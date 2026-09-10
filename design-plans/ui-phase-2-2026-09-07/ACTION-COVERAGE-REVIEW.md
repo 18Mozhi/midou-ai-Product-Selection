@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1479；旧登记1477；新身份19，旧表独有身份17。签名变化不等于增删业务能力。
-- 已具体语义对应31页/663源位置/625组；其中路由动作531组，转发/容器关联64组，其余明确排除。其余42页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应32页/682源位置/649组；其中路由动作551组，转发/容器关联65组，其余明确排除。其余41页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -42,7 +42,7 @@
 | [P28 报表与导出](page-specs/P28.md) | 50 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P29 治理概览](page-specs/P29.md) | 167 | [7组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P30 成员与邀请](page-specs/P30.md) | 167 | [23组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P31 角色与权限](page-specs/P31.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P31 角色与权限](page-specs/P31.md) | 167 | [24组](action-reviews/P31.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P32 工作区管理](page-specs/P32.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P33 团队管理](page-specs/P33.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P34 审批模板](page-specs/P34.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2608,6 +2608,99 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - OG-G01角色选择陈旧、OG-G02邀请尾部/notice及通用写后重读、OG-G03原因上限/重开、跨范围迟到回执与全部C真实实现继续待。
 - 共享reason字段在AuditedReasonDialog，required/minimumLength默认2、无maxlength；邀请表单reason已有500上限。六个value/emit字段另在controlledInputs，不能漏算为仅三个可编辑字段。
 - useAuditedReason新ask取消上个请求，finish先关窗；useModalDialog返焦/销毁与全部调用方跨缓存时序仍待。
+
+## P31 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P31.json)：30个局部源位置 → 24组；3类写入，20组路由动作，1组转发/容器关联不重复计动作。20个本地v-model，4处调用/内嵌容器，11个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有120个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| OG-REFRESH 刷新角色权限 / read | 1处；roles | [roles · 1440](design/roles-direction-c/1440-roles.png) / [roles · 390](design/roles-direction-c/390-roles.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OG-RETRY 重新加载 / read | 1处；roles | [roles · 1440](design/roles-direction-c/1440-roles.png) / [roles · 390](design/roles-direction-c/390-roles.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| EX-P29-PROFILE 组织资料分支排除 / excluded | 3处；roles | [roles · 1440](design/roles-direction-c/1440-roles.png) / [roles · 390](design/roles-direction-c/390-roles.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| EX-P30-MEMBERS 成员分支排除 / excluded | 1处；roles | [roles · 1440](design/roles-direction-c/1440-roles.png) / [roles · 390](design/roles-direction-c/390-roles.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| WIRE-ROLES 角色子组件接线 / wiring | 1处；grants | [grants · 1440](design/roles-direction-c/1440-grants.png) / [grants · 390](design/roles-direction-c/390-grants.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| D-OG-REASON 撤销原因确认调用 / local | 3处；revoke、revoke-invalid | [revoke · 1440](design/roles-direction-c/1440-revoke.png) / [revoke · 390](design/roles-direction-c/390-revoke.png)、[revoke-invalid · 1440](design/roles-direction-c/1440-revoke-invalid.png) / [revoke-invalid · 390](design/roles-direction-c/390-revoke-invalid.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| EX-P36-TOKEN-REASON 令牌原因排除 / excluded | 1处；roles | [roles · 1440](design/roles-direction-c/1440-roles.png) / [roles · 390](design/roles-direction-c/390-roles.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| role.section.{section} 角色/范围/授权分区 / local | 1处；roles、scopes、grants | [roles · 1440](design/roles-direction-c/1440-roles.png) / [roles · 390](design/roles-direction-c/390-roles.png)、[scopes · 1440](design/roles-direction-c/1440-scopes.png) / [scopes · 390](design/roles-direction-c/390-scopes.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| role.select.{roleCode} 选择只读模板 / local | 1处；roles、role-auditor、role-query-empty | [roles · 1440](design/roles-direction-c/1440-roles.png) / [roles · 390](design/roles-direction-c/390-roles.png)、[role-auditor · 1440](design/roles-direction-c/1440-role-auditor.png) / [role-auditor · 390](design/roles-direction-c/390-role-auditor.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| role.capability.technical.toggle 技术能力披露 / local | 1处；role-technical | [role-technical · 1440](design/roles-direction-c/1440-role-technical.png) / [role-technical · 390](design/roles-direction-c/390-role-technical.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| role.capability.filter.reset 重置能力筛选 / local | 1处；roles、matrix-empty | [roles · 1440](design/roles-direction-c/1440-roles.png) / [roles · 390](design/roles-direction-c/390-roles.png)、[matrix-empty · 1440](design/roles-direction-c/1440-matrix-empty.png) / [matrix-empty · 390](design/roles-direction-c/390-matrix-empty.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| role.scope.filter.reset 重置范围筛选 / local | 1处；scopes、scopes-empty | [scopes · 1440](design/roles-direction-c/1440-scopes.png) / [scopes · 390](design/roles-direction-c/390-scopes.png)、[scopes-empty · 1440](design/roles-direction-c/1440-scopes-empty.png) / [scopes-empty · 390](design/roles-direction-c/390-scopes-empty.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| grant.create.form.toggle 展开或取消创建 / local | 1处；grants、create-opportunity | [grants · 1440](design/roles-direction-c/1440-grants.png) / [grants · 390](design/roles-direction-c/390-grants.png)、[create-opportunity · 1440](design/roles-direction-c/1440-create-opportunity.png) / [create-opportunity · 390](design/roles-direction-c/390-create-opportunity.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| grant.create.submit 创建授权 / write | 2处；create-task、create-opportunity、create-competitor、create-sourcing、create-invalid-expiry、create-busy | [create-task · 1440](design/roles-direction-c/1440-create-task.png) / [create-task · 390](design/roles-direction-c/390-create-task.png)、[create-opportunity · 1440](design/roles-direction-c/1440-create-opportunity.png) / [create-opportunity · 390](design/roles-direction-c/390-create-opportunity.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| grant.create.type.change 选择资源类型 / local | 1处；create-task、create-opportunity、create-competitor、create-sourcing | [create-task · 1440](design/roles-direction-c/1440-create-task.png) / [create-task · 390](design/roles-direction-c/390-create-task.png)、[create-opportunity · 1440](design/roles-direction-c/1440-create-opportunity.png) / [create-opportunity · 390](design/roles-direction-c/390-create-opportunity.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| grant.status.select.{status} 授权状态筛选 / read | 1处；grants、grants-filter-empty | [grants · 1440](design/roles-direction-c/1440-grants.png) / [grants · 390](design/roles-direction-c/390-grants.png)、[grants-filter-empty · 1440](design/roles-direction-c/1440-grants-filter-empty.png) / [grants-filter-empty · 390](design/roles-direction-c/390-grants-filter-empty.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| grant.select.{grantId} 选择当前页授权 / local | 1处；grants、grants-search-empty | [grants · 1440](design/roles-direction-c/1440-grants.png) / [grants · 390](design/roles-direction-c/390-grants.png)、[grants-search-empty · 1440](design/roles-direction-c/1440-grants-search-empty.png) / [grants-search-empty · 390](design/roles-direction-c/390-grants-search-empty.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| grant.technical.toggle 披露资源与授权编号 / local | 1处；grant-technical | [grant-technical · 1440](design/roles-direction-c/1440-grant-technical.png) / [grant-technical · 390](design/roles-direction-c/390-grant-technical.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| grant.expiry.submit 更新授权到期时间 / write | 2处；grants、extend-busy | [grants · 1440](design/roles-direction-c/1440-grants.png) / [grants · 390](design/roles-direction-c/390-grants.png)、[extend-busy · 1440](design/roles-direction-c/1440-extend-busy.png) / [extend-busy · 390](design/roles-direction-c/390-extend-busy.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| grant.revoke.request 请求撤销授权 / write | 1处；grants、revoke、revoke-invalid | [grants · 1440](design/roles-direction-c/1440-grants.png) / [grants · 390](design/roles-direction-c/390-grants.png)、[revoke · 1440](design/roles-direction-c/1440-revoke.png) / [revoke · 390](design/roles-direction-c/390-revoke.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| grant.page.previous 授权上一页 / read | 1处；grants | [grants · 1440](design/roles-direction-c/1440-grants.png) / [grants · 390](design/roles-direction-c/390-grants.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| grant.page.next 授权下一页 / read | 1处；grants | [grants · 1440](design/roles-direction-c/1440-grants.png) / [grants · 390](design/roles-direction-c/390-grants.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| grant.create.form.open 创建首条授权 / local | 1处；grants-none、roles-no-grants | [grants-none · 1440](design/roles-direction-c/1440-grants-none.png) / [grants-none · 390](design/roles-direction-c/390-grants-none.png)、[roles-no-grants · 1440](design/roles-direction-c/1440-roles-no-grants.png) / [roles-no-grants · 390](design/roles-direction-c/390-roles-no-grants.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| grant.status.all 查看全部授权 / read | 1处；grants-filter-empty | [grants-filter-empty · 1440](design/roles-direction-c/1440-grants-filter-empty.png) / [grants-filter-empty · 390](design/roles-direction-c/390-grants-filter-empty.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| WIRE-ROLES | @update-grant-type / updateResourceGrantType | grant.create.type.change |
+| WIRE-ROLES | @update-grant-status / updateResourceGrantStatus | grant.status.select.{status}、grant.status.all |
+| WIRE-ROLES | @update-grant-page / updateResourceGrantPage | grant.page.previous、grant.page.next |
+| WIRE-ROLES | @create-grant / createResourceGrant | grant.create.submit |
+| WIRE-ROLES | @extend-grant / extendResourceGrant | grant.expiry.submit |
+| WIRE-ROLES | @revoke-grant / revokeResourceGrant | grant.revoke.request |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| OrganizationAdminCenter.vue / form.name | P29 summary专属，P31不显示 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationAdminCenter.vue / form.logo_url | P29 summary专属，P31不显示 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationAdminCenter.vue / form.timezone | P29 summary专属，P31不显示 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationAdminCenter.vue / form.data_retention_days | P29 summary专属，P31不显示 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationAdminCenter.vue / form.default_workspace_id | P29 summary专属，P31不显示 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationAdminCenter.vue / form.reason | P29 summary专属，P31不显示 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / roleQuery | 已加载角色名称/描述/中文能力的trim小写查询；不搜索原始role.code | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / capabilityQuery | 已加载能力中文和原始能力名称查询 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / capabilityGroup | 已加载能力分组选择，不调用API | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / scopeQuery | 已加载成员姓名/邮箱/团队查询 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / scopeFilter | own/team/workspace/organization本地筛选 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / grantForm.workspace_id | required，来自当前工作区列表；不扩大读取范围 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / grantForm.resource_id | required trim UUID v1–5及变体模式；2026-09-10用户确认保留从真实详情复制UUID，不新增按名称选资源 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / grantForm.grantee_membership_id | required，只从grantTargets对象列表选择，不以所有members替代 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / grantForm.actions | 按类型白名单多选；checkbox无原生required，按钮及父函数保护至少一项 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / grantForm.reason | required trim maxlength500；不同于共享撤销窗前端至少2字且无max | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / grantForm.expires_at | required datetime-local；min/max在setup生成；父级提交按当前时间重新检查未来30天 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / grantQuery | 只搜索当前页成员/工作区/中文类型/中文动作；不搜索授权或资源UUID、reason | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / grantMutation.reason | required trim maxlength500；选中授权对象变化会重置 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / grantMutation.expires_at | required datetime-local；默认现在+7天，不是原expiry+7天 | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| OrganizationAdminCenter.vue / form.1 / roles | form-container / route-excluded-reference | [roles · 1440](design/roles-direction-c/1440-roles.png) / [roles · 390](design/roles-direction-c/390-roles.png) | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / revoke | native-reason-dialog / matching-dialog-scene | [revoke · 1440](design/roles-direction-c/1440-revoke.png) / [revoke · 390](design/roles-direction-c/390-revoke.png) | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / revoke-invalid | native-reason-dialog / matching-dialog-scene | [revoke-invalid · 1440](design/roles-direction-c/1440-revoke-invalid.png) / [revoke-invalid · 390](design/roles-direction-c/390-revoke-invalid.png) | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / form.1 / create-task | form-container / matching-inline-form-scene | [create-task · 1440](design/roles-direction-c/1440-create-task.png) / [create-task · 390](design/roles-direction-c/390-create-task.png) | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / form.1 / create-opportunity | form-container / matching-inline-form-scene | [create-opportunity · 1440](design/roles-direction-c/1440-create-opportunity.png) / [create-opportunity · 390](design/roles-direction-c/390-create-opportunity.png) | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / form.1 / create-competitor | form-container / matching-inline-form-scene | [create-competitor · 1440](design/roles-direction-c/1440-create-competitor.png) / [create-competitor · 390](design/roles-direction-c/390-create-competitor.png) | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / form.1 / create-sourcing | form-container / matching-inline-form-scene | [create-sourcing · 1440](design/roles-direction-c/1440-create-sourcing.png) / [create-sourcing · 390](design/roles-direction-c/390-create-sourcing.png) | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / form.1 / create-invalid-expiry | form-container / matching-inline-form-scene | [create-invalid-expiry · 1440](design/roles-direction-c/1440-create-invalid-expiry.png) / [create-invalid-expiry · 390](design/roles-direction-c/390-create-invalid-expiry.png) | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / form.1 / create-busy | form-container / matching-inline-form-scene | [create-busy · 1440](design/roles-direction-c/1440-create-busy.png) / [create-busy · 390](design/roles-direction-c/390-create-busy.png) | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / form.2 / grants | form-container / matching-inline-form-scene | [grants · 1440](design/roles-direction-c/1440-grants.png) / [grants · 390](design/roles-direction-c/390-grants.png) | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| OrganizationRolePanel.vue / form.2 / extend-busy | form-container / matching-inline-form-scene | [extend-busy · 1440](design/roles-direction-c/1440-extend-busy.png) / [extend-busy · 390](design/roles-direction-c/390-extend-busy.png) | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+
+### 明确保留的边界
+
+- 48张旧图仅上下文，20个动作120个代表状态槽全部未映射；父页刷新/错误、真实多页、字段六态仍待专门出图。
+- 提交中草稿归属、刷新重置延期草稿、确认期间切组织、创建成功覆盖重读失败提示仍待真实Vue与产品决策。
+- 用户已明确保留从详情复制UUID；提示/格式错误/焦点仍需逐态出图，不新增资源目录接口、读取权限或持久化规则。
+- 实际共享撤销reason无maxlength，但服务端max500；各调用方约束及重开生命周期仍待。
+- use-modal-dialog仅绑定当前源码读取，不宣称旧48图已覆盖此依赖或全部返焦/销毁场景。
 
 ## P54 局部动作与共享消费者
 

@@ -1,0 +1,1539 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P31",
+  "route": "/org-admin/roles",
+  "status": "source-reviewed-not-runtime-accepted",
+  "contract": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/web/src/components/OrganizationRolePanel.vue": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11"
+  },
+  "actions": [
+    {
+      "actionId": "OG-REFRESH",
+      "label": "刷新角色权限",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
+      ],
+      "sourceContractKeys": [
+        "OG-REFRESH"
+      ],
+      "priorContractKeys": [
+        "OG-REFRESH"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "loading或refreshing禁用",
+      "handler": "load(background)并行读取角色/授权/成员/工作区/当前页授权/可授予成员及三状态计数；现有roles图不证明父级刷新态",
+      "variants": [
+        "roles"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "roles"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "OG-RETRY",
+      "label": "重新加载",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
+      ],
+      "sourceContractKeys": [
+        "OG-RETRY"
+      ],
+      "priorContractKeys": [
+        "OG-RETRY"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "六种错误页面显示；无disabled绑定",
+      "handler": "load()重新读取，不绕过权限；现有roles图不证明父级错误态",
+      "variants": [
+        "roles"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "roles"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "EX-P29-PROFILE",
+      "label": "组织资料分支排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1"
+      ],
+      "sourceContractKeys": [
+        "EX-P29-PROFILE"
+      ],
+      "priorContractKeys": [
+        "OG-PROFILE-SAVE",
+        "OG-PROFILE-LOGO浏览器有效性"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "summary分支非P31",
+      "handler": "不重复计资料提交/Logo检查",
+      "variants": [
+        "roles"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "roles"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "EX-P30-MEMBERS",
+      "label": "成员分支排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1"
+      ],
+      "sourceContractKeys": [
+        "EX-P30-MEMBERS"
+      ],
+      "priorContractKeys": [
+        "P30全部成员事件父转发，复用M语义"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "members分支非P31",
+      "handler": "固定角色分配在P30；不把模板选择当角色写入",
+      "variants": [
+        "roles"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "roles"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "WIRE-ROLES",
+      "label": "角色子组件接线",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1"
+      ],
+      "sourceContractKeys": [
+        "WIRE-ROLES"
+      ],
+      "priorContractKeys": [
+        "P31资源授权父转发，复用已有合同"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "view===roles；传busy || refreshing",
+      "handler": "六个显式事件归到子组件八个目标动作，不重复计业务操作",
+      "variants": [
+        "grants"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "grants"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+      "forwardsTo": [
+        "grant.create.type.change",
+        "grant.status.select.{status}",
+        "grant.status.all",
+        "grant.page.previous",
+        "grant.page.next",
+        "grant.create.submit",
+        "grant.expiry.submit",
+        "grant.revoke.request"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1",
+          "event": "@update-grant-type",
+          "handler": "updateResourceGrantType",
+          "targets": [
+            "grant.create.type.change"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1",
+          "event": "@update-grant-status",
+          "handler": "updateResourceGrantStatus",
+          "targets": [
+            "grant.status.select.{status}",
+            "grant.status.all"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1",
+          "event": "@update-grant-page",
+          "handler": "updateResourceGrantPage",
+          "targets": [
+            "grant.page.previous",
+            "grant.page.next"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1",
+          "event": "@create-grant",
+          "handler": "createResourceGrant",
+          "targets": [
+            "grant.create.submit"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1",
+          "event": "@extend-grant",
+          "handler": "extendResourceGrant",
+          "targets": [
+            "grant.expiry.submit"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1",
+          "event": "@revoke-grant",
+          "handler": "revokeResourceGrant",
+          "targets": [
+            "grant.revoke.request"
+          ]
+        }
+      ]
+    },
+    {
+      "actionId": "D-OG-REASON",
+      "label": "撤销原因确认调用",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#56b1761955b256ef.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#f3515ca45998a840.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#7a51bff83af3db69.1"
+      ],
+      "sourceContractKeys": [
+        "D-OG-REASON"
+      ],
+      "priorContractKeys": [
+        "D-OG-REASON提交/取消父转发",
+        "D-OG-REASON组件调用",
+        "D-OG-REASON通用成员/邀请/工作区/团队及P31调用"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "撤销先ask，非创建/延期确认",
+      "handler": "trim至少2字；共享输入无maxlength，API最多500；先关窗再写，取消零写，错误在父页",
+      "variants": [
+        "revoke",
+        "revoke-invalid"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "revoke"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "revoke-invalid"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "EX-P36-TOKEN-REASON",
+      "label": "令牌原因排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1"
+      ],
+      "sourceContractKeys": [
+        "EX-P36-TOKEN-REASON"
+      ],
+      "priorContractKeys": [
+        "D-OG-REASON令牌轮换/撤销调用"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "P36发起",
+      "handler": "共享helper不证明其他路由生命周期通过",
+      "variants": [
+        "roles"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "roles"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "role.section.{section}",
+      "label": "角色/范围/授权分区",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#24237df37bd7b7e4.1"
+      ],
+      "sourceContractKeys": [
+        "role.section.{section}"
+      ],
+      "priorContractKeys": [
+        "role.section.{section}"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "三分区无busy禁用",
+      "handler": "activeSection本地切换；保留局部筛选与父级创建草稿",
+      "variants": [
+        "roles",
+        "scopes",
+        "grants"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "roles"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "scopes"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "grants"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "role.select.{roleCode}",
+      "label": "选择只读模板",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#f7e8f2a9a0457015.1"
+      ],
+      "sourceContractKeys": [
+        "role.select.{roleCode}"
+      ],
+      "priorContractKeys": [
+        "role.select.{roleCode}"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "filteredRoles内，无busy禁用",
+      "handler": "仅selectedRoleCode；筛选不含原始role.code，选中不在结果时回退首项",
+      "variants": [
+        "roles",
+        "role-auditor",
+        "role-query-empty"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "roles"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "role-auditor"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "role-query-empty"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "role.capability.technical.toggle",
+      "label": "技术能力披露",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#23a85da051801987.1"
+      ],
+      "sourceContractKeys": [
+        "role.capability.technical.toggle"
+      ],
+      "priorContractKeys": [
+        "role.capability.technical.toggle"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "selectedRole存在",
+      "handler": "原生details/summary，不是弹窗",
+      "variants": [
+        "role-technical"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "role-technical"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "role.capability.filter.reset",
+      "label": "重置能力筛选",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#be3f3fa4fcf2fb2c.1"
+      ],
+      "sourceContractKeys": [
+        "role.capability.filter.reset"
+      ],
+      "priorContractKeys": [
+        "role.capability.filter.reset"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "query与group均空禁用",
+      "handler": "清capabilityQuery/group，不清roleQuery；能力匹配中文及原始能力名",
+      "variants": [
+        "roles",
+        "matrix-empty"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "roles"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "matrix-empty"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "role.scope.filter.reset",
+      "label": "重置范围筛选",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#5235116f7947ac74.1"
+      ],
+      "sourceContractKeys": [
+        "role.scope.filter.reset"
+      ],
+      "priorContractKeys": [
+        "role.scope.filter.reset"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "query与scope均空禁用",
+      "handler": "清scopeQuery/filter；成员范围可重叠计数，非互斥总数",
+      "variants": [
+        "scopes",
+        "scopes-empty"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "scopes"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "scopes-empty"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "grant.create.form.toggle",
+      "label": "展开或取消创建",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#0aac14fac3c56e10.1"
+      ],
+      "sourceContractKeys": [
+        "grant.create.form.toggle"
+      ],
+      "priorContractKeys": [
+        "grant.create.form.toggle"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "canManage；无busy禁用",
+      "handler": "只切showGrantForm，隐藏不会清父级grantForm",
+      "variants": [
+        "grants",
+        "create-opportunity"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "grants"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "create-opportunity"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "grant.create.submit",
+      "label": "创建授权",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#27eeda4bb377f413.1",
+        "apps/web/src/components/OrganizationRolePanel.vue#b75d50f1f8f0cc17.1"
+      ],
+      "sourceContractKeys": [
+        "grant.create.submit"
+      ],
+      "priorContractKeys": [
+        "grant.create.submit"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "canManage内联表单；busy或actions空禁按钮；父函数busy早退",
+      "handler": "POST /org/:organizationId/resource-grants；spread原form、去重actions、trim reason、ISO expires_at；成功清当前草稿部分字段并重读；提交中新增编辑可能被清",
+      "variants": [
+        "create-task",
+        "create-opportunity",
+        "create-competitor",
+        "create-sourcing",
+        "create-invalid-expiry",
+        "create-busy"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "create-task"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "create-opportunity"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "create-competitor"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "create-sourcing"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "create-invalid-expiry"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "create-busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "grant.create.type.change",
+      "label": "选择资源类型",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#f0c0d3b1c8ae684b.1"
+      ],
+      "sourceContractKeys": [
+        "grant.create.type.change"
+      ],
+      "priorContractKeys": [
+        "grant.create.type.change"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "required受控select，忙碌仍可编辑",
+      "handler": "updateResourceGrantType把actions重置该类型第一动作；保持resource_id，不自动请求资源目录",
+      "variants": [
+        "create-task",
+        "create-opportunity",
+        "create-competitor",
+        "create-sourcing"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "create-task"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "create-opportunity"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "create-competitor"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "create-sourcing"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "grant.status.select.{status}",
+      "label": "授权状态筛选",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#8bd3f7b2e5dcb44f.1"
+      ],
+      "sourceContractKeys": [
+        "grant.status.select.{status}"
+      ],
+      "priorContractKeys": [
+        "grant.status.select.{status}"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "busy含refreshing时禁用",
+      "handler": "all/active/expired/revoked；父检查refreshing，设page1后load；不是本地查询",
+      "variants": [
+        "grants",
+        "grants-filter-empty"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "grants"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "grants-filter-empty"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "grant.select.{grantId}",
+      "label": "选择当前页授权",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#a162032f86484b89.1"
+      ],
+      "sourceContractKeys": [
+        "grant.select.{grantId}"
+      ],
+      "priorContractKeys": [
+        "grant.select.{grantId}"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "filteredGrants内，无busy禁用",
+      "handler": "仅selectedGrantId；selectedGrant watcher遇新对象清延期草稿；无选中则保留旧草稿",
+      "variants": [
+        "grants",
+        "grants-search-empty"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "grants"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "grants-search-empty"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "grant.technical.toggle",
+      "label": "披露资源与授权编号",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#5f937fb211eb5840.1"
+      ],
+      "sourceContractKeys": [
+        "grant.technical.toggle"
+      ],
+      "priorContractKeys": [
+        "grant.technical.toggle"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "selectedGrant存在",
+      "handler": "原生details；不执行导航或查询",
+      "variants": [
+        "grant-technical"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "grant-technical"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "grant.expiry.submit",
+      "label": "更新授权到期时间",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#64b97b8b5fe9de71.1",
+        "apps/web/src/components/OrganizationRolePanel.vue#8c59567be7cef9a3.1"
+      ],
+      "sourceContractKeys": [
+        "grant.expiry.submit"
+      ],
+      "priorContractKeys": [
+        "grant.expiry.submit"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "canManage且effective_status active；busy禁用",
+      "handler": "PATCH /org/:organizationId/resource-grants/:id/expiry；expected_version/reason.trim/expires_at；父函数仅验未来30天，服务extend还要求晚于原expiry，否则grant_expiry_not_extended；隔离submit替身不证明服务器接受",
+      "variants": [
+        "grants",
+        "extend-busy"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "grants"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "extend-busy"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "grant.revoke.request",
+      "label": "请求撤销授权",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#5be3d5846e4138fa.1"
+      ],
+      "sourceContractKeys": [
+        "grant.revoke.request"
+      ],
+      "priorContractKeys": [
+        "grant.revoke.request"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "canManage且active；busy禁用",
+      "handler": "先原因确认后POST /org/:organizationId/resource-grants/:id/revoke，expected_version/reason；organizationId及version在await后读取，跨范围归属仍待",
+      "variants": [
+        "grants",
+        "revoke",
+        "revoke-invalid"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "grants"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "revoke"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "revoke-invalid"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "grant.page.previous",
+      "label": "授权上一页",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#bf5c2f057a07f3f3.1"
+      ],
+      "sourceContractKeys": [
+        "grant.page.previous"
+      ],
+      "priorContractKeys": [
+        "grant.page.previous"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "meta.total真；busy或page<=1禁用",
+      "handler": "updateGrantPage(page-1)，父检查refreshing/page<1后load",
+      "variants": [
+        "grants"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "grants"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "grant.page.next",
+      "label": "授权下一页",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#085ead5af6973fef.1"
+      ],
+      "sourceContractKeys": [
+        "grant.page.next"
+      ],
+      "priorContractKeys": [
+        "grant.page.next"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "meta.total真；busy或page>=pageCount禁用",
+      "handler": "updateGrantPage(page+1)读新页，不是本地分页；现有单页图不证明可翻页状态",
+      "variants": [
+        "grants"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "grants"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "grant.create.form.open",
+      "label": "创建首条授权",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#a6d03f8144116449.1"
+      ],
+      "sourceContractKeys": [
+        "grant.create.form.open"
+      ],
+      "priorContractKeys": [
+        "grant.create.form.open"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "grantTotal===0且canManage，无busy禁用",
+      "handler": "showGrantForm=true；不直接提交，不把无授权误作无角色",
+      "variants": [
+        "grants-none",
+        "roles-no-grants"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "grants-none"
+        },
+        {
+          "package": "roles-direction-c",
+          "scene": "roles-no-grants"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "grant.status.all",
+      "label": "查看全部授权",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationRolePanel.vue#cd26859a239383fd.1"
+      ],
+      "sourceContractKeys": [
+        "grant.status.all"
+      ],
+      "priorContractKeys": [
+        "grant.status.all"
+      ],
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "grantTotal>0但meta.total空；busy禁用",
+      "handler": "父更新status all、page1并读取；不是清grantQuery",
+      "variants": [
+        "grants-filter-empty"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "grants-filter-empty"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    }
+  ],
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "创建和延期是两个内联form；仅撤销使用一个共享原因窗。其全部生命周期未验收。"
+  },
+  "inputs": {
+    "OrganizationAdminCenter.vue": [
+      "form.name",
+      "form.logo_url",
+      "form.timezone",
+      "form.data_retention_days",
+      "form.default_workspace_id",
+      "form.reason"
+    ],
+    "OrganizationRolePanel.vue": [
+      "roleQuery",
+      "capabilityQuery",
+      "capabilityGroup",
+      "scopeQuery",
+      "scopeFilter",
+      "grantForm.workspace_id",
+      "grantForm.resource_id",
+      "grantForm.grantee_membership_id",
+      "grantForm.actions",
+      "grantForm.reason",
+      "grantForm.expires_at",
+      "grantQuery",
+      "grantMutation.reason",
+      "grantMutation.expires_at"
+    ]
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      "apps/web/src/components/OrganizationRolePanel.vue"
+    ],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+      "apps/web/src/components/OrganizationRolePanel.vue": "104630b794a993b383689baa5e1203d643da1571e2a70f0f1c52561e87e82b11",
+      "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
+      "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
+      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.name",
+        "meaning": "P29 summary专属，P31不显示",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.logo_url",
+        "meaning": "P29 summary专属，P31不显示",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.timezone",
+        "meaning": "P29 summary专属，P31不显示",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.data_retention_days",
+        "meaning": "P29 summary专属，P31不显示",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.default_workspace_id",
+        "meaning": "P29 summary专属，P31不显示",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "binding": "form.reason",
+        "meaning": "P29 summary专属，P31不显示",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "binding": "roleQuery",
+        "meaning": "已加载角色名称/描述/中文能力的trim小写查询；不搜索原始role.code",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "binding": "capabilityQuery",
+        "meaning": "已加载能力中文和原始能力名称查询",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "binding": "capabilityGroup",
+        "meaning": "已加载能力分组选择，不调用API",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "binding": "scopeQuery",
+        "meaning": "已加载成员姓名/邮箱/团队查询",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "binding": "scopeFilter",
+        "meaning": "own/team/workspace/organization本地筛选",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "binding": "grantForm.workspace_id",
+        "meaning": "required，来自当前工作区列表；不扩大读取范围",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "binding": "grantForm.resource_id",
+        "meaning": "required trim UUID v1–5及变体模式；2026-09-10用户确认保留从真实详情复制UUID，不新增按名称选资源",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "binding": "grantForm.grantee_membership_id",
+        "meaning": "required，只从grantTargets对象列表选择，不以所有members替代",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "binding": "grantForm.actions",
+        "meaning": "按类型白名单多选；checkbox无原生required，按钮及父函数保护至少一项",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "binding": "grantForm.reason",
+        "meaning": "required trim maxlength500；不同于共享撤销窗前端至少2字且无max",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "binding": "grantForm.expires_at",
+        "meaning": "required datetime-local；min/max在setup生成；父级提交按当前时间重新检查未来30天",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "binding": "grantQuery",
+        "meaning": "只搜索当前页成员/工作区/中文类型/中文动作；不搜索授权或资源UUID、reason",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "binding": "grantMutation.reason",
+        "meaning": "required trim maxlength500；选中授权对象变化会重置",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "binding": "grantMutation.expires_at",
+        "meaning": "required datetime-local；默认现在+7天，不是原expiry+7天",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "summary资料表单仅P29可达",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+        "variants": [
+          {
+            "name": "roles",
+            "evidenceScope": "route-excluded-reference",
+            "scenes": [
+              {
+                "package": "roles-direction-c",
+                "scene": "roles"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+            "exclusionReason": "summary与roles分支互斥，不拿角色图证明资料表单"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+        "tag": "AuditedReasonDialog",
+        "ordinal": 1,
+        "shape": "native-reason-dialog",
+        "sourceBehavior": "撤销原因先关窗再写，取消不写；创建/延期不走此窗",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+        "variants": [
+          {
+            "name": "revoke",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "roles-direction-c",
+                "scene": "revoke"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "revoke-invalid",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "roles-direction-c",
+                "scene": "revoke-invalid"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "七字段创建授权内联form，不含额外确认弹窗",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+        "variants": [
+          {
+            "name": "create-task",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-direction-c",
+                "scene": "create-task"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "create-opportunity",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-direction-c",
+                "scene": "create-opportunity"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "create-competitor",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-direction-c",
+                "scene": "create-competitor"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "create-sourcing",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-direction-c",
+                "scene": "create-sourcing"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "create-invalid-expiry",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-direction-c",
+                "scene": "create-invalid-expiry"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "create-busy",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-direction-c",
+                "scene": "create-busy"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationRolePanel.vue",
+        "tag": "form",
+        "ordinal": 2,
+        "shape": "form-container",
+        "sourceBehavior": "active且canManage时的两字段到期时间表单",
+        "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。",
+        "variants": [
+          {
+            "name": "grants",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-direction-c",
+                "scene": "grants"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          },
+          {
+            "name": "extend-busy",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "roles-direction-c",
+                "scene": "extend-busy"
+              }
+            ],
+            "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "实际共享撤销reason无maxlength，但服务端max500；各调用方约束及重开生命周期仍待。",
+      "use-modal-dialog仅绑定当前源码读取，不宣称旧48图已覆盖此依赖或全部返焦/销毁场景。"
+    ]
+  },
+  "controlledInputs": [
+    {
+      "file": "apps/web/src/components/OrganizationRolePanel.vue",
+      "value": "grantForm.resource_type",
+      "actionId": "grant.create.type.change",
+      "persistence": "parent-form-ref-only",
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    }
+  ],
+  "sharedReasonInput": {
+    "file": "apps/web/src/components/AuditedReasonDialog.vue",
+    "binding": "reason",
+    "minimumLength": 2,
+    "maximumLength": null,
+    "sourceMeaning": "共享前端无max；资源授权API三个写入reason上限500，不代表501字服务端成功"
+  },
+  "compositionGaps": [
+    "48张旧图仅上下文，20个动作120个代表状态槽全部未映射；父页刷新/错误、真实多页、字段六态仍待专门出图。",
+    "提交中草稿归属、刷新重置延期草稿、确认期间切组织、创建成功覆盖重读失败提示仍待真实Vue与产品决策。",
+    "用户已明确保留从详情复制UUID；提示/格式错误/焦点仍需逐态出图，不新增资源目录接口、读取权限或持久化规则。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "P16仅布局通过，不能外推P31或任一按钮状态。",
+    "本批只登记真实调用链并加离线源码测试，不修改Vue/API/RBAC/数据库/配置或生产部署。"
+  ]
+}
