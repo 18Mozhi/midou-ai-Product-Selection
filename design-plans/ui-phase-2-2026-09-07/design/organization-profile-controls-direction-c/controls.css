@@ -1,0 +1,10 @@
+/* This package only: make actionable error text readable; waiting differs from recheck. */
+.feedback p {
+  font-size: 16px;
+}
+body[data-control-outcome="recheck"] #save-profile:disabled {
+  cursor: not-allowed;
+}
+#control-note {
+  font-size: 16px;
+}

@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "c10cabaf7c99c4d91a27cebce12c4d99ba5efd325bcb4a146ee980c4e74b1ba8",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "7b7e2173831b020dab589425a9be7d409bc7b670341d07853f13240217e44869",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -57,6 +57,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/evidence.json": "b21bdbdb16471e322f4e60ebf1a2b21a3f4a0c080c943fa444c4867f902e5df2",
     "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/evidence.json": "16d64f22a52445b6407e2f3c057f9e0e0b3691efefee3aebe531f881b2e0f31e",
     "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json": "380786ba76be2768899d5a6bfce8b290fabdc67e49652140b40adfdc1d690403",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/evidence.json": "dbaa0ae0bbbee30ebf6f4f1bbe684f155fa0c84fc0a139f8ffe92d7d968a5d72",
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/evidence.json": "992f751544dbd85a665aa14e51d5a8c8cbe7f83c8dc8a70ec77c53050ba9da67",
     "design-plans/ui-phase-2-2026-09-07/design/permission-comparison-direction-c/evidence.json": "ce1af8f9fbd07321cdcc3832442473a10afbd53605d14b6b7d80976afad884e3",
     "design-plans/ui-phase-2-2026-09-07/design/personal-composed-direction-c/evidence.json": "44d9fab15bd0857cad1d770c24d1a164a6ab0bf6fb61fbb22365d4be05c56241",
@@ -130,16 +131,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "relatedProposalRoutes": 73,
     "noLinkedPageProposalRoutes": 0,
     "missingPageIds": [],
-    "packages": 88,
+    "packages": 89,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 904,
-    "sourceBindings": 1705,
+    "uniqueBoundFiles": 908,
+    "sourceBindings": 1721,
     "sourceDrift": 0,
-    "pngs": 12255,
+    "pngs": 12425,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 9448,
+    "readmeLinksChecked": 9451,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -423,6 +424,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "id": "P29",
       "spec": "page-specs/P29.md",
       "packages": [
+        "organization-profile-controls-direction-c",
         "organization-profile-direction-c"
       ],
       "actualVue": []
@@ -1261,6 +1263,15 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "evidence": "design/org-token-direction-c/evidence.json",
       "prototype": "design/org-token-direction-c/index.html",
       "gallery": null
+    },
+    "organization-profile-controls-direction-c": {
+      "id": "organization-profile-controls-direction-c",
+      "role": "page-or-section-proposal",
+      "screenshots": 170,
+      "readme": "design/organization-profile-controls-direction-c/README.md",
+      "evidence": "design/organization-profile-controls-direction-c/evidence.json",
+      "prototype": "design/organization-profile-controls-direction-c/index.html",
+      "gallery": "design/organization-profile-controls-direction-c/gallery.html"
     },
     "organization-profile-direction-c": {
       "id": "organization-profile-direction-c",

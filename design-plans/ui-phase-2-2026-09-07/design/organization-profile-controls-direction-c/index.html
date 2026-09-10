@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P29 组织资料 · 逐按钮审核</title>
+    <link rel="stylesheet" href="../organization-profile-direction-c/profile.css" />
+    <link rel="stylesheet" href="controls.css" />
+    <script defer src="../organization-profile-direction-c/data.js"></script>
+    <script defer src="../organization-profile-direction-c/profile.js"></script>
+    <script defer src="controls.js"></script>
+  </head>
+  <body>
+    <div class="review-bar">
+      <span>P29 设计审核稿 · 非生产数据</span>
+      <button id="review-toggle" aria-expanded="false">审核场景</button>
+    </div>
+    <section id="review-tools" hidden aria-label="非业务审核工具">
+      <label for="review-scene">场景切换</label
+      ><select id="review-scene"></select>
+      <p id="review-note"></p>
+      <pre id="review-intents"></pre>
+      <label for="control-select">控件与变体</label
+      ><select id="control-select"></select>
+      <label for="control-mode">呈现</label>
+      <select id="control-mode">
+        <option value="default">默认</option>
+        <option value="pending">处理中</option>
+      </select>
+      <button id="show-control">定位控件</button>
+      <p id="control-note"></p>
+    </section>
+    <div class="app">
+      <aside class="directory">
+        <div class="brand">ScoutOps</div>
+        <p>当前组织后台</p>
+        <h1>治理概览</h1>
+        <nav aria-label="本页目录">
+          <a href="#identity">组织资料</a><a href="#profile-form">更新资料</a
+          ><a href="#summary">治理摘要</a>
+        </nav>
+        <div class="directory-foot">只管理当前会话中的组织<br />操作沿用现有审计规则</div>
+      </aside>
+      <main id="workspace"></main>
+    </div>
+  </body>
+</html>

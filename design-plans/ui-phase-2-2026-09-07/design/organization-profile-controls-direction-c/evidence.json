@@ -1,0 +1,4649 @@
+{
+  "version": "ORG-PROFILE-CONTROLS-C-r1",
+  "scope": "offline-proposal-not-runtime-or-user-accepted",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/index.html": "c7534b27e2d5ce1e81009ca6bd61cd1f578b883b12e8ca6bbef5d5a4f92d4fad",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/profile.css": "8af2ac98bed39b910555fbf4dee23b33cae4ac944bc10a56e730be51115f9817",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/profile.js": "e97992f37b251be8dc91342259b8a9001bc33db72ca5867c34b57c25e66aef99",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/data.js": "e6933867dba51bcaf548815b3f943ef6558c519719cd7103707e413ff78ee770",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
+    "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
+    "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "scripts/lib/ui-phase2-organization-profile-design-data.mjs": "47acf1b80de67d5cce6f86661d64e3e65eee0dd044ff13c5dc642ed0a7ceb70d",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-organization-profile-c.mjs": "5a42e1a7baedabaab16a480f7304a59ba9ef6a2f667a127e280ae88ade6a8355",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/index.html": "d3ed891c6e5e916c39e7def6ba8be2dc17ad0d0b3f0f064ef82cb81e27886c21",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/controls.js": "4ec529eebbaedb70daf57e7218d7d4fabd7044302f95ac4f87f467c78aecc6a5",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/controls.css": "2263db25b1af08305b8443d8ef59d67375b269144a9621664a148126f1949c54",
+    "scripts/verify-ui-phase2-organization-profile-controls-c.mjs": "2e18781d5583be7f4e821857950abb446948fdc2f3e1b70a2344969577d3fb77"
+  },
+  "controlReferences": {
+    "save": {
+      "actionId": "OG-PROFILE-SAVE",
+      "scope": "source-action-representative-or-variant",
+      "label": "保存并审计",
+      "selector": "#save-profile",
+      "sourceScene": "editing",
+      "states": {
+        "default": "save-default",
+        "hover": "save-hover",
+        "focus": "save-focus",
+        "pressed": "save-pressed",
+        "pending": "save-pending"
+      }
+    },
+    "refresh": {
+      "actionId": "OG-REFRESH",
+      "scope": "source-action-representative-or-variant",
+      "label": "刷新资料",
+      "selector": "#refresh-profile",
+      "sourceScene": "normal",
+      "states": {
+        "default": "refresh-default",
+        "hover": "refresh-hover",
+        "focus": "refresh-focus",
+        "pressed": "refresh-pressed",
+        "pending": "refresh-pending"
+      }
+    },
+    "retry": {
+      "actionId": "OG-RETRY",
+      "scope": "source-action-representative-or-variant",
+      "label": "服务错误后重读",
+      "selector": "#retry-profile",
+      "sourceScene": "error",
+      "states": {
+        "default": "retry-default",
+        "hover": "retry-hover",
+        "focus": "retry-focus",
+        "pressed": "retry-pressed"
+      }
+    },
+    "retry-blocked": {
+      "actionId": "OG-RETRY",
+      "scope": "source-action-representative-or-variant",
+      "label": "重读 / blocked",
+      "selector": "#retry-profile",
+      "sourceScene": "blocked",
+      "states": {
+        "default": "retry-blocked-default",
+        "hover": "retry-blocked-hover",
+        "focus": "retry-blocked-focus",
+        "pressed": "retry-blocked-pressed"
+      }
+    },
+    "retry-expired": {
+      "actionId": "OG-RETRY",
+      "scope": "source-action-representative-or-variant",
+      "label": "重读 / expired",
+      "selector": "#retry-profile",
+      "sourceScene": "expired",
+      "states": {
+        "default": "retry-expired-default",
+        "hover": "retry-expired-hover",
+        "focus": "retry-expired-focus",
+        "pressed": "retry-expired-pressed"
+      }
+    },
+    "retry-forbidden": {
+      "actionId": "OG-RETRY",
+      "scope": "source-action-representative-or-variant",
+      "label": "重读 / forbidden",
+      "selector": "#retry-profile",
+      "sourceScene": "forbidden",
+      "states": {
+        "default": "retry-forbidden-default",
+        "hover": "retry-forbidden-hover",
+        "focus": "retry-forbidden-focus",
+        "pressed": "retry-forbidden-pressed"
+      }
+    },
+    "retry-rate_limited": {
+      "actionId": "OG-RETRY",
+      "scope": "source-action-representative-or-variant",
+      "label": "重读 / rate_limited",
+      "selector": "#retry-profile",
+      "sourceScene": "rate_limited",
+      "states": {
+        "default": "retry-rate_limited-default",
+        "hover": "retry-rate_limited-hover",
+        "focus": "retry-rate_limited-focus",
+        "pressed": "retry-rate_limited-pressed"
+      }
+    },
+    "retry-conflict_page": {
+      "actionId": "OG-RETRY",
+      "scope": "source-action-representative-or-variant",
+      "label": "重读 / conflict_page",
+      "selector": "#retry-profile",
+      "sourceScene": "conflict_page",
+      "states": {
+        "default": "retry-conflict_page-default",
+        "hover": "retry-conflict_page-hover",
+        "focus": "retry-conflict_page-focus",
+        "pressed": "retry-conflict_page-pressed"
+      }
+    },
+    "nav-identity-available": {
+      "actionId": "PROPOSAL-NAV",
+      "scope": "proposal-only-not-source-action",
+      "label": "目录 identity / 可选",
+      "selector": ".directory nav a[href='#identity']",
+      "sourceScene": "normal",
+      "states": {
+        "default": "nav-identity-available-default",
+        "hover": "nav-identity-available-hover",
+        "focus": "nav-identity-available-focus",
+        "pressed": "nav-identity-available-pressed"
+      }
+    },
+    "nav-identity-selected": {
+      "actionId": "PROPOSAL-NAV",
+      "scope": "proposal-only-not-source-action",
+      "label": "目录 identity / 已选",
+      "selector": ".directory nav a[href='#identity']",
+      "sourceScene": "normal",
+      "states": {
+        "default": "nav-identity-selected-default",
+        "hover": "nav-identity-selected-hover",
+        "focus": "nav-identity-selected-focus",
+        "pressed": "nav-identity-selected-pressed"
+      }
+    },
+    "nav-profile-form-available": {
+      "actionId": "PROPOSAL-NAV",
+      "scope": "proposal-only-not-source-action",
+      "label": "目录 profile-form / 可选",
+      "selector": ".directory nav a[href='#profile-form']",
+      "sourceScene": "normal",
+      "states": {
+        "default": "nav-profile-form-available-default",
+        "hover": "nav-profile-form-available-hover",
+        "focus": "nav-profile-form-available-focus",
+        "pressed": "nav-profile-form-available-pressed"
+      }
+    },
+    "nav-profile-form-selected": {
+      "actionId": "PROPOSAL-NAV",
+      "scope": "proposal-only-not-source-action",
+      "label": "目录 profile-form / 已选",
+      "selector": ".directory nav a[href='#profile-form']",
+      "sourceScene": "normal",
+      "states": {
+        "default": "nav-profile-form-selected-default",
+        "hover": "nav-profile-form-selected-hover",
+        "focus": "nav-profile-form-selected-focus",
+        "pressed": "nav-profile-form-selected-pressed"
+      }
+    },
+    "nav-summary-available": {
+      "actionId": "PROPOSAL-NAV",
+      "scope": "proposal-only-not-source-action",
+      "label": "目录 summary / 可选",
+      "selector": ".directory nav a[href='#summary']",
+      "sourceScene": "normal",
+      "states": {
+        "default": "nav-summary-available-default",
+        "hover": "nav-summary-available-hover",
+        "focus": "nav-summary-available-focus",
+        "pressed": "nav-summary-available-pressed"
+      }
+    },
+    "nav-summary-selected": {
+      "actionId": "PROPOSAL-NAV",
+      "scope": "proposal-only-not-source-action",
+      "label": "目录 summary / 已选",
+      "selector": ".directory nav a[href='#summary']",
+      "sourceScene": "normal",
+      "states": {
+        "default": "nav-summary-selected-default",
+        "hover": "nav-summary-selected-hover",
+        "focus": "nav-summary-selected-focus",
+        "pressed": "nav-summary-selected-pressed"
+      }
+    },
+    "technical-identity": {
+      "actionId": "PROPOSAL-TECH",
+      "scope": "proposal-only-not-source-action",
+      "label": "技术详情 / identity",
+      "selector": "#identity summary",
+      "sourceScene": "normal",
+      "states": {
+        "default": "technical-identity-default",
+        "hover": "technical-identity-hover",
+        "focus": "technical-identity-focus",
+        "pressed": "technical-identity-pressed"
+      }
+    },
+    "technical-page": {
+      "actionId": "PROPOSAL-TECH",
+      "scope": "proposal-only-not-source-action",
+      "label": "技术详情 / page",
+      "selector": "#page-feedback summary",
+      "sourceScene": "refresh_error",
+      "states": {
+        "default": "technical-page-default",
+        "hover": "technical-page-hover",
+        "focus": "technical-page-focus",
+        "pressed": "technical-page-pressed"
+      }
+    },
+    "technical-form": {
+      "actionId": "PROPOSAL-TECH",
+      "scope": "proposal-only-not-source-action",
+      "label": "技术详情 / form",
+      "selector": "#form-feedback summary",
+      "sourceScene": "save_error",
+      "states": {
+        "default": "technical-form-default",
+        "hover": "technical-form-hover",
+        "focus": "technical-form-focus",
+        "pressed": "technical-form-pressed"
+      }
+    },
+    "save_error": {
+      "actionId": "OG-PROFILE-SAVE",
+      "scope": "source-action-representative-or-variant",
+      "label": "保存反馈 / save_error",
+      "selector": "#save-profile",
+      "sourceScene": "save_error",
+      "states": {
+        "default": "save_error-default",
+        "hover": "save_error-hover",
+        "focus": "save_error-focus",
+        "pressed": "save_error-pressed"
+      },
+      "context": "save_error-context"
+    },
+    "save_conflict": {
+      "actionId": "OG-PROFILE-SAVE",
+      "scope": "source-action-representative-or-variant",
+      "label": "保存反馈 / save_conflict",
+      "selector": "#save-profile",
+      "sourceScene": "save_conflict",
+      "states": {
+        "default": "save_conflict-default",
+        "hover": "save_conflict-hover",
+        "focus": "save_conflict-focus",
+        "pressed": "save_conflict-pressed"
+      },
+      "context": "save_conflict-context"
+    },
+    "save_timeout": {
+      "actionId": "PROPOSAL-RECHECK",
+      "scope": "proposal-only-not-source-action",
+      "label": "结果核验 / save_timeout",
+      "selector": "#save-profile",
+      "sourceScene": "save_timeout",
+      "states": {
+        "disabled": "save_timeout-disabled"
+      },
+      "context": "save_timeout-context"
+    },
+    "write_read_failed": {
+      "actionId": "PROPOSAL-RECHECK",
+      "scope": "proposal-only-not-source-action",
+      "label": "结果核验 / write_read_failed",
+      "selector": "#save-profile",
+      "sourceScene": "write_read_failed",
+      "states": {
+        "disabled": "write_read_failed-disabled"
+      },
+      "context": "write_read_failed-context"
+    },
+    "refresh-loading": {
+      "actionId": "OG-REFRESH",
+      "scope": "source-action-representative-or-variant",
+      "label": "首次加载不能刷新",
+      "selector": "#refresh-profile",
+      "sourceScene": "loading",
+      "states": {
+        "disabled": "refresh-loading-disabled"
+      }
+    }
+  },
+  "checks": [
+    {
+      "id": "save",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 108,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 108,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 108,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 108,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save",
+      "width": 1440,
+      "state": "pending",
+      "metrics": {
+        "width": 105.015625,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "refresh",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "refresh",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "refresh",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "refresh",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "refresh",
+      "width": 1440,
+      "state": "pending",
+      "metrics": {
+        "width": 105.015625,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-blocked",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-blocked",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-blocked",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-blocked",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-expired",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-expired",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-expired",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-expired",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-forbidden",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-forbidden",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-forbidden",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-forbidden",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-rate_limited",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-rate_limited",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-rate_limited",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-rate_limited",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-conflict_page",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-conflict_page",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-conflict_page",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-conflict_page",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-available",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-available",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-available",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-available",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-selected",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-selected",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-selected",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-selected",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-available",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-available",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-available",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-available",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-selected",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-selected",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-selected",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-selected",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-available",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-available",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-available",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-available",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-selected",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-selected",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-selected",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-selected",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 188,
+        "height": 49.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-identity",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 1084,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-identity",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 1084,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-identity",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 1084,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-identity",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 1084,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-page",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 1100,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-page",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 1100,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-page",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 1100,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-page",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 1100,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-form",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 824,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-form",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 824,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-form",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 824,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-form",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 824,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_error",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 108,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_error",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 108,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_error",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 108,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_error",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 108,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_conflict",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 108,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_conflict",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 108,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_conflict",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 108,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_conflict",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 108,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_timeout",
+      "width": 1440,
+      "state": "disabled",
+      "metrics": {
+        "width": 108,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "write_read_failed",
+      "width": 1440,
+      "state": "disabled",
+      "metrics": {
+        "width": 108,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "refresh-loading",
+      "width": 1440,
+      "state": "disabled",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save",
+      "width": 390,
+      "state": "pending",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "refresh",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "refresh",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "refresh",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "refresh",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "refresh",
+      "width": 390,
+      "state": "pending",
+      "metrics": {
+        "width": 105.015625,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-blocked",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-blocked",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-blocked",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-blocked",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-expired",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-expired",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-expired",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-expired",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-forbidden",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-forbidden",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-forbidden",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-forbidden",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-rate_limited",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-rate_limited",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-rate_limited",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-rate_limited",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-conflict_page",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-conflict_page",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-conflict_page",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "retry-conflict_page",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-available",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-available",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-available",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-available",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-selected",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-selected",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-selected",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-identity-selected",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-available",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 115.34375,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-available",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 115.34375,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-available",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 115.34375,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-available",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 115.34375,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-selected",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 115.34375,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-selected",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 115.34375,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-selected",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 115.34375,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-profile-form-selected",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 115.34375,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-available",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-available",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-available",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-available",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-selected",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-selected",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-selected",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "nav-summary-selected",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 115.328125,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-identity",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-identity",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-identity",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-identity",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-page",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 324,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-page",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 324,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-page",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 324,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-page",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 324,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-form",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 288,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-form",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 288,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-form",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 288,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "technical-form",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 288,
+        "height": 44,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_error",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_error",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_error",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_error",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_conflict",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_conflict",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_conflict",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_conflict",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "save_timeout",
+      "width": 390,
+      "state": "disabled",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "write_read_failed",
+      "width": 390,
+      "state": "disabled",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    },
+    {
+      "id": "refresh-loading",
+      "width": 390,
+      "state": "disabled",
+      "metrics": {
+        "width": 92,
+        "height": 47.59375,
+        "font": 16,
+        "hit": true,
+        "overflow": false
+      },
+      "unchangedFacts": true
+    }
+  ],
+  "interactions": [
+    {
+      "width": 1440,
+      "id": "save",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "refresh",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "retry",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "retry-blocked",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "retry-expired",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "retry-forbidden",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "retry-rate_limited",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "retry-conflict_page",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "nav-identity-available",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "nav-identity-selected",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "nav-profile-form-available",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "nav-profile-form-selected",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "nav-summary-available",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "nav-summary-selected",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "technical-identity",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "technical-page",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "technical-form",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "save_error",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 1440,
+      "id": "save_conflict",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "save",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "refresh",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "retry",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "retry-blocked",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "retry-expired",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "retry-forbidden",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "retry-rate_limited",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "retry-conflict_page",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "nav-identity-available",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "nav-identity-selected",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "nav-profile-form-available",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "nav-profile-form-selected",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "nav-summary-available",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "nav-summary-selected",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "technical-identity",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "technical-page",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "technical-form",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "save_error",
+      "exactIntentOrLocalNavigation": true
+    },
+    {
+      "width": 390,
+      "id": "save_conflict",
+      "exactIntentOrLocalNavigation": true
+    }
+  ],
+  "screenshots": [
+    {
+      "scene": "save-default",
+      "width": 1440,
+      "file": "save-default-1440.png",
+      "sha256": "39d3a56ed1fbdd4607768cf97398120b9e2caed281c2a670cdc8dc75fcc0dbef",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "save-hover",
+      "width": 1440,
+      "file": "save-hover-1440.png",
+      "sha256": "3b440e93a030f036937fe08ce59013de1cdc09fdfb6c540782b0dff339158522",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "save-focus",
+      "width": 1440,
+      "file": "save-focus-1440.png",
+      "sha256": "0373a1080597e737510313e87fa578cf65849d1fc989753fb2bece687b33ac8d",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "save-pressed",
+      "width": 1440,
+      "file": "save-pressed-1440.png",
+      "sha256": "1712bf17202dd66662ee8d50d42ba35f336103b391c15bdc0a8621937a056e89",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "save-pending",
+      "width": 1440,
+      "file": "save-pending-1440.png",
+      "sha256": "abbe92108c3ba790d435b95531c8d43b094210651411fb3d6599ea78b51b911c",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "refresh-default",
+      "width": 1440,
+      "file": "refresh-default-1440.png",
+      "sha256": "9bf77a54c2afa844dee5092a04449ccbca96500a262668880bc698f5703cfdb8",
+      "control": {
+        "selector": "#refresh-profile",
+        "actionId": "OG-REFRESH",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "refresh-hover",
+      "width": 1440,
+      "file": "refresh-hover-1440.png",
+      "sha256": "0664e2b45413439bfb769c7ce15314ab92c6ae5c63f47a2af7a198638c103787",
+      "control": {
+        "selector": "#refresh-profile",
+        "actionId": "OG-REFRESH",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "refresh-focus",
+      "width": 1440,
+      "file": "refresh-focus-1440.png",
+      "sha256": "16ee1ac41519a468a473ca5831cd4bebed80d18980bc33785276b3404b2882a9",
+      "control": {
+        "selector": "#refresh-profile",
+        "actionId": "OG-REFRESH",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "refresh-pressed",
+      "width": 1440,
+      "file": "refresh-pressed-1440.png",
+      "sha256": "d42e58be3cdd7d7c5e7accc24788aa87061af2111b1e40b1b885a2209a0fa0ad",
+      "control": {
+        "selector": "#refresh-profile",
+        "actionId": "OG-REFRESH",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "refresh-pending",
+      "width": 1440,
+      "file": "refresh-pending-1440.png",
+      "sha256": "5d1400f5c116b50ecb68a9a9de9667137ec5b21ee54dfb2ce252713051f45636",
+      "control": {
+        "selector": "#refresh-profile",
+        "actionId": "OG-REFRESH",
+        "scope": "source-action-representative-or-variant",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "retry-default",
+      "width": 1440,
+      "file": "retry-default-1440.png",
+      "sha256": "70a0079028675b8c6410bcbab83074acb99a5d24336e5b08863e0d8bd127bd30",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "retry-hover",
+      "width": 1440,
+      "file": "retry-hover-1440.png",
+      "sha256": "a8fea39159d378c8fa67c4624951bf5f43ac1b8d6f69f6617dce32e636ed1dde",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "retry-focus",
+      "width": 1440,
+      "file": "retry-focus-1440.png",
+      "sha256": "c04f90195a9d59045bc434dc00e293ebbffb2c2c2154c941857d39b3fba94342",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "retry-pressed",
+      "width": 1440,
+      "file": "retry-pressed-1440.png",
+      "sha256": "07e238fb5b1fa644efc128961c013b6ab72dd42cff0caaed7385aa0e2f26ab5b",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "retry-blocked-default",
+      "width": 1440,
+      "file": "retry-blocked-default-1440.png",
+      "sha256": "14af902a6af4fd1c3e7fb8253242e46ede9e088bf048299ca756c0a72b54cbe3",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "retry-blocked-hover",
+      "width": 1440,
+      "file": "retry-blocked-hover-1440.png",
+      "sha256": "1026e91790cfeaf1a2fbc89f0e125ea5e70b97fa8329963a68a6f08b5b3a10ae",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "retry-blocked-focus",
+      "width": 1440,
+      "file": "retry-blocked-focus-1440.png",
+      "sha256": "8464d34c97875831540d15510e9764b972ebfc86ec09d8fc94a15c4b6b7fd0c5",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "retry-blocked-pressed",
+      "width": 1440,
+      "file": "retry-blocked-pressed-1440.png",
+      "sha256": "6914c0b422a9c41f8ab9a012a407778a0ab0d338c43d52e683afd6b029e37431",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "retry-expired-default",
+      "width": 1440,
+      "file": "retry-expired-default-1440.png",
+      "sha256": "99aeac3dc21b9439089d74a73fc77cad70b347c5703294fccbab377d0d7daa18",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "retry-expired-hover",
+      "width": 1440,
+      "file": "retry-expired-hover-1440.png",
+      "sha256": "bb7f89996a7f51452bb55d7ba9315f99fdcd7c1c59f04a382e115a9307173f91",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "retry-expired-focus",
+      "width": 1440,
+      "file": "retry-expired-focus-1440.png",
+      "sha256": "24ec2e1621b04679019576f0b36a21c0613c18250df373c4759b266da14c4556",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "retry-expired-pressed",
+      "width": 1440,
+      "file": "retry-expired-pressed-1440.png",
+      "sha256": "f7b13b02ac0e1de827ec9c1459e1d93a779ae4f9a12d1e2ead3c2551b5eefd4b",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "retry-forbidden-default",
+      "width": 1440,
+      "file": "retry-forbidden-default-1440.png",
+      "sha256": "49467add115afafc9e28505b4a37ea7f47d0691b6c123fc218ca416ab5a966f1",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "retry-forbidden-hover",
+      "width": 1440,
+      "file": "retry-forbidden-hover-1440.png",
+      "sha256": "5a863fb108d32d43c5873d909ff8d0787a86c9304aa0897895ae2b624f458573",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "retry-forbidden-focus",
+      "width": 1440,
+      "file": "retry-forbidden-focus-1440.png",
+      "sha256": "8909bbb65972a9181325b6f29503fb34e87bdac288ea4815bb66db660918f239",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "retry-forbidden-pressed",
+      "width": 1440,
+      "file": "retry-forbidden-pressed-1440.png",
+      "sha256": "e1949a1e3e344bc77978dd1a6650040e3db51681951c7f6a10f95678a249e530",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "retry-rate_limited-default",
+      "width": 1440,
+      "file": "retry-rate_limited-default-1440.png",
+      "sha256": "e4d7f13df34536f4a1ef7040671a74d6cfcfeaf4059ba8214778fc5d3512d26e",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "retry-rate_limited-hover",
+      "width": 1440,
+      "file": "retry-rate_limited-hover-1440.png",
+      "sha256": "4429c11c083e337508ec6855e19cad16bd4fe57b5a38349a30c0cfe1c93a2504",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "retry-rate_limited-focus",
+      "width": 1440,
+      "file": "retry-rate_limited-focus-1440.png",
+      "sha256": "b8225850086a5a0e415e74324a15b539cbcc218f06f7826ad250a7370ca7d5c1",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "retry-rate_limited-pressed",
+      "width": 1440,
+      "file": "retry-rate_limited-pressed-1440.png",
+      "sha256": "202f0c29e2dd79e96002f0b2617be315725e8729e6c70f1e3832bf0590c1fe17",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "retry-conflict_page-default",
+      "width": 1440,
+      "file": "retry-conflict_page-default-1440.png",
+      "sha256": "e43992995d2492fc2569b16f19b0aa884117f2c8c8c75713efb4045bf86c992b",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "retry-conflict_page-hover",
+      "width": 1440,
+      "file": "retry-conflict_page-hover-1440.png",
+      "sha256": "098839e89e181cbb86cd6cb1b83c146455589470f837c809fef25d5e20c125b4",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "retry-conflict_page-focus",
+      "width": 1440,
+      "file": "retry-conflict_page-focus-1440.png",
+      "sha256": "b0b2ef211c8c08396fb3d2311dc8976440e5f88db5052fc462d8e954ebb5aa4f",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "retry-conflict_page-pressed",
+      "width": 1440,
+      "file": "retry-conflict_page-pressed-1440.png",
+      "sha256": "4e59a4826a60eeafc0ce19ff2cf116ce107247b374526189e0d8760e61ce0831",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "nav-identity-available-default",
+      "width": 1440,
+      "file": "nav-identity-available-default-1440.png",
+      "sha256": "3a7f7f2d10fd89792d56822324d645a0c32e1294f8b893739da26ba4dabe0ab1",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "nav-identity-available-hover",
+      "width": 1440,
+      "file": "nav-identity-available-hover-1440.png",
+      "sha256": "6c140d18df6af214f4d085ee3d18aea4eac66453d3dcc6441d2fbe0a0a93317d",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "nav-identity-available-focus",
+      "width": 1440,
+      "file": "nav-identity-available-focus-1440.png",
+      "sha256": "8b0cf79f3c26f805eafbfd7128374bec09edaaf399f4a35a830240ab83de0c7d",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "nav-identity-available-pressed",
+      "width": 1440,
+      "file": "nav-identity-available-pressed-1440.png",
+      "sha256": "6c140d18df6af214f4d085ee3d18aea4eac66453d3dcc6441d2fbe0a0a93317d",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "nav-identity-selected-default",
+      "width": 1440,
+      "file": "nav-identity-selected-default-1440.png",
+      "sha256": "9bf77a54c2afa844dee5092a04449ccbca96500a262668880bc698f5703cfdb8",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "nav-identity-selected-hover",
+      "width": 1440,
+      "file": "nav-identity-selected-hover-1440.png",
+      "sha256": "f0b2fda3b59cdfec7e7a02b52f80ac5f74c3fda41661f5cec72cb5c80672d69f",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "nav-identity-selected-focus",
+      "width": 1440,
+      "file": "nav-identity-selected-focus-1440.png",
+      "sha256": "825cb21e31bdc692d07c8927f4dc51993c11e6ce2e5ae029e13a3ec91b1c4841",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "nav-identity-selected-pressed",
+      "width": 1440,
+      "file": "nav-identity-selected-pressed-1440.png",
+      "sha256": "f0b2fda3b59cdfec7e7a02b52f80ac5f74c3fda41661f5cec72cb5c80672d69f",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "nav-profile-form-available-default",
+      "width": 1440,
+      "file": "nav-profile-form-available-default-1440.png",
+      "sha256": "9bf77a54c2afa844dee5092a04449ccbca96500a262668880bc698f5703cfdb8",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "nav-profile-form-available-hover",
+      "width": 1440,
+      "file": "nav-profile-form-available-hover-1440.png",
+      "sha256": "99a36d3b251fbc847d861b30136516278a417960caed54811e8752c4afb33779",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "nav-profile-form-available-focus",
+      "width": 1440,
+      "file": "nav-profile-form-available-focus-1440.png",
+      "sha256": "75cf214bf04b34759682d786898479276e76510e3afe8e9168b094081d4d12f2",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "nav-profile-form-available-pressed",
+      "width": 1440,
+      "file": "nav-profile-form-available-pressed-1440.png",
+      "sha256": "99a36d3b251fbc847d861b30136516278a417960caed54811e8752c4afb33779",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "nav-profile-form-selected-default",
+      "width": 1440,
+      "file": "nav-profile-form-selected-default-1440.png",
+      "sha256": "c7f0df5c9ad4154628cd14048ec202a500f244bb8a40e0db5fc2c0a58b2467f2",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "nav-profile-form-selected-hover",
+      "width": 1440,
+      "file": "nav-profile-form-selected-hover-1440.png",
+      "sha256": "99ff6ed450d64ec04869fed4cd96fea4de1f4cb87013b11ba3eed0e5d7f4461f",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "nav-profile-form-selected-focus",
+      "width": 1440,
+      "file": "nav-profile-form-selected-focus-1440.png",
+      "sha256": "f40928adba8143b63e27593743ecf2e9fb31919e587e1db555c7b0bcdeb9a165",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "nav-profile-form-selected-pressed",
+      "width": 1440,
+      "file": "nav-profile-form-selected-pressed-1440.png",
+      "sha256": "4aef47d6365cee208f474515a7c45782e9530a6937b552623aeec7c6105c0981",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "nav-summary-available-default",
+      "width": 1440,
+      "file": "nav-summary-available-default-1440.png",
+      "sha256": "9bf77a54c2afa844dee5092a04449ccbca96500a262668880bc698f5703cfdb8",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "nav-summary-available-hover",
+      "width": 1440,
+      "file": "nav-summary-available-hover-1440.png",
+      "sha256": "098e041c70a7fc138d7e7fc1eccec2ad3593adbb71c7888678b2f11882696e7a",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "nav-summary-available-focus",
+      "width": 1440,
+      "file": "nav-summary-available-focus-1440.png",
+      "sha256": "49fd7c667af3ad55f8a3a60528e449d3f980f2ee05818a24771151f19a578d7f",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "nav-summary-available-pressed",
+      "width": 1440,
+      "file": "nav-summary-available-pressed-1440.png",
+      "sha256": "098e041c70a7fc138d7e7fc1eccec2ad3593adbb71c7888678b2f11882696e7a",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "nav-summary-selected-default",
+      "width": 1440,
+      "file": "nav-summary-selected-default-1440.png",
+      "sha256": "3a7f7f2d10fd89792d56822324d645a0c32e1294f8b893739da26ba4dabe0ab1",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "nav-summary-selected-hover",
+      "width": 1440,
+      "file": "nav-summary-selected-hover-1440.png",
+      "sha256": "c2cc6531f81030d731f41832fe44f36d19171eef0a2606656aff466a6af67b71",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "nav-summary-selected-focus",
+      "width": 1440,
+      "file": "nav-summary-selected-focus-1440.png",
+      "sha256": "07cac7b14eba54f913c50c82aa6c6520bb0ee9d243e97282f5d3e2615596d636",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "nav-summary-selected-pressed",
+      "width": 1440,
+      "file": "nav-summary-selected-pressed-1440.png",
+      "sha256": "c2cc6531f81030d731f41832fe44f36d19171eef0a2606656aff466a6af67b71",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "technical-identity-default",
+      "width": 1440,
+      "file": "technical-identity-default-1440.png",
+      "sha256": "9bf77a54c2afa844dee5092a04449ccbca96500a262668880bc698f5703cfdb8",
+      "control": {
+        "selector": "#identity summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "technical-identity-hover",
+      "width": 1440,
+      "file": "technical-identity-hover-1440.png",
+      "sha256": "9bf77a54c2afa844dee5092a04449ccbca96500a262668880bc698f5703cfdb8",
+      "control": {
+        "selector": "#identity summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "technical-identity-focus",
+      "width": 1440,
+      "file": "technical-identity-focus-1440.png",
+      "sha256": "db96a02ce05f70e8316aa3d3e77d5704f49fe3312aac18487b90be9db796b1f6",
+      "control": {
+        "selector": "#identity summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "technical-identity-pressed",
+      "width": 1440,
+      "file": "technical-identity-pressed-1440.png",
+      "sha256": "9bf77a54c2afa844dee5092a04449ccbca96500a262668880bc698f5703cfdb8",
+      "control": {
+        "selector": "#identity summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "technical-page-default",
+      "width": 1440,
+      "file": "technical-page-default-1440.png",
+      "sha256": "e7ea81d8eaf12809a9c441b8ff83aea79f250160fc1b78112bc7ac0bc020dacc",
+      "control": {
+        "selector": "#page-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "technical-page-hover",
+      "width": 1440,
+      "file": "technical-page-hover-1440.png",
+      "sha256": "e7ea81d8eaf12809a9c441b8ff83aea79f250160fc1b78112bc7ac0bc020dacc",
+      "control": {
+        "selector": "#page-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "technical-page-focus",
+      "width": 1440,
+      "file": "technical-page-focus-1440.png",
+      "sha256": "18f2cf278c72f1f216e3b94b81ebab6f259d69c38e188a183bc6aa74251a011c",
+      "control": {
+        "selector": "#page-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "technical-page-pressed",
+      "width": 1440,
+      "file": "technical-page-pressed-1440.png",
+      "sha256": "e7ea81d8eaf12809a9c441b8ff83aea79f250160fc1b78112bc7ac0bc020dacc",
+      "control": {
+        "selector": "#page-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "technical-form-default",
+      "width": 1440,
+      "file": "technical-form-default-1440.png",
+      "sha256": "41b202d5b056294e2f128a58812e154fb3d274426bcb1681578f0771cde9cee7",
+      "control": {
+        "selector": "#form-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "technical-form-hover",
+      "width": 1440,
+      "file": "technical-form-hover-1440.png",
+      "sha256": "41b202d5b056294e2f128a58812e154fb3d274426bcb1681578f0771cde9cee7",
+      "control": {
+        "selector": "#form-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "technical-form-focus",
+      "width": 1440,
+      "file": "technical-form-focus-1440.png",
+      "sha256": "e2b05279683ed68cdbc424d75d1bc65f2b7c4495f33cd7bc983860ac1f8623ef",
+      "control": {
+        "selector": "#form-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "technical-form-pressed",
+      "width": 1440,
+      "file": "technical-form-pressed-1440.png",
+      "sha256": "41b202d5b056294e2f128a58812e154fb3d274426bcb1681578f0771cde9cee7",
+      "control": {
+        "selector": "#form-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "save_error-default",
+      "width": 1440,
+      "file": "save_error-default-1440.png",
+      "sha256": "c402f85bc4c14402b5f044a91e8242ae91e5c86d19de887ba29fbe63eed88a52",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "save_error-hover",
+      "width": 1440,
+      "file": "save_error-hover-1440.png",
+      "sha256": "8e8b514666c13ca144a637f863818cf832a60444b7b3e53aa05a11b8ed145df4",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "save_error-focus",
+      "width": 1440,
+      "file": "save_error-focus-1440.png",
+      "sha256": "2e89b8c00fc547cbadfd7394ac2094eb6b4a3a90d61b338e30522b312d159faf",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "save_error-pressed",
+      "width": 1440,
+      "file": "save_error-pressed-1440.png",
+      "sha256": "0dd21df3667db9f67e81879090410d6ce68e6c448d63566a9a41d32bb56432b8",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "save_error-context",
+      "width": 1440,
+      "file": "save_error-context-1440.png",
+      "sha256": "4c20259c9881b3973d25681ea52117d5e3dea784b5d8d4b04f48576f08135e82",
+      "control": {
+        "selector": "#profile-form",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "context"
+      }
+    },
+    {
+      "scene": "save_conflict-default",
+      "width": 1440,
+      "file": "save_conflict-default-1440.png",
+      "sha256": "c402f85bc4c14402b5f044a91e8242ae91e5c86d19de887ba29fbe63eed88a52",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "save_conflict-hover",
+      "width": 1440,
+      "file": "save_conflict-hover-1440.png",
+      "sha256": "8e8b514666c13ca144a637f863818cf832a60444b7b3e53aa05a11b8ed145df4",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "save_conflict-focus",
+      "width": 1440,
+      "file": "save_conflict-focus-1440.png",
+      "sha256": "5c146865e07fa2f3c46b25eb9fa366126329e106bf8eef560bafe2cc839b7f3e",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "save_conflict-pressed",
+      "width": 1440,
+      "file": "save_conflict-pressed-1440.png",
+      "sha256": "0dd21df3667db9f67e81879090410d6ce68e6c448d63566a9a41d32bb56432b8",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "save_conflict-context",
+      "width": 1440,
+      "file": "save_conflict-context-1440.png",
+      "sha256": "e9b76aeb450f0cee7e2c09c544e8514ab1f6d0572bf872128756aff3fa2ddeb8",
+      "control": {
+        "selector": "#profile-form",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "context"
+      }
+    },
+    {
+      "scene": "save_timeout-disabled",
+      "width": 1440,
+      "file": "save_timeout-disabled-1440.png",
+      "sha256": "8a072fc9c036c4e9480be82d0fbc68d1946541b06e4e253d30d5370c006e3794",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "PROPOSAL-RECHECK",
+        "scope": "proposal-only-not-source-action",
+        "state": "disabled"
+      }
+    },
+    {
+      "scene": "save_timeout-context",
+      "width": 1440,
+      "file": "save_timeout-context-1440.png",
+      "sha256": "a176c4c3f2005c341c8add5a9b21f43d6781d28189fffbd7a39c01ee949c4d89",
+      "control": {
+        "selector": "#profile-form",
+        "actionId": "PROPOSAL-RECHECK",
+        "scope": "proposal-only-not-source-action",
+        "state": "context"
+      }
+    },
+    {
+      "scene": "write_read_failed-disabled",
+      "width": 1440,
+      "file": "write_read_failed-disabled-1440.png",
+      "sha256": "8a072fc9c036c4e9480be82d0fbc68d1946541b06e4e253d30d5370c006e3794",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "PROPOSAL-RECHECK",
+        "scope": "proposal-only-not-source-action",
+        "state": "disabled"
+      }
+    },
+    {
+      "scene": "write_read_failed-context",
+      "width": 1440,
+      "file": "write_read_failed-context-1440.png",
+      "sha256": "874b4df0128c97bdcc029a859bc2ed611eff9f9d9ac13a4d6f1c89a7f29537ef",
+      "control": {
+        "selector": "#profile-form",
+        "actionId": "PROPOSAL-RECHECK",
+        "scope": "proposal-only-not-source-action",
+        "state": "context"
+      }
+    },
+    {
+      "scene": "refresh-loading-disabled",
+      "width": 1440,
+      "file": "refresh-loading-disabled-1440.png",
+      "sha256": "96842acd39b3c2f8badf2f69e9e946888e1d0396f01857681fbe67441d7cc3f6",
+      "control": {
+        "selector": "#refresh-profile",
+        "actionId": "OG-REFRESH",
+        "scope": "source-action-representative-or-variant",
+        "state": "disabled"
+      }
+    },
+    {
+      "scene": "save-default",
+      "width": 390,
+      "file": "save-default-390.png",
+      "sha256": "9fa9c69659abc041a259db4e80e285fef3db17f719c4727a170bcbde744f94af",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "save-hover",
+      "width": 390,
+      "file": "save-hover-390.png",
+      "sha256": "ef76ac108b1d3cdba61897dd1969ae219d81610e8844c193be03b4ec115aada3",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "save-focus",
+      "width": 390,
+      "file": "save-focus-390.png",
+      "sha256": "89f81b0ad253dc1794e3afdf90f43f184ca7bd1d487f6ffd28732b9e901e5dce",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "save-pressed",
+      "width": 390,
+      "file": "save-pressed-390.png",
+      "sha256": "21a649a3e90c1ab5ec41061e6ca161fb4ee78d57bd2b529b3d7c3d74b9b8e248",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "save-pending",
+      "width": 390,
+      "file": "save-pending-390.png",
+      "sha256": "167d95d77b9cffe192acee24296ee37fcd587946f1a5a1fed20337fcd57feb69",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "refresh-default",
+      "width": 390,
+      "file": "refresh-default-390.png",
+      "sha256": "b63ad6a05209e6b57ec697a97b74ea8a6e55963e95ac6ff000a7aa860bb8c4b3",
+      "control": {
+        "selector": "#refresh-profile",
+        "actionId": "OG-REFRESH",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "refresh-hover",
+      "width": 390,
+      "file": "refresh-hover-390.png",
+      "sha256": "6dcc83c5d9b6e438b494b7e2f67f4bf9370e5a96dfe4c6f725f0513945c09d54",
+      "control": {
+        "selector": "#refresh-profile",
+        "actionId": "OG-REFRESH",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "refresh-focus",
+      "width": 390,
+      "file": "refresh-focus-390.png",
+      "sha256": "aaf336cd901e7fa78f9ed014fb05a074d6f8d33de93565148b6066fb19f3c577",
+      "control": {
+        "selector": "#refresh-profile",
+        "actionId": "OG-REFRESH",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "refresh-pressed",
+      "width": 390,
+      "file": "refresh-pressed-390.png",
+      "sha256": "a58135faf4a31a20757a1f7641b83b3480822217a3407c5bb6c8da05ef5963e9",
+      "control": {
+        "selector": "#refresh-profile",
+        "actionId": "OG-REFRESH",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "refresh-pending",
+      "width": 390,
+      "file": "refresh-pending-390.png",
+      "sha256": "447233ee346211096ae7ccd607c5cc7a7c8014e1e9e19ef4be2bfefa40131281",
+      "control": {
+        "selector": "#refresh-profile",
+        "actionId": "OG-REFRESH",
+        "scope": "source-action-representative-or-variant",
+        "state": "pending"
+      }
+    },
+    {
+      "scene": "retry-default",
+      "width": 390,
+      "file": "retry-default-390.png",
+      "sha256": "be232bd9d1ad002792384a541a426d73f7dc9e0e89cc7cc96eca804dae32f874",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "retry-hover",
+      "width": 390,
+      "file": "retry-hover-390.png",
+      "sha256": "943641cfaee675c1641b195758baaef725877081a43a82d48277c53151ed8a09",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "retry-focus",
+      "width": 390,
+      "file": "retry-focus-390.png",
+      "sha256": "de8420d9af8577880367aaa26bc687ef5bf5ee5ac3eb33edabcf4dc069ba3dec",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "retry-pressed",
+      "width": 390,
+      "file": "retry-pressed-390.png",
+      "sha256": "fe537f357c5e12ea3412cf25222b653a2afacd41f12ca5dfe6d90cc283c8f3e0",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "retry-blocked-default",
+      "width": 390,
+      "file": "retry-blocked-default-390.png",
+      "sha256": "371361061be67c6ddade984992db0236a7e5008bdbc3090ada39ba588c85e5ad",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "retry-blocked-hover",
+      "width": 390,
+      "file": "retry-blocked-hover-390.png",
+      "sha256": "b8780cec5f532a790a7526fc8aae0ea7417eae2313e6beededf426344b173e1b",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "retry-blocked-focus",
+      "width": 390,
+      "file": "retry-blocked-focus-390.png",
+      "sha256": "552b34008aead2d287cc2dcf8f82f0153c24ddb7267659a1c9041bee7e2e14d9",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "retry-blocked-pressed",
+      "width": 390,
+      "file": "retry-blocked-pressed-390.png",
+      "sha256": "1ee87ab4abd132d5e02d03adbabdb11b921c8f7079f12b159479adcd4d94d2f6",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "retry-expired-default",
+      "width": 390,
+      "file": "retry-expired-default-390.png",
+      "sha256": "9118528e58fa720e8d3e2d6e80e7b31e9314f7fad23080c6b3637f55bca6ca92",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "retry-expired-hover",
+      "width": 390,
+      "file": "retry-expired-hover-390.png",
+      "sha256": "89380f72d955a9aab35db02b452b038846c41970de2f90c5d6dff0fbf68b33b6",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "retry-expired-focus",
+      "width": 390,
+      "file": "retry-expired-focus-390.png",
+      "sha256": "3971c4ebc98472a928085d126b25b83c45123f482c52e7f9cad8cc9d17983192",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "retry-expired-pressed",
+      "width": 390,
+      "file": "retry-expired-pressed-390.png",
+      "sha256": "1c07b95f1a94a7793d48d7e8efbb1d09787b0783485e791494ad2a5851c332f3",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "retry-forbidden-default",
+      "width": 390,
+      "file": "retry-forbidden-default-390.png",
+      "sha256": "abf0566dcd5fa007d90fdd10e838b75e6d0026f9a776a7dd2ec00c1f4bb64a3c",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "retry-forbidden-hover",
+      "width": 390,
+      "file": "retry-forbidden-hover-390.png",
+      "sha256": "bb74c29fa5b54493fefaa21364a60a607fd641d4d7023b8d3ae23728bb85ddab",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "retry-forbidden-focus",
+      "width": 390,
+      "file": "retry-forbidden-focus-390.png",
+      "sha256": "dc8917da06a72835ccf8bda84f0493812c1752a42736496080fe509a160d39c2",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "retry-forbidden-pressed",
+      "width": 390,
+      "file": "retry-forbidden-pressed-390.png",
+      "sha256": "7c352aabd07b853030793f430d26a1aa98d572b4ce4c140735fc111ee171e898",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "retry-rate_limited-default",
+      "width": 390,
+      "file": "retry-rate_limited-default-390.png",
+      "sha256": "69f9b854bcb8a822e4e646c18227de8c7221237b3a3a2f82caf85aa77c65257a",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "retry-rate_limited-hover",
+      "width": 390,
+      "file": "retry-rate_limited-hover-390.png",
+      "sha256": "b69bdfd4ae7af7364fa3620f27c4d1e8ee5c4a67257f01d78d0d799c7037a3a3",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "retry-rate_limited-focus",
+      "width": 390,
+      "file": "retry-rate_limited-focus-390.png",
+      "sha256": "349c56f168d69fd096c48bc1db624b6c5f4a7235780c029daee82769e1179544",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "retry-rate_limited-pressed",
+      "width": 390,
+      "file": "retry-rate_limited-pressed-390.png",
+      "sha256": "bdaac14e1548a4b2aa40c3baf70e2e165224cba3def4ae069f7732071ad8a094",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "retry-conflict_page-default",
+      "width": 390,
+      "file": "retry-conflict_page-default-390.png",
+      "sha256": "b3d90113c06f33d6de33a7b2ff00e4c19678f65cc652476159747ebd98552f6a",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "retry-conflict_page-hover",
+      "width": 390,
+      "file": "retry-conflict_page-hover-390.png",
+      "sha256": "dd03b03725696f5c15447c98dfcdbad4361c77387ea0fb4750bb87cac737d9c8",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "retry-conflict_page-focus",
+      "width": 390,
+      "file": "retry-conflict_page-focus-390.png",
+      "sha256": "40e9c1802d68f824edbb9268ce00122d65027d99da1d6413ddf6c36549269cef",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "retry-conflict_page-pressed",
+      "width": 390,
+      "file": "retry-conflict_page-pressed-390.png",
+      "sha256": "a9b08969d86aebfe7ffc3ef664df5e7e529cb73488f5beab8f47c411aafce4f8",
+      "control": {
+        "selector": "#retry-profile",
+        "actionId": "OG-RETRY",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "nav-identity-available-default",
+      "width": 390,
+      "file": "nav-identity-available-default-390.png",
+      "sha256": "56568091e4f18dea0886ff6cf8f23a2bf3c4456665a6d6bf7d584496416c2979",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "nav-identity-available-hover",
+      "width": 390,
+      "file": "nav-identity-available-hover-390.png",
+      "sha256": "eef5cc0421c5a5eb17639157aecc35f487f81cee59b9816b8487e552386a4e4c",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "nav-identity-available-focus",
+      "width": 390,
+      "file": "nav-identity-available-focus-390.png",
+      "sha256": "bf13c8a1685a717cb3e3ebfd3ca5f942eebf76f468ad63894e61ec898426c458",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "nav-identity-available-pressed",
+      "width": 390,
+      "file": "nav-identity-available-pressed-390.png",
+      "sha256": "eef5cc0421c5a5eb17639157aecc35f487f81cee59b9816b8487e552386a4e4c",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "nav-identity-selected-default",
+      "width": 390,
+      "file": "nav-identity-selected-default-390.png",
+      "sha256": "b63ad6a05209e6b57ec697a97b74ea8a6e55963e95ac6ff000a7aa860bb8c4b3",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "nav-identity-selected-hover",
+      "width": 390,
+      "file": "nav-identity-selected-hover-390.png",
+      "sha256": "ba2092bc2ea6437fd805872d9071c4b6ba351aa6249630dd8732f01db12a3be1",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "nav-identity-selected-focus",
+      "width": 390,
+      "file": "nav-identity-selected-focus-390.png",
+      "sha256": "1b3484c36b23e014c1414ea390161fdeedf5b04d36cb107abbba5c508d92b425",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "nav-identity-selected-pressed",
+      "width": 390,
+      "file": "nav-identity-selected-pressed-390.png",
+      "sha256": "ba2092bc2ea6437fd805872d9071c4b6ba351aa6249630dd8732f01db12a3be1",
+      "control": {
+        "selector": ".directory nav a[href='#identity']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "nav-profile-form-available-default",
+      "width": 390,
+      "file": "nav-profile-form-available-default-390.png",
+      "sha256": "b63ad6a05209e6b57ec697a97b74ea8a6e55963e95ac6ff000a7aa860bb8c4b3",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "nav-profile-form-available-hover",
+      "width": 390,
+      "file": "nav-profile-form-available-hover-390.png",
+      "sha256": "3b0bfdf92ae2853f0c0fe248a84928e8812d6d4940de382226b6637bc5e9def5",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "nav-profile-form-available-focus",
+      "width": 390,
+      "file": "nav-profile-form-available-focus-390.png",
+      "sha256": "9f9609213709ec0dc245271e429a323fa60f54e50703a7bb7fb699f9305b5c3f",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "nav-profile-form-available-pressed",
+      "width": 390,
+      "file": "nav-profile-form-available-pressed-390.png",
+      "sha256": "3b0bfdf92ae2853f0c0fe248a84928e8812d6d4940de382226b6637bc5e9def5",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "nav-profile-form-selected-default",
+      "width": 390,
+      "file": "nav-profile-form-selected-default-390.png",
+      "sha256": "8340f08a0b6b5cd00335146065fdcec8d347c46df3e239cb40c2dcb8d58517d9",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "nav-profile-form-selected-hover",
+      "width": 390,
+      "file": "nav-profile-form-selected-hover-390.png",
+      "sha256": "e6400a1654f18f3782cdd5d188d27028a834b2a1b956df817b5e8a0cf13d09fa",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "nav-profile-form-selected-focus",
+      "width": 390,
+      "file": "nav-profile-form-selected-focus-390.png",
+      "sha256": "31b5c39bf8b500cfc959b9b264195e3237caa801b3666af04d622194c2948318",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "nav-profile-form-selected-pressed",
+      "width": 390,
+      "file": "nav-profile-form-selected-pressed-390.png",
+      "sha256": "51e24140f54f3a772a330e68a49f93cd7d7c37b3d4a2d47e8e6ff5b0f74aa1ed",
+      "control": {
+        "selector": ".directory nav a[href='#profile-form']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "nav-summary-available-default",
+      "width": 390,
+      "file": "nav-summary-available-default-390.png",
+      "sha256": "b63ad6a05209e6b57ec697a97b74ea8a6e55963e95ac6ff000a7aa860bb8c4b3",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "nav-summary-available-hover",
+      "width": 390,
+      "file": "nav-summary-available-hover-390.png",
+      "sha256": "f0dd9d6f8b1e8c7d22f38cb0d0288900b6328406e0b824b391aa0605fe0d172f",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "nav-summary-available-focus",
+      "width": 390,
+      "file": "nav-summary-available-focus-390.png",
+      "sha256": "a3c3f467f7259bf9342464b2d5be27750dbd6381455d79086de522610d00aa7b",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "nav-summary-available-pressed",
+      "width": 390,
+      "file": "nav-summary-available-pressed-390.png",
+      "sha256": "9c92b7fd974c323d2f1e93e310e500f565479e4a0c26e16196a3deee50ad9962",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "nav-summary-selected-default",
+      "width": 390,
+      "file": "nav-summary-selected-default-390.png",
+      "sha256": "ada3134b58a847f9ceac074454d390dc16ae0cc549102bbb1fa6836e03a467c6",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "nav-summary-selected-hover",
+      "width": 390,
+      "file": "nav-summary-selected-hover-390.png",
+      "sha256": "a404e40ea9901e2bcafbe937296878e75c7f89fd1a0fe89d8b53d28dd2d42116",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "nav-summary-selected-focus",
+      "width": 390,
+      "file": "nav-summary-selected-focus-390.png",
+      "sha256": "1c66e91e9b44a01ecba73ceb8ae0460a1799b1269a145f947c7c734cc932d32a",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "nav-summary-selected-pressed",
+      "width": 390,
+      "file": "nav-summary-selected-pressed-390.png",
+      "sha256": "a404e40ea9901e2bcafbe937296878e75c7f89fd1a0fe89d8b53d28dd2d42116",
+      "control": {
+        "selector": ".directory nav a[href='#summary']",
+        "actionId": "PROPOSAL-NAV",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "technical-identity-default",
+      "width": 390,
+      "file": "technical-identity-default-390.png",
+      "sha256": "2a3a30f94867dca1ef7fc13cac7f18852dd30cafdd6875912a19fe7b87f2fc0e",
+      "control": {
+        "selector": "#identity summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "technical-identity-hover",
+      "width": 390,
+      "file": "technical-identity-hover-390.png",
+      "sha256": "57c684c85df052a8d4cdce354b6201ed91907380988f22a88e943c925a4bdd45",
+      "control": {
+        "selector": "#identity summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "technical-identity-focus",
+      "width": 390,
+      "file": "technical-identity-focus-390.png",
+      "sha256": "4272a436ec4e80840c56da4691e4313429a022a0b0eb0e4a15e912d0a865298c",
+      "control": {
+        "selector": "#identity summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "technical-identity-pressed",
+      "width": 390,
+      "file": "technical-identity-pressed-390.png",
+      "sha256": "57c684c85df052a8d4cdce354b6201ed91907380988f22a88e943c925a4bdd45",
+      "control": {
+        "selector": "#identity summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "technical-page-default",
+      "width": 390,
+      "file": "technical-page-default-390.png",
+      "sha256": "75dc96a6c3b1b98759aed7c2f410b214540a0ff7732e48912ed176d231f6d9d2",
+      "control": {
+        "selector": "#page-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "technical-page-hover",
+      "width": 390,
+      "file": "technical-page-hover-390.png",
+      "sha256": "75dc96a6c3b1b98759aed7c2f410b214540a0ff7732e48912ed176d231f6d9d2",
+      "control": {
+        "selector": "#page-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "technical-page-focus",
+      "width": 390,
+      "file": "technical-page-focus-390.png",
+      "sha256": "81e19a2556190ebba6c4766f2ed3d0f190d4b7c3de9ca7ce6cd6dbfe6fb6a78e",
+      "control": {
+        "selector": "#page-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "technical-page-pressed",
+      "width": 390,
+      "file": "technical-page-pressed-390.png",
+      "sha256": "75dc96a6c3b1b98759aed7c2f410b214540a0ff7732e48912ed176d231f6d9d2",
+      "control": {
+        "selector": "#page-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "technical-form-default",
+      "width": 390,
+      "file": "technical-form-default-390.png",
+      "sha256": "70f466841e6cbd082006bed9d5c022647bc0a0d26e2eef79aff241a56a3a82d3",
+      "control": {
+        "selector": "#form-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "technical-form-hover",
+      "width": 390,
+      "file": "technical-form-hover-390.png",
+      "sha256": "70f466841e6cbd082006bed9d5c022647bc0a0d26e2eef79aff241a56a3a82d3",
+      "control": {
+        "selector": "#form-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "technical-form-focus",
+      "width": 390,
+      "file": "technical-form-focus-390.png",
+      "sha256": "da6bb3806b935a464136b5b5da42d731c3c423186e3b3ca250d17edc1ac552a8",
+      "control": {
+        "selector": "#form-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "technical-form-pressed",
+      "width": 390,
+      "file": "technical-form-pressed-390.png",
+      "sha256": "70f466841e6cbd082006bed9d5c022647bc0a0d26e2eef79aff241a56a3a82d3",
+      "control": {
+        "selector": "#form-feedback summary",
+        "actionId": "PROPOSAL-TECH",
+        "scope": "proposal-only-not-source-action",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "save_error-default",
+      "width": 390,
+      "file": "save_error-default-390.png",
+      "sha256": "5f6264e5f157ad0d472ccb66b0b16ee9e3c1e19bc1304d505377bf9c607370f6",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "save_error-hover",
+      "width": 390,
+      "file": "save_error-hover-390.png",
+      "sha256": "fe4244a8ff5650524c78c0ef87bdb48eb0a05ab90d6be5f5d0da53e348a675cc",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "save_error-focus",
+      "width": 390,
+      "file": "save_error-focus-390.png",
+      "sha256": "a4d26e6f1b6e9d4a01b88f945d37e39d528978e1f8257f95f5cac112311a78ce",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "save_error-pressed",
+      "width": 390,
+      "file": "save_error-pressed-390.png",
+      "sha256": "b3fce7c428edb1a92af0e2a5fd92b4ac31c967746d837d5265d57bd4be34370d",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "save_error-context",
+      "width": 390,
+      "file": "save_error-context-390.png",
+      "sha256": "b2a63462e6b25975677799a754529b4a631d45b8abb4b2c20ec224a8932d06db",
+      "control": {
+        "selector": "#profile-form",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "context"
+      }
+    },
+    {
+      "scene": "save_conflict-default",
+      "width": 390,
+      "file": "save_conflict-default-390.png",
+      "sha256": "9607a1f5454c8d36f2db47221493cfdfeeedef80a84805b06e60dcd820c1bbcd",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "save_conflict-hover",
+      "width": 390,
+      "file": "save_conflict-hover-390.png",
+      "sha256": "de9a1fed440336e1281329eb2bd4f754330d17f22d33067ce98331f6a5992506",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "save_conflict-focus",
+      "width": 390,
+      "file": "save_conflict-focus-390.png",
+      "sha256": "042c08586c1033e1de2e8b01018fa1576327ba865467c8f1452fa1377ea34a80",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "save_conflict-pressed",
+      "width": 390,
+      "file": "save_conflict-pressed-390.png",
+      "sha256": "9cf474b40a10f6f155463c1ab6c1ba22720407c035a8f7797928270b983f27cc",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "save_conflict-context",
+      "width": 390,
+      "file": "save_conflict-context-390.png",
+      "sha256": "2b1414f38ca17cb0fb0fb81fd29bd8036ad34bc1482cb3ffc424570add95464c",
+      "control": {
+        "selector": "#profile-form",
+        "actionId": "OG-PROFILE-SAVE",
+        "scope": "source-action-representative-or-variant",
+        "state": "context"
+      }
+    },
+    {
+      "scene": "save_timeout-disabled",
+      "width": 390,
+      "file": "save_timeout-disabled-390.png",
+      "sha256": "e9ace8f945ab3b66ac9f7f33b12164e517f691c611b120a79cd5b52c50d5f4d2",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "PROPOSAL-RECHECK",
+        "scope": "proposal-only-not-source-action",
+        "state": "disabled"
+      }
+    },
+    {
+      "scene": "save_timeout-context",
+      "width": 390,
+      "file": "save_timeout-context-390.png",
+      "sha256": "39744d3710fd5f427fdb57bf31f904dc1ba34081cf0dc13b0ed2527478e74e73",
+      "control": {
+        "selector": "#profile-form",
+        "actionId": "PROPOSAL-RECHECK",
+        "scope": "proposal-only-not-source-action",
+        "state": "context"
+      }
+    },
+    {
+      "scene": "write_read_failed-disabled",
+      "width": 390,
+      "file": "write_read_failed-disabled-390.png",
+      "sha256": "e9ace8f945ab3b66ac9f7f33b12164e517f691c611b120a79cd5b52c50d5f4d2",
+      "control": {
+        "selector": "#save-profile",
+        "actionId": "PROPOSAL-RECHECK",
+        "scope": "proposal-only-not-source-action",
+        "state": "disabled"
+      }
+    },
+    {
+      "scene": "write_read_failed-context",
+      "width": 390,
+      "file": "write_read_failed-context-390.png",
+      "sha256": "9e503780d786b9684cdfeeba8e728b8027cd23e0592457dc9822c4b29a04b2f0",
+      "control": {
+        "selector": "#profile-form",
+        "actionId": "PROPOSAL-RECHECK",
+        "scope": "proposal-only-not-source-action",
+        "state": "context"
+      }
+    },
+    {
+      "scene": "refresh-loading-disabled",
+      "width": 390,
+      "file": "refresh-loading-disabled-390.png",
+      "sha256": "6239e560206860e8ba5eb84e7b41461b57613cd4c09829ea9877c191c3ed7b39",
+      "control": {
+        "selector": "#refresh-profile",
+        "actionId": "OG-REFRESH",
+        "scope": "source-action-representative-or-variant",
+        "state": "disabled"
+      }
+    }
+  ]
+}

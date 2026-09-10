@@ -7,8 +7,8 @@
 - 真实路由与规格：73/73。
 - 有明确整页或分段稿关联：73条；这不是73页全部完成。
 - 未关联对应整页稿：0条（无）。共享主题浮层不抵扣业务整页。
-- C稿包88个：含1个方向研究包、3个共享表面包；正式清单内PNG共12255张。
-- 1705条来源绑定 / 904个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内9448个本地链接已核对。
+- C稿包89个：含1个方向研究包、3个共享表面包；正式清单内PNG共12425张。
+- 1721条来源绑定 / 908个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内9451个本地链接已核对。
 - 用户逐页批准0；业务动作已正式验收0、弹窗变体已正式验收0；分母冻结=false。保留原coverage门禁，不把静态候选算去重业务动作。
 
 ## 本轮证据结论与下一步
@@ -51,7 +51,7 @@
 | P26 | 通知中心 · `/notifications` | [规格](page-specs/P26.md) | [notification-forms](design/notification-forms-direction-c/README.md) · [notification-navigation](design/notification-navigation-direction-c/README.md) · [notification-controls](design/notification-controls-direction-c/README.md) · [notification](design/notification-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P27 | 自动化规则 · `/automations` | [规格](page-specs/P27.md) | [automation-forms](design/automation-forms-direction-c/README.md) · [automation-controls](design/automation-controls-direction-c/README.md) · [automation](design/automation-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P28 | 报表与导出 · `/reports` | [规格](page-specs/P28.md) | [report-controls](design/report-controls-direction-c/README.md) · [report](design/report-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
-| P29 | 治理概览 · `/org-admin` | [规格](page-specs/P29.md) | [organization-profile](design/organization-profile-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
+| P29 | 治理概览 · `/org-admin` | [规格](page-specs/P29.md) | [organization-profile-controls](design/organization-profile-controls-direction-c/README.md) · [organization-profile](design/organization-profile-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P30 | 成员与邀请 · `/org-admin/members` | [规格](page-specs/P30.md) | [members](design/members-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P31 | 角色与权限 · `/org-admin/roles` | [规格](page-specs/P31.md) | [roles](design/roles-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P32 | 工作区管理 · `/org-admin/workspaces` | [规格](page-specs/P32.md) | [workspaces](design/workspaces-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
@@ -108,6 +108,6 @@
 
 - 只读复验：`node scripts/audit-ui-phase2-design-delivery.mjs`。
 - 有意更新本审计报告：`node scripts/audit-ui-phase2-design-delivery.mjs --write`；只更新本索引和[机器报告](design-delivery-audit.json)，不刷新旧图、旧证据或批准状态。
-- 指纹匹配只是来源/图片未漂移；本轮没有重跑88个包的浏览器测试，也没有重新人工审核12255张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。
+- 指纹匹配只是来源/图片未漂移；本轮没有重跑89个包的浏览器测试，也没有重新人工审核12425张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。
 - 原始规格和源盘点见[PAGES](PAGES.md)、[计划](PLAN.md)、[旧覆盖表](coverage.json)；它们的目标与静态候选不作为完成证明。
 - 无生产代码、API、环境、依赖、数据库、部署或重启变更；没有创建临时图片、浏览器或服务。审计脚本、JSON与本索引是永久交付物。
