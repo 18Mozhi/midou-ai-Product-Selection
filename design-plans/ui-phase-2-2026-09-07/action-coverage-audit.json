@@ -395,7 +395,7 @@
     "scripts/verify-ui-phase2-teams-fields-c.mjs": "67044958c03df9293e4c5e5974b1cf895572c1a81edf82f64bea4b3c1a34ca69",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P34.json": "8d61e919190bb8b982db2e24e0557e32f111e15653be4de7b0e08626cb24b285",
     "scripts/verify-ui-phase2-org-approvals-controls-c.mjs": "6e341623167e84504655841006bb57b6cc2c7d1c47e4b86fce0ebbd79e63f7cb",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "c438ef7123abd37f06836d4a3c2be3a6c8b007886a753d7fb277fdbcc12f1aa6",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "cb10358780c19c3912d9f5e378de9588cf0ba1d05b40c8420df355469a1c1f9f",
     "scripts/verify-ui-phase2-org-data-controls.mjs": "32652c1547b4998316b79625d87662a3035959d9ae372aa3bf9fcd0785a9838e",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "7375ef991df97c88a0b2a3e7dcb200f26fbb8b5bd828ec96344d7291053c0598",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
@@ -1791,7 +1791,7 @@
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "独立控件/字段图通过额外精确验证关联；未改旧清单格式或冒充统一六态图包，因此通用六态槽继续not-mapped。",
-        "父级七类故障/刷新/鉴权替换已由独立双视图实际App矩阵核对；对应C设计图和实际实施未完成，不能用P34区域批准代替。",
+        "父级七类故障/刷新/鉴权替换已有实际App矩阵及独立276张C设计图；新区域待审、实际实施未完成，不能用P34区域批准代替。",
         "手机导出详情及null/0已有局部批准；生成/重试和新筛选组合未答不通过。",
         "完整URL历史、缓存/多实例/组织切换、主题密度、200%缩放、真实API/SQL/RBAC和全73页生产验收待完成。"
       ]

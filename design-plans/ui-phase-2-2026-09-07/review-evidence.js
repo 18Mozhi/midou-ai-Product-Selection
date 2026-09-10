@@ -144,7 +144,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "output/playwright/p32-approved-restore-review/evidence.json": "85dbd0c62a8dd192c7b9d77738438f483fae352fc9fbe7bdd3625fa54cad304e",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P33.json": "044ced39997828e880fb4356afd643503b8f60977fa3fd76e12e36929ca91a2c",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P34.json": "8d61e919190bb8b982db2e24e0557e32f111e15653be4de7b0e08626cb24b285",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "c438ef7123abd37f06836d4a3c2be3a6c8b007886a753d7fb277fdbcc12f1aa6",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "cb10358780c19c3912d9f5e378de9588cf0ba1d05b40c8420df355469a1c1f9f",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "7375ef991df97c88a0b2a3e7dcb200f26fbb8b5bd828ec96344d7291053c0598"
   },
   "summary": {

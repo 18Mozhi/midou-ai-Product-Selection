@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P35 · 父级读取状态 C 稿</title>
+    <link rel="stylesheet" href="../org-data-direction-c/org-data.css" />
+    <link rel="stylesheet" href="parent.css" />
+  </head>
+  <body>
+    <details class="parent-tools">
+      <summary>设计审核工具 · 非生产数据</summary>
+      <label for="parent-view"
+        >查看视图<select id="parent-view">
+          <option value="workspaces">工作区比较</option>
+          <option value="exports">导出履历</option>
+        </select></label
+      >
+      <label for="parent-picker">读取状态<select id="parent-picker"></select></label>
+      <output id="intent-log">只读原型，不发送请求；场景切换只用于审核。</output>
+    </details>
+    <div id="app"></div>
+    <script src="../org-data-direction-c/data.js"></script>
+    <script src="../org-data-direction-c/org-data.js"></script>
+    <script src="parent.js"></script>
+  </body>
+</html>

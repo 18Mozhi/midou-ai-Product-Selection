@@ -133,6 +133,9 @@ test("P35 all independent control, field and real Vue images are pinned without 
     },
     (r) => r.externalFieldCompositions.pop(),
     (r) => r.externalImplementationImages.pop(),
+    (r) => {
+      r.parentDesignEvidence.screenshots = 0;
+    },
   ]) {
     const r = build();
     mutate(r);
@@ -152,4 +155,7 @@ test("P35 all independent control, field and real Vue images are pinned without 
   assert.equal(build().parentReadEvidence.checks, 1624);
   assert.equal(build().parentReadEvidence.screenshots, 128);
   assert.match(build().parentReadEvidence.scope, /不是C批准/);
+  assert.equal(build().parentDesignEvidence.scenes, 17);
+  assert.equal(build().parentDesignEvidence.screenshots, 276);
+  assert.match(build().parentDesignEvidence.scope, /全部新区域待审/);
 });
