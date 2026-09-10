@@ -1,0 +1,237 @@
+{
+  "kind": "P34-QUERY-RESTORATION",
+  "boundary": "Mounted unchanged-template Vue child with real Vue Router and browser back/forward; fixture data, no parent/API/SQL/permissions/production or C visual approval proof.",
+  "sourceHashes": {
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "5ccdc982cf70d3e0ebfeef672ab38917e7e144baa5406b639e86e52646038bd8",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "scripts/verify-ui-phase2-org-approvals-query.mjs": "2b3abf5a1d0c9dee3d2be9fa8b74b9e0d8609a1763b4fadf1f7ff30914ec15cd",
+    "scripts/lib/ui-phase2-org-approvals-design-data.mjs": "b2d28c6d338a520b4f9e674c345905d6d690236a49c33976dac2e262b23e8f9a",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4"
+  },
+  "checks": [
+    {
+      "width": 1440,
+      "name": "initial URL page two"
+    },
+    {
+      "width": 1440,
+      "name": "initial-requests: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "same component instance"
+    },
+    {
+      "width": 1440,
+      "name": "template sort restored"
+    },
+    {
+      "width": 1440,
+      "name": "inactive request page retained"
+    },
+    {
+      "width": 1440,
+      "name": "templates-restored: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "back restores requests without remount"
+    },
+    {
+      "width": 1440,
+      "name": "back-requests: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "forward restores templates without remount"
+    },
+    {
+      "width": 1440,
+      "name": "forward-templates: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "local filter resets only template page"
+    },
+    {
+      "width": 1440,
+      "name": "unrelated query retained"
+    },
+    {
+      "width": 1440,
+      "name": "reload still restores existing query"
+    },
+    {
+      "width": 1440,
+      "name": "different route not hydrated"
+    },
+    {
+      "width": 1440,
+      "name": "different route query untouched"
+    },
+    {
+      "width": 1440,
+      "name": "query plus page restored together"
+    },
+    {
+      "width": 1440,
+      "name": "unmounted child removed"
+    },
+    {
+      "width": 1440,
+      "name": "zero API/external requests"
+    },
+    {
+      "width": 1440,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "name": "initial URL page two"
+    },
+    {
+      "width": 390,
+      "name": "initial-requests: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "same component instance"
+    },
+    {
+      "width": 390,
+      "name": "template sort restored"
+    },
+    {
+      "width": 390,
+      "name": "inactive request page retained"
+    },
+    {
+      "width": 390,
+      "name": "templates-restored: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "back restores requests without remount"
+    },
+    {
+      "width": 390,
+      "name": "back-requests: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "forward restores templates without remount"
+    },
+    {
+      "width": 390,
+      "name": "forward-templates: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "local filter resets only template page"
+    },
+    {
+      "width": 390,
+      "name": "unrelated query retained"
+    },
+    {
+      "width": 390,
+      "name": "reload still restores existing query"
+    },
+    {
+      "width": 390,
+      "name": "different route not hydrated"
+    },
+    {
+      "width": 390,
+      "name": "different route query untouched"
+    },
+    {
+      "width": 390,
+      "name": "query plus page restored together"
+    },
+    {
+      "width": 390,
+      "name": "unmounted child removed"
+    },
+    {
+      "width": 390,
+      "name": "zero API/external requests"
+    },
+    {
+      "width": 390,
+      "name": "zero browser errors"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "initial-requests-1440.png",
+      "scene": "initial-requests",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "mounted-original-Vue-child-isolated-data-not-C-approval-or-production",
+      "sha256": "ccec3c07e768d18534a93772b7a2ab74911e3d736aaa7df3aabdee5bdef7f126"
+    },
+    {
+      "file": "templates-restored-1440.png",
+      "scene": "templates-restored",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "mounted-original-Vue-child-isolated-data-not-C-approval-or-production",
+      "sha256": "076060b4a0699518236bbcb0e88e5f22e44391c6760de30499a0a0011f23dab0"
+    },
+    {
+      "file": "back-requests-1440.png",
+      "scene": "back-requests",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "mounted-original-Vue-child-isolated-data-not-C-approval-or-production",
+      "sha256": "12be906732850a1e6dfd167802215e76fb9555893b603b151c9bc1475c25338f"
+    },
+    {
+      "file": "forward-templates-1440.png",
+      "scene": "forward-templates",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "mounted-original-Vue-child-isolated-data-not-C-approval-or-production",
+      "sha256": "9e78c29ce796742ec52db49a10fc88648bd20d77ad645a3d6090f08090ba2a60"
+    },
+    {
+      "file": "initial-requests-390.png",
+      "scene": "initial-requests",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "mounted-original-Vue-child-isolated-data-not-C-approval-or-production",
+      "sha256": "2c20ac7cb9475062fdb4e2a85507a40d98c4d7e5033e4504397929b8d52faf71"
+    },
+    {
+      "file": "templates-restored-390.png",
+      "scene": "templates-restored",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "mounted-original-Vue-child-isolated-data-not-C-approval-or-production",
+      "sha256": "134049ab2af33774689b76fc477158ca490dd31c826fc34271be8dac3b3bb9ac"
+    },
+    {
+      "file": "back-requests-390.png",
+      "scene": "back-requests",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "mounted-original-Vue-child-isolated-data-not-C-approval-or-production",
+      "sha256": "6a9c97e0b03675dafd5e731f021c19f5f81fe71aa51b6fd4ec3f3f59558bcf9e"
+    },
+    {
+      "file": "forward-templates-390.png",
+      "scene": "forward-templates",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "mounted-original-Vue-child-isolated-data-not-C-approval-or-production",
+      "sha256": "916c1563b405c05776a6cc2a505b9ea384a3a44ca7d95b304cd27c714e4f23ea"
+    }
+  ]
+}

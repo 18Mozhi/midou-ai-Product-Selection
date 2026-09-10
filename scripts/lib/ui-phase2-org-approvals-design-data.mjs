@@ -87,6 +87,7 @@ export async function buildOrgApprovalsDesignData(repo) {
           return fn();
         },
       }),
+      nextTick: async () => {},
       watch: (s, cb, o) => {
         watches.push({ s, cb });
         if (o?.immediate) cb(s());
@@ -136,7 +137,8 @@ export async function buildOrgApprovalsDesignData(repo) {
   assert.equal(replacements[0].query.approval_template_status, "draft");
   assert.equal(replacements[0].query.approval_template_page, undefined);
   route.query.approval_view = "requests";
-  assert.equal(h.section.value, "templates"); // No reverse route watcher.
+  await watches[6].cb();
+  assert.equal(h.section.value, "requests"); // Explicit callback check, not mounted Vue scheduling.
   const invalid = harness({
     approval_view: "bad",
     approval_request_query: "x".repeat(220),
@@ -199,7 +201,7 @@ export async function buildOrgApprovalsDesignData(repo) {
     noDiff,
     sourceChecks: [
       "Actual child computed and explicit watch callbacks: 8/6 pagination, filters, version sorting, filtered selection and name-based workspace options",
-      "Actual URL readers and serializer: 200-char initial text, positive integer page, default elision and unrelated query preserved; route mutation does not restore refs",
+      "Actual URL readers and serializer: 200-char restored text, positive integer page, default elision and unrelated query preserved; explicit reverse-route callback restores refs, not mounted Vue scheduling",
       "Actual repository diff method: nearest lower persisted version, ordinal matching, four changed fields, removed/added, first version and no changes; no SQL execution",
     ],
   };

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const props = defineProps<{
@@ -55,6 +55,12 @@ const route = useRoute(),
   ),
   templatePage = ref(queryPage("approval_template_page")),
   selectedTemplateId = ref("");
+
+const queryOwnerPath = route.path,
+  pendingQueryWrites = new Map<string, number>();
+let restoringQuery = false,
+  queryRestoreGeneration = 0,
+  queryWriteGeneration = 0;
 
 const requestPageSize = 8,
   templatePageSize = 6,
@@ -168,14 +174,12 @@ const templateById = computed(
       ) ?? filteredTemplates.value[0],
   );
 
-watch(
-  [requestQuery, requestStatus, requestWorkspace, requestResource, requestSort],
-  () => (requestPage.value = 1),
-);
-watch(
-  [templateQuery, templateStatus, templateWorkspace, templateResource, templateSort],
-  () => (templatePage.value = 1),
-);
+watch([requestQuery, requestStatus, requestWorkspace, requestResource, requestSort], () => {
+  if (!restoringQuery) requestPage.value = 1;
+});
+watch([templateQuery, templateStatus, templateWorkspace, templateResource, templateSort], () => {
+  if (!restoringQuery) templatePage.value = 1;
+});
 watch(requestPageCount, (count) => {
   if (requestPage.value > count) requestPage.value = count;
 });
@@ -199,6 +203,7 @@ watch(
     templatePage,
   ],
   () => {
+    if (restoringQuery || route.path !== queryOwnerPath) return;
     const query = { ...route.query } as Record<string, string | string[] | null | undefined>;
     setQuery(query, "approval_view", section.value, "requests");
     setQuery(query, "approval_request_query", requestQuery.value, "");
@@ -213,7 +218,14 @@ watch(
     setQuery(query, "approval_template_resource", templateResource.value, "all");
     setQuery(query, "approval_template_sort", templateSort.value, "name_asc");
     setQuery(query, "approval_template_page", String(templatePage.value), "1");
-    void router.replace({ query });
+    const key = queryFingerprint(query);
+    if (key === queryFingerprint(route.query)) return;
+    const generation = ++queryWriteGeneration;
+    pendingQueryWrites.set(key, generation);
+    const settled = () => {
+      if (pendingQueryWrites.get(key) === generation) pendingQueryWrites.delete(key);
+    };
+    void router.replace({ query }).then(settled, settled);
   },
   { flush: "post" },
 );
@@ -225,6 +237,65 @@ watch(
   },
   { immediate: true },
 );
+
+watch(
+  () => route.query,
+  async () => {
+    if (route.path !== queryOwnerPath || pendingQueryWrites.has(queryFingerprint(route.query)))
+      return;
+    const generation = ++queryRestoreGeneration;
+    restoringQuery = true;
+    section.value = queryChoice("approval_view", ["requests", "templates"], "requests") as Section;
+    requestQuery.value = queryText("approval_request_query");
+    requestStatus.value = queryChoice(
+      "approval_request_status",
+      ["all", "pending", "approved", "rejected", "cancelled"],
+      "all",
+    );
+    requestWorkspace.value = queryText("approval_request_workspace") || "all";
+    requestResource.value = queryChoice(
+      "approval_request_resource",
+      ["all", "task", "opportunity_decision"],
+      "all",
+    );
+    requestSort.value = queryChoice(
+      "approval_request_sort",
+      ["created_desc", "created_asc", "title_asc", "status_asc"],
+      "created_desc",
+    );
+    requestPage.value = queryPage("approval_request_page");
+    templateQuery.value = queryText("approval_template_query");
+    templateStatus.value = queryChoice(
+      "approval_template_status",
+      ["all", "published", "draft", "archived"],
+      "all",
+    );
+    templateWorkspace.value = queryText("approval_template_workspace") || "all";
+    templateResource.value = queryChoice(
+      "approval_template_resource",
+      ["all", "task", "opportunity_decision"],
+      "all",
+    );
+    templateSort.value = queryChoice(
+      "approval_template_sort",
+      ["name_asc", "updated_desc", "nodes_desc", "workspace_asc"],
+      "name_asc",
+    );
+    templatePage.value = queryPage("approval_template_page");
+    // Keep filter/page watchers and the post-flush serializer inside the same restoration batch.
+    await nextTick();
+    if (queryRestoreGeneration === generation) restoringQuery = false;
+  },
+  { flush: "sync" },
+);
+
+function queryFingerprint(query: Record<string, unknown>) {
+  return JSON.stringify(
+    Object.keys(query)
+      .sort()
+      .map((key) => [key, query[key]]),
+  );
+}
 
 function templateLabel(value: string) {
   return templateStatusLabels[value] ?? `未知状态（${value || "空"}）`;

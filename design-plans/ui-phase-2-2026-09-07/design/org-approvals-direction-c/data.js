@@ -172,7 +172,7 @@ window.ORG_APPROVALS_C_DATA = {
   noDiff: { from_version: 1, to_version: 3, change_count: 0, changes: [] },
   sourceChecks: [
     "Actual child computed and explicit watch callbacks: 8/6 pagination, filters, version sorting, filtered selection and name-based workspace options",
-    "Actual URL readers and serializer: 200-char initial text, positive integer page, default elision and unrelated query preserved; route mutation does not restore refs",
+    "Actual URL readers and serializer: 200-char restored text, positive integer page, default elision and unrelated query preserved; explicit reverse-route callback restores refs, not mounted Vue scheduling",
     "Actual repository diff method: nearest lower persisted version, ordinal matching, four changed fields, removed/added, first version and no changes; no SQL execution",
   ],
 };

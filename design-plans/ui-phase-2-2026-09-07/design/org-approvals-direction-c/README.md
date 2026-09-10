@@ -51,7 +51,7 @@ frontend-design指导重排蓝色双视图目录，审批记录使用连续白�
 
 - 13个查询键：approval_view，以及approval_request_和approval_template_各自query/status/workspace/resource/sort/page。初读字符串截200字符，页码必须正安全整数，非法选项回默认；默认值从URL移除，保留无关query。
 - 筛选和排序改动回第一页，数组缩减夹紧页码。选中模板ID不写URL；刷新页面不承诺恢复该选择。原型测试了两视图条件序列化和reload读取。
-- 真实Vue的watch是refs→router.replace，没有反向route.query监听。惰性执行中修改route.query不会恢复section，不能把“URL可重载”宣称为完整前进/后退、多实例或KeepAlive恢复。
+- 2026-09-10真实Vue已补反向route.query恢复，见[查询恢复修复](../../P34-QUERY-RESTORATION-REVIEW.md)。38项真实子组件双端检查覆盖同一实例前进/后退及布局溢出，原始数据助手只显式执行回调；完整父级、多实例及KeepAlive仍不以此替代。此C原型没有获得新的视觉批准。
 - 原始夹具10条审批、2模板；阶段序号有大于当前模板节点数的记录，保持原样，不修造历史事实。合成8模板分页、未知值、长字段、汇总130/列表10、故障及额外diff明确标记，非生产数据。
 - 永久数据助手用TypeScript AST提取原夹具并执行真实子Vue的computed/函数、显式调用watch回调；验证8/6分页、筛选、版本排序和URL读写。它不是挂载Vue响应性测试。
 - 真实仓库templateVersionDiff方法离线执行，验证最近低版本（排除未来版本）、ordinal匹配、四字段变更、新增/移除、首版和无差异，含SLA为0。不执行SQL；MySQL行归属、JOIN、真实历史版本和权限仍须后端验收。
