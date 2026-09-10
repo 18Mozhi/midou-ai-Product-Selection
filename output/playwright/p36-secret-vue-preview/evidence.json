@@ -1,0 +1,1299 @@
+{
+  "kind": "P36-SECRET-VUE-PREVIEW-r1",
+  "approval": "pending-user-review",
+  "scope": "Actual parent and child scripts with review-only secret composition/CSS. Intercepted HTTP and invalid synthetic credentials, mock clipboard; not real authorization, persistence, OS clipboard, App shell, rotation contract or production acceptance. Original pending and enabled states retained; no invented disabled/timeout/policy.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/approval-read-failure.css": "6295ffead416eae4dfdf0fa88dde57a3b7ec6fa60241b44e4405e3f1755aaa6a",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "apps/web/src/design/approval-read-failure-tokens.css": "bd13bd68c498bd64b2bb29cba882d09fb324b0fbacf5cab1812fd52abbdb6692",
+    "apps/web/src/design/export-detail-tokens.css": "d0dc62dff48590e983d06a8960bd74bbadc7d7f78daa31237df45214b7ee513a",
+    "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
+    "apps/web/src/design/token-filter-tokens.css": "6a2b9871858d0c1a5d7ee2a052b5b1d5043331f414685525d561d8ae6d366710",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/org-data-export-detail.css": "55b7a84508f5ff64d02061bc832991bceec6674e66313623ed6ade22aba2de04",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/organization-audit.css": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/token-secret-preview.css": "095e0a25220d1a56064af1c407930c9087764eaee2bc90eb1156dc9d8f7901b8",
+    "scripts/lib/ui-phase2-token-secret-preview.mjs": "6b6567fd5ec260264548d3345518886dcdb61138b0cf45d9df55c73ed3ef8b5b",
+    "scripts/verify-ui-phase2-token-secret-preview.mjs": "0833357f6bbb36e01779ddeb89e5f8fc6f9a0773c750e75fe1eb4a6e9219e8b6"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/OrganizationTokenPanel.vue": "0aaf8f7a438d41bade786a5c6f78354d26da340d171e6f5da08d3fb507a3b7b8"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "no secret before creation"
+    },
+    {
+      "width": 390,
+      "name": "actual parent pending reread"
+    },
+    {
+      "width": 390,
+      "name": "original secret actions remain enabled during reread"
+    },
+    {
+      "width": 390,
+      "name": "parent-refreshing:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "blue rail and white content"
+    },
+    {
+      "width": 390,
+      "name": "complete initial synthetic text"
+    },
+    {
+      "width": 390,
+      "name": "native two button touch targets"
+    },
+    {
+      "width": 390,
+      "name": "mobile vertical or desktop side rail"
+    },
+    {
+      "width": 390,
+      "name": "default:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "keyboard reaches copy"
+    },
+    {
+      "width": 390,
+      "name": "blue keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "copy-focus:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "keyboard proceeds to saved"
+    },
+    {
+      "width": 390,
+      "name": "saved-focus:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy-hover:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy:native pressed"
+    },
+    {
+      "width": 390,
+      "name": "copy-pressed:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "saved-hover:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "saved:native pressed"
+    },
+    {
+      "width": 390,
+      "name": "saved-pressed:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "copy-pending:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "pending feedback remains original idle"
+    },
+    {
+      "width": 390,
+      "name": "copied:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "real success wording"
+    },
+    {
+      "width": 390,
+      "name": "failed:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "real failure wording"
+    },
+    {
+      "width": 390,
+      "name": "manual selection retains exact text"
+    },
+    {
+      "width": 390,
+      "name": "replacement-long:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "old completion never marks replacement"
+    },
+    {
+      "width": 390,
+      "name": "long value completely selectable"
+    },
+    {
+      "width": 390,
+      "name": "actual parent dismissal remains cleared"
+    },
+    {
+      "width": 390,
+      "name": "exact clipboard contents"
+    },
+    {
+      "width": 390,
+      "name": "two explicit original posts"
+    },
+    {
+      "width": 390,
+      "name": "exact create body0"
+    },
+    {
+      "width": 390,
+      "name": "original idempotency0"
+    },
+    {
+      "width": 390,
+      "name": "exact create body1"
+    },
+    {
+      "width": 390,
+      "name": "original idempotency1"
+    },
+    {
+      "width": 390,
+      "name": "no external or unexpected API"
+    },
+    {
+      "width": 390,
+      "name": "no browser errors"
+    },
+    {
+      "width": 390,
+      "name": "no storage"
+    },
+    {
+      "width": 760,
+      "name": "no secret before creation"
+    },
+    {
+      "width": 760,
+      "name": "actual parent pending reread"
+    },
+    {
+      "width": 760,
+      "name": "original secret actions remain enabled during reread"
+    },
+    {
+      "width": 760,
+      "name": "parent-refreshing:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "blue rail and white content"
+    },
+    {
+      "width": 760,
+      "name": "complete initial synthetic text"
+    },
+    {
+      "width": 760,
+      "name": "native two button touch targets"
+    },
+    {
+      "width": 760,
+      "name": "mobile vertical or desktop side rail"
+    },
+    {
+      "width": 760,
+      "name": "default:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "keyboard reaches copy"
+    },
+    {
+      "width": 760,
+      "name": "blue keyboard focus"
+    },
+    {
+      "width": 760,
+      "name": "copy-focus:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "keyboard proceeds to saved"
+    },
+    {
+      "width": 760,
+      "name": "saved-focus:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "copy-hover:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "copy:native pressed"
+    },
+    {
+      "width": 760,
+      "name": "copy-pressed:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "saved-hover:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "saved:native pressed"
+    },
+    {
+      "width": 760,
+      "name": "saved-pressed:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "copy-pending:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "pending feedback remains original idle"
+    },
+    {
+      "width": 760,
+      "name": "copied:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "real success wording"
+    },
+    {
+      "width": 760,
+      "name": "failed:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "real failure wording"
+    },
+    {
+      "width": 760,
+      "name": "manual selection retains exact text"
+    },
+    {
+      "width": 760,
+      "name": "replacement-long:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "old completion never marks replacement"
+    },
+    {
+      "width": 760,
+      "name": "long value completely selectable"
+    },
+    {
+      "width": 760,
+      "name": "actual parent dismissal remains cleared"
+    },
+    {
+      "width": 760,
+      "name": "exact clipboard contents"
+    },
+    {
+      "width": 760,
+      "name": "two explicit original posts"
+    },
+    {
+      "width": 760,
+      "name": "exact create body0"
+    },
+    {
+      "width": 760,
+      "name": "original idempotency0"
+    },
+    {
+      "width": 760,
+      "name": "exact create body1"
+    },
+    {
+      "width": 760,
+      "name": "original idempotency1"
+    },
+    {
+      "width": 760,
+      "name": "no external or unexpected API"
+    },
+    {
+      "width": 760,
+      "name": "no browser errors"
+    },
+    {
+      "width": 760,
+      "name": "no storage"
+    },
+    {
+      "width": 761,
+      "name": "no secret before creation"
+    },
+    {
+      "width": 761,
+      "name": "actual parent pending reread"
+    },
+    {
+      "width": 761,
+      "name": "original secret actions remain enabled during reread"
+    },
+    {
+      "width": 761,
+      "name": "parent-refreshing:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "blue rail and white content"
+    },
+    {
+      "width": 761,
+      "name": "complete initial synthetic text"
+    },
+    {
+      "width": 761,
+      "name": "native two button touch targets"
+    },
+    {
+      "width": 761,
+      "name": "mobile vertical or desktop side rail"
+    },
+    {
+      "width": 761,
+      "name": "default:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "keyboard reaches copy"
+    },
+    {
+      "width": 761,
+      "name": "blue keyboard focus"
+    },
+    {
+      "width": 761,
+      "name": "copy-focus:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "keyboard proceeds to saved"
+    },
+    {
+      "width": 761,
+      "name": "saved-focus:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "copy-hover:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "copy:native pressed"
+    },
+    {
+      "width": 761,
+      "name": "copy-pressed:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "saved-hover:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "saved:native pressed"
+    },
+    {
+      "width": 761,
+      "name": "saved-pressed:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "copy-pending:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "pending feedback remains original idle"
+    },
+    {
+      "width": 761,
+      "name": "copied:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "real success wording"
+    },
+    {
+      "width": 761,
+      "name": "failed:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "real failure wording"
+    },
+    {
+      "width": 761,
+      "name": "manual selection retains exact text"
+    },
+    {
+      "width": 761,
+      "name": "replacement-long:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "old completion never marks replacement"
+    },
+    {
+      "width": 761,
+      "name": "long value completely selectable"
+    },
+    {
+      "width": 761,
+      "name": "actual parent dismissal remains cleared"
+    },
+    {
+      "width": 761,
+      "name": "exact clipboard contents"
+    },
+    {
+      "width": 761,
+      "name": "two explicit original posts"
+    },
+    {
+      "width": 761,
+      "name": "exact create body0"
+    },
+    {
+      "width": 761,
+      "name": "original idempotency0"
+    },
+    {
+      "width": 761,
+      "name": "exact create body1"
+    },
+    {
+      "width": 761,
+      "name": "original idempotency1"
+    },
+    {
+      "width": 761,
+      "name": "no external or unexpected API"
+    },
+    {
+      "width": 761,
+      "name": "no browser errors"
+    },
+    {
+      "width": 761,
+      "name": "no storage"
+    },
+    {
+      "width": 1440,
+      "name": "no secret before creation"
+    },
+    {
+      "width": 1440,
+      "name": "actual parent pending reread"
+    },
+    {
+      "width": 1440,
+      "name": "original secret actions remain enabled during reread"
+    },
+    {
+      "width": 1440,
+      "name": "parent-refreshing:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "blue rail and white content"
+    },
+    {
+      "width": 1440,
+      "name": "complete initial synthetic text"
+    },
+    {
+      "width": 1440,
+      "name": "native two button touch targets"
+    },
+    {
+      "width": 1440,
+      "name": "mobile vertical or desktop side rail"
+    },
+    {
+      "width": 1440,
+      "name": "default:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "keyboard reaches copy"
+    },
+    {
+      "width": 1440,
+      "name": "blue keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "copy-focus:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "keyboard proceeds to saved"
+    },
+    {
+      "width": 1440,
+      "name": "saved-focus:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy-hover:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy:native pressed"
+    },
+    {
+      "width": 1440,
+      "name": "copy-pressed:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "saved-hover:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "saved:native pressed"
+    },
+    {
+      "width": 1440,
+      "name": "saved-pressed:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "copy-pending:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "pending feedback remains original idle"
+    },
+    {
+      "width": 1440,
+      "name": "copied:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "real success wording"
+    },
+    {
+      "width": 1440,
+      "name": "failed:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "real failure wording"
+    },
+    {
+      "width": 1440,
+      "name": "manual selection retains exact text"
+    },
+    {
+      "width": 1440,
+      "name": "replacement-long:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "old completion never marks replacement"
+    },
+    {
+      "width": 1440,
+      "name": "long value completely selectable"
+    },
+    {
+      "width": 1440,
+      "name": "actual parent dismissal remains cleared"
+    },
+    {
+      "width": 1440,
+      "name": "exact clipboard contents"
+    },
+    {
+      "width": 1440,
+      "name": "two explicit original posts"
+    },
+    {
+      "width": 1440,
+      "name": "exact create body0"
+    },
+    {
+      "width": 1440,
+      "name": "original idempotency0"
+    },
+    {
+      "width": 1440,
+      "name": "exact create body1"
+    },
+    {
+      "width": 1440,
+      "name": "original idempotency1"
+    },
+    {
+      "width": 1440,
+      "name": "no external or unexpected API"
+    },
+    {
+      "width": 1440,
+      "name": "no browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "no storage"
+    }
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "POST",
+          "body": {
+            "name": "明文审核测试",
+            "scopes": [
+              "task:read"
+            ],
+            "ttl_days": 90,
+            "reason": "界面审核，不创建真实凭据"
+          },
+          "idempotency": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "POST",
+          "body": {
+            "name": "明文审核测试",
+            "scopes": [
+              "task:read"
+            ],
+            "ttl_days": 90,
+            "reason": "界面审核，不创建真实凭据"
+          },
+          "idempotency": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "POST",
+          "body": {
+            "name": "明文审核测试",
+            "scopes": [
+              "task:read"
+            ],
+            "ttl_days": 90,
+            "reason": "界面审核，不创建真实凭据"
+          },
+          "idempotency": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "POST",
+          "body": {
+            "name": "明文审核测试",
+            "scopes": [
+              "task:read"
+            ],
+            "ttl_days": 90,
+            "reason": "界面审核，不创建真实凭据"
+          },
+          "idempotency": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        }
+      ]
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "POST",
+          "body": {
+            "name": "明文审核测试",
+            "scopes": [
+              "task:read"
+            ],
+            "ttl_days": 90,
+            "reason": "界面审核，不创建真实凭据"
+          },
+          "idempotency": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "POST",
+          "body": {
+            "name": "明文审核测试",
+            "scopes": [
+              "task:read"
+            ],
+            "ttl_days": 90,
+            "reason": "界面审核，不创建真实凭据"
+          },
+          "idempotency": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "POST",
+          "body": {
+            "name": "明文审核测试",
+            "scopes": [
+              "task:read"
+            ],
+            "ttl_days": 90,
+            "reason": "界面审核，不创建真实凭据"
+          },
+          "idempotency": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "POST",
+          "body": {
+            "name": "明文审核测试",
+            "scopes": [
+              "task:read"
+            ],
+            "ttl_days": 90,
+            "reason": "界面审核，不创建真实凭据"
+          },
+          "idempotency": true
+        },
+        {
+          "path": "/api/v1/org/admin/summary",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "path": "/api/v1/org/admin/tokens",
+          "method": "GET",
+          "body": null,
+          "idempotency": false
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-parent-refreshing.png",
+      "width": 390,
+      "state": "parent-refreshing",
+      "sha256": "b17a4dc5e8acbfc8fca8c9535a6cdd5d6be6286a80b8e070c4a7ca8bc40d21a3",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "390-default.png",
+      "width": 390,
+      "state": "default",
+      "sha256": "b17a4dc5e8acbfc8fca8c9535a6cdd5d6be6286a80b8e070c4a7ca8bc40d21a3",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "390-copy-focus.png",
+      "width": 390,
+      "state": "copy-focus",
+      "sha256": "dbab713fa536ddd9c5885e442bce4d7100a81042fab3299adfd8dfe4d1d0c107",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "390-saved-focus.png",
+      "width": 390,
+      "state": "saved-focus",
+      "sha256": "086a9a98e50665f5698ad32289a0d770fb4413d8f3d6aa5763e0a0d005e507e4",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "390-copy-hover.png",
+      "width": 390,
+      "state": "copy-hover",
+      "sha256": "ed8938c2c89e07684c22a59a72b68ee2ade2b2bf20b05f9eaef49d68b41aeaea",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "390-copy-pressed.png",
+      "width": 390,
+      "state": "copy-pressed",
+      "sha256": "3e82e976502f8d259a4eccf696cc665f66114e307ac9a994997e58792bcbf738",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "390-saved-hover.png",
+      "width": 390,
+      "state": "saved-hover",
+      "sha256": "9a43dd1596681a29241662cf796481555d24abff7dc611fefad75521d8d3c4df",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "390-saved-pressed.png",
+      "width": 390,
+      "state": "saved-pressed",
+      "sha256": "00153c9d69e7e5800dc9371fdb59e5c83e0292859c445cfadc56f203be85a7d6",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "390-copy-pending.png",
+      "width": 390,
+      "state": "copy-pending",
+      "sha256": "54f138a822553ce1ac14ae8c3d1a26923c336592f5ef90ebf96fb0f866a40ff4",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "390-copied.png",
+      "width": 390,
+      "state": "copied",
+      "sha256": "383df71564955f159698e8002e99b798a7b41cb60d8905154407659c7c5a4d7e",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "390-failed.png",
+      "width": 390,
+      "state": "failed",
+      "sha256": "33cdf99be770f16d1f66809c10e81f5c7254e3703eb9dec12349f3efb88651c6",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "390-replacement-long.png",
+      "width": 390,
+      "state": "replacement-long",
+      "sha256": "66796cfeae125d69ac63b8d5c0073d7ad748cd9f23b62d58716259aede2e2c9d",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "760-parent-refreshing.png",
+      "width": 760,
+      "state": "parent-refreshing",
+      "sha256": "e45de481dd1b1b576fb74ab2f175a6584466328535b5b322da3ee9d2a1d20a8b",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "760-default.png",
+      "width": 760,
+      "state": "default",
+      "sha256": "741c10a6398a5eac348df2a9856e59f8d5902942760d520f11457955bec09dd9",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "760-copy-focus.png",
+      "width": 760,
+      "state": "copy-focus",
+      "sha256": "62234f6f088fbb4baaf9b250b079ed27a33591f730fcfb3408afa8b3c501cbdc",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "760-saved-focus.png",
+      "width": 760,
+      "state": "saved-focus",
+      "sha256": "86147480dc10d91aac34b72200fba117dd7062b082017d71c30300aa622a863d",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "760-copy-hover.png",
+      "width": 760,
+      "state": "copy-hover",
+      "sha256": "ac06acab1b002356cf2d788af48b4f045f79e5bc267af4f6c3dc0d9727b26764",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "760-copy-pressed.png",
+      "width": 760,
+      "state": "copy-pressed",
+      "sha256": "af5f9ff3ad2838e2ef08b019867d48c440d85babddfd6701200b0fb14f3d8fc2",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "760-saved-hover.png",
+      "width": 760,
+      "state": "saved-hover",
+      "sha256": "dd8dd7c3d0f9783a73197427616170e6996ce71e939758ae3612dbcca9e28713",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "760-saved-pressed.png",
+      "width": 760,
+      "state": "saved-pressed",
+      "sha256": "5c6542054498776b4a4a2126fee36049a3cfc5d62b9923d2cfb6512e85df1a12",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "760-copy-pending.png",
+      "width": 760,
+      "state": "copy-pending",
+      "sha256": "46bbd753fa1e0059ed79500ba1d94457a715f55737edf143d3ea9330ac3550b9",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "760-copied.png",
+      "width": 760,
+      "state": "copied",
+      "sha256": "fd6cb8959e53c2c154caa0699e1700e839184f25fcabb879e10b44cc01c0f9a9",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "760-failed.png",
+      "width": 760,
+      "state": "failed",
+      "sha256": "3b85c80607a8b98cb0d58be04fca8c17a4ca532781057c5f35229494854cd3ac",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "760-replacement-long.png",
+      "width": 760,
+      "state": "replacement-long",
+      "sha256": "ae77ecf4262b0d4a20f4d90ca8fd81daab1a55ccecf7363264bf03ea39227f14",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "761-parent-refreshing.png",
+      "width": 761,
+      "state": "parent-refreshing",
+      "sha256": "4d8fee39160d33a1b3a8333c35abd2601d1bd3cda078d0ac311fd273fac3ac96",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "761-default.png",
+      "width": 761,
+      "state": "default",
+      "sha256": "4d8fee39160d33a1b3a8333c35abd2601d1bd3cda078d0ac311fd273fac3ac96",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "761-copy-focus.png",
+      "width": 761,
+      "state": "copy-focus",
+      "sha256": "e3c785b428ba79ce254ec4cb14d86a0003e80999a66af63f39656d685c1d7ea0",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "761-saved-focus.png",
+      "width": 761,
+      "state": "saved-focus",
+      "sha256": "b2702fcb0faf2f2aec0c3e0d2ad7582f6f790df440bc1e59c5e6a1ace1e1fabd",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "761-copy-hover.png",
+      "width": 761,
+      "state": "copy-hover",
+      "sha256": "2420f4d940bbe40337afc8cbf0df6accd38d7895b9e32873da63f0cc968f6c4b",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "761-copy-pressed.png",
+      "width": 761,
+      "state": "copy-pressed",
+      "sha256": "f4cbd2abbd9d81e627df05aaa97d1c4191e377316f46906edba2716e2cb24c8c",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "761-saved-hover.png",
+      "width": 761,
+      "state": "saved-hover",
+      "sha256": "0cd821aceb0e898abf6f5090aa5d55b0f86293d688fdca796382cf16896dfd31",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "761-saved-pressed.png",
+      "width": 761,
+      "state": "saved-pressed",
+      "sha256": "d6dc5cfba85821cee61685b6aa6daf51504ee4d6ba64bbdfe0749c1d5fa5d496",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "761-copy-pending.png",
+      "width": 761,
+      "state": "copy-pending",
+      "sha256": "b60231e9020cfc0b43e53500e4fe1cac84119e75e4755032606105afae933ca2",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "761-copied.png",
+      "width": 761,
+      "state": "copied",
+      "sha256": "a81eeae5c9378e533c9e075cce59149751cc7c11b5f0c8a0644820fb3d461f7d",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "761-failed.png",
+      "width": 761,
+      "state": "failed",
+      "sha256": "03336663bb76afc896a45d935dbcb92c6ef55488838fddbcce7050e828fe1baa",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "761-replacement-long.png",
+      "width": 761,
+      "state": "replacement-long",
+      "sha256": "83e911aa4691a780f223b014ecef3e3539b08073d9e1d280172100c55a4b41a2",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "1440-parent-refreshing.png",
+      "width": 1440,
+      "state": "parent-refreshing",
+      "sha256": "4f4d284fb3e363fa79989878ef398978c98936c05a314911432f60bd414a5fb9",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "1440-default.png",
+      "width": 1440,
+      "state": "default",
+      "sha256": "f777f11d0cd1fe547962e3de1261b3aa61e9bcef7f99d19dc5266fdda46573e9",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "1440-copy-focus.png",
+      "width": 1440,
+      "state": "copy-focus",
+      "sha256": "ba2b6017e711ccba308edea39c1cef132af4f94918be33e02237de578e0fcae8",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "1440-saved-focus.png",
+      "width": 1440,
+      "state": "saved-focus",
+      "sha256": "66e7dcf4e0baf80fd4df00c7f16148ea64bf5fe555887fa489df84c2bb02b990",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "1440-copy-hover.png",
+      "width": 1440,
+      "state": "copy-hover",
+      "sha256": "c9bacfb1368a3aecd9fdf4be970fdf85a6800eab872fa6567531d21cc26810f9",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "1440-copy-pressed.png",
+      "width": 1440,
+      "state": "copy-pressed",
+      "sha256": "bf4b22b7c8eec4fc91a6804c2d11271f79dc12154f0f644820c99e75c8d89701",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "1440-saved-hover.png",
+      "width": 1440,
+      "state": "saved-hover",
+      "sha256": "f315e208d4f2285d5c688682502a1ac0f888dbf8dbfd4e862c987feca26aaa0f",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "1440-saved-pressed.png",
+      "width": 1440,
+      "state": "saved-pressed",
+      "sha256": "5c757adec12b6cfdbcdbe1c3f7d30fffd4fb34c4afb98e1690df1889272ada87",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "1440-copy-pending.png",
+      "width": 1440,
+      "state": "copy-pending",
+      "sha256": "f0669a7b5ff52fbda8ba6b878d2f68523c46dc905e22c55ad3704e632fdafece",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "1440-copied.png",
+      "width": 1440,
+      "state": "copied",
+      "sha256": "2dd666e9abf163364d843a2d3f62331a10c80208e5b26ab751a00a700d809543",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "1440-failed.png",
+      "width": 1440,
+      "state": "failed",
+      "sha256": "5a75161421c91fe38f96d53d0f201b242f0e11b6c5a1f45ec2616df7f1849251",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    },
+    {
+      "file": "1440-replacement-long.png",
+      "width": 1440,
+      "state": "replacement-long",
+      "sha256": "7201c4219ae6770f06b039f46bb8c8d61f16134393951a38a8417eb849948210",
+      "scope": "actual-parent-child-review-template-css-fixtures-not-approval"
+    }
+  ],
+  "processesClosed": true
+}
