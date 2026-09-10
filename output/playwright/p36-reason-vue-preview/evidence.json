@@ -1,0 +1,2249 @@
+{
+  "kind": "P36-REASON-VUE-PREVIEW-r1",
+  "approval": "pending-user-review",
+  "scope": "Actual unmodified parent, child, reason dialog and hooks; CSS-only review host. GET fixtures only, no submission, real permissions, SQL, audit write, OS clipboard, full App or production approval. Synthetic long target and 501-character input do not define backend length policy. Original immediate-close-on-submit behavior unchanged and not exercised here.",
+  "fixedTime": "2026-08-26T10:00:00.000Z",
+  "checks": [
+    {
+      "width": 390,
+      "name": "rotate:actual target"
+    },
+    {
+      "width": 390,
+      "name": "rotate:autofocus"
+    },
+    {
+      "width": 390,
+      "name": "rotate:initial empty"
+    },
+    {
+      "width": 390,
+      "name": "rotate:initial disabled"
+    },
+    {
+      "width": 390,
+      "name": "rotate:disabled gray"
+    },
+    {
+      "width": 390,
+      "name": "rotate:minimum two"
+    },
+    {
+      "width": 390,
+      "name": "rotate:no maximum"
+    },
+    {
+      "width": 390,
+      "name": "rotate-default:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "rotate-default:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "rotate:trimmed invalid \"字\""
+    },
+    {
+      "width": 390,
+      "name": "rotate:trimmed invalid \"   \""
+    },
+    {
+      "width": 390,
+      "name": "rotate:trimmed invalid \" 字 \""
+    },
+    {
+      "width": 390,
+      "name": "rotate-invalid:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "rotate-invalid:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "rotate:valid enabled"
+    },
+    {
+      "width": 390,
+      "name": "rotate:action color"
+    },
+    {
+      "width": 390,
+      "name": "rotate:44px controls"
+    },
+    {
+      "width": 390,
+      "name": "rotate:forward trap"
+    },
+    {
+      "width": 390,
+      "name": "rotate:reverse trap"
+    },
+    {
+      "width": 390,
+      "name": "rotate:confirm keyboard outline"
+    },
+    {
+      "width": 390,
+      "name": "rotate:confirm focus color"
+    },
+    {
+      "width": 390,
+      "name": "rotate-confirm-focus:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "rotate-confirm-focus:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "rotate:cancel keyboard outline"
+    },
+    {
+      "width": 390,
+      "name": "rotate:cancel focus color"
+    },
+    {
+      "width": 390,
+      "name": "rotate-cancel-focus:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "rotate-cancel-focus:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "rotate:close keyboard outline"
+    },
+    {
+      "width": 390,
+      "name": "rotate:close focus color"
+    },
+    {
+      "width": 390,
+      "name": "rotate-close-focus:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "rotate-close-focus:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "rotate-confirm-hover:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "rotate-confirm-hover:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "rotate:pressed"
+    },
+    {
+      "width": 390,
+      "name": "rotate-confirm-pressed:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "rotate-confirm-pressed:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "rotate:501 retained without inferred server policy"
+    },
+    {
+      "width": 390,
+      "name": "rotate-long-reason:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "rotate-long-reason:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "rotate:escape restores trigger"
+    },
+    {
+      "width": 390,
+      "name": "rotate:reopen resets"
+    },
+    {
+      "width": 390,
+      "name": "rotate:header restores trigger"
+    },
+    {
+      "width": 390,
+      "name": "rotate:footer restores trigger"
+    },
+    {
+      "width": 390,
+      "name": "revoke:actual target"
+    },
+    {
+      "width": 390,
+      "name": "revoke:autofocus"
+    },
+    {
+      "width": 390,
+      "name": "revoke:initial empty"
+    },
+    {
+      "width": 390,
+      "name": "revoke:initial disabled"
+    },
+    {
+      "width": 390,
+      "name": "revoke:disabled gray"
+    },
+    {
+      "width": 390,
+      "name": "revoke:minimum two"
+    },
+    {
+      "width": 390,
+      "name": "revoke:no maximum"
+    },
+    {
+      "width": 390,
+      "name": "revoke-default:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "revoke-default:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "revoke:trimmed invalid \"字\""
+    },
+    {
+      "width": 390,
+      "name": "revoke:trimmed invalid \"   \""
+    },
+    {
+      "width": 390,
+      "name": "revoke:trimmed invalid \" 字 \""
+    },
+    {
+      "width": 390,
+      "name": "revoke-invalid:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "revoke-invalid:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "revoke:valid enabled"
+    },
+    {
+      "width": 390,
+      "name": "revoke:action color"
+    },
+    {
+      "width": 390,
+      "name": "revoke:44px controls"
+    },
+    {
+      "width": 390,
+      "name": "revoke:forward trap"
+    },
+    {
+      "width": 390,
+      "name": "revoke:reverse trap"
+    },
+    {
+      "width": 390,
+      "name": "revoke:confirm keyboard outline"
+    },
+    {
+      "width": 390,
+      "name": "revoke:confirm focus color"
+    },
+    {
+      "width": 390,
+      "name": "revoke-confirm-focus:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "revoke-confirm-focus:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "revoke:cancel keyboard outline"
+    },
+    {
+      "width": 390,
+      "name": "revoke:cancel focus color"
+    },
+    {
+      "width": 390,
+      "name": "revoke-cancel-focus:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "revoke-cancel-focus:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "revoke:close keyboard outline"
+    },
+    {
+      "width": 390,
+      "name": "revoke:close focus color"
+    },
+    {
+      "width": 390,
+      "name": "revoke-close-focus:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "revoke-close-focus:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "revoke-confirm-hover:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "revoke-confirm-hover:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "revoke:pressed"
+    },
+    {
+      "width": 390,
+      "name": "revoke-confirm-pressed:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "revoke-confirm-pressed:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "revoke:501 retained without inferred server policy"
+    },
+    {
+      "width": 390,
+      "name": "revoke-long-reason:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "revoke-long-reason:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "revoke:escape restores trigger"
+    },
+    {
+      "width": 390,
+      "name": "revoke:reopen resets"
+    },
+    {
+      "width": 390,
+      "name": "revoke:header restores trigger"
+    },
+    {
+      "width": 390,
+      "name": "revoke:footer restores trigger"
+    },
+    {
+      "width": 390,
+      "name": "rotate:short footer reachable"
+    },
+    {
+      "width": 390,
+      "name": "rotate-short-long-target-footer:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "rotate-short-long-target-footer:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "rotate:short header reachable"
+    },
+    {
+      "width": 390,
+      "name": "rotate-short-long-target-header:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "rotate-short-long-target-header:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "revoke:short footer reachable"
+    },
+    {
+      "width": 390,
+      "name": "revoke-short-long-target-footer:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "revoke-short-long-target-footer:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "revoke:short header reachable"
+    },
+    {
+      "width": 390,
+      "name": "revoke-short-long-target-header:contained horizontally"
+    },
+    {
+      "width": 390,
+      "name": "revoke-short-long-target-header:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "zero external or write requests"
+    },
+    {
+      "width": 390,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "name": "exact four GET"
+    },
+    {
+      "width": 390,
+      "name": "zero storage"
+    },
+    {
+      "width": 760,
+      "name": "rotate:actual target"
+    },
+    {
+      "width": 760,
+      "name": "rotate:autofocus"
+    },
+    {
+      "width": 760,
+      "name": "rotate:initial empty"
+    },
+    {
+      "width": 760,
+      "name": "rotate:initial disabled"
+    },
+    {
+      "width": 760,
+      "name": "rotate:disabled gray"
+    },
+    {
+      "width": 760,
+      "name": "rotate:minimum two"
+    },
+    {
+      "width": 760,
+      "name": "rotate:no maximum"
+    },
+    {
+      "width": 760,
+      "name": "rotate-default:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "rotate-default:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "rotate:trimmed invalid \"字\""
+    },
+    {
+      "width": 760,
+      "name": "rotate:trimmed invalid \"   \""
+    },
+    {
+      "width": 760,
+      "name": "rotate:trimmed invalid \" 字 \""
+    },
+    {
+      "width": 760,
+      "name": "rotate-invalid:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "rotate-invalid:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "rotate:valid enabled"
+    },
+    {
+      "width": 760,
+      "name": "rotate:action color"
+    },
+    {
+      "width": 760,
+      "name": "rotate:44px controls"
+    },
+    {
+      "width": 760,
+      "name": "rotate:forward trap"
+    },
+    {
+      "width": 760,
+      "name": "rotate:reverse trap"
+    },
+    {
+      "width": 760,
+      "name": "rotate:confirm keyboard outline"
+    },
+    {
+      "width": 760,
+      "name": "rotate:confirm focus color"
+    },
+    {
+      "width": 760,
+      "name": "rotate-confirm-focus:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "rotate-confirm-focus:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "rotate:cancel keyboard outline"
+    },
+    {
+      "width": 760,
+      "name": "rotate:cancel focus color"
+    },
+    {
+      "width": 760,
+      "name": "rotate-cancel-focus:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "rotate-cancel-focus:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "rotate:close keyboard outline"
+    },
+    {
+      "width": 760,
+      "name": "rotate:close focus color"
+    },
+    {
+      "width": 760,
+      "name": "rotate-close-focus:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "rotate-close-focus:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "rotate-confirm-hover:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "rotate-confirm-hover:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "rotate:pressed"
+    },
+    {
+      "width": 760,
+      "name": "rotate-confirm-pressed:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "rotate-confirm-pressed:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "rotate:501 retained without inferred server policy"
+    },
+    {
+      "width": 760,
+      "name": "rotate-long-reason:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "rotate-long-reason:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "rotate:escape restores trigger"
+    },
+    {
+      "width": 760,
+      "name": "rotate:reopen resets"
+    },
+    {
+      "width": 760,
+      "name": "rotate:header restores trigger"
+    },
+    {
+      "width": 760,
+      "name": "rotate:footer restores trigger"
+    },
+    {
+      "width": 760,
+      "name": "revoke:actual target"
+    },
+    {
+      "width": 760,
+      "name": "revoke:autofocus"
+    },
+    {
+      "width": 760,
+      "name": "revoke:initial empty"
+    },
+    {
+      "width": 760,
+      "name": "revoke:initial disabled"
+    },
+    {
+      "width": 760,
+      "name": "revoke:disabled gray"
+    },
+    {
+      "width": 760,
+      "name": "revoke:minimum two"
+    },
+    {
+      "width": 760,
+      "name": "revoke:no maximum"
+    },
+    {
+      "width": 760,
+      "name": "revoke-default:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "revoke-default:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "revoke:trimmed invalid \"字\""
+    },
+    {
+      "width": 760,
+      "name": "revoke:trimmed invalid \"   \""
+    },
+    {
+      "width": 760,
+      "name": "revoke:trimmed invalid \" 字 \""
+    },
+    {
+      "width": 760,
+      "name": "revoke-invalid:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "revoke-invalid:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "revoke:valid enabled"
+    },
+    {
+      "width": 760,
+      "name": "revoke:action color"
+    },
+    {
+      "width": 760,
+      "name": "revoke:44px controls"
+    },
+    {
+      "width": 760,
+      "name": "revoke:forward trap"
+    },
+    {
+      "width": 760,
+      "name": "revoke:reverse trap"
+    },
+    {
+      "width": 760,
+      "name": "revoke:confirm keyboard outline"
+    },
+    {
+      "width": 760,
+      "name": "revoke:confirm focus color"
+    },
+    {
+      "width": 760,
+      "name": "revoke-confirm-focus:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "revoke-confirm-focus:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "revoke:cancel keyboard outline"
+    },
+    {
+      "width": 760,
+      "name": "revoke:cancel focus color"
+    },
+    {
+      "width": 760,
+      "name": "revoke-cancel-focus:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "revoke-cancel-focus:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "revoke:close keyboard outline"
+    },
+    {
+      "width": 760,
+      "name": "revoke:close focus color"
+    },
+    {
+      "width": 760,
+      "name": "revoke-close-focus:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "revoke-close-focus:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "revoke-confirm-hover:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "revoke-confirm-hover:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "revoke:pressed"
+    },
+    {
+      "width": 760,
+      "name": "revoke-confirm-pressed:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "revoke-confirm-pressed:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "revoke:501 retained without inferred server policy"
+    },
+    {
+      "width": 760,
+      "name": "revoke-long-reason:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "revoke-long-reason:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "revoke:escape restores trigger"
+    },
+    {
+      "width": 760,
+      "name": "revoke:reopen resets"
+    },
+    {
+      "width": 760,
+      "name": "revoke:header restores trigger"
+    },
+    {
+      "width": 760,
+      "name": "revoke:footer restores trigger"
+    },
+    {
+      "width": 760,
+      "name": "rotate:short footer reachable"
+    },
+    {
+      "width": 760,
+      "name": "rotate-short-long-target-footer:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "rotate-short-long-target-footer:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "rotate:short header reachable"
+    },
+    {
+      "width": 760,
+      "name": "rotate-short-long-target-header:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "rotate-short-long-target-header:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "revoke:short footer reachable"
+    },
+    {
+      "width": 760,
+      "name": "revoke-short-long-target-footer:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "revoke-short-long-target-footer:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "revoke:short header reachable"
+    },
+    {
+      "width": 760,
+      "name": "revoke-short-long-target-header:contained horizontally"
+    },
+    {
+      "width": 760,
+      "name": "revoke-short-long-target-header:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "zero external or write requests"
+    },
+    {
+      "width": 760,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 760,
+      "name": "exact four GET"
+    },
+    {
+      "width": 760,
+      "name": "zero storage"
+    },
+    {
+      "width": 761,
+      "name": "rotate:actual target"
+    },
+    {
+      "width": 761,
+      "name": "rotate:autofocus"
+    },
+    {
+      "width": 761,
+      "name": "rotate:initial empty"
+    },
+    {
+      "width": 761,
+      "name": "rotate:initial disabled"
+    },
+    {
+      "width": 761,
+      "name": "rotate:disabled gray"
+    },
+    {
+      "width": 761,
+      "name": "rotate:minimum two"
+    },
+    {
+      "width": 761,
+      "name": "rotate:no maximum"
+    },
+    {
+      "width": 761,
+      "name": "rotate-default:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "rotate-default:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "rotate:trimmed invalid \"字\""
+    },
+    {
+      "width": 761,
+      "name": "rotate:trimmed invalid \"   \""
+    },
+    {
+      "width": 761,
+      "name": "rotate:trimmed invalid \" 字 \""
+    },
+    {
+      "width": 761,
+      "name": "rotate-invalid:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "rotate-invalid:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "rotate:valid enabled"
+    },
+    {
+      "width": 761,
+      "name": "rotate:action color"
+    },
+    {
+      "width": 761,
+      "name": "rotate:44px controls"
+    },
+    {
+      "width": 761,
+      "name": "rotate:forward trap"
+    },
+    {
+      "width": 761,
+      "name": "rotate:reverse trap"
+    },
+    {
+      "width": 761,
+      "name": "rotate:confirm keyboard outline"
+    },
+    {
+      "width": 761,
+      "name": "rotate:confirm focus color"
+    },
+    {
+      "width": 761,
+      "name": "rotate-confirm-focus:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "rotate-confirm-focus:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "rotate:cancel keyboard outline"
+    },
+    {
+      "width": 761,
+      "name": "rotate:cancel focus color"
+    },
+    {
+      "width": 761,
+      "name": "rotate-cancel-focus:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "rotate-cancel-focus:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "rotate:close keyboard outline"
+    },
+    {
+      "width": 761,
+      "name": "rotate:close focus color"
+    },
+    {
+      "width": 761,
+      "name": "rotate-close-focus:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "rotate-close-focus:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "rotate-confirm-hover:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "rotate-confirm-hover:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "rotate:pressed"
+    },
+    {
+      "width": 761,
+      "name": "rotate-confirm-pressed:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "rotate-confirm-pressed:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "rotate:501 retained without inferred server policy"
+    },
+    {
+      "width": 761,
+      "name": "rotate-long-reason:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "rotate-long-reason:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "rotate:escape restores trigger"
+    },
+    {
+      "width": 761,
+      "name": "rotate:reopen resets"
+    },
+    {
+      "width": 761,
+      "name": "rotate:header restores trigger"
+    },
+    {
+      "width": 761,
+      "name": "rotate:footer restores trigger"
+    },
+    {
+      "width": 761,
+      "name": "revoke:actual target"
+    },
+    {
+      "width": 761,
+      "name": "revoke:autofocus"
+    },
+    {
+      "width": 761,
+      "name": "revoke:initial empty"
+    },
+    {
+      "width": 761,
+      "name": "revoke:initial disabled"
+    },
+    {
+      "width": 761,
+      "name": "revoke:disabled gray"
+    },
+    {
+      "width": 761,
+      "name": "revoke:minimum two"
+    },
+    {
+      "width": 761,
+      "name": "revoke:no maximum"
+    },
+    {
+      "width": 761,
+      "name": "revoke-default:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "revoke-default:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "revoke:trimmed invalid \"字\""
+    },
+    {
+      "width": 761,
+      "name": "revoke:trimmed invalid \"   \""
+    },
+    {
+      "width": 761,
+      "name": "revoke:trimmed invalid \" 字 \""
+    },
+    {
+      "width": 761,
+      "name": "revoke-invalid:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "revoke-invalid:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "revoke:valid enabled"
+    },
+    {
+      "width": 761,
+      "name": "revoke:action color"
+    },
+    {
+      "width": 761,
+      "name": "revoke:44px controls"
+    },
+    {
+      "width": 761,
+      "name": "revoke:forward trap"
+    },
+    {
+      "width": 761,
+      "name": "revoke:reverse trap"
+    },
+    {
+      "width": 761,
+      "name": "revoke:confirm keyboard outline"
+    },
+    {
+      "width": 761,
+      "name": "revoke:confirm focus color"
+    },
+    {
+      "width": 761,
+      "name": "revoke-confirm-focus:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "revoke-confirm-focus:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "revoke:cancel keyboard outline"
+    },
+    {
+      "width": 761,
+      "name": "revoke:cancel focus color"
+    },
+    {
+      "width": 761,
+      "name": "revoke-cancel-focus:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "revoke-cancel-focus:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "revoke:close keyboard outline"
+    },
+    {
+      "width": 761,
+      "name": "revoke:close focus color"
+    },
+    {
+      "width": 761,
+      "name": "revoke-close-focus:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "revoke-close-focus:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "revoke-confirm-hover:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "revoke-confirm-hover:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "revoke:pressed"
+    },
+    {
+      "width": 761,
+      "name": "revoke-confirm-pressed:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "revoke-confirm-pressed:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "revoke:501 retained without inferred server policy"
+    },
+    {
+      "width": 761,
+      "name": "revoke-long-reason:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "revoke-long-reason:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "revoke:escape restores trigger"
+    },
+    {
+      "width": 761,
+      "name": "revoke:reopen resets"
+    },
+    {
+      "width": 761,
+      "name": "revoke:header restores trigger"
+    },
+    {
+      "width": 761,
+      "name": "revoke:footer restores trigger"
+    },
+    {
+      "width": 761,
+      "name": "rotate:short footer reachable"
+    },
+    {
+      "width": 761,
+      "name": "rotate-short-long-target-footer:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "rotate-short-long-target-footer:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "rotate:short header reachable"
+    },
+    {
+      "width": 761,
+      "name": "rotate-short-long-target-header:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "rotate-short-long-target-header:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "revoke:short footer reachable"
+    },
+    {
+      "width": 761,
+      "name": "revoke-short-long-target-footer:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "revoke-short-long-target-footer:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "revoke:short header reachable"
+    },
+    {
+      "width": 761,
+      "name": "revoke-short-long-target-header:contained horizontally"
+    },
+    {
+      "width": 761,
+      "name": "revoke-short-long-target-header:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "zero external or write requests"
+    },
+    {
+      "width": 761,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 761,
+      "name": "exact four GET"
+    },
+    {
+      "width": 761,
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:actual target"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:autofocus"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:initial empty"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:initial disabled"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:disabled gray"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:minimum two"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:no maximum"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-default:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-default:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:trimmed invalid \"字\""
+    },
+    {
+      "width": 1440,
+      "name": "rotate:trimmed invalid \"   \""
+    },
+    {
+      "width": 1440,
+      "name": "rotate:trimmed invalid \" 字 \""
+    },
+    {
+      "width": 1440,
+      "name": "rotate-invalid:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-invalid:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:valid enabled"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:action color"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:44px controls"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:forward trap"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:reverse trap"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:confirm keyboard outline"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:confirm focus color"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-confirm-focus:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-confirm-focus:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:cancel keyboard outline"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:cancel focus color"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-cancel-focus:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-cancel-focus:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:close keyboard outline"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:close focus color"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-close-focus:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-close-focus:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-confirm-hover:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-confirm-hover:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:pressed"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-confirm-pressed:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-confirm-pressed:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:501 retained without inferred server policy"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-long-reason:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-long-reason:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:escape restores trigger"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:reopen resets"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:header restores trigger"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:footer restores trigger"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:actual target"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:autofocus"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:initial empty"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:initial disabled"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:disabled gray"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:minimum two"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:no maximum"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-default:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-default:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:trimmed invalid \"字\""
+    },
+    {
+      "width": 1440,
+      "name": "revoke:trimmed invalid \"   \""
+    },
+    {
+      "width": 1440,
+      "name": "revoke:trimmed invalid \" 字 \""
+    },
+    {
+      "width": 1440,
+      "name": "revoke-invalid:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-invalid:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:valid enabled"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:action color"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:44px controls"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:forward trap"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:reverse trap"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:confirm keyboard outline"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:confirm focus color"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-confirm-focus:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-confirm-focus:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:cancel keyboard outline"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:cancel focus color"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-cancel-focus:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-cancel-focus:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:close keyboard outline"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:close focus color"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-close-focus:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-close-focus:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-confirm-hover:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-confirm-hover:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:pressed"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-confirm-pressed:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-confirm-pressed:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:501 retained without inferred server policy"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-long-reason:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-long-reason:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:escape restores trigger"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:reopen resets"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:header restores trigger"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:footer restores trigger"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:short footer reachable"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-short-long-target-footer:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-short-long-target-footer:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:short header reachable"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-short-long-target-header:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-short-long-target-header:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:short footer reachable"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-short-long-target-footer:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-short-long-target-footer:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:short header reachable"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-short-long-target-header:contained horizontally"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-short-long-target-header:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "zero external or write requests"
+    },
+    {
+      "width": 1440,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "exact four GET"
+    },
+    {
+      "width": 1440,
+      "name": "zero storage"
+    }
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        }
+      ]
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-rotate-default.png",
+      "width": 390,
+      "state": "rotate-default",
+      "sha256": "53108c6032643bc364e1d4b772a69b73c7ff16124b3df7977abe13e4b5217d33"
+    },
+    {
+      "file": "390-rotate-invalid.png",
+      "width": 390,
+      "state": "rotate-invalid",
+      "sha256": "1e1833342e59f1ba0eaa47351b75e3d1ddd8e3bbda7ac9dca61664ae7326bebe"
+    },
+    {
+      "file": "390-rotate-confirm-focus.png",
+      "width": 390,
+      "state": "rotate-confirm-focus",
+      "sha256": "2000c004290fe4c95200d9393385f68d2cbdc584a390c4d964df01d132169e6c"
+    },
+    {
+      "file": "390-rotate-cancel-focus.png",
+      "width": 390,
+      "state": "rotate-cancel-focus",
+      "sha256": "a65dc20acb5500506ccfd5e496bd6d56d325259800605e6f3deb860631bf8004"
+    },
+    {
+      "file": "390-rotate-close-focus.png",
+      "width": 390,
+      "state": "rotate-close-focus",
+      "sha256": "09c3b2a90f9ad248063ddef74dad42ef828b3c7ea6a44c1f4dd25a87e78e441a"
+    },
+    {
+      "file": "390-rotate-confirm-hover.png",
+      "width": 390,
+      "state": "rotate-confirm-hover",
+      "sha256": "1bd75c032eacb0bef84db1ddd13fcb7c9190abd35fa44059f7041615ed75f5e4"
+    },
+    {
+      "file": "390-rotate-confirm-pressed.png",
+      "width": 390,
+      "state": "rotate-confirm-pressed",
+      "sha256": "50ee90ecc0f47683defff428ed3154b1739b84d3879c01793f7eee4be8b3e06c"
+    },
+    {
+      "file": "390-rotate-long-reason.png",
+      "width": 390,
+      "state": "rotate-long-reason",
+      "sha256": "45b684995d9f7f28ab97e3b5dc0573308b22ef99eb069dea034d7aca1ca14912"
+    },
+    {
+      "file": "390-revoke-default.png",
+      "width": 390,
+      "state": "revoke-default",
+      "sha256": "1ed72219bf67adfee11906570099cf49a58af3c19a1dc55609da4ce3be243f46"
+    },
+    {
+      "file": "390-revoke-invalid.png",
+      "width": 390,
+      "state": "revoke-invalid",
+      "sha256": "7f72979861b76e6e838efd913df26fba00e69dd1db53e3f5be2f2c4bfacea5d9"
+    },
+    {
+      "file": "390-revoke-confirm-focus.png",
+      "width": 390,
+      "state": "revoke-confirm-focus",
+      "sha256": "8337dbe1f5c6adde106c3f041b6e041bcc0be482db8aed5d74054bf4f176c6f6"
+    },
+    {
+      "file": "390-revoke-cancel-focus.png",
+      "width": 390,
+      "state": "revoke-cancel-focus",
+      "sha256": "ae23fcf9bea6c18894c1846bd7a3d643eb71189be1adbf88b2418af15d783aa9"
+    },
+    {
+      "file": "390-revoke-close-focus.png",
+      "width": 390,
+      "state": "revoke-close-focus",
+      "sha256": "13cf73dca760061c5ac09d5091d381f792668aaa4f338d56f4a2f01154bb4fac"
+    },
+    {
+      "file": "390-revoke-confirm-hover.png",
+      "width": 390,
+      "state": "revoke-confirm-hover",
+      "sha256": "a5cd0345746f8af53b33ca9e82cdda178deaba8992df90a2c16e70328618f8f0"
+    },
+    {
+      "file": "390-revoke-confirm-pressed.png",
+      "width": 390,
+      "state": "revoke-confirm-pressed",
+      "sha256": "8e84dac503cef209f8d992155fef6a1eeefcd3e3af4a94897f81c0ddea358140"
+    },
+    {
+      "file": "390-revoke-long-reason.png",
+      "width": 390,
+      "state": "revoke-long-reason",
+      "sha256": "6c1bdceb2873983f6582ba2e6a5463167aea33869cfd77cedf1d70d53bf08489"
+    },
+    {
+      "file": "390-rotate-short-long-target-footer.png",
+      "width": 390,
+      "state": "rotate-short-long-target-footer",
+      "sha256": "95fb97ca72ea1ae0087f70b23971393aeea72f1862fd9ea0294eebc7903e5631"
+    },
+    {
+      "file": "390-rotate-short-long-target-header.png",
+      "width": 390,
+      "state": "rotate-short-long-target-header",
+      "sha256": "cdceaf2acbffdea8482adcd4a8830debf8e8d0b81b6c943edabac7e994e8b127"
+    },
+    {
+      "file": "390-revoke-short-long-target-footer.png",
+      "width": 390,
+      "state": "revoke-short-long-target-footer",
+      "sha256": "bc0acd1a3b0979c106d97d87e6de70f8cc46fe945517058d2b3a85659ef8fabc"
+    },
+    {
+      "file": "390-revoke-short-long-target-header.png",
+      "width": 390,
+      "state": "revoke-short-long-target-header",
+      "sha256": "5cba66864a7221e3ead1dd5b72821960e71528cd55d34160ce1363c3d754a5eb"
+    },
+    {
+      "file": "760-rotate-default.png",
+      "width": 760,
+      "state": "rotate-default",
+      "sha256": "9b6da0fa692d625c1574f4de100d30298fc8dd74049d8031f9ccfff463310f09"
+    },
+    {
+      "file": "760-rotate-invalid.png",
+      "width": 760,
+      "state": "rotate-invalid",
+      "sha256": "e4db0f9c3c28a176a00f81791ce96428d6db1853de1770aebcce5d7249cd80dc"
+    },
+    {
+      "file": "760-rotate-confirm-focus.png",
+      "width": 760,
+      "state": "rotate-confirm-focus",
+      "sha256": "8d76c873f122e2bcdc5fd0c6171d1125ecbf34a7fd949de27930f8c794b6c744"
+    },
+    {
+      "file": "760-rotate-cancel-focus.png",
+      "width": 760,
+      "state": "rotate-cancel-focus",
+      "sha256": "3a9b51b8aecbd5e8d2240e86a3242ee333853e87807c6e5997215f3abbd02e78"
+    },
+    {
+      "file": "760-rotate-close-focus.png",
+      "width": 760,
+      "state": "rotate-close-focus",
+      "sha256": "78d5f6fff38d0baac446b38576e4ed8f95a3971175e86709bc97bbc98a942bd4"
+    },
+    {
+      "file": "760-rotate-confirm-hover.png",
+      "width": 760,
+      "state": "rotate-confirm-hover",
+      "sha256": "a63ba049f167b97ec10192e9e3749337a3202757568e7dbea3ab310e0fe38fb1"
+    },
+    {
+      "file": "760-rotate-confirm-pressed.png",
+      "width": 760,
+      "state": "rotate-confirm-pressed",
+      "sha256": "1be638ba45eb598a8c4ecfe3123a7a7c3940820da053d0df3347493127ad9c71"
+    },
+    {
+      "file": "760-rotate-long-reason.png",
+      "width": 760,
+      "state": "rotate-long-reason",
+      "sha256": "0febb6ade425c0552f3476b84138b5beb788c2af807aef10d095c634d8b0a532"
+    },
+    {
+      "file": "760-revoke-default.png",
+      "width": 760,
+      "state": "revoke-default",
+      "sha256": "c7d110a0ce34ce309b1efd905dc81046fe2f0637b367632633a55d41696c2e6b"
+    },
+    {
+      "file": "760-revoke-invalid.png",
+      "width": 760,
+      "state": "revoke-invalid",
+      "sha256": "d1218a8df1ce1f10e47f98da8ec1bead46ecb1df934094c817e15856ae4a7f72"
+    },
+    {
+      "file": "760-revoke-confirm-focus.png",
+      "width": 760,
+      "state": "revoke-confirm-focus",
+      "sha256": "b2af80af7493145e61d762a46dbdfbfb8a2dca48be412a0140eabb0963e0f04b"
+    },
+    {
+      "file": "760-revoke-cancel-focus.png",
+      "width": 760,
+      "state": "revoke-cancel-focus",
+      "sha256": "5b25123cbbd1fdda09ab401f5a3fd4f90be071f6c559650ba981a15cce54f8f7"
+    },
+    {
+      "file": "760-revoke-close-focus.png",
+      "width": 760,
+      "state": "revoke-close-focus",
+      "sha256": "48ec2cd43be1d46845332e9c7047556501e5fd5fe4583791a8c473f80a03977d"
+    },
+    {
+      "file": "760-revoke-confirm-hover.png",
+      "width": 760,
+      "state": "revoke-confirm-hover",
+      "sha256": "da83fe64eecb0c648eef29d22a3abb36ce50cf2db74c608a44531e6c15f7f34f"
+    },
+    {
+      "file": "760-revoke-confirm-pressed.png",
+      "width": 760,
+      "state": "revoke-confirm-pressed",
+      "sha256": "966bb308128af2635ede08e8c4a18eee4aa05220d01ddd7c39cf782cd7608ddb"
+    },
+    {
+      "file": "760-revoke-long-reason.png",
+      "width": 760,
+      "state": "revoke-long-reason",
+      "sha256": "67c7fce996e9ff6928f9c3cda986083434d33c94e67cdb97d37273acaeb932a4"
+    },
+    {
+      "file": "760-rotate-short-long-target-footer.png",
+      "width": 760,
+      "state": "rotate-short-long-target-footer",
+      "sha256": "7fc91db13b690afffdab25316c22022346cd800f81e43570e66584d19d7dfc0f"
+    },
+    {
+      "file": "760-rotate-short-long-target-header.png",
+      "width": 760,
+      "state": "rotate-short-long-target-header",
+      "sha256": "658a09dffa42ad2fbe823f4e1c495761b44f5e53514f7f1fbae1902a917ba597"
+    },
+    {
+      "file": "760-revoke-short-long-target-footer.png",
+      "width": 760,
+      "state": "revoke-short-long-target-footer",
+      "sha256": "f3a945ae432ada60908f89aaccf5aa0b9a2ddc55662202367132c386d52640f4"
+    },
+    {
+      "file": "760-revoke-short-long-target-header.png",
+      "width": 760,
+      "state": "revoke-short-long-target-header",
+      "sha256": "1cda470ed342a1829089618e0f3ea123ab6c27496496e81c2b2369249d6bd3f7"
+    },
+    {
+      "file": "761-rotate-default.png",
+      "width": 761,
+      "state": "rotate-default",
+      "sha256": "b1f17eef4dc841aa4f5c94e93752e93b06d258ab4bd73af4d82da585f91faa6f"
+    },
+    {
+      "file": "761-rotate-invalid.png",
+      "width": 761,
+      "state": "rotate-invalid",
+      "sha256": "c0d8b23035ef2b19ac906da2f681a2c8c304bb3fe0cffe602c3e0befcb5f7eae"
+    },
+    {
+      "file": "761-rotate-confirm-focus.png",
+      "width": 761,
+      "state": "rotate-confirm-focus",
+      "sha256": "6d9e89fa5d145af095bdb4c9ad888a43ad335404e642e50014087a3c5fae1236"
+    },
+    {
+      "file": "761-rotate-cancel-focus.png",
+      "width": 761,
+      "state": "rotate-cancel-focus",
+      "sha256": "32629f64b342f965f5e00e09a783a900bf576a091fb90f6e322a8a793a948efd"
+    },
+    {
+      "file": "761-rotate-close-focus.png",
+      "width": 761,
+      "state": "rotate-close-focus",
+      "sha256": "c0b38d4311152ad7924a4bf29022c86a86d5259fb72ddcc3db106a896d6a623e"
+    },
+    {
+      "file": "761-rotate-confirm-hover.png",
+      "width": 761,
+      "state": "rotate-confirm-hover",
+      "sha256": "c65ba9a94b90b061557c47d46a69252f3f2ab1091d450b5a569e23c11cdf7504"
+    },
+    {
+      "file": "761-rotate-confirm-pressed.png",
+      "width": 761,
+      "state": "rotate-confirm-pressed",
+      "sha256": "ad84ee7515bd1eddf59a3334512175d718fce8574928d9f2ca23d3a3de8f2ce4"
+    },
+    {
+      "file": "761-rotate-long-reason.png",
+      "width": 761,
+      "state": "rotate-long-reason",
+      "sha256": "94167a2970286938c744191004481ae70b5f1274ddd9ed28c15ea5ba15fe67f9"
+    },
+    {
+      "file": "761-revoke-default.png",
+      "width": 761,
+      "state": "revoke-default",
+      "sha256": "a964fd3d1543bfb81c98413f2a4ac7ca4a695e4de6eb6811665c42e3bc08da3d"
+    },
+    {
+      "file": "761-revoke-invalid.png",
+      "width": 761,
+      "state": "revoke-invalid",
+      "sha256": "75628d2133b62c3dbc9fb4856551b3b68c26968d38286e8bd542f532a0eb0858"
+    },
+    {
+      "file": "761-revoke-confirm-focus.png",
+      "width": 761,
+      "state": "revoke-confirm-focus",
+      "sha256": "270476d62b127b84ab499ff9945965dfb9c295a9efc38bc0acd9ddefb22a7de2"
+    },
+    {
+      "file": "761-revoke-cancel-focus.png",
+      "width": 761,
+      "state": "revoke-cancel-focus",
+      "sha256": "8c7cf05946b850f4652de928ffb5c42c03796a5b2e7af9e29eaa636dd701eb45"
+    },
+    {
+      "file": "761-revoke-close-focus.png",
+      "width": 761,
+      "state": "revoke-close-focus",
+      "sha256": "8d347bdc0ad0b12f546a5002cebb1181189dfe63c4f7eb30bcb33c35afa78709"
+    },
+    {
+      "file": "761-revoke-confirm-hover.png",
+      "width": 761,
+      "state": "revoke-confirm-hover",
+      "sha256": "80166b0525490c575b524f997f3251cfdb7c610b6c4860f890764393a9cdc6e1"
+    },
+    {
+      "file": "761-revoke-confirm-pressed.png",
+      "width": 761,
+      "state": "revoke-confirm-pressed",
+      "sha256": "57b7b8b78c65459dd02c034d74f5ca47e338274db54e82420b20b6ef7c647d4f"
+    },
+    {
+      "file": "761-revoke-long-reason.png",
+      "width": 761,
+      "state": "revoke-long-reason",
+      "sha256": "8a8fd21912a861cd0be7cc7bf91bf92c49b8fcf70b0fee2d747839e4f83c5eb7"
+    },
+    {
+      "file": "761-rotate-short-long-target-footer.png",
+      "width": 761,
+      "state": "rotate-short-long-target-footer",
+      "sha256": "87ac234457fa7727b73f22da08b925fec2fa3523c9385febfcd5f346ab8ea6bb"
+    },
+    {
+      "file": "761-rotate-short-long-target-header.png",
+      "width": 761,
+      "state": "rotate-short-long-target-header",
+      "sha256": "4b01bc5d5ce6d46b2b7b4ad4e8902d91e5913d028e807fb4aefaa02fb109a7aa"
+    },
+    {
+      "file": "761-revoke-short-long-target-footer.png",
+      "width": 761,
+      "state": "revoke-short-long-target-footer",
+      "sha256": "468cea8e3d14b5daa987aaf99fcf6cc52beed78468a230dc8d9e73461000fa41"
+    },
+    {
+      "file": "761-revoke-short-long-target-header.png",
+      "width": 761,
+      "state": "revoke-short-long-target-header",
+      "sha256": "0f0f2cfd41f18f2e0d4c9e0af6fb97a6c5d48075be1753a82d9b8503b4b00d29"
+    },
+    {
+      "file": "1440-rotate-default.png",
+      "width": 1440,
+      "state": "rotate-default",
+      "sha256": "f38cd770465c5359a977185f5f41c3e9503a8db7968584564fc4ecd035c8a207"
+    },
+    {
+      "file": "1440-rotate-invalid.png",
+      "width": 1440,
+      "state": "rotate-invalid",
+      "sha256": "5bf4b90e7b082ea9c41511e5ea84c480b3afc212acf58e57c9f34fead76788dc"
+    },
+    {
+      "file": "1440-rotate-confirm-focus.png",
+      "width": 1440,
+      "state": "rotate-confirm-focus",
+      "sha256": "dd9c38bd5435807165422d8a0381eaf3cf21273ee3dfb5d29a1b132279d82437"
+    },
+    {
+      "file": "1440-rotate-cancel-focus.png",
+      "width": 1440,
+      "state": "rotate-cancel-focus",
+      "sha256": "7f2daf60b23128809d4d8c45d70e39f2af3dfb0100d0dc267543cb489733f1f3"
+    },
+    {
+      "file": "1440-rotate-close-focus.png",
+      "width": 1440,
+      "state": "rotate-close-focus",
+      "sha256": "b1d1e9c75c5ab67231c3faea5bbe5daa8d9048e3e3f2baead7aa938146fa9def"
+    },
+    {
+      "file": "1440-rotate-confirm-hover.png",
+      "width": 1440,
+      "state": "rotate-confirm-hover",
+      "sha256": "c83ca067764e9c119adfb85c877a0ae1feee26c17bd5b3dcf1f4fda8eb9fd298"
+    },
+    {
+      "file": "1440-rotate-confirm-pressed.png",
+      "width": 1440,
+      "state": "rotate-confirm-pressed",
+      "sha256": "4942a1482a29f6ccf45806897a18a0c8019d0617a676f2cd0b1adf3f593bf666"
+    },
+    {
+      "file": "1440-rotate-long-reason.png",
+      "width": 1440,
+      "state": "rotate-long-reason",
+      "sha256": "ea6632105371c6d0decd1e7aad017f43339dd9223d5eb1f4244311856e3a6752"
+    },
+    {
+      "file": "1440-revoke-default.png",
+      "width": 1440,
+      "state": "revoke-default",
+      "sha256": "33c2a57e62b5e24c70b77e04ded56155f4a1f6707c9442b311aaa02bde114cab"
+    },
+    {
+      "file": "1440-revoke-invalid.png",
+      "width": 1440,
+      "state": "revoke-invalid",
+      "sha256": "44e839d3a2dc06b0366031b3c788d1e42d4ecb659034c75e615d6c7553297f9f"
+    },
+    {
+      "file": "1440-revoke-confirm-focus.png",
+      "width": 1440,
+      "state": "revoke-confirm-focus",
+      "sha256": "fb5e24af27958f680ee2db43fc6b10e2b8e5d1933112f1f1d3fd2f9281bfaa7e"
+    },
+    {
+      "file": "1440-revoke-cancel-focus.png",
+      "width": 1440,
+      "state": "revoke-cancel-focus",
+      "sha256": "b6e58525a6a084e013774062f785ac0647c893126f288ad196779b8cd6ad4c8c"
+    },
+    {
+      "file": "1440-revoke-close-focus.png",
+      "width": 1440,
+      "state": "revoke-close-focus",
+      "sha256": "c57322df226d803ba87a9290a09c0938bd014c12aecec0d488041e45398506aa"
+    },
+    {
+      "file": "1440-revoke-confirm-hover.png",
+      "width": 1440,
+      "state": "revoke-confirm-hover",
+      "sha256": "4e7ab423df7a643d94a73cec5a83f821dbb2a79e4f7ec8eae46073d853be88a6"
+    },
+    {
+      "file": "1440-revoke-confirm-pressed.png",
+      "width": 1440,
+      "state": "revoke-confirm-pressed",
+      "sha256": "3813a09000e08cb51dd305af197356eceeabd7f364ab75d7be603da5f3a4ccec"
+    },
+    {
+      "file": "1440-revoke-long-reason.png",
+      "width": 1440,
+      "state": "revoke-long-reason",
+      "sha256": "4164cadd3fc871c5ffbcc3ccd0b0bb2e290b3ee1d41799544ad89f3be59f34f6"
+    },
+    {
+      "file": "1440-rotate-short-long-target-footer.png",
+      "width": 1440,
+      "state": "rotate-short-long-target-footer",
+      "sha256": "fa7b4ee1dfd5e83b12deb677d26874a39153f77da175543fadfad9f2917d9560"
+    },
+    {
+      "file": "1440-rotate-short-long-target-header.png",
+      "width": 1440,
+      "state": "rotate-short-long-target-header",
+      "sha256": "5f899e765f06b705c14e5f4f5e7799aa1dfc838d3d50b998baa1735691adfc92"
+    },
+    {
+      "file": "1440-revoke-short-long-target-footer.png",
+      "width": 1440,
+      "state": "revoke-short-long-target-footer",
+      "sha256": "27253732f20a0621d690fc6eb1c1b1c6281169f7bff7ad78c5f006f117c9593b"
+    },
+    {
+      "file": "1440-revoke-short-long-target-header.png",
+      "width": 1440,
+      "state": "revoke-short-long-target-header",
+      "sha256": "6019b657263d0bfa1a8cf3e18c4c00feeb6028e508a0019cb820701793704c79"
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/approval-read-failure.css": "6295ffead416eae4dfdf0fa88dde57a3b7ec6fa60241b44e4405e3f1755aaa6a",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "apps/web/src/design/approval-read-failure-tokens.css": "bd13bd68c498bd64b2bb29cba882d09fb324b0fbacf5cab1812fd52abbdb6692",
+    "apps/web/src/design/export-detail-tokens.css": "d0dc62dff48590e983d06a8960bd74bbadc7d7f78daa31237df45214b7ee513a",
+    "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
+    "apps/web/src/design/token-filter-tokens.css": "6a2b9871858d0c1a5d7ee2a052b5b1d5043331f414685525d561d8ae6d366710",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/org-data-export-detail.css": "55b7a84508f5ff64d02061bc832991bceec6674e66313623ed6ade22aba2de04",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/organization-audit.css": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/token-reason-preview.css": "b093ca816f9cfe27d07a0195e5346996964e49911a87634c1e61862a67016c08",
+    "scripts/verify-ui-phase2-token-reason-preview.mjs": "7b9fdbd8d9a1253489540683288960761af3d769f55b9b65d5699501a859db78",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4"
+  },
+  "processesClosed": true
+}

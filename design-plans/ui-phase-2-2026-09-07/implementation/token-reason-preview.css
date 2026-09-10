@@ -1,0 +1,184 @@
+/* P36 review host only. No production import or business-state override. */
+.p36-reason-preview #app .audited-reason-dialog:not(.workspace-restore-reason) {
+  width: min(560px, calc(100vw - 36px));
+  max-height: calc(100dvh - 36px);
+  overflow: auto;
+  border: 0;
+  border-radius: 12px;
+  background: #fff;
+  color: #203047;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+  box-shadow: 0 20px 64px #152c5140;
+}
+.p36-reason-preview #app .audited-reason-dialog::backdrop {
+  background: #142b4d80;
+}
+.p36-reason-preview #app .audited-reason-dialog form {
+  display: grid;
+  gap: 0;
+  padding: 0;
+}
+.p36-reason-preview #app .audited-reason-dialog header {
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  background: #2059d4;
+  color: #fff;
+}
+.p36-reason-preview #app .audited-reason-dialog header > div {
+  min-width: 0;
+}
+.p36-reason-preview #app .audited-reason-dialog header p {
+  margin: 0 0 8px;
+  color: #e3edff;
+  font-size: 13px;
+  font-weight: 400;
+}
+.p36-reason-preview #app .audited-reason-dialog h3 {
+  margin: 0;
+  color: #fff;
+  font:
+    700 22px/1.4 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+  overflow-wrap: anywhere;
+}
+.p36-reason-preview #app .audited-reason-dialog form > p {
+  margin: 0;
+  padding: 24px 24px 20px;
+  color: #34465e;
+  font: inherit;
+}
+.p36-reason-preview #app .audited-reason-dialog label {
+  display: grid;
+  gap: 10px;
+  margin: 0 24px;
+  color: #203047;
+  font: inherit;
+  font-weight: 600;
+}
+.p36-reason-preview #app .audited-reason-dialog textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 136px;
+  padding: 12px;
+  border: 1px solid #8d9db3;
+  border-radius: 6px;
+  background: #fff;
+  color: #203047;
+  font:
+    400 16px/1.6 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+  resize: vertical;
+}
+.p36-reason-preview #app .audited-reason-dialog small {
+  margin: 10px 24px 24px;
+  color: #586b82;
+  font:
+    400 14px/1.6 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+}
+.p36-reason-preview #app .audited-reason-dialog footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 18px 24px;
+  border-top: 1px solid #dbe3ee;
+  background: #f5f8fc;
+}
+.p36-reason-preview #app .audited-reason-dialog button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 9px 18px;
+  border: 1px solid #2059d4;
+  border-radius: 6px;
+  background: #fff;
+  color: #2059d4;
+  font:
+    400 16px/1.5 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+  box-shadow: none;
+  cursor: pointer;
+}
+.p36-reason-preview #app .audited-reason-dialog header > button {
+  flex: 0 0 44px;
+  padding: 8px;
+  border-color: #a5c2ff;
+  background: transparent;
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+}
+.p36-reason-preview #app .audited-reason-dialog button[type="submit"] {
+  background: #2059d4;
+  color: #fff;
+}
+.p36-reason-preview #app .audited-reason-dialog[aria-label^="撤销"] button[type="submit"] {
+  border-color: #b52c3a;
+  background: #b52c3a;
+}
+.p36-reason-preview #app .audited-reason-dialog button:not(:disabled):hover {
+  background: #eaf1ff;
+}
+.p36-reason-preview #app .audited-reason-dialog header > button:hover {
+  background: #1646af;
+}
+.p36-reason-preview #app .audited-reason-dialog button[type="submit"]:not(:disabled):hover {
+  background: #1749b7;
+}
+.p36-reason-preview
+  #app
+  .audited-reason-dialog[aria-label^="撤销"]
+  button[type="submit"]:not(:disabled):hover {
+  background: #932330;
+}
+.p36-reason-preview #app .audited-reason-dialog button:not(:disabled):active {
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+.p36-reason-preview #app .audited-reason-dialog button[type="submit"]:disabled {
+  border-color: #d5deea;
+  background: #e8edf3;
+  color: #68788c;
+  opacity: 1;
+  cursor: not-allowed;
+}
+.p36-reason-preview #app .audited-reason-dialog :is(button, textarea):focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 2px #fff;
+}
+.p36-reason-preview #app .audited-reason-dialog header > button:focus-visible {
+  outline-color: #fff;
+  box-shadow: 0 0 0 2px #2059d4;
+}
+@media (prefers-reduced-motion: reduce) {
+  .p36-reason-preview #app .audited-reason-dialog :is(button, textarea) {
+    transition: none;
+  }
+}
+@media (max-width: 760px) {
+  .p36-reason-preview #app .audited-reason-dialog header {
+    padding: 20px 18px;
+  }
+  .p36-reason-preview #app .audited-reason-dialog form > p {
+    padding: 20px 18px;
+  }
+  .p36-reason-preview #app .audited-reason-dialog label {
+    margin-inline: 18px;
+  }
+  .p36-reason-preview #app .audited-reason-dialog small {
+    margin: 10px 18px 20px;
+  }
+  .p36-reason-preview #app .audited-reason-dialog footer {
+    padding: 16px 18px;
+  }
+  .p36-reason-preview #app .audited-reason-dialog footer button {
+    flex: 1;
+  }
+}
