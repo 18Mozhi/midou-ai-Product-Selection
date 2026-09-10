@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1484；旧登记1477；新身份29，旧表独有身份22。签名变化不等于增删业务能力。
-- 已具体语义对应35页/735源位置/705组；其中路由动作589组，转发/容器关联66组，其余明确排除。其余38页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应36页/745源位置/719组；其中路由动作598组，转发/容器关联66组，其余明确排除。其余37页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -46,7 +46,7 @@
 | [P32 工作区管理](page-specs/P32.md) | 162 | [23组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P33 团队管理](page-specs/P33.md) | 162 | [17组](action-reviews/P33.json) | 17个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P34 审批模板](page-specs/P34.md) | 162 | [13组](action-reviews/P34.json) | 15个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P35 组织数据](page-specs/P35.md) | 162 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P35 组织数据](page-specs/P35.md) | 162 | [14组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P36 组织令牌](page-specs/P36.md) | 162 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P37 组织审计](page-specs/P37.md) | 162 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P38 平台概览](page-specs/P38.md) | 66 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2930,6 +2930,66 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - source-reviewed不是整页完成；此前网络白色区域问题仍待用户答复。
 - 三个结构记录不等于三个本页弹窗；本页业务弹窗为0。
 - 模板详情article不被结构扫描当dialog；首版/无变化/差异阅读保持只读。
+
+## P35 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P35.json)：23个局部源位置 → 14组；0类写入，9组路由动作，0组转发/容器关联不重复计动作。14个本地v-model，4处调用/内嵌容器，4个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有54个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| OG-REFRESH 刷新组织数据 / read | 1处；source-current | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OG-RETRY 重新加载 / read | 1处；source-current | [error · 1440](design/org-data-direction-c/1440-error.png) / [error · 390](design/org-data-direction-c/390-error.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| EX-P34-RETRY 审批专有重试排除 / excluded | 2处；source-current | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| EX-P29-PROFILE 组织资料排除 / excluded | 3处；source-current | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| EX-P30-MEMBERS 成员事件排除 / excluded | 1处；source-current | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| EX-P31-ROLES 资源授权事件排除 / excluded | 1处；source-current | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| EX-REASON-ORIGINS 其他页原因窗排除 / excluded | 4处；source-current | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OG-D-REPORT 前往报表工作台 / navigation | 1处；source-current | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OG-D-VIEW 工作区/导出视图 / local | 2处；source-current | [exports · 1440](design/org-data-direction-c/1440-exports.png) / [exports · 390](design/org-data-direction-c/390-exports.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OG-D-W-FILTER 工作区重置 / local | 1处；source-current | [workspace_search · 1440](design/org-data-direction-c/1440-workspace_search.png) / [workspace_search · 390](design/org-data-direction-c/390-workspace_search.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OG-D-W-PAGE 工作区分页 / local | 2处；source-current | [workspace_page_two · 1440](design/org-data-direction-c/1440-workspace_page_two.png) / [workspace_page_two · 390](design/org-data-direction-c/390-workspace_page_two.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OG-D-E-FILTER 导出重置 / local | 1处；source-current | [export_search · 1440](design/org-data-direction-c/1440-export_search.png) / [export_search · 390](design/org-data-direction-c/390-export_search.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OG-D-E-PAGE 导出分页 / local | 2处；source-current | [export_page_two · 1440](design/org-data-direction-c/1440-export_page_two.png) / [export_page_two · 390](design/org-data-direction-c/390-export_page_two.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OG-TECH 导出技术详情 / local | 1处；source-current | [technical · 1440](design/org-data-direction-c/1440-technical.png) / [technical · 390](design/org-data-direction-c/390-technical.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| OrganizationAdminCenter.vue / form.name | P29组织资料分支，P35排除 | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationAdminCenter.vue / form.logo_url | P29组织资料分支，P35排除 | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationAdminCenter.vue / form.timezone | P29组织资料分支，P35排除 | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationAdminCenter.vue / form.data_retention_days | P29组织资料分支，P35排除 | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationAdminCenter.vue / form.default_workspace_id | P29组织资料分支，P35排除 | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationAdminCenter.vue / form.reason | P29组织资料分支，P35排除 | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationDataPanel.vue / workspaceQuery | 只搜索工作区名称，trim与中文小写；无maxlength；初始URL截200 UTF-16单位 | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationDataPanel.vue / workspaceStatus | all/active/archived；筛选变化回第一页 | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationDataPanel.vue / workspaceSort | total_desc/name_asc/trends_desc/opportunities_desc/tasks_desc/exports_desc；合计非质量分 | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationDataPanel.vue / exportQuery | 搜索工作区名称/中文报表类型/中文状态，不搜ID；无maxlength；初始URL截200单位 | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationDataPanel.vue / exportWorkspace | 已加载导出workspace_name去重排序，非完整工作区目录；同名合并 | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationDataPanel.vue / exportType | all/opportunity/trend/team；未知值保留在全部内 | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationDataPanel.vue / exportStatus | all/queued/leased/retry_scheduled/succeeded/dead_letter/expired | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationDataPanel.vue / exportSort | created_desc/created_asc/updated_desc/rows_desc/workspace_asc；只排序已加载记录 | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| OrganizationAdminCenter.vue / form.1 / summary-excluded | form-container / route-excluded-reference | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png) | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / no-local-origin | native-reason-dialog / route-excluded-reference | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png) | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationDataPanel.vue / aside.1 / observed-at | inline-aside / related-scene-only | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)、[exports · 1440](design/org-data-direction-c/1440-exports.png) / [exports · 390](design/org-data-direction-c/390-exports.png) | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| OrganizationDataPanel.vue / aside.2 / quality-notice | inline-aside / related-scene-only | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)、[exports · 1440](design/org-data-direction-c/1440-exports.png) / [exports · 390](design/org-data-direction-c/390-exports.png) | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+
+### 明确保留的边界
+
+- 独立控件/字段图通过额外精确验证关联；未改旧清单格式或冒充统一六态图包，因此通用六态槽继续not-mapped。
+- 控件图未覆盖父blocked/conflict与完整首读/刷新/鉴权替换；不能用P34区域批准代替。
+- 手机导出详情及null/0已有局部批准；生成/重试和新筛选组合未答不通过。
+- 完整URL历史、缓存/多实例/组织切换、主题密度、200%缩放、真实API/SQL/RBAC和全73页生产验收待完成。
+- 源扫描4容器：2父共享/他页结构及2子行内说明，不等于P35有4个业务弹窗。
+- 子组件details、section、列表不是原生dialog或抽屉；父真实异常、路由归属和生命周期另验。
 
 ## P54 局部动作与共享消费者
 
