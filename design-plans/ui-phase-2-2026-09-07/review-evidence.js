@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "613cdf3579ee663e3a15968dac756bdee1c38fd88a7c9e589f683d1e943f74ff",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "7f185d4e88cafc1325a9eefede5aef5f3252bb894ac40f0d9ea696f45a7c16e6",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -99,6 +99,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/work-direction-c/evidence.json": "7d8af75123533b4e27c891c4f6dd5da965a64b5ba15a783ed426aa7808bb87f8",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json": "92a88d46af44742df861c3993fe5a3a726d2d52b8e45837502a68f1bb280147a",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/evidence.json": "1796da2704b32d2b2a356d2121387a63aacdb46600e590dbbb63e5486e3ca80b",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c/evidence.json": "baa89dcedcda1024641ccc6a148c4ad03d5bda43828a48ca368d177b6a553373",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P01.json": "aa1f6f6104351672956368a32e011f880097271920b98b0344ea0fcfcc5f000a",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P02.json": "2744a788c22662f7bd77274f0235da5720fba7ceb872a16c487b87af710f8b9b",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P03.json": "b8ba5616bd0ae01b7f8a37ae6904740e237f744f5a57046c4606de0704fcf072",
@@ -142,16 +143,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "relatedProposalRoutes": 73,
     "noLinkedPageProposalRoutes": 0,
     "missingPageIds": [],
-    "packages": 95,
+    "packages": 96,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 932,
-    "sourceBindings": 1833,
+    "uniqueBoundFiles": 936,
+    "sourceBindings": 1856,
     "sourceDrift": 0,
-    "pngs": 14019,
+    "pngs": 14039,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 10061,
+    "readmeLinksChecked": 10065,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -474,6 +475,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "id": "P32",
       "spec": "page-specs/P32.md",
       "packages": [
+        "workspaces-restore-states-direction-c",
         "workspaces-controls-direction-c",
         "workspaces-direction-c"
       ],
@@ -1667,6 +1669,15 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "evidence": "design/workspaces-direction-c/evidence.json",
       "prototype": "design/workspaces-direction-c/index.html",
       "gallery": null
+    },
+    "workspaces-restore-states-direction-c": {
+      "id": "workspaces-restore-states-direction-c",
+      "role": "page-or-section-proposal",
+      "screenshots": 20,
+      "readme": "design/workspaces-restore-states-direction-c/README.md",
+      "evidence": "design/workspaces-restore-states-direction-c/evidence.json",
+      "prototype": "design/workspaces-restore-states-direction-c/index.html",
+      "gallery": "design/workspaces-restore-states-direction-c/gallery.html"
     }
   }
 };

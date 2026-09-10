@@ -1,0 +1,737 @@
+{
+  "kind": "P32-RESTORE-STATES-r1",
+  "approval": "pending-user-review",
+  "boundary": "Offline existing C renderer only. No Vue/API/database/permission/audit acceptance. Maxlength policy excluded.",
+  "approvedReference": {
+    "file": "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/composition-restore-390.png",
+    "sha256": "640c22bdbccc5a6f7fc24b427487f6d0e25f23418d2080a453035aff17c49176",
+    "scope": "previous mobile composition only"
+  },
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/index.html": "6975ed12dc54aefefe3b3f55239b43249a021402e886072b9e34fee766b62fc5",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/workspaces.css": "f6560bf294e02d891ac65777bdd0976970b4f70c76e7f48dd15d5095962ed333",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/workspaces.js": "871b281952fe5f95462d00326b059a94e22cdf5450ccaab6e15f1fc50361af36",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/data.js": "d4dd20ec9d48d4fbf81587e84ab275cdc6f7687d6555dbbd3d2df2888b9a8f2e",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/components/AuditedReasonDialog.vue": "270b84d19094e57b101a8e4efb1317b19785c87d30b8b452ee5b78e8f1378d00",
+    "apps/web/src/use-audited-reason.ts": "113c2329aa046ce187ad1d834d92918391ef9c8ff79ed37c919c87e7e57f6bb8",
+    "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
+    "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
+    "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "scripts/lib/ui-phase2-workspaces-design-data.mjs": "638b24c0fd3c9daaace7bb8ca624a967f863277532c93a1b56c5577688de2123",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-workspaces-c.mjs": "a2099317449e0b217cf15a384434cbd5b43efcce537552c5d4477d1242d9db5b",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/index.html": "6b2ba2e2620e8b3084b0e1ea7349eae0c13483885b8d16d5ba23f06fef3c7226",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/controls.js": "102ebe4f13962d53795a88fbd9b64759bb390c5dffa6204891a12f897219691f",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/controls.css": "da2e5d5fe05810b490b74ba053fc12b0fb0e990c0cc9ff40248bcdcf0936574d",
+    "scripts/verify-ui-phase2-workspaces-controls-c.mjs": "5ed21d201b155ff5c2eb7a2062a5c7f0e7b162d93108a2c71ab5c3d0a8b3c846",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c/index.html": "2e8fa53da5aed02b824bc42b3ca91fbff699be2a004808c3345b94bd3dc20cfa",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c/states.js": "52c1aae352b9c8e15b582f21632dc6cd7723a8b54d8163c83c0326091f758f53",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json": "92a88d46af44742df861c3993fe5a3a726d2d52b8e45837502a68f1bb280147a",
+    "scripts/verify-ui-phase2-workspaces-restore-states.mjs": "f66163591f99fab11f19a3e9172f258daf541eaef96b721bcf9d5e47e82988cf"
+  },
+  "scenes": {
+    "empty": "清空原因：确认禁用",
+    "short": "一个字：确认仍禁用",
+    "valid": "两个字：蓝色确认可用",
+    "keyboard-loop": "键盘焦点：在原因窗内循环",
+    "cancel-return": "取消：不提交，返回恢复入口",
+    "close-return": "关闭：不提交，返回恢复入口",
+    "escape-return": "Escape：不提交，返回恢复入口",
+    "waiting": "已确认：原因窗关闭，页面等待",
+    "failure": "隔离失败反馈：不冒充恢复成功",
+    "reopen": "失败后重开：回到默认原因"
+  },
+  "checks": [
+    {
+      "width": 1440,
+      "name": "initial focus on reason"
+    },
+    {
+      "width": 1440,
+      "name": "restore target is archived"
+    },
+    {
+      "width": 1440,
+      "name": "empty: disabled"
+    },
+    {
+      "width": 1440,
+      "name": "empty: no intent"
+    },
+    {
+      "width": 1440,
+      "name": "empty: stays open"
+    },
+    {
+      "width": 1440,
+      "name": "empty: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "empty: dialog inside viewport"
+    },
+    {
+      "width": 1440,
+      "name": "short: disabled"
+    },
+    {
+      "width": 1440,
+      "name": "short: no intent"
+    },
+    {
+      "width": 1440,
+      "name": "short: stays open"
+    },
+    {
+      "width": 1440,
+      "name": "short: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "short: dialog inside viewport"
+    },
+    {
+      "width": 1440,
+      "name": "two trimmed characters enable confirmation"
+    },
+    {
+      "width": 1440,
+      "name": "valid restore button is blue"
+    },
+    {
+      "width": 1440,
+      "name": "valid: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "valid: dialog inside viewport"
+    },
+    {
+      "width": 1440,
+      "name": "keyboard reaches confirm"
+    },
+    {
+      "width": 1440,
+      "name": "Tab wraps to close"
+    },
+    {
+      "width": 1440,
+      "name": "Shift+Tab wraps to confirm"
+    },
+    {
+      "width": 1440,
+      "name": "keyboard-loop: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "keyboard-loop: dialog inside viewport"
+    },
+    {
+      "width": 1440,
+      "name": "cancel: closed"
+    },
+    {
+      "width": 1440,
+      "name": "cancel: zero intent"
+    },
+    {
+      "width": 1440,
+      "name": "cancel: trigger focus restored"
+    },
+    {
+      "width": 1440,
+      "name": "cancel-return: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial focus on reason"
+    },
+    {
+      "width": 1440,
+      "name": "restore target is archived"
+    },
+    {
+      "width": 1440,
+      "name": "close: closed"
+    },
+    {
+      "width": 1440,
+      "name": "close: zero intent"
+    },
+    {
+      "width": 1440,
+      "name": "close: trigger focus restored"
+    },
+    {
+      "width": 1440,
+      "name": "close-return: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial focus on reason"
+    },
+    {
+      "width": 1440,
+      "name": "restore target is archived"
+    },
+    {
+      "width": 1440,
+      "name": "escape: closed"
+    },
+    {
+      "width": 1440,
+      "name": "escape: zero intent"
+    },
+    {
+      "width": 1440,
+      "name": "escape: trigger focus restored"
+    },
+    {
+      "width": 1440,
+      "name": "escape-return: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial focus on reason"
+    },
+    {
+      "width": 1440,
+      "name": "restore target is archived"
+    },
+    {
+      "width": 1440,
+      "name": "confirmation closes reason before waiting"
+    },
+    {
+      "width": 1440,
+      "name": "pending action"
+    },
+    {
+      "width": 1440,
+      "name": "exact restore intent"
+    },
+    {
+      "width": 1440,
+      "name": "pending entry disabled"
+    },
+    {
+      "width": 1440,
+      "name": "pending status is announced"
+    },
+    {
+      "width": 1440,
+      "name": "disabled entry does not duplicate intent"
+    },
+    {
+      "width": 1440,
+      "name": "waiting: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "failure removes pending notice"
+    },
+    {
+      "width": 1440,
+      "name": "failure clears busy"
+    },
+    {
+      "width": 1440,
+      "name": "failure does not reopen reason"
+    },
+    {
+      "width": 1440,
+      "name": "failure preserves original facts"
+    },
+    {
+      "width": 1440,
+      "name": "failure has no automatic retry"
+    },
+    {
+      "width": 1440,
+      "name": "failure is announced"
+    },
+    {
+      "width": 1440,
+      "name": "failure: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reopening resets to existing default reason"
+    },
+    {
+      "width": 1440,
+      "name": "reopening is not a retry"
+    },
+    {
+      "width": 1440,
+      "name": "reopen: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reopen: dialog inside viewport"
+    },
+    {
+      "width": 1440,
+      "name": "no browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "no HTTP request"
+    },
+    {
+      "width": 1440,
+      "name": "no cookies"
+    },
+    {
+      "width": 1440,
+      "name": "no storage writes"
+    },
+    {
+      "width": 390,
+      "name": "initial focus on reason"
+    },
+    {
+      "width": 390,
+      "name": "restore target is archived"
+    },
+    {
+      "width": 390,
+      "name": "empty: disabled"
+    },
+    {
+      "width": 390,
+      "name": "empty: no intent"
+    },
+    {
+      "width": 390,
+      "name": "empty: stays open"
+    },
+    {
+      "width": 390,
+      "name": "empty: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "empty: dialog inside viewport"
+    },
+    {
+      "width": 390,
+      "name": "short: disabled"
+    },
+    {
+      "width": 390,
+      "name": "short: no intent"
+    },
+    {
+      "width": 390,
+      "name": "short: stays open"
+    },
+    {
+      "width": 390,
+      "name": "short: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "short: dialog inside viewport"
+    },
+    {
+      "width": 390,
+      "name": "two trimmed characters enable confirmation"
+    },
+    {
+      "width": 390,
+      "name": "valid restore button is blue"
+    },
+    {
+      "width": 390,
+      "name": "valid: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "valid: dialog inside viewport"
+    },
+    {
+      "width": 390,
+      "name": "keyboard reaches confirm"
+    },
+    {
+      "width": 390,
+      "name": "Tab wraps to close"
+    },
+    {
+      "width": 390,
+      "name": "Shift+Tab wraps to confirm"
+    },
+    {
+      "width": 390,
+      "name": "keyboard-loop: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "keyboard-loop: dialog inside viewport"
+    },
+    {
+      "width": 390,
+      "name": "cancel: closed"
+    },
+    {
+      "width": 390,
+      "name": "cancel: zero intent"
+    },
+    {
+      "width": 390,
+      "name": "cancel: trigger focus restored"
+    },
+    {
+      "width": 390,
+      "name": "cancel-return: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial focus on reason"
+    },
+    {
+      "width": 390,
+      "name": "restore target is archived"
+    },
+    {
+      "width": 390,
+      "name": "close: closed"
+    },
+    {
+      "width": 390,
+      "name": "close: zero intent"
+    },
+    {
+      "width": 390,
+      "name": "close: trigger focus restored"
+    },
+    {
+      "width": 390,
+      "name": "close-return: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial focus on reason"
+    },
+    {
+      "width": 390,
+      "name": "restore target is archived"
+    },
+    {
+      "width": 390,
+      "name": "escape: closed"
+    },
+    {
+      "width": 390,
+      "name": "escape: zero intent"
+    },
+    {
+      "width": 390,
+      "name": "escape: trigger focus restored"
+    },
+    {
+      "width": 390,
+      "name": "escape-return: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial focus on reason"
+    },
+    {
+      "width": 390,
+      "name": "restore target is archived"
+    },
+    {
+      "width": 390,
+      "name": "confirmation closes reason before waiting"
+    },
+    {
+      "width": 390,
+      "name": "pending action"
+    },
+    {
+      "width": 390,
+      "name": "exact restore intent"
+    },
+    {
+      "width": 390,
+      "name": "pending entry disabled"
+    },
+    {
+      "width": 390,
+      "name": "pending status is announced"
+    },
+    {
+      "width": 390,
+      "name": "disabled entry does not duplicate intent"
+    },
+    {
+      "width": 390,
+      "name": "waiting: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "failure removes pending notice"
+    },
+    {
+      "width": 390,
+      "name": "failure clears busy"
+    },
+    {
+      "width": 390,
+      "name": "failure does not reopen reason"
+    },
+    {
+      "width": 390,
+      "name": "failure preserves original facts"
+    },
+    {
+      "width": 390,
+      "name": "failure has no automatic retry"
+    },
+    {
+      "width": 390,
+      "name": "failure is announced"
+    },
+    {
+      "width": 390,
+      "name": "failure: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "reopening resets to existing default reason"
+    },
+    {
+      "width": 390,
+      "name": "reopening is not a retry"
+    },
+    {
+      "width": 390,
+      "name": "reopen: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "reopen: dialog inside viewport"
+    },
+    {
+      "width": 390,
+      "name": "no browser errors"
+    },
+    {
+      "width": 390,
+      "name": "no HTTP request"
+    },
+    {
+      "width": 390,
+      "name": "no cookies"
+    },
+    {
+      "width": 390,
+      "name": "no storage writes"
+    }
+  ],
+  "observations": [
+    {
+      "width": 1440,
+      "actionId": "OG-W-STATE",
+      "dialogId": "D-OG-REASON",
+      "intents": [
+        {
+          "url": "/org/admin/workspaces/00000000-0000-4000-8000-000000000809/actions",
+          "method": "POST",
+          "body": {
+            "action": "restore",
+            "expected_version": 1,
+            "reason": "核验后恢复"
+          }
+        }
+      ],
+      "factsUnchanged": true,
+      "frontendMaxPolicyTested": false
+    },
+    {
+      "width": 390,
+      "actionId": "OG-W-STATE",
+      "dialogId": "D-OG-REASON",
+      "intents": [
+        {
+          "url": "/org/admin/workspaces/00000000-0000-4000-8000-000000000809/actions",
+          "method": "POST",
+          "body": {
+            "action": "restore",
+            "expected_version": 1,
+            "reason": "核验后恢复"
+          }
+        }
+      ],
+      "factsUnchanged": true,
+      "frontendMaxPolicyTested": false
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "empty-1440.png",
+      "scene": "empty",
+      "width": 1440,
+      "sha256": "a14d9278fa53368e58e732f4fefe0396e33dce1b2d0da903b44b0e603cf8a064",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "short-1440.png",
+      "scene": "short",
+      "width": 1440,
+      "sha256": "55c48fc93c9e61f4288d792731bfbdd152551c7e1d4ca6376dda7ec0635b90c3",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "valid-1440.png",
+      "scene": "valid",
+      "width": 1440,
+      "sha256": "36afce9237e0c82a6bef4ef63ef22b86a1291513feb63a8f1d9706d44cdf8430",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "keyboard-loop-1440.png",
+      "scene": "keyboard-loop",
+      "width": 1440,
+      "sha256": "2f7b1e89b5f8ff137e0da7dcb0822411f3861eac66eef713dc8215a69d352d10",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "cancel-return-1440.png",
+      "scene": "cancel-return",
+      "width": 1440,
+      "sha256": "041ef3f0757258d660f51e83667a9ef617219aef5bd83e525983a77ecac99f25",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "close-return-1440.png",
+      "scene": "close-return",
+      "width": 1440,
+      "sha256": "041ef3f0757258d660f51e83667a9ef617219aef5bd83e525983a77ecac99f25",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "escape-return-1440.png",
+      "scene": "escape-return",
+      "width": 1440,
+      "sha256": "8edc002ccf7c4c38b63a44c5c1763f2f05956b117dd0c40ee2ced483f4a11370",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "waiting-1440.png",
+      "scene": "waiting",
+      "width": 1440,
+      "sha256": "0262f299d2cdc2e11ee070a564791cb1e0c3303353df8e8170950c8db8072b66",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "failure-1440.png",
+      "scene": "failure",
+      "width": 1440,
+      "sha256": "0cb620f6e0c4a65d98f4880e9d6edc2864752f99362e5168bebfebc1f35792ed",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "reopen-1440.png",
+      "scene": "reopen",
+      "width": 1440,
+      "sha256": "fff31b0d9532d821be6289b802b3336143d391a24fc0dca59c7487c23297619b",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "empty-390.png",
+      "scene": "empty",
+      "width": 390,
+      "sha256": "051bcad7b844fdc2e2b4c8d2e5caf60c2ff8ca53cfdfff6f74df22cd0c956b9b",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "short-390.png",
+      "scene": "short",
+      "width": 390,
+      "sha256": "e23295a3b4b31d7a44156a290d8c75b66183963e87d612291e65debf12f5d658",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "valid-390.png",
+      "scene": "valid",
+      "width": 390,
+      "sha256": "a79d41a6080b765692fb3b89b0fd1ed197cc99705ced0a9e9beebea3e0a0d33b",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "keyboard-loop-390.png",
+      "scene": "keyboard-loop",
+      "width": 390,
+      "sha256": "2a02b308dafeda6f8558614840ffab17e0100c59f8da6d58f0b505f9bb31174b",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "cancel-return-390.png",
+      "scene": "cancel-return",
+      "width": 390,
+      "sha256": "d4842a331ce6094bed4a5983ad08a1349478b1d730874125d9e3b84cb512c106",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "close-return-390.png",
+      "scene": "close-return",
+      "width": 390,
+      "sha256": "d4842a331ce6094bed4a5983ad08a1349478b1d730874125d9e3b84cb512c106",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "escape-return-390.png",
+      "scene": "escape-return",
+      "width": 390,
+      "sha256": "0b46f34bcb939ff42dc3e3a9beb6d57ff1b92c4bfad978f679983b32fa4471ca",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "waiting-390.png",
+      "scene": "waiting",
+      "width": 390,
+      "sha256": "6b4b5dfbc2beb638cc5df4ac0fed337b4fd002455ef97d38c61abbd6ff62ef32",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "failure-390.png",
+      "scene": "failure",
+      "width": 390,
+      "sha256": "897d570df41578b7d3c7c627855decf88171f5ba3cd476caada82cbff23df617",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    },
+    {
+      "file": "reopen-390.png",
+      "scene": "reopen",
+      "width": 390,
+      "sha256": "3d0674e2e61c76222060652c79088161312c9fb23d3b8d735691bad1ae23774d",
+      "pageId": "P32",
+      "scope": "restore-state-proposal-not-Vue-or-production"
+    }
+  ]
+}
