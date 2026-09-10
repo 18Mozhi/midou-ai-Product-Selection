@@ -1,0 +1,1128 @@
+{
+  "kind": "P36-CREATE-VUE-PREVIEW-r1",
+  "approval": "pending-user-review",
+  "scope": "Actual parent/child scripts and native constraints; review-only creation template/CSS. HTTP fixtures, synthetic invalid secret, no real authorization, persistence, OS clipboard, App shell or production acceptance. Failure notice remains outside form, not a new inline field error.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/approval-read-failure.css": "6295ffead416eae4dfdf0fa88dde57a3b7ec6fa60241b44e4405e3f1755aaa6a",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "81ba6a86c80bdcdb1cfea7832b3c13b0d85a5a9bf8dd6922583a5ada5d0e326d",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "apps/web/src/design/approval-read-failure-tokens.css": "bd13bd68c498bd64b2bb29cba882d09fb324b0fbacf5cab1812fd52abbdb6692",
+    "apps/web/src/design/export-detail-tokens.css": "d0dc62dff48590e983d06a8960bd74bbadc7d7f78daa31237df45214b7ee513a",
+    "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
+    "apps/web/src/design/token-filter-tokens.css": "6a2b9871858d0c1a5d7ee2a052b5b1d5043331f414685525d561d8ae6d366710",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
+    "apps/web/src/org-data-export-detail.css": "55b7a84508f5ff64d02061bc832991bceec6674e66313623ed6ade22aba2de04",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/organization-audit.css": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/token-create-preview.css": "e15e6d1b748f66fe2749572c7b336022f93df3ec6f067295bf3d88052040d18c",
+    "scripts/lib/ui-phase2-org-token-design-data.mjs": "408840ae6f80aa140d617544bdae231a418fe449ec6d96b9fa03402f3a2fe135",
+    "scripts/lib/ui-phase2-token-create-preview.mjs": "e17ca664629b392328daf88597fd1ee2ce6757c0bd948007f831dc197b119a63",
+    "scripts/verify-ui-phase2-token-create-preview.mjs": "d9163f7500a020a31d3aa55618e622761d94427b5b6eb556ad325c672b5c4910",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/OrganizationTokenPanel.vue": "14e08fb90175a24ad3bc7bd8a11dd3dd851e93630b658a05de7624a1d9d1b5a2"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "C paper and no inherited primary containers"
+    },
+    {
+      "width": 390,
+      "name": "native fields and clickable labels have readable touch geometry"
+    },
+    {
+      "width": 390,
+      "name": "original empty name and90days"
+    },
+    {
+      "width": 390,
+      "name": "original four scopes unchecked"
+    },
+    {
+      "width": 390,
+      "name": "original native field constraints"
+    },
+    {
+      "width": 390,
+      "name": "default no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "DOM and keyboard order match proposed field order"
+    },
+    {
+      "width": 390,
+      "name": "missing scopes sends no POST"
+    },
+    {
+      "width": 390,
+      "name": "scope-required no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "native TTL blocks 0"
+    },
+    {
+      "width": 390,
+      "name": "invalid TTL has no POST 0"
+    },
+    {
+      "width": 390,
+      "name": "native TTL blocks 366"
+    },
+    {
+      "width": 390,
+      "name": "invalid TTL has no POST 366"
+    },
+    {
+      "width": 390,
+      "name": "native TTL blocks 1.5"
+    },
+    {
+      "width": 390,
+      "name": "invalid TTL has no POST 1.5"
+    },
+    {
+      "width": 390,
+      "name": "native TTL blocks empty"
+    },
+    {
+      "width": 390,
+      "name": "invalid TTL has no POST "
+    },
+    {
+      "width": 390,
+      "name": "ttl-invalid no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "shortcut 30 retained"
+    },
+    {
+      "width": 390,
+      "name": "shortcut 90 retained"
+    },
+    {
+      "width": 390,
+      "name": "shortcut 180 retained"
+    },
+    {
+      "width": 390,
+      "name": "shortcut 365 retained"
+    },
+    {
+      "width": 390,
+      "name": "all-scopes no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "name-focus no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "pending fields remain editable"
+    },
+    {
+      "width": 390,
+      "name": "pending no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "failed creation exposes no secret"
+    },
+    {
+      "width": 390,
+      "name": "failure-preserved no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "success unchecks all scopes"
+    },
+    {
+      "width": 390,
+      "name": "success-reset no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "two explicit original posts"
+    },
+    {
+      "width": 390,
+      "name": "exact original body0"
+    },
+    {
+      "width": 390,
+      "name": "idempotency retained0"
+    },
+    {
+      "width": 390,
+      "name": "exact original body1"
+    },
+    {
+      "width": 390,
+      "name": "idempotency retained1"
+    },
+    {
+      "width": 390,
+      "name": "no storage"
+    },
+    {
+      "width": 390,
+      "name": "no unexpected requests"
+    },
+    {
+      "width": 390,
+      "name": "no Vue errors"
+    },
+    {
+      "width": 760,
+      "name": "C paper and no inherited primary containers"
+    },
+    {
+      "width": 760,
+      "name": "native fields and clickable labels have readable touch geometry"
+    },
+    {
+      "width": 760,
+      "name": "original empty name and90days"
+    },
+    {
+      "width": 760,
+      "name": "original four scopes unchecked"
+    },
+    {
+      "width": 760,
+      "name": "original native field constraints"
+    },
+    {
+      "width": 760,
+      "name": "default no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "DOM and keyboard order match proposed field order"
+    },
+    {
+      "width": 760,
+      "name": "missing scopes sends no POST"
+    },
+    {
+      "width": 760,
+      "name": "scope-required no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "native TTL blocks 0"
+    },
+    {
+      "width": 760,
+      "name": "invalid TTL has no POST 0"
+    },
+    {
+      "width": 760,
+      "name": "native TTL blocks 366"
+    },
+    {
+      "width": 760,
+      "name": "invalid TTL has no POST 366"
+    },
+    {
+      "width": 760,
+      "name": "native TTL blocks 1.5"
+    },
+    {
+      "width": 760,
+      "name": "invalid TTL has no POST 1.5"
+    },
+    {
+      "width": 760,
+      "name": "native TTL blocks empty"
+    },
+    {
+      "width": 760,
+      "name": "invalid TTL has no POST "
+    },
+    {
+      "width": 760,
+      "name": "ttl-invalid no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "shortcut 30 retained"
+    },
+    {
+      "width": 760,
+      "name": "shortcut 90 retained"
+    },
+    {
+      "width": 760,
+      "name": "shortcut 180 retained"
+    },
+    {
+      "width": 760,
+      "name": "shortcut 365 retained"
+    },
+    {
+      "width": 760,
+      "name": "all-scopes no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "name-focus no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "pending fields remain editable"
+    },
+    {
+      "width": 760,
+      "name": "pending no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "failed creation exposes no secret"
+    },
+    {
+      "width": 760,
+      "name": "failure-preserved no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "success unchecks all scopes"
+    },
+    {
+      "width": 760,
+      "name": "success-reset no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "two explicit original posts"
+    },
+    {
+      "width": 760,
+      "name": "exact original body0"
+    },
+    {
+      "width": 760,
+      "name": "idempotency retained0"
+    },
+    {
+      "width": 760,
+      "name": "exact original body1"
+    },
+    {
+      "width": 760,
+      "name": "idempotency retained1"
+    },
+    {
+      "width": 760,
+      "name": "no storage"
+    },
+    {
+      "width": 760,
+      "name": "no unexpected requests"
+    },
+    {
+      "width": 760,
+      "name": "no Vue errors"
+    },
+    {
+      "width": 761,
+      "name": "C paper and no inherited primary containers"
+    },
+    {
+      "width": 761,
+      "name": "native fields and clickable labels have readable touch geometry"
+    },
+    {
+      "width": 761,
+      "name": "original empty name and90days"
+    },
+    {
+      "width": 761,
+      "name": "original four scopes unchecked"
+    },
+    {
+      "width": 761,
+      "name": "original native field constraints"
+    },
+    {
+      "width": 761,
+      "name": "default no page overflow"
+    },
+    {
+      "width": 761,
+      "name": "DOM and keyboard order match proposed field order"
+    },
+    {
+      "width": 761,
+      "name": "missing scopes sends no POST"
+    },
+    {
+      "width": 761,
+      "name": "scope-required no page overflow"
+    },
+    {
+      "width": 761,
+      "name": "native TTL blocks 0"
+    },
+    {
+      "width": 761,
+      "name": "invalid TTL has no POST 0"
+    },
+    {
+      "width": 761,
+      "name": "native TTL blocks 366"
+    },
+    {
+      "width": 761,
+      "name": "invalid TTL has no POST 366"
+    },
+    {
+      "width": 761,
+      "name": "native TTL blocks 1.5"
+    },
+    {
+      "width": 761,
+      "name": "invalid TTL has no POST 1.5"
+    },
+    {
+      "width": 761,
+      "name": "native TTL blocks empty"
+    },
+    {
+      "width": 761,
+      "name": "invalid TTL has no POST "
+    },
+    {
+      "width": 761,
+      "name": "ttl-invalid no page overflow"
+    },
+    {
+      "width": 761,
+      "name": "shortcut 30 retained"
+    },
+    {
+      "width": 761,
+      "name": "shortcut 90 retained"
+    },
+    {
+      "width": 761,
+      "name": "shortcut 180 retained"
+    },
+    {
+      "width": 761,
+      "name": "shortcut 365 retained"
+    },
+    {
+      "width": 761,
+      "name": "all-scopes no page overflow"
+    },
+    {
+      "width": 761,
+      "name": "name-focus no page overflow"
+    },
+    {
+      "width": 761,
+      "name": "pending fields remain editable"
+    },
+    {
+      "width": 761,
+      "name": "pending no page overflow"
+    },
+    {
+      "width": 761,
+      "name": "failed creation exposes no secret"
+    },
+    {
+      "width": 761,
+      "name": "failure-preserved no page overflow"
+    },
+    {
+      "width": 761,
+      "name": "success unchecks all scopes"
+    },
+    {
+      "width": 761,
+      "name": "success-reset no page overflow"
+    },
+    {
+      "width": 761,
+      "name": "two explicit original posts"
+    },
+    {
+      "width": 761,
+      "name": "exact original body0"
+    },
+    {
+      "width": 761,
+      "name": "idempotency retained0"
+    },
+    {
+      "width": 761,
+      "name": "exact original body1"
+    },
+    {
+      "width": 761,
+      "name": "idempotency retained1"
+    },
+    {
+      "width": 761,
+      "name": "no storage"
+    },
+    {
+      "width": 761,
+      "name": "no unexpected requests"
+    },
+    {
+      "width": 761,
+      "name": "no Vue errors"
+    },
+    {
+      "width": 1440,
+      "name": "C paper and no inherited primary containers"
+    },
+    {
+      "width": 1440,
+      "name": "native fields and clickable labels have readable touch geometry"
+    },
+    {
+      "width": 1440,
+      "name": "original empty name and90days"
+    },
+    {
+      "width": 1440,
+      "name": "original four scopes unchecked"
+    },
+    {
+      "width": 1440,
+      "name": "original native field constraints"
+    },
+    {
+      "width": 1440,
+      "name": "default no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "DOM and keyboard order match proposed field order"
+    },
+    {
+      "width": 1440,
+      "name": "missing scopes sends no POST"
+    },
+    {
+      "width": 1440,
+      "name": "scope-required no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "native TTL blocks 0"
+    },
+    {
+      "width": 1440,
+      "name": "invalid TTL has no POST 0"
+    },
+    {
+      "width": 1440,
+      "name": "native TTL blocks 366"
+    },
+    {
+      "width": 1440,
+      "name": "invalid TTL has no POST 366"
+    },
+    {
+      "width": 1440,
+      "name": "native TTL blocks 1.5"
+    },
+    {
+      "width": 1440,
+      "name": "invalid TTL has no POST 1.5"
+    },
+    {
+      "width": 1440,
+      "name": "native TTL blocks empty"
+    },
+    {
+      "width": 1440,
+      "name": "invalid TTL has no POST "
+    },
+    {
+      "width": 1440,
+      "name": "ttl-invalid no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "shortcut 30 retained"
+    },
+    {
+      "width": 1440,
+      "name": "shortcut 90 retained"
+    },
+    {
+      "width": 1440,
+      "name": "shortcut 180 retained"
+    },
+    {
+      "width": 1440,
+      "name": "shortcut 365 retained"
+    },
+    {
+      "width": 1440,
+      "name": "all-scopes no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "name-focus no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "pending fields remain editable"
+    },
+    {
+      "width": 1440,
+      "name": "pending no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "failed creation exposes no secret"
+    },
+    {
+      "width": 1440,
+      "name": "failure-preserved no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "success unchecks all scopes"
+    },
+    {
+      "width": 1440,
+      "name": "success-reset no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "two explicit original posts"
+    },
+    {
+      "width": 1440,
+      "name": "exact original body0"
+    },
+    {
+      "width": 1440,
+      "name": "idempotency retained0"
+    },
+    {
+      "width": 1440,
+      "name": "exact original body1"
+    },
+    {
+      "width": 1440,
+      "name": "idempotency retained1"
+    },
+    {
+      "width": 1440,
+      "name": "no storage"
+    },
+    {
+      "width": 1440,
+      "name": "no unexpected requests"
+    },
+    {
+      "width": 1440,
+      "name": "no Vue errors"
+    }
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "key": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "key": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens",
+          "body": {
+            "name": "月度报表接入",
+            "scopes": [
+              "task:read",
+              "trend:read",
+              "opportunity:read",
+              "report:read"
+            ],
+            "ttl_days": 90,
+            "reason": "经营团队按月核对报表"
+          },
+          "key": true
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens",
+          "body": {
+            "name": "失败后保留的后续草稿",
+            "scopes": [
+              "task:read",
+              "trend:read",
+              "opportunity:read",
+              "report:read"
+            ],
+            "ttl_days": 90,
+            "reason": "经营团队按月核对报表"
+          },
+          "key": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "key": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "key": false
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "key": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "key": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens",
+          "body": {
+            "name": "月度报表接入",
+            "scopes": [
+              "task:read",
+              "trend:read",
+              "opportunity:read",
+              "report:read"
+            ],
+            "ttl_days": 90,
+            "reason": "经营团队按月核对报表"
+          },
+          "key": true
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens",
+          "body": {
+            "name": "失败后保留的后续草稿",
+            "scopes": [
+              "task:read",
+              "trend:read",
+              "opportunity:read",
+              "report:read"
+            ],
+            "ttl_days": 90,
+            "reason": "经营团队按月核对报表"
+          },
+          "key": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "key": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "key": false
+        }
+      ]
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "key": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "key": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens",
+          "body": {
+            "name": "月度报表接入",
+            "scopes": [
+              "task:read",
+              "trend:read",
+              "opportunity:read",
+              "report:read"
+            ],
+            "ttl_days": 90,
+            "reason": "经营团队按月核对报表"
+          },
+          "key": true
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens",
+          "body": {
+            "name": "失败后保留的后续草稿",
+            "scopes": [
+              "task:read",
+              "trend:read",
+              "opportunity:read",
+              "report:read"
+            ],
+            "ttl_days": 90,
+            "reason": "经营团队按月核对报表"
+          },
+          "key": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "key": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "key": false
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "key": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "key": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens",
+          "body": {
+            "name": "月度报表接入",
+            "scopes": [
+              "task:read",
+              "trend:read",
+              "opportunity:read",
+              "report:read"
+            ],
+            "ttl_days": 90,
+            "reason": "经营团队按月核对报表"
+          },
+          "key": true
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens",
+          "body": {
+            "name": "失败后保留的后续草稿",
+            "scopes": [
+              "task:read",
+              "trend:read",
+              "opportunity:read",
+              "report:read"
+            ],
+            "ttl_days": 90,
+            "reason": "经营团队按月核对报表"
+          },
+          "key": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "key": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "key": false
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-default.png",
+      "width": 390,
+      "state": "default",
+      "sha256": "77cc892f571b6f970c5bf1cd36bbcd00faa509561ac666aa46227c9c39913d77",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "390-scope-required.png",
+      "width": 390,
+      "state": "scope-required",
+      "sha256": "34b1d2ab5c75eadaacc35d6b4491c41fc36905b2031bff2eeb9eac423a77bd13",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "390-ttl-invalid.png",
+      "width": 390,
+      "state": "ttl-invalid",
+      "sha256": "4f508c221e68aac8a8fd34ca5c59180961cd6168d148850044ce5d0faea1c518",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "390-all-scopes.png",
+      "width": 390,
+      "state": "all-scopes",
+      "sha256": "f9e03a91532b89764b45480c2dc25b603bda0f571ff6503eb4924ff010094600",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "390-name-focus.png",
+      "width": 390,
+      "state": "name-focus",
+      "sha256": "046a30eb1c4a9c67d79bb175b5647cef7459dc46b2c6b74463765b8ee24be422",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "390-pending.png",
+      "width": 390,
+      "state": "pending",
+      "sha256": "dcd97098cea53a3dba4e12f3d25f1627d781cf6c14fa954a4fcf268c0bd75244",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "390-failure-preserved.png",
+      "width": 390,
+      "state": "failure-preserved",
+      "sha256": "f4101b6d3869fa6c72bf5654591ffcf36b878924443760b0aa3bdf7a0025d3bd",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "390-success-reset.png",
+      "width": 390,
+      "state": "success-reset",
+      "sha256": "8a1316529fa0df9ce3146d26ef6d6365be392a668a134d499c742a34acbe08f2",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "760-default.png",
+      "width": 760,
+      "state": "default",
+      "sha256": "a6947f564847d11ed96ab07323326bd3d916713b6f297ab4d901435d97363e76",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "760-scope-required.png",
+      "width": 760,
+      "state": "scope-required",
+      "sha256": "e4114c108f44cb324216393b0b75d1859d4391aead8e9bdc6bd4bb17f0621758",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "760-ttl-invalid.png",
+      "width": 760,
+      "state": "ttl-invalid",
+      "sha256": "f9f7366f779696449ad675ac94188779c1519322b5e0ccfe211df9973f3c7305",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "760-all-scopes.png",
+      "width": 760,
+      "state": "all-scopes",
+      "sha256": "8d2d58abdb1d6d8ebe4a916887f0d55e7c2e99677a695345b949f46419fee2e9",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "760-name-focus.png",
+      "width": 760,
+      "state": "name-focus",
+      "sha256": "9c669fa8de1b10dede81a486b0220771641840211c15634c9e02a2e62a6be35f",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "760-pending.png",
+      "width": 760,
+      "state": "pending",
+      "sha256": "fc8c95d0900d3d382b5221398ae977befd9f925a1caa5df1572941eee472c14f",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "760-failure-preserved.png",
+      "width": 760,
+      "state": "failure-preserved",
+      "sha256": "119b9f3dc75ffb48f6932f9c410b2c9acd51b4546142b00cab756ffa89c21798",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "760-success-reset.png",
+      "width": 760,
+      "state": "success-reset",
+      "sha256": "cf184d3823c7df687124c996834e59ac8af3acd0f2a7aa3b5fe0bb7c7b86342d",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "761-default.png",
+      "width": 761,
+      "state": "default",
+      "sha256": "fe8a7a2f77a269225ea0d6cac6747db2b44e072cc1bc93adff8908787ca9e0ef",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "761-scope-required.png",
+      "width": 761,
+      "state": "scope-required",
+      "sha256": "893a19dc3927ed709b8dee4b54750c3e13faa3d333cf05bdf8345adfaab00463",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "761-ttl-invalid.png",
+      "width": 761,
+      "state": "ttl-invalid",
+      "sha256": "2320c4242f21dfafdc8b81870a75910a14440c2fa1125a0ebe35df6473380dcd",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "761-all-scopes.png",
+      "width": 761,
+      "state": "all-scopes",
+      "sha256": "77f94df3fd01583837ab3976d5e4bf5feee49d0224649f283e83dafbfb1b1d7b",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "761-name-focus.png",
+      "width": 761,
+      "state": "name-focus",
+      "sha256": "d9ccf57e400206ca730ae0f1ac9e035200f08dc76fbcc6675dba69832ff2f7b1",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "761-pending.png",
+      "width": 761,
+      "state": "pending",
+      "sha256": "42301c1ec1ccdd97bed6aae44641d44e4102ff6ad2840badfd058f3824ffb8ba",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "761-failure-preserved.png",
+      "width": 761,
+      "state": "failure-preserved",
+      "sha256": "2806e39dd8c4d6069be0afc70e8fadb3c10185ebf84f809e775978b4be9195e2",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "761-success-reset.png",
+      "width": 761,
+      "state": "success-reset",
+      "sha256": "8fb555fb532d399622db54d874190a0e636697ae08c415b3ae5a1fa7c156fa26",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "1440-default.png",
+      "width": 1440,
+      "state": "default",
+      "sha256": "b98d67422f9f7ac4743d0bd8bbba7770d4cc2d7e6c740faf94e60bf0daa27050",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "1440-scope-required.png",
+      "width": 1440,
+      "state": "scope-required",
+      "sha256": "13230cc169063d8d4c50d3ec671ca407d49d84d519ffb09bc968a405f6241488",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "1440-ttl-invalid.png",
+      "width": 1440,
+      "state": "ttl-invalid",
+      "sha256": "590b2e948b73a299e5a532742b556ec4116448b4503705abe093de0ec2cdf2c7",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "1440-all-scopes.png",
+      "width": 1440,
+      "state": "all-scopes",
+      "sha256": "aa1a18e3287f64c38a20c9f42f80e3751de8e9763b73f9f3110b79b67b11ff43",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "1440-name-focus.png",
+      "width": 1440,
+      "state": "name-focus",
+      "sha256": "d2d6baac81bdb611fae3ff9965f67c87f9a86eaabeabe04372bdd5db21e47758",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "1440-pending.png",
+      "width": 1440,
+      "state": "pending",
+      "sha256": "e3919a3a21d2bf55b2404a3238cae4c0bc7f4ab6e42e2645d4bcff94233d4c01",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "1440-failure-preserved.png",
+      "width": 1440,
+      "state": "failure-preserved",
+      "sha256": "36e3ce454f8c29ed1696036429788f8a7dde67ef8b5d61a73aa0ece0cf416077",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    },
+    {
+      "file": "1440-success-reset.png",
+      "width": 1440,
+      "state": "success-reset",
+      "sha256": "06fd752e3d3fda674743fbff83e31310d83c5644bba58546209b766591335915",
+      "scope": "actual-parent-child-with-review-template-css-and-HTTP-fixtures-not-approval"
+    }
+  ],
+  "processesClosed": true
+}
