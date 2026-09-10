@@ -1,0 +1,1745 @@
+{
+  "schemaVersion": 1,
+  "approval": "pending",
+  "scope": "Original current Vue parent and child scripts/templates; CSS-only isolated creation dialog. All GET/POST intercepted with test samples. Not production C, full shell, backend validation, native popup capture, real MFA/RBAC or account creation.",
+  "sourceCommit": "797e8af35a8a1209ce3b007a21e8678ba8d98cc0",
+  "sourceHashes": {
+    "apps/api/src/mysql-platform-account-repository.ts": "96cc13077b24ba17643adc9b13ca14cd2e71ea49d3e13d3abceb7b86ed7b87c5",
+    "apps/api/src/platform-account-service.ts": "189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/platform-account-types.ts": "7c78cdfd603d8419ee18d7bd5feb12b1d40cbb7bdf102aeaf17a919a7003afe2",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/account-create-preview.css": "3ca6614eb37eec2deb65fc3dec5db9b946db5d1d35fc9dad78994438d34a2650",
+    "scripts/lib/ui-phase2-account-overview-design-data.mjs": "df765906f1eda3eb7c1c4158ee5e808796024df6bba3a841ce7ceaa3f2a7ba93",
+    "scripts/verify-ui-phase2-account-create-preview.mjs": "fdde20be1fdef9a9fa6989fe4c8cdc0dd01dffa4f3cfb0cd7a31b79177af9218",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "native dialog initially focuses email"
+    },
+    {
+      "width": 390,
+      "name": "four fields until organization chosen"
+    },
+    {
+      "width": 390,
+      "name": "original native limits and password type"
+    },
+    {
+      "width": 390,
+      "name": "all original platform choices"
+    },
+    {
+      "width": 390,
+      "name": "44px controls 16px sans serif"
+    },
+    {
+      "width": 390,
+      "name": "dialog no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "password follows email"
+    },
+    {
+      "width": 390,
+      "name": "role selection does not submit"
+    },
+    {
+      "width": 390,
+      "name": "conditional organization role and exact options"
+    },
+    {
+      "width": 390,
+      "name": "organization role defaults to member"
+    },
+    {
+      "width": 390,
+      "name": "required empty fields block write"
+    },
+    {
+      "width": 390,
+      "name": "required validity is native"
+    },
+    {
+      "width": 390,
+      "name": "invalid email blocks write"
+    },
+    {
+      "width": 390,
+      "name": "native email type mismatch"
+    },
+    {
+      "width": 390,
+      "name": "short password blocks write"
+    },
+    {
+      "width": 390,
+      "name": "native password too short"
+    },
+    {
+      "width": 390,
+      "name": "confirm follows cancel"
+    },
+    {
+      "width": 390,
+      "name": "native pressed state and stable control"
+    },
+    {
+      "width": 390,
+      "name": "pending disables confirm only"
+    },
+    {
+      "width": 390,
+      "name": "pending keeps original button text"
+    },
+    {
+      "width": 390,
+      "name": "exact original organization creation body"
+    },
+    {
+      "width": 390,
+      "name": "failure keeps all five values"
+    },
+    {
+      "width": 390,
+      "name": "cancel restores real trigger focus"
+    },
+    {
+      "width": 390,
+      "name": "reopen clears identity and role fields"
+    },
+    {
+      "width": 390,
+      "name": "Escape restores real trigger focus"
+    },
+    {
+      "width": 390,
+      "name": "inactive synthetic org option disabled"
+    },
+    {
+      "width": 390,
+      "name": "inactive option not selected"
+    },
+    {
+      "width": 390,
+      "name": "successful fixture closes and shows existing parent message"
+    },
+    {
+      "width": 390,
+      "name": "default payload preserves null and no reason"
+    },
+    {
+      "width": 390,
+      "name": "short screen footer within viewport"
+    },
+    {
+      "width": 390,
+      "name": "only isolated GET/POST fixture; no external requests or browser errors"
+    },
+    {
+      "width": 760,
+      "name": "native dialog initially focuses email"
+    },
+    {
+      "width": 760,
+      "name": "four fields until organization chosen"
+    },
+    {
+      "width": 760,
+      "name": "original native limits and password type"
+    },
+    {
+      "width": 760,
+      "name": "all original platform choices"
+    },
+    {
+      "width": 760,
+      "name": "44px controls 16px sans serif"
+    },
+    {
+      "width": 760,
+      "name": "dialog no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "password follows email"
+    },
+    {
+      "width": 760,
+      "name": "role selection does not submit"
+    },
+    {
+      "width": 760,
+      "name": "conditional organization role and exact options"
+    },
+    {
+      "width": 760,
+      "name": "organization role defaults to member"
+    },
+    {
+      "width": 760,
+      "name": "required empty fields block write"
+    },
+    {
+      "width": 760,
+      "name": "required validity is native"
+    },
+    {
+      "width": 760,
+      "name": "invalid email blocks write"
+    },
+    {
+      "width": 760,
+      "name": "native email type mismatch"
+    },
+    {
+      "width": 760,
+      "name": "short password blocks write"
+    },
+    {
+      "width": 760,
+      "name": "native password too short"
+    },
+    {
+      "width": 760,
+      "name": "confirm follows cancel"
+    },
+    {
+      "width": 760,
+      "name": "native pressed state and stable control"
+    },
+    {
+      "width": 760,
+      "name": "pending disables confirm only"
+    },
+    {
+      "width": 760,
+      "name": "pending keeps original button text"
+    },
+    {
+      "width": 760,
+      "name": "exact original organization creation body"
+    },
+    {
+      "width": 760,
+      "name": "failure keeps all five values"
+    },
+    {
+      "width": 760,
+      "name": "cancel restores real trigger focus"
+    },
+    {
+      "width": 760,
+      "name": "reopen clears identity and role fields"
+    },
+    {
+      "width": 760,
+      "name": "Escape restores real trigger focus"
+    },
+    {
+      "width": 760,
+      "name": "inactive synthetic org option disabled"
+    },
+    {
+      "width": 760,
+      "name": "inactive option not selected"
+    },
+    {
+      "width": 760,
+      "name": "successful fixture closes and shows existing parent message"
+    },
+    {
+      "width": 760,
+      "name": "default payload preserves null and no reason"
+    },
+    {
+      "width": 760,
+      "name": "only isolated GET/POST fixture; no external requests or browser errors"
+    },
+    {
+      "width": 761,
+      "name": "native dialog initially focuses email"
+    },
+    {
+      "width": 761,
+      "name": "four fields until organization chosen"
+    },
+    {
+      "width": 761,
+      "name": "original native limits and password type"
+    },
+    {
+      "width": 761,
+      "name": "all original platform choices"
+    },
+    {
+      "width": 761,
+      "name": "44px controls 16px sans serif"
+    },
+    {
+      "width": 761,
+      "name": "dialog no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "password follows email"
+    },
+    {
+      "width": 761,
+      "name": "role selection does not submit"
+    },
+    {
+      "width": 761,
+      "name": "conditional organization role and exact options"
+    },
+    {
+      "width": 761,
+      "name": "organization role defaults to member"
+    },
+    {
+      "width": 761,
+      "name": "required empty fields block write"
+    },
+    {
+      "width": 761,
+      "name": "required validity is native"
+    },
+    {
+      "width": 761,
+      "name": "invalid email blocks write"
+    },
+    {
+      "width": 761,
+      "name": "native email type mismatch"
+    },
+    {
+      "width": 761,
+      "name": "short password blocks write"
+    },
+    {
+      "width": 761,
+      "name": "native password too short"
+    },
+    {
+      "width": 761,
+      "name": "confirm follows cancel"
+    },
+    {
+      "width": 761,
+      "name": "native pressed state and stable control"
+    },
+    {
+      "width": 761,
+      "name": "pending disables confirm only"
+    },
+    {
+      "width": 761,
+      "name": "pending keeps original button text"
+    },
+    {
+      "width": 761,
+      "name": "exact original organization creation body"
+    },
+    {
+      "width": 761,
+      "name": "failure keeps all five values"
+    },
+    {
+      "width": 761,
+      "name": "cancel restores real trigger focus"
+    },
+    {
+      "width": 761,
+      "name": "reopen clears identity and role fields"
+    },
+    {
+      "width": 761,
+      "name": "Escape restores real trigger focus"
+    },
+    {
+      "width": 761,
+      "name": "inactive synthetic org option disabled"
+    },
+    {
+      "width": 761,
+      "name": "inactive option not selected"
+    },
+    {
+      "width": 761,
+      "name": "successful fixture closes and shows existing parent message"
+    },
+    {
+      "width": 761,
+      "name": "default payload preserves null and no reason"
+    },
+    {
+      "width": 761,
+      "name": "only isolated GET/POST fixture; no external requests or browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "native dialog initially focuses email"
+    },
+    {
+      "width": 1440,
+      "name": "four fields until organization chosen"
+    },
+    {
+      "width": 1440,
+      "name": "original native limits and password type"
+    },
+    {
+      "width": 1440,
+      "name": "all original platform choices"
+    },
+    {
+      "width": 1440,
+      "name": "44px controls 16px sans serif"
+    },
+    {
+      "width": 1440,
+      "name": "dialog no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "password follows email"
+    },
+    {
+      "width": 1440,
+      "name": "role selection does not submit"
+    },
+    {
+      "width": 1440,
+      "name": "conditional organization role and exact options"
+    },
+    {
+      "width": 1440,
+      "name": "organization role defaults to member"
+    },
+    {
+      "width": 1440,
+      "name": "required empty fields block write"
+    },
+    {
+      "width": 1440,
+      "name": "required validity is native"
+    },
+    {
+      "width": 1440,
+      "name": "invalid email blocks write"
+    },
+    {
+      "width": 1440,
+      "name": "native email type mismatch"
+    },
+    {
+      "width": 1440,
+      "name": "short password blocks write"
+    },
+    {
+      "width": 1440,
+      "name": "native password too short"
+    },
+    {
+      "width": 1440,
+      "name": "confirm follows cancel"
+    },
+    {
+      "width": 1440,
+      "name": "native pressed state and stable control"
+    },
+    {
+      "width": 1440,
+      "name": "pending disables confirm only"
+    },
+    {
+      "width": 1440,
+      "name": "pending keeps original button text"
+    },
+    {
+      "width": 1440,
+      "name": "exact original organization creation body"
+    },
+    {
+      "width": 1440,
+      "name": "failure keeps all five values"
+    },
+    {
+      "width": 1440,
+      "name": "cancel restores real trigger focus"
+    },
+    {
+      "width": 1440,
+      "name": "reopen clears identity and role fields"
+    },
+    {
+      "width": 1440,
+      "name": "Escape restores real trigger focus"
+    },
+    {
+      "width": 1440,
+      "name": "inactive synthetic org option disabled"
+    },
+    {
+      "width": 1440,
+      "name": "inactive option not selected"
+    },
+    {
+      "width": 1440,
+      "name": "successful fixture closes and shows existing parent message"
+    },
+    {
+      "width": 1440,
+      "name": "default payload preserves null and no reason"
+    },
+    {
+      "width": 1440,
+      "name": "only isolated GET/POST fixture; no external requests or browser errors"
+    }
+  ],
+  "requestsByWidth": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": {
+            "email": "preview@example.test",
+            "temporary_password": "[known synthetic value matched]",
+            "platform_role_code": null,
+            "organization_id": "00000000-0000-4000-8000-000000000622",
+            "organization_role_code": "organization_admin"
+          },
+          "idempotencyKeyPresent": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": {
+            "email": "preview@example.test",
+            "temporary_password": "[known synthetic value matched]",
+            "platform_role_code": null,
+            "organization_id": null,
+            "organization_role_code": "member"
+          },
+          "idempotencyKeyPresent": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "limitations": "No backend/RBAC/database or real account creation. Current CSS-only dialog preview; full app shell/history and late write ownership excluded."
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": {
+            "email": "preview@example.test",
+            "temporary_password": "[known synthetic value matched]",
+            "platform_role_code": null,
+            "organization_id": "00000000-0000-4000-8000-000000000622",
+            "organization_role_code": "organization_admin"
+          },
+          "idempotencyKeyPresent": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": {
+            "email": "preview@example.test",
+            "temporary_password": "[known synthetic value matched]",
+            "platform_role_code": null,
+            "organization_id": null,
+            "organization_role_code": "member"
+          },
+          "idempotencyKeyPresent": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "limitations": "No backend/RBAC/database or real account creation. Current CSS-only dialog preview; full app shell/history and late write ownership excluded."
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": {
+            "email": "preview@example.test",
+            "temporary_password": "[known synthetic value matched]",
+            "platform_role_code": null,
+            "organization_id": "00000000-0000-4000-8000-000000000622",
+            "organization_role_code": "organization_admin"
+          },
+          "idempotencyKeyPresent": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": {
+            "email": "preview@example.test",
+            "temporary_password": "[known synthetic value matched]",
+            "platform_role_code": null,
+            "organization_id": null,
+            "organization_role_code": "member"
+          },
+          "idempotencyKeyPresent": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "limitations": "No backend/RBAC/database or real account creation. Current CSS-only dialog preview; full app shell/history and late write ownership excluded."
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": {
+            "email": "preview@example.test",
+            "temporary_password": "[known synthetic value matched]",
+            "platform_role_code": null,
+            "organization_id": "00000000-0000-4000-8000-000000000622",
+            "organization_role_code": "organization_admin"
+          },
+          "idempotencyKeyPresent": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": {
+            "email": "preview@example.test",
+            "temporary_password": "[known synthetic value matched]",
+            "platform_role_code": null,
+            "organization_id": null,
+            "organization_role_code": "member"
+          },
+          "idempotencyKeyPresent": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "limitations": "No backend/RBAC/database or real account creation. Current CSS-only dialog preview; full app shell/history and late write ownership excluded."
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-default.png",
+      "label": "普通用户 · 默认四字段",
+      "state": "default",
+      "bottom": false,
+      "sha256": "847f81baecee6c5a85d21a9a6a26253ea5a53c39179d33c790272076330933ca",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 618
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:53.922Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-email-focus.png",
+      "label": "邮箱 · 键盘焦点",
+      "state": "email-focus",
+      "bottom": false,
+      "sha256": "acfadd365b021eb8f980f8756f958b54c93b2ce9c7000e909af2825e1d463a04",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 618
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:54.020Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-password-focus.png",
+      "label": "临时密码 · 键盘焦点",
+      "state": "password-focus",
+      "bottom": false,
+      "sha256": "13be8f6a59a0daf551bbf15eab119aee9ce5df8b3aade654fefd2cba40411204",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 618
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:54.121Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-role-operations.png",
+      "label": "平台角色 · 运营管理员",
+      "state": "role-operations",
+      "bottom": false,
+      "sha256": "db5d9fed02100cf26814b115f9de5600a57d063f1cf4fc3f0abe8588163a0c8d",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 618
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:54.220Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-role-security.png",
+      "label": "平台角色 · 安全管理员",
+      "state": "role-security",
+      "bottom": false,
+      "sha256": "fc6f760963949a0ebd02bfc201d7d94dd488455c959da39d4851e272d90aa324",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 618
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:54.322Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-role-super.png",
+      "label": "平台角色 · 超级管理员",
+      "state": "role-super",
+      "bottom": false,
+      "sha256": "685fd0db2ac1328097a4fb6da4b2dd35c4043feef8fe3f863de2dd20b79d3ae8",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 618
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:54.420Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-member.png",
+      "label": "加入组织 · 普通成员",
+      "state": "member",
+      "bottom": false,
+      "sha256": "ecbbace0d8e55c59e2c40e6c44f6264dedf0e2e392114244f831419cdcb0a8f5",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 716
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:54.539Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-org-admin.png",
+      "label": "加入组织 · 组织管理员",
+      "state": "org-admin",
+      "bottom": false,
+      "sha256": "96f2ec1596539f937b4f0bd98d3310b3a2cff5a79882124f580204007c7ce058",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 716
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:54.639Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-org-admin-bottom.png",
+      "label": "五字段组合 · 底部操作",
+      "state": "org-admin-bottom",
+      "bottom": true,
+      "sha256": "96f2ec1596539f937b4f0bd98d3310b3a2cff5a79882124f580204007c7ce058",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 716
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:54.738Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-required.png",
+      "label": "原生必填无效态 · 不含系统气泡",
+      "state": "required",
+      "bottom": false,
+      "sha256": "9ff23bfc0fa92a215fcc8a1b008d388013a4fe1763eade2c3025fc569d4688c0",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 716
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:54.888Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-invalid-email.png",
+      "label": "原生邮箱格式无效态 · 不含系统气泡",
+      "state": "invalid-email",
+      "bottom": false,
+      "sha256": "4cc4039f3539886889f57f5470dbc30cda0acaab1bec3476115069653938858f",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 716
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:55.055Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-short-password.png",
+      "label": "原生密码不足12字符 · 不含系统气泡",
+      "state": "short-password",
+      "bottom": false,
+      "sha256": "daeb89f23226d983345fd97b6fdca6633aa9131331b51c285872d764dc5c3046",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 716
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:55.223Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-cancel-focus.png",
+      "label": "取消 · 键盘焦点",
+      "state": "cancel-focus",
+      "bottom": true,
+      "sha256": "f22fd14f1a283eb8aa07a0a2fcceb2115cdb64e71a8d95983372602f11244841",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 716
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:55.323Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-confirm-focus.png",
+      "label": "确认创建 · 键盘焦点",
+      "state": "confirm-focus",
+      "bottom": true,
+      "sha256": "9b0956d96c829216b6da5661f08e783b840cf1af8361b958a2725fd43e7032df",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 716
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:55.423Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-confirm-hover.png",
+      "label": "确认创建 · 悬停",
+      "state": "confirm-hover",
+      "bottom": true,
+      "sha256": "9b0956d96c829216b6da5661f08e783b840cf1af8361b958a2725fd43e7032df",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 716
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:55.572Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-confirm-pressed.png",
+      "label": "确认创建 · 原生按下",
+      "state": "confirm-pressed",
+      "bottom": true,
+      "sha256": "f84590242e8eaa39350b26f504fbc2104d802248a2126b0dc3f3f53f932437e1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 716
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:55.739Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-pending.png",
+      "label": "提交等待 · 确认禁用，字段和取消仍可用",
+      "state": "pending",
+      "bottom": true,
+      "sha256": "35280c1d5b7e494c5b87cdf0bfb2c966232d5e95866afb1b352a33717d8f06c3",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 716
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:55.856Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-failure.png",
+      "label": "创建失败 · 保留字段",
+      "state": "failure",
+      "bottom": false,
+      "sha256": "2a7fd402d017b985d2cfad39e84f57eede486676bb79c7030864e1a91577edea",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 786
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:55.991Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-failure-bottom.png",
+      "label": "创建失败 · 重试操作",
+      "state": "failure-bottom",
+      "bottom": true,
+      "sha256": "2a7fd402d017b985d2cfad39e84f57eede486676bb79c7030864e1a91577edea",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 786
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:56.090Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-reopened.png",
+      "label": "重新打开 · 默认空表单",
+      "state": "reopened",
+      "bottom": false,
+      "sha256": "847f81baecee6c5a85d21a9a6a26253ea5a53c39179d33c790272076330933ca",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 618
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:56.287Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-short-screen-top.png",
+      "label": "568px短屏 · 上部字段",
+      "state": "short-screen-top",
+      "bottom": false,
+      "sha256": "381181ee27f57721736640e7e23282422c69055a384b99d4049bdac37d98cb6a",
+      "viewport": {
+        "width": 390,
+        "height": 568
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 544
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:57.020Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "390-short-screen-bottom.png",
+      "label": "568px短屏 · 底部可达",
+      "state": "short-screen-bottom",
+      "bottom": true,
+      "sha256": "66aec369c3c343f1e992f27a959847944f58eda303ca2158c838f743b16f72ae",
+      "viewport": {
+        "width": 390,
+        "height": 568
+      },
+      "imageDimensions": {
+        "width": 366,
+        "height": 544
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:09:57.101Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-default.png",
+      "label": "普通用户 · 默认四字段",
+      "state": "default",
+      "bottom": false,
+      "sha256": "aa43f7d95296401c1c6fa7b25ac1ee7750a90af6d79571d5396fd99c2dec8cd0",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 432
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:01.123Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-email-focus.png",
+      "label": "邮箱 · 键盘焦点",
+      "state": "email-focus",
+      "bottom": false,
+      "sha256": "c7d0ab9d581bf55d4db1b7954a755ad0d0bbe94ce54ea4a03090973ab11851de",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 432
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:01.224Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-password-focus.png",
+      "label": "临时密码 · 键盘焦点",
+      "state": "password-focus",
+      "bottom": false,
+      "sha256": "75afaa9cb1a7043bb6c9010bf23372a74d67ea7f84fae56a7da57559625536eb",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 432
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:01.323Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-role-operations.png",
+      "label": "平台角色 · 运营管理员",
+      "state": "role-operations",
+      "bottom": false,
+      "sha256": "5793eabb7414de59cd363c08d0eb2c4d96234e8638a9a8459035752d9184cc22",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 432
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:01.424Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-role-security.png",
+      "label": "平台角色 · 安全管理员",
+      "state": "role-security",
+      "bottom": false,
+      "sha256": "2315649a655846b3dc4632645b44a5a48d2bc5b6f524cb46b1afb2c52127e75a",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 432
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:01.522Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-role-super.png",
+      "label": "平台角色 · 超级管理员",
+      "state": "role-super",
+      "bottom": false,
+      "sha256": "8e119d833da693880433ef368573a8f23a46b0977f9350d47b26f17430428e54",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 432
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:01.622Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-member.png",
+      "label": "加入组织 · 普通成员",
+      "state": "member",
+      "bottom": false,
+      "sha256": "a66c611367a1469b62cc4cc60a90a9d132b0071c1d7476991cd0f177337ddd03",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 532
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:01.742Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-org-admin.png",
+      "label": "加入组织 · 组织管理员",
+      "state": "org-admin",
+      "bottom": false,
+      "sha256": "e913dd0d82ab6a9963a9b24197cb814cc311ec9bed25fcc86eace1f053ac721a",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 532
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:01.841Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-org-admin-bottom.png",
+      "label": "五字段组合 · 底部操作",
+      "state": "org-admin-bottom",
+      "bottom": true,
+      "sha256": "e913dd0d82ab6a9963a9b24197cb814cc311ec9bed25fcc86eace1f053ac721a",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 532
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:01.943Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-required.png",
+      "label": "原生必填无效态 · 不含系统气泡",
+      "state": "required",
+      "bottom": false,
+      "sha256": "6098e4c629e88bc729570bbc1924334d31deb6fad3a6d058ca89a44df60f523c",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 532
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:02.092Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-invalid-email.png",
+      "label": "原生邮箱格式无效态 · 不含系统气泡",
+      "state": "invalid-email",
+      "bottom": false,
+      "sha256": "c47d1202207b69103c80514ec9a18f2dca4a6f91ccc56f9765a486a15faac2d9",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 532
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:02.259Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-short-password.png",
+      "label": "原生密码不足12字符 · 不含系统气泡",
+      "state": "short-password",
+      "bottom": false,
+      "sha256": "3ec302af83204d33ad5645454b1720af9854cc071ce4df7e7354187799663e4a",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 532
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:02.426Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-cancel-focus.png",
+      "label": "取消 · 键盘焦点",
+      "state": "cancel-focus",
+      "bottom": true,
+      "sha256": "43e43a70a254e74d15da19f24d22c963dd1fa6de080ae1b8dc9350c4ee0edd63",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 532
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:02.526Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-confirm-focus.png",
+      "label": "确认创建 · 键盘焦点",
+      "state": "confirm-focus",
+      "bottom": true,
+      "sha256": "149057196046dedc977c68d8eb53b31a27fad6035404e2a9d715b1d444010880",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 532
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:02.626Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-confirm-hover.png",
+      "label": "确认创建 · 悬停",
+      "state": "confirm-hover",
+      "bottom": true,
+      "sha256": "149057196046dedc977c68d8eb53b31a27fad6035404e2a9d715b1d444010880",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 532
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:02.759Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-confirm-pressed.png",
+      "label": "确认创建 · 原生按下",
+      "state": "confirm-pressed",
+      "bottom": true,
+      "sha256": "600c9aabb71a5622e5696b87123a387f9d1f348a7cfdb15a90b48d8a38a49084",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 532
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:02.926Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-pending.png",
+      "label": "提交等待 · 确认禁用，字段和取消仍可用",
+      "state": "pending",
+      "bottom": true,
+      "sha256": "78f71874e9ba26274c50f2d1aada890a0ea8111b8e71d0010f240a5a29facede",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 532
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:03.042Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-failure.png",
+      "label": "创建失败 · 保留字段",
+      "state": "failure",
+      "bottom": false,
+      "sha256": "57caa0d86a3bd1cc172ff2a4188a7fc03a3ff7481ba9ea57b5e483ca3a3bd4b4",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 608
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:03.161Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-failure-bottom.png",
+      "label": "创建失败 · 重试操作",
+      "state": "failure-bottom",
+      "bottom": true,
+      "sha256": "57caa0d86a3bd1cc172ff2a4188a7fc03a3ff7481ba9ea57b5e483ca3a3bd4b4",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 608
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:03.261Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    },
+    {
+      "file": "1440-reopened.png",
+      "label": "重新打开 · 默认空表单",
+      "state": "reopened",
+      "bottom": false,
+      "sha256": "aa43f7d95296401c1c6fa7b25ac1ee7750a90af6d79571d5396fd99c2dec8cd0",
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 432
+      },
+      "kind": "vue-isolated-css",
+      "routeId": "P39",
+      "concreteUrl": "http://127.0.0.1:58052/platform-admin/accounts?keep=creation",
+      "role": "fixture only; no real authentication",
+      "theme": "review-only C blue/white creation dialog",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:10:03.458Z",
+      "sourceSha": "870cbf1ece8b08cdebe37e227e8837f9c1a3a8be65145ff0b2feca53a0f09ee0"
+    }
+  ],
+  "processesClosed": true
+}

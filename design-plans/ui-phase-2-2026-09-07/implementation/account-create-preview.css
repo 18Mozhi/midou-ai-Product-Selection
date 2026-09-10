@@ -1,0 +1,222 @@
+/* Review only: scopes the existing native creation dialog, without template changes. */
+html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] {
+  --pc-blue: #254a9c;
+  --pc-blue-strong: #193b80;
+  --pc-text: #202c3d;
+  --pc-muted: #58677b;
+  --pc-line: #6680a2;
+  --pc-rule: #dbe1e9;
+  --pc-white: #fff;
+  --pc-soft: #edf1f6;
+  --pc-error: #a32934;
+  --pc-error-soft: #fff3f3;
+  --so-disabled-opacity: 1;
+  --so-control-height: 48px;
+  width: min(760px, calc(100% - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--pc-rule);
+  border-radius: 16px;
+  background: var(--pc-white);
+  color: var(--pc-text);
+  overflow: auto;
+  scroll-padding-block: 16px 100px;
+}
+html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"]::backdrop {
+  background: rgb(25 42 69 / 50%);
+  backdrop-filter: none;
+}
+html
+  body.p39-create-preview
+  #app
+  dialog[aria-label="新建用户或平台管理员"]
+  :is(form, h3, p, label, input, select, button) {
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+  padding: 0;
+  gap: 24px;
+}
+html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] h3 {
+  grid-column: 1/-1;
+  margin: 0 0 -24px;
+  padding: 24px 28px 8px;
+  background: var(--pc-blue);
+  color: var(--pc-white);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] h3 + p {
+  grid-column: 1/-1;
+  margin: 0;
+  padding: 0 28px 24px;
+  background: var(--pc-blue);
+  color: var(--pc-white);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
+}
+html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] label {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  margin: 0;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--pc-text);
+}
+html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] label:nth-of-type(odd) {
+  margin-left: 28px;
+}
+html
+  body.p39-create-preview
+  #app
+  dialog[aria-label="新建用户或平台管理员"]
+  label:nth-of-type(even) {
+  margin-right: 28px;
+}
+html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] label:nth-of-type(5) {
+  grid-column: 1/-1;
+  margin-right: 28px;
+}
+html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] :is(input, select) {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 11px 12px;
+  border: 1px solid var(--pc-line);
+  border-radius: 8px;
+  background: var(--pc-white);
+  color: var(--pc-text);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+html
+  body.p39-create-preview
+  #app
+  dialog[aria-label="新建用户或平台管理员"]
+  :is(input, select, button):focus-visible {
+  outline: 3px solid var(--pc-blue);
+  outline-offset: 3px;
+}
+html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] footer {
+  position: sticky;
+  bottom: 0;
+  grid-column: 1/-1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 28px;
+  border-top: 1px solid var(--pc-rule);
+  background: var(--pc-white);
+  z-index: 1;
+}
+html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] button {
+  min-width: 112px;
+  min-height: 48px;
+  padding: 11px 20px;
+  border: 1px solid var(--pc-blue);
+  border-radius: 8px;
+  background: var(--pc-blue);
+  color: var(--pc-white);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  opacity: 1;
+  transform: none;
+  box-shadow: none;
+}
+html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] button[type="button"] {
+  color: var(--pc-blue);
+  background: var(--pc-white);
+}
+html
+  body.p39-create-preview
+  #app
+  dialog[aria-label="新建用户或平台管理员"]
+  button:not(:disabled):hover {
+  color: var(--pc-white);
+  background: var(--pc-blue-strong);
+}
+html
+  body.p39-create-preview
+  #app
+  dialog[aria-label="新建用户或平台管理员"]
+  button:not(:disabled):active {
+  transform: none;
+  box-shadow: inset 0 0 0 2px var(--pc-white);
+}
+html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] button:disabled {
+  background: var(--pc-soft);
+  color: var(--pc-muted);
+  border-color: var(--pc-rule);
+  cursor: not-allowed;
+  opacity: 1;
+  outline: none;
+  box-shadow: none;
+}
+html
+  body.p39-create-preview
+  #app
+  dialog[aria-label="新建用户或平台管理员"]
+  .dialog-feedback--error {
+  grid-column: 1/-1;
+  margin: 0 28px;
+  padding: 12px 16px;
+  border: 1px solid var(--pc-error);
+  border-radius: 8px;
+  background: var(--pc-error-soft);
+  color: var(--pc-error);
+  font-size: 16px;
+  line-height: 1.6;
+}
+@media (max-width: 760px) {
+  html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] {
+    width: calc(100% - 24px);
+    max-height: calc(100dvh - 24px);
+    border-radius: 12px;
+  }
+  html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] form {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] h3 {
+    padding: 20px 20px 8px;
+    margin-bottom: -20px;
+    font-size: 22px;
+  }
+  html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] h3 + p {
+    padding: 0 20px 20px;
+  }
+  html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] label:nth-of-type(n) {
+    margin: 0 20px;
+  }
+  html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] footer {
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] button {
+    width: 100%;
+    min-width: 0;
+  }
+  html
+    body.p39-create-preview
+    #app
+    dialog[aria-label="新建用户或平台管理员"]
+    .dialog-feedback--error {
+    margin: 0 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body.p39-create-preview #app dialog[aria-label="新建用户或平台管理员"] * {
+    transition: none;
+  }
+}
