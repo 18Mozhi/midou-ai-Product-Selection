@@ -12,6 +12,16 @@ const remaining =
   "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。";
 const definitions = [
   [
+    "EX-P34-FIRST-FAILURE",
+    "P34首次读取失败转发（非本页）",
+    "excluded",
+    ["5ae31bc55551b1dc.1"],
+    ["OG-RETRY"],
+    "仅view===approvals且error、无data、HTTP500；非P29",
+    "P29不渲染此分支；P34复用原load()，不计入本页动作",
+    ["normal"],
+  ],
+  [
     "OG-REFRESH",
     "刷新组织资料",
     "read",

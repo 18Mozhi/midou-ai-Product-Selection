@@ -70,6 +70,7 @@ export async function buildOrganizationProfileDesignData(repo) {
           "requestId",
           "busy",
           "refreshing",
+          "lastReadFailureStatus",
           "secret",
         ].map((k) => [
           k,

@@ -12,7 +12,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/workspaces.css": "f6560bf294e02d891ac65777bdd0976970b4f70c76e7f48dd15d5095962ed333",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/workspaces.js": "871b281952fe5f95462d00326b059a94e22cdf5450ccaab6e15f1fc50361af36",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/data.js": "d4dd20ec9d48d4fbf81587e84ab275cdc6f7687d6555dbbd3d2df2888b9a8f2e",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529",
     "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
     "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
     "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
@@ -29,7 +29,7 @@
     "scripts/verify-ui-phase2-workspaces-controls-c.mjs": "5ed21d201b155ff5c2eb7a2062a5c7f0e7b162d93108a2c71ab5c3d0a8b3c846",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c/index.html": "2e8fa53da5aed02b824bc42b3ca91fbff699be2a004808c3345b94bd3dc20cfa",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c/states.js": "52c1aae352b9c8e15b582f21632dc6cd7723a8b54d8163c83c0326091f758f53",
-    "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json": "06774e3116e80a37af7b407d7d808ebbc61a8f543a221842c9dbd6cafad010b1",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json": "dade58ec9144c60159c465e7b7574126b43e5eb59b21760562a8c1d69af7432d",
     "scripts/verify-ui-phase2-workspaces-restore-states.mjs": "f66163591f99fab11f19a3e9172f258daf541eaef96b721bcf9d5e47e82988cf"
   },
   "scenes": {

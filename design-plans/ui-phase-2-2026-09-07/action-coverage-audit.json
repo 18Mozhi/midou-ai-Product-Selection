@@ -68,7 +68,8 @@
     "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
     "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "2bda7b1e4c04d4dfe751e396bbb2d762cbe7654986b5d5c48446300f57605327",
     "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
     "apps/web/src/components/OrganizationAuditPanel.vue": "b0f7e9452a81914dfa71c3812765f93726804d2ed1e56494e9004314a6f8ac7a",
     "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
@@ -183,17 +184,17 @@
     "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "bd3c1297906ce2c96f2eff9b445bd5b5b9c6e43742cdea3f1cb2b9460303eaf6",
     "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "17744f8b5cc5d1d1290f538bb4f7d87dc429cf454d55f81640850c5e31da1083",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "73ccec3c884d7f0f2037640bf851a734ba81d9dff1ab02f7ecfffd193902b0e5",
-    "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "b2fe3c4e93789c3c9addb67e6a20fd1410a74c5934a551a25ca26663f16618ab",
+    "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "7f64614253d2339c379b37540aed9392a31b0c22af54fe87739c60634f17fdcd",
     "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "015a45bb5c16e1c5daa933b7eb4cfede9bb0417e0eced2ac4e7bca51a3d11393",
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
     "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "00ddf46b8d17108aba16e9bfd83c806551a07c47739ef860573db25cb55a5caf",
     "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "99197515dbb0075c1b19c86d3b0eb81f6ac55493af0c7cadbeb1ea32dfa6ae93",
-    "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "1b1c3591cd8e7a04a1e1a59ceddd369af23b602849922f01fa73f3146a7413a4",
+    "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "ab4b39e93e58abac3be4354c074be7c9eb1707e05df73f76a69f888a3ed4e5e2",
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "894e47fe1fedb1728897fd5afa1497731585d5fbe6507566599008c581db6760",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "09124326e2db64b069941a69ac7161c94fd754015069ea47a24a9b433b3a8938",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "dfe9ea0a1064513435cf4e004233fd1bc64660a0b9a1ecbc3d380893159cad88",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "aae0afa73fcdba0e1e65d5b7e83ca9697bf84e5f056e6be0da0bf547bd1fd155",
-    "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "92f6c685b66a8e22b46e053d085e7f9014fd707490b53d3d93665f8412420895",
+    "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "b1e9e231e351bc183f408778c09e53ef9399c85affd09a0184fac66ec6a752a4",
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "74529109c7dd6373438b50a7121528953d172412ffc9e1eafea81e8f3155e64e",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "2cba8fb2525d35483ff8d2c29229e8068fedcb59a2921b9ea4ff519d294774ba",
@@ -240,9 +241,9 @@
     "design-plans/ui-phase-2-2026-09-07/design/insights-direction-c/evidence.json": "a49ba0902fc80bab8f0099fb86f4cce033b52b873a442f7c924fe008c9c8ef33",
     "design-plans/ui-phase-2-2026-09-07/design/journey-direction-c/evidence.json": "fec49054a4c86198eddeb6be212e66398288f1bc87ebcd0f131819cfe60e7fab",
     "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/evidence.json": "ce300e955c27fb5a1b9bf9da140d180928596752ff320cce065bde24d9c4d41f",
-    "design-plans/ui-phase-2-2026-09-07/design/members-controls-direction-c/evidence.json": "d61fe9cf8936bbe24c9fadd4997cfce24445dff7be0cbb370a72ec682b210ad2",
-    "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/evidence.json": "6e9f844f6f1b26ab637b6b20c8cacd4f2383c7a4052baf77f6fd781bf2133163",
-    "design-plans/ui-phase-2-2026-09-07/design/members-fields-direction-c/evidence.json": "7d616008fbcf219aeebf231c4d7671dfb9eb38b782f79cb184965c5c9c980e04",
+    "design-plans/ui-phase-2-2026-09-07/design/members-controls-direction-c/evidence.json": "3e2373a90454cf2493c75b88a9e68c76038239053297f84a96033df586514a9f",
+    "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/evidence.json": "ae4ce0ebe5cd3647990d31027682253bceaa4f3788389ee45562250ada989460",
+    "design-plans/ui-phase-2-2026-09-07/design/members-fields-direction-c/evidence.json": "e85159405f5484d3af48f22ffa6182b6dafd43d0b8f156faddba77ea607a5862",
     "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/evidence.json": "af3fb14e12fa98b535e663488f41252600b2f4349040721f71ea8faf2dd7b6f2",
     "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/evidence.json": "f4a25996f56f4d68b445ea4a12c673793a3034952340aa04aebedb2c0a75dad8",
     "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/evidence.json": "fe6a2e7df297fa4d285b11c1af15cfd6470547546ec648846b558a0b01937868",
@@ -251,16 +252,16 @@
     "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/evidence.json": "680ae6b54396859f9e410a67851bed759be790f33cca6c7aac2e501c6974e8e8",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/evidence.json": "ccdc0ffb2f31fc66fc71b0d5722afc5355f4f0872f706551c5f730ee4e52e99d",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-direction-c/evidence.json": "ae2f594b7964b2aeb093f57c828fd381c862d4570a5ba8798a4b93c480dc31af",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/evidence.json": "05ff6a6c011859e0abce43257938f5532b1aa65faf77537ca6b4f4966df84893",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json": "9593402df2b45815e12b530ec39fae0446549d1a49d75e5eb323d7265f2c0a35",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/evidence.json": "119ca340a2f968edb025abc720085cc1540638686dd79ed4c35aa3c7ebe0754d",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/evidence.json": "fcdd574a8a73c82d14260a1060f0d5b039c6e6fddbcaf4b58d6fac53ce5025b0",
-    "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/evidence.json": "ff82e9bf86a14443ef2273a9871dd8937cae0d461447a24bc277338cbea6995e",
-    "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/evidence.json": "b633f59f44962017305897434f7956b31b16da17fbdab5218499c59d785d1e68",
-    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json": "92db772cdceb7a1e74e265c027502814f49a355a6629e95908e2a5a880ad1b94",
-    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/evidence.json": "48c9985429ccbf0bf3f9de02017e3f868d2f868f712e9543cf1289ff235c339f",
-    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/evidence.json": "726bc607fd92f30e47cfc3a8f49cc5a33c3a7e0e614f713de23e343439313672",
-    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-fields-direction-c/evidence.json": "3447b9a18a43e5be50f2843b33be531e990bb6a2e77371977465db2fd58e5274",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/evidence.json": "6242888a07db974f0381192d50f681880ddc3eec0c08e20c1ca341b856d9c2fd",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json": "f8b8f67b4d6566b63e4693600f8560a716a6c59229ec4cb78e7353cc9bd6abe4",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/evidence.json": "0490c170eb8ab3a300c454c806b0ede955f0c3c5a65cda5ea2ac5215c35b092a",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/evidence.json": "e1519dc5486489147850c84d638185085f5b7f21e9826c5c399ba317570b191b",
+    "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/evidence.json": "124ffdb191b479346bf4843add4ad6e5f1c59d16d1ee4e0b1192b9718e318a58",
+    "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/evidence.json": "a98cef9e9bf0a4f1cb8c642050a1e70813167b96a209bee7288aaf43fcc0d6c3",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json": "1645f692927bb3030e7d7cf8c9693503cc71ff1bb30cf5cff137c63d611d7ca1",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/evidence.json": "97b1eda13ea0e554d6c1b85b1eb100cdba430190eca1897a555c5d4fb85dfb64",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/evidence.json": "8eec8cfb256c4028d7512fe3b55158f2655e6621b86f3c0f72fb3e0cabb89f2c",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-fields-direction-c/evidence.json": "26c4bcf5f5efcf6f681cebe5eab7cc1d92a4adfaebecea26de39b8c36afee6a1",
     "design-plans/ui-phase-2-2026-09-07/design/permission-comparison-direction-c/evidence.json": "ce1af8f9fbd07321cdcc3832442473a10afbd53605d14b6b7d80976afad884e3",
     "design-plans/ui-phase-2-2026-09-07/design/personal-composed-direction-c/evidence.json": "44d9fab15bd0857cad1d770c24d1a164a6ab0bf6fb61fbb22365d4be05c56241",
     "design-plans/ui-phase-2-2026-09-07/design/personal-direction-c/evidence.json": "a55004bd7f957bdd5e3dc8134114504f6e48b8cf44897ffd463cf71b97d0e272",
@@ -277,9 +278,9 @@
     "design-plans/ui-phase-2-2026-09-07/design/report-controls-direction-c/evidence.json": "3949cb0a58724d5ff6b82722109c951c27645523a33dad2aaf31a295580b85e9",
     "design-plans/ui-phase-2-2026-09-07/design/report-direction-c/evidence.json": "b95c32558e798230dcacf691dbcb9b4b51e727ed6c4d55cc12d4623742e7d0a6",
     "design-plans/ui-phase-2-2026-09-07/design/review-direction-c/evidence.json": "950a4ccec1c625f788db47106bebe8ba8448b7cd300108eeaf9afb3935163ae0",
-    "design-plans/ui-phase-2-2026-09-07/design/roles-controls-direction-c/evidence.json": "2341ef0b3b32f1af41b4c448ee9fa21694f0c3401d7e49d5f6bcd816db0a6eb0",
-    "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/evidence.json": "33acb6c1ff0c76207edce9c0b2eab25d190e6d07d4be9bd346ef6a95ec584f07",
-    "design-plans/ui-phase-2-2026-09-07/design/roles-fields-direction-c/evidence.json": "5276c2ccea7b5de757f94ec10e195df5a856e0b3d2ffa83703393af4cead3701",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-controls-direction-c/evidence.json": "b80569cd0cc31a96c274d57650bb6828877d6c85a040647596f7530f201a2de5",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/evidence.json": "cb128d38900ada7f5a464652da88b9571c6bad689f64b55cd5c4ba24881d11c0",
+    "design-plans/ui-phase-2-2026-09-07/design/roles-fields-direction-c/evidence.json": "ab6b19389f9f7374eb6fad533f3ab6a2b872c57ce9f2d2a05de3bf9d337ef8f8",
     "design-plans/ui-phase-2-2026-09-07/design/scheduler-direction-c/evidence.json": "c41dae66423d75fa549f35d4322a750b868609d6a595b84002bfa0e1f544151e",
     "design-plans/ui-phase-2-2026-09-07/design/scoring-direction-c/evidence.json": "998193f09224c3d87029ede4094856bc00c8407ea7d1374d275c23a3d986aa2d",
     "design-plans/ui-phase-2-2026-09-07/design/security-direction-c/evidence.json": "5f401727b28f442e07177f471b5450b41d9dc360e42f4dfd3cb401374972ee22",
@@ -290,18 +291,18 @@
     "design-plans/ui-phase-2-2026-09-07/design/status-direction-c/evidence.json": "e55c94edb2bc36a9b53661ba6f1ba423fd20cb98c55c10893318426febaf327c",
     "design-plans/ui-phase-2-2026-09-07/design/task-direction-c/evidence.json": "7ed167b7e63539135e3fde6f1c569473f8910fe4dba3d7a95ca0b91612bf3b3f",
     "design-plans/ui-phase-2-2026-09-07/design/task-direction-c-forms/evidence.json": "83f7768529bc472132c88a6e6fe68e8d2f40a6ccc5b93b96f5acccf6ab362c3d",
-    "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c/evidence.json": "40d61f0edb5aee0e8543b7cd7f57f9ccdb439941eea97b085720be056f163161",
-    "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/evidence.json": "3d563207566dc44842b4a356180388830ff453a46fa3ddb18796c8068fa79467",
-    "design-plans/ui-phase-2-2026-09-07/design/teams-fields-direction-c/evidence.json": "5c021374975fe43523356db0317f89f925cbe7ebacf0d8b1a27bfdb328a81fdd",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c/evidence.json": "c42e0deb5cac6e887b5f207a4f974f1533989c342e2e877dec85d76868e9b0fc",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/evidence.json": "60e779e5d2d4701eb3d7bd981c6fc4d93f943aa49bef912116488ee36cccad25",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-fields-direction-c/evidence.json": "024b0cd5938ede3019e0a5ddf50eff22974df3cc4c3d1eead90bcbf25c139d70",
     "design-plans/ui-phase-2-2026-09-07/design/theme-direction-c/evidence.json": "cf3b090b8aeddc4179a056f1ad7820e65613b73582c73f044b7e60b78a540061",
     "design-plans/ui-phase-2-2026-09-07/design/topology-direction-c/evidence.json": "09802e81d0046ae2a604b24493a1ad8a1f333cf5fdacd86e324f51a229102f99",
     "design-plans/ui-phase-2-2026-09-07/design/trend-direction-c/evidence.json": "0d5e9180acae43b437ec03b2629974feec09c021c6f282c5236612fa90aebaac",
     "design-plans/ui-phase-2-2026-09-07/design/user-admin-direction-c/evidence.json": "affcc6c564f332485ea14fd28d1b7c1c7a74de565caeaa4c5b59ccfd1bcd1d48",
     "design-plans/ui-phase-2-2026-09-07/design/work-direction-c/evidence.json": "7d8af75123533b4e27c891c4f6dd5da965a64b5ba15a783ed426aa7808bb87f8",
-    "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json": "06774e3116e80a37af7b407d7d808ebbc61a8f543a221842c9dbd6cafad010b1",
-    "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/evidence.json": "89bccdb468a4587db8c24d634c377ce5929e8d2d2a1f04b35c3b906a46e1ffb0",
-    "design-plans/ui-phase-2-2026-09-07/design/workspaces-fields-direction-c/evidence.json": "55989dda4d3ad81c3d1aff23ad4524b6ed1005e63ee45523e7ad571428f4b563",
-    "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c/evidence.json": "e77a3494a31e9d0dc705c62df5bd1889e5f7f77f35e16408caab353e5b1c4dc1",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json": "dade58ec9144c60159c465e7b7574126b43e5eb59b21760562a8c1d69af7432d",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/evidence.json": "def50c6303fc53a78fcb360438b3b9215bed1eb03e85f43841b4908883961551",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-fields-direction-c/evidence.json": "dfa505d7b8f3fc8547d31d3f506479b84b44f40f7acc8fa06d12b5db81964e5f",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c/evidence.json": "61ac25b14c3b68ea474687506ba2ec6ca2ecbb15dfe99c66e968f55603accaf4",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P01.json": "aa1f6f6104351672956368a32e011f880097271920b98b0344ea0fcfcc5f000a",
     "scripts/verify-ui-phase2-identity-source.mjs": "8ab750d0e68f0f198c72a7f3f4ce48eaf3c564efdf8924e520134ecc18b217f6",
     "scripts/verify-ui-phase2-identity-c.mjs": "e738ed2727df69f8a856bb951ee8ecae593d58600b2af9bf8c037f14a56ea874",
@@ -375,20 +376,20 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P28.json": "79bfb96f492e1752f6f4bcd48b55869d749040974bfdecbbb67ab8c8798a5c3d",
     "scripts/verify-ui-phase2-report-c.mjs": "63c52224823743579af6909fbed606a9bc2ae2765de6f7fe887cc98f4102dbdb",
     "scripts/verify-ui-phase2-report-controls-c.mjs": "9e464c9d0749bb96bb7bdde89a09e24975e8a087ae4ad2b3b706afd7d86439e7",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P29.json": "525e16ab262b4b750654591d248fef16f9127e165399cd11c6db8ea12a69a0da",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P29.json": "a0ecc4b700a9ec07e156df192a7d9ee389ac2ed2bd0ba991e5f1fa48fc4aceb3",
     "scripts/verify-ui-phase2-organization-profile-c.mjs": "5a42e1a7baedabaab16a480f7304a59ba9ef6a2f667a127e280ae88ade6a8355",
     "scripts/verify-ui-phase2-organization-profile-controls-c.mjs": "517b5cf3e6640b2096123a1c36353f7ee3a194187b358d094107632227b4a64a",
     "scripts/verify-ui-phase2-organization-profile-fields-c.mjs": "1cd07eb755a37c342dd9e0477c2e18d5dcbfba89cbb6483319b3a9a190afcffb",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "b4ce48f70be7ae6e96c94661cb71b724adb5d4badc9a06f77848df16bd96efa1",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "8dcd75465b873900681b5e406d70ff77015f914259afbdc27d20689f694217cf",
     "scripts/verify-ui-phase2-members-c.mjs": "4c49e066ccd290f59420f0e0e4f7ab7b2ae36709d67ddfd9d0620c5287106f91",
     "scripts/verify-ui-phase2-members-controls-c.mjs": "2af24e5b1ad27c940812a385a45486da0163c3df96c0efcd8d34500e9bc83c7d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "a2ec848374a0722332924530c0c267999b3b5c705b08593bb2d1bd109c7c9280",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "5f1af7bf7f13970d5aa24454675ce9165fc78ee805f3f2289aa04ce8dd911d72",
     "scripts/verify-ui-phase2-roles-c.mjs": "d77e1f34fa446c63ef0dea49cea750b6c724ea6c0c7c53d1db4f6a7666b7c044",
     "scripts/verify-ui-phase2-roles-controls-c.mjs": "a7a318f327d2a7cb95bf439f21e36d006531abca5f3a194eb2cfd50b3b203bdd",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "0267e1589dcd4d78eace2098fa1fab153aa5256cbbd5acfe943d8a489cad8015",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "671cc1bc0718ab3092f3697783d1c34255c1cf28f1b927965b81fea8e904c764",
     "scripts/verify-ui-phase2-workspaces-c.mjs": "a2099317449e0b217cf15a384434cbd5b43efcce537552c5d4477d1242d9db5b",
     "scripts/verify-ui-phase2-workspaces-controls-c.mjs": "5ed21d201b155ff5c2eb7a2062a5c7f0e7b162d93108a2c71ab5c3d0a8b3c846",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P33.json": "fb8132e5750fd59f997a4058e63d93f619504341132c7a33f8fdcdf0f31a0036",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P33.json": "47382254c7b10f6b6d3c815b4ea7fec527d850112d380e79990f36f7f878d110",
     "scripts/verify-ui-phase2-teams-c.mjs": "32be558307423a0131b146701a7a8c8dbe79f365f5fa306cf2555951a55890eb",
     "scripts/verify-ui-phase2-teams-controls-c.mjs": "c2f015d785ddfff74c1ddaecec3150763fbf29a176e40e71ac4a2d783bcd4ce7",
     "scripts/verify-ui-phase2-teams-fields-c.mjs": "67044958c03df9293e4c5e5974b1cf895572c1a81edf82f64bea4b3c1a34ca69",
@@ -430,7 +431,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P31.md": "947dbf0bc440200cc64474ae2f51716f29111a21072715a91a6c60be814515e1",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P32.md": "716d2faab84015c8a9f999d7888b74571a738a58a062448780bfb6ec1fcbe4ea",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P33.md": "99dbe7bd37443547b5e536c9139f7a2e3c6c2b2278dea690810a5f62194685cb",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P34.md": "a8df7e333ab9b58f1a91edaf0fe5dfcca17fa662152576441bd9c36f93ed1073",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P34.md": "549597aa3032a1ba788e1dad960edb0d0bcda2dfe9116842096028b1fab3831d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P35.md": "122a75f10073b9a4d964175636fe84d7747534f2af78d777d1b6b4f4b0302ae8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P36.md": "a3eedde42a68aa1b7203fe559da370cf7c6c855c68c5a34bcefddc65619cca68",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P37.md": "016ad982e719dc19228975508a1257bd9a704941fa3065b1bea61ed3d78942c2",
@@ -474,18 +475,18 @@
     "scripts/lib/ui-phase2-action-coverage.mjs": "f82699fd46bb673b1f7157a4fdb85c44358c0c758c0a0f182e0302ac8fa7dcd7",
     "scripts/lib/ui-phase2-review-surfaces.mjs": "f889a2064905f48cbaec479c0ea89d101271b6b1db94afa64702f8f3199db4b1",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
-    "scripts/audit-ui-phase2-contracts.mjs": "2f52f82033aa48f50084d26bd94a0fb503b9b022afd24a95ef464c181a74e8ad",
+    "scripts/audit-ui-phase2-contracts.mjs": "738647b0c176f1cf90f1e80e35a916915b56f349caeddc3721ebfcec212bf886",
     "scripts/lib/ui-phase2-contract-audit.mjs": "92007530e6463dae89d24e669347a9d5fb5482e839e7999dff602f1011817a3d"
   },
   "summary": {
     "routes": 73,
-    "currentSourceCandidates": 1480,
+    "currentSourceCandidates": 1483,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 25,
+    "newSourceIdentities": 28,
     "oldOnlyIdentities": 22,
     "reviewedPages": 34,
-    "explicitlyGroupedSourceSites": 717,
-    "semanticGroups": 687,
+    "explicitlyGroupedSourceSites": 718,
+    "semanticGroups": 692,
     "routeActions": 581,
     "wiringGroups": 65,
     "pagesWithoutExplicitSemanticReview": [
@@ -1546,11 +1547,11 @@
       "oldStaticAssociatedCandidates": 162,
       "review": {
         "pageId": "P29",
-        "sourceSites": 11,
-        "semanticGroups": 7,
+        "sourceSites": 12,
+        "semanticGroups": 8,
         "routeActions": 4,
         "wiringGroups": 0,
-        "excludedGroups": 3,
+        "excludedGroups": 4,
         "writeActions": 1,
         "sourceInapplicableVisualSlots": 4,
         "unmappedVisualSlots": 0,
@@ -1581,11 +1582,11 @@
       "oldStaticAssociatedCandidates": 162,
       "review": {
         "pageId": "P30",
-        "sourceSites": 28,
-        "semanticGroups": 23,
+        "sourceSites": 29,
+        "semanticGroups": 24,
         "routeActions": 19,
         "wiringGroups": 1,
-        "excludedGroups": 3,
+        "excludedGroups": 4,
         "writeActions": 4,
         "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 30,
@@ -1618,11 +1619,11 @@
       "oldStaticAssociatedCandidates": 162,
       "review": {
         "pageId": "P31",
-        "sourceSites": 30,
-        "semanticGroups": 24,
+        "sourceSites": 31,
+        "semanticGroups": 25,
         "routeActions": 20,
         "wiringGroups": 1,
-        "excludedGroups": 3,
+        "excludedGroups": 4,
         "writeActions": 3,
         "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 44,
@@ -1654,11 +1655,11 @@
       "oldStaticAssociatedCandidates": 162,
       "review": {
         "pageId": "P32",
-        "sourceSites": 28,
-        "semanticGroups": 22,
+        "sourceSites": 29,
+        "semanticGroups": 23,
         "routeActions": 18,
         "wiringGroups": 0,
-        "excludedGroups": 4,
+        "excludedGroups": 5,
         "writeActions": 2,
         "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 28,
@@ -1691,11 +1692,11 @@
       "oldStaticAssociatedCandidates": 162,
       "review": {
         "pageId": "P33",
-        "sourceSites": 29,
-        "semanticGroups": 16,
+        "sourceSites": 30,
+        "semanticGroups": 17,
         "routeActions": 12,
         "wiringGroups": 0,
-        "excludedGroups": 4,
+        "excludedGroups": 5,
         "writeActions": 2,
         "sourceInapplicableVisualSlots": 0,
         "unmappedVisualSlots": 17,
@@ -2771,11 +2772,11 @@
     },
     {
       "pageId": "P29",
-      "sourceSites": 11,
-      "semanticGroups": 7,
+      "sourceSites": 12,
+      "semanticGroups": 8,
       "routeActions": 4,
       "wiringGroups": 0,
-      "excludedGroups": 3,
+      "excludedGroups": 4,
       "writeActions": 1,
       "sourceInapplicableVisualSlots": 4,
       "unmappedVisualSlots": 0,
@@ -2789,11 +2790,11 @@
     },
     {
       "pageId": "P30",
-      "sourceSites": 28,
-      "semanticGroups": 23,
+      "sourceSites": 29,
+      "semanticGroups": 24,
       "routeActions": 19,
       "wiringGroups": 1,
-      "excludedGroups": 3,
+      "excludedGroups": 4,
       "writeActions": 4,
       "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 30,
@@ -2807,11 +2808,11 @@
     },
     {
       "pageId": "P31",
-      "sourceSites": 30,
-      "semanticGroups": 24,
+      "sourceSites": 31,
+      "semanticGroups": 25,
       "routeActions": 20,
       "wiringGroups": 1,
-      "excludedGroups": 3,
+      "excludedGroups": 4,
       "writeActions": 3,
       "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 44,
@@ -2825,11 +2826,11 @@
     },
     {
       "pageId": "P32",
-      "sourceSites": 28,
-      "semanticGroups": 22,
+      "sourceSites": 29,
+      "semanticGroups": 23,
       "routeActions": 18,
       "wiringGroups": 0,
-      "excludedGroups": 4,
+      "excludedGroups": 5,
       "writeActions": 2,
       "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 28,
@@ -2843,11 +2844,11 @@
     },
     {
       "pageId": "P33",
-      "sourceSites": 29,
-      "semanticGroups": 16,
+      "sourceSites": 30,
+      "semanticGroups": 17,
       "routeActions": 12,
       "wiringGroups": 0,
-      "excludedGroups": 4,
+      "excludedGroups": 5,
       "writeActions": 2,
       "sourceInapplicableVisualSlots": 0,
       "unmappedVisualSlots": 17,
@@ -26655,7 +26656,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 944,
+      "line": 950,
       "kind": "control",
       "label": "{{ refreshing ? \"正在刷新…\" : \"刷新数据\" }}",
       "conditions": [],
@@ -26675,7 +26676,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 35,
+          "line": 37,
           "jsonPointer": null
         },
         {
@@ -26713,9 +26714,68 @@
       ]
     },
     {
+      "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1",
+      "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+      "line": 968,
+      "kind": "event-binding",
+      "label": "",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "notice"
+        },
+        {
+          "directive": "v-if",
+          "expression": "view === 'approvals' && state === 'error' && !data && lastReadFailureStatus === 500"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
+          "line": 39,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
+          "line": 15,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P29",
+          "actionId": "EX-P34-FIRST-FAILURE",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P30",
+          "actionId": "EX-P34-FIRST-FAILURE",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P31",
+          "actionId": "EX-P34-FIRST-FAILURE",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P32",
+          "actionId": "EX-P34-FIRST-FAILURE",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P33",
+          "actionId": "EX-P34-FIRST-FAILURE",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 984,
+      "line": 1004,
       "kind": "control",
       "label": "重新加载",
       "conditions": [
@@ -26740,7 +26800,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 36,
+          "line": 38,
           "jsonPointer": null
         },
         {
@@ -26780,7 +26840,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1041,
+      "line": 1061,
       "kind": "form-event",
       "label": "更新组织资料 名称 Logo HTTPS 地址 仅支持 HTTPS；留空表示暂不设置 Logo。 时区 数据保留天数 默认工作区 请选择工作区 {{ workspace.name }} 变更原因 {{ busy ? \"正在保存…\" : \"保",
       "conditions": [
@@ -26809,12 +26869,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 37,
+          "line": 42,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 15,
+          "line": 16,
           "jsonPointer": null
         }
       ],
@@ -26849,7 +26909,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1055,
+      "line": 1075,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -26878,12 +26938,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 38,
+          "line": 43,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 15,
+          "line": 16,
           "jsonPointer": null
         }
       ],
@@ -26918,7 +26978,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1093,
+      "line": 1113,
       "kind": "control",
       "label": "{{ busy ? \"正在保存…\" : \"保存并审计\" }}",
       "conditions": [
@@ -26947,12 +27007,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 37,
+          "line": 42,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 15,
+          "line": 16,
           "jsonPointer": null
         }
       ],
@@ -26987,7 +27047,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1096,
+      "line": 1116,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -27016,12 +27076,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 39,
+          "line": 44,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 16,
+          "line": 17,
           "jsonPointer": null
         }
       ],
@@ -27056,7 +27116,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1158,
+      "line": 1178,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -27085,12 +27145,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 40,
+          "line": 45,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 17,
+          "line": 18,
           "jsonPointer": null
         }
       ],
@@ -27125,7 +27185,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1231,
+      "line": 1251,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -27135,12 +27195,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 41,
+          "line": 46,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 18,
+          "line": 19,
           "jsonPointer": null
         }
       ],
@@ -27175,7 +27235,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1231,
+      "line": 1251,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -27185,12 +27245,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 42,
+          "line": 47,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 18,
+          "line": 19,
           "jsonPointer": null
         }
       ],
@@ -27225,7 +27285,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#ab6191688d424055.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 489,
+      "line": 492,
       "kind": "dialog-script-call",
       "label": "askAuditedReason({ title: `${action}原因`, description: \"原因会与组织、操作者和目标对象一起写入审计记录。\", initialValue: action, ...(workspaceRes",
       "conditions": [],
@@ -27235,12 +27295,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 43,
+          "line": 48,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 18,
+          "line": 19,
           "jsonPointer": null
         }
       ],
@@ -27275,7 +27335,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 703,
+      "line": 706,
       "kind": "dialog-script-call",
       "label": "askAuditedReason({ title: rotating ? `轮换“${item.name}”密钥` : `撤销“${item.name}”访问`, description: rotating ? \"提交后旧令牌立即失效，新明",
       "conditions": [],
@@ -27295,12 +27355,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 44,
+          "line": 49,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 19,
+          "line": 20,
           "jsonPointer": null
         }
       ],
@@ -27333,6 +27393,49 @@
       ]
     },
     {
+      "candidateId": "apps/web/src/components/OrganizationApprovalFirstFailure.vue#479570dac45574ea.1",
+      "file": "apps/web/src/components/OrganizationApprovalFirstFailure.vue",
+      "line": 16,
+      "kind": "control",
+      "label": "读取追踪",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "requestId"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
+          "line": 41,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/OrganizationApprovalFirstFailure.vue#54b14787946c2f69.1",
+      "file": "apps/web/src/components/OrganizationApprovalFirstFailure.vue",
+      "line": 19,
+      "kind": "control",
+      "label": "重新加载",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
+          "line": 40,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
       "candidateId": "apps/web/src/components/OrganizationApprovalPanel.vue#00f81ad5e8a2f732.1",
       "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
       "line": 393,
@@ -27355,7 +27458,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 72,
+          "line": 77,
           "jsonPointer": null
         }
       ],
@@ -27384,7 +27487,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 72,
+          "line": 77,
           "jsonPointer": null
         }
       ],
@@ -27418,7 +27521,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 73,
+          "line": 78,
           "jsonPointer": null
         }
       ],
@@ -27460,7 +27563,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 76,
+          "line": 81,
           "jsonPointer": null
         }
       ],
@@ -27498,7 +27601,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 73,
+          "line": 78,
           "jsonPointer": null
         }
       ],
@@ -27536,7 +27639,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 73,
+          "line": 78,
           "jsonPointer": null
         }
       ],
@@ -27570,7 +27673,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 74,
+          "line": 79,
           "jsonPointer": null
         }
       ],
@@ -27612,7 +27715,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 75,
+          "line": 80,
           "jsonPointer": null
         }
       ],
@@ -27650,7 +27753,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 74,
+          "line": 79,
           "jsonPointer": null
         }
       ],
@@ -27688,7 +27791,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 74,
+          "line": 79,
           "jsonPointer": null
         }
       ],
@@ -27730,7 +27833,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 76,
+          "line": 81,
           "jsonPointer": null
         }
       ],
@@ -27762,7 +27865,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 74,
+          "line": 79,
           "jsonPointer": null
         }
       ],
@@ -27791,7 +27894,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 77,
+          "line": 82,
           "jsonPointer": null
         }
       ],
@@ -27820,7 +27923,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 77,
+          "line": 82,
           "jsonPointer": null
         }
       ],
@@ -27849,7 +27952,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 95,
+          "line": 100,
           "jsonPointer": null
         }
       ],
@@ -27878,7 +27981,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 96,
+          "line": 101,
           "jsonPointer": null
         }
       ],
@@ -27907,7 +28010,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 95,
+          "line": 100,
           "jsonPointer": null
         }
       ],
@@ -27936,7 +28039,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 97,
+          "line": 102,
           "jsonPointer": null
         }
       ],
@@ -27970,7 +28073,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 98,
+          "line": 103,
           "jsonPointer": null
         }
       ],
@@ -28004,7 +28107,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 99,
+          "line": 104,
           "jsonPointer": null
         }
       ],
@@ -28038,7 +28141,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 100,
+          "line": 105,
           "jsonPointer": null
         }
       ],
@@ -28072,7 +28175,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 101,
+          "line": 106,
           "jsonPointer": null
         }
       ],
@@ -28106,7 +28209,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 101,
+          "line": 106,
           "jsonPointer": null
         }
       ],
@@ -28140,7 +28243,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 102,
+          "line": 107,
           "jsonPointer": null
         }
       ],
@@ -28469,7 +28572,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 78,
+          "line": 83,
           "jsonPointer": null
         }
       ],
@@ -28498,7 +28601,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 79,
+          "line": 84,
           "jsonPointer": null
         }
       ],
@@ -28527,7 +28630,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 79,
+          "line": 84,
           "jsonPointer": null
         }
       ],
@@ -28561,7 +28664,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 80,
+          "line": 85,
           "jsonPointer": null
         }
       ],
@@ -28599,7 +28702,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 81,
+          "line": 86,
           "jsonPointer": null
         }
       ],
@@ -28637,7 +28740,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 81,
+          "line": 86,
           "jsonPointer": null
         }
       ],
@@ -28671,7 +28774,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 82,
+          "line": 87,
           "jsonPointer": null
         }
       ],
@@ -28713,7 +28816,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 84,
+          "line": 89,
           "jsonPointer": null
         }
       ],
@@ -28751,7 +28854,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 83,
+          "line": 88,
           "jsonPointer": null
         }
       ],
@@ -28789,7 +28892,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 83,
+          "line": 88,
           "jsonPointer": null
         }
       ],
@@ -28818,7 +28921,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 45,
+          "line": 50,
           "jsonPointer": null
         }
       ],
@@ -28853,7 +28956,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 45,
+          "line": 50,
           "jsonPointer": null
         }
       ],
@@ -28888,7 +28991,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 46,
+          "line": 51,
           "jsonPointer": null
         }
       ],
@@ -28923,7 +29026,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 46,
+          "line": 51,
           "jsonPointer": null
         }
       ],
@@ -28967,7 +29070,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 47,
+          "line": 52,
           "jsonPointer": null
         }
       ],
@@ -29002,7 +29105,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 48,
+          "line": 53,
           "jsonPointer": null
         }
       ],
@@ -29037,7 +29140,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 48,
+          "line": 53,
           "jsonPointer": null
         }
       ],
@@ -29072,7 +29175,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 48,
+          "line": 53,
           "jsonPointer": null
         }
       ],
@@ -29107,7 +29210,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 48,
+          "line": 53,
           "jsonPointer": null
         }
       ],
@@ -29142,7 +29245,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 48,
+          "line": 53,
           "jsonPointer": null
         }
       ],
@@ -29177,7 +29280,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 48,
+          "line": 53,
           "jsonPointer": null
         }
       ],
@@ -29217,7 +29320,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 49,
+          "line": 54,
           "jsonPointer": null
         }
       ],
@@ -29257,7 +29360,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 50,
+          "line": 55,
           "jsonPointer": null
         }
       ],
@@ -29297,7 +29400,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 51,
+          "line": 56,
           "jsonPointer": null
         }
       ],
@@ -29337,7 +29440,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 52,
+          "line": 57,
           "jsonPointer": null
         }
       ],
@@ -29377,7 +29480,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 53,
+          "line": 58,
           "jsonPointer": null
         }
       ],
@@ -29417,7 +29520,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 53,
+          "line": 58,
           "jsonPointer": null
         }
       ],
@@ -29457,7 +29560,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 25,
+          "line": 26,
           "jsonPointer": null
         },
         {
@@ -29510,7 +29613,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 26,
+          "line": 27,
           "jsonPointer": null
         },
         {
@@ -29563,7 +29666,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 27,
+          "line": 28,
           "jsonPointer": null
         },
         {
@@ -29612,7 +29715,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 28,
+          "line": 29,
           "jsonPointer": null
         },
         {
@@ -29657,7 +29760,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 29,
+          "line": 30,
           "jsonPointer": null
         },
         {
@@ -29706,7 +29809,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 30,
+          "line": 31,
           "jsonPointer": null
         },
         {
@@ -29755,7 +29858,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 31,
+          "line": 32,
           "jsonPointer": null
         },
         {
@@ -29804,7 +29907,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 32,
+          "line": 33,
           "jsonPointer": null
         },
         {
@@ -29853,7 +29956,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 31,
+          "line": 32,
           "jsonPointer": null
         },
         {
@@ -29902,7 +30005,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 33,
+          "line": 34,
           "jsonPointer": null
         },
         {
@@ -29955,7 +30058,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 34,
+          "line": 35,
           "jsonPointer": null
         },
         {
@@ -30008,7 +30111,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 35,
+          "line": 36,
           "jsonPointer": null
         },
         {
@@ -30055,7 +30158,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 36,
+          "line": 37,
           "jsonPointer": null
         },
         {
@@ -30112,7 +30215,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 36,
+          "line": 37,
           "jsonPointer": null
         },
         {
@@ -30169,7 +30272,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 37,
+          "line": 38,
           "jsonPointer": null
         },
         {
@@ -30218,7 +30321,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 38,
+          "line": 39,
           "jsonPointer": null
         },
         {
@@ -30267,7 +30370,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 39,
+          "line": 40,
           "jsonPointer": null
         },
         {
@@ -30320,7 +30423,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 40,
+          "line": 41,
           "jsonPointer": null
         },
         {
@@ -30369,7 +30472,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
-          "line": 41,
+          "line": 42,
           "jsonPointer": null
         },
         {
@@ -30409,7 +30512,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 63,
+          "line": 68,
           "jsonPointer": null
         }
       ],
@@ -30449,7 +30552,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 64,
+          "line": 69,
           "jsonPointer": null
         }
       ],
@@ -30489,7 +30592,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 65,
+          "line": 70,
           "jsonPointer": null
         }
       ],
@@ -30529,7 +30632,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 64,
+          "line": 69,
           "jsonPointer": null
         }
       ],
@@ -30564,7 +30667,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 66,
+          "line": 71,
           "jsonPointer": null
         }
       ],
@@ -30599,7 +30702,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 66,
+          "line": 71,
           "jsonPointer": null
         }
       ],
@@ -30634,7 +30737,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 66,
+          "line": 71,
           "jsonPointer": null
         }
       ],
@@ -30669,7 +30772,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 66,
+          "line": 71,
           "jsonPointer": null
         }
       ],
@@ -30713,7 +30816,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 67,
+          "line": 72,
           "jsonPointer": null
         }
       ],
@@ -30757,7 +30860,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 66,
+          "line": 71,
           "jsonPointer": null
         }
       ],
@@ -30801,7 +30904,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 63,
+          "line": 68,
           "jsonPointer": null
         }
       ],
@@ -30841,7 +30944,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 68,
+          "line": 73,
           "jsonPointer": null
         }
       ],
@@ -30881,7 +30984,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 68,
+          "line": 73,
           "jsonPointer": null
         }
       ],
@@ -30921,7 +31024,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 69,
+          "line": 74,
           "jsonPointer": null
         }
       ],
@@ -30961,7 +31064,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 69,
+          "line": 74,
           "jsonPointer": null
         }
       ],
@@ -31001,7 +31104,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 70,
+          "line": 75,
           "jsonPointer": null
         }
       ],
@@ -31041,7 +31144,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 70,
+          "line": 75,
           "jsonPointer": null
         }
       ],
@@ -31081,7 +31184,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 71,
+          "line": 76,
           "jsonPointer": null
         }
       ],
@@ -31121,7 +31224,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 85,
+          "line": 90,
           "jsonPointer": null
         }
       ],
@@ -31155,7 +31258,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 86,
+          "line": 91,
           "jsonPointer": null
         }
       ],
@@ -31184,7 +31287,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 87,
+          "line": 92,
           "jsonPointer": null
         }
       ],
@@ -31218,7 +31321,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 88,
+          "line": 93,
           "jsonPointer": null
         }
       ],
@@ -31252,7 +31355,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 89,
+          "line": 94,
           "jsonPointer": null
         }
       ],
@@ -31281,7 +31384,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 87,
+          "line": 92,
           "jsonPointer": null
         }
       ],
@@ -31310,7 +31413,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 90,
+          "line": 95,
           "jsonPointer": null
         }
       ],
@@ -31348,7 +31451,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 94,
+          "line": 99,
           "jsonPointer": null
         }
       ],
@@ -31390,7 +31493,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 91,
+          "line": 96,
           "jsonPointer": null
         }
       ],
@@ -31432,7 +31535,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 92,
+          "line": 97,
           "jsonPointer": null
         }
       ],
@@ -31466,7 +31569,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 93,
+          "line": 98,
           "jsonPointer": null
         }
       ],
@@ -31500,7 +31603,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 93,
+          "line": 98,
           "jsonPointer": null
         }
       ],
@@ -31529,7 +31632,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 54,
+          "line": 59,
           "jsonPointer": null
         }
       ],
@@ -31569,7 +31672,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 55,
+          "line": 60,
           "jsonPointer": null
         }
       ],
@@ -31609,7 +31712,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 56,
+          "line": 61,
           "jsonPointer": null
         }
       ],
@@ -31649,7 +31752,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 55,
+          "line": 60,
           "jsonPointer": null
         }
       ],
@@ -31684,7 +31787,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 57,
+          "line": 62,
           "jsonPointer": null
         }
       ],
@@ -31719,7 +31822,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 57,
+          "line": 62,
           "jsonPointer": null
         }
       ],
@@ -31754,7 +31857,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 57,
+          "line": 62,
           "jsonPointer": null
         }
       ],
@@ -31789,7 +31892,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 57,
+          "line": 62,
           "jsonPointer": null
         }
       ],
@@ -31833,7 +31936,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 58,
+          "line": 63,
           "jsonPointer": null
         }
       ],
@@ -31877,7 +31980,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 57,
+          "line": 62,
           "jsonPointer": null
         }
       ],
@@ -31921,7 +32024,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 54,
+          "line": 59,
           "jsonPointer": null
         }
       ],
@@ -31961,7 +32064,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 59,
+          "line": 64,
           "jsonPointer": null
         }
       ],
@@ -32001,7 +32104,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 59,
+          "line": 64,
           "jsonPointer": null
         }
       ],
@@ -32041,7 +32144,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 60,
+          "line": 65,
           "jsonPointer": null
         }
       ],
@@ -32081,7 +32184,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 61,
+          "line": 66,
           "jsonPointer": null
         }
       ],
@@ -32121,7 +32224,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 61,
+          "line": 66,
           "jsonPointer": null
         }
       ],
@@ -32161,7 +32264,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
-          "line": 62,
+          "line": 67,
           "jsonPointer": null
         }
       ],

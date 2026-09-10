@@ -1,5 +1,7 @@
 # F04 组织治理八页事实与交互合同
 
+2026-09-10 P34首次失败真实Vue增量：手机且首次未取得数据、HTTP500时，将用户已批准的白色恢复区域接入原父notice。真实错误说明/action_hint继续展示，真实requestId折叠；新F组件按钮和父reload转发同属OG-RETRY，只调用原load()两项GET；新增原生summary归OG-TECH。三个新增源位置不新增业务写入/权限/弹窗。详见[P34-FIRST-FAILURE-VUE-REVIEW](P34-FIRST-FAILURE-VUE-REVIEW.md)；原108候选等是历史计数。
+
 2026-09-10 P29逐按钮增量：[ORG-PROFILE-CONTROLS-C-r1](design/organization-profile-controls-direction-c/README.md)。170张图分别记录162控件呈现和8完整表单反馈，22控件/变体不作22业务动作。OG-PROFILE-SAVE/REFRESH/RETRY沿既有合同，Logo事件是字段校验；新目录、技术详情和结果待核验禁用明确只作提案。复用原74图/controller/数据，未改真实Vue或API；正式逐页源注册、OG-G修复与完整实际链/用户审核/部署继续待办。
 
 2026-09-09 P37设计增量：W04组织审计：[ORG-AUDIT-C-r1](design/org-audit-direction-c/README.md)50场景双端100主图＋4局部图，共104PNG（含2非业务工具图），蓝色精确条件区与白色时间线/详情，零业务弹窗。原55条50/5游标与40连接＋10业务独立夹具保留，计数不是全库。源computed/函数/手动watch核对六搜索ID、七条件/ISO/URL、深层键名脱敏；父函数与惰性SQL检查不是挂载Vue/API/MySQL/权限。OG-G05复制错归属与旧页追加新列表已复现；归属保护、已读范围区分及错误可读性仅提案，生产未改。具体稿、OG-G及完整主题密度/角色/生命周期、全73页实现部署待办，下一W05 P38平台运行概览。下文“下一P37”为历史状态。
@@ -26,7 +28,7 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 
 ## 1. 局部候选逐项归属
 
-文件简称均位于apps/web/src/components：C=OrganizationAdminCenter.vue；M=OrganizationMemberPanel.vue；W=OrganizationWorkspacePanel.vue；T=OrganizationTeamPanel.vue；A=OrganizationApprovalPanel.vue；D=OrganizationDataPanel.vue；K=OrganizationTokenPanel.vue；U=OrganizationAuditPanel.vue。完整候选ID为文件路径#sig；每个sig在下表出现一次，同行逗号表示同一业务动作的多个源码入口，不以渲染记录数扩张分母。
+文件简称均位于apps/web/src/components：C=OrganizationAdminCenter.vue；M=OrganizationMemberPanel.vue；W=OrganizationWorkspacePanel.vue；T=OrganizationTeamPanel.vue；A=OrganizationApprovalPanel.vue；D=OrganizationDataPanel.vue；K=OrganizationTokenPanel.vue；U=OrganizationAuditPanel.vue；F=OrganizationApprovalFirstFailure.vue。完整候选ID为文件路径#sig；每个sig在下表出现一次，同行逗号表示同一业务动作的多个源码入口，不以渲染记录数扩张分母。
 
 八文件共108候选：105控件/事件、3弹窗调用候选（父层AuditedReasonDialog组件调用及两处askAuditedReason）。本地没有新原生dialog定义，复用共享AuditedReasonDialog/useAuditedReason/useModalDialog。54处v-model另列输入表，扫描候选不包含所有无显式事件的字段。P31的父转发只标复用，不再次计为新动作。全站G0仍未冻结。
 
@@ -34,6 +36,9 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 | --- | --- | --- |
 | C | b11692c0597885e3.1 | OG-REFRESH |
 | C | 97ed4772fb320d6c.1 | OG-RETRY |
+| C | 5ae31bc55551b1dc.1 | OG-RETRY · 父reload转发，复用原load() |
+| F | 54b14787946c2f69.1 | OG-RETRY 手机首次500恢复按钮 |
+| F | 479570dac45574ea.1 | OG-TECH 真实请求追踪展开/折叠，无API |
 | C | d6b520278ab3dd57.1,5878e30377f290ae.1 | OG-PROFILE-SAVE |
 | C | 1cbd108c64b5230c.1 | OG-PROFILE-LOGO浏览器有效性 |
 | C | 6a563eeaa67fea90.1 | P30全部成员事件父转发，复用M语义 |
@@ -162,7 +167,7 @@ UI2-OG01三实例同时核对精确创建body/幂等键、单POST、两次GET（
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| `apps/web/src/components/OrganizationAdminCenter.vue` | `7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea` |
+| `apps/web/src/components/OrganizationAdminCenter.vue` | `6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529` |
 | `apps/web/src/components/OrganizationMemberPanel.vue` | `33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7` |
 | `apps/web/src/components/OrganizationWorkspacePanel.vue` | `63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7` |
 | `apps/web/src/components/OrganizationTeamPanel.vue` | `cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174` |

@@ -5,9 +5,55 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea"
+    "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529"
   },
   "actions": [
+    {
+      "actionId": "EX-P34-FIRST-FAILURE",
+      "label": "P34首次读取失败转发（非本页）",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1"
+      ],
+      "sourceContractKeys": [
+        "OG-RETRY"
+      ],
+      "contractAliasReason": "沿F04完整语义末列显式合并表单/保存及共享原因调用；不从按钮文案推断动作。",
+      "condition": "仅view===approvals且error、无data、HTTP500；非P29",
+      "handler": "P29不渲染此分支；P34复用原load()，不计入本页动作",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "organization-profile-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-organization-profile-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-organization-profile-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-organization-profile-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
+    },
     {
       "actionId": "OG-REFRESH",
       "label": "刷新组织资料",
@@ -406,7 +452,7 @@
           "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea"
+          "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529"
         }
       }
     },
@@ -706,7 +752,7 @@
           "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea"
+          "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529"
         }
       }
     },
@@ -876,7 +922,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea"
+      "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529"
     },
     "inputs": [
       {

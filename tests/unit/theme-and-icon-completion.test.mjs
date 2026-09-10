@@ -86,6 +86,13 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
     sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));
 
   for (const [index, source] of sources.entries()) {
+    if (paths[index] === "apps/web/src/design/approval-read-failure-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html #app \.org-approval-first-failure-c\s*\{(?:\s*--so-approval-failure-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
     if (paths[index] === "apps/web/src/design/approval-filter-tokens.css") {
       // P34 palette can only declare tokens on this filter, never global styling rules.
       assert.match(

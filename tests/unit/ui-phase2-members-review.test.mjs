@@ -58,11 +58,11 @@ const plain = (v) => JSON.parse(JSON.stringify(v));
 
 test("P30 registers all 28 local sites without duplicating parent event forwards", () => {
   const r = validateActionReview(review(), context);
-  assert.equal(r.sourceSites, 28);
-  assert.equal(r.semanticGroups, 23);
+  assert.equal(r.sourceSites, 29);
+  assert.equal(r.semanticGroups, 24);
   assert.equal(r.routeActions, 19);
   assert.equal(r.wiringGroups, 1);
-  assert.equal(r.excludedGroups, 3);
+  assert.equal(r.excludedGroups, 4);
   assert.equal(r.writeActions, 4);
   assert.equal(r.unmappedVisualSlots, 30);
   assert.deepEqual(review(), buildMembersReview(sources, evidence));

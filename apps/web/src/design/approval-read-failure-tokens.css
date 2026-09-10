@@ -1,0 +1,11 @@
+/* C palette applies only to the approved P34 mobile first-failure region. */
+html #app .org-approval-first-failure-c {
+  --so-approval-failure-ink: #202c3d;
+  --so-approval-failure-muted: #58677b;
+  --so-approval-failure-blue: #254a9c;
+  --so-approval-failure-deep: #193b80;
+  --so-approval-failure-paper: #fff;
+  --so-approval-failure-soft: #edf3ff;
+  --so-approval-failure-line: #dbe1e9;
+  --so-approval-failure-focus: #285ec7;
+}

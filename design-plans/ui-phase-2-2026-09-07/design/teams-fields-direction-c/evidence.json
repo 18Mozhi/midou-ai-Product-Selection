@@ -7,7 +7,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/teams.css": "5aa4a2a298ec8546fe78e7fcf47a05cd847566e46f972bd89d932a8bd018bd5b",
     "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/teams.js": "3f2ca35d59a27fcb284d2378b3531f0dc376627836e22fadbb547f77b4a9c412",
     "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/data.js": "0608f8b32717d4ede9ba24c018029251d2cfadb06885c6d2b8e5d84feb2259e9",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529",
     "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
     "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
     "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",

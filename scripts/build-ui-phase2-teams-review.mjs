@@ -24,6 +24,18 @@ const remaining =
 const definitions = [
   [
     parentFile,
+    "EX-P34-FIRST-FAILURE",
+    "P34首次读取失败转发（非本页）",
+    "excluded",
+    ["5ae31bc55551b1dc.1"],
+    ["OG-RETRY"],
+    "仅view===approvals且error、无data、HTTP500；非P33",
+    "P33不渲染此分支；P34复用原load()，不计入本页动作",
+    null,
+    ["normal"],
+  ],
+  [
+    parentFile,
     "OG-REFRESH",
     "刷新团队",
     "read",

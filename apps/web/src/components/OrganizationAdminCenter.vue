@@ -10,6 +10,7 @@ import { useAuditedReason, type WorkspaceRestoreReasonContext } from "../use-aud
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import OrganizationAuditPanel from "./OrganizationAuditPanel.vue";
 import OrganizationApprovalPanel from "./OrganizationApprovalPanel.vue";
+import OrganizationApprovalFirstFailure from "./OrganizationApprovalFirstFailure.vue";
 import OrganizationDataPanel from "./OrganizationDataPanel.vue";
 import OrganizationMemberPanel from "./OrganizationMemberPanel.vue";
 import OrganizationRolePanel from "./OrganizationRolePanel.vue";
@@ -53,6 +54,7 @@ const props = defineProps<{
   requestId = ref(""),
   busy = ref(false),
   refreshing = ref(false),
+  lastReadFailureStatus = ref<number | null>(null),
   secret = ref(""),
   form = ref<any>({ reason: "" }),
   invitationResults = ref<Array<{ email: string; status: "success" | "error"; message: string }>>(
@@ -332,6 +334,7 @@ async function load(options: { background?: boolean; preserveNotice?: boolean } 
     const failure = error instanceof ApiClientError ? error : null,
       mustReplacePage = !background || ["expired", "forbidden"].includes(failure?.kind ?? "");
     applyFailure(error, mustReplacePage);
+    lastReadFailureStatus.value = failure?.status ?? null;
     rethrowUnexpectedError(error);
   } finally {
     if (sequence === loadSequence) refreshing.value = false;
@@ -929,6 +932,9 @@ onMounted(() => void load());
   <section
     class="org-admin-center"
     :data-state="state"
+    :data-approval-first-failure="
+      view === 'approvals' && state === 'error' && !data && lastReadFailureStatus === 500
+    "
     :aria-busy="state === 'loading' || refreshing || (view === 'audit' && busy)"
   >
     <header class="org-admin-hero">
@@ -956,7 +962,21 @@ onMounted(() => void load());
       :data-kind="noticeKind"
       :role="noticeKind === 'error' ? 'alert' : 'status'"
     >
-      {{ notice }} <code v-if="requestId">{{ requestId }}</code>
+      <template
+        v-if="view === 'approvals' && state === 'error' && !data && lastReadFailureStatus === 500"
+      >
+        <OrganizationApprovalFirstFailure
+          :notice="notice"
+          :request-id="requestId"
+          @reload="load()"
+        />
+        <span class="org-approval-first-failure-legacy">
+          {{ notice }} <code v-if="requestId">{{ requestId }}</code>
+        </span>
+      </template>
+      <template v-else
+        >{{ notice }} <code v-if="requestId">{{ requestId }}</code></template
+      >
     </div>
     <section v-if="state === 'loading'" class="org-admin-state">正在读取当前组织数据…</section>
     <section

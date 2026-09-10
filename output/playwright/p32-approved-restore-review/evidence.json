@@ -5,7 +5,7 @@
     "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
     "scripts/verify-ui-phase2-workspaces-vue-restore.mjs": "b6dcb6cb97023f9ff667522776792c0cc39b733d09590ef97d6c3523ebcd64cb",
     "scripts/lib/ui-phase2-workspaces-design-data.mjs": "638b24c0fd3c9daaace7bb8ca624a967f863277532c93a1b56c5577688de2123",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529",
     "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
     "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
     "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",

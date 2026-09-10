@@ -1,0 +1,708 @@
+{
+  "kind": "P34-FIRST-FAILURE-VUE",
+  "baselineCommit": "d815f74b57bfdb5eb7ea514098fd948d129c8133",
+  "sourceHashes": {
+    "apps/web/src/components/OrganizationAdminCenter.vue": "6866a4f9b6715ef0b2555b497c7a9d4f930dcf7d2a3b427a13d6b6725e457529",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "scripts/verify-ui-phase2-org-approvals-first-failure-vue.mjs": "5f3d613f8ec3651e99a56174e5499bd8bc74b870cde12ee6bc5a7c297a3670e9",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "2bda7b1e4c04d4dfe751e396bbb2d762cbe7654986b5d5c48446300f57605327",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/approval-read-failure.css": "6295ffead416eae4dfdf0fa88dde57a3b7ec6fa60241b44e4405e3f1755aaa6a",
+    "apps/web/src/design/approval-read-failure-tokens.css": "bd13bd68c498bd64b2bb29cba882d09fb324b0fbacf5cab1812fd52abbdb6692",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "summary-500-header: pixels unchanged"
+    },
+    {
+      "width": 390,
+      "name": "summary: approved card visible"
+    },
+    {
+      "width": 390,
+      "name": "summary: legacy failure hidden"
+    },
+    {
+      "width": 390,
+      "name": "summary: one visible retry"
+    },
+    {
+      "width": 390,
+      "name": "summary: real actionable notice retained"
+    },
+    {
+      "width": 390,
+      "name": "summary: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "summary: approved palette and touch floor"
+    },
+    {
+      "width": 390,
+      "name": "summary: trace initially folded"
+    },
+    {
+      "width": 390,
+      "name": "summary: real request ID"
+    },
+    {
+      "width": 390,
+      "name": "summary: keyboard retry focus"
+    },
+    {
+      "width": 390,
+      "name": "summary: retry hides stale failure"
+    },
+    {
+      "width": 390,
+      "name": "summary: loading refresh disabled"
+    },
+    {
+      "width": 390,
+      "name": "summary: retry reads both once"
+    },
+    {
+      "width": 390,
+      "name": "summary: query preserved after recovery"
+    },
+    {
+      "width": 390,
+      "name": "summary: unrelated URL preserved"
+    },
+    {
+      "width": 390,
+      "name": "approvals-500-header: pixels unchanged"
+    },
+    {
+      "width": 390,
+      "name": "approvals: approved card visible"
+    },
+    {
+      "width": 390,
+      "name": "approvals: legacy failure hidden"
+    },
+    {
+      "width": 390,
+      "name": "approvals: one visible retry"
+    },
+    {
+      "width": 390,
+      "name": "approvals: real actionable notice retained"
+    },
+    {
+      "width": 390,
+      "name": "approvals: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "approvals: approved palette and touch floor"
+    },
+    {
+      "width": 390,
+      "name": "approvals: trace initially folded"
+    },
+    {
+      "width": 390,
+      "name": "approvals: real request ID"
+    },
+    {
+      "width": 390,
+      "name": "approvals: keyboard retry focus"
+    },
+    {
+      "width": 390,
+      "name": "approvals: retry hides stale failure"
+    },
+    {
+      "width": 390,
+      "name": "approvals: loading refresh disabled"
+    },
+    {
+      "width": 390,
+      "name": "approvals: retry reads both once"
+    },
+    {
+      "width": 390,
+      "name": "approvals: query preserved after recovery"
+    },
+    {
+      "width": 390,
+      "name": "approvals: unrelated URL preserved"
+    },
+    {
+      "width": 390,
+      "name": "401: no unapproved card"
+    },
+    {
+      "width": 390,
+      "name": "initial-401: pixels unchanged"
+    },
+    {
+      "width": 390,
+      "name": "403: no unapproved card"
+    },
+    {
+      "width": 390,
+      "name": "initial-403: pixels unchanged"
+    },
+    {
+      "width": 390,
+      "name": "404: no unapproved card"
+    },
+    {
+      "width": 390,
+      "name": "initial-404: pixels unchanged"
+    },
+    {
+      "width": 390,
+      "name": "409: no unapproved card"
+    },
+    {
+      "width": 390,
+      "name": "initial-409: pixels unchanged"
+    },
+    {
+      "width": 390,
+      "name": "429: no unapproved card"
+    },
+    {
+      "width": 390,
+      "name": "initial-429: pixels unchanged"
+    },
+    {
+      "width": 390,
+      "name": "503: no unapproved card"
+    },
+    {
+      "width": 390,
+      "name": "initial-503: pixels unchanged"
+    },
+    {
+      "width": 390,
+      "name": "ready: pixels unchanged"
+    },
+    {
+      "width": 390,
+      "name": "background 500 keeps original behavior"
+    },
+    {
+      "width": 390,
+      "name": "background-500: pixels unchanged"
+    },
+    {
+      "width": 390,
+      "name": "workspaces: no P34 card"
+    },
+    {
+      "width": 390,
+      "name": "workspaces-500: pixels unchanged"
+    },
+    {
+      "width": 390,
+      "name": "members: no P34 card"
+    },
+    {
+      "width": 390,
+      "name": "members-500: pixels unchanged"
+    },
+    {
+      "width": 390,
+      "name": "zero page errors"
+    },
+    {
+      "width": 390,
+      "name": "zero unmatched requests"
+    },
+    {
+      "width": 390,
+      "name": "zero business writes"
+    },
+    {
+      "width": 760,
+      "name": "summary-500-header: pixels unchanged"
+    },
+    {
+      "width": 760,
+      "name": "summary: approved card visible"
+    },
+    {
+      "width": 760,
+      "name": "summary: legacy failure hidden"
+    },
+    {
+      "width": 760,
+      "name": "summary: one visible retry"
+    },
+    {
+      "width": 760,
+      "name": "summary: real actionable notice retained"
+    },
+    {
+      "width": 760,
+      "name": "summary: no overflow"
+    },
+    {
+      "width": 760,
+      "name": "summary: approved palette and touch floor"
+    },
+    {
+      "width": 760,
+      "name": "summary: trace initially folded"
+    },
+    {
+      "width": 760,
+      "name": "summary: real request ID"
+    },
+    {
+      "width": 760,
+      "name": "summary: keyboard retry focus"
+    },
+    {
+      "width": 760,
+      "name": "summary: retry hides stale failure"
+    },
+    {
+      "width": 760,
+      "name": "summary: loading refresh disabled"
+    },
+    {
+      "width": 760,
+      "name": "summary: retry reads both once"
+    },
+    {
+      "width": 760,
+      "name": "summary: query preserved after recovery"
+    },
+    {
+      "width": 760,
+      "name": "summary: unrelated URL preserved"
+    },
+    {
+      "width": 760,
+      "name": "approvals-500-header: pixels unchanged"
+    },
+    {
+      "width": 760,
+      "name": "approvals: approved card visible"
+    },
+    {
+      "width": 760,
+      "name": "approvals: legacy failure hidden"
+    },
+    {
+      "width": 760,
+      "name": "approvals: one visible retry"
+    },
+    {
+      "width": 760,
+      "name": "approvals: real actionable notice retained"
+    },
+    {
+      "width": 760,
+      "name": "approvals: no overflow"
+    },
+    {
+      "width": 760,
+      "name": "approvals: approved palette and touch floor"
+    },
+    {
+      "width": 760,
+      "name": "approvals: trace initially folded"
+    },
+    {
+      "width": 760,
+      "name": "approvals: real request ID"
+    },
+    {
+      "width": 760,
+      "name": "approvals: keyboard retry focus"
+    },
+    {
+      "width": 760,
+      "name": "approvals: retry hides stale failure"
+    },
+    {
+      "width": 760,
+      "name": "approvals: loading refresh disabled"
+    },
+    {
+      "width": 760,
+      "name": "approvals: retry reads both once"
+    },
+    {
+      "width": 760,
+      "name": "approvals: query preserved after recovery"
+    },
+    {
+      "width": 760,
+      "name": "approvals: unrelated URL preserved"
+    },
+    {
+      "width": 760,
+      "name": "401: no unapproved card"
+    },
+    {
+      "width": 760,
+      "name": "initial-401: pixels unchanged"
+    },
+    {
+      "width": 760,
+      "name": "403: no unapproved card"
+    },
+    {
+      "width": 760,
+      "name": "initial-403: pixels unchanged"
+    },
+    {
+      "width": 760,
+      "name": "404: no unapproved card"
+    },
+    {
+      "width": 760,
+      "name": "initial-404: pixels unchanged"
+    },
+    {
+      "width": 760,
+      "name": "409: no unapproved card"
+    },
+    {
+      "width": 760,
+      "name": "initial-409: pixels unchanged"
+    },
+    {
+      "width": 760,
+      "name": "429: no unapproved card"
+    },
+    {
+      "width": 760,
+      "name": "initial-429: pixels unchanged"
+    },
+    {
+      "width": 760,
+      "name": "503: no unapproved card"
+    },
+    {
+      "width": 760,
+      "name": "initial-503: pixels unchanged"
+    },
+    {
+      "width": 760,
+      "name": "ready: pixels unchanged"
+    },
+    {
+      "width": 760,
+      "name": "background 500 keeps original behavior"
+    },
+    {
+      "width": 760,
+      "name": "background-500: pixels unchanged"
+    },
+    {
+      "width": 760,
+      "name": "workspaces: no P34 card"
+    },
+    {
+      "width": 760,
+      "name": "workspaces-500: pixels unchanged"
+    },
+    {
+      "width": 760,
+      "name": "members: no P34 card"
+    },
+    {
+      "width": 760,
+      "name": "members-500: pixels unchanged"
+    },
+    {
+      "width": 760,
+      "name": "zero page errors"
+    },
+    {
+      "width": 760,
+      "name": "zero unmatched requests"
+    },
+    {
+      "width": 760,
+      "name": "zero business writes"
+    },
+    {
+      "width": 761,
+      "name": "summary-500-header: pixels unchanged"
+    },
+    {
+      "width": 761,
+      "name": "summary-500-desktop: pixels unchanged"
+    },
+    {
+      "width": 761,
+      "name": "approvals-500-header: pixels unchanged"
+    },
+    {
+      "width": 761,
+      "name": "approvals-500-desktop: pixels unchanged"
+    },
+    {
+      "width": 761,
+      "name": "401: no unapproved card"
+    },
+    {
+      "width": 761,
+      "name": "initial-401: pixels unchanged"
+    },
+    {
+      "width": 761,
+      "name": "403: no unapproved card"
+    },
+    {
+      "width": 761,
+      "name": "initial-403: pixels unchanged"
+    },
+    {
+      "width": 761,
+      "name": "404: no unapproved card"
+    },
+    {
+      "width": 761,
+      "name": "initial-404: pixels unchanged"
+    },
+    {
+      "width": 761,
+      "name": "409: no unapproved card"
+    },
+    {
+      "width": 761,
+      "name": "initial-409: pixels unchanged"
+    },
+    {
+      "width": 761,
+      "name": "429: no unapproved card"
+    },
+    {
+      "width": 761,
+      "name": "initial-429: pixels unchanged"
+    },
+    {
+      "width": 761,
+      "name": "503: no unapproved card"
+    },
+    {
+      "width": 761,
+      "name": "initial-503: pixels unchanged"
+    },
+    {
+      "width": 761,
+      "name": "ready: pixels unchanged"
+    },
+    {
+      "width": 761,
+      "name": "background 500 keeps original behavior"
+    },
+    {
+      "width": 761,
+      "name": "background-500: pixels unchanged"
+    },
+    {
+      "width": 761,
+      "name": "workspaces: no P34 card"
+    },
+    {
+      "width": 761,
+      "name": "workspaces-500: pixels unchanged"
+    },
+    {
+      "width": 761,
+      "name": "members: no P34 card"
+    },
+    {
+      "width": 761,
+      "name": "members-500: pixels unchanged"
+    },
+    {
+      "width": 761,
+      "name": "zero page errors"
+    },
+    {
+      "width": 761,
+      "name": "zero unmatched requests"
+    },
+    {
+      "width": 761,
+      "name": "zero business writes"
+    },
+    {
+      "width": 1440,
+      "name": "summary-500-header: pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "summary-500-desktop: pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "approvals-500-header: pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "approvals-500-desktop: pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "401: no unapproved card"
+    },
+    {
+      "width": 1440,
+      "name": "initial-401: pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "403: no unapproved card"
+    },
+    {
+      "width": 1440,
+      "name": "initial-403: pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "404: no unapproved card"
+    },
+    {
+      "width": 1440,
+      "name": "initial-404: pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "409: no unapproved card"
+    },
+    {
+      "width": 1440,
+      "name": "initial-409: pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "429: no unapproved card"
+    },
+    {
+      "width": 1440,
+      "name": "initial-429: pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "503: no unapproved card"
+    },
+    {
+      "width": 1440,
+      "name": "initial-503: pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "ready: pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "background 500 keeps original behavior"
+    },
+    {
+      "width": 1440,
+      "name": "background-500: pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "workspaces: no P34 card"
+    },
+    {
+      "width": 1440,
+      "name": "workspaces-500: pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "members: no P34 card"
+    },
+    {
+      "width": 1440,
+      "name": "members-500: pixels unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "zero page errors"
+    },
+    {
+      "width": 1440,
+      "name": "zero unmatched requests"
+    },
+    {
+      "width": 1440,
+      "name": "zero business writes"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "summary-500-390.png",
+      "scene": "summary-500",
+      "width": 390,
+      "sha256": "f84bddace60f1cdb01cac451885aea6362fb8c40007014df49fb9f07b6f3c7d1",
+      "scope": "actual-Vue-P34-first-500-mobile-only-fixture"
+    },
+    {
+      "file": "summary-trace-390.png",
+      "scene": "summary-trace",
+      "width": 390,
+      "sha256": "fe8888a4418481efd4ee332a462f0c06b3f02227cdd3fe965dcbfb18c1becd14",
+      "scope": "actual-Vue-P34-first-500-mobile-only-fixture"
+    },
+    {
+      "file": "approvals-500-390.png",
+      "scene": "approvals-500",
+      "width": 390,
+      "sha256": "f84bddace60f1cdb01cac451885aea6362fb8c40007014df49fb9f07b6f3c7d1",
+      "scope": "actual-Vue-P34-first-500-mobile-only-fixture"
+    },
+    {
+      "file": "approvals-trace-390.png",
+      "scene": "approvals-trace",
+      "width": 390,
+      "sha256": "fe8888a4418481efd4ee332a462f0c06b3f02227cdd3fe965dcbfb18c1becd14",
+      "scope": "actual-Vue-P34-first-500-mobile-only-fixture"
+    },
+    {
+      "file": "summary-500-760.png",
+      "scene": "summary-500",
+      "width": 760,
+      "sha256": "c8062e99e0b092456d45d142d4d41dee9745cdef66c572150a7fadc55771a4ef",
+      "scope": "actual-Vue-P34-first-500-mobile-only-fixture"
+    },
+    {
+      "file": "summary-trace-760.png",
+      "scene": "summary-trace",
+      "width": 760,
+      "sha256": "6e40ef4f19026fbc68492ab9e6c7e13b58861d11f3260ccc789a0edc754c98df",
+      "scope": "actual-Vue-P34-first-500-mobile-only-fixture"
+    },
+    {
+      "file": "approvals-500-760.png",
+      "scene": "approvals-500",
+      "width": 760,
+      "sha256": "c8062e99e0b092456d45d142d4d41dee9745cdef66c572150a7fadc55771a4ef",
+      "scope": "actual-Vue-P34-first-500-mobile-only-fixture"
+    },
+    {
+      "file": "approvals-trace-760.png",
+      "scene": "approvals-trace",
+      "width": 760,
+      "sha256": "6e40ef4f19026fbc68492ab9e6c7e13b58861d11f3260ccc789a0edc754c98df",
+      "scope": "actual-Vue-P34-first-500-mobile-only-fixture"
+    }
+  ],
+  "boundary": "Actual App/parent/child with fixture HTTP. Only P34 initial 500 without data at width<=760 changed. No production authorization/deployment claim;real API notice preserved rather than prototype filler."
+}
