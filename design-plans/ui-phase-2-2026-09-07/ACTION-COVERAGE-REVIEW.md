@@ -3,7 +3,7 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1479；旧登记1477；新身份19，旧表独有身份17。签名变化不等于增删业务能力。
-- 已具体语义对应30页/646源位置/602组；其中路由动作512组，转发/容器关联63组，其余明确排除。其余43页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应31页/663源位置/625组；其中路由动作531组，转发/容器关联64组，其余明确排除。其余42页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -41,7 +41,7 @@
 | [P27 自动化规则](page-specs/P27.md) | 55 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P28 报表与导出](page-specs/P28.md) | 50 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P29 治理概览](page-specs/P29.md) | 167 | [7组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P30 成员与邀请](page-specs/P30.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P30 成员与邀请](page-specs/P30.md) | 167 | [23组](action-reviews/P30.json) | 114个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P31 角色与权限](page-specs/P31.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P32 工作区管理](page-specs/P32.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P33 团队管理](page-specs/P33.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2517,6 +2517,95 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 110字段图、170控件图与74整页图不代表真实Vue已实现；OG-G02和其它生命周期缺口仍存在。
 - P30–P37子组件和共享原因窗全源需分别核对；不以父层排除完成其它页面。
 - 全局缓存/组织隔离、共享诊断及未提交草稿策略仍待，不从Token保护推断资料页安全。
+
+## P30 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P30.json)：28个局部源位置 → 23组；4类写入，19组路由动作，1组转发/容器关联不重复计动作。9个本地v-model，3处调用/内嵌容器，13个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有114个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| OG-REFRESH 刷新成员资料 / read | 1处；normal、refreshing、refresh_error | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png)、[refreshing · 1440](design/members-direction-c/1440-refreshing.png) / [refreshing · 390](design/members-direction-c/390-refreshing.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-RETRY 重新加载 / read | 1处；error、blocked、expired、forbidden、rate_limited | [error · 1440](design/members-direction-c/1440-error.png) / [error · 390](design/members-direction-c/390-error.png)、[blocked · 1440](design/members-direction-c/1440-blocked.png) / [blocked · 390](design/members-direction-c/390-blocked.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| EX-P29-PROFILE 组织资料分支排除 / excluded | 3处；normal | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| WIRE-MEMBERS 成员子组件事件接线 / wiring | 1处；normal | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| EX-P31-ROLES 独立角色页排除 / excluded | 1处；normal | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| D-OG-REASON 共享原因确认与取消调用 / local | 3处；reason_disable、reason_restore、reason_role、reason_revoke、reason_short、reason_long、action_busy、action_conflict | [reason_disable · 1440](design/members-direction-c/1440-reason_disable.png) / [reason_disable · 390](design/members-direction-c/390-reason_disable.png)、[reason_restore · 1440](design/members-direction-c/1440-reason_restore.png) / [reason_restore · 390](design/members-direction-c/390-reason_restore.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| EX-P36-TOKEN-REASON 令牌原因调用排除 / excluded | 1处；normal | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-INVITE 创建邀请 / write | 2处；invite_form、invite_invalid、invite_busy、invite_partial、invite_interrupted、invite_success | [invite_form · 1440](design/members-direction-c/1440-invite_form.png) / [invite_form · 390](design/members-direction-c/390-invite_form.png)、[invite_invalid · 1440](design/members-direction-c/1440-invite_invalid.png) / [invite_invalid · 390](design/members-direction-c/390-invite_invalid.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-TAB-PENDING 待接受邀请 / local | 1处；normal、invite_acceptance、invite_empty | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png)、[invite_acceptance · 1440](design/members-direction-c/1440-invite_acceptance.png) / [invite_acceptance · 390](design/members-direction-c/390-invite_acceptance.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-TAB-EXPIRED 已失效邀请 / local | 1处；invite_expired、invite_revoked、invite_boundary | [invite_expired · 1440](design/members-direction-c/1440-invite_expired.png) / [invite_expired · 390](design/members-direction-c/390-invite_expired.png)、[invite_revoked · 1440](design/members-direction-c/1440-invite_revoked.png) / [invite_revoked · 390](design/members-direction-c/390-invite_revoked.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-INVITATION-REVOKE 撤销邀请 / write | 1处；normal、reason_revoke、action_busy、action_conflict | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png)、[reason_revoke · 1440](design/members-direction-c/1440-reason_revoke.png) / [reason_revoke · 390](design/members-direction-c/390-reason_revoke.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-SEARCH 搜索姓名或邮箱 / local | 1处；search、filter_empty | [search · 1440](design/members-direction-c/1440-search.png) / [search · 390](design/members-direction-c/390-search.png)、[filter_empty · 1440](design/members-direction-c/1440-filter_empty.png) / [filter_empty · 390](design/members-direction-c/390-filter_empty.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-STATUS-FILTER 成员有效状态筛选 / local | 1处；filter_locked、disabled_locked | [filter_locked · 1440](design/members-direction-c/1440-filter_locked.png) / [filter_locked · 390](design/members-direction-c/390-filter_locked.png)、[disabled_locked · 1440](design/members-direction-c/1440-disabled_locked.png) / [disabled_locked · 390](design/members-direction-c/390-disabled_locked.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-ROLE-FILTER 角色筛选 / local | 1处；filter_role、multiple_roles | [filter_role · 1440](design/members-direction-c/1440-filter_role.png) / [filter_role · 390](design/members-direction-c/390-filter_role.png)、[multiple_roles · 1440](design/members-direction-c/1440-multiple_roles.png) / [multiple_roles · 390](design/members-direction-c/390-multiple_roles.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-TEAM-FILTER 团队筛选 / local | 1处；filter_team、filter_empty | [filter_team · 1440](design/members-direction-c/1440-filter_team.png) / [filter_team · 390](design/members-direction-c/390-filter_team.png)、[filter_empty · 1440](design/members-direction-c/1440-filter_empty.png) / [filter_empty · 390](design/members-direction-c/390-filter_empty.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-SORT 成员排序 / local | 1处；normal、multipage | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png)、[multipage · 1440](design/members-direction-c/1440-multipage.png) / [multipage · 390](design/members-direction-c/390-multipage.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-RESET 重置成员筛选 / local | 1处；normal、filter_empty | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png)、[filter_empty · 1440](design/members-direction-c/1440-filter_empty.png) / [filter_empty · 390](design/members-direction-c/390-filter_empty.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-TECH 展开成员技术详情 / local | 1处；technical、long_member | [technical · 1440](design/members-direction-c/1440-technical.png) / [technical · 390](design/members-direction-c/390-technical.png)、[long_member · 1440](design/members-direction-c/1440-long_member.png) / [long_member · 390](design/members-direction-c/390-long_member.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-ROLE-SELECT 选择单行角色 / local | 1处；normal、multiple_roles | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png)、[multiple_roles · 1440](design/members-direction-c/1440-multiple_roles.png) / [multiple_roles · 390](design/members-direction-c/390-multiple_roles.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-ROLE-ASSIGN 分配所选角色 / write | 1处；reason_role、action_busy、action_conflict | [reason_role · 1440](design/members-direction-c/1440-reason_role.png) / [reason_role · 390](design/members-direction-c/390-reason_role.png)、[action_busy · 1440](design/members-direction-c/1440-action_busy.png) / [action_busy · 390](design/members-direction-c/390-action_busy.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-STATE 禁用或恢复成员关系 / write | 1处；reason_disable、reason_restore、disabled_locked、self_forbidden、last_admin、action_busy、action_conflict | [reason_disable · 1440](design/members-direction-c/1440-reason_disable.png) / [reason_disable · 390](design/members-direction-c/390-reason_disable.png)、[reason_restore · 1440](design/members-direction-c/1440-reason_restore.png) / [reason_restore · 390](design/members-direction-c/390-reason_restore.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-PREV 成员上一页 / local | 1处；multipage、page_two | [multipage · 1440](design/members-direction-c/1440-multipage.png) / [multipage · 390](design/members-direction-c/390-multipage.png)、[page_two · 1440](design/members-direction-c/1440-page_two.png) / [page_two · 390](design/members-direction-c/390-page_two.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OG-M-NEXT 成员下一页 / local | 1处；multipage、page_two | [multipage · 1440](design/members-direction-c/1440-multipage.png) / [multipage · 390](design/members-direction-c/390-multipage.png)、[page_two · 1440](design/members-direction-c/1440-page_two.png) / [page_two · 390](design/members-direction-c/390-page_two.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| WIRE-MEMBERS | @invite / inviteMembers | OG-M-INVITE |
+| WIRE-MEMBERS | @invitation-action / invitationAction | OG-M-INVITATION-REVOKE |
+| WIRE-MEMBERS | @update-invitation-tab / invitationTab = $event | OG-M-TAB-PENDING、OG-M-TAB-EXPIRED |
+| WIRE-MEMBERS | @update-member-query / memberQuery = $event; memberPage = 1; | OG-M-SEARCH |
+| WIRE-MEMBERS | @update-member-status / memberStatus = $event; memberPage = 1; | OG-M-STATUS-FILTER |
+| WIRE-MEMBERS | @update-member-role / memberRole = $event; memberPage = 1; | OG-M-ROLE-FILTER |
+| WIRE-MEMBERS | @update-member-team / memberTeam = $event; memberPage = 1; | OG-M-TEAM-FILTER |
+| WIRE-MEMBERS | @update-member-sort / memberSort = $event; memberPage = 1; | OG-M-SORT |
+| WIRE-MEMBERS | @update-member-page / memberPage = $event | OG-M-PREV、OG-M-NEXT |
+| WIRE-MEMBERS | @reset-member-filters / memberQuery = ''; memberStatus = ''; memberRole = ''; memberTeam = ''; memberSort = 'name_asc'; memberPage = 1; | OG-M-RESET |
+| WIRE-MEMBERS | @update-member-role-selection / memberRoles[$event.memberId] = $event.role | OG-M-ROLE-SELECT |
+| WIRE-MEMBERS | @assign-role / assignRole | OG-M-ROLE-ASSIGN |
+| WIRE-MEMBERS | @member-action / memberAction | OG-M-STATE |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| OrganizationAdminCenter.vue / form.name | P29 summary专属字段；P30不呈现，不与成员邀请reason混为同一表单 | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationAdminCenter.vue / form.logo_url | P29 summary专属字段；P30不呈现，不与成员邀请reason混为同一表单 | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationAdminCenter.vue / form.timezone | P29 summary专属字段；P30不呈现，不与成员邀请reason混为同一表单 | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationAdminCenter.vue / form.data_retention_days | P29 summary专属字段；P30不呈现，不与成员邀请reason混为同一表单 | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationAdminCenter.vue / form.default_workspace_id | P29 summary专属字段；P30不呈现，不与成员邀请reason混为同一表单 | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationAdminCenter.vue / form.reason | P29 summary专属字段；P30不呈现，不与成员邀请reason混为同一表单 | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationMemberPanel.vue / form.emails | 邀请邮箱textarea必填；无maxlength；分隔/邮箱254边界由父函数校验 | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationMemberPanel.vue / form.role_code | 必填固定五角色select；选择本身不写入 | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationMemberPanel.vue / form.reason | 邀请原因必填maxlength500，父函数trim后1–500；不是共享窗的至少2字规则 | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| OrganizationAdminCenter.vue / form.1 / normal | form-container / route-excluded-reference | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png) | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / reason_disable | native-reason-dialog / matching-dialog-scene | [reason_disable · 1440](design/members-direction-c/1440-reason_disable.png) / [reason_disable · 390](design/members-direction-c/390-reason_disable.png) | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / reason_restore | native-reason-dialog / matching-dialog-scene | [reason_restore · 1440](design/members-direction-c/1440-reason_restore.png) / [reason_restore · 390](design/members-direction-c/390-reason_restore.png) | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / reason_role | native-reason-dialog / matching-dialog-scene | [reason_role · 1440](design/members-direction-c/1440-reason_role.png) / [reason_role · 390](design/members-direction-c/390-reason_role.png) | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationAdminCenter.vue / AuditedReasonDialog.1 / reason_revoke | native-reason-dialog / matching-dialog-scene | [reason_revoke · 1440](design/members-direction-c/1440-reason_revoke.png) / [reason_revoke · 390](design/members-direction-c/390-reason_revoke.png) | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationMemberPanel.vue / form.1 / invite_form | form-container / matching-inline-form-scene | [invite_form · 1440](design/members-direction-c/1440-invite_form.png) / [invite_form · 390](design/members-direction-c/390-invite_form.png) | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationMemberPanel.vue / form.1 / invite_invalid | form-container / matching-inline-form-scene | [invite_invalid · 1440](design/members-direction-c/1440-invite_invalid.png) / [invite_invalid · 390](design/members-direction-c/390-invite_invalid.png) | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationMemberPanel.vue / form.1 / invite_partial | form-container / matching-inline-form-scene | [invite_partial · 1440](design/members-direction-c/1440-invite_partial.png) / [invite_partial · 390](design/members-direction-c/390-invite_partial.png) | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationMemberPanel.vue / form.1 / invite_busy | form-container / matching-inline-form-scene | [invite_busy · 1440](design/members-direction-c/1440-invite_busy.png) / [invite_busy · 390](design/members-direction-c/390-invite_busy.png) | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationMemberPanel.vue / form.1 / invite_interrupted | form-container / matching-inline-form-scene | [invite_interrupted · 1440](design/members-direction-c/1440-invite_interrupted.png) / [invite_interrupted · 390](design/members-direction-c/390-invite_interrupted.png) | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationMemberPanel.vue / form.1 / invite_success | form-container / matching-inline-form-scene | [invite_success · 1440](design/members-direction-c/1440-invite_success.png) / [invite_success · 390](design/members-direction-c/390-invite_success.png) | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationMemberPanel.vue / form.1 / invite_empty | form-container / matching-inline-form-scene | [invite_empty · 1440](design/members-direction-c/1440-invite_empty.png) / [invite_empty · 390](design/members-direction-c/390-invite_empty.png) | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| OrganizationMemberPanel.vue / form.1 / invite_boundary | form-container / matching-inline-form-scene | [invite_boundary · 1440](design/members-direction-c/1440-invite_boundary.png) / [invite_boundary · 390](design/members-direction-c/390-invite_boundary.png) | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+
+### 明确保留的边界
+
+- 94旧图只有整页/原因窗及单个邀请按钮代表状态；本批不借图填114精确控件槽，也不把声明无busy当已完成截图。
+- OG-G01角色选择陈旧、OG-G02邀请尾部/notice及通用写后重读、OG-G03原因上限/重开、跨范围迟到回执与全部C真实实现继续待。
+- 共享reason字段在AuditedReasonDialog，required/minimumLength默认2、无maxlength；邀请表单reason已有500上限。六个value/emit字段另在controlledInputs，不能漏算为仅三个可编辑字段。
+- useAuditedReason新ask取消上个请求，finish先关窗；useModalDialog返焦/销毁与全部调用方跨缓存时序仍待。
 
 ## P54 局部动作与共享消费者
 

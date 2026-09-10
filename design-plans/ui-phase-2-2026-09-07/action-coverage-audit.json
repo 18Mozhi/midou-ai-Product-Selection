@@ -366,6 +366,8 @@
     "scripts/verify-ui-phase2-organization-profile-c.mjs": "5a42e1a7baedabaab16a480f7304a59ba9ef6a2f667a127e280ae88ade6a8355",
     "scripts/verify-ui-phase2-organization-profile-controls-c.mjs": "517b5cf3e6640b2096123a1c36353f7ee3a194187b358d094107632227b4a64a",
     "scripts/verify-ui-phase2-organization-profile-fields-c.mjs": "1cd07eb755a37c342dd9e0477c2e18d5dcbfba89cbb6483319b3a9a190afcffb",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "2f1368a16766c129c782530f296d8bcc49964ff17e57764ce190f6b867098251",
+    "scripts/verify-ui-phase2-members-c.mjs": "4c49e066ccd290f59420f0e0e4f7ab7b2ae36709d67ddfd9d0620c5287106f91",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0",
     "scripts/verify-ui-phase2-data-records-c.mjs": "1c09c100ae7d1e9a5866b89020bc6f23200bcaa5a538c7f979cf9d3d75146d00",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -400,7 +402,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "d99d66fec022fe8eabceaccaa52683e8de640190857b28da49b0940edade1549",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "24d40460e447eb5ed672eafd17f1cb1cf47133e41aa3d4d89931279bf57e3f6a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "a118eb7a0301a847ec9a48f7232f83e3b13b2fc3fb1ea528f471aa72f286021c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "8bb99072f3db70e0687adb08c5596ac3bae9129d975d2f1fe472224956734247",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "3cc06ce387a9a52283919bb2f4a7e215531fa341269fba3292fcab0056ecb9db",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P31.md": "96faebd57a156fffedf3a60f1feddb8be4644b8851100b6b64bb5f26d8c9a5e2",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P32.md": "7033fd42ed0b5654f922ae10643fdc50234059680a7a1b936fa81710b8397291",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P33.md": "7ebc9f00d7cbd16fe1574c7656b42f1968e32a6248860a4bc146ad8b4088f4d2",
@@ -444,7 +446,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "521bb40c9e3166139972537a100486243e73bba1639ac1c2cca8a03fc970a9af",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "9d5945eea5629968885c098c8e477bd7e0bda5b25cbd2ada860304f7a1721e69",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "73d491925cd4090181fd04df614eea603c40885573777c7250057f67c6f5245b",
-    "scripts/audit-ui-phase2-action-coverage.mjs": "369c79b9ccd25070839aa8351b0a30a1909d5592fb697d1b272977d72384a5fa",
+    "scripts/audit-ui-phase2-action-coverage.mjs": "ae8aa310d278a45a01b5e16b450dca12e56460ea8755385e9f6060c855423e5c",
     "scripts/lib/ui-phase2-action-coverage.mjs": "cdeb3c77909d311263745f29e0fb5e5e0dbce2622349c17fcf8ec803528a9cce",
     "scripts/lib/ui-phase2-review-surfaces.mjs": "f889a2064905f48cbaec479c0ea89d101271b6b1db94afa64702f8f3199db4b1",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
@@ -457,13 +459,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 19,
     "oldOnlyIdentities": 17,
-    "reviewedPages": 30,
-    "explicitlyGroupedSourceSites": 646,
-    "semanticGroups": 602,
-    "routeActions": 512,
-    "wiringGroups": 63,
+    "reviewedPages": 31,
+    "explicitlyGroupedSourceSites": 663,
+    "semanticGroups": 625,
+    "routeActions": 531,
+    "wiringGroups": 64,
     "pagesWithoutExplicitSemanticReview": [
-      "P30",
       "P31",
       "P32",
       "P33",
@@ -1557,13 +1558,33 @@
       "path": "/org-admin/members",
       "title": "成员与邀请",
       "oldStaticAssociatedCandidates": 167,
-      "review": null,
+      "review": {
+        "pageId": "P30",
+        "sourceSites": 28,
+        "semanticGroups": 23,
+        "routeActions": 19,
+        "wiringGroups": 1,
+        "excludedGroups": 3,
+        "writeActions": 4,
+        "sourceInapplicableVisualSlots": 0,
+        "unmappedVisualSlots": 114,
+        "surfaces": {
+          "callerFiles": 2,
+          "localModelBindings": 9,
+          "callerContainers": 3,
+          "consumerVariants": 13,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "members-direction-c"
       ],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "94旧图只有整页/原因窗及单个邀请按钮代表状态；本批不借图填114精确控件槽，也不把声明无busy当已完成截图。",
+        "OG-G01角色选择陈旧、OG-G02邀请尾部/notice及通用写后重读、OG-G03原因上限/重开、跨范围迟到回执与全部C真实实现继续待。"
+      ]
     },
     {
       "id": "P31",
@@ -2665,6 +2686,24 @@
         "localModelBindings": 6,
         "callerContainers": 2,
         "consumerVariants": 32,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P30",
+      "sourceSites": 28,
+      "semanticGroups": 23,
+      "routeActions": 19,
+      "wiringGroups": 1,
+      "excludedGroups": 3,
+      "writeActions": 4,
+      "sourceInapplicableVisualSlots": 0,
+      "unmappedVisualSlots": 114,
+      "surfaces": {
+        "callerFiles": 2,
+        "localModelBindings": 9,
+        "callerContainers": 3,
+        "consumerVariants": 13,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -26511,6 +26550,11 @@
           "pageId": "P29",
           "actionId": "OG-REFRESH",
           "kind": "read"
+        },
+        {
+          "pageId": "P30",
+          "actionId": "OG-REFRESH",
+          "kind": "read"
         }
       ]
     },
@@ -26549,6 +26593,11 @@
       "semanticReviews": [
         {
           "pageId": "P29",
+          "actionId": "OG-RETRY",
+          "kind": "read"
+        },
+        {
+          "pageId": "P30",
           "actionId": "OG-RETRY",
           "kind": "read"
         }
@@ -26595,6 +26644,11 @@
           "pageId": "P29",
           "actionId": "OG-PROFILE-SAVE",
           "kind": "write"
+        },
+        {
+          "pageId": "P30",
+          "actionId": "EX-P29-PROFILE",
+          "kind": "excluded"
         }
       ]
     },
@@ -26639,6 +26693,11 @@
           "pageId": "P29",
           "actionId": "OG-PROFILE-LOGO",
           "kind": "local"
+        },
+        {
+          "pageId": "P30",
+          "actionId": "EX-P29-PROFILE",
+          "kind": "excluded"
         }
       ]
     },
@@ -26683,6 +26742,11 @@
           "pageId": "P29",
           "actionId": "OG-PROFILE-SAVE",
           "kind": "write"
+        },
+        {
+          "pageId": "P30",
+          "actionId": "EX-P29-PROFILE",
+          "kind": "excluded"
         }
       ]
     },
@@ -26727,6 +26791,11 @@
           "pageId": "P29",
           "actionId": "EX-P30-MEMBERS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P30",
+          "actionId": "WIRE-MEMBERS",
+          "kind": "wiring"
         }
       ]
     },
@@ -26771,6 +26840,11 @@
           "pageId": "P29",
           "actionId": "EX-P31-ROLES",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P30",
+          "actionId": "EX-P31-ROLES",
+          "kind": "excluded"
         }
       ]
     },
@@ -26806,6 +26880,11 @@
           "pageId": "P29",
           "actionId": "EX-REASON-ORIGINS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P30",
+          "actionId": "D-OG-REASON",
+          "kind": "local"
         }
       ]
     },
@@ -26841,6 +26920,11 @@
           "pageId": "P29",
           "actionId": "EX-REASON-ORIGINS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P30",
+          "actionId": "D-OG-REASON",
+          "kind": "local"
         }
       ]
     },
@@ -26876,6 +26960,11 @@
           "pageId": "P29",
           "actionId": "EX-REASON-ORIGINS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P30",
+          "actionId": "D-OG-REASON",
+          "kind": "local"
         }
       ]
     },
@@ -26910,6 +26999,11 @@
         {
           "pageId": "P29",
           "actionId": "EX-REASON-ORIGINS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P30",
+          "actionId": "EX-P36-TOKEN-REASON",
           "kind": "excluded"
         }
       ]
@@ -28372,7 +28466,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-INVITE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#0589c9bc31734883.1",
@@ -28401,7 +28501,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-INVITE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#171dd535ef8757aa.1",
@@ -28430,7 +28536,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-TAB-PENDING",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#5fa949f2fa7f314d.1",
@@ -28459,7 +28571,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-TAB-EXPIRED",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#4f34de62fea95c43.1",
@@ -28497,7 +28615,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-INVITATION-REVOKE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#a8d9441ebc6a59ed.1",
@@ -28526,7 +28650,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-SEARCH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#b937a80e03f88040.1",
@@ -28555,7 +28685,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-STATUS-FILTER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#375006d73f4accaa.1",
@@ -28584,7 +28720,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-ROLE-FILTER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#beaf3d0c1db3450f.1",
@@ -28613,7 +28755,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-TEAM-FILTER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#f3b2f3f668cdb561.1",
@@ -28642,7 +28790,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-SORT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#9472331a8a7f9e19.1",
@@ -28671,7 +28825,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-RESET",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#1c008f867673db60.1",
@@ -28705,7 +28865,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#8583e0c13eca946e.1",
@@ -28739,7 +28905,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-ROLE-SELECT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#4842f2b67c787729.1",
@@ -28773,7 +28945,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-ROLE-ASSIGN",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#01c67ff42b0489fa.1",
@@ -28807,7 +28985,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-STATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#bc843bc08e306aa8.1",
@@ -28841,7 +29025,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-PREV",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationMemberPanel.vue#de6415e79bea088d.1",
@@ -28875,7 +29065,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P30",
+          "actionId": "OG-M-NEXT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationRolePanel.vue#24237df37bd7b7e4.1",

@@ -232,7 +232,7 @@ for (const review of reviews.filter((r) => r.surfaceReview)) {
       "\n### 事件转发关系（不增加业务动作）\n\n| 关系键 | 源事件 / handler | 目标合同组 |\n| --- | --- | --- |\n";
     for (const a of review.actions.filter((v) => v.kind === "wiring")) {
       for (const edge of a.forwardBindings ?? [])
-        md += `| ${a.actionId} | ${edge.event} / ${edge.handler} | ${edge.targets.join("、")} |\n`;
+        md += `| ${a.actionId} | ${edge.event} / ${edge.handler.replaceAll("|", "\\|").replace(/\s+/gu, " ").trim()} | ${edge.targets.join("、")} |\n`;
       if (!a.forwardBindings?.length)
         md += `| ${a.actionId} | 容器定义，无额外事件 | ${a.forwardsTo.join("、")} |\n`;
     }
