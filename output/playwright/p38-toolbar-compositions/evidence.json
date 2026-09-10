@@ -1,0 +1,650 @@
+{
+  "schemaVersion": 2,
+  "approval": "pending",
+  "sourceCommit": "e845daca4bc601a3c3bb5baa893203d73083fbea",
+  "scope": "Actual Vue toolbar with fixture GET and scoped review CSS; not native popup, full page, real RBAC/API, MySQL or production acceptance",
+  "checks": [
+    {
+      "width": 390,
+      "name": "normal toolbar and non-target facts pixels preserved; 44px controls/16px text and no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "native range hover and keyboard focus; four unchanged options; no invented popup"
+    },
+    {
+      "width": 390,
+      "name": "refresh hover/focus/pressed are distinct; no pressed displacement or read before release"
+    },
+    {
+      "width": 390,
+      "name": "loading keeps existing grey disabled visuals and single read; failed refresh retains snapshot and re-enables controls"
+    },
+    {
+      "width": 390,
+      "name": "keyboard selection triggers one 7d read and preserves other query; no real API, writes or browser errors"
+    },
+    {
+      "width": 760,
+      "name": "normal toolbar and non-target facts pixels preserved; 44px controls/16px text and no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "native range hover and keyboard focus; four unchanged options; no invented popup"
+    },
+    {
+      "width": 760,
+      "name": "refresh hover/focus/pressed are distinct; no pressed displacement or read before release"
+    },
+    {
+      "width": 760,
+      "name": "loading keeps existing grey disabled visuals and single read; failed refresh retains snapshot and re-enables controls"
+    },
+    {
+      "width": 760,
+      "name": "keyboard selection triggers one 7d read and preserves other query; no real API, writes or browser errors"
+    },
+    {
+      "width": 761,
+      "name": "normal toolbar and non-target facts pixels preserved; 44px controls/16px text and no page overflow"
+    },
+    {
+      "width": 761,
+      "name": "native range hover and keyboard focus; four unchanged options; no invented popup"
+    },
+    {
+      "width": 761,
+      "name": "refresh hover/focus/pressed are distinct; no pressed displacement or read before release"
+    },
+    {
+      "width": 761,
+      "name": "loading keeps existing grey disabled visuals and single read; failed refresh retains snapshot and re-enables controls"
+    },
+    {
+      "width": 761,
+      "name": "keyboard selection triggers one 7d read and preserves other query; no real API, writes or browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "normal toolbar and non-target facts pixels preserved; 44px controls/16px text and no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "native range hover and keyboard focus; four unchanged options; no invented popup"
+    },
+    {
+      "width": 1440,
+      "name": "refresh hover/focus/pressed are distinct; no pressed displacement or read before release"
+    },
+    {
+      "width": 1440,
+      "name": "loading keeps existing grey disabled visuals and single read; failed refresh retains snapshot and re-enables controls"
+    },
+    {
+      "width": 1440,
+      "name": "keyboard selection triggers one 7d read and preserves other query; no real API, writes or browser errors"
+    }
+  ],
+  "disabledComparisons": [
+    {
+      "width": 390,
+      "computedStylesIdentical": true,
+      "beforeSha256": "a933b7049936b0becd795f902891567af00717df79975e9dc71813a4a696c660",
+      "afterSha256": "4e4a838baac4e9a6ee1c8249a86fe71405908460b097afbaf226d615c216fc98",
+      "dimensions": [
+        358,
+        345
+      ],
+      "changedPixels": 18,
+      "maxChannelDelta": 2
+    },
+    {
+      "width": 760,
+      "computedStylesIdentical": true,
+      "beforeSha256": "d0647169eaa5eb9ba58f3a4824e76c689d4eabcfaab98e7dcf67483a08a1aeef",
+      "afterSha256": "db3cb2b60918d70263d030fe63f4ca2925a25c6e359c50a35376a46545292285",
+      "dimensions": [
+        728,
+        318
+      ],
+      "changedPixels": 31,
+      "maxChannelDelta": 2
+    },
+    {
+      "width": 761,
+      "computedStylesIdentical": true,
+      "beforeSha256": "2962a192f81010710d700ebe7a2295dcb0ee537f326f344dc00363601ad4dfb5",
+      "afterSha256": "7f1b50425ec5f32dd1eed6752bf995f0a29164cea7eb09a33a33c86cd33c5b40",
+      "dimensions": [
+        210,
+        430
+      ],
+      "changedPixels": 31,
+      "maxChannelDelta": 2
+    },
+    {
+      "width": 1440,
+      "computedStylesIdentical": true,
+      "beforeSha256": "b4e0d56f46494d900d5cff036e219734c876a98072048cc7d7787c52a6ef80c3",
+      "afterSha256": "5c909f5bf65ef0c322d3711a5705c9939724e0d704455df1aff2602726bf1d1a",
+      "dimensions": [
+        248,
+        403
+      ],
+      "changedPixels": 20,
+      "maxChannelDelta": 1
+    }
+  ],
+  "sourceHashes": {
+    "scripts/verify-ui-phase2-platform-toolbar.mjs": "2f73d9e69ce58becb7cc0bd1abeb866827b82304473c029a66d68bebca513783",
+    "design-plans/ui-phase-2-2026-09-07/implementation/platform-overview-preview.css": "b074ad6bb00cc99acdf7e6b79b9912d9a5d60d4f9a8f4f606279e7050ac738ce",
+    "design-plans/ui-phase-2-2026-09-07/implementation/platform-overview-controls-preview.css": "dd90b18021a1b80b11f81576714ba7464e6bde7f276ac9ca87c4e518b39ce9ce",
+    "scripts/lib/ui-phase2-platform-overview-design-data.mjs": "68a2c484c171c0a61e5bfd71e783976aa845e9b35406d39f4ab5b3976c6c1ae2",
+    "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+    "apps/web/src/components/PlatformDashboard.vue": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
+    "apps/web/src/components/TechnicalDetails.vue": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b"
+  },
+  "screenshots": [
+    {
+      "file": "390-normal.png",
+      "sha256": "bf7dec7fb17e20965acc2d7e1d958923ff355c14af5b4b14d11fe90c61ccf65d",
+      "artifactId": "P38-toolbar-390-normal",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "normal",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 359
+      },
+      "capturedAt": "2026-09-10T18:22:55.357Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-normal",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "390-range-hover.png",
+      "sha256": "c3e0aa9760e30f3e54629f27d670881049c0ed957dec320500192ce248e60c0f",
+      "artifactId": "P38-toolbar-390-range-hover",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "range-hover",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 359
+      },
+      "capturedAt": "2026-09-10T18:22:55.524Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-range-hover",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "390-range-focus.png",
+      "sha256": "b7015d48d1be0769f4d9e574cc881e753fe8cdedc33df58e7555ed981be327df",
+      "artifactId": "P38-toolbar-390-range-focus",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "range-focus",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 359
+      },
+      "capturedAt": "2026-09-10T18:22:55.623Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-range-focus",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "390-refresh-hover.png",
+      "sha256": "3a0ad43daa2a4f8ef688df01b2598a41abd8bf781af17a98e0282135e2173ebd",
+      "artifactId": "P38-toolbar-390-refresh-hover",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "refresh-hover",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 359
+      },
+      "capturedAt": "2026-09-10T18:22:55.757Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-refresh-hover",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "390-refresh-focus.png",
+      "sha256": "fbc1933984933f81e820976c3f3cbe0b36d758910fc30248502d9e56cd7bdc16",
+      "artifactId": "P38-toolbar-390-refresh-focus",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "refresh-focus",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 359
+      },
+      "capturedAt": "2026-09-10T18:22:55.856Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-refresh-focus",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "390-refresh-pressed.png",
+      "sha256": "2406cc4c5ec16213efe152b6b5660c1688671861d568d725ad5b785438f5555b",
+      "artifactId": "P38-toolbar-390-refresh-pressed",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "refresh-pressed",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 359
+      },
+      "capturedAt": "2026-09-10T18:22:56.007Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-refresh-pressed",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "390-refresh-loading.png",
+      "sha256": "c99f409b3d4227a3c75ba98d578de2a2f608d072e0e77c523c4b47edff70d5ed",
+      "artifactId": "P38-toolbar-390-refresh-loading",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "refresh-loading",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 359
+      },
+      "capturedAt": "2026-09-10T18:22:56.107Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-refresh-loading",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "390-refresh-failed.png",
+      "sha256": "98bbc85a156867921072b019760c5099d3772989dcba2250f8987f3b65e24f43",
+      "artifactId": "P38-toolbar-390-refresh-failed",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "refresh-failed",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 488
+      },
+      "capturedAt": "2026-09-10T18:22:56.442Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-refresh-failed",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "390-range-7d.png",
+      "sha256": "55d69d28881d383279f22153b0de5db4da873d19bd3833997627b9d64837c942",
+      "artifactId": "P38-toolbar-390-range-7d",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "range-7d",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=7d&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 359
+      },
+      "capturedAt": "2026-09-10T18:22:56.556Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-range-7d",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "1440-normal.png",
+      "sha256": "00ccbfe1bc057f51c4795d469465b1f06e9812ac5db7d139a5cd9710cc53b98d",
+      "artifactId": "P38-toolbar-1440-normal",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "normal",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 264,
+        "height": 418
+      },
+      "capturedAt": "2026-09-10T18:23:01.355Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-normal",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "1440-range-hover.png",
+      "sha256": "229c3837600c474c0b259a7b592e4fef4b296ca603199209680fe87305e33148",
+      "artifactId": "P38-toolbar-1440-range-hover",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "range-hover",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 264,
+        "height": 418
+      },
+      "capturedAt": "2026-09-10T18:23:01.631Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-range-hover",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "1440-range-focus.png",
+      "sha256": "2c4c69c9765802d3f3696510bf0b20d7664d510f5af701f4cfd5a6b950c141da",
+      "artifactId": "P38-toolbar-1440-range-focus",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "range-focus",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 264,
+        "height": 418
+      },
+      "capturedAt": "2026-09-10T18:23:01.799Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-range-focus",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "1440-refresh-hover.png",
+      "sha256": "fdf0bcda4a9fc549e0099c95e259d8bb53f795db82f73f64521eab3a29722e14",
+      "artifactId": "P38-toolbar-1440-refresh-hover",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "refresh-hover",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 264,
+        "height": 418
+      },
+      "capturedAt": "2026-09-10T18:23:02.036Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-refresh-hover",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "1440-refresh-focus.png",
+      "sha256": "187eabf5f1a6274cd285cf70130567e9764e3d7e9862c5f713ca74d793e14625",
+      "artifactId": "P38-toolbar-1440-refresh-focus",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "refresh-focus",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 264,
+        "height": 418
+      },
+      "capturedAt": "2026-09-10T18:23:02.196Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-refresh-focus",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "1440-refresh-pressed.png",
+      "sha256": "bca25960da6e8a67d274c42756952b9fb11909449c9e8c255a1a769daa3b4660",
+      "artifactId": "P38-toolbar-1440-refresh-pressed",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "refresh-pressed",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 264,
+        "height": 418
+      },
+      "capturedAt": "2026-09-10T18:23:02.452Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-refresh-pressed",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "1440-refresh-loading.png",
+      "sha256": "f21839a02dc0daeacdbb90417998bfffd6f702491b02790b2e3ecdb3d7e88eb9",
+      "artifactId": "P38-toolbar-1440-refresh-loading",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "refresh-loading",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 264,
+        "height": 418
+      },
+      "capturedAt": "2026-09-10T18:23:02.698Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-refresh-loading",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "1440-refresh-failed.png",
+      "sha256": "eba6d1b96b03a7128155f94021e7aa0e8992c79f9fb26497901d06a61adce0a5",
+      "artifactId": "P38-toolbar-1440-refresh-failed",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "refresh-failed",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=24h&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1392,
+        "height": 418
+      },
+      "capturedAt": "2026-09-10T18:23:03.270Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-refresh-failed",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    },
+    {
+      "file": "1440-range-7d.png",
+      "sha256": "afe8eb8e353eb4c9345920f3dec8b79344153811546e768901cf40cd9fb5b52b",
+      "artifactId": "P38-toolbar-1440-range-7d",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "state": "range-7d",
+      "role": "fixture platform:operate; no real authentication",
+      "concreteUrl": "http://127.0.0.1:65261/platform-admin?window=7d&keep=toolbar",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 264,
+        "height": 418
+      },
+      "capturedAt": "2026-09-10T18:23:03.513Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "caseId": "P38-toolbar-range-7d",
+      "sourceSha": "7874a5042718e4e4c3342fea9f5c673efb1f00bc742456848d5b444ee5f73fb5"
+    }
+  ],
+  "processesClosed": true
+}

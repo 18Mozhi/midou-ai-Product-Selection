@@ -1,0 +1,24 @@
+/* Review-only toolbar states; no production import or layout changes. */
+body.p38-vue-preview #app .platform-dashboard-toolbar :is(button, select):not(:disabled) {
+  transition: none;
+  box-shadow: none;
+  transform: none;
+}
+
+body.p38-vue-preview #app .platform-dashboard-toolbar :is(button, select):hover:not(:disabled) {
+  background: #f0f5ff;
+  border-color: #c5d4ef;
+  color: var(--so-primary-strong);
+}
+
+body.p38-vue-preview #app .platform-dashboard-toolbar button:active:not(:disabled) {
+  background: #dbe7fb;
+  border-color: #b7caeb;
+  color: var(--so-primary-strong);
+  transform: none;
+}
+
+body.p38-vue-preview #app .platform-dashboard-toolbar :is(button, select):focus-visible {
+  outline: 3px solid white;
+  outline-offset: 3px;
+}
