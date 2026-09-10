@@ -1,0 +1,1728 @@
+{
+  "kind": "P37-PAGE-VUE-PREVIEW-r1",
+  "approval": "pending-user-review",
+  "scope": "Actual parent/child scripts and original directives with review-only layout/CSS and field-specific initial copy labels.55-row original fixture and separate40-connection+10-business fixture,never concatenated. GET-only and synthetic clipboard; fixture cursor IDs are not production cursor encoding. Exact seven request fields checked; fixture handler does not implement server date semantics. Not full App/navigation,real authorization/SQL/metadata end-to-end/OS clipboard/production approval; original listitem button semantics and full keyboard accessibility remain to audit.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/approval-read-failure.css": "6295ffead416eae4dfdf0fa88dde57a3b7ec6fa60241b44e4405e3f1755aaa6a",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "apps/web/src/design/approval-read-failure-tokens.css": "bd13bd68c498bd64b2bb29cba882d09fb324b0fbacf5cab1812fd52abbdb6692",
+    "apps/web/src/design/export-detail-tokens.css": "d0dc62dff48590e983d06a8960bd74bbadc7d7f78daa31237df45214b7ee513a",
+    "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
+    "apps/web/src/design/token-filter-tokens.css": "6a2b9871858d0c1a5d7ee2a052b5b1d5043331f414685525d561d8ae6d366710",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/org-data-export-detail.css": "55b7a84508f5ff64d02061bc832991bceec6674e66313623ed6ade22aba2de04",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/organization-audit.css": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/audit-page-preview.css": "6c672a618b837177bf58146b9637d0c138f5b1a2e746524045b6f894e2c2681a",
+    "scripts/lib/ui-phase2-audit-page-preview.mjs": "4eb1de023eeaae072d00d147c77a6966bb4178da239906b5fce76deb39252c36",
+    "scripts/verify-ui-phase2-audit-page-preview.mjs": "cbb331dfa4689f146ee9b285ebed18f3faf055607e636f26e5dc834085a9cf0b",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/OrganizationAuditPanel.vue": "cd2c3606e6ec540a8a527dfe1df6d42d87e05082bc0635dd66d292f6ee5c7291"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "loading:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "no unrelated organization summary request"
+    },
+    {
+      "width": 390,
+      "name": "first exact limit"
+    },
+    {
+      "width": 390,
+      "name": "first metadata redacted"
+    },
+    {
+      "width": 390,
+      "name": "raw probe absent from rendered page"
+    },
+    {
+      "width": 390,
+      "name": "blue query region"
+    },
+    {
+      "width": 390,
+      "name": "all eight native inputs present"
+    },
+    {
+      "width": 390,
+      "name": "no visible business dialog"
+    },
+    {
+      "width": 390,
+      "name": ".org-audit-overview:unobscured"
+    },
+    {
+      "width": 390,
+      "name": ".org-audit-filters:unobscured"
+    },
+    {
+      "width": 390,
+      "name": ".org-audit-metrics:unobscured"
+    },
+    {
+      "width": 390,
+      "name": ".org-audit-list:unobscured"
+    },
+    {
+      "width": 390,
+      "name": ".org-audit-detail:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "default:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "default-viewport:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "failed detail selected"
+    },
+    {
+      "width": 390,
+      "name": "selected-failed:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "blocked detail selected"
+    },
+    {
+      "width": 390,
+      "name": "selected-blocked:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "technical ID exact"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "request copy exact"
+    },
+    {
+      "width": 390,
+      "name": "request-copied:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "trace copy exact"
+    },
+    {
+      "width": 390,
+      "name": "trace failure shown"
+    },
+    {
+      "width": 390,
+      "name": "trace-copy-failed:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "pending disables query buttons"
+    },
+    {
+      "width": 390,
+      "name": "more-pending:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "cursor exact fixture marker"
+    },
+    {
+      "width": 390,
+      "name": "end hides more"
+    },
+    {
+      "width": 390,
+      "name": "cursor-end:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "local search has no GET"
+    },
+    {
+      "width": 390,
+      "name": "no-local-results:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "invalid dates no GET"
+    },
+    {
+      "width": 390,
+      "name": "date-invalid:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "exact seven filter query"
+    },
+    {
+      "width": 390,
+      "name": "server-filtered:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "reset removes exact query"
+    },
+    {
+      "width": 390,
+      "name": "system count40"
+    },
+    {
+      "width": 390,
+      "name": "system-collapsed:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "system expanded"
+    },
+    {
+      "width": 390,
+      "name": "system-expanded:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "system search no GET"
+    },
+    {
+      "width": 390,
+      "name": "system-search:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "empty has no detail"
+    },
+    {
+      "width": 390,
+      "name": "empty:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "403:content hidden"
+    },
+    {
+      "width": 390,
+      "name": "first-403:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "500:content hidden"
+    },
+    {
+      "width": 390,
+      "name": "first-500:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "all requests GET audit only"
+    },
+    {
+      "width": 390,
+      "name": "no external or writes"
+    },
+    {
+      "width": 390,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "name": "zero storage"
+    },
+    {
+      "width": 760,
+      "name": "loading:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "no unrelated organization summary request"
+    },
+    {
+      "width": 760,
+      "name": "first exact limit"
+    },
+    {
+      "width": 760,
+      "name": "first metadata redacted"
+    },
+    {
+      "width": 760,
+      "name": "raw probe absent from rendered page"
+    },
+    {
+      "width": 760,
+      "name": "blue query region"
+    },
+    {
+      "width": 760,
+      "name": "all eight native inputs present"
+    },
+    {
+      "width": 760,
+      "name": "no visible business dialog"
+    },
+    {
+      "width": 760,
+      "name": ".org-audit-overview:unobscured"
+    },
+    {
+      "width": 760,
+      "name": ".org-audit-filters:unobscured"
+    },
+    {
+      "width": 760,
+      "name": ".org-audit-metrics:unobscured"
+    },
+    {
+      "width": 760,
+      "name": ".org-audit-list:unobscured"
+    },
+    {
+      "width": 760,
+      "name": ".org-audit-detail:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "default:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "default-viewport:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "failed detail selected"
+    },
+    {
+      "width": 760,
+      "name": "selected-failed:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "blocked detail selected"
+    },
+    {
+      "width": 760,
+      "name": "selected-blocked:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "technical ID exact"
+    },
+    {
+      "width": 760,
+      "name": "technical-open:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "request copy exact"
+    },
+    {
+      "width": 760,
+      "name": "request-copied:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "trace copy exact"
+    },
+    {
+      "width": 760,
+      "name": "trace failure shown"
+    },
+    {
+      "width": 760,
+      "name": "trace-copy-failed:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "pending disables query buttons"
+    },
+    {
+      "width": 760,
+      "name": "more-pending:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "cursor exact fixture marker"
+    },
+    {
+      "width": 760,
+      "name": "end hides more"
+    },
+    {
+      "width": 760,
+      "name": "cursor-end:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "local search has no GET"
+    },
+    {
+      "width": 760,
+      "name": "no-local-results:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "invalid dates no GET"
+    },
+    {
+      "width": 760,
+      "name": "date-invalid:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "exact seven filter query"
+    },
+    {
+      "width": 760,
+      "name": "server-filtered:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "reset removes exact query"
+    },
+    {
+      "width": 760,
+      "name": "system count40"
+    },
+    {
+      "width": 760,
+      "name": "system-collapsed:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "system expanded"
+    },
+    {
+      "width": 760,
+      "name": "system-expanded:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "system search no GET"
+    },
+    {
+      "width": 760,
+      "name": "system-search:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "empty has no detail"
+    },
+    {
+      "width": 760,
+      "name": "empty:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "403:content hidden"
+    },
+    {
+      "width": 760,
+      "name": "first-403:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "500:content hidden"
+    },
+    {
+      "width": 760,
+      "name": "first-500:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "all requests GET audit only"
+    },
+    {
+      "width": 760,
+      "name": "no external or writes"
+    },
+    {
+      "width": 760,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 760,
+      "name": "zero storage"
+    },
+    {
+      "width": 761,
+      "name": "loading:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "no unrelated organization summary request"
+    },
+    {
+      "width": 761,
+      "name": "first exact limit"
+    },
+    {
+      "width": 761,
+      "name": "first metadata redacted"
+    },
+    {
+      "width": 761,
+      "name": "raw probe absent from rendered page"
+    },
+    {
+      "width": 761,
+      "name": "blue query region"
+    },
+    {
+      "width": 761,
+      "name": "all eight native inputs present"
+    },
+    {
+      "width": 761,
+      "name": "no visible business dialog"
+    },
+    {
+      "width": 761,
+      "name": ".org-audit-overview:unobscured"
+    },
+    {
+      "width": 761,
+      "name": ".org-audit-filters:unobscured"
+    },
+    {
+      "width": 761,
+      "name": ".org-audit-metrics:unobscured"
+    },
+    {
+      "width": 761,
+      "name": ".org-audit-list:unobscured"
+    },
+    {
+      "width": 761,
+      "name": ".org-audit-detail:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "default:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "default-viewport:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "failed detail selected"
+    },
+    {
+      "width": 761,
+      "name": "selected-failed:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "blocked detail selected"
+    },
+    {
+      "width": 761,
+      "name": "selected-blocked:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "technical ID exact"
+    },
+    {
+      "width": 761,
+      "name": "technical-open:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "request copy exact"
+    },
+    {
+      "width": 761,
+      "name": "request-copied:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "trace copy exact"
+    },
+    {
+      "width": 761,
+      "name": "trace failure shown"
+    },
+    {
+      "width": 761,
+      "name": "trace-copy-failed:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "pending disables query buttons"
+    },
+    {
+      "width": 761,
+      "name": "more-pending:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "cursor exact fixture marker"
+    },
+    {
+      "width": 761,
+      "name": "end hides more"
+    },
+    {
+      "width": 761,
+      "name": "cursor-end:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "local search has no GET"
+    },
+    {
+      "width": 761,
+      "name": "no-local-results:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "invalid dates no GET"
+    },
+    {
+      "width": 761,
+      "name": "date-invalid:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "exact seven filter query"
+    },
+    {
+      "width": 761,
+      "name": "server-filtered:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "reset removes exact query"
+    },
+    {
+      "width": 761,
+      "name": "system count40"
+    },
+    {
+      "width": 761,
+      "name": "system-collapsed:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "system expanded"
+    },
+    {
+      "width": 761,
+      "name": "system-expanded:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "system search no GET"
+    },
+    {
+      "width": 761,
+      "name": "system-search:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "empty has no detail"
+    },
+    {
+      "width": 761,
+      "name": "empty:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "403:content hidden"
+    },
+    {
+      "width": 761,
+      "name": "first-403:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "500:content hidden"
+    },
+    {
+      "width": 761,
+      "name": "first-500:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "all requests GET audit only"
+    },
+    {
+      "width": 761,
+      "name": "no external or writes"
+    },
+    {
+      "width": 761,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 761,
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "name": "loading:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "no unrelated organization summary request"
+    },
+    {
+      "width": 1440,
+      "name": "first exact limit"
+    },
+    {
+      "width": 1440,
+      "name": "first metadata redacted"
+    },
+    {
+      "width": 1440,
+      "name": "raw probe absent from rendered page"
+    },
+    {
+      "width": 1440,
+      "name": "blue query region"
+    },
+    {
+      "width": 1440,
+      "name": "all eight native inputs present"
+    },
+    {
+      "width": 1440,
+      "name": "no visible business dialog"
+    },
+    {
+      "width": 1440,
+      "name": ".org-audit-overview:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": ".org-audit-filters:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": ".org-audit-metrics:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": ".org-audit-list:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": ".org-audit-detail:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "default:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "default-viewport:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "failed detail selected"
+    },
+    {
+      "width": 1440,
+      "name": "selected-failed:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "blocked detail selected"
+    },
+    {
+      "width": 1440,
+      "name": "selected-blocked:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "technical ID exact"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "request copy exact"
+    },
+    {
+      "width": 1440,
+      "name": "request-copied:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "trace copy exact"
+    },
+    {
+      "width": 1440,
+      "name": "trace failure shown"
+    },
+    {
+      "width": 1440,
+      "name": "trace-copy-failed:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "pending disables query buttons"
+    },
+    {
+      "width": 1440,
+      "name": "more-pending:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "cursor exact fixture marker"
+    },
+    {
+      "width": 1440,
+      "name": "end hides more"
+    },
+    {
+      "width": 1440,
+      "name": "cursor-end:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "local search has no GET"
+    },
+    {
+      "width": 1440,
+      "name": "no-local-results:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "invalid dates no GET"
+    },
+    {
+      "width": 1440,
+      "name": "date-invalid:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "exact seven filter query"
+    },
+    {
+      "width": 1440,
+      "name": "server-filtered:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reset removes exact query"
+    },
+    {
+      "width": 1440,
+      "name": "system count40"
+    },
+    {
+      "width": 1440,
+      "name": "system-collapsed:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "system expanded"
+    },
+    {
+      "width": 1440,
+      "name": "system-expanded:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "system search no GET"
+    },
+    {
+      "width": 1440,
+      "name": "system-search:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "empty has no detail"
+    },
+    {
+      "width": 1440,
+      "name": "empty:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "403:content hidden"
+    },
+    {
+      "width": 1440,
+      "name": "first-403:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "500:content hidden"
+    },
+    {
+      "width": 1440,
+      "name": "first-500:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "all requests GET audit only"
+    },
+    {
+      "width": 1440,
+      "name": "no external or writes"
+    },
+    {
+      "width": 1440,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "zero storage"
+    }
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "action": "organization.member.invited",
+            "outcome": "succeeded",
+            "resource_type": "membership",
+            "request_id": "m06-01-audit-request-001",
+            "trace_id": "m06-01-audit-trace-001",
+            "occurred_from": "2026-08-26T16:00:00.000Z",
+            "occurred_to": "2026-08-27T16:00:00.000Z"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "action": "organization.member.invited",
+            "outcome": "succeeded",
+            "resource_type": "membership",
+            "request_id": "m06-01-audit-request-001",
+            "trace_id": "m06-01-audit-trace-001",
+            "occurred_from": "2026-08-26T16:00:00.000Z",
+            "occurred_to": "2026-08-27T16:00:00.000Z"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        }
+      ]
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "action": "organization.member.invited",
+            "outcome": "succeeded",
+            "resource_type": "membership",
+            "request_id": "m06-01-audit-request-001",
+            "trace_id": "m06-01-audit-trace-001",
+            "occurred_from": "2026-08-26T16:00:00.000Z",
+            "occurred_to": "2026-08-27T16:00:00.000Z"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "cursor": "00000000-0000-4000-8000-000000000669"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50",
+            "action": "organization.member.invited",
+            "outcome": "succeeded",
+            "resource_type": "membership",
+            "request_id": "m06-01-audit-request-001",
+            "trace_id": "m06-01-audit-trace-001",
+            "occurred_from": "2026-08-26T16:00:00.000Z",
+            "occurred_to": "2026-08-27T16:00:00.000Z"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/organizations/00000000-0000-4000-8000-000000000601/audit-events",
+          "query": {
+            "limit": "50"
+          }
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-loading.png",
+      "width": 390,
+      "state": "loading",
+      "fullPage": true,
+      "sha256": "689af0d7a786d9585f113cb0a0e6236c9b2cdf8a01504190ef87fbe0008f4007"
+    },
+    {
+      "file": "390-default.png",
+      "width": 390,
+      "state": "default",
+      "fullPage": true,
+      "sha256": "78cb92df116ad854d4f54a1e14665f6ffcfd1172eae979517df2dce830d3e98c"
+    },
+    {
+      "file": "390-default-viewport.png",
+      "width": 390,
+      "state": "default-viewport",
+      "fullPage": false,
+      "sha256": "d7ea666bf2b54371d9b31788b8f383c7d2c1ce666e291401f8d0d43afd471351"
+    },
+    {
+      "file": "390-selected-failed.png",
+      "width": 390,
+      "state": "selected-failed",
+      "fullPage": true,
+      "sha256": "e2fefa97afcdb5da5ec942c1188c13a55fff90195c8bf5607bc0a2eec92fa29e"
+    },
+    {
+      "file": "390-selected-blocked.png",
+      "width": 390,
+      "state": "selected-blocked",
+      "fullPage": true,
+      "sha256": "0fd3c165814ea0db32530f5c3e8f9805b7d2ea85107f4961211444b0ede4d8fc"
+    },
+    {
+      "file": "390-technical-open.png",
+      "width": 390,
+      "state": "technical-open",
+      "fullPage": true,
+      "sha256": "b35a5ab139e1523998127f8d14f2e26396683695eda7b5912ed55b5a407de3e3"
+    },
+    {
+      "file": "390-request-copied.png",
+      "width": 390,
+      "state": "request-copied",
+      "fullPage": true,
+      "sha256": "b797c244acb2172d77afd01b75d1f7b2b8645b0150bbb391d6d95a5a7f261fb3"
+    },
+    {
+      "file": "390-trace-copy-failed.png",
+      "width": 390,
+      "state": "trace-copy-failed",
+      "fullPage": true,
+      "sha256": "bcb37a8f1c3d73378965f01cf2278a516df50317b77e83348ffdf4c39afc668a"
+    },
+    {
+      "file": "390-more-pending.png",
+      "width": 390,
+      "state": "more-pending",
+      "fullPage": true,
+      "sha256": "dbd61ab25ebb0b30a644ad56aa496732e4245c820efed7ce21f8bb7e2a170d26"
+    },
+    {
+      "file": "390-cursor-end.png",
+      "width": 390,
+      "state": "cursor-end",
+      "fullPage": true,
+      "sha256": "a24a12c2a709d7c63b77508225eb03a5e33b0088cb84fc9b2e418b07c25c0142"
+    },
+    {
+      "file": "390-no-local-results.png",
+      "width": 390,
+      "state": "no-local-results",
+      "fullPage": true,
+      "sha256": "aee439e12dab925c33faec605f58d211b329d81273b0f45cab15db39c959a51e"
+    },
+    {
+      "file": "390-date-invalid.png",
+      "width": 390,
+      "state": "date-invalid",
+      "fullPage": true,
+      "sha256": "bc2918514aebc295cad039fe86e974e839fa9c146f633eff3c2d865aada16982"
+    },
+    {
+      "file": "390-server-filtered.png",
+      "width": 390,
+      "state": "server-filtered",
+      "fullPage": true,
+      "sha256": "90d55afeba97f7a721a362a1536d25f4d27d76b32599cdef90570ff2ef5e2cea"
+    },
+    {
+      "file": "390-system-collapsed.png",
+      "width": 390,
+      "state": "system-collapsed",
+      "fullPage": true,
+      "sha256": "047c9f7f85090991638ab0c3d18ef272e488f127a7b1a7afe3964e6f43deb304"
+    },
+    {
+      "file": "390-system-expanded.png",
+      "width": 390,
+      "state": "system-expanded",
+      "fullPage": true,
+      "sha256": "44e9e19fc11cfff857ba46cd12126aeb6398df62574d56ccee79b5960e0e29fc"
+    },
+    {
+      "file": "390-system-search.png",
+      "width": 390,
+      "state": "system-search",
+      "fullPage": true,
+      "sha256": "4e2cd869c62c9b08ec36ebb285bc797c0a1e9b3eeadae482aa5615e9b5ac33bc"
+    },
+    {
+      "file": "390-empty.png",
+      "width": 390,
+      "state": "empty",
+      "fullPage": true,
+      "sha256": "360dd4030bf5a5967a95f202ca96d29756a1b2b523640a3a946ccccc29e88038"
+    },
+    {
+      "file": "390-first-403.png",
+      "width": 390,
+      "state": "first-403",
+      "fullPage": true,
+      "sha256": "746e5ca1ea26e36bb614ed377d5fb230efd5bd1472f3b830e6f588bf220f161f"
+    },
+    {
+      "file": "390-first-500.png",
+      "width": 390,
+      "state": "first-500",
+      "fullPage": true,
+      "sha256": "6dee4799feb55eef9ddf3827335915380407b494cd6f7364ea19fea5f471db90"
+    },
+    {
+      "file": "760-loading.png",
+      "width": 760,
+      "state": "loading",
+      "fullPage": true,
+      "sha256": "b4a405cea33124c4cb3f74f06a7686604933a2677bda7839e695f1d4f2353fcb"
+    },
+    {
+      "file": "760-default.png",
+      "width": 760,
+      "state": "default",
+      "fullPage": true,
+      "sha256": "b95f3d5e92b50e27da0aa99f53ee02d28924de26c1c6fe35b244e9d11357a63f"
+    },
+    {
+      "file": "760-default-viewport.png",
+      "width": 760,
+      "state": "default-viewport",
+      "fullPage": false,
+      "sha256": "fc8afc35c67afd51fbcb2302d453e65b74981c3206dfe62f0e4c8480a907c976"
+    },
+    {
+      "file": "760-selected-failed.png",
+      "width": 760,
+      "state": "selected-failed",
+      "fullPage": true,
+      "sha256": "b6b85e3a3e2e0335e9aba9754094beeaf9ef457dec1897f6d195f2c859ff0786"
+    },
+    {
+      "file": "760-selected-blocked.png",
+      "width": 760,
+      "state": "selected-blocked",
+      "fullPage": true,
+      "sha256": "874939ad34982fc8af2f7defba6a58aff30c2b6581df6d5ba0ea353955db4900"
+    },
+    {
+      "file": "760-technical-open.png",
+      "width": 760,
+      "state": "technical-open",
+      "fullPage": true,
+      "sha256": "bfd71c6669a957d86d6d80b28342362724530dc0476b61e3cc9fdd81b9048cf0"
+    },
+    {
+      "file": "760-request-copied.png",
+      "width": 760,
+      "state": "request-copied",
+      "fullPage": true,
+      "sha256": "efff0af9d6339af99d991692e8ac8a23a9901e4b0425ce1290bd79ff4241d970"
+    },
+    {
+      "file": "760-trace-copy-failed.png",
+      "width": 760,
+      "state": "trace-copy-failed",
+      "fullPage": true,
+      "sha256": "81750302de9b9d1c9a438e951ac7e8282474ba09be3a14c322bfeb600ed39a6d"
+    },
+    {
+      "file": "760-more-pending.png",
+      "width": 760,
+      "state": "more-pending",
+      "fullPage": true,
+      "sha256": "1dcf218464f628cabfe4c2f54075496b92002cee58a93245a32043dadd80ac1b"
+    },
+    {
+      "file": "760-cursor-end.png",
+      "width": 760,
+      "state": "cursor-end",
+      "fullPage": true,
+      "sha256": "4ab497495f5d8a570edcf7c3c45dc9f0eae8ce78455ad52c1af4d954e748ba42"
+    },
+    {
+      "file": "760-no-local-results.png",
+      "width": 760,
+      "state": "no-local-results",
+      "fullPage": true,
+      "sha256": "3d5aaf08a9ca054792cca7cd7de6cff73c112bb3526c4d43afb08c43791d1b9b"
+    },
+    {
+      "file": "760-date-invalid.png",
+      "width": 760,
+      "state": "date-invalid",
+      "fullPage": true,
+      "sha256": "1da8377ef86ffd827e9293ce059ecff5f3bba9c0f154f9b6f96eee9d3cca5c22"
+    },
+    {
+      "file": "760-server-filtered.png",
+      "width": 760,
+      "state": "server-filtered",
+      "fullPage": true,
+      "sha256": "cf7e1398a3aed943be9a5bd2792ef3432109b333c0ca66416157081d47468dcd"
+    },
+    {
+      "file": "760-system-collapsed.png",
+      "width": 760,
+      "state": "system-collapsed",
+      "fullPage": true,
+      "sha256": "03da19a35975506a65f133d9439c3139b40041392a4997766ddbed408fc32fe2"
+    },
+    {
+      "file": "760-system-expanded.png",
+      "width": 760,
+      "state": "system-expanded",
+      "fullPage": true,
+      "sha256": "96fea96c034d3014c7d15bbe7fe34301f24e8272b7d65abac1970955a7342799"
+    },
+    {
+      "file": "760-system-search.png",
+      "width": 760,
+      "state": "system-search",
+      "fullPage": true,
+      "sha256": "1cab6094453e0dcc8ba9b1df98bcd090da49b5f4633d0473422b0ac8aa48526b"
+    },
+    {
+      "file": "760-empty.png",
+      "width": 760,
+      "state": "empty",
+      "fullPage": true,
+      "sha256": "2105482b1aaedba788b19a3201420b58d29a03f2a4a864f7305e338fd99deb54"
+    },
+    {
+      "file": "760-first-403.png",
+      "width": 760,
+      "state": "first-403",
+      "fullPage": true,
+      "sha256": "d362419b67a86833ce1f705497f690f8bd565b644a7fc73796e398dedade2dcf"
+    },
+    {
+      "file": "760-first-500.png",
+      "width": 760,
+      "state": "first-500",
+      "fullPage": true,
+      "sha256": "b2565989c72c9e4fc30f9bb13a06cfae6de8f40ea7b70a5125f1a56726d808e2"
+    },
+    {
+      "file": "761-loading.png",
+      "width": 761,
+      "state": "loading",
+      "fullPage": true,
+      "sha256": "e6aa6056bd859e0a2ed7cb792fa5e54ae1abc6edf559042e801869d586c6572e"
+    },
+    {
+      "file": "761-default.png",
+      "width": 761,
+      "state": "default",
+      "fullPage": true,
+      "sha256": "0070d53b2349445552c6cec3deef01d94ee0f3d9faff97fe63a76993728f1784"
+    },
+    {
+      "file": "761-default-viewport.png",
+      "width": 761,
+      "state": "default-viewport",
+      "fullPage": false,
+      "sha256": "578293494ef5fc8f2de05a77bf2bf85e0ced31a2b27b6bcbbdbebfd43e558b91"
+    },
+    {
+      "file": "761-selected-failed.png",
+      "width": 761,
+      "state": "selected-failed",
+      "fullPage": true,
+      "sha256": "ba656b74876501d4906464f57766a27c2e713a9b18288fc1f3407cd8426d1b9a"
+    },
+    {
+      "file": "761-selected-blocked.png",
+      "width": 761,
+      "state": "selected-blocked",
+      "fullPage": true,
+      "sha256": "296409e070ba524c86e6fdcbff3179f7de613d497424fda8ae5cc34df606f566"
+    },
+    {
+      "file": "761-technical-open.png",
+      "width": 761,
+      "state": "technical-open",
+      "fullPage": true,
+      "sha256": "9f8d8887920dc94df2e0d1a97a75f3167b58f13075a47170cd6552ba946deca6"
+    },
+    {
+      "file": "761-request-copied.png",
+      "width": 761,
+      "state": "request-copied",
+      "fullPage": true,
+      "sha256": "4a90076345abc91bfa8ff3b987d71059dda39174fe2c6a040852dcaa5b2c4652"
+    },
+    {
+      "file": "761-trace-copy-failed.png",
+      "width": 761,
+      "state": "trace-copy-failed",
+      "fullPage": true,
+      "sha256": "4ed0353c682d95ebf9acebb2a98fee9136f53c5edfce1183b3c7684494111ddf"
+    },
+    {
+      "file": "761-more-pending.png",
+      "width": 761,
+      "state": "more-pending",
+      "fullPage": true,
+      "sha256": "e5becdad21290c6fdb163c1809def062f156792e73065f9d7b49cccdd15bcc91"
+    },
+    {
+      "file": "761-cursor-end.png",
+      "width": 761,
+      "state": "cursor-end",
+      "fullPage": true,
+      "sha256": "3db20fb18a36e4294852abe12b766617c98bbaebce0a5ba221a8a64a7d2f89e3"
+    },
+    {
+      "file": "761-no-local-results.png",
+      "width": 761,
+      "state": "no-local-results",
+      "fullPage": true,
+      "sha256": "90a14e4535911b24387000537391b294bd01a9f02ea7d9593d57ee3ef7fc76fc"
+    },
+    {
+      "file": "761-date-invalid.png",
+      "width": 761,
+      "state": "date-invalid",
+      "fullPage": true,
+      "sha256": "e96883ae5aa4fb9d8538246418ed2a9110ef642742bebcb65606b3ff99c4c216"
+    },
+    {
+      "file": "761-server-filtered.png",
+      "width": 761,
+      "state": "server-filtered",
+      "fullPage": true,
+      "sha256": "ad67a4b55c131891579e2b361a73e398a4141d0d4b5e393e9b3dd13b8e03f6f7"
+    },
+    {
+      "file": "761-system-collapsed.png",
+      "width": 761,
+      "state": "system-collapsed",
+      "fullPage": true,
+      "sha256": "15a1afaa01ccc81efd86567410642adc92bf286d70d1a55503698e91569d5e03"
+    },
+    {
+      "file": "761-system-expanded.png",
+      "width": 761,
+      "state": "system-expanded",
+      "fullPage": true,
+      "sha256": "d0a79fd2cd72daad3b3f1821b49273a1d4d42e475e079639c35e7a1a50ea07c3"
+    },
+    {
+      "file": "761-system-search.png",
+      "width": 761,
+      "state": "system-search",
+      "fullPage": true,
+      "sha256": "bdc4a68de201f9d4f27383e62bd35a967070bb2de5966a6d31026f7e83a52d29"
+    },
+    {
+      "file": "761-empty.png",
+      "width": 761,
+      "state": "empty",
+      "fullPage": true,
+      "sha256": "dbeaa1618db05e7db6058191bc664584aad556409066243ad33a37bd4e1a0f38"
+    },
+    {
+      "file": "761-first-403.png",
+      "width": 761,
+      "state": "first-403",
+      "fullPage": true,
+      "sha256": "b754cee9187ba0fb7ff41466ab0a3de46e43202577ec748d6e97d9b2b8ff68a7"
+    },
+    {
+      "file": "761-first-500.png",
+      "width": 761,
+      "state": "first-500",
+      "fullPage": true,
+      "sha256": "5e341273dbf7149e0c6a28408a66d1b785b9ce382215ff207cfe0c70f96ddf0e"
+    },
+    {
+      "file": "1440-loading.png",
+      "width": 1440,
+      "state": "loading",
+      "fullPage": true,
+      "sha256": "7b78dc08d8bd3ff1c1cfbe64c97da6012494bd385650926522431662fb17c271"
+    },
+    {
+      "file": "1440-default.png",
+      "width": 1440,
+      "state": "default",
+      "fullPage": true,
+      "sha256": "d63f1ad00a7d20bad9fb46d3e0e9191a13545e3b4c1952de90e2e3a7a17dbd93"
+    },
+    {
+      "file": "1440-default-viewport.png",
+      "width": 1440,
+      "state": "default-viewport",
+      "fullPage": false,
+      "sha256": "2a42a1d5b1691c0deec90c91d98c19b2408e33c3121e45a7685ceb748c9d2edd"
+    },
+    {
+      "file": "1440-selected-failed.png",
+      "width": 1440,
+      "state": "selected-failed",
+      "fullPage": true,
+      "sha256": "76f834cafe95ed16da7a75730f8b51265ca94edab98f60e3d6bfbe8376aff0bf"
+    },
+    {
+      "file": "1440-selected-blocked.png",
+      "width": 1440,
+      "state": "selected-blocked",
+      "fullPage": true,
+      "sha256": "68556759273ad48fa50a2236b6a6842e6b498cbdd4f7a1e6c8bbaf7ce629c7b0"
+    },
+    {
+      "file": "1440-technical-open.png",
+      "width": 1440,
+      "state": "technical-open",
+      "fullPage": true,
+      "sha256": "35ddda4cf67a999a17166abd29ff24579c21b79f31feb3a1e2aa2eca7ac77594"
+    },
+    {
+      "file": "1440-request-copied.png",
+      "width": 1440,
+      "state": "request-copied",
+      "fullPage": true,
+      "sha256": "3b44bfc871055496a9ed00e0cadc75808674a75570e71865156d6398690afea8"
+    },
+    {
+      "file": "1440-trace-copy-failed.png",
+      "width": 1440,
+      "state": "trace-copy-failed",
+      "fullPage": true,
+      "sha256": "eb13c61ae1edbf877a1691caf31d7e61eb287bc5fb96c467171e1671e9080828"
+    },
+    {
+      "file": "1440-more-pending.png",
+      "width": 1440,
+      "state": "more-pending",
+      "fullPage": true,
+      "sha256": "7d8c667e6b692d5b718ab3ec1812d4e760137dfba3ba9e48e19c0b3c845d1d66"
+    },
+    {
+      "file": "1440-cursor-end.png",
+      "width": 1440,
+      "state": "cursor-end",
+      "fullPage": true,
+      "sha256": "27af14fd384b62dff4cb20f912f4e0857d0788c4ee11ae823ef36c83ca3db44b"
+    },
+    {
+      "file": "1440-no-local-results.png",
+      "width": 1440,
+      "state": "no-local-results",
+      "fullPage": true,
+      "sha256": "4f86f8d9622005dae0a2ab1ffe01c7e0cfe5f0c45db5dd615a08952b27436db0"
+    },
+    {
+      "file": "1440-date-invalid.png",
+      "width": 1440,
+      "state": "date-invalid",
+      "fullPage": true,
+      "sha256": "34e6e8a941eccad73164eb139bd93d933aa5f1e4b654ab1cb0d056fd4a8f214a"
+    },
+    {
+      "file": "1440-server-filtered.png",
+      "width": 1440,
+      "state": "server-filtered",
+      "fullPage": true,
+      "sha256": "4cde0858393ef7d28372bc93301320f0183176a73654614f131027b360cf4e2c"
+    },
+    {
+      "file": "1440-system-collapsed.png",
+      "width": 1440,
+      "state": "system-collapsed",
+      "fullPage": true,
+      "sha256": "d8d484529db2101abb53d92496b4fc30c256bcd91ccf0be99aecd5c35377f9f9"
+    },
+    {
+      "file": "1440-system-expanded.png",
+      "width": 1440,
+      "state": "system-expanded",
+      "fullPage": true,
+      "sha256": "f2bbabb228cd59929c4f712c756691a33a018bf68c2e2b1e64a441e5d2d27071"
+    },
+    {
+      "file": "1440-system-search.png",
+      "width": 1440,
+      "state": "system-search",
+      "fullPage": true,
+      "sha256": "a7832378b986791b9a906ab4ca51242f35649a297da2506d3434c42824589d17"
+    },
+    {
+      "file": "1440-empty.png",
+      "width": 1440,
+      "state": "empty",
+      "fullPage": true,
+      "sha256": "5f01d699bdd23a59e8ecc592031da04279bfd22b110bf499d86611dea990f02c"
+    },
+    {
+      "file": "1440-first-403.png",
+      "width": 1440,
+      "state": "first-403",
+      "fullPage": true,
+      "sha256": "9395e654c8fb26a33c05a0ea14707dacf2e1467ac55af67ebbbeee67b46cf4d9"
+    },
+    {
+      "file": "1440-first-500.png",
+      "width": 1440,
+      "state": "first-500",
+      "fullPage": true,
+      "sha256": "7d78fdd3deb9c9dae879d373918980da629467f2679192fda43ab9c5beceeb4b"
+    }
+  ],
+  "processesClosed": true
+}
