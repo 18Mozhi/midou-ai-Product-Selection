@@ -7,12 +7,17 @@ import vm from "node:vm";
 import { chromium } from "playwright";
 import { buildOrgApprovalsDesignData } from "./lib/ui-phase2-org-approvals-design-data.mjs";
 import { checkPrototypeMetrics } from "./lib/ui-phase2-prototype-metrics.mjs";
+import { assertRetainedProposalSources } from "./lib/ui-phase2-org-approvals-retained-sources.mjs";
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."),
   relative = "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c",
   root = path.join(repo, relative),
   capture = process.argv.includes("--capture"),
+  refreshSources = process.argv.includes("--refresh-sources"),
   hash = (v) => createHash("sha256").update(v).digest("hex");
-assert.ok(process.argv.slice(2).every((v) => v === "--capture"));
+assert.ok(
+  process.argv.slice(2).every((v) => ["--capture", "--refresh-sources"].includes(v)) &&
+    !(capture && refreshSources),
+);
 const data = await buildOrgApprovalsDesignData(repo),
   box = { window: {} };
 vm.runInNewContext(await readFile(path.join(root, "data.js"), "utf8"), box);
@@ -22,6 +27,7 @@ const sources = [
   "scripts/lib/ui-phase2-org-approvals-design-data.mjs",
   "scripts/verify-ui-phase2-org-approvals-c.mjs",
   "scripts/lib/ui-phase2-prototype-metrics.mjs",
+  "scripts/lib/ui-phase2-org-approvals-retained-sources.mjs",
   "apps/web/src/components/OrganizationApprovalPanel.vue",
   "apps/web/src/components/OrganizationAdminCenter.vue",
   "apps/api/src/organization-admin-routes.ts",
@@ -40,7 +46,8 @@ const sourceHashes = Object.fromEntries(
 let previous;
 if (!capture) {
   previous = JSON.parse(await readFile(path.join(root, "evidence.json"), "utf8"));
-  assert.deepEqual(previous.sourceHashes, sourceHashes);
+  if (refreshSources) assertRetainedProposalSources(previous.sourceHashes, sourceHashes);
+  else assert.deepEqual(previous.sourceHashes, sourceHashes);
   for (const s of previous.screenshots)
     assert.equal(hash(await readFile(path.join(root, s.file))), s.sha256);
 }
@@ -273,7 +280,16 @@ if (capture)
       2,
     ) + "\n",
   );
-else assert.deepEqual(previous.screenshots.map((s) => s.file).sort(), expected);
+else {
+  assert.deepEqual(previous.screenshots.map((s) => s.file).sort(), expected);
+  assert.deepEqual(checks, previous.checks);
+  assert.deepEqual(data.sourceChecks, previous.sourceChecks);
+  if (refreshSources)
+    await writeFile(
+      path.join(root, "evidence.json"),
+      JSON.stringify({ ...previous, sourceHashes }, null, 2) + "\n",
+    );
+}
 console.log(
   JSON.stringify(
     {

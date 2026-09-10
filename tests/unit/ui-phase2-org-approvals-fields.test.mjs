@@ -8,6 +8,19 @@ import { loadOrgApprovalFieldContract } from "../../scripts/lib/ui-phase2-org-ap
 const root = "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c";
 const e = JSON.parse(readFileSync(`${root}/evidence.json`, "utf8"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
+test("P34 approved mobile empty-result image remains immutable and approval is regional", () => {
+  assert.equal(
+    hash(readFileSync(`${root}/template-filters-empty-390.png`)),
+    "3cb818b26f53aa8eee823c939856a9027e5bb14c84873b576a1f5a44eb386410",
+  );
+  assert.equal(e.approval, "pending-user-review");
+  assert.ok(
+    readFileSync(
+      "design-plans/ui-phase-2-2026-09-07/P34-MOBILE-EMPTY-COMPOSITION-APPROVAL.md",
+      "utf8",
+    ).includes("批准仅覆盖结果数量、浅灰提示区、说明文字与“清除筛选”按钮的组合"),
+  );
+});
 test("P34 approved mobile filter image remains immutable without promoting the whole package", () => {
   assert.equal(
     hash(readFileSync(`${root}/template-filters-matching-390.png`)),

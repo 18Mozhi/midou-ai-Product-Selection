@@ -2,6 +2,8 @@
 
 手机模板筛选区域已获[局部批准](../../P34-MOBILE-FILTER-COMPOSITION-APPROVAL.md)：单列、帮助文字、底部重置。其他内容仍待审核，完整截图中的目录/详情不在批准范围内。本批是独立字段设计稿，不是实际 Vue 页面或生产验收；工具/图库待审标题为制图时状态。
 
+后续批准：[手机空结果区域](../../P34-MOBILE-EMPTY-COMPOSITION-APPROVAL.md)的数量、浅灰提示、说明和清除按钮也通过，不包含折叠入口或整页。已批准原图不可替换。手机筛选区域已[局部实施到真实Vue](../../P34-MOBILE-FILTER-VUE-REVIEW.md)，空结果提案仍待实施；下文“源码不改”描述的是初版制图边界。
+
 [字段及组合图册](gallery.html) · [离线交互](index.html) · [原页面与数据合同](../org-approvals-direction-c/README.md) · [控件图册](../org-approvals-controls-direction-c/README.md)
 
 ## 交付范围
@@ -37,7 +39,9 @@ frontend-design 用于细化 C 方向的字段层级：桌面三列、搜索占�
 - `node scripts/verify-ui-phase2-org-approvals-fields-c.mjs --smoke`：手机最小验证，不写文件。
 - `node scripts/verify-ui-phase2-org-approvals-fields-c.mjs --capture`：重采150图、证据与图库。
 - `node scripts/verify-ui-phase2-org-approvals-fields-c.mjs`：核对源图哈希后重放完整验证。
-- `node --test tests/unit/ui-phase2-org-approvals-fields.test.mjs`：五项定向源约束/绑定/漂移检查。
+- `node --test tests/unit/ui-phase2-org-approvals-fields.test.mjs`：批准图、源约束、绑定与漂移检查。
+
+已批准图禁止用重采覆盖。仅刷新真实源码绑定时，使用[保留图片的完整重验流程](../../P34-MOBILE-FILTER-VUE-REVIEW.md)，而不是 `--capture`。
 
 完整浏览器验证为134字段状态、16组合、20字段改动回第一页流程，共170项。所有下拉选项与真实SFC模板提取结果核对；每个筛选结果完整ID序列与实际Vue脚本的computed函数比较。源码助手使用惰性getter及显式ref赋值，不是挂载Vue、watch调度或后端SQL证明。浏览器检验原生有效性、帮助关联、焦点、字号/热区、水平溢出、URL既有键和只读零请求/零存储；结束关闭浏览器，无开发服务。
 

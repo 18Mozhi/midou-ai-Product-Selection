@@ -45,6 +45,7 @@ return()=>h('main',{class:'org-admin-center'},shown.value?h(Panel,{ref:child,tem
 const app=createApp(Host).use(router);await router.isReady();app.mount('#host');`;
 const files = [
   "apps/web/src/components/OrganizationApprovalPanel.vue",
+  "apps/web/src/design/approval-filter-tokens.css",
   "apps/web/src/styles.css",
   "apps/web/src/organization-admin.css",
   "apps/web/src/design/tokens.css",

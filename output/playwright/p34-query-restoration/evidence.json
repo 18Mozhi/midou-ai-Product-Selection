@@ -2,7 +2,8 @@
   "kind": "P34-QUERY-RESTORATION",
   "boundary": "Mounted unchanged-template Vue child with real Vue Router and browser back/forward; fixture data, no parent/API/SQL/permissions/production or C visual approval proof.",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationApprovalPanel.vue": "5ccdc982cf70d3e0ebfeef672ab38917e7e144baa5406b639e86e52646038bd8",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "eb961bc2924ffbaeeb3826cbe34246be80123257afa21c56487ee26086917a56",
+    "apps/web/src/design/approval-filter-tokens.css": "800eabf96b61082ea793087bb899d042f1af8a01d67b618c4520581a5785f8e6",
     "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
     "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
     "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
@@ -10,7 +11,7 @@
     "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
     "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
     "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
-    "scripts/verify-ui-phase2-org-approvals-query.mjs": "2b3abf5a1d0c9dee3d2be9fa8b74b9e0d8609a1763b4fadf1f7ff30914ec15cd",
+    "scripts/verify-ui-phase2-org-approvals-query.mjs": "55ff8fd1533c9a38546bdec03a179201c0eb061724872ffabd57222cbf26526f",
     "scripts/lib/ui-phase2-org-approvals-design-data.mjs": "b2d28c6d338a520b4f9e674c345905d6d690236a49c33976dac2e262b23e8f9a",
     "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4"
   },
@@ -183,7 +184,7 @@
       "width": 1440,
       "pageId": "P34",
       "scope": "mounted-original-Vue-child-isolated-data-not-C-approval-or-production",
-      "sha256": "076060b4a0699518236bbcb0e88e5f22e44391c6760de30499a0a0011f23dab0"
+      "sha256": "94c1308112e3c3be4bc8b1f9b307bf7b4714fa951ec3adfc0c90943849674bb0"
     },
     {
       "file": "back-requests-1440.png",
@@ -199,7 +200,7 @@
       "width": 1440,
       "pageId": "P34",
       "scope": "mounted-original-Vue-child-isolated-data-not-C-approval-or-production",
-      "sha256": "9e78c29ce796742ec52db49a10fc88648bd20d77ad645a3d6090f08090ba2a60"
+      "sha256": "2ad3031a089eb807d9de007210a77d53d6c26fdf226f0b804e8810f3addb4c64"
     },
     {
       "file": "initial-requests-390.png",
@@ -215,7 +216,7 @@
       "width": 390,
       "pageId": "P34",
       "scope": "mounted-original-Vue-child-isolated-data-not-C-approval-or-production",
-      "sha256": "134049ab2af33774689b76fc477158ca490dd31c826fc34271be8dac3b3bb9ac"
+      "sha256": "677a6f681306b8b4bdc838c92edfd45eb9ba92e93eabc4db5162c6d150a8c1df"
     },
     {
       "file": "back-requests-390.png",
@@ -223,7 +224,7 @@
       "width": 390,
       "pageId": "P34",
       "scope": "mounted-original-Vue-child-isolated-data-not-C-approval-or-production",
-      "sha256": "6a9c97e0b03675dafd5e731f021c19f5f81fe71aa51b6fd4ec3f3f59558bcf9e"
+      "sha256": "854fc2e2f9ef6923967fb27aba305fb3c0ddb86ab6b3831b0bf3f9fd1ccd128b"
     },
     {
       "file": "forward-templates-390.png",
@@ -231,7 +232,7 @@
       "width": 390,
       "pageId": "P34",
       "scope": "mounted-original-Vue-child-isolated-data-not-C-approval-or-production",
-      "sha256": "916c1563b405c05776a6cc2a505b9ea384a3a44ca7d95b304cd27c714e4f23ea"
+      "sha256": "cab52759ba34ca6fc645ca5f735a5b548b5e0261927717e6305591359ee2377a"
     }
   ]
 }

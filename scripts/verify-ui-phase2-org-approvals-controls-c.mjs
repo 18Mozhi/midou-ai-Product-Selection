@@ -5,14 +5,17 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { chromium } from "playwright";
 import { scanSource } from "./lib/ui-phase2-inventory.mjs";
+import { assertRetainedProposalSources } from "./lib/ui-phase2-org-approvals-retained-sources.mjs";
 
 const base = "design-plans/ui-phase-2-2026-09-07/design";
 const output = `${base}/org-approvals-controls-direction-c`;
 const sourceFile = "apps/web/src/components/OrganizationApprovalPanel.vue";
 const capture = process.argv.includes("--capture"),
-  smoke = process.argv.includes("--smoke");
+  smoke = process.argv.includes("--smoke"),
+  refreshSources = process.argv.includes("--refresh-sources");
 assert.ok(
-  process.argv.slice(2).every((a) => ["--capture", "--smoke"].includes(a)) && !(capture && smoke),
+  process.argv.slice(2).every((a) => ["--capture", "--smoke", "--refresh-sources"].includes(a)) &&
+    [capture, smoke, refreshSources].filter(Boolean).length <= 1,
 );
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const parent = JSON.parse(
@@ -34,7 +37,8 @@ const sourceSignatures = scanSource(await readFile(sourceFile, "utf8"), sourceFi
 let previous;
 if (!capture && !smoke) {
   previous = JSON.parse(await readFile(`${output}/evidence.json`, "utf8"));
-  assert.deepEqual(previous.sourceHashes, sourceHashes);
+  if (refreshSources) assertRetainedProposalSources(previous.sourceHashes, sourceHashes);
+  else assert.deepEqual(previous.sourceHashes, sourceHashes);
   for (const s of previous.screenshots) {
     assert.match(s.file, /^[a-z_-]+-(1440|390)\.png$/);
     assert.equal(hash(await readFile(`${output}/${s.file}`)), s.sha256);
@@ -292,6 +296,11 @@ if (capture) {
 } else if (!smoke) {
   assert.deepEqual(checks, previous.checks);
   assert.deepEqual(interactions, previous.interactions);
+  if (refreshSources)
+    await writeFile(
+      `${output}/evidence.json`,
+      JSON.stringify({ ...previous, sourceHashes }, null, 2) + "\n",
+    );
 }
 console.log(
   JSON.stringify({

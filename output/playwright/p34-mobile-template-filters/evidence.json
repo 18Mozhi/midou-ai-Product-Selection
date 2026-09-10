@@ -1,0 +1,408 @@
+{
+  "kind": "P34-MOBILE-TEMPLATE-FILTERS",
+  "boundary": "Actual child with isolated fixtures. Only mobile filter region implemented; desktop/request pixels compared to pre-change SFC. Not parent/API/permission/production or other visual approval.",
+  "baselineCommit": "7a147e6f65083cd63042a9c6b2d0a03ac8968b87",
+  "baselineSha256": "5ccdc982cf70d3e0ebfeef672ab38917e7e144baa5406b639e86e52646038bd8",
+  "sourceHashes": {
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "eb961bc2924ffbaeeb3826cbe34246be80123257afa21c56487ee26086917a56",
+    "apps/web/src/design/approval-filter-tokens.css": "800eabf96b61082ea793087bb899d042f1af8a01d67b618c4520581a5785f8e6",
+    "scripts/verify-ui-phase2-org-approvals-mobile-filters.mjs": "9abcb6092872557a99a13e50ce04df16a79e81ef701f69b38e4d243e09b3e9cb",
+    "scripts/lib/ui-phase2-org-approvals-design-data.mjs": "b2d28c6d338a520b4f9e674c345905d6d690236a49c33976dac2e262b23e8f9a",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "requests: pixel identical to pre-change child"
+    },
+    {
+      "width": 390,
+      "name": "five existing native fields"
+    },
+    {
+      "width": 390,
+      "name": "native constraints unchanged"
+    },
+    {
+      "width": 390,
+      "name": "single column and 44px/16px controls"
+    },
+    {
+      "width": 390,
+      "name": "six help/count lines visible"
+    },
+    {
+      "width": 390,
+      "name": "C field colors are not overridden by old theme"
+    },
+    {
+      "width": 390,
+      "name": "help IDs resolve"
+    },
+    {
+      "width": 390,
+      "name": "bottom full width reset"
+    },
+    {
+      "width": 390,
+      "name": "default: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "combined filters one real fixture match"
+    },
+    {
+      "width": 390,
+      "name": "matching: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "no result is not validation error"
+    },
+    {
+      "width": 390,
+      "name": "empty result has no directory rows"
+    },
+    {
+      "width": 390,
+      "name": "no-result: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "keyboard order stays fields then reset"
+    },
+    {
+      "width": 390,
+      "name": "reset-focus: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "reset keeps five existing defaults"
+    },
+    {
+      "width": 390,
+      "name": "reset preserves other view and unrelated URL"
+    },
+    {
+      "width": 390,
+      "name": "reset-result: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "220 input remains allowed"
+    },
+    {
+      "width": 390,
+      "name": "existing URL reader still restores 200 units"
+    },
+    {
+      "width": 390,
+      "name": "zero external/API requests"
+    },
+    {
+      "width": 390,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 760,
+      "name": "requests: pixel identical to pre-change child"
+    },
+    {
+      "width": 760,
+      "name": "five existing native fields"
+    },
+    {
+      "width": 760,
+      "name": "native constraints unchanged"
+    },
+    {
+      "width": 760,
+      "name": "single column and 44px/16px controls"
+    },
+    {
+      "width": 760,
+      "name": "six help/count lines visible"
+    },
+    {
+      "width": 760,
+      "name": "C field colors are not overridden by old theme"
+    },
+    {
+      "width": 760,
+      "name": "help IDs resolve"
+    },
+    {
+      "width": 760,
+      "name": "bottom full width reset"
+    },
+    {
+      "width": 760,
+      "name": "default: no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "combined filters one real fixture match"
+    },
+    {
+      "width": 760,
+      "name": "matching: no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "no result is not validation error"
+    },
+    {
+      "width": 760,
+      "name": "empty result has no directory rows"
+    },
+    {
+      "width": 760,
+      "name": "no-result: no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "keyboard order stays fields then reset"
+    },
+    {
+      "width": 760,
+      "name": "reset-focus: no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "reset keeps five existing defaults"
+    },
+    {
+      "width": 760,
+      "name": "reset preserves other view and unrelated URL"
+    },
+    {
+      "width": 760,
+      "name": "reset-result: no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "220 input remains allowed"
+    },
+    {
+      "width": 760,
+      "name": "existing URL reader still restores 200 units"
+    },
+    {
+      "width": 760,
+      "name": "zero external/API requests"
+    },
+    {
+      "width": 760,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 761,
+      "name": "requests: pixel identical to pre-change child"
+    },
+    {
+      "width": 761,
+      "name": "templates: pixel identical to pre-change child"
+    },
+    {
+      "width": 761,
+      "name": "five existing native fields"
+    },
+    {
+      "width": 761,
+      "name": "native constraints unchanged"
+    },
+    {
+      "width": 761,
+      "name": "desktop help visually hidden"
+    },
+    {
+      "width": 761,
+      "name": "default: no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "combined filters one real fixture match"
+    },
+    {
+      "width": 761,
+      "name": "matching: no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "no result is not validation error"
+    },
+    {
+      "width": 761,
+      "name": "empty result has no directory rows"
+    },
+    {
+      "width": 761,
+      "name": "no-result: no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "keyboard order stays fields then reset"
+    },
+    {
+      "width": 761,
+      "name": "reset-focus: no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "reset keeps five existing defaults"
+    },
+    {
+      "width": 761,
+      "name": "reset preserves other view and unrelated URL"
+    },
+    {
+      "width": 761,
+      "name": "reset-result: no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "220 input remains allowed"
+    },
+    {
+      "width": 761,
+      "name": "existing URL reader still restores 200 units"
+    },
+    {
+      "width": 761,
+      "name": "zero external/API requests"
+    },
+    {
+      "width": 761,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "requests: pixel identical to pre-change child"
+    },
+    {
+      "width": 1440,
+      "name": "templates: pixel identical to pre-change child"
+    },
+    {
+      "width": 1440,
+      "name": "five existing native fields"
+    },
+    {
+      "width": 1440,
+      "name": "native constraints unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "desktop help visually hidden"
+    },
+    {
+      "width": 1440,
+      "name": "default: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "combined filters one real fixture match"
+    },
+    {
+      "width": 1440,
+      "name": "matching: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "no result is not validation error"
+    },
+    {
+      "width": 1440,
+      "name": "empty result has no directory rows"
+    },
+    {
+      "width": 1440,
+      "name": "no-result: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "keyboard order stays fields then reset"
+    },
+    {
+      "width": 1440,
+      "name": "reset-focus: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reset keeps five existing defaults"
+    },
+    {
+      "width": 1440,
+      "name": "reset preserves other view and unrelated URL"
+    },
+    {
+      "width": 1440,
+      "name": "reset-result: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "220 input remains allowed"
+    },
+    {
+      "width": 1440,
+      "name": "existing URL reader still restores 200 units"
+    },
+    {
+      "width": 1440,
+      "name": "zero external/API requests"
+    },
+    {
+      "width": 1440,
+      "name": "zero browser errors"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "default-390.png",
+      "scene": "default",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "mounted-Vue-mobile-template-filters-only-not-production-or-whole-page-approval",
+      "sha256": "24b2656545e307fde3ce3144380be669c5a47fe33d5d8d3158a3eb3eefe17fdf"
+    },
+    {
+      "file": "matching-390.png",
+      "scene": "matching",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "mounted-Vue-mobile-template-filters-only-not-production-or-whole-page-approval",
+      "sha256": "def3ab9bb42daab00ecdcba789703bbc5a7bcfe91c5c1d4e2c1e64cc0fc3e108"
+    },
+    {
+      "file": "no-result-390.png",
+      "scene": "no-result",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "mounted-Vue-mobile-template-filters-only-not-production-or-whole-page-approval",
+      "sha256": "c1388a62d89f210f3bd2869c6ab5d3d7b037f3c32a58c37ae25dba644d21bdb3"
+    },
+    {
+      "file": "reset-focus-390.png",
+      "scene": "reset-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "mounted-Vue-mobile-template-filters-only-not-production-or-whole-page-approval",
+      "sha256": "b0461beccffc414ce51c4566ab356e5560feb98c9d153d4455866e6fbe3da15d"
+    },
+    {
+      "file": "reset-result-390.png",
+      "scene": "reset-result",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "mounted-Vue-mobile-template-filters-only-not-production-or-whole-page-approval",
+      "sha256": "24b2656545e307fde3ce3144380be669c5a47fe33d5d8d3158a3eb3eefe17fdf"
+    }
+  ]
+}

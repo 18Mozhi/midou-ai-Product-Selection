@@ -533,45 +533,85 @@ function resetTemplates() {
           >已归档</span
         >
       </div>
-      <div class="org-approval-toolbar">
+      <div class="org-approval-toolbar org-approval-template-filters-c">
         <label class="org-approval-search">
           <span>搜索模板</span>
-          <input v-model="templateQuery" type="search" placeholder="模板名称或工作区" />
+          <input
+            v-model="templateQuery"
+            type="search"
+            placeholder="模板名称或工作区"
+            aria-label="搜索模板"
+            aria-describedby="org-template-query-help org-template-query-count"
+          />
+          <small id="org-template-query-help" class="org-template-filter-help"
+            >仅搜索已返回模板的名称或工作区名称，不搜索节点或技术编号。</small
+          >
+          <small id="org-template-query-count" class="org-template-filter-help"
+            >当前输入长度：{{ templateQuery.length }}</small
+          >
         </label>
         <label>
           <span>状态</span>
-          <select v-model="templateStatus">
+          <select
+            v-model="templateStatus"
+            aria-label="状态"
+            aria-describedby="org-template-status-help"
+          >
             <option value="all">全部状态</option>
             <option value="published">已发布</option>
             <option value="draft">草稿</option>
             <option value="archived">已归档</option>
           </select>
+          <small id="org-template-status-help" class="org-template-filter-help"
+            >按返回记录的真实状态筛选；无匹配结果不表示输入错误。</small
+          >
         </label>
         <label>
           <span>工作区</span>
-          <select v-model="templateWorkspace">
+          <select
+            v-model="templateWorkspace"
+            aria-label="工作区"
+            aria-describedby="org-template-workspace-help"
+          >
             <option value="all">全部工作区</option>
             <option v-for="workspace in workspaces" :key="workspace" :value="workspace">
               {{ workspace }}
             </option>
           </select>
+          <small id="org-template-workspace-help" class="org-template-filter-help"
+            >按已返回模板的工作区名称筛选；同名工作区合并为一个选项。</small
+          >
         </label>
         <label>
           <span>资源类型</span>
-          <select v-model="templateResource">
+          <select
+            v-model="templateResource"
+            aria-label="资源类型"
+            aria-describedby="org-template-resource-help"
+          >
             <option value="all">全部类型</option>
             <option value="task">业务任务</option>
             <option value="opportunity_decision">机会决策</option>
           </select>
+          <small id="org-template-resource-help" class="org-template-filter-help"
+            >业务任务与机会决策分别查看，不改变当前工作区。</small
+          >
         </label>
         <label>
           <span>排序</span>
-          <select v-model="templateSort">
+          <select
+            v-model="templateSort"
+            aria-label="排序"
+            aria-describedby="org-template-sort-help"
+          >
             <option value="name_asc">名称 A–Z</option>
             <option value="updated_desc">版本号从高到低</option>
             <option value="nodes_desc">节点数从多到少</option>
             <option value="workspace_asc">工作区排序</option>
           </select>
+          <small id="org-template-sort-help" class="org-template-filter-help"
+            >版本号排序依据当前版本，不按更新时间；修改条件后回到第一页。</small
+          >
         </label>
         <button type="button" @click="resetTemplates">重置</button>
       </div>
@@ -713,3 +753,64 @@ function resetTemplates() {
     </footer>
   </section>
 </template>
+
+<style src="../design/approval-filter-tokens.css"></style>
+
+<style scoped>
+.org-template-filter-help {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .org-approval-template-filters-c {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    padding: 16px;
+    background: var(--so-approval-filter-paper);
+    font-family: "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+    line-height: 1.6;
+  }
+
+  .org-approval-template-filters-c label {
+    min-width: 0;
+    gap: 7px;
+  }
+
+  .org-approval-template-filters-c .org-approval-search {
+    grid-column: auto;
+  }
+
+  .org-approval-template-filters-c label > span {
+    color: var(--so-approval-filter-ink);
+    font-size: 14px;
+  }
+
+  .org-approval-template-filters-c input,
+  .org-approval-template-filters-c select,
+  .org-approval-template-filters-c > button {
+    width: 100%;
+    height: 44px;
+    min-height: 44px;
+    border: 1px solid var(--so-approval-filter-border);
+    border-radius: 4px;
+    padding: 8px 10px;
+    background: var(--so-approval-filter-paper);
+    color: var(--so-approval-filter-ink);
+    font: inherit;
+    font-size: 16px;
+  }
+
+  .org-approval-template-filters-c > button {
+    color: var(--so-approval-filter-blue);
+  }
+
+  .org-approval-template-filters-c .org-template-filter-help {
+    display: block;
+    color: var(--so-approval-filter-muted);
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+  }
+}
+</style>

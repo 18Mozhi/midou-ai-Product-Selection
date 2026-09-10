@@ -5,13 +5,16 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { chromium } from "playwright";
 import { loadOrgApprovalFieldContract } from "./lib/ui-phase2-org-approvals-fields-data.mjs";
+import { assertRetainedProposalSources } from "./lib/ui-phase2-org-approvals-retained-sources.mjs";
 
 const base = "design-plans/ui-phase-2-2026-09-07/design";
 const output = `${base}/org-approvals-fields-direction-c`;
 const capture = process.argv.includes("--capture"),
-  smoke = process.argv.includes("--smoke");
+  smoke = process.argv.includes("--smoke"),
+  refreshSources = process.argv.includes("--refresh-sources");
 assert.ok(
-  process.argv.slice(2).every((v) => ["--capture", "--smoke"].includes(v)) && !(capture && smoke),
+  process.argv.slice(2).every((v) => ["--capture", "--smoke", "--refresh-sources"].includes(v)) &&
+    [capture, smoke, refreshSources].filter(Boolean).length <= 1,
 );
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const parent = JSON.parse(
@@ -30,7 +33,8 @@ for (const file of ["index.html", "fields.css", "fields.js"]
 let previous;
 if (!capture && !smoke) {
   previous = JSON.parse(await readFile(`${output}/evidence.json`, "utf8"));
-  assert.deepEqual(previous.sourceHashes, sourceHashes);
+  if (refreshSources) assertRetainedProposalSources(previous.sourceHashes, sourceHashes);
+  else assert.deepEqual(previous.sourceHashes, sourceHashes);
   for (const s of previous.screenshots) {
     assert.match(s.file, /^[a-z\d_-]+-(390|1440)\.png$/);
     assert.equal(hash(await readFile(`${output}/${s.file}`)), s.sha256);
@@ -299,6 +303,25 @@ if (capture) {
   assert.deepEqual(fieldChecks, previous.fieldChecks);
   assert.deepEqual(compositionChecks, previous.compositionChecks);
   assert.deepEqual(workflowChecks, previous.workflowChecks);
+  if (refreshSources) {
+    const withoutDescriptions = (inputs) =>
+      inputs.map((input) => ({
+        ...input,
+        attrs: Object.fromEntries(
+          Object.entries(input.attrs).filter(
+            ([key]) => !["aria-label", "aria-describedby"].includes(key),
+          ),
+        ),
+      }));
+    assert.deepEqual(
+      withoutDescriptions(JSON.parse(JSON.stringify(contract.inputs))),
+      withoutDescriptions(previous.sourceInputs),
+    );
+    await writeFile(
+      `${output}/evidence.json`,
+      JSON.stringify({ ...previous, sourceHashes, sourceInputs: contract.inputs }, null, 2) + "\n",
+    );
+  }
 }
 console.log(
   JSON.stringify({

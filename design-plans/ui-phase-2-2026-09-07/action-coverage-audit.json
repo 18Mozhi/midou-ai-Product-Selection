@@ -69,7 +69,7 @@
     "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
     "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
-    "apps/web/src/components/OrganizationApprovalPanel.vue": "5ccdc982cf70d3e0ebfeef672ab38917e7e144baa5406b639e86e52646038bd8",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "eb961bc2924ffbaeeb3826cbe34246be80123257afa21c56487ee26086917a56",
     "apps/web/src/components/OrganizationAuditPanel.vue": "b0f7e9452a81914dfa71c3812765f93726804d2ed1e56494e9004314a6f8ac7a",
     "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
     "apps/web/src/components/OrganizationDataPanel.vue": "575175d7e1aeabf68a6e742e97aea34fc6876ef5e09219b876f243f77eb42bb2",
@@ -251,9 +251,9 @@
     "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/evidence.json": "680ae6b54396859f9e410a67851bed759be790f33cca6c7aac2e501c6974e8e8",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/evidence.json": "ccdc0ffb2f31fc66fc71b0d5722afc5355f4f0872f706551c5f730ee4e52e99d",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-direction-c/evidence.json": "ae2f594b7964b2aeb093f57c828fd381c862d4570a5ba8798a4b93c480dc31af",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/evidence.json": "3827fb1854b9f190e9961c959e2caa37eaca01cfa10d20c8f5c12eb7ba04c0bc",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json": "1ccc2a7f7ce664fb105dde1fcd3fbccdae7b2e9417316abaeacb0a6ddefd0626",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/evidence.json": "b44dcbafcfa08e1167cd55d62f0826646777862d5cb096da24281a7953fa7b31",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/evidence.json": "fc81a210efc5d622d3001db274a0b80ca6dc8182bea215874f3242df31253b92",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json": "25159176906a79b67706aa0025bef92a205f39c1f63f5804f45fab5b97b50746",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/evidence.json": "68fa0a37fd97d41a6ff08cdbe572926ba2aea337c20ef8d6881368c35c1dc502",
     "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/evidence.json": "ff82e9bf86a14443ef2273a9871dd8937cae0d461447a24bc277338cbea6995e",
     "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/evidence.json": "b633f59f44962017305897434f7956b31b16da17fbdab5218499c59d785d1e68",
     "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json": "92db772cdceb7a1e74e265c027502814f49a355a6629e95908e2a5a880ad1b94",
@@ -27543,7 +27543,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationApprovalPanel.vue#2a3781fdd41e7df6.1",
       "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
-      "line": 576,
+      "line": 616,
       "kind": "control",
       "label": "重置",
       "conditions": [
@@ -27577,7 +27577,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationApprovalPanel.vue#f6777d94811ef9af.1",
       "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
-      "line": 581,
+      "line": 621,
       "kind": "control",
       "label": "{{ template.workspace_name }} {{ template.name }} {{ resourceLabel(template.resource_type) }} · {{ template.node_count }",
       "conditions": [
@@ -27619,7 +27619,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationApprovalPanel.vue#0b242741fe22e1a9.1",
       "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
-      "line": 599,
+      "line": 639,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -27657,7 +27657,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationApprovalPanel.vue#0ab42724896b9cf9.1",
       "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
-      "line": 600,
+      "line": 640,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -27695,7 +27695,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationApprovalPanel.vue#1c008f867673db60.2",
       "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
-      "line": 686,
+      "line": 726,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -27737,7 +27737,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationApprovalPanel.vue#cb237b82e3d08902.1",
       "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
-      "line": 711,
+      "line": 751,
       "kind": "control",
       "label": "前往审批工作台",
       "conditions": [],
@@ -27766,7 +27766,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationApprovalPanel.vue#a8c2e662cd00ee63.1",
       "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
-      "line": 712,
+      "line": 752,
       "kind": "control",
       "label": "查看组织审计",
       "conditions": [],
