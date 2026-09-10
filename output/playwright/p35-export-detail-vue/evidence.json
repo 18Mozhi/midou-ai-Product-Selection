@@ -1,0 +1,2390 @@
+{
+  "pageId": "P35",
+  "scope": "mobile-detail-only-actual-child-not-parent-API-SQL-production",
+  "baselineCommit": "d401ec95501555a458715ea3a610e61f5f8eead7",
+  "sourceHashes": {
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+    "apps/web/src/org-data-export-detail.css": "b258adf5f28ff62e553e4e3e925c38e243cfa0fd76240bb454bd6f821a248e98",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "scripts/verify-ui-phase2-org-data-export-detail.mjs": "286b52b60e27198a5262e90ac15dc6cd24c8630c85d5d9685100da933d539c72",
+    "scripts/lib/ui-phase2-org-data-design-data.mjs": "4c6db4f4924384c2bf1361533798e829299d54a10b0cbc730633161afeac51cb",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "workspaces: unchanged baseline pixels"
+    },
+    {
+      "width": 390,
+      "name": "no exports: unchanged baseline pixels"
+    },
+    {
+      "width": 390,
+      "name": "no match: unchanged baseline pixels"
+    },
+    {
+      "width": 390,
+      "name": "normal: present"
+    },
+    {
+      "width": 390,
+      "name": "normal: keyboard opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "normal: technical ID visible"
+    },
+    {
+      "width": 390,
+      "name": "normal: mobile white surface"
+    },
+    {
+      "width": 390,
+      "name": "normal: title font"
+    },
+    {
+      "width": 390,
+      "name": "normal: control font"
+    },
+    {
+      "width": 390,
+      "name": "normal: control size"
+    },
+    {
+      "width": 390,
+      "name": "normal: approved placement"
+    },
+    {
+      "width": 390,
+      "name": "normal: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "normal: no field clipping"
+    },
+    {
+      "width": 390,
+      "name": "normal: keyboard closes native detail"
+    },
+    {
+      "width": 390,
+      "name": "normal: pointer opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "normal: data unchanged"
+    },
+    {
+      "width": 390,
+      "name": "normal: URL unchanged"
+    },
+    {
+      "width": 390,
+      "name": "zero: present"
+    },
+    {
+      "width": 390,
+      "name": "known zero remains 0 行"
+    },
+    {
+      "width": 390,
+      "name": "null remains 尚未生成"
+    },
+    {
+      "width": 390,
+      "name": "zero: keyboard opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "zero: technical ID visible"
+    },
+    {
+      "width": 390,
+      "name": "zero: mobile white surface"
+    },
+    {
+      "width": 390,
+      "name": "zero: title font"
+    },
+    {
+      "width": 390,
+      "name": "zero: control font"
+    },
+    {
+      "width": 390,
+      "name": "zero: control size"
+    },
+    {
+      "width": 390,
+      "name": "zero: approved placement"
+    },
+    {
+      "width": 390,
+      "name": "zero: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "zero: no field clipping"
+    },
+    {
+      "width": 390,
+      "name": "zero row exact label"
+    },
+    {
+      "width": 390,
+      "name": "zero row native detail opens"
+    },
+    {
+      "width": 390,
+      "name": "zero: keyboard closes native detail"
+    },
+    {
+      "width": 390,
+      "name": "zero: pointer opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "zero: data unchanged"
+    },
+    {
+      "width": 390,
+      "name": "zero: URL unchanged"
+    },
+    {
+      "width": 390,
+      "name": "long: present"
+    },
+    {
+      "width": 390,
+      "name": "long: keyboard opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "long: technical ID visible"
+    },
+    {
+      "width": 390,
+      "name": "long: mobile white surface"
+    },
+    {
+      "width": 390,
+      "name": "long: title font"
+    },
+    {
+      "width": 390,
+      "name": "long: control font"
+    },
+    {
+      "width": 390,
+      "name": "long: control size"
+    },
+    {
+      "width": 390,
+      "name": "long: approved placement"
+    },
+    {
+      "width": 390,
+      "name": "long: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "long: no field clipping"
+    },
+    {
+      "width": 390,
+      "name": "long: keyboard closes native detail"
+    },
+    {
+      "width": 390,
+      "name": "long: pointer opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "long: data unchanged"
+    },
+    {
+      "width": 390,
+      "name": "long: URL unchanged"
+    },
+    {
+      "width": 390,
+      "name": "unknown: present"
+    },
+    {
+      "width": 390,
+      "name": "unknown status retained"
+    },
+    {
+      "width": 390,
+      "name": "unknown type retained"
+    },
+    {
+      "width": 390,
+      "name": "unknown: keyboard opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "unknown: technical ID visible"
+    },
+    {
+      "width": 390,
+      "name": "unknown: mobile white surface"
+    },
+    {
+      "width": 390,
+      "name": "unknown: title font"
+    },
+    {
+      "width": 390,
+      "name": "unknown: control font"
+    },
+    {
+      "width": 390,
+      "name": "unknown: control size"
+    },
+    {
+      "width": 390,
+      "name": "unknown: approved placement"
+    },
+    {
+      "width": 390,
+      "name": "unknown: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "unknown: no field clipping"
+    },
+    {
+      "width": 390,
+      "name": "unknown: keyboard closes native detail"
+    },
+    {
+      "width": 390,
+      "name": "unknown: pointer opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "unknown: data unchanged"
+    },
+    {
+      "width": 390,
+      "name": "unknown: URL unchanged"
+    },
+    {
+      "width": 390,
+      "name": "missing: present"
+    },
+    {
+      "width": 390,
+      "name": "missing times preserve original formatter"
+    },
+    {
+      "width": 390,
+      "name": "missing: keyboard opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "missing: technical ID visible"
+    },
+    {
+      "width": 390,
+      "name": "missing: mobile white surface"
+    },
+    {
+      "width": 390,
+      "name": "missing: title font"
+    },
+    {
+      "width": 390,
+      "name": "missing: control font"
+    },
+    {
+      "width": 390,
+      "name": "missing: control size"
+    },
+    {
+      "width": 390,
+      "name": "missing: approved placement"
+    },
+    {
+      "width": 390,
+      "name": "missing: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "missing: no field clipping"
+    },
+    {
+      "width": 390,
+      "name": "missing: keyboard closes native detail"
+    },
+    {
+      "width": 390,
+      "name": "missing: pointer opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "missing: data unchanged"
+    },
+    {
+      "width": 390,
+      "name": "missing: URL unchanged"
+    },
+    {
+      "width": 390,
+      "name": "queued: present"
+    },
+    {
+      "width": 390,
+      "name": "queued: original status attribute"
+    },
+    {
+      "width": 390,
+      "name": "queued: keyboard opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "queued: technical ID visible"
+    },
+    {
+      "width": 390,
+      "name": "queued: mobile white surface"
+    },
+    {
+      "width": 390,
+      "name": "queued: title font"
+    },
+    {
+      "width": 390,
+      "name": "queued: control font"
+    },
+    {
+      "width": 390,
+      "name": "queued: control size"
+    },
+    {
+      "width": 390,
+      "name": "queued: approved placement"
+    },
+    {
+      "width": 390,
+      "name": "queued: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "queued: no field clipping"
+    },
+    {
+      "width": 390,
+      "name": "queued: keyboard closes native detail"
+    },
+    {
+      "width": 390,
+      "name": "queued: pointer opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "queued: data unchanged"
+    },
+    {
+      "width": 390,
+      "name": "queued: URL unchanged"
+    },
+    {
+      "width": 390,
+      "name": "leased: present"
+    },
+    {
+      "width": 390,
+      "name": "leased: original status attribute"
+    },
+    {
+      "width": 390,
+      "name": "leased: keyboard opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "leased: technical ID visible"
+    },
+    {
+      "width": 390,
+      "name": "leased: mobile white surface"
+    },
+    {
+      "width": 390,
+      "name": "leased: title font"
+    },
+    {
+      "width": 390,
+      "name": "leased: control font"
+    },
+    {
+      "width": 390,
+      "name": "leased: control size"
+    },
+    {
+      "width": 390,
+      "name": "leased: approved placement"
+    },
+    {
+      "width": 390,
+      "name": "leased: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "leased: no field clipping"
+    },
+    {
+      "width": 390,
+      "name": "leased: keyboard closes native detail"
+    },
+    {
+      "width": 390,
+      "name": "leased: pointer opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "leased: data unchanged"
+    },
+    {
+      "width": 390,
+      "name": "leased: URL unchanged"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: present"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: original status attribute"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: keyboard opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: technical ID visible"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: mobile white surface"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: title font"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: control font"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: control size"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: approved placement"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: no field clipping"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: keyboard closes native detail"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: pointer opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: data unchanged"
+    },
+    {
+      "width": 390,
+      "name": "retry_scheduled: URL unchanged"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: present"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: original status attribute"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: keyboard opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: technical ID visible"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: mobile white surface"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: title font"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: control font"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: control size"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: approved placement"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: no field clipping"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: keyboard closes native detail"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: pointer opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: data unchanged"
+    },
+    {
+      "width": 390,
+      "name": "succeeded: URL unchanged"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: present"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: original status attribute"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: keyboard opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: technical ID visible"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: mobile white surface"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: title font"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: control font"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: control size"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: approved placement"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: no field clipping"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: keyboard closes native detail"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: pointer opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: data unchanged"
+    },
+    {
+      "width": 390,
+      "name": "dead_letter: URL unchanged"
+    },
+    {
+      "width": 390,
+      "name": "expired: present"
+    },
+    {
+      "width": 390,
+      "name": "expired: original status attribute"
+    },
+    {
+      "width": 390,
+      "name": "expired: keyboard opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "expired: technical ID visible"
+    },
+    {
+      "width": 390,
+      "name": "expired: mobile white surface"
+    },
+    {
+      "width": 390,
+      "name": "expired: title font"
+    },
+    {
+      "width": 390,
+      "name": "expired: control font"
+    },
+    {
+      "width": 390,
+      "name": "expired: control size"
+    },
+    {
+      "width": 390,
+      "name": "expired: approved placement"
+    },
+    {
+      "width": 390,
+      "name": "expired: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "expired: no field clipping"
+    },
+    {
+      "width": 390,
+      "name": "expired: keyboard closes native detail"
+    },
+    {
+      "width": 390,
+      "name": "expired: pointer opens native detail"
+    },
+    {
+      "width": 390,
+      "name": "expired: data unchanged"
+    },
+    {
+      "width": 390,
+      "name": "expired: URL unchanged"
+    },
+    {
+      "width": 390,
+      "name": "no business/file buttons"
+    },
+    {
+      "width": 390,
+      "name": "no dialog"
+    },
+    {
+      "width": 390,
+      "name": "no external/API requests"
+    },
+    {
+      "width": 390,
+      "name": "no page errors"
+    },
+    {
+      "width": 390,
+      "name": "no persistent storage"
+    },
+    {
+      "width": 760,
+      "name": "workspaces: unchanged baseline pixels"
+    },
+    {
+      "width": 760,
+      "name": "no exports: unchanged baseline pixels"
+    },
+    {
+      "width": 760,
+      "name": "no match: unchanged baseline pixels"
+    },
+    {
+      "width": 760,
+      "name": "normal: present"
+    },
+    {
+      "width": 760,
+      "name": "normal: keyboard opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "normal: technical ID visible"
+    },
+    {
+      "width": 760,
+      "name": "normal: mobile white surface"
+    },
+    {
+      "width": 760,
+      "name": "normal: title font"
+    },
+    {
+      "width": 760,
+      "name": "normal: control font"
+    },
+    {
+      "width": 760,
+      "name": "normal: control size"
+    },
+    {
+      "width": 760,
+      "name": "normal: approved placement"
+    },
+    {
+      "width": 760,
+      "name": "normal: no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "normal: no field clipping"
+    },
+    {
+      "width": 760,
+      "name": "normal: keyboard closes native detail"
+    },
+    {
+      "width": 760,
+      "name": "normal: pointer opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "normal: data unchanged"
+    },
+    {
+      "width": 760,
+      "name": "normal: URL unchanged"
+    },
+    {
+      "width": 760,
+      "name": "zero: present"
+    },
+    {
+      "width": 760,
+      "name": "known zero remains 0 行"
+    },
+    {
+      "width": 760,
+      "name": "null remains 尚未生成"
+    },
+    {
+      "width": 760,
+      "name": "zero: keyboard opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "zero: technical ID visible"
+    },
+    {
+      "width": 760,
+      "name": "zero: mobile white surface"
+    },
+    {
+      "width": 760,
+      "name": "zero: title font"
+    },
+    {
+      "width": 760,
+      "name": "zero: control font"
+    },
+    {
+      "width": 760,
+      "name": "zero: control size"
+    },
+    {
+      "width": 760,
+      "name": "zero: approved placement"
+    },
+    {
+      "width": 760,
+      "name": "zero: no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "zero: no field clipping"
+    },
+    {
+      "width": 760,
+      "name": "zero row exact label"
+    },
+    {
+      "width": 760,
+      "name": "zero row native detail opens"
+    },
+    {
+      "width": 760,
+      "name": "zero: keyboard closes native detail"
+    },
+    {
+      "width": 760,
+      "name": "zero: pointer opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "zero: data unchanged"
+    },
+    {
+      "width": 760,
+      "name": "zero: URL unchanged"
+    },
+    {
+      "width": 760,
+      "name": "long: present"
+    },
+    {
+      "width": 760,
+      "name": "long: keyboard opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "long: technical ID visible"
+    },
+    {
+      "width": 760,
+      "name": "long: mobile white surface"
+    },
+    {
+      "width": 760,
+      "name": "long: title font"
+    },
+    {
+      "width": 760,
+      "name": "long: control font"
+    },
+    {
+      "width": 760,
+      "name": "long: control size"
+    },
+    {
+      "width": 760,
+      "name": "long: approved placement"
+    },
+    {
+      "width": 760,
+      "name": "long: no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "long: no field clipping"
+    },
+    {
+      "width": 760,
+      "name": "long: keyboard closes native detail"
+    },
+    {
+      "width": 760,
+      "name": "long: pointer opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "long: data unchanged"
+    },
+    {
+      "width": 760,
+      "name": "long: URL unchanged"
+    },
+    {
+      "width": 760,
+      "name": "unknown: present"
+    },
+    {
+      "width": 760,
+      "name": "unknown status retained"
+    },
+    {
+      "width": 760,
+      "name": "unknown type retained"
+    },
+    {
+      "width": 760,
+      "name": "unknown: keyboard opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "unknown: technical ID visible"
+    },
+    {
+      "width": 760,
+      "name": "unknown: mobile white surface"
+    },
+    {
+      "width": 760,
+      "name": "unknown: title font"
+    },
+    {
+      "width": 760,
+      "name": "unknown: control font"
+    },
+    {
+      "width": 760,
+      "name": "unknown: control size"
+    },
+    {
+      "width": 760,
+      "name": "unknown: approved placement"
+    },
+    {
+      "width": 760,
+      "name": "unknown: no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "unknown: no field clipping"
+    },
+    {
+      "width": 760,
+      "name": "unknown: keyboard closes native detail"
+    },
+    {
+      "width": 760,
+      "name": "unknown: pointer opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "unknown: data unchanged"
+    },
+    {
+      "width": 760,
+      "name": "unknown: URL unchanged"
+    },
+    {
+      "width": 760,
+      "name": "missing: present"
+    },
+    {
+      "width": 760,
+      "name": "missing times preserve original formatter"
+    },
+    {
+      "width": 760,
+      "name": "missing: keyboard opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "missing: technical ID visible"
+    },
+    {
+      "width": 760,
+      "name": "missing: mobile white surface"
+    },
+    {
+      "width": 760,
+      "name": "missing: title font"
+    },
+    {
+      "width": 760,
+      "name": "missing: control font"
+    },
+    {
+      "width": 760,
+      "name": "missing: control size"
+    },
+    {
+      "width": 760,
+      "name": "missing: approved placement"
+    },
+    {
+      "width": 760,
+      "name": "missing: no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "missing: no field clipping"
+    },
+    {
+      "width": 760,
+      "name": "missing: keyboard closes native detail"
+    },
+    {
+      "width": 760,
+      "name": "missing: pointer opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "missing: data unchanged"
+    },
+    {
+      "width": 760,
+      "name": "missing: URL unchanged"
+    },
+    {
+      "width": 760,
+      "name": "queued: present"
+    },
+    {
+      "width": 760,
+      "name": "queued: original status attribute"
+    },
+    {
+      "width": 760,
+      "name": "queued: keyboard opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "queued: technical ID visible"
+    },
+    {
+      "width": 760,
+      "name": "queued: mobile white surface"
+    },
+    {
+      "width": 760,
+      "name": "queued: title font"
+    },
+    {
+      "width": 760,
+      "name": "queued: control font"
+    },
+    {
+      "width": 760,
+      "name": "queued: control size"
+    },
+    {
+      "width": 760,
+      "name": "queued: approved placement"
+    },
+    {
+      "width": 760,
+      "name": "queued: no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "queued: no field clipping"
+    },
+    {
+      "width": 760,
+      "name": "queued: keyboard closes native detail"
+    },
+    {
+      "width": 760,
+      "name": "queued: pointer opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "queued: data unchanged"
+    },
+    {
+      "width": 760,
+      "name": "queued: URL unchanged"
+    },
+    {
+      "width": 760,
+      "name": "leased: present"
+    },
+    {
+      "width": 760,
+      "name": "leased: original status attribute"
+    },
+    {
+      "width": 760,
+      "name": "leased: keyboard opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "leased: technical ID visible"
+    },
+    {
+      "width": 760,
+      "name": "leased: mobile white surface"
+    },
+    {
+      "width": 760,
+      "name": "leased: title font"
+    },
+    {
+      "width": 760,
+      "name": "leased: control font"
+    },
+    {
+      "width": 760,
+      "name": "leased: control size"
+    },
+    {
+      "width": 760,
+      "name": "leased: approved placement"
+    },
+    {
+      "width": 760,
+      "name": "leased: no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "leased: no field clipping"
+    },
+    {
+      "width": 760,
+      "name": "leased: keyboard closes native detail"
+    },
+    {
+      "width": 760,
+      "name": "leased: pointer opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "leased: data unchanged"
+    },
+    {
+      "width": 760,
+      "name": "leased: URL unchanged"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: present"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: original status attribute"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: keyboard opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: technical ID visible"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: mobile white surface"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: title font"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: control font"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: control size"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: approved placement"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: no field clipping"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: keyboard closes native detail"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: pointer opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: data unchanged"
+    },
+    {
+      "width": 760,
+      "name": "retry_scheduled: URL unchanged"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: present"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: original status attribute"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: keyboard opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: technical ID visible"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: mobile white surface"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: title font"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: control font"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: control size"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: approved placement"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: no field clipping"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: keyboard closes native detail"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: pointer opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: data unchanged"
+    },
+    {
+      "width": 760,
+      "name": "succeeded: URL unchanged"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: present"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: original status attribute"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: keyboard opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: technical ID visible"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: mobile white surface"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: title font"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: control font"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: control size"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: approved placement"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: no field clipping"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: keyboard closes native detail"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: pointer opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: data unchanged"
+    },
+    {
+      "width": 760,
+      "name": "dead_letter: URL unchanged"
+    },
+    {
+      "width": 760,
+      "name": "expired: present"
+    },
+    {
+      "width": 760,
+      "name": "expired: original status attribute"
+    },
+    {
+      "width": 760,
+      "name": "expired: keyboard opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "expired: technical ID visible"
+    },
+    {
+      "width": 760,
+      "name": "expired: mobile white surface"
+    },
+    {
+      "width": 760,
+      "name": "expired: title font"
+    },
+    {
+      "width": 760,
+      "name": "expired: control font"
+    },
+    {
+      "width": 760,
+      "name": "expired: control size"
+    },
+    {
+      "width": 760,
+      "name": "expired: approved placement"
+    },
+    {
+      "width": 760,
+      "name": "expired: no page overflow"
+    },
+    {
+      "width": 760,
+      "name": "expired: no field clipping"
+    },
+    {
+      "width": 760,
+      "name": "expired: keyboard closes native detail"
+    },
+    {
+      "width": 760,
+      "name": "expired: pointer opens native detail"
+    },
+    {
+      "width": 760,
+      "name": "expired: data unchanged"
+    },
+    {
+      "width": 760,
+      "name": "expired: URL unchanged"
+    },
+    {
+      "width": 760,
+      "name": "no business/file buttons"
+    },
+    {
+      "width": 760,
+      "name": "no dialog"
+    },
+    {
+      "width": 760,
+      "name": "no external/API requests"
+    },
+    {
+      "width": 760,
+      "name": "no page errors"
+    },
+    {
+      "width": 760,
+      "name": "no persistent storage"
+    },
+    {
+      "width": 761,
+      "name": "workspaces: unchanged baseline pixels"
+    },
+    {
+      "width": 761,
+      "name": "no exports: unchanged baseline pixels"
+    },
+    {
+      "width": 761,
+      "name": "no match: unchanged baseline pixels"
+    },
+    {
+      "width": 761,
+      "name": "desktop exports: unchanged baseline pixels"
+    },
+    {
+      "width": 761,
+      "name": "normal: present"
+    },
+    {
+      "width": 761,
+      "name": "normal: keyboard opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "normal: technical ID visible"
+    },
+    {
+      "width": 761,
+      "name": "normal: keyboard closes native detail"
+    },
+    {
+      "width": 761,
+      "name": "normal: pointer opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "normal: data unchanged"
+    },
+    {
+      "width": 761,
+      "name": "normal: URL unchanged"
+    },
+    {
+      "width": 761,
+      "name": "zero: present"
+    },
+    {
+      "width": 761,
+      "name": "known zero remains 0 行"
+    },
+    {
+      "width": 761,
+      "name": "null remains 尚未生成"
+    },
+    {
+      "width": 761,
+      "name": "zero: keyboard opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "zero: technical ID visible"
+    },
+    {
+      "width": 761,
+      "name": "zero row exact label"
+    },
+    {
+      "width": 761,
+      "name": "zero row native detail opens"
+    },
+    {
+      "width": 761,
+      "name": "zero: keyboard closes native detail"
+    },
+    {
+      "width": 761,
+      "name": "zero: pointer opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "zero: data unchanged"
+    },
+    {
+      "width": 761,
+      "name": "zero: URL unchanged"
+    },
+    {
+      "width": 761,
+      "name": "long: present"
+    },
+    {
+      "width": 761,
+      "name": "long: keyboard opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "long: technical ID visible"
+    },
+    {
+      "width": 761,
+      "name": "long: keyboard closes native detail"
+    },
+    {
+      "width": 761,
+      "name": "long: pointer opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "long: data unchanged"
+    },
+    {
+      "width": 761,
+      "name": "long: URL unchanged"
+    },
+    {
+      "width": 761,
+      "name": "unknown: present"
+    },
+    {
+      "width": 761,
+      "name": "unknown status retained"
+    },
+    {
+      "width": 761,
+      "name": "unknown type retained"
+    },
+    {
+      "width": 761,
+      "name": "unknown: keyboard opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "unknown: technical ID visible"
+    },
+    {
+      "width": 761,
+      "name": "unknown: keyboard closes native detail"
+    },
+    {
+      "width": 761,
+      "name": "unknown: pointer opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "unknown: data unchanged"
+    },
+    {
+      "width": 761,
+      "name": "unknown: URL unchanged"
+    },
+    {
+      "width": 761,
+      "name": "missing: present"
+    },
+    {
+      "width": 761,
+      "name": "missing times preserve original formatter"
+    },
+    {
+      "width": 761,
+      "name": "missing: keyboard opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "missing: technical ID visible"
+    },
+    {
+      "width": 761,
+      "name": "missing: keyboard closes native detail"
+    },
+    {
+      "width": 761,
+      "name": "missing: pointer opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "missing: data unchanged"
+    },
+    {
+      "width": 761,
+      "name": "missing: URL unchanged"
+    },
+    {
+      "width": 761,
+      "name": "queued: present"
+    },
+    {
+      "width": 761,
+      "name": "queued: original status attribute"
+    },
+    {
+      "width": 761,
+      "name": "queued: keyboard opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "queued: technical ID visible"
+    },
+    {
+      "width": 761,
+      "name": "queued: keyboard closes native detail"
+    },
+    {
+      "width": 761,
+      "name": "queued: pointer opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "queued: data unchanged"
+    },
+    {
+      "width": 761,
+      "name": "queued: URL unchanged"
+    },
+    {
+      "width": 761,
+      "name": "leased: present"
+    },
+    {
+      "width": 761,
+      "name": "leased: original status attribute"
+    },
+    {
+      "width": 761,
+      "name": "leased: keyboard opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "leased: technical ID visible"
+    },
+    {
+      "width": 761,
+      "name": "leased: keyboard closes native detail"
+    },
+    {
+      "width": 761,
+      "name": "leased: pointer opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "leased: data unchanged"
+    },
+    {
+      "width": 761,
+      "name": "leased: URL unchanged"
+    },
+    {
+      "width": 761,
+      "name": "retry_scheduled: present"
+    },
+    {
+      "width": 761,
+      "name": "retry_scheduled: original status attribute"
+    },
+    {
+      "width": 761,
+      "name": "retry_scheduled: keyboard opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "retry_scheduled: technical ID visible"
+    },
+    {
+      "width": 761,
+      "name": "retry_scheduled: keyboard closes native detail"
+    },
+    {
+      "width": 761,
+      "name": "retry_scheduled: pointer opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "retry_scheduled: data unchanged"
+    },
+    {
+      "width": 761,
+      "name": "retry_scheduled: URL unchanged"
+    },
+    {
+      "width": 761,
+      "name": "succeeded: present"
+    },
+    {
+      "width": 761,
+      "name": "succeeded: original status attribute"
+    },
+    {
+      "width": 761,
+      "name": "succeeded: keyboard opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "succeeded: technical ID visible"
+    },
+    {
+      "width": 761,
+      "name": "succeeded: keyboard closes native detail"
+    },
+    {
+      "width": 761,
+      "name": "succeeded: pointer opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "succeeded: data unchanged"
+    },
+    {
+      "width": 761,
+      "name": "succeeded: URL unchanged"
+    },
+    {
+      "width": 761,
+      "name": "dead_letter: present"
+    },
+    {
+      "width": 761,
+      "name": "dead_letter: original status attribute"
+    },
+    {
+      "width": 761,
+      "name": "dead_letter: keyboard opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "dead_letter: technical ID visible"
+    },
+    {
+      "width": 761,
+      "name": "dead_letter: keyboard closes native detail"
+    },
+    {
+      "width": 761,
+      "name": "dead_letter: pointer opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "dead_letter: data unchanged"
+    },
+    {
+      "width": 761,
+      "name": "dead_letter: URL unchanged"
+    },
+    {
+      "width": 761,
+      "name": "expired: present"
+    },
+    {
+      "width": 761,
+      "name": "expired: original status attribute"
+    },
+    {
+      "width": 761,
+      "name": "expired: keyboard opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "expired: technical ID visible"
+    },
+    {
+      "width": 761,
+      "name": "expired: keyboard closes native detail"
+    },
+    {
+      "width": 761,
+      "name": "expired: pointer opens native detail"
+    },
+    {
+      "width": 761,
+      "name": "expired: data unchanged"
+    },
+    {
+      "width": 761,
+      "name": "expired: URL unchanged"
+    },
+    {
+      "width": 761,
+      "name": "no business/file buttons"
+    },
+    {
+      "width": 761,
+      "name": "no dialog"
+    },
+    {
+      "width": 761,
+      "name": "no external/API requests"
+    },
+    {
+      "width": 761,
+      "name": "no page errors"
+    },
+    {
+      "width": 761,
+      "name": "no persistent storage"
+    },
+    {
+      "width": 1440,
+      "name": "workspaces: unchanged baseline pixels"
+    },
+    {
+      "width": 1440,
+      "name": "no exports: unchanged baseline pixels"
+    },
+    {
+      "width": 1440,
+      "name": "no match: unchanged baseline pixels"
+    },
+    {
+      "width": 1440,
+      "name": "desktop exports: unchanged baseline pixels"
+    },
+    {
+      "width": 1440,
+      "name": "normal: present"
+    },
+    {
+      "width": 1440,
+      "name": "normal: keyboard opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "normal: technical ID visible"
+    },
+    {
+      "width": 1440,
+      "name": "normal: keyboard closes native detail"
+    },
+    {
+      "width": 1440,
+      "name": "normal: pointer opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "normal: data unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "normal: URL unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "zero: present"
+    },
+    {
+      "width": 1440,
+      "name": "known zero remains 0 行"
+    },
+    {
+      "width": 1440,
+      "name": "null remains 尚未生成"
+    },
+    {
+      "width": 1440,
+      "name": "zero: keyboard opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "zero: technical ID visible"
+    },
+    {
+      "width": 1440,
+      "name": "zero row exact label"
+    },
+    {
+      "width": 1440,
+      "name": "zero row native detail opens"
+    },
+    {
+      "width": 1440,
+      "name": "zero: keyboard closes native detail"
+    },
+    {
+      "width": 1440,
+      "name": "zero: pointer opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "zero: data unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "zero: URL unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "long: present"
+    },
+    {
+      "width": 1440,
+      "name": "long: keyboard opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "long: technical ID visible"
+    },
+    {
+      "width": 1440,
+      "name": "long: keyboard closes native detail"
+    },
+    {
+      "width": 1440,
+      "name": "long: pointer opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "long: data unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "long: URL unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "unknown: present"
+    },
+    {
+      "width": 1440,
+      "name": "unknown status retained"
+    },
+    {
+      "width": 1440,
+      "name": "unknown type retained"
+    },
+    {
+      "width": 1440,
+      "name": "unknown: keyboard opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "unknown: technical ID visible"
+    },
+    {
+      "width": 1440,
+      "name": "unknown: keyboard closes native detail"
+    },
+    {
+      "width": 1440,
+      "name": "unknown: pointer opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "unknown: data unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "unknown: URL unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "missing: present"
+    },
+    {
+      "width": 1440,
+      "name": "missing times preserve original formatter"
+    },
+    {
+      "width": 1440,
+      "name": "missing: keyboard opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "missing: technical ID visible"
+    },
+    {
+      "width": 1440,
+      "name": "missing: keyboard closes native detail"
+    },
+    {
+      "width": 1440,
+      "name": "missing: pointer opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "missing: data unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "missing: URL unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "queued: present"
+    },
+    {
+      "width": 1440,
+      "name": "queued: original status attribute"
+    },
+    {
+      "width": 1440,
+      "name": "queued: keyboard opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "queued: technical ID visible"
+    },
+    {
+      "width": 1440,
+      "name": "queued: keyboard closes native detail"
+    },
+    {
+      "width": 1440,
+      "name": "queued: pointer opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "queued: data unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "queued: URL unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "leased: present"
+    },
+    {
+      "width": 1440,
+      "name": "leased: original status attribute"
+    },
+    {
+      "width": 1440,
+      "name": "leased: keyboard opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "leased: technical ID visible"
+    },
+    {
+      "width": 1440,
+      "name": "leased: keyboard closes native detail"
+    },
+    {
+      "width": 1440,
+      "name": "leased: pointer opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "leased: data unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "leased: URL unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "retry_scheduled: present"
+    },
+    {
+      "width": 1440,
+      "name": "retry_scheduled: original status attribute"
+    },
+    {
+      "width": 1440,
+      "name": "retry_scheduled: keyboard opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "retry_scheduled: technical ID visible"
+    },
+    {
+      "width": 1440,
+      "name": "retry_scheduled: keyboard closes native detail"
+    },
+    {
+      "width": 1440,
+      "name": "retry_scheduled: pointer opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "retry_scheduled: data unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "retry_scheduled: URL unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "succeeded: present"
+    },
+    {
+      "width": 1440,
+      "name": "succeeded: original status attribute"
+    },
+    {
+      "width": 1440,
+      "name": "succeeded: keyboard opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "succeeded: technical ID visible"
+    },
+    {
+      "width": 1440,
+      "name": "succeeded: keyboard closes native detail"
+    },
+    {
+      "width": 1440,
+      "name": "succeeded: pointer opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "succeeded: data unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "succeeded: URL unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "dead_letter: present"
+    },
+    {
+      "width": 1440,
+      "name": "dead_letter: original status attribute"
+    },
+    {
+      "width": 1440,
+      "name": "dead_letter: keyboard opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "dead_letter: technical ID visible"
+    },
+    {
+      "width": 1440,
+      "name": "dead_letter: keyboard closes native detail"
+    },
+    {
+      "width": 1440,
+      "name": "dead_letter: pointer opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "dead_letter: data unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "dead_letter: URL unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "expired: present"
+    },
+    {
+      "width": 1440,
+      "name": "expired: original status attribute"
+    },
+    {
+      "width": 1440,
+      "name": "expired: keyboard opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "expired: technical ID visible"
+    },
+    {
+      "width": 1440,
+      "name": "expired: keyboard closes native detail"
+    },
+    {
+      "width": 1440,
+      "name": "expired: pointer opens native detail"
+    },
+    {
+      "width": 1440,
+      "name": "expired: data unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "expired: URL unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "no business/file buttons"
+    },
+    {
+      "width": 1440,
+      "name": "no dialog"
+    },
+    {
+      "width": 1440,
+      "name": "no external/API requests"
+    },
+    {
+      "width": 1440,
+      "name": "no page errors"
+    },
+    {
+      "width": 1440,
+      "name": "no persistent storage"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "normal-open-390.png",
+      "scene": "normal",
+      "width": 390,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "4bb2ed0a651a6db31588d624c0961165ad6efd29fc1a2c04b6f0f63a2c06cf6e"
+    },
+    {
+      "file": "known-zero-open-390.png",
+      "scene": "known-zero",
+      "width": 390,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "3c4ea30c98279a4da0f361e73d72a39e7547411bdc3d17c6fa30ef512160a560"
+    },
+    {
+      "file": "zero-open-390.png",
+      "scene": "zero",
+      "width": 390,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "4d9f22dddd4c73714a04c5021aae81213b8b1991a0c13bf8d99aec4358cd40ae"
+    },
+    {
+      "file": "long-open-390.png",
+      "scene": "long",
+      "width": 390,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "4e4d4089f6e2e0a4553fcd91bc81b5703cb1349c931e0b89fb35bf2fbae28b54"
+    },
+    {
+      "file": "unknown-open-390.png",
+      "scene": "unknown",
+      "width": 390,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "7e48c75dfa4529aca97a196fdd22238c5ffb5f306a19f6798e3687c4a0378e99"
+    },
+    {
+      "file": "missing-open-390.png",
+      "scene": "missing",
+      "width": 390,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "2c558f7ed89d5dab5938906a3168aa92ee4d776734cd28ace2e13b5b08ca4162"
+    },
+    {
+      "file": "queued-open-390.png",
+      "scene": "queued",
+      "width": 390,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "eaf36a1c7e239147d500b9eed7ff63f91f4f01fae58bd2432a72d3349a642afe"
+    },
+    {
+      "file": "leased-open-390.png",
+      "scene": "leased",
+      "width": 390,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "f9b19ca41652e79e007beb5d551b06c418c406b1ab2d3f1109348095e5efcfde"
+    },
+    {
+      "file": "retry_scheduled-open-390.png",
+      "scene": "retry_scheduled",
+      "width": 390,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "010afd204473870ca4a023623c1c5de297a6210aab467dcd346a15239259dff6"
+    },
+    {
+      "file": "succeeded-open-390.png",
+      "scene": "succeeded",
+      "width": 390,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "4bb2ed0a651a6db31588d624c0961165ad6efd29fc1a2c04b6f0f63a2c06cf6e"
+    },
+    {
+      "file": "dead_letter-open-390.png",
+      "scene": "dead_letter",
+      "width": 390,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "cb51f776df39009de3266d94cc394eda9925243f52cb6b23321017d49016ff19"
+    },
+    {
+      "file": "expired-open-390.png",
+      "scene": "expired",
+      "width": 390,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "ab120e62085fc22c5cc91c2e38d85e082010a29112e50ce7d8eb672754b80bd2"
+    },
+    {
+      "file": "normal-open-760.png",
+      "scene": "normal",
+      "width": 760,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "d442046d2d83beaab088a93fe01977f0b0ec0a846bdbd5733e0971cc36bfdf4f"
+    },
+    {
+      "file": "known-zero-open-760.png",
+      "scene": "known-zero",
+      "width": 760,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "24f563fa9e92fc68709cbe894b5aef044bdc078e1614e50f17a5d1f9d77e57ca"
+    },
+    {
+      "file": "zero-open-760.png",
+      "scene": "zero",
+      "width": 760,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "79eaa6d4471c7fe0665cd460e054423dd3f62ad3ca69880ba9dc18ed544c529e"
+    },
+    {
+      "file": "long-open-760.png",
+      "scene": "long",
+      "width": 760,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "3fb5d9c2ddf0337ebc905d2fe2eec808fe0bc4f101c8e9ce038081154f854521"
+    },
+    {
+      "file": "unknown-open-760.png",
+      "scene": "unknown",
+      "width": 760,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "d7d5002b7436205878172639dfff0983cfcdfa3cb6e34aed8cf833c7a21346d3"
+    },
+    {
+      "file": "missing-open-760.png",
+      "scene": "missing",
+      "width": 760,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "5173ca160a3dfdd2c1eceb2ac685f2516951ec8a2a8f409e35d4f8b2c5ca28c7"
+    },
+    {
+      "file": "queued-open-760.png",
+      "scene": "queued",
+      "width": 760,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "e852dd6b921f19f90311a3bf7e7240be2440863c03bf8838d502d33eed980530"
+    },
+    {
+      "file": "leased-open-760.png",
+      "scene": "leased",
+      "width": 760,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "319bd9530a06e0edbb704c1903a89a6402f1ec8c14bc6d50de513ca7cbfbb988"
+    },
+    {
+      "file": "retry_scheduled-open-760.png",
+      "scene": "retry_scheduled",
+      "width": 760,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "31d218ad4fa57acad2591986ac2f034a04ff5a899887212abaa904fe104ead5d"
+    },
+    {
+      "file": "succeeded-open-760.png",
+      "scene": "succeeded",
+      "width": 760,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "d442046d2d83beaab088a93fe01977f0b0ec0a846bdbd5733e0971cc36bfdf4f"
+    },
+    {
+      "file": "dead_letter-open-760.png",
+      "scene": "dead_letter",
+      "width": 760,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "7103c8d1beafcbbe188fe72eb62566468fea18d3f96722b0b505013fbf1edcb7"
+    },
+    {
+      "file": "expired-open-760.png",
+      "scene": "expired",
+      "width": 760,
+      "scope": "actual-child-isolated-fixture-not-parent-API-production",
+      "sha256": "342dc60ba3e88dea9272947baa3c5fb7f3dabc9e9c7a8943ca5fccb08f7d502d"
+    }
+  ],
+  "baselineLoaded": true
+}

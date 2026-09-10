@@ -257,7 +257,7 @@ function resetExports() {
 </script>
 
 <template>
-  <section class="org-data-panel" aria-labelledby="org-data-title">
+  <section class="org-data-panel" aria-labelledby="org-data-title" data-export-detail-c>
     <header class="org-data-overview">
       <div>
         <p>DATA LEDGER · 实时只读</p>
@@ -531,3 +531,5 @@ function resetExports() {
     </section>
   </section>
 </template>
+
+<style src="../org-data-export-detail.css"></style>

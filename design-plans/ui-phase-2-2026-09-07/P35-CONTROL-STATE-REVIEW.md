@@ -1,5 +1,7 @@
 # P35 组织数据 · 按钮与操作控件 C 方向细化
 
+后续进展：用户已批准[手机导出详情单张组合](P35-MOBILE-EXPORT-DETAIL-APPROVAL.md)，其[局部真实Vue实施](P35-MOBILE-EXPORT-DETAIL-VUE-REVIEW.md)另有24图与验证；下文192图仍为历史离线控件批次，未整体获批。
+
 状态：待用户审核，非真实 Vue 或生产截图。本批基于 main/e2eef28a，生产源及原94张布局图不改。
 
 ## 审核入口
