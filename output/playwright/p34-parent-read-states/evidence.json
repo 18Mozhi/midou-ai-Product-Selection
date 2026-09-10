@@ -1,0 +1,3993 @@
+{
+  "kind": "P34-PARENT-READ-STATES",
+  "boundary": "Actual application, navigation shell, organization parent and child with intercepted fixture HTTP only. Server authorization/SQL/production,real outage/timeout,scope-switch lifecycle and C visual approval are not proven. 409 is a synthetic client classifier exercise,not a new approvals read API contract.",
+  "sourceHashes": {
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "scripts/verify-ui-phase2-org-approvals-parent.mjs": "6583104963edf56593467a048c81df0e9f355816d0468d9f295bd2b97dbb5dba",
+    "scripts/lib/ui-phase2-org-approvals-design-data.mjs": "b2d28c6d338a520b4f9e674c345905d6d690236a49c33976dac2e262b23e8f9a",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835"
+  },
+  "failures": [
+    {
+      "id": "server-error",
+      "status": 500,
+      "state": "error",
+      "attempts": 1
+    },
+    {
+      "id": "service-blocked",
+      "status": 503,
+      "state": "blocked",
+      "attempts": 3
+    },
+    {
+      "id": "version-conflict",
+      "status": 409,
+      "state": "conflict",
+      "attempts": 1
+    },
+    {
+      "id": "rate-limited",
+      "status": 429,
+      "state": "rate_limited",
+      "attempts": 3
+    },
+    {
+      "id": "session-expired",
+      "status": 401,
+      "state": "expired",
+      "attempts": 1
+    },
+    {
+      "id": "permission-forbidden",
+      "status": 403,
+      "state": "forbidden",
+      "attempts": 1
+    },
+    {
+      "id": "network-unavailable",
+      "status": 0,
+      "state": "blocked",
+      "attempts": 3
+    }
+  ],
+  "checks": [
+    {
+      "width": 1440,
+      "name": "initial loading hides child"
+    },
+    {
+      "width": 1440,
+      "name": "initial loading disables refresh"
+    },
+    {
+      "width": 1440,
+      "name": "initial-loading: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "ready shows existing template query"
+    },
+    {
+      "width": 1440,
+      "name": "ready: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background refresh retains child"
+    },
+    {
+      "width": 1440,
+      "name": "background refresh disables only refresh"
+    },
+    {
+      "width": 1440,
+      "name": "background filter remains editable"
+    },
+    {
+      "width": 1440,
+      "name": "pending refresh still shows old template"
+    },
+    {
+      "width": 1440,
+      "name": "background-refreshing: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "successful refresh commits fresh template"
+    },
+    {
+      "width": 1440,
+      "name": "successful refresh keeps filter"
+    },
+    {
+      "width": 1440,
+      "name": "successful refresh advances observed time"
+    },
+    {
+      "width": 1440,
+      "name": "refresh-success: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-server-error: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-server-error: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-server-error: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-server-error: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-server-error: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-server-error: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-server-error: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-server-error: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-server-error: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-server-error: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-server-error: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-server-error: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-server-error: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-server-error: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-server-error: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-server-error: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-server-error: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-server-error: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-server-error: old template retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-server-error: old summary retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-server-error: template filter retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-server-error: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-server-error: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-server-error: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-server-error: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-server-error: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-server-error: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-server-error: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-server-error: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-server-error: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-server-error: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-server-error: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-server-error: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-server-error: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-server-error: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-server-error: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-server-error: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-server-error: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-server-error: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-server-error: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-server-error: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-server-error: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-server-error: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-server-error: old template retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-server-error: old summary retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-server-error: template filter retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-server-error: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-server-error: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-server-error: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-server-error: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-service-blocked: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-service-blocked: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-service-blocked: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-service-blocked: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-service-blocked: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-service-blocked: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-service-blocked: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-service-blocked: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-service-blocked: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-service-blocked: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-service-blocked: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-service-blocked: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-service-blocked: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-service-blocked: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-service-blocked: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-service-blocked: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-service-blocked: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-service-blocked: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-service-blocked: old template retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-service-blocked: old summary retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-service-blocked: template filter retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-service-blocked: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-service-blocked: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-service-blocked: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-service-blocked: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-service-blocked: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-service-blocked: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-service-blocked: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-service-blocked: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-service-blocked: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-service-blocked: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-service-blocked: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-service-blocked: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-service-blocked: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-service-blocked: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-service-blocked: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-service-blocked: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-service-blocked: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-service-blocked: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-service-blocked: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-service-blocked: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-service-blocked: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-service-blocked: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-service-blocked: old template retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-service-blocked: old summary retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-service-blocked: template filter retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-service-blocked: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-service-blocked: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-service-blocked: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-service-blocked: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-version-conflict: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-version-conflict: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-version-conflict: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-version-conflict: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-version-conflict: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-version-conflict: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-version-conflict: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-version-conflict: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-version-conflict: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-version-conflict: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-version-conflict: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-version-conflict: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-version-conflict: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-version-conflict: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-version-conflict: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-version-conflict: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-version-conflict: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-version-conflict: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-version-conflict: old template retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-version-conflict: old summary retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-version-conflict: template filter retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-version-conflict: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-version-conflict: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-version-conflict: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-version-conflict: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-version-conflict: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-version-conflict: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-version-conflict: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-version-conflict: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-version-conflict: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-version-conflict: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-version-conflict: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-version-conflict: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-version-conflict: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-version-conflict: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-version-conflict: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-version-conflict: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-version-conflict: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-version-conflict: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-version-conflict: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-version-conflict: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-version-conflict: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-version-conflict: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-version-conflict: old template retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-version-conflict: old summary retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-version-conflict: template filter retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-version-conflict: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-version-conflict: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-version-conflict: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-version-conflict: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-rate-limited: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-rate-limited: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-rate-limited: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-rate-limited: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-rate-limited: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-rate-limited: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-rate-limited: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-rate-limited: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-rate-limited: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-rate-limited: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-rate-limited: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-rate-limited: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-rate-limited: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-rate-limited: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-rate-limited: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-rate-limited: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-rate-limited: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-rate-limited: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-rate-limited: old template retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-rate-limited: old summary retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-rate-limited: template filter retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-rate-limited: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-rate-limited: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-rate-limited: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-rate-limited: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-rate-limited: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-rate-limited: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-rate-limited: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-rate-limited: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-rate-limited: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-rate-limited: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-rate-limited: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-rate-limited: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-rate-limited: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-rate-limited: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-rate-limited: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-rate-limited: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-rate-limited: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-rate-limited: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-rate-limited: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-rate-limited: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-rate-limited: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-rate-limited: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-rate-limited: old template retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-rate-limited: old summary retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-rate-limited: template filter retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-rate-limited: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-rate-limited: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-rate-limited: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-rate-limited: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-session-expired: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-session-expired: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-session-expired: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-session-expired: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-session-expired: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-session-expired: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-session-expired: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-session-expired: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-session-expired: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-session-expired: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-session-expired: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-session-expired: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-session-expired: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-session-expired: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-session-expired: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-session-expired: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-session-expired: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-session-expired: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-session-expired: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-session-expired: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-session-expired: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-session-expired: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-session-expired: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-session-expired: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-session-expired: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-session-expired: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-session-expired: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-session-expired: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-session-expired: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-session-expired: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-session-expired: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-session-expired: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-session-expired: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-session-expired: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-session-expired: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-session-expired: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-session-expired: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-session-expired: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-session-expired: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-session-expired: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-session-expired: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-session-expired: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-session-expired: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-session-expired: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-permission-forbidden: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-permission-forbidden: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-permission-forbidden: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-permission-forbidden: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-permission-forbidden: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-permission-forbidden: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-permission-forbidden: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-permission-forbidden: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-permission-forbidden: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-permission-forbidden: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-permission-forbidden: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-permission-forbidden: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-permission-forbidden: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-permission-forbidden: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-permission-forbidden: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-permission-forbidden: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-permission-forbidden: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-permission-forbidden: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-permission-forbidden: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-permission-forbidden: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-permission-forbidden: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-permission-forbidden: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-permission-forbidden: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-permission-forbidden: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-permission-forbidden: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-permission-forbidden: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-permission-forbidden: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-permission-forbidden: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-permission-forbidden: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-permission-forbidden: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-permission-forbidden: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-permission-forbidden: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-permission-forbidden: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-permission-forbidden: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-permission-forbidden: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-permission-forbidden: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-permission-forbidden: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-permission-forbidden: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-permission-forbidden: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-permission-forbidden: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-permission-forbidden: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-permission-forbidden: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-permission-forbidden: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-permission-forbidden: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-network-unavailable: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-network-unavailable: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-network-unavailable: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-network-unavailable: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-network-unavailable: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-network-unavailable: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-network-unavailable: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-network-unavailable: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-network-unavailable: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-network-unavailable: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "initial-summary-network-unavailable: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-network-unavailable: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-network-unavailable: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-network-unavailable: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-network-unavailable: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-network-unavailable: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-network-unavailable: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-network-unavailable: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-network-unavailable: old template retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-network-unavailable: old summary retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-network-unavailable: template filter retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-network-unavailable: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-network-unavailable: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-network-unavailable: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "background-summary-network-unavailable: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-network-unavailable: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-network-unavailable: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-network-unavailable: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-network-unavailable: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-network-unavailable: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-network-unavailable: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-network-unavailable: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-network-unavailable: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-network-unavailable: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-network-unavailable: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "initial-approvals-network-unavailable: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-network-unavailable: child visibility"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-network-unavailable: error notice is alert"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-network-unavailable: read completed"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-network-unavailable: bounded existing retry count"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-network-unavailable: successful sibling reads once"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-network-unavailable: retry correlation retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-network-unavailable: request trace correlation"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-network-unavailable: old template retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-network-unavailable: old summary retained atomically"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-network-unavailable: template filter retained"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-network-unavailable: no overflow"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-network-unavailable: recovery removes notice"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-network-unavailable: recovery retains URL query"
+    },
+    {
+      "width": 1440,
+      "name": "background-approvals-network-unavailable: unrelated query survives"
+    },
+    {
+      "width": 1440,
+      "name": "no business writes"
+    },
+    {
+      "width": 1440,
+      "name": "no unmatched or external requests"
+    },
+    {
+      "width": 1440,
+      "name": "no page errors"
+    },
+    {
+      "width": 1440,
+      "name": "no business dialogs fabricated"
+    },
+    {
+      "width": 390,
+      "name": "initial loading hides child"
+    },
+    {
+      "width": 390,
+      "name": "initial loading disables refresh"
+    },
+    {
+      "width": 390,
+      "name": "initial-loading: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "ready shows existing template query"
+    },
+    {
+      "width": 390,
+      "name": "ready: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background refresh retains child"
+    },
+    {
+      "width": 390,
+      "name": "background refresh disables only refresh"
+    },
+    {
+      "width": 390,
+      "name": "background filter remains editable"
+    },
+    {
+      "width": 390,
+      "name": "pending refresh still shows old template"
+    },
+    {
+      "width": 390,
+      "name": "background-refreshing: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "successful refresh commits fresh template"
+    },
+    {
+      "width": 390,
+      "name": "successful refresh keeps filter"
+    },
+    {
+      "width": 390,
+      "name": "successful refresh advances observed time"
+    },
+    {
+      "width": 390,
+      "name": "refresh-success: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-server-error: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-server-error: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-server-error: read completed"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-server-error: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-server-error: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-server-error: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-server-error: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-server-error: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-server-error: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-server-error: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-server-error: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-server-error: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-server-error: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-server-error: read completed"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-server-error: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-server-error: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-server-error: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-server-error: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-server-error: old template retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-server-error: old summary retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-server-error: template filter retained"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-server-error: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-server-error: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-server-error: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-server-error: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-server-error: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-server-error: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-server-error: read completed"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-server-error: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-server-error: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-server-error: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-server-error: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-server-error: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-server-error: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-server-error: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-server-error: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-server-error: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-server-error: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-server-error: read completed"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-server-error: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-server-error: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-server-error: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-server-error: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-server-error: old template retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-server-error: old summary retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-server-error: template filter retained"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-server-error: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-server-error: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-server-error: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-server-error: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-service-blocked: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-service-blocked: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-service-blocked: read completed"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-service-blocked: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-service-blocked: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-service-blocked: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-service-blocked: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-service-blocked: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-service-blocked: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-service-blocked: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-service-blocked: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-service-blocked: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-service-blocked: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-service-blocked: read completed"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-service-blocked: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-service-blocked: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-service-blocked: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-service-blocked: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-service-blocked: old template retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-service-blocked: old summary retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-service-blocked: template filter retained"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-service-blocked: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-service-blocked: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-service-blocked: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-service-blocked: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-service-blocked: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-service-blocked: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-service-blocked: read completed"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-service-blocked: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-service-blocked: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-service-blocked: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-service-blocked: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-service-blocked: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-service-blocked: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-service-blocked: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-service-blocked: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-service-blocked: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-service-blocked: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-service-blocked: read completed"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-service-blocked: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-service-blocked: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-service-blocked: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-service-blocked: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-service-blocked: old template retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-service-blocked: old summary retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-service-blocked: template filter retained"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-service-blocked: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-service-blocked: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-service-blocked: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-service-blocked: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-version-conflict: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-version-conflict: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-version-conflict: read completed"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-version-conflict: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-version-conflict: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-version-conflict: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-version-conflict: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-version-conflict: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-version-conflict: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-version-conflict: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-version-conflict: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-version-conflict: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-version-conflict: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-version-conflict: read completed"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-version-conflict: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-version-conflict: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-version-conflict: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-version-conflict: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-version-conflict: old template retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-version-conflict: old summary retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-version-conflict: template filter retained"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-version-conflict: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-version-conflict: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-version-conflict: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-version-conflict: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-version-conflict: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-version-conflict: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-version-conflict: read completed"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-version-conflict: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-version-conflict: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-version-conflict: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-version-conflict: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-version-conflict: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-version-conflict: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-version-conflict: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-version-conflict: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-version-conflict: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-version-conflict: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-version-conflict: read completed"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-version-conflict: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-version-conflict: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-version-conflict: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-version-conflict: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-version-conflict: old template retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-version-conflict: old summary retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-version-conflict: template filter retained"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-version-conflict: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-version-conflict: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-version-conflict: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-version-conflict: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-rate-limited: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-rate-limited: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-rate-limited: read completed"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-rate-limited: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-rate-limited: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-rate-limited: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-rate-limited: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-rate-limited: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-rate-limited: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-rate-limited: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-rate-limited: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-rate-limited: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-rate-limited: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-rate-limited: read completed"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-rate-limited: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-rate-limited: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-rate-limited: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-rate-limited: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-rate-limited: old template retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-rate-limited: old summary retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-rate-limited: template filter retained"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-rate-limited: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-rate-limited: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-rate-limited: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-rate-limited: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-rate-limited: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-rate-limited: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-rate-limited: read completed"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-rate-limited: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-rate-limited: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-rate-limited: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-rate-limited: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-rate-limited: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-rate-limited: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-rate-limited: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-rate-limited: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-rate-limited: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-rate-limited: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-rate-limited: read completed"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-rate-limited: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-rate-limited: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-rate-limited: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-rate-limited: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-rate-limited: old template retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-rate-limited: old summary retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-rate-limited: template filter retained"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-rate-limited: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-rate-limited: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-rate-limited: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-rate-limited: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-session-expired: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-session-expired: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-session-expired: read completed"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-session-expired: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-session-expired: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-session-expired: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-session-expired: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-session-expired: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-session-expired: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-session-expired: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-session-expired: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-session-expired: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-session-expired: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-session-expired: read completed"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-session-expired: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-session-expired: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-session-expired: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-session-expired: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-session-expired: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-session-expired: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-session-expired: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-session-expired: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-session-expired: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-session-expired: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-session-expired: read completed"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-session-expired: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-session-expired: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-session-expired: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-session-expired: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-session-expired: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-session-expired: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-session-expired: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-session-expired: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-session-expired: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-session-expired: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-session-expired: read completed"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-session-expired: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-session-expired: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-session-expired: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-session-expired: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-session-expired: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-session-expired: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-session-expired: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-session-expired: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-permission-forbidden: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-permission-forbidden: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-permission-forbidden: read completed"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-permission-forbidden: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-permission-forbidden: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-permission-forbidden: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-permission-forbidden: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-permission-forbidden: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-permission-forbidden: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-permission-forbidden: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-permission-forbidden: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-permission-forbidden: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-permission-forbidden: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-permission-forbidden: read completed"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-permission-forbidden: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-permission-forbidden: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-permission-forbidden: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-permission-forbidden: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-permission-forbidden: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-permission-forbidden: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-permission-forbidden: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-permission-forbidden: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-permission-forbidden: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-permission-forbidden: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-permission-forbidden: read completed"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-permission-forbidden: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-permission-forbidden: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-permission-forbidden: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-permission-forbidden: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-permission-forbidden: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-permission-forbidden: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-permission-forbidden: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-permission-forbidden: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-permission-forbidden: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-permission-forbidden: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-permission-forbidden: read completed"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-permission-forbidden: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-permission-forbidden: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-permission-forbidden: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-permission-forbidden: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-permission-forbidden: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-permission-forbidden: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-permission-forbidden: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-permission-forbidden: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-network-unavailable: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-network-unavailable: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-network-unavailable: read completed"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-network-unavailable: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-network-unavailable: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-network-unavailable: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-network-unavailable: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-network-unavailable: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-network-unavailable: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-network-unavailable: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "initial-summary-network-unavailable: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-network-unavailable: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-network-unavailable: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-network-unavailable: read completed"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-network-unavailable: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-network-unavailable: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-network-unavailable: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-network-unavailable: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-network-unavailable: old template retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-network-unavailable: old summary retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-network-unavailable: template filter retained"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-network-unavailable: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-network-unavailable: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-network-unavailable: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "background-summary-network-unavailable: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-network-unavailable: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-network-unavailable: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-network-unavailable: read completed"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-network-unavailable: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-network-unavailable: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-network-unavailable: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-network-unavailable: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-network-unavailable: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-network-unavailable: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-network-unavailable: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "initial-approvals-network-unavailable: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-network-unavailable: child visibility"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-network-unavailable: error notice is alert"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-network-unavailable: read completed"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-network-unavailable: bounded existing retry count"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-network-unavailable: successful sibling reads once"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-network-unavailable: retry correlation retained"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-network-unavailable: request trace correlation"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-network-unavailable: old template retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-network-unavailable: old summary retained atomically"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-network-unavailable: template filter retained"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-network-unavailable: no overflow"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-network-unavailable: recovery removes notice"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-network-unavailable: recovery retains URL query"
+    },
+    {
+      "width": 390,
+      "name": "background-approvals-network-unavailable: unrelated query survives"
+    },
+    {
+      "width": 390,
+      "name": "no business writes"
+    },
+    {
+      "width": 390,
+      "name": "no unmatched or external requests"
+    },
+    {
+      "width": 390,
+      "name": "no page errors"
+    },
+    {
+      "width": 390,
+      "name": "no business dialogs fabricated"
+    }
+  ],
+  "scenarios": [
+    {
+      "width": 1440,
+      "phase": "initial",
+      "target": "summary",
+      "failure": "server-error",
+      "state": "error",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "background",
+      "target": "summary",
+      "failure": "server-error",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "initial",
+      "target": "approvals",
+      "failure": "server-error",
+      "state": "error",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "background",
+      "target": "approvals",
+      "failure": "server-error",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "initial",
+      "target": "summary",
+      "failure": "service-blocked",
+      "state": "blocked",
+      "childVisible": false,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "background",
+      "target": "summary",
+      "failure": "service-blocked",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "initial",
+      "target": "approvals",
+      "failure": "service-blocked",
+      "state": "blocked",
+      "childVisible": false,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "background",
+      "target": "approvals",
+      "failure": "service-blocked",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "initial",
+      "target": "summary",
+      "failure": "version-conflict",
+      "state": "conflict",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "background",
+      "target": "summary",
+      "failure": "version-conflict",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "initial",
+      "target": "approvals",
+      "failure": "version-conflict",
+      "state": "conflict",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "background",
+      "target": "approvals",
+      "failure": "version-conflict",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "initial",
+      "target": "summary",
+      "failure": "rate-limited",
+      "state": "rate_limited",
+      "childVisible": false,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "background",
+      "target": "summary",
+      "failure": "rate-limited",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "initial",
+      "target": "approvals",
+      "failure": "rate-limited",
+      "state": "rate_limited",
+      "childVisible": false,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "background",
+      "target": "approvals",
+      "failure": "rate-limited",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "initial",
+      "target": "summary",
+      "failure": "session-expired",
+      "state": "expired",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "background",
+      "target": "summary",
+      "failure": "session-expired",
+      "state": "expired",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "initial",
+      "target": "approvals",
+      "failure": "session-expired",
+      "state": "expired",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "background",
+      "target": "approvals",
+      "failure": "session-expired",
+      "state": "expired",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "initial",
+      "target": "summary",
+      "failure": "permission-forbidden",
+      "state": "forbidden",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "background",
+      "target": "summary",
+      "failure": "permission-forbidden",
+      "state": "forbidden",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "initial",
+      "target": "approvals",
+      "failure": "permission-forbidden",
+      "state": "forbidden",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "background",
+      "target": "approvals",
+      "failure": "permission-forbidden",
+      "state": "forbidden",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "initial",
+      "target": "summary",
+      "failure": "network-unavailable",
+      "state": "blocked",
+      "childVisible": false,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "background",
+      "target": "summary",
+      "failure": "network-unavailable",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "initial",
+      "target": "approvals",
+      "failure": "network-unavailable",
+      "state": "blocked",
+      "childVisible": false,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 1440,
+      "phase": "background",
+      "target": "approvals",
+      "failure": "network-unavailable",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "target": "summary",
+      "failure": "server-error",
+      "state": "error",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "background",
+      "target": "summary",
+      "failure": "server-error",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "target": "approvals",
+      "failure": "server-error",
+      "state": "error",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "background",
+      "target": "approvals",
+      "failure": "server-error",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "target": "summary",
+      "failure": "service-blocked",
+      "state": "blocked",
+      "childVisible": false,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "background",
+      "target": "summary",
+      "failure": "service-blocked",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "target": "approvals",
+      "failure": "service-blocked",
+      "state": "blocked",
+      "childVisible": false,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "background",
+      "target": "approvals",
+      "failure": "service-blocked",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "target": "summary",
+      "failure": "version-conflict",
+      "state": "conflict",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "background",
+      "target": "summary",
+      "failure": "version-conflict",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "target": "approvals",
+      "failure": "version-conflict",
+      "state": "conflict",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "background",
+      "target": "approvals",
+      "failure": "version-conflict",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "target": "summary",
+      "failure": "rate-limited",
+      "state": "rate_limited",
+      "childVisible": false,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "background",
+      "target": "summary",
+      "failure": "rate-limited",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "target": "approvals",
+      "failure": "rate-limited",
+      "state": "rate_limited",
+      "childVisible": false,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "background",
+      "target": "approvals",
+      "failure": "rate-limited",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "target": "summary",
+      "failure": "session-expired",
+      "state": "expired",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "background",
+      "target": "summary",
+      "failure": "session-expired",
+      "state": "expired",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "target": "approvals",
+      "failure": "session-expired",
+      "state": "expired",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "background",
+      "target": "approvals",
+      "failure": "session-expired",
+      "state": "expired",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "target": "summary",
+      "failure": "permission-forbidden",
+      "state": "forbidden",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "background",
+      "target": "summary",
+      "failure": "permission-forbidden",
+      "state": "forbidden",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "target": "approvals",
+      "failure": "permission-forbidden",
+      "state": "forbidden",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "background",
+      "target": "approvals",
+      "failure": "permission-forbidden",
+      "state": "forbidden",
+      "childVisible": false,
+      "attempts": 1,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "target": "summary",
+      "failure": "network-unavailable",
+      "state": "blocked",
+      "childVisible": false,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "background",
+      "target": "summary",
+      "failure": "network-unavailable",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "target": "approvals",
+      "failure": "network-unavailable",
+      "state": "blocked",
+      "childVisible": false,
+      "attempts": 3,
+      "recovery": "passed"
+    },
+    {
+      "width": 390,
+      "phase": "background",
+      "target": "approvals",
+      "failure": "network-unavailable",
+      "state": "ready",
+      "childVisible": true,
+      "attempts": 3,
+      "recovery": "passed"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "initial-loading-1440.png",
+      "scene": "initial-loading",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "ada9320d73b3e1d5da53f060cab540ba933e9049d5a961c193f7bc6c9e94ca23"
+    },
+    {
+      "file": "ready-1440.png",
+      "scene": "ready",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "3cc3c5d36215e15cd49ea01212257f64acd3724f8a5c00e0dddcd14c50c358a5"
+    },
+    {
+      "file": "background-refreshing-1440.png",
+      "scene": "background-refreshing",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "27da37a0997c8f44cab9451c27287999d1ad488833faec18aa4754e90498a58f"
+    },
+    {
+      "file": "refresh-success-1440.png",
+      "scene": "refresh-success",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "78460f8bb58778e65f99952ece4670093d0fe12aa053b0fdc8e8f717a4a46ec4"
+    },
+    {
+      "file": "initial-summary-server-error-1440.png",
+      "scene": "initial-summary-server-error",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "0a4e4be19d1ef45e4e6056e88739a09339a230558edc9348094ab4c40c1ce69c"
+    },
+    {
+      "file": "background-summary-server-error-1440.png",
+      "scene": "background-summary-server-error",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "f0614a81d24e046b402a6f59c7b934bbc6112a08b32daa766600f71b00f4a95e"
+    },
+    {
+      "file": "initial-approvals-server-error-1440.png",
+      "scene": "initial-approvals-server-error",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "04e7f468d8bee360472147b4ffeb9eea986ce2eb53eba9d169f56a5b6b0ebd21"
+    },
+    {
+      "file": "background-approvals-server-error-1440.png",
+      "scene": "background-approvals-server-error",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "b342bbd4cc33f3bddc4e0b9f8ddd4288f8e0939b652b474b44c7ebf3a372035a"
+    },
+    {
+      "file": "initial-summary-service-blocked-1440.png",
+      "scene": "initial-summary-service-blocked",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "2e222540c9e4e987a884278f8d95ae672f2bd57a62cc061b8aa3b2163b7f5ed6"
+    },
+    {
+      "file": "background-summary-service-blocked-1440.png",
+      "scene": "background-summary-service-blocked",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "b350289775c858b11487f77f7616d62d83438b0668924bfb185abb7cbf75d977"
+    },
+    {
+      "file": "initial-approvals-service-blocked-1440.png",
+      "scene": "initial-approvals-service-blocked",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "410341c35b03379065458b3dd10b3c25b6e17d1fb04f2d93f4c41e3312f2d080"
+    },
+    {
+      "file": "background-approvals-service-blocked-1440.png",
+      "scene": "background-approvals-service-blocked",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "ef716afd3290a215a2a489ee00f4885632207b542237d39f305be62309f4d9bd"
+    },
+    {
+      "file": "initial-summary-version-conflict-1440.png",
+      "scene": "initial-summary-version-conflict",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "16a9926a55fada6c702c12b2c910d31107acd2204726991c3bd4233ecde57030"
+    },
+    {
+      "file": "background-summary-version-conflict-1440.png",
+      "scene": "background-summary-version-conflict",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "f9157969fbc4fb82943785becce15506df9aa2b8253b0951b6f4999950208e43"
+    },
+    {
+      "file": "initial-approvals-version-conflict-1440.png",
+      "scene": "initial-approvals-version-conflict",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "f05afcca2629df0ef08a9f24d8b3dfa2ed2eeca2bc3bf7341aa70f83a1fa375c"
+    },
+    {
+      "file": "background-approvals-version-conflict-1440.png",
+      "scene": "background-approvals-version-conflict",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "91e0cfb987a93d1edda6ea8d057191dc2bf921fca0ab247049c25f3bc8f89b9b"
+    },
+    {
+      "file": "initial-summary-rate-limited-1440.png",
+      "scene": "initial-summary-rate-limited",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "ed6d722334b087acad2475fa9f3a9f58ebcc9a08627f690b664e40117ed02c2e"
+    },
+    {
+      "file": "background-summary-rate-limited-1440.png",
+      "scene": "background-summary-rate-limited",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "f27ff48a4455097847c0c43d8148eb33ab6db63293f85cdd6861152876f92dde"
+    },
+    {
+      "file": "initial-approvals-rate-limited-1440.png",
+      "scene": "initial-approvals-rate-limited",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "69dba86d57effb8c8f367c28e18da5c1352aea5ac0125880ad704aa3c0e8251a"
+    },
+    {
+      "file": "background-approvals-rate-limited-1440.png",
+      "scene": "background-approvals-rate-limited",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "e6ad2a13d532a59046254200588086ac657edcbed73ebf6d81136e0b63dbba23"
+    },
+    {
+      "file": "initial-summary-session-expired-1440.png",
+      "scene": "initial-summary-session-expired",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "bb7711f99c4073c9e3f69b3b712c9c4244452e292bc67ceee5a708cd75bf0b33"
+    },
+    {
+      "file": "background-summary-session-expired-1440.png",
+      "scene": "background-summary-session-expired",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "91b4cc7c71c6d347d48c0279ccc5270ac8d4054a48f0be4ef689f354695fa9d3"
+    },
+    {
+      "file": "initial-approvals-session-expired-1440.png",
+      "scene": "initial-approvals-session-expired",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "67aa92f4f020642dfa8519f457fbea01a5361e160d4c65c44f69ac47a21da77e"
+    },
+    {
+      "file": "background-approvals-session-expired-1440.png",
+      "scene": "background-approvals-session-expired",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "57e071a4661ce247ad6eabbaf1b82d0472d9e480f16c2e200006d0683c055f61"
+    },
+    {
+      "file": "initial-summary-permission-forbidden-1440.png",
+      "scene": "initial-summary-permission-forbidden",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "6a14cb41457f4aa4a3969d77ebcb9bc6a57353d7b970028bce17e6e3b247db1e"
+    },
+    {
+      "file": "background-summary-permission-forbidden-1440.png",
+      "scene": "background-summary-permission-forbidden",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "b6ef723b7adcd0e7188740366226e62546d188ee91347230a1271324f83c407c"
+    },
+    {
+      "file": "initial-approvals-permission-forbidden-1440.png",
+      "scene": "initial-approvals-permission-forbidden",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "3559eebd3ffc8f562f509bfda10dac000e265b3cd4ae3c6aa6059a78009745ca"
+    },
+    {
+      "file": "background-approvals-permission-forbidden-1440.png",
+      "scene": "background-approvals-permission-forbidden",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "2f1da122da807609620b0575d1f32bd89afe5f74a0b42c0107e14235345319b8"
+    },
+    {
+      "file": "initial-summary-network-unavailable-1440.png",
+      "scene": "initial-summary-network-unavailable",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "c92ce28df4530f7b9df54174c7d640fecac9d5bcfaec9777e32f5542a8e18a36"
+    },
+    {
+      "file": "background-summary-network-unavailable-1440.png",
+      "scene": "background-summary-network-unavailable",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "afc5688355f0e87c4a9164203a257f5aa66da2b27c9b6a1cb8dd72d31c85279e"
+    },
+    {
+      "file": "initial-approvals-network-unavailable-1440.png",
+      "scene": "initial-approvals-network-unavailable",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "a3a54b4ba2b882012eb792b51dd92866f49315064f8955ec4a36fc63e7bc2e9d"
+    },
+    {
+      "file": "background-approvals-network-unavailable-1440.png",
+      "scene": "background-approvals-network-unavailable",
+      "width": 1440,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "bf23f254f7f65b2447445a5e563b44f441f0aa73a47a6ed7fd57bb4cbcab64f9"
+    },
+    {
+      "file": "initial-loading-390.png",
+      "scene": "initial-loading",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "16bd42baecf8a4f3ee4a375785c91276cd193d784ffa9c45e71f083f0a0a4494"
+    },
+    {
+      "file": "ready-390.png",
+      "scene": "ready",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "ea8b24c32e5c0d24148b7e25b32a94f9091a57f53ddb2ce306812a4e9bf4f7f0"
+    },
+    {
+      "file": "background-refreshing-390.png",
+      "scene": "background-refreshing",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "e02fe1d59d02def2e7b26e45e501d3b9bad07dc262d36f671093a69aee73287e"
+    },
+    {
+      "file": "refresh-success-390.png",
+      "scene": "refresh-success",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "93b8233a20e60083436553cc42c0611be7327cdcb228ddd6e992916c78e7a4f5"
+    },
+    {
+      "file": "initial-summary-server-error-390.png",
+      "scene": "initial-summary-server-error",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "d6320d78122468eb33864e08bbe97297e0d0a8de13828e38769f8454b34b03bc"
+    },
+    {
+      "file": "background-summary-server-error-390.png",
+      "scene": "background-summary-server-error",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "40fe961fff5860010d206544d8e7ceb4e09242f707eb50d1b5d37f5a60556af0"
+    },
+    {
+      "file": "initial-approvals-server-error-390.png",
+      "scene": "initial-approvals-server-error",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "554ad53b0c1328b051c94efb07de59b81ef6be256acbde4331127ce384e8ca8b"
+    },
+    {
+      "file": "background-approvals-server-error-390.png",
+      "scene": "background-approvals-server-error",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "eee572c502e88a3e9108cf37a7bab0afa08cb1654ad48cd7d1b5ef6fe6fda00c"
+    },
+    {
+      "file": "initial-summary-service-blocked-390.png",
+      "scene": "initial-summary-service-blocked",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "706f5025703ca3259f8f4d5d62c2deb63520dd1e69c2a5cb76eaf6a22efd6023"
+    },
+    {
+      "file": "background-summary-service-blocked-390.png",
+      "scene": "background-summary-service-blocked",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "f13df274447de0fd46a23b67777314824219f9bf49d7f6a9522f69f1bcdc8570"
+    },
+    {
+      "file": "initial-approvals-service-blocked-390.png",
+      "scene": "initial-approvals-service-blocked",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "5d5026cf1f5d649482a8d48f1bc4e4f5b5fe64463d5a9f78c1895a2e8be31366"
+    },
+    {
+      "file": "background-approvals-service-blocked-390.png",
+      "scene": "background-approvals-service-blocked",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "5f198db04a07c17ee0d094463a54ab4eb8273c871be58a03c845d66a61a9afce"
+    },
+    {
+      "file": "initial-summary-version-conflict-390.png",
+      "scene": "initial-summary-version-conflict",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "63bf08f3bd91bb2e0b9a24e5dcbfd82ac955edeb8039d852f7ed6eceadd834f5"
+    },
+    {
+      "file": "background-summary-version-conflict-390.png",
+      "scene": "background-summary-version-conflict",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "8d1969faee5dd966ae4f50a4ab5d94ca223664f9b11ef0806b62743b451b5ff5"
+    },
+    {
+      "file": "initial-approvals-version-conflict-390.png",
+      "scene": "initial-approvals-version-conflict",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "4304c89eed41e81cee5f3521edc94509ebd180b55788e51ffb942f4d73070c8a"
+    },
+    {
+      "file": "background-approvals-version-conflict-390.png",
+      "scene": "background-approvals-version-conflict",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "3dd2ea07c8c3ce98bbe37a5009972247326d6348591ae6ea306b83fa31756a63"
+    },
+    {
+      "file": "initial-summary-rate-limited-390.png",
+      "scene": "initial-summary-rate-limited",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "54684d93652b04b9a3f0c30124b0c4cef2785e10b92796e8dd832e560bec5353"
+    },
+    {
+      "file": "background-summary-rate-limited-390.png",
+      "scene": "background-summary-rate-limited",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "dbe9b93d9e6562b8db3cae97d1e6f4a2e64c4d014087f5a1c65bee0e9a2bba7b"
+    },
+    {
+      "file": "initial-approvals-rate-limited-390.png",
+      "scene": "initial-approvals-rate-limited",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "f7840dcd0ff084b7f2613b619e9160c0ab3c5f8eacd5ef13d8eea90f5929c690"
+    },
+    {
+      "file": "background-approvals-rate-limited-390.png",
+      "scene": "background-approvals-rate-limited",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "028f00ac6ff0fde6149ab063751c67161e588aa8f6d3fef8728f599cc2e9b493"
+    },
+    {
+      "file": "initial-summary-session-expired-390.png",
+      "scene": "initial-summary-session-expired",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "df7435510ee6e524f0cbbff79710db0828c3d5e660068e6caa2d322fc9f6a725"
+    },
+    {
+      "file": "background-summary-session-expired-390.png",
+      "scene": "background-summary-session-expired",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "fa993bdd012433151810fa01c8084b71e55163ca847eeda5259be7ed88da7c9a"
+    },
+    {
+      "file": "initial-approvals-session-expired-390.png",
+      "scene": "initial-approvals-session-expired",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "f0764cc0556d0640fcd8ff8fe37a95a69b0b06a2f3c3492c93663657f0b76018"
+    },
+    {
+      "file": "background-approvals-session-expired-390.png",
+      "scene": "background-approvals-session-expired",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "ec6f7d80174fc3dc693290abb201a691b85363cf86274562ca0c2a744f7c062a"
+    },
+    {
+      "file": "initial-summary-permission-forbidden-390.png",
+      "scene": "initial-summary-permission-forbidden",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "216d2e56ba7cade20c42239bad0a22853b69bc560626e7b66400fd6df31a31e2"
+    },
+    {
+      "file": "background-summary-permission-forbidden-390.png",
+      "scene": "background-summary-permission-forbidden",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "1ad0474cade7bff4d90f60be518d19c2b0e81a5cc4ebc056dbb5eef472e44131"
+    },
+    {
+      "file": "initial-approvals-permission-forbidden-390.png",
+      "scene": "initial-approvals-permission-forbidden",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "acaf752f50eb0df3010fb049d5b28d6c36de1a4f87af06632bf5a0196d09c74a"
+    },
+    {
+      "file": "background-approvals-permission-forbidden-390.png",
+      "scene": "background-approvals-permission-forbidden",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "52a9d22ae3bc8a72f90f884bcaa3f64c51940424f911a3c98512c6aca0b178b3"
+    },
+    {
+      "file": "initial-summary-network-unavailable-390.png",
+      "scene": "initial-summary-network-unavailable",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "dae6cfa81e4d721ba06149d7b59b33d6d926b40335afccffea255bdd8a85943c"
+    },
+    {
+      "file": "background-summary-network-unavailable-390.png",
+      "scene": "background-summary-network-unavailable",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "994462c3d1c40f31c4b83ae2d1894571a8eee3fb070cac245863973fc0268227"
+    },
+    {
+      "file": "initial-approvals-network-unavailable-390.png",
+      "scene": "initial-approvals-network-unavailable",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "eff79851bee2463411a97aa92a07865855b0b634d2fa35e753f8f0dc04ead8c6"
+    },
+    {
+      "file": "background-approvals-network-unavailable-390.png",
+      "scene": "background-approvals-network-unavailable",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "actual-app-parent-fixture-HTTP-not-production-or-C-approval",
+      "sha256": "20be3b36a9569d051b2220b199a0d01512d91257df0e09d4c660f38f8bfb570c"
+    }
+  ]
+}
