@@ -140,13 +140,20 @@ const formScenes = [
   "timezone_invalid",
   "name_invalid",
 ];
-export function buildOrganizationProfileReview(source, evidence) {
+export function buildOrganizationProfileReview(source, evidence, fieldEvidence) {
   const sha = createHash("sha256").update(source.replaceAll("\r\n", "\n")).digest("hex");
   assert.equal(
     evidence.sourceHashes[sourceFile],
     sha,
     "verify current proposal before registration",
   );
+  assert.equal(fieldEvidence.sourceHashes[sourceFile], sha, "verify current field proposal");
+  assert.deepEqual(
+    Object.keys(fieldEvidence.fieldVisualReferences).sort(),
+    fields.map(([binding]) => binding).sort(),
+    "exact six field evidence required",
+  );
+  const fieldPackage = "organization-profile-fields-direction-c";
   const ids = (signatures) => signatures.map((s) => `${sourceFile}#${s}`);
   const actions = definitions.map(
     ([actionId, label, kind, signatures, sourceContractKeys, condition, handler, variants]) => {
@@ -171,10 +178,16 @@ export function buildOrganizationProfileReview(source, evidence) {
         testReferences: [
           "scripts/verify-ui-phase2-organization-profile-c.mjs",
           "scripts/verify-ui-phase2-organization-profile-controls-c.mjs",
+          "scripts/verify-ui-phase2-organization-profile-fields-c.mjs",
         ].map((file) => ({ file, evidenceType: "offline-proposal-check-not-Vue" })),
         remaining,
       };
-      const primary = evidence.actionVisualReferences[actionId];
+      const primary =
+        actionId === "OG-PROFILE-LOGO"
+          ? fieldEvidence.actionVisualReferences[actionId]
+          : evidence.actionVisualReferences[actionId];
+      const primaryPackage = actionId === "OG-PROFILE-LOGO" ? fieldPackage : controls;
+      if (actionId === "OG-PROFILE-LOGO") assert.ok(primary, "missing Logo field evidence");
       if (["OG-REFRESH", "OG-RETRY", "OG-PROFILE-SAVE"].includes(actionId))
         assert.ok(primary, "missing business control evidence " + actionId);
       if (primary) {
@@ -182,12 +195,12 @@ export function buildOrganizationProfileReview(source, evidence) {
         for (const [state, scene] of Object.entries(primary.states)) {
           action.visualStates[state] = "scene-reference-not-acceptance";
           action.visualStateReferences[state] = {
-            package: controls,
+            package: primaryPackage,
             scene,
             selector: primary.selector,
           };
-          if (!action.scenes.some((r) => r.package === controls && r.scene === scene))
-            action.scenes.push({ package: controls, scene });
+          if (!action.scenes.some((r) => r.package === primaryPackage && r.scene === scene))
+            action.scenes.push({ package: primaryPackage, scene });
         }
         action.additionalControlVariants = Object.entries(evidence.controlVariantReferences)
           .filter(([, r]) => r.actionId === actionId)
@@ -244,7 +257,11 @@ export function buildOrganizationProfileReview(source, evidence) {
         binding,
         meaning,
         relatedScenes: [{ package: parent, scene }],
-        remaining: "原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。",
+        visualReferences: {
+          package: fieldPackage,
+          ...fieldEvidence.fieldVisualReferences[binding],
+        },
+        remaining: "字段代表状态与8组合已有图；真实Vue、全主题/密度/软键盘/原生select弹出层仍待。",
       })),
       containers: [
         {
@@ -254,12 +271,20 @@ export function buildOrganizationProfileReview(source, evidence) {
           shape: "form-container",
           sourceBehavior: "summary内联资料表单，六字段；原生校验后统一PATCH，无额外确认。",
           remaining,
-          variants: formScenes.map((name) => ({
-            name,
-            evidenceScope: "matching-inline-form-scene",
-            scenes: [{ package: parent, scene: name }],
-            remaining,
-          })),
+          variants: [
+            ...formScenes.map((name) => ({
+              name,
+              evidenceScope: "matching-inline-form-scene",
+              scenes: [{ package: parent, scene: name }],
+              remaining,
+            })),
+            ...fieldEvidence.combinations.map((name) => ({
+              name: `fields-${name}`,
+              evidenceScope: "matching-inline-form-scene",
+              scenes: [{ package: fieldPackage, scene: `${name}-form` }],
+              remaining,
+            })),
+          ],
         },
         {
           file: sourceFile,
@@ -296,8 +321,8 @@ export function buildOrganizationProfileReview(source, evidence) {
         reason: "目录/技术详情/结果核验是独立C提案；不进入现有源码业务动作分母。",
       })),
     compositionGaps: [
-      "Logo默认/悬停/焦点/按下尚未精确绑定；六字段完整状态另细化。",
-      "170控件图与74整页图不代表真实Vue已实现；OG-G02和其它生命周期缺口仍存在。",
+      "Logo四态及六字段47代表状态/8表单组合已绑定；不是全部字段/角色/主题/密度/软键盘组合。",
+      "110字段图、170控件图与74整页图不代表真实Vue已实现；OG-G02和其它生命周期缺口仍存在。",
     ],
     approval: "pending-user-review",
     limits: [remaining, "P16仅独立布局批准不外推P29；本批未部署、未改变API或业务规则。"],
@@ -308,6 +333,9 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const value = buildOrganizationProfileReview(
     readFileSync(sourceFile, "utf8"),
     JSON.parse(readFileSync(`${base}/design/${controls}/evidence.json`, "utf8")),
+    JSON.parse(
+      readFileSync(`${base}/design/organization-profile-fields-direction-c/evidence.json`, "utf8"),
+    ),
   );
   const target = `${base}/action-reviews/P29.json`;
   if (process.argv.includes("--write"))

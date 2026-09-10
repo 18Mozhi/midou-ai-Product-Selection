@@ -5,7 +5,7 @@
     "review.js": "119dfb67483c3c234ddbdb85f0f44418d4ec1bc8a694112475ef2d69e91b9d0b",
     "review.css": "748789d5fe23303dea9270717d1fee07488f05bd167a44d1994602e5fc0473f2",
     "review-data.js": "7bc86064c1312d4fceddb49f70ca61710192e94a96e946360e0b6192f944bf03",
-    "review-evidence.js": "922464b96a567e2bd5840397810290b27587f082e0fcafe82251a640dc12a9e0"
+    "review-evidence.js": "4e45440bca7fef024b2fe83a4514e9bb3a5ce2ea595a1385ac7bede1abdea8fd"
   },
   "proof": [
     {
@@ -16,10 +16,10 @@
         "height": 1000
       },
       "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
-      "capturedAt": "2026-09-10T00:50:08.388Z",
+      "capturedAt": "2026-09-10T01:05:59.380Z",
       "browser": "151.0.7922.34",
       "platform": "win32",
-      "sha256": "efe5694a965d25c03f216bb4669775ff4f96e1dc0273ce65c751b2d79c1efdeb"
+      "sha256": "1b11b29660ca0a7553a47fee68960d34046f5f087a3d26ac3d1ec8229aaf27e1"
     },
     {
       "kind": "local-review-tool-not-product-page",
@@ -29,10 +29,10 @@
         "height": 844
       },
       "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
-      "capturedAt": "2026-09-10T00:50:10.218Z",
+      "capturedAt": "2026-09-10T01:06:01.195Z",
       "browser": "151.0.7922.34",
       "platform": "win32",
-      "sha256": "f68b22ed2685f3c32d862e3da5773e67c23afcafc5499240a7e15ba95fb9af5c"
+      "sha256": "3fd47060a340710ca4e74d1b03359c1424ab47a1f385aaa23da34fc5bd6e2abe"
     }
   ],
   "results": [

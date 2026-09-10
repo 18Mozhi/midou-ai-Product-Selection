@@ -90,6 +90,10 @@
         {
           "file": "scripts/verify-ui-phase2-organization-profile-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-organization-profile-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
       "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。",
@@ -295,6 +299,10 @@
         },
         {
           "file": "scripts/verify-ui-phase2-organization-profile-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-organization-profile-fields-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
@@ -523,6 +531,10 @@
         {
           "file": "scripts/verify-ui-phase2-organization-profile-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-organization-profile-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
       "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。",
@@ -615,13 +627,29 @@
         {
           "package": "organization-profile-direction-c",
           "scene": "blank_logo"
+        },
+        {
+          "package": "organization-profile-fields-direction-c",
+          "scene": "logo_url-default"
+        },
+        {
+          "package": "organization-profile-fields-direction-c",
+          "scene": "logo_url-hover"
+        },
+        {
+          "package": "organization-profile-fields-direction-c",
+          "scene": "logo_url-focus"
+        },
+        {
+          "package": "organization-profile-fields-direction-c",
+          "scene": "logo_url-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-applicable-source-unrepresented",
         "busy": "not-applicable-source-unrepresented"
       },
@@ -633,9 +661,36 @@
         {
           "file": "scripts/verify-ui-phase2-organization-profile-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-organization-profile-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
       "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。",
+      "visualStateReferences": {
+        "default": {
+          "package": "organization-profile-fields-direction-c",
+          "scene": "logo_url-default",
+          "selector": "#logo_url"
+        },
+        "hover": {
+          "package": "organization-profile-fields-direction-c",
+          "scene": "logo_url-hover",
+          "selector": "#logo_url"
+        },
+        "focus": {
+          "package": "organization-profile-fields-direction-c",
+          "scene": "logo_url-focus",
+          "selector": "#logo_url"
+        },
+        "pressed": {
+          "package": "organization-profile-fields-direction-c",
+          "scene": "logo_url-pressed",
+          "selector": "#logo_url"
+        }
+      },
+      "additionalControlVariants": [],
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
         "states": [
@@ -693,6 +748,10 @@
         {
           "file": "scripts/verify-ui-phase2-organization-profile-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-organization-profile-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
       "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
@@ -734,6 +793,10 @@
         },
         {
           "file": "scripts/verify-ui-phase2-organization-profile-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-organization-profile-fields-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
@@ -783,6 +846,10 @@
         {
           "file": "scripts/verify-ui-phase2-organization-profile-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-organization-profile-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
       "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
@@ -822,7 +889,24 @@
             "scene": "name_invalid"
           }
         ],
-        "remaining": "原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。"
+        "visualReferences": {
+          "package": "organization-profile-fields-direction-c",
+          "pageId": "P29",
+          "label": "名称",
+          "selector": "#name",
+          "scope": "six-source-fields-proposal-not-Vue",
+          "states": {
+            "default": "name-default",
+            "hover": "name-hover",
+            "focus": "name-focus",
+            "pressed": "name-pressed",
+            "empty": "name-empty",
+            "invalid": "name-invalid",
+            "corrected": "name-corrected",
+            "save_editable": "name-save_editable"
+          }
+        },
+        "remaining": "字段代表状态与8组合已有图；真实Vue、全主题/密度/软键盘/原生select弹出层仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationAdminCenter.vue",
@@ -834,7 +918,24 @@
             "scene": "logo_invalid"
           }
         ],
-        "remaining": "原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。"
+        "visualReferences": {
+          "package": "organization-profile-fields-direction-c",
+          "pageId": "P29",
+          "label": "Logo HTTPS 地址",
+          "selector": "#logo_url",
+          "scope": "six-source-fields-proposal-not-Vue",
+          "states": {
+            "default": "logo_url-default",
+            "hover": "logo_url-hover",
+            "focus": "logo_url-focus",
+            "pressed": "logo_url-pressed",
+            "empty": "logo_url-empty",
+            "invalid": "logo_url-invalid",
+            "corrected": "logo_url-corrected",
+            "save_editable": "logo_url-save_editable"
+          }
+        },
+        "remaining": "字段代表状态与8组合已有图；真实Vue、全主题/密度/软键盘/原生select弹出层仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationAdminCenter.vue",
@@ -846,7 +947,24 @@
             "scene": "timezone_invalid"
           }
         ],
-        "remaining": "原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。"
+        "visualReferences": {
+          "package": "organization-profile-fields-direction-c",
+          "pageId": "P29",
+          "label": "时区",
+          "selector": "#timezone",
+          "scope": "six-source-fields-proposal-not-Vue",
+          "states": {
+            "default": "timezone-default",
+            "hover": "timezone-hover",
+            "focus": "timezone-focus",
+            "pressed": "timezone-pressed",
+            "empty": "timezone-empty",
+            "invalid": "timezone-invalid",
+            "corrected": "timezone-corrected",
+            "save_editable": "timezone-save_editable"
+          }
+        },
+        "remaining": "字段代表状态与8组合已有图；真实Vue、全主题/密度/软键盘/原生select弹出层仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationAdminCenter.vue",
@@ -858,7 +976,24 @@
             "scene": "retention_invalid"
           }
         ],
-        "remaining": "原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。"
+        "visualReferences": {
+          "package": "organization-profile-fields-direction-c",
+          "pageId": "P29",
+          "label": "数据保留天数",
+          "selector": "#data_retention_days",
+          "scope": "six-source-fields-proposal-not-Vue",
+          "states": {
+            "default": "data_retention_days-default",
+            "hover": "data_retention_days-hover",
+            "focus": "data_retention_days-focus",
+            "pressed": "data_retention_days-pressed",
+            "empty": "data_retention_days-empty",
+            "invalid": "data_retention_days-invalid",
+            "corrected": "data_retention_days-corrected",
+            "save_editable": "data_retention_days-save_editable"
+          }
+        },
+        "remaining": "字段代表状态与8组合已有图；真实Vue、全主题/密度/软键盘/原生select弹出层仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationAdminCenter.vue",
@@ -870,7 +1005,23 @@
             "scene": "missing_workspace"
           }
         ],
-        "remaining": "原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。"
+        "visualReferences": {
+          "package": "organization-profile-fields-direction-c",
+          "pageId": "P29",
+          "label": "默认工作区",
+          "selector": "#default_workspace_id",
+          "scope": "six-source-fields-proposal-not-Vue",
+          "states": {
+            "default": "default_workspace_id-default",
+            "hover": "default_workspace_id-hover",
+            "focus": "default_workspace_id-focus",
+            "empty": "default_workspace_id-empty",
+            "invalid": "default_workspace_id-invalid",
+            "corrected": "default_workspace_id-corrected",
+            "save_editable": "default_workspace_id-save_editable"
+          }
+        },
+        "remaining": "字段代表状态与8组合已有图；真实Vue、全主题/密度/软键盘/原生select弹出层仍待。"
       },
       {
         "file": "apps/web/src/components/OrganizationAdminCenter.vue",
@@ -882,7 +1033,24 @@
             "scene": "reason_missing"
           }
         ],
-        "remaining": "原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。"
+        "visualReferences": {
+          "package": "organization-profile-fields-direction-c",
+          "pageId": "P29",
+          "label": "变更原因",
+          "selector": "#reason",
+          "scope": "six-source-fields-proposal-not-Vue",
+          "states": {
+            "default": "reason-default",
+            "hover": "reason-hover",
+            "focus": "reason-focus",
+            "pressed": "reason-pressed",
+            "empty": "reason-empty",
+            "invalid": "reason-invalid",
+            "corrected": "reason-corrected",
+            "save_editable": "reason-save_editable"
+          }
+        },
+        "remaining": "字段代表状态与8组合已有图；真实Vue、全主题/密度/软键盘/原生select弹出层仍待。"
       }
     ],
     "containers": [
@@ -1146,6 +1314,94 @@
               }
             ],
             "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
+          },
+          {
+            "name": "fields-editing",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "organization-profile-fields-direction-c",
+                "scene": "editing-form"
+              }
+            ],
+            "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
+          },
+          {
+            "name": "fields-save_busy",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "organization-profile-fields-direction-c",
+                "scene": "save_busy-form"
+              }
+            ],
+            "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
+          },
+          {
+            "name": "fields-save_conflict",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "organization-profile-fields-direction-c",
+                "scene": "save_conflict-form"
+              }
+            ],
+            "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
+          },
+          {
+            "name": "fields-write_read_failed",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "organization-profile-fields-direction-c",
+                "scene": "write_read_failed-form"
+              }
+            ],
+            "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
+          },
+          {
+            "name": "fields-save_timeout",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "organization-profile-fields-direction-c",
+                "scene": "save_timeout-form"
+              }
+            ],
+            "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
+          },
+          {
+            "name": "fields-missing_workspace",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "organization-profile-fields-direction-c",
+                "scene": "missing_workspace-form"
+              }
+            ],
+            "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
+          },
+          {
+            "name": "fields-no_options",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "organization-profile-fields-direction-c",
+                "scene": "no_options-form"
+              }
+            ],
+            "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
+          },
+          {
+            "name": "fields-archived_option",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "organization-profile-fields-direction-c",
+                "scene": "archived_option-form"
+              }
+            ],
+            "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
           }
         ]
       },
@@ -1306,8 +1562,8 @@
     }
   ],
   "compositionGaps": [
-    "Logo默认/悬停/焦点/按下尚未精确绑定；六字段完整状态另细化。",
-    "170控件图与74整页图不代表真实Vue已实现；OG-G02和其它生命周期缺口仍存在。"
+    "Logo四态及六字段47代表状态/8表单组合已绑定；不是全部字段/角色/主题/密度/软键盘组合。",
+    "110字段图、170控件图与74整页图不代表真实Vue已实现；OG-G02和其它生命周期缺口仍存在。"
   ],
   "approval": "pending-user-review",
   "limits": [

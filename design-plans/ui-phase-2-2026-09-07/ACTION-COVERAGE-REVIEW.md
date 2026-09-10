@@ -40,7 +40,7 @@
 | [P26 通知中心](page-specs/P26.md) | 59 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P27 自动化规则](page-specs/P27.md) | 55 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P28 报表与导出](page-specs/P28.md) | 50 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P29 治理概览](page-specs/P29.md) | 167 | [7组](action-reviews/P29.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P29 治理概览](page-specs/P29.md) | 167 | [7组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P30 成员与邀请](page-specs/P30.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P31 角色与权限](page-specs/P31.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P32 工作区管理](page-specs/P32.md) | 167 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -2447,9 +2447,9 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P29 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P29.json)：11个局部源位置 → 7组；1类写入，4组路由动作，0组转发/容器关联不重复计动作。6个本地v-model，2处调用/内嵌容器，24个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P29.json)：11个局部源位置 → 7组；1类写入，4组路由动作，0组转发/容器关联不重复计动作。6个本地v-model，2处调用/内嵌容器，32个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
 
-尚有4个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有0个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 另有4个disabled/busy槽按逐项源码证据登记为当前控件无此呈现；不计图片或验收通过，不减少语义动作数。原源候选、实际子控件和源文件指纹必须一致；隐藏、父面板loading或函数拒绝不冒充按钮禁用。
 
@@ -2467,12 +2467,12 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 | 本地字段 | 含义 | 未验事项 |
 | --- | --- | --- |
-| OrganizationAdminCenter.vue / form.name | 名称；required、maxlength120，初值data.name | 原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。 |
-| OrganizationAdminCenter.vue / form.logo_url | Logo；url、https://.*、maxlength2048，可空；输入清自定义错误 | 原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。 |
-| OrganizationAdminCenter.vue / form.timezone | 时区；required、maxlength64，自由文本，不造枚举 | 原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。 |
-| OrganizationAdminCenter.vue / form.data_retention_days | 保留天数；v-model.number，number/min30/max3650/required；原生默认step1 | 原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。 |
-| OrganizationAdminCenter.vue / form.default_workspace_id | 默认工作区；required，按当前返回名称展示，不新增active-only过滤 | 原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。 |
-| OrganizationAdminCenter.vue / form.reason | 变更原因；required、maxlength500；成功load清空，保存期间未禁用输入 | 原稿相关字段错误不等于逐字段全部状态；具体呈现、忙碌可编辑及真实生命周期仍待。 |
+| OrganizationAdminCenter.vue / form.name | 名称；required、maxlength120，初值data.name | 字段代表状态与8组合已有图；真实Vue、全主题/密度/软键盘/原生select弹出层仍待。 |
+| OrganizationAdminCenter.vue / form.logo_url | Logo；url、https://.*、maxlength2048，可空；输入清自定义错误 | 字段代表状态与8组合已有图；真实Vue、全主题/密度/软键盘/原生select弹出层仍待。 |
+| OrganizationAdminCenter.vue / form.timezone | 时区；required、maxlength64，自由文本，不造枚举 | 字段代表状态与8组合已有图；真实Vue、全主题/密度/软键盘/原生select弹出层仍待。 |
+| OrganizationAdminCenter.vue / form.data_retention_days | 保留天数；v-model.number，number/min30/max3650/required；原生默认step1 | 字段代表状态与8组合已有图；真实Vue、全主题/密度/软键盘/原生select弹出层仍待。 |
+| OrganizationAdminCenter.vue / form.default_workspace_id | 默认工作区；required，按当前返回名称展示，不新增active-only过滤 | 字段代表状态与8组合已有图；真实Vue、全主题/密度/软键盘/原生select弹出层仍待。 |
+| OrganizationAdminCenter.vue / form.reason | 变更原因；required、maxlength500；成功load清空，保存期间未禁用输入 | 字段代表状态与8组合已有图；真实Vue、全主题/密度/软键盘/原生select弹出层仍待。 |
 
 ### 弹窗与详情消费者（有图不自动等价）
 
@@ -2501,12 +2501,20 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OrganizationAdminCenter.vue / form.1 / retention_invalid | form-container / matching-inline-form-scene | [retention_invalid · 1440](design/organization-profile-direction-c/1440-retention_invalid.png) / [retention_invalid · 390](design/organization-profile-direction-c/390-retention_invalid.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
 | OrganizationAdminCenter.vue / form.1 / timezone_invalid | form-container / matching-inline-form-scene | [timezone_invalid · 1440](design/organization-profile-direction-c/1440-timezone_invalid.png) / [timezone_invalid · 390](design/organization-profile-direction-c/390-timezone_invalid.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
 | OrganizationAdminCenter.vue / form.1 / name_invalid | form-container / matching-inline-form-scene | [name_invalid · 1440](design/organization-profile-direction-c/1440-name_invalid.png) / [name_invalid · 390](design/organization-profile-direction-c/390-name_invalid.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / fields-editing | form-container / matching-inline-form-scene | [editing-form · 1440](design/organization-profile-fields-direction-c/editing-form-1440.png) / [editing-form · 390](design/organization-profile-fields-direction-c/editing-form-390.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / fields-save_busy | form-container / matching-inline-form-scene | [save_busy-form · 1440](design/organization-profile-fields-direction-c/save_busy-form-1440.png) / [save_busy-form · 390](design/organization-profile-fields-direction-c/save_busy-form-390.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / fields-save_conflict | form-container / matching-inline-form-scene | [save_conflict-form · 1440](design/organization-profile-fields-direction-c/save_conflict-form-1440.png) / [save_conflict-form · 390](design/organization-profile-fields-direction-c/save_conflict-form-390.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / fields-write_read_failed | form-container / matching-inline-form-scene | [write_read_failed-form · 1440](design/organization-profile-fields-direction-c/write_read_failed-form-1440.png) / [write_read_failed-form · 390](design/organization-profile-fields-direction-c/write_read_failed-form-390.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / fields-save_timeout | form-container / matching-inline-form-scene | [save_timeout-form · 1440](design/organization-profile-fields-direction-c/save_timeout-form-1440.png) / [save_timeout-form · 390](design/organization-profile-fields-direction-c/save_timeout-form-390.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / fields-missing_workspace | form-container / matching-inline-form-scene | [missing_workspace-form · 1440](design/organization-profile-fields-direction-c/missing_workspace-form-1440.png) / [missing_workspace-form · 390](design/organization-profile-fields-direction-c/missing_workspace-form-390.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / fields-no_options | form-container / matching-inline-form-scene | [no_options-form · 1440](design/organization-profile-fields-direction-c/no_options-form-1440.png) / [no_options-form · 390](design/organization-profile-fields-direction-c/no_options-form-390.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| OrganizationAdminCenter.vue / form.1 / fields-archived_option | form-container / matching-inline-form-scene | [archived_option-form · 1440](design/organization-profile-fields-direction-c/archived_option-form-1440.png) / [archived_option-form · 390](design/organization-profile-fields-direction-c/archived_option-form-390.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
 | OrganizationAdminCenter.vue / AuditedReasonDialog.1 / fresh-summary-no-reason-origin | native-reason-dialog / route-excluded-reference | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png) | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
 
 ### 明确保留的边界
 
-- Logo默认/悬停/焦点/按下尚未精确绑定；六字段完整状态另细化。
-- 170控件图与74整页图不代表真实Vue已实现；OG-G02和其它生命周期缺口仍存在。
+- Logo四态及六字段47代表状态/8表单组合已绑定；不是全部字段/角色/主题/密度/软键盘组合。
+- 110字段图、170控件图与74整页图不代表真实Vue已实现；OG-G02和其它生命周期缺口仍存在。
 - P30–P37子组件和共享原因窗全源需分别核对；不以父层排除完成其它页面。
 - 全局缓存/组织隔离、共享诊断及未提交草稿策略仍待，不从Token保护推断资料页安全。
 

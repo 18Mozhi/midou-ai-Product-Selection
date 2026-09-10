@@ -1,5 +1,7 @@
 # P29 组织资料 · 源码与图稿逐项对应
 
+2026-09-10字段后续：[110张字段图](design/organization-profile-fields-direction-c/README.md)补Logo四態与六字段47代表状态/8表单组合。当前主状态引用20，容器引用32（原23表单+新增8表单+1初始原因排除），不是32个弹窗。源位置/组不增加；下文16/24和Logo四态未绑定为前批记录。全字段组合、真实Vue、用户批准与生产验收仍待。
+
 2026-09-10；起点main/fcb18ca8。依据AGENTS → Feature Map organizationAdmin → 蓝图M06-01 → 当前OrganizationAdminCenter、F04合同与C稿。使用ui-skills-root/frontend-design保持已选方向和具体批准边界；本批不改变视觉布局或业务代码。
 
 [机器清单](action-reviews/P29.json) · [170张控件图](design/organization-profile-controls-direction-c/gallery.html) · [原74张整页稿](design/organization-profile-direction-c/README.md)。全部仍待具体审核。

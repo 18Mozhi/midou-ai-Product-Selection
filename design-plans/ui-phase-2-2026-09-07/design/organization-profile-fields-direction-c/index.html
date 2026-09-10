@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P29 组织资料 · 字段状态审核</title>
+    <link rel="stylesheet" href="../organization-profile-direction-c/profile.css" />
+    <link rel="stylesheet" href="fields.css" />
+    <script defer src="../organization-profile-direction-c/data.js"></script>
+    <script defer src="../organization-profile-direction-c/profile.js"></script>
+    <script defer src="fields.js"></script>
+  </head>
+  <body>
+    <div class="review-bar">
+      <span>P29 字段审核稿 · 非生产数据</span
+      ><button id="review-toggle" aria-expanded="false">审核场景</button>
+    </div>
+    <section id="review-tools" hidden aria-label="非业务审核工具">
+      <label for="review-scene">整页场景</label
+      ><select id="review-scene"></select>
+      <p id="review-note"></p>
+      <pre id="review-intents"></pre>
+      <label for="field-select">字段</label
+      ><select id="field-select"></select>
+      <label for="field-mode">状态</label
+      ><select id="field-mode">
+        <option value="default">默认</option>
+        <option value="empty">留空</option>
+        <option value="invalid">校验失败</option>
+        <option value="save_editable">保存中仍可编辑</option>
+      </select>
+      <button id="show-field">定位字段</button>
+      <p>悬停、键盘焦点和按下请直接操作；选择框原生弹出列表不计作网页弹窗。</p>
+    </section>
+    <div class="app">
+      <aside class="directory">
+        <div class="brand">ScoutOps</div>
+        <p>当前组织后台</p>
+        <h1>治理概览</h1>
+        <nav aria-label="本页目录">
+          <a href="#identity">组织资料</a><a href="#profile-form">更新资料</a
+          ><a href="#summary">治理摘要</a>
+        </nav>
+        <div class="directory-foot">只管理当前会话中的组织<br />操作沿用现有审计规则</div>
+      </aside>
+      <main id="workspace"></main>
+    </div>
+  </body>
+</html>

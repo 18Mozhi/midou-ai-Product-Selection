@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "094b6f74b2a1be27f4f328a254e8e83c316b131556c2ba08cfe9e82e7e4e9b47",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "f98a13ed176917b9a0d1ae43dcd63c6c567edd92635127d4b354d83850be8f29",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -59,6 +59,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json": "380786ba76be2768899d5a6bfce8b290fabdc67e49652140b40adfdc1d690403",
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/evidence.json": "500ba595f07edd54de77dc6f7a03ac16b0ad234f7cf2aba43acbaf996a53e904",
     "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/evidence.json": "992f751544dbd85a665aa14e51d5a8c8cbe7f83c8dc8a70ec77c53050ba9da67",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-fields-direction-c/evidence.json": "78ae21c4999e0536151a1f81e8517f0bc0a050a02ed302a9f90e8d9b362fd7f9",
     "design-plans/ui-phase-2-2026-09-07/design/permission-comparison-direction-c/evidence.json": "ce1af8f9fbd07321cdcc3832442473a10afbd53605d14b6b7d80976afad884e3",
     "design-plans/ui-phase-2-2026-09-07/design/personal-composed-direction-c/evidence.json": "44d9fab15bd0857cad1d770c24d1a164a6ab0bf6fb61fbb22365d4be05c56241",
     "design-plans/ui-phase-2-2026-09-07/design/personal-direction-c/evidence.json": "a55004bd7f957bdd5e3dc8134114504f6e48b8cf44897ffd463cf71b97d0e272",
@@ -123,7 +124,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "f0a25e68f8096db8f1536fd1a8f5c535ce6025d9f0403bf173e3fa8b69a61505",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P27.json": "873cc1947c923bc7269b767b29bb8002d8d27cfc38494cde1a6125b8be82b255",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P28.json": "79bfb96f492e1752f6f4bcd48b55869d749040974bfdecbbb67ab8c8798a5c3d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P29.json": "36eb37442232959f418cb428b3eb802986858469d8eecb3829087e8bb1e2127f",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P29.json": "cd3b657b5c6baee30237855171bf6cd8282f1815c800c6b15bd286e5cc72fe17",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0"
   },
   "summary": {
@@ -132,16 +133,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "relatedProposalRoutes": 73,
     "noLinkedPageProposalRoutes": 0,
     "missingPageIds": [],
-    "packages": 89,
+    "packages": 90,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 908,
-    "sourceBindings": 1721,
+    "uniqueBoundFiles": 912,
+    "sourceBindings": 1737,
     "sourceDrift": 0,
-    "pngs": 12425,
+    "pngs": 12535,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 9452,
+    "readmeLinksChecked": 9455,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -425,6 +426,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "id": "P29",
       "spec": "page-specs/P29.md",
       "packages": [
+        "organization-profile-fields-direction-c",
         "organization-profile-controls-direction-c",
         "organization-profile-direction-c"
       ],
@@ -1282,6 +1284,15 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "evidence": "design/organization-profile-direction-c/evidence.json",
       "prototype": "design/organization-profile-direction-c/index.html",
       "gallery": null
+    },
+    "organization-profile-fields-direction-c": {
+      "id": "organization-profile-fields-direction-c",
+      "role": "page-or-section-proposal",
+      "screenshots": 110,
+      "readme": "design/organization-profile-fields-direction-c/README.md",
+      "evidence": "design/organization-profile-fields-direction-c/evidence.json",
+      "prototype": "design/organization-profile-fields-direction-c/index.html",
+      "gallery": "design/organization-profile-fields-direction-c/gallery.html"
     },
     "permission-comparison-direction-c": {
       "id": "permission-comparison-direction-c",

@@ -1,0 +1,3266 @@
+{
+  "version": "ORG-PROFILE-FIELDS-C-r1",
+  "scope": "proposal-not-Vue-or-user-accepted",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/index.html": "c7534b27e2d5ce1e81009ca6bd61cd1f578b883b12e8ca6bbef5d5a4f92d4fad",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/profile.css": "8af2ac98bed39b910555fbf4dee23b33cae4ac944bc10a56e730be51115f9817",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/profile.js": "e97992f37b251be8dc91342259b8a9001bc33db72ca5867c34b57c25e66aef99",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/data.js": "e6933867dba51bcaf548815b3f943ef6558c519719cd7103707e413ff78ee770",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "90f52f690e7a86398efbb9cd9225ea98212d4c0f584cb0eb01ff91de8fcebd5c",
+    "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
+    "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
+    "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "scripts/lib/ui-phase2-organization-profile-design-data.mjs": "47acf1b80de67d5cce6f86661d64e3e65eee0dd044ff13c5dc642ed0a7ceb70d",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-organization-profile-c.mjs": "5a42e1a7baedabaab16a480f7304a59ba9ef6a2f667a127e280ae88ade6a8355",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-fields-direction-c/index.html": "0a35b9876b62a7dc495628e1e044ebac2830b2a25bde468635ec8c2b4e1d1ed0",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-fields-direction-c/fields.js": "e749e4810dac47f81331062ef0d851163d4d3af87d3996e7d9ebdab137558aec",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-fields-direction-c/fields.css": "8eb783ad8f266f235737b99a40af23a5187cb5e81ebe4c978c9cfb13754b57bd",
+    "scripts/verify-ui-phase2-organization-profile-fields-c.mjs": "1cd07eb755a37c342dd9e0477c2e18d5dcbfba89cbb6483319b3a9a190afcffb"
+  },
+  "fieldVisualReferences": {
+    "form.name": {
+      "pageId": "P29",
+      "label": "名称",
+      "selector": "#name",
+      "scope": "six-source-fields-proposal-not-Vue",
+      "states": {
+        "default": "name-default",
+        "hover": "name-hover",
+        "focus": "name-focus",
+        "pressed": "name-pressed",
+        "empty": "name-empty",
+        "invalid": "name-invalid",
+        "corrected": "name-corrected",
+        "save_editable": "name-save_editable"
+      }
+    },
+    "form.logo_url": {
+      "pageId": "P29",
+      "label": "Logo HTTPS 地址",
+      "selector": "#logo_url",
+      "scope": "six-source-fields-proposal-not-Vue",
+      "states": {
+        "default": "logo_url-default",
+        "hover": "logo_url-hover",
+        "focus": "logo_url-focus",
+        "pressed": "logo_url-pressed",
+        "empty": "logo_url-empty",
+        "invalid": "logo_url-invalid",
+        "corrected": "logo_url-corrected",
+        "save_editable": "logo_url-save_editable"
+      }
+    },
+    "form.timezone": {
+      "pageId": "P29",
+      "label": "时区",
+      "selector": "#timezone",
+      "scope": "six-source-fields-proposal-not-Vue",
+      "states": {
+        "default": "timezone-default",
+        "hover": "timezone-hover",
+        "focus": "timezone-focus",
+        "pressed": "timezone-pressed",
+        "empty": "timezone-empty",
+        "invalid": "timezone-invalid",
+        "corrected": "timezone-corrected",
+        "save_editable": "timezone-save_editable"
+      }
+    },
+    "form.data_retention_days": {
+      "pageId": "P29",
+      "label": "数据保留天数",
+      "selector": "#data_retention_days",
+      "scope": "six-source-fields-proposal-not-Vue",
+      "states": {
+        "default": "data_retention_days-default",
+        "hover": "data_retention_days-hover",
+        "focus": "data_retention_days-focus",
+        "pressed": "data_retention_days-pressed",
+        "empty": "data_retention_days-empty",
+        "invalid": "data_retention_days-invalid",
+        "corrected": "data_retention_days-corrected",
+        "save_editable": "data_retention_days-save_editable"
+      }
+    },
+    "form.default_workspace_id": {
+      "pageId": "P29",
+      "label": "默认工作区",
+      "selector": "#default_workspace_id",
+      "scope": "six-source-fields-proposal-not-Vue",
+      "states": {
+        "default": "default_workspace_id-default",
+        "hover": "default_workspace_id-hover",
+        "focus": "default_workspace_id-focus",
+        "empty": "default_workspace_id-empty",
+        "invalid": "default_workspace_id-invalid",
+        "corrected": "default_workspace_id-corrected",
+        "save_editable": "default_workspace_id-save_editable"
+      }
+    },
+    "form.reason": {
+      "pageId": "P29",
+      "label": "变更原因",
+      "selector": "#reason",
+      "scope": "six-source-fields-proposal-not-Vue",
+      "states": {
+        "default": "reason-default",
+        "hover": "reason-hover",
+        "focus": "reason-focus",
+        "pressed": "reason-pressed",
+        "empty": "reason-empty",
+        "invalid": "reason-invalid",
+        "corrected": "reason-corrected",
+        "save_editable": "reason-save_editable"
+      }
+    }
+  },
+  "actionVisualReferences": {
+    "OG-PROFILE-LOGO": {
+      "pageId": "P29",
+      "scope": "representative-control-only-not-all-variants-or-Vue",
+      "selector": "#logo_url",
+      "states": {
+        "default": "logo_url-default",
+        "hover": "logo_url-hover",
+        "focus": "logo_url-focus",
+        "pressed": "logo_url-pressed"
+      }
+    }
+  },
+  "combinations": [
+    "editing",
+    "save_busy",
+    "save_conflict",
+    "write_read_failed",
+    "save_timeout",
+    "missing_workspace",
+    "no_options",
+    "archived_option"
+  ],
+  "checks": [
+    {
+      "field": "name",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 864,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 864,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 864,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 864,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 1440,
+      "state": "empty",
+      "metrics": {
+        "width": 864,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 1440,
+      "state": "invalid",
+      "metrics": {
+        "width": 864,
+        "height": 49.59375,
+        "font": 16,
+        "border": "rgb(161, 66, 44)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 1440,
+      "state": "corrected",
+      "metrics": {
+        "width": 864,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 1440,
+      "state": "save_editable",
+      "metrics": {
+        "width": 864,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 864,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 864,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 864,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 864,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 1440,
+      "state": "empty",
+      "metrics": {
+        "width": 864,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 1440,
+      "state": "invalid",
+      "metrics": {
+        "width": 864,
+        "height": 49.59375,
+        "font": 16,
+        "border": "rgb(161, 66, 44)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "true",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 1440,
+      "state": "corrected",
+      "metrics": {
+        "width": 864,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 1440,
+      "state": "save_editable",
+      "metrics": {
+        "width": 864,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 422,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 422,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 422,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 422,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 1440,
+      "state": "empty",
+      "metrics": {
+        "width": 422,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 1440,
+      "state": "invalid",
+      "metrics": {
+        "width": 422,
+        "height": 49.59375,
+        "font": 16,
+        "border": "rgb(161, 66, 44)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 1440,
+      "state": "corrected",
+      "metrics": {
+        "width": 422,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 1440,
+      "state": "save_editable",
+      "metrics": {
+        "width": 422,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 422,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 422,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 422,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 422,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 1440,
+      "state": "empty",
+      "metrics": {
+        "width": 422,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 1440,
+      "state": "invalid",
+      "metrics": {
+        "width": 422,
+        "height": 49.59375,
+        "font": 16,
+        "border": "rgb(161, 66, 44)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 1440,
+      "state": "corrected",
+      "metrics": {
+        "width": 422,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 1440,
+      "state": "save_editable",
+      "metrics": {
+        "width": 422,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "default_workspace_id",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 864,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "默认工作区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "default_workspace_id",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 864,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "默认工作区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "default_workspace_id",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 864,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "默认工作区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "default_workspace_id",
+      "width": 1440,
+      "state": "empty",
+      "metrics": {
+        "width": 864,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "默认工作区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "default_workspace_id",
+      "width": 1440,
+      "state": "invalid",
+      "metrics": {
+        "width": 864,
+        "height": 46,
+        "font": 16,
+        "border": "rgb(161, 66, 44)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "label": "默认工作区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "default_workspace_id",
+      "width": 1440,
+      "state": "corrected",
+      "metrics": {
+        "width": 864,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "默认工作区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "default_workspace_id",
+      "width": 1440,
+      "state": "save_editable",
+      "metrics": {
+        "width": 864,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "默认工作区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 1440,
+      "state": "default",
+      "metrics": {
+        "width": 864,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 1440,
+      "state": "hover",
+      "metrics": {
+        "width": 864,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 1440,
+      "state": "focus",
+      "metrics": {
+        "width": 864,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 1440,
+      "state": "pressed",
+      "metrics": {
+        "width": 864,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 1440,
+      "state": "empty",
+      "metrics": {
+        "width": 864,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 1440,
+      "state": "invalid",
+      "metrics": {
+        "width": 864,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(161, 66, 44)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 1440,
+      "state": "corrected",
+      "metrics": {
+        "width": 864,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 1440,
+      "state": "save_editable",
+      "metrics": {
+        "width": 864,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 390,
+      "state": "empty",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 390,
+      "state": "invalid",
+      "metrics": {
+        "width": 322,
+        "height": 49.59375,
+        "font": 16,
+        "border": "rgb(161, 66, 44)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 390,
+      "state": "corrected",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "name",
+      "width": 390,
+      "state": "save_editable",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "名称",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 390,
+      "state": "empty",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 390,
+      "state": "invalid",
+      "metrics": {
+        "width": 322,
+        "height": 49.59375,
+        "font": 16,
+        "border": "rgb(161, 66, 44)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "true",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 390,
+      "state": "corrected",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "logo_url",
+      "width": 390,
+      "state": "save_editable",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": false,
+        "disabled": false,
+        "invalid": "false",
+        "label": "Logo HTTPS 地址",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 390,
+      "state": "empty",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 390,
+      "state": "invalid",
+      "metrics": {
+        "width": 322,
+        "height": 49.59375,
+        "font": 16,
+        "border": "rgb(161, 66, 44)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 390,
+      "state": "corrected",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "timezone",
+      "width": 390,
+      "state": "save_editable",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "时区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 390,
+      "state": "empty",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 390,
+      "state": "invalid",
+      "metrics": {
+        "width": 322,
+        "height": 49.59375,
+        "font": 16,
+        "border": "rgb(161, 66, 44)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 390,
+      "state": "corrected",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "data_retention_days",
+      "width": 390,
+      "state": "save_editable",
+      "metrics": {
+        "width": 322,
+        "height": 47.59375,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "数据保留天数",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "default_workspace_id",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "默认工作区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "default_workspace_id",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "默认工作区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "default_workspace_id",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "默认工作区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "default_workspace_id",
+      "width": 390,
+      "state": "empty",
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "默认工作区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "default_workspace_id",
+      "width": 390,
+      "state": "invalid",
+      "metrics": {
+        "width": 322,
+        "height": 46,
+        "font": 16,
+        "border": "rgb(161, 66, 44)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "label": "默认工作区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "default_workspace_id",
+      "width": 390,
+      "state": "corrected",
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "默认工作区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "default_workspace_id",
+      "width": 390,
+      "state": "save_editable",
+      "metrics": {
+        "width": 322,
+        "height": 44,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "默认工作区",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 390,
+      "state": "default",
+      "metrics": {
+        "width": 322,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 390,
+      "state": "hover",
+      "metrics": {
+        "width": 322,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 390,
+      "state": "focus",
+      "metrics": {
+        "width": 322,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 390,
+      "state": "pressed",
+      "metrics": {
+        "width": 322,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(37, 74, 156)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(37, 74, 156)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 390,
+      "state": "empty",
+      "metrics": {
+        "width": 322,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 390,
+      "state": "invalid",
+      "metrics": {
+        "width": 322,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(161, 66, 44)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "true",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 390,
+      "state": "corrected",
+      "metrics": {
+        "width": 322,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    },
+    {
+      "field": "reason",
+      "width": 390,
+      "state": "save_editable",
+      "metrics": {
+        "width": 322,
+        "height": 112,
+        "font": 16,
+        "border": "rgb(123, 135, 152)",
+        "color": "rgb(32, 44, 61)",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(32, 44, 61)",
+        "hit": true,
+        "required": true,
+        "disabled": false,
+        "invalid": "false",
+        "label": "变更原因",
+        "descriptions": true,
+        "overflow": false
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "scene": "name-default",
+      "width": 1440,
+      "file": "name-default-1440.png",
+      "sha256": "97b3161db531a3242ab86ccdfa6a377c9a9d942dc62f2bc390d5d44b91191a56",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "name-hover",
+      "width": 1440,
+      "file": "name-hover-1440.png",
+      "sha256": "ec428106df6c13002796dd33b22d1240497832373592d453d4fe6a033e99b88c",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "name-focus",
+      "width": 1440,
+      "file": "name-focus-1440.png",
+      "sha256": "755b832b3e5ea2373da6bd2d7ab97b696fe668008632a316b8df04bf385321db",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "name-pressed",
+      "width": 1440,
+      "file": "name-pressed-1440.png",
+      "sha256": "b126841801deb7a02479baa28a776453468194de8e42057ff3190f914490f927",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "name-empty",
+      "width": 1440,
+      "file": "name-empty-1440.png",
+      "sha256": "154d16d8cd62c22f0d7c4738160854c31154e84c514b0e7900610c13553f673f",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "empty"
+      }
+    },
+    {
+      "scene": "name-invalid",
+      "width": 1440,
+      "file": "name-invalid-1440.png",
+      "sha256": "bc0a73fd94f3e4a4647d797bdfecae0dc63fc0db6490f72e248a0280c6524389",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "invalid"
+      }
+    },
+    {
+      "scene": "name-corrected",
+      "width": 1440,
+      "file": "name-corrected-1440.png",
+      "sha256": "2db7df18ebd51e7e00edecee24a596c7fbf51766c938155c1f6f85e92a3257a3",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "corrected"
+      }
+    },
+    {
+      "scene": "name-save_editable",
+      "width": 1440,
+      "file": "name-save_editable-1440.png",
+      "sha256": "1fb725126cbe399e5eb664a9eec08d0599c0def9c7aee259240e801558309f9b",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "save_editable"
+      }
+    },
+    {
+      "scene": "logo_url-default",
+      "width": 1440,
+      "file": "logo_url-default-1440.png",
+      "sha256": "f89d9276cd1001381d4d68d74e55e95609079f14b2f0f308219f0fd343f20a8e",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "logo_url-hover",
+      "width": 1440,
+      "file": "logo_url-hover-1440.png",
+      "sha256": "4b44dd3e37aee739d9573905761ef91322e0a4023e2c96d36a8ac5635b0a4271",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "logo_url-focus",
+      "width": 1440,
+      "file": "logo_url-focus-1440.png",
+      "sha256": "0b078d825d1bd0fd75f116abf492abfb2070b0df3e3b1e4410c5fc264232348b",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "logo_url-pressed",
+      "width": 1440,
+      "file": "logo_url-pressed-1440.png",
+      "sha256": "e3720f5c2a01186c2d3b7ed6286815daee22181d31c4bf83d3ef994469ba25fa",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "logo_url-empty",
+      "width": 1440,
+      "file": "logo_url-empty-1440.png",
+      "sha256": "af6e4a79ca0e627668fc6f9002672f8bbe5fa8f517b967da2e40191418e9ddaa",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "empty"
+      }
+    },
+    {
+      "scene": "logo_url-invalid",
+      "width": 1440,
+      "file": "logo_url-invalid-1440.png",
+      "sha256": "7f4fcdc5113942867527157c72223837d3678fb45af359b42c3e6f515c0123c4",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "invalid"
+      }
+    },
+    {
+      "scene": "logo_url-corrected",
+      "width": 1440,
+      "file": "logo_url-corrected-1440.png",
+      "sha256": "afd6324671bc0b080eaa21716bbd6256d0c013b97bd0c2901031209b0de923e0",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "corrected"
+      }
+    },
+    {
+      "scene": "logo_url-save_editable",
+      "width": 1440,
+      "file": "logo_url-save_editable-1440.png",
+      "sha256": "ced6cf455fd959989d1c3d790f75395fd0138212cec3e3f026122208ad939420",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "save_editable"
+      }
+    },
+    {
+      "scene": "timezone-default",
+      "width": 1440,
+      "file": "timezone-default-1440.png",
+      "sha256": "ce9f28a09bc2ff81f77d3813e5cb4c0a76e31007b6b40f7479a675af38db8ec9",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "timezone-hover",
+      "width": 1440,
+      "file": "timezone-hover-1440.png",
+      "sha256": "98949e70724f5a89d4ac4c3c6bc76f34947dfe287fc46133225f1a116201b25a",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "timezone-focus",
+      "width": 1440,
+      "file": "timezone-focus-1440.png",
+      "sha256": "09b33d2c43373b921d753918919cea216438396d506ac459036fac347265a0d4",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "timezone-pressed",
+      "width": 1440,
+      "file": "timezone-pressed-1440.png",
+      "sha256": "aa9cce4ddc72ed89e7c49ba4fdc893f8204128dfd518a05d8a3b50a10ac25476",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "timezone-empty",
+      "width": 1440,
+      "file": "timezone-empty-1440.png",
+      "sha256": "4eca3a7297fe161bde344f9955fd1a03e024baaaf5ef9068ce2e4738fb37f0d2",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "empty"
+      }
+    },
+    {
+      "scene": "timezone-invalid",
+      "width": 1440,
+      "file": "timezone-invalid-1440.png",
+      "sha256": "4b969e2a315ef8a33375bc516d9e9314e121fc1ba1f88f60e1ede8fadf52a178",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "invalid"
+      }
+    },
+    {
+      "scene": "timezone-corrected",
+      "width": 1440,
+      "file": "timezone-corrected-1440.png",
+      "sha256": "750de4efd3a4812cb894df3bfcbd264cde3ccf682158235bd9da1a382a80c46b",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "corrected"
+      }
+    },
+    {
+      "scene": "timezone-save_editable",
+      "width": 1440,
+      "file": "timezone-save_editable-1440.png",
+      "sha256": "3d84f2a20bf414e28926370f79c434d07994d45080ac2502511516fc3a910abe",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "save_editable"
+      }
+    },
+    {
+      "scene": "data_retention_days-default",
+      "width": 1440,
+      "file": "data_retention_days-default-1440.png",
+      "sha256": "ce9f28a09bc2ff81f77d3813e5cb4c0a76e31007b6b40f7479a675af38db8ec9",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "data_retention_days-hover",
+      "width": 1440,
+      "file": "data_retention_days-hover-1440.png",
+      "sha256": "3a55bd4874cfd368c351e5ad6a3eb9004a2716b871062c89b259d31d1e679976",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "data_retention_days-focus",
+      "width": 1440,
+      "file": "data_retention_days-focus-1440.png",
+      "sha256": "300e186b0bee3c57468ed7e8b0d248495e7f3b53ba0739ac311da0b7d088d7e8",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "data_retention_days-pressed",
+      "width": 1440,
+      "file": "data_retention_days-pressed-1440.png",
+      "sha256": "004f18d2e1e90f2f8a9736b1a1c4c39d946b6c98b269106b7b722f3e43b9745e",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "data_retention_days-empty",
+      "width": 1440,
+      "file": "data_retention_days-empty-1440.png",
+      "sha256": "e8db669c224f916ea1a55651cd81d81c277679961f25d96c94631681e36bd7d5",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "empty"
+      }
+    },
+    {
+      "scene": "data_retention_days-invalid",
+      "width": 1440,
+      "file": "data_retention_days-invalid-1440.png",
+      "sha256": "7242add2066cff16243b2a839467c122630cd38418751349d4aeb22009b1a29d",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "invalid"
+      }
+    },
+    {
+      "scene": "data_retention_days-corrected",
+      "width": 1440,
+      "file": "data_retention_days-corrected-1440.png",
+      "sha256": "ce9f28a09bc2ff81f77d3813e5cb4c0a76e31007b6b40f7479a675af38db8ec9",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "corrected"
+      }
+    },
+    {
+      "scene": "data_retention_days-save_editable",
+      "width": 1440,
+      "file": "data_retention_days-save_editable-1440.png",
+      "sha256": "c4a06e7dc52d0f911bb34bc7bfc16daa26bc936474df2e1cc514fb79a43c83d1",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "save_editable"
+      }
+    },
+    {
+      "scene": "default_workspace_id-default",
+      "width": 1440,
+      "file": "default_workspace_id-default-1440.png",
+      "sha256": "83f731f4480210162d427196dcf3a140a4cf3679f85155603bd41343ceb49d67",
+      "control": {
+        "selector": "#default_workspace_id",
+        "binding": "form.default_workspace_id",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "default_workspace_id-hover",
+      "width": 1440,
+      "file": "default_workspace_id-hover-1440.png",
+      "sha256": "2e75526ab2e57379c1a9d1ad75c2eec4025725f2615e18ef2e9810da8e89f4f0",
+      "control": {
+        "selector": "#default_workspace_id",
+        "binding": "form.default_workspace_id",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "default_workspace_id-focus",
+      "width": 1440,
+      "file": "default_workspace_id-focus-1440.png",
+      "sha256": "63d3d44d11d3b26154ecbed0fdf7ab2199a1f9d5c1a989892dc7ec08ffaa1b47",
+      "control": {
+        "selector": "#default_workspace_id",
+        "binding": "form.default_workspace_id",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "default_workspace_id-empty",
+      "width": 1440,
+      "file": "default_workspace_id-empty-1440.png",
+      "sha256": "02df1c629e4dd30649c64df97b2225bff3de323313d983721d58e00909eb8c79",
+      "control": {
+        "selector": "#default_workspace_id",
+        "binding": "form.default_workspace_id",
+        "state": "empty"
+      }
+    },
+    {
+      "scene": "default_workspace_id-invalid",
+      "width": 1440,
+      "file": "default_workspace_id-invalid-1440.png",
+      "sha256": "720968772d3bc6fb7cdb93a3ea97527a193c8f3c9bd7eef4cffdc19b816a1d95",
+      "control": {
+        "selector": "#default_workspace_id",
+        "binding": "form.default_workspace_id",
+        "state": "invalid"
+      }
+    },
+    {
+      "scene": "default_workspace_id-corrected",
+      "width": 1440,
+      "file": "default_workspace_id-corrected-1440.png",
+      "sha256": "83f731f4480210162d427196dcf3a140a4cf3679f85155603bd41343ceb49d67",
+      "control": {
+        "selector": "#default_workspace_id",
+        "binding": "form.default_workspace_id",
+        "state": "corrected"
+      }
+    },
+    {
+      "scene": "default_workspace_id-save_editable",
+      "width": 1440,
+      "file": "default_workspace_id-save_editable-1440.png",
+      "sha256": "8fb3892fe6bc720495c05bb33faf573df2cf7856a76e218acf7107860e71ffa9",
+      "control": {
+        "selector": "#default_workspace_id",
+        "binding": "form.default_workspace_id",
+        "state": "save_editable"
+      }
+    },
+    {
+      "scene": "reason-default",
+      "width": 1440,
+      "file": "reason-default-1440.png",
+      "sha256": "2faf0228d4d7f59ab0278a367feb420e1c9e1c7e1d5f97689ba7006c4e31f11d",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "reason-hover",
+      "width": 1440,
+      "file": "reason-hover-1440.png",
+      "sha256": "c2254ad56397c1eb3d4d68ddb9712799b85a28f692a04bfc9c48dbf7539a19f7",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "reason-focus",
+      "width": 1440,
+      "file": "reason-focus-1440.png",
+      "sha256": "a79935d500efe8f15cdaf4ac618afbd45eb3c21a30ebc3aada76c84a32c7e0c1",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "reason-pressed",
+      "width": 1440,
+      "file": "reason-pressed-1440.png",
+      "sha256": "717e306f4949ce010151ab4acd04cbffe0cd8d3189386c77b6f78653ed12c19a",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "reason-empty",
+      "width": 1440,
+      "file": "reason-empty-1440.png",
+      "sha256": "2faf0228d4d7f59ab0278a367feb420e1c9e1c7e1d5f97689ba7006c4e31f11d",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "empty"
+      }
+    },
+    {
+      "scene": "reason-invalid",
+      "width": 1440,
+      "file": "reason-invalid-1440.png",
+      "sha256": "4cc524e4b18e46c3d9272a7947f4595d52cfd8ffadb2452c92768b49fb477f86",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "invalid"
+      }
+    },
+    {
+      "scene": "reason-corrected",
+      "width": 1440,
+      "file": "reason-corrected-1440.png",
+      "sha256": "1f146f5b5267dc73a4073b7fb6a1a9e8aaa3859190d884ead2764824ee08b535",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "corrected"
+      }
+    },
+    {
+      "scene": "reason-save_editable",
+      "width": 1440,
+      "file": "reason-save_editable-1440.png",
+      "sha256": "73a9d6a2c43f7751560ae4ca5002aa4e20d69569d01fdf2debe8ccc7a8c801b7",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "save_editable"
+      }
+    },
+    {
+      "scene": "editing-form",
+      "width": 1440,
+      "file": "editing-form-1440.png",
+      "sha256": "14704b1ccfcbe0b35ffa0d947a27a105350a03d623750064fe3c3760f8f5180c",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "save_busy-form",
+      "width": 1440,
+      "file": "save_busy-form-1440.png",
+      "sha256": "467735c016fedffe2a7af6417cf3e766355debd8c22031376034f3e1a7ea5e30",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "save_conflict-form",
+      "width": 1440,
+      "file": "save_conflict-form-1440.png",
+      "sha256": "b4065edcfdc195cbc8f0f47c5cf4a13398c79474d93b9d426dfadc462deb463d",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "write_read_failed-form",
+      "width": 1440,
+      "file": "write_read_failed-form-1440.png",
+      "sha256": "84527d3c90034e7a82cdc9d95b260445d2fa85c79709f41c81f8c0603167d158",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "save_timeout-form",
+      "width": 1440,
+      "file": "save_timeout-form-1440.png",
+      "sha256": "933a6457d551a6961aadc37615ca8f6b8ecb7c38f7397a00a75dca78e5feeac4",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "missing_workspace-form",
+      "width": 1440,
+      "file": "missing_workspace-form-1440.png",
+      "sha256": "0e51d1a01af5930a14681742e0b926fdc3f383a0460a54c5f77ab23b211b0efb",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "no_options-form",
+      "width": 1440,
+      "file": "no_options-form-1440.png",
+      "sha256": "0e51d1a01af5930a14681742e0b926fdc3f383a0460a54c5f77ab23b211b0efb",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "archived_option-form",
+      "width": 1440,
+      "file": "archived_option-form-1440.png",
+      "sha256": "ccb54526549c4eebd93ca993f490abedba4da84889c516818a762ec4ce9e1988",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "name-default",
+      "width": 390,
+      "file": "name-default-390.png",
+      "sha256": "fe0a5c142304bcef29a95801a8269607f5be41bcc2ef898417062a97a59902cb",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "name-hover",
+      "width": 390,
+      "file": "name-hover-390.png",
+      "sha256": "ed7be8ce8cded8671259123d48bc33a854048d47fd387afb413ddb385a28c925",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "name-focus",
+      "width": 390,
+      "file": "name-focus-390.png",
+      "sha256": "2022f391743048889e5d7a7d08c74d7c1e93aca1f7096ab2d856b0da37f04178",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "name-pressed",
+      "width": 390,
+      "file": "name-pressed-390.png",
+      "sha256": "ab4e0d8008e9eb2bd051947537eae3cf54ac6781e89a6a26824d9644d66384f8",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "name-empty",
+      "width": 390,
+      "file": "name-empty-390.png",
+      "sha256": "1b3ec5f465850ffe1d284fd6c1e1c3126657b36ee258b21e041a48544da4b27d",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "empty"
+      }
+    },
+    {
+      "scene": "name-invalid",
+      "width": 390,
+      "file": "name-invalid-390.png",
+      "sha256": "3805d7b8eb55775ea4f4323eec56fb2bc898f39ff139316f3a12c57ba32877e9",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "invalid"
+      }
+    },
+    {
+      "scene": "name-corrected",
+      "width": 390,
+      "file": "name-corrected-390.png",
+      "sha256": "479fb1445f6b43641c383ec5ca3fdbff001e6e816332cd01fc45dcdc069d5e8f",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "corrected"
+      }
+    },
+    {
+      "scene": "name-save_editable",
+      "width": 390,
+      "file": "name-save_editable-390.png",
+      "sha256": "b39543717472b9d46a69466841f093d0e096d2af799816dc92227c2439e1cc6e",
+      "control": {
+        "selector": "#name",
+        "binding": "form.name",
+        "state": "save_editable"
+      }
+    },
+    {
+      "scene": "logo_url-default",
+      "width": 390,
+      "file": "logo_url-default-390.png",
+      "sha256": "b8841fa2b3ece72ef50d24b1b0c71b2440044a631e9600ce8297079043a7c639",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "logo_url-hover",
+      "width": 390,
+      "file": "logo_url-hover-390.png",
+      "sha256": "e68393578e3654a1c1069e9751f3f8be1f1d45800be6eea7a0c78e6d312aad23",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "logo_url-focus",
+      "width": 390,
+      "file": "logo_url-focus-390.png",
+      "sha256": "e05b353bda8f68db0d7efbed07b2bcbc8be559b083e0e24d758cbce5bacb07ea",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "logo_url-pressed",
+      "width": 390,
+      "file": "logo_url-pressed-390.png",
+      "sha256": "32e9586daa913ebeb9a52fc87df1c359c0f2d3d96279ae60955dfcc8cf3af212",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "logo_url-empty",
+      "width": 390,
+      "file": "logo_url-empty-390.png",
+      "sha256": "9c7b67d0ca2f22e54eb2dbc3ec6f30d7da12d2d3df5b098e76130a8e1e32a2e6",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "empty"
+      }
+    },
+    {
+      "scene": "logo_url-invalid",
+      "width": 390,
+      "file": "logo_url-invalid-390.png",
+      "sha256": "553c29aff33efa04d1973f86edb31792f3f5347ece01c054225eeed6d8253eca",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "invalid"
+      }
+    },
+    {
+      "scene": "logo_url-corrected",
+      "width": 390,
+      "file": "logo_url-corrected-390.png",
+      "sha256": "998fc6d7fedfd671ae2b356e7176e78765eaeb1f6e8c2cacdbb81246900a408f",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "corrected"
+      }
+    },
+    {
+      "scene": "logo_url-save_editable",
+      "width": 390,
+      "file": "logo_url-save_editable-390.png",
+      "sha256": "3b53595575050832f37d147640bb3b3efd89f18f66d561572ca25c2f9dc657a3",
+      "control": {
+        "selector": "#logo_url",
+        "binding": "form.logo_url",
+        "state": "save_editable"
+      }
+    },
+    {
+      "scene": "timezone-default",
+      "width": 390,
+      "file": "timezone-default-390.png",
+      "sha256": "07bc73b4feadbcd5776ebb5c467f2f49470bd2dedbb10baac723477329e81049",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "timezone-hover",
+      "width": 390,
+      "file": "timezone-hover-390.png",
+      "sha256": "168853d416db1af8d20fc8116c13b6e4361731bdd2e6db18ed28933f9549fea0",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "timezone-focus",
+      "width": 390,
+      "file": "timezone-focus-390.png",
+      "sha256": "3b19ed94ffbc40d0eeab7f4c4c731757f8545ec765bedd0079faa206310ef474",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "timezone-pressed",
+      "width": 390,
+      "file": "timezone-pressed-390.png",
+      "sha256": "7a0f5027986aeb72302d407f12d352f1c697aca49f4a55455e8331e1f42935f9",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "timezone-empty",
+      "width": 390,
+      "file": "timezone-empty-390.png",
+      "sha256": "3d5a54e674dc44b49036c79cb88cc56a3110930e45bdc5e1084808db7a333d79",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "empty"
+      }
+    },
+    {
+      "scene": "timezone-invalid",
+      "width": 390,
+      "file": "timezone-invalid-390.png",
+      "sha256": "b984ed05f78c34236a02346e432de1a8d94f71bc6fa673d0e51ba7bdac1444fd",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "invalid"
+      }
+    },
+    {
+      "scene": "timezone-corrected",
+      "width": 390,
+      "file": "timezone-corrected-390.png",
+      "sha256": "5d07c8cf93b2223fdc180d1ed5cdcc2cc467e3b6f7a65c74f12d7a94294e26cf",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "corrected"
+      }
+    },
+    {
+      "scene": "timezone-save_editable",
+      "width": 390,
+      "file": "timezone-save_editable-390.png",
+      "sha256": "1943d6d0c46c4f27eb3e27ed446230dce3f3a66e13f2414275a5e4bcc375acf2",
+      "control": {
+        "selector": "#timezone",
+        "binding": "form.timezone",
+        "state": "save_editable"
+      }
+    },
+    {
+      "scene": "data_retention_days-default",
+      "width": 390,
+      "file": "data_retention_days-default-390.png",
+      "sha256": "fc18b6799940775f8f85c96eb5eb61f65d2380a70eb0381266e4cd4815dcde26",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "data_retention_days-hover",
+      "width": 390,
+      "file": "data_retention_days-hover-390.png",
+      "sha256": "f626f9d76ae266105303b7c8efcff0c1f979b1d9e05f45594985bae7d13b099d",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "data_retention_days-focus",
+      "width": 390,
+      "file": "data_retention_days-focus-390.png",
+      "sha256": "31f215475f148385c9541d5342c0346a42b41c85db268e027ee41f04afd677e3",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "data_retention_days-pressed",
+      "width": 390,
+      "file": "data_retention_days-pressed-390.png",
+      "sha256": "4b0c9a82a21f192fb2330b8793cb369bc1046d5aa8d4afdae912e9db4eadc04e",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "data_retention_days-empty",
+      "width": 390,
+      "file": "data_retention_days-empty-390.png",
+      "sha256": "f9692b608acf46ec5b78fa504219aa868651fe19e21530a9286d680d90e42591",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "empty"
+      }
+    },
+    {
+      "scene": "data_retention_days-invalid",
+      "width": 390,
+      "file": "data_retention_days-invalid-390.png",
+      "sha256": "5d54cdfc0730de1f8837083497dfda9546fbab68cdc3d6251c7b8a88b5031c27",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "invalid"
+      }
+    },
+    {
+      "scene": "data_retention_days-corrected",
+      "width": 390,
+      "file": "data_retention_days-corrected-390.png",
+      "sha256": "fc18b6799940775f8f85c96eb5eb61f65d2380a70eb0381266e4cd4815dcde26",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "corrected"
+      }
+    },
+    {
+      "scene": "data_retention_days-save_editable",
+      "width": 390,
+      "file": "data_retention_days-save_editable-390.png",
+      "sha256": "e736000452fd6761c48b52bf9fc55ecc8a538edf3ec34eb778a8f6f5bcaffddd",
+      "control": {
+        "selector": "#data_retention_days",
+        "binding": "form.data_retention_days",
+        "state": "save_editable"
+      }
+    },
+    {
+      "scene": "default_workspace_id-default",
+      "width": 390,
+      "file": "default_workspace_id-default-390.png",
+      "sha256": "4d13ab951aae7245cc9c6e5bd01fe8bb5c753291e46cd1bcfe05ccd3dd327c42",
+      "control": {
+        "selector": "#default_workspace_id",
+        "binding": "form.default_workspace_id",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "default_workspace_id-hover",
+      "width": 390,
+      "file": "default_workspace_id-hover-390.png",
+      "sha256": "3fca0b5ed59e39135148605976d721a454f2c4292254da018919c31e919ae447",
+      "control": {
+        "selector": "#default_workspace_id",
+        "binding": "form.default_workspace_id",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "default_workspace_id-focus",
+      "width": 390,
+      "file": "default_workspace_id-focus-390.png",
+      "sha256": "9e21d43d9ae9fe3259410cca2c2da09c6608f484ba7144e4c86736d8c4f77198",
+      "control": {
+        "selector": "#default_workspace_id",
+        "binding": "form.default_workspace_id",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "default_workspace_id-empty",
+      "width": 390,
+      "file": "default_workspace_id-empty-390.png",
+      "sha256": "50e8478245f8cad5afcd2248b068fe0cec097b948cef90e186692054c85c10e9",
+      "control": {
+        "selector": "#default_workspace_id",
+        "binding": "form.default_workspace_id",
+        "state": "empty"
+      }
+    },
+    {
+      "scene": "default_workspace_id-invalid",
+      "width": 390,
+      "file": "default_workspace_id-invalid-390.png",
+      "sha256": "00f60eae86e4512941440bb664b10657f63527cdadd5343a4924c566351da5aa",
+      "control": {
+        "selector": "#default_workspace_id",
+        "binding": "form.default_workspace_id",
+        "state": "invalid"
+      }
+    },
+    {
+      "scene": "default_workspace_id-corrected",
+      "width": 390,
+      "file": "default_workspace_id-corrected-390.png",
+      "sha256": "4d13ab951aae7245cc9c6e5bd01fe8bb5c753291e46cd1bcfe05ccd3dd327c42",
+      "control": {
+        "selector": "#default_workspace_id",
+        "binding": "form.default_workspace_id",
+        "state": "corrected"
+      }
+    },
+    {
+      "scene": "default_workspace_id-save_editable",
+      "width": 390,
+      "file": "default_workspace_id-save_editable-390.png",
+      "sha256": "14998e8834bb4808704045b510a420837c1396fcdfe597746f223e52aeb641cc",
+      "control": {
+        "selector": "#default_workspace_id",
+        "binding": "form.default_workspace_id",
+        "state": "save_editable"
+      }
+    },
+    {
+      "scene": "reason-default",
+      "width": 390,
+      "file": "reason-default-390.png",
+      "sha256": "5660bd1a7c95f9ad2eafad6eeb62c6dcb7ad382fb8e76f35e4508864305b1d34",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "default"
+      }
+    },
+    {
+      "scene": "reason-hover",
+      "width": 390,
+      "file": "reason-hover-390.png",
+      "sha256": "778c62e2a8e8569f301618d079a4406f1c73a0fe17e5b14f3da89a61b3dfd831",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "hover"
+      }
+    },
+    {
+      "scene": "reason-focus",
+      "width": 390,
+      "file": "reason-focus-390.png",
+      "sha256": "0b7c50948459b560c9a5ac5060663b0d37e2b51c548145371b648688cc8e4ecb",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "focus"
+      }
+    },
+    {
+      "scene": "reason-pressed",
+      "width": 390,
+      "file": "reason-pressed-390.png",
+      "sha256": "4cc0bc15c18f40ff0b6c2a74e6be97a278f16cec978a289d2a805c1863154c23",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "pressed"
+      }
+    },
+    {
+      "scene": "reason-empty",
+      "width": 390,
+      "file": "reason-empty-390.png",
+      "sha256": "5660bd1a7c95f9ad2eafad6eeb62c6dcb7ad382fb8e76f35e4508864305b1d34",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "empty"
+      }
+    },
+    {
+      "scene": "reason-invalid",
+      "width": 390,
+      "file": "reason-invalid-390.png",
+      "sha256": "bd31eee1fb07cc7ff85d8635d9c627e1e9a57be50811e3afaf76c9a1dcd3e5ad",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "invalid"
+      }
+    },
+    {
+      "scene": "reason-corrected",
+      "width": 390,
+      "file": "reason-corrected-390.png",
+      "sha256": "5d44c83a0ba9dd8e9cf14626bb670a8ad7f0c95426946e642489a1c552ac46ab",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "corrected"
+      }
+    },
+    {
+      "scene": "reason-save_editable",
+      "width": 390,
+      "file": "reason-save_editable-390.png",
+      "sha256": "99c782c6756e9a342a08018fd22b28b59ea2a338c38aa6adc5a47d786daacb75",
+      "control": {
+        "selector": "#reason",
+        "binding": "form.reason",
+        "state": "save_editable"
+      }
+    },
+    {
+      "scene": "editing-form",
+      "width": 390,
+      "file": "editing-form-390.png",
+      "sha256": "6780656845270d9689568e87e6dfbfa32f5caeaa61e2922581afa2141781e932",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "save_busy-form",
+      "width": 390,
+      "file": "save_busy-form-390.png",
+      "sha256": "ab422825ed0d1765bf6060e7ec1e161c3f80a818d01818bf3419e32916e926e7",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "save_conflict-form",
+      "width": 390,
+      "file": "save_conflict-form-390.png",
+      "sha256": "b0fe00fa091b95bbaffad156f44f2b022e457cd9c96078b206a298606277d128",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "write_read_failed-form",
+      "width": 390,
+      "file": "write_read_failed-form-390.png",
+      "sha256": "05dbcb0de49bf6833d8bee31f4dc0d864f7e20175eb93cd4cae4bfbcf5c3f731",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "save_timeout-form",
+      "width": 390,
+      "file": "save_timeout-form-390.png",
+      "sha256": "321e68c95983ea9876cec647509735b27a30d4d9fa42ea855d19968ea92760f2",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "missing_workspace-form",
+      "width": 390,
+      "file": "missing_workspace-form-390.png",
+      "sha256": "dcf38f2545aab4645eaedddcaf32c9c3fdc42cfb3eeeb0772e327a67bff0a426",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "no_options-form",
+      "width": 390,
+      "file": "no_options-form-390.png",
+      "sha256": "dcf38f2545aab4645eaedddcaf32c9c3fdc42cfb3eeeb0772e327a67bff0a426",
+      "scope": "form-combination-not-all-runtime-states"
+    },
+    {
+      "scene": "archived_option-form",
+      "width": 390,
+      "file": "archived_option-form-390.png",
+      "sha256": "7b61173a27c3a2c2326d9a495e0ed0ed39570a0a4a352ae21cf462df8f536bcc",
+      "scope": "form-combination-not-all-runtime-states"
+    }
+  ]
+}

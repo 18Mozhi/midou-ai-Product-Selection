@@ -9,17 +9,20 @@ import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 import {
   base,
   sourceFile,
-  buildOrganizationProfileReview,
+  buildOrganizationProfileReview as buildProfileReview,
 } from "../../scripts/build-ui-phase2-organization-profile-review.mjs";
 
 const source = readFileSync(sourceFile, "utf8").replaceAll("\r\n", "\n");
 const sourceHashes = { [sourceFile]: createHash("sha256").update(source).digest("hex") };
 const packages = new Map(
-  ["organization-profile-direction-c", "organization-profile-controls-direction-c"].map((name) => [
-    name,
-    JSON.parse(readFileSync(`${base}/design/${name}/evidence.json`, "utf8")),
-  ]),
+  [
+    "organization-profile-direction-c",
+    "organization-profile-controls-direction-c",
+    "organization-profile-fields-direction-c",
+  ].map((name) => [name, JSON.parse(readFileSync(`${base}/design/${name}/evidence.json`, "utf8"))]),
 );
+const buildOrganizationProfileReview = (source, evidence) =>
+  buildProfileReview(source, evidence, packages.get("organization-profile-fields-direction-c"));
 const context = {
   candidates: scanSource(source, sourceFile).candidates,
   sourceHashes,
@@ -28,6 +31,7 @@ const context = {
   files: new Set([
     "scripts/verify-ui-phase2-organization-profile-c.mjs",
     "scripts/verify-ui-phase2-organization-profile-controls-c.mjs",
+    "scripts/verify-ui-phase2-organization-profile-fields-c.mjs",
   ]),
 };
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P29.json`, "utf8"));
@@ -39,7 +43,7 @@ test("P29 maps all eleven parent sites to three business actions, Logo validity 
   assert.equal(r.routeActions, 4); // Includes the local field callback, not four business buttons.
   assert.equal(r.excludedGroups, 3);
   assert.equal(r.writeActions, 1);
-  assert.equal(r.unmappedVisualSlots, 4);
+  assert.equal(r.unmappedVisualSlots, 0);
   assert.equal(r.sourceInapplicableVisualSlots, 4);
   assert.equal(
     review().actions.find((a) => a.actionId === "OG-PROFILE-SAVE").sourceCandidateIds.length,
@@ -54,7 +58,7 @@ test("P29 keeps six models, one inline form and the shared reason caller distinc
   });
   assert.equal(result.localModelBindings, 6);
   assert.equal(result.callerContainers, 2);
-  assert.equal(result.consumerVariants, 24);
+  assert.equal(result.consumerVariants, 32);
   assert.equal(result.runtimeAcceptance, "unproven");
   const reason = value.surfaceReview.containers[1].variants[0];
   assert.equal(reason.evidenceScope, "route-excluded-reference");
@@ -66,7 +70,7 @@ test("P29 only binds business states; directory/disclosure/recheck remain propos
     e = packages.get("organization-profile-controls-direction-c");
   assert.equal(
     r.actions.reduce((n, a) => n + Object.keys(a.visualStateReferences ?? {}).length, 0),
-    16,
+    20,
   );
   const variants = r.actions.flatMap((a) => a.additionalControlVariants ?? []);
   assert.equal(variants.length, 8);
