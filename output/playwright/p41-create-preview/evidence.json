@@ -1,0 +1,1540 @@
+{
+  "schemaVersion": 1,
+  "approval": "pending",
+  "scope": "P41 actual Vue wizard/parent scripts with review-only presentation and C CSS. Not full App/KeepAlive, real API/RBAC/database, late-write ownership, P42 design or production acceptance.",
+  "sourceCommit": "1f909c92c54842f56026731e62bc1bd070dce3c5",
+  "sourceHashes": {
+    "apps/api/src/mysql-platform-account-repository.ts": "96cc13077b24ba17643adc9b13ca14cd2e71ea49d3e13d3abceb7b86ed7b87c5",
+    "apps/api/src/platform-account-service.ts": "189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/platform-account-types.ts": "7c78cdfd603d8419ee18d7bd5feb12b1d40cbb7bdf102aeaf17a919a7003afe2",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/account-create-preview.css": "3ca6614eb37eec2deb65fc3dec5db9b946db5d1d35fc9dad78994438d34a2650",
+    "design-plans/ui-phase-2-2026-09-07/implementation/account-filter-preview.css": "da58782137fbcf8b489e51dcce69e9af573dac83e356c6b6f98d84d77c887b79",
+    "design-plans/ui-phase-2-2026-09-07/implementation/account-page-preview.css": "fc8c02e1b07df9e7d85712ec1bf702b576a80603cf72732fbdd0152d140b5f9b",
+    "design-plans/ui-phase-2-2026-09-07/implementation/organization-create-preview.css": "1f28f557a7faf327e022fbf8eca91b30c2d83ba9cc74c6b983af68ba072450ab",
+    "design-plans/ui-phase-2-2026-09-07/implementation/organization-list-preview.css": "b54614add55ab6d5d1b6a9aeeb5f5ae3f14f11afc0bf47140278fe80da0eadd8",
+    "scripts/lib/ui-phase2-account-filter-preview.mjs": "c2e406a8516e19bd0fe9ef44f3f3ef11769bfe309e0811c9b6caae58d07bdeea",
+    "scripts/lib/ui-phase2-account-overview-design-data.mjs": "df765906f1eda3eb7c1c4158ee5e808796024df6bba3a841ce7ceaa3f2a7ba93",
+    "scripts/lib/ui-phase2-account-page-preview.mjs": "ebc3ebccafb395f1f861a7bcd430f8936b08b820d55153667c8e74815f5c788f",
+    "scripts/lib/ui-phase2-organization-create-preview.mjs": "ee991d5d27807a2f796da86206d73f4ef84590c2431d934472cbfb6c06b69470",
+    "scripts/lib/ui-phase2-organization-list-preview.mjs": "4df7efa461c52f5c826b1c3c851164f6a79b8d37bc1964ba97d81f0885c4804e",
+    "scripts/lib/ui-phase2-vue-review-host.mjs": "4980b53e811ccfae94e460fd1f3f8ddbaf259d6ecc808c58296a6ec59b934663",
+    "scripts/verify-ui-phase2-organization-create-preview.mjs": "fe52c1ece84ed1ef6dddf0ea732242c727664fc222b6def16195225c7e504dd7",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "3945560486c7dabbc17689bad9b7f2cc5da73a15daf40b379f0ed49d299a3654",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "2df4919c8f64e665c1d59d387ea325a41b26a3a6677da5d70d99139c055f98c2",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "bfa0376a2f449a72c9332a9e50ad2768445a359c86dcd5804cfc17b8a1a57310"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "direct deep-link native modal open"
+    },
+    {
+      "width": 390,
+      "name": "initial focus is name"
+    },
+    {
+      "width": 390,
+      "name": "native name constraints unchanged"
+    },
+    {
+      "width": 390,
+      "name": "native slug constraints unchanged"
+    },
+    {
+      "width": 390,
+      "name": "step1 dialog contains horizontal content"
+    },
+    {
+      "width": 390,
+      "name": "step1 controls44 and16"
+    },
+    {
+      "width": 390,
+      "name": "step1 viewport contains dialog"
+    },
+    {
+      "width": 390,
+      "name": "trailing hyphen moves to confirmation with no POST"
+    },
+    {
+      "width": 390,
+      "name": "native selected and disabled user options"
+    },
+    {
+      "width": 390,
+      "name": "step2 dialog contains horizontal content"
+    },
+    {
+      "width": 390,
+      "name": "step2 controls44 and16"
+    },
+    {
+      "width": 390,
+      "name": "step2 viewport contains dialog"
+    },
+    {
+      "width": 390,
+      "name": "back keeps name and slug"
+    },
+    {
+      "width": 390,
+      "name": "required name blocks next"
+    },
+    {
+      "width": 390,
+      "name": "invalid name first focus"
+    },
+    {
+      "width": 390,
+      "name": "invalid slug blocks next"
+    },
+    {
+      "width": 390,
+      "name": "Enter with two fields does not submit creation"
+    },
+    {
+      "width": 390,
+      "name": "Enter on step1 retains first step"
+    },
+    {
+      "width": 390,
+      "name": "next visible keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "back retained selected administrator"
+    },
+    {
+      "width": 390,
+      "name": "default POST omits optional administrator and reason"
+    },
+    {
+      "width": 390,
+      "name": "idempotency header is present"
+    },
+    {
+      "width": 390,
+      "name": "pending only confirm disabled; select back cancel remain usable"
+    },
+    {
+      "width": 390,
+      "name": "one request for confirm"
+    },
+    {
+      "width": 390,
+      "name": "failed confirm keeps draft summary"
+    },
+    {
+      "width": 390,
+      "name": "admin change clears error"
+    },
+    {
+      "width": 390,
+      "name": "cancel returns focus to original create entry"
+    },
+    {
+      "width": 390,
+      "name": "reopen keeps draft and starts at step1"
+    },
+    {
+      "width": 390,
+      "name": "long dialog contains horizontal content"
+    },
+    {
+      "width": 390,
+      "name": "long controls44 and16"
+    },
+    {
+      "width": 390,
+      "name": "long viewport contains dialog"
+    },
+    {
+      "width": 390,
+      "name": "short footer remains reachable"
+    },
+    {
+      "width": 390,
+      "name": "Escape does not create"
+    },
+    {
+      "width": 390,
+      "name": "explicit administrator is the only extra create field"
+    },
+    {
+      "width": 390,
+      "name": "success closes wizard and reads overview"
+    },
+    {
+      "width": 390,
+      "name": "success clears prior name and slug"
+    },
+    {
+      "width": 390,
+      "name": "success clears prior explicit administrator"
+    },
+    {
+      "width": 390,
+      "name": "all traffic intercepted and no browser errors"
+    },
+    {
+      "width": 699,
+      "name": "direct deep-link native modal open"
+    },
+    {
+      "width": 699,
+      "name": "initial focus is name"
+    },
+    {
+      "width": 699,
+      "name": "native name constraints unchanged"
+    },
+    {
+      "width": 699,
+      "name": "native slug constraints unchanged"
+    },
+    {
+      "width": 699,
+      "name": "step1 dialog contains horizontal content"
+    },
+    {
+      "width": 699,
+      "name": "step1 controls44 and16"
+    },
+    {
+      "width": 699,
+      "name": "step1 viewport contains dialog"
+    },
+    {
+      "width": 699,
+      "name": "trailing hyphen moves to confirmation with no POST"
+    },
+    {
+      "width": 699,
+      "name": "native selected and disabled user options"
+    },
+    {
+      "width": 699,
+      "name": "step2 dialog contains horizontal content"
+    },
+    {
+      "width": 699,
+      "name": "step2 controls44 and16"
+    },
+    {
+      "width": 699,
+      "name": "step2 viewport contains dialog"
+    },
+    {
+      "width": 699,
+      "name": "all traffic intercepted and no browser errors"
+    },
+    {
+      "width": 700,
+      "name": "direct deep-link native modal open"
+    },
+    {
+      "width": 700,
+      "name": "initial focus is name"
+    },
+    {
+      "width": 700,
+      "name": "native name constraints unchanged"
+    },
+    {
+      "width": 700,
+      "name": "native slug constraints unchanged"
+    },
+    {
+      "width": 700,
+      "name": "step1 dialog contains horizontal content"
+    },
+    {
+      "width": 700,
+      "name": "step1 controls44 and16"
+    },
+    {
+      "width": 700,
+      "name": "step1 viewport contains dialog"
+    },
+    {
+      "width": 700,
+      "name": "trailing hyphen moves to confirmation with no POST"
+    },
+    {
+      "width": 700,
+      "name": "native selected and disabled user options"
+    },
+    {
+      "width": 700,
+      "name": "step2 dialog contains horizontal content"
+    },
+    {
+      "width": 700,
+      "name": "step2 controls44 and16"
+    },
+    {
+      "width": 700,
+      "name": "step2 viewport contains dialog"
+    },
+    {
+      "width": 700,
+      "name": "all traffic intercepted and no browser errors"
+    },
+    {
+      "width": 701,
+      "name": "direct deep-link native modal open"
+    },
+    {
+      "width": 701,
+      "name": "initial focus is name"
+    },
+    {
+      "width": 701,
+      "name": "native name constraints unchanged"
+    },
+    {
+      "width": 701,
+      "name": "native slug constraints unchanged"
+    },
+    {
+      "width": 701,
+      "name": "step1 dialog contains horizontal content"
+    },
+    {
+      "width": 701,
+      "name": "step1 controls44 and16"
+    },
+    {
+      "width": 701,
+      "name": "step1 viewport contains dialog"
+    },
+    {
+      "width": 701,
+      "name": "trailing hyphen moves to confirmation with no POST"
+    },
+    {
+      "width": 701,
+      "name": "native selected and disabled user options"
+    },
+    {
+      "width": 701,
+      "name": "step2 dialog contains horizontal content"
+    },
+    {
+      "width": 701,
+      "name": "step2 controls44 and16"
+    },
+    {
+      "width": 701,
+      "name": "step2 viewport contains dialog"
+    },
+    {
+      "width": 701,
+      "name": "all traffic intercepted and no browser errors"
+    },
+    {
+      "width": 1024,
+      "name": "direct deep-link native modal open"
+    },
+    {
+      "width": 1024,
+      "name": "initial focus is name"
+    },
+    {
+      "width": 1024,
+      "name": "native name constraints unchanged"
+    },
+    {
+      "width": 1024,
+      "name": "native slug constraints unchanged"
+    },
+    {
+      "width": 1024,
+      "name": "step1 dialog contains horizontal content"
+    },
+    {
+      "width": 1024,
+      "name": "step1 controls44 and16"
+    },
+    {
+      "width": 1024,
+      "name": "step1 viewport contains dialog"
+    },
+    {
+      "width": 1024,
+      "name": "trailing hyphen moves to confirmation with no POST"
+    },
+    {
+      "width": 1024,
+      "name": "native selected and disabled user options"
+    },
+    {
+      "width": 1024,
+      "name": "step2 dialog contains horizontal content"
+    },
+    {
+      "width": 1024,
+      "name": "step2 controls44 and16"
+    },
+    {
+      "width": 1024,
+      "name": "step2 viewport contains dialog"
+    },
+    {
+      "width": 1024,
+      "name": "all traffic intercepted and no browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "direct deep-link native modal open"
+    },
+    {
+      "width": 1440,
+      "name": "initial focus is name"
+    },
+    {
+      "width": 1440,
+      "name": "native name constraints unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "native slug constraints unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "step1 dialog contains horizontal content"
+    },
+    {
+      "width": 1440,
+      "name": "step1 controls44 and16"
+    },
+    {
+      "width": 1440,
+      "name": "step1 viewport contains dialog"
+    },
+    {
+      "width": 1440,
+      "name": "trailing hyphen moves to confirmation with no POST"
+    },
+    {
+      "width": 1440,
+      "name": "native selected and disabled user options"
+    },
+    {
+      "width": 1440,
+      "name": "step2 dialog contains horizontal content"
+    },
+    {
+      "width": 1440,
+      "name": "step2 controls44 and16"
+    },
+    {
+      "width": 1440,
+      "name": "step2 viewport contains dialog"
+    },
+    {
+      "width": 1440,
+      "name": "back keeps name and slug"
+    },
+    {
+      "width": 1440,
+      "name": "required name blocks next"
+    },
+    {
+      "width": 1440,
+      "name": "invalid name first focus"
+    },
+    {
+      "width": 1440,
+      "name": "invalid slug blocks next"
+    },
+    {
+      "width": 1440,
+      "name": "Enter with two fields does not submit creation"
+    },
+    {
+      "width": 1440,
+      "name": "Enter on step1 retains first step"
+    },
+    {
+      "width": 1440,
+      "name": "next visible keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "back retained selected administrator"
+    },
+    {
+      "width": 1440,
+      "name": "default POST omits optional administrator and reason"
+    },
+    {
+      "width": 1440,
+      "name": "idempotency header is present"
+    },
+    {
+      "width": 1440,
+      "name": "pending only confirm disabled; select back cancel remain usable"
+    },
+    {
+      "width": 1440,
+      "name": "one request for confirm"
+    },
+    {
+      "width": 1440,
+      "name": "failed confirm keeps draft summary"
+    },
+    {
+      "width": 1440,
+      "name": "admin change clears error"
+    },
+    {
+      "width": 1440,
+      "name": "cancel returns focus to original create entry"
+    },
+    {
+      "width": 1440,
+      "name": "reopen keeps draft and starts at step1"
+    },
+    {
+      "width": 1440,
+      "name": "long dialog contains horizontal content"
+    },
+    {
+      "width": 1440,
+      "name": "long controls44 and16"
+    },
+    {
+      "width": 1440,
+      "name": "long viewport contains dialog"
+    },
+    {
+      "width": 1440,
+      "name": "Escape does not create"
+    },
+    {
+      "width": 1440,
+      "name": "explicit administrator is the only extra create field"
+    },
+    {
+      "width": 1440,
+      "name": "success closes wizard and reads overview"
+    },
+    {
+      "width": 1440,
+      "name": "success clears prior name and slug"
+    },
+    {
+      "width": 1440,
+      "name": "success clears prior explicit administrator"
+    },
+    {
+      "width": 1440,
+      "name": "all traffic intercepted and no browser errors"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-step1.png",
+      "state": "step1",
+      "label": "第一步 · 组织资料",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "320540e97171e32956a6e2fec93d32e065467098625831fbc03cc0b32f1915c3",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:07.155Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "390-step2.png",
+      "state": "step2",
+      "label": "第二步 · 默认管理员与创建核对",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "6868625f52be3dfe8dc12f3c7d414125fe0648e5da470ed5c595bc6d7d5b70dc",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:07.322Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "390-selected-admin.png",
+      "state": "selected-admin",
+      "label": "明确选择首位管理员",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "9b07d069ad2ccf41149a7386de3b2eb23f85d1a79524db1532d64e534f38eaa5",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:07.404Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "390-name-required.png",
+      "state": "name-required",
+      "label": "名称必填 · 原生校验状态，不含浏览器气泡",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "7811227c263f3df949e7f3d42302ff9039564102f308eb6b40a912ab0ac633ec",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:07.593Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "390-slug-invalid.png",
+      "state": "slug-invalid",
+      "label": "不合法标识 · 原生校验状态，不含浏览器气泡",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "b91cd28df28e7f83170dd4b84bebf2b8fd35d6fbe10c2e2d8a8e6fc00038e676",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:07.734Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "390-next-focus.png",
+      "state": "next-focus",
+      "label": "下一步 · 蓝色键盘焦点",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "952271dee0bcdcd15083402ae79ab961a123e014175e7bb3c6c5502711838a8b",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:07.879Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "390-confirm-hover.png",
+      "state": "confirm-hover",
+      "label": "确认创建 · 悬停",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "f1b0ef49b779323c7ad89d2ac9aa85c9c8136f75071413fa62c67bdf35141ee3",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:08.053Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "390-confirm-focus.png",
+      "state": "confirm-focus",
+      "label": "确认创建 · 蓝色键盘焦点",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "83f91a08302cdaa34ebcce2619766c711b692022279526e5225052b66f94ef79",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:08.139Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "390-pending.png",
+      "state": "pending",
+      "label": "提交中 · 原生禁用与保留的编辑入口",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "d67ccd95c1a41648a85dd128a7c16709b8fa640c22893f15a9d3f3289bcbf495",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:08.263Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "390-failure.png",
+      "state": "failure",
+      "label": "创建失败 · 保留核对内容",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "8ffcc7d9b0a3eb3c1f05ac10861495d74eccd6e3769330476d31ff541957d63e",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:08.396Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "390-reopened.png",
+      "state": "reopened",
+      "label": "取消后重开 · 草稿保留，回到第一步",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "e063be1c4838b877303f9b5278bdecda5ccaf803e9a557e70cefb6799bae64bc",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:08.601Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "390-long-summary.png",
+      "state": "long-summary",
+      "label": "120字符名称与63字符标识核对",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "60c7a6f4d8c50f6ea5a3de097985ca51dbdec4fc0ad109c785b7f7c26e2e9d0d",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:08.734Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "390-short-top.png",
+      "state": "short-top",
+      "label": "600px短屏 · 顶部步骤与管理员",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "db3479c967a1653e74e9dfe6581f4cd7d58646abacc52b5fe2bfae01c5c7239f",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 600
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:08.806Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "390-short-bottom.png",
+      "state": "short-bottom",
+      "label": "600px短屏 · 核对下部与底部操作",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "af5156cf58d97fe7383960bcb192a02326dc63b3e15f64c70c7f18b463376c54",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 600
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:08.854Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "699-step1.png",
+      "state": "step1",
+      "label": "第一步 · 组织资料",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "5856ce6e218407e640140b587803195d7238434384da54e9257bd3938ff3ae35",
+      "viewport": {
+        "width": 699,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 699,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:09.942Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "699-step2.png",
+      "state": "step2",
+      "label": "第二步 · 默认管理员与创建核对",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "13d9153587a4a403b30f471bd35fb41a945dd1672df59392dde807c20cf03e0e",
+      "viewport": {
+        "width": 699,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 699,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:10.128Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "700-step1.png",
+      "state": "step1",
+      "label": "第一步 · 组织资料",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "09020c4450da660a94eaa2655a15c245c4c779bd37b991b3d248625bd082360c",
+      "viewport": {
+        "width": 700,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 700,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:10.857Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "700-step2.png",
+      "state": "step2",
+      "label": "第二步 · 默认管理员与创建核对",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "7d59678f835baa5cface4022baa84fa3a425f041db371dc6dee2cbe0591efbd5",
+      "viewport": {
+        "width": 700,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 700,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:11.064Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "701-step1.png",
+      "state": "step1",
+      "label": "第一步 · 组织资料",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "4482ea551d928543f17db96eb75f42d65e02d574a2ee5cf5e30570153e1d0641",
+      "viewport": {
+        "width": 701,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 701,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:11.755Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "701-step2.png",
+      "state": "step2",
+      "label": "第二步 · 默认管理员与创建核对",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "ed635431ebadfe433e46c2c221e6b514bbaac8b272ee6fa519d9530921f61835",
+      "viewport": {
+        "width": 701,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 701,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:11.948Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "1024-step1.png",
+      "state": "step1",
+      "label": "第一步 · 组织资料",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "f1e3f73bdd654ad5886097f37c7a5c3a100901a5e7e6de1b87e08e3e2b61b193",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1024,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:12.886Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "1024-step2.png",
+      "state": "step2",
+      "label": "第二步 · 默认管理员与创建核对",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "9534b45adb50c31db7ada2c46f542b32938008d27dba9cb8eeed3d71f16a0945",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1024,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:13.243Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "1440-step1.png",
+      "state": "step1",
+      "label": "第一步 · 组织资料",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "92b630e0f98fdc21e6b871351710e3fc67c751f62e20e2c8a21703fa4fd2f534",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:14.162Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "1440-step2.png",
+      "state": "step2",
+      "label": "第二步 · 默认管理员与创建核对",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "a6e864e908a6399e9299f05d74a9f2f6eeaa4208bf2f55f795c05be9146e94bd",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:14.564Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "1440-selected-admin.png",
+      "state": "selected-admin",
+      "label": "明确选择首位管理员",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "8715c4080519bbddbd28e4304e6f2340ea8627e51672dda1edd6a420c327742d",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:14.823Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "1440-name-required.png",
+      "state": "name-required",
+      "label": "名称必填 · 原生校验状态，不含浏览器气泡",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "ac4cce5aa1b19afa57ec2b17faf589cf818039ae6d6c9afe3bced28b72636bbf",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:15.305Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "1440-slug-invalid.png",
+      "state": "slug-invalid",
+      "label": "不合法标识 · 原生校验状态，不含浏览器气泡",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "ea5c82f3d52df955a0eb3c3e186867129b4628afd4ad1efac65142d7c4d8e29d",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:15.746Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "1440-next-focus.png",
+      "state": "next-focus",
+      "label": "下一步 · 蓝色键盘焦点",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "5248e3e05efd8473211c55c03619d043b84fc5aa063bd3fd67c23b316979eaf5",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:16.129Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "1440-confirm-hover.png",
+      "state": "confirm-hover",
+      "label": "确认创建 · 悬停",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "e97702a8c4cafdd265eef34a4aed5338fae08c6ee1fe68c40cd7df938efa9946",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:16.547Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "1440-confirm-focus.png",
+      "state": "confirm-focus",
+      "label": "确认创建 · 蓝色键盘焦点",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "35793030d501e208e8a959b4c2bb5383120f2b09b81643340631f7d43ced235e",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:16.768Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "1440-pending.png",
+      "state": "pending",
+      "label": "提交中 · 原生禁用与保留的编辑入口",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "dab66388526aac9a8db0db4da8a1555c0459030553d245ec6529b54df1704d90",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:17.096Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "1440-failure.png",
+      "state": "failure",
+      "label": "创建失败 · 保留核对内容",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "9c0a739e756a6575ffd02196215a4e0ad73406ff8b5f871cefe30d9ec948f3f7",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new?keep=p41",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:17.345Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "1440-reopened.png",
+      "state": "reopened",
+      "label": "取消后重开 · 草稿保留，回到第一步",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "3dfd15012fee707261fa1822188b4a1cc1df577afa1e33934d1b82935b9a256c",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:17.823Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    },
+    {
+      "file": "1440-long-summary.png",
+      "state": "long-summary",
+      "label": "120字符名称与63字符标识核对",
+      "routeId": "P41",
+      "kind": "actual-vue-review-template",
+      "sha256": "e49c69f7c733c01da021bff612fbc774e46a2ee872c6b2758b29881ede5d7acc",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:62134/platform-admin/organizations/new",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T20:56:18.164Z",
+      "sourceSha": "8a127f94162b0bffd47a18576885ca9ee8f913ab7accbc88716ce02df3a79811"
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations",
+          "body": {
+            "name": "南方选品团队",
+            "slug": "south-team-"
+          },
+          "hasIdempotencyKey": true,
+          "status": 500
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations",
+          "body": {
+            "name": "成功创建样例",
+            "slug": "created-fixture",
+            "initial_admin_user_id": "00000000-0000-4000-8000-000000000621"
+          },
+          "hasIdempotencyKey": true,
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "scope": "Synthetic GET/POST only, original Vue parent/wizard logic; no real organization, MySQL, audit or authentication"
+    },
+    {
+      "width": 699,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "scope": "Synthetic GET/POST only, original Vue parent/wizard logic; no real organization, MySQL, audit or authentication"
+    },
+    {
+      "width": 700,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "scope": "Synthetic GET/POST only, original Vue parent/wizard logic; no real organization, MySQL, audit or authentication"
+    },
+    {
+      "width": 701,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "scope": "Synthetic GET/POST only, original Vue parent/wizard logic; no real organization, MySQL, audit or authentication"
+    },
+    {
+      "width": 1024,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "scope": "Synthetic GET/POST only, original Vue parent/wizard logic; no real organization, MySQL, audit or authentication"
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations",
+          "body": {
+            "name": "南方选品团队",
+            "slug": "south-team-"
+          },
+          "hasIdempotencyKey": true,
+          "status": 500
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations",
+          "body": {
+            "name": "成功创建样例",
+            "slug": "created-fixture",
+            "initial_admin_user_id": "00000000-0000-4000-8000-000000000621"
+          },
+          "hasIdempotencyKey": true,
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "scope": "Synthetic GET/POST only, original Vue parent/wizard logic; no real organization, MySQL, audit or authentication"
+    }
+  ],
+  "processesClosed": true
+}
