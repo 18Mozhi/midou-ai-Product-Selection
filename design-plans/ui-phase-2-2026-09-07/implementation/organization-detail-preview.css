@@ -1,0 +1,314 @@
+/* P42 review layer only. No production import or change to write rules. */
+html body.p40-list-preview #app :is(.organization-detail-dialog, .p42-reason-dialog) {
+  --p42-blue: #254a9c;
+  --p42-line: #dbe1e9;
+  --p42-muted: #58677b;
+  --p42-text: #202c3d;
+  padding: 0;
+  max-height: calc(100dvh - 32px);
+  width: min(960px, calc(100% - 32px));
+  border: 1px solid var(--p42-line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--p42-text);
+  overflow: auto;
+  box-shadow: 0 20px 60px #10244226;
+}
+html body.p40-list-preview #app :is(.organization-detail-dialog, .p42-reason-dialog)::backdrop {
+  background: #23354e99;
+  backdrop-filter: blur(3px);
+}
+html body.p40-list-preview #app :is(.organization-detail-dialog, .p42-reason-dialog) * {
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  box-sizing: border-box;
+}
+html body.p40-list-preview #app .organization-detail-dialog > form {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 0;
+  padding: 0;
+  min-width: 0;
+}
+html body.p40-list-preview #app .p42-identity {
+  background: var(--p42-blue);
+  color: #fff;
+  padding: 28px 24px;
+}
+html body.p40-list-preview #app .p42-identity header {
+  display: block;
+  margin-bottom: 28px;
+}
+html body.p40-list-preview #app .p42-identity h3 {
+  margin: 12px 0 0;
+  color: #fff;
+  font-size: 24px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  text-wrap: wrap;
+}
+html body.p40-list-preview #app .p42-identity :is(small, strong) {
+  color: #fff;
+}
+html body.p40-list-preview #app .p42-identity .detail-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+html body.p40-list-preview #app .p42-identity .detail-grid article {
+  padding: 18px 0;
+  border: 0;
+  border-top: 1px solid #ffffff55;
+  border-radius: 0;
+  background: transparent;
+}
+html body.p40-list-preview #app .detail-grid strong {
+  margin-top: 6px;
+  font-size: 20px;
+  line-height: 1.4;
+}
+html body.p40-list-preview #app .p42-work {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 22px;
+  padding: 26px 28px 0;
+}
+html body.p40-list-preview #app .p42-work-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+html body.p40-list-preview #app .p42-work-head h3 {
+  margin: 0;
+  font-size: 24px;
+}
+html body.p40-list-preview #app .organization-profile {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+html body.p40-list-preview #app .organization-profile h4 {
+  font-size: 18px;
+}
+html
+  body.p40-list-preview
+  #app
+  :is(.organization-detail-dialog, .p42-reason-dialog)
+  :is(label, input, textarea, button, summary, dd) {
+  font-size: 16px;
+}
+html body.p40-list-preview #app .organization-profile label {
+  min-width: 0;
+  gap: 8px;
+}
+html
+  body.p40-list-preview
+  #app
+  :is(.organization-detail-dialog, .p42-reason-dialog)
+  :is(input, textarea) {
+  min-height: 48px;
+  min-width: 0;
+  width: 100%;
+  border: 1px solid #6680a2;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--p42-text);
+  padding: 10px 12px;
+}
+html
+  body.p40-list-preview
+  #app
+  :is(.organization-detail-dialog, .p42-reason-dialog)
+  :is(button, summary) {
+  min-height: 44px;
+  min-width: 44px;
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+html body.p40-list-preview #app .organization-detail-dialog button {
+  border: 1px solid var(--p42-line);
+  color: var(--p42-text);
+  background: #fff;
+}
+html body.p40-list-preview #app .organization-detail-dialog .p42-save {
+  color: #fff;
+  background: var(--p42-blue);
+  border-color: var(--p42-blue);
+}
+html body.p40-list-preview #app .p42-status-zone {
+  box-shadow: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid var(--p42-line);
+  border-radius: 8px;
+  background: #f6f8fb;
+}
+html body.p40-list-preview #app .p42-status-zone h4 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+html body.p40-list-preview #app .p42-status-zone p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--p42-muted);
+}
+html body.p40-list-preview #app .p42-status-action {
+  box-shadow: none;
+  flex-shrink: 0;
+  color: var(--p42-blue);
+  border-color: var(--p42-blue);
+}
+html body.p40-list-preview #app .p42-status-action[data-danger="true"] {
+  color: #8c3c32;
+  border-color: #c9786d;
+  background: #fff8f6;
+}
+html body.p40-list-preview #app .p42-work > details {
+  border-block: 1px solid var(--p42-line);
+}
+html body.p40-list-preview #app .p42-work > details summary {
+  padding-inline: 0;
+}
+html body.p40-list-preview #app .p42-work footer {
+  border-top: 1px solid var(--p42-line);
+  padding: 18px 0;
+  background: #fff;
+  justify-content: flex-end;
+}
+html body.p40-list-preview #app .organization-feedback {
+  border-radius: 8px;
+  padding: 14px;
+  overflow-wrap: anywhere;
+}
+html body.p40-list-preview #app .organization-feedback.is-error {
+  border-color: #c9786d;
+  color: #8c3c32;
+  background: #fff3ef;
+}
+html body.p40-list-preview #app .organization-feedback.is-success {
+  border-color: #82a89a;
+  color: #23664c;
+  background: #eff8f3;
+}
+html body.p40-list-preview #app .organization-detail-state {
+  padding: 28px;
+  gap: 20px;
+  background: #fff;
+}
+html body.p40-list-preview #app .organization-detail-state h3 {
+  font-size: 24px;
+}
+html body.p40-list-preview #app .organization-detail-state p {
+  font-size: 16px;
+  line-height: 1.7;
+}
+html body.p40-list-preview #app .p42-reason-dialog {
+  width: min(580px, calc(100% - 32px));
+}
+html body.p40-list-preview #app .p42-reason-dialog form {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  min-width: 0;
+}
+html body.p40-list-preview #app .p42-reason-head {
+  padding: 24px;
+  background: var(--p42-blue);
+  color: #fff;
+}
+html body.p40-list-preview #app .p42-reason-head h3 {
+  margin: 0 0 12px;
+  color: #fff;
+  font-size: 24px;
+}
+html body.p40-list-preview #app .p42-reason-head p {
+  margin: 0;
+  color: #fff;
+  font-size: 14px;
+}
+html body.p40-list-preview #app .p42-reason-dialog label {
+  padding: 24px;
+  gap: 10px;
+}
+html body.p40-list-preview #app .p42-reason-dialog textarea {
+  min-height: 140px;
+}
+html body.p40-list-preview #app .p42-reason-dialog footer {
+  padding: 18px 24px;
+  border-top: 1px solid var(--p42-line);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+html body.p40-list-preview #app .p42-reason-dialog footer button {
+  border: 1px solid var(--p42-line);
+  color: var(--p42-text);
+  background: #fff;
+}
+html body.p40-list-preview #app .p42-reason-dialog footer button:last-child {
+  border-color: var(--p42-blue);
+  color: #fff;
+  background: var(--p42-blue);
+}
+html body.p40-list-preview #app .p42-reason-dialog[aria-label="停用组织"] footer button:last-child {
+  border-color: #8c3c32;
+  background: #8c3c32;
+}
+html
+  body.p40-list-preview
+  #app
+  :is(.organization-detail-dialog, .p42-reason-dialog)
+  :is(button, input, textarea, summary):focus-visible {
+  outline: 3px solid var(--p42-blue);
+  outline-offset: 3px;
+}
+html
+  body.p40-list-preview
+  #app
+  :is(.organization-detail-dialog, .p42-reason-dialog)
+  button:disabled {
+  border-color: var(--p42-line);
+  background: #edf1f6;
+  color: var(--p42-muted);
+  opacity: 1;
+}
+@media (max-width: 700px) {
+  html body.p40-list-preview #app .organization-detail-dialog > form {
+    grid-template-columns: 1fr;
+  }
+  html body.p40-list-preview #app .p42-identity {
+    padding: 20px;
+  }
+  html body.p40-list-preview #app .p42-identity header {
+    margin-bottom: 18px;
+  }
+  html body.p40-list-preview #app .p42-identity .detail-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  html body.p40-list-preview #app .detail-grid strong {
+    font-size: 16px;
+  }
+  html body.p40-list-preview #app .p42-identity .detail-grid article {
+    padding: 12px 0 0;
+  }
+  html body.p40-list-preview #app .p42-work {
+    padding: 20px 20px 0;
+    gap: 18px;
+  }
+  html body.p40-list-preview #app .organization-profile {
+    grid-template-columns: 1fr;
+  }
+  html body.p40-list-preview #app .p42-work footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+  }
+  html body.p40-list-preview #app .p42-status-zone {
+    display: grid;
+  }
+}

@@ -1,0 +1,1902 @@
+{
+  "schemaVersion": 1,
+  "approval": "pending",
+  "scope": "P42 actual Vue scripts with review-only grouping, C styles, missing-count and missing-target presentation. Not production correction, full App/KeepAlive, real API/RBAC/DB or late-write ownership acceptance.",
+  "sourceCommit": "73d048321453a9f234e0ad252f9a3cfaee5139e9",
+  "sourceHashes": {
+    "apps/api/src/mysql-platform-account-repository.ts": "96cc13077b24ba17643adc9b13ca14cd2e71ea49d3e13d3abceb7b86ed7b87c5",
+    "apps/api/src/platform-account-service.ts": "189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/platform-account-types.ts": "7c78cdfd603d8419ee18d7bd5feb12b1d40cbb7bdf102aeaf17a919a7003afe2",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/account-create-preview.css": "3ca6614eb37eec2deb65fc3dec5db9b946db5d1d35fc9dad78994438d34a2650",
+    "design-plans/ui-phase-2-2026-09-07/implementation/account-filter-preview.css": "da58782137fbcf8b489e51dcce69e9af573dac83e356c6b6f98d84d77c887b79",
+    "design-plans/ui-phase-2-2026-09-07/implementation/account-page-preview.css": "fc8c02e1b07df9e7d85712ec1bf702b576a80603cf72732fbdd0152d140b5f9b",
+    "design-plans/ui-phase-2-2026-09-07/implementation/organization-detail-preview.css": "70a95a0cca18c955ed163bfda0afc430ed8a068e5c3459a32b4be4a1b9cf6b6f",
+    "design-plans/ui-phase-2-2026-09-07/implementation/organization-list-preview.css": "b54614add55ab6d5d1b6a9aeeb5f5ae3f14f11afc0bf47140278fe80da0eadd8",
+    "scripts/lib/ui-phase2-account-filter-preview.mjs": "c2e406a8516e19bd0fe9ef44f3f3ef11769bfe309e0811c9b6caae58d07bdeea",
+    "scripts/lib/ui-phase2-account-overview-design-data.mjs": "df765906f1eda3eb7c1c4158ee5e808796024df6bba3a841ce7ceaa3f2a7ba93",
+    "scripts/lib/ui-phase2-account-page-preview.mjs": "ebc3ebccafb395f1f861a7bcd430f8936b08b820d55153667c8e74815f5c788f",
+    "scripts/lib/ui-phase2-organization-detail-preview.mjs": "b59ce5b08255834dae7c9a2a8711da9492029aef0199e4b5557303ae630f46a3",
+    "scripts/lib/ui-phase2-organization-list-preview.mjs": "4df7efa461c52f5c826b1c3c851164f6a79b8d37bc1964ba97d81f0885c4804e",
+    "scripts/lib/ui-phase2-vue-review-host.mjs": "4980b53e811ccfae94e460fd1f3f8ddbaf259d6ecc808c58296a6ec59b934663",
+    "scripts/verify-ui-phase2-organization-detail-preview.mjs": "b3aed268bc320ea2eadfc3913cd8c4fdd992bc3a1263c811622fe832e675175a",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "3945560486c7dabbc17689bad9b7f2cc5da73a15daf40b379f0ed49d299a3654",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "2df4919c8f64e665c1d59d387ea325a41b26a3a6677da5d70d99139c055f98c2",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "893a7a355fafd0d0550795c294937c5b35b80e7bbaf2d8c1a09eaa7912346f23",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "e1e2e98e07d9e175dd81dc35800313a17928b216dfc1d0d23817d67ce32870a4"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "actual native detail modal"
+    },
+    {
+      "width": 390,
+      "name": "original complete counts"
+    },
+    {
+      "width": 390,
+      "name": "three original editable fields"
+    },
+    {
+      "width": 390,
+      "name": "original name/timezone/day constraints"
+    },
+    {
+      "width": 390,
+      "name": "status action separated from save footer"
+    },
+    {
+      "width": 390,
+      "name": "normal horizontal containment"
+    },
+    {
+      "width": 390,
+      "name": "normal controls44 and16"
+    },
+    {
+      "width": 390,
+      "name": "normal dialog inside viewport"
+    },
+    {
+      "width": 390,
+      "name": "technical UUID unchanged"
+    },
+    {
+      "width": 390,
+      "name": "required name blocks reason dialog"
+    },
+    {
+      "width": 390,
+      "name": "day below30 blocks reason"
+    },
+    {
+      "width": 390,
+      "name": "save reason has original title/default"
+    },
+    {
+      "width": 390,
+      "name": "reason horizontal containment"
+    },
+    {
+      "width": 390,
+      "name": "reason controls44 and16"
+    },
+    {
+      "width": 390,
+      "name": "reason dialog inside viewport"
+    },
+    {
+      "width": 390,
+      "name": "reason cancel does not write"
+    },
+    {
+      "width": 390,
+      "name": "reason cancel restores save focus"
+    },
+    {
+      "width": 390,
+      "name": "empty reason native validation"
+    },
+    {
+      "width": 390,
+      "name": "reason closes before pending write"
+    },
+    {
+      "width": 390,
+      "name": "PATCH exact original four fields"
+    },
+    {
+      "width": 390,
+      "name": "busy disables save/status but keeps field and close"
+    },
+    {
+      "width": 390,
+      "name": "save failure preserves fields"
+    },
+    {
+      "width": 390,
+      "name": "input clears prior feedback"
+    },
+    {
+      "width": 390,
+      "name": "refreshed identity matches edited name"
+    },
+    {
+      "width": 390,
+      "name": "disable original reason variant"
+    },
+    {
+      "width": 390,
+      "name": "disable exact status body"
+    },
+    {
+      "width": 390,
+      "name": "restore original reason variant"
+    },
+    {
+      "width": 390,
+      "name": "restore exact status body"
+    },
+    {
+      "width": 390,
+      "name": "all writes have idempotency header"
+    },
+    {
+      "width": 390,
+      "name": "zero not converted to fallback one"
+    },
+    {
+      "width": 390,
+      "name": "zero horizontal containment"
+    },
+    {
+      "width": 390,
+      "name": "zero controls44 and16"
+    },
+    {
+      "width": 390,
+      "name": "zero dialog inside viewport"
+    },
+    {
+      "width": 390,
+      "name": "missing counts explicitly not invented"
+    },
+    {
+      "width": 390,
+      "name": "unavailable horizontal containment"
+    },
+    {
+      "width": 390,
+      "name": "unavailable controls44 and16"
+    },
+    {
+      "width": 390,
+      "name": "unavailable dialog inside viewport"
+    },
+    {
+      "width": 390,
+      "name": "unknown status preserved with original restore action"
+    },
+    {
+      "width": 390,
+      "name": "unknown horizontal containment"
+    },
+    {
+      "width": 390,
+      "name": "unknown controls44 and16"
+    },
+    {
+      "width": 390,
+      "name": "unknown dialog inside viewport"
+    },
+    {
+      "width": 390,
+      "name": "long horizontal containment"
+    },
+    {
+      "width": 390,
+      "name": "long controls44 and16"
+    },
+    {
+      "width": 390,
+      "name": "long dialog inside viewport"
+    },
+    {
+      "width": 390,
+      "name": "missing copy does not infer deletion or denial"
+    },
+    {
+      "width": 390,
+      "name": "missing horizontal containment"
+    },
+    {
+      "width": 390,
+      "name": "missing controls44 and16"
+    },
+    {
+      "width": 390,
+      "name": "missing dialog inside viewport"
+    },
+    {
+      "width": 390,
+      "name": "missing retry uses overview GET"
+    },
+    {
+      "width": 390,
+      "name": "missing return uses bare organization list"
+    },
+    {
+      "width": 390,
+      "name": "short footer reachable"
+    },
+    {
+      "width": 390,
+      "name": "Escape returns bare list"
+    },
+    {
+      "width": 390,
+      "name": "no unintended API or external traffic or browser errors"
+    },
+    {
+      "width": 699,
+      "name": "actual native detail modal"
+    },
+    {
+      "width": 699,
+      "name": "original complete counts"
+    },
+    {
+      "width": 699,
+      "name": "three original editable fields"
+    },
+    {
+      "width": 699,
+      "name": "original name/timezone/day constraints"
+    },
+    {
+      "width": 699,
+      "name": "status action separated from save footer"
+    },
+    {
+      "width": 699,
+      "name": "normal horizontal containment"
+    },
+    {
+      "width": 699,
+      "name": "normal controls44 and16"
+    },
+    {
+      "width": 699,
+      "name": "normal dialog inside viewport"
+    },
+    {
+      "width": 699,
+      "name": "no unintended API or external traffic or browser errors"
+    },
+    {
+      "width": 700,
+      "name": "actual native detail modal"
+    },
+    {
+      "width": 700,
+      "name": "original complete counts"
+    },
+    {
+      "width": 700,
+      "name": "three original editable fields"
+    },
+    {
+      "width": 700,
+      "name": "original name/timezone/day constraints"
+    },
+    {
+      "width": 700,
+      "name": "status action separated from save footer"
+    },
+    {
+      "width": 700,
+      "name": "normal horizontal containment"
+    },
+    {
+      "width": 700,
+      "name": "normal controls44 and16"
+    },
+    {
+      "width": 700,
+      "name": "normal dialog inside viewport"
+    },
+    {
+      "width": 700,
+      "name": "no unintended API or external traffic or browser errors"
+    },
+    {
+      "width": 701,
+      "name": "actual native detail modal"
+    },
+    {
+      "width": 701,
+      "name": "original complete counts"
+    },
+    {
+      "width": 701,
+      "name": "three original editable fields"
+    },
+    {
+      "width": 701,
+      "name": "original name/timezone/day constraints"
+    },
+    {
+      "width": 701,
+      "name": "status action separated from save footer"
+    },
+    {
+      "width": 701,
+      "name": "normal horizontal containment"
+    },
+    {
+      "width": 701,
+      "name": "normal controls44 and16"
+    },
+    {
+      "width": 701,
+      "name": "normal dialog inside viewport"
+    },
+    {
+      "width": 701,
+      "name": "no unintended API or external traffic or browser errors"
+    },
+    {
+      "width": 1024,
+      "name": "actual native detail modal"
+    },
+    {
+      "width": 1024,
+      "name": "original complete counts"
+    },
+    {
+      "width": 1024,
+      "name": "three original editable fields"
+    },
+    {
+      "width": 1024,
+      "name": "original name/timezone/day constraints"
+    },
+    {
+      "width": 1024,
+      "name": "status action separated from save footer"
+    },
+    {
+      "width": 1024,
+      "name": "normal horizontal containment"
+    },
+    {
+      "width": 1024,
+      "name": "normal controls44 and16"
+    },
+    {
+      "width": 1024,
+      "name": "normal dialog inside viewport"
+    },
+    {
+      "width": 1024,
+      "name": "no unintended API or external traffic or browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "actual native detail modal"
+    },
+    {
+      "width": 1440,
+      "name": "original complete counts"
+    },
+    {
+      "width": 1440,
+      "name": "three original editable fields"
+    },
+    {
+      "width": 1440,
+      "name": "original name/timezone/day constraints"
+    },
+    {
+      "width": 1440,
+      "name": "status action separated from save footer"
+    },
+    {
+      "width": 1440,
+      "name": "normal horizontal containment"
+    },
+    {
+      "width": 1440,
+      "name": "normal controls44 and16"
+    },
+    {
+      "width": 1440,
+      "name": "normal dialog inside viewport"
+    },
+    {
+      "width": 1440,
+      "name": "technical UUID unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "required name blocks reason dialog"
+    },
+    {
+      "width": 1440,
+      "name": "day below30 blocks reason"
+    },
+    {
+      "width": 1440,
+      "name": "save reason has original title/default"
+    },
+    {
+      "width": 1440,
+      "name": "reason horizontal containment"
+    },
+    {
+      "width": 1440,
+      "name": "reason controls44 and16"
+    },
+    {
+      "width": 1440,
+      "name": "reason dialog inside viewport"
+    },
+    {
+      "width": 1440,
+      "name": "reason cancel does not write"
+    },
+    {
+      "width": 1440,
+      "name": "reason cancel restores save focus"
+    },
+    {
+      "width": 1440,
+      "name": "empty reason native validation"
+    },
+    {
+      "width": 1440,
+      "name": "reason closes before pending write"
+    },
+    {
+      "width": 1440,
+      "name": "PATCH exact original four fields"
+    },
+    {
+      "width": 1440,
+      "name": "busy disables save/status but keeps field and close"
+    },
+    {
+      "width": 1440,
+      "name": "save failure preserves fields"
+    },
+    {
+      "width": 1440,
+      "name": "input clears prior feedback"
+    },
+    {
+      "width": 1440,
+      "name": "refreshed identity matches edited name"
+    },
+    {
+      "width": 1440,
+      "name": "disable original reason variant"
+    },
+    {
+      "width": 1440,
+      "name": "disable exact status body"
+    },
+    {
+      "width": 1440,
+      "name": "restore original reason variant"
+    },
+    {
+      "width": 1440,
+      "name": "restore exact status body"
+    },
+    {
+      "width": 1440,
+      "name": "all writes have idempotency header"
+    },
+    {
+      "width": 1440,
+      "name": "zero not converted to fallback one"
+    },
+    {
+      "width": 1440,
+      "name": "zero horizontal containment"
+    },
+    {
+      "width": 1440,
+      "name": "zero controls44 and16"
+    },
+    {
+      "width": 1440,
+      "name": "zero dialog inside viewport"
+    },
+    {
+      "width": 1440,
+      "name": "missing counts explicitly not invented"
+    },
+    {
+      "width": 1440,
+      "name": "unavailable horizontal containment"
+    },
+    {
+      "width": 1440,
+      "name": "unavailable controls44 and16"
+    },
+    {
+      "width": 1440,
+      "name": "unavailable dialog inside viewport"
+    },
+    {
+      "width": 1440,
+      "name": "unknown status preserved with original restore action"
+    },
+    {
+      "width": 1440,
+      "name": "unknown horizontal containment"
+    },
+    {
+      "width": 1440,
+      "name": "unknown controls44 and16"
+    },
+    {
+      "width": 1440,
+      "name": "unknown dialog inside viewport"
+    },
+    {
+      "width": 1440,
+      "name": "long horizontal containment"
+    },
+    {
+      "width": 1440,
+      "name": "long controls44 and16"
+    },
+    {
+      "width": 1440,
+      "name": "long dialog inside viewport"
+    },
+    {
+      "width": 1440,
+      "name": "missing copy does not infer deletion or denial"
+    },
+    {
+      "width": 1440,
+      "name": "missing horizontal containment"
+    },
+    {
+      "width": 1440,
+      "name": "missing controls44 and16"
+    },
+    {
+      "width": 1440,
+      "name": "missing dialog inside viewport"
+    },
+    {
+      "width": 1440,
+      "name": "missing retry uses overview GET"
+    },
+    {
+      "width": 1440,
+      "name": "missing return uses bare organization list"
+    },
+    {
+      "width": 1440,
+      "name": "Escape returns bare list"
+    },
+    {
+      "width": 1440,
+      "name": "no unintended API or external traffic or browser errors"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-normal.png",
+      "state": "normal",
+      "label": "组织身份与资料 · 正常详情",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "d08c7d71e190649de3ed7380b127d04e516232f4da1860e42558cbd579744ae8",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:44.099Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-normal-bottom.png",
+      "state": "normal-bottom",
+      "label": "资料与独立状态操作 · 下部",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "697d97d69c1204e90dc0b8a8262a1e158219797094ced3904f9d8e13210ef4ad",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:44.171Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-technical.png",
+      "state": "technical",
+      "label": "技术详情展开",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "cb3091854c2586ce8a5bd18bbf487e8509ec6bda746ad849d61db778b1c31ba3",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:44.273Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-invalid-days.png",
+      "state": "invalid-days",
+      "label": "保留天数低于下限 · 原生校验",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "4a334d670a3394c1c313a613a2a94b420d29ab4d43fdb66dcfda8d6803c32540",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:44.541Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-save-reason.png",
+      "state": "save-reason",
+      "label": "保存资料 · 原生原因确认",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "e4318bec8a4cc533451f5d923a3537b530536618cb9f5eda510609c9fc9b8af6",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:44.749Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-reason-required.png",
+      "state": "reason-required",
+      "label": "原因必填 · 原生校验",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "35993900905c70b5d2409cd031296c4e5a9d360899d3dd6cd39d7c304e722fe7",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:45.092Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-save-pending.png",
+      "state": "save-pending",
+      "label": "保存处理中 · 原因已关闭",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "d933e41cb4df3edcf6b7e0126a44b8c6a0b4a908b0f35c5db521bad1d996ab45",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:45.230Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-save-failure.png",
+      "state": "save-failure",
+      "label": "保存失败 · 原详情内反馈",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "fe71dc04f6c08b632ad6b935ae631ecb79187e7a80f87d433243077c1957d4de",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:45.327Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-save-success.png",
+      "state": "save-success",
+      "label": "保存成功 · 已重读测试列表",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "b0e692757cec2cd8bb962bd8fe6fb4165fdf38b6118654e121b41bd98333f8fe",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:45.579Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-disable-reason.png",
+      "state": "disable-reason",
+      "label": "停用组织 · 原生原因确认",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "51ab17c6db24603458f3c0bf91328968a398401fab47253428762066c57968cc",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:45.734Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-disable-success.png",
+      "state": "disable-success",
+      "label": "停用组织成功 · 测试返回",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "71b3e80cc59986a4ac02b9bf9a61110fb15b97d495d96bce58832840af808c70",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:45.903Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-restore-reason.png",
+      "state": "restore-reason",
+      "label": "恢复组织 · 原生原因确认",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "559de477bb037d44ae72c75271ddd84e3e9b504baaf73b86dbee87af0cd157e0",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:46.052Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-restore-success.png",
+      "state": "restore-success",
+      "label": "恢复组织成功 · 测试返回",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "842a2f22e4be8f5d55878faaf413c155c1dff99694ad5db8e4e9f2e0a984a850",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:46.218Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-zero.png",
+      "state": "zero",
+      "label": "关系计数均为0",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "7f30c69d62ab01c84edad992c274315b4efa243a80b2c8573050afe8767176d4",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:46.521Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-unavailable.png",
+      "state": "unavailable",
+      "label": "缺失计数 · 审核稿不补1",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "4e0403168c30496d269576d011200f6b0ed181a0b4b68462ae2130ce42b5a3c1",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:46.831Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-unknown.png",
+      "state": "unknown",
+      "label": "未知状态 · 原值保留",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "3d64cfd6532ae40a112f717503d909b05f6d38299278290898db7cbecf810a59",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:47.149Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-long.png",
+      "state": "long",
+      "label": "超长组织身份 · 合成数据",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "6b21629f3b1b1f8779315197eb5a35672bbcbd9250e0e2fe2b492b0cb623e2aa",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:47.453Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-missing.png",
+      "state": "missing",
+      "label": "当前列表未返回目标",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "ffd601c2b920e2269f6151a5ca4e7a2b0afcf2875eff46127844ea6219b7a459",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:47.743Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-short-top.png",
+      "state": "short-top",
+      "label": "600px短屏 · 身份与资料上部",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "c5f48e08c077e104738bdd3a37ef5cd252ea46903203d682233948ae5a90899f",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 600
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:48.115Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "390-short-bottom.png",
+      "state": "short-bottom",
+      "label": "600px短屏 · 状态与保存操作",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "cf6393e9d97d43e456010f64febf2a713a42aea6840cb3f5e3532db687ac1a85",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 600
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:48.161Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "699-normal.png",
+      "state": "normal",
+      "label": "组织身份与资料 · 正常详情",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "2053fda85a075b6fca5d1698830a4d05e487b97f38a01ef5bba3edd37a34612e",
+      "viewport": {
+        "width": 699,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 699,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:48.945Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "700-normal.png",
+      "state": "normal",
+      "label": "组织身份与资料 · 正常详情",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "be6f5e50c98e92d856af405d6cb8f66afac928c56460ae1a2b130caf7cda651b",
+      "viewport": {
+        "width": 700,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 700,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:49.671Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "701-normal.png",
+      "state": "normal",
+      "label": "组织身份与资料 · 正常详情",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "238bd84bc53f0ae5359ddecf3dfa4f0d7f08f5809cf29417634eda71f8c37a5d",
+      "viewport": {
+        "width": 701,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 701,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:50.346Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1024-normal.png",
+      "state": "normal",
+      "label": "组织身份与资料 · 正常详情",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "9a4d73f4cb57d27427dd9b024b4988cf29a26cdc6e68172ced49c096d66fac99",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1024,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:51.178Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-normal.png",
+      "state": "normal",
+      "label": "组织身份与资料 · 正常详情",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "12ce5815bf049d4d68a7e409e17d904dc1137657583fefbc75130eabb685a025",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:52.113Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-normal-bottom.png",
+      "state": "normal-bottom",
+      "label": "资料与独立状态操作 · 下部",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "12ce5815bf049d4d68a7e409e17d904dc1137657583fefbc75130eabb685a025",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:52.322Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-technical.png",
+      "state": "technical",
+      "label": "技术详情展开",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "3f4773d0612d9b26877d8aff385a664c8b0424dccea40d6b14e3497e4de1a773",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:52.624Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-invalid-days.png",
+      "state": "invalid-days",
+      "label": "保留天数低于下限 · 原生校验",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "42cba0f2aa11b48c61b9c84bbba96a108dc062998136819b8797ac495a6cc36f",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:53.211Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-save-reason.png",
+      "state": "save-reason",
+      "label": "保存资料 · 原生原因确认",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "79de78dae53a7c8a908f5d8019b9fce25940e26a88aa282549a0bd7238811a5d",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:53.909Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-reason-required.png",
+      "state": "reason-required",
+      "label": "原因必填 · 原生校验",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "5b26093b0f596cc161df59f66b157ab5e8bf4d4fc06b9aa0d98327545f926e23",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:54.730Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-save-pending.png",
+      "state": "save-pending",
+      "label": "保存处理中 · 原因已关闭",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "c84318dd541e7b904edd6b616372ff44681f20d38b8ea8842f242d962956ace7",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:55.230Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-save-failure.png",
+      "state": "save-failure",
+      "label": "保存失败 · 原详情内反馈",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "719025c69fa299a17b69f1e66137ed60fd532833b11c10b91593824837614f23",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:55.559Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-save-success.png",
+      "state": "save-success",
+      "label": "保存成功 · 已重读测试列表",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "a5a2dd0bf9cf349f96c1ef4f3fd18b019af23fc397ab2fbfd8396073d8afd343",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:56.129Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-disable-reason.png",
+      "state": "disable-reason",
+      "label": "停用组织 · 原生原因确认",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "f83a7e1f8712a1f27e60b43f91e7b0cccc28b92d5aaa63d3a1f09b0f04c04725",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:56.531Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-disable-success.png",
+      "state": "disable-success",
+      "label": "停用组织成功 · 测试返回",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "d731630fe4f39b5c3cd361679ec064dc7f77d8fd9c1adcc6061bc9ed5145361e",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:57.050Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-restore-reason.png",
+      "state": "restore-reason",
+      "label": "恢复组织 · 原生原因确认",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "dfe722fe68134a68afdfc8f419078c9c6c305720971da685dcd295b6de3b354f",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:57.446Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-restore-success.png",
+      "state": "restore-success",
+      "label": "恢复组织成功 · 测试返回",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "50851fbb2e72b19a1bac0720e0da0ac46efba7eeb3f1cf5d2c4ce81ea3375410",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:57.997Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-zero.png",
+      "state": "zero",
+      "label": "关系计数均为0",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "796f5331db112f72a593e0dca2b144913ad32b531232da0ceccbb0550e6ee00a",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:58.457Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-unavailable.png",
+      "state": "unavailable",
+      "label": "缺失计数 · 审核稿不补1",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "fe99aeb517101b6caa7bf6c4fb64088791a8ed8de398d68bb20bf509f98c116e",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:59.056Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-unknown.png",
+      "state": "unknown",
+      "label": "未知状态 · 原值保留",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "85664d26b3d6ddb348c90bd5c90f015d387ffc19f6642cd81160a254560ad5d1",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:15:59.505Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-long.png",
+      "state": "long",
+      "label": "超长组织身份 · 合成数据",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "dd8e67a57fb453ebe2a6316eb73465ec795a5656323ca5bcc5783340ef2a3709",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:16:00.107Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    },
+    {
+      "file": "1440-missing.png",
+      "state": "missing",
+      "label": "当前列表未返回目标",
+      "routeId": "P42",
+      "kind": "actual-vue-review-template",
+      "sha256": "9e01239971154ddffdbc918b63d45785dbf69a5bdaa4a6a75de0d7fb7416a5f3",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "concreteUrl": "http://127.0.0.1:63723/platform-admin/organizations/00000000-0000-4000-8000-000000000622?keep=p42",
+      "role": "synthetic fixture without authentication",
+      "theme": "review-only C",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "capturedAt": "2026-09-10T21:16:00.542Z",
+      "sourceSha": "9117cdfbcb72fc0144aef86ebe28a5c0e5529e87c21ade651189bc2761f10e48"
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622",
+          "body": {
+            "name": "更新后的组织",
+            "timezone": "UTC",
+            "data_retention_days": 30,
+            "reason": "核对资料"
+          },
+          "status": 500,
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622",
+          "body": {
+            "name": "再次更新的组织",
+            "timezone": "UTC",
+            "data_retention_days": 30,
+            "reason": "保存复核"
+          },
+          "status": 200,
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622/status",
+          "body": {
+            "status": "archived",
+            "reason": "停用复核"
+          },
+          "status": 200,
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622/status",
+          "body": {
+            "status": "active",
+            "reason": "恢复复核"
+          },
+          "status": 200,
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "zero",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "unavailable",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "unknown",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "long",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "missing",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "missing",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "missing",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        }
+      ],
+      "scope": "GET/PATCH/POST synthetic fixtures; actual parent/detail/reason logic, not real persistence, permissions, App/KeepAlive or late write ownership"
+    },
+    {
+      "width": 699,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        }
+      ],
+      "scope": "GET/PATCH/POST synthetic fixtures; actual parent/detail/reason logic, not real persistence, permissions, App/KeepAlive or late write ownership"
+    },
+    {
+      "width": 700,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        }
+      ],
+      "scope": "GET/PATCH/POST synthetic fixtures; actual parent/detail/reason logic, not real persistence, permissions, App/KeepAlive or late write ownership"
+    },
+    {
+      "width": 701,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        }
+      ],
+      "scope": "GET/PATCH/POST synthetic fixtures; actual parent/detail/reason logic, not real persistence, permissions, App/KeepAlive or late write ownership"
+    },
+    {
+      "width": 1024,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        }
+      ],
+      "scope": "GET/PATCH/POST synthetic fixtures; actual parent/detail/reason logic, not real persistence, permissions, App/KeepAlive or late write ownership"
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622",
+          "body": {
+            "name": "更新后的组织",
+            "timezone": "UTC",
+            "data_retention_days": 30,
+            "reason": "核对资料"
+          },
+          "status": 500,
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622",
+          "body": {
+            "name": "再次更新的组织",
+            "timezone": "UTC",
+            "data_retention_days": 30,
+            "reason": "保存复核"
+          },
+          "status": 200,
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622/status",
+          "body": {
+            "status": "archived",
+            "reason": "停用复核"
+          },
+          "status": 200,
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/organizations/00000000-0000-4000-8000-000000000622/status",
+          "body": {
+            "status": "active",
+            "reason": "恢复复核"
+          },
+          "status": 200,
+          "hasIdempotencyKey": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "zero",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "unavailable",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "unknown",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "long",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "missing",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "missing",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "missing",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "variant": "normal",
+          "query": {}
+        }
+      ],
+      "scope": "GET/PATCH/POST synthetic fixtures; actual parent/detail/reason logic, not real persistence, permissions, App/KeepAlive or late write ownership"
+    }
+  ],
+  "processesClosed": true
+}
