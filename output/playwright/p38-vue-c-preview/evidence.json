@@ -1,0 +1,253 @@
+{
+  "schemaVersion": 1,
+  "page": "P38",
+  "approval": "pending",
+  "implementation": "Unmodified actual Vue SFC with review-only CSS; no production import",
+  "scope": "Fixture-intercepted GET only; no real API, MySQL, RBAC, history lifecycle, clipboard or production acceptance. Real dashboard GET writes view and audit records.",
+  "checks": [
+    {
+      "width": 390,
+      "name": "normal fixture, four window requests and preserved query, link targets, no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "pending disabled controls, retained data, error retry, source 8 to 15 to 8"
+    },
+    {
+      "width": 390,
+      "name": "actual mobile drawer open, technical disclosure, Escape and close focus return"
+    },
+    {
+      "width": 390,
+      "name": "initial 401/403/429/500, empty, null versus zero, no page errors or external/unexpected API requests"
+    },
+    {
+      "width": 760,
+      "name": "normal fixture, four window requests and preserved query, link targets, no document overflow"
+    },
+    {
+      "width": 760,
+      "name": "pending disabled controls, retained data, error retry, source 8 to 15 to 8"
+    },
+    {
+      "width": 760,
+      "name": "actual mobile drawer open, technical disclosure, Escape and close focus return"
+    },
+    {
+      "width": 760,
+      "name": "initial 401/403/429/500, empty, null versus zero, no page errors or external/unexpected API requests"
+    },
+    {
+      "width": 761,
+      "name": "normal fixture, four window requests and preserved query, link targets, no document overflow"
+    },
+    {
+      "width": 761,
+      "name": "pending disabled controls, retained data, error retry, source 8 to 15 to 8"
+    },
+    {
+      "width": 761,
+      "name": "actual columns, last-column protection, freeze toggle, density computed padding"
+    },
+    {
+      "width": 761,
+      "name": "initial 401/403/429/500, empty, null versus zero, no page errors or external/unexpected API requests"
+    },
+    {
+      "width": 1440,
+      "name": "normal fixture, four window requests and preserved query, link targets, no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "pending disabled controls, retained data, error retry, source 8 to 15 to 8"
+    },
+    {
+      "width": 1440,
+      "name": "actual columns, last-column protection, freeze toggle, density computed padding"
+    },
+    {
+      "width": 1440,
+      "name": "initial 401/403/429/500, empty, null versus zero, no page errors or external/unexpected API requests"
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "name": "Existing ready data remains visible after 403; selected window changes even when refresh fails. Not a permission or freshness pass."
+    },
+    {
+      "width": 390,
+      "name": "Existing drawer Shift+Tab leaves dialog for scrim; no full focus trap or background inert. Must be addressed before production acceptance."
+    },
+    {
+      "width": 760,
+      "name": "Existing ready data remains visible after 403; selected window changes even when refresh fails. Not a permission or freshness pass."
+    },
+    {
+      "width": 760,
+      "name": "Existing drawer Shift+Tab leaves dialog for scrim; no full focus trap or background inert. Must be addressed before production acceptance."
+    },
+    {
+      "width": 761,
+      "name": "Existing ready data remains visible after 403; selected window changes even when refresh fails. Not a permission or freshness pass."
+    },
+    {
+      "width": 1440,
+      "name": "Existing ready data remains visible after 403; selected window changes even when refresh fails. Not a permission or freshness pass."
+    }
+  ],
+  "sourceHashes": {
+    "scripts/verify-ui-phase2-platform-overview-vue-preview.mjs": "fe0bbdc7d639d36be1e7caaa2806878e090cabffb4163d5d79ccb1069c381bfb",
+    "design-plans/ui-phase-2-2026-09-07/implementation/platform-overview-preview.css": "b074ad6bb00cc99acdf7e6b79b9912d9a5d60d4f9a8f4f606279e7050ac738ce",
+    "scripts/lib/ui-phase2-platform-overview-design-data.mjs": "8b56a34ca836b44efda63e0aa7f0d251de017e33d98cfcd853276d0066f7da7d",
+    "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+    "apps/web/src/components/PlatformDashboard.vue": "7935e4cdeca4991615f554ff0c66cf5e623454269fa0771ff06b861f15ca5a95",
+    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/TechnicalDetails.vue": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b"
+  },
+  "screenshots": [
+    {
+      "file": "390-normal.png",
+      "width": 390,
+      "sha256": "e3ac254d5a28ebe47f0e195202dc59f2df8f80f821a271d2d65d0b62e311bf5a"
+    },
+    {
+      "file": "390-refreshing.png",
+      "width": 390,
+      "sha256": "9405bbc5d844a7c92ff54a4cb50ac9f57bf29d9a2e500c49cca0d2909c60fcea"
+    },
+    {
+      "file": "390-retained-error.png",
+      "width": 390,
+      "sha256": "f9a1f20587b92d466e6c7d466faf7cf685b75762ab8c707eded5607c34056f5b"
+    },
+    {
+      "file": "390-all-sources.png",
+      "width": 390,
+      "sha256": "9e3f8de47066bbe91cda657bcb8e6a7da891c7fe1bccbfb907016d51abc605ae"
+    },
+    {
+      "file": "390-drawer.png",
+      "width": 390,
+      "sha256": "a199c877068c53036f63738868b1b563032280c46f22df2e4cf14ec28154a5da"
+    },
+    {
+      "file": "390-drawer-technical.png",
+      "width": 390,
+      "sha256": "e23e5cf6545c22d1a48cfeb6ed4b19d7729865270fe2fccc73e5a1fece1639f2"
+    },
+    {
+      "file": "390-initial-401.png",
+      "width": 390,
+      "sha256": "d57de385674a79eb370ed0f32ac1f4c7615197ce5b4a2b3be106a0fd6467dd36"
+    },
+    {
+      "file": "390-initial-403.png",
+      "width": 390,
+      "sha256": "256aa0d7cb57e87e51d8ebef18ad04a6be96d8439cfcc6b81dcc967d3c87c2a6"
+    },
+    {
+      "file": "390-initial-429.png",
+      "width": 390,
+      "sha256": "0ae612f80731c39e1db1358e3d214484a78629ef8d247c1f60351e432d80b640"
+    },
+    {
+      "file": "390-initial-500.png",
+      "width": 390,
+      "sha256": "6251eca4d8fa3411bf6c67b2b7f3259a13ade1434efed66a7d5595818f430048"
+    },
+    {
+      "file": "390-empty.png",
+      "width": 390,
+      "sha256": "4cae0031ef320f62c60bb39b5ce5a855593b895d11a895178283dff66f529378"
+    },
+    {
+      "file": "390-no-sample.png",
+      "width": 390,
+      "sha256": "4f100594286bbd87c758d238b188373d2630eb05d3fbd3b21332feecea52db5f"
+    },
+    {
+      "file": "390-zero-rate.png",
+      "width": 390,
+      "sha256": "7d3417a2cfc6ad22b2087424c5613b83713d8d38e748cf5eb9f93cd81c233cd9"
+    },
+    {
+      "file": "1440-normal.png",
+      "width": 1440,
+      "sha256": "b0186ae2c16c0a36ce2c720404abc10da504d846bc10aba53ec7e4f5a711583f"
+    },
+    {
+      "file": "1440-refreshing.png",
+      "width": 1440,
+      "sha256": "7c31e54d9d613f611c6338c314027ffbaace20dec7bfb4d1b1f97f3162daf8ff"
+    },
+    {
+      "file": "1440-retained-error.png",
+      "width": 1440,
+      "sha256": "fbcf013fc36a2269823bd1ece80acfc553904a90eb1ce71c0fd023d23b2b58f9"
+    },
+    {
+      "file": "1440-all-sources.png",
+      "width": 1440,
+      "sha256": "49b5fa1b86f53441d72084f980c465d02c7f40c7784536a8a6e3fd87faa7edec"
+    },
+    {
+      "file": "1440-columns.png",
+      "width": 1440,
+      "sha256": "d4a3d88e742214c3ca7501e5ee69906257c8bc414042b472456f46a31c1e404e"
+    },
+    {
+      "file": "1440-compact.png",
+      "width": 1440,
+      "sha256": "61893826ccfffb730f69db759b58eb86c4180a47a79445c020074e4110846817"
+    },
+    {
+      "file": "1440-initial-401.png",
+      "width": 1440,
+      "sha256": "54f86ddb8372c758c56e9d501c673fed9e3b7d1630015af1c9cca379fba86ea3"
+    },
+    {
+      "file": "1440-initial-403.png",
+      "width": 1440,
+      "sha256": "3b6645da14399b6d3533fce8f7b0cd3bd6cd11506a0fad65fa716fa2818e0406"
+    },
+    {
+      "file": "1440-initial-429.png",
+      "width": 1440,
+      "sha256": "f8daa737a502f32cdf67bf9afaaed90ba3d4faa34142913e1e478a58ca1e4c0d"
+    },
+    {
+      "file": "1440-initial-500.png",
+      "width": 1440,
+      "sha256": "4f0bc256952339c4c6519cf5d08274e7de578df2bed1b13f7f8ede97c101078b"
+    },
+    {
+      "file": "1440-empty.png",
+      "width": 1440,
+      "sha256": "fe660b1e76c11e275f8db6c632e29c786761d18eb26b78394fe0150df7c3968d"
+    },
+    {
+      "file": "1440-no-sample.png",
+      "width": 1440,
+      "sha256": "9696c965d653d2503de6230aadd8b349d49b6cf7fc6bcb3a5cda56f1ebe440b0"
+    },
+    {
+      "file": "1440-zero-rate.png",
+      "width": 1440,
+      "sha256": "c6cd5e75026fe36c459288fd0b7bf8defd9c4390910a7c9fcfa78a5c99fc0973"
+    }
+  ]
+}

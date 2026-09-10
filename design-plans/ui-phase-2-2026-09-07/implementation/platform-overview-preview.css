@@ -1,0 +1,355 @@
+/* P38 review-only C skin. Never imported by the production application. */
+body.p38-vue-preview {
+  --so-bg: #edf1f6;
+  --so-bg-elevated: #fff;
+  --so-panel: #fff;
+  --so-panel-soft: #f4f7fb;
+  --so-panel-muted: #e8eef5;
+  --so-text: #202c3d;
+  --so-text-muted: #58677b;
+  --so-primary: #254a9c;
+  --so-primary-strong: #193b80;
+  --so-on-primary: #fff;
+  --so-border: #dbe1e9;
+  --so-border-strong: #9daec3;
+  --so-success: #236951;
+  --so-warning: #85530c;
+  --so-danger: #9e3f3d;
+  --so-font-ui: "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+  --so-font-display: "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+  --so-font-mono: Consolas, "Microsoft YaHei UI", "Microsoft YaHei", monospace;
+  --so-font-meta: 13px;
+  --so-touch-target: 44px;
+  margin: 0;
+  background: #edf1f6;
+  color: #202c3d;
+  font: 16px/1.65 var(--so-font-ui);
+}
+html[data-design="signal-ledger"] body.p38-vue-preview {
+  background-image: none;
+}
+body.p38-vue-preview::before,
+body.p38-vue-preview::after {
+  display: none;
+}
+body.p38-vue-preview #app {
+  max-width: 1480px;
+  padding: 32px;
+  margin: 0 auto;
+}
+body.p38-vue-preview .preview-disclaimer {
+  padding: 0 0 16px;
+  font-size: 13px;
+  color: var(--so-text-muted);
+}
+body.p38-vue-preview #app .platform-dashboard {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  align-items: start;
+  gap: 20px 28px;
+  font: 16px/1.65 var(--so-font-ui);
+}
+body.p38-vue-preview #app .platform-dashboard > * {
+  grid-column: 2;
+  min-width: 0;
+}
+body.p38-vue-preview #app .platform-dashboard .platform-dashboard-toolbar {
+  grid-column: 1;
+  grid-row: 1 / span 5;
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
+  padding: 28px 22px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--so-primary);
+  color: white;
+  box-shadow: none;
+}
+body.p38-vue-preview #app .platform-dashboard-toolbar :is(h2, p, span, label) {
+  color: white;
+}
+body.p38-vue-preview #app .platform-dashboard-toolbar h2 {
+  font: 700 26px/1.5 var(--so-font-ui);
+  margin: 10px 0 20px;
+}
+body.p38-vue-preview #app .platform-dashboard-toolbar :is(p, span) {
+  font: 13px/1.9 var(--so-font-ui);
+  letter-spacing: 0;
+}
+body.p38-vue-preview #app .platform-dashboard-toolbar label {
+  gap: 10px;
+  font-size: 16px;
+}
+body.p38-vue-preview #app .platform-dashboard-toolbar :is(select, button) {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid white;
+  border-radius: 4px;
+  background: white;
+  color: var(--so-primary-strong);
+  font: 16px/1.5 var(--so-font-ui);
+}
+body.p38-vue-preview #app .platform-dashboard-toolbar :disabled {
+  opacity: 1;
+  color: #627086;
+  background: #e3e9f3;
+  border-color: #e3e9f3;
+}
+body.p38-vue-preview
+  #app
+  :is(
+    .platform-facts,
+    .platform-get-started,
+    .platform-dashboard-grid > section,
+    .platform-dashboard-state
+  ) {
+  padding: 24px;
+  border: 0;
+  border-radius: 6px;
+  background: white;
+  box-shadow: none;
+}
+body.p38-vue-preview #app .platform-action-summary {
+  gap: 1px;
+  background: var(--so-border);
+  border-radius: 6px;
+}
+body.p38-vue-preview #app .platform-action-summary a {
+  padding: 24px;
+  border: 0;
+  border-radius: 0;
+  background: white;
+  transition: none;
+}
+body.p38-vue-preview #app .platform-action-summary strong {
+  color: var(--so-primary);
+  font: 600 40px/1.3 var(--so-font-ui);
+  font-variant-numeric: tabular-nums;
+}
+body.p38-vue-preview #app .platform-action-summary a:hover {
+  background: #f4f7fb;
+  transform: none;
+}
+body.p38-vue-preview #app .platform-facts > div {
+  gap: 0;
+}
+body.p38-vue-preview #app .platform-facts article {
+  padding: 12px 16px;
+  border: 0;
+  border-left: 1px solid var(--so-border);
+  background: transparent;
+}
+body.p38-vue-preview #app .platform-facts article:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+body.p38-vue-preview #app .platform-facts article strong {
+  font-size: 24px;
+  font-variant-numeric: tabular-nums;
+}
+body.p38-vue-preview #app .platform-facts article a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: underline;
+}
+body.p38-vue-preview #app .platform-get-started > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 24px;
+}
+body.p38-vue-preview #app .platform-get-started a {
+  padding: 16px 0;
+  border: 0;
+  border-top: 1px solid var(--so-border);
+  border-radius: 0;
+  background: white;
+}
+body.p38-vue-preview #app .platform-get-started a b {
+  color: var(--so-primary);
+}
+body.p38-vue-preview #app .platform-dashboard-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+body.p38-vue-preview #app .platform-dashboard-grid > section:nth-child(2),
+body.p38-vue-preview #app .platform-dashboard-grid > section:last-child {
+  grid-column: 1 / -1;
+}
+body.p38-vue-preview #app .platform-dashboard-grid h3,
+body.p38-vue-preview #app .platform-facts h3,
+body.p38-vue-preview #app .platform-get-started h3 {
+  font-size: 20px;
+}
+body.p38-vue-preview #app .platform-dashboard :is(button, select, summary) {
+  min-height: 44px;
+  font-size: 16px;
+}
+body.p38-vue-preview #app .platform-dashboard :is(button, select) {
+  border-radius: 4px;
+}
+body.p38-vue-preview #app .platform-dashboard :is(th, td) {
+  padding: 14px 12px;
+  border-color: var(--so-border);
+  font-size: 16px;
+}
+body.p38-vue-preview #app .platform-dashboard th {
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+body.p38-vue-preview #app .platform-dashboard table {
+  border-block: 1px solid var(--so-border);
+  background: white;
+}
+body.p38-vue-preview #app .platform-dashboard table[data-table-density="compact"] :is(th, td) {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+body.p38-vue-preview #app .table-view-controls__toolbar {
+  margin: 18px 0;
+}
+body.p38-vue-preview #app .platform-signals li,
+body.p38-vue-preview #app .platform-alerts li {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--so-border);
+  border-radius: 0;
+  background: white;
+}
+body.p38-vue-preview #app .platform-queue-bars b {
+  background: var(--so-primary);
+  border-radius: 0;
+}
+body.p38-vue-preview #app .platform-refresh-feedback {
+  border-radius: 4px;
+  background: #fff8e8;
+  color: #78530e;
+}
+body.p38-vue-preview #app .platform-observed {
+  text-align: left;
+  padding: 16px 0;
+}
+body.p38-vue-preview #app .platform-dashboard :focus-visible {
+  outline: 3px solid var(--so-primary);
+  outline-offset: 3px;
+}
+body.p38-vue-preview #app .platform-dashboard-toolbar :focus-visible {
+  outline-color: white;
+}
+body.p38-vue-preview .responsive-data-view__drawer {
+  background: white;
+  color: var(--so-text);
+  border: 0;
+  border-top: 4px solid var(--so-primary);
+  padding: 20px;
+  font: 16px/1.65 var(--so-font-ui);
+}
+body.p38-vue-preview .responsive-data-view__drawer > header {
+  position: sticky;
+  top: -20px;
+  padding-block: 12px;
+  background: white;
+}
+body.p38-vue-preview .responsive-data-view__drawer :is(button, summary) {
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 16px;
+}
+body.p38-vue-preview .responsive-data-view__drawer :focus-visible {
+  outline: 3px solid var(--so-primary);
+  outline-offset: 3px;
+}
+@media (max-width: 1100px) {
+  body.p38-vue-preview #app .platform-dashboard {
+    grid-template-columns: 210px minmax(0, 1fr);
+    gap: 16px;
+  }
+  body.p38-vue-preview #app .platform-dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body.p38-vue-preview #app .platform-facts > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  body.p38-vue-preview #app .platform-facts article:nth-child(odd) {
+    border-left: 0;
+  }
+}
+@media (max-width: 760px) {
+  body.p38-vue-preview #app {
+    padding: 16px;
+  }
+  body.p38-vue-preview #app .platform-dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  body.p38-vue-preview #app .platform-dashboard .platform-dashboard-toolbar {
+    position: static;
+    gap: 16px;
+    padding: 24px 20px;
+  }
+  body.p38-vue-preview #app .platform-dashboard-toolbar h2 {
+    margin-bottom: 12px;
+  }
+  body.p38-vue-preview
+    #app
+    .platform-dashboard
+    :is(
+      .platform-facts,
+      .platform-get-started,
+      .platform-dashboard-grid > section,
+      .platform-dashboard-state
+    ) {
+    padding: 20px;
+  }
+  body.p38-vue-preview #app .platform-facts > div,
+  body.p38-vue-preview #app .platform-get-started > div,
+  body.p38-vue-preview #app .platform-action-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body.p38-vue-preview #app .platform-facts article {
+    grid-template-columns: minmax(0, 1fr) auto;
+    border: 0;
+    border-top: 1px solid var(--so-border);
+    padding: 16px 0;
+  }
+  body.p38-vue-preview #app .platform-facts article small,
+  body.p38-vue-preview #app .platform-facts article a {
+    grid-column: 1 / -1;
+  }
+  body.p38-vue-preview #app .platform-facts > header,
+  body.p38-vue-preview #app .platform-get-started > header {
+    align-items: start;
+    flex-direction: column;
+  }
+  body.p38-vue-preview #app .platform-dashboard-grid {
+    gap: 16px;
+  }
+  body.p38-vue-preview #app .responsive-data-view__mobile article button {
+    background: white;
+    padding: 18px 0;
+    border: 0;
+    border-bottom: 1px solid var(--so-border);
+    border-radius: 0;
+  }
+  body.p38-vue-preview #app .responsive-data-view__mobile article {
+    border: 0;
+    border-radius: 0;
+    background: white;
+  }
+  body.p38-vue-preview #app .platform-refresh-feedback {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  body.p38-vue-preview #app .technical-details dl > div {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  body.p38-vue-preview #app .technical-details dt {
+    grid-column: 1 / -1;
+  }
+}
