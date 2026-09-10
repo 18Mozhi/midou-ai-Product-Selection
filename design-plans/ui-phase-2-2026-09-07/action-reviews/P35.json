@@ -549,6 +549,10 @@
     "implementation": {
       "file": "output/playwright/p35-export-detail-vue/evidence.json",
       "sha256": "1a84bd08347f63f23073f0ae31103091365f58e616670e95a8cbc577eb20188a"
+    },
+    "parent": {
+      "file": "output/playwright/p35-parent-read-states/evidence.json",
+      "sha256": "87b5f77e04949323dab8e3fdd57a1f326b66753f0baa681b34e62c62e8733456"
     }
   },
   "externalControlBindings": [
@@ -2035,6 +2039,14 @@
       "sha256": "342dc60ba3e88dea9272947baa3c5fb7f3dabc9e9c7a8943ca5fccb08f7d502d"
     }
   ],
+  "parentReadEvidence": {
+    "review": "P35-PARENT-READ-STATES-REVIEW.md",
+    "evidence": "output/playwright/p35-parent-read-states/evidence.json",
+    "checks": 1624,
+    "scenarios": 112,
+    "screenshots": 128,
+    "scope": "实际App双视图/双端点/两阶段/七故障/双端隔离HTTP；旧界面技术证据，不是C批准或真实后端/权限/生产验收"
+  },
   "surfaceReview": {
     "status": "source-reviewed-not-runtime-accepted",
     "files": [
@@ -2904,7 +2916,7 @@
   "approvalRecords": ["P35-MOBILE-EXPORT-DETAIL-APPROVAL.md"],
   "compositionGaps": [
     "独立控件/字段图通过额外精确验证关联；未改旧清单格式或冒充统一六态图包，因此通用六态槽继续not-mapped。",
-    "控件图未覆盖父blocked/conflict与完整首读/刷新/鉴权替换；不能用P34区域批准代替。",
+    "父级七类故障/刷新/鉴权替换已由独立双视图实际App矩阵核对；对应C设计图和实际实施未完成，不能用P34区域批准代替。",
     "手机导出详情及null/0已有局部批准；生成/重试和新筛选组合未答不通过。",
     "完整URL历史、缓存/多实例/组织切换、主题密度、200%缩放、真实API/SQL/RBAC和全73页生产验收待完成。"
   ],

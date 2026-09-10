@@ -207,6 +207,7 @@ export const externalPaths = {
   controls: "output/playwright/p35-controls-review/evidence.json",
   fields: "output/playwright/p35-fields-review/evidence.json",
   implementation: "output/playwright/p35-export-detail-vue/evidence.json",
+  parent: "output/playwright/p35-parent-read-states/evidence.json",
 };
 export function readOrgDataReviewInputs() {
   return {
@@ -325,6 +326,15 @@ export function buildOrgDataReview({ sources, external }) {
     })),
     externalFieldCompositions: imageReferences("fields", (s) => s.name.includes("-composition-")),
     externalImplementationImages: imageReferences("implementation", () => true),
+    parentReadEvidence: {
+      review: "P35-PARENT-READ-STATES-REVIEW.md",
+      evidence: externalPaths.parent,
+      checks: external.parent.checks.length,
+      scenarios: external.parent.scenarios.length,
+      screenshots: external.parent.screenshots.length,
+      scope:
+        "实际App双视图/双端点/两阶段/七故障/双端隔离HTTP；旧界面技术证据，不是C批准或真实后端/权限/生产验收",
+    },
     surfaceReview: {
       status: "source-reviewed-not-runtime-accepted",
       files: dependencies,
@@ -398,7 +408,7 @@ export function buildOrgDataReview({ sources, external }) {
     approvalRecords: ["P35-MOBILE-EXPORT-DETAIL-APPROVAL.md"],
     compositionGaps: [
       "独立控件/字段图通过额外精确验证关联；未改旧清单格式或冒充统一六态图包，因此通用六态槽继续not-mapped。",
-      "控件图未覆盖父blocked/conflict与完整首读/刷新/鉴权替换；不能用P34区域批准代替。",
+      "父级七类故障/刷新/鉴权替换已由独立双视图实际App矩阵核对；对应C设计图和实际实施未完成，不能用P34区域批准代替。",
       "手机导出详情及null/0已有局部批准；生成/重试和新筛选组合未答不通过。",
       "完整URL历史、缓存/多实例/组织切换、主题密度、200%缩放、真实API/SQL/RBAC和全73页生产验收待完成。",
     ],
@@ -412,6 +422,7 @@ export function validateOrgDataBindings(review, inputs) {
     "externalControlBindings",
     "externalFieldCompositions",
     "externalImplementationImages",
+    "parentReadEvidence",
     "propBindings",
     "inputs",
     "approvalRecords",

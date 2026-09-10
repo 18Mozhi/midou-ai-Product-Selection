@@ -2,6 +2,8 @@
 
 状态：source-reviewed-not-runtime-accepted，整页批准仍 pending-user-review。本登记不修改运行代码、不部署，也不能授予任何局部或全页批准。
 
+后续父级证据：[实际App双视图读取矩阵](P35-PARENT-READ-STATES-REVIEW.md)112故障恢复场景、1624检查、128整页图已独立关联；证明所列读取/保留/替换规则，不改变下文旧控件图的覆盖范围，也不授予父级C批准。
+
 ## 本页与他页边界
 
 从当前 OrganizationAdminCenter.vue → OrganizationDataPanel.vue 路径核对全部23个源码入口，形成9组本页动作、5组排除。父子都参与源码扫描；不按列表行数重复计算按钮，不把其他页面的共享调用算成本页行为。

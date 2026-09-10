@@ -148,4 +148,8 @@ test("P35 all independent control, field and real Vue images are pinned without 
       .every((a) => Object.values(a.visualStates).every((v) => v === "not-mapped")),
   );
   assert.deepEqual(build().approvalRecords, ["P35-MOBILE-EXPORT-DETAIL-APPROVAL.md"]);
+  assert.equal(build().parentReadEvidence.scenarios, 112);
+  assert.equal(build().parentReadEvidence.checks, 1624);
+  assert.equal(build().parentReadEvidence.screenshots, 128);
+  assert.match(build().parentReadEvidence.scope, /不是C批准/);
 });
