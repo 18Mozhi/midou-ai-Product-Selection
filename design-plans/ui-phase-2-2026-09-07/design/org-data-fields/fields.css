@@ -1,0 +1,57 @@
+.field-review-region .filters {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 20px 24px;
+}
+.field-review-region label {
+  min-width: 0;
+  gap: 7px;
+}
+.field-review-region label > span {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.field-review-region input,
+.field-review-region select {
+  min-width: 0;
+  min-height: 46px;
+}
+.field-review-region input:hover,
+.field-review-region select:hover {
+  border-color: var(--blue);
+  background-color: #f8faff;
+}
+.field-review-region :focus-visible {
+  outline: 3px solid #5379cf;
+  outline-offset: 3px;
+}
+.field-help {
+  display: block;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.field-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.field-actions button {
+  flex-shrink: 0;
+}
+@media (max-width: 760px) {
+  .field-review-region .filters {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .field-actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
