@@ -1,0 +1,118 @@
+:root {
+  --control-focus: #285ec7;
+  --control-disabled-bg: #e6ebf1;
+}
+.control-tools {
+  padding: 12px 24px;
+  background: white;
+  border-bottom: 1px solid var(--line);
+}
+.control-tools select {
+  max-width: 640px;
+  width: 100%;
+}
+.control-tools p {
+  font-size: 13px;
+}
+button,
+input,
+select,
+textarea {
+  border-color: #6680a2;
+}
+button:focus-visible,
+a:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--control-focus);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 2px white;
+}
+button:active:not(:disabled),
+summary:active {
+  background: #dbe7fb;
+  color: var(--deep);
+  transform: none;
+}
+button.primary:active:not(:disabled) {
+  background: #10285b;
+  color: white;
+}
+button.danger:hover:not(:disabled) {
+  background: #fff0ed;
+  color: #87332d;
+  border-color: #a94a40;
+}
+button.danger:active:not(:disabled) {
+  background: #f5d7d2;
+  color: #732821;
+}
+button.danger.primary:hover:not(:disabled) {
+  background: #7e2f29;
+  color: white;
+}
+button.danger.primary:active:not(:disabled) {
+  background: #64201b;
+  color: white;
+}
+button:disabled,
+button.primary:disabled,
+button.danger:disabled {
+  opacity: 1;
+  background: var(--control-disabled-bg);
+  color: #526176;
+  border-color: #a1aec0;
+  cursor: not-allowed;
+  transform: none;
+}
+[data-ttl][aria-pressed="true"] {
+  background: #e8effe;
+  color: #193b80;
+  border-color: #285ec7;
+  box-shadow: inset 0 -3px #285ec7;
+}
+[data-ttl][aria-pressed="true"]:active {
+  background: #cbdcf9;
+}
+.scope-options label {
+  font-size: 16px;
+  border: 1px solid #9aabc0;
+  border-radius: 8px;
+}
+.scope-options label:has(:checked) {
+  background: #e8effe;
+  border-color: #285ec7;
+}
+.scope-options label:has(:focus-visible) {
+  outline: 3px solid #285ec7;
+  outline-offset: 3px;
+}
+.scope-options label:hover {
+  border-color: #285ec7;
+}
+.scope-options label:active {
+  background: #dbe7fb;
+}
+.scope-options label:has(:disabled) {
+  background: #e6ebf1;
+  color: #526176;
+  border-color: #a1aec0;
+}
+.technical summary {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 10px;
+  font-size: 16px;
+}
+.technical summary:hover {
+  background: #e8eefb;
+}
+@media (prefers-reduced-motion: reduce) {
+  button,
+  a,
+  summary {
+    transition: none;
+  }
+}

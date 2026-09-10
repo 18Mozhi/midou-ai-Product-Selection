@@ -1,0 +1,6658 @@
+{
+  "pageId": "P36",
+  "approval": "pending-user-review",
+  "scope": "Offline controls; no mounted Vue/API/SQL/OS clipboard or production proof",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/index.html": "529d563c5aae674548867da37c502a7802219c017044424b1c684eaf5cdfd4f7",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/tokens.css": "14a8ea8d27f328ff1442224772a263541d86df7f10ac7c70d9a59da34db8ded2",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/tokens.js": "f7748959f9c2612db89a919c1934f73dfb8a1955281d398e862991ec4ba3e62a",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/data.js": "5ed377927e57ece618435f984ea238667400e87d93c85373ebd787d8f11ea405",
+    "scripts/lib/ui-phase2-org-token-design-data.mjs": "408840ae6f80aa140d617544bdae231a418fe449ec6d96b9fa03402f3a2fe135",
+    "scripts/verify-ui-phase2-org-token-c.mjs": "e9432d22d284c2e965091bd76ef3e2d11f106a1ca03b25fd14dfc5d43e91583d",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "cd90fc469e663ef0e49bd5371b3c9a91f24d68f6039affb55b8ead8be5540725",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
+    "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
+    "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-controls/index.html": "40ed5bd27e168a665a6f4aa809743c71b6d5d2573a614b67c3e51326351878c1",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-controls/controls.css": "f633a7487f2b9d9e0c400925ed48966cfb2bc51723ff4f39a9d4b769a5aa101d",
+    "design-plans/ui-phase-2-2026-09-07/design/org-token-controls/controls.js": "345281e4a6087f220807d5caca3d45631705d08104f706543776d7ee68d3dc8c",
+    "scripts/verify-ui-phase2-org-token-controls.mjs": "80210a2d4d289a83eaa260e29aeb1e2eb54e5953fa9238b6eac1feb2c9c7b205",
+    "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb"
+  },
+  "sourceSignatures": [
+    "00a635020f530ba8.1",
+    "073eb5c8ded40aa0.1",
+    "169268616bd2a69a.1",
+    "1c008f867673db60.1",
+    "5b6c117ef94cbbb0.1",
+    "66725db5db9a8fe8.1",
+    "6d8d1a59210a6ea0.1",
+    "ab0838b07b48fd2a.1",
+    "b3a4e8d62ca470a9.1",
+    "d27cb4f69e0d30d7.1",
+    "ed5969fa99d64044.1",
+    "ee181e5ac85b01ec.1"
+  ],
+  "retainedOriginalImages": 112,
+  "controls": [
+    {
+      "id": "catalog-nav",
+      "label": "定位生命周期",
+      "selector": "[data-anchor=\"catalog-title\"]",
+      "scene": "normal",
+      "action": "jump",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "proposalOnly": true,
+      "focusTarget": "#catalog-title"
+    },
+    {
+      "id": "create-nav",
+      "label": "定位创建令牌",
+      "selector": "[data-anchor=\"create-name\"]",
+      "scene": "normal",
+      "action": "jump",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "proposalOnly": true
+    },
+    {
+      "id": "refresh",
+      "label": "刷新数据",
+      "selector": "#refresh",
+      "scene": "normal",
+      "action": "read",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "busy"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "parentReference": true
+    },
+    {
+      "id": "retry",
+      "label": "重新加载",
+      "selector": "#retry",
+      "scene": "error",
+      "action": "read",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "parentReference": true
+    },
+    {
+      "id": "create-jump",
+      "label": "定位创建表单",
+      "selector": "#new-token",
+      "scene": "normal",
+      "action": "jump",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "proposalOnly": true
+    },
+    {
+      "id": "reset",
+      "label": "重置筛选",
+      "selector": "#reset",
+      "scene": "search",
+      "action": "reset",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [
+        "66725db5db9a8fe8.1"
+      ]
+    },
+    {
+      "id": "clear",
+      "label": "清除空结果筛选",
+      "selector": "#clear-filter",
+      "scene": "filter_empty",
+      "action": "reset",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "proposalOnly": true
+    },
+    {
+      "id": "technical-closed",
+      "label": "技术详情收起",
+      "selector": ".technical summary",
+      "scene": "normal",
+      "action": "technical",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [
+        "1c008f867673db60.1"
+      ],
+      "open": false
+    },
+    {
+      "id": "technical-open",
+      "label": "技术详情展开",
+      "selector": ".technical summary",
+      "scene": "technical",
+      "action": "technical",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "open": true
+    },
+    {
+      "id": "previous",
+      "label": "上一页",
+      "selector": "[data-page=\"-1\"]",
+      "scene": "page_two",
+      "action": "page",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [
+        "d27cb4f69e0d30d7.1"
+      ],
+      "delta": -1
+    },
+    {
+      "id": "previous-disabled",
+      "label": "首页禁用上一页",
+      "selector": "[data-page=\"-1\"]",
+      "scene": "normal",
+      "action": "page",
+      "states": [
+        "disabled"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "disabledOnly": true
+    },
+    {
+      "id": "next",
+      "label": "下一页",
+      "selector": "[data-page=\"1\"]",
+      "scene": "normal",
+      "action": "page",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [
+        "169268616bd2a69a.1"
+      ],
+      "delta": 1
+    },
+    {
+      "id": "next-disabled",
+      "label": "末页禁用下一页",
+      "selector": "[data-page=\"1\"]",
+      "scene": "page_two",
+      "action": "page",
+      "states": [
+        "disabled"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "disabledOnly": true
+    },
+    {
+      "id": "create",
+      "label": "创建并显示一次明文",
+      "selector": "#create-submit",
+      "scene": "create_draft",
+      "action": "create",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "busy"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [
+        "ed5969fa99d64044.1",
+        "073eb5c8ded40aa0.1"
+      ]
+    },
+    {
+      "id": "ttl-30-unselected",
+      "label": "30天未选",
+      "selector": "[data-ttl=\"30\"]",
+      "scene": "create",
+      "action": "ttl",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [
+        "ee181e5ac85b01ec.1"
+      ],
+      "days": 30,
+      "selected": false
+    },
+    {
+      "id": "ttl-30-selected",
+      "label": "30天已选",
+      "selector": "[data-ttl=\"30\"]",
+      "scene": "create",
+      "action": "ttl",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "days": 30,
+      "selected": true
+    },
+    {
+      "id": "ttl-90-unselected",
+      "label": "90天未选",
+      "selector": "[data-ttl=\"90\"]",
+      "scene": "create",
+      "action": "ttl",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "days": 90,
+      "selected": false
+    },
+    {
+      "id": "ttl-90-selected",
+      "label": "90天已选",
+      "selector": "[data-ttl=\"90\"]",
+      "scene": "create",
+      "action": "ttl",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "days": 90,
+      "selected": true
+    },
+    {
+      "id": "ttl-180-unselected",
+      "label": "180天未选",
+      "selector": "[data-ttl=\"180\"]",
+      "scene": "create",
+      "action": "ttl",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "days": 180,
+      "selected": false
+    },
+    {
+      "id": "ttl-180-selected",
+      "label": "180天已选",
+      "selector": "[data-ttl=\"180\"]",
+      "scene": "create",
+      "action": "ttl",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "days": 180,
+      "selected": true
+    },
+    {
+      "id": "ttl-365-unselected",
+      "label": "365天未选",
+      "selector": "[data-ttl=\"365\"]",
+      "scene": "create",
+      "action": "ttl",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "days": 365,
+      "selected": false
+    },
+    {
+      "id": "ttl-365-selected",
+      "label": "365天已选",
+      "selector": "[data-ttl=\"365\"]",
+      "scene": "create",
+      "action": "ttl",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "days": 365,
+      "selected": true
+    },
+    {
+      "id": "scope-0-unchecked",
+      "label": "任务只读未选",
+      "selector": "#scope-0",
+      "scene": "create",
+      "action": "scope",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [
+        "ab0838b07b48fd2a.1"
+      ],
+      "scopeIndex": 0,
+      "checked": false,
+      "crop": "label[for=\"scope-0\"]"
+    },
+    {
+      "id": "scope-0-checked",
+      "label": "任务只读已选",
+      "selector": "#scope-0",
+      "scene": "create",
+      "action": "scope",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "scopeIndex": 0,
+      "checked": true,
+      "crop": "label[for=\"scope-0\"]"
+    },
+    {
+      "id": "scope-1-unchecked",
+      "label": "热点趋势只读未选",
+      "selector": "#scope-1",
+      "scene": "create",
+      "action": "scope",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "scopeIndex": 1,
+      "checked": false,
+      "crop": "label[for=\"scope-1\"]"
+    },
+    {
+      "id": "scope-1-checked",
+      "label": "热点趋势只读已选",
+      "selector": "#scope-1",
+      "scene": "create",
+      "action": "scope",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "scopeIndex": 1,
+      "checked": true,
+      "crop": "label[for=\"scope-1\"]"
+    },
+    {
+      "id": "scope-2-unchecked",
+      "label": "选品机会只读未选",
+      "selector": "#scope-2",
+      "scene": "create",
+      "action": "scope",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "scopeIndex": 2,
+      "checked": false,
+      "crop": "label[for=\"scope-2\"]"
+    },
+    {
+      "id": "scope-2-checked",
+      "label": "选品机会只读已选",
+      "selector": "#scope-2",
+      "scene": "create",
+      "action": "scope",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "scopeIndex": 2,
+      "checked": true,
+      "crop": "label[for=\"scope-2\"]"
+    },
+    {
+      "id": "scope-3-unchecked",
+      "label": "报表只读未选",
+      "selector": "#scope-3",
+      "scene": "create",
+      "action": "scope",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "scopeIndex": 3,
+      "checked": false,
+      "crop": "label[for=\"scope-3\"]"
+    },
+    {
+      "id": "scope-3-checked",
+      "label": "报表只读已选",
+      "selector": "#scope-3",
+      "scene": "create",
+      "action": "scope",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "scopeIndex": 3,
+      "checked": true,
+      "crop": "label[for=\"scope-3\"]"
+    },
+    {
+      "id": "copy",
+      "label": "复制明文",
+      "selector": "#copy",
+      "scene": "secret",
+      "action": "copy",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [
+        "6d8d1a59210a6ea0.1"
+      ]
+    },
+    {
+      "id": "copy-copied",
+      "label": "复制反馈成功",
+      "selector": "#copy",
+      "scene": "copy_success",
+      "action": "copy",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": []
+    },
+    {
+      "id": "copy-failed",
+      "label": "复制反馈失败",
+      "selector": "#copy",
+      "scene": "copy_failure",
+      "action": "copy",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": []
+    },
+    {
+      "id": "dismiss",
+      "label": "我已安全保存",
+      "selector": "#dismiss",
+      "scene": "secret",
+      "action": "dismiss",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [
+        "b3a4e8d62ca470a9.1"
+      ]
+    },
+    {
+      "id": "rotate",
+      "label": "轮换密钥",
+      "selector": "[data-action=\"rotate\"]",
+      "scene": "normal",
+      "action": "open-reason",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "busy"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [
+        "00a635020f530ba8.1"
+      ],
+      "tokenAction": "rotate"
+    },
+    {
+      "id": "rotate-close",
+      "label": "轮换窗 · 关闭",
+      "selector": "#reason-close",
+      "scene": "reason_rotate",
+      "action": "cancel",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "tokenAction": "rotate",
+      "sharedReason": true
+    },
+    {
+      "id": "rotate-cancel",
+      "label": "轮换窗 · 取消",
+      "selector": "#reason-cancel",
+      "scene": "reason_rotate",
+      "action": "cancel",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "tokenAction": "rotate",
+      "sharedReason": true
+    },
+    {
+      "id": "rotate-submit",
+      "label": "轮换窗 · 确认",
+      "selector": "#reason-submit",
+      "scene": "reason_rotate",
+      "action": "confirm",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "tokenAction": "rotate",
+      "sharedReason": true
+    },
+    {
+      "id": "revoke",
+      "label": "撤销访问",
+      "selector": "[data-action=\"revoke\"]",
+      "scene": "normal",
+      "action": "open-reason",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "busy"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [
+        "5b6c117ef94cbbb0.1"
+      ],
+      "tokenAction": "revoke"
+    },
+    {
+      "id": "revoke-close",
+      "label": "撤销窗 · 关闭",
+      "selector": "#reason-close",
+      "scene": "reason_revoke",
+      "action": "cancel",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "tokenAction": "revoke",
+      "sharedReason": true
+    },
+    {
+      "id": "revoke-cancel",
+      "label": "撤销窗 · 取消",
+      "selector": "#reason-cancel",
+      "scene": "reason_revoke",
+      "action": "cancel",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "tokenAction": "revoke",
+      "sharedReason": true
+    },
+    {
+      "id": "revoke-submit",
+      "label": "撤销窗 · 确认",
+      "selector": "#reason-submit",
+      "scene": "reason_revoke",
+      "action": "confirm",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
+      "widths": [
+        1440,
+        390
+      ],
+      "signatures": [],
+      "tokenAction": "revoke",
+      "sharedReason": true
+    },
+    {
+      "id": "filters-closed",
+      "label": "展开筛选",
+      "selector": "#filters-toggle",
+      "scene": "normal",
+      "action": "filters",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        390
+      ],
+      "signatures": [],
+      "proposalOnly": true,
+      "filtersOpen": false
+    },
+    {
+      "id": "filters-open",
+      "label": "收起筛选",
+      "selector": "#filters-toggle",
+      "scene": "normal",
+      "action": "filters",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
+      "widths": [
+        390
+      ],
+      "signatures": [],
+      "proposalOnly": true,
+      "filtersOpen": true
+    }
+  ],
+  "checks": [
+    {
+      "controlId": "catalog-nav",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "catalog-nav",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "catalog-nav",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "catalog-nav",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-nav",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-nav",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-nav",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-nav",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "busy",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "retry",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "retry",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "retry",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "retry",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-jump",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-jump",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-jump",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-jump",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "reset",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "reset",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "reset",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "reset",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "clear",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "clear",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "clear",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "clear",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "previous",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "previous",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "previous",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "previous",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "previous-disabled",
+      "variant": "disabled",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "next",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "next",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "next",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "next",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "next-disabled",
+      "variant": "disabled",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create",
+      "variant": "busy",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-unselected",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-unselected",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-unselected",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-unselected",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-selected",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-selected",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-selected",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-selected",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-unselected",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-unselected",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-unselected",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-unselected",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-selected",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-selected",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-selected",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-selected",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-unselected",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-unselected",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-unselected",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-unselected",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-selected",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-selected",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-selected",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-selected",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-unselected",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-unselected",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-unselected",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-unselected",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-selected",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-selected",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-selected",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-selected",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-unchecked",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-unchecked",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-unchecked",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-unchecked",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-checked",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-checked",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-checked",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-checked",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-unchecked",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-unchecked",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-unchecked",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-unchecked",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-checked",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-checked",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-checked",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-checked",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-unchecked",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-unchecked",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-unchecked",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-unchecked",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-checked",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-checked",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-checked",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-checked",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-unchecked",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-unchecked",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-unchecked",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-unchecked",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-checked",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-checked",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-checked",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-checked",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-copied",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-copied",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-copied",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-copied",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-failed",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-failed",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-failed",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-failed",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "dismiss",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "dismiss",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "dismiss",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "dismiss",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate",
+      "variant": "busy",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-close",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-close",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-close",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-close",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-cancel",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-cancel",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-cancel",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-cancel",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-submit",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-submit",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-submit",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-submit",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-submit",
+      "variant": "disabled",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke",
+      "variant": "busy",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-close",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-close",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-close",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-close",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-cancel",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-cancel",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-cancel",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-cancel",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-submit",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-submit",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-submit",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-submit",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-submit",
+      "variant": "disabled",
+      "width": 1440,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "catalog-nav",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "catalog-nav",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "catalog-nav",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "catalog-nav",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-nav",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-nav",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-nav",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-nav",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "busy",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "retry",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "retry",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "retry",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "retry",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-jump",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-jump",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-jump",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create-jump",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "reset",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "reset",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "reset",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "reset",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "clear",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "clear",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "clear",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "clear",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "previous",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "previous",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "previous",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "previous",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "previous-disabled",
+      "variant": "disabled",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "next",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "next",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "next",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "next",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "next-disabled",
+      "variant": "disabled",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "create",
+      "variant": "busy",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-unselected",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-unselected",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-unselected",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-unselected",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-selected",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-selected",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-selected",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-30-selected",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-unselected",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-unselected",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-unselected",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-unselected",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-selected",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-selected",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-selected",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-90-selected",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-unselected",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-unselected",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-unselected",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-unselected",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-selected",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-selected",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-selected",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-180-selected",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-unselected",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-unselected",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-unselected",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-unselected",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-selected",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-selected",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-selected",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "ttl-365-selected",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-unchecked",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-unchecked",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-unchecked",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-unchecked",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-checked",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-checked",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-checked",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-0-checked",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-unchecked",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-unchecked",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-unchecked",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-unchecked",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-checked",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-checked",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-checked",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-1-checked",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-unchecked",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-unchecked",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-unchecked",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-unchecked",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-checked",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-checked",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-checked",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-2-checked",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-unchecked",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-unchecked",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-unchecked",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-unchecked",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-checked",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-checked",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-checked",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "scope-3-checked",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-copied",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-copied",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-copied",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-copied",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-failed",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-failed",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-failed",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "copy-failed",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "dismiss",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "dismiss",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "dismiss",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "dismiss",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate",
+      "variant": "busy",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-close",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-close",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-close",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-close",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-cancel",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-cancel",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-cancel",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-cancel",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-submit",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-submit",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-submit",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-submit",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "rotate-submit",
+      "variant": "disabled",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke",
+      "variant": "busy",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-close",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-close",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-close",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-close",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-cancel",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-cancel",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-cancel",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-cancel",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-submit",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-submit",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-submit",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-submit",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "revoke-submit",
+      "variant": "disabled",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "filters-closed",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "filters-closed",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "filters-closed",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "filters-closed",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "filters-open",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "filters-open",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "filters-open",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    },
+    {
+      "controlId": "filters-open",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "unchangedFacts": true
+    }
+  ],
+  "interactions": [
+    {
+      "controlId": "catalog-nav",
+      "width": 1440,
+      "action": "jump",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "create-nav",
+      "width": 1440,
+      "action": "jump",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "refresh",
+      "width": 1440,
+      "action": "read",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "retry",
+      "width": 1440,
+      "action": "read",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "create-jump",
+      "width": 1440,
+      "action": "jump",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "reset",
+      "width": 1440,
+      "action": "reset",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "clear",
+      "width": 1440,
+      "action": "reset",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "technical-closed",
+      "width": 1440,
+      "action": "technical",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "technical-open",
+      "width": 1440,
+      "action": "technical",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "previous",
+      "width": 1440,
+      "action": "page",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "next",
+      "width": 1440,
+      "action": "page",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "create",
+      "width": 1440,
+      "action": "create",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-30-unselected",
+      "width": 1440,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-30-selected",
+      "width": 1440,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-90-unselected",
+      "width": 1440,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-90-selected",
+      "width": 1440,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-180-unselected",
+      "width": 1440,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-180-selected",
+      "width": 1440,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-365-unselected",
+      "width": 1440,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-365-selected",
+      "width": 1440,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-0-unchecked",
+      "width": 1440,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-0-checked",
+      "width": 1440,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-1-unchecked",
+      "width": 1440,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-1-checked",
+      "width": 1440,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-2-unchecked",
+      "width": 1440,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-2-checked",
+      "width": 1440,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-3-unchecked",
+      "width": 1440,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-3-checked",
+      "width": 1440,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "copy",
+      "width": 1440,
+      "action": "copy",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "copy-copied",
+      "width": 1440,
+      "action": "copy",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "copy-failed",
+      "width": 1440,
+      "action": "copy",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "dismiss",
+      "width": 1440,
+      "action": "dismiss",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "rotate",
+      "width": 1440,
+      "action": "open-reason",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "rotate-close",
+      "width": 1440,
+      "action": "cancel",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "rotate-cancel",
+      "width": 1440,
+      "action": "cancel",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "rotate-submit",
+      "width": 1440,
+      "action": "confirm",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "revoke",
+      "width": 1440,
+      "action": "open-reason",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "revoke-close",
+      "width": 1440,
+      "action": "cancel",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "revoke-cancel",
+      "width": 1440,
+      "action": "cancel",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "revoke-submit",
+      "width": 1440,
+      "action": "confirm",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "catalog-nav",
+      "width": 390,
+      "action": "jump",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "create-nav",
+      "width": 390,
+      "action": "jump",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "refresh",
+      "width": 390,
+      "action": "read",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "retry",
+      "width": 390,
+      "action": "read",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "create-jump",
+      "width": 390,
+      "action": "jump",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "reset",
+      "width": 390,
+      "action": "reset",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "clear",
+      "width": 390,
+      "action": "reset",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "technical-closed",
+      "width": 390,
+      "action": "technical",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "technical-open",
+      "width": 390,
+      "action": "technical",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "previous",
+      "width": 390,
+      "action": "page",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "next",
+      "width": 390,
+      "action": "page",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "create",
+      "width": 390,
+      "action": "create",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-30-unselected",
+      "width": 390,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-30-selected",
+      "width": 390,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-90-unselected",
+      "width": 390,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-90-selected",
+      "width": 390,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-180-unselected",
+      "width": 390,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-180-selected",
+      "width": 390,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-365-unselected",
+      "width": 390,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "ttl-365-selected",
+      "width": 390,
+      "action": "ttl",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-0-unchecked",
+      "width": 390,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-0-checked",
+      "width": 390,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-1-unchecked",
+      "width": 390,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-1-checked",
+      "width": 390,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-2-unchecked",
+      "width": 390,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-2-checked",
+      "width": 390,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-3-unchecked",
+      "width": 390,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "scope-3-checked",
+      "width": 390,
+      "action": "scope",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "copy",
+      "width": 390,
+      "action": "copy",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "copy-copied",
+      "width": 390,
+      "action": "copy",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "copy-failed",
+      "width": 390,
+      "action": "copy",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "dismiss",
+      "width": 390,
+      "action": "dismiss",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "rotate",
+      "width": 390,
+      "action": "open-reason",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "rotate-close",
+      "width": 390,
+      "action": "cancel",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "rotate-cancel",
+      "width": 390,
+      "action": "cancel",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "rotate-submit",
+      "width": 390,
+      "action": "confirm",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "revoke",
+      "width": 390,
+      "action": "open-reason",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "revoke-close",
+      "width": 390,
+      "action": "cancel",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "revoke-cancel",
+      "width": 390,
+      "action": "cancel",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "revoke-submit",
+      "width": 390,
+      "action": "confirm",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "filters-closed",
+      "width": 390,
+      "action": "filters",
+      "exactIntentOrLocalResult": true
+    },
+    {
+      "controlId": "filters-open",
+      "width": 390,
+      "action": "filters",
+      "exactIntentOrLocalResult": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "catalog-nav-default-1440.png",
+      "width": 1440,
+      "sha256": "d5c6b93d0e7b565a35e3c33c6b59a1da77dba0f0c8c88757f05585edcd2c1e6e",
+      "controlId": "catalog-nav",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "catalog-nav-hover-1440.png",
+      "width": 1440,
+      "sha256": "b0f935367f38a54d529f696997d625b973624f2b6ee952e9e62e1ff8bf62e0dd",
+      "controlId": "catalog-nav",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "catalog-nav-focus-1440.png",
+      "width": 1440,
+      "sha256": "ddeb75c34147a77cfa888a057beee44c378fbf214e05c92e5fe9c4a59253ed48",
+      "controlId": "catalog-nav",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "catalog-nav-pressed-1440.png",
+      "width": 1440,
+      "sha256": "b0f935367f38a54d529f696997d625b973624f2b6ee952e9e62e1ff8bf62e0dd",
+      "controlId": "catalog-nav",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-nav-default-1440.png",
+      "width": 1440,
+      "sha256": "351d3675cc7fb8c0c899faed423e70d48ffd38025eb0df708bb55ba88a5a6ba7",
+      "controlId": "create-nav",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-nav-hover-1440.png",
+      "width": 1440,
+      "sha256": "58092882b86e056e31311d7ca0a56c3e3c4ada138ea8cced74719d12bf8651dd",
+      "controlId": "create-nav",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-nav-focus-1440.png",
+      "width": 1440,
+      "sha256": "e0a0bfb2e84220f09d4aff2b5a2a5dfa7b0c3e5143d160df4378b572f873af30",
+      "controlId": "create-nav",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-nav-pressed-1440.png",
+      "width": 1440,
+      "sha256": "58092882b86e056e31311d7ca0a56c3e3c4ada138ea8cced74719d12bf8651dd",
+      "controlId": "create-nav",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "refresh-default-1440.png",
+      "width": 1440,
+      "sha256": "19f725c5f9940474981a08eaeeb82b3b1cd7aca0b6c388e70ddf1fde83652657",
+      "controlId": "refresh",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "refresh-hover-1440.png",
+      "width": 1440,
+      "sha256": "982e118d12e0b0fdcdd0611762e70b02c3a1afc700a969d235810a675677dc2a",
+      "controlId": "refresh",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "refresh-focus-1440.png",
+      "width": 1440,
+      "sha256": "9c29ecd66be58724a9387d84595b12120ae2853c2ef39229ba3acc161ef07b88",
+      "controlId": "refresh",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "refresh-pressed-1440.png",
+      "width": 1440,
+      "sha256": "01ad7e94bd782496efbb5b4ee80e79eab9dc89790028aa359e7f94c5d82091c2",
+      "controlId": "refresh",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "refresh-busy-1440.png",
+      "width": 1440,
+      "sha256": "f01d58289e8b8391cfea77e46ef1170e5cdd369fdff086bdead6f1d34ebbc513",
+      "controlId": "refresh",
+      "variant": "busy",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "retry-default-1440.png",
+      "width": 1440,
+      "sha256": "d37aa10fd70ed284cbaf9c46d9cf9699af254ac920e1a287f8a4e1b714d1b0c9",
+      "controlId": "retry",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "retry-hover-1440.png",
+      "width": 1440,
+      "sha256": "a64da456c35df1e6c1694d61b3f754bf4813d5e2c0e9867669324b03e8aa6644",
+      "controlId": "retry",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "retry-focus-1440.png",
+      "width": 1440,
+      "sha256": "4a89796e0aa98ebc1e9f79137137d11890d94e87814b77e8bebae35b94375c53",
+      "controlId": "retry",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "retry-pressed-1440.png",
+      "width": 1440,
+      "sha256": "b2b6fe2b93c0271efad0480ef20ef65490a98b1229e4c3115ff4114720a8909c",
+      "controlId": "retry",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-jump-default-1440.png",
+      "width": 1440,
+      "sha256": "73b20458115dd01502e0c4fe48b4c6d67fdeff7198ab8356f545bd4d8d0a5608",
+      "controlId": "create-jump",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-jump-hover-1440.png",
+      "width": 1440,
+      "sha256": "1e0afdd8fab2b9496550a063681ad3937dd2a7975d5c54e16b715792ada8ccc7",
+      "controlId": "create-jump",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-jump-focus-1440.png",
+      "width": 1440,
+      "sha256": "2aaa7609f6716856bd0cdc18226263784cb5ffbc51f8df601db83d9152fb727d",
+      "controlId": "create-jump",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-jump-pressed-1440.png",
+      "width": 1440,
+      "sha256": "d1bc7ae0ce2d1d57a65b72adcc166c6f815aef915a10b1881f08d19b66277f65",
+      "controlId": "create-jump",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "reset-default-1440.png",
+      "width": 1440,
+      "sha256": "fb1ef50cf4b26196182de03a54cba5b2dc0cea2cbea949c96f2f4617732469f2",
+      "controlId": "reset",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "reset-hover-1440.png",
+      "width": 1440,
+      "sha256": "5fd11992371f37032ac5713e3fb14d35f9fe6cdfa6319a1ed2c925c49275068a",
+      "controlId": "reset",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "reset-focus-1440.png",
+      "width": 1440,
+      "sha256": "b6466412bc4f27ed636e34d3644b52d5f74e45183fac5fe025109a36bc653de5",
+      "controlId": "reset",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "reset-pressed-1440.png",
+      "width": 1440,
+      "sha256": "ad88865da9a883fe8ca5b9d278f75a1575f92c8d11dfbb660edaa647442c27d9",
+      "controlId": "reset",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "clear-default-1440.png",
+      "width": 1440,
+      "sha256": "a7bfb12d2b297372444ae13efb342d15d4b803e4ee279ec59ae111c9d58ac8d9",
+      "controlId": "clear",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "clear-hover-1440.png",
+      "width": 1440,
+      "sha256": "6d75bff673eb1013fef50bc59ee7bce2c1a6d3fb9bb475e6dfdcd9bccdbccf96",
+      "controlId": "clear",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "clear-focus-1440.png",
+      "width": 1440,
+      "sha256": "4ef54c2911d9c2a616b217a3074bb5d71d8569342fde9b901d7fa909e74ec4f3",
+      "controlId": "clear",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "clear-pressed-1440.png",
+      "width": 1440,
+      "sha256": "c685007fa5bfc1b6155dc79d3ba7292e8269a87beea9213412fafbebe61959fe",
+      "controlId": "clear",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-closed-default-1440.png",
+      "width": 1440,
+      "sha256": "650aa502c0b9f8fd4d2fba94ae473c798eb205aa39bf26148ed83c33c606931e",
+      "controlId": "technical-closed",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-closed-hover-1440.png",
+      "width": 1440,
+      "sha256": "bd3248888503c1ca1fea00d8d54d8c0ae3e0f662361db0fc32702415c55cfead",
+      "controlId": "technical-closed",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-closed-focus-1440.png",
+      "width": 1440,
+      "sha256": "e516a6440764f3b8d17be462d29fedf492069088f5df4ad2b1056052577ac1f5",
+      "controlId": "technical-closed",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-closed-pressed-1440.png",
+      "width": 1440,
+      "sha256": "f15bd7a9972654b5576a160860d6e46b1597c1af82a9f99df8057eac7cb11c5a",
+      "controlId": "technical-closed",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-open-default-1440.png",
+      "width": 1440,
+      "sha256": "f435d2afe784e4d51c34d419d436abb0365e6e7ee7765f48ef6d416c811c2f65",
+      "controlId": "technical-open",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-open-hover-1440.png",
+      "width": 1440,
+      "sha256": "385f8a9a2e325c2eb493d25dd9e24f0931cdf8a9e040825c4e67a3ce9573e736",
+      "controlId": "technical-open",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-open-focus-1440.png",
+      "width": 1440,
+      "sha256": "cd99b7c4a2915fae7f7771ff150efa2c3cfab2b0e5fd66305184443913f4539a",
+      "controlId": "technical-open",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-open-pressed-1440.png",
+      "width": 1440,
+      "sha256": "d7d4ec127ea0ecffff8a240192260711fa8ba080b0970b53b2ed0b889feaea79",
+      "controlId": "technical-open",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "previous-default-1440.png",
+      "width": 1440,
+      "sha256": "b76d23a9a7ad9ac8b925338a7be18c2cab7cedf0e9cdaf4f1d8185c2e2e66657",
+      "controlId": "previous",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "previous-hover-1440.png",
+      "width": 1440,
+      "sha256": "3e7ddf63379dc28a4f6ebb84834c32c5a08ea61c0402c71ff18909aac48f685f",
+      "controlId": "previous",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "previous-focus-1440.png",
+      "width": 1440,
+      "sha256": "1d9cc115edd19859939d62ceaf3b463d754ebca4dddba76abe2feb4c9bca64e4",
+      "controlId": "previous",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "previous-pressed-1440.png",
+      "width": 1440,
+      "sha256": "a4af3292c08e1867f933dc2753a631be36bdb791893e954b2581b206b7f63ed0",
+      "controlId": "previous",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "previous-disabled-disabled-1440.png",
+      "width": 1440,
+      "sha256": "9e00a29129f7c5ab77e1458b3682a61ddba48e1cd2a96b64333fa1e96ce2b000",
+      "controlId": "previous-disabled",
+      "variant": "disabled",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "next-default-1440.png",
+      "width": 1440,
+      "sha256": "c5190622722a58242a74c57892e8bcae18541e2a0d399a38aae1780946603eb3",
+      "controlId": "next",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "next-hover-1440.png",
+      "width": 1440,
+      "sha256": "b13df1a47fe1b580f19b370aee8b09f0fd57702fd83533cc78f2e596284b7b87",
+      "controlId": "next",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "next-focus-1440.png",
+      "width": 1440,
+      "sha256": "24b0d9089cfcc4a38eb782cfce8cf04b2664cdd905c3c6091d80dbf01df46c5b",
+      "controlId": "next",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "next-pressed-1440.png",
+      "width": 1440,
+      "sha256": "0b216713f1ee5dccb222b47634119b9aa49b22dae56eef28bb3bf432477ea6c8",
+      "controlId": "next",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "next-disabled-disabled-1440.png",
+      "width": 1440,
+      "sha256": "42eb4458dd39c059bedc67d147b4f74dfc246278e26fe7d94914222d88e6ee08",
+      "controlId": "next-disabled",
+      "variant": "disabled",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-default-1440.png",
+      "width": 1440,
+      "sha256": "242b47413495f857e042757770c46acf5e45952e1fcf5fb2ad56d9eaa90257cb",
+      "controlId": "create",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-hover-1440.png",
+      "width": 1440,
+      "sha256": "1e6bc60f86abeff6e9bbce095fea22bc6b1449600d71d761d3fd6cffe3d3bf65",
+      "controlId": "create",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-focus-1440.png",
+      "width": 1440,
+      "sha256": "4d122fa3e21c3564eaf3e63b7885ec4ca236d1c0b89180227c2bf66a90a57fbb",
+      "controlId": "create",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-pressed-1440.png",
+      "width": 1440,
+      "sha256": "2460504ada155efec4cda3d39e29ee9ae754d17d35e26eeb5efc28cee73517aa",
+      "controlId": "create",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-busy-1440.png",
+      "width": 1440,
+      "sha256": "409c51ed7f00dd1916a324ddc258d4fb485c57b7860441b2df49adfd520a5361",
+      "controlId": "create",
+      "variant": "busy",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-unselected-default-1440.png",
+      "width": 1440,
+      "sha256": "6b6c0638dab79381553c9bd7ad16f16a95f31ca059114f2e6f744a50b3e7e3a5",
+      "controlId": "ttl-30-unselected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-unselected-hover-1440.png",
+      "width": 1440,
+      "sha256": "0afa7275b673dd308b3b2fbd7f009a4376dcb1dea6e771abe142335f1ab0fe71",
+      "controlId": "ttl-30-unselected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-unselected-focus-1440.png",
+      "width": 1440,
+      "sha256": "7efa50ccd23f3ccb5c1d96dccca88bce25fe017ed4f41df68b20be580708fdd9",
+      "controlId": "ttl-30-unselected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-unselected-pressed-1440.png",
+      "width": 1440,
+      "sha256": "74a4933747fcee7f2c96da7827a2a20bab847251074b92e1acec82c6d2b65186",
+      "controlId": "ttl-30-unselected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-selected-default-1440.png",
+      "width": 1440,
+      "sha256": "d298e48c75083da5aeb5263cca109efd5652971b5d457ed79cf284210c590f69",
+      "controlId": "ttl-30-selected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-selected-hover-1440.png",
+      "width": 1440,
+      "sha256": "d298e48c75083da5aeb5263cca109efd5652971b5d457ed79cf284210c590f69",
+      "controlId": "ttl-30-selected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-selected-focus-1440.png",
+      "width": 1440,
+      "sha256": "ffa42c61ebf87387bcdd8eb52f3b731161f946c05e9395f0d13571d7874f170d",
+      "controlId": "ttl-30-selected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-selected-pressed-1440.png",
+      "width": 1440,
+      "sha256": "02d813320f5d025259de9d81160ddf27ef087265127bf2850231e08b051f7d92",
+      "controlId": "ttl-30-selected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-unselected-default-1440.png",
+      "width": 1440,
+      "sha256": "1e68fc36a5d088d2bec018c10e6b330a2fda49a9f4a1cf3f7c933ce3af93397c",
+      "controlId": "ttl-90-unselected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-unselected-hover-1440.png",
+      "width": 1440,
+      "sha256": "37d6101e89d90d0f885110bf65c45ec70d00b57cfd2d8733eabe16db973dd177",
+      "controlId": "ttl-90-unselected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-unselected-focus-1440.png",
+      "width": 1440,
+      "sha256": "f2e56e00ff7afcabb77f1885cfdd46cd786958fb1a2d8bf23c8f9bdc2400de29",
+      "controlId": "ttl-90-unselected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-unselected-pressed-1440.png",
+      "width": 1440,
+      "sha256": "707ccc031ca72cd84cb9fede1358ddfd52d8795099797a44c40509d092df5604",
+      "controlId": "ttl-90-unselected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-selected-default-1440.png",
+      "width": 1440,
+      "sha256": "5665c90fe1a1a2f805b9bd2c82f863f81a1e684ea2b0cfcef94c9c7110ea09fd",
+      "controlId": "ttl-90-selected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-selected-hover-1440.png",
+      "width": 1440,
+      "sha256": "5665c90fe1a1a2f805b9bd2c82f863f81a1e684ea2b0cfcef94c9c7110ea09fd",
+      "controlId": "ttl-90-selected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-selected-focus-1440.png",
+      "width": 1440,
+      "sha256": "944fd2aee0368f1492a7ffb5e99094c38645f08c8f995245c701bdfa6286d47d",
+      "controlId": "ttl-90-selected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-selected-pressed-1440.png",
+      "width": 1440,
+      "sha256": "2e88069194d08422ede73ca91fbeb0f51491408a7e261ac3af61cf1724d49fac",
+      "controlId": "ttl-90-selected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-unselected-default-1440.png",
+      "width": 1440,
+      "sha256": "31fdc6a80f587f6915f7d81f6fd8385076094bbf48d19dfcea02ed576b88b003",
+      "controlId": "ttl-180-unselected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-unselected-hover-1440.png",
+      "width": 1440,
+      "sha256": "1e286f55d8a964dfb248792db793f79e1495a9f873a4bb640b766dd4e41d3a23",
+      "controlId": "ttl-180-unselected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-unselected-focus-1440.png",
+      "width": 1440,
+      "sha256": "e6337ca9a1ec3039cb25f20df1d325224a561e84f7b7e17a9a8faf74fdc055d5",
+      "controlId": "ttl-180-unselected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-unselected-pressed-1440.png",
+      "width": 1440,
+      "sha256": "001d6305fdfc67f382ccafceda7ebaddcf09da316260d55b67f0a290a099e457",
+      "controlId": "ttl-180-unselected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-selected-default-1440.png",
+      "width": 1440,
+      "sha256": "2099e728c62beae7b3a85ffea0bc568db5ff0cdf5460f03540b4d44ce0703243",
+      "controlId": "ttl-180-selected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-selected-hover-1440.png",
+      "width": 1440,
+      "sha256": "2099e728c62beae7b3a85ffea0bc568db5ff0cdf5460f03540b4d44ce0703243",
+      "controlId": "ttl-180-selected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-selected-focus-1440.png",
+      "width": 1440,
+      "sha256": "3833662ab5c17bbf83f9f80be614ab57c5a694f1b54a837686cb13974b788bed",
+      "controlId": "ttl-180-selected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-selected-pressed-1440.png",
+      "width": 1440,
+      "sha256": "7de2f1db2c0cce4c8a9715e2cecbdef3f99d5a58c756da4cd7c5d419b43d6d90",
+      "controlId": "ttl-180-selected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-unselected-default-1440.png",
+      "width": 1440,
+      "sha256": "80acdb0f0771f56fd286d201376a10031e7c6bbc0623c4cd2fab1ce94879ed55",
+      "controlId": "ttl-365-unselected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-unselected-hover-1440.png",
+      "width": 1440,
+      "sha256": "e5c40cc53e6dff2bad465a920c97f99b595b637fedcd4ff9423a4509ff516d82",
+      "controlId": "ttl-365-unselected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-unselected-focus-1440.png",
+      "width": 1440,
+      "sha256": "c893015145c23e2f489986a8e5d3db16f22c47e6fdefdf2c2ff47e5813e01b24",
+      "controlId": "ttl-365-unselected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-unselected-pressed-1440.png",
+      "width": 1440,
+      "sha256": "913550f7ac9ec175ba1696e45a5fb630d798c048edc3bed5c619b275a114f149",
+      "controlId": "ttl-365-unselected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-selected-default-1440.png",
+      "width": 1440,
+      "sha256": "308dc2340766ee31579287925a29e96b52019e83be35939bfd259fe23fdf07b5",
+      "controlId": "ttl-365-selected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-selected-hover-1440.png",
+      "width": 1440,
+      "sha256": "308dc2340766ee31579287925a29e96b52019e83be35939bfd259fe23fdf07b5",
+      "controlId": "ttl-365-selected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-selected-focus-1440.png",
+      "width": 1440,
+      "sha256": "07795508132fde2807c2037ac9a5b07fcb3d279531100a3d87cbd4916447cf8a",
+      "controlId": "ttl-365-selected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-selected-pressed-1440.png",
+      "width": 1440,
+      "sha256": "e8a8ec77ca8b15a2ee016977e24b01c42656abe5fe0acaf443a7cce017ba4261",
+      "controlId": "ttl-365-selected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-unchecked-default-1440.png",
+      "width": 1440,
+      "sha256": "97905093cc757d8fc69eaf5f257d3c5d4401b23825d33d14c247450ccfafafa1",
+      "controlId": "scope-0-unchecked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-unchecked-hover-1440.png",
+      "width": 1440,
+      "sha256": "d61004441c8122c0bf70bef44c15136a073515c3721c1a4b9edea13430bb6348",
+      "controlId": "scope-0-unchecked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-unchecked-focus-1440.png",
+      "width": 1440,
+      "sha256": "1b906e25d03f9cd5eaaf481fd17894c3345ba910c9a1486b6b706927177a1570",
+      "controlId": "scope-0-unchecked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-unchecked-pressed-1440.png",
+      "width": 1440,
+      "sha256": "758cdce5b23d96182d1eef5fc73e07e2c5659ed5d590e525a608b32207b16f0d",
+      "controlId": "scope-0-unchecked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-checked-default-1440.png",
+      "width": 1440,
+      "sha256": "6fb3011efd3331ccb7b47b3d3888ae96632416791ba9bdc46bb8a6f78c374911",
+      "controlId": "scope-0-checked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-checked-hover-1440.png",
+      "width": 1440,
+      "sha256": "23499ca35fac2d845c201dd712c9d132a5d3572528e4c4b58ac8ebe15277559b",
+      "controlId": "scope-0-checked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-checked-focus-1440.png",
+      "width": 1440,
+      "sha256": "eb54ed6211cd8ad0e3d1d3953905c7b13d28865ffb8c2474047866e05218e1a6",
+      "controlId": "scope-0-checked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-checked-pressed-1440.png",
+      "width": 1440,
+      "sha256": "2dabc4f12692ac0f70532aa3b2fb6e3040aa72a2a30fc20648680c35c9fcb0ab",
+      "controlId": "scope-0-checked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-unchecked-default-1440.png",
+      "width": 1440,
+      "sha256": "e9e9571848cace5018e33b3842fcc2a755f365b5eb63467469930216e18bb8a8",
+      "controlId": "scope-1-unchecked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-unchecked-hover-1440.png",
+      "width": 1440,
+      "sha256": "68a91119bfd60d81ab540e91a63c22523a7fbf649558254ae5e3d53b2222d857",
+      "controlId": "scope-1-unchecked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-unchecked-focus-1440.png",
+      "width": 1440,
+      "sha256": "1b9683d8ad018ee8e9d08cd5968b934f8b891813315be7dd934c1069ae9fc5a1",
+      "controlId": "scope-1-unchecked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-unchecked-pressed-1440.png",
+      "width": 1440,
+      "sha256": "fb5ae52dec6143886f15456e8ebdda93e6baa55b7e9a220acb16edcacc59d976",
+      "controlId": "scope-1-unchecked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-checked-default-1440.png",
+      "width": 1440,
+      "sha256": "2df7b23b4b9d9c4ac0718f8fce18ac105b86df29e0218c8eef55df870f37d6b3",
+      "controlId": "scope-1-checked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-checked-hover-1440.png",
+      "width": 1440,
+      "sha256": "5507886eab0a908241f88ccb6a6a5044f1667aecadb2e238ca0dd714583e6c98",
+      "controlId": "scope-1-checked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-checked-focus-1440.png",
+      "width": 1440,
+      "sha256": "809c93fa26b702bdbcb57a51088dda385228a5cae6e4153667ffbc706da32413",
+      "controlId": "scope-1-checked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-checked-pressed-1440.png",
+      "width": 1440,
+      "sha256": "ef298a81eca3fa9d6d9ab0e7c80c1a63941c780abdffbb9719d5335456cec414",
+      "controlId": "scope-1-checked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-unchecked-default-1440.png",
+      "width": 1440,
+      "sha256": "04480f7f96e02010df17dac99a3a23d7d29bcb5cb52f98f71d618fba3417249e",
+      "controlId": "scope-2-unchecked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-unchecked-hover-1440.png",
+      "width": 1440,
+      "sha256": "77190006c43c4cd823b786101b0c0e5ff4257a8deb8a78f8a5cfc9b79b28d12d",
+      "controlId": "scope-2-unchecked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-unchecked-focus-1440.png",
+      "width": 1440,
+      "sha256": "7d07d375fbbaea60438164d45b4528013d4f6bba55e062670c5646fa5faea8f6",
+      "controlId": "scope-2-unchecked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-unchecked-pressed-1440.png",
+      "width": 1440,
+      "sha256": "5861748ac775999217a4c573da781602c69fd1a513519f7999e1afa247e653db",
+      "controlId": "scope-2-unchecked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-checked-default-1440.png",
+      "width": 1440,
+      "sha256": "32641b1bb4745c986132a8053017b99d37ddb829effb85e96aea33fd0503d629",
+      "controlId": "scope-2-checked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-checked-hover-1440.png",
+      "width": 1440,
+      "sha256": "ad0e451d7324e66f476d93af3aaf2adc63035b3252d15d2ad56d328ed99ca4ce",
+      "controlId": "scope-2-checked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-checked-focus-1440.png",
+      "width": 1440,
+      "sha256": "1045f4903de134ea1adb5f7a06279b1d315c460d18c2762474686d4678fbb629",
+      "controlId": "scope-2-checked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-checked-pressed-1440.png",
+      "width": 1440,
+      "sha256": "a3b0c252ba6d68d492ece97270d06eec6c726aef1cf59eef376522980a798d77",
+      "controlId": "scope-2-checked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-unchecked-default-1440.png",
+      "width": 1440,
+      "sha256": "352854290910bcbebbaf096c79ee73597e810228b3006b9a3d8186de0752a37d",
+      "controlId": "scope-3-unchecked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-unchecked-hover-1440.png",
+      "width": 1440,
+      "sha256": "33b53b7aa10b8821fa809169405701047e4e823abd64388b1b3e939da29a0329",
+      "controlId": "scope-3-unchecked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-unchecked-focus-1440.png",
+      "width": 1440,
+      "sha256": "5a591fa198443b6d10ac3c1253b87308ee4d6a59572a9cd5be10d802fb942262",
+      "controlId": "scope-3-unchecked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-unchecked-pressed-1440.png",
+      "width": 1440,
+      "sha256": "62f9cc97d9efd6473944512ebf443478b56b4be7c87c20fac0b3b17a7379f824",
+      "controlId": "scope-3-unchecked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-checked-default-1440.png",
+      "width": 1440,
+      "sha256": "c1055d50d8dd365931a118f0fa00bc4abd726337cc0d89bb36973c297872414c",
+      "controlId": "scope-3-checked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-checked-hover-1440.png",
+      "width": 1440,
+      "sha256": "3095f79cd5083fa5d2fb1fbdcc5e6067ba499d9e84264da26c59d39966170ae1",
+      "controlId": "scope-3-checked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-checked-focus-1440.png",
+      "width": 1440,
+      "sha256": "9a92978ee82757b980e16f52bbbae4cc8a839fafec4088549d72088459ce9010",
+      "controlId": "scope-3-checked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-checked-pressed-1440.png",
+      "width": 1440,
+      "sha256": "bf36a5c92b3935ea983102a76ef7dadb78b7785e80b796a95aa444fa9c29c6ee",
+      "controlId": "scope-3-checked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-default-1440.png",
+      "width": 1440,
+      "sha256": "df9526f8459d2b5ba16286b1288e4e9310c94a2a47e0d3a7c4e08834ef0fee7c",
+      "controlId": "copy",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-hover-1440.png",
+      "width": 1440,
+      "sha256": "f51cc3aca2007ac24f1c96b0f33c540e301f1ae0e9700fce39e43f05ef70dc4d",
+      "controlId": "copy",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-focus-1440.png",
+      "width": 1440,
+      "sha256": "7760ee5eef68e2c1e545b8ab3c3ee3fbae9bd6e245553cd29a32501838aab5e9",
+      "controlId": "copy",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-pressed-1440.png",
+      "width": 1440,
+      "sha256": "ed970a5c82aad6a94d55f74782f1037b6b874531ff7801fc57e6dfd18d0f405c",
+      "controlId": "copy",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-copied-default-1440.png",
+      "width": 1440,
+      "sha256": "df9526f8459d2b5ba16286b1288e4e9310c94a2a47e0d3a7c4e08834ef0fee7c",
+      "controlId": "copy-copied",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-copied-hover-1440.png",
+      "width": 1440,
+      "sha256": "f51cc3aca2007ac24f1c96b0f33c540e301f1ae0e9700fce39e43f05ef70dc4d",
+      "controlId": "copy-copied",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-copied-focus-1440.png",
+      "width": 1440,
+      "sha256": "7760ee5eef68e2c1e545b8ab3c3ee3fbae9bd6e245553cd29a32501838aab5e9",
+      "controlId": "copy-copied",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-copied-pressed-1440.png",
+      "width": 1440,
+      "sha256": "ed970a5c82aad6a94d55f74782f1037b6b874531ff7801fc57e6dfd18d0f405c",
+      "controlId": "copy-copied",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-failed-default-1440.png",
+      "width": 1440,
+      "sha256": "df9526f8459d2b5ba16286b1288e4e9310c94a2a47e0d3a7c4e08834ef0fee7c",
+      "controlId": "copy-failed",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-failed-hover-1440.png",
+      "width": 1440,
+      "sha256": "f51cc3aca2007ac24f1c96b0f33c540e301f1ae0e9700fce39e43f05ef70dc4d",
+      "controlId": "copy-failed",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-failed-focus-1440.png",
+      "width": 1440,
+      "sha256": "7760ee5eef68e2c1e545b8ab3c3ee3fbae9bd6e245553cd29a32501838aab5e9",
+      "controlId": "copy-failed",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-failed-pressed-1440.png",
+      "width": 1440,
+      "sha256": "ed970a5c82aad6a94d55f74782f1037b6b874531ff7801fc57e6dfd18d0f405c",
+      "controlId": "copy-failed",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "dismiss-default-1440.png",
+      "width": 1440,
+      "sha256": "1c3f716c893b8b3ead1efbdd5b5555d26c3e2ae0a737f30d3ad629c9b237c95f",
+      "controlId": "dismiss",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "dismiss-hover-1440.png",
+      "width": 1440,
+      "sha256": "6cbc2001a2276a04d80615653ea64f9f2623c41e5f686ecf6421bf275ecfce37",
+      "controlId": "dismiss",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "dismiss-focus-1440.png",
+      "width": 1440,
+      "sha256": "8d3f5f7e4d4f2109a510f9337503b1bf391e43ad8b8926a41ea28ba2ed0d3b59",
+      "controlId": "dismiss",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "dismiss-pressed-1440.png",
+      "width": 1440,
+      "sha256": "99fce97cbfdfcfc43cb90f97f12b4abc9d6f75aecbaf307c7819d11fb1eb71dc",
+      "controlId": "dismiss",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-default-1440.png",
+      "width": 1440,
+      "sha256": "79c429e735551592770c001c7ea8fccd34fc2cd86aa67088ebe4cc0a6b544a4a",
+      "controlId": "rotate",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-hover-1440.png",
+      "width": 1440,
+      "sha256": "0a43ab1bf429eeb94b0043749759eaab2dc266e4d92763ea0f5e512696b51b88",
+      "controlId": "rotate",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-focus-1440.png",
+      "width": 1440,
+      "sha256": "895127205caa7ccf12ec3a93ff790f2f2924c1890c5725257535e171b0c4e96a",
+      "controlId": "rotate",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-pressed-1440.png",
+      "width": 1440,
+      "sha256": "fd2ceaaac6d05c8429f2e6daf8d83e71de96c45b0ce9cd7208b9d6045992ed4b",
+      "controlId": "rotate",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-busy-1440.png",
+      "width": 1440,
+      "sha256": "c735f11a2a31bef244b857182698e225b068ceab646c1e65f0376507477b7bb9",
+      "controlId": "rotate",
+      "variant": "busy",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-close-default-1440.png",
+      "width": 1440,
+      "sha256": "41d96bcb96722478213b280856444e34416a033a0e87fd263acee0d9387bab84",
+      "controlId": "rotate-close",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-close-hover-1440.png",
+      "width": 1440,
+      "sha256": "8d766f5b1f1de562fa66172272db100ac7b007ab68f9df1548c5f24c11603418",
+      "controlId": "rotate-close",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-close-focus-1440.png",
+      "width": 1440,
+      "sha256": "b900fdaa8e368b3fa983ed3445a9ba2aab89d9487f95d4b26d47158341dfbeaf",
+      "controlId": "rotate-close",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-close-pressed-1440.png",
+      "width": 1440,
+      "sha256": "9efe726f6f6df5f1028c5612bc8c9c8e7acb5149677c9c990de3f6f330def658",
+      "controlId": "rotate-close",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-cancel-default-1440.png",
+      "width": 1440,
+      "sha256": "be944af3bd097f2a597f809949a768a05b46217341c1bad940117b5de5be3714",
+      "controlId": "rotate-cancel",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-cancel-hover-1440.png",
+      "width": 1440,
+      "sha256": "c02eff4d4ca4a53594729c44ab2f3ab5a0ad4d8ac58c575d246c82170c5254f2",
+      "controlId": "rotate-cancel",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-cancel-focus-1440.png",
+      "width": 1440,
+      "sha256": "f6e5001c060b163462d9dff71a9e5f6be3b7362fce1c929254c319f775147b21",
+      "controlId": "rotate-cancel",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-cancel-pressed-1440.png",
+      "width": 1440,
+      "sha256": "c27baa6d735eacc5749db2e8892aca9f69b6782868365edf6b60e1f152d798f4",
+      "controlId": "rotate-cancel",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-submit-default-1440.png",
+      "width": 1440,
+      "sha256": "9df5ff276d16fe08d3933161ab4f4e821d5e47920da7d11dcca012cbf9a98336",
+      "controlId": "rotate-submit",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-submit-hover-1440.png",
+      "width": 1440,
+      "sha256": "dc89daa40485bcfecab2af510070ffded813b463696ee5f54f8a7dfd43d73f6f",
+      "controlId": "rotate-submit",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-submit-focus-1440.png",
+      "width": 1440,
+      "sha256": "f3e8addac66934648353cd86f4178b17804b39cc66b43bd3024f505791a36a4f",
+      "controlId": "rotate-submit",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-submit-pressed-1440.png",
+      "width": 1440,
+      "sha256": "fb781209dc556cd9f86e4a5879bd730a4ab5cbe4accff8ddcb692a2b90318504",
+      "controlId": "rotate-submit",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-submit-disabled-1440.png",
+      "width": 1440,
+      "sha256": "c896bc7300d91e203f78451db4da379b8a9eb9d801cf810628eac4607eb6fe7c",
+      "controlId": "rotate-submit",
+      "variant": "disabled",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-default-1440.png",
+      "width": 1440,
+      "sha256": "58529521e9c4a950dbf6e9c7f80f842a5164f2b06c10148994ff59e8597ffbce",
+      "controlId": "revoke",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-hover-1440.png",
+      "width": 1440,
+      "sha256": "0c8a92cb0bdedd2cc4d6206b9c13ef33720de476ed75f3f9bc3f4205a8bd201a",
+      "controlId": "revoke",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-focus-1440.png",
+      "width": 1440,
+      "sha256": "d83ae766ab42bfff4de60a956021c013b6f472ceb760ff1b435febc6e83b5403",
+      "controlId": "revoke",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-pressed-1440.png",
+      "width": 1440,
+      "sha256": "f399b38fe0a6090e9eb224991373b41684ef707ed07c59c6b219debd776b5dd3",
+      "controlId": "revoke",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-busy-1440.png",
+      "width": 1440,
+      "sha256": "806fe5ef52c5003da6194a770c97dcba6567bc3342ee54371bf23ba9b78ffe1d",
+      "controlId": "revoke",
+      "variant": "busy",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-close-default-1440.png",
+      "width": 1440,
+      "sha256": "41d96bcb96722478213b280856444e34416a033a0e87fd263acee0d9387bab84",
+      "controlId": "revoke-close",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-close-hover-1440.png",
+      "width": 1440,
+      "sha256": "8d766f5b1f1de562fa66172272db100ac7b007ab68f9df1548c5f24c11603418",
+      "controlId": "revoke-close",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-close-focus-1440.png",
+      "width": 1440,
+      "sha256": "b900fdaa8e368b3fa983ed3445a9ba2aab89d9487f95d4b26d47158341dfbeaf",
+      "controlId": "revoke-close",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-close-pressed-1440.png",
+      "width": 1440,
+      "sha256": "9efe726f6f6df5f1028c5612bc8c9c8e7acb5149677c9c990de3f6f330def658",
+      "controlId": "revoke-close",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-cancel-default-1440.png",
+      "width": 1440,
+      "sha256": "2f2c4b4f519524f67ff296457a89b303fd0555ab07ebfb3f16ea6307883f4eb5",
+      "controlId": "revoke-cancel",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-cancel-hover-1440.png",
+      "width": 1440,
+      "sha256": "5fcc5be37342887b5556a4f2e3b462f53dcfe30c0e9328515a9ee96189dc5b70",
+      "controlId": "revoke-cancel",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-cancel-focus-1440.png",
+      "width": 1440,
+      "sha256": "882802cf5c4c896668083fbbea00c747f3f0528df5cea76975d014bc0d74615c",
+      "controlId": "revoke-cancel",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-cancel-pressed-1440.png",
+      "width": 1440,
+      "sha256": "ffca22f03a29a77db23c7ebd3c83c63909956c4a9bb31505cbc2ecfb98c31d62",
+      "controlId": "revoke-cancel",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-submit-default-1440.png",
+      "width": 1440,
+      "sha256": "b1a94ebc74f269c3eecbb4e8958bbe6d2f14b6ce2a6b89239accaf02d2420ab5",
+      "controlId": "revoke-submit",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-submit-hover-1440.png",
+      "width": 1440,
+      "sha256": "03da84df80ccaf430f3de4267fceb5b3c0ecce793347ee3950d52c4526389ccb",
+      "controlId": "revoke-submit",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-submit-focus-1440.png",
+      "width": 1440,
+      "sha256": "904afe14f408a94dd2a4089dfccc3450b5c115abd2d8173a71d1f7576d6d46cf",
+      "controlId": "revoke-submit",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-submit-pressed-1440.png",
+      "width": 1440,
+      "sha256": "c848e0b52680a01b1c77ef579c3420dea18069781589f7da10cb602d7a77ec2b",
+      "controlId": "revoke-submit",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-submit-disabled-1440.png",
+      "width": 1440,
+      "sha256": "4d8f2c96ecb314067c0782df2ae343100c2b484299a0449cb564d68f3af539d9",
+      "controlId": "revoke-submit",
+      "variant": "disabled",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-reason-composition-1440.png",
+      "width": 1440,
+      "sha256": "5712e5991d79b8cb234a18bf46f4834635737218dfbcf97334cbe4cb6382703a",
+      "composition": "rotate",
+      "scope": "offline-reason-composition-pending-user-review"
+    },
+    {
+      "file": "revoke-reason-composition-1440.png",
+      "width": 1440,
+      "sha256": "3098f4b73787e95d8d023881341a763a492dd969903d8451d70f928e84451ac3",
+      "composition": "revoke",
+      "scope": "offline-reason-composition-pending-user-review"
+    },
+    {
+      "file": "copy-composition-1440.png",
+      "width": 1440,
+      "sha256": "226c77ba851bd2d3fcf4921d5c2744fa64a8334bd38b94d70f9491ec34ee2e9e",
+      "composition": "copy",
+      "scope": "offline-synthetic-secret-feedback-pending-user-review"
+    },
+    {
+      "file": "copy-copied-composition-1440.png",
+      "width": 1440,
+      "sha256": "596f72749ced86d9ca36bcd2a6f46015ebfae65e9bc81df85909cd4b2298f399",
+      "composition": "copy-copied",
+      "scope": "offline-synthetic-secret-feedback-pending-user-review"
+    },
+    {
+      "file": "copy-failed-composition-1440.png",
+      "width": 1440,
+      "sha256": "a5e7da423bb2537c8a47b0552dac181c0fb2fa7cbd0390a5add6b1e4918bfcc7",
+      "composition": "copy-failed",
+      "scope": "offline-synthetic-secret-feedback-pending-user-review"
+    },
+    {
+      "file": "catalog-nav-default-390.png",
+      "width": 390,
+      "sha256": "e23309f0a487bda3e6ef3bb51bcc21b6e4f2deeabf03de04519ac846ebdd3e47",
+      "controlId": "catalog-nav",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "catalog-nav-hover-390.png",
+      "width": 390,
+      "sha256": "f21922d5a4f76cdfe7d4ff133e97193b60a81e72c9d107ca09850c7e79ce02f9",
+      "controlId": "catalog-nav",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "catalog-nav-focus-390.png",
+      "width": 390,
+      "sha256": "54719ebbdf4552c1c84c83096a2e379471fa6ed0d2777d5d1f8d1543ca3602eb",
+      "controlId": "catalog-nav",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "catalog-nav-pressed-390.png",
+      "width": 390,
+      "sha256": "f21922d5a4f76cdfe7d4ff133e97193b60a81e72c9d107ca09850c7e79ce02f9",
+      "controlId": "catalog-nav",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-nav-default-390.png",
+      "width": 390,
+      "sha256": "d80dea645eee88dbd733f3f9d04488d3fc24c6adcdcf4717ba587c5fb993c8dd",
+      "controlId": "create-nav",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-nav-hover-390.png",
+      "width": 390,
+      "sha256": "a9bbbc825b2a04ac0526842d9efc74fbedbdfef791881db05be08833b852802b",
+      "controlId": "create-nav",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-nav-focus-390.png",
+      "width": 390,
+      "sha256": "8030602f65aa29a0210c2380f4f79ae6460da1f9b4ea5e3de31d60bc54ffd3c9",
+      "controlId": "create-nav",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-nav-pressed-390.png",
+      "width": 390,
+      "sha256": "a9bbbc825b2a04ac0526842d9efc74fbedbdfef791881db05be08833b852802b",
+      "controlId": "create-nav",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "refresh-default-390.png",
+      "width": 390,
+      "sha256": "68ca54b87675d6282c9e074fdbbf48eb039d745f2acdd0122457e0e29cbf6183",
+      "controlId": "refresh",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "refresh-hover-390.png",
+      "width": 390,
+      "sha256": "ef597f485321784976babd09cf9978bebe0dd7f452d702975168295ae9accdf6",
+      "controlId": "refresh",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "refresh-focus-390.png",
+      "width": 390,
+      "sha256": "bb1ec6d6ec5bbf3bf0ab1d58fed0b7f617d661c17affc09a3217d44946566dcc",
+      "controlId": "refresh",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "refresh-pressed-390.png",
+      "width": 390,
+      "sha256": "2feb130ee1c8734de389097998ac561f3fb65d69f9d213652d35024d502fb194",
+      "controlId": "refresh",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "refresh-busy-390.png",
+      "width": 390,
+      "sha256": "83ad5cb8de9962dd841ad69db90899ebee9a349cf6abfdfd022f3355c3b63c8d",
+      "controlId": "refresh",
+      "variant": "busy",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "retry-default-390.png",
+      "width": 390,
+      "sha256": "725e929d76e7d7fedfaea47a2b3102f0afe8680ad1d738a8401817e5af9f0b0b",
+      "controlId": "retry",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "retry-hover-390.png",
+      "width": 390,
+      "sha256": "7d1fb76d5eea48f26660b1bce15fcff979d82200b3fdb452c3b7d4833dc2672e",
+      "controlId": "retry",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "retry-focus-390.png",
+      "width": 390,
+      "sha256": "bd7fae539fc688f13d881644c19c6c7d39c060e1c2f51bd0e9e89973d4661e13",
+      "controlId": "retry",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "retry-pressed-390.png",
+      "width": 390,
+      "sha256": "11a94570d3c6ea6684d3b21e851d06cbd43ad645c1561bd721dd857a4bf83b12",
+      "controlId": "retry",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-jump-default-390.png",
+      "width": 390,
+      "sha256": "31eeed473fc542dbc5c27f97207bb1f66ce748afc1e05829b96474ae2578587a",
+      "controlId": "create-jump",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-jump-hover-390.png",
+      "width": 390,
+      "sha256": "76daba2d9f118df88e1c75fe21258720d158344cd441fba28e0048b4dcbb9bf9",
+      "controlId": "create-jump",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-jump-focus-390.png",
+      "width": 390,
+      "sha256": "7cf6a18b07e6d33540768eb00c5d952c2a94a14870c1a1f567d23b308527e7e0",
+      "controlId": "create-jump",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-jump-pressed-390.png",
+      "width": 390,
+      "sha256": "62281762eea2a0b6e02228322cf0a75679041b96c6e2882ed92daebf14c3941b",
+      "controlId": "create-jump",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "reset-default-390.png",
+      "width": 390,
+      "sha256": "5ffcc977781d91d9103d1dc48ff5b435859ee5bc770b76f3982d828e61447fd7",
+      "controlId": "reset",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "reset-hover-390.png",
+      "width": 390,
+      "sha256": "ec3a9f15e51bc2a11bca6894b00662772f37cb75be32f871f80d9744427c310d",
+      "controlId": "reset",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "reset-focus-390.png",
+      "width": 390,
+      "sha256": "65375a95f41f697538c29868ad6eba95ee971a79d51e963f3ddb9dbc7368ff40",
+      "controlId": "reset",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "reset-pressed-390.png",
+      "width": 390,
+      "sha256": "87b249a4afa5c20d4b8b38bebb14fc57b850717a7c70fc00078b62dfe6471c06",
+      "controlId": "reset",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "clear-default-390.png",
+      "width": 390,
+      "sha256": "a7bfb12d2b297372444ae13efb342d15d4b803e4ee279ec59ae111c9d58ac8d9",
+      "controlId": "clear",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "clear-hover-390.png",
+      "width": 390,
+      "sha256": "6d75bff673eb1013fef50bc59ee7bce2c1a6d3fb9bb475e6dfdcd9bccdbccf96",
+      "controlId": "clear",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "clear-focus-390.png",
+      "width": 390,
+      "sha256": "4ef54c2911d9c2a616b217a3074bb5d71d8569342fde9b901d7fa909e74ec4f3",
+      "controlId": "clear",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "clear-pressed-390.png",
+      "width": 390,
+      "sha256": "c685007fa5bfc1b6155dc79d3ba7292e8269a87beea9213412fafbebe61959fe",
+      "controlId": "clear",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-closed-default-390.png",
+      "width": 390,
+      "sha256": "2cc7a321d43e24ca58521ae85b556316791512df417a210f33a2217fce84bfaa",
+      "controlId": "technical-closed",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-closed-hover-390.png",
+      "width": 390,
+      "sha256": "3f0375183eb3ac70112a9fcf60239e98a388fd88c0972652eb0868701be296d8",
+      "controlId": "technical-closed",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-closed-focus-390.png",
+      "width": 390,
+      "sha256": "4caa77b873611d06b1df714f73d5e1926f3609f7c906e3783298e3a61a5b16ef",
+      "controlId": "technical-closed",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-closed-pressed-390.png",
+      "width": 390,
+      "sha256": "e951044c7f3efaec7156a96e2b80497e5f253106ed796bb6a97a3d6ae60cfe2c",
+      "controlId": "technical-closed",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-open-default-390.png",
+      "width": 390,
+      "sha256": "ba75ee020358f8ef45bccd7b0a99ce9f4edfdfd2ad8157f94f167bc6225ea82a",
+      "controlId": "technical-open",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-open-hover-390.png",
+      "width": 390,
+      "sha256": "634793496def1737180aae56f3fb4600f1c09a2549fcc9b254c7573fe739ec9b",
+      "controlId": "technical-open",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-open-focus-390.png",
+      "width": 390,
+      "sha256": "6f142010b4fa0b7633df798594ac84daa80a39a0bf0ea35376597878c9ee70db",
+      "controlId": "technical-open",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "technical-open-pressed-390.png",
+      "width": 390,
+      "sha256": "4a7b620bf8b427e1a458104d492bd1b5b752cc4f6e384dbf0164b0d60a72e5d3",
+      "controlId": "technical-open",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "previous-default-390.png",
+      "width": 390,
+      "sha256": "be8a18580d21fcc97f9278d244eb24f30a6331f8d3f535911d3d5d09486124d8",
+      "controlId": "previous",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "previous-hover-390.png",
+      "width": 390,
+      "sha256": "f82f225dd5d82e4baf1cd8e9999e69261342bf518d9e55956e89c4fc2a6dc267",
+      "controlId": "previous",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "previous-focus-390.png",
+      "width": 390,
+      "sha256": "fc69d6c64746f42e7c293e78197b89b90e9fed95914850236b8286a611288ce5",
+      "controlId": "previous",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "previous-pressed-390.png",
+      "width": 390,
+      "sha256": "4a2dda04b566600166d4ae9345d11a76710dc5baebec9f7146e57de684d1c2d5",
+      "controlId": "previous",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "previous-disabled-disabled-390.png",
+      "width": 390,
+      "sha256": "9e00a29129f7c5ab77e1458b3682a61ddba48e1cd2a96b64333fa1e96ce2b000",
+      "controlId": "previous-disabled",
+      "variant": "disabled",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "next-default-390.png",
+      "width": 390,
+      "sha256": "c5190622722a58242a74c57892e8bcae18541e2a0d399a38aae1780946603eb3",
+      "controlId": "next",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "next-hover-390.png",
+      "width": 390,
+      "sha256": "b13df1a47fe1b580f19b370aee8b09f0fd57702fd83533cc78f2e596284b7b87",
+      "controlId": "next",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "next-focus-390.png",
+      "width": 390,
+      "sha256": "24b0d9089cfcc4a38eb782cfce8cf04b2664cdd905c3c6091d80dbf01df46c5b",
+      "controlId": "next",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "next-pressed-390.png",
+      "width": 390,
+      "sha256": "acbc20b6bb52176d8e60290ae69e7b1f4ad45e51b4c7fd85f11f990711442410",
+      "controlId": "next",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "next-disabled-disabled-390.png",
+      "width": 390,
+      "sha256": "555c68496f048a62f2f757ad491f0954f464546c9b7386025a79a8726760b228",
+      "controlId": "next-disabled",
+      "variant": "disabled",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-default-390.png",
+      "width": 390,
+      "sha256": "ba552f5fd6a0d5e4a0d25f344dcd26fe465860d708b411bd38881ff06a417507",
+      "controlId": "create",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-hover-390.png",
+      "width": 390,
+      "sha256": "3509ea748de93dc7228785db1b9f78f64b931d95c74915a6b6e12db57bcc8f12",
+      "controlId": "create",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-focus-390.png",
+      "width": 390,
+      "sha256": "5ba9622b2b6fe9abd55b2f7522ddd4d1b7ff43002f1d8a31437108a05e0d5818",
+      "controlId": "create",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-pressed-390.png",
+      "width": 390,
+      "sha256": "a8e3debbffc9b2ad06f881420ddd9805503d957ad22a5717f1422137c3d13c50",
+      "controlId": "create",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "create-busy-390.png",
+      "width": 390,
+      "sha256": "5da36f56f9b86d7520ebc76792aafe8bbaf1b7586943404382c49d5534a4ecf0",
+      "controlId": "create",
+      "variant": "busy",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-unselected-default-390.png",
+      "width": 390,
+      "sha256": "a6637b9285d09e489a25e641ef7b1b44b3ef9350db27b2a503cf08ec0d24748d",
+      "controlId": "ttl-30-unselected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-unselected-hover-390.png",
+      "width": 390,
+      "sha256": "6e26ec6c486821598d9a42b00ac8f7fd2e7df36c6a92e4059c4b4f3602c40b45",
+      "controlId": "ttl-30-unselected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-unselected-focus-390.png",
+      "width": 390,
+      "sha256": "21c12db531316983cbc39223878c8ce6bfc00d768b34ee1940e969aa146fd2f6",
+      "controlId": "ttl-30-unselected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-unselected-pressed-390.png",
+      "width": 390,
+      "sha256": "3aec237afdbdf976840a4dd93d57e8eabcd675ece6aa05d3fdf9f19c6713594c",
+      "controlId": "ttl-30-unselected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-selected-default-390.png",
+      "width": 390,
+      "sha256": "259b625ea07f70bcf103fc5043073b576f05483baeb09ccb1ff5bfd3ed219345",
+      "controlId": "ttl-30-selected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-selected-hover-390.png",
+      "width": 390,
+      "sha256": "259b625ea07f70bcf103fc5043073b576f05483baeb09ccb1ff5bfd3ed219345",
+      "controlId": "ttl-30-selected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-selected-focus-390.png",
+      "width": 390,
+      "sha256": "5b1e5e5e1274d6a3a0a8ad6bbaf8bc799f9ad9c2d75fc2c27e12f13abe32db5f",
+      "controlId": "ttl-30-selected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-30-selected-pressed-390.png",
+      "width": 390,
+      "sha256": "439416e13452dd068b1b20df35499bb97f396518dc92d553fc267c3df3323167",
+      "controlId": "ttl-30-selected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-unselected-default-390.png",
+      "width": 390,
+      "sha256": "76036e47a3e3f5672d9616b7db385e02fa209bb46f87a52610b906283dabdb06",
+      "controlId": "ttl-90-unselected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-unselected-hover-390.png",
+      "width": 390,
+      "sha256": "7ba4824be2680d721d9f2f564e6dc16c7355ad70c4f090235e012c07ac0691f6",
+      "controlId": "ttl-90-unselected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-unselected-focus-390.png",
+      "width": 390,
+      "sha256": "6b6873647815a14a09c9bffb8f83889918b8145b18a785b0692984c7224029b4",
+      "controlId": "ttl-90-unselected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-unselected-pressed-390.png",
+      "width": 390,
+      "sha256": "b0ba322ecb795a16c1aad3ef0f095a3d3754501132d4f648a412452612f04548",
+      "controlId": "ttl-90-unselected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-selected-default-390.png",
+      "width": 390,
+      "sha256": "7ae0499162b2b5da86fac6f343c1a07f73b874c58428a7ad013ebf9291e28df3",
+      "controlId": "ttl-90-selected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-selected-hover-390.png",
+      "width": 390,
+      "sha256": "7ae0499162b2b5da86fac6f343c1a07f73b874c58428a7ad013ebf9291e28df3",
+      "controlId": "ttl-90-selected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-selected-focus-390.png",
+      "width": 390,
+      "sha256": "b6bc80e0a8df53ff3648b3c6ed6962542b65c13b9b7e54bc94cd81254fb5604a",
+      "controlId": "ttl-90-selected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-90-selected-pressed-390.png",
+      "width": 390,
+      "sha256": "60dc860aad5103da06398af55be5292d4c5ed20c393c2169880c22e8bcae5f44",
+      "controlId": "ttl-90-selected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-unselected-default-390.png",
+      "width": 390,
+      "sha256": "13155a70507e7c4f4f773bd8d861efdbe3b1c851bc5c81c16d4ca56463ded662",
+      "controlId": "ttl-180-unselected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-unselected-hover-390.png",
+      "width": 390,
+      "sha256": "62fc5768a5e403244f8ea98af3408372238a9d03e359538a0fa132f868def3cd",
+      "controlId": "ttl-180-unselected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-unselected-focus-390.png",
+      "width": 390,
+      "sha256": "46f3b69b509d51c2981af543aee9bbd096e8c258401c35669ff115d994a1c41c",
+      "controlId": "ttl-180-unselected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-unselected-pressed-390.png",
+      "width": 390,
+      "sha256": "55eec18b9183642ce703bccf6a8eb86abba3211b2637f9da14a30dbf60ea535c",
+      "controlId": "ttl-180-unselected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-selected-default-390.png",
+      "width": 390,
+      "sha256": "fdb79f65b13fb0e6a0e18e84b427405e2ca3513e6983ff7876e0f7c3a51c653f",
+      "controlId": "ttl-180-selected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-selected-hover-390.png",
+      "width": 390,
+      "sha256": "fdb79f65b13fb0e6a0e18e84b427405e2ca3513e6983ff7876e0f7c3a51c653f",
+      "controlId": "ttl-180-selected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-selected-focus-390.png",
+      "width": 390,
+      "sha256": "41134911bbba87f50a091cd4e854a69fb7e489c0d7b0e9d4232549ccd99047f0",
+      "controlId": "ttl-180-selected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-180-selected-pressed-390.png",
+      "width": 390,
+      "sha256": "53f451d4a8c622584a320351543ad0913d1f476b3a30e0445b9faae1dc1331af",
+      "controlId": "ttl-180-selected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-unselected-default-390.png",
+      "width": 390,
+      "sha256": "8865370899107309c43d768076dee9792b3a137279e1d0279491192aa03b8a5e",
+      "controlId": "ttl-365-unselected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-unselected-hover-390.png",
+      "width": 390,
+      "sha256": "ca952d1cc7f90f3ebe5e058a4190925c8f0c5598f8b84d543eca9a7537c02893",
+      "controlId": "ttl-365-unselected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-unselected-focus-390.png",
+      "width": 390,
+      "sha256": "0c1c91a5f29cda86a628f0ad8ffd47b17a3f9b61542d793ae5611795f7ebbd27",
+      "controlId": "ttl-365-unselected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-unselected-pressed-390.png",
+      "width": 390,
+      "sha256": "4db275f44cfd07ea2a7a0d24a335619a0dbb20513712e3df3d828cce42fc27b7",
+      "controlId": "ttl-365-unselected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-selected-default-390.png",
+      "width": 390,
+      "sha256": "7a569f502765ad3a650ec961bfa1aa2a206b81bbc2092685c905694ca7444a03",
+      "controlId": "ttl-365-selected",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-selected-hover-390.png",
+      "width": 390,
+      "sha256": "7a569f502765ad3a650ec961bfa1aa2a206b81bbc2092685c905694ca7444a03",
+      "controlId": "ttl-365-selected",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-selected-focus-390.png",
+      "width": 390,
+      "sha256": "51c2e1733c37bd3d0bbb7d0f4bf6d008af0fb38c27142d496823fa999c89b6a2",
+      "controlId": "ttl-365-selected",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "ttl-365-selected-pressed-390.png",
+      "width": 390,
+      "sha256": "e2cd2c2040b70bb502502e604d944dc5e111162c1128664270aaa7b79dee13f5",
+      "controlId": "ttl-365-selected",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-unchecked-default-390.png",
+      "width": 390,
+      "sha256": "93ee860cead17806494109a47fb913700446ee67bd974747e2fac7e41a42920c",
+      "controlId": "scope-0-unchecked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-unchecked-hover-390.png",
+      "width": 390,
+      "sha256": "d80cda007f9b988cd877604768bcf7587fc2754ddbf62fc066652c5d557181f8",
+      "controlId": "scope-0-unchecked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-unchecked-focus-390.png",
+      "width": 390,
+      "sha256": "26402adbe962d55fc01ce545ac389b29e0d414d8e1a2407b79fd9b61526a180c",
+      "controlId": "scope-0-unchecked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-unchecked-pressed-390.png",
+      "width": 390,
+      "sha256": "c674220d5e78cf098f4e14150feda4ee227509d2a897892c0cd075b639141e03",
+      "controlId": "scope-0-unchecked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-checked-default-390.png",
+      "width": 390,
+      "sha256": "1220941b1b736e766326f767c1f777c0ace88332a89753722e985803fb00507f",
+      "controlId": "scope-0-checked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-checked-hover-390.png",
+      "width": 390,
+      "sha256": "3c3c7afb0c53670c3a29b3629d8813cb5af95d555dd9cd4c24fae1b34011a144",
+      "controlId": "scope-0-checked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-checked-focus-390.png",
+      "width": 390,
+      "sha256": "8db402b3b4ff2dae3931ff6344a6526a2bf94ed624bf2bc70076b51cb51154ef",
+      "controlId": "scope-0-checked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-0-checked-pressed-390.png",
+      "width": 390,
+      "sha256": "7797cefd120fc163997edcdae3a7bd16a1189712961d9dab73f0c441236564f4",
+      "controlId": "scope-0-checked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-unchecked-default-390.png",
+      "width": 390,
+      "sha256": "ca4dec3119860fd23ea3632f08f0f8bb2025261697cbfad4c0984f126c7e40d7",
+      "controlId": "scope-1-unchecked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-unchecked-hover-390.png",
+      "width": 390,
+      "sha256": "dd3548329a24099f2d647fa823513b02ae2e3745f792755d4b79af71e27584b0",
+      "controlId": "scope-1-unchecked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-unchecked-focus-390.png",
+      "width": 390,
+      "sha256": "94ef7c7a1029d6798d9b183a2e3d32510adad6ca3a64cfa594cc9b551cb82f36",
+      "controlId": "scope-1-unchecked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-unchecked-pressed-390.png",
+      "width": 390,
+      "sha256": "e5a61343bb3bdddf9360db7209036eb6f01e1810da86dc89f19d5c6291ccda92",
+      "controlId": "scope-1-unchecked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-checked-default-390.png",
+      "width": 390,
+      "sha256": "15036c278a0dee271fe11d8d5257de193624748e3bcc67603d4b1c0c98ddf1bf",
+      "controlId": "scope-1-checked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-checked-hover-390.png",
+      "width": 390,
+      "sha256": "5a069829093023ec27803b6191ccf68f672e87b2663aff4399cc60037a60dd4c",
+      "controlId": "scope-1-checked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-checked-focus-390.png",
+      "width": 390,
+      "sha256": "3791ea5a1c179d14ffa95ba2d3d369726f2b41e702b2f9eb5b199952134028bd",
+      "controlId": "scope-1-checked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-1-checked-pressed-390.png",
+      "width": 390,
+      "sha256": "d0acd708fc38902a52eeec2bec53e7f7324324bd150013177c67705ba503df61",
+      "controlId": "scope-1-checked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-unchecked-default-390.png",
+      "width": 390,
+      "sha256": "921f59926621f1388a599026e474f2e0679656e66e272eee13dd0b8077e4b9f8",
+      "controlId": "scope-2-unchecked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-unchecked-hover-390.png",
+      "width": 390,
+      "sha256": "8875e415870636528959c4e93cc0b84df2541d1c7fbf8e998b59af81bb2e85a5",
+      "controlId": "scope-2-unchecked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-unchecked-focus-390.png",
+      "width": 390,
+      "sha256": "96d295b2a620f4abf99eb7aa9f87215e62a19b86b4e636cd42533535e0c916f9",
+      "controlId": "scope-2-unchecked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-unchecked-pressed-390.png",
+      "width": 390,
+      "sha256": "e697c250c9c903de1c6938324fc83af1b4691575b5593a011c103f51fa579e09",
+      "controlId": "scope-2-unchecked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-checked-default-390.png",
+      "width": 390,
+      "sha256": "00b3ddd378275b0857195bbeeec882352449d91596be80efcb6dca9052a509d1",
+      "controlId": "scope-2-checked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-checked-hover-390.png",
+      "width": 390,
+      "sha256": "9b31b59810570aaab6c270eedc05bc85465ea420929c0d155210a6fa37f9cc7f",
+      "controlId": "scope-2-checked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-checked-focus-390.png",
+      "width": 390,
+      "sha256": "986de3fcf38220fa7c7572ddfab74be26343edd6da99a5ec51d03cdb40c988df",
+      "controlId": "scope-2-checked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-2-checked-pressed-390.png",
+      "width": 390,
+      "sha256": "ea0e1d323ad909c40e1f1736744c1fe529ea67ace10a944d2f6cc4ce9ac5f524",
+      "controlId": "scope-2-checked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-unchecked-default-390.png",
+      "width": 390,
+      "sha256": "6131e8ccfe10d381a913442d8a987f164f030504af8148684cb02317c8116ab3",
+      "controlId": "scope-3-unchecked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-unchecked-hover-390.png",
+      "width": 390,
+      "sha256": "3188e0b0dfbeaefda7b21e739c2c0437b0cc258ad5d71f5f0f9e81c778a7f603",
+      "controlId": "scope-3-unchecked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-unchecked-focus-390.png",
+      "width": 390,
+      "sha256": "639df6a88e80ffccc451654dc1b5c0c9e76668a950dcd811c90ac1f25899809a",
+      "controlId": "scope-3-unchecked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-unchecked-pressed-390.png",
+      "width": 390,
+      "sha256": "f25922ad199ec6d01f4b108883d7cdf1341f44f98cd9bdda572ce2aed8b51263",
+      "controlId": "scope-3-unchecked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-checked-default-390.png",
+      "width": 390,
+      "sha256": "1fb234efea682bc1d56f529a670fb0b620c331bb335b5f1a3f51c568903e3bf4",
+      "controlId": "scope-3-checked",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-checked-hover-390.png",
+      "width": 390,
+      "sha256": "c57de164bb9ff7ee26c5d1830c07eec2a85155b22704037a34b2bf49e9d3a2f1",
+      "controlId": "scope-3-checked",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-checked-focus-390.png",
+      "width": 390,
+      "sha256": "f8ab2245c526327173f62aa0443d94e0220db3d452224d02b63142ef7e16dc94",
+      "controlId": "scope-3-checked",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "scope-3-checked-pressed-390.png",
+      "width": 390,
+      "sha256": "af07b70ad3daec19c02a20882a95f681d26b40efd60d877e24f02786df482bbb",
+      "controlId": "scope-3-checked",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-default-390.png",
+      "width": 390,
+      "sha256": "416c1f04ef0139b496745fdbf455b406642007c982678c99809d35e4d385a64d",
+      "controlId": "copy",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-hover-390.png",
+      "width": 390,
+      "sha256": "6679c43b758bb11c12a2e6a3a43ee6eb735a5d8748ba95f6a1a7dd623c714fdc",
+      "controlId": "copy",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-focus-390.png",
+      "width": 390,
+      "sha256": "476d752fc3bfad3c98d136e21077312369211b9dafa10581029e58152ca65099",
+      "controlId": "copy",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-pressed-390.png",
+      "width": 390,
+      "sha256": "d642eeeabcf7db7ea0f3c8405d2274c4a3889c8fcf2ed979fa5e05da5909653b",
+      "controlId": "copy",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-copied-default-390.png",
+      "width": 390,
+      "sha256": "df9526f8459d2b5ba16286b1288e4e9310c94a2a47e0d3a7c4e08834ef0fee7c",
+      "controlId": "copy-copied",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-copied-hover-390.png",
+      "width": 390,
+      "sha256": "f51cc3aca2007ac24f1c96b0f33c540e301f1ae0e9700fce39e43f05ef70dc4d",
+      "controlId": "copy-copied",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-copied-focus-390.png",
+      "width": 390,
+      "sha256": "7760ee5eef68e2c1e545b8ab3c3ee3fbae9bd6e245553cd29a32501838aab5e9",
+      "controlId": "copy-copied",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-copied-pressed-390.png",
+      "width": 390,
+      "sha256": "ed970a5c82aad6a94d55f74782f1037b6b874531ff7801fc57e6dfd18d0f405c",
+      "controlId": "copy-copied",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-failed-default-390.png",
+      "width": 390,
+      "sha256": "df9526f8459d2b5ba16286b1288e4e9310c94a2a47e0d3a7c4e08834ef0fee7c",
+      "controlId": "copy-failed",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-failed-hover-390.png",
+      "width": 390,
+      "sha256": "f51cc3aca2007ac24f1c96b0f33c540e301f1ae0e9700fce39e43f05ef70dc4d",
+      "controlId": "copy-failed",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-failed-focus-390.png",
+      "width": 390,
+      "sha256": "7760ee5eef68e2c1e545b8ab3c3ee3fbae9bd6e245553cd29a32501838aab5e9",
+      "controlId": "copy-failed",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "copy-failed-pressed-390.png",
+      "width": 390,
+      "sha256": "ed970a5c82aad6a94d55f74782f1037b6b874531ff7801fc57e6dfd18d0f405c",
+      "controlId": "copy-failed",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "dismiss-default-390.png",
+      "width": 390,
+      "sha256": "26aec03595ca6cb07990fa592696b83557cf041cc9dcb690ff4974b509fddb1c",
+      "controlId": "dismiss",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "dismiss-hover-390.png",
+      "width": 390,
+      "sha256": "8206cfc2342b325b4ab4491369259f4ddf1a9b1b9a1bb54d027598f9fdc457bb",
+      "controlId": "dismiss",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "dismiss-focus-390.png",
+      "width": 390,
+      "sha256": "7451077ba30b432e6a36ae64f5678bec7bbb9dd0418d656598c434b80042dd84",
+      "controlId": "dismiss",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "dismiss-pressed-390.png",
+      "width": 390,
+      "sha256": "095f9ce5deffacc5958db01c5318ebf4c5b2c122647bb18db5ec80c53f73f04d",
+      "controlId": "dismiss",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-default-390.png",
+      "width": 390,
+      "sha256": "79c429e735551592770c001c7ea8fccd34fc2cd86aa67088ebe4cc0a6b544a4a",
+      "controlId": "rotate",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-hover-390.png",
+      "width": 390,
+      "sha256": "b3101e0bc656fba9c4ce8ca92e18c6b42e7c8398e3ac34ba6a1a6b1bccc753b9",
+      "controlId": "rotate",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-focus-390.png",
+      "width": 390,
+      "sha256": "63a7238b94473ccbc177e558e21d82ef85f500594f02f5a21e572c5130dc1b7e",
+      "controlId": "rotate",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-pressed-390.png",
+      "width": 390,
+      "sha256": "e7333146bb8c6cb6905698a854984723ca6fa7e22a6d250a1ea9988878d516c2",
+      "controlId": "rotate",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-busy-390.png",
+      "width": 390,
+      "sha256": "4f82fe3367faece6d1c9b5a708bd40b3ebddf824cc081d8731d9b55518ecd416",
+      "controlId": "rotate",
+      "variant": "busy",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-close-default-390.png",
+      "width": 390,
+      "sha256": "7b16a265f1538e969194f94d1d96f09a19fca1decf748d4cedd9ee14718510e6",
+      "controlId": "rotate-close",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-close-hover-390.png",
+      "width": 390,
+      "sha256": "cc669cff6182e15fe9ccafdb467681ad97d02fb23ff6b87fc40d363a9c931967",
+      "controlId": "rotate-close",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-close-focus-390.png",
+      "width": 390,
+      "sha256": "709e4b9f7e63f90512e341fae68eb7ad62866bf3e1ec8bf84c354c3e71d53f9e",
+      "controlId": "rotate-close",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-close-pressed-390.png",
+      "width": 390,
+      "sha256": "ee97c6d1751b6bc6a7c7ec34c724e68d7e9e19f2b92520384b8aca1f9a7b0370",
+      "controlId": "rotate-close",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-cancel-default-390.png",
+      "width": 390,
+      "sha256": "9a4d199c1fec1d63fe161659fc1e840f7dccdd965832eecf9a6bcd2b26cfb38d",
+      "controlId": "rotate-cancel",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-cancel-hover-390.png",
+      "width": 390,
+      "sha256": "2497642019a8e2540217bc9ebed80e0e7ed9ab2f7eea7a3b6bf1377070143ea3",
+      "controlId": "rotate-cancel",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-cancel-focus-390.png",
+      "width": 390,
+      "sha256": "0c42c4ad3c14259c07f8b32825582dfb5378064872c441664c9b37d3b623a005",
+      "controlId": "rotate-cancel",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-cancel-pressed-390.png",
+      "width": 390,
+      "sha256": "99d1fb0458d8ba204902a37c4bae2634f6f457f83a00061c45b1e1eff47c331b",
+      "controlId": "rotate-cancel",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-submit-default-390.png",
+      "width": 390,
+      "sha256": "33c9b825d2073241e4e0e10de41ebfc40a113232f79d7ab39c72253a9d293888",
+      "controlId": "rotate-submit",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-submit-hover-390.png",
+      "width": 390,
+      "sha256": "ccc6816d3ed8a73f1065173382dbe97c1988b6bec830525316cf182898511de6",
+      "controlId": "rotate-submit",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-submit-focus-390.png",
+      "width": 390,
+      "sha256": "0c42c89e09e549a7c1c4cb46febbe359c17f9dc370c8e38485b2fd73d2fc1ea2",
+      "controlId": "rotate-submit",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-submit-pressed-390.png",
+      "width": 390,
+      "sha256": "9a88361a7b4f2a5e37a6f94f1e4a9cd373ad95b47c23fc21c1b9b1b00984d033",
+      "controlId": "rotate-submit",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-submit-disabled-390.png",
+      "width": 390,
+      "sha256": "e9479f65048784c9014c2a6eeb9ce736b0ebe22f19926e632dcdba1acf72a902",
+      "controlId": "rotate-submit",
+      "variant": "disabled",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-default-390.png",
+      "width": 390,
+      "sha256": "58529521e9c4a950dbf6e9c7f80f842a5164f2b06c10148994ff59e8597ffbce",
+      "controlId": "revoke",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-hover-390.png",
+      "width": 390,
+      "sha256": "0c8a92cb0bdedd2cc4d6206b9c13ef33720de476ed75f3f9bc3f4205a8bd201a",
+      "controlId": "revoke",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-focus-390.png",
+      "width": 390,
+      "sha256": "d83ae766ab42bfff4de60a956021c013b6f472ceb760ff1b435febc6e83b5403",
+      "controlId": "revoke",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-pressed-390.png",
+      "width": 390,
+      "sha256": "f4d1b7783d2fab7d379f9f2cdfd6458153dd94c6b6db16d79fe30d7af8c9cd98",
+      "controlId": "revoke",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-busy-390.png",
+      "width": 390,
+      "sha256": "e3a37ba81fac8f4fe8e5d3ffd8d55231a8d9d5a85b1d47632a4522597056a2e0",
+      "controlId": "revoke",
+      "variant": "busy",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-close-default-390.png",
+      "width": 390,
+      "sha256": "7b16a265f1538e969194f94d1d96f09a19fca1decf748d4cedd9ee14718510e6",
+      "controlId": "revoke-close",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-close-hover-390.png",
+      "width": 390,
+      "sha256": "cc669cff6182e15fe9ccafdb467681ad97d02fb23ff6b87fc40d363a9c931967",
+      "controlId": "revoke-close",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-close-focus-390.png",
+      "width": 390,
+      "sha256": "709e4b9f7e63f90512e341fae68eb7ad62866bf3e1ec8bf84c354c3e71d53f9e",
+      "controlId": "revoke-close",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-close-pressed-390.png",
+      "width": 390,
+      "sha256": "ee97c6d1751b6bc6a7c7ec34c724e68d7e9e19f2b92520384b8aca1f9a7b0370",
+      "controlId": "revoke-close",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-cancel-default-390.png",
+      "width": 390,
+      "sha256": "9a4d199c1fec1d63fe161659fc1e840f7dccdd965832eecf9a6bcd2b26cfb38d",
+      "controlId": "revoke-cancel",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-cancel-hover-390.png",
+      "width": 390,
+      "sha256": "2497642019a8e2540217bc9ebed80e0e7ed9ab2f7eea7a3b6bf1377070143ea3",
+      "controlId": "revoke-cancel",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-cancel-focus-390.png",
+      "width": 390,
+      "sha256": "0c42c4ad3c14259c07f8b32825582dfb5378064872c441664c9b37d3b623a005",
+      "controlId": "revoke-cancel",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-cancel-pressed-390.png",
+      "width": 390,
+      "sha256": "99d1fb0458d8ba204902a37c4bae2634f6f457f83a00061c45b1e1eff47c331b",
+      "controlId": "revoke-cancel",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-submit-default-390.png",
+      "width": 390,
+      "sha256": "73afff638b8341f0e7e58c876628b930c283ca7b03de4e53d9d24071ff57900c",
+      "controlId": "revoke-submit",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-submit-hover-390.png",
+      "width": 390,
+      "sha256": "d4f9703963c416130c153fc6e90afb9f29cdf69994305606b8e7f57c9804a681",
+      "controlId": "revoke-submit",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-submit-focus-390.png",
+      "width": 390,
+      "sha256": "537bc00fd2558090540354c9955573a9503043e34695b6457b6f3478aebb0b9d",
+      "controlId": "revoke-submit",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-submit-pressed-390.png",
+      "width": 390,
+      "sha256": "5bb6198b29e7c4512bbee8eb52090a9194eeb7b0abb2e0dc8e78ca0b3e7875c3",
+      "controlId": "revoke-submit",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "revoke-submit-disabled-390.png",
+      "width": 390,
+      "sha256": "e9479f65048784c9014c2a6eeb9ce736b0ebe22f19926e632dcdba1acf72a902",
+      "controlId": "revoke-submit",
+      "variant": "disabled",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "filters-closed-default-390.png",
+      "width": 390,
+      "sha256": "659db2dcb65e5ef1b22bd86f0351690e1f8305a8e6f7c0ed85482f2599e9261c",
+      "controlId": "filters-closed",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "filters-closed-hover-390.png",
+      "width": 390,
+      "sha256": "0ba5e3c68737583c52b87cb599035128e044ca28986aa9fa147c0a3ca953fdd8",
+      "controlId": "filters-closed",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "filters-closed-focus-390.png",
+      "width": 390,
+      "sha256": "b3fe4db8715964e835eb52cb79c2c12cfdbe05692c8d4dbc44de514a05c9c7e6",
+      "controlId": "filters-closed",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "filters-closed-pressed-390.png",
+      "width": 390,
+      "sha256": "9af084e004c0043fea06c483d4720d5cc92b521e0ba52d0cf068b36ad22348da",
+      "controlId": "filters-closed",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "filters-open-default-390.png",
+      "width": 390,
+      "sha256": "bebd7c0632db7a8eb46b3f696e0a5bf02336f60b9f5f432c02d5b8bde6f68ef2",
+      "controlId": "filters-open",
+      "variant": "default",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "filters-open-hover-390.png",
+      "width": 390,
+      "sha256": "38d89f3b293c8547a982d25e00a5f8d119c5861572feb32de1549add8facb863",
+      "controlId": "filters-open",
+      "variant": "hover",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "filters-open-focus-390.png",
+      "width": 390,
+      "sha256": "1a3ccc8d6b6546cbc7cfe763342ba693f5743a496407197f69fe1bb9c79abc9e",
+      "controlId": "filters-open",
+      "variant": "focus",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "filters-open-pressed-390.png",
+      "width": 390,
+      "sha256": "a550fa79b23230572a582798f659e6f9c538f4e9bf0e2fa49c17675641530b90",
+      "controlId": "filters-open",
+      "variant": "pressed",
+      "scope": "offline-native-control-proposal-not-Vue-or-approval"
+    },
+    {
+      "file": "rotate-reason-composition-390.png",
+      "width": 390,
+      "sha256": "b48c563f82eb7b0d2d0e785baa3023c5816379a1e9aced24b50ff17908b10d7b",
+      "composition": "rotate",
+      "scope": "offline-reason-composition-pending-user-review"
+    },
+    {
+      "file": "revoke-reason-composition-390.png",
+      "width": 390,
+      "sha256": "67637ad81684c72d948af99896de2ec61e6b58bcb6935890065acfdef11bdbd3",
+      "composition": "revoke",
+      "scope": "offline-reason-composition-pending-user-review"
+    },
+    {
+      "file": "copy-composition-390.png",
+      "width": 390,
+      "sha256": "fc3cfab250a441e7a21bc8375f16a6087c2c9a702919b65688898c2dacd9e8ac",
+      "composition": "copy",
+      "scope": "offline-synthetic-secret-feedback-pending-user-review"
+    },
+    {
+      "file": "copy-copied-composition-390.png",
+      "width": 390,
+      "sha256": "e9495b9343f6b0f3e776a21bec51ca42bb55c3cad173fa8c30463001e06fd8e9",
+      "composition": "copy-copied",
+      "scope": "offline-synthetic-secret-feedback-pending-user-review"
+    },
+    {
+      "file": "copy-failed-composition-390.png",
+      "width": 390,
+      "sha256": "80df60c7ecf099f9a1a8c489168e531f357fa707d276da2047231b368a57ef2d",
+      "composition": "copy-failed",
+      "scope": "offline-synthetic-secret-feedback-pending-user-review"
+    }
+  ],
+  "externalRequests": 0,
+  "osClipboardCalls": 0
+}
