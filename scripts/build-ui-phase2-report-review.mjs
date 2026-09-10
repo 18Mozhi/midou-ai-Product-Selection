@@ -49,7 +49,7 @@ const definitions = [
     ["97ed4772fb320d6c.1"],
     ["RP-LOAD；错误重读"],
     "error/expired/forbidden/rate_limited/blocked",
-    "load()并发报表与导出GET；序号只保护外层结果，内部诊断和详情回执归属尚未完备",
+    "load()并发报表与导出GET共享有效期；首错即失效，晚到数据/诊断不覆盖新批次；只对未更换的详情视图继续同步",
     ["error", "expired", "forbidden", "rate_limited", "blocked"],
   ],
   [
@@ -114,7 +114,7 @@ const definitions = [
     ["9455978516828e94.1"],
     ["RP-DETAIL；export深链"],
     "导出列表每条记录；无busy禁用",
-    "openDetail写export query，监听syncDetailFromRoute GET；错误清选中/参数，404特定提示；晚到/跨页保护仍待",
+    "openDetail写export query；syncDetailFromRoute按代次/完整路径/父批次保护数据与诊断，关闭/清参数/销毁后失效；当前错误清选中/参数，404特定提示；完整缓存范围与写后归属仍待",
     ["detail_succeeded", "detail_queued", "detail_not_found", "detail_forbidden"],
   ],
   [
@@ -124,7 +124,7 @@ const definitions = [
     ["ec6fb3ba685c67a6.1"],
     ["RP-CLOSE；关闭按钮"],
     "详情打开时；按钮与Escape归同一关闭动作",
-    "closeDetail清selectedExport及export query，保留report和其他query；不取消已发送事务",
+    "closeDetail立即失效详情代次，清selectedExport及export query，保留report和其他query；不取消已发送事务",
     ["detail_succeeded", "detail_expired"],
   ],
   [
@@ -257,6 +257,16 @@ export function buildReportReview(source, evidence) {
     status: "source-reviewed-not-runtime-accepted",
     contract: `${base}/automation-report-contract-review.md`,
     sourceHashes: { [sourceFile]: sha },
+    readOwnershipEvidence: {
+      scope: "source-and-mounted-Vue-isolated-reads-not-service-or-full-page-acceptance",
+      document: `${base}/P28-READ-OWNERSHIP-REVIEW.md`,
+      tests: [
+        "tests/unit/ui-phase2-report-read-ownership.test.mjs",
+        "scripts/verify-ui-phase2-report-read-ownership.mjs",
+      ],
+      remaining:
+        "写后回执、下载、refresh finally、尚存活跨范围缓存及所有并行操作的共享诊断仲裁未完成。",
+    },
     dialogs: {
       kind: "local-callers-and-listed-shared-only",
       remaining: "1原生dialog；无form或自定义日期输入；17关联状态不是17个窗口。",
@@ -301,7 +311,7 @@ export function buildReportReview(source, evidence) {
       ],
     },
     compositionGaps: [
-      "当前全新图与真实Vue未整合；业务接口、SQL口径及既有回执缺口未改。",
+      "当前全新图与真实Vue未整合；业务接口/SQL未改，读取批次与详情代次已局部修复，写入/下载/缓存范围归属仍待。",
       "208图覆盖10代表控件和14明确变体，不是全部导出记录/状态/主题/密度/角色/缩放组合。",
     ],
     approval: "pending-user-review",

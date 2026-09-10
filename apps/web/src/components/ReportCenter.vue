@@ -32,6 +32,22 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   downloadingId = ref("");
 let timer: number | undefined;
 let loadSequence = 0;
+let detailSequence = 0;
+let disposed = false;
+watch(
+  [() => route.path, () => route.query.report],
+  () => {
+    loadSequence++;
+  },
+  { flush: "sync" },
+);
+watch(
+  () => route.fullPath,
+  () => {
+    detailSequence++;
+  },
+  { flush: "sync" },
+);
 const { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } = useModalDialog(
   () => Boolean(selectedExport.value),
   closeDetail,
@@ -40,40 +56,61 @@ async function api<T>(
   path: string,
   options: { method?: string; body?: unknown } = {},
   affectPageState = true,
+  owner?: { current: () => boolean; failed?: () => void },
 ) {
   try {
     const response = await request<T>(path, options);
-    requestId.value = response.request_id;
+    if (!owner || owner.current()) requestId.value = response.request_id;
     return response.data;
   } catch (error) {
-    const failure = error instanceof ApiClientError ? error : null;
-    requestId.value = failure?.requestId ?? "";
-    if (affectPageState)
-      state.value = failure?.kind === "conflict" ? "blocked" : (failure?.kind ?? "error");
-    notice.value = failure?.actionHint ?? "稍后重试。";
+    if (!owner || owner.current()) {
+      const failure = error instanceof ApiClientError ? error : null;
+      requestId.value = failure?.requestId ?? "";
+      if (affectPageState)
+        state.value = failure?.kind === "conflict" ? "blocked" : (failure?.kind ?? "error");
+      notice.value = failure?.actionHint ?? "稍后重试。";
+      // Invalidate the whole parallel batch before a sibling settles its metadata.
+      owner?.failed?.();
+    }
     throw error;
   }
 }
 async function load(background = false) {
+  if (disposed) return;
   const sequence = ++loadSequence,
-    selectedType = type.value;
+    selectedType = type.value,
+    ownerPath = route.path,
+    detailAtStart = detailSequence,
+    detailPath = route.fullPath;
+  let active = true;
+  const owner = {
+    current: () =>
+      !disposed &&
+      active &&
+      sequence === loadSequence &&
+      selectedType === type.value &&
+      ownerPath === route.path,
+    failed: () => {
+      active = false;
+    },
+  };
   if (!background) state.value = "loading";
   try {
     const [nextReport, nextExports] = await Promise.all([
-      api<any>(`/reports/${selectedType}`, {}, false),
-      api<any[]>("/report-exports", {}, false),
+      api<any>(`/reports/${selectedType}`, {}, !background, owner),
+      api<any[]>("/report-exports", {}, !background, owner),
     ]);
-    if (sequence !== loadSequence || selectedType !== type.value) return;
+    if (!owner.current()) return;
     report.value = nextReport;
     exports.value = nextExports;
-    await syncDetailFromRoute();
     state.value = report.value.summary.total || report.value.summary.members ? "ready" : "empty";
+    // Do not replay a view closed or replaced while this list was pending.
+    if (detailAtStart === detailSequence && detailPath === route.fullPath)
+      await syncDetailFromRoute(owner.current);
   } catch (error) {
-    if (sequence !== loadSequence) return;
-    const failure = error instanceof ApiClientError ? error : null;
-    if (!background)
-      state.value = failure?.kind === "conflict" ? "blocked" : (failure?.kind ?? "error");
     rethrowUnexpectedError(error);
+  } finally {
+    active = false;
   }
 }
 async function choose(v: ReportType) {
@@ -153,6 +190,7 @@ async function openDetail(item: any) {
   await setDetailQuery(item.id);
 }
 function closeDetail() {
+  detailSequence++;
   selectedExport.value = null;
   if (route.query.export) void setDetailQuery();
 }
@@ -162,16 +200,29 @@ async function setDetailQuery(exportId?: string, replace = false) {
   else delete query.export;
   await (replace ? router.replace({ query }) : router.push({ query }));
 }
-async function syncDetailFromRoute() {
+async function syncDetailFromRoute(parentCurrent = () => true) {
+  if (disposed || !parentCurrent()) return;
+  const sequence = ++detailSequence,
+    ownerPath = route.fullPath;
   const exportId = typeof route.query.export === "string" ? route.query.export : "";
   if (!exportId) {
     selectedExport.value = null;
     return;
   }
+  const owner = {
+    current: () =>
+      !disposed &&
+      parentCurrent() &&
+      sequence === detailSequence &&
+      ownerPath === route.fullPath &&
+      exportId === route.query.export,
+  };
   try {
-    selectedExport.value = await api<any>(`/report-exports/${exportId}`, {}, false);
+    const detail = await api<any>(`/report-exports/${exportId}`, {}, false, owner);
+    if (owner.current()) selectedExport.value = detail;
   } catch (error) {
     if (error instanceof ApiClientError) {
+      if (!owner.current()) return;
       notice.value =
         error.status === 404 ? "链接中的导出记录不存在或不在当前工作区。" : error.actionHint;
       selectedExport.value = null;
@@ -268,7 +319,12 @@ onMounted(() => {
       void load(true);
   }, 5000);
 });
-onUnmounted(() => clearInterval(timer));
+onUnmounted(() => {
+  disposed = true;
+  loadSequence++;
+  detailSequence++;
+  clearInterval(timer);
+});
 watch(
   () => [route.query.report, route.query.export],
   ([value, exportId], [previousValue, previousExportId]) => {
