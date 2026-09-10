@@ -309,7 +309,13 @@ if (capture) {
         ...input,
         attrs: Object.fromEntries(
           Object.entries(input.attrs).filter(
-            ([key]) => !["aria-label", "aria-describedby"].includes(key),
+            ([key, value]) =>
+              !["aria-label", "aria-describedby"].includes(key) &&
+              !(
+                input.binding === "templateQuery" &&
+                key === "ref" &&
+                value === "templateSearchInput"
+              ),
           ),
         ),
       }));

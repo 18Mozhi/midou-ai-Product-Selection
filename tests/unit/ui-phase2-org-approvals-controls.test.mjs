@@ -7,12 +7,28 @@ import { scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";
 const root = "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c";
 const e = JSON.parse(readFileSync(`${root}/evidence.json`, "utf8"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
-test("P34 control proposals map all 13 actual child positions once, excluding new convenience entries", () => {
+test("P34 original 13 positions plus implemented mobile clear binding cover all 14 child positions", () => {
   const candidates = scanSource(readFileSync(e.sourceFile, "utf8"), e.sourceFile).candidates;
-  assert.equal(candidates.length, 13);
+  assert.equal(candidates.length, 14);
   const signatures = candidates.map((c) => c.candidateId.split("#")[1]).sort();
   assert.deepEqual(e.sourceSignatures, signatures);
-  assert.deepEqual(e.controls.flatMap((c) => c.signatures).sort(), signatures);
+  assert.deepEqual(
+    [
+      ...e.controls.flatMap((c) => c.signatures),
+      ...e.implementedBindings.map((b) => b.sourceSignature),
+    ].sort(),
+    signatures,
+  );
+  assert.equal(e.implementedBindings.length, 1);
+  const binding = e.implementedBindings[0];
+  assert.equal(binding.proposalControlId, "template-clear-empty");
+  assert.deepEqual(binding.widths, [390]);
+  const implemented = candidates.find((c) => c.candidateId.endsWith("#" + binding.sourceSignature));
+  assert.equal(implemented.attributes.class, "org-template-empty-clear");
+  assert.equal(
+    implemented.attributes["@click"].replace(/\s/g, ""),
+    "resetTemplates();templateSearchInput?.focus();",
+  );
   const bySignature = new Map(candidates.map((c) => [c.candidateId.split("#")[1], c]));
   for (const c of e.controls)
     for (const signature of c.signatures) {

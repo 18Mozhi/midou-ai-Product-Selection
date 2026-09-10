@@ -13,6 +13,8 @@ const props = defineProps<{
 
 type Section = "requests" | "templates";
 
+const templateSearchInput = ref<HTMLInputElement>();
+
 const route = useRoute(),
   router = useRouter(),
   section = ref<Section>(
@@ -538,6 +540,7 @@ function resetTemplates() {
           <span>搜索模板</span>
           <input
             v-model="templateQuery"
+            ref="templateSearchInput"
             type="search"
             placeholder="模板名称或工作区"
             aria-label="搜索模板"
@@ -728,7 +731,17 @@ function resetTemplates() {
           </details>
         </article>
       </div>
-      <div v-else class="org-approval-empty" role="status">
+      <div
+        v-else
+        class="org-approval-empty"
+        :class="{ 'org-template-empty-c': templates.length > 0 }"
+        role="status"
+      >
+        <p v-if="templates.length" class="org-template-empty-count">
+          筛选 {{ filteredTemplates.length }} / 已返回 {{ templates.length }} 个模板；每页{{
+            templatePageSize
+          }}个
+        </p>
         <span>0</span>
         <div>
           <h5>{{ templates.length ? "没有符合条件的模板" : "暂无审批模板" }}</h5>
@@ -739,6 +752,17 @@ function resetTemplates() {
                 : "审批模板由对应工作区的审批合同统一维护。"
             }}
           </p>
+          <button
+            v-if="templates.length"
+            type="button"
+            class="org-template-empty-clear"
+            @click="
+              resetTemplates();
+              templateSearchInput?.focus();
+            "
+          >
+            清除筛选
+          </button>
         </div>
       </div>
     </section>
@@ -761,7 +785,68 @@ function resetTemplates() {
   display: none;
 }
 
+.org-template-empty-count,
+.org-template-empty-clear {
+  display: none;
+}
+
 @media (max-width: 760px) {
+  .org-template-empty-c {
+    display: block;
+    padding: 0;
+    min-height: 0;
+    background: var(--so-approval-filter-paper);
+    text-align: left;
+    font-family: "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+    line-height: 1.6;
+  }
+
+  .org-template-empty-c > span {
+    display: none;
+  }
+
+  .org-template-empty-c > .org-template-empty-count {
+    display: block;
+    margin: 0;
+    padding: 12px 0;
+    border-top: 1px solid var(--so-approval-filter-line);
+    font-size: 13px;
+    color: var(--so-approval-filter-muted);
+  }
+
+  .org-template-empty-c > div {
+    padding: 36px 18px;
+    border-radius: 5px;
+    background: var(--so-approval-filter-empty);
+  }
+
+  .org-template-empty-c h5 {
+    margin: 0;
+    color: var(--so-approval-filter-ink);
+    font-size: 19px;
+    line-height: 1.6;
+  }
+
+  .org-template-empty-c > div > p {
+    margin: 8px 0 0;
+    color: var(--so-approval-filter-muted);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .org-template-empty-c .org-template-empty-clear {
+    display: inline-block;
+    min-height: 44px;
+    margin-top: 18px;
+    padding: 8px 15px;
+    border: 1px solid var(--so-approval-filter-border);
+    border-radius: 5px;
+    background: var(--so-approval-filter-paper);
+    color: var(--so-approval-filter-blue);
+    font: inherit;
+    font-size: 16px;
+  }
+
   .org-approval-template-filters-c {
     grid-template-columns: minmax(0, 1fr);
     gap: 18px;

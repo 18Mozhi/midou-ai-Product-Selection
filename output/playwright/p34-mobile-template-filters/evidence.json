@@ -1,12 +1,12 @@
 {
   "kind": "P34-MOBILE-TEMPLATE-FILTERS",
-  "boundary": "Actual child with isolated fixtures. Only mobile filter region implemented; desktop/request pixels compared to pre-change SFC. Not parent/API/permission/production or other visual approval.",
-  "baselineCommit": "7a147e6f65083cd63042a9c6b2d0a03ac8968b87",
-  "baselineSha256": "5ccdc982cf70d3e0ebfeef672ab38917e7e144baa5406b639e86e52646038bd8",
+  "boundary": "Actual child with isolated fixtures. Mobile filter and approved no-match region implemented; desktop/request/no-catalog pixels compared to pre-change SFC. Local clear restores focus, not parent/API/permission/production or other visual approval.",
+  "baselineCommit": "bae3cbe722ecfee23b6b8331fd9104599ffa22a2",
+  "baselineSha256": "eb961bc2924ffbaeeb3826cbe34246be80123257afa21c56487ee26086917a56",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationApprovalPanel.vue": "eb961bc2924ffbaeeb3826cbe34246be80123257afa21c56487ee26086917a56",
-    "apps/web/src/design/approval-filter-tokens.css": "800eabf96b61082ea793087bb899d042f1af8a01d67b618c4520581a5785f8e6",
-    "scripts/verify-ui-phase2-org-approvals-mobile-filters.mjs": "9abcb6092872557a99a13e50ce04df16a79e81ef701f69b38e4d243e09b3e9cb",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "scripts/verify-ui-phase2-org-approvals-mobile-filters.mjs": "77f755200df333ceea7c0f6968c4c865e02137b4e364d4a69df15e8acb803089",
     "scripts/lib/ui-phase2-org-approvals-design-data.mjs": "b2d28c6d338a520b4f9e674c345905d6d690236a49c33976dac2e262b23e8f9a",
     "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
     "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
@@ -24,6 +24,18 @@
     },
     {
       "width": 390,
+      "name": "request empty: pixel identical to pre-change child"
+    },
+    {
+      "width": 390,
+      "name": "no returned templates: pixel identical to pre-change child"
+    },
+    {
+      "width": 390,
+      "name": "no catalog has no misleading clear-filter action"
+    },
+    {
+      "width": 390,
       "name": "five existing native fields"
     },
     {
@@ -76,6 +88,18 @@
     },
     {
       "width": 390,
+      "name": "empty count reflects returned templates not organization summary"
+    },
+    {
+      "width": 390,
+      "name": "approved neutral empty palette and readable title"
+    },
+    {
+      "width": 390,
+      "name": "empty-region: no horizontal overflow"
+    },
+    {
+      "width": 390,
       "name": "keyboard order stays fields then reset"
     },
     {
@@ -96,6 +120,30 @@
     },
     {
       "width": 390,
+      "name": "empty-clear-focus: no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "keyboard clear restores existing defaults"
+    },
+    {
+      "width": 390,
+      "name": "removed empty action returns focus to persistent search"
+    },
+    {
+      "width": 390,
+      "name": "clear preserves other view and unrelated query"
+    },
+    {
+      "width": 390,
+      "name": "pointer clear restores results"
+    },
+    {
+      "width": 390,
+      "name": "pointer clear also returns focus"
+    },
+    {
+      "width": 390,
       "name": "220 input remains allowed"
     },
     {
@@ -113,6 +161,18 @@
     {
       "width": 760,
       "name": "requests: pixel identical to pre-change child"
+    },
+    {
+      "width": 760,
+      "name": "request empty: pixel identical to pre-change child"
+    },
+    {
+      "width": 760,
+      "name": "no returned templates: pixel identical to pre-change child"
+    },
+    {
+      "width": 760,
+      "name": "no catalog has no misleading clear-filter action"
     },
     {
       "width": 760,
@@ -168,6 +228,18 @@
     },
     {
       "width": 760,
+      "name": "empty count reflects returned templates not organization summary"
+    },
+    {
+      "width": 760,
+      "name": "approved neutral empty palette and readable title"
+    },
+    {
+      "width": 760,
+      "name": "empty-region: no horizontal overflow"
+    },
+    {
+      "width": 760,
       "name": "keyboard order stays fields then reset"
     },
     {
@@ -185,6 +257,30 @@
     {
       "width": 760,
       "name": "reset-result: no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "empty-clear-focus: no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "keyboard clear restores existing defaults"
+    },
+    {
+      "width": 760,
+      "name": "removed empty action returns focus to persistent search"
+    },
+    {
+      "width": 760,
+      "name": "clear preserves other view and unrelated query"
+    },
+    {
+      "width": 760,
+      "name": "pointer clear restores results"
+    },
+    {
+      "width": 760,
+      "name": "pointer clear also returns focus"
     },
     {
       "width": 760,
@@ -209,6 +305,22 @@
     {
       "width": 761,
       "name": "templates: pixel identical to pre-change child"
+    },
+    {
+      "width": 761,
+      "name": "request empty: pixel identical to pre-change child"
+    },
+    {
+      "width": 761,
+      "name": "no returned templates: pixel identical to pre-change child"
+    },
+    {
+      "width": 761,
+      "name": "no catalog has no misleading clear-filter action"
+    },
+    {
+      "width": 761,
+      "name": "desktop template no match: pixel identical to pre-change child"
     },
     {
       "width": 761,
@@ -248,6 +360,10 @@
     },
     {
       "width": 761,
+      "name": "desktop empty clear stays hidden"
+    },
+    {
+      "width": 761,
       "name": "keyboard order stays fields then reset"
     },
     {
@@ -292,6 +408,22 @@
     },
     {
       "width": 1440,
+      "name": "request empty: pixel identical to pre-change child"
+    },
+    {
+      "width": 1440,
+      "name": "no returned templates: pixel identical to pre-change child"
+    },
+    {
+      "width": 1440,
+      "name": "no catalog has no misleading clear-filter action"
+    },
+    {
+      "width": 1440,
+      "name": "desktop template no match: pixel identical to pre-change child"
+    },
+    {
+      "width": 1440,
       "name": "five existing native fields"
     },
     {
@@ -325,6 +457,10 @@
     {
       "width": 1440,
       "name": "no-result: no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "desktop empty clear stays hidden"
     },
     {
       "width": 1440,
@@ -386,7 +522,15 @@
       "width": 390,
       "pageId": "P34",
       "scope": "mounted-Vue-mobile-template-filters-only-not-production-or-whole-page-approval",
-      "sha256": "c1388a62d89f210f3bd2869c6ab5d3d7b037f3c32a58c37ae25dba644d21bdb3"
+      "sha256": "4400f9d48d772df39b281d3c7220e447b681bcb5ac5a5c26f90cd7105ad7200a"
+    },
+    {
+      "file": "empty-region-390.png",
+      "scene": "empty-region",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "mounted-Vue-mobile-template-filters-only-not-production-or-whole-page-approval",
+      "sha256": "fc8b69f980b36ea7755fe1ed620a130d56d7ebf7d501e93a9e6d61a8ed90a047"
     },
     {
       "file": "reset-focus-390.png",
@@ -394,7 +538,7 @@
       "width": 390,
       "pageId": "P34",
       "scope": "mounted-Vue-mobile-template-filters-only-not-production-or-whole-page-approval",
-      "sha256": "b0461beccffc414ce51c4566ab356e5560feb98c9d153d4455866e6fbe3da15d"
+      "sha256": "04043a139dc349f5ac7d73016c0936393df6bfd8c07875b702d0587da067dd5c"
     },
     {
       "file": "reset-result-390.png",
@@ -402,7 +546,15 @@
       "width": 390,
       "pageId": "P34",
       "scope": "mounted-Vue-mobile-template-filters-only-not-production-or-whole-page-approval",
-      "sha256": "24b2656545e307fde3ce3144380be669c5a47fe33d5d8d3158a3eb3eefe17fdf"
+      "sha256": "b02df77aeef6bea832474bdcb4184b5884bc45336662d831b003844c69d74eef"
+    },
+    {
+      "file": "empty-clear-focus-390.png",
+      "scene": "empty-clear-focus",
+      "width": 390,
+      "pageId": "P34",
+      "scope": "mounted-Vue-mobile-template-filters-only-not-production-or-whole-page-approval",
+      "sha256": "d2dd0d135a5c568ec150a669506d2efb288213a3b3838071290c352834b86c1a"
     }
   ]
 }

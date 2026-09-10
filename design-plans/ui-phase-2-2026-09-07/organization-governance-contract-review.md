@@ -71,7 +71,7 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 | T | 1c008f867673db60.1 | OG-TECH |
 | A | 00f81ad5e8a2f732.1,86f59f25b64551b6.1 | OG-A-VIEW |
 | A | f376017b5e1818c0.1,184674807c82ee93.1,3169b6613d3ce948.1 | OG-A-REQUEST-FILTER重置/分页 |
-| A | 2a3781fdd41e7df6.1,0b242741fe22e1a9.1,0ab42724896b9cf9.1 | OG-A-TEMPLATE-FILTER重置/分页 |
+| A | 2a3781fdd41e7df6.1,0b242741fe22e1a9.1,0ab42724896b9cf9.1,97e57c58af0dc63f.1 | OG-A-TEMPLATE-FILTER重置/分页/已批准手机空结果清除；清除后焦点回搜索，不写业务数据 |
 | A | f6777d94811ef9af.1 | OG-A-SELECT |
 | A | 1c008f867673db60.1,1c008f867673db60.2 | OG-TECH审批/模板 |
 | A | cb237b82e3d08902.1,a8c2e662cd00ee63.1 | OG-A-LINK审批/审计 |

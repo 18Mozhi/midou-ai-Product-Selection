@@ -1,8 +1,10 @@
 /* P34 approved mobile filter palette: component-lazy, scoped tokens only. */
-html #app .org-approval-template-filters-c {
+html #app :is(.org-approval-template-filters-c, .org-template-empty-c) {
   --so-approval-filter-ink: #202c3d;
   --so-approval-filter-muted: #58677b;
   --so-approval-filter-blue: #254a9c;
   --so-approval-filter-border: #6680a2;
   --so-approval-filter-paper: #fff;
+  --so-approval-filter-empty: #f5f7fb;
+  --so-approval-filter-line: #dbe1e9;
 }

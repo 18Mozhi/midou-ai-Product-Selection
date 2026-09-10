@@ -31,9 +31,26 @@ for (const file of ["index.html", "controls.js", "controls.css"]
     "scripts/lib/ui-phase2-inventory.mjs",
   ))
   sourceHashes[file] = hash((await readFile(file, "utf8")).replaceAll("\r\n", "\n"));
-const sourceSignatures = scanSource(await readFile(sourceFile, "utf8"), sourceFile)
-  .candidates.map((c) => c.candidateId.split("#")[1])
-  .sort();
+const candidates = scanSource(await readFile(sourceFile, "utf8"), sourceFile).candidates;
+const sourceSignatures = candidates.map((c) => c.candidateId.split("#")[1]).sort();
+const implementedClear = candidates.filter(
+  (c) => c.attributes.class === "org-template-empty-clear",
+);
+assert.equal(implementedClear.length, 1);
+assert.equal(
+  implementedClear[0].attributes["@click"].replace(/\s/g, ""),
+  "resetTemplates();templateSearchInput?.focus();",
+);
+assert.equal(implementedClear[0].attributes["v-if"], "templates.length");
+const implementedBindings = [
+  {
+    sourceSignature: implementedClear[0].candidateId.split("#")[1],
+    proposalControlId: "template-clear-empty",
+    selector: ".org-template-empty-clear",
+    widths: [390],
+    scope: "mobile-only-implemented-binding-original-proposal-images-retained",
+  },
+];
 let previous;
 if (!capture && !smoke) {
   previous = JSON.parse(await readFile(`${output}/evidence.json`, "utf8"));
@@ -70,7 +87,10 @@ try {
       await page.waitForFunction(() => !!window.ORG_APPROVAL_CONTROLS_C);
       controls = await page.evaluate(() => window.ORG_APPROVAL_CONTROLS_C.controls);
       assert.deepEqual(
-        controls.flatMap((c) => c.signatures).sort(),
+        [
+          ...controls.flatMap((c) => c.signatures),
+          ...implementedBindings.map((b) => b.sourceSignature),
+        ].sort(),
         sourceSignatures,
         "each child source control appears exactly once",
       );
@@ -266,6 +286,7 @@ if (capture) {
     sourceHashes,
     sourceFile,
     sourceSignatures,
+    implementedBindings,
     controls,
     checks,
     interactions,
@@ -296,10 +317,18 @@ if (capture) {
 } else if (!smoke) {
   assert.deepEqual(checks, previous.checks);
   assert.deepEqual(interactions, previous.interactions);
+  if (!refreshSources) {
+    assert.deepEqual(implementedBindings, previous.implementedBindings);
+    assert.deepEqual(sourceSignatures, previous.sourceSignatures);
+  }
   if (refreshSources)
     await writeFile(
       `${output}/evidence.json`,
-      JSON.stringify({ ...previous, sourceHashes }, null, 2) + "\n",
+      JSON.stringify(
+        { ...previous, sourceHashes, sourceSignatures, implementedBindings },
+        null,
+        2,
+      ) + "\n",
     );
 }
 console.log(

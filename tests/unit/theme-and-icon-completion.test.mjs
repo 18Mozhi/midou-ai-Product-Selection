@@ -90,7 +90,7 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       // P34 palette can only declare tokens on this filter, never global styling rules.
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html #app \.org-approval-template-filters-c\s*\{(?:\s*--so-approval-filter-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+        /^html #app :is\(\.org-approval-template-filters-c, \.org-template-empty-c\)\s*\{(?:\s*--so-approval-filter-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
       );
       continue;
     }

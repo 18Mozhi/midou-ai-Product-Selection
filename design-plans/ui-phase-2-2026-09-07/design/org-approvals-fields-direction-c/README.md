@@ -2,7 +2,7 @@
 
 手机模板筛选区域已获[局部批准](../../P34-MOBILE-FILTER-COMPOSITION-APPROVAL.md)：单列、帮助文字、底部重置。其他内容仍待审核，完整截图中的目录/详情不在批准范围内。本批是独立字段设计稿，不是实际 Vue 页面或生产验收；工具/图库待审标题为制图时状态。
 
-后续批准：[手机空结果区域](../../P34-MOBILE-EMPTY-COMPOSITION-APPROVAL.md)的数量、浅灰提示、说明和清除按钮也通过，不包含折叠入口或整页。已批准原图不可替换。手机筛选区域已[局部实施到真实Vue](../../P34-MOBILE-FILTER-VUE-REVIEW.md)，空结果提案仍待实施；下文“源码不改”描述的是初版制图边界。
+后续批准：[手机空结果区域](../../P34-MOBILE-EMPTY-COMPOSITION-APPROVAL.md)的数量、浅灰提示、说明和清除按钮也通过，不包含折叠入口或整页。已批准原图不可替换。手机筛选区域已[局部实施到真实Vue](../../P34-MOBILE-FILTER-VUE-REVIEW.md)，空结果区域也已[局部实施](../../P34-MOBILE-EMPTY-VUE-REVIEW.md)；下文“源码不改”描述的是初版制图边界。
 
 [字段及组合图册](gallery.html) · [离线交互](index.html) · [原页面与数据合同](../org-approvals-direction-c/README.md) · [控件图册](../org-approvals-controls-direction-c/README.md)
 

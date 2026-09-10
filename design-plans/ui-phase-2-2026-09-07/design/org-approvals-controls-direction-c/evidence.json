@@ -11,7 +11,7 @@
     "scripts/verify-ui-phase2-org-approvals-c.mjs": "3af77fe1cf4635c22e1ee2ee1873853b1efd24ed49857b148fc306c1fc4076c5",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "scripts/lib/ui-phase2-org-approvals-retained-sources.mjs": "e7df6e4d846d5493893eb8f12b105e5891907b4a82e0364aa2da7a0de2e2abcc",
-    "apps/web/src/components/OrganizationApprovalPanel.vue": "eb961bc2924ffbaeeb3826cbe34246be80123257afa21c56487ee26086917a56",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
     "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
     "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
     "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
@@ -20,7 +20,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/index.html": "d7b377ee1d0c315935edaff90fcf02f6a6f31171e2a518b3217e6ef072fa6756",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/controls.js": "2705094ad55b103490f39dd67c52f62a55b2355710b6812953f9adde79631e8f",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/controls.css": "55f3c91d48b07bbb7005ed99ff74efa8f74bf21d533b683307e465e78cd8ef84",
-    "scripts/verify-ui-phase2-org-approvals-controls-c.mjs": "2b2615eaf6b1924e990e9a01b824e0d6c69ab16c8eb189d55211526d85577cab",
+    "scripts/verify-ui-phase2-org-approvals-controls-c.mjs": "6e341623167e84504655841006bb57b6cc2c7d1c47e4b86fce0ebbd79e63f7cb",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb"
   },
   "sourceFile": "apps/web/src/components/OrganizationApprovalPanel.vue",
@@ -34,6 +34,7 @@
     "2a3781fdd41e7df6.1",
     "3169b6613d3ce948.1",
     "86f59f25b64551b6.1",
+    "97e57c58af0dc63f.1",
     "a8c2e662cd00ee63.1",
     "cb237b82e3d08902.1",
     "f376017b5e1818c0.1",
@@ -6466,6 +6467,17 @@
       "scope": "pending-template-detail-composition",
       "sha256": "da1dcaa6e6d1c871bea25767bb1fa841eaa2e3e2192cf3f1ccc2d2f59e7f062a",
       "captureSelector": "#detail"
+    }
+  ],
+  "implementedBindings": [
+    {
+      "sourceSignature": "97e57c58af0dc63f.1",
+      "proposalControlId": "template-clear-empty",
+      "selector": ".org-template-empty-clear",
+      "widths": [
+        390
+      ],
+      "scope": "mobile-only-implemented-binding-original-proposal-images-retained"
     }
   ]
 }
