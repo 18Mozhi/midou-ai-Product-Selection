@@ -33,6 +33,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
 let timer: number | undefined;
 let loadSequence = 0;
 let detailSequence = 0;
+let viewSequence = 0;
 let disposed = false;
 watch(
   [() => route.path, () => route.query.report],
@@ -45,6 +46,7 @@ watch(
   () => route.fullPath,
   () => {
     detailSequence++;
+    viewSequence++;
   },
   { flush: "sync" },
 );
@@ -117,7 +119,21 @@ async function choose(v: ReportType) {
   if (type.value === v) return;
   await router.push({ query: { ...route.query, report: v === "opportunity" ? undefined : v } });
 }
+function operationViewOwner() {
+  const sequence = viewSequence,
+    ownerPath = route.fullPath,
+    selectedType = type.value;
+  return {
+    current: () =>
+      !disposed &&
+      sequence === viewSequence &&
+      ownerPath === route.fullPath &&
+      selectedType === type.value,
+  };
+}
 async function createExport() {
+  if (disposed || busy.value) return;
+  const owner = operationViewOwner();
   busy.value = true;
   try {
     await api(
@@ -127,21 +143,24 @@ async function createExport() {
         body: { report_type: type.value, format: "csv" },
       },
       false,
+      owner,
     );
+    if (!owner.current()) return;
     notice.value = "导出任务已提交，由宝塔 Node Worker 异步生成。";
     await load();
   } catch (error) {
     rethrowUnexpectedError(error);
   } finally {
-    busy.value = false;
+    if (!disposed) busy.value = false;
   }
 }
 async function refresh() {
+  if (disposed || refreshing.value) return;
   refreshing.value = true;
   try {
     await load(true);
   } finally {
-    refreshing.value = false;
+    if (!disposed) refreshing.value = false;
   }
 }
 async function regenerate(item: any) {
@@ -162,7 +181,8 @@ async function regenerate(item: any) {
   }
 }
 async function download(item: any) {
-  if (downloadingId.value) return;
+  if (disposed || downloadingId.value) return;
+  const owner = operationViewOwner();
   downloadingId.value = item.id;
   try {
     const correlationId = crypto.randomUUID();
@@ -172,18 +192,24 @@ async function download(item: any) {
       traceId: correlationId,
       headers: { accept: "application/octet-stream" },
     });
-    const url = URL.createObjectURL(await r.blob()),
-      a = document.createElement("a");
-    a.href = url;
-    a.download = item.filename;
-    a.click();
-    URL.revokeObjectURL(url);
+    // Preserve the requested download across navigation; only its UI feedback is view-owned.
+    const url = URL.createObjectURL(await r.blob());
+    try {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = item.filename;
+      a.click();
+    } finally {
+      URL.revokeObjectURL(url);
+    }
   } catch (error) {
-    const failure = error instanceof ApiClientError ? error : null;
-    requestId.value = failure?.requestId ?? requestId.value;
-    notice.value = failure?.actionHint ?? "下载连接失败，请稍后重试。";
+    if (owner.current()) {
+      const failure = error instanceof ApiClientError ? error : null;
+      requestId.value = failure?.requestId ?? requestId.value;
+      notice.value = failure?.actionHint ?? "下载连接失败，请稍后重试。";
+    }
   } finally {
-    downloadingId.value = "";
+    if (!disposed) downloadingId.value = "";
   }
 }
 async function openDetail(item: any) {
@@ -191,6 +217,7 @@ async function openDetail(item: any) {
 }
 function closeDetail() {
   detailSequence++;
+  viewSequence++;
   selectedExport.value = null;
   if (route.query.export) void setDetailQuery();
 }
@@ -323,6 +350,7 @@ onUnmounted(() => {
   disposed = true;
   loadSequence++;
   detailSequence++;
+  viewSequence++;
   clearInterval(timer);
 });
 watch(

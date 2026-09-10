@@ -19,7 +19,7 @@ const definitions = [
     ["97351e6d4fd4cc45.1"],
     ["RP-CREATE；CSV入队"],
     "busy禁用按钮；空报表仍可导出",
-    "createExport：POST /report-exports，{report_type:type,format:csv}；202只确认入队，不确认文件可用；现函数无busy早退",
+    "createExport：disposed/busy早退；POST /report-exports，{report_type:type,format:csv}；202仅确认入队，只有原视图仍有效才显示成功并刷新；不撤销已提交任务",
     ["opportunity", "trend", "team", "empty", "create_busy", "create_error"],
   ],
   [
@@ -59,7 +59,7 @@ const definitions = [
     ["aa7c04ce54cf7cb5.1"],
     ["RP-REFRESH；后台保留显示"],
     "refreshing禁用按钮并显示正在刷新",
-    "refresh设置refreshing，load(true)保留报告；finally清除，重入/旧finally保护仍待",
+    "refresh在disposed/refreshing时早退，load(true)保留报告；finally仅在实例存活时清除标志，跨范围缓存/完整并发仍待",
     ["opportunity", "refreshing", "refresh_error"],
   ],
   [
@@ -79,7 +79,7 @@ const definitions = [
     ["6008f8ab717efc14.1"],
     ["RP-DOWNLOAD；有效文件GET"],
     "列表succeeded且未到期；仅本行下载按钮禁用，但函数会拦截任一在途下载",
-    "download：带请求/追踪ID和Accept的GET原始字节，blob/object URL/filename/click/revoke；非导出创建事务",
+    "download：disposed或已有下载时早退；原始GET的请求/追踪ID和Accept不变，错误提示只归原视图；已发起下载仍完成，blob URL在点击异常时也由finally释放；非创建事务",
     [
       "opportunity",
       "download_busy",
@@ -265,7 +265,17 @@ export function buildReportReview(source, evidence) {
         "scripts/verify-ui-phase2-report-read-ownership.mjs",
       ],
       remaining:
-        "写后回执、下载、refresh finally、尚存活跨范围缓存及所有并行操作的共享诊断仲裁未完成。",
+        "读取证据不替代操作证据；重新生成并发回执、尚存活跨范围缓存及所有并行操作的共享诊断仲裁未完成。",
+    },
+    operationOwnershipEvidence: {
+      scope: "controlled-create-download-refresh-not-regeneration-policy-or-production",
+      document: `${base}/P28-OPERATION-OWNERSHIP-REVIEW.md`,
+      tests: [
+        "tests/unit/ui-phase2-report-operation-ownership.test.mjs",
+        "scripts/verify-ui-phase2-report-operation-ownership.mjs",
+      ],
+      remaining:
+        "重新生成并发跳转策略待用户选择；跨范围缓存/所有操作诊断优先级及完整C视觉、生产验收仍待。",
     },
     dialogs: {
       kind: "local-callers-and-listed-shared-only",
@@ -311,7 +321,7 @@ export function buildReportReview(source, evidence) {
       ],
     },
     compositionGaps: [
-      "当前全新图与真实Vue未整合；业务接口/SQL未改，读取批次与详情代次已局部修复，写入/下载/缓存范围归属仍待。",
+      "当前全新图与真实Vue未整合；接口/SQL未改，读取批次、创建回执/下载提示和刷新重入已局部修复，重建并发策略/缓存范围及全局诊断仲裁仍待。",
       "208图覆盖10代表控件和14明确变体，不是全部导出记录/状态/主题/密度/角色/缩放组合。",
     ],
     approval: "pending-user-review",

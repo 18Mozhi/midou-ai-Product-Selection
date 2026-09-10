@@ -6,7 +6,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/report-direction-c/report.css": "1b37b4fa50811af79e5e86daf2bc624ae4fe95a795889f5aee8b934ff90e000a",
     "design-plans/ui-phase-2-2026-09-07/design/report-direction-c/report.js": "3a57f626a430a7f798fb7bdbef739199225faf3a1216b54200ca3b0fde3fc232",
     "design-plans/ui-phase-2-2026-09-07/design/report-direction-c/data.js": "6b8e8b329515af2281adddaadf0b8b897a7a6d7dc3273f8af455891a32c31855",
-    "apps/web/src/components/ReportCenter.vue": "1e591237017192a2c794c23711abff9c95a188ae5abac2ea34e2cd4e74ecdd47",
+    "apps/web/src/components/ReportCenter.vue": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
     "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
     "apps/api/src/report-service.ts": "6303c6aa73caa347d5aa11c5bb67e9fdc66ae352eca240c407ba370569a74184",
     "apps/api/src/report-routes.ts": "762c3d53c128ec887b0b22e54a9ee023fa0b0273a35271dba78ce21cea58507a",
@@ -4557,7 +4557,7 @@
       "scene": "create-default",
       "width": 390,
       "file": "create-default-390.png",
-      "sha256": "39e96e41f33ea2679be7c0f2baffe09b6225d3996d838dc2948c2f07b39bf390",
+      "sha256": "f3141cabc6748d8a3a94451bdb00d5552955aaa5e48ac9d6cbd33d49fa180493",
       "control": {
         "selector": "[data-create]",
         "actionId": "RP-CREATE",
