@@ -1,0 +1,97 @@
+:root {
+  --control-focus: #285ec7;
+  --control-disabled-bg: #e6ebf1;
+  --control-disabled-text: #526176;
+}
+.control-tools {
+  padding: 12px 24px;
+  background: white;
+  border-bottom: 1px solid var(--line);
+}
+.control-tools label {
+  margin: 8px 0;
+}
+.control-tools select {
+  max-width: 640px;
+}
+.control-tools p {
+  font-size: 13px;
+}
+button,
+input,
+select {
+  border-color: #6680a2;
+}
+button:focus-visible,
+a:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--control-focus);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 2px white;
+}
+button:active:not(:disabled),
+a:active,
+summary:active {
+  background: #dbe7fb;
+  color: var(--deep);
+  transform: none;
+}
+button.primary:active:not(:disabled) {
+  background: #10285b;
+  color: white;
+}
+button:disabled,
+button.primary:disabled {
+  opacity: 1;
+  background: var(--control-disabled-bg);
+  color: var(--control-disabled-text);
+  border-color: #a1aec0;
+  cursor: not-allowed;
+  transform: none;
+}
+.rail button[aria-pressed="true"] {
+  background: white;
+  color: var(--blue);
+  box-shadow: inset 0 -3px 0 var(--deep);
+}
+.rail button[aria-pressed="true"]:hover {
+  background: #edf3ff;
+}
+.rail button:active:not(:disabled) {
+  background: #dbe7fb;
+  color: var(--deep);
+}
+.rail button[aria-pressed="true"]:focus-visible {
+  box-shadow:
+    0 0 0 2px white,
+    inset 0 -3px 0 var(--deep);
+}
+summary,
+.truth a {
+  padding: 8px 10px;
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 16px;
+}
+.technical summary,
+.technical code {
+  font-size: 16px;
+}
+summary:hover,
+.truth a:hover {
+  background: #e8eefb;
+}
+@media (max-width: 760px) {
+  .control-tools {
+    padding: 10px 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  button,
+  a,
+  summary {
+    transition: none;
+  }
+}

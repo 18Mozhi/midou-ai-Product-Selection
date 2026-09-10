@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P35 组织数据 · 控件状态审核</title>
+    <link rel="stylesheet" href="../org-data-direction-c/org-data.css" />
+    <link rel="stylesheet" href="controls.css" />
+  </head>
+  <body>
+    <details class="control-tools">
+      <summary>控件审核工具（非业务功能）</summary>
+      <label for="control-picker">控件与状态<select id="control-picker"></select></label>
+      <button id="control-show" type="button">定位控件</button>
+      <p>
+        悬停、按下、键盘焦点请用鼠标或键盘触发；禁用与忙碌由场景提供。仅设计提案，无
+        API、写入或下载。
+      </p>
+    </details>
+    <div id="app"></div>
+    <script src="../org-data-direction-c/data.js"></script>
+    <script src="../org-data-direction-c/org-data.js"></script>
+    <script src="controls.js"></script>
+  </body>
+</html>

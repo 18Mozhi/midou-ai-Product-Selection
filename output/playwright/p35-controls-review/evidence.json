@@ -1,0 +1,3865 @@
+{
+  "pageId": "P35",
+  "status": "pending-user-review",
+  "scope": "offline-design-controls-not-mounted-Vue-API-SQL-or-production",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/index.html": "be6e4cd2ec8ebde671536a83fe7b9706c5986d7ec50514e28655ef9acb1f5b2b",
+    "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/org-data.css": "7ead6fcb39ad27280462658b13458ba1cc58cb5a8add8263fc3dc818c3fe114c",
+    "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/org-data.js": "35c836788e06285f41715bbd6a78dd7bd3ac93f83a39329314a8348a04222da2",
+    "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/data.js": "6946d6f85afb11e6526649ccd4fa9af6b7a592d8811cd22bdb54b4e5590491f9",
+    "scripts/lib/ui-phase2-org-data-design-data.mjs": "4c6db4f4924384c2bf1361533798e829299d54a10b0cbc730633161afeac51cb",
+    "scripts/verify-ui-phase2-org-data-c.mjs": "c53fb6abcf8393880b22bc9207cabbfcb0cdbefad077223ded5710044a2fdc56",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "apps/web/src/components/OrganizationDataPanel.vue": "575175d7e1aeabf68a6e742e97aea34fc6876ef5e09219b876f243f77eb42bb2",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb",
+    "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
+    "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
+    "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "design-plans/ui-phase-2-2026-09-07/design/org-data-controls/index.html": "8261503a21f3afe02b03be88e24918b2c84626e6abd6849175cc5350c9cbe0cd",
+    "design-plans/ui-phase-2-2026-09-07/design/org-data-controls/controls.js": "257566943ada28ed4a592b3d511c0e4c0cb7be37c8370ba155098fa7603df14e",
+    "design-plans/ui-phase-2-2026-09-07/design/org-data-controls/controls.css": "4b618578e853df12bc0cd6f6bcd960b047ec92edb37a936c50b5004d4f0bcb11",
+    "scripts/verify-ui-phase2-org-data-controls.mjs": "32652c1547b4998316b79625d87662a3035959d9ae372aa3bf9fcd0785a9838e",
+    "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb"
+  },
+  "retainedOriginalImages": 94,
+  "sourceSignatures": [
+    "000799abd17373dd.1",
+    "17620112cb625463.1",
+    "1c008f867673db60.1",
+    "26b1ac38e04c362f.1",
+    "3638b3e1e1d8cad7.1",
+    "595d56ce2159fb14.1",
+    "874d2aeb7a9f46f2.1",
+    "a3740ac6cf7e5072.1",
+    "ad756c5bd12f75ea.1",
+    "cd1df6927d5a68fd.1"
+  ],
+  "controls": [
+    {
+      "id": "refresh",
+      "label": "刷新数据",
+      "selector": "#refresh",
+      "scene": "normal",
+      "signatures": [],
+      "parentControl": true,
+      "busyScene": "refreshing",
+      "action": "read",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "busy"
+      ]
+    },
+    {
+      "id": "refresh-loading",
+      "label": "首次读取禁用刷新",
+      "selector": "#refresh",
+      "scene": "loading",
+      "signatures": [],
+      "parentControl": true,
+      "disabledOnly": true,
+      "action": "read",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "disabled"
+      ]
+    },
+    {
+      "id": "retry-error",
+      "label": "重新加载 / error",
+      "selector": "#retry",
+      "scene": "error",
+      "signatures": [],
+      "parentControl": true,
+      "action": "read",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "retry-forbidden",
+      "label": "重新加载 / forbidden",
+      "selector": "#retry",
+      "scene": "forbidden",
+      "signatures": [],
+      "parentControl": true,
+      "action": "read",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "retry-expired",
+      "label": "重新加载 / expired",
+      "selector": "#retry",
+      "scene": "expired",
+      "signatures": [],
+      "parentControl": true,
+      "action": "read",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "retry-rate_limited",
+      "label": "重新加载 / rate_limited",
+      "selector": "#retry",
+      "scene": "rate_limited",
+      "signatures": [],
+      "parentControl": true,
+      "action": "read",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "view-workspaces-available",
+      "label": "工作区比较 / 未选",
+      "selector": "[data-view=\"workspaces\"]",
+      "scene": "exports",
+      "signatures": [
+        "874d2aeb7a9f46f2.1"
+      ],
+      "selected": false,
+      "view": "workspaces",
+      "action": "view",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "view-workspaces-selected",
+      "label": "工作区比较 / 已选",
+      "selector": "[data-view=\"workspaces\"]",
+      "scene": "normal",
+      "signatures": [],
+      "selected": true,
+      "view": "workspaces",
+      "action": "view",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "view-exports-available",
+      "label": "导出履历 / 未选",
+      "selector": "[data-view=\"exports\"]",
+      "scene": "normal",
+      "signatures": [
+        "26b1ac38e04c362f.1"
+      ],
+      "selected": false,
+      "view": "exports",
+      "action": "view",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "view-exports-selected",
+      "label": "导出履历 / 已选",
+      "selector": "[data-view=\"exports\"]",
+      "scene": "exports",
+      "signatures": [],
+      "selected": true,
+      "view": "exports",
+      "action": "view",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "workspace-reset",
+      "label": "工作区重置筛选",
+      "selector": "#reset",
+      "scene": "workspace_search",
+      "signatures": [
+        "3638b3e1e1d8cad7.1"
+      ],
+      "kind": "workspace",
+      "filtersOpen": true,
+      "action": "reset",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "workspace-clear-empty",
+      "label": "工作区空结果清除筛选",
+      "selector": "#clear-filter",
+      "scene": "workspace_filter_empty",
+      "signatures": [],
+      "kind": "workspace",
+      "proposalOnly": true,
+      "action": "reset",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "workspace-previous",
+      "label": "工作区上一页",
+      "selector": "[data-page=\"-1\"]",
+      "scene": "workspace_page_two",
+      "signatures": [
+        "a3740ac6cf7e5072.1"
+      ],
+      "kind": "workspace",
+      "disabledScene": "normal",
+      "delta": -1,
+      "action": "page",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ]
+    },
+    {
+      "id": "workspace-next",
+      "label": "工作区下一页",
+      "selector": "[data-page=\"1\"]",
+      "scene": "normal",
+      "signatures": [
+        "595d56ce2159fb14.1"
+      ],
+      "kind": "workspace",
+      "disabledScene": "workspace_page_two",
+      "delta": 1,
+      "action": "page",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ]
+    },
+    {
+      "id": "workspace-filters-closed",
+      "label": "工作区手机筛选 / 展开",
+      "selector": "#filters-toggle",
+      "scene": "normal",
+      "signatures": [],
+      "kind": "workspace",
+      "filtersOpen": false,
+      "proposalOnly": true,
+      "widths": [
+        390
+      ],
+      "action": "filters",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "workspace-filters-open",
+      "label": "工作区手机筛选 / 收起",
+      "selector": "#filters-toggle",
+      "scene": "normal",
+      "signatures": [],
+      "kind": "workspace",
+      "filtersOpen": true,
+      "proposalOnly": true,
+      "widths": [
+        390
+      ],
+      "action": "filters",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "export-reset",
+      "label": "导出重置筛选",
+      "selector": "#reset",
+      "scene": "export_search",
+      "signatures": [
+        "000799abd17373dd.1"
+      ],
+      "kind": "export",
+      "filtersOpen": true,
+      "action": "reset",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "export-clear-empty",
+      "label": "导出空结果清除筛选",
+      "selector": "#clear-filter",
+      "scene": "export_filter_empty",
+      "signatures": [],
+      "kind": "export",
+      "proposalOnly": true,
+      "action": "reset",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "export-previous",
+      "label": "导出上一页",
+      "selector": "[data-page=\"-1\"]",
+      "scene": "export_page_two",
+      "signatures": [
+        "ad756c5bd12f75ea.1"
+      ],
+      "kind": "export",
+      "disabledScene": "exports",
+      "delta": -1,
+      "action": "page",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ]
+    },
+    {
+      "id": "export-next",
+      "label": "导出下一页",
+      "selector": "[data-page=\"1\"]",
+      "scene": "exports",
+      "signatures": [
+        "17620112cb625463.1"
+      ],
+      "kind": "export",
+      "disabledScene": "export_page_three",
+      "delta": 1,
+      "action": "page",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ]
+    },
+    {
+      "id": "export-filters-closed",
+      "label": "导出手机筛选 / 展开",
+      "selector": "#filters-toggle",
+      "scene": "exports",
+      "signatures": [],
+      "kind": "export",
+      "filtersOpen": false,
+      "proposalOnly": true,
+      "widths": [
+        390
+      ],
+      "action": "filters",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "export-filters-open",
+      "label": "导出手机筛选 / 收起",
+      "selector": "#filters-toggle",
+      "scene": "exports",
+      "signatures": [],
+      "kind": "export",
+      "filtersOpen": true,
+      "proposalOnly": true,
+      "widths": [
+        390
+      ],
+      "action": "filters",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "technical-closed",
+      "label": "技术详情 / 展开",
+      "selector": ".technical summary",
+      "scene": "exports",
+      "signatures": [
+        "1c008f867673db60.1"
+      ],
+      "open": false,
+      "action": "technical",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "technical-open",
+      "label": "技术详情 / 收起",
+      "selector": ".technical summary",
+      "scene": "exports",
+      "signatures": [],
+      "open": true,
+      "action": "technical",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "reports",
+      "label": "前往报表工作台",
+      "selector": "#reports",
+      "scene": "normal",
+      "signatures": [
+        "cd1df6927d5a68fd.1"
+      ],
+      "action": "navigate",
+      "href": "/reports",
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "controlId": "refresh",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "busy",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "refresh-loading",
+      "variant": "disabled",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-error",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-error",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-error",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-error",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-forbidden",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-forbidden",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-forbidden",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-forbidden",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-expired",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-expired",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-expired",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-expired",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-rate_limited",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-rate_limited",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-rate_limited",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-rate_limited",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-available",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-available",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-available",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-available",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-selected",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-selected",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-selected",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-selected",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-available",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-available",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-available",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-available",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-selected",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-selected",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-selected",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-selected",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-reset",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-reset",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-reset",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-reset",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-clear-empty",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-clear-empty",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-clear-empty",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-clear-empty",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-previous",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-previous",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-previous",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-previous",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-previous",
+      "variant": "disabled",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-next",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-next",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-next",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-next",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-next",
+      "variant": "disabled",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-reset",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-reset",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-reset",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-reset",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-clear-empty",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-clear-empty",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-clear-empty",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-clear-empty",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-previous",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-previous",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-previous",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-previous",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-previous",
+      "variant": "disabled",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-next",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-next",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-next",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-next",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-next",
+      "variant": "disabled",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "reports",
+      "variant": "default",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "reports",
+      "variant": "hover",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "reports",
+      "variant": "focus",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "reports",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "refresh",
+      "variant": "busy",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "refresh-loading",
+      "variant": "disabled",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-error",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-error",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-error",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-error",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-forbidden",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-forbidden",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-forbidden",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-forbidden",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-expired",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-expired",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-expired",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-expired",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-rate_limited",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-rate_limited",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-rate_limited",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "retry-rate_limited",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-available",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-available",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-available",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-available",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-selected",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-selected",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-selected",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-workspaces-selected",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-available",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-available",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-available",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-available",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-selected",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-selected",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-selected",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "view-exports-selected",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-reset",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-reset",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-reset",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-reset",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-clear-empty",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-clear-empty",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-clear-empty",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-clear-empty",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-previous",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-previous",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-previous",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-previous",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-previous",
+      "variant": "disabled",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-next",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-next",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-next",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-next",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-next",
+      "variant": "disabled",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-filters-closed",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-filters-closed",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-filters-closed",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-filters-closed",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-filters-open",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-filters-open",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-filters-open",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "workspace-filters-open",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-reset",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-reset",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-reset",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-reset",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-clear-empty",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-clear-empty",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-clear-empty",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-clear-empty",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-previous",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-previous",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-previous",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-previous",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-previous",
+      "variant": "disabled",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-next",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-next",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-next",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-next",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-next",
+      "variant": "disabled",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-filters-closed",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-filters-closed",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-filters-closed",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-filters-closed",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-filters-open",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-filters-open",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-filters-open",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "export-filters-open",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-closed",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "technical-open",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "reports",
+      "variant": "default",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "reports",
+      "variant": "hover",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "reports",
+      "variant": "focus",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    },
+    {
+      "controlId": "reports",
+      "variant": "pressed",
+      "width": 390,
+      "nativeState": true,
+      "noSideEffect": true
+    }
+  ],
+  "interactions": [
+    {
+      "controlId": "refresh",
+      "width": 1440,
+      "action": "read",
+      "checked": true
+    },
+    {
+      "controlId": "retry-error",
+      "width": 1440,
+      "action": "read",
+      "checked": true
+    },
+    {
+      "controlId": "retry-forbidden",
+      "width": 1440,
+      "action": "read",
+      "checked": true
+    },
+    {
+      "controlId": "retry-expired",
+      "width": 1440,
+      "action": "read",
+      "checked": true
+    },
+    {
+      "controlId": "retry-rate_limited",
+      "width": 1440,
+      "action": "read",
+      "checked": true
+    },
+    {
+      "controlId": "view-workspaces-available",
+      "width": 1440,
+      "action": "view",
+      "checked": true
+    },
+    {
+      "controlId": "view-workspaces-selected",
+      "width": 1440,
+      "action": "view",
+      "checked": true
+    },
+    {
+      "controlId": "view-exports-available",
+      "width": 1440,
+      "action": "view",
+      "checked": true
+    },
+    {
+      "controlId": "view-exports-selected",
+      "width": 1440,
+      "action": "view",
+      "checked": true
+    },
+    {
+      "controlId": "workspace-reset",
+      "width": 1440,
+      "action": "reset",
+      "checked": true
+    },
+    {
+      "controlId": "workspace-clear-empty",
+      "width": 1440,
+      "action": "reset",
+      "checked": true
+    },
+    {
+      "controlId": "workspace-previous",
+      "width": 1440,
+      "action": "page",
+      "checked": true
+    },
+    {
+      "controlId": "workspace-next",
+      "width": 1440,
+      "action": "page",
+      "checked": true
+    },
+    {
+      "controlId": "export-reset",
+      "width": 1440,
+      "action": "reset",
+      "checked": true
+    },
+    {
+      "controlId": "export-clear-empty",
+      "width": 1440,
+      "action": "reset",
+      "checked": true
+    },
+    {
+      "controlId": "export-previous",
+      "width": 1440,
+      "action": "page",
+      "checked": true
+    },
+    {
+      "controlId": "export-next",
+      "width": 1440,
+      "action": "page",
+      "checked": true
+    },
+    {
+      "controlId": "technical-closed",
+      "width": 1440,
+      "action": "technical",
+      "checked": true
+    },
+    {
+      "controlId": "technical-open",
+      "width": 1440,
+      "action": "technical",
+      "checked": true
+    },
+    {
+      "controlId": "reports",
+      "width": 1440,
+      "action": "navigate",
+      "checked": true
+    },
+    {
+      "controlId": "refresh",
+      "width": 390,
+      "action": "read",
+      "checked": true
+    },
+    {
+      "controlId": "retry-error",
+      "width": 390,
+      "action": "read",
+      "checked": true
+    },
+    {
+      "controlId": "retry-forbidden",
+      "width": 390,
+      "action": "read",
+      "checked": true
+    },
+    {
+      "controlId": "retry-expired",
+      "width": 390,
+      "action": "read",
+      "checked": true
+    },
+    {
+      "controlId": "retry-rate_limited",
+      "width": 390,
+      "action": "read",
+      "checked": true
+    },
+    {
+      "controlId": "view-workspaces-available",
+      "width": 390,
+      "action": "view",
+      "checked": true
+    },
+    {
+      "controlId": "view-workspaces-selected",
+      "width": 390,
+      "action": "view",
+      "checked": true
+    },
+    {
+      "controlId": "view-exports-available",
+      "width": 390,
+      "action": "view",
+      "checked": true
+    },
+    {
+      "controlId": "view-exports-selected",
+      "width": 390,
+      "action": "view",
+      "checked": true
+    },
+    {
+      "controlId": "workspace-reset",
+      "width": 390,
+      "action": "reset",
+      "checked": true
+    },
+    {
+      "controlId": "workspace-clear-empty",
+      "width": 390,
+      "action": "reset",
+      "checked": true
+    },
+    {
+      "controlId": "workspace-previous",
+      "width": 390,
+      "action": "page",
+      "checked": true
+    },
+    {
+      "controlId": "workspace-next",
+      "width": 390,
+      "action": "page",
+      "checked": true
+    },
+    {
+      "controlId": "workspace-filters-closed",
+      "width": 390,
+      "action": "filters",
+      "checked": true
+    },
+    {
+      "controlId": "workspace-filters-open",
+      "width": 390,
+      "action": "filters",
+      "checked": true
+    },
+    {
+      "controlId": "export-reset",
+      "width": 390,
+      "action": "reset",
+      "checked": true
+    },
+    {
+      "controlId": "export-clear-empty",
+      "width": 390,
+      "action": "reset",
+      "checked": true
+    },
+    {
+      "controlId": "export-previous",
+      "width": 390,
+      "action": "page",
+      "checked": true
+    },
+    {
+      "controlId": "export-next",
+      "width": 390,
+      "action": "page",
+      "checked": true
+    },
+    {
+      "controlId": "export-filters-closed",
+      "width": 390,
+      "action": "filters",
+      "checked": true
+    },
+    {
+      "controlId": "export-filters-open",
+      "width": 390,
+      "action": "filters",
+      "checked": true
+    },
+    {
+      "controlId": "technical-closed",
+      "width": 390,
+      "action": "technical",
+      "checked": true
+    },
+    {
+      "controlId": "technical-open",
+      "width": 390,
+      "action": "technical",
+      "checked": true
+    },
+    {
+      "controlId": "reports",
+      "width": 390,
+      "action": "navigate",
+      "checked": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "refresh-default-1440.png",
+      "width": 1440,
+      "controlId": "refresh",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "0fdc2063f45e9c9eb38d6f5e74e0d1ee84062356085d17eaa9fd51205835aef8"
+    },
+    {
+      "file": "refresh-hover-1440.png",
+      "width": 1440,
+      "controlId": "refresh",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "050b979cf9f11a2ab886921a91f2c37763edc013e445298aa5380563c8dfdb56"
+    },
+    {
+      "file": "refresh-focus-1440.png",
+      "width": 1440,
+      "controlId": "refresh",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "3230d54357a2274af92847982f59393ca071d648e9e4c128e5f75368a99e068d"
+    },
+    {
+      "file": "refresh-pressed-1440.png",
+      "width": 1440,
+      "controlId": "refresh",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "f496e3cc21258590770333ae70b79bcf69e3d73941aec0d4609dcd0ce9e60c61"
+    },
+    {
+      "file": "refresh-busy-1440.png",
+      "width": 1440,
+      "controlId": "refresh",
+      "variant": "busy",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "81a200dda832a4012c2d71ee35e4597c37d88624a368364225f7695d2753d500"
+    },
+    {
+      "file": "refresh-loading-disabled-1440.png",
+      "width": 1440,
+      "controlId": "refresh-loading",
+      "variant": "disabled",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "dde71687c886cb32ed59a1f9aa6dbc9452fd2e651945a8ffd19269202d4e2c42"
+    },
+    {
+      "file": "retry-error-default-1440.png",
+      "width": 1440,
+      "controlId": "retry-error",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "7dedc7f4a75c5221113b84fed563326db32e1249c70fa1539eab00c5ec698c90"
+    },
+    {
+      "file": "retry-error-hover-1440.png",
+      "width": 1440,
+      "controlId": "retry-error",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "810fff2725d42a27e4a8033641a498f6c297439254d13aae651aae70763e70be"
+    },
+    {
+      "file": "retry-error-focus-1440.png",
+      "width": 1440,
+      "controlId": "retry-error",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "95c951a693b87f13707832e1cb24459a9393352f79632816d047fbfd9586140a"
+    },
+    {
+      "file": "retry-error-pressed-1440.png",
+      "width": 1440,
+      "controlId": "retry-error",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "f0e72bf6bcf5b2dc134c1dc58d5723bc94fffa2674c57dd1d7f8606adbf3c243"
+    },
+    {
+      "file": "retry-forbidden-default-1440.png",
+      "width": 1440,
+      "controlId": "retry-forbidden",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "56ca02a04741e7de87dcd1afa2364a93ce6394cc859f5a1b2af35604f324df5f"
+    },
+    {
+      "file": "retry-forbidden-hover-1440.png",
+      "width": 1440,
+      "controlId": "retry-forbidden",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "3ada1d82ed4041849b6d3c89bfe6d3fe0a06916bfb7dabecf831a85ee59fb6d9"
+    },
+    {
+      "file": "retry-forbidden-focus-1440.png",
+      "width": 1440,
+      "controlId": "retry-forbidden",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "7323b23f4c493bce9ae0fa154a3989d918c71e83697ac7dda65f7ce690cc6751"
+    },
+    {
+      "file": "retry-forbidden-pressed-1440.png",
+      "width": 1440,
+      "controlId": "retry-forbidden",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "7ff975c34e250bdf3cd693a0bec79e78c5debbecd750dc2ed0fccddf56788370"
+    },
+    {
+      "file": "retry-expired-default-1440.png",
+      "width": 1440,
+      "controlId": "retry-expired",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "68cc3e71aa41886782ff57edb4741d4c42415718f0da2a4c43a7585a5b4ac096"
+    },
+    {
+      "file": "retry-expired-hover-1440.png",
+      "width": 1440,
+      "controlId": "retry-expired",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "7d7416822f63088ca2edb627085674d310494fd4d0f9f4cfbf637972a664ad73"
+    },
+    {
+      "file": "retry-expired-focus-1440.png",
+      "width": 1440,
+      "controlId": "retry-expired",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "e953f1994bad8a1bfe7a1ecbcedda9995962dc4c229f2c367a271010423f5b46"
+    },
+    {
+      "file": "retry-expired-pressed-1440.png",
+      "width": 1440,
+      "controlId": "retry-expired",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "40fabdd7a73fcecfb359f274ddd8e24321dcf2255b9847b28dde0acc3c5ed4f6"
+    },
+    {
+      "file": "retry-rate_limited-default-1440.png",
+      "width": 1440,
+      "controlId": "retry-rate_limited",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "01b92f5106b257df990c3aff354fbdb8858009026404263111ea091e3412160f"
+    },
+    {
+      "file": "retry-rate_limited-hover-1440.png",
+      "width": 1440,
+      "controlId": "retry-rate_limited",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "3785cfb635321c280a05e716651036a397b65dd2dbe996ef0d6fe80b5c928c3a"
+    },
+    {
+      "file": "retry-rate_limited-focus-1440.png",
+      "width": 1440,
+      "controlId": "retry-rate_limited",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "cd71afe3d817bc9c00353b1897049b7af0548e9a317ee90431b7af1c8dcdc0cf"
+    },
+    {
+      "file": "retry-rate_limited-pressed-1440.png",
+      "width": 1440,
+      "controlId": "retry-rate_limited",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "40f9c7155f60c7908aeecdd0b2f49a3b1b1d50fa070d3c593811dcdd99537578"
+    },
+    {
+      "file": "view-workspaces-available-default-1440.png",
+      "width": 1440,
+      "controlId": "view-workspaces-available",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "8fc483fdccc9c7c97498a44c74cb9372757817ecefa40e633be9439eff0d7200"
+    },
+    {
+      "file": "view-workspaces-available-hover-1440.png",
+      "width": 1440,
+      "controlId": "view-workspaces-available",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "8fc483fdccc9c7c97498a44c74cb9372757817ecefa40e633be9439eff0d7200"
+    },
+    {
+      "file": "view-workspaces-available-focus-1440.png",
+      "width": 1440,
+      "controlId": "view-workspaces-available",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "a17c5a0e7df385825069acc89c39d2b8fa7569ce809e3d85b052ea75c97f9b5d"
+    },
+    {
+      "file": "view-workspaces-available-pressed-1440.png",
+      "width": 1440,
+      "controlId": "view-workspaces-available",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "97bba71c9e8d3e257f1bf6f3317806456e64ed6e45be2ea00b8343e8c0884b5e"
+    },
+    {
+      "file": "view-workspaces-selected-default-1440.png",
+      "width": 1440,
+      "controlId": "view-workspaces-selected",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "0457ce35b3a1b69e802b2709475e9a67833ac1b266ac8fc052cb4ccea4e108da"
+    },
+    {
+      "file": "view-workspaces-selected-hover-1440.png",
+      "width": 1440,
+      "controlId": "view-workspaces-selected",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "f23417f35bd280d14a69201d6688b1c157e6fc7216838b8399ef748959938e41"
+    },
+    {
+      "file": "view-workspaces-selected-focus-1440.png",
+      "width": 1440,
+      "controlId": "view-workspaces-selected",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "53428d6af244f9ba8249ebd1c24a8b0fa0dd36a1f6ac670a9b06c56b9fbffa1a"
+    },
+    {
+      "file": "view-workspaces-selected-pressed-1440.png",
+      "width": 1440,
+      "controlId": "view-workspaces-selected",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "0c6516be1aa025bbb84818860298a50eb1075e5145fcdb869690a11f4574d6c5"
+    },
+    {
+      "file": "view-exports-available-default-1440.png",
+      "width": 1440,
+      "controlId": "view-exports-available",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "bf9a4905221b57cacf4c9f7a345dc80ad445f654f8b1102091324047283b904a"
+    },
+    {
+      "file": "view-exports-available-hover-1440.png",
+      "width": 1440,
+      "controlId": "view-exports-available",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "bf9a4905221b57cacf4c9f7a345dc80ad445f654f8b1102091324047283b904a"
+    },
+    {
+      "file": "view-exports-available-focus-1440.png",
+      "width": 1440,
+      "controlId": "view-exports-available",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "8e85768c2026c8537be3fd3c86a8e6dc3212f70e406c160f693898b821394456"
+    },
+    {
+      "file": "view-exports-available-pressed-1440.png",
+      "width": 1440,
+      "controlId": "view-exports-available",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "ee9c8c5ae1012bc48bb3d0998c11deeda0c52c38ab98f6da7be908f66063303b"
+    },
+    {
+      "file": "view-exports-selected-default-1440.png",
+      "width": 1440,
+      "controlId": "view-exports-selected",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "5f1d285cbff1a3c97d01f117de66f2447b3f65c8ed3b01a4362de49b333b10c8"
+    },
+    {
+      "file": "view-exports-selected-hover-1440.png",
+      "width": 1440,
+      "controlId": "view-exports-selected",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "3ba7ca012b07e102076ab82fd3226a6b9ab43821c036a3b160cd00c3def4f958"
+    },
+    {
+      "file": "view-exports-selected-focus-1440.png",
+      "width": 1440,
+      "controlId": "view-exports-selected",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "786095869299d6177ea78e9697c2bc1ccb52abdef9597b04062f05742b97c233"
+    },
+    {
+      "file": "view-exports-selected-pressed-1440.png",
+      "width": 1440,
+      "controlId": "view-exports-selected",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "aae7e4b1727690a4911d3a38eed2f70780c6a53722ec3a4a0c0fd243298e54fc"
+    },
+    {
+      "file": "workspace-reset-default-1440.png",
+      "width": 1440,
+      "controlId": "workspace-reset",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "a422482cf7e8745a3260b94b0f2be51204462cf0aabeca8a00c7b06b3147ab6e"
+    },
+    {
+      "file": "workspace-reset-hover-1440.png",
+      "width": 1440,
+      "controlId": "workspace-reset",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "647ce545edf45a164397c915f9fe3a3535e1d86aca43265b2d6ae62d2eff39b8"
+    },
+    {
+      "file": "workspace-reset-focus-1440.png",
+      "width": 1440,
+      "controlId": "workspace-reset",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "850bae5737d4c1a5ab53d85e90ba0df8daebf08ea5ef41ec501f718baa100cac"
+    },
+    {
+      "file": "workspace-reset-pressed-1440.png",
+      "width": 1440,
+      "controlId": "workspace-reset",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "5fd1166032575067b36598cc9a3f9f5f459e1b973abee4116a2bdf77b3ea03b6"
+    },
+    {
+      "file": "workspace-clear-empty-default-1440.png",
+      "width": 1440,
+      "controlId": "workspace-clear-empty",
+      "variant": "default",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "e5bcfbd444f0cb463867950df88f9fc5cee072706535a264d97e7fab2bbd8bc9"
+    },
+    {
+      "file": "workspace-clear-empty-hover-1440.png",
+      "width": 1440,
+      "controlId": "workspace-clear-empty",
+      "variant": "hover",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "6f11062ddde68578aec8d67542ff9f742c821d614da9189b93b1a03e2aac12f4"
+    },
+    {
+      "file": "workspace-clear-empty-focus-1440.png",
+      "width": 1440,
+      "controlId": "workspace-clear-empty",
+      "variant": "focus",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "c159ba87b2140575ea8b26bf8b124bef5fd2e6ee9231173fb8112274a1cc45b2"
+    },
+    {
+      "file": "workspace-clear-empty-pressed-1440.png",
+      "width": 1440,
+      "controlId": "workspace-clear-empty",
+      "variant": "pressed",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "5fdfc265cf2e3c60b8bdce11740f8cfc9c813d3dfed4e7f65ebd9ef8e1c95c44"
+    },
+    {
+      "file": "workspace-previous-default-1440.png",
+      "width": 1440,
+      "controlId": "workspace-previous",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "f4f872a6d49c20e436c1d02302b7d7bdaa2f9c9413658acf20cb98ff1466a942"
+    },
+    {
+      "file": "workspace-previous-hover-1440.png",
+      "width": 1440,
+      "controlId": "workspace-previous",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "bb148f9d842683e3de4e4fffcf21f45438d809cef51b9572c7ade1d034b3631c"
+    },
+    {
+      "file": "workspace-previous-focus-1440.png",
+      "width": 1440,
+      "controlId": "workspace-previous",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "104c91c2144a27fa19c7b513f20fd016c76de411938f425ac0a69922a18cb4fe"
+    },
+    {
+      "file": "workspace-previous-pressed-1440.png",
+      "width": 1440,
+      "controlId": "workspace-previous",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "a05b1bd9aeac931a39045e7bbbbe6291837f76145b226956c7fba743e35f7158"
+    },
+    {
+      "file": "workspace-previous-disabled-1440.png",
+      "width": 1440,
+      "controlId": "workspace-previous",
+      "variant": "disabled",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "d43584d323dbf82846b43f02ca8ea5979be51e925cfc2938051623bd42dc2ed6"
+    },
+    {
+      "file": "workspace-next-default-1440.png",
+      "width": 1440,
+      "controlId": "workspace-next",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "2a686d7c03772b30cff6a3c89678d500b71629e0c103eb6afe08e2cb432d4275"
+    },
+    {
+      "file": "workspace-next-hover-1440.png",
+      "width": 1440,
+      "controlId": "workspace-next",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "69b845fec56c568af9bba4a32845e34c79c78d6aa131737087613acfd9b8a24c"
+    },
+    {
+      "file": "workspace-next-focus-1440.png",
+      "width": 1440,
+      "controlId": "workspace-next",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "19ac6cd740256bb277ca596086a230db1eb4d3178fdd369700066f223eddba42"
+    },
+    {
+      "file": "workspace-next-pressed-1440.png",
+      "width": 1440,
+      "controlId": "workspace-next",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "e4576ae78adfb14a288c9c6d196ea4bf210ea609ed9946eb5f3a6a4ef5f1fd31"
+    },
+    {
+      "file": "workspace-next-disabled-1440.png",
+      "width": 1440,
+      "controlId": "workspace-next",
+      "variant": "disabled",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "b137f12cbe015b0ac23a050e47e8acce270c31cb2ace7b0751488e5d101ff613"
+    },
+    {
+      "file": "export-reset-default-1440.png",
+      "width": 1440,
+      "controlId": "export-reset",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "a422482cf7e8745a3260b94b0f2be51204462cf0aabeca8a00c7b06b3147ab6e"
+    },
+    {
+      "file": "export-reset-hover-1440.png",
+      "width": 1440,
+      "controlId": "export-reset",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "647ce545edf45a164397c915f9fe3a3535e1d86aca43265b2d6ae62d2eff39b8"
+    },
+    {
+      "file": "export-reset-focus-1440.png",
+      "width": 1440,
+      "controlId": "export-reset",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "850bae5737d4c1a5ab53d85e90ba0df8daebf08ea5ef41ec501f718baa100cac"
+    },
+    {
+      "file": "export-reset-pressed-1440.png",
+      "width": 1440,
+      "controlId": "export-reset",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "5fd1166032575067b36598cc9a3f9f5f459e1b973abee4116a2bdf77b3ea03b6"
+    },
+    {
+      "file": "export-clear-empty-default-1440.png",
+      "width": 1440,
+      "controlId": "export-clear-empty",
+      "variant": "default",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "e5bcfbd444f0cb463867950df88f9fc5cee072706535a264d97e7fab2bbd8bc9"
+    },
+    {
+      "file": "export-clear-empty-hover-1440.png",
+      "width": 1440,
+      "controlId": "export-clear-empty",
+      "variant": "hover",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "6f11062ddde68578aec8d67542ff9f742c821d614da9189b93b1a03e2aac12f4"
+    },
+    {
+      "file": "export-clear-empty-focus-1440.png",
+      "width": 1440,
+      "controlId": "export-clear-empty",
+      "variant": "focus",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "c159ba87b2140575ea8b26bf8b124bef5fd2e6ee9231173fb8112274a1cc45b2"
+    },
+    {
+      "file": "export-clear-empty-pressed-1440.png",
+      "width": 1440,
+      "controlId": "export-clear-empty",
+      "variant": "pressed",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "5fdfc265cf2e3c60b8bdce11740f8cfc9c813d3dfed4e7f65ebd9ef8e1c95c44"
+    },
+    {
+      "file": "export-previous-default-1440.png",
+      "width": 1440,
+      "controlId": "export-previous",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "afe23585f7ea4af3e7b30e780fadf07cba5a7764a1a12901c1bc0e4b078cec33"
+    },
+    {
+      "file": "export-previous-hover-1440.png",
+      "width": 1440,
+      "controlId": "export-previous",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "80e320c10943e7c9691a7a5290ea8cc6efd6967159ea3d1100b3517be9eb08aa"
+    },
+    {
+      "file": "export-previous-focus-1440.png",
+      "width": 1440,
+      "controlId": "export-previous",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "198d4a393199e3defe1667b92762a4b91fb021654f49dbd9371f771ee7951100"
+    },
+    {
+      "file": "export-previous-pressed-1440.png",
+      "width": 1440,
+      "controlId": "export-previous",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "c1215924882f28758938bde19a6fc9aac7c0a04f0b74a8eb28d759f12c8a4e8f"
+    },
+    {
+      "file": "export-previous-disabled-1440.png",
+      "width": 1440,
+      "controlId": "export-previous",
+      "variant": "disabled",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "5f3b552ee4981d720ca409cabc61b4778ae48375b00e155aab5383717bc84043"
+    },
+    {
+      "file": "export-next-default-1440.png",
+      "width": 1440,
+      "controlId": "export-next",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "c3f7044f69ed5c638925b6c5f7aef79342f63104913a4d9f9443ab3954d80947"
+    },
+    {
+      "file": "export-next-hover-1440.png",
+      "width": 1440,
+      "controlId": "export-next",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "031749235f41cc685e72a6650a86aa53c5eaacc767149f7773de8c21547a68c7"
+    },
+    {
+      "file": "export-next-focus-1440.png",
+      "width": 1440,
+      "controlId": "export-next",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "d092c7067789af3c5317bfff733bc8706292e3990c6ca14ca4fc138af68842de"
+    },
+    {
+      "file": "export-next-pressed-1440.png",
+      "width": 1440,
+      "controlId": "export-next",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "361dcc7e3fb7e79a96c94ef6ac0dec9f739bc869d042003e5944bb09f72327d1"
+    },
+    {
+      "file": "export-next-disabled-1440.png",
+      "width": 1440,
+      "controlId": "export-next",
+      "variant": "disabled",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "748a2ae4ccd2244256271efa30014abb1bd24b745b794d748e7231c4014e3c2e"
+    },
+    {
+      "file": "technical-closed-default-1440.png",
+      "width": 1440,
+      "controlId": "technical-closed",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "d75de0f5fb53c858aedb9523b931c86f44c7a1ee7e7876ab0e6da5986f8c9bf7"
+    },
+    {
+      "file": "technical-closed-hover-1440.png",
+      "width": 1440,
+      "controlId": "technical-closed",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "4576d7a0baabdae0e447bcf1699a49dbe58c7fb325b3a469bf7a0148f0b66334"
+    },
+    {
+      "file": "technical-closed-focus-1440.png",
+      "width": 1440,
+      "controlId": "technical-closed",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "6b8df41f701d25a27e8fd4e407c89800f319dc087b045773e46fee6726647e1e"
+    },
+    {
+      "file": "technical-closed-pressed-1440.png",
+      "width": 1440,
+      "controlId": "technical-closed",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "e6faacbe61b5bb6c335cd2981f1591e149b971dee98742831e218e6512f5402f"
+    },
+    {
+      "file": "technical-open-default-1440.png",
+      "width": 1440,
+      "controlId": "technical-open",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "3e345789d664f18a7d9b3b4219de7e7f0a29a71c06faf1ed557387fcf243a515"
+    },
+    {
+      "file": "technical-open-hover-1440.png",
+      "width": 1440,
+      "controlId": "technical-open",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "8cc2fe67381deacd4974e5115a557b8d06ce53aaa9402e2a605ba75129a41e54"
+    },
+    {
+      "file": "technical-open-focus-1440.png",
+      "width": 1440,
+      "controlId": "technical-open",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "73b366dd039ff3226efad7704575ed417b6b66dd198e589ea393eea778358bb5"
+    },
+    {
+      "file": "technical-open-pressed-1440.png",
+      "width": 1440,
+      "controlId": "technical-open",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "cd7e0f2f4e417285e6498df13b47346c3fbcbfd2ed08610bfdc1eb1315cba0a7"
+    },
+    {
+      "file": "reports-default-1440.png",
+      "width": 1440,
+      "controlId": "reports",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "07f2543e78ec76859ab2117e00150213f397e89f28489aff6d91ade5a23a09e0"
+    },
+    {
+      "file": "reports-hover-1440.png",
+      "width": 1440,
+      "controlId": "reports",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "be721f09e31ed69a25ede3ea969c788904f90597d7ec3c838a7d051ff7428bfa"
+    },
+    {
+      "file": "reports-focus-1440.png",
+      "width": 1440,
+      "controlId": "reports",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "d088ec448bffb327427c69c01e33749c3af79825dcd44b163bb24bddd590d94b"
+    },
+    {
+      "file": "reports-pressed-1440.png",
+      "width": 1440,
+      "controlId": "reports",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "fa9781d8090e30b011eadb78cb1c9d34d53089c60241f06e916bc0f6412c4096"
+    },
+    {
+      "file": "workspace-composition-1440.png",
+      "width": 1440,
+      "scope": "offline-composition-not-production",
+      "sha256": "12c5c98b86918bddd9b7064b921d435d216bfb0f86db6b69c69335803d8a5391"
+    },
+    {
+      "file": "export-details-composition-1440.png",
+      "width": 1440,
+      "scope": "offline-composition-not-production",
+      "sha256": "7d9a11443366107d627b505f29018099e0361c83efe4221a87c167797a1a19c8"
+    },
+    {
+      "file": "refresh-default-390.png",
+      "width": 390,
+      "controlId": "refresh",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "d1a4ce66767338e2a9aff3133dd61dbef1d39ce6bce61efd4dc20e9f88301f42"
+    },
+    {
+      "file": "refresh-hover-390.png",
+      "width": 390,
+      "controlId": "refresh",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "91ea242af4efc7e9d193529c16a963b8a0a2613705f4c8a72991c7ccdadb1732"
+    },
+    {
+      "file": "refresh-focus-390.png",
+      "width": 390,
+      "controlId": "refresh",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "003d8755ec9d730dc7da791341a328e88c59ce2b0a5c85083f8526809fb996b6"
+    },
+    {
+      "file": "refresh-pressed-390.png",
+      "width": 390,
+      "controlId": "refresh",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "87ab794ef1335efbf0fd4f98bf25c9fe29b5489ddbc3ba72d4e15912f4f32bec"
+    },
+    {
+      "file": "refresh-busy-390.png",
+      "width": 390,
+      "controlId": "refresh",
+      "variant": "busy",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "1abd74b8d8f2b8f9d117a52d05c79f1b21f7188207425027d8eb49034635a874"
+    },
+    {
+      "file": "refresh-loading-disabled-390.png",
+      "width": 390,
+      "controlId": "refresh-loading",
+      "variant": "disabled",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "3fd64f2499e8b0dac60fc7e146e60e9737a3af57bc7f52268207726745045cb8"
+    },
+    {
+      "file": "retry-error-default-390.png",
+      "width": 390,
+      "controlId": "retry-error",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "a5bb1711f0017b03980810e335e3c4b94e5db27a4a35efb00d76345a626e672f"
+    },
+    {
+      "file": "retry-error-hover-390.png",
+      "width": 390,
+      "controlId": "retry-error",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "80ef288f764e9583f91ec42dae8671d792a018c2088ad454b7ef518fa4782659"
+    },
+    {
+      "file": "retry-error-focus-390.png",
+      "width": 390,
+      "controlId": "retry-error",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "cba7b6c280bb2e148671eb2488397cbeaa7c4409b0354bc7348ba26d7214e797"
+    },
+    {
+      "file": "retry-error-pressed-390.png",
+      "width": 390,
+      "controlId": "retry-error",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "48019140c506b17809cf2d0d5e32edbe14e811f7d72b127a2bd7fb255209801f"
+    },
+    {
+      "file": "retry-forbidden-default-390.png",
+      "width": 390,
+      "controlId": "retry-forbidden",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "cd59653d9e8a6a2b1a5b66d967522da6f36dde55f02eae293497b7d9eea93233"
+    },
+    {
+      "file": "retry-forbidden-hover-390.png",
+      "width": 390,
+      "controlId": "retry-forbidden",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "9e3d7c91cf3ba5ac97721207dd3e361f0d75914567277eeff284d3ba4855f287"
+    },
+    {
+      "file": "retry-forbidden-focus-390.png",
+      "width": 390,
+      "controlId": "retry-forbidden",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "611a75560b2802d1af14d879473821b21eb84e08437c0fb674231623d525cc6b"
+    },
+    {
+      "file": "retry-forbidden-pressed-390.png",
+      "width": 390,
+      "controlId": "retry-forbidden",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "97ffdc4382116c242042acc52bd9722bb665960ce504cb62a8579ec1bfe3a7a1"
+    },
+    {
+      "file": "retry-expired-default-390.png",
+      "width": 390,
+      "controlId": "retry-expired",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "8fc7a518569cd6695b5e9ba1638e2c3e38ebd22223d246fda532340526b2a741"
+    },
+    {
+      "file": "retry-expired-hover-390.png",
+      "width": 390,
+      "controlId": "retry-expired",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "a54a5188c4d0a4e97c8d6d453a29c2015c1cf8fcd56cda91bd303bf7e4da64a1"
+    },
+    {
+      "file": "retry-expired-focus-390.png",
+      "width": 390,
+      "controlId": "retry-expired",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "a36b2e06a4126b8f1e9181f074c6f62eb3a3bce4ada85b2f0f5d31bbf2e72343"
+    },
+    {
+      "file": "retry-expired-pressed-390.png",
+      "width": 390,
+      "controlId": "retry-expired",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "86db140abb03e8982d2f7c10abf4828a6b8403806e225863dccc42eee0236500"
+    },
+    {
+      "file": "retry-rate_limited-default-390.png",
+      "width": 390,
+      "controlId": "retry-rate_limited",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "94e245ce1d4329ebaa4cf3880f38384b0098f0202e9f9822afeca6cc093de045"
+    },
+    {
+      "file": "retry-rate_limited-hover-390.png",
+      "width": 390,
+      "controlId": "retry-rate_limited",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "159e2d743bb3f1cfca6492cabe75a62dfef53d5d2c7cceb91a292b5908bbb3c5"
+    },
+    {
+      "file": "retry-rate_limited-focus-390.png",
+      "width": 390,
+      "controlId": "retry-rate_limited",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "70a467d0b339cb8bf18e37a5349fac33cd98e4814cd9736b1e1e2f685bde2623"
+    },
+    {
+      "file": "retry-rate_limited-pressed-390.png",
+      "width": 390,
+      "controlId": "retry-rate_limited",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "b65b442d3a8325719bc33f11267d3914cf0079d219641b56bcd9f8c4412dff1a"
+    },
+    {
+      "file": "view-workspaces-available-default-390.png",
+      "width": 390,
+      "controlId": "view-workspaces-available",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "967b84428f3138781e05104f98d12d14b76d8c3a1f032a88d3939c4e721bab31"
+    },
+    {
+      "file": "view-workspaces-available-hover-390.png",
+      "width": 390,
+      "controlId": "view-workspaces-available",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "967b84428f3138781e05104f98d12d14b76d8c3a1f032a88d3939c4e721bab31"
+    },
+    {
+      "file": "view-workspaces-available-focus-390.png",
+      "width": 390,
+      "controlId": "view-workspaces-available",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "dd69c3187cc6c667c4c7bec95d9bf23fcedc315005210b4465cb1568309eb73d"
+    },
+    {
+      "file": "view-workspaces-available-pressed-390.png",
+      "width": 390,
+      "controlId": "view-workspaces-available",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "c2dcac82adfb9edf28c1a29028032e0a54d19af1b3d3a04ea82eec9040aa0205"
+    },
+    {
+      "file": "view-workspaces-selected-default-390.png",
+      "width": 390,
+      "controlId": "view-workspaces-selected",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "51783fb6c6bac182d5c5819c37ad199745edf7bee7984997c612630acb7160ee"
+    },
+    {
+      "file": "view-workspaces-selected-hover-390.png",
+      "width": 390,
+      "controlId": "view-workspaces-selected",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "6113e3e623c6e3df40286fa1196164b28d8a123d11cc963fae5f6a8920d2daa5"
+    },
+    {
+      "file": "view-workspaces-selected-focus-390.png",
+      "width": 390,
+      "controlId": "view-workspaces-selected",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "02518fb284216f17b9b55fd721882a71d26c060e00b7f8b84ea0dc72b25740fb"
+    },
+    {
+      "file": "view-workspaces-selected-pressed-390.png",
+      "width": 390,
+      "controlId": "view-workspaces-selected",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "cf03038fb53360a55974f76e1bcc827373c5a1a0c43593d3aff9d5ea1466a347"
+    },
+    {
+      "file": "view-exports-available-default-390.png",
+      "width": 390,
+      "controlId": "view-exports-available",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "f4eb9b299693807a3dc3649f04aa06c91c3ae611fed659b54dad50726e287df7"
+    },
+    {
+      "file": "view-exports-available-hover-390.png",
+      "width": 390,
+      "controlId": "view-exports-available",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "f4eb9b299693807a3dc3649f04aa06c91c3ae611fed659b54dad50726e287df7"
+    },
+    {
+      "file": "view-exports-available-focus-390.png",
+      "width": 390,
+      "controlId": "view-exports-available",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "147bc36d1a29a148f2c63a98051192323a8b7fda037157231237f143220b6e46"
+    },
+    {
+      "file": "view-exports-available-pressed-390.png",
+      "width": 390,
+      "controlId": "view-exports-available",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "6a5f3d56ef62e79f0ad7d386cb0ee39986c939ee7c0bd0b3add2720933ff3cf9"
+    },
+    {
+      "file": "view-exports-selected-default-390.png",
+      "width": 390,
+      "controlId": "view-exports-selected",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "898ff85ddfc88799f590f79576b6f594efbea56fdaff69402ab10c9f9f906054"
+    },
+    {
+      "file": "view-exports-selected-hover-390.png",
+      "width": 390,
+      "controlId": "view-exports-selected",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "f9d6d85d5ec1b3fdeb28e585c326875de253b1323f0a617c5edee18127a65695"
+    },
+    {
+      "file": "view-exports-selected-focus-390.png",
+      "width": 390,
+      "controlId": "view-exports-selected",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "2c91b56ec3a2896de1c163b66d6e8a8c75e048c42b529b6efcd9a1ff6e808f64"
+    },
+    {
+      "file": "view-exports-selected-pressed-390.png",
+      "width": 390,
+      "controlId": "view-exports-selected",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "2c125f0d2926fa92201c87df48e4c1e724a41d4dcf48148dfced743b0402c182"
+    },
+    {
+      "file": "workspace-reset-default-390.png",
+      "width": 390,
+      "controlId": "workspace-reset",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "d31145ca40edab275a723cb65c5687b980629e1a3574e0f006b76882029cec3f"
+    },
+    {
+      "file": "workspace-reset-hover-390.png",
+      "width": 390,
+      "controlId": "workspace-reset",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "5bb102a625f1504dc6a2d19ddbcd11875244a9b039c02f2f3f2eac7bf70718df"
+    },
+    {
+      "file": "workspace-reset-focus-390.png",
+      "width": 390,
+      "controlId": "workspace-reset",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "227f9defa1a3c5201db0a6a5cfe4fe5bcb8f5240e9497302319595b4ba7f9b73"
+    },
+    {
+      "file": "workspace-reset-pressed-390.png",
+      "width": 390,
+      "controlId": "workspace-reset",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "13d840fc53ce9bf05fda3bff926efb034c837ff4a85ac1ee62ac1f1311b67fb5"
+    },
+    {
+      "file": "workspace-clear-empty-default-390.png",
+      "width": 390,
+      "controlId": "workspace-clear-empty",
+      "variant": "default",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "a97eaea958debdede0f9b1d20aa12ff76ea54e3a3dfac90973ee34a024f548dd"
+    },
+    {
+      "file": "workspace-clear-empty-hover-390.png",
+      "width": 390,
+      "controlId": "workspace-clear-empty",
+      "variant": "hover",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "bd1a1e7ad3d25a0f46cc1db2a4a2ad9458ae962a4fd1a2b4a9ce8427f6609ecf"
+    },
+    {
+      "file": "workspace-clear-empty-focus-390.png",
+      "width": 390,
+      "controlId": "workspace-clear-empty",
+      "variant": "focus",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "14878746cdc97d4482aedd5ebf9826840649511dbdf6527467ad4e991daf2d2e"
+    },
+    {
+      "file": "workspace-clear-empty-pressed-390.png",
+      "width": 390,
+      "controlId": "workspace-clear-empty",
+      "variant": "pressed",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "438afc5b0c64cdfae8490c5437cda831e8562d528d82a74bb633a3ba765c8030"
+    },
+    {
+      "file": "workspace-previous-default-390.png",
+      "width": 390,
+      "controlId": "workspace-previous",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "73c1b24e9981f1a522d9745c0c9463b9802214465eb561dfd33d5cf04d44abb2"
+    },
+    {
+      "file": "workspace-previous-hover-390.png",
+      "width": 390,
+      "controlId": "workspace-previous",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "013b06f876871e40d7024d04b77ead167c6a52dae64a2a21a3b2f3146d49594a"
+    },
+    {
+      "file": "workspace-previous-focus-390.png",
+      "width": 390,
+      "controlId": "workspace-previous",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "6c8e78a9fc168c4f3e87bb121c816e8f9cdf2352b394e2d6d9f716d8e1cb2c71"
+    },
+    {
+      "file": "workspace-previous-pressed-390.png",
+      "width": 390,
+      "controlId": "workspace-previous",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "7179b07c1bb30dde8aed9937636286d50177a53eec839346e791cc4a69d6878c"
+    },
+    {
+      "file": "workspace-previous-disabled-390.png",
+      "width": 390,
+      "controlId": "workspace-previous",
+      "variant": "disabled",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "48e23b10680fcf032c192477dd87758e69cfe5ab7318334f5eb3ceb164495627"
+    },
+    {
+      "file": "workspace-next-default-390.png",
+      "width": 390,
+      "controlId": "workspace-next",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "60d6317469b0dfa6fb2c79ad4e649c9b7f6e8eb68df249b910a8376b0fb3a712"
+    },
+    {
+      "file": "workspace-next-hover-390.png",
+      "width": 390,
+      "controlId": "workspace-next",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "bde4602296d902b5cf8523adbdbad0db22be2219ee04045bb5ba625c4e5fe6b2"
+    },
+    {
+      "file": "workspace-next-focus-390.png",
+      "width": 390,
+      "controlId": "workspace-next",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "abdeca28b5e0d5e7436562308ca1b2c39851f3b964ff7f4cb3fd64b7835b4c59"
+    },
+    {
+      "file": "workspace-next-pressed-390.png",
+      "width": 390,
+      "controlId": "workspace-next",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "b2a84af017000d3f6be96bad2e0fed89e613b8da7a9311f95a45c802f575fe5a"
+    },
+    {
+      "file": "workspace-next-disabled-390.png",
+      "width": 390,
+      "controlId": "workspace-next",
+      "variant": "disabled",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "3f97a96b565d22a54e360d838d2d20133c36db5a13683d5e12deebd24673b181"
+    },
+    {
+      "file": "workspace-filters-closed-default-390.png",
+      "width": 390,
+      "controlId": "workspace-filters-closed",
+      "variant": "default",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "09532a67454cb0bc76e138fe013e77ad878894c786c6f6a5cf7e162dbb677987"
+    },
+    {
+      "file": "workspace-filters-closed-hover-390.png",
+      "width": 390,
+      "controlId": "workspace-filters-closed",
+      "variant": "hover",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "f48c124deca50e52fda081969ead8a22410a6ce8edd9c535c427c42b1977fba4"
+    },
+    {
+      "file": "workspace-filters-closed-focus-390.png",
+      "width": 390,
+      "controlId": "workspace-filters-closed",
+      "variant": "focus",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "a9a102c9a03e1d498dea6bc6e01f2bacc558873b58354d99eb7f6b42f37a1fa2"
+    },
+    {
+      "file": "workspace-filters-closed-pressed-390.png",
+      "width": 390,
+      "controlId": "workspace-filters-closed",
+      "variant": "pressed",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "d926af60e2db112d32e2fc23054bfcd835dc220c016ad91c2886143bc577825b"
+    },
+    {
+      "file": "workspace-filters-open-default-390.png",
+      "width": 390,
+      "controlId": "workspace-filters-open",
+      "variant": "default",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "4a1c678d92a116db11bd238659cfa1c7ee653ad0a19ed0699df1f3dc25d3277c"
+    },
+    {
+      "file": "workspace-filters-open-hover-390.png",
+      "width": 390,
+      "controlId": "workspace-filters-open",
+      "variant": "hover",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "6136a2bffb3195a13679d7eb6b16f024cdbd7ff0f87edacad7d771464bb3cc37"
+    },
+    {
+      "file": "workspace-filters-open-focus-390.png",
+      "width": 390,
+      "controlId": "workspace-filters-open",
+      "variant": "focus",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "d94dc4eeaa03c5e28e88cf79a815ce4429a9b9135674aaa8c4f0735b431d7692"
+    },
+    {
+      "file": "workspace-filters-open-pressed-390.png",
+      "width": 390,
+      "controlId": "workspace-filters-open",
+      "variant": "pressed",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "f7b1bfe858b874b1c1dbfa2e964c538c30837fe2b43d86107d3c178f435bc978"
+    },
+    {
+      "file": "export-reset-default-390.png",
+      "width": 390,
+      "controlId": "export-reset",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "d735de7697131a75df7d071c0f9ef0190273ec77f5d2f4929afab10817151532"
+    },
+    {
+      "file": "export-reset-hover-390.png",
+      "width": 390,
+      "controlId": "export-reset",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "b2b0bb8f392e821744bc048573d008311ba23e20fe59f301f93d3f6f583bd47f"
+    },
+    {
+      "file": "export-reset-focus-390.png",
+      "width": 390,
+      "controlId": "export-reset",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "43eb0739ed103bde1bd32bd4d81fc623b0fc5ba652094fd490af96d893f37511"
+    },
+    {
+      "file": "export-reset-pressed-390.png",
+      "width": 390,
+      "controlId": "export-reset",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "a7b4f33439d32a4ef3ee2ea40bac33858241b9cb8fc31bc0eeaddf237dacebdc"
+    },
+    {
+      "file": "export-clear-empty-default-390.png",
+      "width": 390,
+      "controlId": "export-clear-empty",
+      "variant": "default",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "a97eaea958debdede0f9b1d20aa12ff76ea54e3a3dfac90973ee34a024f548dd"
+    },
+    {
+      "file": "export-clear-empty-hover-390.png",
+      "width": 390,
+      "controlId": "export-clear-empty",
+      "variant": "hover",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "bd1a1e7ad3d25a0f46cc1db2a4a2ad9458ae962a4fd1a2b4a9ce8427f6609ecf"
+    },
+    {
+      "file": "export-clear-empty-focus-390.png",
+      "width": 390,
+      "controlId": "export-clear-empty",
+      "variant": "focus",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "14878746cdc97d4482aedd5ebf9826840649511dbdf6527467ad4e991daf2d2e"
+    },
+    {
+      "file": "export-clear-empty-pressed-390.png",
+      "width": 390,
+      "controlId": "export-clear-empty",
+      "variant": "pressed",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "438afc5b0c64cdfae8490c5437cda831e8562d528d82a74bb633a3ba765c8030"
+    },
+    {
+      "file": "export-previous-default-390.png",
+      "width": 390,
+      "controlId": "export-previous",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "557af3332fc3af9eeaafd248887dd36d16390da1abf0d7dc11c398543620e28b"
+    },
+    {
+      "file": "export-previous-hover-390.png",
+      "width": 390,
+      "controlId": "export-previous",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "db28bba1ffb2e81f968aafd3d4bf2e6db2b7c5d5f45e52b8dc48077272142aef"
+    },
+    {
+      "file": "export-previous-focus-390.png",
+      "width": 390,
+      "controlId": "export-previous",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "0f866e86d702ef298e025dbb03087055f1a75f0efcbe6e1c76d1247bfc68adbb"
+    },
+    {
+      "file": "export-previous-pressed-390.png",
+      "width": 390,
+      "controlId": "export-previous",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "d68f8346a66e325aa765c2893945af7d4096a1cda389703ef539165a1f5ce076"
+    },
+    {
+      "file": "export-previous-disabled-390.png",
+      "width": 390,
+      "controlId": "export-previous",
+      "variant": "disabled",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "56ec427164cf99c78741dddd868c43899b5e03fc7c6a9e0a4f993e209e2b32d8"
+    },
+    {
+      "file": "export-next-default-390.png",
+      "width": 390,
+      "controlId": "export-next",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "6742d7c9fac66a4dbfd1060183be14723b9e24b77e81eccc7fba059724118042"
+    },
+    {
+      "file": "export-next-hover-390.png",
+      "width": 390,
+      "controlId": "export-next",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "a08603c8745c1028572c94c717911b639cb76344acde5d82db0830712422216d"
+    },
+    {
+      "file": "export-next-focus-390.png",
+      "width": 390,
+      "controlId": "export-next",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "7d3294769fac798cd1233b49785de975d67b207824b3556bfa1d2d169344dcc2"
+    },
+    {
+      "file": "export-next-pressed-390.png",
+      "width": 390,
+      "controlId": "export-next",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "505c494e431202b0363cda8c40dfb9136452a3b5f9033eba75aacb7766e44433"
+    },
+    {
+      "file": "export-next-disabled-390.png",
+      "width": 390,
+      "controlId": "export-next",
+      "variant": "disabled",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "a4970e2646bac0cf9e0418b2b610a3768e19744c3ab816aa827a3e8780b363d9"
+    },
+    {
+      "file": "export-filters-closed-default-390.png",
+      "width": 390,
+      "controlId": "export-filters-closed",
+      "variant": "default",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "09532a67454cb0bc76e138fe013e77ad878894c786c6f6a5cf7e162dbb677987"
+    },
+    {
+      "file": "export-filters-closed-hover-390.png",
+      "width": 390,
+      "controlId": "export-filters-closed",
+      "variant": "hover",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "f48c124deca50e52fda081969ead8a22410a6ce8edd9c535c427c42b1977fba4"
+    },
+    {
+      "file": "export-filters-closed-focus-390.png",
+      "width": 390,
+      "controlId": "export-filters-closed",
+      "variant": "focus",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "a9a102c9a03e1d498dea6bc6e01f2bacc558873b58354d99eb7f6b42f37a1fa2"
+    },
+    {
+      "file": "export-filters-closed-pressed-390.png",
+      "width": 390,
+      "controlId": "export-filters-closed",
+      "variant": "pressed",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "d926af60e2db112d32e2fc23054bfcd835dc220c016ad91c2886143bc577825b"
+    },
+    {
+      "file": "export-filters-open-default-390.png",
+      "width": 390,
+      "controlId": "export-filters-open",
+      "variant": "default",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "4a1b50c27e47dbd87df464baaa65129f3de4defe42ae392e40182b0252c07bab"
+    },
+    {
+      "file": "export-filters-open-hover-390.png",
+      "width": 390,
+      "controlId": "export-filters-open",
+      "variant": "hover",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "d3d0c8af75df4504fee5a2eaf3fe1469c17b4a5ea2bd6ca818f1624b9b10759d"
+    },
+    {
+      "file": "export-filters-open-focus-390.png",
+      "width": 390,
+      "controlId": "export-filters-open",
+      "variant": "focus",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "0799a51f344e5bbc336eae15038275edafbfa90ca4939eb44479a4b1e1227175"
+    },
+    {
+      "file": "export-filters-open-pressed-390.png",
+      "width": 390,
+      "controlId": "export-filters-open",
+      "variant": "pressed",
+      "proposalOnly": true,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "facb3df70676025b5e01dddfc0302483b7c2b766b3d8c07af0f00448f870b005"
+    },
+    {
+      "file": "technical-closed-default-390.png",
+      "width": 390,
+      "controlId": "technical-closed",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "56a962606cd5313269fac810abba29e78a95d84e21f55ea8fe16b3ab584eb986"
+    },
+    {
+      "file": "technical-closed-hover-390.png",
+      "width": 390,
+      "controlId": "technical-closed",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "4ac58acc515caefa68d606ea79ad695879db19a2fd265916c1b4b271453dcaae"
+    },
+    {
+      "file": "technical-closed-focus-390.png",
+      "width": 390,
+      "controlId": "technical-closed",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "c444ead277d6266b2352b1a09a096d6289698155630cddcd9b8b83ea7fa0dad5"
+    },
+    {
+      "file": "technical-closed-pressed-390.png",
+      "width": 390,
+      "controlId": "technical-closed",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "59f89be275b5288ee4fbdc948546cfd46c45aaaadf71b20c7a65a6478c85aab5"
+    },
+    {
+      "file": "technical-open-default-390.png",
+      "width": 390,
+      "controlId": "technical-open",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "f03bb7e24e8e0e4629f2cc365cb17081a88f830c7a6f6737b4c79df155245277"
+    },
+    {
+      "file": "technical-open-hover-390.png",
+      "width": 390,
+      "controlId": "technical-open",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "c6bf326d24df945e4f12979a49fc8f0f76d5cb897d71d9cdbcba6c325389e1ff"
+    },
+    {
+      "file": "technical-open-focus-390.png",
+      "width": 390,
+      "controlId": "technical-open",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "ddea656fe7b8406c1e5211bb1a0f087f2ccbed2a2755fb6c768753e1b59514ef"
+    },
+    {
+      "file": "technical-open-pressed-390.png",
+      "width": 390,
+      "controlId": "technical-open",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "42c6ca1fb7b484064649b033c3335d7f1eafca06bdb31936e87462b610cb37a3"
+    },
+    {
+      "file": "reports-default-390.png",
+      "width": 390,
+      "controlId": "reports",
+      "variant": "default",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "7921f4025097c50422e001c7502a7bb785375f1eed7f9f8cad2a3b6cfa09afe1"
+    },
+    {
+      "file": "reports-hover-390.png",
+      "width": 390,
+      "controlId": "reports",
+      "variant": "hover",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "8eb4b7c6b1c738432e00e9190fff1762b0f28311d4843fc02e5ec807cac37c0e"
+    },
+    {
+      "file": "reports-focus-390.png",
+      "width": 390,
+      "controlId": "reports",
+      "variant": "focus",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "f78b24e93d6ffdb4c5713cfd91bcb33e03e7f498dd20777e2e71c6a0ac3c4ec6"
+    },
+    {
+      "file": "reports-pressed-390.png",
+      "width": 390,
+      "controlId": "reports",
+      "variant": "pressed",
+      "proposalOnly": false,
+      "scope": "offline-native-control-region-not-production",
+      "sha256": "c5c67e82418eb70fb887cbf455b154fcc47080269da8a7abf3c48e076711a1fc"
+    },
+    {
+      "file": "workspace-composition-390.png",
+      "width": 390,
+      "scope": "offline-composition-not-production",
+      "sha256": "f8505e0e9f3e0e99f78f077f2a36d84e44cfb1e935943738f7b0cad78710353b"
+    },
+    {
+      "file": "export-details-composition-390.png",
+      "width": 390,
+      "scope": "offline-composition-not-production",
+      "sha256": "ace59de073c5b4507a6704d89c8a0767043715e98370608a56ddd70c49e08217"
+    }
+  ],
+  "businessDialogs": 0,
+  "businessWrites": 0,
+  "externalRequests": 0,
+  "pageErrors": 0
+}
