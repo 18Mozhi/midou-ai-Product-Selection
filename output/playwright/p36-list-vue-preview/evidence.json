@@ -1,0 +1,1836 @@
+{
+  "kind": "P36-LIST-VUE-PREVIEW-r1",
+  "approval": "pending-user-review",
+  "scope": "Actual parent/child and original scripts/directives with review-only result template/CSS. Original eight token fixture at fixed review clock; supplemental empty,expired and unknown/long-name responses explicitly synthetic. GET-only, original reason dialogs opened and cancelled; no submitted rotation/revoke, OS clipboard, permissions, actual SQL, App shell or production acceptance. Filters retain original markup; host workbench width is a preview arrangement, not pixel-identical full-page approval.",
+  "fixedTime": "2026-08-26T10:00:00.000Z",
+  "fixtureRows": [
+    {
+      "id": "00000000-0000-4000-8000-000000000900",
+      "name": "月度经营报表",
+      "token_prefix": "sco_org_e2e_1",
+      "scopes": [
+        "trend:read",
+        "report:read"
+      ],
+      "status": "active",
+      "expires_at": "2026-08-30T12:00:00.000Z",
+      "last_used_at": "2026-08-08T11:00:00.000Z",
+      "version": 1,
+      "created_at": "2026-08-01T10:00:00.000Z",
+      "updated_at": "2026-08-08T12:00:00.000Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000901",
+      "name": "只读系统 2",
+      "token_prefix": "sco_org_e2e_2",
+      "scopes": [
+        "task:read"
+      ],
+      "status": "active",
+      "expires_at": "2027-08-08T12:00:00.000Z",
+      "last_used_at": null,
+      "version": 1,
+      "created_at": "2026-08-02T10:00:00.000Z",
+      "updated_at": "2026-08-08T12:00:00.000Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000902",
+      "name": "只读系统 3",
+      "token_prefix": "sco_org_e2e_3",
+      "scopes": [
+        "trend:read",
+        "report:read"
+      ],
+      "status": "active",
+      "expires_at": "2027-08-08T12:00:00.000Z",
+      "last_used_at": "2026-08-08T11:00:00.000Z",
+      "version": 1,
+      "created_at": "2026-08-03T10:00:00.000Z",
+      "updated_at": "2026-08-08T12:00:00.000Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000903",
+      "name": "只读系统 4",
+      "token_prefix": "sco_org_e2e_4",
+      "scopes": [
+        "task:read"
+      ],
+      "status": "active",
+      "expires_at": "2027-08-08T12:00:00.000Z",
+      "last_used_at": "2026-08-08T11:00:00.000Z",
+      "version": 1,
+      "created_at": "2026-08-04T10:00:00.000Z",
+      "updated_at": "2026-08-08T12:00:00.000Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000904",
+      "name": "只读系统 5",
+      "token_prefix": "sco_org_e2e_5",
+      "scopes": [
+        "trend:read",
+        "report:read"
+      ],
+      "status": "active",
+      "expires_at": "2027-08-08T12:00:00.000Z",
+      "last_used_at": "2026-08-08T11:00:00.000Z",
+      "version": 1,
+      "created_at": "2026-08-05T10:00:00.000Z",
+      "updated_at": "2026-08-08T12:00:00.000Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000905",
+      "name": "只读系统 6",
+      "token_prefix": "sco_org_e2e_6",
+      "scopes": [
+        "task:read"
+      ],
+      "status": "active",
+      "expires_at": "2027-08-08T12:00:00.000Z",
+      "last_used_at": "2026-08-08T11:00:00.000Z",
+      "version": 1,
+      "created_at": "2026-08-06T10:00:00.000Z",
+      "updated_at": "2026-08-08T12:00:00.000Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000906",
+      "name": "只读系统 7",
+      "token_prefix": "sco_org_e2e_7",
+      "scopes": [
+        "trend:read",
+        "report:read"
+      ],
+      "status": "rotated",
+      "expires_at": "2027-08-08T12:00:00.000Z",
+      "last_used_at": "2026-08-08T11:00:00.000Z",
+      "version": 1,
+      "created_at": "2026-08-07T10:00:00.000Z",
+      "updated_at": "2026-08-08T12:00:00.000Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000907",
+      "name": "只读系统 8",
+      "token_prefix": "sco_org_e2e_8",
+      "scopes": [
+        "task:read"
+      ],
+      "status": "revoked",
+      "expires_at": "2027-08-08T12:00:00.000Z",
+      "last_used_at": "2026-08-08T11:00:00.000Z",
+      "version": 1,
+      "created_at": "2026-08-08T10:00:00.000Z",
+      "updated_at": "2026-08-08T12:00:00.000Z"
+    }
+  ],
+  "supplemental": [
+    "empty",
+    "expired-clone",
+    "unknown-scope-status-long-name-clone"
+  ],
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/approval-read-failure.css": "6295ffead416eae4dfdf0fa88dde57a3b7ec6fa60241b44e4405e3f1755aaa6a",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "apps/web/src/design/approval-read-failure-tokens.css": "bd13bd68c498bd64b2bb29cba882d09fb324b0fbacf5cab1812fd52abbdb6692",
+    "apps/web/src/design/export-detail-tokens.css": "d0dc62dff48590e983d06a8960bd74bbadc7d7f78daa31237df45214b7ee513a",
+    "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
+    "apps/web/src/design/token-filter-tokens.css": "6a2b9871858d0c1a5d7ee2a052b5b1d5043331f414685525d561d8ae6d366710",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/org-data-export-detail.css": "55b7a84508f5ff64d02061bc832991bceec6674e66313623ed6ade22aba2de04",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/organization-audit.css": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/token-list-preview.css": "7f574634115ff6e15ed54da2b3821916ac09a2b701690c8bcfa510eb50bf6943",
+    "scripts/lib/ui-phase2-token-list-preview.mjs": "1dbc8720af98081623c87b0d5dad1a943385f54087f212bc9dcc78a36fe2896e",
+    "scripts/verify-ui-phase2-token-list-preview.mjs": "b0411dfccca089da03b6e3ba435091ed1ae4eb950739a2f72a0d09086a1f743f",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/OrganizationTokenPanel.vue": "9ea0335610e44a70e462f64e1927c92e898dc57202ec7a59c1dfb0de68d6f39f"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "six rows on first page"
+    },
+    {
+      "width": 390,
+      "name": "first previous disabled"
+    },
+    {
+      "width": 390,
+      "name": "first next enabled"
+    },
+    {
+      "width": 390,
+      "name": "inactive rows have no write actions"
+    },
+    {
+      "width": 390,
+      "name": "technical IDs initially collapsed"
+    },
+    {
+      "width": 390,
+      "name": "page-one:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "page-one:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "page two exact names"
+    },
+    {
+      "width": 390,
+      "name": "page two next disabled"
+    },
+    {
+      "width": 390,
+      "name": "page two URL"
+    },
+    {
+      "width": 390,
+      "name": "page-two:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "page-two:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "no-result copy"
+    },
+    {
+      "width": 390,
+      "name": "no-result pagination absent"
+    },
+    {
+      "width": 390,
+      "name": "no-result:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "no-result:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "all six actual active records"
+    },
+    {
+      "width": 390,
+      "name": "filter and paging made no extra GET"
+    },
+    {
+      "width": 390,
+      "name": "C record paper"
+    },
+    {
+      "width": 390,
+      "name": "native action and summary touch targets"
+    },
+    {
+      "width": 390,
+      "name": "active-record:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "active-record:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "exact technical ID"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "technical-open:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "rotate:real keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "rotate-focus:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "rotate-focus:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "rotate-hover:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "rotate-hover:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "rotate:native pressed"
+    },
+    {
+      "width": 390,
+      "name": "rotate-pressed:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "rotate-pressed:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "rotate:actual reason target"
+    },
+    {
+      "width": 390,
+      "name": "rotate:original blank reason"
+    },
+    {
+      "width": 390,
+      "name": "rotate:cancel restores trigger"
+    },
+    {
+      "width": 390,
+      "name": "revoke:real keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "revoke-focus:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "revoke-focus:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "revoke-hover:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "revoke-hover:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "revoke:native pressed"
+    },
+    {
+      "width": 390,
+      "name": "revoke-pressed:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "revoke-pressed:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "revoke:actual reason target"
+    },
+    {
+      "width": 390,
+      "name": "revoke:original blank reason"
+    },
+    {
+      "width": 390,
+      "name": "revoke:cancel restores trigger"
+    },
+    {
+      "width": 390,
+      "name": "busy record actions disabled"
+    },
+    {
+      "width": 390,
+      "name": "busy-record:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "busy-record:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "empty-organization copy"
+    },
+    {
+      "width": 390,
+      "name": "no-tokens:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "no-tokens:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "expired actual label"
+    },
+    {
+      "width": 390,
+      "name": "expired has no write actions"
+    },
+    {
+      "width": 390,
+      "name": "expired-record:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "expired-record:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "unknown status is not invented active"
+    },
+    {
+      "width": 390,
+      "name": "unknown scope original fallback"
+    },
+    {
+      "width": 390,
+      "name": "unknown has no actions"
+    },
+    {
+      "width": 390,
+      "name": "unknown-long-record:visible region is unobscured"
+    },
+    {
+      "width": 390,
+      "name": "unknown-long-record:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "all requests remain exact GET"
+    },
+    {
+      "width": 390,
+      "name": "zero external or write requests"
+    },
+    {
+      "width": 390,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "name": "zero storage"
+    },
+    {
+      "width": 760,
+      "name": "six rows on first page"
+    },
+    {
+      "width": 760,
+      "name": "first previous disabled"
+    },
+    {
+      "width": 760,
+      "name": "first next enabled"
+    },
+    {
+      "width": 760,
+      "name": "inactive rows have no write actions"
+    },
+    {
+      "width": 760,
+      "name": "technical IDs initially collapsed"
+    },
+    {
+      "width": 760,
+      "name": "page-one:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "page-one:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "page two exact names"
+    },
+    {
+      "width": 760,
+      "name": "page two next disabled"
+    },
+    {
+      "width": 760,
+      "name": "page two URL"
+    },
+    {
+      "width": 760,
+      "name": "page-two:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "page-two:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "no-result copy"
+    },
+    {
+      "width": 760,
+      "name": "no-result pagination absent"
+    },
+    {
+      "width": 760,
+      "name": "no-result:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "no-result:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "all six actual active records"
+    },
+    {
+      "width": 760,
+      "name": "filter and paging made no extra GET"
+    },
+    {
+      "width": 760,
+      "name": "C record paper"
+    },
+    {
+      "width": 760,
+      "name": "native action and summary touch targets"
+    },
+    {
+      "width": 760,
+      "name": "active-record:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "active-record:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "exact technical ID"
+    },
+    {
+      "width": 760,
+      "name": "technical-open:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "technical-open:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "rotate:real keyboard focus"
+    },
+    {
+      "width": 760,
+      "name": "rotate-focus:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "rotate-focus:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "rotate-hover:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "rotate-hover:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "rotate:native pressed"
+    },
+    {
+      "width": 760,
+      "name": "rotate-pressed:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "rotate-pressed:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "rotate:actual reason target"
+    },
+    {
+      "width": 760,
+      "name": "rotate:original blank reason"
+    },
+    {
+      "width": 760,
+      "name": "rotate:cancel restores trigger"
+    },
+    {
+      "width": 760,
+      "name": "revoke:real keyboard focus"
+    },
+    {
+      "width": 760,
+      "name": "revoke-focus:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "revoke-focus:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "revoke-hover:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "revoke-hover:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "revoke:native pressed"
+    },
+    {
+      "width": 760,
+      "name": "revoke-pressed:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "revoke-pressed:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "revoke:actual reason target"
+    },
+    {
+      "width": 760,
+      "name": "revoke:original blank reason"
+    },
+    {
+      "width": 760,
+      "name": "revoke:cancel restores trigger"
+    },
+    {
+      "width": 760,
+      "name": "busy record actions disabled"
+    },
+    {
+      "width": 760,
+      "name": "busy-record:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "busy-record:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "empty-organization copy"
+    },
+    {
+      "width": 760,
+      "name": "no-tokens:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "no-tokens:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "expired actual label"
+    },
+    {
+      "width": 760,
+      "name": "expired has no write actions"
+    },
+    {
+      "width": 760,
+      "name": "expired-record:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "expired-record:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "unknown status is not invented active"
+    },
+    {
+      "width": 760,
+      "name": "unknown scope original fallback"
+    },
+    {
+      "width": 760,
+      "name": "unknown has no actions"
+    },
+    {
+      "width": 760,
+      "name": "unknown-long-record:visible region is unobscured"
+    },
+    {
+      "width": 760,
+      "name": "unknown-long-record:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "all requests remain exact GET"
+    },
+    {
+      "width": 760,
+      "name": "zero external or write requests"
+    },
+    {
+      "width": 760,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 760,
+      "name": "zero storage"
+    },
+    {
+      "width": 761,
+      "name": "six rows on first page"
+    },
+    {
+      "width": 761,
+      "name": "first previous disabled"
+    },
+    {
+      "width": 761,
+      "name": "first next enabled"
+    },
+    {
+      "width": 761,
+      "name": "inactive rows have no write actions"
+    },
+    {
+      "width": 761,
+      "name": "technical IDs initially collapsed"
+    },
+    {
+      "width": 761,
+      "name": "page-one:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "page-one:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "page two exact names"
+    },
+    {
+      "width": 761,
+      "name": "page two next disabled"
+    },
+    {
+      "width": 761,
+      "name": "page two URL"
+    },
+    {
+      "width": 761,
+      "name": "page-two:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "page-two:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "no-result copy"
+    },
+    {
+      "width": 761,
+      "name": "no-result pagination absent"
+    },
+    {
+      "width": 761,
+      "name": "no-result:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "no-result:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "all six actual active records"
+    },
+    {
+      "width": 761,
+      "name": "filter and paging made no extra GET"
+    },
+    {
+      "width": 761,
+      "name": "C record paper"
+    },
+    {
+      "width": 761,
+      "name": "native action and summary touch targets"
+    },
+    {
+      "width": 761,
+      "name": "active-record:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "active-record:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "exact technical ID"
+    },
+    {
+      "width": 761,
+      "name": "technical-open:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "technical-open:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "rotate:real keyboard focus"
+    },
+    {
+      "width": 761,
+      "name": "rotate-focus:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "rotate-focus:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "rotate-hover:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "rotate-hover:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "rotate:native pressed"
+    },
+    {
+      "width": 761,
+      "name": "rotate-pressed:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "rotate-pressed:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "rotate:actual reason target"
+    },
+    {
+      "width": 761,
+      "name": "rotate:original blank reason"
+    },
+    {
+      "width": 761,
+      "name": "rotate:cancel restores trigger"
+    },
+    {
+      "width": 761,
+      "name": "revoke:real keyboard focus"
+    },
+    {
+      "width": 761,
+      "name": "revoke-focus:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "revoke-focus:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "revoke-hover:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "revoke-hover:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "revoke:native pressed"
+    },
+    {
+      "width": 761,
+      "name": "revoke-pressed:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "revoke-pressed:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "revoke:actual reason target"
+    },
+    {
+      "width": 761,
+      "name": "revoke:original blank reason"
+    },
+    {
+      "width": 761,
+      "name": "revoke:cancel restores trigger"
+    },
+    {
+      "width": 761,
+      "name": "busy record actions disabled"
+    },
+    {
+      "width": 761,
+      "name": "busy-record:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "busy-record:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "empty-organization copy"
+    },
+    {
+      "width": 761,
+      "name": "no-tokens:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "no-tokens:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "expired actual label"
+    },
+    {
+      "width": 761,
+      "name": "expired has no write actions"
+    },
+    {
+      "width": 761,
+      "name": "expired-record:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "expired-record:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "unknown status is not invented active"
+    },
+    {
+      "width": 761,
+      "name": "unknown scope original fallback"
+    },
+    {
+      "width": 761,
+      "name": "unknown has no actions"
+    },
+    {
+      "width": 761,
+      "name": "unknown-long-record:visible region is unobscured"
+    },
+    {
+      "width": 761,
+      "name": "unknown-long-record:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "all requests remain exact GET"
+    },
+    {
+      "width": 761,
+      "name": "zero external or write requests"
+    },
+    {
+      "width": 761,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 761,
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "name": "six rows on first page"
+    },
+    {
+      "width": 1440,
+      "name": "first previous disabled"
+    },
+    {
+      "width": 1440,
+      "name": "first next enabled"
+    },
+    {
+      "width": 1440,
+      "name": "inactive rows have no write actions"
+    },
+    {
+      "width": 1440,
+      "name": "technical IDs initially collapsed"
+    },
+    {
+      "width": 1440,
+      "name": "page-one:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "page-one:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "page two exact names"
+    },
+    {
+      "width": 1440,
+      "name": "page two next disabled"
+    },
+    {
+      "width": 1440,
+      "name": "page two URL"
+    },
+    {
+      "width": 1440,
+      "name": "page-two:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "page-two:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "no-result copy"
+    },
+    {
+      "width": 1440,
+      "name": "no-result pagination absent"
+    },
+    {
+      "width": 1440,
+      "name": "no-result:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "no-result:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "all six actual active records"
+    },
+    {
+      "width": 1440,
+      "name": "filter and paging made no extra GET"
+    },
+    {
+      "width": 1440,
+      "name": "C record paper"
+    },
+    {
+      "width": 1440,
+      "name": "native action and summary touch targets"
+    },
+    {
+      "width": 1440,
+      "name": "active-record:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "active-record:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "exact technical ID"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "technical-open:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:real keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-focus:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-focus:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-hover:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-hover:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:native pressed"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-pressed:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-pressed:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:actual reason target"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:original blank reason"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:cancel restores trigger"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:real keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-focus:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-focus:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-hover:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-hover:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:native pressed"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-pressed:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-pressed:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:actual reason target"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:original blank reason"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:cancel restores trigger"
+    },
+    {
+      "width": 1440,
+      "name": "busy record actions disabled"
+    },
+    {
+      "width": 1440,
+      "name": "busy-record:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "busy-record:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "empty-organization copy"
+    },
+    {
+      "width": 1440,
+      "name": "no-tokens:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "no-tokens:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "expired actual label"
+    },
+    {
+      "width": 1440,
+      "name": "expired has no write actions"
+    },
+    {
+      "width": 1440,
+      "name": "expired-record:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "expired-record:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "unknown status is not invented active"
+    },
+    {
+      "width": 1440,
+      "name": "unknown scope original fallback"
+    },
+    {
+      "width": 1440,
+      "name": "unknown has no actions"
+    },
+    {
+      "width": 1440,
+      "name": "unknown-long-record:visible region is unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "unknown-long-record:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "all requests remain exact GET"
+    },
+    {
+      "width": 1440,
+      "name": "zero external or write requests"
+    },
+    {
+      "width": 1440,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "zero storage"
+    }
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        }
+      ]
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-page-one.png",
+      "width": 390,
+      "state": "page-one",
+      "sha256": "bbd789a35596299fe1bb8e99c086f981c0dc35d28757dc74c9409352b62ded7c",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "390-page-two.png",
+      "width": 390,
+      "state": "page-two",
+      "sha256": "67e1edf42505a969b5a4f8bfeae7c876359ff80bf1aa1be49009416a59673b6b",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "390-no-result.png",
+      "width": 390,
+      "state": "no-result",
+      "sha256": "1ccfd0bf3baa54ab913b18989ac4c9727f4fee4009f3f9b0fbcf612b9a7c9405",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "390-active-record.png",
+      "width": 390,
+      "state": "active-record",
+      "sha256": "65ffc0f381f74a865c2da2b326ace738f25eec69a2a913172d8eeda03382a2bc",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "390-technical-open.png",
+      "width": 390,
+      "state": "technical-open",
+      "sha256": "7620250973a21ab40232d52ce734f4f725523602ea50ac21eefc1adc24cdaf84",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "390-rotate-focus.png",
+      "width": 390,
+      "state": "rotate-focus",
+      "sha256": "e768a8efd23f9b68e78469ccf58437f28490102009c4cb8c5eb4a7c1f9e1b2e0",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "390-rotate-hover.png",
+      "width": 390,
+      "state": "rotate-hover",
+      "sha256": "a3d206d69410f61364e02e54377db0e3069ec12ff6a3af1fa68b5dbc4e33b0be",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "390-rotate-pressed.png",
+      "width": 390,
+      "state": "rotate-pressed",
+      "sha256": "26eecb58a0b952de92218eddba1e269e02a3b9a8a271e9db6283c28ff6be9e3c",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "390-revoke-focus.png",
+      "width": 390,
+      "state": "revoke-focus",
+      "sha256": "5e33beadb334508b860702c1a13ae94fedcb512a26e2848d73c1afc83c392722",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "390-revoke-hover.png",
+      "width": 390,
+      "state": "revoke-hover",
+      "sha256": "26224790d1f66300a6bc722d37f168497153be231161815ec3f8d510659824bc",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "390-revoke-pressed.png",
+      "width": 390,
+      "state": "revoke-pressed",
+      "sha256": "d17d71c87c2618bb6df941dc002d14db08c34af1833fd415fbcf1ab1e73a2bc8",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "390-busy-record.png",
+      "width": 390,
+      "state": "busy-record",
+      "sha256": "de6ffe85c59d5a9b9506bacbfba65a4478541612a9bdaa822618bcac51368254",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "390-no-tokens.png",
+      "width": 390,
+      "state": "no-tokens",
+      "sha256": "b08065e7e8d46e4fde4bdf2e28f92e65e1ef7acec8e1129f4fd168d0a1f47de4",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "390-expired-record.png",
+      "width": 390,
+      "state": "expired-record",
+      "sha256": "ededac32dadeef614e4ac2e9ac9e9b02f4050ca21eaf5a9ddcce4154b6fbf59a",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "390-unknown-long-record.png",
+      "width": 390,
+      "state": "unknown-long-record",
+      "sha256": "8df1c73cc4d102f350b7e9096ddae0be266708ec190f7a23797e2b3bdcbd3691",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-page-one.png",
+      "width": 760,
+      "state": "page-one",
+      "sha256": "f4d1f8d9d6a90ab24691c4c0f7c30381ccc34a796c97701d4f3c6ced18442e3f",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-page-two.png",
+      "width": 760,
+      "state": "page-two",
+      "sha256": "3f11ec6f53ab3218073b504e4e6cf347965ea2b259ece130dfcac54f8fe4c044",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-no-result.png",
+      "width": 760,
+      "state": "no-result",
+      "sha256": "2fde6bfebe626afb82f87d4cc5409f2ede5765710911340575a0c7e5e5aae63c",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-active-record.png",
+      "width": 760,
+      "state": "active-record",
+      "sha256": "2378770f3ac9608b498b41c734c1df1857a924b9a23421b5ef76fdbe51dd7adf",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-technical-open.png",
+      "width": 760,
+      "state": "technical-open",
+      "sha256": "cfaa0db1485feba6fdc3483cc405337d45f90117ff02c66fa0bf925c4e97751c",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-rotate-focus.png",
+      "width": 760,
+      "state": "rotate-focus",
+      "sha256": "31ec0a14f439b875f70c3fd38fbcc94554801e15a970ce1d3a6fcbc252f50024",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-rotate-hover.png",
+      "width": 760,
+      "state": "rotate-hover",
+      "sha256": "2f0d77030fba1ba1e24a363363f2cfb4df95cc4fe0887236d8bfe6acadc1263d",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-rotate-pressed.png",
+      "width": 760,
+      "state": "rotate-pressed",
+      "sha256": "4539cf86dc59467308b5f33645ae047d1a886445507d9368a66d7ebc9232de09",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-revoke-focus.png",
+      "width": 760,
+      "state": "revoke-focus",
+      "sha256": "ba2d07949e5dc420b89d9a1be21401c343466466b5387d304a29645acbf1bc69",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-revoke-hover.png",
+      "width": 760,
+      "state": "revoke-hover",
+      "sha256": "ce2315d671a05b45d84312c6efb47ce70bd5c867a5a0b9ee5eabfa3a786c89ed",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-revoke-pressed.png",
+      "width": 760,
+      "state": "revoke-pressed",
+      "sha256": "27812c83d2b50ee162b49220edfe54244e8db045fa3ab75dbc9ae88f80d93c87",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-busy-record.png",
+      "width": 760,
+      "state": "busy-record",
+      "sha256": "cb7d504b5be1de0e07ade49cc03b717d301815339f9dde5bde44fd564a679c19",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-no-tokens.png",
+      "width": 760,
+      "state": "no-tokens",
+      "sha256": "ed030d77e5f94fd0d074afd863a0d7a3829c8c956d84058a80ef784af6306979",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-expired-record.png",
+      "width": 760,
+      "state": "expired-record",
+      "sha256": "1bd79b836439d899032eb4fe660eb40e7d59177ea579051c08950ed14463e789",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "760-unknown-long-record.png",
+      "width": 760,
+      "state": "unknown-long-record",
+      "sha256": "1c070149b8ff1a37ef15613d8a766132c5950441528caadb149dcaee0633f5c8",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-page-one.png",
+      "width": 761,
+      "state": "page-one",
+      "sha256": "9e75eda3f40593f4ad21f290ea5ad1978da9a321d4d0945984c64d9baed0a2c1",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-page-two.png",
+      "width": 761,
+      "state": "page-two",
+      "sha256": "0aa846c777874dea3c4bd1676f01ba95f51e80ba220be4b8542e7b388e743915",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-no-result.png",
+      "width": 761,
+      "state": "no-result",
+      "sha256": "499d71a3e9da2dc601159fb1cf91faddcd357bf92bf7b19bc00b93c4bb9f66d6",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-active-record.png",
+      "width": 761,
+      "state": "active-record",
+      "sha256": "e4e01aa7e82761df0f2b7155f6144785e805b97135269d433fc3de02d0223e4f",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-technical-open.png",
+      "width": 761,
+      "state": "technical-open",
+      "sha256": "2f35fc6553fd5b8939a87e33548441816e5943b5cf6aa7300ba5f9f37618e18c",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-rotate-focus.png",
+      "width": 761,
+      "state": "rotate-focus",
+      "sha256": "ee2049c84a302229f579576d4057e24a836b45e5ec5a72dc7c9e800402b8a515",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-rotate-hover.png",
+      "width": 761,
+      "state": "rotate-hover",
+      "sha256": "ab9227151353f8ec299d7f3f13c43a677a0e538b41ccc45b8849fd3a1cd651de",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-rotate-pressed.png",
+      "width": 761,
+      "state": "rotate-pressed",
+      "sha256": "cd767ba605a7999ea0004f079dd4870c18e6ab92502efb69756428b918e6ba57",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-revoke-focus.png",
+      "width": 761,
+      "state": "revoke-focus",
+      "sha256": "f56cab17066b9dbf5743f02cb8bcaf6deb84106fe32c02dc2b14b944e12a3c1f",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-revoke-hover.png",
+      "width": 761,
+      "state": "revoke-hover",
+      "sha256": "3524ab9fe1e4e8e19118fb7da262b28be0d9535a9d226f98f0e638836be83ed8",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-revoke-pressed.png",
+      "width": 761,
+      "state": "revoke-pressed",
+      "sha256": "7dac7340898297f7dd66c69ef1cb7b01ceaf660e94e51784a7048f0fcf4bfeeb",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-busy-record.png",
+      "width": 761,
+      "state": "busy-record",
+      "sha256": "9df3fd141c5ea02f38bd5606dc4894381a2c26e2291d6377817feb2c3eb0dc81",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-no-tokens.png",
+      "width": 761,
+      "state": "no-tokens",
+      "sha256": "6bdad2b0d462c770f3664a6a0406b6202e229392177ad3364692e950d1fb1dc7",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-expired-record.png",
+      "width": 761,
+      "state": "expired-record",
+      "sha256": "de754a6ae54972a591ad4f95e92dce7a0a1563869326983968634f9c17c09c52",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "761-unknown-long-record.png",
+      "width": 761,
+      "state": "unknown-long-record",
+      "sha256": "f245d5784975e17b677ee5b524aaa7663a9c8c0f7a7d8c2ab63c9e224fe44dba",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-page-one.png",
+      "width": 1440,
+      "state": "page-one",
+      "sha256": "4f17c901213e59d604095581f9539a3bd2835f98ca930f4c3013eb4b5a9665b7",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-page-two.png",
+      "width": 1440,
+      "state": "page-two",
+      "sha256": "4d8e7b795ed0b92ee66aee1e1a8ad84e031a9dd2de14c554cce09591cebdf7ad",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-no-result.png",
+      "width": 1440,
+      "state": "no-result",
+      "sha256": "454079c912140cc684229fef6738b2871e14a8648f76f56d0c65fc0be8f218d3",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-active-record.png",
+      "width": 1440,
+      "state": "active-record",
+      "sha256": "93013a7781b1f459cc8abd11a6a9436714e1a8df19ba95f46df939da8d189005",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-technical-open.png",
+      "width": 1440,
+      "state": "technical-open",
+      "sha256": "700db86ad844362a9a03aeff99552775325e83f637bd68b27c4b5c902f1caf16",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-rotate-focus.png",
+      "width": 1440,
+      "state": "rotate-focus",
+      "sha256": "55b38200af4edca292ef66c6e1d9987f215081f0a3c2ac9a1777d4b2732b5004",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-rotate-hover.png",
+      "width": 1440,
+      "state": "rotate-hover",
+      "sha256": "7c7193561e695ca04cdb5b17b93b796be303c27cfa0a6e0e215509ef2ffa6fdd",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-rotate-pressed.png",
+      "width": 1440,
+      "state": "rotate-pressed",
+      "sha256": "56b070fd8be562f66d6554fa1c0fdf7a611b2780078971bd5c13257dc1dc67a1",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-revoke-focus.png",
+      "width": 1440,
+      "state": "revoke-focus",
+      "sha256": "0d6d8fc2390e98c55c3cfdd20fecced9370ee0ed4de6d77553b3dd5dae20bf46",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-revoke-hover.png",
+      "width": 1440,
+      "state": "revoke-hover",
+      "sha256": "68ff73eb8aca0e0c4e53c777d939ca08a30b072eaba19dbf5072034c1111f4db",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-revoke-pressed.png",
+      "width": 1440,
+      "state": "revoke-pressed",
+      "sha256": "59ce82474ed5aae8d3b315e47679504f10ab101eccae9264e9e613372e65db46",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-busy-record.png",
+      "width": 1440,
+      "state": "busy-record",
+      "sha256": "0b853e01adb57d7d555cc82e154fa6d670cebccee9e31cad9f77c2cc39a8f0e4",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-no-tokens.png",
+      "width": 1440,
+      "state": "no-tokens",
+      "sha256": "b01f140ed5a0f314ed290636afd6ddca151d9c673c1553899221b89741be48d5",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-expired-record.png",
+      "width": 1440,
+      "state": "expired-record",
+      "sha256": "b84b0a40a7976fe0b29cccfa856c52ef3bf0443a9a88f5ef819a511f5b230f3e",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    },
+    {
+      "file": "1440-unknown-long-record.png",
+      "width": 1440,
+      "state": "unknown-long-record",
+      "sha256": "246e3492ba08feb2b23c1c9e0991348b78058b1bc1934f540a465a94631abb8d",
+      "scope": "actual-parent-child-C-review-fixtures-not-approval"
+    }
+  ],
+  "processesClosed": true
+}
