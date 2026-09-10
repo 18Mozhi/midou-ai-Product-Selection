@@ -1,0 +1,1244 @@
+{
+  "kind": "P36-PAGE-VUE-PREVIEW-r1",
+  "approval": "pending-user-review",
+  "scope": "Actual parent and child scripts with composed review-only create/secret/list templates and page/reason CSS. Whole route content, not App shell/navigation or production integration. Original eight fixtures plus one synthetic creation; exact create POST and GET, no rotation/revocation submits, real authorization/SQL/audit/clipboard. Original filter markup and old captures unchanged, not pixel-identical filter approval. Previously diagnosed write/read-failure and cached reason policies remain pending; no behavior fix inferred from this layout.",
+  "fixedTime": "2026-08-26T10:00:00.000Z",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/approval-read-failure.css": "6295ffead416eae4dfdf0fa88dde57a3b7ec6fa60241b44e4405e3f1755aaa6a",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "apps/web/src/design/approval-read-failure-tokens.css": "bd13bd68c498bd64b2bb29cba882d09fb324b0fbacf5cab1812fd52abbdb6692",
+    "apps/web/src/design/export-detail-tokens.css": "d0dc62dff48590e983d06a8960bd74bbadc7d7f78daa31237df45214b7ee513a",
+    "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
+    "apps/web/src/design/token-filter-tokens.css": "6a2b9871858d0c1a5d7ee2a052b5b1d5043331f414685525d561d8ae6d366710",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/org-data-export-detail.css": "55b7a84508f5ff64d02061bc832991bceec6674e66313623ed6ade22aba2de04",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/organization-audit.css": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/token-create-preview.css": "e15e6d1b748f66fe2749572c7b336022f93df3ec6f067295bf3d88052040d18c",
+    "design-plans/ui-phase-2-2026-09-07/implementation/token-list-preview.css": "7f574634115ff6e15ed54da2b3821916ac09a2b701690c8bcfa510eb50bf6943",
+    "design-plans/ui-phase-2-2026-09-07/implementation/token-page-preview.css": "32c39dd6d23ef136f4b59b64984a9b8763a35b8acde9071a18e6195969f6945b",
+    "design-plans/ui-phase-2-2026-09-07/implementation/token-reason-preview.css": "b093ca816f9cfe27d07a0195e5346996964e49911a87634c1e61862a67016c08",
+    "design-plans/ui-phase-2-2026-09-07/implementation/token-secret-preview.css": "095e0a25220d1a56064af1c407930c9087764eaee2bc90eb1156dc9d8f7901b8",
+    "scripts/lib/ui-phase2-token-create-preview.mjs": "e17ca664629b392328daf88597fd1ee2ce6757c0bd948007f831dc197b119a63",
+    "scripts/lib/ui-phase2-token-list-preview.mjs": "1dbc8720af98081623c87b0d5dad1a943385f54087f212bc9dcc78a36fe2896e",
+    "scripts/lib/ui-phase2-token-page-preview.mjs": "e2890f59577ae041918c3d01ec6ec1016fc2839604f596f41e599bf6a08ca824",
+    "scripts/lib/ui-phase2-token-secret-preview.mjs": "6b6567fd5ec260264548d3345518886dcdb61138b0cf45d9df55c73ed3ef8b5b",
+    "scripts/verify-ui-phase2-token-page-preview.mjs": "356b6850316c8613e0560ffcd4ccdbe704fc935c134d80a50066d49977d4d30e",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/OrganizationTokenPanel.vue": "050225c9a0497852b80756d361762b2ddfeba0b505f27abc5783d4694734e67f"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "initial loading refresh disabled"
+    },
+    {
+      "width": 390,
+      "name": "loading:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "original eight total"
+    },
+    {
+      "width": 390,
+      "name": "management DOM precedes creation"
+    },
+    {
+      "width": 390,
+      "name": "blue overview"
+    },
+    {
+      "width": 390,
+      "name": "old grid removed"
+    },
+    {
+      "width": 390,
+      "name": "creation remains nonsticky"
+    },
+    {
+      "width": 390,
+      "name": "original blank creation"
+    },
+    {
+      "width": 390,
+      "name": ".org-admin-hero:unobscured"
+    },
+    {
+      "width": 390,
+      "name": ".org-token-overview:unobscured"
+    },
+    {
+      "width": 390,
+      "name": ".org-token-metrics:unobscured"
+    },
+    {
+      "width": 390,
+      "name": ".org-token-truth:unobscured"
+    },
+    {
+      "width": 390,
+      "name": ".org-token-filters-c:unobscured"
+    },
+    {
+      "width": 390,
+      "name": ".p36-results-c:unobscured"
+    },
+    {
+      "width": 390,
+      "name": ".p36-create-c:unobscured"
+    },
+    {
+      "width": 390,
+      "name": "default:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "default-viewport:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "page two URL"
+    },
+    {
+      "width": 390,
+      "name": "page-two:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "no-results:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "scope failure no POST"
+    },
+    {
+      "width": 390,
+      "name": "create-scope-error:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "exact create body"
+    },
+    {
+      "width": 390,
+      "name": "idempotency present"
+    },
+    {
+      "width": 390,
+      "name": "synthetic secret full text"
+    },
+    {
+      "width": 390,
+      "name": "total after reread"
+    },
+    {
+      "width": 390,
+      "name": "secret-shown:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "saved removes secret"
+    },
+    {
+      "width": 390,
+      "name": "secret-cleared:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "rotate:actual modal"
+    },
+    {
+      "width": 390,
+      "name": "rotate-dialog:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "rotate:restore focus"
+    },
+    {
+      "width": 390,
+      "name": "revoke:actual modal"
+    },
+    {
+      "width": 390,
+      "name": "revoke-dialog:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "revoke:restore focus"
+    },
+    {
+      "width": 390,
+      "name": "read failure error role"
+    },
+    {
+      "width": 390,
+      "name": "first-read-failure:no horizontal overflow"
+    },
+    {
+      "width": 390,
+      "name": "one creation only"
+    },
+    {
+      "width": 390,
+      "name": "no external or unexpected writes"
+    },
+    {
+      "width": 390,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "name": "zero storage"
+    },
+    {
+      "width": 760,
+      "name": "initial loading refresh disabled"
+    },
+    {
+      "width": 760,
+      "name": "loading:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "original eight total"
+    },
+    {
+      "width": 760,
+      "name": "management DOM precedes creation"
+    },
+    {
+      "width": 760,
+      "name": "blue overview"
+    },
+    {
+      "width": 760,
+      "name": "old grid removed"
+    },
+    {
+      "width": 760,
+      "name": "creation remains nonsticky"
+    },
+    {
+      "width": 760,
+      "name": "original blank creation"
+    },
+    {
+      "width": 760,
+      "name": ".org-admin-hero:unobscured"
+    },
+    {
+      "width": 760,
+      "name": ".org-token-overview:unobscured"
+    },
+    {
+      "width": 760,
+      "name": ".org-token-metrics:unobscured"
+    },
+    {
+      "width": 760,
+      "name": ".org-token-truth:unobscured"
+    },
+    {
+      "width": 760,
+      "name": ".org-token-filters-c:unobscured"
+    },
+    {
+      "width": 760,
+      "name": ".p36-results-c:unobscured"
+    },
+    {
+      "width": 760,
+      "name": ".p36-create-c:unobscured"
+    },
+    {
+      "width": 760,
+      "name": "default:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "default-viewport:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "page two URL"
+    },
+    {
+      "width": 760,
+      "name": "page-two:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "no-results:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "scope failure no POST"
+    },
+    {
+      "width": 760,
+      "name": "create-scope-error:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "exact create body"
+    },
+    {
+      "width": 760,
+      "name": "idempotency present"
+    },
+    {
+      "width": 760,
+      "name": "synthetic secret full text"
+    },
+    {
+      "width": 760,
+      "name": "total after reread"
+    },
+    {
+      "width": 760,
+      "name": "secret-shown:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "saved removes secret"
+    },
+    {
+      "width": 760,
+      "name": "secret-cleared:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "rotate:actual modal"
+    },
+    {
+      "width": 760,
+      "name": "rotate-dialog:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "rotate:restore focus"
+    },
+    {
+      "width": 760,
+      "name": "revoke:actual modal"
+    },
+    {
+      "width": 760,
+      "name": "revoke-dialog:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "revoke:restore focus"
+    },
+    {
+      "width": 760,
+      "name": "read failure error role"
+    },
+    {
+      "width": 760,
+      "name": "first-read-failure:no horizontal overflow"
+    },
+    {
+      "width": 760,
+      "name": "one creation only"
+    },
+    {
+      "width": 760,
+      "name": "no external or unexpected writes"
+    },
+    {
+      "width": 760,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 760,
+      "name": "zero storage"
+    },
+    {
+      "width": 761,
+      "name": "initial loading refresh disabled"
+    },
+    {
+      "width": 761,
+      "name": "loading:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "original eight total"
+    },
+    {
+      "width": 761,
+      "name": "management DOM precedes creation"
+    },
+    {
+      "width": 761,
+      "name": "blue overview"
+    },
+    {
+      "width": 761,
+      "name": "old grid removed"
+    },
+    {
+      "width": 761,
+      "name": "creation remains nonsticky"
+    },
+    {
+      "width": 761,
+      "name": "original blank creation"
+    },
+    {
+      "width": 761,
+      "name": ".org-admin-hero:unobscured"
+    },
+    {
+      "width": 761,
+      "name": ".org-token-overview:unobscured"
+    },
+    {
+      "width": 761,
+      "name": ".org-token-metrics:unobscured"
+    },
+    {
+      "width": 761,
+      "name": ".org-token-truth:unobscured"
+    },
+    {
+      "width": 761,
+      "name": ".org-token-filters-c:unobscured"
+    },
+    {
+      "width": 761,
+      "name": ".p36-results-c:unobscured"
+    },
+    {
+      "width": 761,
+      "name": ".p36-create-c:unobscured"
+    },
+    {
+      "width": 761,
+      "name": "default:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "default-viewport:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "page two URL"
+    },
+    {
+      "width": 761,
+      "name": "page-two:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "no-results:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "scope failure no POST"
+    },
+    {
+      "width": 761,
+      "name": "create-scope-error:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "exact create body"
+    },
+    {
+      "width": 761,
+      "name": "idempotency present"
+    },
+    {
+      "width": 761,
+      "name": "synthetic secret full text"
+    },
+    {
+      "width": 761,
+      "name": "total after reread"
+    },
+    {
+      "width": 761,
+      "name": "secret-shown:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "saved removes secret"
+    },
+    {
+      "width": 761,
+      "name": "secret-cleared:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "rotate:actual modal"
+    },
+    {
+      "width": 761,
+      "name": "rotate-dialog:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "rotate:restore focus"
+    },
+    {
+      "width": 761,
+      "name": "revoke:actual modal"
+    },
+    {
+      "width": 761,
+      "name": "revoke-dialog:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "revoke:restore focus"
+    },
+    {
+      "width": 761,
+      "name": "read failure error role"
+    },
+    {
+      "width": 761,
+      "name": "first-read-failure:no horizontal overflow"
+    },
+    {
+      "width": 761,
+      "name": "one creation only"
+    },
+    {
+      "width": 761,
+      "name": "no external or unexpected writes"
+    },
+    {
+      "width": 761,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 761,
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "name": "initial loading refresh disabled"
+    },
+    {
+      "width": 1440,
+      "name": "loading:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "original eight total"
+    },
+    {
+      "width": 1440,
+      "name": "management DOM precedes creation"
+    },
+    {
+      "width": 1440,
+      "name": "blue overview"
+    },
+    {
+      "width": 1440,
+      "name": "old grid removed"
+    },
+    {
+      "width": 1440,
+      "name": "creation remains nonsticky"
+    },
+    {
+      "width": 1440,
+      "name": "original blank creation"
+    },
+    {
+      "width": 1440,
+      "name": ".org-admin-hero:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": ".org-token-overview:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": ".org-token-metrics:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": ".org-token-truth:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": ".org-token-filters-c:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": ".p36-results-c:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": ".p36-create-c:unobscured"
+    },
+    {
+      "width": 1440,
+      "name": "default:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "default-viewport:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "page two URL"
+    },
+    {
+      "width": 1440,
+      "name": "page-two:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "no-results:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "scope failure no POST"
+    },
+    {
+      "width": 1440,
+      "name": "create-scope-error:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "exact create body"
+    },
+    {
+      "width": 1440,
+      "name": "idempotency present"
+    },
+    {
+      "width": 1440,
+      "name": "synthetic secret full text"
+    },
+    {
+      "width": 1440,
+      "name": "total after reread"
+    },
+    {
+      "width": 1440,
+      "name": "secret-shown:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "saved removes secret"
+    },
+    {
+      "width": 1440,
+      "name": "secret-cleared:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:actual modal"
+    },
+    {
+      "width": 1440,
+      "name": "rotate-dialog:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "rotate:restore focus"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:actual modal"
+    },
+    {
+      "width": 1440,
+      "name": "revoke-dialog:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "revoke:restore focus"
+    },
+    {
+      "width": 1440,
+      "name": "read failure error role"
+    },
+    {
+      "width": 1440,
+      "name": "first-read-failure:no horizontal overflow"
+    },
+    {
+      "width": 1440,
+      "name": "one creation only"
+    },
+    {
+      "width": 1440,
+      "name": "no external or unexpected writes"
+    },
+    {
+      "width": 1440,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "zero storage"
+    }
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens",
+          "body": {
+            "name": "整页审核接入",
+            "scopes": [
+              "task:read"
+            ],
+            "ttl_days": 90,
+            "reason": "验证整页组合"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens",
+          "body": {
+            "name": "整页审核接入",
+            "scopes": [
+              "task:read"
+            ],
+            "ttl_days": 90,
+            "reason": "验证整页组合"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ]
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens",
+          "body": {
+            "name": "整页审核接入",
+            "scopes": [
+              "task:read"
+            ],
+            "ttl_days": 90,
+            "reason": "验证整页组合"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/org/admin/tokens",
+          "body": {
+            "name": "整页审核接入",
+            "scopes": [
+              "task:read"
+            ],
+            "ttl_days": 90,
+            "reason": "验证整页组合"
+          },
+          "idempotency": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/summary",
+          "body": null,
+          "idempotency": false
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/org/admin/tokens",
+          "body": null,
+          "idempotency": false
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-loading.png",
+      "width": 390,
+      "state": "loading",
+      "fullPage": true,
+      "sha256": "6a1bcfc5f5e81d2dfed64aebbd892c7dc0c323e7f80f86b72e560a65b2d09116"
+    },
+    {
+      "file": "390-default.png",
+      "width": 390,
+      "state": "default",
+      "fullPage": true,
+      "sha256": "8dfecfbfc19856f3d9c7b3729e31cd195e15fa20b03db428ea93a7f6ce4a7bc6"
+    },
+    {
+      "file": "390-default-viewport.png",
+      "width": 390,
+      "state": "default-viewport",
+      "fullPage": false,
+      "sha256": "0380634085c32b68e6bbc99522f48a280e90b5e8dc30659ddf73ef509f00eae5"
+    },
+    {
+      "file": "390-page-two.png",
+      "width": 390,
+      "state": "page-two",
+      "fullPage": true,
+      "sha256": "7ed7ce3117d680b3e47512915704e50ce888a331d53199943717b40758c9b290"
+    },
+    {
+      "file": "390-no-results.png",
+      "width": 390,
+      "state": "no-results",
+      "fullPage": true,
+      "sha256": "bae38cf83e412d5219ddd6b3f8fb4390b3e3a0f4a325d8bcdf9f1c0c4b74dbb0"
+    },
+    {
+      "file": "390-create-scope-error.png",
+      "width": 390,
+      "state": "create-scope-error",
+      "fullPage": true,
+      "sha256": "60f341b7293059afb4c6a7fce947614f268105159c6c8a926ae0971d3b10b1a9"
+    },
+    {
+      "file": "390-secret-shown.png",
+      "width": 390,
+      "state": "secret-shown",
+      "fullPage": true,
+      "sha256": "ceedfdb4a24a200b6132c4ea5dd37f43837e78a4ada10c2e7ab5dac7fa79a2c1"
+    },
+    {
+      "file": "390-secret-cleared.png",
+      "width": 390,
+      "state": "secret-cleared",
+      "fullPage": true,
+      "sha256": "6795e9754393ed38b697b4396185622a7088f5fd22e761d56e47404b6a2c89f2"
+    },
+    {
+      "file": "390-rotate-dialog.png",
+      "width": 390,
+      "state": "rotate-dialog",
+      "fullPage": false,
+      "sha256": "de0d511b9a92b2e395113cd3c6b7cf61a516146ad654fb9c9043825a82b86d16"
+    },
+    {
+      "file": "390-revoke-dialog.png",
+      "width": 390,
+      "state": "revoke-dialog",
+      "fullPage": false,
+      "sha256": "36c12d2927ce735d2a734a230f04372fbcfa4d396dff269c4d806b32d009ec33"
+    },
+    {
+      "file": "390-first-read-failure.png",
+      "width": 390,
+      "state": "first-read-failure",
+      "fullPage": true,
+      "sha256": "722bcd5f4f3a6479924c81aaf9ed249bc6b2396215da7132f4544ef70ede2be7"
+    },
+    {
+      "file": "760-loading.png",
+      "width": 760,
+      "state": "loading",
+      "fullPage": true,
+      "sha256": "67df2c954dca173573c554134249edb8823a8ebf50a5879ac4b3db0995214140"
+    },
+    {
+      "file": "760-default.png",
+      "width": 760,
+      "state": "default",
+      "fullPage": true,
+      "sha256": "5e28ddfd62daaa25b3a57829373d40187895ca4fb51fb7a36c2420cd0144389e"
+    },
+    {
+      "file": "760-default-viewport.png",
+      "width": 760,
+      "state": "default-viewport",
+      "fullPage": false,
+      "sha256": "ab63cddfae975f45638884f489debf7c0b0f07fa29c160d0a314fe1f20d34e00"
+    },
+    {
+      "file": "760-page-two.png",
+      "width": 760,
+      "state": "page-two",
+      "fullPage": true,
+      "sha256": "0a3493990902d5ae19aa0b787afbbe37c593a4a3aab3d3bf87954628deb64d24"
+    },
+    {
+      "file": "760-no-results.png",
+      "width": 760,
+      "state": "no-results",
+      "fullPage": true,
+      "sha256": "719ab2402af25030c305e210aa0fba78f18c1133d214ce3a6bb53224085acfb0"
+    },
+    {
+      "file": "760-create-scope-error.png",
+      "width": 760,
+      "state": "create-scope-error",
+      "fullPage": true,
+      "sha256": "7c9ff5c2397e9d1c291da19e0ddd96b282609c48be99d3765826e167ca1b1eae"
+    },
+    {
+      "file": "760-secret-shown.png",
+      "width": 760,
+      "state": "secret-shown",
+      "fullPage": true,
+      "sha256": "5aec8aba76a0c0ed05fd746a29a0e74f66fefeb1bfa1c2bb6db07c9eca8cbe40"
+    },
+    {
+      "file": "760-secret-cleared.png",
+      "width": 760,
+      "state": "secret-cleared",
+      "fullPage": true,
+      "sha256": "1b9aa49d65559497559f133b4df0e12112397fc4cca3243d5b0c9369ef05cb99"
+    },
+    {
+      "file": "760-rotate-dialog.png",
+      "width": 760,
+      "state": "rotate-dialog",
+      "fullPage": false,
+      "sha256": "2abbb8524d1de5a5ed8a540ff1e2dd4017f644d430520efb4a5d90d2aba37652"
+    },
+    {
+      "file": "760-revoke-dialog.png",
+      "width": 760,
+      "state": "revoke-dialog",
+      "fullPage": false,
+      "sha256": "a62dc1c8b86ac6d2099b46186c5fa3c0b999ae1fc34db74668b956c731a2d49e"
+    },
+    {
+      "file": "760-first-read-failure.png",
+      "width": 760,
+      "state": "first-read-failure",
+      "fullPage": true,
+      "sha256": "35ee8bce6a4991d2e0e43e819fdac23800bea33a6ec00642f3f309c8651bab1d"
+    },
+    {
+      "file": "761-loading.png",
+      "width": 761,
+      "state": "loading",
+      "fullPage": true,
+      "sha256": "09d45217d700b84818cf3f2128f034b51ee1c89de3e534fef6279ce35629eddc"
+    },
+    {
+      "file": "761-default.png",
+      "width": 761,
+      "state": "default",
+      "fullPage": true,
+      "sha256": "0119de710ccaa545873fa18261a81f52f32f7e85f9ed3755ee28b64faa72bc70"
+    },
+    {
+      "file": "761-default-viewport.png",
+      "width": 761,
+      "state": "default-viewport",
+      "fullPage": false,
+      "sha256": "b666916b0072fcda1b1603115d76de699a3b6357a295a2a5084b100264ea69f5"
+    },
+    {
+      "file": "761-page-two.png",
+      "width": 761,
+      "state": "page-two",
+      "fullPage": true,
+      "sha256": "41804d73c72b3d128cd0b5a093530ce65ce776c029756bdf8e728dfb88f697f0"
+    },
+    {
+      "file": "761-no-results.png",
+      "width": 761,
+      "state": "no-results",
+      "fullPage": true,
+      "sha256": "67f157a9e352122b3cf92dc2546fbcf3ee83ff8276f3594f579bf1931dc57b38"
+    },
+    {
+      "file": "761-create-scope-error.png",
+      "width": 761,
+      "state": "create-scope-error",
+      "fullPage": true,
+      "sha256": "cf04a0e9545fc1a5da5547dbcc273a226e7796707e48391b85db7a8fa2fcbe7c"
+    },
+    {
+      "file": "761-secret-shown.png",
+      "width": 761,
+      "state": "secret-shown",
+      "fullPage": true,
+      "sha256": "bdbf89b616c17f97c20d8771efde7efd3bb7ba0e8a510cea9f276f0cc6af6324"
+    },
+    {
+      "file": "761-secret-cleared.png",
+      "width": 761,
+      "state": "secret-cleared",
+      "fullPage": true,
+      "sha256": "01183aa867b8e6841631a678224997a3643eaa6cbed6deb66772bd56e9550189"
+    },
+    {
+      "file": "761-rotate-dialog.png",
+      "width": 761,
+      "state": "rotate-dialog",
+      "fullPage": false,
+      "sha256": "837c2f776dac11bd817bd8ea35d32597ddd5418754216ff09c9bdf74eafd19b5"
+    },
+    {
+      "file": "761-revoke-dialog.png",
+      "width": 761,
+      "state": "revoke-dialog",
+      "fullPage": false,
+      "sha256": "28c06d851a56aa95c2790bf61089b7331671d3563e7374941123786706f80928"
+    },
+    {
+      "file": "761-first-read-failure.png",
+      "width": 761,
+      "state": "first-read-failure",
+      "fullPage": true,
+      "sha256": "2bea9874692a4f49589b9b9f948e7a85ab10d61c30bca2c49c1076a4d90acb02"
+    },
+    {
+      "file": "1440-loading.png",
+      "width": 1440,
+      "state": "loading",
+      "fullPage": true,
+      "sha256": "9e8b78f3a8f6ffa2a220c4a5ac8b0a95d61dc32bac429e8757903383d29b925a"
+    },
+    {
+      "file": "1440-default.png",
+      "width": 1440,
+      "state": "default",
+      "fullPage": true,
+      "sha256": "cbb1dbe489739a3920560f40ae0547bf34456d336d0524c356e07ca7b0b50da5"
+    },
+    {
+      "file": "1440-default-viewport.png",
+      "width": 1440,
+      "state": "default-viewport",
+      "fullPage": false,
+      "sha256": "03816bcba129b2c0a5c5597bd4b4646e7783f89740357435df9a6d28e1b69178"
+    },
+    {
+      "file": "1440-page-two.png",
+      "width": 1440,
+      "state": "page-two",
+      "fullPage": true,
+      "sha256": "add85a0547ad5dd821d0ec4e02c50d20c663ead7e6a17fe4250d7d98ed0dd03b"
+    },
+    {
+      "file": "1440-no-results.png",
+      "width": 1440,
+      "state": "no-results",
+      "fullPage": true,
+      "sha256": "096fdbcad19657df2c037002e10969266db6e6572f1af2a5c9556e5392e303b9"
+    },
+    {
+      "file": "1440-create-scope-error.png",
+      "width": 1440,
+      "state": "create-scope-error",
+      "fullPage": true,
+      "sha256": "90d07021af6d1c5df813399491288482133a34b08e72cf8d4be7c8bd5bb7a786"
+    },
+    {
+      "file": "1440-secret-shown.png",
+      "width": 1440,
+      "state": "secret-shown",
+      "fullPage": true,
+      "sha256": "e8243950f7c22a06458d23361f56302f4920ad5324d8a9abe0a6c1e54341438f"
+    },
+    {
+      "file": "1440-secret-cleared.png",
+      "width": 1440,
+      "state": "secret-cleared",
+      "fullPage": true,
+      "sha256": "f3368e92492ec56af0371b88c1895ce496770b30f148ed87f347ba185a0c2024"
+    },
+    {
+      "file": "1440-rotate-dialog.png",
+      "width": 1440,
+      "state": "rotate-dialog",
+      "fullPage": false,
+      "sha256": "cd9a4b0cb233c80ea55395671e1c7cdb91c7cab4a9314880c28a7d84423d69f7"
+    },
+    {
+      "file": "1440-revoke-dialog.png",
+      "width": 1440,
+      "state": "revoke-dialog",
+      "fullPage": false,
+      "sha256": "ac5b13b763879929ca2e83425eb53498983ceeacc767c0e8ac3f54c1247d97fe"
+    },
+    {
+      "file": "1440-first-read-failure.png",
+      "width": 1440,
+      "state": "first-read-failure",
+      "fullPage": true,
+      "sha256": "a2155d8da7f9f9ec58283057d1a80b02128bdc380bfa786da2bd36786d73662f"
+    }
+  ],
+  "processesClosed": true
+}
