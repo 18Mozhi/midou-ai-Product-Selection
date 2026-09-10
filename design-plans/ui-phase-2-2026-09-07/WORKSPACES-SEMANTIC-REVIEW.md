@@ -1,5 +1,7 @@
 # P32 工作区管理 · 逐控件源码核对
 
+控件增量：[296图审核包](design/workspaces-controls-direction-c/README.md)。18动作80代表状态及18变体66状态已精确绑定，余28代表槽；新增4张原因窗局部组合，字段/生命周期/全页批准继续待。以下108未映射为初始登记记录，原源合同与业务动作数不变。
+
 2026-09-10，从干净 main/39f0cf5c 继续；属于全站 C 重构的动作/字段/组合核对，不是整页实现或用户批准。
 
 [现有 C 交互图册](design/workspaces-direction-c/index.html) · [机器登记](action-reviews/P32.json) · [页面规格](page-specs/P32.md)

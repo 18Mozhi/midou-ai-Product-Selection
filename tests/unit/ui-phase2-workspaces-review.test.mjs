@@ -24,9 +24,15 @@ const sources = Object.fromEntries(
 const evidence = JSON.parse(
   readFileSync(`${base}/design/workspaces-direction-c/evidence.json`, "utf8"),
 );
-const review = () => buildWorkspacesReview(sources, evidence);
+const controlsEvidence = JSON.parse(
+  readFileSync(`${base}/design/workspaces-controls-direction-c/evidence.json`, "utf8"),
+);
+const review = () => buildWorkspacesReview(sources, evidence, controlsEvidence);
 const plain = (v) => JSON.parse(JSON.stringify(v));
-const packages = new Map([["workspaces-direction-c", evidence]]);
+const packages = new Map([
+  ["workspaces-direction-c", evidence],
+  ["workspaces-controls-direction-c", controlsEvidence],
+]);
 const context = {
   candidates: [parentFile, childFile].flatMap((f) => scanSource(sources[f], f).candidates),
   sourceHashes: Object.fromEntries(
@@ -34,8 +40,101 @@ const context = {
   ),
   contracts: runContractAudit().records,
   packages,
-  files: new Set(["scripts/verify-ui-phase2-workspaces-c.mjs"]),
+  files: new Set([
+    "scripts/verify-ui-phase2-workspaces-c.mjs",
+    "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+  ]),
 };
+test("P32 control evidence has exact dual-viewport bindings and current image/source fingerprints", () => {
+  assert.equal(Object.keys(controlsEvidence.controlReferences).length, 36);
+  assert.equal(Object.keys(controlsEvidence.actionVisualReferences).length, 18);
+  assert.equal(Object.keys(controlsEvidence.controlVariantReferences).length, 18);
+  assert.equal(controlsEvidence.screenshots.length, 296);
+  assert.equal(controlsEvidence.checks.length, 292);
+  assert.equal(controlsEvidence.interactions.length, 68);
+  assert.deepEqual(
+    controlsEvidence.screenshots
+      .filter((s) => !s.control)
+      .map((s) => `${s.scene}/${s.width}`)
+      .sort(),
+    [
+      "composition-archive/1440",
+      "composition-archive/390",
+      "composition-restore/1440",
+      "composition-restore/390",
+    ],
+  );
+  for (const [file, sha] of Object.entries(controlsEvidence.sourceHashes))
+    assert.equal(
+      createHash("sha256")
+        .update(readFileSync(file, "utf8").replaceAll("\r\n", "\n"))
+        .digest("hex"),
+      sha,
+      file,
+    );
+  for (const shot of controlsEvidence.screenshots)
+    assert.equal(
+      createHash("sha256")
+        .update(readFileSync(`${base}/design/workspaces-controls-direction-c/${shot.file}`))
+        .digest("hex"),
+      shot.sha256,
+      shot.file,
+    );
+  assert.deepEqual(
+    controlsEvidence.screenshots
+      .filter((s) => s.control)
+      .map((s) => `${s.scene}/${s.width}`)
+      .sort(),
+    Object.values(controlsEvidence.controlReferences)
+      .flatMap((c) => Object.values(c.states).flatMap((scene) => [`${scene}/1440`, `${scene}/390`]))
+      .sort(),
+  );
+});
+test("P32 selected controls remain distinct variants instead of pressed-state substitutes", () => {
+  for (const key of ["all", "active", "archived"])
+    assert.ok(
+      controlsEvidence.controlVariantReferences[`P32-status-${key}-selected`].states.pressed,
+    );
+  assert.equal(
+    controlsEvidence.controlVariantReferences["P32-select-current"].selector,
+    ".workspace-list button[aria-pressed='true']",
+  );
+  assert.deepEqual(
+    Object.keys(controlsEvidence.controlVariantReferences["P32-default-protected"].states),
+    ["disabled"],
+  );
+  assert.ok(controlsEvidence.controlVariantReferences["P32-reason-restore-confirm"]);
+  assert.equal(controlsEvidence.actionVisualReferences["D-OG-REASON"].states.busy, undefined);
+});
+test("P32 control binding rejects changed selector, missing viewport and changed variant action", () => {
+  for (const mutation of ["selector", "viewport", "action"]) {
+    const bad = plain(controlsEvidence);
+    if (mutation === "selector")
+      bad.actionVisualReferences["OG-W-CREATE"].selector = "#wrong-control";
+    if (mutation === "viewport")
+      bad.screenshots = bad.screenshots.filter(
+        (s) => !(s.scene === "restore-focus" && s.width === 390),
+      );
+    if (mutation === "action") bad.controlVariantReferences["P32-restore"].actionId = "OG-W-CREATE";
+    assert.throws(() =>
+      validateActionReview(review(), {
+        ...context,
+        packages: new Map([
+          ["workspaces-direction-c", evidence],
+          ["workspaces-controls-direction-c", bad],
+        ]),
+      }),
+    );
+  }
+});
+test("P32 source and review preserve explicit inherited proposal differences", () => {
+  const markup = readFileSync(`${base}/design/workspaces-controls-direction-c/index.html`, "utf8");
+  assert.match(markup, /真实共享前端尚无上限/);
+  assert.match(markup, /\.\.\/workspaces-direction-c\/workspaces\.js/);
+  assert.doesNotMatch(sources[dependencies[2]], /maxlength=/);
+  assert.equal(review().approval, "pending-user-review");
+  assert.match(review().compositionGaps.at(-1), /字段锁定/);
+});
 test("P32 explicitly covers 28 source sites and 18 actions without granting approval", () => {
   const r = review(),
     result = validateActionReview(r, context);
@@ -45,7 +144,7 @@ test("P32 explicitly covers 28 source sites and 18 actions without granting appr
   assert.equal(result.excludedGroups, 4);
   assert.equal(result.writeActions, 2);
   assert.equal(result.wiringGroups, 0);
-  assert.equal(result.unmappedVisualSlots, 108);
+  assert.equal(result.unmappedVisualSlots, 28);
   assert.equal(r.approval, "pending-user-review");
   assert.deepEqual(JSON.parse(readFileSync(`${base}/action-reviews/P32.json`, "utf8")), r);
 });
@@ -62,7 +161,10 @@ test("P32 rejects omitted source, invented approval and a missing mobile scene",
     () =>
       validateActionReview(review(), {
         ...context,
-        packages: new Map([["workspaces-direction-c", bad]]),
+        packages: new Map([
+          ["workspaces-direction-c", bad],
+          ["workspaces-controls-direction-c", controlsEvidence],
+        ]),
       }),
     /missing scene/,
   );
@@ -71,7 +173,7 @@ test("P32 binds eleven local models and three caller containers, not three dialo
   const result = validateReviewSurfaces(review().surfaceReview, { sources, packages });
   assert.equal(result.localModelBindings, 11);
   assert.equal(result.callerContainers, 3);
-  assert.equal(result.consumerVariants, 16);
+  assert.equal(result.consumerVariants, 18);
   const r = review();
   r.surfaceReview.inputs.pop();
   assert.throws(
@@ -83,7 +185,12 @@ test("P32 binds eleven local models and three caller containers, not three dialo
 });
 test("P32 rejects stale source or a forged source-to-scene claim", () => {
   assert.throws(
-    () => buildWorkspacesReview({ ...sources, [childFile]: sources[childFile] + "\n" }, evidence),
+    () =>
+      buildWorkspacesReview(
+        { ...sources, [childFile]: sources[childFile] + "\n" },
+        evidence,
+        controlsEvidence,
+      ),
     /stale workspace source/,
   );
   const r = review();

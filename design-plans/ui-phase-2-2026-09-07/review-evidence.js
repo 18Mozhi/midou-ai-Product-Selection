@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "4d3ff8fc243f8c5f81901ca92a1b9923c822fc3da6604b1398ab9ebc2a73a8b9",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "613cdf3579ee663e3a15968dac756bdee1c38fd88a7c9e589f683d1e943f74ff",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -97,6 +97,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/trend-direction-c/evidence.json": "0d5e9180acae43b437ec03b2629974feec09c021c6f282c5236612fa90aebaac",
     "design-plans/ui-phase-2-2026-09-07/design/user-admin-direction-c/evidence.json": "affcc6c564f332485ea14fd28d1b7c1c7a74de565caeaa4c5b59ccfd1bcd1d48",
     "design-plans/ui-phase-2-2026-09-07/design/work-direction-c/evidence.json": "7d8af75123533b4e27c891c4f6dd5da965a64b5ba15a783ed426aa7808bb87f8",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json": "92a88d46af44742df861c3993fe5a3a726d2d52b8e45837502a68f1bb280147a",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/evidence.json": "1796da2704b32d2b2a356d2121387a63aacdb46600e590dbbb63e5486e3ca80b",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P01.json": "aa1f6f6104351672956368a32e011f880097271920b98b0344ea0fcfcc5f000a",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P02.json": "2744a788c22662f7bd77274f0235da5720fba7ceb872a16c487b87af710f8b9b",
@@ -132,7 +133,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "9ce4a6c7e507d3cab1074c9eabece32967cc83c6d71fcb975ad2b39e269bda1e",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "2e24e68887c7a4f33de7131023c7d5714d7c80945e634b6ef8b148169e3c6a16",
     "output/playwright/p31-approved-controls-review/evidence.json": "f36cd9ebe59f94a11a74ae22425afbf65b96753b7ede197a3ee97a3340466640",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "d7a76590ca72bd56a206a1d364a0a422bab662bb84e998016b9c33c88956b9d3",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "4b220030b67949f2eeede71a77ffe25818c16ebf61f8e9b24a4ce16a567476ae",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "a37cfdd05ed8ba1ec2fc5b5b62dece7dfb6037c913060d1e79c6e174ec4f21a0"
   },
   "summary": {
@@ -141,16 +142,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "relatedProposalRoutes": 73,
     "noLinkedPageProposalRoutes": 0,
     "missingPageIds": [],
-    "packages": 94,
+    "packages": 95,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 928,
-    "sourceBindings": 1814,
+    "uniqueBoundFiles": 932,
+    "sourceBindings": 1833,
     "sourceDrift": 0,
-    "pngs": 13723,
+    "pngs": 14019,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 10052,
+    "readmeLinksChecked": 10061,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -473,6 +474,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "id": "P32",
       "spec": "page-specs/P32.md",
       "packages": [
+        "workspaces-controls-direction-c",
         "workspaces-direction-c"
       ],
       "actualVue": []
@@ -1647,6 +1649,15 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "evidence": "design/work-direction-c/evidence.json",
       "prototype": "design/work-direction-c/index.html",
       "gallery": null
+    },
+    "workspaces-controls-direction-c": {
+      "id": "workspaces-controls-direction-c",
+      "role": "page-or-section-proposal",
+      "screenshots": 296,
+      "readme": "design/workspaces-controls-direction-c/README.md",
+      "evidence": "design/workspaces-controls-direction-c/evidence.json",
+      "prototype": "design/workspaces-controls-direction-c/index.html",
+      "gallery": "design/workspaces-controls-direction-c/gallery.html"
     },
     "workspaces-direction-c": {
       "id": "workspaces-direction-c",

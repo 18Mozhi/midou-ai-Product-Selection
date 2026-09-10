@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P32 工作区 · 控件状态审核</title>
+    <link rel="stylesheet" href="../workspaces-direction-c/workspaces.css" />
+    <link rel="stylesheet" href="controls.css" />
+    <script defer src="../workspaces-direction-c/data.js"></script>
+    <script defer src="../workspaces-direction-c/workspaces.js"></script>
+    <script defer src="controls.js"></script>
+  </head>
+  <body>
+    <details class="control-tools">
+      <summary>P32 控件审核工具 · 非业务入口</summary>
+      <label>控件与变体<select id="control-select"></select></label>
+      <label
+        >呈现<select id="control-mode">
+          <option value="default">正常</option>
+          <option value="busy">等待</option>
+          <option value="disabled">禁用</option>
+        </select></label
+      >
+      <button id="show-control" type="button">定位控件</button>
+      <p id="control-note" role="status">纯设计审核，不创建工作区或审计记录。</p>
+      <a href="gallery.html">打开逐状态图册</a>
+    </details>
+    <div class="review-bar">
+      <span>P32 C 控件稿 · 数据与页面框架沿用已核对原稿</span
+      ><button id="review-toggle" aria-expanded="false">原审核场景</button>
+    </div>
+    <section id="review-tools" hidden>
+      <label for="scene-picker">审核状态</label
+      ><select id="scene-picker"></select>
+      <pre id="intent-log">仅记录意图，不访问服务。</pre>
+    </section>
+    <div class="shell">
+      <aside class="blue-directory">
+        <div class="brand">ScoutOps</div>
+        <p>当前组织后台</p>
+        <h1>工作区</h1>
+        <nav aria-label="本页目录">
+          <a href="#catalog" aria-current="true">工作区目录</a><a href="#detail">治理详情</a>
+        </nav>
+        <p class="note">明确数据边界<br />历史业务事实保留</p>
+      </aside>
+      <main id="workspace"></main>
+    </div>
+    <dialog id="reason-dialog" aria-labelledby="reason-title">
+      <form id="reason-form">
+        <header>
+          <h2 id="reason-title"></h2>
+          <button type="button" id="reason-close" aria-label="关闭原因填写">关闭</button>
+        </header>
+        <div id="reason-target"></div>
+        <label for="reason-input">原因（至少2个字）</label
+        ><textarea
+          id="reason-input"
+          required
+          minlength="2"
+          maxlength="500"
+          aria-describedby="reason-help"
+        ></textarea>
+        <p id="reason-help">本原型最多500字；真实共享前端尚无上限，服务端上限500。字段组合另审。</p>
+        <footer>
+          <button type="button" id="reason-cancel">取消</button
+          ><button type="submit" id="reason-confirm" class="primary">确认提交</button>
+        </footer>
+      </form>
+    </dialog>
+  </body>
+</html>

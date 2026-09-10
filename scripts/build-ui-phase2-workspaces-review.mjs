@@ -300,7 +300,7 @@ const fields = [
   ["query", "只查询当前返回name/slug，trim转小写；不查询id/版本/成员数，无maxlength"],
   ["sort", "name_asc/members_desc/updated_desc，后两者并列时名称排序；不发GET"],
 ];
-export function buildWorkspacesReview(sources, evidence) {
+export function buildWorkspacesReview(sources, evidence, controlsEvidence) {
   const dependencyHashes = Object.fromEntries(
     dependencies.map((file) => {
       assert.equal(typeof sources[file], "string", `missing source ${file}`);
@@ -316,7 +316,7 @@ export function buildWorkspacesReview(sources, evidence) {
     scenes: scenes([name]),
     remaining,
   });
-  return {
+  const result = {
     schemaVersion: 1,
     pageId: "P32",
     route: "/org-admin/workspaces",
@@ -469,6 +469,65 @@ export function buildWorkspacesReview(sources, evidence) {
     approval: "pending-user-review",
     limits: [remaining, "P31局部控件批准不自动外推P32整页；没有部署或更改权限/API。"],
   };
+  const controlsPackage = "workspaces-controls-direction-c";
+  for (const file of dependencies)
+    assert.equal(
+      controlsEvidence.sourceHashes[file],
+      dependencyHashes[file],
+      "stale controls source",
+    );
+  assert.deepEqual(
+    Object.keys(controlsEvidence.actionVisualReferences).sort(),
+    result.actions
+      .filter((a) => a.kind !== "excluded")
+      .map((a) => a.actionId)
+      .sort(),
+    "exact eighteen action representatives",
+  );
+  for (const action of result.actions) {
+    if (action.kind === "excluded") continue;
+    const ref = controlsEvidence.actionVisualReferences[action.actionId];
+    action.visualStateReferences = {};
+    for (const [state, scene] of Object.entries(ref.states)) {
+      action.visualStates[state] = "scene-reference-not-acceptance";
+      action.visualStateReferences[state] = {
+        package: controlsPackage,
+        scene,
+        selector: ref.selector,
+      };
+      action.scenes.push({ package: controlsPackage, scene });
+    }
+    action.additionalControlVariants = Object.entries(controlsEvidence.controlVariantReferences)
+      .filter(([, r]) => r.actionId === action.actionId)
+      .map(([key, r]) => {
+        for (const scene of Object.values(r.states))
+          action.scenes.push({ package: controlsPackage, scene });
+        return {
+          key,
+          scope: r.scope,
+          package: controlsPackage,
+          selector: r.selector,
+          states: r.states,
+        };
+      });
+    action.testReferences.push({
+      file: "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+      evidenceType: "offline-proposal-check-not-Vue",
+    });
+    action.remaining =
+      "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。";
+  }
+  result.compositionGaps.push(
+    "新控件稿保留旧原型字段锁定、reason max500及未知结果保护提案；不能用控件图批准这些未确认的生产行为。",
+  );
+  for (const kind of ["archive", "restore"])
+    result.surfaceReview.containers[1].variants.push({
+      name: `controls-${kind}-composition`,
+      evidenceScope: "matching-dialog-scene",
+      scenes: [{ package: controlsPackage, scene: `composition-${kind}` }],
+      remaining: "仅原因窗局部组合提案，字段边界与真实生命周期未获批准。",
+    });
+  return result;
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   assert.ok(process.argv.slice(2).every((a) => ["--write", "--check"].includes(a)));
@@ -476,6 +535,9 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const result = buildWorkspacesReview(
     sources,
     JSON.parse(readFileSync(`${base}/design/${pkg}/evidence.json`, "utf8")),
+    JSON.parse(
+      readFileSync(`${base}/design/workspaces-controls-direction-c/evidence.json`, "utf8"),
+    ),
   );
   const target = `${base}/action-reviews/P32.json`;
   if (process.argv.includes("--write"))

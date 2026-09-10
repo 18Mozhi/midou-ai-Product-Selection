@@ -39,23 +39,89 @@
         {
           "package": "workspaces-direction-c",
           "scene": "refresh_error"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "refresh-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "refresh-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "refresh-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "refresh-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "refresh-busy"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "refresh-loading-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "refresh-default",
+          "selector": "#refresh"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "refresh-hover",
+          "selector": "#refresh"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "refresh-focus",
+          "selector": "#refresh"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "refresh-pressed",
+          "selector": "#refresh"
+        },
+        "busy": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "refresh-busy",
+          "selector": "#refresh"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P32-refresh-loading",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "#refresh",
+          "states": {
+            "disabled": "refresh-loading-disabled"
+          }
+        }
+      ]
     },
     {
       "actionId": "OG-RETRY",
@@ -97,13 +163,93 @@
         {
           "package": "workspaces-direction-c",
           "scene": "rate_limited"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-blocked-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-blocked-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-blocked-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-blocked-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-expired-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-expired-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-expired-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-expired-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-forbidden-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-forbidden-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-forbidden-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-forbidden-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-rate_limited-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-rate_limited-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-rate_limited-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-rate_limited-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -111,9 +257,85 @@
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-default",
+          "selector": "#retry"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-hover",
+          "selector": "#retry"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-focus",
+          "selector": "#retry"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "retry-pressed",
+          "selector": "#retry"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P32-retry-blocked",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "#retry",
+          "states": {
+            "default": "retry-blocked-default",
+            "hover": "retry-blocked-hover",
+            "focus": "retry-blocked-focus",
+            "pressed": "retry-blocked-pressed"
+          }
+        },
+        {
+          "key": "P32-retry-expired",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "#retry",
+          "states": {
+            "default": "retry-expired-default",
+            "hover": "retry-expired-hover",
+            "focus": "retry-expired-focus",
+            "pressed": "retry-expired-pressed"
+          }
+        },
+        {
+          "key": "P32-retry-forbidden",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "#retry",
+          "states": {
+            "default": "retry-forbidden-default",
+            "hover": "retry-forbidden-hover",
+            "focus": "retry-forbidden-focus",
+            "pressed": "retry-forbidden-pressed"
+          }
+        },
+        {
+          "key": "P32-retry-rate_limited",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "#retry",
+          "states": {
+            "default": "retry-rate_limited-default",
+            "hover": "retry-rate_limited-hover",
+            "focus": "retry-rate_limited-focus",
+            "pressed": "retry-rate_limited-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "EX-P29-PROFILE",
@@ -271,23 +493,216 @@
         {
           "package": "workspaces-direction-c",
           "scene": "reason_long"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-confirm-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-confirm-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-confirm-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-confirm-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-confirm-disabled"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-restore-confirm-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-restore-confirm-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-restore-confirm-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-restore-confirm-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-cancel-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-cancel-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-cancel-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-cancel-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-close-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-close-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-close-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-close-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-restore-cancel-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-restore-cancel-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-restore-cancel-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-restore-cancel-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-restore-close-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-restore-close-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-restore-close-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-restore-close-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-confirm-default",
+          "selector": "#reason-confirm"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-confirm-hover",
+          "selector": "#reason-confirm"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-confirm-focus",
+          "selector": "#reason-confirm"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-confirm-pressed",
+          "selector": "#reason-confirm"
+        },
+        "disabled": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reason-archive-confirm-disabled",
+          "selector": "#reason-confirm"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P32-reason-restore-confirm",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "#reason-confirm",
+          "states": {
+            "default": "reason-restore-confirm-default",
+            "hover": "reason-restore-confirm-hover",
+            "focus": "reason-restore-confirm-focus",
+            "pressed": "reason-restore-confirm-pressed"
+          }
+        },
+        {
+          "key": "P32-reason-archive-cancel",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "#reason-cancel",
+          "states": {
+            "default": "reason-archive-cancel-default",
+            "hover": "reason-archive-cancel-hover",
+            "focus": "reason-archive-cancel-focus",
+            "pressed": "reason-archive-cancel-pressed"
+          }
+        },
+        {
+          "key": "P32-reason-archive-close",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "#reason-close",
+          "states": {
+            "default": "reason-archive-close-default",
+            "hover": "reason-archive-close-hover",
+            "focus": "reason-archive-close-focus",
+            "pressed": "reason-archive-close-pressed"
+          }
+        },
+        {
+          "key": "P32-reason-restore-cancel",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "#reason-cancel",
+          "states": {
+            "default": "reason-restore-cancel-default",
+            "hover": "reason-restore-cancel-hover",
+            "focus": "reason-restore-cancel-focus",
+            "pressed": "reason-restore-cancel-pressed"
+          }
+        },
+        {
+          "key": "P32-reason-restore-close",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "#reason-close",
+          "states": {
+            "default": "reason-restore-close-default",
+            "hover": "reason-restore-close-hover",
+            "focus": "reason-restore-close-focus",
+            "pressed": "reason-restore-close-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "EX-P36-TOKEN",
@@ -358,23 +773,104 @@
         {
           "package": "workspaces-direction-c",
           "scene": "create"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "open-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "open-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "open-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "open-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "open-busy"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "open-empty-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "open-empty-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "open-empty-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "open-empty-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "open-default",
+          "selector": ".head-actions [data-create]"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "open-hover",
+          "selector": ".head-actions [data-create]"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "open-focus",
+          "selector": ".head-actions [data-create]"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "open-pressed",
+          "selector": ".head-actions [data-create]"
+        },
+        "busy": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "open-busy",
+          "selector": ".head-actions [data-create]"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P32-open-empty",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": ".empty [data-create]",
+          "states": {
+            "default": "open-empty-default",
+            "hover": "open-empty-hover",
+            "focus": "open-empty-focus",
+            "pressed": "open-empty-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "OG-W-CREATE",
@@ -427,23 +923,75 @@
         {
           "package": "workspaces-direction-c",
           "scene": "create_read_failed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "create-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "create-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "create-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "create-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "create-busy"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "create-default",
+          "selector": "#create-submit"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "create-hover",
+          "selector": "#create-submit"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "create-focus",
+          "selector": "#create-submit"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "create-pressed",
+          "selector": "#create-submit"
+        },
+        "busy": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "create-busy",
+          "selector": "#create-submit"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-W-CANCEL",
@@ -470,23 +1018,75 @@
         {
           "package": "workspaces-direction-c",
           "scene": "create_busy"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "cancel-create-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "cancel-create-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "cancel-create-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "cancel-create-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "cancel-create-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "cancel-create-default",
+          "selector": "#cancel-create"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "cancel-create-hover",
+          "selector": "#cancel-create"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "cancel-create-focus",
+          "selector": "#cancel-create"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "cancel-create-pressed",
+          "selector": "#cancel-create"
+        },
+        "disabled": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "cancel-create-disabled",
+          "selector": "#cancel-create"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-W-STATUS-ALL",
@@ -508,13 +1108,45 @@
         {
           "package": "workspaces-direction-c",
           "scene": "catalog"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-all-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-all-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-all-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-all-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-all-selected-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-all-selected-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-all-selected-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-all-selected-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -522,9 +1154,49 @@
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-all-default",
+          "selector": "[data-status='all']"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-all-hover",
+          "selector": "[data-status='all']"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-all-focus",
+          "selector": "[data-status='all']"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-all-pressed",
+          "selector": "[data-status='all']"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P32-status-all-selected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "[data-status='all']",
+          "states": {
+            "default": "status-all-selected-default",
+            "hover": "status-all-selected-hover",
+            "focus": "status-all-selected-focus",
+            "pressed": "status-all-selected-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "OG-W-STATUS-ACTIVE",
@@ -546,13 +1218,45 @@
         {
           "package": "workspaces-direction-c",
           "scene": "active"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-active-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-active-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-active-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-active-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-active-selected-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-active-selected-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-active-selected-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-active-selected-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -560,9 +1264,49 @@
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-active-default",
+          "selector": "[data-status='active']"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-active-hover",
+          "selector": "[data-status='active']"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-active-focus",
+          "selector": "[data-status='active']"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-active-pressed",
+          "selector": "[data-status='active']"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P32-status-active-selected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "[data-status='active']",
+          "states": {
+            "default": "status-active-selected-default",
+            "hover": "status-active-selected-hover",
+            "focus": "status-active-selected-focus",
+            "pressed": "status-active-selected-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "OG-W-STATUS-ARCHIVED",
@@ -584,13 +1328,45 @@
         {
           "package": "workspaces-direction-c",
           "scene": "archived"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-archived-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-archived-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-archived-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-archived-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-archived-selected-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-archived-selected-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-archived-selected-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-archived-selected-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -598,9 +1374,49 @@
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-archived-default",
+          "selector": "[data-status='archived']"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-archived-hover",
+          "selector": "[data-status='archived']"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-archived-focus",
+          "selector": "[data-status='archived']"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "status-archived-pressed",
+          "selector": "[data-status='archived']"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P32-status-archived-selected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "[data-status='archived']",
+          "states": {
+            "default": "status-archived-selected-default",
+            "hover": "status-archived-selected-hover",
+            "focus": "status-archived-selected-focus",
+            "pressed": "status-archived-selected-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "OG-W-RESET",
@@ -627,13 +1443,29 @@
         {
           "package": "workspaces-direction-c",
           "scene": "catalog"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reset-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reset-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reset-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reset-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -641,9 +1473,36 @@
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reset-default",
+          "selector": ".filter-fields [data-reset]"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reset-hover",
+          "selector": ".filter-fields [data-reset]"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reset-focus",
+          "selector": ".filter-fields [data-reset]"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "reset-pressed",
+          "selector": ".filter-fields [data-reset]"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-W-CLEAR-EMPTY",
@@ -665,13 +1524,29 @@
         {
           "package": "workspaces-direction-c",
           "scene": "filter_empty"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "clear-empty-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "clear-empty-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "clear-empty-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "clear-empty-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -679,9 +1554,36 @@
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "clear-empty-default",
+          "selector": ".empty [data-reset]"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "clear-empty-hover",
+          "selector": ".empty [data-reset]"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "clear-empty-focus",
+          "selector": ".empty [data-reset]"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "clear-empty-pressed",
+          "selector": ".empty [data-reset]"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-W-SELECT",
@@ -708,13 +1610,45 @@
         {
           "package": "workspaces-direction-c",
           "scene": "search"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "select-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "select-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "select-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "select-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "select-current-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "select-current-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "select-current-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "select-current-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -722,9 +1656,49 @@
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "select-default",
+          "selector": ".workspace-list li:nth-child(2) button"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "select-hover",
+          "selector": ".workspace-list li:nth-child(2) button"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "select-focus",
+          "selector": ".workspace-list li:nth-child(2) button"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "select-pressed",
+          "selector": ".workspace-list li:nth-child(2) button"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P32-select-current",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": ".workspace-list button[aria-pressed='true']",
+          "states": {
+            "default": "select-current-default",
+            "hover": "select-current-hover",
+            "focus": "select-current-focus",
+            "pressed": "select-current-pressed"
+          }
+        }
+      ]
     },
     {
       "actionId": "OG-W-PREVIOUS",
@@ -751,23 +1725,75 @@
         {
           "package": "workspaces-direction-c",
           "scene": "page_two"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "previous-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "previous-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "previous-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "previous-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "previous-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "previous-default",
+          "selector": ".pagination button:first-child"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "previous-hover",
+          "selector": ".pagination button:first-child"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "previous-focus",
+          "selector": ".pagination button:first-child"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "previous-pressed",
+          "selector": ".pagination button:first-child"
+        },
+        "disabled": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "previous-disabled",
+          "selector": ".pagination button:first-child"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-W-NEXT",
@@ -794,23 +1820,75 @@
         {
           "package": "workspaces-direction-c",
           "scene": "page_two"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "next-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "next-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "next-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "next-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "next-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "next-default",
+          "selector": ".pagination button:last-child"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "next-hover",
+          "selector": ".pagination button:last-child"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "next-focus",
+          "selector": ".pagination button:last-child"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "next-pressed",
+          "selector": ".pagination button:last-child"
+        },
+        "disabled": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "next-disabled",
+          "selector": ".pagination button:last-child"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-W-STATE",
@@ -867,23 +1945,117 @@
         {
           "package": "workspaces-direction-c",
           "scene": "default_conflict"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "archive-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "archive-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "archive-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "archive-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "archive-busy"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "restore-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "restore-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "restore-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "restore-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "default-protected-disabled"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "busy": "scene-reference-not-acceptance"
       },
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "archive-default",
+          "selector": "#state-action"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "archive-hover",
+          "selector": "#state-action"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "archive-focus",
+          "selector": "#state-action"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "archive-pressed",
+          "selector": "#state-action"
+        },
+        "busy": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "archive-busy",
+          "selector": "#state-action"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P32-restore",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "#state-action",
+          "states": {
+            "default": "restore-default",
+            "hover": "restore-hover",
+            "focus": "restore-focus",
+            "pressed": "restore-pressed"
+          }
+        },
+        {
+          "key": "P32-default-protected",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "#state-action",
+          "states": {
+            "disabled": "default-protected-disabled"
+          }
+        }
+      ]
     },
     {
       "actionId": "OG-W-TEAMS",
@@ -905,13 +2077,29 @@
         {
           "package": "workspaces-direction-c",
           "scene": "selected"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "teams-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "teams-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "teams-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "teams-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -919,9 +2107,36 @@
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "teams-default",
+          "selector": "a[data-route][href='/org-admin/teams']"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "teams-hover",
+          "selector": "a[data-route][href='/org-admin/teams']"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "teams-focus",
+          "selector": "a[data-route][href='/org-admin/teams']"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "teams-pressed",
+          "selector": "a[data-route][href='/org-admin/teams']"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-W-PROFILE",
@@ -943,13 +2158,29 @@
         {
           "package": "workspaces-direction-c",
           "scene": "normal"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "profile-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "profile-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "profile-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "profile-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -957,9 +2188,36 @@
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "profile-default",
+          "selector": "a[data-route][href='/org-admin']"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "profile-hover",
+          "selector": "a[data-route][href='/org-admin']"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "profile-focus",
+          "selector": "a[data-route][href='/org-admin']"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "profile-pressed",
+          "selector": "a[data-route][href='/org-admin']"
+        }
+      },
+      "additionalControlVariants": []
     },
     {
       "actionId": "OG-W-TECH",
@@ -981,13 +2239,45 @@
         {
           "package": "workspaces-direction-c",
           "scene": "technical"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "technical-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "technical-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "technical-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "technical-pressed"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "technical-open-default"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "technical-open-hover"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "technical-open-focus"
+        },
+        {
+          "package": "workspaces-controls-direction-c",
+          "scene": "technical-open-pressed"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
@@ -995,9 +2285,49 @@
         {
           "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+      "remaining": "已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "technical-default",
+          "selector": "#technical summary"
+        },
+        "hover": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "technical-hover",
+          "selector": "#technical summary"
+        },
+        "focus": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "technical-focus",
+          "selector": "#technical summary"
+        },
+        "pressed": {
+          "package": "workspaces-controls-direction-c",
+          "scene": "technical-pressed",
+          "selector": "#technical summary"
+        }
+      },
+      "additionalControlVariants": [
+        {
+          "key": "P32-technical-open",
+          "scope": "additional-control-variant-not-new-action",
+          "package": "workspaces-controls-direction-c",
+          "selector": "#technical summary",
+          "states": {
+            "default": "technical-open-default",
+            "hover": "technical-open-hover",
+            "focus": "technical-open-focus",
+            "pressed": "technical-open-pressed"
+          }
+        }
+      ]
     }
   ],
   "functionProps": [
@@ -1202,6 +2532,28 @@
               }
             ],
             "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+          },
+          {
+            "name": "controls-archive-composition",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "workspaces-controls-direction-c",
+                "scene": "composition-archive"
+              }
+            ],
+            "remaining": "仅原因窗局部组合提案，字段边界与真实生命周期未获批准。"
+          },
+          {
+            "name": "controls-restore-composition",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "workspaces-controls-direction-c",
+                "scene": "composition-restore"
+              }
+            ],
+            "remaining": "仅原因窗局部组合提案，字段边界与真实生命周期未获批准。"
           }
         ]
       },
@@ -1344,7 +2696,8 @@
   },
   "compositionGaps": [
     "原型内联错误、缺失计数区分、原生button语义、未知写结果保护尚未进入真实Vue。",
-    "创建成功会清除等待期间后续编辑；归档原因等待与当前组织/目标版本归属仍需具体决策与真实验证。"
+    "创建成功会清除等待期间后续编辑；归档原因等待与当前组织/目标版本归属仍需具体决策与真实验证。",
+    "新控件稿保留旧原型字段锁定、reason max500及未知结果保护提案；不能用控件图批准这些未确认的生产行为。"
   ],
   "approval": "pending-user-review",
   "limits": [
