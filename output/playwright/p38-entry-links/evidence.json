@@ -1,0 +1,612 @@
+{
+  "schemaVersion": 1,
+  "scope": "Actual Vue with capability input fixtures and real surfaceProps; NOT full NavigationShell, backend RBAC, destination page, OS clipboard or production acceptance.",
+  "approval": "pending",
+  "sourceHashes": {
+    "scripts/verify-ui-phase2-platform-entry-links.mjs": "b7f93b3eb1a3cd4bec6b32fabfb489c4b4317f5b9258e4fa664121c11b3874e1",
+    "scripts/lib/ui-phase2-platform-overview-design-data.mjs": "838e4970f3e643620c01dd0e9e430974fc64f703e88b68b3626fc862946d9bda",
+    "apps/web/src/components/PlatformDashboard.vue": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+    "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+    "design-plans/ui-phase-2-2026-09-07/implementation/platform-overview-preview.css": "b074ad6bb00cc99acdf7e6b79b9912d9a5d60d4f9a8f4f606279e7050ac738ce",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "actual surfaceProps passes capabilities; 7 versus 10 ready links, three superadmin-only source sites, no capability-change GET"
+    },
+    {
+      "width": 390,
+      "name": "all ten ready RouterLink source instances clicked; exact catalog path/query and return URL; destinations not mounted"
+    },
+    {
+      "width": 390,
+      "name": "empty trend adds exactly its two existing navigation instances, no new business operation"
+    },
+    {
+      "width": 390,
+      "name": "removing capability input hides three entry instances but does not clear child facts; isolated child is not an authorization gate"
+    },
+    {
+      "width": 390,
+      "name": "initial 401 exposes the existing login link; no real login, external/API mutation, page errors or changed window"
+    },
+    {
+      "width": 760,
+      "name": "actual surfaceProps passes capabilities; 7 versus 10 ready links, three superadmin-only source sites, no capability-change GET"
+    },
+    {
+      "width": 760,
+      "name": "all ten ready RouterLink source instances clicked; exact catalog path/query and return URL; destinations not mounted"
+    },
+    {
+      "width": 760,
+      "name": "empty trend adds exactly its two existing navigation instances, no new business operation"
+    },
+    {
+      "width": 760,
+      "name": "removing capability input hides three entry instances but does not clear child facts; isolated child is not an authorization gate"
+    },
+    {
+      "width": 760,
+      "name": "initial 401 exposes the existing login link; no real login, external/API mutation, page errors or changed window"
+    },
+    {
+      "width": 761,
+      "name": "actual surfaceProps passes capabilities; 7 versus 10 ready links, three superadmin-only source sites, no capability-change GET"
+    },
+    {
+      "width": 761,
+      "name": "all ten ready RouterLink source instances clicked; exact catalog path/query and return URL; destinations not mounted"
+    },
+    {
+      "width": 761,
+      "name": "empty trend adds exactly its two existing navigation instances, no new business operation"
+    },
+    {
+      "width": 761,
+      "name": "removing capability input hides three entry instances but does not clear child facts; isolated child is not an authorization gate"
+    },
+    {
+      "width": 761,
+      "name": "initial 401 exposes the existing login link; no real login, external/API mutation, page errors or changed window"
+    },
+    {
+      "width": 1440,
+      "name": "actual surfaceProps passes capabilities; 7 versus 10 ready links, three superadmin-only source sites, no capability-change GET"
+    },
+    {
+      "width": 1440,
+      "name": "all ten ready RouterLink source instances clicked; exact catalog path/query and return URL; destinations not mounted"
+    },
+    {
+      "width": 1440,
+      "name": "empty trend adds exactly its two existing navigation instances, no new business operation"
+    },
+    {
+      "width": 1440,
+      "name": "removing capability input hides three entry instances but does not clear child facts; isolated child is not an authorization gate"
+    },
+    {
+      "width": 1440,
+      "name": "initial 401 exposes the existing login link; no real login, external/API mutation, page errors or changed window"
+    }
+  ],
+  "navigation": [
+    {
+      "width": 390,
+      "text": "等待处理7查看排队、运行或受阻的采集任务 →",
+      "href": "/platform-admin/collection",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 390,
+      "text": "需要关注2按错误根因查看异常 →",
+      "href": "/platform-admin/collection/overview?root_cause=1",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 390,
+      "text": "查看组织",
+      "href": "/platform-admin/organizations",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 390,
+      "text": "查看用户",
+      "href": "/platform-admin/users",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 390,
+      "text": "查看来源",
+      "href": "/platform-admin/providers/sources",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 390,
+      "text": "查看任务",
+      "href": "/platform-admin/collection",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 390,
+      "text": "查看数据",
+      "href": "/platform-admin/data",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 390,
+      "text": "管理组织和用户新建组织、停用账号、分配管理员",
+      "href": "/platform-admin/organizations",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 390,
+      "text": "查看热点来源确认自动来源、待配置来源和手动来源",
+      "href": "/platform-admin/providers/sources",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 390,
+      "text": "查看采集进度看看自动获取是否完成、哪里需要处理",
+      "href": "/platform-admin/collection/overview",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 390,
+      "text": "检查来源是否启用",
+      "href": "/platform-admin/providers/sources",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 390,
+      "text": "查看采集队列",
+      "href": "/platform-admin/collection/overview",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 390,
+      "text": "重新登录",
+      "href": "/login",
+      "scope": "router-destination-only-not-login-flow"
+    },
+    {
+      "width": 760,
+      "text": "等待处理7查看排队、运行或受阻的采集任务 →",
+      "href": "/platform-admin/collection",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 760,
+      "text": "需要关注2按错误根因查看异常 →",
+      "href": "/platform-admin/collection/overview?root_cause=1",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 760,
+      "text": "查看组织",
+      "href": "/platform-admin/organizations",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 760,
+      "text": "查看用户",
+      "href": "/platform-admin/users",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 760,
+      "text": "查看来源",
+      "href": "/platform-admin/providers/sources",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 760,
+      "text": "查看任务",
+      "href": "/platform-admin/collection",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 760,
+      "text": "查看数据",
+      "href": "/platform-admin/data",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 760,
+      "text": "管理组织和用户新建组织、停用账号、分配管理员",
+      "href": "/platform-admin/organizations",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 760,
+      "text": "查看热点来源确认自动来源、待配置来源和手动来源",
+      "href": "/platform-admin/providers/sources",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 760,
+      "text": "查看采集进度看看自动获取是否完成、哪里需要处理",
+      "href": "/platform-admin/collection/overview",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 760,
+      "text": "检查来源是否启用",
+      "href": "/platform-admin/providers/sources",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 760,
+      "text": "查看采集队列",
+      "href": "/platform-admin/collection/overview",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 760,
+      "text": "重新登录",
+      "href": "/login",
+      "scope": "router-destination-only-not-login-flow"
+    },
+    {
+      "width": 761,
+      "text": "等待处理7查看排队、运行或受阻的采集任务 →",
+      "href": "/platform-admin/collection",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 761,
+      "text": "需要关注2按错误根因查看异常 →",
+      "href": "/platform-admin/collection/overview?root_cause=1",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 761,
+      "text": "查看组织",
+      "href": "/platform-admin/organizations",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 761,
+      "text": "查看用户",
+      "href": "/platform-admin/users",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 761,
+      "text": "查看来源",
+      "href": "/platform-admin/providers/sources",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 761,
+      "text": "查看任务",
+      "href": "/platform-admin/collection",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 761,
+      "text": "查看数据",
+      "href": "/platform-admin/data",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 761,
+      "text": "管理组织和用户新建组织、停用账号、分配管理员",
+      "href": "/platform-admin/organizations",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 761,
+      "text": "查看热点来源确认自动来源、待配置来源和手动来源",
+      "href": "/platform-admin/providers/sources",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 761,
+      "text": "查看采集进度看看自动获取是否完成、哪里需要处理",
+      "href": "/platform-admin/collection/overview",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 761,
+      "text": "检查来源是否启用",
+      "href": "/platform-admin/providers/sources",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 761,
+      "text": "查看采集队列",
+      "href": "/platform-admin/collection/overview",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 761,
+      "text": "重新登录",
+      "href": "/login",
+      "scope": "router-destination-only-not-login-flow"
+    },
+    {
+      "width": 1440,
+      "text": "等待处理7查看排队、运行或受阻的采集任务 →",
+      "href": "/platform-admin/collection",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 1440,
+      "text": "需要关注2按错误根因查看异常 →",
+      "href": "/platform-admin/collection/overview?root_cause=1",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 1440,
+      "text": "查看组织",
+      "href": "/platform-admin/organizations",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 1440,
+      "text": "查看用户",
+      "href": "/platform-admin/users",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 1440,
+      "text": "查看来源",
+      "href": "/platform-admin/providers/sources",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 1440,
+      "text": "查看任务",
+      "href": "/platform-admin/collection",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 1440,
+      "text": "查看数据",
+      "href": "/platform-admin/data",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 1440,
+      "text": "管理组织和用户新建组织、停用账号、分配管理员",
+      "href": "/platform-admin/organizations",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 1440,
+      "text": "查看热点来源确认自动来源、待配置来源和手动来源",
+      "href": "/platform-admin/providers/sources",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 1440,
+      "text": "查看采集进度看看自动获取是否完成、哪里需要处理",
+      "href": "/platform-admin/collection/overview",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 1440,
+      "text": "检查来源是否启用",
+      "href": "/platform-admin/providers/sources",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 1440,
+      "text": "查看采集队列",
+      "href": "/platform-admin/collection/overview",
+      "scope": "router-destination-only-not-destination-page"
+    },
+    {
+      "width": 1440,
+      "text": "重新登录",
+      "href": "/login",
+      "scope": "router-destination-only-not-login-flow"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-operate-facts.png",
+      "sha256": "1319125efeb6f74d1503b7d67eb4de52b4ee0adb4546d84d3ccaac36891a1cce",
+      "kind": "vue-isolated",
+      "pageId": "P38",
+      "state": "operate-facts",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 655
+      },
+      "concreteUrl": "http://127.0.0.1:52689/platform-admin?window=24h&keep=entry",
+      "buildSha": null,
+      "capturedAt": "2026-09-10T19:08:39.821Z",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "caseId": "P38-entry-390-operate-facts",
+      "approval": "pending"
+    },
+    {
+      "file": "390-operate-shortcuts.png",
+      "sha256": "67e24fd17aa54b45a6bf7030a71900166ea9bca8b6ccd422d4907f8b08b82844",
+      "kind": "vue-isolated",
+      "pageId": "P38",
+      "state": "operate-shortcuts",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 298
+      },
+      "concreteUrl": "http://127.0.0.1:52689/platform-admin?window=24h&keep=entry",
+      "buildSha": null,
+      "capturedAt": "2026-09-10T19:08:39.897Z",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "caseId": "P38-entry-390-operate-shortcuts",
+      "approval": "pending"
+    },
+    {
+      "file": "390-superadmin-facts.png",
+      "sha256": "8f64cf9d57f129c8b21780fbca5030a0d21cc0f9368e52c5fa7b73ec08553236",
+      "kind": "vue-isolated",
+      "pageId": "P38",
+      "state": "superadmin-facts",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 704
+      },
+      "concreteUrl": "http://127.0.0.1:52689/platform-admin?window=24h&keep=entry",
+      "buildSha": null,
+      "capturedAt": "2026-09-10T19:08:40.003Z",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "caseId": "P38-entry-390-superadmin-facts",
+      "approval": "pending"
+    },
+    {
+      "file": "390-superadmin-shortcuts.png",
+      "sha256": "a57f5e6c7f8ba65b2c571d47773c5b7eb77ac2f35ff23fcf2afd50df9b962954",
+      "kind": "vue-isolated",
+      "pageId": "P38",
+      "state": "superadmin-shortcuts",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 385
+      },
+      "concreteUrl": "http://127.0.0.1:52689/platform-admin?window=24h&keep=entry",
+      "buildSha": null,
+      "capturedAt": "2026-09-10T19:08:40.081Z",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "caseId": "P38-entry-390-superadmin-shortcuts",
+      "approval": "pending"
+    },
+    {
+      "file": "1440-operate-facts.png",
+      "sha256": "6fd9a4a295681e5c39bb2ecef98817c954916d094f20e91a346078be55604c63",
+      "kind": "vue-isolated",
+      "pageId": "P38",
+      "state": "operate-facts",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 249
+      },
+      "concreteUrl": "http://127.0.0.1:52689/platform-admin?window=24h&keep=entry",
+      "buildSha": null,
+      "capturedAt": "2026-09-10T19:08:45.236Z",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "caseId": "P38-entry-1440-operate-facts",
+      "approval": "pending"
+    },
+    {
+      "file": "1440-operate-shortcuts.png",
+      "sha256": "c7386976bea5c6d0f0fae162c9aae4548952edab81901d43b33212f89bdbd7ec",
+      "kind": "vue-isolated",
+      "pageId": "P38",
+      "state": "operate-shortcuts",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 182
+      },
+      "concreteUrl": "http://127.0.0.1:52689/platform-admin?window=24h&keep=entry",
+      "buildSha": null,
+      "capturedAt": "2026-09-10T19:08:45.314Z",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "caseId": "P38-entry-1440-operate-shortcuts",
+      "approval": "pending"
+    },
+    {
+      "file": "1440-superadmin-facts.png",
+      "sha256": "5b284ba31668e16cf2c44d7b7967d5a9ab6c771619ded113cf0ffa2b0a4bb65f",
+      "kind": "vue-isolated",
+      "pageId": "P38",
+      "state": "superadmin-facts",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 249
+      },
+      "concreteUrl": "http://127.0.0.1:52689/platform-admin?window=24h&keep=entry",
+      "buildSha": null,
+      "capturedAt": "2026-09-10T19:08:45.418Z",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "caseId": "P38-entry-1440-superadmin-facts",
+      "approval": "pending"
+    },
+    {
+      "file": "1440-superadmin-shortcuts.png",
+      "sha256": "34041d43c0dedfc09bfa1aa5c4c571dfbccc8e29d994f423f76d25dd9b0d0d9e",
+      "kind": "vue-isolated",
+      "pageId": "P38",
+      "state": "superadmin-shortcuts",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 269
+      },
+      "concreteUrl": "http://127.0.0.1:52689/platform-admin?window=24h&keep=entry",
+      "buildSha": null,
+      "capturedAt": "2026-09-10T19:08:45.501Z",
+      "browser": "151.0.7922.34",
+      "os": "win32",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "caseId": "P38-entry-1440-superadmin-shortcuts",
+      "approval": "pending"
+    }
+  ],
+  "processesClosed": true
+}

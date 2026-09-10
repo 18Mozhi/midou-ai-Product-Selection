@@ -2,8 +2,8 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1484；旧登记1477；新身份29，旧表独有身份22。签名变化不等于增删业务能力。
-- 已具体语义对应38页/767源位置/754组；其中路由动作621组，转发/容器关联68组，其余明确排除。其余35页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1484；旧登记1477；新身份32，旧表独有身份25。签名变化不等于增删业务能力。
+- 已具体语义对应39页/797源位置/774组；其中路由动作640组，转发/容器关联69组，其余明确排除。其余34页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
@@ -49,34 +49,34 @@
 | [P35 组织数据](page-specs/P35.md) | 162 | [14组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P36 组织令牌](page-specs/P36.md) | 162 | [19组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P37 组织审计](page-specs/P37.md) | 162 | [16组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P38 平台概览](page-specs/P38.md) | 66 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P39 账号与组织](page-specs/P39.md) | 142 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P40 组织管理](page-specs/P40.md) | 142 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P41 创建组织](page-specs/P41.md) | 142 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P42 组织详情](page-specs/P42.md) | 142 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P43 用户管理](page-specs/P43.md) | 142 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P44 管理员管理](page-specs/P44.md) | 142 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P45 角色权限](page-specs/P45.md) | 142 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P46 来源设置](page-specs/P46.md) | 181 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P47 采集程序](page-specs/P47.md) | 181 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P48 热点来源](page-specs/P48.md) | 181 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P49 1688 启用检查](page-specs/P49.md) | 181 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P50 凭证与档案](page-specs/P50.md) | 181 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P51 采集任务](page-specs/P51.md) | 123 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P52 采集总览](page-specs/P52.md) | 123 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P53 网页登录采集](page-specs/P53.md) | 123 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P54 数据中心](page-specs/P54.md) | 103 | [17组](action-reviews/P54.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P55 质量与规则](page-specs/P55.md) | 71 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P56 内容管理](page-specs/P56.md) | 115 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P57 通知管理](page-specs/P57.md) | 115 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P38 平台概览](page-specs/P38.md) | 63 | [20组](action-reviews/P38.json) | 114个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P39 账号与组织](page-specs/P39.md) | 139 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P40 组织管理](page-specs/P40.md) | 139 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P41 创建组织](page-specs/P41.md) | 139 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P42 组织详情](page-specs/P42.md) | 139 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P43 用户管理](page-specs/P43.md) | 139 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P44 管理员管理](page-specs/P44.md) | 139 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P45 角色权限](page-specs/P45.md) | 139 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P46 来源设置](page-specs/P46.md) | 178 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P47 采集程序](page-specs/P47.md) | 178 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P48 热点来源](page-specs/P48.md) | 178 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P49 1688 启用检查](page-specs/P49.md) | 178 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P50 凭证与档案](page-specs/P50.md) | 178 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P51 采集任务](page-specs/P51.md) | 120 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P52 采集总览](page-specs/P52.md) | 120 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P53 网页登录采集](page-specs/P53.md) | 120 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P54 数据中心](page-specs/P54.md) | 100 | [17组](action-reviews/P54.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P55 质量与规则](page-specs/P55.md) | 68 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P56 内容管理](page-specs/P56.md) | 112 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P57 通知管理](page-specs/P57.md) | 112 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P58 配额管理](page-specs/P58.md) | 79 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P59 安全中心](page-specs/P59.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P60 开放平台](page-specs/P60.md) | 87 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P61 系统状态](page-specs/P61.md) | 115 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P62 链路日志](page-specs/P62.md) | 71 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P63 接口覆盖证据](page-specs/P63.md) | 115 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P64 备份与恢复](page-specs/P64.md) | 53 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P65 发布管理](page-specs/P65.md) | 54 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P59 安全中心](page-specs/P59.md) | 72 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P60 开放平台](page-specs/P60.md) | 84 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P61 系统状态](page-specs/P61.md) | 112 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P62 链路日志](page-specs/P62.md) | 68 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P63 接口覆盖证据](page-specs/P63.md) | 112 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P64 备份与恢复](page-specs/P64.md) | 50 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P65 发布管理](page-specs/P65.md) | 51 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P66 服务拓扑](page-specs/P66.md) | 49 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P67 Redis 运行](page-specs/P67.md) | 42 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P68 MySQL 运行](page-specs/P68.md) | 42 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -3138,6 +3138,65 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 父共享原因的跨页遗留状态不在当前登记中验收。
 - 子源10候选、八模型和四结构都需真实Vue生命周期验证。
 
+## P38 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P38.json)：30个局部源位置 → 20组；0类写入，19组路由动作，1组转发/容器关联不重复计动作。2个本地v-model，1处调用/内嵌容器，3个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+
+尚有114个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| PA38-WINDOW 切换查看范围 / read | 1处；41083a84c60ec185.1 | [window15m · 1440](design/platform-overview-direction-c/1440-window15m.png) / [window15m · 390](design/platform-overview-direction-c/390-window15m.png)、[window7d · 1440](design/platform-overview-direction-c/1440-window7d.png) / [window7d · 390](design/platform-overview-direction-c/390-window7d.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-REFRESH 刷新与两类重试 / read | 3处；15e83f4e8898e4d7.1、17f7411f1727355d.1、3569d8f0f015857e.1 | [normal · 1440](design/platform-overview-direction-c/1440-normal.png) / [normal · 390](design/platform-overview-direction-c/390-normal.png)、[blocked · 1440](design/platform-overview-direction-c/1440-blocked.png) / [blocked · 390](design/platform-overview-direction-c/390-blocked.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-LOGIN 重新登录入口 / navigation | 1处；5587941412d5210f.1 | [expired · 1440](design/platform-overview-direction-c/1440-expired.png) / [expired · 390](design/platform-overview-direction-c/390-expired.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-COLLECTION 等待处理与查看任务 / navigation | 2处；65c09ba74ca8870b.1、348b42f6f4eb388b.1 | [normal · 1440](design/platform-overview-direction-c/1440-normal.png) / [normal · 390](design/platform-overview-direction-c/390-normal.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-ROOTCAUSE 需要关注入口 / navigation | 1处；d1c0b626714a7ff9.1 | [normal · 1440](design/platform-overview-direction-c/1440-normal.png) / [normal · 390](design/platform-overview-direction-c/390-normal.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-ORGANIZATIONS 查看组织与管理组织和用户 / navigation | 2处；52444eba9c2a98bc.1、f84b8209be451866.1 | [superadmin · 1440](design/platform-overview-direction-c/1440-superadmin.png) / [superadmin · 390](design/platform-overview-direction-c/390-superadmin.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-USERS 查看用户 / navigation | 1处；c4dfc8f822a18263.1 | [superadmin · 1440](design/platform-overview-direction-c/1440-superadmin.png) / [superadmin · 390](design/platform-overview-direction-c/390-superadmin.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-SOURCES 来源导航的三处变体 / navigation | 3处；06b4b917d7a90e96.1、5074531b9e5b8a16.1、ba487bb14816185a.1 | [normal · 1440](design/platform-overview-direction-c/1440-normal.png) / [normal · 390](design/platform-overview-direction-c/390-normal.png)、[trend · 1440](design/platform-overview-direction-c/1440-trend.png) / [trend · 390](design/platform-overview-direction-c/390-trend.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-DATA 查看数据 / navigation | 1处；9ae1b37e258dde35.1 | [normal · 1440](design/platform-overview-direction-c/1440-normal.png) / [normal · 390](design/platform-overview-direction-c/390-normal.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-QUEUE 采集进度与无趋势恢复 / navigation | 2处；1ce54f6253c32ad1.1、2e8c2f831b1b02a5.1 | [normal · 1440](design/platform-overview-direction-c/1440-normal.png) / [normal · 390](design/platform-overview-direction-c/390-normal.png)、[trend · 1440](design/platform-overview-direction-c/1440-trend.png) / [trend · 390](design/platform-overview-direction-c/390-trend.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-TECH 来源与告警原生技术折叠 / local | 2处；1c008f867673db60.1、1c008f867673db60.2 | [technical · 1440](design/platform-overview-direction-c/1440-technical.png) / [technical · 390](design/platform-overview-direction-c/390-technical.png)、[alert_details · 1440](design/platform-overview-direction-c/1440-alert_details.png) / [alert_details · 390](design/platform-overview-direction-c/390-alert_details.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-PROVIDERS 来源展开收起 / local | 1处；d604390773d9cd06.1 | [many_providers · 1440](design/platform-overview-direction-c/1440-many_providers.png) / [many_providers · 390](design/platform-overview-direction-c/390-many_providers.png)、[all_providers · 1440](design/platform-overview-direction-c/1440-all_providers.png) / [all_providers · 390](design/platform-overview-direction-c/390-all_providers.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-PREVIEW-OPEN 手机记录预览 / local | 1处；6da4dad42cb34c8d.1 | [normal · 1440](design/platform-overview-direction-c/1440-normal.png) / [normal · 390](design/platform-overview-direction-c/390-normal.png)、[long_fields · 1440](design/platform-overview-direction-c/1440-long_fields.png) / [long_fields · 390](design/platform-overview-direction-c/390-long_fields.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-PREVIEW-CLOSE 关闭与焦点循环 / local | 3处；c182428cb2c0ed66.1、988131834dc4bd6f.1、847801b2ac6e7a17.1 | [normal · 1440](design/platform-overview-direction-c/1440-normal.png) / [normal · 390](design/platform-overview-direction-c/390-normal.png)、[long_fields · 1440](design/platform-overview-direction-c/1440-long_fields.png) / [long_fields · 390](design/platform-overview-direction-c/390-long_fields.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-PREVIEW-DIALOG 共享预览容器关联 / wiring | 1处；a3c9be2acacfd788.1 | [normal · 1440](design/platform-overview-direction-c/1440-normal.png) / [normal · 390](design/platform-overview-direction-c/390-normal.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-COLUMNS 列设置展开 / local | 1处；e2fd0d02cbd9f684.1 | [columns · 1440](design/platform-overview-direction-c/1440-columns.png) / [columns · 390](design/platform-overview-direction-c/390-columns.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-COLUMN-TOGGLE 切换来源显示列 / local | 1处；921f4be18a3fe814.1 | [columns · 1440](design/platform-overview-direction-c/1440-columns.png) / [columns · 390](design/platform-overview-direction-c/390-columns.png)、[one_column · 1440](design/platform-overview-direction-c/1440-one_column.png) / [one_column · 390](design/platform-overview-direction-c/390-one_column.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-FREEZE 冻结首个可见列 / local | 1处；d09cd5524db7bee5.1 | [normal · 1440](design/platform-overview-direction-c/1440-normal.png) / [normal · 390](design/platform-overview-direction-c/390-normal.png)、[unfrozen · 1440](design/platform-overview-direction-c/1440-unfrozen.png) / [unfrozen · 390](design/platform-overview-direction-c/390-unfrozen.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-REQUEST-DETAILS 共享请求技术详情 / local | 1处；b3ffca8eb967d682.1 | [technical · 1440](design/platform-overview-direction-c/1440-technical.png) / [technical · 390](design/platform-overview-direction-c/390-technical.png)、[blocked · 1440](design/platform-overview-direction-c/1440-blocked.png) / [blocked · 390](design/platform-overview-direction-c/390-blocked.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PA38-REQUEST-COPY 复制请求编号 / local | 1处；c19091da9e2471f1.1 | [copy_success · 1440](design/platform-overview-direction-c/1440-copy_success.png) / [copy_success · 390](design/platform-overview-direction-c/390-copy_success.png)、[copy_failed · 1440](design/platform-overview-direction-c/1440-copy_failed.png) / [copy_failed · 390](design/platform-overview-direction-c/390-copy_failed.png)；其余见JSON | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| PA38-PREVIEW-DIALOG | 容器定义，无额外事件 | PA38-PREVIEW-OPEN、PA38-PREVIEW-CLOSE |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| PlatformDashboard.vue / windowCode | 现有四时间窗；URL replace保留其他查询；pending时禁用 | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| TableViewControls.vue / density | 表格密度standard/compact，经v-model和watch本地应用；无显式事件签名，不冒充扫描动作候选 | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| PlatformDashboard.vue / ResponsiveDataView.1 / normal | responsive-row-detail / related-scene-only | [normal · 1440](design/platform-overview-direction-c/1440-normal.png) / [normal · 390](design/platform-overview-direction-c/390-normal.png) | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PlatformDashboard.vue / ResponsiveDataView.1 / unknown_provider | responsive-row-detail / related-scene-only | [unknown_provider · 1440](design/platform-overview-direction-c/1440-unknown_provider.png) / [unknown_provider · 390](design/platform-overview-direction-c/390-unknown_provider.png) | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+| PlatformDashboard.vue / ResponsiveDataView.1 / long_fields | responsive-row-detail / related-scene-only | [long_fields · 1440](design/platform-overview-direction-c/1440-long_fields.png) / [long_fields · 390](design/platform-overview-direction-c/390-long_fields.png) | 具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。 |
+
+### 明确保留的边界
+
+- 8张入口组合待审，不填充通用六态，也不抵扣其他未审构图。
+- ready刷新401/403旧快照展示策略已询问、待用户决策；本轮保持现状。
+- 全父壳/KeepAlive、真实角色与目标页业务、全主题/密度/缩放和生产验收仍待完成。
+- 共享组件仅核对本页消费者，不推广为其他页面验收。
+- 密度是独立模型驱动交互，不因动作扫描器不收集纯v-model而省略。
+- role=dialog定义由候选扫描器登记，不冒充结构容器扫描器的额外结果。
+
 ## P54 局部动作与共享消费者
 
 [逐项机器清单](action-reviews/P54.json)：44个局部源位置 → 17组；4类写入，17组路由动作，0组转发/容器关联不重复计动作。7个本地v-model，9处调用/内嵌容器，14个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
@@ -3201,6 +3260,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 40个明确控件变体已有364张双端原生状态图；17组主控件81个槽有selector/scene关联，21个槽仍未映射。主控件证据不是全动态行、全部共享消费者或真实Vue验收。
 - 三类实体详情已补打开/完整字段/双端长内容证据，全部状态行及逐按钮主题仍未穷尽；Q54源tab保留query/runId与原型清空、短语trim与原型严格全等的差异须具体审核。
 - 原质量无ready刷新/清搜索/清选择、无手机checkbox；原型额外入口仍是待审行为，不新增现行源合同ID。
+- 2026-09-11仅同步既有共享修复的当前依赖指纹：e845daca手机预览焦点隔离、fae70505复制拒绝及旧回执保护。P54页面源、原图和批准不变；共享测试不替代P54三个调用/六种内容变体的真实流程验收。
 - PlatformShell及UiStatePanel内部控件、表格列显隐/冻结/密度、TechnicalDetails复制必须按调用方再映射；不在44个局部源位置内。
 - ConfirmDialog共享typedText适用，acknowledged因本页destructive=false不显示；AuditedReasonDialog内部reason与质量reason分域；TableViewControls密度字段未冒充本页7个v-model。
 - ResponsiveDataView的三个调用/六种内容变体不能拿一个shared测试全验；同类动态行、空字段与主题密度交叉场景还未穷尽。

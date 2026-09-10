@@ -1,0 +1,931 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P38",
+  "route": "/platform-admin",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "contract": "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/PlatformDashboard.vue": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d"
+  },
+  "actions": [
+    {
+      "actionId": "PA38-WINDOW",
+      "label": "切换查看范围",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDashboard.vue#41083a84c60ec185.1"
+      ],
+      "condition": "pending禁用；15m/24h/7d/30d",
+      "handler": "changeWindow：保留其他query后replace，再load；历史同步见独立回归",
+      "variants": [
+        "41083a84c60ec185.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "window15m"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "window7d"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "window30d"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-REFRESH",
+      "label": "刷新与两类重试",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDashboard.vue#15e83f4e8898e4d7.1",
+        "apps/web/src/components/PlatformDashboard.vue#17f7411f1727355d.1",
+        "apps/web/src/components/PlatformDashboard.vue#3569d8f0f015857e.1"
+      ],
+      "condition": "页头/旧快照重试pending禁用；首读重试排除loading/expired/forbidden，没有disabled属性",
+      "handler": "load：同窗单飞和12秒取消；ready失败保留快照，不代替权限验收",
+      "variants": [
+        "15e83f4e8898e4d7.1",
+        "17f7411f1727355d.1",
+        "3569d8f0f015857e.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "blocked"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "refresh_failed"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "refreshing"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-LOGIN",
+      "label": "重新登录入口",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDashboard.vue#5587941412d5210f.1"
+      ],
+      "condition": "首次读取expired分支",
+      "handler": "RouterLink /login；不保证登录后返回",
+      "variants": [
+        "5587941412d5210f.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "expired"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-COLLECTION",
+      "label": "等待处理与查看任务",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDashboard.vue#65c09ba74ca8870b.1",
+        "apps/web/src/components/PlatformDashboard.vue#348b42f6f4eb388b.1"
+      ],
+      "condition": "ready且data存在",
+      "handler": "RouterLink /platform-admin/collection，两处独立入口",
+      "variants": [
+        "65c09ba74ca8870b.1",
+        "348b42f6f4eb388b.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-ROOTCAUSE",
+      "label": "需要关注入口",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDashboard.vue#d1c0b626714a7ff9.1"
+      ],
+      "condition": "ready且data存在",
+      "handler": "RouterLink /platform-admin/collection/overview?root_cause=1",
+      "variants": [
+        "d1c0b626714a7ff9.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-ORGANIZATIONS",
+      "label": "查看组织与管理组织和用户",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDashboard.vue#52444eba9c2a98bc.1",
+        "apps/web/src/components/PlatformDashboard.vue#f84b8209be451866.1"
+      ],
+      "condition": "ready且capabilities包含platform:superadmin",
+      "handler": "RouterLink /platform-admin/organizations；入口显隐不等于后端鉴权",
+      "variants": [
+        "52444eba9c2a98bc.1",
+        "f84b8209be451866.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "superadmin"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-USERS",
+      "label": "查看用户",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDashboard.vue#c4dfc8f822a18263.1"
+      ],
+      "condition": "ready且capabilities包含platform:superadmin",
+      "handler": "RouterLink /platform-admin/users",
+      "variants": [
+        "c4dfc8f822a18263.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "superadmin"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-SOURCES",
+      "label": "来源导航的三处变体",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDashboard.vue#06b4b917d7a90e96.1",
+        "apps/web/src/components/PlatformDashboard.vue#5074531b9e5b8a16.1",
+        "apps/web/src/components/PlatformDashboard.vue#ba487bb14816185a.1"
+      ],
+      "condition": "事实/常用入口在ready；恢复入口额外要求趋势数组为空",
+      "handler": "RouterLink /platform-admin/providers/sources；不是启停来源",
+      "variants": [
+        "06b4b917d7a90e96.1",
+        "5074531b9e5b8a16.1",
+        "ba487bb14816185a.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "trend"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-DATA",
+      "label": "查看数据",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDashboard.vue#9ae1b37e258dde35.1"
+      ],
+      "condition": "ready且data存在",
+      "handler": "RouterLink /platform-admin/data；不是导出",
+      "variants": [
+        "9ae1b37e258dde35.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-QUEUE",
+      "label": "采集进度与无趋势恢复",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDashboard.vue#1ce54f6253c32ad1.1",
+        "apps/web/src/components/PlatformDashboard.vue#2e8c2f831b1b02a5.1"
+      ],
+      "condition": "常用入口在ready；恢复入口额外要求趋势数组为空",
+      "handler": "RouterLink /platform-admin/collection/overview，无root_cause参数",
+      "variants": [
+        "1ce54f6253c32ad1.1",
+        "2e8c2f831b1b02a5.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "trend"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-TECH",
+      "label": "来源与告警原生技术折叠",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDashboard.vue#1c008f867673db60.1",
+        "apps/web/src/components/PlatformDashboard.vue#1c008f867673db60.2"
+      ],
+      "condition": "来源detail槽/告警循环内",
+      "handler": "原生details，仅原始ID/code；不是共享请求编号复制，也不处理告警",
+      "variants": [
+        "1c008f867673db60.1",
+        "1c008f867673db60.2"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "technical"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "alert_details"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-PROVIDERS",
+      "label": "来源展开收起",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDashboard.vue#d604390773d9cd06.1"
+      ],
+      "condition": "原始provider_health超过8项，aria-expanded绑定展开标记",
+      "handler": "切换providerHealthExpanded；异常优先显示前8或全部，无额外GET",
+      "variants": [
+        "d604390773d9cd06.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "many_providers"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "all_providers"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-PREVIEW-OPEN",
+      "label": "手机记录预览",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ResponsiveDataView.vue#6da4dad42cb34c8d.1"
+      ],
+      "condition": "手机逐来源渲染，aria-haspopup=dialog",
+      "handler": "show(row,event)记录触发器与selectedKey；不是详情路由",
+      "variants": [
+        "6da4dad42cb34c8d.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "long_fields"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-PREVIEW-CLOSE",
+      "label": "关闭与焦点循环",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ResponsiveDataView.vue#c182428cb2c0ed66.1",
+        "apps/web/src/components/ResponsiveDataView.vue#988131834dc4bd6f.1",
+        "apps/web/src/components/ResponsiveDataView.vue#847801b2ac6e7a17.1"
+      ],
+      "condition": "selected存在；遮罩tabindex=-1",
+      "handler": "close清selectedKey；Esc关闭、Tab/Shift+Tab循环，关闭返焦；背景inert及嵌套确认挂起见共享验证",
+      "variants": [
+        "c182428cb2c0ed66.1",
+        "988131834dc4bd6f.1",
+        "847801b2ac6e7a17.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "long_fields"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-PREVIEW-DIALOG",
+      "label": "共享预览容器关联",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ResponsiveDataView.vue#a3c9be2acacfd788.1"
+      ],
+      "condition": "selected存在，Teleport body",
+      "handler": "section role=dialog、aria-modal；标题来自detailTitle(selected)，定义本身无事件",
+      "variants": [
+        "a3c9be2acacfd788.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。",
+      "forwardsTo": [
+        "PA38-PREVIEW-OPEN",
+        "PA38-PREVIEW-CLOSE"
+      ],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "PA38-COLUMNS",
+      "label": "列设置展开",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TableViewControls.vue#e2fd0d02cbd9f684.1"
+      ],
+      "condition": "表头列数大于1，桌面控制区",
+      "handler": "原生details展开列选择",
+      "variants": [
+        "e2fd0d02cbd9f684.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "columns"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-COLUMN-TOGGLE",
+      "label": "切换来源显示列",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TableViewControls.vue#921f4be18a3fe814.1"
+      ],
+      "condition": "按列循环；已选且只剩1列时禁用",
+      "handler": "toggleColumn改变hiddenColumns，不影响数据或服务端列",
+      "variants": [
+        "921f4be18a3fe814.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "columns"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "one_column"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-FREEZE",
+      "label": "冻结首个可见列",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TableViewControls.vue#d09cd5524db7bee5.1"
+      ],
+      "condition": "表头列数大于1，aria-pressed绑定freezeFirst",
+      "handler": "切换freezeFirst，由watch应用首个可见列样式；不是固定第0列",
+      "variants": [
+        "d09cd5524db7bee5.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "normal"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "unfrozen"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-REQUEST-DETAILS",
+      "label": "共享请求技术详情",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TechnicalDetails.vue#b3ffca8eb967d682.1"
+      ],
+      "condition": "rows非空；P38两处只传requestId",
+      "handler": "原生details；组件通用trace/items不视为P38已有字段",
+      "variants": [
+        "b3ffca8eb967d682.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "technical"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "blocked"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    },
+    {
+      "actionId": "PA38-REQUEST-COPY",
+      "label": "复制请求编号",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TechnicalDetails.vue#c19091da9e2471f1.1"
+      ],
+      "condition": "共享rows循环；P38只传requestId，无busy/disabled属性",
+      "handler": "copy(label,value)原值写剪贴板，1500ms成功反馈；拒绝提示手动复制，旧回执隔离",
+      "variants": [
+        "c19091da9e2471f1.1"
+      ],
+      "scenes": [
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "copy_success"
+        },
+        {
+          "package": "platform-overview-direction-c",
+          "scene": "copy_failed"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-platform-overview-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+    }
+  ],
+  "inputs": {
+    "PlatformDashboard.vue": [
+      "windowCode"
+    ],
+    "ResponsiveDataView.vue": [],
+    "TableViewControls.vue": [
+      "density"
+    ],
+    "TechnicalDetails.vue": []
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "只有来源手机共享预览，无本页业务写入确认；共享role=dialog定义另列关联组，不能漏计或重复算写入。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/PlatformDashboard.vue",
+      "apps/web/src/components/ResponsiveDataView.vue",
+      "apps/web/src/components/TableViewControls.vue",
+      "apps/web/src/components/TechnicalDetails.vue"
+    ],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/PlatformDashboard.vue": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+      "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
+      "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/PlatformDashboard.vue",
+        "binding": "windowCode",
+        "meaning": "现有四时间窗；URL replace保留其他查询；pending时禁用",
+        "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+      },
+      {
+        "file": "apps/web/src/components/TableViewControls.vue",
+        "binding": "density",
+        "meaning": "表格密度standard/compact，经v-model和watch本地应用；无显式事件签名，不冒充扫描动作候选",
+        "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/PlatformDashboard.vue",
+        "tag": "ResponsiveDataView",
+        "ordinal": 1,
+        "shape": "responsive-row-detail",
+        "sourceBehavior": "PlatformDashboard的ResponsiveDataView传可见来源行；桌面四列表格、手机summary/detail槽，无额外GET",
+        "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。",
+        "variants": [
+          {
+            "name": "normal",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "platform-overview-direction-c",
+                "scene": "normal"
+              }
+            ],
+            "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+          },
+          {
+            "name": "unknown_provider",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "platform-overview-direction-c",
+                "scene": "unknown_provider"
+              }
+            ],
+            "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+          },
+          {
+            "name": "long_fields",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "platform-overview-direction-c",
+                "scene": "long_fields"
+              }
+            ],
+            "remaining": "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "共享组件仅核对本页消费者，不推广为其他页面验收。",
+      "密度是独立模型驱动交互，不因动作扫描器不收集纯v-model而省略。",
+      "role=dialog定义由候选扫描器登记，不冒充结构容器扫描器的额外结果。"
+    ]
+  },
+  "parentWiring": {
+    "files": [
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/navigation-shell-route-state.ts",
+      "config/route-catalog.json"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+      "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150"
+    },
+    "routeName": "platform-overview",
+    "surface": "platform-dashboard",
+    "component": "PlatformDashboard",
+    "props": {
+      "apiBaseUrl": "input.apiBaseUrl",
+      "capabilities": "input.capabilities"
+    },
+    "sourcePath": "route.meta.surface → surfaceComponents → lazy(PlatformDashboard) → KeepAlive component; selectedSurfaceProps由surfaceProps传递allCapabilities",
+    "boundary": "父层routeAllowed及KeepAlive只核对源码接线；浏览器夹具未挂载完整父壳、真实登录或RBAC。"
+  },
+  "actualEntryEvidence": {
+    "file": "output/playwright/p38-entry-links/evidence.json",
+    "sha256": "eb9d9fc96de57c46ae852543a39e372c3d133f8d0e7ca3e95c8e2b7e40db4b24",
+    "sourceCandidateIds": [
+      "apps/web/src/components/PlatformDashboard.vue#5587941412d5210f.1",
+      "apps/web/src/components/PlatformDashboard.vue#65c09ba74ca8870b.1",
+      "apps/web/src/components/PlatformDashboard.vue#348b42f6f4eb388b.1",
+      "apps/web/src/components/PlatformDashboard.vue#d1c0b626714a7ff9.1",
+      "apps/web/src/components/PlatformDashboard.vue#52444eba9c2a98bc.1",
+      "apps/web/src/components/PlatformDashboard.vue#f84b8209be451866.1",
+      "apps/web/src/components/PlatformDashboard.vue#c4dfc8f822a18263.1",
+      "apps/web/src/components/PlatformDashboard.vue#06b4b917d7a90e96.1",
+      "apps/web/src/components/PlatformDashboard.vue#5074531b9e5b8a16.1",
+      "apps/web/src/components/PlatformDashboard.vue#ba487bb14816185a.1",
+      "apps/web/src/components/PlatformDashboard.vue#9ae1b37e258dde35.1",
+      "apps/web/src/components/PlatformDashboard.vue#1ce54f6253c32ad1.1",
+      "apps/web/src/components/PlatformDashboard.vue#2e8c2f831b1b02a5.1"
+    ],
+    "sourceSites": 13,
+    "checks": 20,
+    "clickedInstances": 52,
+    "screenshots": 8,
+    "scope": "related-composition-not-per-control-state-acceptance",
+    "approval": "pending"
+  },
+  "compositionGaps": [
+    "8张入口组合待审，不填充通用六态，也不抵扣其他未审构图。",
+    "ready刷新401/403旧快照展示策略已询问、待用户决策；本轮保持现状。",
+    "全父壳/KeepAlive、真实角色与目标页业务、全主题/密度/缩放和生产验收仍待完成。"
+  ],
+  "limits": [
+    "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。",
+    "0类页面写入动作不等于GET无数据库副作用：真实读取写入平台观测与审计。本轮只mock GET，不接触数据库。",
+    "不修改生产Vue/CSS、API/OpenAPI、环境、依赖或权限；无部署/重启。"
+  ]
+}
