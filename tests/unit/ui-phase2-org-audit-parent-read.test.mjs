@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
@@ -14,7 +15,10 @@ test("P37 historical parent/child/API client evidence is pinned to its baseline 
     assert.ok(Object.keys(e.sourceHashes).some((f) => f.endsWith("/" + name)));
   for (const [file, sha] of Object.entries(e.sourceHashes))
     assert.equal(
-      capturedExportDetailHash(file, historicalAuditSource(file, await text(file))),
+      capturedExportDetailHash(
+        file,
+        historicalAuditSource(file, historicalTokenCopySource(file, await text(file))),
+      ),
       sha,
       file,
     );

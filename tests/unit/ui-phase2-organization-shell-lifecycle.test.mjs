@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -12,7 +13,7 @@ test("P42 full app capture binds actual loaded sources and exact screenshot inve
   assert.equal(evidence.scenarios.length, 20);
   assert.equal(evidence.screenshots.length, 44);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
+    assert.equal(hash(historicalTokenCopySource(file, read(file))), sha, file);
   for (const file of [
     "apps/web/src/main.ts",
     "apps/web/src/App.vue",

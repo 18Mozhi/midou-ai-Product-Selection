@@ -8,6 +8,7 @@ import {
   organizationActionParent,
 } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import { organizationListPreview } from "../../scripts/lib/ui-phase2-organization-list-preview.mjs";
+import { tokenCopyRevisions } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
 const evidence = (mode) =>
   JSON.parse(read(`output/playwright/p42-write-ownership/${mode}/evidence.json`));
@@ -85,7 +86,9 @@ test("historical associations accept only exact reviewed source revisions", () =
   const associations = audit.packages.flatMap((p) => p.historicalSourceAssociations ?? []);
   assert.ok(associations.length > 0);
   for (const association of associations) {
-    const pair = organizationActionRevisions[association.file];
+    const pair =
+      organizationActionRevisions[association.file] ?? tokenCopyRevisions[association.file];
+    assert.ok(pair, `Unknown historical association: ${association.file}`);
     assert.equal(association.expected, pair.before);
     assert.equal(association.actual, pair.after);
     assert.equal(association.encoding, "historical-LF-exact-revision-not-current-acceptance");

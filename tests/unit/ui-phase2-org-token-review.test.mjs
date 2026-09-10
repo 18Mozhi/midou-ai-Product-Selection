@@ -146,7 +146,7 @@ test("P36 every control/field/composition/implementation image is bound without 
   assert.doesNotThrow(() => validateOrgTokenBindings(build(), inputs));
   assert.deepEqual(build().approvalRecords, ["P36-MOBILE-FILTER-COMPOSITION-APPROVAL.md"]);
 });
-test("P36 current inert source handler checks still match existing bodies and known limitations", async () => {
+test("P36 historical inert source handler checks preserve original bodies and defect diagnosis", async () => {
   const data = await buildOrgTokenDesignData(process.cwd());
   assert.deepEqual(Object.keys(data.createBody).sort(), ["name", "reason", "scopes", "ttl_days"]);
   assert.equal(data.actionBodies.length, 2);

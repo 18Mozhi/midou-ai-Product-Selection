@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -41,7 +42,7 @@ test("P37 current parent r2 proves192 checks and40 images without promoting the 
   assert.equal(e.acceptanceComplete, false);
   assert.equal(e.browserAndServerClosed, true);
   for (const [f, sha] of Object.entries(e.sourceHashes))
-    assert.equal(capturedExportDetailHash(f, text(f)), sha, f);
+    assert.equal(capturedExportDetailHash(f, historicalTokenCopySource(f, text(f))), sha, f);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["index.html", "evidence.json", ...e.screenshots.map((s) => s.file)].sort(),

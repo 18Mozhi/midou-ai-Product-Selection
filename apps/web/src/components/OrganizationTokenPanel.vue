@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, onDeactivated, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 type TokenStatusFilter =
@@ -163,10 +163,14 @@ watch(
   },
   { flush: "post" },
 );
-watch(
-  () => props.secret,
-  () => (copyState.value = ""),
-);
+let tokenCopyGeneration = 0;
+function invalidateTokenCopy() {
+  tokenCopyGeneration += 1;
+  copyState.value = "";
+}
+watch([() => props.secret, () => route.path], invalidateTokenCopy, { flush: "sync" });
+onDeactivated(invalidateTokenCopy);
+onBeforeUnmount(invalidateTokenCopy);
 
 watch(
   [() => route.path, () => route.query],
@@ -290,11 +294,16 @@ async function submitCreate() {
   if (succeeded) createForm.value = { name: "", scopes: [], ttl_days: 90, reason: "" };
 }
 async function copySecret() {
+  const generation = ++tokenCopyGeneration,
+    secret = props.secret,
+    ownerPath = route.path,
+    ownsFeedback = () =>
+      generation === tokenCopyGeneration && props.secret === secret && route.path === ownerPath;
   try {
-    await navigator.clipboard.writeText(props.secret);
-    copyState.value = "copied";
+    await navigator.clipboard.writeText(secret);
+    if (ownsFeedback()) copyState.value = "copied";
   } catch {
-    copyState.value = "failed";
+    if (ownsFeedback()) copyState.value = "failed";
   }
 }
 </script>

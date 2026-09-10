@@ -6,6 +6,7 @@ import { parse } from "@vue/compiler-sfc";
 import ts from "typescript";
 import { computed, effectScope, nextTick, reactive, ref, watch } from "vue";
 import { undoTokenQuerySync } from "../../scripts/lib/ui-phase2-token-query-delta.mjs";
+import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const file = "apps/web/src/components/OrganizationTokenPanel.vue";
 const current = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
@@ -68,6 +69,8 @@ function mount(t, query = {}, deferred = false) {
     ref,
     watch,
     nextTick,
+    onDeactivated: () => {},
+    onBeforeUnmount: () => {},
     defineProps: () => props,
     useRoute: () => route,
     useRouter: () => router,
@@ -88,17 +91,18 @@ function mount(t, query = {}, deferred = false) {
   return { route, writes, h, state, props };
 }
 
-test("P36 query change is an exact bounded script delta", () => {
+test("P36 historical query change is an exact bounded script delta; runtime tests use current source", () => {
+  const queryRevision = historicalTokenCopySource(file, current);
   const baseline = execFileSync("git", ["show", `c380b995:${file}`], {
     encoding: "utf8",
   }).replaceAll("\r\n", "\n");
   assert.equal(
-    parse(undoTokenQuerySync(current)).descriptor.scriptSetup.content,
+    parse(undoTokenQuerySync(queryRevision)).descriptor.scriptSetup.content,
     parse(baseline).descriptor.scriptSetup.content,
   );
   assert.throws(() =>
     undoTokenQuerySync(
-      current.replace("pendingQueryWrites.has(queryFingerprint(route.query))", "false"),
+      queryRevision.replace("pendingQueryWrites.has(queryFingerprint(route.query))", "false"),
     ),
   );
 });

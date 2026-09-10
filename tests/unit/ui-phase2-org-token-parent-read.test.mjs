@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
+import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { capturedExportDetailHash } from "../../scripts/lib/ui-phase2-export-detail-token-delta.mjs";
 
 const output = "output/playwright/p36-parent-read-vue-r2";
@@ -19,7 +20,7 @@ test("P36 parent read captures source-backed parent, child, client and imported 
     assert.ok(manifest.sourceHashes[file], `missing ${file}`);
   for (const [file, sha] of Object.entries(manifest.sourceHashes))
     assert.equal(
-      capturedExportDetailHash(file, (await readFile(file, "utf8")).replaceAll("\r\n", "\n")),
+      capturedExportDetailHash(file, historicalTokenCopySource(file, await readFile(file, "utf8"))),
       sha,
       file,
     );

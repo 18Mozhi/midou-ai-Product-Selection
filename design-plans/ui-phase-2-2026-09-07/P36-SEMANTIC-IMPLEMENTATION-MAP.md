@@ -1,5 +1,7 @@
 # P36 正式交互、字段与实施证据登记
 
+当前追加：[复制反馈归属修复](P36-COPY-OWNERSHIP-REVIEW.md)。P36.json从当前生产源重新生成，动作/字段/容器分母不变；已交截图的组件与fixture helper用固定b4fc398d历史指纹核对，不再称为当前源码图。新复制行为有独立实际子Vue回归；原批准范围不变，下文保留登记时事实。
+
 后续状态：[查询历史恢复修复](P36-QUERY-RESTORATION-REVIEW.md)更新当前子组件source hash，25源位置及动作/字段/容器分母不变。三提案清单的script关联现在为query-sync-only；原图和批准保留，下文描述为登记批次当时的边界。
 
 状态：source-reviewed-not-runtime-accepted，整页批准仍 pending-user-review。起点HEAD为c380b995，保留前一轮未提交的手机筛选实装及来源关联；本批不再改生产代码，也不改P35。全局颜色门的既有P35失败仍未解决，不自动提交。

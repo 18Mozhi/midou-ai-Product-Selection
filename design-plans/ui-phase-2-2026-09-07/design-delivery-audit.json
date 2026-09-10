@@ -8,8 +8,9 @@
     "design-plans/ui-phase-2-2026-09-07/coverage.json": "deb03542feef014f93eef82679eacc848bb187ada9bbbe03d7a3d029b2b46ea9",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "design-plans/ui-phase-2-2026-09-07/PAGES.md": "ca41a447eb5be9317f20642bd87acc71ae31f9fe00147f1a7a63b7c48d39320d",
-    "scripts/audit-ui-phase2-design-delivery.mjs": "5ef04d168955bf16c50e6dad6a69d77a2947c90b9f50bdeba38f5a830cd704ac",
+    "scripts/audit-ui-phase2-design-delivery.mjs": "bd7e80e68da562fed029599ba27912afdd01629a74402353bdb1c945a4995d92",
     "scripts/lib/ui-phase2-organization-action-baseline.mjs": "fb7ae644405df28b8f8dac2173d1e5945d76de9bf54e4e82f47156866631237b",
+    "scripts/lib/ui-phase2-token-copy-baseline.mjs": "bb93e58271aba9065cf4c5eeb31d2af806e6653119e3aca54e90e967722171bf",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "7e5cb0b62a259d6e436738a757cef13816ab6705d914469555a699755dff22aa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "56880356f7da1b3f3195d51f2c2c3dc6c880c73e5c1893315a0b9e1f3b39b2b4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "775a1ecbc546756cd56312fa9f730b316bc8b49499777431832a7371238331d9",
@@ -45,7 +46,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P33.md": "99dbe7bd37443547b5e536c9139f7a2e3c6c2b2278dea690810a5f62194685cb",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P34.md": "2211090b9f933d74522fb692d2c89ed3fd4b33e79b8a57de42a3523a245a4bfd",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P35.md": "96a65f23a3083af74558463bfdf09999a9f3ef502f46349adf99fe73c79d4841",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P36.md": "8c5be942b5efd37e90b249bc7c79983503a0b934dca2cc4f621622e867a9b160",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P36.md": "0ad7ad5a5ae0525b7b9fadbb860e8f0ebf261ec3f8edc52a837b2c748ac7e911",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P37.md": "016ad982e719dc19228975508a1257bd9a704941fa3065b1bea61ed3d78942c2",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P38.md": "a94063447c9da3fbcfd0fad7c362ce558ed958e42820c4e261e70c4c6ce67f3d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P39.md": "38a00165d43b2919d6da9f9b476845893258ba546a60cbc5d0811875827bfa1f",
@@ -99,7 +100,7 @@
     "pngs": 15069,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 10102,
+    "readmeLinksChecked": 10103,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -4342,7 +4343,7 @@
       "readme": "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json",
       "manifestHash": "13ba4121baf87fa5e1477ea72f34c7e3523ecaae6935d0508e51e0d6ec8f7468",
-      "readmeHash": "16c5ee3c0c05e10878cbd4a722873d65b7df72f49f5519ebcb23a18cb3df71aa",
+      "readmeHash": "defed33b75e45be1e7d280ccc5d07de780a1dbf07c902779fa8504de1f15054e",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
@@ -4351,7 +4352,7 @@
       "screenshotCount": 112,
       "screenshotDrift": [],
       "unmanifestedPng": [],
-      "readmeLinksChecked": 113,
+      "readmeLinksChecked": 114,
       "checkedSourceFiles": [
         "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/index.html",
         "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/tokens.css",
@@ -4369,7 +4370,20 @@
         "apps/api/src/mysql-organization-admin-repository.ts",
         "tests/e2e/m06-01-organization-admin.spec.ts"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "scripts/lib/ui-phase2-org-token-design-data.mjs",
+          "expected": "408840ae6f80aa140d617544bdae231a418fe449ec6d96b9fa03402f3a2fe135",
+          "actual": "28a8951aa0bd373352df39ffb76d5ff936bdedad9444d3795989dda066b587c2",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+          "expected": "81ba6a86c80bdcdb1cfea7832b3c13b0d85a5a9bf8dd6922583a5ada5d0e326d",
+          "actual": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390

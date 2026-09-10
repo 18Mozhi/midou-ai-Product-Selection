@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import vm from "node:vm";
 import ts from "typescript";
+import { historicalTokenCopySource } from "./ui-phase2-token-copy-baseline.mjs";
 const plain = (v) => JSON.parse(JSON.stringify(v));
 export async function buildOrgTokenDesignData(repo) {
   const read = (p) => readFile(path.join(repo, p), "utf8"),
@@ -47,7 +48,11 @@ export async function buildOrgTokenDesignData(repo) {
       return Date.parse(fixedTime);
     }
   }
-  const child = await read("apps/web/src/components/OrganizationTokenPanel.vue"),
+  // Preserve the original OG-G05 reproduction and proposal data, not current acceptance.
+  const child = historicalTokenCopySource(
+      "apps/web/src/components/OrganizationTokenPanel.vue",
+      await read("apps/web/src/components/OrganizationTokenPanel.vue"),
+    ),
     ast = parse(child.split(/<script setup[^>]*>/)[1].split("</script>")[0]);
   const script = ast.statements
     .filter((n) => !ts.isImportDeclaration(n))

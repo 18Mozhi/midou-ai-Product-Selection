@@ -8,6 +8,7 @@ import {
   tokenComponent,
 } from "./lib/ui-phase2-token-filter-delta.mjs";
 import { undoTokenQuerySync } from "./lib/ui-phase2-token-query-delta.mjs";
+import { historicalTokenCopySource } from "./lib/ui-phase2-token-copy-baseline.mjs";
 import {
   readBeforeAuditPage,
   hasAuditPageAssociations,
@@ -20,7 +21,8 @@ assert.ok(
   "Historical P36 writer is frozen; use refresh-ui-phase2-audit-page-bindings.mjs for current associations",
 );
 const hash = (v) => createHash("sha256").update(v).digest("hex");
-const text = async (f) => readBeforeAuditPage(f);
+// Frozen historical association audit. Never relabel it as current acceptance.
+const text = async (f) => historicalTokenCopySource(f, readBeforeAuditPage(f));
 const baseline = (f) =>
   execFileSync("git", ["show", `${baselineCommit}:${f}`], {
     encoding: "utf8",

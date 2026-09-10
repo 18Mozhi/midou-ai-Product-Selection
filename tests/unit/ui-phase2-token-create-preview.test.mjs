@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -43,14 +44,18 @@ test("P36 creation preview preserves complete scripts, native controls and all d
     tokenCreatePreview(original.replace('class="org-token-create"', 'class="unexpected"')),
   );
 });
-test("P36 new preview binds current originals and transformed template without relabeling approval", () => {
+test("P36 existing preview binds capture-time originals and transformed template without relabeling approval", () => {
   assert.equal(evidence.approval, "pending-user-review");
   assert.equal(evidence.processesClosed, true);
   assert.equal(evidence.checks.length, 152);
   assert.equal(evidence.runs.length, 4);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
-  assert.equal(evidence.transformedHashes[component], hash(transformed));
+    assert.equal(hash(historicalTokenCopySource(file, read(file))), sha, file);
+  // Original capture is historical; the structural test above still uses current source.
+  assert.equal(
+    evidence.transformedHashes[component],
+    hash(tokenCreatePreview(historicalTokenCopySource(component, original))),
+  );
   assert.equal(evidence.screenshots.length, 32);
   assert.deepEqual(
     readdirSync(folder).sort(),

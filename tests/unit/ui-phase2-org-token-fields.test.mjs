@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -102,9 +103,10 @@ test("P36 each of78 field states has both widths,20 compositions and exact field
       assert.equal(e.flows.filter((f) => f.width === width && f.kind === kind).length, 1);
 });
 
-test("P36 source and image fingerprints are current with no leftover partial captures", () => {
+test("P36 historical source and image fingerprints retain exact captures", () => {
   for (const [f, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(readFileSync(f, "utf8").replaceAll("\r\n", "\n")), sha, f);
+    // Capture-time proof only; current behavior has a separate mounted regression.
+    assert.equal(hash(historicalTokenCopySource(f, readFileSync(f, "utf8"))), sha, f);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   assert.deepEqual(

@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -54,7 +55,7 @@ test("P37 actual current parent/child/browser evidence binds62 checks and exact1
   assert.equal(e.checks.length, 62);
   assert.equal(e.screenshots.length, 16);
   for (const [f, sha] of Object.entries(e.sourceHashes))
-    assert.equal(capturedExportDetailHash(f, text(f)), sha, f);
+    assert.equal(capturedExportDetailHash(f, historicalTokenCopySource(f, text(f))), sha, f);
   for (const s of e.screenshots) {
     assert.equal(hash(readFileSync(dir + s.file)), s.sha256);
     assert.equal(s.approval, "runtime-observation-not-C-design-approval");

@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -16,12 +17,13 @@ const baseline = (f) =>
     encoding: "utf8",
     maxBuffer: 8 * 1024 * 1024,
   }).replaceAll("\r\n", "\n");
-const current = read(tokenComponent),
+// Preserve the exact historical filter delta; current copy behavior is tested separately.
+const current = historicalTokenCopySource(tokenComponent, read(tokenComponent)),
   old = baseline(tokenComponent);
 const output = "output/playwright/p36-mobile-filters-vue",
   e = JSON.parse(read(`${output}/evidence.json`));
 
-test("P36 filter implementation permits exact presentation plus separately tested query delta", () => {
+test("P36 historical filter implementation permits exact presentation and query delta", () => {
   assert.equal(assertTokenFilterDelta(current, old), true);
   for (const mutation of [
     current.replace('tokenQuery.value = "";', 'tokenQuery.value = "other";'),
@@ -75,8 +77,9 @@ test("P36 original reset, filtering, URL and write boundaries stay covered", () 
   assert.equal(e.checks.filter((c) => c.name.startsWith("full sorting ")).length, 40);
   assert.equal(e.checks.filter((c) => c.name.startsWith("status ")).length, 28);
 });
-test("P36 actual-source and image hashes are current with only permanent delivery files", () => {
-  for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+test("P36 capture-time source and image hashes retain only permanent delivery files", () => {
+  for (const [f, sha] of Object.entries(e.sourceHashes))
+    assert.equal(hash(historicalTokenCopySource(f, read(f))), sha, f);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   assert.deepEqual(

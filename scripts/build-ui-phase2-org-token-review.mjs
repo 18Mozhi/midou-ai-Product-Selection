@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { historicalTokenCopySource } from "./lib/ui-phase2-token-copy-baseline.mjs";
 import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
@@ -630,7 +631,8 @@ export function validateOrgTokenBindings(review, inputs) {
   assert.match(inputs.sources[childFile], /@click="dismissSecret"/);
   for (const [key, e] of Object.entries(inputs.external)) {
     for (const [f, sha] of Object.entries(e.sourceHashes))
-      assert.equal(hash(text(f)), sha, `${key}: ${f}`);
+      // External captures remain historical; action mapping above uses actual current sources.
+      assert.equal(hash(historicalTokenCopySource(f, text(f))), sha, `${key}: ${f}`);
     for (const s of e.screenshots)
       assert.equal(
         hash(readFileSync(`${path.posix.dirname(externalPaths[key])}/${s.file}`)),

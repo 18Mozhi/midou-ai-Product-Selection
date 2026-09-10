@@ -1,0 +1,691 @@
+{
+  "kind": "P36-COPY-OWNERSHIP-VUE-r1",
+  "scope": "Raw current child, actual router/KeepAlive and host-controlled synthetic inputs. No parent, App shell, API, valid credential, real OS clipboard, C visual approval or production acceptance. Sync same-value-reset is separately covered by the direct reactive test; batched host props are not claimed as that proof.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+    "apps/web/src/design/token-filter-tokens.css": "6a2b9871858d0c1a5d7ee2a052b5b1d5043331f414685525d561d8ae6d366710",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "scripts/verify-ui-phase2-token-copy-ownership.mjs": "12aa5d04bc9174eb6d571430e0831d1c3de0b13added0d81ad35fa4e0005102b"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "stay-success:one original clipboard intent"
+    },
+    {
+      "width": 390,
+      "name": "stay-success:feedback owner checked"
+    },
+    {
+      "width": 390,
+      "name": "stay-success:synthetic displayed value"
+    },
+    {
+      "width": 390,
+      "name": "replace-success:one original clipboard intent"
+    },
+    {
+      "width": 390,
+      "name": "replace-success:feedback owner checked"
+    },
+    {
+      "width": 390,
+      "name": "replace-success:synthetic displayed value"
+    },
+    {
+      "width": 390,
+      "name": "clear-success:one original clipboard intent"
+    },
+    {
+      "width": 390,
+      "name": "clear-success:feedback owner checked"
+    },
+    {
+      "width": 390,
+      "name": "clear-success:synthetic displayed value"
+    },
+    {
+      "width": 390,
+      "name": "route-success:one original clipboard intent"
+    },
+    {
+      "width": 390,
+      "name": "route-success:feedback owner checked"
+    },
+    {
+      "width": 390,
+      "name": "route-success:synthetic displayed value"
+    },
+    {
+      "width": 390,
+      "name": "deactivate-success:one original clipboard intent"
+    },
+    {
+      "width": 390,
+      "name": "deactivate-success:feedback owner checked"
+    },
+    {
+      "width": 390,
+      "name": "deactivate-success:same cached DOM"
+    },
+    {
+      "width": 390,
+      "name": "deactivate-success:synthetic displayed value"
+    },
+    {
+      "width": 390,
+      "name": "unmount-success:one original clipboard intent"
+    },
+    {
+      "width": 390,
+      "name": "unmount-success:feedback owner checked"
+    },
+    {
+      "width": 390,
+      "name": "unmount-success:new DOM"
+    },
+    {
+      "width": 390,
+      "name": "unmount-success:synthetic displayed value"
+    },
+    {
+      "width": 390,
+      "name": "stay-failure:one original clipboard intent"
+    },
+    {
+      "width": 390,
+      "name": "stay-failure:feedback owner checked"
+    },
+    {
+      "width": 390,
+      "name": "stay-failure:synthetic displayed value"
+    },
+    {
+      "width": 390,
+      "name": "replace-failure:one original clipboard intent"
+    },
+    {
+      "width": 390,
+      "name": "replace-failure:feedback owner checked"
+    },
+    {
+      "width": 390,
+      "name": "replace-failure:synthetic displayed value"
+    },
+    {
+      "width": 390,
+      "name": "clear-failure:one original clipboard intent"
+    },
+    {
+      "width": 390,
+      "name": "clear-failure:feedback owner checked"
+    },
+    {
+      "width": 390,
+      "name": "clear-failure:synthetic displayed value"
+    },
+    {
+      "width": 390,
+      "name": "route-failure:one original clipboard intent"
+    },
+    {
+      "width": 390,
+      "name": "route-failure:feedback owner checked"
+    },
+    {
+      "width": 390,
+      "name": "route-failure:synthetic displayed value"
+    },
+    {
+      "width": 390,
+      "name": "deactivate-failure:one original clipboard intent"
+    },
+    {
+      "width": 390,
+      "name": "deactivate-failure:feedback owner checked"
+    },
+    {
+      "width": 390,
+      "name": "deactivate-failure:same cached DOM"
+    },
+    {
+      "width": 390,
+      "name": "deactivate-failure:synthetic displayed value"
+    },
+    {
+      "width": 390,
+      "name": "unmount-failure:one original clipboard intent"
+    },
+    {
+      "width": 390,
+      "name": "unmount-failure:feedback owner checked"
+    },
+    {
+      "width": 390,
+      "name": "unmount-failure:new DOM"
+    },
+    {
+      "width": 390,
+      "name": "unmount-failure:synthetic displayed value"
+    },
+    {
+      "width": 390,
+      "name": "latest-success:reverse settlement"
+    },
+    {
+      "width": 390,
+      "name": "latest-failure:reverse settlement"
+    },
+    {
+      "width": 390,
+      "name": "zero external or API requests"
+    },
+    {
+      "width": 390,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 390,
+      "name": "zero storage"
+    },
+    {
+      "width": 1440,
+      "name": "stay-success:one original clipboard intent"
+    },
+    {
+      "width": 1440,
+      "name": "stay-success:feedback owner checked"
+    },
+    {
+      "width": 1440,
+      "name": "stay-success:synthetic displayed value"
+    },
+    {
+      "width": 1440,
+      "name": "replace-success:one original clipboard intent"
+    },
+    {
+      "width": 1440,
+      "name": "replace-success:feedback owner checked"
+    },
+    {
+      "width": 1440,
+      "name": "replace-success:synthetic displayed value"
+    },
+    {
+      "width": 1440,
+      "name": "clear-success:one original clipboard intent"
+    },
+    {
+      "width": 1440,
+      "name": "clear-success:feedback owner checked"
+    },
+    {
+      "width": 1440,
+      "name": "clear-success:synthetic displayed value"
+    },
+    {
+      "width": 1440,
+      "name": "route-success:one original clipboard intent"
+    },
+    {
+      "width": 1440,
+      "name": "route-success:feedback owner checked"
+    },
+    {
+      "width": 1440,
+      "name": "route-success:synthetic displayed value"
+    },
+    {
+      "width": 1440,
+      "name": "deactivate-success:one original clipboard intent"
+    },
+    {
+      "width": 1440,
+      "name": "deactivate-success:feedback owner checked"
+    },
+    {
+      "width": 1440,
+      "name": "deactivate-success:same cached DOM"
+    },
+    {
+      "width": 1440,
+      "name": "deactivate-success:synthetic displayed value"
+    },
+    {
+      "width": 1440,
+      "name": "unmount-success:one original clipboard intent"
+    },
+    {
+      "width": 1440,
+      "name": "unmount-success:feedback owner checked"
+    },
+    {
+      "width": 1440,
+      "name": "unmount-success:new DOM"
+    },
+    {
+      "width": 1440,
+      "name": "unmount-success:synthetic displayed value"
+    },
+    {
+      "width": 1440,
+      "name": "stay-failure:one original clipboard intent"
+    },
+    {
+      "width": 1440,
+      "name": "stay-failure:feedback owner checked"
+    },
+    {
+      "width": 1440,
+      "name": "stay-failure:synthetic displayed value"
+    },
+    {
+      "width": 1440,
+      "name": "replace-failure:one original clipboard intent"
+    },
+    {
+      "width": 1440,
+      "name": "replace-failure:feedback owner checked"
+    },
+    {
+      "width": 1440,
+      "name": "replace-failure:synthetic displayed value"
+    },
+    {
+      "width": 1440,
+      "name": "clear-failure:one original clipboard intent"
+    },
+    {
+      "width": 1440,
+      "name": "clear-failure:feedback owner checked"
+    },
+    {
+      "width": 1440,
+      "name": "clear-failure:synthetic displayed value"
+    },
+    {
+      "width": 1440,
+      "name": "route-failure:one original clipboard intent"
+    },
+    {
+      "width": 1440,
+      "name": "route-failure:feedback owner checked"
+    },
+    {
+      "width": 1440,
+      "name": "route-failure:synthetic displayed value"
+    },
+    {
+      "width": 1440,
+      "name": "deactivate-failure:one original clipboard intent"
+    },
+    {
+      "width": 1440,
+      "name": "deactivate-failure:feedback owner checked"
+    },
+    {
+      "width": 1440,
+      "name": "deactivate-failure:same cached DOM"
+    },
+    {
+      "width": 1440,
+      "name": "deactivate-failure:synthetic displayed value"
+    },
+    {
+      "width": 1440,
+      "name": "unmount-failure:one original clipboard intent"
+    },
+    {
+      "width": 1440,
+      "name": "unmount-failure:feedback owner checked"
+    },
+    {
+      "width": 1440,
+      "name": "unmount-failure:new DOM"
+    },
+    {
+      "width": 1440,
+      "name": "unmount-failure:synthetic displayed value"
+    },
+    {
+      "width": 1440,
+      "name": "latest-success:reverse settlement"
+    },
+    {
+      "width": 1440,
+      "name": "latest-failure:reverse settlement"
+    },
+    {
+      "width": 1440,
+      "name": "zero external or API requests"
+    },
+    {
+      "width": 1440,
+      "name": "zero browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "zero storage"
+    }
+  ],
+  "scenarios": [
+    {
+      "width": 390,
+      "name": "stay-success"
+    },
+    {
+      "width": 390,
+      "name": "replace-success"
+    },
+    {
+      "width": 390,
+      "name": "clear-success"
+    },
+    {
+      "width": 390,
+      "name": "route-success"
+    },
+    {
+      "width": 390,
+      "name": "deactivate-success"
+    },
+    {
+      "width": 390,
+      "name": "unmount-success"
+    },
+    {
+      "width": 390,
+      "name": "stay-failure"
+    },
+    {
+      "width": 390,
+      "name": "replace-failure"
+    },
+    {
+      "width": 390,
+      "name": "clear-failure"
+    },
+    {
+      "width": 390,
+      "name": "route-failure"
+    },
+    {
+      "width": 390,
+      "name": "deactivate-failure"
+    },
+    {
+      "width": 390,
+      "name": "unmount-failure"
+    },
+    {
+      "width": 390,
+      "name": "latest-success"
+    },
+    {
+      "width": 390,
+      "name": "latest-failure"
+    },
+    {
+      "width": 1440,
+      "name": "stay-success"
+    },
+    {
+      "width": 1440,
+      "name": "replace-success"
+    },
+    {
+      "width": 1440,
+      "name": "clear-success"
+    },
+    {
+      "width": 1440,
+      "name": "route-success"
+    },
+    {
+      "width": 1440,
+      "name": "deactivate-success"
+    },
+    {
+      "width": 1440,
+      "name": "unmount-success"
+    },
+    {
+      "width": 1440,
+      "name": "stay-failure"
+    },
+    {
+      "width": 1440,
+      "name": "replace-failure"
+    },
+    {
+      "width": 1440,
+      "name": "clear-failure"
+    },
+    {
+      "width": 1440,
+      "name": "route-failure"
+    },
+    {
+      "width": 1440,
+      "name": "deactivate-failure"
+    },
+    {
+      "width": 1440,
+      "name": "unmount-failure"
+    },
+    {
+      "width": 1440,
+      "name": "latest-success"
+    },
+    {
+      "width": 1440,
+      "name": "latest-failure"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-stay-success.png",
+      "width": 390,
+      "scenario": "stay-success",
+      "sha256": "600962e07d193addcb0676af655dead280c48cdf6427f9cb34231892a8ce925f",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "390-replace-success.png",
+      "width": 390,
+      "scenario": "replace-success",
+      "sha256": "10c12586925bdda30656ccd6039220e91b127c9577649a5ea51e73ee3d775cf6",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "390-clear-success.png",
+      "width": 390,
+      "scenario": "clear-success",
+      "sha256": "10c12586925bdda30656ccd6039220e91b127c9577649a5ea51e73ee3d775cf6",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "390-route-success.png",
+      "width": 390,
+      "scenario": "route-success",
+      "sha256": "b498bf7bb37b6da2aad2236c3b257098f847a93a8d09ebd668a0d970c21bb454",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "390-deactivate-success.png",
+      "width": 390,
+      "scenario": "deactivate-success",
+      "sha256": "b498bf7bb37b6da2aad2236c3b257098f847a93a8d09ebd668a0d970c21bb454",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "390-unmount-success.png",
+      "width": 390,
+      "scenario": "unmount-success",
+      "sha256": "b498bf7bb37b6da2aad2236c3b257098f847a93a8d09ebd668a0d970c21bb454",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "390-stay-failure.png",
+      "width": 390,
+      "scenario": "stay-failure",
+      "sha256": "4d0f7956387078a0cea3fcb6cc0845b2bdd8d1414022baa34192087d692ad43e",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "390-replace-failure.png",
+      "width": 390,
+      "scenario": "replace-failure",
+      "sha256": "10c12586925bdda30656ccd6039220e91b127c9577649a5ea51e73ee3d775cf6",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "390-clear-failure.png",
+      "width": 390,
+      "scenario": "clear-failure",
+      "sha256": "10c12586925bdda30656ccd6039220e91b127c9577649a5ea51e73ee3d775cf6",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "390-route-failure.png",
+      "width": 390,
+      "scenario": "route-failure",
+      "sha256": "b498bf7bb37b6da2aad2236c3b257098f847a93a8d09ebd668a0d970c21bb454",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "390-deactivate-failure.png",
+      "width": 390,
+      "scenario": "deactivate-failure",
+      "sha256": "b498bf7bb37b6da2aad2236c3b257098f847a93a8d09ebd668a0d970c21bb454",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "390-unmount-failure.png",
+      "width": 390,
+      "scenario": "unmount-failure",
+      "sha256": "b498bf7bb37b6da2aad2236c3b257098f847a93a8d09ebd668a0d970c21bb454",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "390-latest-success.png",
+      "width": 390,
+      "scenario": "latest-success",
+      "sha256": "600962e07d193addcb0676af655dead280c48cdf6427f9cb34231892a8ce925f",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "390-latest-failure.png",
+      "width": 390,
+      "scenario": "latest-failure",
+      "sha256": "4d0f7956387078a0cea3fcb6cc0845b2bdd8d1414022baa34192087d692ad43e",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "1440-stay-success.png",
+      "width": 1440,
+      "scenario": "stay-success",
+      "sha256": "e8918ee7a43a837e55195fd9a61a11d2838a8136fdcdd946c6ea03e86f434451",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "1440-replace-success.png",
+      "width": 1440,
+      "scenario": "replace-success",
+      "sha256": "69df77f785a5f0c8756ca7fc9ba715bc39b4f714b895b31308fc54cf14e46dce",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "1440-clear-success.png",
+      "width": 1440,
+      "scenario": "clear-success",
+      "sha256": "69df77f785a5f0c8756ca7fc9ba715bc39b4f714b895b31308fc54cf14e46dce",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "1440-route-success.png",
+      "width": 1440,
+      "scenario": "route-success",
+      "sha256": "849e01c7d2ad02ff6d19f6b02de5967b9e3df3561a0d385275e80b1675458577",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "1440-deactivate-success.png",
+      "width": 1440,
+      "scenario": "deactivate-success",
+      "sha256": "849e01c7d2ad02ff6d19f6b02de5967b9e3df3561a0d385275e80b1675458577",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "1440-unmount-success.png",
+      "width": 1440,
+      "scenario": "unmount-success",
+      "sha256": "849e01c7d2ad02ff6d19f6b02de5967b9e3df3561a0d385275e80b1675458577",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "1440-stay-failure.png",
+      "width": 1440,
+      "scenario": "stay-failure",
+      "sha256": "43b212923033af2c32cbebd8c893cc05e555865dccff1dba5a135d5c5c2cd0c2",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "1440-replace-failure.png",
+      "width": 1440,
+      "scenario": "replace-failure",
+      "sha256": "69df77f785a5f0c8756ca7fc9ba715bc39b4f714b895b31308fc54cf14e46dce",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "1440-clear-failure.png",
+      "width": 1440,
+      "scenario": "clear-failure",
+      "sha256": "69df77f785a5f0c8756ca7fc9ba715bc39b4f714b895b31308fc54cf14e46dce",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "1440-route-failure.png",
+      "width": 1440,
+      "scenario": "route-failure",
+      "sha256": "849e01c7d2ad02ff6d19f6b02de5967b9e3df3561a0d385275e80b1675458577",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "1440-deactivate-failure.png",
+      "width": 1440,
+      "scenario": "deactivate-failure",
+      "sha256": "849e01c7d2ad02ff6d19f6b02de5967b9e3df3561a0d385275e80b1675458577",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "1440-unmount-failure.png",
+      "width": 1440,
+      "scenario": "unmount-failure",
+      "sha256": "849e01c7d2ad02ff6d19f6b02de5967b9e3df3561a0d385275e80b1675458577",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "1440-latest-success.png",
+      "width": 1440,
+      "scenario": "latest-success",
+      "sha256": "e8918ee7a43a837e55195fd9a61a11d2838a8136fdcdd946c6ea03e86f434451",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    },
+    {
+      "file": "1440-latest-failure.png",
+      "width": 1440,
+      "scenario": "latest-failure",
+      "sha256": "43b212923033af2c32cbebd8c893cc05e555865dccff1dba5a135d5c5c2cd0c2",
+      "scope": "actual-child-original-style-synthetic-values-not-C-approval"
+    }
+  ],
+  "processesClosed": true,
+  "acceptanceComplete": false
+}

@@ -7,6 +7,10 @@ import {
   historicalOrganizationActionSource,
   organizationActionRevisions,
 } from "./lib/ui-phase2-organization-action-baseline.mjs";
+import {
+  historicalTokenCopySource,
+  tokenCopyRevisions,
+} from "./lib/ui-phase2-token-copy-baseline.mjs";
 
 // Artifact integrity and explicit page-link inventory, NOT design/action/production acceptance.
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -47,6 +51,7 @@ for (const file of [
   relative + "/PAGES.md",
   "scripts/audit-ui-phase2-design-delivery.mjs",
   "scripts/lib/ui-phase2-organization-action-baseline.mjs",
+  "scripts/lib/ui-phase2-token-copy-baseline.mjs",
 ])
   inputHashes[file] = (await fileHashes(file)).lf;
 const packages = [];
@@ -62,7 +67,10 @@ for (const dir of (await readdir(path.join(root, "design"), { withFileTypes: tru
     const actual = await fileHashes(file);
     const historical = organizationActionRevisions[file]?.before === expected;
     const associated =
-      historical && hash(historicalOrganizationActionSource(file, await text(file))) === expected;
+      (historical &&
+        hash(historicalOrganizationActionSource(file, await text(file))) === expected) ||
+      (tokenCopyRevisions[file]?.before === expected &&
+        hash(historicalTokenCopySource(file, await text(file))) === expected);
     sources.push({
       file,
       expected,
