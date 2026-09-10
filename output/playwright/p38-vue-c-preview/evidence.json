@@ -1,9 +1,10 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "page": "P38",
   "approval": "pending",
+  "sourceCommit": "d300d40b9d3ddec68ba2dbba2bb10311801eb5f4",
   "implementation": "Unmodified actual Vue SFC with review-only CSS; no production import",
-  "scope": "Fixture-intercepted GET only; no real API, MySQL, RBAC, history lifecycle, clipboard or production acceptance. Real dashboard GET writes view and audit records.",
+  "scope": "Fixture-intercepted GET only; no real API, MySQL, RBAC, full history/KeepAlive, OS clipboard or production acceptance. Browser history uses a synthetic same-route entry; copy uses a local success/rejection adapter. Real dashboard GET writes view and audit records.",
   "checks": [
     {
       "width": 390,
@@ -19,6 +20,14 @@
     },
     {
       "width": 390,
+      "name": "technical keyboard disclosure, exact request ID clipboard adapter, focus/hover/pressed/success, feedback expiry and 44px target"
+    },
+    {
+      "width": 390,
+      "name": "initial failure diagnostic copies its own request ID through local adapter; no OS clipboard access"
+    },
+    {
+      "width": 390,
       "name": "initial 401/403/429/500, empty, null versus zero, no page errors or external/unexpected API requests"
     },
     {
@@ -35,6 +44,14 @@
     },
     {
       "width": 760,
+      "name": "technical keyboard disclosure, exact request ID clipboard adapter, focus/hover/pressed/success, feedback expiry and 44px target"
+    },
+    {
+      "width": 760,
+      "name": "initial failure diagnostic copies its own request ID through local adapter; no OS clipboard access"
+    },
+    {
+      "width": 760,
       "name": "initial 401/403/429/500, empty, null versus zero, no page errors or external/unexpected API requests"
     },
     {
@@ -51,6 +68,14 @@
     },
     {
       "width": 761,
+      "name": "technical keyboard disclosure, exact request ID clipboard adapter, focus/hover/pressed/success, feedback expiry and 44px target"
+    },
+    {
+      "width": 761,
+      "name": "initial failure diagnostic copies its own request ID through local adapter; no OS clipboard access"
+    },
+    {
+      "width": 761,
       "name": "initial 401/403/429/500, empty, null versus zero, no page errors or external/unexpected API requests"
     },
     {
@@ -64,6 +89,14 @@
     {
       "width": 1440,
       "name": "actual columns, last-column protection, freeze toggle, density computed padding"
+    },
+    {
+      "width": 1440,
+      "name": "technical keyboard disclosure, exact request ID clipboard adapter, focus/hover/pressed/success, feedback expiry and 44px target"
+    },
+    {
+      "width": 1440,
+      "name": "initial failure diagnostic copies its own request ID through local adapter; no OS clipboard access"
     },
     {
       "width": 1440,
@@ -80,6 +113,14 @@
       "name": "Existing drawer Shift+Tab leaves dialog for scrim; no full focus trap or background inert. Must be addressed before production acceptance."
     },
     {
+      "width": 390,
+      "name": "Actual browser Back reaches 15m URL while selector and last fetched data remain 30d, with no new request; synthetic same-route history entry, not full router/KeepAlive acceptance."
+    },
+    {
+      "width": 390,
+      "name": "Clipboard denial remains an uncaught page error with no user-facing failure feedback; deliberate local adapter rejection, not a pass."
+    },
+    {
       "width": 760,
       "name": "Existing ready data remains visible after 403; selected window changes even when refresh fails. Not a permission or freshness pass."
     },
@@ -88,16 +129,40 @@
       "name": "Existing drawer Shift+Tab leaves dialog for scrim; no full focus trap or background inert. Must be addressed before production acceptance."
     },
     {
+      "width": 760,
+      "name": "Actual browser Back reaches 15m URL while selector and last fetched data remain 30d, with no new request; synthetic same-route history entry, not full router/KeepAlive acceptance."
+    },
+    {
+      "width": 760,
+      "name": "Clipboard denial remains an uncaught page error with no user-facing failure feedback; deliberate local adapter rejection, not a pass."
+    },
+    {
       "width": 761,
       "name": "Existing ready data remains visible after 403; selected window changes even when refresh fails. Not a permission or freshness pass."
     },
     {
+      "width": 761,
+      "name": "Actual browser Back reaches 15m URL while selector and last fetched data remain 30d, with no new request; synthetic same-route history entry, not full router/KeepAlive acceptance."
+    },
+    {
+      "width": 761,
+      "name": "Clipboard denial remains an uncaught page error with no user-facing failure feedback; deliberate local adapter rejection, not a pass."
+    },
+    {
       "width": 1440,
       "name": "Existing ready data remains visible after 403; selected window changes even when refresh fails. Not a permission or freshness pass."
+    },
+    {
+      "width": 1440,
+      "name": "Actual browser Back reaches 15m URL while selector and last fetched data remain 30d, with no new request; synthetic same-route history entry, not full router/KeepAlive acceptance."
+    },
+    {
+      "width": 1440,
+      "name": "Clipboard denial remains an uncaught page error with no user-facing failure feedback; deliberate local adapter rejection, not a pass."
     }
   ],
   "sourceHashes": {
-    "scripts/verify-ui-phase2-platform-overview-vue-preview.mjs": "fe0bbdc7d639d36be1e7caaa2806878e090cabffb4163d5d79ccb1069c381bfb",
+    "scripts/verify-ui-phase2-platform-overview-vue-preview.mjs": "347d0ba3f441fa6380995c721670401d5e3f1d5aa5a5dda6602cfc04697127e0",
     "design-plans/ui-phase-2-2026-09-07/implementation/platform-overview-preview.css": "b074ad6bb00cc99acdf7e6b79b9912d9a5d60d4f9a8f4f606279e7050ac738ce",
     "scripts/lib/ui-phase2-platform-overview-design-data.mjs": "8b56a34ca836b44efda63e0aa7f0d251de017e33d98cfcd853276d0066f7da7d",
     "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
@@ -122,132 +187,1122 @@
     {
       "file": "390-normal.png",
       "width": 390,
-      "sha256": "e3ac254d5a28ebe47f0e195202dc59f2df8f80f821a271d2d65d0b62e311bf5a"
+      "sha256": "e3ac254d5a28ebe47f0e195202dc59f2df8f80f821a271d2d65d0b62e311bf5a",
+      "artifactId": "P38-vue-c-390-normal",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "normal",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 3355
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:23.233Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-normal",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "390-refreshing.png",
       "width": 390,
-      "sha256": "9405bbc5d844a7c92ff54a4cb50ac9f57bf29d9a2e500c49cca0d2909c60fcea"
+      "sha256": "1a5b969269f938a0453431ee13d04264d11be3fd6d36fa9391d27e129fa7b239",
+      "artifactId": "P38-vue-c-390-refreshing",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes&window=24h",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "refreshing",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 345
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:23.456Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-refreshing",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "390-retained-error.png",
       "width": 390,
-      "sha256": "f9a1f20587b92d466e6c7d466faf7cf685b75762ab8c707eded5607c34056f5b"
+      "sha256": "f9a1f20587b92d466e6c7d466faf7cf685b75762ab8c707eded5607c34056f5b",
+      "artifactId": "P38-vue-c-390-retained-error",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes&window=7d",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "retained-error",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 3484
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:23.656Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-retained-error",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "390-all-sources.png",
       "width": 390,
-      "sha256": "9e3f8de47066bbe91cda657bcb8e6a7da891c7fe1bccbfb907016d51abc605ae"
+      "sha256": "9e3f8de47066bbe91cda657bcb8e6a7da891c7fe1bccbfb907016d51abc605ae",
+      "artifactId": "P38-vue-c-390-all-sources",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "all-sources",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 1605
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:24.031Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-all-sources",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "390-drawer.png",
       "width": 390,
-      "sha256": "a199c877068c53036f63738868b1b563032280c46f22df2e4cf14ec28154a5da"
+      "sha256": "a199c877068c53036f63738868b1b563032280c46f22df2e4cf14ec28154a5da",
+      "artifactId": "P38-vue-c-390-drawer",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "drawer",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 370,
+        "height": 1000
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:24.197Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-drawer",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "390-drawer-technical.png",
       "width": 390,
-      "sha256": "e23e5cf6545c22d1a48cfeb6ed4b19d7729865270fe2fccc73e5a1fece1639f2"
+      "sha256": "e23e5cf6545c22d1a48cfeb6ed4b19d7729865270fe2fccc73e5a1fece1639f2",
+      "artifactId": "P38-vue-c-390-drawer-technical",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "drawer-technical",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 370,
+        "height": 1000
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:24.332Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-drawer-technical",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "390-initial-401.png",
       "width": 390,
-      "sha256": "d57de385674a79eb370ed0f32ac1f4c7615197ce5b4a2b3be106a0fd6467dd36"
+      "sha256": "d57de385674a79eb370ed0f32ac1f4c7615197ce5b4a2b3be106a0fd6467dd36",
+      "artifactId": "P38-vue-c-390-initial-401",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "initial-401",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 277
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:24.735Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-initial-401",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "390-initial-403.png",
       "width": 390,
-      "sha256": "256aa0d7cb57e87e51d8ebef18ad04a6be96d8439cfcc6b81dcc967d3c87c2a6"
+      "sha256": "256aa0d7cb57e87e51d8ebef18ad04a6be96d8439cfcc6b81dcc967d3c87c2a6",
+      "artifactId": "P38-vue-c-390-initial-403",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "initial-403",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 250
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:24.953Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-initial-403",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "390-initial-429.png",
       "width": 390,
-      "sha256": "0ae612f80731c39e1db1358e3d214484a78629ef8d247c1f60351e432d80b640"
+      "sha256": "0ae612f80731c39e1db1358e3d214484a78629ef8d247c1f60351e432d80b640",
+      "artifactId": "P38-vue-c-390-initial-429",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "initial-429",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 294
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:25.986Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-initial-429",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "390-initial-500.png",
       "width": 390,
-      "sha256": "6251eca4d8fa3411bf6c67b2b7f3259a13ade1434efed66a7d5595818f430048"
+      "sha256": "6251eca4d8fa3411bf6c67b2b7f3259a13ade1434efed66a7d5595818f430048",
+      "artifactId": "P38-vue-c-390-initial-500",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "initial-500",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 321
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:26.204Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-initial-500",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "390-empty.png",
       "width": 390,
-      "sha256": "4cae0031ef320f62c60bb39b5ce5a855593b895d11a895178283dff66f529378"
+      "sha256": "4cae0031ef320f62c60bb39b5ce5a855593b895d11a895178283dff66f529378",
+      "artifactId": "P38-vue-c-390-empty",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "empty",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 292
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:26.420Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-empty",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "390-no-sample.png",
       "width": 390,
-      "sha256": "4f100594286bbd87c758d238b188373d2630eb05d3fbd3b21332feecea52db5f"
+      "sha256": "4f100594286bbd87c758d238b188373d2630eb05d3fbd3b21332feecea52db5f",
+      "artifactId": "P38-vue-c-390-no-sample",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "no-sample",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 655
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:26.660Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-no-sample",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "390-zero-rate.png",
       "width": 390,
-      "sha256": "7d3417a2cfc6ad22b2087424c5613b83713d8d38e748cf5eb9f93cd81c233cd9"
+      "sha256": "7d3417a2cfc6ad22b2087424c5613b83713d8d38e748cf5eb9f93cd81c233cd9",
+      "artifactId": "P38-vue-c-390-zero-rate",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "zero-rate",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 358,
+        "height": 655
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:26.892Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-zero-rate",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
+    },
+    {
+      "file": "390-technical-summary-focus.png",
+      "width": 390,
+      "sha256": "556dbcc79aa6be1c71d7ef632bfe46ae4559bab6d0df8e05b4cb70adeca142d2",
+      "artifactId": "P38-vue-c-390-technical-summary-focus",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "technical-summary-focus",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 113
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:27.150Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-technical-summary-focus",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
+    },
+    {
+      "file": "390-technical-open.png",
+      "width": 390,
+      "sha256": "3b64264773ba8c73ef5c5596887ee6c411f2643f4adfde845984e6c73a6ccea3",
+      "artifactId": "P38-vue-c-390-technical-open",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "technical-open",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 197
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:27.233Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-technical-open",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
+    },
+    {
+      "file": "390-technical-copy-focus.png",
+      "width": 390,
+      "sha256": "6bb4216cee21d81827caeea4c19a5d3744a83bf2a7836f91bb844a5eda468c7b",
+      "artifactId": "P38-vue-c-390-technical-copy-focus",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "technical-copy-focus",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 197
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:27.318Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-technical-copy-focus",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
+    },
+    {
+      "file": "390-technical-copy-hover.png",
+      "width": 390,
+      "sha256": "f5b12884d16d9e0973a898c666677d224f7653ad2189ff67ea57022bb2dc5a12",
+      "artifactId": "P38-vue-c-390-technical-copy-hover",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "technical-copy-hover",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 197
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:27.450Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-technical-copy-hover",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
+    },
+    {
+      "file": "390-technical-copy-pressed.png",
+      "width": 390,
+      "sha256": "3614476fa2eb08ffb75a258292c6ea788d5fd4c7711e2778f390eb904f3e4594",
+      "artifactId": "P38-vue-c-390-technical-copy-pressed",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "technical-copy-pressed",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 197
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:27.533Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-technical-copy-pressed",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
+    },
+    {
+      "file": "390-technical-copy-success.png",
+      "width": 390,
+      "sha256": "bb91b60c7b3af49d15c34b6df7d81a6848b41f6b4d21773aeda5bf960d0c526a",
+      "artifactId": "P38-vue-c-390-technical-copy-success",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "technical-copy-success",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 197
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:27.633Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-technical-copy-success",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
+    },
+    {
+      "file": "390-failure-technical-open.png",
+      "width": 390,
+      "sha256": "8acd3bd8f5517118ad886fe9d2ec974845a2e00dd1b14d0a25aedd6d4258310b",
+      "artifactId": "P38-vue-c-390-failure-technical-open",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "failure-technical-open",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 374,
+        "height": 420
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:29.803Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-failure-technical-open",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "1440-normal.png",
       "width": 1440,
-      "sha256": "b0186ae2c16c0a36ce2c720404abc10da504d846bc10aba53ec7e4f5a711583f"
+      "sha256": "b0186ae2c16c0a36ce2c720404abc10da504d846bc10aba53ec7e4f5a711583f",
+      "artifactId": "P38-vue-c-1440-normal",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "normal",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 2219
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:46.984Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-normal",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "1440-refreshing.png",
       "width": 1440,
-      "sha256": "7c31e54d9d613f611c6338c314027ffbaace20dec7bfb4d1b1f97f3162daf8ff"
+      "sha256": "7c31e54d9d613f611c6338c314027ffbaace20dec7bfb4d1b1f97f3162daf8ff",
+      "artifactId": "P38-vue-c-1440-refreshing",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes&window=24h",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "refreshing",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 248,
+        "height": 403
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:47.186Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-refreshing",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "1440-retained-error.png",
       "width": 1440,
-      "sha256": "fbcf013fc36a2269823bd1ece80acfc553904a90eb1ce71c0fd023d23b2b58f9"
+      "sha256": "fbcf013fc36a2269823bd1ece80acfc553904a90eb1ce71c0fd023d23b2b58f9",
+      "artifactId": "P38-vue-c-1440-retained-error",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes&window=7d",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "retained-error",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 2310
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:47.495Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-retained-error",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "1440-all-sources.png",
       "width": 1440,
-      "sha256": "49b5fa1b86f53441d72084f980c465d02c7f40c7784536a8a6e3fd87faa7edec"
+      "sha256": "49b5fa1b86f53441d72084f980c465d02c7f40c7784536a8a6e3fd87faa7edec",
+      "artifactId": "P38-vue-c-1440-all-sources",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "all-sources",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 1098
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:47.890Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-all-sources",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "1440-columns.png",
       "width": 1440,
-      "sha256": "d4a3d88e742214c3ca7501e5ee69906257c8bc414042b472456f46a31c1e404e"
+      "sha256": "d4a3d88e742214c3ca7501e5ee69906257c8bc414042b472456f46a31c1e404e",
+      "artifactId": "P38-vue-c-1440-columns",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "columns",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 710
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:48.078Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-columns",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "1440-compact.png",
       "width": 1440,
-      "sha256": "61893826ccfffb730f69db759b58eb86c4180a47a79445c020074e4110846817"
+      "sha256": "61893826ccfffb730f69db759b58eb86c4180a47a79445c020074e4110846817",
+      "artifactId": "P38-vue-c-1440-compact",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "compact",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 566
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:48.670Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-compact",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "1440-initial-401.png",
       "width": 1440,
-      "sha256": "54f86ddb8372c758c56e9d501c673fed9e3b7d1630015af1c9cca379fba86ea3"
+      "sha256": "54f86ddb8372c758c56e9d501c673fed9e3b7d1630015af1c9cca379fba86ea3",
+      "artifactId": "P38-vue-c-1440-initial-401",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "initial-401",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 285
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:48.907Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-initial-401",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "1440-initial-403.png",
       "width": 1440,
-      "sha256": "3b6645da14399b6d3533fce8f7b0cd3bd6cd11506a0fad65fa716fa2818e0406"
+      "sha256": "3b6645da14399b6d3533fce8f7b0cd3bd6cd11506a0fad65fa716fa2818e0406",
+      "artifactId": "P38-vue-c-1440-initial-403",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "initial-403",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 258
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:49.122Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-initial-403",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "1440-initial-429.png",
       "width": 1440,
-      "sha256": "f8daa737a502f32cdf67bf9afaaed90ba3d4faa34142913e1e478a58ca1e4c0d"
+      "sha256": "f8daa737a502f32cdf67bf9afaaed90ba3d4faa34142913e1e478a58ca1e4c0d",
+      "artifactId": "P38-vue-c-1440-initial-429",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "initial-429",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 302
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:50.140Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-initial-429",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "1440-initial-500.png",
       "width": 1440,
-      "sha256": "4f0bc256952339c4c6519cf5d08274e7de578df2bed1b13f7f8ede97c101078b"
+      "sha256": "4f0bc256952339c4c6519cf5d08274e7de578df2bed1b13f7f8ede97c101078b",
+      "artifactId": "P38-vue-c-1440-initial-500",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "initial-500",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 302
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:50.357Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-initial-500",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "1440-empty.png",
       "width": 1440,
-      "sha256": "fe660b1e76c11e275f8db6c632e29c786761d18eb26b78394fe0150df7c3968d"
+      "sha256": "fe660b1e76c11e275f8db6c632e29c786761d18eb26b78394fe0150df7c3968d",
+      "artifactId": "P38-vue-c-1440-empty",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "empty",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 274
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:50.573Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-empty",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "1440-no-sample.png",
       "width": 1440,
-      "sha256": "9696c965d653d2503de6230aadd8b349d49b6cf7fc6bcb3a5cda56f1ebe440b0"
+      "sha256": "9696c965d653d2503de6230aadd8b349d49b6cf7fc6bcb3a5cda56f1ebe440b0",
+      "artifactId": "P38-vue-c-1440-no-sample",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "no-sample",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 249
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:50.791Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-no-sample",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     },
     {
       "file": "1440-zero-rate.png",
       "width": 1440,
-      "sha256": "c6cd5e75026fe36c459288fd0b7bf8defd9c4390910a7c9fcfa78a5c99fc0973"
+      "sha256": "c6cd5e75026fe36c459288fd0b7bf8defd9c4390910a7c9fcfa78a5c99fc0973",
+      "artifactId": "P38-vue-c-1440-zero-rate",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "zero-rate",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 249
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:51.009Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-zero-rate",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
+    },
+    {
+      "file": "1440-technical-summary-focus.png",
+      "width": 1440,
+      "sha256": "a137ce2cb76759c5bb8f495743a7eade4b7c1bf7085691f66f8bc5baad726f7d",
+      "artifactId": "P38-vue-c-1440-technical-summary-focus",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "technical-summary-focus",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1116,
+        "height": 113
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:51.250Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-technical-summary-focus",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
+    },
+    {
+      "file": "1440-technical-open.png",
+      "width": 1440,
+      "sha256": "2d14573559e777f4f79b333123500720c4bc9c593214d17a8c0b0383f8a4dc0b",
+      "artifactId": "P38-vue-c-1440-technical-open",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "technical-open",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1116,
+        "height": 167
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:51.355Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-technical-open",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
+    },
+    {
+      "file": "1440-technical-copy-focus.png",
+      "width": 1440,
+      "sha256": "28c635e5e5890d61b2824fc9080598b48598770ee137ce743743cfee584f9e5a",
+      "artifactId": "P38-vue-c-1440-technical-copy-focus",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "technical-copy-focus",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1116,
+        "height": 167
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:51.453Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-technical-copy-focus",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
+    },
+    {
+      "file": "1440-technical-copy-hover.png",
+      "width": 1440,
+      "sha256": "574ccd8c649a9a3e85ae0aaf3d5f144fc359e979a82b7a6c2aaddabfced76f71",
+      "artifactId": "P38-vue-c-1440-technical-copy-hover",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "technical-copy-hover",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1116,
+        "height": 167
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:51.605Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-technical-copy-hover",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
+    },
+    {
+      "file": "1440-technical-copy-pressed.png",
+      "width": 1440,
+      "sha256": "5b296355454e7273cd0d3754095e430427ace00b7e57b55e24eb02485e34f35a",
+      "artifactId": "P38-vue-c-1440-technical-copy-pressed",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "technical-copy-pressed",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1116,
+        "height": 167
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:51.719Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-technical-copy-pressed",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
+    },
+    {
+      "file": "1440-technical-copy-success.png",
+      "width": 1440,
+      "sha256": "adb1425a22643ac218c0174be7711f51995377feb4ef6cbdcc076af40afb55b4",
+      "artifactId": "P38-vue-c-1440-technical-copy-success",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "technical-copy-success",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1116,
+        "height": 167
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:51.853Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-technical-copy-success",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
+    },
+    {
+      "file": "1440-failure-technical-open.png",
+      "width": 1440,
+      "sha256": "9f06ba26d52d068d8c6118f87bfc9404847943a8ffd151f79e9ddcfc37c4463d",
+      "artifactId": "P38-vue-c-1440-failure-technical-open",
+      "kind": "vue-isolated",
+      "routeId": "P38",
+      "concreteUrl": "http://127.0.0.1:60024/platform-admin?keep=yes",
+      "role": "fixture platform:operate; no real authentication",
+      "state": "failure-technical-open",
+      "theme": "review-only C blue-white",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "imageDimensions": {
+        "width": 1116,
+        "height": 372
+      },
+      "buildSha": null,
+      "buildScope": "Vite development host; no production build",
+      "capturedAt": "2026-09-10T17:21:54.043Z",
+      "browser": "Chromium 151.0.7922.34",
+      "os": "win32 10.0.19045",
+      "caseId": "P38-VUE-failure-technical-open",
+      "font": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+      "sourceSha": "22ac0c78b2a8b468f78d33bb8ac957a2643261f69961b7260d113cc8a10237ef"
     }
   ]
 }

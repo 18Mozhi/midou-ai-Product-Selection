@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
+import os from "node:os";
 import { createServer as reservePort } from "node:net";
 import path from "node:path";
 import { createServer } from "vite";
@@ -27,6 +29,7 @@ import '/@fs/${path.resolve(stylesheet).replaceAll("\\", "/")}';
 document.documentElement.dataset.design='signal-ledger';
 document.body.classList.add('p38-vue-preview');
 const router=createRouter({history:createWebHistory(),routes:[{path:'/:pathMatch(.*)*',component:{render:()=>null}}]});
+window.__previewPushWindow=(windowCode)=>router.push({query:{...router.currentRoute.value.query,window:windowCode}});
 const app=createApp({render:()=>h('main',[
 h('p',{class:'preview-disclaimer'},'P38 · 真实 Vue 独立设计预览 · 测试样例数据（非 MySQL 实测） · 未批准 / 未上线'),
 h(Current,{apiBaseUrl:'/api/v1',capabilities:['platform:operate']})])}).use(router);
@@ -79,6 +82,18 @@ try {
       reducedMotion: "reduce",
     });
     try {
+      await context.addInitScript(() => {
+        window.__previewClipboard = { writes: [], deny: false };
+        Object.defineProperty(navigator, "clipboard", {
+          configurable: true,
+          value: {
+            writeText: async (value) => {
+              if (window.__previewClipboard.deny) throw new Error("P38 synthetic clipboard denied");
+              window.__previewClipboard.writes.push(value);
+            },
+          },
+        });
+      });
       const page = await context.newPage();
       const errors = [],
         unexpected = [],
@@ -124,10 +139,45 @@ try {
       });
       const snap = async (name, locator = page.locator("#app")) => {
         if (!capture || ![390, 1440].includes(width)) return;
-        const file = `${width}-${name}.png`,
-          bytes = await locator.screenshot({ animations: "disabled" });
+        const file = `${width}-${name}.png`;
+        let bytes;
+        if (name.startsWith("technical-") || name === "failure-technical-open") {
+          await locator.scrollIntoViewIfNeeded();
+          const clip = await locator.evaluate((node) => {
+            const box = node.getBoundingClientRect();
+            const x = Math.max(0, box.x + scrollX - 8);
+            const y = Math.max(0, box.y + scrollY - 8);
+            return {
+              x,
+              y,
+              width: Math.min(document.documentElement.scrollWidth - x, box.width + 16),
+              height: Math.min(document.documentElement.scrollHeight - y, box.height + 16),
+            };
+          });
+          bytes = await page.screenshot({ clip, fullPage: true, animations: "disabled" });
+        } else bytes = await locator.screenshot({ animations: "disabled" });
         await writeFile(`${output}/${file}`, bytes);
-        screenshots.push({ file, width, sha256: hash(bytes) });
+        screenshots.push({
+          file,
+          width,
+          sha256: hash(bytes),
+          artifactId: `P38-vue-c-${width}-${name}`,
+          kind: "vue-isolated",
+          routeId: "P38",
+          concreteUrl: page.url(),
+          role: "fixture platform:operate; no real authentication",
+          state: name,
+          theme: "review-only C blue-white",
+          viewport: page.viewportSize(),
+          imageDimensions: { width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20) },
+          buildSha: null,
+          buildScope: "Vite development host; no production build",
+          capturedAt: new Date().toISOString(),
+          browser: `Chromium ${browser.version()}`,
+          os: `${os.platform()} ${os.release()}`,
+          caseId: `P38-VUE-${name}`,
+          font: await locator.evaluate((node) => getComputedStyle(node).fontFamily),
+        });
       };
       const ready = () =>
         expect(page.locator(".platform-dashboard")).toHaveAttribute("aria-busy", "false");
@@ -296,11 +346,106 @@ try {
         );
         await snap(rate === null ? "no-sample" : "zero-rate", page.locator(".platform-facts"));
       }
+      response = structuredClone(fixture.dashboard);
+      await go();
+      const technical = page.locator(".platform-observed .technical-details");
+      const summary = technical.locator("summary");
+      await summary.focus();
+      await page.keyboard.press("Tab");
+      await page.keyboard.press("Shift+Tab");
+      await expect(summary).toBeFocused();
+      await snap("technical-summary-focus", page.locator(".platform-observed"));
+      await page.keyboard.press("Enter");
+      await expect(technical).toHaveAttribute("open", "");
+      await expect(technical.locator("code")).toHaveText("p38-local-fixture");
+      await snap("technical-open", page.locator(".platform-observed"));
+      await page.keyboard.press("Tab");
+      const copyButton = technical.getByRole("button", { name: "复制请求编号" });
+      await expect(copyButton).toBeFocused();
+      await snap("technical-copy-focus", page.locator(".platform-observed"));
+      await copyButton.blur();
+      await copyButton.hover();
+      await snap("technical-copy-hover", page.locator(".platform-observed"));
+      await page.mouse.down();
+      await snap("technical-copy-pressed", page.locator(".platform-observed"));
+      await page.mouse.move(0, 0);
+      await page.mouse.up();
+      await copyButton.focus();
+      await page.keyboard.press("Enter");
+      await expect(copyButton).toHaveText("已复制");
+      assert.deepEqual(await page.evaluate(() => window.__previewClipboard.writes), [
+        "p38-local-fixture",
+      ]);
+      await snap("technical-copy-success", page.locator(".platform-observed"));
+      await expect(copyButton).toHaveText("复制", { timeout: 4000 });
+      assert.equal(
+        await copyButton.evaluate((node) => node.getBoundingClientRect().height >= 44),
+        true,
+      );
+      assert.equal(
+        await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
+        true,
+      );
+      checks.push({
+        width,
+        name: "technical keyboard disclosure, exact request ID clipboard adapter, focus/hover/pressed/success, feedback expiry and 44px target",
+      });
+      await windowSelect.selectOption("15m");
+      await ready();
+      await page.evaluate(() => window.__previewPushWindow("7d"));
+      await expect(page).toHaveURL(/window=7d/);
+      await windowSelect.selectOption("30d");
+      await ready();
+      const beforeBack = requests.length;
+      await page.goBack();
+      await expect(page).toHaveURL(/window=15m/);
+      await expect(windowSelect).toHaveValue("30d");
+      assert.equal(requests.length, beforeBack);
+      await page.goForward();
+      await expect(page).toHaveURL(/window=30d/);
+      await expect(windowSelect).toHaveValue("30d");
+      assert.equal(requests.length, beforeBack);
+      observations.push({
+        width,
+        name: "Actual browser Back reaches 15m URL while selector and last fetched data remain 30d, with no new request; synthetic same-route history entry, not full router/KeepAlive acceptance.",
+      });
+      status = 500;
+      await go();
+      const failedTechnical = page.locator(".platform-dashboard-state .technical-details");
+      await failedTechnical.locator("summary").click();
+      await expect(failedTechnical.locator("code")).toHaveText("p38-local-failure");
+      await snap("failure-technical-open", page.locator(".platform-dashboard-state"));
+      const failedCopy = failedTechnical.getByRole("button", { name: "复制请求编号" });
+      await failedCopy.click();
+      await expect(failedCopy).toHaveText("已复制");
+      assert.deepEqual(await page.evaluate(() => window.__previewClipboard.writes), [
+        "p38-local-failure",
+      ]);
+      await expect(failedCopy).toHaveText("复制", { timeout: 4000 });
+      checks.push({
+        width,
+        name: "initial failure diagnostic copies its own request ID through local adapter; no OS clipboard access",
+      });
       assert.deepEqual(errors, []);
       assert.deepEqual(unexpected, []);
       checks.push({
         width,
         name: "initial 401/403/429/500, empty, null versus zero, no page errors or external/unexpected API requests",
+      });
+      await page.evaluate(() => {
+        window.__previewClipboard.deny = true;
+      });
+      const denied = page.waitForEvent("pageerror", {
+        predicate: (error) => error.message === "P38 synthetic clipboard denied",
+      });
+      await failedCopy.click();
+      await denied;
+      await expect(failedCopy).toHaveText("复制");
+      assert.deepEqual(errors, ["P38 synthetic clipboard denied"]);
+      assert.deepEqual(unexpected, []);
+      observations.push({
+        width,
+        name: "Clipboard denial remains an uncaught page error with no user-facing failure feedback; deliberate local adapter rejection, not a pass.",
       });
     } finally {
       await context.close();
@@ -327,11 +472,23 @@ const sourceFiles = [
 const sourceHashes = Object.fromEntries(
   await Promise.all(sourceFiles.map(async (file) => [file, hash(await read(file))])),
 );
+const sourceSha = hash(JSON.stringify(sourceHashes));
+for (const screenshot of screenshots) screenshot.sourceSha = sourceSha;
 if (capture) {
-  await writeFile(
-    `${output}/evidence.json`,
-    `${JSON.stringify({ schemaVersion: 1, page: "P38", approval: "pending", implementation: "Unmodified actual Vue SFC with review-only CSS; no production import", scope: "Fixture-intercepted GET only; no real API, MySQL, RBAC, history lifecycle, clipboard or production acceptance. Real dashboard GET writes view and audit records.", checks, observations, sourceHashes, screenshots }, null, 2)}\n`,
-  );
+  const evidence = {
+    schemaVersion: 2,
+    page: "P38",
+    approval: "pending",
+    sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
+    implementation: "Unmodified actual Vue SFC with review-only CSS; no production import",
+    scope:
+      "Fixture-intercepted GET only; no real API, MySQL, RBAC, full history/KeepAlive, OS clipboard or production acceptance. Browser history uses a synthetic same-route entry; copy uses a local success/rejection adapter. Real dashboard GET writes view and audit records.",
+    checks,
+    observations,
+    sourceHashes,
+    screenshots,
+  };
+  await writeFile(`${output}/evidence.json`, `${JSON.stringify(evidence, null, 2)}\n`);
   await writeFile(
     `${output}/index.html`,
     `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P38 实际 Vue 审核图</title>

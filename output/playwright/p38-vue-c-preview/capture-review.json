@@ -1,0 +1,17 @@
+{
+  "baselineCommit": "d300d40b",
+  "reviewType": "agent visual and decoded-pixel inspection; not user approval",
+  "approvedByUser": false,
+  "differences": [
+    {
+      "file": "390-refreshing.png",
+      "beforeSha256": "9405bbc5d844a7c92ff54a4cb50ac9f57bf29d9a2e500c49cca0d2909c60fcea",
+      "afterSha256": "1a5b969269f938a0453431ee13d04264d11be3fd6d36fa9391d27e129fa7b239",
+      "dimensions": [358, 345],
+      "changedPixels": 31,
+      "maxChannelDelta": 2,
+      "bounds": [20, 216, 337, 318],
+      "conclusion": "31 pixels in the disabled select/button region differ by at most 2 of 255 per channel. Layout, text and production/CSS source unchanged; both images visually inspected. Exact reviewed hashes only, no blanket tolerance for future captures."
+    }
+  ]
+}
