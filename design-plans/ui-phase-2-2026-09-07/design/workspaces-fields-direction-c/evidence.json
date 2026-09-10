@@ -1,0 +1,2902 @@
+{
+  "kind": "WORKSPACES-FIELDS-C-r1",
+  "approval": "pending-user-review",
+  "boundary": "Independent field proposal; real Vue remains unchanged. Source field contracts retained; local error presentation is proposed. Shared reason dialog excluded. Pending editing snapshot does not decide later-draft completion policy.",
+  "sourceHashes": {
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/index.html": "6975ed12dc54aefefe3b3f55239b43249a021402e886072b9e34fee766b62fc5",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/workspaces.css": "f6560bf294e02d891ac65777bdd0976970b4f70c76e7f48dd15d5095962ed333",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/workspaces.js": "871b281952fe5f95462d00326b059a94e22cdf5450ccaab6e15f1fc50361af36",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/data.js": "d4dd20ec9d48d4fbf81587e84ab275cdc6f7687d6555dbbd3d2df2888b9a8f2e",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7ba04fb90083af7d2f7f395ed8399d9d2db7f4a282cb2f39f56e2d6989fe60ea",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
+    "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
+    "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "scripts/lib/ui-phase2-workspaces-design-data.mjs": "638b24c0fd3c9daaace7bb8ca624a967f863277532c93a1b56c5577688de2123",
+    "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
+    "scripts/verify-ui-phase2-workspaces-c.mjs": "a2099317449e0b217cf15a384434cbd5b43efcce537552c5d4477d1242d9db5b",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-fields-direction-c/index.html": "c38b41de3f0fe61f5aaefe6700da6b09c8378aa8e9470896959514d4f4fcef72",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-fields-direction-c/fields.css": "fbab6c612a4bcbf78d3ea535bd2f6195bd8d2b6aa2bae88a5fa64b7b21ac60ce",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-fields-direction-c/fields.js": "04d1544176de617ad8d6e39e244904ea6cf2a0bee92ea65a5b686f5c6bf3ad5f",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/controls.css": "da2e5d5fe05810b490b74ba053fc12b0fb0e990c0cc9ff40248bcdcf0936574d",
+    "scripts/verify-ui-phase2-workspaces-fields-c.mjs": "79e057e9459dc233d233ab118407409ae6a5efc1e86a1283078fb8b71a9ae025"
+  },
+  "fields": [
+    {
+      "id": "name",
+      "model": "form.name",
+      "selector": "#workspace-name",
+      "label": "工作区名称",
+      "max": 120,
+      "states": [
+        "default",
+        "focus",
+        "empty",
+        "whitespace",
+        "boundary",
+        "corrected",
+        "pending"
+      ]
+    },
+    {
+      "id": "slug",
+      "model": "form.slug",
+      "selector": "#workspace-slug",
+      "label": "英文标识",
+      "max": 63,
+      "states": [
+        "default",
+        "focus",
+        "empty",
+        "uppercase",
+        "leading-hyphen",
+        "trailing-hyphen",
+        "single",
+        "boundary",
+        "corrected",
+        "pending"
+      ]
+    },
+    {
+      "id": "reason",
+      "model": "form.reason",
+      "selector": "#workspace-reason",
+      "label": "创建原因",
+      "max": 500,
+      "states": [
+        "default",
+        "focus",
+        "empty",
+        "whitespace",
+        "boundary",
+        "corrected",
+        "pending"
+      ]
+    },
+    {
+      "id": "query",
+      "model": "query",
+      "selector": "#query",
+      "label": "搜索工作区",
+      "states": [
+        "default",
+        "focus",
+        "typed",
+        "no-result",
+        "cleared"
+      ]
+    },
+    {
+      "id": "sort",
+      "model": "sort",
+      "selector": "#sort",
+      "label": "排序",
+      "states": [
+        "default",
+        "focus",
+        "name_asc",
+        "members_desc",
+        "updated_desc"
+      ]
+    }
+  ],
+  "compositions": {
+    "create-empty": [
+      "create",
+      "新建空表单"
+    ],
+    "create-ready": [
+      "create_draft",
+      "填写完成"
+    ],
+    "create-invalid": [
+      "create_required",
+      "三个必填错误"
+    ],
+    "create-slug-invalid": [
+      "create_invalid",
+      "英文标识错误"
+    ],
+    "create-boundary": [
+      "create_long",
+      "三个字段长度边界"
+    ],
+    "create-pending": [
+      "create_busy",
+      "提交中仍可编辑"
+    ],
+    "create-failed": [
+      "create_failure",
+      "失败保留草稿"
+    ],
+    "create-conflict": [
+      "create_conflict",
+      "标识冲突反馈"
+    ]
+  },
+  "checks": [
+    {
+      "width": 1440,
+      "name": "name-default: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "name-default: editable"
+    },
+    {
+      "width": 1440,
+      "name": "name-default: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "name-default: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "name-default: counter"
+    },
+    {
+      "width": 1440,
+      "name": "name-default: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "name-focus: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "name-focus: editable"
+    },
+    {
+      "width": 1440,
+      "name": "name-focus: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "name-focus: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "name-focus: counter"
+    },
+    {
+      "width": 1440,
+      "name": "name-focus: visible keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "name-focus: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: editable"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: counter"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: inline invalid"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: no write intent"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: error text visible"
+    },
+    {
+      "width": 1440,
+      "name": "name-empty: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: editable"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: counter"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: inline invalid"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: no write intent"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: error text visible"
+    },
+    {
+      "width": 1440,
+      "name": "name-whitespace: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "name-boundary: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "name-boundary: editable"
+    },
+    {
+      "width": 1440,
+      "name": "name-boundary: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "name-boundary: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "name-boundary: counter"
+    },
+    {
+      "width": 1440,
+      "name": "name-boundary: native extra character blocked"
+    },
+    {
+      "width": 1440,
+      "name": "name-boundary: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "name-corrected: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "name-corrected: editable"
+    },
+    {
+      "width": 1440,
+      "name": "name-corrected: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "name-corrected: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "name-corrected: counter"
+    },
+    {
+      "width": 1440,
+      "name": "name-corrected: local error clears"
+    },
+    {
+      "width": 1440,
+      "name": "name-corrected: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: editable"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: counter"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: submission and cancel disabled"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: actual draft changes"
+    },
+    {
+      "width": 1440,
+      "name": "name-pending: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "slug-default: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "slug-default: editable"
+    },
+    {
+      "width": 1440,
+      "name": "slug-default: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "slug-default: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "slug-default: counter"
+    },
+    {
+      "width": 1440,
+      "name": "slug-default: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "slug-focus: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "slug-focus: editable"
+    },
+    {
+      "width": 1440,
+      "name": "slug-focus: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "slug-focus: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "slug-focus: counter"
+    },
+    {
+      "width": 1440,
+      "name": "slug-focus: visible keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "slug-focus: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "slug-empty: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "slug-empty: editable"
+    },
+    {
+      "width": 1440,
+      "name": "slug-empty: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "slug-empty: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "slug-empty: counter"
+    },
+    {
+      "width": 1440,
+      "name": "slug-empty: inline invalid"
+    },
+    {
+      "width": 1440,
+      "name": "slug-empty: no write intent"
+    },
+    {
+      "width": 1440,
+      "name": "slug-empty: error text visible"
+    },
+    {
+      "width": 1440,
+      "name": "slug-empty: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "slug-uppercase: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "slug-uppercase: editable"
+    },
+    {
+      "width": 1440,
+      "name": "slug-uppercase: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "slug-uppercase: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "slug-uppercase: counter"
+    },
+    {
+      "width": 1440,
+      "name": "slug-uppercase: inline invalid"
+    },
+    {
+      "width": 1440,
+      "name": "slug-uppercase: no write intent"
+    },
+    {
+      "width": 1440,
+      "name": "slug-uppercase: error text visible"
+    },
+    {
+      "width": 1440,
+      "name": "slug-uppercase: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "slug-leading-hyphen: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "slug-leading-hyphen: editable"
+    },
+    {
+      "width": 1440,
+      "name": "slug-leading-hyphen: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "slug-leading-hyphen: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "slug-leading-hyphen: counter"
+    },
+    {
+      "width": 1440,
+      "name": "slug-leading-hyphen: inline invalid"
+    },
+    {
+      "width": 1440,
+      "name": "slug-leading-hyphen: no write intent"
+    },
+    {
+      "width": 1440,
+      "name": "slug-leading-hyphen: error text visible"
+    },
+    {
+      "width": 1440,
+      "name": "slug-leading-hyphen: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "slug-trailing-hyphen: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "slug-trailing-hyphen: editable"
+    },
+    {
+      "width": 1440,
+      "name": "slug-trailing-hyphen: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "slug-trailing-hyphen: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "slug-trailing-hyphen: counter"
+    },
+    {
+      "width": 1440,
+      "name": "slug-trailing-hyphen: inline invalid"
+    },
+    {
+      "width": 1440,
+      "name": "slug-trailing-hyphen: no write intent"
+    },
+    {
+      "width": 1440,
+      "name": "slug-trailing-hyphen: error text visible"
+    },
+    {
+      "width": 1440,
+      "name": "slug-trailing-hyphen: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "slug-single: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "slug-single: editable"
+    },
+    {
+      "width": 1440,
+      "name": "slug-single: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "slug-single: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "slug-single: counter"
+    },
+    {
+      "width": 1440,
+      "name": "slug-single: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "slug-boundary: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "slug-boundary: editable"
+    },
+    {
+      "width": 1440,
+      "name": "slug-boundary: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "slug-boundary: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "slug-boundary: counter"
+    },
+    {
+      "width": 1440,
+      "name": "slug-boundary: native extra character blocked"
+    },
+    {
+      "width": 1440,
+      "name": "slug-boundary: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "slug-corrected: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "slug-corrected: editable"
+    },
+    {
+      "width": 1440,
+      "name": "slug-corrected: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "slug-corrected: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "slug-corrected: counter"
+    },
+    {
+      "width": 1440,
+      "name": "slug-corrected: local error clears"
+    },
+    {
+      "width": 1440,
+      "name": "slug-corrected: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "slug-pending: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "slug-pending: editable"
+    },
+    {
+      "width": 1440,
+      "name": "slug-pending: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "slug-pending: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "slug-pending: counter"
+    },
+    {
+      "width": 1440,
+      "name": "slug-pending: submission and cancel disabled"
+    },
+    {
+      "width": 1440,
+      "name": "slug-pending: actual draft changes"
+    },
+    {
+      "width": 1440,
+      "name": "slug-pending: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reason-default: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "reason-default: editable"
+    },
+    {
+      "width": 1440,
+      "name": "reason-default: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "reason-default: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "reason-default: counter"
+    },
+    {
+      "width": 1440,
+      "name": "reason-default: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus: editable"
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus: counter"
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus: visible keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: editable"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: counter"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: inline invalid"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: no write intent"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: error text visible"
+    },
+    {
+      "width": 1440,
+      "name": "reason-empty: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: editable"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: counter"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: inline invalid"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: no write intent"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: error text visible"
+    },
+    {
+      "width": 1440,
+      "name": "reason-whitespace: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reason-boundary: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "reason-boundary: editable"
+    },
+    {
+      "width": 1440,
+      "name": "reason-boundary: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "reason-boundary: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "reason-boundary: counter"
+    },
+    {
+      "width": 1440,
+      "name": "reason-boundary: native extra character blocked"
+    },
+    {
+      "width": 1440,
+      "name": "reason-boundary: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reason-corrected: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "reason-corrected: editable"
+    },
+    {
+      "width": 1440,
+      "name": "reason-corrected: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "reason-corrected: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "reason-corrected: counter"
+    },
+    {
+      "width": 1440,
+      "name": "reason-corrected: local error clears"
+    },
+    {
+      "width": 1440,
+      "name": "reason-corrected: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: editable"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: source required and max"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: linked help count and error"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: counter"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: submission and cancel disabled"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: actual draft changes"
+    },
+    {
+      "width": 1440,
+      "name": "reason-pending: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "query-default: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "query-default: editable"
+    },
+    {
+      "width": 1440,
+      "name": "query-default: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "query-focus: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "query-focus: editable"
+    },
+    {
+      "width": 1440,
+      "name": "query-focus: visible keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "query-focus: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "query-typed: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "query-typed: editable"
+    },
+    {
+      "width": 1440,
+      "name": "query-typed: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "query-no-result: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "query-no-result: editable"
+    },
+    {
+      "width": 1440,
+      "name": "query-no-result: honest empty result"
+    },
+    {
+      "width": 1440,
+      "name": "query-no-result: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "query-cleared: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "query-cleared: editable"
+    },
+    {
+      "width": 1440,
+      "name": "query-cleared: clears query"
+    },
+    {
+      "width": 1440,
+      "name": "query-cleared: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "sort-default: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "sort-default: editable"
+    },
+    {
+      "width": 1440,
+      "name": "sort-default: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "sort-focus: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "sort-focus: editable"
+    },
+    {
+      "width": 1440,
+      "name": "sort-focus: visible keyboard focus"
+    },
+    {
+      "width": 1440,
+      "name": "sort-focus: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "sort-name_asc: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "sort-name_asc: editable"
+    },
+    {
+      "width": 1440,
+      "name": "sort-name_asc: exact sort value"
+    },
+    {
+      "width": 1440,
+      "name": "sort-name_asc: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "sort-members_desc: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "sort-members_desc: editable"
+    },
+    {
+      "width": 1440,
+      "name": "sort-members_desc: exact sort value"
+    },
+    {
+      "width": 1440,
+      "name": "sort-members_desc: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "sort-updated_desc: accessible label and readable target"
+    },
+    {
+      "width": 1440,
+      "name": "sort-updated_desc: editable"
+    },
+    {
+      "width": 1440,
+      "name": "sort-updated_desc: exact sort value"
+    },
+    {
+      "width": 1440,
+      "name": "sort-updated_desc: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "create-empty: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "create-ready: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "create-invalid: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "create-slug-invalid: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "create-boundary: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "create-pending: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "create-failed: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "create-conflict: no page overflow"
+    },
+    {
+      "width": 1440,
+      "name": "exact trimmed create intent"
+    },
+    {
+      "width": 1440,
+      "name": "disabled submit no duplicate"
+    },
+    {
+      "width": 1440,
+      "name": "waiting creates no fake row"
+    },
+    {
+      "width": 1440,
+      "name": "cancel clears draft"
+    },
+    {
+      "width": 1440,
+      "name": "cancel closes inline form"
+    },
+    {
+      "width": 1440,
+      "name": "cancel never submits"
+    },
+    {
+      "width": 1440,
+      "name": "no browser errors"
+    },
+    {
+      "width": 1440,
+      "name": "no HTTP"
+    },
+    {
+      "width": 1440,
+      "name": "no cookies"
+    },
+    {
+      "width": 1440,
+      "name": "no storage"
+    },
+    {
+      "width": 390,
+      "name": "name-default: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "name-default: editable"
+    },
+    {
+      "width": 390,
+      "name": "name-default: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "name-default: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "name-default: counter"
+    },
+    {
+      "width": 390,
+      "name": "name-default: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "name-focus: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "name-focus: editable"
+    },
+    {
+      "width": 390,
+      "name": "name-focus: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "name-focus: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "name-focus: counter"
+    },
+    {
+      "width": 390,
+      "name": "name-focus: visible keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "name-focus: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: editable"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: counter"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: inline invalid"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: no write intent"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: error text visible"
+    },
+    {
+      "width": 390,
+      "name": "name-empty: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: editable"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: counter"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: inline invalid"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: no write intent"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: error text visible"
+    },
+    {
+      "width": 390,
+      "name": "name-whitespace: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "name-boundary: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "name-boundary: editable"
+    },
+    {
+      "width": 390,
+      "name": "name-boundary: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "name-boundary: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "name-boundary: counter"
+    },
+    {
+      "width": 390,
+      "name": "name-boundary: native extra character blocked"
+    },
+    {
+      "width": 390,
+      "name": "name-boundary: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "name-corrected: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "name-corrected: editable"
+    },
+    {
+      "width": 390,
+      "name": "name-corrected: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "name-corrected: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "name-corrected: counter"
+    },
+    {
+      "width": 390,
+      "name": "name-corrected: local error clears"
+    },
+    {
+      "width": 390,
+      "name": "name-corrected: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: editable"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: counter"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: submission and cancel disabled"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: actual draft changes"
+    },
+    {
+      "width": 390,
+      "name": "name-pending: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "slug-default: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "slug-default: editable"
+    },
+    {
+      "width": 390,
+      "name": "slug-default: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "slug-default: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "slug-default: counter"
+    },
+    {
+      "width": 390,
+      "name": "slug-default: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "slug-focus: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "slug-focus: editable"
+    },
+    {
+      "width": 390,
+      "name": "slug-focus: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "slug-focus: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "slug-focus: counter"
+    },
+    {
+      "width": 390,
+      "name": "slug-focus: visible keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "slug-focus: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "slug-empty: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "slug-empty: editable"
+    },
+    {
+      "width": 390,
+      "name": "slug-empty: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "slug-empty: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "slug-empty: counter"
+    },
+    {
+      "width": 390,
+      "name": "slug-empty: inline invalid"
+    },
+    {
+      "width": 390,
+      "name": "slug-empty: no write intent"
+    },
+    {
+      "width": 390,
+      "name": "slug-empty: error text visible"
+    },
+    {
+      "width": 390,
+      "name": "slug-empty: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "slug-uppercase: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "slug-uppercase: editable"
+    },
+    {
+      "width": 390,
+      "name": "slug-uppercase: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "slug-uppercase: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "slug-uppercase: counter"
+    },
+    {
+      "width": 390,
+      "name": "slug-uppercase: inline invalid"
+    },
+    {
+      "width": 390,
+      "name": "slug-uppercase: no write intent"
+    },
+    {
+      "width": 390,
+      "name": "slug-uppercase: error text visible"
+    },
+    {
+      "width": 390,
+      "name": "slug-uppercase: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "slug-leading-hyphen: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "slug-leading-hyphen: editable"
+    },
+    {
+      "width": 390,
+      "name": "slug-leading-hyphen: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "slug-leading-hyphen: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "slug-leading-hyphen: counter"
+    },
+    {
+      "width": 390,
+      "name": "slug-leading-hyphen: inline invalid"
+    },
+    {
+      "width": 390,
+      "name": "slug-leading-hyphen: no write intent"
+    },
+    {
+      "width": 390,
+      "name": "slug-leading-hyphen: error text visible"
+    },
+    {
+      "width": 390,
+      "name": "slug-leading-hyphen: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "slug-trailing-hyphen: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "slug-trailing-hyphen: editable"
+    },
+    {
+      "width": 390,
+      "name": "slug-trailing-hyphen: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "slug-trailing-hyphen: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "slug-trailing-hyphen: counter"
+    },
+    {
+      "width": 390,
+      "name": "slug-trailing-hyphen: inline invalid"
+    },
+    {
+      "width": 390,
+      "name": "slug-trailing-hyphen: no write intent"
+    },
+    {
+      "width": 390,
+      "name": "slug-trailing-hyphen: error text visible"
+    },
+    {
+      "width": 390,
+      "name": "slug-trailing-hyphen: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "slug-single: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "slug-single: editable"
+    },
+    {
+      "width": 390,
+      "name": "slug-single: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "slug-single: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "slug-single: counter"
+    },
+    {
+      "width": 390,
+      "name": "slug-single: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "slug-boundary: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "slug-boundary: editable"
+    },
+    {
+      "width": 390,
+      "name": "slug-boundary: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "slug-boundary: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "slug-boundary: counter"
+    },
+    {
+      "width": 390,
+      "name": "slug-boundary: native extra character blocked"
+    },
+    {
+      "width": 390,
+      "name": "slug-boundary: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "slug-corrected: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "slug-corrected: editable"
+    },
+    {
+      "width": 390,
+      "name": "slug-corrected: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "slug-corrected: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "slug-corrected: counter"
+    },
+    {
+      "width": 390,
+      "name": "slug-corrected: local error clears"
+    },
+    {
+      "width": 390,
+      "name": "slug-corrected: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "slug-pending: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "slug-pending: editable"
+    },
+    {
+      "width": 390,
+      "name": "slug-pending: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "slug-pending: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "slug-pending: counter"
+    },
+    {
+      "width": 390,
+      "name": "slug-pending: submission and cancel disabled"
+    },
+    {
+      "width": 390,
+      "name": "slug-pending: actual draft changes"
+    },
+    {
+      "width": 390,
+      "name": "slug-pending: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "reason-default: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "reason-default: editable"
+    },
+    {
+      "width": 390,
+      "name": "reason-default: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "reason-default: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "reason-default: counter"
+    },
+    {
+      "width": 390,
+      "name": "reason-default: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "reason-focus: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "reason-focus: editable"
+    },
+    {
+      "width": 390,
+      "name": "reason-focus: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "reason-focus: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "reason-focus: counter"
+    },
+    {
+      "width": 390,
+      "name": "reason-focus: visible keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "reason-focus: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: editable"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: counter"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: inline invalid"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: no write intent"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: error text visible"
+    },
+    {
+      "width": 390,
+      "name": "reason-empty: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: editable"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: counter"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: inline invalid"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: no write intent"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: error text visible"
+    },
+    {
+      "width": 390,
+      "name": "reason-whitespace: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "reason-boundary: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "reason-boundary: editable"
+    },
+    {
+      "width": 390,
+      "name": "reason-boundary: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "reason-boundary: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "reason-boundary: counter"
+    },
+    {
+      "width": 390,
+      "name": "reason-boundary: native extra character blocked"
+    },
+    {
+      "width": 390,
+      "name": "reason-boundary: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "reason-corrected: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "reason-corrected: editable"
+    },
+    {
+      "width": 390,
+      "name": "reason-corrected: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "reason-corrected: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "reason-corrected: counter"
+    },
+    {
+      "width": 390,
+      "name": "reason-corrected: local error clears"
+    },
+    {
+      "width": 390,
+      "name": "reason-corrected: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: editable"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: source required and max"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: linked help count and error"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: counter"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: submission and cancel disabled"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: actual draft changes"
+    },
+    {
+      "width": 390,
+      "name": "reason-pending: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "query-default: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "query-default: editable"
+    },
+    {
+      "width": 390,
+      "name": "query-default: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "query-focus: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "query-focus: editable"
+    },
+    {
+      "width": 390,
+      "name": "query-focus: visible keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "query-focus: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "query-typed: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "query-typed: editable"
+    },
+    {
+      "width": 390,
+      "name": "query-typed: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "query-no-result: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "query-no-result: editable"
+    },
+    {
+      "width": 390,
+      "name": "query-no-result: honest empty result"
+    },
+    {
+      "width": 390,
+      "name": "query-no-result: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "query-cleared: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "query-cleared: editable"
+    },
+    {
+      "width": 390,
+      "name": "query-cleared: clears query"
+    },
+    {
+      "width": 390,
+      "name": "query-cleared: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "sort-default: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "sort-default: editable"
+    },
+    {
+      "width": 390,
+      "name": "sort-default: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "sort-focus: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "sort-focus: editable"
+    },
+    {
+      "width": 390,
+      "name": "sort-focus: visible keyboard focus"
+    },
+    {
+      "width": 390,
+      "name": "sort-focus: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "sort-name_asc: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "sort-name_asc: editable"
+    },
+    {
+      "width": 390,
+      "name": "sort-name_asc: exact sort value"
+    },
+    {
+      "width": 390,
+      "name": "sort-name_asc: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "sort-members_desc: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "sort-members_desc: editable"
+    },
+    {
+      "width": 390,
+      "name": "sort-members_desc: exact sort value"
+    },
+    {
+      "width": 390,
+      "name": "sort-members_desc: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "sort-updated_desc: accessible label and readable target"
+    },
+    {
+      "width": 390,
+      "name": "sort-updated_desc: editable"
+    },
+    {
+      "width": 390,
+      "name": "sort-updated_desc: exact sort value"
+    },
+    {
+      "width": 390,
+      "name": "sort-updated_desc: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "create-empty: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "create-ready: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "create-invalid: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "create-slug-invalid: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "create-boundary: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "create-pending: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "create-failed: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "create-conflict: no page overflow"
+    },
+    {
+      "width": 390,
+      "name": "exact trimmed create intent"
+    },
+    {
+      "width": 390,
+      "name": "disabled submit no duplicate"
+    },
+    {
+      "width": 390,
+      "name": "waiting creates no fake row"
+    },
+    {
+      "width": 390,
+      "name": "cancel clears draft"
+    },
+    {
+      "width": 390,
+      "name": "cancel closes inline form"
+    },
+    {
+      "width": 390,
+      "name": "cancel never submits"
+    },
+    {
+      "width": 390,
+      "name": "no browser errors"
+    },
+    {
+      "width": 390,
+      "name": "no HTTP"
+    },
+    {
+      "width": 390,
+      "name": "no cookies"
+    },
+    {
+      "width": 390,
+      "name": "no storage"
+    }
+  ],
+  "observations": [
+    {
+      "width": 1440,
+      "exactCreateIntent": {
+        "url": "/org/admin/workspaces",
+        "method": "POST",
+        "body": {
+          "name": "北美新品决策",
+          "slug": "north-america-launch",
+          "reason": "划分新品团队的数据边界"
+        }
+      },
+      "fieldsRemainEditable": true,
+      "noProductionWrites": true
+    },
+    {
+      "width": 390,
+      "exactCreateIntent": {
+        "url": "/org/admin/workspaces",
+        "method": "POST",
+        "body": {
+          "name": "北美新品决策",
+          "slug": "north-america-launch",
+          "reason": "划分新品团队的数据边界"
+        }
+      },
+      "fieldsRemainEditable": true,
+      "noProductionWrites": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "name-default-1440.png",
+      "scene": "name-default",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "a8151792a65383d9e2930a4a8f3e40160f9c528bed92d982a5e6ab8ea33cfe48",
+      "field": "name",
+      "variant": "default"
+    },
+    {
+      "file": "name-focus-1440.png",
+      "scene": "name-focus",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "dad279ed93f0c02de29ca2623553ba5be5cfd5cd8a8021163c6df614db712930",
+      "field": "name",
+      "variant": "focus"
+    },
+    {
+      "file": "name-empty-1440.png",
+      "scene": "name-empty",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "78c3f1ca6c350eb33b23ef0ee3c762082a37dfc70cbab52cb7b05c92349aa65a",
+      "field": "name",
+      "variant": "empty"
+    },
+    {
+      "file": "name-whitespace-1440.png",
+      "scene": "name-whitespace",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "5b2ac1669d97e9a5b42d8ae6b43ebd6ae79b6181a42004d86d40bdebe035df37",
+      "field": "name",
+      "variant": "whitespace"
+    },
+    {
+      "file": "name-boundary-1440.png",
+      "scene": "name-boundary",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "570f8b16edb5c332018c3a02c8ca7f87ecd488556ee171192965431cb3dac108",
+      "field": "name",
+      "variant": "boundary"
+    },
+    {
+      "file": "name-corrected-1440.png",
+      "scene": "name-corrected",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "39f3e071c063b9333aee7818a5fba774d65a9441c9f45025101abee77260d31d",
+      "field": "name",
+      "variant": "corrected"
+    },
+    {
+      "file": "name-pending-1440.png",
+      "scene": "name-pending",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "11e478bf4ce32e99571cfae9305d654401df228f7c235692266ff3d337c0df9c",
+      "field": "name",
+      "variant": "pending"
+    },
+    {
+      "file": "slug-default-1440.png",
+      "scene": "slug-default",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "c354e8e093646d207031863cc2915bcaabaae15ddbfcc3cbb6a438acd8cb6f68",
+      "field": "slug",
+      "variant": "default"
+    },
+    {
+      "file": "slug-focus-1440.png",
+      "scene": "slug-focus",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "50d1f4551ee4186194599ecaaed2c75657ff5bf0bad79e81932cff0356f35449",
+      "field": "slug",
+      "variant": "focus"
+    },
+    {
+      "file": "slug-empty-1440.png",
+      "scene": "slug-empty",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "1970b2eddffff3580ab305fe2fb7bb8f9533b120e96bcd8ec1171f04aa52978a",
+      "field": "slug",
+      "variant": "empty"
+    },
+    {
+      "file": "slug-uppercase-1440.png",
+      "scene": "slug-uppercase",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "84de254b38e3df0fd44b9ae1520dcdd96956bb3e33f2de8ad7d10e7b26556e04",
+      "field": "slug",
+      "variant": "uppercase"
+    },
+    {
+      "file": "slug-leading-hyphen-1440.png",
+      "scene": "slug-leading-hyphen",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "addda3d2d166167dbc23ac74fe856dc58eb04a70d8a07c0e86dbf9fca7cc02ac",
+      "field": "slug",
+      "variant": "leading-hyphen"
+    },
+    {
+      "file": "slug-trailing-hyphen-1440.png",
+      "scene": "slug-trailing-hyphen",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "72a0ce46e377019928b824596f1a98823e455f7e15ed3909a27c715b3c47206a",
+      "field": "slug",
+      "variant": "trailing-hyphen"
+    },
+    {
+      "file": "slug-single-1440.png",
+      "scene": "slug-single",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "204d1d610c4129f0608d359c57a05233128656320519bec9d33d28748579257f",
+      "field": "slug",
+      "variant": "single"
+    },
+    {
+      "file": "slug-boundary-1440.png",
+      "scene": "slug-boundary",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "006e5124bc3c95f5987ea247801ef9d7503ceb7a46aff8b8e6e7d7adf1e873d1",
+      "field": "slug",
+      "variant": "boundary"
+    },
+    {
+      "file": "slug-corrected-1440.png",
+      "scene": "slug-corrected",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "22fe12742838536a3b9dc64fd2493b25723cd23958b390f7336af18abda7ee92",
+      "field": "slug",
+      "variant": "corrected"
+    },
+    {
+      "file": "slug-pending-1440.png",
+      "scene": "slug-pending",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "e7552bfa689defd88f7fa09029b1a85a82f91f950f613eaa05b1ca9bfe9537e3",
+      "field": "slug",
+      "variant": "pending"
+    },
+    {
+      "file": "reason-default-1440.png",
+      "scene": "reason-default",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "e45c481d977170062a74aae3f853c3661be3c85068738165c4d98aded9c7a51c",
+      "field": "reason",
+      "variant": "default"
+    },
+    {
+      "file": "reason-focus-1440.png",
+      "scene": "reason-focus",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "56694374b2276330ce57445001f8afb953176e34a300d03ad5e3b7be131c2725",
+      "field": "reason",
+      "variant": "focus"
+    },
+    {
+      "file": "reason-empty-1440.png",
+      "scene": "reason-empty",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "d401642cb243bd803480e2961497cc83186c7eceb5c8326fc50ff57b080ffdfd",
+      "field": "reason",
+      "variant": "empty"
+    },
+    {
+      "file": "reason-whitespace-1440.png",
+      "scene": "reason-whitespace",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "c7582a6e1184db260688dcb76fb7b50d04e7415e2f8c6a0b8ff0798bd9c42c4f",
+      "field": "reason",
+      "variant": "whitespace"
+    },
+    {
+      "file": "reason-boundary-1440.png",
+      "scene": "reason-boundary",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "179abebed0be322200f6013ba5bcb2a10b327d09d0c5e4f44575c40531d315cb",
+      "field": "reason",
+      "variant": "boundary"
+    },
+    {
+      "file": "reason-corrected-1440.png",
+      "scene": "reason-corrected",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "02a38c83010c06668182db594c3da39a4c822f48931af6e5248b79515ed59379",
+      "field": "reason",
+      "variant": "corrected"
+    },
+    {
+      "file": "reason-pending-1440.png",
+      "scene": "reason-pending",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "91e8b4ecb304419a1c89045d02f28195728bdc0ac1b3c4ce1dd8f028f01d8415",
+      "field": "reason",
+      "variant": "pending"
+    },
+    {
+      "file": "query-default-1440.png",
+      "scene": "query-default",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "e69c240f4b2e4c94963d4685f39c0e6864975341d41806e519a2200a5cc69571",
+      "field": "query",
+      "variant": "default"
+    },
+    {
+      "file": "query-focus-1440.png",
+      "scene": "query-focus",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "ee82157706f57bef020a38f8ded1bc0897bcf1e4d096727450e6fc275f0b7800",
+      "field": "query",
+      "variant": "focus"
+    },
+    {
+      "file": "query-typed-1440.png",
+      "scene": "query-typed",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "0ce65554ea84acf482650c821daacff6ed803327244507b1e46418fcfbc4f0ac",
+      "field": "query",
+      "variant": "typed"
+    },
+    {
+      "file": "query-no-result-1440.png",
+      "scene": "query-no-result",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "6345f8a78a42141c41b1fd569e563fb1db1572e3b3f58f6dd01671f8de0dafd1",
+      "field": "query",
+      "variant": "no-result"
+    },
+    {
+      "file": "query-cleared-1440.png",
+      "scene": "query-cleared",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "ee82157706f57bef020a38f8ded1bc0897bcf1e4d096727450e6fc275f0b7800",
+      "field": "query",
+      "variant": "cleared"
+    },
+    {
+      "file": "sort-default-1440.png",
+      "scene": "sort-default",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "e69c240f4b2e4c94963d4685f39c0e6864975341d41806e519a2200a5cc69571",
+      "field": "sort",
+      "variant": "default"
+    },
+    {
+      "file": "sort-focus-1440.png",
+      "scene": "sort-focus",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "37ed7adf250fa3ba07cf869a7b8c9de7ff33ace1e55ec4e3414df0a3cb4ec1db",
+      "field": "sort",
+      "variant": "focus"
+    },
+    {
+      "file": "sort-name_asc-1440.png",
+      "scene": "sort-name_asc",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "37ed7adf250fa3ba07cf869a7b8c9de7ff33ace1e55ec4e3414df0a3cb4ec1db",
+      "field": "sort",
+      "variant": "name_asc"
+    },
+    {
+      "file": "sort-members_desc-1440.png",
+      "scene": "sort-members_desc",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "cf65db81fea9bfe2caa588fbfd1e2ea6400b1ea7ba082e9deffd8606734bd0bd",
+      "field": "sort",
+      "variant": "members_desc"
+    },
+    {
+      "file": "sort-updated_desc-1440.png",
+      "scene": "sort-updated_desc",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "d4960139198f3a1bff36f08af4ed65ec2901e8f15c8e1082eba611fea7fa1567",
+      "field": "sort",
+      "variant": "updated_desc"
+    },
+    {
+      "file": "create-empty-1440.png",
+      "scene": "create-empty",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "94e62897c9c78c5645d267e5c120a9d8d26d46dcaadf06d7248ea6c090e082af",
+      "composition": true
+    },
+    {
+      "file": "create-ready-1440.png",
+      "scene": "create-ready",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "19283f2e90329ef9805fa2f0d9bd5f80b3941c322de6fdb05e94f5ee31a5b683",
+      "composition": true
+    },
+    {
+      "file": "create-invalid-1440.png",
+      "scene": "create-invalid",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "71ef12675854b793bfcccef83620381728e56eb1f6de6564537a1fa79f94983e",
+      "composition": true
+    },
+    {
+      "file": "create-slug-invalid-1440.png",
+      "scene": "create-slug-invalid",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "9e75246763bf85bce067f952784f8647c03e2fed0dfa408f97de489d1c092747",
+      "composition": true
+    },
+    {
+      "file": "create-boundary-1440.png",
+      "scene": "create-boundary",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "eeb5d8c1bf82761347c86c070545227aab4c212df95e962318108ac6a2568c1f",
+      "composition": true
+    },
+    {
+      "file": "create-pending-1440.png",
+      "scene": "create-pending",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "448fb317d0fea5666246df05c2ee52b56059eb5aa904d2afacc0f370ab9e4248",
+      "composition": true
+    },
+    {
+      "file": "create-failed-1440.png",
+      "scene": "create-failed",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "5b091408c31ef3fb80ba17d34d2b17e3544505c2a86a309e440af58fbc1370de",
+      "composition": true
+    },
+    {
+      "file": "create-conflict-1440.png",
+      "scene": "create-conflict",
+      "width": 1440,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "7cc96d18be453cafe58b58064b6faeb15975b94a1ac2580f713ced0189af5685",
+      "composition": true
+    },
+    {
+      "file": "name-default-390.png",
+      "scene": "name-default",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "666430bbd1a46e9cdc56d1451292be0ff04d0900f9bbe767f3e873e2d94b3718",
+      "field": "name",
+      "variant": "default"
+    },
+    {
+      "file": "name-focus-390.png",
+      "scene": "name-focus",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "01f0aad2f590affefb3867e6f91851b77d38f27e15c1a109777ed2e9812db583",
+      "field": "name",
+      "variant": "focus"
+    },
+    {
+      "file": "name-empty-390.png",
+      "scene": "name-empty",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "c4d1297417e56e8da763b0be187dd084cef47fea4d0f7c15518cb9b64e525a3c",
+      "field": "name",
+      "variant": "empty"
+    },
+    {
+      "file": "name-whitespace-390.png",
+      "scene": "name-whitespace",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "199ce5a494dc18dd50152b952b54741e7b8b6f7c816fe36ecda4ab0e93ddb5eb",
+      "field": "name",
+      "variant": "whitespace"
+    },
+    {
+      "file": "name-boundary-390.png",
+      "scene": "name-boundary",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "470cd88aa7675eda3444a9071a355829da2dc09b24228f5018229befa6849af3",
+      "field": "name",
+      "variant": "boundary"
+    },
+    {
+      "file": "name-corrected-390.png",
+      "scene": "name-corrected",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "e7e54daaf35f1f73ef8f9bd539ce39ca7ca92e53b78f13ec23a0bd20f613bf33",
+      "field": "name",
+      "variant": "corrected"
+    },
+    {
+      "file": "name-pending-390.png",
+      "scene": "name-pending",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "cd4c311a1a9af4f16b5c49578821da411041456d11f7cc57d34fd4c0f8350fbb",
+      "field": "name",
+      "variant": "pending"
+    },
+    {
+      "file": "slug-default-390.png",
+      "scene": "slug-default",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "3d25f0f7a4f209905c8a4fb3c5acff9993a2cc0ee6ec66e81377ca0dedfb295d",
+      "field": "slug",
+      "variant": "default"
+    },
+    {
+      "file": "slug-focus-390.png",
+      "scene": "slug-focus",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "34b9228ca7f2daf8abd0e936a7eda4d881114f16bd28d1ddf7d33484d7570311",
+      "field": "slug",
+      "variant": "focus"
+    },
+    {
+      "file": "slug-empty-390.png",
+      "scene": "slug-empty",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "3ed4730fc807ad39fb3119fc2ed102507008a977ddd6595a8935d94f317819f8",
+      "field": "slug",
+      "variant": "empty"
+    },
+    {
+      "file": "slug-uppercase-390.png",
+      "scene": "slug-uppercase",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "54a9bddc37af7413ec5c509e26c16c69ac4c1a719492549e12451f77d2aa92c1",
+      "field": "slug",
+      "variant": "uppercase"
+    },
+    {
+      "file": "slug-leading-hyphen-390.png",
+      "scene": "slug-leading-hyphen",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "fbd9b9c189a9bc44601b0fe40c79fb24f3c0b0114e6945add939103db01e0fe8",
+      "field": "slug",
+      "variant": "leading-hyphen"
+    },
+    {
+      "file": "slug-trailing-hyphen-390.png",
+      "scene": "slug-trailing-hyphen",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "2bdbab454543275505ab057df10f7004c15287af60079d3d211577e624dc0840",
+      "field": "slug",
+      "variant": "trailing-hyphen"
+    },
+    {
+      "file": "slug-single-390.png",
+      "scene": "slug-single",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "c19d6ebe248287216b7f2e1652c8e3d8398f875a0754fe9fb8b6aac375dbd2ae",
+      "field": "slug",
+      "variant": "single"
+    },
+    {
+      "file": "slug-boundary-390.png",
+      "scene": "slug-boundary",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "fca2686857bba7eb1a92c792e9a7ab01a4d9324c1c2d1526e6c8f111c9cd5f67",
+      "field": "slug",
+      "variant": "boundary"
+    },
+    {
+      "file": "slug-corrected-390.png",
+      "scene": "slug-corrected",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "b118674b99e0ed5c89086827b5364f7180b47543037f8ed43751091e69e3f75a",
+      "field": "slug",
+      "variant": "corrected"
+    },
+    {
+      "file": "slug-pending-390.png",
+      "scene": "slug-pending",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "975edb0fc09b7c70214781965529a2378e8934fbc9a887483d68c3b84855ebf7",
+      "field": "slug",
+      "variant": "pending"
+    },
+    {
+      "file": "reason-default-390.png",
+      "scene": "reason-default",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "0f930bc401c97246be53660f419b270400bc6df894119b58a2089a717b9827c1",
+      "field": "reason",
+      "variant": "default"
+    },
+    {
+      "file": "reason-focus-390.png",
+      "scene": "reason-focus",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "815138fc205cf373a43c444e27e5a8d3fbe8b8e8391d0d2afdd71e5924b38102",
+      "field": "reason",
+      "variant": "focus"
+    },
+    {
+      "file": "reason-empty-390.png",
+      "scene": "reason-empty",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "b032024e01dd55188f32e806e2eb6896833752e14b4ba777faf5bfee607de965",
+      "field": "reason",
+      "variant": "empty"
+    },
+    {
+      "file": "reason-whitespace-390.png",
+      "scene": "reason-whitespace",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "13bc6d9dc73e19b006cdf29ff31f61921650d35d5049523c60f718ca8ae9f8b2",
+      "field": "reason",
+      "variant": "whitespace"
+    },
+    {
+      "file": "reason-boundary-390.png",
+      "scene": "reason-boundary",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "2efea12e38a5ea09b807e2003d0efd26530a32ef3ed16141950d7490b936a7e5",
+      "field": "reason",
+      "variant": "boundary"
+    },
+    {
+      "file": "reason-corrected-390.png",
+      "scene": "reason-corrected",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "6298a770f4c3dffee0282e40badbece528ffafea55fb3036a6694ae3c8cb92fa",
+      "field": "reason",
+      "variant": "corrected"
+    },
+    {
+      "file": "reason-pending-390.png",
+      "scene": "reason-pending",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "4af06d61eda44db4cec640eaed140b169d0787fbd2565b66f315fbfe5c61deb7",
+      "field": "reason",
+      "variant": "pending"
+    },
+    {
+      "file": "query-default-390.png",
+      "scene": "query-default",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "53cff60fcffca9904842bc84ca900f8b08cc9ae5410e18a379d6298a1f9f5a75",
+      "field": "query",
+      "variant": "default"
+    },
+    {
+      "file": "query-focus-390.png",
+      "scene": "query-focus",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "3f7e41feee5016afd3ad6e54daeeeb9db1e7c4cddcbf83e65f34c0c4277f3469",
+      "field": "query",
+      "variant": "focus"
+    },
+    {
+      "file": "query-typed-390.png",
+      "scene": "query-typed",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "b30e64c4eb0d9c938728045eab5f56dfbc00ee2ab648a1b631351af2c9706493",
+      "field": "query",
+      "variant": "typed"
+    },
+    {
+      "file": "query-no-result-390.png",
+      "scene": "query-no-result",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "ddb5e5deadd053cbb0e6db667d50a211cbe7cb9a2adb83b0896673a2f49f3374",
+      "field": "query",
+      "variant": "no-result"
+    },
+    {
+      "file": "query-cleared-390.png",
+      "scene": "query-cleared",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "3f7e41feee5016afd3ad6e54daeeeb9db1e7c4cddcbf83e65f34c0c4277f3469",
+      "field": "query",
+      "variant": "cleared"
+    },
+    {
+      "file": "sort-default-390.png",
+      "scene": "sort-default",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "53cff60fcffca9904842bc84ca900f8b08cc9ae5410e18a379d6298a1f9f5a75",
+      "field": "sort",
+      "variant": "default"
+    },
+    {
+      "file": "sort-focus-390.png",
+      "scene": "sort-focus",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "80892d90b495f7d19cc3e8111bb3c9f71d9dec2b179c329ce3278999afa741b6",
+      "field": "sort",
+      "variant": "focus"
+    },
+    {
+      "file": "sort-name_asc-390.png",
+      "scene": "sort-name_asc",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "80892d90b495f7d19cc3e8111bb3c9f71d9dec2b179c329ce3278999afa741b6",
+      "field": "sort",
+      "variant": "name_asc"
+    },
+    {
+      "file": "sort-members_desc-390.png",
+      "scene": "sort-members_desc",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "dbebd15c58246e26989b643d221e513337e2a51842266677aba5c530cd85c34d",
+      "field": "sort",
+      "variant": "members_desc"
+    },
+    {
+      "file": "sort-updated_desc-390.png",
+      "scene": "sort-updated_desc",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "9d6c26b87bf03b325976e9ed64b7c1355f5a7689b1efebedbd24646934749a4c",
+      "field": "sort",
+      "variant": "updated_desc"
+    },
+    {
+      "file": "create-empty-390.png",
+      "scene": "create-empty",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "dfcc1d95c7f1be2d0f913919fa197470c6a47450597c5edb3cb718f4b11e2201",
+      "composition": true
+    },
+    {
+      "file": "create-ready-390.png",
+      "scene": "create-ready",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "56f038603e17b7ccf00b238b116ed25e97b762a11cfc9de08aceefd20cd3b141",
+      "composition": true
+    },
+    {
+      "file": "create-invalid-390.png",
+      "scene": "create-invalid",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "31bfa38bfa9c4150f1111dda4c479d92703bc2bcb1ff6587d1799219b220df80",
+      "composition": true
+    },
+    {
+      "file": "create-slug-invalid-390.png",
+      "scene": "create-slug-invalid",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "4f5a4db69a2d698f7665ba35adc31365037c65ee2710ccce877d03e9f8cc5766",
+      "composition": true
+    },
+    {
+      "file": "create-boundary-390.png",
+      "scene": "create-boundary",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "c6b0f90c0690ab81974605f5e7414f1a6d1129a6a513af0ca197da32d8d48306",
+      "composition": true
+    },
+    {
+      "file": "create-pending-390.png",
+      "scene": "create-pending",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "0a3d272d350337c027a2e5236543b4d81d6febb64f191e7fbaaf2ee761303fa6",
+      "composition": true
+    },
+    {
+      "file": "create-failed-390.png",
+      "scene": "create-failed",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "ad079c382429576b57ae6c9810eb97d54a58f347350484118f59198ad1ce05ad",
+      "composition": true
+    },
+    {
+      "file": "create-conflict-390.png",
+      "scene": "create-conflict",
+      "width": 390,
+      "pageId": "P32",
+      "scope": "offline-field-proposal-not-production",
+      "sha256": "bd4af9e820b1ecc821e6a2858e4e50d18367bf930b8d7851b97221189adf5002",
+      "composition": true
+    }
+  ]
+}

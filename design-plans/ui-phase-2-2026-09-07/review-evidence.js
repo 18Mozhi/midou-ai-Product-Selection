@@ -3,7 +3,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
   "schemaVersion": 1,
   "scope": "current-linked-materials-not-full-page-acceptance",
   "inputHashes": {
-    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "be696e5ec5ef502d0ab7b3470a08c352703a2c8b0e35bd33608fc949b62cd7d6",
+    "design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json": "e92a6157527c10d508584e81a05ddd55d85e171ab4f32413a97c519f89ee6d46",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "e77d4f4b351acbe38808c1e60ca103bd6e2555b956f69445024d02cf430832d5",
@@ -99,6 +99,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "design-plans/ui-phase-2-2026-09-07/design/work-direction-c/evidence.json": "7d8af75123533b4e27c891c4f6dd5da965a64b5ba15a783ed426aa7808bb87f8",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json": "06774e3116e80a37af7b407d7d808ebbc61a8f543a221842c9dbd6cafad010b1",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/evidence.json": "89bccdb468a4587db8c24d634c377ce5929e8d2d2a1f04b35c3b906a46e1ffb0",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-fields-direction-c/evidence.json": "55989dda4d3ad81c3d1aff23ad4524b6ed1005e63ee45523e7ad571428f4b563",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c/evidence.json": "e77a3494a31e9d0dc705c62df5bd1889e5f7f77f35e16408caab353e5b1c4dc1",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P01.json": "aa1f6f6104351672956368a32e011f880097271920b98b0344ea0fcfcc5f000a",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P02.json": "2744a788c22662f7bd77274f0235da5720fba7ceb872a16c487b87af710f8b9b",
@@ -144,16 +145,16 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
     "relatedProposalRoutes": 73,
     "noLinkedPageProposalRoutes": 0,
     "missingPageIds": [],
-    "packages": 96,
+    "packages": 97,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
-    "uniqueBoundFiles": 936,
-    "sourceBindings": 1856,
+    "uniqueBoundFiles": 940,
+    "sourceBindings": 1876,
     "sourceDrift": 0,
-    "pngs": 14039,
+    "pngs": 14123,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 10065,
+    "readmeLinksChecked": 10069,
     "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
@@ -476,6 +477,7 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "id": "P32",
       "spec": "page-specs/P32.md",
       "packages": [
+        "workspaces-fields-direction-c",
         "workspaces-restore-states-direction-c",
         "workspaces-controls-direction-c",
         "workspaces-direction-c"
@@ -1679,6 +1681,15 @@ window.SCOUTOPS_PHASE2_EVIDENCE = {
       "evidence": "design/workspaces-direction-c/evidence.json",
       "prototype": "design/workspaces-direction-c/index.html",
       "gallery": null
+    },
+    "workspaces-fields-direction-c": {
+      "id": "workspaces-fields-direction-c",
+      "role": "page-or-section-proposal",
+      "screenshots": 84,
+      "readme": "design/workspaces-fields-direction-c/README.md",
+      "evidence": "design/workspaces-fields-direction-c/evidence.json",
+      "prototype": "design/workspaces-fields-direction-c/index.html",
+      "gallery": "design/workspaces-fields-direction-c/gallery.html"
     },
     "workspaces-restore-states-direction-c": {
       "id": "workspaces-restore-states-direction-c",

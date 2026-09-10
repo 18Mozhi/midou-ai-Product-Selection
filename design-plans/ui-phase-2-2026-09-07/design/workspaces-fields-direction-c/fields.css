@@ -1,0 +1,70 @@
+/* Independent pending C field proposal. No production/global theme changes. */
+#create-form .field-group {
+  margin-top: 18px;
+  min-width: 0;
+}
+#create-form .field-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+#workspace .field-help,
+#workspace .field-count,
+#workspace .field-error {
+  display: block;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+#workspace .field-help {
+  color: #445779;
+  margin: 6px 0;
+}
+#workspace .field-count {
+  color: #445779;
+  text-align: right;
+  margin: 4px 0;
+}
+#workspace .field-error {
+  color: #9f301c;
+  padding-left: 10px;
+  border-left: 3px solid #9f301c;
+  margin: 6px 0;
+}
+#workspace .field-error:empty {
+  display: none;
+}
+#workspace input[aria-invalid="true"],
+#workspace textarea[aria-invalid="true"] {
+  border-color: #9f301c;
+}
+#workspace input,
+#workspace select,
+#workspace textarea {
+  border-color: #6680a2;
+}
+#workspace #workspace-reason {
+  min-height: 150px;
+}
+#create-form footer {
+  border-top: 1px solid #dbe1e9;
+  padding-top: 18px;
+  margin-top: 20px;
+}
+#create-form footer p {
+  font-size: 16px;
+}
+#create-pending {
+  background: #f3f6fc;
+  color: #254a9c;
+  padding: 12px;
+  margin-top: 12px;
+}
+@media (max-width: 600px) {
+  #create-form .create-head h2 {
+    font-size: 23px;
+  }
+  #create-form footer button {
+    width: 100%;
+  }
+}

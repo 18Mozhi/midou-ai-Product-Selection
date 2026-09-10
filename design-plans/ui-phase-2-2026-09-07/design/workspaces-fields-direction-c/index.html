@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>P32 工作区 · 字段与创建组合审核</title>
+    <link rel="stylesheet" href="../workspaces-direction-c/workspaces.css" />
+    <link rel="stylesheet" href="../workspaces-controls-direction-c/controls.css" />
+    <link rel="stylesheet" href="fields.css" />
+    <script defer src="../workspaces-direction-c/data.js"></script>
+    <script defer src="../workspaces-direction-c/workspaces.js"></script>
+    <script defer src="fields.js"></script>
+  </head>
+  <body>
+    <details class="control-tools">
+      <summary>P32 字段审核工具 · 非业务入口</summary>
+      <label for="field-scene">字段 / 表单状态</label>
+      <select id="field-scene"></select>
+      <button id="field-show" type="button">展示状态</button>
+      <p>
+        独立离线提案，不创建真实工作区。提交中仍可编辑与当前 Vue
+        一致；后续草稿的完成处理不在本稿决定。
+      </p>
+      <a href="gallery.html">打开全部双端图</a>
+    </details>
+    <div class="review-bar">
+      <span>P32 C · 字段与创建表单 / 待审核</span
+      ><button id="review-toggle" aria-expanded="false">原审核场景</button>
+    </div>
+    <section id="review-tools" hidden>
+      <label for="scene-picker">原场景</label
+      ><select id="scene-picker"></select>
+      <pre id="intent-log">仅记录意图，不访问服务。</pre>
+    </section>
+    <div class="shell">
+      <aside class="blue-directory">
+        <div class="brand">ScoutOps</div>
+        <p>当前组织后台</p>
+        <h1>工作区</h1>
+        <nav aria-label="本页目录">
+          <a href="#catalog">工作区目录</a><a href="#detail" aria-current="true">创建与治理</a>
+        </nav>
+        <p class="note">名称便于识别<br />标识定义边界</p>
+      </aside>
+      <main id="workspace"></main>
+    </div>
+    <dialog id="reason-dialog" aria-labelledby="reason-title">
+      <form id="reason-form">
+        <header>
+          <h2 id="reason-title"></h2>
+          <button type="button" id="reason-close">关闭</button>
+        </header>
+        <div id="reason-target"></div>
+        <label for="reason-input">原因（至少2个字）</label
+        ><textarea id="reason-input" required minlength="2" maxlength="500"></textarea>
+        <footer>
+          <button type="button" id="reason-cancel">取消</button
+          ><button id="reason-confirm" class="primary">确认提交</button>
+        </footer>
+      </form>
+    </dialog>
+  </body>
+</html>
