@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { responsiveFocusContractHash } from "./lib/ui-phase2-responsive-focus-contract.mjs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { readFile, readdir, writeFile } from "node:fs/promises";
@@ -62,9 +63,14 @@ for (const [, f, h] of contracts) {
       binding.current,
     );
   }
-  assert.equal(hash(lf(await readFile(path.join(repo, f), "utf8"))), binding?.current ?? h, f);
+  assert.equal(
+    hash(lf(await readFile(path.join(repo, f), "utf8"))),
+    responsiveFocusContractHash(f, binding?.current ?? h),
+    f,
+  );
 }
 const sourcePaths = [
+  "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
   ...data.sourcePaths,
   "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.css",
   "scripts/lib/ui-phase2-governance-design-data.mjs",

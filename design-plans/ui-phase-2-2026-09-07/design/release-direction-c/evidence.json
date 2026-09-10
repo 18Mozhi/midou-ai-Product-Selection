@@ -1,8 +1,9 @@
 {
   "proposal": "RELEASE-C-r1",
   "sourceHashes": {
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "b0cdf21fcbe29264649f3648955717d44fa3bbb527c1781ec929e05ca5fe8555",
     "apps/web/src/components/ReleaseRolloutCenter.vue": "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
-    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/components/TechnicalDetails.vue": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0",
     "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
@@ -15,7 +16,7 @@
     "apps/api/src/bootstrap/register-operations-domain.ts": "4d04d263f637e2d164930f5ca891e81857f6b55a43f13de57ce47b40250c3edd",
     "infra/baota/service-manifest.json": "1cdaa3027372ef6786e31667bdfb94586c03667c4d4b34cc625bf5658ef00df3",
     "scripts/lib/ui-phase2-release-design-data.mjs": "23c6e3e7f5c4def4ea6260c2a0a7a00a1b39ea37c66c2b49c0f369aafd888343",
-    "scripts/verify-ui-phase2-release-c.mjs": "3303dcb97a7bc5b109f0b71b3236b39bcffb2beaf85c092caefd963ab81b1dfe",
+    "scripts/verify-ui-phase2-release-c.mjs": "432e51a4d72629beb404cdd154a4538caebd763fd3c72144a94c2353d6f101cc",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "design-plans/ui-phase-2-2026-09-07/design/release-direction-c/index.html": "cad051f5e8bb24e9d9fe1809bada7d0b3487361e809c97bf17c2e34a675dc858",
     "design-plans/ui-phase-2-2026-09-07/design/release-direction-c/release.css": "858060e8d382d6199f8760ecacbeba68b9106b415b055318804d7d4ec545263b",

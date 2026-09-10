@@ -1,10 +1,11 @@
 {
   "proposal": "COLLECTION-TASKS-C-r1",
   "sourceHashes": {
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "b0cdf21fcbe29264649f3648955717d44fa3bbb527c1781ec929e05ca5fe8555",
     "apps/web/src/components/CollectionTaskCenter.vue": "1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed",
     "apps/web/src/components/CollectionRuntimeSurface.vue": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
     "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
-    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
     "apps/api/src/collection-task-service.ts": "e2be97bceb32547991fe08c629d5459b686bd1672278366e7e3919321af81684",
@@ -13,7 +14,7 @@
     "packages/collection-tasks/src/index.ts": "9e9a5500b479ab2c1da8c5e1de629b5aeb403058cfad35ecf1f6f4fa2ad644fe",
     "tests/e2e/m03-05-collection-tasks.spec.ts": "9218c2552339e5c25f2920f9fc340d9b546e89621c0978f4208179ae66151afd",
     "scripts/lib/ui-phase2-collection-tasks-design-data.mjs": "af10b15b075c98801fce5cf5ed896bd0d90b5f8080903eb34289254cceb53447",
-    "scripts/verify-ui-phase2-collection-tasks-c.mjs": "fd70fd10e7b0f007bf510061ba6a391f7ff48f2d01a8f63587bd44f275cc31f9",
+    "scripts/verify-ui-phase2-collection-tasks-c.mjs": "b2e002630d307b17bb86dab81c17ca7f5fa253027f1a27a0e7f4b62c631ec8d0",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/credentials.css": "408c80845bfb398aecad8be3e9a0006f00208a59066b511cfda5a1efbb75ad68",
     "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/index.html": "3a7a284f97b13a9d5b2cdbc7668335779f95800305993371329cd258e01e6a3c",
@@ -338,7 +339,7 @@
       "pageId": "P51",
       "proposal": "COLLECTION-TASKS-C-r1",
       "part": 0,
-      "sha256": "d8a5a101f9b5fbbf0c50cd900918a2f7a6eafe5adb3945c1419a74920f5b76aa"
+      "sha256": "96d57060dca049192cf63207c3aa70922cd59f7d52de364aec111687bad0a133"
     },
     {
       "file": "1440-detail-history-part1.png",
@@ -348,7 +349,7 @@
       "pageId": "P51",
       "proposal": "COLLECTION-TASKS-C-r1",
       "part": 1,
-      "sha256": "0d9f903f7c630c441bfa748541c0e880b0e38655235c65c992182d29e3a09ae0"
+      "sha256": "ebd18779455233436e96a992065ad099bbd97e8448f58370979f7b08e0c1646a"
     },
     {
       "file": "1440-detail-history-part2.png",
@@ -418,7 +419,7 @@
       "pageId": "P51",
       "proposal": "COLLECTION-TASKS-C-r1",
       "part": 1,
-      "sha256": "09ef5d79637a10d8e8469f72930b04a230e47821cd5564edce50efc4cb8fbd5a"
+      "sha256": "17a59a525054d0a9262b2af35fae2249085cd0504f5d992d59abe89188f412cb"
     },
     {
       "file": "1440-reason-filled.png",
@@ -498,7 +499,7 @@
       "pageId": "P51",
       "proposal": "COLLECTION-TASKS-C-r1",
       "part": 1,
-      "sha256": "28e81c236995cb6e22dcb4cfb44fafbb4fd73628ff585c9a940353ec4ea24e69"
+      "sha256": "84b9243b543a7fbc72ddf4acd74a05d88a402cc702bfbc24b1cfa425af75d637"
     },
     {
       "file": "1440-replay-error.png",
@@ -548,7 +549,7 @@
       "pageId": "P51",
       "proposal": "COLLECTION-TASKS-C-r1",
       "part": 0,
-      "sha256": "54e1c1d0ec4bb065829f2a83a8370fb7945433378db2138b3c52651684c0b22b"
+      "sha256": "32a300c1362ec420a16368112cfba2c5659811cd657bbabb99756215d5bc55f2"
     },
     {
       "file": "1440-replay-success-part1.png",
@@ -558,7 +559,7 @@
       "pageId": "P51",
       "proposal": "COLLECTION-TASKS-C-r1",
       "part": 1,
-      "sha256": "968a388f9a8c0743c1b14c1ee1bba9dc050e722957693d610eeac851ee616093"
+      "sha256": "5d65ab743b5d04cde3c8c38454b8570f707ed3d4f73871be77c28ada95f78550"
     },
     {
       "file": "1440-replay-refresh-error.png",
@@ -598,7 +599,7 @@
       "pageId": "P51",
       "proposal": "COLLECTION-TASKS-C-r1",
       "part": 1,
-      "sha256": "a88111fd7a88c72a471d6be859356f84a94df3a6ee8f0b5b1498a778956381b9"
+      "sha256": "55d30b7dec79f5abcb5b8f9a1d8cd1f17b22b829b6f71e724e13a960e612a086"
     },
     {
       "file": "1440-long-content.png",

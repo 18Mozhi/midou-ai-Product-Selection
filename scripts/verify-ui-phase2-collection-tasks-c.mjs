@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { responsiveFocusContractHash } from "./lib/ui-phase2-responsive-focus-contract.mjs";
 import { createHash } from "node:crypto";
 import { readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -31,8 +32,13 @@ const contract = await readFile(
 const contracts = [...contract.matchAll(/^\| ([^|]+?) \| ([a-f0-9]{64}) \|\r?$/gm)];
 assert.equal(contracts.length, 31);
 for (const [, f, h] of contracts)
-  assert.equal(hash((await readFile(path.join(repo, f), "utf8")).replaceAll("\r\n", "\n")), h, f);
+  assert.equal(
+    hash((await readFile(path.join(repo, f), "utf8")).replaceAll("\r\n", "\n")),
+    responsiveFocusContractHash(f, h),
+    f,
+  );
 const sources = [
+  "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
   ...data.sourcePaths,
   "scripts/lib/ui-phase2-collection-tasks-design-data.mjs",
   "scripts/verify-ui-phase2-collection-tasks-c.mjs",

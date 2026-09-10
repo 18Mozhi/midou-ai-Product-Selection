@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="DataRow extends Record<string, any>">
-import { computed, nextTick, shallowRef } from "vue";
+import { computed, nextTick, onBeforeUnmount, shallowRef, watch } from "vue";
 import TableViewControls from "./TableViewControls.vue";
 
 const props = defineProps<{
@@ -16,20 +16,98 @@ const selectedKey = shallowRef<string | null>(null),
       ? null
       : (props.rows.find((row) => props.rowKey(row) === selectedKey.value) ?? null),
   ),
+  mobileList = shallowRef<HTMLDivElement | null>(null),
+  overlay = shallowRef<HTMLDivElement | null>(null),
+  drawer = shallowRef<HTMLElement | null>(null),
   closeButton = shallowRef<HTMLButtonElement | null>(null);
 let trigger: HTMLButtonElement | null = null;
+const background = new Map<HTMLElement, boolean>();
+let confirmationObserver: MutationObserver | null = null;
 
-async function show(row: DataRow, event: MouseEvent) {
+function releaseBackground() {
+  confirmationObserver?.disconnect();
+  confirmationObserver = null;
+  for (const [element, inert] of background) element.inert = inert;
+  background.clear();
+}
+onBeforeUnmount(releaseBackground);
+
+function show(row: DataRow, event: MouseEvent) {
   trigger = event.currentTarget as HTMLButtonElement;
+  trigger.focus({ preventScroll: true });
   selectedKey.value = props.rowKey(row);
-  await nextTick();
-  closeButton.value?.focus();
 }
 
-async function close() {
+function close() {
   selectedKey.value = null;
-  await nextTick();
-  trigger?.focus();
+}
+
+watch(
+  () => Boolean(selected.value),
+  async (open, wasOpen) => {
+    if (open) {
+      await nextTick();
+      if (!selected.value || !overlay.value) return;
+      // Keep body-level confirmation dialogs opened later operable above this drawer.
+      for (const element of document.body.children) {
+        if (
+          !(element instanceof HTMLElement) ||
+          element === overlay.value ||
+          element.matches("dialog")
+        )
+          continue;
+        if (!background.has(element)) background.set(element, element.inert);
+        element.inert = true;
+      }
+      // ConfirmDialog is a body-level custom layer at z-index 100, not a native dialog.
+      const syncConfirmation = () => {
+        if (!overlay.value) return;
+        const suspended = Boolean(document.body.querySelector(":scope > .confirm-backdrop"));
+        overlay.value.inert = suspended;
+        overlay.value.classList.toggle("responsive-data-view__overlay--suspended", suspended);
+      };
+      confirmationObserver = new MutationObserver(syncConfirmation);
+      confirmationObserver.observe(document.body, { childList: true });
+      syncConfirmation();
+      closeButton.value?.focus({ preventScroll: true });
+      return;
+    }
+    releaseBackground();
+    if (!wasOpen) return;
+    selectedKey.value = null;
+    await nextTick();
+    // A handoff may already have focused a newer dialog. Never steal that focus.
+    const activeDialog = document.activeElement?.closest(
+      '[role="dialog"], [role="alertdialog"], dialog[open]',
+    );
+    if (!activeDialog)
+      (trigger?.isConnected ? trigger : mobileList.value)?.focus({ preventScroll: true });
+  },
+);
+
+function handleTab(event: KeyboardEvent) {
+  if (event.key !== "Tab" || !drawer.value || !selected.value) return;
+  const controls = [
+    ...drawer.value.querySelectorAll<HTMLElement>(
+      'button, a[href], input, select, textarea, summary, [tabindex], [contenteditable="true"]',
+    ),
+  ].filter(
+    (element) =>
+      !element.matches(":disabled") &&
+      element.tabIndex >= 0 &&
+      !element.closest("[inert]") &&
+      element.checkVisibility({ visibilityProperty: true }),
+  );
+  const first = controls[0],
+    last = controls.at(-1);
+  if (!first || !last) return;
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
 }
 </script>
 
@@ -38,7 +116,7 @@ async function close() {
     <TableViewControls class="responsive-data-view__desktop"
       ><slot name="desktop"
     /></TableViewControls>
-    <div class="responsive-data-view__mobile" :aria-label="title">
+    <div ref="mobileList" class="responsive-data-view__mobile" :aria-label="title" tabindex="-1">
       <p v-if="!rows.length" class="responsive-data-view__empty">
         {{ emptyMessage || "暂无记录" }}
       </p>
@@ -50,14 +128,22 @@ async function close() {
       </article>
     </div>
     <Teleport to="body">
-      <div v-if="selected" class="responsive-data-view__overlay" @keydown.esc="close">
+      <div
+        v-if="selected"
+        ref="overlay"
+        class="responsive-data-view__overlay"
+        @keydown.esc="close"
+        @keydown="handleTab"
+      >
         <button
           type="button"
           class="responsive-data-view__scrim"
           aria-label="关闭详情"
+          tabindex="-1"
           @click="close"
         ></button>
         <section
+          ref="drawer"
           class="responsive-data-view__drawer"
           role="dialog"
           aria-modal="true"
@@ -88,6 +174,10 @@ async function close() {
   position: fixed;
   z-index: 260;
   inset: 0;
+}
+
+.responsive-data-view__overlay--suspended {
+  z-index: 99;
 }
 
 .responsive-data-view__scrim {

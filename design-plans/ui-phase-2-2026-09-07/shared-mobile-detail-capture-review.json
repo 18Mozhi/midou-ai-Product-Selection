@@ -1,0 +1,329 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "ea005452",
+  "approvedByUser": false,
+  "scope": "Exact pixel audit of recaptured historical HTML proposals; not Vue or user acceptance.",
+  "assessment": "All dimensions unchanged. 33 recaptured images differ only in 1-74 pixels, maximum channel delta 13. Prototype HTML/CSS/data unchanged; these small edge rasterization differences are explicitly recorded, not a global tolerance.",
+  "manifests": [
+    "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/backup-recovery-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/collection-overview-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/data-composed-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/data-record-detail-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/governance-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/platform-overview-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/provider-adapters-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/provider-registry-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/release-direction-c/evidence.json",
+    "design-plans/ui-phase-2-2026-09-07/design/security-direction-c/evidence.json"
+  ],
+  "differences": [
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/390-create_busy.png",
+      "beforeSha256": "f8a5de2fb44ca112802a8cc2fc3c26b90f141a2241089db9159fc136eb3e4164",
+      "afterSha256": "386d0c812272a61570aa8d3ba887346221a2442eadd0ec05773e7d77d64c329a",
+      "dimensions": [390, 844],
+      "changedPixels": 5,
+      "maxChannelDelta": 1,
+      "bounds": [16, 529, 17, 531]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/1440-detail-history-part1.png",
+      "beforeSha256": "0d9f903f7c630c441bfa748541c0e880b0e38655235c65c992182d29e3a09ae0",
+      "afterSha256": "ebd18779455233436e96a992065ad099bbd97e8448f58370979f7b08e0c1646a",
+      "dimensions": [1440, 1000],
+      "changedPixels": 4,
+      "maxChannelDelta": 1,
+      "bounds": [28, 524, 29, 651]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/1440-detail-history.png",
+      "beforeSha256": "d8a5a101f9b5fbbf0c50cd900918a2f7a6eafe5adb3945c1419a74920f5b76aa",
+      "afterSha256": "96d57060dca049192cf63207c3aa70922cd59f7d52de364aec111687bad0a133",
+      "dimensions": [1440, 1000],
+      "changedPixels": 4,
+      "maxChannelDelta": 1,
+      "bounds": [28, 524, 29, 651]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/1440-missing-detail-part1.png",
+      "beforeSha256": "a88111fd7a88c72a471d6be859356f84a94df3a6ee8f0b5b1498a778956381b9",
+      "afterSha256": "55d30b7dec79f5abcb5b8f9a1d8cd1f17b22b829b6f71e724e13a960e612a086",
+      "dimensions": [1440, 1000],
+      "changedPixels": 4,
+      "maxChannelDelta": 1,
+      "bounds": [28, 524, 29, 651]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/1440-reason-one-part1.png",
+      "beforeSha256": "09ef5d79637a10d8e8469f72930b04a230e47821cd5564edce50efc4cb8fbd5a",
+      "afterSha256": "17a59a525054d0a9262b2af35fae2249085cd0504f5d992d59abe89188f412cb",
+      "dimensions": [1440, 1000],
+      "changedPixels": 4,
+      "maxChannelDelta": 1,
+      "bounds": [28, 524, 29, 651]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/1440-replay-success-part1.png",
+      "beforeSha256": "968a388f9a8c0743c1b14c1ee1bba9dc050e722957693d610eeac851ee616093",
+      "afterSha256": "5d65ab743b5d04cde3c8c38454b8570f707ed3d4f73871be77c28ada95f78550",
+      "dimensions": [1440, 1000],
+      "changedPixels": 3,
+      "maxChannelDelta": 1,
+      "bounds": [1398, 185, 1398, 187]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/1440-replay-success.png",
+      "beforeSha256": "54e1c1d0ec4bb065829f2a83a8370fb7945433378db2138b3c52651684c0b22b",
+      "afterSha256": "32a300c1362ec420a16368112cfba2c5659811cd657bbabb99756215d5bc55f2",
+      "dimensions": [1440, 1000],
+      "changedPixels": 3,
+      "maxChannelDelta": 1,
+      "bounds": [1398, 185, 1398, 187]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/1440-replaying-part1.png",
+      "beforeSha256": "28e81c236995cb6e22dcb4cfb44fafbb4fd73628ff585c9a940353ec4ea24e69",
+      "afterSha256": "84b9243b543a7fbc72ddf4acd74a05d88a402cc702bfbc24b1cfa425af75d637",
+      "dimensions": [1440, 1000],
+      "changedPixels": 4,
+      "maxChannelDelta": 1,
+      "bounds": [28, 524, 29, 651]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/1440-login.png",
+      "beforeSha256": "79f02ab8c0d5b9dafeb351404a785de26cb5f8125c7d43f199458b9ed1015295",
+      "afterSha256": "4d8ada379d596a71632b77800e19c05a3170ed57af1e8bf527fea5574d0368e5",
+      "dimensions": [1440, 1000],
+      "changedPixels": 19,
+      "maxChannelDelta": 1,
+      "bounds": [1131, 291, 1399, 334]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/1440-profile-busy.png",
+      "beforeSha256": "cacc1bf02a9855689c074cf2a064e98aa95ea3a625df98aa46b6685d1c365413",
+      "afterSha256": "0d366400cdc1e69044c4a7ef4a652f23ffa4222618ed62f9d43250613f7fb131",
+      "dimensions": [1440, 1000],
+      "changedPixels": 19,
+      "maxChannelDelta": 1,
+      "bounds": [1131, 291, 1399, 334]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/1440-profile-noasset.png",
+      "beforeSha256": "ad9ec50aaa6e2e3af8fea6a9d2335d36ac14d7712e76d6b5b70104a6f21c5908",
+      "afterSha256": "2ac206f2e9c9cb581c658b1ddfc0cc0b3ff9513a2d3506a758dc217b9ab15b37",
+      "dimensions": [1440, 1000],
+      "changedPixels": 19,
+      "maxChannelDelta": 1,
+      "bounds": [1131, 291, 1399, 334]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/1440-revoke-conflict.png",
+      "beforeSha256": "07fe5bd29f8d13cedd3cc0e1e3b24775e99df8c3fa9cd95f20caf48a7b48bf99",
+      "afterSha256": "2479d8bc6ca9ebf0a4eb75f49cc5e399bd6eb8edbc249649224e2d4f166a35d1",
+      "dimensions": [1440, 1000],
+      "changedPixels": 6,
+      "maxChannelDelta": 1,
+      "bounds": [1131, 291, 1257, 293]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/1440-rotate.png",
+      "beforeSha256": "f4fb055b40808efb633ab1ac5c51da52444bb85f746c3f5b6f07fe9e177c9e21",
+      "afterSha256": "1f8af99ef72a18eef0f74851535d7aceb6843ff03cf3f78a725690fb10b806cb",
+      "dimensions": [1440, 1000],
+      "changedPixels": 6,
+      "maxChannelDelta": 1,
+      "bounds": [1131, 291, 1257, 293]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-batch-submit-focus.png",
+      "beforeSha256": "de1f0dd41bbeae597f9a3932e6a519a862117a39de01315765c940e0967670d5",
+      "afterSha256": "aa844880b24911258298d5dc1e0b6304e7908cbf08a28d0ab9558502bd474ae6",
+      "dimensions": [1440, 1000],
+      "changedPixels": 13,
+      "maxChannelDelta": 2,
+      "bounds": [365, 690, 370, 695]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-download-cancel-focus.png",
+      "beforeSha256": "d93c431fb93f69e7e4829d1a30addc1d49223da825ea623b7173a747d7eed075",
+      "afterSha256": "909415f54a53c231004ed8772f22a98e31381aed5f4f348585bf5be433c5e8a0",
+      "dimensions": [1440, 1000],
+      "changedPixels": 74,
+      "maxChannelDelta": 7,
+      "bounds": [709, 654, 730, 701]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-filter-close-focus.png",
+      "beforeSha256": "d7f7b8e1abbc51b8bc89a22d06a57eed156a0cf157d10b26e310860aa9793d49",
+      "afterSha256": "186c6293a789d4f81b317f8ca72361baa92ecdf290a279c8767f85890862f865",
+      "dimensions": [1440, 1000],
+      "changedPixels": 1,
+      "maxChannelDelta": 7,
+      "bounds": [980, 368, 980, 368]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-issue-evidence-focus.png",
+      "beforeSha256": "6a91ac3cd839e66a8f8cdd109a5ee70f3bd1f8f27d138918f7569ed21ab63706",
+      "afterSha256": "8a57c7bf891dac628fdc59f092c5b0446e3d9ff309adf90d0c9e1d2f4de8556c",
+      "dimensions": [1440, 1000],
+      "changedPixels": 1,
+      "maxChannelDelta": 3,
+      "bounds": [372, 667, 372, 667]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-quality-previous-focus.png",
+      "beforeSha256": "646880a4756a37d7f31a908336cba6c122d83c500e092811837e6c7e943e6a72",
+      "afterSha256": "55d4b238ff0d2dd9089dc1303a359bf93926a9b5d6e15981a8d9cf929b6cb82b",
+      "dimensions": [1440, 1000],
+      "changedPixels": 1,
+      "maxChannelDelta": 1,
+      "bounds": [1165, 483, 1165, 483]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-resolve-back-focus.png",
+      "beforeSha256": "21ed47872ee74f27fb9660052353f132d1cc6a9e201f0a7a6a25c2e6b3ceae8d",
+      "afterSha256": "3f1d329d5b6b6a044c3f2ed92657d6976c028596a30c2c483b909028dc9df01b",
+      "dimensions": [1440, 1000],
+      "changedPixels": 63,
+      "maxChannelDelta": 7,
+      "bounds": [359, 652, 1074, 802]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-resolve-preview-focus.png",
+      "beforeSha256": "a13b039500fe45a922308977826d931ff95f094ed94ca7d921298185c863e3ba",
+      "afterSha256": "c64674e9f0f50153c72015a4ca82ff3ee6caaf52bb8ceffe87eb8812ecf55b44",
+      "dimensions": [1440, 1000],
+      "changedPixels": 66,
+      "maxChannelDelta": 7,
+      "bounds": [359, 519, 1074, 749]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-resolve-submit-focus.png",
+      "beforeSha256": "c4fa00b1792f428f8c17aef74d61f520f64ad4343da6e8b7e97be34e6e8ebbf7",
+      "afterSha256": "e30ae88caad9469a3f439c42a50e4b9dd322b23dee832d5d3e96c290cba1f5b2",
+      "dimensions": [1440, 1000],
+      "changedPixels": 13,
+      "maxChannelDelta": 2,
+      "bounds": [365, 690, 370, 695]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/1440-run-clear-focus.png",
+      "beforeSha256": "9d180a7d25c6251cd04356d63b1c511b0d50732d9213d18de7df387e653f32e5",
+      "afterSha256": "b3817c75ca3d9555286e6d8ccd606cfbd9c33ba9af593b18955359f05960589d",
+      "dimensions": [1440, 1000],
+      "changedPixels": 1,
+      "maxChannelDelta": 1,
+      "bounds": [54, 483, 54, 483]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-batch-back-focus.png",
+      "beforeSha256": "ff5de680bf111ac1fefcbafd7a4707ec3a949b9aaa1be0bdb9d93d25d0ccbb42",
+      "afterSha256": "8d20ea4d132ce02d6089da2d75ce3ac7b7e5441d4a0fbcb3c24b072f2d32ecc2",
+      "dimensions": [390, 844],
+      "changedPixels": 19,
+      "maxChannelDelta": 2,
+      "bounds": [40, 638, 45, 679]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-export-submit-focus.png",
+      "beforeSha256": "9b76d43b22ec495fe8e5d509f475eafa1832e6447859cc7b23fefc1a7160f335",
+      "afterSha256": "bb4219b0c220152bbc5907bf5d4dd6d777b4562328bc00aa6318937867b5ed62",
+      "dimensions": [390, 844],
+      "changedPixels": 6,
+      "maxChannelDelta": 1,
+      "bounds": [21, 826, 24, 827]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-issue-evidence-focus.png",
+      "beforeSha256": "c14356f282a6878887fc037ea57bc86d2f09771299d00308c03f550ba70da957",
+      "afterSha256": "8e2f54ca947a36476914ad1d38b3b307db2e3b70496b7cbab1bca045e133fd7a",
+      "dimensions": [390, 844],
+      "changedPixels": 1,
+      "maxChannelDelta": 1,
+      "bounds": [37, 747, 37, 747]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-quality-runs-focus.png",
+      "beforeSha256": "4e9772040a9cab6706de3b451e7933019dcc2b170b64e8e4309ba178bb955786",
+      "afterSha256": "2797a720622597d7cc4b0905f2ad638c79a37c38c3e0018c8eccb887c896dfa1",
+      "dimensions": [390, 844],
+      "changedPixels": 3,
+      "maxChannelDelta": 13,
+      "bounds": [131, 401, 131, 442]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-record-technical-focus.png",
+      "beforeSha256": "b8a6752fb6f28d8c9b067545716a997ce163dde8b67413e4e8074f5e86199a49",
+      "afterSha256": "21a212cf1a1af44dc5839b15600cf56dd64cdf497ccca8f9f1163c4a124d2604",
+      "dimensions": [390, 844],
+      "changedPixels": 22,
+      "maxChannelDelta": 6,
+      "bounds": [14, 699, 375, 706]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-resolve-preview-focus.png",
+      "beforeSha256": "49dd99d6fcb0a60141905be0d7da81c97b50e74ea7f0928de4819afcf4349296",
+      "afterSha256": "a9667901f8badf169bfeb66d9e2d70206fa9b6471069b3f61c5e963dd2b2b566",
+      "dimensions": [390, 844],
+      "changedPixels": 26,
+      "maxChannelDelta": 2,
+      "bounds": [344, 464, 349, 579]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-run-clear-focus.png",
+      "beforeSha256": "c855989deac7ecf6bdd74a443d875057791c84edb851c60e1835736760d6cf1f",
+      "afterSha256": "6d3d4fa3fe3169657381f336c76b648d009b8f128c82837d5a5bbb6e8b88758a",
+      "dimensions": [390, 844],
+      "changedPixels": 1,
+      "maxChannelDelta": 1,
+      "bounds": [30, 405, 30, 405]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-workspace-records-focus.png",
+      "beforeSha256": "2ed36c13bcf2ecf9c3dac8d6d2e993cb46916b90c077d131599d7195df9c0681",
+      "afterSha256": "f76e0b42ad787f375ceaecc0af9f894186644becb8b54e12e0966a8ff2d1a724",
+      "dimensions": [390, 844],
+      "changedPixels": 6,
+      "maxChannelDelta": 2,
+      "bounds": [202, 186, 205, 187]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/390-workspace-records-pressed.png",
+      "beforeSha256": "d252b1c4e14af54bee4171300cbec57f5a179541022f58984d8f8b7ac42ac451",
+      "afterSha256": "c4fbe3ba27678852932ca0cd40753739d1b864db35ec217192a16dcfb34c7676",
+      "dimensions": [390, 844],
+      "changedPixels": 6,
+      "maxChannelDelta": 2,
+      "bounds": [202, 186, 205, 187]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/1440-export-over.png",
+      "beforeSha256": "65f49e4535b342a054df0b2a3f4ae1f4dcf0c13841cca3ef84e7f1ecd818d4ea",
+      "afterSha256": "b9e6bb40ef257c3a54cd50c978ca72b1189d95f28fc8016b7d4b74504cdce85b",
+      "dimensions": [1440, 1000],
+      "changedPixels": 13,
+      "maxChannelDelta": 1,
+      "bounds": [22, 538, 248, 757]
+    },
+    {
+      "file": "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/1440-expired.png",
+      "beforeSha256": "66c655a79984aa0950c3cf451c4d451a138019eaed7d77ac27e810193c5b9193",
+      "afterSha256": "458a72af8e20ae818e917ec80c96e08b728e2ce5c1e583005264ce89f761ee40",
+      "dimensions": [1440, 1000],
+      "changedPixels": 14,
+      "maxChannelDelta": 1,
+      "bounds": [22, 140, 24, 231]
+    }
+  ]
+}

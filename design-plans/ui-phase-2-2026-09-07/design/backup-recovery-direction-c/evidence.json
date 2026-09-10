@@ -1,8 +1,9 @@
 {
   "proposal": "BACKUP-RECOVERY-C-r1",
   "sourceHashes": {
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "b0cdf21fcbe29264649f3648955717d44fa3bbb527c1781ec929e05ca5fe8555",
     "apps/web/src/components/BackupRecoveryCenter.vue": "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
-    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/components/TechnicalDetails.vue": "f4a499a068700cb49cb6f7467c6969309636c87a093356b634771b5d1a1aebb0",
     "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
@@ -13,7 +14,7 @@
     "packages/config/src/index.ts": "7128cf13c8d183abd5b500e54e296b017fa7e2a9a72a441fbabe15f608546a11",
     "tests/e2e/m07-04-backup-recovery.spec.ts": "f9c712921c576a00c0ef4f9f4c24721f06a38d609514ee924557316259f17f53",
     "scripts/lib/ui-phase2-backup-recovery-design-data.mjs": "1d7df98e4caaffbe4e83fbd57231c7df0a77f1808473a0a351d357fe4b133671",
-    "scripts/verify-ui-phase2-backup-recovery-c.mjs": "b9e5e6f2bf26c31e4802e6c0203fc49ec2c9af092f65d347ec5fbc78aa6158e8",
+    "scripts/verify-ui-phase2-backup-recovery-c.mjs": "90175340ba898ff2f5ef6a09b1eb00f9258b8a8c98d5da5da50fe2d6b1c0874e",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "design-plans/ui-phase-2-2026-09-07/design/backup-recovery-direction-c/index.html": "c1ae3a89e7887caec176828b3d18b1a71007e9d6f0a3eb034369aeb3528921c5",
     "design-plans/ui-phase-2-2026-09-07/design/backup-recovery-direction-c/backup.css": "ccd1d9a7f493c075fbe61248c61d0221d3968c06b19e9615e3d36b6fa7261b81",

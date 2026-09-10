@@ -22,6 +22,14 @@ test("responsive data view keeps desktop tables and moves mobile details into a 
   assert.match(view, /role="dialog"/);
   assert.match(view, /aria-modal="true"/);
   assert.match(view, /@keydown\.esc="close"/);
+  assert.match(view, /@keydown="handleTab"/);
+  assert.match(view, /closeButton\.value\?\.focus/);
+  assert.match(view, /background\.set\(element, element\.inert\)/);
+  assert.match(view, /onBeforeUnmount\(releaseBackground\)/);
+  assert.match(view, /class="responsive-data-view__scrim"[\s\S]*tabindex="-1"/);
+  assert.match(view, /element\.checkVisibility/);
+  assert.match(view, /document\.activeElement === first[\s\S]*last\.focus\(\)/);
+  assert.match(view, /document\.activeElement === last[\s\S]*first\.focus\(\)/);
   assert.match(view, /:close="close"/);
   assert.match(view, /emptyMessage \|\| "暂无记录"/);
   assert.match(view, /props\.rows\.find[\s\S]*props\.rowKey\(row\)/);

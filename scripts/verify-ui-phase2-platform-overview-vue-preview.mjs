@@ -272,7 +272,7 @@ try {
       if (width <= 760) {
         const trigger = page.locator(".responsive-data-view__mobile article button").first();
         await trigger.click();
-        const drawer = page.getByRole("dialog"),
+        const drawer = page.locator(".responsive-data-view__drawer"),
           close = drawer.getByRole("button", { name: "关闭详情" });
         await expect(close).toBeFocused();
         await snap("drawer", drawer);
@@ -287,15 +287,16 @@ try {
         await trigger.click();
         await close.focus();
         await page.keyboard.press("Shift+Tab");
-        assert.equal(await drawer.evaluate((node) => node.contains(document.activeElement)), false);
-        observations.push({
-          width,
-          name: "Existing drawer Shift+Tab leaves dialog for scrim; no full focus trap or background inert. Must be addressed before production acceptance.",
-        });
+        await expect(drawer.locator("summary")).toBeFocused();
+        await page.keyboard.press("Tab");
+        await expect(close).toBeFocused();
+        await trigger.evaluate((node) => node.focus());
+        await expect(close).toBeFocused();
+        assert.equal(await page.locator("#app").evaluate((node) => node.inert), true);
         await close.click();
         checks.push({
           width,
-          name: "actual mobile drawer open, technical disclosure, Escape and close focus return",
+          name: "actual mobile drawer modal focus trap, background isolation, technical disclosure, Escape and close focus return",
         });
       } else {
         const toolbar = page.locator(".table-view-controls__toolbar");

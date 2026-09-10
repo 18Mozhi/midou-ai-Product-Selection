@@ -88,7 +88,8 @@ test("P38 child styles are scoped to providers and preview without changing sour
   const html = read(`${proposal}/index.html`);
   assert.match(html, /\.\.\/platform-overview-direction-c\/data.js/);
   assert.match(html, /\.\.\/platform-overview-direction-c\/overview.js/);
-  for (const file of ["PlatformDashboard.vue", "ResponsiveDataView.vue", "TableViewControls.vue"]) {
+  // ResponsiveDataView now has its own modal-focus runtime regression gate.
+  for (const file of ["PlatformDashboard.vue", "TableViewControls.vue"]) {
     const path = `apps/web/src/components/${file}`;
     assert.equal(
       file === "PlatformDashboard.vue" ? read(path).split("</script>")[1] : read(path),

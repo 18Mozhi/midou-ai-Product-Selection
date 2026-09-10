@@ -3,7 +3,7 @@
   "sourceHashes": {
     "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
     "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
-    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
     "apps/api/src/credential-asset-service.ts": "27c3aa04144be0cc9ffaec7aa8d3dbd39b3adf1128ba98c6abc94c04bbbc4a7d",
@@ -274,7 +274,7 @@
       "pageId": "P50",
       "proposal": "CREDENTIAL-ASSETS-C-r1",
       "part": 0,
-      "sha256": "f4fb055b40808efb633ab1ac5c51da52444bb85f746c3f5b6f07fe9e177c9e21"
+      "sha256": "1f8af99ef72a18eef0f74851535d7aceb6843ff03cf3f78a725690fb10b806cb"
     },
     {
       "file": "1440-rotate-conflict.png",
@@ -334,7 +334,7 @@
       "pageId": "P50",
       "proposal": "CREDENTIAL-ASSETS-C-r1",
       "part": 0,
-      "sha256": "ad9ec50aaa6e2e3af8fea6a9d2335d36ac14d7712e76d6b5b70104a6f21c5908"
+      "sha256": "2ac206f2e9c9cb581c658b1ddfc0cc0b3ff9513a2d3506a758dc217b9ab15b37"
     },
     {
       "file": "1440-profile-error.png",
@@ -354,7 +354,7 @@
       "pageId": "P50",
       "proposal": "CREDENTIAL-ASSETS-C-r1",
       "part": 0,
-      "sha256": "cacc1bf02a9855689c074cf2a064e98aa95ea3a625df98aa46b6685d1c365413"
+      "sha256": "0d366400cdc1e69044c4a7ef4a652f23ffa4222618ed62f9d43250613f7fb131"
     },
     {
       "file": "1440-login.png",
@@ -364,7 +364,7 @@
       "pageId": "P50",
       "proposal": "CREDENTIAL-ASSETS-C-r1",
       "part": 0,
-      "sha256": "79f02ab8c0d5b9dafeb351404a785de26cb5f8125c7d43f199458b9ed1015295"
+      "sha256": "4d8ada379d596a71632b77800e19c05a3170ed57af1e8bf527fea5574d0368e5"
     },
     {
       "file": "1440-login-browser.png",
@@ -604,7 +604,7 @@
       "pageId": "P50",
       "proposal": "CREDENTIAL-ASSETS-C-r1",
       "part": 0,
-      "sha256": "07fe5bd29f8d13cedd3cc0e1e3b24775e99df8c3fa9cd95f20caf48a7b48bf99"
+      "sha256": "2479d8bc6ca9ebf0a4eb75f49cc5e399bd6eb8edbc249649224e2d4f166a35d1"
     },
     {
       "file": "1440-compat-detail.png",

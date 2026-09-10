@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "scope": "actual shared Vue with synthetic slots; no business API, permission or production acceptance",
+  "approval": "pending",
+  "checks": [
+    {
+      "width": 390,
+      "name": "initial focus; Tab/Shift+Tab loop; hidden, disabled and collapsed controls skipped; background focus blocked"
+    },
+    {
+      "width": 390,
+      "name": "actual ConfirmDialog and native AuditedReasonDialog remain operable; cancel/Escape returns to detail action; no submit"
+    },
+    {
+      "width": 390,
+      "name": "Escape, header, scrim and slot close restore focus/inert; close-and-confirm handoff does not steal focus"
+    },
+    {
+      "width": 390,
+      "name": "same-key refresh, removed-row fallback/no phantom reopen, single-button loop, unmount releases background"
+    },
+    {
+      "width": 760,
+      "name": "initial focus; Tab/Shift+Tab loop; hidden, disabled and collapsed controls skipped; background focus blocked"
+    },
+    {
+      "width": 760,
+      "name": "actual ConfirmDialog and native AuditedReasonDialog remain operable; cancel/Escape returns to detail action; no submit"
+    },
+    {
+      "width": 760,
+      "name": "Escape, header, scrim and slot close restore focus/inert; close-and-confirm handoff does not steal focus"
+    },
+    {
+      "width": 760,
+      "name": "same-key refresh, removed-row fallback/no phantom reopen, single-button loop, unmount releases background"
+    },
+    {
+      "width": 761,
+      "name": "desktop table remains visible; no mobile modal or inert lock"
+    },
+    {
+      "width": 1440,
+      "name": "desktop table remains visible; no mobile modal or inert lock"
+    }
+  ],
+  "sourceHashes": {
+    "scripts/verify-responsive-data-view-focus.mjs": "f891a55fde3c5732f05e19266a4396a25280308d322cdbd3aba5bf2bfd6ae2ef",
+    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b"
+  },
+  "screenshots": [
+    {
+      "file": "390-close-focus.png",
+      "width": 390,
+      "state": "close-focus",
+      "kind": "vue-isolated",
+      "sha256": "ce9b7f6c717bfde3feea8a17f2bef0af277ddd4a23b4e8f4aff285d53c0bb185"
+    },
+    {
+      "file": "390-expanded-control-focus.png",
+      "width": 390,
+      "state": "expanded-control-focus",
+      "kind": "vue-isolated",
+      "sha256": "793308e5993978fc4628ee14c30926fa90f846cf9d2e1e8d1f0cb94c3f5d38e8"
+    },
+    {
+      "file": "390-nested-confirm.png",
+      "width": 390,
+      "state": "nested-confirm",
+      "kind": "vue-isolated",
+      "sha256": "ae2db12c96b4b3d19959a116fdd61fa20e58a1d29a45ba72951a16b690db4b04"
+    },
+    {
+      "file": "390-returned-to-list.png",
+      "width": 390,
+      "state": "returned-to-list",
+      "kind": "vue-isolated",
+      "sha256": "5bcb5e92da64997673b0ddf373bf099be2f5c5e18d5b0d1288591696bbb6ba9a"
+    }
+  ],
+  "processesClosed": true
+}

@@ -10,6 +10,7 @@
     }
   ],
   "sourceHashes": {
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "b0cdf21fcbe29264649f3648955717d44fa3bbb527c1781ec929e05ca5fe8555",
     "apps/web/src/components/PlatformGovernanceCenter.vue": "76eae80f51225c3af676a17ab9c4ec94369262cc5e8c968be7fd62ef5f2280db",
     "apps/api/src/platform-dashboard-service.ts": "568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e",
     "apps/api/src/platform-dashboard-routes.ts": "1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30",
@@ -17,7 +18,7 @@
     "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
     "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.css": "107e3760b83961d388dfe03a72d77a436b7f8794e10353ef1d9f5e71f2d14b78",
     "scripts/lib/ui-phase2-governance-design-data.mjs": "d0c71ea198d14cb41e350a707e10d05211f8781ddbe02d056e3e9568e08902a6",
-    "scripts/verify-ui-phase2-governance-c.mjs": "48cd51883f68e2d2644cfaf7be32d31cdb5ea14a33be00a58f54a2d84cf64c11",
+    "scripts/verify-ui-phase2-governance-c.mjs": "0f314bfcd9bceeaa7aafb3d04857ac3f922fd14a67fb6cebed60fce865481d80",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "design-plans/ui-phase-2-2026-09-07/design/governance-direction-c/index.html": "db83dac4cf084522c128d76d41f24a26e55f8c148f34d38cbb6d5b35faf9d93d",
     "design-plans/ui-phase-2-2026-09-07/design/governance-direction-c/governance.css": "3b7c8ad798e07509718c969c8ff3fc45e3f4cb2af2c25ff253c8f90f782f3849",

@@ -1,10 +1,11 @@
 {
   "proposal": "LOGS-C-r1",
   "sourceHashes": {
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "b0cdf21fcbe29264649f3648955717d44fa3bbb527c1781ec929e05ca5fe8555",
     "apps/web/src/components/PlatformLogCenter.vue": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
     "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
     "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
-    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
     "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
@@ -16,7 +17,7 @@
     "apps/web/src/ui/status-labels.ts": "650924068bf52de808067527033710a711e851717a1bc14f55dea7e2767ef13a",
     "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
     "scripts/lib/ui-phase2-log-design-data.mjs": "12491ed1707355975626446af54b989e6b380224eff8dbcd185b15475e21de7a",
-    "scripts/verify-ui-phase2-logs-c.mjs": "edefa0499a82dc0201230b385c97059861bc28c0b7da721e230628f68912b7c8",
+    "scripts/verify-ui-phase2-logs-c.mjs": "385c16d4354ec11e7b00b2e1ac065a234310888355bfff79cc439963fc4d96f9",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/index.html": "ef03ad37f13f213b1f42aacd407eae438d08cb0dd6c51c4bba4d3f83c7aaa6da",
     "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/logs.css": "6e89b637e5c57d22a406317bd901621ac39dc7255dbcff08c0a491889a29a556",
@@ -248,7 +249,7 @@
       "scene": "export-over",
       "width": 1440,
       "file": "1440-export-over.png",
-      "sha256": "65f49e4535b342a054df0b2a3f4ae1f4dcf0c13841cca3ef84e7f1ecd818d4ea"
+      "sha256": "b9e6bb40ef257c3a54cd50c978ca72b1189d95f28fc8016b7d4b74504cdce85b"
     },
     {
       "scene": "export-pending",

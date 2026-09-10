@@ -17,6 +17,7 @@
     }
   ],
   "sourceHashes": {
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "b0cdf21fcbe29264649f3648955717d44fa3bbb527c1781ec929e05ca5fe8555",
     "apps/web/src/components/use-platform-notification-list.ts": "2e697d3a5f53cdfded5335bc693fcd9f7ed1a7d9f8b2dc0a543708269bfdc61b",
     "apps/web/src/components/PlatformManagementCenter.vue": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
     "apps/web/src/components/PlatformMessageEditor.vue": "8bafb3374f744389257c36a27580dbf768a9b4a0991fa0ce748889bb2c093cea",
@@ -26,7 +27,7 @@
     "apps/web/src/components/PlatformNotificationPagination.vue": "6116c32da6df91e40433fd5f4e4f9cc82c59d20b5726df52ebfdafcaf08b1606",
     "apps/web/src/components/PlatformManagementFilter.vue": "b1e608502ee29df66c4f813c38a6593ffc4c8bc5770183cfdfafbf968db689d9",
     "apps/web/src/components/platform-management-presentation.ts": "1d5bfec09dfc7efb63cc6d31bdbc924b35eb1d4092fe1e20fa60d779bd259133",
-    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
     "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
@@ -40,7 +41,7 @@
     "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
     "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.css": "107e3760b83961d388dfe03a72d77a436b7f8794e10353ef1d9f5e71f2d14b78",
     "scripts/lib/ui-phase2-platform-notifications-design-data.mjs": "107502b2286521a38b06a32469d4879b439eee5780ea925ee719b74160b0539f",
-    "scripts/verify-ui-phase2-platform-notifications-c.mjs": "221b30a3e7d451c31985492114b5051841212677a4cc3ed9e988975fd0281c64",
+    "scripts/verify-ui-phase2-platform-notifications-c.mjs": "53303a4d22403f7ac8b0018c66f21a7543edf731b93762258d077c4bd78901ec",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/index.html": "fda3b417a8f63ce584740ded0892efb11f094e61e75defd7388cfa3dee9d9c5e",
     "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/notifications.css": "ab78d0924615fb04491747910ee1c4fe97f993c5893a7b6207d47bd9d2ab123d",

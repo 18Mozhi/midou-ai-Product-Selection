@@ -7,9 +7,9 @@
     "design-plans/ui-phase-2-2026-09-07/design/platform-overview-direction-c/overview.js": "97f69f050c71a8bb73d7d04496480948ecd12eac2b646b75bcf098e314968589",
     "design-plans/ui-phase-2-2026-09-07/design/platform-overview-direction-c/overview.css": "f4a2f6804eb31d9c851a9462a72f5c351807f1202931699e78ab99d0cb5d2584",
     "design-plans/ui-phase-2-2026-09-07/design/platform-overview-direction-c/data.js": "b6907abfa5fcea460b0e985b7dce0a575b77699ce96092044d737d4b66cd183f",
-    "design-plans/ui-phase-2-2026-09-07/design/platform-overview-direction-c/evidence.json": "8f68ebcc73f772be9eb2e3aa0daabb911bbd36d0a944b5eaad23771ff4097b04",
+    "design-plans/ui-phase-2-2026-09-07/design/platform-overview-direction-c/evidence.json": "06e75455f6f671bd3ea4aaedbccedaa27e2f9d34b35b0eb3024e56d4c6aa020d",
     "apps/web/src/components/PlatformDashboard.vue": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
-    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "scripts/verify-ui-phase2-platform-provider-detail.mjs": "ef70a7f7e5f3a9bf79facc9105ff93087ef9c4b147bb2b975b76b4d701d98712",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c"

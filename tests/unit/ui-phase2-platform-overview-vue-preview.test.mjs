@@ -28,7 +28,7 @@ test("P38 actual Vue preview binds current source and every permanent review ima
     assert.equal(hash(readFileSync(`${output}/${image.file}`)), image.sha256, image.file);
 });
 
-test("P38 review CSS is scoped; template, shared components and production entry remain unchanged", () => {
+test("P38 review CSS is scoped; dashboard template and unrelated shared components remain unchanged", () => {
   postcss.parse(read(stylesheet)).walkRules((rule) => {
     for (const selector of rule.selectors)
       assert.match(
@@ -40,7 +40,6 @@ test("P38 review CSS is scoped; template, shared components and production entry
   for (const file of [
     "main.ts",
     "components/PlatformDashboard.vue",
-    "components/ResponsiveDataView.vue",
     "components/TableViewControls.vue",
     "components/TechnicalDetails.vue",
     "api-client.ts",
@@ -69,8 +68,9 @@ test("P38 keeps actual interaction evidence separate from user and production ac
   for (const width of [390, 760, 761, 1440])
     assert.equal(evidence.checks.filter((c) => c.width === width).length, 8);
   assert.equal(evidence.observations.filter((c) => c.name.includes("403")).length, 4);
+  assert.equal(evidence.observations.filter((c) => c.name.includes("focus trap")).length, 0);
   assert.deepEqual(
-    evidence.observations.filter((c) => c.name.includes("focus trap")).map((c) => c.width),
+    evidence.checks.filter((c) => c.name.includes("modal focus trap")).map((c) => c.width),
     [390, 760],
   );
 });

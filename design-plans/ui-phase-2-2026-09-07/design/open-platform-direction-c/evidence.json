@@ -1,12 +1,13 @@
 {
   "proposal": "OPEN-PLATFORM-C-r1",
   "sourceHashes": {
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "b0cdf21fcbe29264649f3648955717d44fa3bbb527c1781ec929e05ca5fe8555",
     "apps/web/src/components/OpenPlatformCenter.vue": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
     "apps/api/src/open-platform-service.ts": "221f74851fb85ead7bf9dbaa07febf84b9427352a9b50f26395b485b8f589689",
     "apps/api/src/mysql-open-platform-repository.ts": "705eb961c103b25a7a408b9aed615c0ed825dc3c112fe919b7454d017717dc51",
     "apps/api/src/open-platform-routes.ts": "d6f26c9f2f14a5271d18fe8fd75944b7d7f5745f9884927105b401c96ef584a3",
     "apps/worker/src/webhook-delivery-worker.ts": "2aeb4ade86cb30217fad610880931f1167328f81dadf71fae2dcda253ffdcb50",
-    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+    "apps/web/src/components/ResponsiveDataView.vue": "95c19fa56e0d2ebe9224786fe6a9503948fcc067d5863aeb957fbeb344674d87",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
     "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
@@ -14,7 +15,7 @@
     "tests/e2e/m06-05-open-platform.spec.ts": "e6748c821528db225c9e88a199e020edef31516f20c4199ba7a21c9dbcf6f79f",
     "tests/m06-05/open-platform.test.mjs": "5da3baed4878db3a96f3a1cf3a617feadf41b535f0a151e5d9290ad9a7cf7aa1",
     "scripts/lib/ui-phase2-open-platform-design-data.mjs": "8fab05bf8c05b247d153a2cbd97c1592efe1c7a6d95f76bf4d09b83c44b2b4e1",
-    "scripts/verify-ui-phase2-open-platform-c.mjs": "53afd1c9962ba2f2ef0368e621b3586ca7863b35fd8748ae9251cbf5354f4ce4",
+    "scripts/verify-ui-phase2-open-platform-c.mjs": "c5b1af0ecb6f201390f4d3db341fea340ec4938c9a1379b56e56ada5ec2e144a",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.css": "107e3760b83961d388dfe03a72d77a436b7f8794e10353ef1d9f5e71f2d14b78",
     "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/index.html": "8e565581f9660fe1a7890a50b1bc7670fdcddb270fe8f2e09c3dce891d3db6ae",
@@ -73,7 +74,7 @@
       "scene": "expired",
       "width": 1440,
       "file": "1440-expired.png",
-      "sha256": "66c655a79984aa0950c3cf451c4d451a138019eaed7d77ac27e810193c5b9193"
+      "sha256": "458a72af8e20ae818e917ec80c96e08b728e2ce5c1e583005264ce89f761ee40"
     },
     {
       "scene": "forbidden",
