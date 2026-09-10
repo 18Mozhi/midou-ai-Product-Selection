@@ -1,0 +1,71 @@
+/* P40 review layer, sharing the C family with P39; no production import. */
+html body.p40-list-preview #app .p39-page-grid {
+  grid-template-columns: 228px minmax(0, 1fr);
+}
+html body.p40-list-preview #app .p39-directory > header {
+  padding: 20px;
+}
+html body.p40-list-preview #app .account-metrics article {
+  padding: 18px 20px;
+}
+html body.p40-list-preview #app .account-filter {
+  padding: 20px;
+}
+html
+  body.p40-list-preview
+  #app
+  .account-table-wrap
+  table[data-table-density="compact"]
+  :is(th, td) {
+  padding-block: 8px;
+}
+html body.p40-list-preview #app .account-table-wrap td:first-child {
+  width: 38%;
+}
+html body.p40-list-preview #app .account-table-wrap td small {
+  overflow-wrap: anywhere;
+}
+html body.p40-list-preview #app .responsive-data-view__mobile article {
+  padding: 0;
+}
+html body.p40-list-preview #app .responsive-record-summary {
+  display: grid;
+  gap: 8px;
+}
+html body.p40-list-preview #app .p40-record-status {
+  color: var(--so-text-muted);
+  border: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+html body.p40-list-preview #app .p40-record-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 14px;
+  color: var(--so-text-muted);
+}
+html body.p40-list-preview #app .p40-record-counts b {
+  font-weight: 600;
+  color: var(--so-text);
+}
+@media (max-width: 1024px) {
+  html body.p40-list-preview #app .p39-page-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html body.p40-list-preview #app .account-metrics article {
+    padding: 12px;
+  }
+}
+@media (max-width: 760px) {
+  html body.p40-list-preview #app .p39-directory > header {
+    padding: 14px 16px;
+  }
+  html body.p40-list-preview #app .account-filter {
+    padding: 16px;
+  }
+  html body.p40-list-preview #app .responsive-data-view__mobile article > button {
+    align-self: start;
+  }
+}
