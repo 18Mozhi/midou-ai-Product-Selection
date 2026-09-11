@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { historicalProviderStructureSource } from "./ui-phase2-provider-structure-baseline.mjs";
 
 export const providerKeyboardRevisions = [
   {
@@ -24,7 +25,7 @@ const hash = (s) => createHash("sha256").update(s).digest("hex");
 // Associate only exact known revisions with immutable pre-keyboard evidence.
 // Current implementation tests must read raw files, never this adapter.
 export function historicalProviderKeyboardSource(file, source) {
-  source = source.replaceAll("\r\n", "\n");
+  source = historicalProviderStructureSource(file, source);
   const r = providerKeyboardRevisions.find((r) => r.file === file);
   if (!r || hash(source) !== r.after) return source;
   if (!cache.has(file)) {

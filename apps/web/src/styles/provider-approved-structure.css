@@ -1,0 +1,733 @@
+/* Local C identity tokens; existing theme IDs/preferences and non-P46 palettes remain unchanged. */
+html:has(#app .provider-registry) {
+  --p46-ink: #142a46;
+  --p46-canvas: #eef2f7;
+  --p46-panel: #fff;
+  --p46-accent: #294caf;
+  --p46-muted: #536b86;
+  --p46-border-strong: #9db1cc;
+  --p46-border: #d8e1ed;
+  --p46-divider: #c9d6e8;
+  --p46-on-accent-muted: #edf3ff;
+  --p46-on-accent-border: #97ade1;
+  --p46-error: #a33332;
+  --p46-disabled-ink: #66748a;
+  --p46-disabled-panel: #e8edf4;
+  --p46-focus: #4276df;
+  --p46-secondary-ink: #294466;
+  --p46-accent-soft: #e5edf9;
+  --p46-scrim: rgba(15, 31, 53, 0.55);
+}
+/* P46 approved frame + mobile editor structure. No preview host, detail or error-state styling. */
+html
+  body:has(#app .provider-registry)
+  #app
+  :is(.provider-hero > button, .provider-list-heading > button, .provider-reset) {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--p46-border-strong);
+  border-radius: 6px;
+  color: var(--p46-accent);
+  background: var(--p46-panel);
+  font-size: 14px;
+}
+html body:has(#app .provider-registry) #app .provider-hero > button {
+  color: var(--p46-panel);
+  background: var(--p46-accent);
+  border-color: var(--p46-accent);
+}
+html body:has(#app .provider-registry) #app .provider-filters :is(input, select) {
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid var(--p46-border-strong);
+  border-radius: 6px;
+  font-size: 16px;
+  color: var(--p46-ink);
+  background: var(--p46-panel);
+}
+html
+  body:has(#app .provider-registry)
+  #app
+  :is(.provider-hero, .provider-list-tools)
+  :is(button, input, select):focus-visible {
+  outline: 3px solid var(--p46-focus);
+  outline-offset: 3px;
+}
+html
+  body:has(#app .provider-registry)
+  #app
+  :is(
+    .role-page-title h1,
+    .role-context-rail strong:not(.role-signal-status),
+    .role-context-drawer strong:not(.role-signal-status)
+  ) {
+  color: var(--p46-ink);
+}
+html body:has(#app .provider-registry) #app .role-menu-search input {
+  background: var(--p46-canvas);
+  border-color: var(--p46-border);
+}
+html body:has(#app .provider-registry) #app .role-menu-search {
+  background: var(--p46-canvas);
+  border-color: var(--p46-border);
+}
+html body:has(#app .provider-registry) #app .role-nav-groups details > summary {
+  background: var(--p46-panel);
+  border-color: var(--p46-border);
+}
+html
+  body:has(#app .provider-registry)
+  #app
+  .role-nav-groups
+  details:has([aria-current="page"])
+  > summary,
+html body:has(#app .provider-registry) #app .role-nav-groups details[open] > summary {
+  background: var(--p46-accent-soft);
+}
+html body:has(#app .provider-registry) #app .role-mobile-nav :is(a, button, i) {
+  color: var(--p46-accent);
+}
+html body:has(#app .provider-registry) #app .provider-runtime-surface {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+html body:has(#app .provider-registry) #app .provider-runtime-tabs {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--p46-accent);
+}
+html body:has(#app .provider-registry) #app .provider-runtime-tabs a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 12px;
+  color: var(--p46-panel);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 14px;
+  text-decoration: none;
+}
+html body:has(#app .provider-registry) #app .provider-runtime-tabs a[aria-current="page"] {
+  background: var(--p46-panel);
+  color: var(--p46-accent);
+  font-weight: 700;
+}
+html body:has(#app .provider-registry) #app .provider-runtime-tabs a:focus-visible {
+  outline: 3px solid var(--p46-panel);
+  outline-offset: 3px;
+}
+html body:has(#app .provider-registry) #app .provider-registry {
+  margin: 0;
+  min-width: 0;
+}
+html body:has(#app .provider-registry) #app .provider-hero {
+  padding: 0 0 24px;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--p46-divider);
+  border-radius: 0;
+  box-shadow: none;
+}
+html body:has(#app .provider-registry) #app .provider-hero h2 {
+  margin: 8px 0;
+  color: var(--p46-ink);
+  font-size: 28px;
+}
+html body:has(#app .provider-registry) #app .provider-hero p {
+  color: var(--p46-accent);
+  letter-spacing: 0;
+  font-size: 14px;
+}
+html body:has(#app .provider-registry) #app .provider-hero span {
+  font-size: 14px;
+  color: var(--p46-muted);
+}
+html body:has(#app .provider-registry) #app .provider-hero > button {
+  background: var(--p46-accent);
+  color: var(--p46-panel);
+  border-color: var(--p46-accent);
+}
+html body:has(#app .provider-registry) #app .provider-overview {
+  gap: 0;
+  margin: 20px 0;
+}
+html body:has(#app .provider-registry) #app .provider-overview article {
+  padding: 0 16px;
+  border: 0;
+  border-right: 1px solid var(--p46-divider);
+  border-radius: 0;
+  background: none;
+  gap: 6px;
+}
+html body:has(#app .provider-registry) #app .provider-overview article:first-child {
+  padding-left: 0;
+}
+html body:has(#app .provider-registry) #app .provider-overview article:last-child {
+  border: 0;
+}
+html body:has(#app .provider-registry) #app .provider-overview strong {
+  font-size: 24px;
+  color: var(--p46-ink);
+}
+html body:has(#app .provider-registry) #app .provider-overview :is(span, small) {
+  font-size: 13px;
+  color: var(--p46-muted);
+}
+html body:has(#app .provider-registry) #app .provider-truth-note {
+  padding: 16px 20px;
+  border: 0;
+  border-left: 3px solid var(--p46-accent);
+  border-radius: 0;
+  background: var(--p46-accent-soft);
+  color: var(--p46-secondary-ink);
+  font-size: 14px;
+  line-height: 1.7;
+}
+html body:has(#app .provider-registry) #app .provider-truth-note strong {
+  color: var(--p46-accent);
+}
+html body:has(#app .provider-registry) #app .provider-list-tools {
+  margin-top: 24px;
+  padding: 24px;
+  border: 1px solid var(--p46-border);
+  border-radius: 10px 10px 0 0;
+  background: var(--p46-panel);
+}
+html body:has(#app .provider-registry) #app .provider-list-heading h3 {
+  font-size: 20px;
+  color: var(--p46-ink);
+}
+html body:has(#app .provider-registry) #app .provider-list-heading span {
+  font-size: 14px;
+  color: var(--p46-muted);
+}
+html body:has(#app .provider-registry) #app .provider-filters {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+html body:has(#app .provider-registry) #app .provider-filters label {
+  min-width: 0;
+  color: var(--p46-muted);
+  font-size: 14px;
+}
+html body:has(#app .provider-registry) #app .provider-filters :is(input, select) {
+  width: 100%;
+}
+html body:has(#app .provider-registry) #app .provider-reset {
+  justify-self: start;
+}
+html body:has(#app .provider-registry) #app .responsive-data-view {
+  padding: 20px 24px;
+  background: var(--p46-panel);
+  border: 1px solid var(--p46-border);
+  border-top: 0;
+  min-width: 0;
+}
+@media (max-width: 1100px) {
+  html body:has(#app .provider-registry) #app .provider-runtime-surface {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  html body:has(#app .provider-registry) #app .provider-runtime-tabs {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  html body:has(#app .provider-registry) #app .provider-runtime-tabs a {
+    flex: 1 1 150px;
+  }
+}
+@media (max-width: 760px) {
+  html body:has(#app .provider-registry) #app .provider-runtime-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 12px;
+  }
+  html body:has(#app .provider-registry) #app .provider-runtime-tabs a {
+    padding: 10px;
+  }
+  html body:has(#app .provider-registry) #app .provider-runtime-tabs a:last-child {
+    grid-column: 1/-1;
+  }
+  html body:has(#app .provider-registry) #app .provider-hero {
+    display: grid;
+    gap: 20px;
+  }
+  html body:has(#app .provider-registry) #app .provider-hero > button {
+    justify-self: start;
+  }
+  html body:has(#app .provider-registry) #app .provider-overview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 16px;
+  }
+  html body:has(#app .provider-registry) #app .provider-overview article {
+    padding: 0;
+    border: 0;
+  }
+  html body:has(#app .provider-registry) #app .provider-truth-note {
+    display: grid;
+    gap: 6px;
+    padding: 16px;
+  }
+  html body:has(#app .provider-registry) #app .provider-list-tools {
+    padding: 20px 16px;
+  }
+  html body:has(#app .provider-registry) #app .provider-list-heading {
+    display: grid;
+    gap: 16px;
+  }
+  html body:has(#app .provider-registry) #app .provider-list-heading > button {
+    justify-self: start;
+  }
+  html body:has(#app .provider-registry) #app .provider-filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html body:has(#app .provider-registry) #app .responsive-data-view {
+    padding: 0 16px;
+  }
+}
+
+html:has(#app .provider-registry) {
+  --so-font-ui: "Microsoft YaHei", sans-serif;
+  --so-font-display: "Microsoft YaHei", sans-serif;
+}
+html body:has(#app .provider-registry) {
+  margin: 0;
+  background: var(--p46-canvas);
+  background-image: none;
+  color: var(--p46-ink);
+  font-family: "Microsoft YaHei", sans-serif;
+}
+html body:has(#app .provider-registry) #app {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+html body:has(#app .provider-registry) #app .role-shell {
+  display: block;
+  padding: 0;
+  background: var(--p46-canvas);
+}
+html body:has(#app .provider-registry) #app .role-topbar {
+  position: relative;
+  inset: auto;
+  height: auto;
+  min-height: 72px;
+  padding: 12px 28px;
+  border: 0;
+  border-bottom: 1px solid var(--p46-border);
+  background: var(--p46-panel);
+}
+html body:has(#app .provider-registry) #app .role-brand > span {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--p46-accent);
+  font-size: 20px;
+}
+html body:has(#app .provider-registry) #app .role-brand > b {
+  font-family: "Microsoft YaHei", sans-serif;
+  letter-spacing: 0.04em;
+}
+html body:has(#app .provider-registry) #app .role-top-actions {
+  gap: 8px;
+}
+html body:has(#app .provider-registry) #app .role-top-actions :is(button, a),
+html body:has(#app .provider-registry) #app .role-menu-toggle {
+  min-height: 44px;
+  border: 1px solid var(--p46-border);
+  border-radius: 6px;
+  color: var(--p46-accent);
+  background: var(--p46-panel);
+}
+html body:has(#app .provider-registry) #app .role-sidebar {
+  top: 0;
+  border: 0;
+  border-bottom: 1px solid var(--p46-border);
+  background: var(--p46-panel);
+}
+html body:has(#app .provider-registry) #app .role-sidebar :is(input, summary, a) {
+  color: var(--p46-secondary-ink);
+}
+html body:has(#app .provider-registry) #app .role-nav-menu {
+  border: 1px solid var(--p46-border);
+  border-radius: 8px;
+  background: var(--p46-panel);
+}
+html body:has(#app .provider-registry) #app .role-nav-menu a[aria-current="page"] {
+  color: var(--p46-accent);
+  background: var(--p46-accent-soft);
+}
+html body:has(#app .provider-registry) #app .role-content {
+  max-width: 1600px;
+  margin: auto;
+  padding: 24px 28px 40px;
+}
+html body:has(#app .provider-registry) #app .role-page-breadcrumb {
+  min-height: 32px;
+  margin: 0 0 12px;
+  color: var(--p46-muted);
+}
+html body:has(#app .provider-registry) #app .role-page-title {
+  display: block;
+  min-height: 0;
+  margin: 0 0 20px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+html body:has(#app .provider-registry) #app .role-page-folio,
+html body:has(#app .provider-registry) #app .role-page-title p {
+  display: none;
+}
+html body:has(#app .provider-registry) #app .role-page-title h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  font-family: "Microsoft YaHei", sans-serif;
+}
+html body:has(#app .provider-registry) #app .role-context-rail {
+  margin: 0 0 28px;
+  border: 1px solid var(--p46-border);
+  border-radius: 8px;
+  background: var(--p46-panel);
+}
+html body:has(#app .provider-registry) #app .role-context-rail > div {
+  padding: 12px 20px;
+  border-color: var(--p46-border);
+}
+html body:has(#app .provider-registry) #app .role-context-rail strong {
+  font-size: 14px;
+}
+html body:has(#app .provider-registry) #app .role-context-drawer {
+  margin: 0 0 24px;
+  border: 1px solid var(--p46-border);
+  border-radius: 8px;
+  background: var(--p46-panel);
+}
+html body:has(#app .provider-registry) #app .role-context-drawer > summary {
+  border: 0;
+}
+html body:has(#app .provider-registry) #app .provider-registry :is(h2, h3),
+html body:has(#app .provider-registry) .responsive-data-view__drawer > header strong {
+  font-family: "Microsoft YaHei", sans-serif;
+  font-weight: 700;
+}
+html body:has(#app .provider-registry) #app .role-mobile-nav {
+  border-top: 1px solid var(--p46-border);
+  background: var(--p46-panel);
+}
+html body:has(#app .provider-registry) #app .role-mobile-nav :is(a, button) {
+  border: 0;
+}
+html body:has(#app .provider-registry) #app .role-mobile-nav [aria-current="page"] {
+  border-radius: 8px;
+  color: var(--p46-accent);
+  background: var(--p46-accent-soft);
+}
+html body:has(#app .provider-registry) #app .role-shell > .role-theme-menu {
+  border: 1px solid var(--p46-border);
+  border-radius: 8px;
+  background: var(--p46-panel);
+}
+html body:has(#app .provider-registry) #app .role-shell > .role-theme-menu button {
+  color: var(--p46-secondary-ink);
+  background: var(--p46-panel);
+}
+html body:has(#app .provider-registry) #app .role-shell > .role-theme-menu [aria-pressed="true"] {
+  background: var(--p46-accent-soft);
+}
+html
+  body:has(#app .provider-registry)
+  #app
+  .role-shell
+  > :is(header, nav)
+  :is(button, a, input, summary):focus-visible {
+  outline: 3px solid var(--p46-focus);
+  outline-offset: 3px;
+}
+@media (max-width: 840px) {
+  html body:has(#app .provider-registry) #app .role-shell {
+    padding-top: 64px;
+    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+  html body:has(#app .provider-registry) #app .role-topbar {
+    position: fixed;
+    inset: 0 0 auto;
+    height: 64px;
+    box-sizing: border-box;
+    z-index: 45;
+    padding: 10px 16px;
+    min-height: 64px;
+  }
+  html body:has(#app .provider-registry) #app .role-sidebar {
+    top: 64px;
+    height: calc(100dvh - 64px);
+    border-right: 1px solid var(--p46-border);
+  }
+  html body:has(#app .provider-registry) #app .role-content {
+    padding: 20px 16px 32px;
+  }
+  html body:has(#app .provider-registry) #app .role-page-title h1 {
+    font-size: 26px;
+  }
+  html body:has(#app .provider-registry) #app .role-page-title {
+    margin-bottom: 16px;
+  }
+}
+@media (min-width: 841px) {
+  html body:has(#app .provider-registry) #app .role-sidebar-head {
+    display: none;
+  }
+  html body:has(#app .provider-registry) #app .role-sidebar-utility a {
+    width: auto;
+    min-width: 176px;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 760px) {
+  html body:has(#app .provider-registry) #app .provider-editor-layer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: var(--p46-scrim);
+    backdrop-filter: none;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor {
+    width: min(100%, 1000px);
+    max-width: none;
+    max-height: calc(100dvh - 48px);
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    border: 1px solid var(--p46-divider);
+    border-radius: 12px;
+    background: var(--p46-panel);
+    color: var(--p46-ink);
+    box-shadow: none;
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 0;
+    scroll-padding-block: 24px 96px;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor > header {
+    grid-column: 1/-1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 24px 28px;
+    border: 0;
+    border-radius: 0;
+    background: var(--p46-accent);
+    color: var(--p46-panel);
+  }
+  html body:has(#app .provider-registry) #app .provider-editor > header p {
+    margin: 0 0 8px;
+    color: var(--p46-on-accent-muted);
+    font-size: 13px;
+    letter-spacing: 0;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor > header h3 {
+    margin: 0;
+    color: var(--p46-panel);
+    font-size: 26px;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor :is(button, summary) {
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid var(--p46-border-strong);
+    border-radius: 6px;
+    color: var(--p46-accent);
+    background: var(--p46-panel);
+    font-size: 14px;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor > header button {
+    min-width: 44px;
+    color: var(--p46-panel);
+    background: transparent;
+    border-color: var(--p46-on-accent-border);
+    font-size: 22px;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor-steps {
+    grid-column: 1;
+    grid-row: 2/5;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin: 0;
+    padding: 24px 16px;
+    background: var(--p46-accent);
+    border: 0;
+    border-radius: 0;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor-steps li {
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor-steps button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    color: var(--p46-panel);
+    background: transparent;
+    border-color: transparent;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor-steps span {
+    width: 24px;
+    height: 24px;
+    border: 0;
+    color: inherit;
+    background: none;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor-steps [aria-current="step"] {
+    background: var(--p46-panel);
+    color: var(--p46-accent);
+  }
+  html body:has(#app .provider-registry) #app .provider-template-bar {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0;
+    padding: 20px 28px;
+    background: var(--p46-canvas);
+    border: 0;
+    border-radius: 0;
+    color: var(--p46-muted);
+    gap: 12px;
+    font-size: 14px;
+  }
+  html body:has(#app .provider-registry) #app .provider-fields {
+    grid-column: 2;
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 20px;
+    margin: 0;
+    padding: 28px;
+  }
+  html body:has(#app .provider-registry) #app .provider-fields label {
+    min-width: 0;
+    display: grid;
+    gap: 8px;
+    color: var(--p46-muted);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  html body:has(#app .provider-registry) #app .provider-fields :is(input, select) {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 10px 12px;
+    color: var(--p46-ink);
+    background: var(--p46-panel);
+    border: 1px solid var(--p46-border-strong);
+    border-radius: 6px;
+    font-size: 16px;
+  }
+  html body:has(#app .provider-registry) #app .provider-fields small {
+    color: var(--p46-error);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor > footer {
+    grid-column: 1/-1;
+    grid-row: 5;
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0;
+    padding: 18px 28px;
+    border: 0;
+    border-top: 1px solid var(--p46-border);
+    background: var(--p46-panel);
+    color: var(--p46-muted);
+    font-size: 13px;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor > footer > span {
+    flex: 1;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor > footer button:not(.secondary) {
+    color: var(--p46-panel);
+    background: var(--p46-accent);
+    border-color: var(--p46-accent);
+  }
+  html body:has(#app .provider-registry) #app .provider-editor button:disabled,
+  html body:has(#app .provider-registry) #app .provider-editor > footer button:disabled {
+    color: var(--p46-disabled-ink);
+    background: var(--p46-disabled-panel);
+    border-color: var(--p46-border);
+    opacity: 1;
+    cursor: not-allowed;
+  }
+  html
+    body:has(#app .provider-registry)
+    #app
+    .provider-editor
+    :is(button, input, select, summary):focus-visible {
+    outline: 3px solid var(--p46-focus);
+    outline-offset: 3px;
+  }
+  html
+    body:has(#app .provider-registry)
+    #app
+    .provider-editor
+    :is(header, .provider-editor-steps)
+    button:focus-visible {
+    outline-color: var(--p46-panel);
+  }
+  @media (max-width: 760px) {
+    html body:has(#app .provider-registry) #app .provider-editor-layer {
+      padding: 12px;
+    }
+    html body:has(#app .provider-registry) #app .provider-editor {
+      display: block;
+      max-height: calc(100dvh - 24px);
+    }
+    html body:has(#app .provider-registry) #app .provider-editor > header {
+      padding: 20px;
+    }
+    html body:has(#app .provider-registry) #app .provider-editor-steps {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      padding: 0 12px 20px;
+      gap: 8px;
+    }
+    html body:has(#app .provider-registry) #app .provider-editor-steps button {
+      padding: 10px 6px;
+      gap: 4px;
+    }
+    html body:has(#app .provider-registry) #app .provider-template-bar {
+      padding: 20px;
+      display: grid;
+      justify-items: start;
+    }
+    html body:has(#app .provider-registry) #app .provider-fields {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 24px 20px;
+    }
+    html body:has(#app .provider-registry) #app .provider-fields .wide {
+      grid-column: auto;
+    }
+    html body:has(#app .provider-registry) #app .provider-editor > footer {
+      padding: 16px 20px;
+      gap: 12px;
+    }
+  }
+}

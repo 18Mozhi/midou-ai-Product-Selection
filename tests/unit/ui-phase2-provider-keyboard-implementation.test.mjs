@@ -3,13 +3,15 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
+import { historicalProviderStructureSource } from "../../scripts/lib/ui-phase2-provider-structure-baseline.mjs";
 import {
   historicalProviderKeyboardSource,
   providerKeyboardRevisions,
 } from "../../scripts/lib/ui-phase2-provider-keyboard-baseline.mjs";
 import { providerPagePreview } from "../../scripts/lib/ui-phase2-provider-page-preview.mjs";
 
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+// Preserve the keyboard-only capture; the structure suite binds raw current sources.
+const read = (f) => historicalProviderStructureSource(f, readFileSync(f, "utf8"));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = "apps/web/src/components/ProviderRegistry.vue";
 const current = read(file);

@@ -10,16 +10,42 @@ import { chromium, expect } from "@playwright/test";
 import { providerPagePreview } from "./lib/ui-phase2-provider-page-preview.mjs";
 
 const capture = process.argv.includes("--capture");
-const keyboardTrap = process.argv.includes("--keyboard-trap");
-assert.ok(process.argv.slice(2).every((v) => ["--capture", "--keyboard-trap"].includes(v)));
+const structure = process.argv.includes("--structure");
+const baseline = process.argv.includes("--baseline-production");
+const keyboardTrap = structure || process.argv.includes("--keyboard-trap");
+assert.ok(!baseline || structure);
+assert.ok(
+  process.argv
+    .slice(2)
+    .every((v) =>
+      ["--capture", "--keyboard-trap", "--structure", "--baseline-production"].includes(v),
+    ),
+);
 const output =
   "output/playwright/" +
-  (keyboardTrap ? "p46-editor-keyboard-implementation" : "p46-route-assembly-review");
+  (structure
+    ? "p46-approved-structure-implementation/" + (baseline ? "baseline" : "current")
+    : keyboardTrap
+      ? "p46-editor-keyboard-implementation"
+      : "p46-route-assembly-review");
 const read = async (f) => (await readFile(f, "utf8")).replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const registry = "apps/web/src/components/ProviderRegistry.vue";
 const original = await read(registry),
-  preview = providerPagePreview(original);
+  preview = structure
+    ? baseline
+      ? original.replace('<style src="../styles/provider-approved-structure.css"></style>\n', "")
+      : original
+    : providerPagePreview(original);
+assert.ok(
+  structure || !original.includes('src="../styles/provider-approved-structure.css"'),
+  "Use --structure for current production CSS; historical capture modes must not overwrite prior evidence",
+);
+if (structure)
+  assert.equal(
+    original.split('<style src="../styles/provider-approved-structure.css"></style>').length,
+    2,
+  );
 assert.ok(
   keyboardTrap ||
     hash(original) === "ec671e2cf8c1d55f88d97df05d7a14849235961b4e4f66f838ca0cf6fb76971f",
@@ -42,12 +68,16 @@ vm.runInNewContext(
   box,
 );
 const data = JSON.parse(JSON.stringify(box.data));
-const styles = [
-  "provider-page-preview.css",
-  "provider-editor-preview.css",
-  "provider-detail-preview.css",
-  "provider-route-assembly-preview.css",
-].map((f) => "design-plans/ui-phase-2-2026-09-07/implementation/" + f);
+const styles = (
+  structure
+    ? []
+    : [
+        "provider-page-preview.css",
+        "provider-editor-preview.css",
+        "provider-detail-preview.css",
+        "provider-route-assembly-preview.css",
+      ]
+).map((f) => "design-plans/ui-phase-2-2026-09-07/implementation/" + f);
 const sources = new Set([
   registry,
   fixture,
@@ -77,6 +107,7 @@ const server = await createServer({
       },
       transformIndexHtml(html) {
         assert.ok(html.includes('src="/src/main.ts"'));
+        if (structure) return html;
         return html
           .replace(
             "<body>",
@@ -210,6 +241,24 @@ try {
         await page.waitForLoadState("networkidle");
         await page.evaluate(() => document.fonts.ready);
         await page.clock.runFor(120);
+        if (structure)
+          await page.evaluate(async () => {
+            const finite = document
+              .getAnimations()
+              .filter(
+                (a) =>
+                  a.playState === "running" &&
+                  Number.isFinite(a.effect?.getComputedTiming().endTime),
+              );
+            await Promise.all(
+              finite.map((a) =>
+                a.finished.catch((error) => {
+                  // A replaced CSS transition cancels its finished promise, not an API request.
+                  if (error?.name !== "AbortError") throw error;
+                }),
+              ),
+            );
+          });
       };
       const shot = async (state, selector = null, fullPage = false) => {
         await settle();
@@ -220,12 +269,18 @@ try {
             .evaluate((n) => n.scrollIntoView({ block: "start", behavior: "instant" }));
         else await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
         await page.clock.runFor(120);
-        check(
-          state + " no horizontal overflow",
-          await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
-        );
+        const bounds = await page.evaluate(() => ({
+          viewport: innerWidth,
+          scroll: document.documentElement.scrollWidth,
+        }));
+        if (structure && baseline)
+          observations.push({ width, case: "baseline-width-observation", state, ...bounds });
+        else check(state + " no horizontal overflow", bounds.scroll <= bounds.viewport + 1);
         if (!capture) return;
-        const bytes = await page.screenshot({ fullPage, animations: "disabled" }),
+        const bytes = await page.screenshot({
+            fullPage,
+            animations: structure ? "allow" : "disabled",
+          }),
           file = width + "-" + state + ".png";
         await writeFile(output + "/" + file, bytes);
         screenshots.push({
@@ -301,6 +356,39 @@ try {
         "25",
       );
       await shot("page-top");
+      if (structure) {
+        check("no review body class", await page.locator("body").getAttribute("class"), null);
+        check("no review disclaimer", await page.locator(".assembly-disclaimer").count(), 0);
+        check("no review stylesheet", await page.locator('link[href*="design-plans"]').count(), 0);
+        observations.push({
+          width,
+          case: "production-frame",
+          baseline,
+          metrics: await page.evaluate(() => {
+            const style = (s) => {
+              const n = document.querySelector(s),
+                r = n.getBoundingClientRect(),
+                c = getComputedStyle(n);
+              return {
+                x: r.x,
+                y: r.y,
+                width: r.width,
+                height: r.height,
+                background: c.backgroundColor,
+                display: c.display,
+                fontFamily: c.fontFamily,
+              };
+            };
+            return {
+              title: style(".role-page-title"),
+              frame: style(".provider-runtime-surface"),
+              nav: style(".provider-runtime-tabs"),
+              hero: style(".provider-hero"),
+              topbar: style(".role-topbar"),
+            };
+          }),
+        });
+      }
       check(
         "page title remains one line",
         await page.locator(".role-page-title h1").evaluate((n) => {
@@ -452,11 +540,80 @@ try {
         await recordButton().evaluate((n) => n === document.activeElement),
       );
       check("local interactions no reread", providerReads(), 1);
+      if (structure) await page.clock.setFixedTime(new Date("2026-09-11T04:10:00Z"));
       await page
         .locator('.provider-runtime-tabs a[href="/platform-admin/providers/adapters"]')
         .click();
       await expect(page.locator(".adapter-center")).toBeVisible();
       check("actual P47 route", new URL(page.url()).pathname, "/platform-admin/providers/adapters");
+      if (structure) {
+        await shot("p47-no-leak");
+        observations.push({
+          width,
+          case: "p47-no-leak",
+          metrics: await page.evaluate(() => ({
+            providerPresent: !!document.querySelector("#app .provider-registry"),
+            background: getComputedStyle(document.body).backgroundColor,
+            font: getComputedStyle(document.documentElement).getPropertyValue("--so-font-display"),
+            nav: getComputedStyle(document.querySelector(".provider-runtime-tabs")).backgroundColor,
+            title: getComputedStyle(document.querySelector(".role-page-title")).display,
+            svg: [...document.querySelectorAll(".role-shell svg")].map((n) => {
+              const r = n.getBoundingClientRect(),
+                c = getComputedStyle(n);
+              return {
+                x: r.x,
+                y: r.y,
+                width: r.width,
+                height: r.height,
+                viewBox: n.getAttribute("viewBox"),
+                color: c.color,
+                fill: c.fill,
+                stroke: c.stroke,
+                opacity: c.opacity,
+                transform: c.transform,
+                paths: [...n.querySelectorAll("*")].map((p) => {
+                  const s = getComputedStyle(p);
+                  return {
+                    tag: p.tagName,
+                    d: p.getAttribute("d"),
+                    color: s.color,
+                    fill: s.fill,
+                    stroke: s.stroke,
+                    strokeWidth: s.strokeWidth,
+                    opacity: s.opacity,
+                    transform: s.transform,
+                  };
+                }),
+              };
+            }),
+          })),
+        });
+        if (width <= 840) {
+          await page.getByRole("button", { name: "打开导航菜单", exact: true }).click();
+          await expect(page.locator(".role-sidebar.is-open")).toBeVisible();
+          await shot("p47-menu-no-leak");
+          observations.push({
+            width,
+            case: "p47-menu-no-leak",
+            svg: await page.locator(".role-sidebar.is-open svg").evaluateAll((nodes) =>
+              nodes.map((n) => {
+                const r = n.getBoundingClientRect(),
+                  c = getComputedStyle(n);
+                return {
+                  x: r.x,
+                  y: r.y,
+                  width: r.width,
+                  height: r.height,
+                  color: c.color,
+                  stroke: c.stroke,
+                  fill: c.fill,
+                };
+              }),
+            ),
+          });
+          await page.getByRole("button", { name: "打开导航菜单", exact: true }).click();
+        }
+      }
       await page.goBack();
       await expect(page.locator(".provider-list-tools")).toBeVisible();
       await settle();
@@ -498,6 +655,25 @@ try {
       await expect(page.locator(".provider-list-tools")).toBeVisible();
       await settle();
       await shot("direct-recovered");
+      if (structure) {
+        for (const theme of ["aurora-purple", "cloud-white", "deep-ocean"]) {
+          await page.getByRole("button", { name: "切换界面主题", exact: true }).click();
+          await page
+            .locator(".role-theme-menu button")
+            .filter({ has: page.locator('i[data-theme-dot="' + theme + '"]') })
+            .click();
+          check("theme ID " + theme, await page.locator("html").getAttribute("data-theme"), theme);
+          await shot("theme-" + theme);
+          observations.push({
+            width,
+            case: "theme",
+            theme,
+            primary: await page.evaluate(() =>
+              getComputedStyle(document.documentElement).getPropertyValue("--so-primary"),
+            ),
+          });
+        }
+      }
       check("no page errors", errors, []);
       check("no unexpected requests", unexpected, []);
       observations.push({ width, case: "network-and-focus", requests, focus });
@@ -528,14 +704,19 @@ try {
       output + "/evidence.json",
       JSON.stringify(
         {
-          kind: keyboardTrap
-            ? "P46-EDITOR-KEYBOARD-IMPLEMENTATION-r1"
-            : "P46-REAL-ROUTE-C-ASSEMBLY-r1",
+          kind: structure
+            ? "P46-APPROVED-STRUCTURE-IMPLEMENTATION-r1"
+            : keyboardTrap
+              ? "P46-EDITOR-KEYBOARD-IMPLEMENTATION-r1"
+              : "P46-REAL-ROUTE-C-ASSEMBLY-r1",
           sourceHashes,
+          ...(structure ? { mode: baseline ? "baseline" : "current" } : {}),
           transformedRegistryHash: hash(preview),
-          scope: keyboardTrap
-            ? "Actual App/NavigationShell/KeepAlive with current Registry Tab handler and fallback tabindex; original form/save/contracts unchanged. C CSS remains review-only. Six-width forward/reverse/interior traversal, disabled submit and technical details, Escape return; local intercepted GET/rejected PUT only. Not production, real auth/persistence or complete modal/all-state acceptance."
-            : "Actual index/main/router/App/NavigationShell and ProviderRuntimeSurface. Review-only CSS and two existing presentation replacements in Registry; no script or runtime contract edits. Supplied navigation/session/provider/adapters GET and rejected PUT only, no real auth or persistence. Full frontend route replay is not production, full RBAC, complete modal or all-state acceptance.",
+          scope: structure
+            ? "Real frontend entry without preview CSS/body classes/template rewrites. Production C approved frame/mobile-editor structure versus prior style import removed. Original scripts/templates/contracts and theme IDs unchanged, three existing theme controls exercised; fixed blue-white identity regions do not claim all-theme/full-state acceptance. P47 route after loaded stylesheet checked for leakage. Local intercepted GET/rejected PUT only, not deployment or real auth/persistence."
+            : keyboardTrap
+              ? "Actual App/NavigationShell/KeepAlive with current Registry Tab handler and fallback tabindex; original form/save/contracts unchanged. C CSS remains review-only. Six-width forward/reverse/interior traversal, disabled submit and technical details, Escape return; local intercepted GET/rejected PUT only. Not production, real auth/persistence or complete modal/all-state acceptance."
+              : "Actual index/main/router/App/NavigationShell and ProviderRuntimeSurface. Review-only CSS and two existing presentation replacements in Registry; no script or runtime contract edits. Supplied navigation/session/provider/adapters GET and rejected PUT only, no real auth or persistence. Full frontend route replay is not production, full RBAC, complete modal or all-state acceptance.",
           checks,
           screenshots,
           observations,

@@ -1106,3 +1106,4 @@ onActivated(() => {
 </template>
 
 <style src="../styles/provider-approved-feedback.css"></style>
+<style src="../styles/provider-approved-structure.css"></style>
