@@ -1,0 +1,218 @@
+/* Review only: P48 preserved-directory refresh feedback. */
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center:has(.p48-source-refresh-feedback:is([data-kind="success"], [data-kind="failed"]))
+  > .source-message {
+  display: none;
+}
+
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center:has(.p48-source-refresh-feedback[data-kind="failed"])
+  .source-guide-actions
+  > button {
+  display: none;
+}
+
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-refresh-host {
+  min-width: 0;
+}
+
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-refresh-feedback {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 8px 24px;
+  min-width: 0;
+  padding: 20px 22px;
+  border: 1px solid var(--p48-border);
+  border-left: 4px solid var(--p48-accent);
+  border-radius: 6px;
+  background: #f8fbff;
+  color: var(--p48-ink);
+}
+
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-refresh-feedback[data-kind="success"] {
+  border-left-color: #3b7d63;
+  background: #f8fcfa;
+}
+
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-refresh-feedback[data-failure-kind="blocked"] {
+  border-left-color: #a97016;
+  background: #fffdf8;
+}
+
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-refresh-feedback[data-failure-kind="error"] {
+  border-left-color: #a44a4a;
+  background: #fffafa;
+}
+
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-refresh-eyebrow {
+  grid-column: 1;
+  margin: 0;
+  color: var(--p48-accent-strong);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-refresh-feedback
+  h2 {
+  grid-column: 1;
+  margin: 0;
+  color: var(--p48-ink);
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-refresh-description {
+  grid-column: 1;
+  max-width: 760px;
+  margin: 0;
+  color: var(--p48-muted);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-refresh-technical {
+  grid-column: 1;
+  width: min(100%, 760px);
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--p48-border);
+  color: var(--p48-muted);
+  font-size: 13px;
+}
+
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-refresh-technical
+  summary {
+  min-height: 44px;
+  padding: 11px 0;
+  color: var(--p48-accent-strong);
+  cursor: pointer;
+}
+
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-refresh-technical
+  code {
+  display: block;
+  margin-top: 6px;
+  padding: 10px 12px;
+  background: var(--p48-panel-soft);
+  color: var(--p48-ink);
+  font-family: Consolas, monospace;
+  overflow-wrap: anywhere;
+}
+
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-refresh-primary {
+  grid-column: 2;
+  grid-row: 1 / span 4;
+  align-self: end;
+  min-width: 148px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--p48-accent);
+  border-radius: 6px;
+  background: var(--p48-accent);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center
+  :is(.p48-source-refresh-primary, .p48-source-refresh-technical summary):focus-visible,
+html
+  body.p48-source-refresh-review:has(#app .source-center)
+  #app
+  .source-center
+  .source-guide
+  h2:focus {
+  outline: 3px solid var(--p48-focus);
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  html
+    body.p48-source-refresh-review:has(#app .source-center)
+    #app
+    .source-center
+    .p48-source-refresh-feedback {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 18px 16px;
+    border-right: 0;
+    border-left-width: 4px;
+    border-radius: 0;
+  }
+
+  html
+    body.p48-source-refresh-review:has(#app .source-center)
+    #app
+    .source-center
+    .p48-source-refresh-primary {
+    grid-column: 1;
+    grid-row: auto;
+    width: 100%;
+  }
+}
+
+@media (forced-colors: active) {
+  html
+    body.p48-source-refresh-review:has(#app .source-center)
+    #app
+    .source-center
+    :is(.p48-source-refresh-feedback, .p48-source-refresh-primary) {
+    border-color: CanvasText;
+  }
+}

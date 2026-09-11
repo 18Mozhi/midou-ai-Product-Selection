@@ -1,0 +1,2182 @@
+{
+  "kind": "P48-SOURCE-REFRESH-REVIEW-r1",
+  "reviewOnly": true,
+  "processesClosed": true,
+  "ports": [
+    52726
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "scene": "success",
+      "outcome": "success",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "success hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "success uses one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "success keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "rate-limited",
+      "outcome": "failure",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 5
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "dependency",
+      "outcome": "failure",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 5
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "error",
+      "outcome": "failure",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 3
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "timeout",
+      "outcome": "timeout",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "timeout has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 3
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "success",
+      "outcome": "success",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "success hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "success uses one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "success keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "rate-limited",
+      "outcome": "failure",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 5
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "dependency",
+      "outcome": "failure",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 5
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "error",
+      "outcome": "failure",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 3
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "timeout",
+      "outcome": "timeout",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "timeout has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 3
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "success",
+      "outcome": "success",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "success hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "success uses one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "success keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "rate-limited",
+      "outcome": "failure",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 5
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "dependency",
+      "outcome": "failure",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 5
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "error",
+      "outcome": "failure",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 3
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "timeout",
+      "outcome": "timeout",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "timeout has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 3
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "success",
+      "outcome": "success",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "success hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "success uses one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "success keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "rate-limited",
+      "outcome": "failure",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 5
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "dependency",
+      "outcome": "failure",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 5
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "error",
+      "outcome": "failure",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 3
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "timeout",
+      "outcome": "timeout",
+      "checks": [
+        {
+          "name": "initial catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "pending keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "pending keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "pending has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "pending starts one refresh GET",
+          "actual": 2
+        },
+        {
+          "name": "failure keeps20 records",
+          "actual": 20
+        },
+        {
+          "name": "failure keeps146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "failure hides duplicate global message",
+          "actual": 0
+        },
+        {
+          "name": "failure hides duplicate header refresh",
+          "actual": false
+        },
+        {
+          "name": "failure action44",
+          "actual": true
+        },
+        {
+          "name": "timeout has no stale request ID",
+          "actual": 0
+        },
+        {
+          "name": "failure attempts follow current safe retry",
+          "actual": 3
+        },
+        {
+          "name": "recovery restores146 result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-success-refreshing.png",
+      "width": 390,
+      "scene": "success",
+      "suffix": "refreshing",
+      "sha256": "d45ce9787371dbc754c96a696435dec8a6dfa309e44c60a8f56776b4436c0238",
+      "pixelWidth": 362,
+      "pixelHeight": 142
+    },
+    {
+      "file": "390-success-success.png",
+      "width": 390,
+      "scene": "success",
+      "suffix": "success",
+      "sha256": "8e7cd0d2dce407d28e9d3542f2f97094c872772c9b99debb47a02af534bf1072",
+      "pixelWidth": 362,
+      "pixelHeight": 185
+    },
+    {
+      "file": "390-rate-limited-technical.png",
+      "width": 390,
+      "scene": "rate-limited",
+      "suffix": "technical",
+      "sha256": "b4d6569aeaf59341c095286db4fdf5dcde443a3b01068a35e47017400db318e7",
+      "pixelWidth": 362,
+      "pixelHeight": 300
+    },
+    {
+      "file": "390-rate-limited-failed.png",
+      "width": 390,
+      "scene": "rate-limited",
+      "suffix": "failed",
+      "sha256": "0574caca20e2125631ba95e61cf2c3790940fecd07eb62442477625032630d1c",
+      "pixelWidth": 362,
+      "pixelHeight": 259
+    },
+    {
+      "file": "390-dependency-technical.png",
+      "width": 390,
+      "scene": "dependency",
+      "suffix": "technical",
+      "sha256": "104336501868e1f8529151d82fb22eecc5d8dc47f05385ab6a35dc93b15e4e4f",
+      "pixelWidth": 362,
+      "pixelHeight": 300
+    },
+    {
+      "file": "390-dependency-failed.png",
+      "width": 390,
+      "scene": "dependency",
+      "suffix": "failed",
+      "sha256": "f62f730873ccc12b8259a074a05d51b52551426a5f385563430857443723ab21",
+      "pixelWidth": 362,
+      "pixelHeight": 259
+    },
+    {
+      "file": "390-error-technical.png",
+      "width": 390,
+      "scene": "error",
+      "suffix": "technical",
+      "sha256": "40d7e70ecbef8814896d5f2efc41fb533869f1e6e4b20bee6b65422c87f2ff4c",
+      "pixelWidth": 362,
+      "pixelHeight": 300
+    },
+    {
+      "file": "390-error-failed.png",
+      "width": 390,
+      "scene": "error",
+      "suffix": "failed",
+      "sha256": "1d98fb7724799ed3f3e139f9cd2f448c2b8089d6748dc5b88b851f5ab1dbc8e4",
+      "pixelWidth": 362,
+      "pixelHeight": 259
+    },
+    {
+      "file": "390-timeout-failed.png",
+      "width": 390,
+      "scene": "timeout",
+      "suffix": "failed",
+      "sha256": "9bf4ed17b20f32c9e26ddfc5cf95cdfbca88c68daa3a0395d504233fe4a181e4",
+      "pixelWidth": 362,
+      "pixelHeight": 172
+    },
+    {
+      "file": "760-success-refreshing.png",
+      "width": 760,
+      "scene": "success",
+      "suffix": "refreshing",
+      "sha256": "5dc888db968f21051a8cccf35dd3ecd83917e2476c81f70c4182c69569f76bd2",
+      "pixelWidth": 732,
+      "pixelHeight": 120
+    },
+    {
+      "file": "760-success-success.png",
+      "width": 760,
+      "scene": "success",
+      "suffix": "success",
+      "sha256": "b0f4d1a2fc1df54a5ce3477da519d6a885227f355ee61a2576d1e3cc7d362b8f",
+      "pixelWidth": 732,
+      "pixelHeight": 185
+    },
+    {
+      "file": "760-rate-limited-failed.png",
+      "width": 760,
+      "scene": "rate-limited",
+      "suffix": "failed",
+      "sha256": "2ef5816f53b0e6ea179388ee7e546bf8f51a2772d58f862c6338df5bce3640f5",
+      "pixelWidth": 732,
+      "pixelHeight": 237
+    },
+    {
+      "file": "760-dependency-failed.png",
+      "width": 760,
+      "scene": "dependency",
+      "suffix": "failed",
+      "sha256": "3748db4784848eb70f826f664b505834a0bd9edfc53052d8e0a629f18dbbcaf5",
+      "pixelWidth": 732,
+      "pixelHeight": 237
+    },
+    {
+      "file": "760-error-failed.png",
+      "width": 760,
+      "scene": "error",
+      "suffix": "failed",
+      "sha256": "c0f468efcb9c71dd189c85483954b7123fdb99311e83a9149940113369c8644f",
+      "pixelWidth": 732,
+      "pixelHeight": 237
+    },
+    {
+      "file": "760-timeout-failed.png",
+      "width": 760,
+      "scene": "timeout",
+      "suffix": "failed",
+      "sha256": "d16cc40f2d2b7246680acf6e53722a81ec07147ab9b96f824091581d6adb05a6",
+      "pixelWidth": 732,
+      "pixelHeight": 172
+    },
+    {
+      "file": "1024-success-refreshing.png",
+      "width": 1024,
+      "scene": "success",
+      "suffix": "refreshing",
+      "sha256": "23e140587f5ae716b9bd0bbf38a9b0530af25607bc9e1df9aa60b5765fa7cefb",
+      "pixelWidth": 960,
+      "pixelHeight": 124
+    },
+    {
+      "file": "1024-success-success.png",
+      "width": 1024,
+      "scene": "success",
+      "suffix": "success",
+      "sha256": "2cfcbcce1a6f8b1581fca3b418c57a813b3f325646e0c5dca891ec85dbf56789",
+      "pixelWidth": 960,
+      "pixelHeight": 189
+    },
+    {
+      "file": "1024-rate-limited-failed.png",
+      "width": 1024,
+      "scene": "rate-limited",
+      "suffix": "failed",
+      "sha256": "362d6a7c082fa0529900f19116dedbe9d86129a8850cfbde9518214ef30c5842",
+      "pixelWidth": 960,
+      "pixelHeight": 189
+    },
+    {
+      "file": "1024-dependency-failed.png",
+      "width": 1024,
+      "scene": "dependency",
+      "suffix": "failed",
+      "sha256": "8acb92a2390ac8ea6f1ab05f5df88f9003ed9622de57786503559e79f452fabd",
+      "pixelWidth": 960,
+      "pixelHeight": 189
+    },
+    {
+      "file": "1024-error-failed.png",
+      "width": 1024,
+      "scene": "error",
+      "suffix": "failed",
+      "sha256": "19142c763c46e3f6dfd2d092e0f01433017607d885d3d1df9c4ac47012b99387",
+      "pixelWidth": 960,
+      "pixelHeight": 189
+    },
+    {
+      "file": "1024-timeout-failed.png",
+      "width": 1024,
+      "scene": "timeout",
+      "suffix": "failed",
+      "sha256": "a1db156d92091e5d1cbce478c992e36239632641f4d1d4c0ab7f346e595bab01",
+      "pixelWidth": 960,
+      "pixelHeight": 132
+    },
+    {
+      "file": "1440-success-refreshing.png",
+      "width": 1440,
+      "scene": "success",
+      "suffix": "refreshing",
+      "sha256": "74b960d2c0cd80da1de7603c448d544b2b94be76d2e695242522f8210dc702ce",
+      "pixelWidth": 1348,
+      "pixelHeight": 124
+    },
+    {
+      "file": "1440-success-success.png",
+      "width": 1440,
+      "scene": "success",
+      "suffix": "success",
+      "sha256": "e33964d6c3e2118fef69d97d72d724ec0cb121b4017785d7c6a831b5c1e5c3a1",
+      "pixelWidth": 1348,
+      "pixelHeight": 189
+    },
+    {
+      "file": "1440-rate-limited-failed.png",
+      "width": 1440,
+      "scene": "rate-limited",
+      "suffix": "failed",
+      "sha256": "274edc0e51c2a3bb9f8270f76db5667ecbb1b8abc692330755419aab58a866a9",
+      "pixelWidth": 1348,
+      "pixelHeight": 189
+    },
+    {
+      "file": "1440-dependency-failed.png",
+      "width": 1440,
+      "scene": "dependency",
+      "suffix": "failed",
+      "sha256": "db08b1de5bea3cf22e23233d1d312c31593038b15e6cf0a6a9a7fe4d1d2c8c87",
+      "pixelWidth": 1348,
+      "pixelHeight": 189
+    },
+    {
+      "file": "1440-error-failed.png",
+      "width": 1440,
+      "scene": "error",
+      "suffix": "failed",
+      "sha256": "70687769c9c22910c958bd9a3b8ec72abe906d76637db6f7c068ac6bffc62d4d",
+      "pixelWidth": 1348,
+      "pixelHeight": 189
+    },
+    {
+      "file": "1440-timeout-failed.png",
+      "width": 1440,
+      "scene": "timeout",
+      "suffix": "failed",
+      "sha256": "1ae7bf139a44084acd2ba49112d92d8712777eb84047c7604a1b98efa35ad5f0",
+      "pixelWidth": 1348,
+      "pixelHeight": 132
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/index.html": "0376c4bf04227ac5dbb6bb43895e5ed97eef6ca8bde54f08774908d3f07d9d88",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "66b064c2135275b9d173ef316692366823ef4f6276002796d9ed112183218cef",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.css": "a31b900bedbf1cafdf756eea8b7bd8742a5ec844fef9bcad0d8ffe643e39bb74",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/navigation-shell-scoped.css": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+    "apps/web/src/provider-adapters-c-detail.css": "094a11fe39b3701c35d6061f7a570e940b3bb00abcc0b2ed7f64ffeaea0c6bdd",
+    "apps/web/src/provider-adapters-c-feedback.css": "64b09e635e98f8865ea2fb3c8b33b1d21f447affd55061f3d01cf6667904bba2",
+    "apps/web/src/provider-adapters-c-page.css": "899ca57a21bceef95c7dc030bb7f92bae1755f324b1d26c3f0ba692dad736c86",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/route-catalog.generated.json": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/signal-ledger-workflows.css": "3a3bcb8ca4aa2c0b7dae11218223aaa9de25db45eb0704a2670ea156bf06229b",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/provider-approved-feedback.css": "6b21f3adefccd50f52268076f3dc6134eb66db02c8c62a8404a19fa2e2c45a9e",
+    "apps/web/src/styles/provider-approved-structure.css": "901f1088e4ff961a730204ab6e0ac2111b20bc1448a5001299c98f53f318308b",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-sources-page-preview.css": "0ad5722b2920de2f07d92f37afb706266dde7726b4677a4bdbf8107cb00744e7",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-sources-refresh-preview.css": "35af0ac80cb020bb5fbc593757c5f75ba04f3e3b071a4b6fe214da13ec1e84fe",
+    "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
+    "scripts/lib/ui-phase2-provider-sources-refresh-preview.mjs": "991a1dff7db58c353d5f3dd2e208308fd30501b16d1fad5594536f299bb44c25",
+    "scripts/verify-ui-phase2-provider-sources-refresh.mjs": "69e39f4fc8db30175a86bce9c3c6d84b282d9a7ae7dfd97fe9e5d689f361a58e",
+    "tests/e2e/m03-07-provider-sources.spec.ts": "29c1232a33cb260beeee6851f33c4558873d25e47e538d6a2e04c47eaa6ba5fe"
+  },
+  "boundary": "Actual App/current ProviderSourceCenter with exact review-only refresh ownership/template transform and P48 CSS. Initial authoritative146-row directory remains visible during safe refresh and non-access failure;429/503 retry counts,500,12s abort,success and explicit recovery are local responses.401/403 preserve policy is intentionally unchanged and excluded pending a security decision. No production/API/permission/write/external/deploy change."
+}
