@@ -20,15 +20,15 @@
 - [机器证据](../../output/playwright/p50-credential-login-cache-review/evidence.json)：8 次真实 App/Router/NavigationShell/KeepAlive 运行、128 项检查、8 张 PNG、172 个实际加载源码哈希。
 - 两种图证每次只执行导航、会话、三项凭证资料 GET 和一个空平台概览 GET；零写入、零外链、零真实助手，合成材料不回显、不进入本地/会话存储或 Cookie。
 - 第三个真实路由回归专门延迟首次三项 GET：离页后旧批次失效，返回重新发起三项 GET，并显示新批次资产资料。
-- M03-02 全文件桌面与 390px 共 36/36 通过，其中本批三个 KeepAlive 场景为 6/6；新增通用写入用例见独立实施报告。
+- M03-02 全文件当前桌面与 390px 共 44/44 通过，其中本批三个 KeepAlive 场景持续覆盖；通用写入与登录离页用例见独立实施报告。
 - 复验图证：`node --test tests/unit/ui-phase2-credential-login-cache.test.mjs`。重建：`node scripts/verify-ui-phase2-credential-login-material.mjs --suite=cache --capture`。
 
 ## 变更边界
 
 - 未改 API 地址、方法、字段、重试次数、权限、文件格式/大小、数据库、加密、环境变量或依赖；OpenAPI、`.env.example` 与迁移不适用。
 - 普通缓存返回仍复用当前成功快照，不额外 GET；只有被中断读取会恢复。
-- 通用资产/轮换/档案/撤销的在途写归属已由 `P50-CREDENTIAL-WRITE-OWNERSHIP-IMPLEMENTATION.md` 独立实施；登录两段写离页后的页级结果对账仍需独立验证。
+- 通用资产/轮换/档案/撤销的在途写归属已由 `P50-CREDENTIAL-WRITE-OWNERSHIP-IMPLEMENTATION.md` 独立实施；登录两段写离页后的页级结果对账已由 `P50-CREDENTIAL-LOGIN-DETACHED-IMPLEMENTATION.md` 独立实施。
 
 ## 待审与未覆盖
 
-本批只申请两张缓存返回后的“全新材料状态”审核，不代表 P50 页面、七种保存生命周期、真实助手、真实 API/加密/MySQL、权限或生产验收。通用四类写入另见独立实施图证；登录两段写离页对账、深链重复激活政策、主题/密度和全 73 页继续后续处理。
+本批只申请两张缓存返回后的“全新材料状态”审核，不代表 P50 页面、七种保存生命周期、真实助手、真实 API/加密/MySQL、权限或生产验收。通用四类写入与登录两段写离页对账另见独立实施图证；深链重复激活政策、主题/密度和全 73 页继续后续处理。

@@ -894,3 +894,323 @@ test("UI2-SC50 revoke locks its confirmation and renders the owned failure", asy
   await expect(dialog).toContainText("凭证版本已经变化，请重新读取后再撤销。");
   await expect(dialog).toContainText("ui2-revoke-conflict");
 });
+
+test("UI2-SC50 detached login continues its submitted two-step save and rereads facts", async ({
+  page,
+}) => {
+  await nav(page, [provider, secondProvider]);
+  await stubEmptyPlatformDashboard(page);
+  await page.unroute("**/api/v1/platform/crawler-profiles");
+  const savedAsset = {
+      ...asset,
+      id: "00000000-0000-4000-8000-000000000807",
+      name: "离页登录 Cookie 档案",
+      kind: "cookie_bundle",
+      version: 1,
+    },
+    savedProfile = {
+      ...profile,
+      id: "00000000-0000-4000-8000-000000000808",
+      credential_asset_id: savedAsset.id,
+      name: "离页登录运行档案",
+      status: "active",
+    };
+  let releaseAsset = () => {},
+    assetWriteStarted = false,
+    assetWrites = 0,
+    profileWrites = 0,
+    assetReads = 0,
+    profileReads = 0;
+  const assetGate = new Promise<void>((resolve) => {
+    releaseAsset = resolve;
+  });
+  await page.route("**/api/v1/platform/credential-assets", async (route) => {
+    if (route.request().method() === "POST") {
+      assetWrites += 1;
+      assetWriteStarted = true;
+      await assetGate;
+      return route.fulfill({
+        status: 201,
+        json: {
+          data: savedAsset,
+          request_id: "ui2-login-detached-asset",
+          trace_id: "ui2-login-detached-asset",
+        },
+      });
+    }
+    assetReads += 1;
+    return route.fulfill({
+      json: {
+        data: assetWrites ? [savedAsset] : [],
+        request_id: `ui2-login-detached-assets-${assetReads}`,
+        trace_id: `ui2-login-detached-assets-${assetReads}`,
+      },
+    });
+  });
+  await page.route("**/api/v1/platform/crawler-profiles", async (route) => {
+    if (route.request().method() === "POST") {
+      profileWrites += 1;
+      return route.fulfill({
+        status: 201,
+        json: {
+          data: savedProfile,
+          request_id: "ui2-login-detached-profile",
+          trace_id: "ui2-login-detached-profile",
+        },
+      });
+    }
+    profileReads += 1;
+    return route.fulfill({
+      json: {
+        data: profileWrites ? [savedProfile] : [],
+        request_id: `ui2-login-detached-profiles-${profileReads}`,
+        trace_id: `ui2-login-detached-profiles-${profileReads}`,
+      },
+    });
+  });
+  await page.goto(`/platform-admin/credentials?provider_id=${provider.id}&mode=login`);
+  const dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await dialog.locator('input[type="file"]').setInputFiles({
+    name: "detached-login.cookies",
+    mimeType: "text/plain",
+    buffer: Buffer.from('[{"name":"study","value":"synthetic","domain":"example.test"}]'),
+  });
+  await dialog.getByRole("button", { name: "加密保存并启用", exact: true }).click();
+  await expect.poll(() => assetWriteStarted).toBe(true);
+  await navigatePlatform(page, "/platform-admin");
+  await page.goBack();
+  await expect(page.getByRole("status")).toContainText("网页登录档案保存仍在等待服务器响应");
+  await expect(page.getByRole("button", { name: "配置网页登录", exact: true })).toBeDisabled();
+  releaseAsset();
+  await expect(page.getByRole("heading", { name: savedAsset.name, exact: true })).toBeVisible();
+  await expect(page.locator(".profile-list")).toContainText(savedProfile.name);
+  await expect(page.getByRole("status")).toContainText("网页登录档案保存已完成");
+  expect({ assetWrites, profileWrites, assetReads, profileReads }).toEqual({
+    assetWrites: 1,
+    profileWrites: 1,
+    assetReads: 2,
+    profileReads: 2,
+  });
+});
+
+test("UI2-SC50 detached login asset unknown rereads without creating a profile", async ({
+  page,
+}) => {
+  await nav(page, [provider, secondProvider]);
+  await stubEmptyPlatformDashboard(page);
+  await page.unroute("**/api/v1/platform/crawler-profiles");
+  let releaseAsset = () => {},
+    assetWriteStarted = false,
+    assetWrites = 0,
+    profileWrites = 0,
+    assetReads = 0;
+  const assetGate = new Promise<void>((resolve) => {
+    releaseAsset = resolve;
+  });
+  await page.route("**/api/v1/platform/credential-assets", async (route) => {
+    if (route.request().method() === "POST") {
+      assetWrites += 1;
+      assetWriteStarted = true;
+      await assetGate;
+      return route.abort("failed");
+    }
+    assetReads += 1;
+    return route.fulfill({
+      json: {
+        data: [],
+        request_id: `ui2-login-asset-unknown-${assetReads}`,
+        trace_id: `ui2-login-asset-unknown-${assetReads}`,
+      },
+    });
+  });
+  await page.route("**/api/v1/platform/crawler-profiles", async (route) => {
+    if (route.request().method() === "POST") profileWrites += 1;
+    return route.fulfill({
+      json: { data: [], request_id: "ui2-login-profile-none", trace_id: "ui2-login-profile-none" },
+    });
+  });
+  await page.goto(`/platform-admin/credentials?provider_id=${provider.id}&mode=login`);
+  const dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await dialog.locator('input[type="file"]').setInputFiles({
+    name: "detached-unknown.cookies",
+    mimeType: "text/plain",
+    buffer: Buffer.from('[{"name":"study","value":"synthetic","domain":"example.test"}]'),
+  });
+  await dialog.getByRole("button", { name: "加密保存并启用", exact: true }).click();
+  await expect.poll(() => assetWriteStarted).toBe(true);
+  await navigatePlatform(page, "/platform-admin");
+  await page.goBack();
+  await expect(page.getByRole("status")).toContainText("网页登录档案保存仍在等待服务器响应");
+  releaseAsset();
+  await expect(page.getByRole("status")).toContainText("凭证资产写入结果暂时无法确认");
+  await expect(page.getByRole("status")).toContainText("避免重新导入");
+  expect({ assetWrites, profileWrites, assetReads }).toEqual({
+    assetWrites: 1,
+    profileWrites: 0,
+    assetReads: 2,
+  });
+});
+
+test("UI2-SC50 detached login profile failure rereads the saved asset for recovery", async ({
+  page,
+}) => {
+  await nav(page, [provider, secondProvider]);
+  await stubEmptyPlatformDashboard(page);
+  await page.unroute("**/api/v1/platform/crawler-profiles");
+  const savedAsset = {
+    ...asset,
+    id: "00000000-0000-4000-8000-000000000809",
+    name: "部分成功 Cookie 档案",
+    kind: "cookie_bundle",
+    version: 1,
+  };
+  let releaseProfile = () => {},
+    profileWriteStarted = false,
+    assetWrites = 0,
+    profileWrites = 0,
+    assetReads = 0;
+  const profileGate = new Promise<void>((resolve) => {
+    releaseProfile = resolve;
+  });
+  await page.route("**/api/v1/platform/credential-assets", async (route) => {
+    if (route.request().method() === "POST") {
+      assetWrites += 1;
+      return route.fulfill({
+        status: 201,
+        json: {
+          data: savedAsset,
+          request_id: "ui2-login-partial-asset",
+          trace_id: "ui2-login-partial-asset",
+        },
+      });
+    }
+    assetReads += 1;
+    return route.fulfill({
+      json: {
+        data: assetWrites ? [savedAsset] : [],
+        request_id: `ui2-login-partial-assets-${assetReads}`,
+        trace_id: `ui2-login-partial-assets-${assetReads}`,
+      },
+    });
+  });
+  await page.route("**/api/v1/platform/crawler-profiles", async (route) => {
+    if (route.request().method() === "POST") {
+      profileWrites += 1;
+      profileWriteStarted = true;
+      await profileGate;
+      return route.fulfill({
+        status: 409,
+        json: {
+          error: {
+            code: "crawler_profile_conflict",
+            message: "运行档案冲突",
+            action_hint: "运行档案未创建，请重新读取后继续。",
+          },
+          request_id: "ui2-login-partial-profile",
+          trace_id: "ui2-login-partial-profile",
+        },
+      });
+    }
+    return route.fulfill({
+      json: { data: [], request_id: "ui2-login-partial-read", trace_id: "ui2-login-partial-read" },
+    });
+  });
+  await page.goto(`/platform-admin/credentials?provider_id=${provider.id}&mode=login`);
+  const dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await dialog.locator('input[type="file"]').setInputFiles({
+    name: "detached-partial.cookies",
+    mimeType: "text/plain",
+    buffer: Buffer.from('[{"name":"study","value":"synthetic","domain":"example.test"}]'),
+  });
+  await dialog.getByRole("button", { name: "加密保存并启用", exact: true }).click();
+  await expect.poll(() => profileWriteStarted).toBe(true);
+  await navigatePlatform(page, "/platform-admin");
+  await page.goBack();
+  await expect(page.getByRole("status")).toContainText("网页登录档案保存仍在等待服务器响应");
+  releaseProfile();
+  await expect(page.getByRole("heading", { name: savedAsset.name, exact: true })).toBeVisible();
+  await expect(page.getByRole("status")).toContainText("加密档案已保存，但运行档案未创建");
+  await expect(page.getByRole("status")).toContainText("关联运行档案");
+  await expect(page.getByText("ui2-login-partial-profile", { exact: true })).toBeVisible();
+  expect({ assetWrites, profileWrites, assetReads }).toEqual({
+    assetWrites: 1,
+    profileWrites: 1,
+    assetReads: 2,
+  });
+});
+
+test("UI2-SC50 detached login profile unknown rereads before any manual recovery", async ({
+  page,
+}) => {
+  await nav(page, [provider, secondProvider]);
+  await stubEmptyPlatformDashboard(page);
+  await page.unroute("**/api/v1/platform/crawler-profiles");
+  const savedAsset = {
+    ...asset,
+    id: "00000000-0000-4000-8000-000000000810",
+    name: "待核对 Cookie 档案",
+    kind: "cookie_bundle",
+    version: 1,
+  };
+  let releaseProfile = () => {},
+    profileWriteStarted = false,
+    assetWrites = 0,
+    profileWrites = 0,
+    assetReads = 0;
+  const profileGate = new Promise<void>((resolve) => {
+    releaseProfile = resolve;
+  });
+  await page.route("**/api/v1/platform/credential-assets", async (route) => {
+    if (route.request().method() === "POST") {
+      assetWrites += 1;
+      return route.fulfill({
+        status: 201,
+        json: {
+          data: savedAsset,
+          request_id: "ui2-login-profile-unknown-asset",
+          trace_id: "ui2-login-profile-unknown-asset",
+        },
+      });
+    }
+    assetReads += 1;
+    return route.fulfill({
+      json: {
+        data: assetWrites ? [savedAsset] : [],
+        request_id: `ui2-login-profile-unknown-assets-${assetReads}`,
+        trace_id: `ui2-login-profile-unknown-assets-${assetReads}`,
+      },
+    });
+  });
+  await page.route("**/api/v1/platform/crawler-profiles", async (route) => {
+    if (route.request().method() === "POST") {
+      profileWrites += 1;
+      profileWriteStarted = true;
+      await profileGate;
+      return route.abort("failed");
+    }
+    return route.fulfill({
+      json: { data: [], request_id: "ui2-login-unknown-read", trace_id: "ui2-login-unknown-read" },
+    });
+  });
+  await page.goto(`/platform-admin/credentials?provider_id=${provider.id}&mode=login`);
+  const dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await dialog.locator('input[type="file"]').setInputFiles({
+    name: "detached-profile-unknown.cookies",
+    mimeType: "text/plain",
+    buffer: Buffer.from('[{"name":"study","value":"synthetic","domain":"example.test"}]'),
+  });
+  await dialog.getByRole("button", { name: "加密保存并启用", exact: true }).click();
+  await expect.poll(() => profileWriteStarted).toBe(true);
+  await navigatePlatform(page, "/platform-admin");
+  await page.goBack();
+  await expect(page.getByRole("status")).toContainText("网页登录档案保存仍在等待服务器响应");
+  releaseProfile();
+  await expect(page.getByRole("heading", { name: savedAsset.name, exact: true })).toBeVisible();
+  await expect(page.getByRole("status")).toContainText("运行档案写入结果暂时无法确认");
+  await expect(page.getByRole("status")).toContainText("避免重新导入或重复关联");
+  expect({ assetWrites, profileWrites, assetReads }).toEqual({
+    assetWrites: 1,
+    profileWrites: 1,
+    assetReads: 2,
+  });
+});

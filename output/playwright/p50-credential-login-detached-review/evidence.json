@@ -1,0 +1,2774 @@
+{
+  "kind": "P50-CREDENTIAL-LOGIN-DETACHED-IMPLEMENTATION-r1",
+  "generatedAt": "2026-09-11T19:41:53.198Z",
+  "reviewOnly": true,
+  "productionChanged": true,
+  "deployed": false,
+  "processesClosed": true,
+  "states": [
+    "detached-login-pending",
+    "detached-login-success",
+    "detached-login-asset-unknown",
+    "detached-login-profile-unknown",
+    "detached-login-profile-rejected"
+  ],
+  "ports": [
+    64830
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "state": "detached-login-pending",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "pending notice is informational",
+          "actual": "info"
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "13b3f3b3-22cd-451f-9732-576e43ff0841"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd3p0t\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "95670332-9682-4da2-adbe-b079a1f95d39"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "state": "detached-login-success",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "3ca47b7b-4175-4b48-b11b-001cf58a21f4"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd3pyh\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "a1fec3f5-0075-4ff5-b030-fc8f1c33bb19"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "state": "detached-login-asset-unknown",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 0
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 1
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "8d617ed1-6734-4008-845c-870605e480e4"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "state": "detached-login-profile-unknown",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "c1e3a525-3226-47b5-b3e3-86b39f3d9497"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd3rp5\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "21a3af22-0c62-453a-a75a-3fb4161a2784"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "state": "detached-login-profile-rejected",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "78b8313e-78ef-4200-b002-195e6823e148"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd3sj5\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "a96e4d25-fdf3-44ce-b011-89222b8652ef"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "state": "detached-login-pending",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "pending notice is informational",
+          "actual": "info"
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "68cfd481-a782-4930-ba15-be78c4796c1d"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd3tjx\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "a732b88e-7cd4-4ad2-9c02-f568596804e8"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "state": "detached-login-success",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "1c06c9c9-ed7f-4d3b-994c-1a455d824880"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd3uc9\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "7945f69f-7090-43e6-8346-a75a4c8ac77a"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "state": "detached-login-asset-unknown",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 0
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 1
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "22786d40-b7d6-41fd-9eb7-4303b1fc9352"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "state": "detached-login-profile-unknown",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "5d486bee-98a5-47a2-a1c0-a113f8483a91"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd3vzu\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "bbf7cfb2-5cd8-48b6-a4d3-a71d1137289f"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "state": "detached-login-profile-rejected",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "2f6c3095-46aa-4a47-bb19-bf949afde931"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd3x0n\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "41571711-10c7-4c5c-8fb4-23b566726ca9"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "state": "detached-login-pending",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "pending notice is informational",
+          "actual": "info"
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "6f57f848-4ee6-44a6-a0ec-3b5f2646948f"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd3xz8\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "42112e50-1e29-4245-b197-754a3c2c92f0"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "state": "detached-login-success",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "f6967a04-624e-42a3-8609-205042f28d21"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd3yxk\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "f39b07c3-e039-4eeb-97e8-139ad5f1f18a"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "state": "detached-login-asset-unknown",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 0
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 1
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "90811e62-016e-4264-94c3-5bfbb299bab8"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "state": "detached-login-profile-unknown",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "312db8d1-76ca-4012-9518-1ff735cfcca7"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd40rk\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "e4be203d-33a4-4559-a2ec-d62e3dc6aa9e"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "state": "detached-login-profile-rejected",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "f748a69c-de29-4b93-ae2e-134de69a6ef3"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd41rg\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "347ee96b-769f-4114-9d7e-9854dfc5f2ae"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "state": "detached-login-pending",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "pending notice is informational",
+          "actual": "info"
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "15480e50-bc6d-41b2-a25c-354ebc1e4751"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd42s7\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "05d08c33-b127-41cc-8ab9-71b25c52ff02"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "state": "detached-login-success",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "1b2dd058-2b19-4f3c-b29f-3af8fe069de7"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd4412\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "9978f414-1078-4882-b4f9-322817b8a8a4"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "state": "detached-login-asset-unknown",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 0
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 1
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "b16942fd-9796-4323-8888-683ef8856485"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "state": "detached-login-profile-unknown",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "3f741a01-6436-47da-a3eb-5b89b82486aa"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd4604\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "d7f86938-dfae-4818-bf83-e2ca6352216a"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "state": "detached-login-profile-rejected",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "mutation controls locked while detached login is pending",
+          "actual": true
+        },
+        {
+          "name": "login asset is submitted once",
+          "actual": 1
+        },
+        {
+          "name": "login profile is submitted at most once",
+          "actual": 1
+        },
+        {
+          "name": "detached result rereads assets once",
+          "actual": 2
+        },
+        {
+          "name": "detached result rereads profiles once",
+          "actual": 2
+        },
+        {
+          "name": "six credential data GETs",
+          "actual": 6
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "expected isolated writes",
+          "actual": 2
+        },
+        {
+          "name": "writes carry bodies and idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 configure login",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "POST /api/v1/platform/credential-assets",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"study\\\",\\\"value\\\":\\\"p50-hidden-detached-login\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
+          "idempotencyKey": "d0ba989c-fd3f-4943-b56d-86533fdc0cd0"
+        },
+        {
+          "key": "POST /api/v1/platform/crawler-profiles",
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000811\",\"code\":\"browser_source_login_mtxd472p\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "4007c378-45db-401f-aa8d-027769bed599"
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-detached-login-pending.png",
+      "width": 390,
+      "state": "detached-login-pending",
+      "sha256": "68b1b98e848a8e8f5d7b81d3543eb07df37e7965cb272b854e6862c227c7b177",
+      "pixelWidth": 390,
+      "pixelHeight": 1000
+    },
+    {
+      "file": "390-detached-login-success.png",
+      "width": 390,
+      "state": "detached-login-success",
+      "sha256": "15fadad796a43c1199ecb9c7551f4b0312eb3600c0a7b07a5bddb0d39a06134f",
+      "pixelWidth": 390,
+      "pixelHeight": 1000
+    },
+    {
+      "file": "390-detached-login-asset-unknown.png",
+      "width": 390,
+      "state": "detached-login-asset-unknown",
+      "sha256": "bc012c0817c14d7ecb826a30a539c0c8005d066a3bfbd4a9bca556cd131ba9dd",
+      "pixelWidth": 390,
+      "pixelHeight": 1000
+    },
+    {
+      "file": "390-detached-login-profile-unknown.png",
+      "width": 390,
+      "state": "detached-login-profile-unknown",
+      "sha256": "0679d488bd381ace3e94498f2f1b34fb6f72d4e396f565545179da4ea3ee6f6b",
+      "pixelWidth": 390,
+      "pixelHeight": 1000
+    },
+    {
+      "file": "390-detached-login-profile-rejected.png",
+      "width": 390,
+      "state": "detached-login-profile-rejected",
+      "sha256": "c35102ea32c7c9c59c7dfaba565d3ed50ce6ca4c3c6b582dd6c2716af2b9afd5",
+      "pixelWidth": 390,
+      "pixelHeight": 1000
+    },
+    {
+      "file": "760-detached-login-pending.png",
+      "width": 760,
+      "state": "detached-login-pending",
+      "sha256": "e0e05496da657b0cf1816baf53262d6c718a46a8d3280088415699c29aa51376",
+      "pixelWidth": 760,
+      "pixelHeight": 1000
+    },
+    {
+      "file": "760-detached-login-success.png",
+      "width": 760,
+      "state": "detached-login-success",
+      "sha256": "326a3bc9d0f91c21823d879c1fe005969dbfab94a3721e02da176ddbe52dc4e9",
+      "pixelWidth": 760,
+      "pixelHeight": 1000
+    },
+    {
+      "file": "760-detached-login-asset-unknown.png",
+      "width": 760,
+      "state": "detached-login-asset-unknown",
+      "sha256": "c30ab3d2612586aa3c59fa51b43fa935914ccb9058f5ab329eaab8ac73f4a06f",
+      "pixelWidth": 760,
+      "pixelHeight": 1000
+    },
+    {
+      "file": "760-detached-login-profile-unknown.png",
+      "width": 760,
+      "state": "detached-login-profile-unknown",
+      "sha256": "ae8fb162e3db7f0f7101195b0e4f3fa06cb73486074471948d064286fe1697e8",
+      "pixelWidth": 760,
+      "pixelHeight": 1000
+    },
+    {
+      "file": "760-detached-login-profile-rejected.png",
+      "width": 760,
+      "state": "detached-login-profile-rejected",
+      "sha256": "e6633bc748004007b13c3c5d5ca238a1de9469981b0200a9087d5cdd1747aeef",
+      "pixelWidth": 760,
+      "pixelHeight": 1000
+    },
+    {
+      "file": "1024-detached-login-pending.png",
+      "width": 1024,
+      "state": "detached-login-pending",
+      "sha256": "2a862d6e83ec4f9bb10c12733817bc5fe7c0ba6d013fdd67880f392a8e828778",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-detached-login-success.png",
+      "width": 1024,
+      "state": "detached-login-success",
+      "sha256": "e3b0d7d3bf8eade641a39a62d112e27c2e4a136a133b536e6504ebc467410c95",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-detached-login-asset-unknown.png",
+      "width": 1024,
+      "state": "detached-login-asset-unknown",
+      "sha256": "a8395317517793f27b036f9fa5a8b7f5ed2a1dda758a4b0a25cd43353dbca396",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-detached-login-profile-unknown.png",
+      "width": 1024,
+      "state": "detached-login-profile-unknown",
+      "sha256": "1634324c7b5db8663008d44cf621ca616517afbe5878f381abc71675aeb40e03",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-detached-login-profile-rejected.png",
+      "width": 1024,
+      "state": "detached-login-profile-rejected",
+      "sha256": "31906ffae27510f29fe640bb835d01f2f1300eb924fa0be964767f927bcb9a44",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-detached-login-pending.png",
+      "width": 1440,
+      "state": "detached-login-pending",
+      "sha256": "fd36659a5f2bf9e6c945ae7babbf6f838fff7d86a9a09ca56d42ac1e043a0928",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-detached-login-success.png",
+      "width": 1440,
+      "state": "detached-login-success",
+      "sha256": "02efbb72fd4cb8302746df3f17cec8484969dc9ab57c7d5745e4786355dae918",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-detached-login-asset-unknown.png",
+      "width": 1440,
+      "state": "detached-login-asset-unknown",
+      "sha256": "93212296ca3e98d2a02c607873e0b539cdab7e46af907356af530335efc6ad58",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-detached-login-profile-unknown.png",
+      "width": 1440,
+      "state": "detached-login-profile-unknown",
+      "sha256": "1c4ef242c88740b8cac100f29210c35dc1d96606297c607ac1c8d96e4344e1ae",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-detached-login-profile-rejected.png",
+      "width": 1440,
+      "state": "detached-login-profile-rejected",
+      "sha256": "e11bbfae3053a7f2b87f7d6b1e14f7e82658c151ea24fc3113b5f6e6e381c0fd",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/index.html": "0376c4bf04227ac5dbb6bb43895e5ed97eef6ca8bde54f08774908d3f07d9d88",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AccountShell.vue": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/ApiCoverageDashboard.vue": "dfa6e82e10a8410c3ad761bf8d0f9c56bb018a29c3f9ba935a67014c16d1a126",
+    "apps/web/src/components/ApiFoundation.vue": "8329bdc20aa1d9f905c11ab81bce0ca1281a295b5d5732f16aeb65a0f2ea7b32",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/ApprovalWorkspace.vue": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+    "apps/web/src/components/AuditSecurityCenter.vue": "49e2dfcdc9e12cd7efcc7311b259daffb4fbb703187f2c1a026acabcb5a87a80",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/components/AuthorizationCenter.vue": "accb7cbfe2f0dc35466a81de506d0ca60223db49f13fa32ebd40ba38ee038920",
+    "apps/web/src/components/AutomationRuleCenter.vue": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+    "apps/web/src/components/BackupRecoveryCenter.vue": "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
+    "apps/web/src/components/CapacityBoundaryCenter.vue": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
+    "apps/web/src/components/CollectionOperationsConsole.vue": "0e22a3d1ae404c05b96b321424be8489c6c3bd21f2223e33af09c3eebef3b856",
+    "apps/web/src/components/CollectionRuntimeCenter.vue": "e6829b2cc84321af56e830cbd60839eafa89f23937cb44eeccf6b79e2428b3b4",
+    "apps/web/src/components/CollectionRuntimeSurface.vue": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
+    "apps/web/src/components/CollectionTaskCenter.vue": "1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed",
+    "apps/web/src/components/CommercialOperationsCenter.vue": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
+    "apps/web/src/components/CompetitorMonitor.vue": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+    "apps/web/src/components/ConfigBoundary.vue": "36d9cdf35921c647740965aad0d6ed490ecbc0afdc9c80da6b861befbbc622cb",
+    "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
+    "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+    "apps/web/src/components/CrawlerSchedulerCenter.vue": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
+    "apps/web/src/components/CredentialAssetCenter.vue": "d06cdc7dad91fbed93334f37648c7cb7e81500c280cb121cf554fc8b062a4dfa",
+    "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+    "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
+    "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+    "apps/web/src/components/FileAuditFoundation.vue": "430edf42d733087abe6628a89214516d17b5afc8cc921ce148b7003f3392b184",
+    "apps/web/src/components/FileResilienceCenter.vue": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
+    "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4",
+    "apps/web/src/components/HomeDashboard.vue": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+    "apps/web/src/components/LandingRedirect.vue": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7",
+    "apps/web/src/components/LocalIdentity.vue": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
+    "apps/web/src/components/MySqlFoundation.vue": "b7d39ddfda7ddcd69ed1ca77290b074846b80acb933e7cdf1ef4467f0e3e73f3",
+    "apps/web/src/components/MySqlResilienceCenter.vue": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/NotFoundPage.vue": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b",
+    "apps/web/src/components/NotificationCenter.vue": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+    "apps/web/src/components/OnboardingGuide.vue": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088",
+    "apps/web/src/components/OpenPlatformCenter.vue": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
+    "apps/web/src/components/OpportunityAiPanel.vue": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
+    "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+    "apps/web/src/components/OpportunityDecisionPanel.vue": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+    "apps/web/src/components/OpportunityDetailInsights.vue": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
+    "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
+    "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
+    "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
+    "apps/web/src/components/OpportunityListPanel.vue": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+    "apps/web/src/components/OpportunityMobileShell.vue": "093aafdd1b27c39b89b8fac76aa90f9ac61337bd062607a51800b82c3938f934",
+    "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+    "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/components/PersonalCenter.vue": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+    "apps/web/src/components/PlatformAccountCenter.vue": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformContentPagination.vue": "2c59ac9fa920dd095d36718eb86638a58abaebc6dd99bd8b73e869af5a0e6402",
+    "apps/web/src/components/PlatformDashboard.vue": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+    "apps/web/src/components/PlatformDataCenter.vue": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
+    "apps/web/src/components/PlatformGovernanceCenter.vue": "76eae80f51225c3af676a17ab9c4ec94369262cc5e8c968be7fd62ef5f2280db",
+    "apps/web/src/components/PlatformLogCenter.vue": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+    "apps/web/src/components/PlatformManagementCenter.vue": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
+    "apps/web/src/components/PlatformManagementFilter.vue": "b1e608502ee29df66c4f813c38a6593ffc4c8bc5770183cfdfafbf968db689d9",
+    "apps/web/src/components/PlatformManagementRecordList.vue": "3ec74f90ff5740a58f70ea98fdc9c76835da9d223f01dd31d23ffd6a7cf78bfc",
+    "apps/web/src/components/PlatformMessageEditor.vue": "8bafb3374f744389257c36a27580dbf768a9b4a0991fa0ce748889bb2c093cea",
+    "apps/web/src/components/PlatformMessageWorkbench.vue": "7863a19cace6a921628b2e33e66434a5662868d8a33351abc1ef3d129a7382c2",
+    "apps/web/src/components/PlatformNotificationManagement.vue": "a91ffa14ffdbd1f17b01f0877b745288d96c4ea8574449721edbc61883f1cb18",
+    "apps/web/src/components/PlatformNotificationOperations.vue": "18c8b856cc26ed7aa7bf45f7375645ea23a5914b50425d84ee03efc17268cc6c",
+    "apps/web/src/components/PlatformNotificationPagination.vue": "6116c32da6df91e40433fd5f4e4f9cc82c59d20b5726df52ebfdafcaf08b1606",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.vue": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "66b064c2135275b9d173ef316692366823ef4f6276002796d9ed112183218cef",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.css": "a31b900bedbf1cafdf756eea8b7bd8742a5ec844fef9bcad0d8ffe643e39bb74",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/RedisFoundation.vue": "c39e3eecfad2441d0ca0bf157d59c7b507dbeb709051b39de7fded1982da4dea",
+    "apps/web/src/components/RedisResilienceCenter.vue": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
+    "apps/web/src/components/ReleaseRolloutCenter.vue": "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
+    "apps/web/src/components/ReportCenter.vue": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+    "apps/web/src/components/ResourceGrantCenter.vue": "80a3164ccef4a3c2f0e547f01ea0789c7f0c6b50f07858e07a2721ca8e196970",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+    "apps/web/src/components/RuntimeTopologyCenter.vue": "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
+    "apps/web/src/components/ScoreRuleConsole.vue": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+    "apps/web/src/components/SecurityOperationsCenter.vue": "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
+    "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
+    "apps/web/src/components/SourcingComparisonPanel.vue": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+    "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
+    "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+    "apps/web/src/components/SourcingWorkspaceDialogs.vue": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/TaskBatchActions.vue": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d",
+    "apps/web/src/components/TaskDetailPanel.vue": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
+    "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
+    "apps/web/src/components/TaskWorkspace.vue": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+    "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
+    "apps/web/src/components/TenancyChooser.vue": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
+    "apps/web/src/components/ThemeStudio.vue": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+    "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f",
+    "apps/web/src/components/TrendDashboard.vue": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+    "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
+    "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
+    "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
+    "apps/web/src/components/TrendRuleDialog.vue": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/components/UiStateShowcase.vue": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
+    "apps/web/src/components/VerificationFramework.vue": "aab55dcadf05e3427665faadb057f86a5fbe44dde8f022b0a7225f6c1ec6cccf",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/src/credential-assets.css": "57a84bb3a44e788fbb94de6b5855a0dffb7c070edc8be79d3b092df2427e93c3",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/navigation-shell-scoped.css": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+    "apps/web/src/provider-adapters-c-detail.css": "094a11fe39b3701c35d6061f7a570e940b3bb00abcc0b2ed7f64ffeaea0c6bdd",
+    "apps/web/src/provider-adapters-c-feedback.css": "64b09e635e98f8865ea2fb3c8b33b1d21f447affd55061f3d01cf6667904bba2",
+    "apps/web/src/provider-adapters-c-page.css": "899ca57a21bceef95c7dc030bb7f92bae1755f324b1d26c3f0ba692dad736c86",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/route-catalog.generated.json": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/signal-ledger-workflows.css": "3a3bcb8ca4aa2c0b7dae11218223aaa9de25db45eb0704a2670ea156bf06229b",
+    "apps/web/src/signal-ledger.css": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/provider-approved-feedback.css": "6b21f3adefccd50f52268076f3dc6134eb66db02c8c62a8404a19fa2e2c45a9e",
+    "apps/web/src/styles/provider-approved-structure.css": "901f1088e4ff961a730204ab6e0ac2111b20bc1448a5001299c98f53f318308b",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css": "7e2411b46606e8cca9901ce1dfb024610b7d287c4278eb2ce5d7bc56a6b3c0a8",
+    "design-plans/ui-phase-2-2026-09-07/implementation/credential-login-material-preview.css": "5eb2b981c695e6bdbeee358a3508d697b849f99222f0d89b9e923350cdaea5ea",
+    "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
+    "scripts/lib/ui-phase2-credential-login-material-preview.mjs": "7869a322a10702b53be1afde3ff0393e6547800e57b49eb351f0336d1a52a0e9",
+    "scripts/verify-ui-phase2-credential-login-material.mjs": "d0a16a1d5e14e5a0e34023ae689965bd08920a896115de257d4944c00a4ed8cc",
+    "tests/e2e/m03-02-credential-assets.spec.ts": "f735f94d9f2d564e26608736c19cdd899ffbf30d88b0aabbb666550cb076703c"
+  },
+  "materialBoundary": "All detached-login materials are synthetic and local. The two POST steps and the following authoritative reread are intercepted inside an isolated browser using the actual App, Router, NavigationShell and KeepAlive. No request reaches a backend, encryption service, database or production credential system; material values are neither rendered nor persisted.",
+  "proposalBoundary": "The production Vue component now lets an already-submitted login import finish its asset-to-profile chain after KeepAlive deactivation, keeps new mutation controls locked while pending, and reconciles success, unknown or partial outcomes through one fresh read before allowing recovery. It never replays either write. C-direction styling remains review-only; real helper/API/database/permissions and production deployment are not claimed."
+}

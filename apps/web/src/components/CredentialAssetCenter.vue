@@ -18,7 +18,7 @@ import "../credential-login.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type EditorKind = "asset" | "rotate" | "profile" | "login";
 type LoginSaveStage = "idle" | "asset" | "profile" | "partial" | "unknown";
-type DetachedWriteOutcome = "success" | "unknown" | "failure";
+type DetachedWriteOutcome = "success" | "unknown" | "failure" | "partial";
 interface WriteResult<T> {
   data: T | null;
   error: ApiClientError | null;
@@ -28,6 +28,7 @@ interface DetachedWriteSettlement {
   label: string;
   outcome: DetachedWriteOutcome;
   actionHint: string;
+  message: string;
   requestId: string;
 }
 interface Asset {
@@ -557,11 +558,17 @@ function beginOwnedWrite(label: string) {
   refreshNotice.value = "";
   refreshNoticeRequestId.value = "";
 }
-function detachedSettlement<T>(label: string, result: WriteResult<T>): DetachedWriteSettlement {
+function detachedSettlement<T>(
+  label: string,
+  result: WriteResult<T>,
+  override: Partial<Pick<DetachedWriteSettlement, "outcome" | "message">> = {},
+): DetachedWriteSettlement {
   return {
     label,
-    outcome: result.data ? "success" : result.error?.status ? "failure" : "unknown",
+    outcome:
+      override.outcome ?? (result.data ? "success" : result.error?.status ? "failure" : "unknown"),
     actionHint: result.error?.actionHint ?? "",
+    message: override.message ?? "",
     requestId: result.requestId,
   };
 }
@@ -582,8 +589,11 @@ async function applyDetachedWriteSettlement(settlement: DetachedWriteSettlement)
     return;
   }
   refreshNoticeTone.value = settlement.outcome === "success" && refreshed ? "success" : "danger";
-  refreshNotice.value =
-    settlement.outcome === "success"
+  refreshNotice.value = settlement.message
+    ? refreshed
+      ? `${settlement.message} 当前资料已重新读取。`
+      : `${settlement.message} 当前资料未能刷新，请稍后点击“刷新数据”核对。`
+    : settlement.outcome === "success"
       ? refreshed
         ? `${settlement.label}已完成，当前凭证资料已重新读取。`
         : `${settlement.label}已完成，但当前资料未能刷新，请点击“刷新数据”重试。`
@@ -592,9 +602,13 @@ async function applyDetachedWriteSettlement(settlement: DetachedWriteSettlement)
         : `${settlement.label}结果暂时无法确认，当前资料也未能刷新；请稍后点击“刷新数据”核对，避免重复提交。`;
   refreshNoticeRequestId.value = settlement.requestId;
 }
-async function settleDetachedWrite<T>(label: string, result: WriteResult<T>) {
+async function settleDetachedWrite<T>(
+  label: string,
+  result: WriteResult<T>,
+  override?: Partial<Pick<DetachedWriteSettlement, "outcome" | "message">>,
+) {
   pendingWriteLabel.value = "";
-  await applyDetachedWriteSettlement(detachedSettlement(label, result));
+  await applyDetachedWriteSettlement(detachedSettlement(label, result, override));
 }
 async function saveAsset() {
   if (saving.value) return;
@@ -676,7 +690,12 @@ async function saveLogin() {
   const provider = loginProvider.value;
   if (!provider || !loginPayload.value) return;
   const generation = editorGeneration,
-    isCurrent = () => editor.value === "login" && editorGeneration === generation,
+    visit = pageVisit,
+    isCurrent = () =>
+      pageActive &&
+      pageVisit === visit &&
+      editor.value === "login" &&
+      editorGeneration === generation,
     mode = loginMode.value,
     payload = loginPayload.value,
     stamp = Date.now().toString(36),
@@ -686,6 +705,7 @@ async function saveLogin() {
         .replace(/[^a-z0-9]+/g, "_")
         .replace(/^_|_$/g, "")
         .slice(0, 45) || "source";
+  beginOwnedWrite("网页登录档案保存");
   loginSaveStage.value = "asset";
   const assetResult = await writeOutcome<Asset>(
     "/platform/credential-assets",
@@ -701,8 +721,22 @@ async function saveLogin() {
     },
     isCurrent,
   );
-  if (!isCurrent()) return;
   if (!assetResult.data) {
+    if (!isCurrent()) {
+      await settleDetachedWrite(
+        "凭证资产写入",
+        assetResult,
+        assetResult.error?.status === 0
+          ? {
+              outcome: "unknown",
+              message:
+                "凭证资产写入结果暂时无法确认。请核对当前资料后再操作，避免重新导入或重复提交。",
+            }
+          : undefined,
+      );
+      return;
+    }
+    pendingWriteLabel.value = "";
     if (assetResult.error?.status === 0) {
       invalidateLoginMaterial();
       loginSaveStage.value = "unknown";
@@ -711,8 +745,10 @@ async function saveLogin() {
     } else loginSaveStage.value = "idle";
     return;
   }
-  invalidateLoginMaterial();
-  loginSaveStage.value = "profile";
+  if (isCurrent()) {
+    invalidateLoginMaterial();
+    loginSaveStage.value = "profile";
+  }
   const profileResult = await writeOutcome<Profile>(
     "/platform/crawler-profiles",
     {
@@ -727,7 +763,23 @@ async function saveLogin() {
     },
     isCurrent,
   );
-  if (!isCurrent()) return;
+  if (!isCurrent()) {
+    if (profileResult.data) await settleDetachedWrite("网页登录档案保存", profileResult);
+    else if (profileResult.error?.status === 0)
+      await settleDetachedWrite("运行档案写入", profileResult, {
+        outcome: "unknown",
+        message:
+          "加密档案已保存，但运行档案写入结果暂时无法确认。请核对当前资料后再操作，避免重新导入或重复关联。",
+      });
+    else
+      await settleDetachedWrite("运行档案创建", profileResult, {
+        outcome: "partial",
+        message:
+          "加密档案已保存，但运行档案未创建。请点击“关联运行档案”，选择刚保存的档案继续；无需重新导入。",
+      });
+    return;
+  }
+  pendingWriteLabel.value = "";
   if (!profileResult.data) {
     loginSaveStage.value = profileResult.error?.status === 0 ? "unknown" : "partial";
     message.value =

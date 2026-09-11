@@ -14,17 +14,19 @@ assert.ok(
   args.every(
     (arg) =>
       arg === "--capture" ||
-      ["--suite=boundary", "--suite=lifecycle", "--suite=cache"].includes(arg),
+      ["--suite=boundary", "--suite=lifecycle", "--suite=cache", "--suite=detached"].includes(arg),
   ),
 );
 const capture = args.includes("--capture"),
-  suite = args.includes("--suite=cache")
-    ? "cache"
-    : args.includes("--suite=lifecycle")
-      ? "lifecycle"
-      : args.includes("--suite=boundary")
-        ? "boundary"
-        : "core",
+  suite = args.includes("--suite=detached")
+    ? "detached"
+    : args.includes("--suite=cache")
+      ? "cache"
+      : args.includes("--suite=lifecycle")
+        ? "lifecycle"
+        : args.includes("--suite=boundary")
+          ? "boundary"
+          : "core",
   output =
     suite === "core"
       ? "output/playwright/p50-credential-login-material-review"
@@ -32,7 +34,9 @@ const capture = args.includes("--capture"),
         ? "output/playwright/p50-credential-login-boundary-review"
         : suite === "lifecycle"
           ? "output/playwright/p50-credential-login-lifecycle-review"
-          : "output/playwright/p50-credential-login-cache-review",
+          : suite === "cache"
+            ? "output/playwright/p50-credential-login-cache-review"
+            : "output/playwright/p50-credential-login-detached-review",
   component = "apps/web/src/components/CredentialAssetCenter.vue",
   pageCss = "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css",
   materialCss =
@@ -68,6 +72,13 @@ const capture = args.includes("--capture"),
       "profile-rejected",
     ],
     cache: ["cache-material-cleared", "cache-helper-late-ignored"],
+    detached: [
+      "detached-login-pending",
+      "detached-login-success",
+      "detached-login-asset-unknown",
+      "detached-login-profile-unknown",
+      "detached-login-profile-rejected",
+    ],
   }[suite];
 
 const ast = ts.createSourceFile(fixture, await read(fixture), ts.ScriptTarget.Latest, true),
@@ -92,6 +103,20 @@ vm.runInNewContext(
   box,
 );
 const data = JSON.parse(JSON.stringify(box.data)),
+  detachedAsset = {
+    ...data.asset,
+    id: "00000000-0000-4000-8000-000000000811",
+    name: "离页登录 Cookie 档案",
+    kind: "cookie_bundle",
+    version: 1,
+  },
+  detachedProfile = {
+    ...data.profile,
+    id: "00000000-0000-4000-8000-000000000812",
+    credential_asset_id: "00000000-0000-4000-8000-000000000811",
+    name: "离页登录运行档案",
+    status: "active",
+  },
   sources = new Set([
     component,
     pageCss,
@@ -177,10 +202,19 @@ try {
           errors = [],
           checks = [];
         let releaseAssetWrite = () => {},
+          releaseProfileWrite = () => {},
           assetWriteStarted = false,
+          profileWriteStarted = false,
+          assetWrites = 0,
+          profileWrites = 0,
+          assetReads = 0,
+          profileReads = 0,
           screenshotTaken = false;
         const assetWriteGate = new Promise((resolve) => {
           releaseAssetWrite = resolve;
+        });
+        const profileWriteGate = new Promise((resolve) => {
+          releaseProfileWrite = resolve;
         });
         const check = (name, actual, expected = true) => {
             assert.deepEqual(actual, expected, `${width}/${state}:${name}`);
@@ -200,6 +234,15 @@ try {
               pixelHeight: bytes.readUInt32BE(20),
             });
             screenshotTaken = true;
+          },
+          leaveAndReturn = async () => {
+            const link = page
+              .getByRole("navigation", { name: "平台管理后台导航", exact: true })
+              .locator('a[href="/platform-admin"]');
+            await link.evaluate((element) => element.click());
+            await expect(page).toHaveURL(/\/platform-admin$/);
+            await page.goBack();
+            await expect(page).toHaveURL(/\/platform-admin\/credentials\?/);
           };
         await page.addInitScript((reviewState) => {
           window.__p50BridgeRequests = [];
@@ -237,12 +280,16 @@ try {
             "GET /api/v1/platform/crawler-profiles",
             "GET /api/v1/platform/credential-provider-options",
           ];
-          if (suite === "cache") allowedGet.push("GET /api/v1/platform/dashboard");
+          if (["cache", "detached"].includes(suite))
+            allowedGet.push("GET /api/v1/platform/dashboard");
           const allowedPost = [
             "POST /api/v1/platform/credential-assets",
             "POST /api/v1/platform/crawler-profiles",
           ];
-          if (!allowedGet.includes(key) && !(suite === "lifecycle" && allowedPost.includes(key))) {
+          if (
+            !allowedGet.includes(key) &&
+            !(["lifecycle", "detached"].includes(suite) && allowedPost.includes(key))
+          ) {
             unexpected.push(key);
             return route.abort();
           }
@@ -253,6 +300,22 @@ try {
           });
           if (key === "POST /api/v1/platform/credential-assets") {
             assetWriteStarted = true;
+            assetWrites += 1;
+            if (suite === "detached") {
+              if (
+                [
+                  "detached-login-pending",
+                  "detached-login-success",
+                  "detached-login-asset-unknown",
+                ].includes(state)
+              )
+                await assetWriteGate;
+              if (state === "detached-login-asset-unknown") return route.abort("failed");
+              return route.fulfill({
+                status: 201,
+                json: { data: detachedAsset, request_id: "p50-detached-asset" },
+              });
+            }
             if (state === "saving-asset") {
               await assetWriteGate;
               return route.fulfill({
@@ -278,6 +341,33 @@ try {
             });
           }
           if (key === "POST /api/v1/platform/crawler-profiles") {
+            profileWriteStarted = true;
+            profileWrites += 1;
+            if (suite === "detached") {
+              if (
+                ["detached-login-profile-unknown", "detached-login-profile-rejected"].includes(
+                  state,
+                )
+              )
+                await profileWriteGate;
+              if (state === "detached-login-profile-unknown") return route.abort("failed");
+              if (state === "detached-login-profile-rejected")
+                return route.fulfill({
+                  status: 409,
+                  json: {
+                    error: {
+                      code: "crawler_profile_conflict",
+                      message: "运行档案冲突",
+                      action_hint: "运行档案未创建，请重新读取后继续。",
+                    },
+                    request_id: "p50-detached-profile-rejected",
+                  },
+                });
+              return route.fulfill({
+                status: 201,
+                json: { data: detachedProfile, request_id: "p50-detached-profile" },
+              });
+            }
             if (state === "profile-unknown") return route.abort("failed");
             if (state === "profile-rejected")
               return route.fulfill({
@@ -314,10 +404,31 @@ try {
             return route.fulfill({ json: { data: data.navigation, request_id: "p50-nav" } });
           if (url.pathname.endsWith("/auth/session-status"))
             return route.fulfill({ json: { data: { authenticated: true } } });
-          if (url.pathname.endsWith("/credential-assets"))
-            return route.fulfill({ json: { data: [data.asset], request_id: "p50-assets" } });
-          if (url.pathname.endsWith("/crawler-profiles"))
-            return route.fulfill({ json: { data: [data.profile], request_id: "p50-profiles" } });
+          if (url.pathname.endsWith("/credential-assets")) {
+            assetReads += 1;
+            return route.fulfill({
+              json: {
+                data: suite === "detached" && assetWrites ? [detachedAsset] : [data.asset],
+                request_id: `p50-assets-${assetReads}`,
+              },
+            });
+          }
+          if (url.pathname.endsWith("/crawler-profiles")) {
+            profileReads += 1;
+            return route.fulfill({
+              json: {
+                data:
+                  suite === "detached" &&
+                  profileWrites &&
+                  !["detached-login-profile-unknown", "detached-login-profile-rejected"].includes(
+                    state,
+                  )
+                    ? [detachedProfile]
+                    : [data.profile],
+                request_id: `p50-profiles-${profileReads}`,
+              },
+            });
+          }
           return route.fulfill({
             json: {
               data: [data.provider, data.secondProvider],
@@ -625,6 +736,76 @@ try {
             await expect(editor.getByRole("status")).toContainText("关联运行档案");
             check("rejected profile resubmit locked", await save.isDisabled());
           }
+        } else if (state.startsWith("detached-login-")) {
+          await editor.locator('input[type="file"]').setInputFiles({
+            name: `${state}.cookies`,
+            mimeType: "text/plain",
+            buffer: Buffer.from(
+              '[{"name":"study","value":"p50-hidden-detached-login","domain":"example.test"}]',
+            ),
+          });
+          await save.click();
+          if (
+            [
+              "detached-login-pending",
+              "detached-login-success",
+              "detached-login-asset-unknown",
+            ].includes(state)
+          )
+            await expect.poll(() => assetWriteStarted).toBe(true);
+          else await expect.poll(() => profileWriteStarted).toBe(true);
+          await leaveAndReturn();
+          const center = page.locator(".credential-center");
+          await expect(center.getByRole("status")).toContainText(
+            "网页登录档案保存仍在等待服务器响应",
+          );
+          check(
+            "mutation controls locked while detached login is pending",
+            await center.getByRole("button", { name: "配置网页登录", exact: true }).isDisabled(),
+          );
+          if (state === "detached-login-pending") {
+            check(
+              "pending notice is informational",
+              await center.getByRole("status").getAttribute("data-tone"),
+              "info",
+            );
+            await picture();
+            releaseAssetWrite();
+            await expect(center.getByRole("status")).toContainText("网页登录档案保存已完成");
+          } else if (state === "detached-login-success") {
+            releaseAssetWrite();
+            await expect(center.getByRole("heading", { name: detachedAsset.name })).toBeVisible();
+            await expect(center.locator(".profile-list")).toContainText(detachedProfile.name);
+            await expect(center.getByRole("status")).toContainText("网页登录档案保存已完成");
+          } else if (state === "detached-login-asset-unknown") {
+            releaseAssetWrite();
+            await expect(center.getByRole("status")).toContainText("凭证资产写入结果暂时无法确认");
+            await expect(center.getByRole("status")).toContainText("避免重新导入");
+          } else if (state === "detached-login-profile-unknown") {
+            releaseProfileWrite();
+            await expect(center.getByRole("heading", { name: detachedAsset.name })).toBeVisible();
+            await expect(center.getByRole("status")).toContainText("运行档案写入结果暂时无法确认");
+            await expect(center.getByRole("status")).toContainText("避免重新导入或重复关联");
+          } else {
+            releaseProfileWrite();
+            await expect(center.getByRole("heading", { name: detachedAsset.name })).toBeVisible();
+            await expect(center.getByRole("status")).toContainText(
+              "加密档案已保存，但运行档案未创建",
+            );
+            await expect(center.getByRole("status")).toContainText("关联运行档案");
+            await expect(
+              center.getByText("p50-detached-profile-rejected", { exact: true }),
+            ).toBeVisible();
+          }
+          if (state !== "detached-login-pending") await picture();
+          check("login asset is submitted once", assetWrites, 1);
+          check(
+            "login profile is submitted at most once",
+            profileWrites,
+            state === "detached-login-asset-unknown" ? 0 : 1,
+          );
+          check("detached result rereads assets once", assetReads, 2);
+          check("detached result rereads profiles once", profileReads, 2);
         } else if (state === "cache-material-cleared") {
           await editor.locator('input[type="file"]').setInputFiles({
             name: "cached-secret.cookies",
@@ -678,30 +859,33 @@ try {
           check("cached helper result ignored", await save.isDisabled());
         }
 
-        check(
-          "three credential data GETs",
-          requests.filter(
-            (request) =>
-              request.key.startsWith("GET ") &&
-              ["/credential-assets", "/crawler-profiles", "/credential-provider-options"].some(
-                (suffix) => request.key.endsWith(suffix),
-              ),
-          ).length,
-          3,
-        );
+        const credentialReads = requests.filter(
+          (request) =>
+            request.key.startsWith("GET ") &&
+            ["/credential-assets", "/crawler-profiles", "/credential-provider-options"].some(
+              (suffix) => request.key.endsWith(suffix),
+            ),
+        ).length;
+        if (suite === "detached") check("six credential data GETs", credentialReads, 6);
+        else check("three credential data GETs", credentialReads, 3);
         check(
           "all network requests are GET without bodies",
           requests
             .filter((request) => request.key.startsWith("GET "))
             .every((request) => request.body === null),
         );
-        if (suite === "lifecycle") {
+        if (["lifecycle", "detached"].includes(suite)) {
           const writes = requests.filter((request) => request.key.startsWith("POST ")),
-            expectedWrites = ["profile-unknown", "profile-rejected"].includes(state)
-              ? 2
-              : ["saving-asset", "asset-unknown"].includes(state)
-                ? 1
-                : 0;
+            expectedWrites =
+              suite === "detached"
+                ? state === "detached-login-asset-unknown"
+                  ? 1
+                  : 2
+                : ["profile-unknown", "profile-rejected"].includes(state)
+                  ? 2
+                  : ["saving-asset", "asset-unknown"].includes(state)
+                    ? 1
+                    : 0;
           check("expected isolated writes", writes.length, expectedWrites);
           check(
             "writes carry bodies and idempotency keys",
@@ -723,6 +907,7 @@ try {
               "p50-hidden-asset-unknown",
               "p50-hidden-profile-unknown",
               "p50-hidden-profile-rejected",
+              "p50-hidden-detached-login",
               "p50-hidden-cache-secret",
               "p50-hidden-cache-late",
             ].every((value) => !document.body.textContent.includes(value)),
@@ -748,40 +933,59 @@ try {
               "p50-hidden-asset-unknown",
               "p50-hidden-profile-unknown",
               "p50-hidden-profile-rejected",
+              "p50-hidden-detached-login",
               "p50-hidden-cache-secret",
               "p50-hidden-cache-late",
             ].every((value) => !persisted.includes(value));
           }),
         );
         check("no browser cookies created", (await context.cookies()).length, 0);
-        for (const [name, control] of [
-          ["source", source],
-          ["mode", mode],
-          ["cancel", cancel],
-          ["save", save],
-        ])
+        if (suite === "detached") {
           check(
-            `target44 ${name}`,
-            await control.evaluate((element) => {
+            "target44 configure login",
+            await page
+              .getByRole("button", { name: "配置网页登录", exact: true })
+              .evaluate((element) => {
+                const rect = element.getBoundingClientRect();
+                return rect.width >= 44 && rect.height >= 44;
+              }),
+          );
+          check(
+            "no horizontal overflow",
+            await page.evaluate(
+              () => document.documentElement.scrollWidth <= window.innerWidth + 1,
+            ),
+          );
+        } else {
+          for (const [name, control] of [
+            ["source", source],
+            ["mode", mode],
+            ["cancel", cancel],
+            ["save", save],
+          ])
+            check(
+              `target44 ${name}`,
+              await control.evaluate((element) => {
+                const rect = element.getBoundingClientRect();
+                return rect.width >= 44 && rect.height >= 44;
+              }),
+            );
+          check(
+            "no horizontal overflow",
+            await editor.evaluate(
+              (element) =>
+                element.scrollWidth <= element.clientWidth + 1 &&
+                document.documentElement.scrollWidth <= window.innerWidth + 1,
+            ),
+          );
+          check(
+            "footer actions remain in viewport",
+            await editor.locator(":scope > footer").evaluate((element) => {
               const rect = element.getBoundingClientRect();
-              return rect.width >= 44 && rect.height >= 44;
+              return rect.top >= 0 && rect.bottom <= window.innerHeight + 1;
             }),
           );
-        check(
-          "no horizontal overflow",
-          await editor.evaluate(
-            (element) =>
-              element.scrollWidth <= element.clientWidth + 1 &&
-              document.documentElement.scrollWidth <= window.innerWidth + 1,
-          ),
-        );
-        check(
-          "footer actions remain in viewport",
-          await editor.locator(":scope > footer").evaluate((element) => {
-            const rect = element.getBoundingClientRect();
-            return rect.top >= 0 && rect.bottom <= window.innerHeight + 1;
-          }),
-        );
+        }
         check("no unexpected network", unexpected, []);
         check("no runtime errors", errors, []);
         await page.evaluate(() => document.fonts.ready);
@@ -822,10 +1026,12 @@ const evidence = {
         ? "P50-CREDENTIAL-LOGIN-BOUNDARY-REVIEW-r1"
         : suite === "lifecycle"
           ? "P50-CREDENTIAL-LOGIN-LIFECYCLE-IMPLEMENTATION-r1"
-          : "P50-CREDENTIAL-LOGIN-CACHE-IMPLEMENTATION-r1",
+          : suite === "cache"
+            ? "P50-CREDENTIAL-LOGIN-CACHE-IMPLEMENTATION-r1"
+            : "P50-CREDENTIAL-LOGIN-DETACHED-IMPLEMENTATION-r1",
   generatedAt: new Date().toISOString(),
   reviewOnly: true,
-  productionChanged: ["lifecycle", "cache"].includes(suite),
+  productionChanged: ["lifecycle", "cache", "detached"].includes(suite),
   deployed: false,
   processesClosed: true,
   states,
@@ -840,7 +1046,9 @@ const evidence = {
         ? "Oversize and invalid files are synthetic local buffers; helper denial and timeout are locally delivered or clock-driven. No file content is rendered or persisted and no save action, external page, real helper, API write, encryption, database or production credential is used."
         : suite === "lifecycle"
           ? "All lifecycle files and browser-helper values are synthetic and local. POST requests are intercepted in the isolated browser and never reach a backend, encryption service, database or production. Screenshots expose only filenames and status feedback; material values are neither rendered nor persisted."
-          : "The cached-page file and delayed helper result are synthetic and local. Navigation uses the actual App, Router, NavigationShell and KeepAlive. No save, external page, real helper, API write, encryption, database or production credential is used; material values are neither rendered nor persisted.",
+          : suite === "cache"
+            ? "The cached-page file and delayed helper result are synthetic and local. Navigation uses the actual App, Router, NavigationShell and KeepAlive. No save, external page, real helper, API write, encryption, database or production credential is used; material values are neither rendered nor persisted."
+            : "All detached-login materials are synthetic and local. The two POST steps and the following authoritative reread are intercepted inside an isolated browser using the actual App, Router, NavigationShell and KeepAlive. No request reaches a backend, encryption service, database or production credential system; material values are neither rendered nor persisted.",
   proposalBoundary:
     suite === "core"
       ? "This is a visual review batch for the material-reading states. Production lifecycle ownership and post-close cleanup are now covered separately by the lifecycle implementation evidence; this batch does not claim real helper, API, database or production verification."
@@ -848,7 +1056,9 @@ const evidence = {
         ? "This visual boundary review preserves the exact 2,000,000 and 6,000,000 byte limits and extension allowlists, distinguishes the 15-second helper timeout from helper denial, and keeps recovery choices visible. Production lifecycle ownership is covered separately; real helper, API, database and production verification are not claimed."
         : suite === "lifecycle"
           ? "The production Vue component binds file and helper results to the active editor/source/mode generation, clears prepared material on context change, locks close/cancel/source/mode during writes, and fails closed when either write outcome is unknown. C-direction styling remains a review-only transform. Real browser-helper, backend encryption, database writes and production deployment are not claimed."
-          : "The production Vue component now invalidates the editor/material generation, aborts an active helper read and clears sensitive editor state when the actual KeepAlive page deactivates. A separately tested interrupted credential GET restarts on activation. C-direction styling remains review-only; pending writes, real helper/API/database/permissions and production deployment are not claimed.",
+          : suite === "cache"
+            ? "The production Vue component now invalidates the editor/material generation, aborts an active helper read and clears sensitive editor state when the actual KeepAlive page deactivates. A separately tested interrupted credential GET restarts on activation. C-direction styling remains review-only; pending writes, real helper/API/database/permissions and production deployment are not claimed."
+            : "The production Vue component now lets an already-submitted login import finish its asset-to-profile chain after KeepAlive deactivation, keeps new mutation controls locked while pending, and reconciles success, unknown or partial outcomes through one fresh read before allowing recovery. It never replays either write. C-direction styling remains review-only; real helper/API/database/permissions and production deployment are not claimed.",
 };
 if (capture) {
   await writeFile(`${output}/evidence.json`, JSON.stringify(evidence, null, 2) + "\n");
@@ -865,7 +1075,9 @@ if (capture) {
         ? "边界"
         : suite === "lifecycle"
           ? "生命周期"
-          : "缓存返回";
+          : suite === "cache"
+            ? "缓存返回"
+            : "离页对账";
   await writeFile(
     `${output}/index.html`,
     [

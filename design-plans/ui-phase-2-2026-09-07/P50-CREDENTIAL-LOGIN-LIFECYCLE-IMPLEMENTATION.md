@@ -22,7 +22,7 @@
 - [机器证据](../../output/playwright/p50-credential-login-lifecycle-review/evidence.json)：28 次实际 App 路由运行、500 项检查、28 张 PNG、172 个实际加载源码哈希。
 - 前三种状态零写入；保存中/资产未知各拦截 1 次资产 POST；档案未知/明确失败各拦截资产和档案共 2 次 POST。所有写请求只到本地 Playwright 路由，均检查请求体和 `Idempotency-Key`，没有抵达后端。
 - 合成材料逐次检查不进入页面文本、本地存储、会话存储、Cookie 或浏览器上下文 Cookie；四档宽度均通过来源身份、44px 代表控件、固定底部、零水平溢出、零未知网络和零运行时错误。
-- 真实 M03-02 文件在桌面与手机项目共 22/22 通过，其中新增 5 个生命周期回归；生产类型检查通过。
+- 真实 M03-02 文件当前在桌面与手机项目共 44/44 通过，其中本批 5 个生命周期回归持续覆盖；生产类型检查通过。
 - 复验：`node --test tests/unit/ui-phase2-credential-login-lifecycle.test.mjs`。重建：`node scripts/verify-ui-phase2-credential-login-material.mjs --suite=lifecycle --capture`。
 
 ## 变更边界
@@ -33,4 +33,4 @@
 
 ## 待审与未覆盖
 
-本批只申请七种生命周期反馈与控件锁定的视觉/交互审核，不代表真实浏览器助手、服务端 Cookie 域校验、真实加密/MySQL、权限或生产验收。KeepAlive 停用清理与通用四类写入归属分别见 `P50-CREDENTIAL-LOGIN-CACHE-IMPLEMENTATION.md`、`P50-CREDENTIAL-WRITE-OWNERSHIP-IMPLEMENTATION.md`；登录两段写离页对账、主题/密度和全 73 页仍待后续完成。
+本批只申请七种生命周期反馈与控件锁定的视觉/交互审核，不代表真实浏览器助手、服务端 Cookie 域校验、真实加密/MySQL、权限或生产验收。KeepAlive 停用清理、通用四类写入归属与登录两段写离页对账分别见 `P50-CREDENTIAL-LOGIN-CACHE-IMPLEMENTATION.md`、`P50-CREDENTIAL-WRITE-OWNERSHIP-IMPLEMENTATION.md`、`P50-CREDENTIAL-LOGIN-DETACHED-IMPLEMENTATION.md`；主题/密度和全 73 页仍待后续完成。

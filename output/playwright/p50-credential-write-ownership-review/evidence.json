@@ -1,6 +1,6 @@
 {
   "kind": "P50-CREDENTIAL-WRITE-OWNERSHIP-IMPLEMENTATION-r1",
-  "generatedAt": "2026-09-11T19:19:03.268Z",
+  "generatedAt": "2026-09-11T19:49:46.065Z",
   "reviewOnly": true,
   "productionChanged": true,
   "deployed": false,
@@ -15,7 +15,7 @@
     "revoke-conflict"
   ],
   "ports": [
-    60955
+    50696
   ],
   "runs": [
     {
@@ -99,7 +99,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"离页后已确认资产\",\"kind\":\"api_key\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"p50-hidden-create-secret\"},\"expires_at\":null}",
-          "idempotencyKey": "1ae777d6-13cd-4ccd-b5ea-a6918f1d90b2"
+          "idempotencyKey": "6a94482c-76b1-43b3-9f51-762d0dc7e0ed"
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
@@ -199,7 +199,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"离页后已确认资产\",\"kind\":\"api_key\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"p50-hidden-create-secret\"},\"expires_at\":null}",
-          "idempotencyKey": "604cefe1-c7ea-40f6-9fb8-6339e2da4874"
+          "idempotencyKey": "a7162040-85c4-4dd0-a3b3-b294189a7040"
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
@@ -295,7 +295,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets/00000000-0000-4000-8000-000000000803/rotate",
           "body": "{\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"p50-hidden-rotate-secret\"},\"expected_version\":2,\"expires_at\":null}",
-          "idempotencyKey": "6e985b1b-1347-47fb-b4cc-51d889ede594"
+          "idempotencyKey": "1f4de356-0810-450a-9722-6e513894f7f7"
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
@@ -391,7 +391,7 @@
         {
           "key": "POST /api/v1/platform/crawler-profiles",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"review_profile\",\"name\":\"审核档案引用\",\"browser_family\":\"chromium\",\"locale\":\"en-US\",\"timezone\":\"America/Los_Angeles\",\"status\":\"disabled\"}",
-          "idempotencyKey": "be8f6d09-7a8b-4ccc-b93c-e2c41fccad06"
+          "idempotencyKey": "4034f34e-71c8-4d8b-8833-e9623d303978"
         }
       ]
     },
@@ -472,7 +472,7 @@
         {
           "key": "POST /api/v1/platform/crawler-profiles",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"review_profile\",\"name\":\"审核档案引用\",\"browser_family\":\"chromium\",\"locale\":\"en-US\",\"timezone\":\"America/Los_Angeles\",\"status\":\"disabled\"}",
-          "idempotencyKey": "db985278-19f9-468c-abd5-1763dbfeda6d"
+          "idempotencyKey": "36852bda-6636-48f5-bfe4-375cb9caa64f"
         }
       ]
     },
@@ -561,7 +561,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets/00000000-0000-4000-8000-000000000803/revoke",
           "body": "{\"expected_version\":2,\"reason\":\"平台安全管理员确认撤销\"}",
-          "idempotencyKey": "6cd1a027-12c1-4ddb-adf1-bb4b7ba35fc3"
+          "idempotencyKey": "be5abbc4-b149-4f2e-9486-7e9f1c5d0a25"
         }
       ]
     },
@@ -642,7 +642,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets/00000000-0000-4000-8000-000000000803/revoke",
           "body": "{\"expected_version\":2,\"reason\":\"平台安全管理员确认撤销\"}",
-          "idempotencyKey": "8b5b4abf-3521-4458-a133-a39a5cb166fe"
+          "idempotencyKey": "ad21af9a-ec9e-415d-900f-469fb4602d19"
         }
       ]
     },
@@ -727,7 +727,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"离页后已确认资产\",\"kind\":\"api_key\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"p50-hidden-create-secret\"},\"expires_at\":null}",
-          "idempotencyKey": "c6ba3e8d-bc53-4801-a70c-9311d78758e3"
+          "idempotencyKey": "5605d021-412b-4bed-be46-a6acd356d4cf"
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
@@ -827,7 +827,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"离页后已确认资产\",\"kind\":\"api_key\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"p50-hidden-create-secret\"},\"expires_at\":null}",
-          "idempotencyKey": "ce19ed15-fc41-4f7a-a001-a9779dc3fb7d"
+          "idempotencyKey": "382263f1-80ab-4e3c-b9dc-4177f32b44e3"
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
@@ -923,7 +923,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets/00000000-0000-4000-8000-000000000803/rotate",
           "body": "{\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"p50-hidden-rotate-secret\"},\"expected_version\":2,\"expires_at\":null}",
-          "idempotencyKey": "05f2dfb5-7182-4d8f-b18a-6747197686f9"
+          "idempotencyKey": "cd42437d-b8de-4db4-8080-a608369b8b29"
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
@@ -1019,7 +1019,7 @@
         {
           "key": "POST /api/v1/platform/crawler-profiles",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"review_profile\",\"name\":\"审核档案引用\",\"browser_family\":\"chromium\",\"locale\":\"en-US\",\"timezone\":\"America/Los_Angeles\",\"status\":\"disabled\"}",
-          "idempotencyKey": "a95f1010-e276-4ab3-9785-822a087778fc"
+          "idempotencyKey": "93e086e6-d8d5-415e-9d51-e8ffe2be8215"
         }
       ]
     },
@@ -1100,7 +1100,7 @@
         {
           "key": "POST /api/v1/platform/crawler-profiles",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"review_profile\",\"name\":\"审核档案引用\",\"browser_family\":\"chromium\",\"locale\":\"en-US\",\"timezone\":\"America/Los_Angeles\",\"status\":\"disabled\"}",
-          "idempotencyKey": "49b09c3c-5e78-4f24-acf3-85ae21bad061"
+          "idempotencyKey": "c384dadc-6a88-467c-a519-ad44f3035f68"
         }
       ]
     },
@@ -1189,7 +1189,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets/00000000-0000-4000-8000-000000000803/revoke",
           "body": "{\"expected_version\":2,\"reason\":\"平台安全管理员确认撤销\"}",
-          "idempotencyKey": "2bde0620-1eef-4ec8-bf12-359f2ec557e1"
+          "idempotencyKey": "4f655775-d51a-4e9d-ada1-d8504f27ec2d"
         }
       ]
     },
@@ -1270,7 +1270,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets/00000000-0000-4000-8000-000000000803/revoke",
           "body": "{\"expected_version\":2,\"reason\":\"平台安全管理员确认撤销\"}",
-          "idempotencyKey": "e06eff7c-5533-4ffd-8472-3575d22fa310"
+          "idempotencyKey": "b1d487ee-9440-4620-83d0-12041360596c"
         }
       ]
     },
@@ -1355,7 +1355,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"离页后已确认资产\",\"kind\":\"api_key\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"p50-hidden-create-secret\"},\"expires_at\":null}",
-          "idempotencyKey": "8601207c-e9db-4692-8585-0ee32c985984"
+          "idempotencyKey": "28255474-88e4-4303-b53d-416b0552bd22"
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
@@ -1455,7 +1455,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"离页后已确认资产\",\"kind\":\"api_key\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"p50-hidden-create-secret\"},\"expires_at\":null}",
-          "idempotencyKey": "2c5b3dfc-e63d-4b98-a761-a6cfea5fb46c"
+          "idempotencyKey": "0e947057-b4d9-478f-af3c-ebd57fb5f681"
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
@@ -1551,7 +1551,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets/00000000-0000-4000-8000-000000000803/rotate",
           "body": "{\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"p50-hidden-rotate-secret\"},\"expected_version\":2,\"expires_at\":null}",
-          "idempotencyKey": "b3e268d9-5213-47ea-8520-569582647e9b"
+          "idempotencyKey": "dd6ee0f6-59f1-464d-baee-950fe0f2e0aa"
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
@@ -1647,7 +1647,7 @@
         {
           "key": "POST /api/v1/platform/crawler-profiles",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"review_profile\",\"name\":\"审核档案引用\",\"browser_family\":\"chromium\",\"locale\":\"en-US\",\"timezone\":\"America/Los_Angeles\",\"status\":\"disabled\"}",
-          "idempotencyKey": "c0e51c23-a55b-4835-b3e9-6ebd63351ca5"
+          "idempotencyKey": "0df9e9ea-6974-4794-a9fb-48989f129b75"
         }
       ]
     },
@@ -1728,7 +1728,7 @@
         {
           "key": "POST /api/v1/platform/crawler-profiles",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"review_profile\",\"name\":\"审核档案引用\",\"browser_family\":\"chromium\",\"locale\":\"en-US\",\"timezone\":\"America/Los_Angeles\",\"status\":\"disabled\"}",
-          "idempotencyKey": "9a8dd1c3-05c6-4259-9fa4-8ee32de542e0"
+          "idempotencyKey": "24dd3a59-0c8b-4a45-ac8b-2d24110881fc"
         }
       ]
     },
@@ -1817,7 +1817,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets/00000000-0000-4000-8000-000000000803/revoke",
           "body": "{\"expected_version\":2,\"reason\":\"平台安全管理员确认撤销\"}",
-          "idempotencyKey": "7d46d2a3-b674-49be-86ef-b878e2b192ab"
+          "idempotencyKey": "fc67449e-9709-4856-b660-7389aa98a351"
         }
       ]
     },
@@ -1898,7 +1898,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets/00000000-0000-4000-8000-000000000803/revoke",
           "body": "{\"expected_version\":2,\"reason\":\"平台安全管理员确认撤销\"}",
-          "idempotencyKey": "58a58664-7271-4f07-b383-af01df9ab177"
+          "idempotencyKey": "e875c09d-fdd3-4824-a3a5-22a1448ede4c"
         }
       ]
     },
@@ -1983,7 +1983,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"离页后已确认资产\",\"kind\":\"api_key\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"p50-hidden-create-secret\"},\"expires_at\":null}",
-          "idempotencyKey": "f80ce166-9f85-4e5e-8dff-07b8df721ae5"
+          "idempotencyKey": "85960c0d-7479-4afc-9c3b-1a08fa6f9ca8"
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
@@ -2083,7 +2083,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"离页后已确认资产\",\"kind\":\"api_key\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"p50-hidden-create-secret\"},\"expires_at\":null}",
-          "idempotencyKey": "de1436e0-b7dc-4ec1-8b8e-00c1284aafa9"
+          "idempotencyKey": "8fc60120-3b51-456e-9d0e-f8a60fe57657"
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
@@ -2179,7 +2179,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets/00000000-0000-4000-8000-000000000803/rotate",
           "body": "{\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"p50-hidden-rotate-secret\"},\"expected_version\":2,\"expires_at\":null}",
-          "idempotencyKey": "a9432ac8-3c51-4deb-b31c-39e245d877f2"
+          "idempotencyKey": "3dcf2abd-e156-4961-bfb7-66ca4999e092"
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
@@ -2275,7 +2275,7 @@
         {
           "key": "POST /api/v1/platform/crawler-profiles",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"review_profile\",\"name\":\"审核档案引用\",\"browser_family\":\"chromium\",\"locale\":\"en-US\",\"timezone\":\"America/Los_Angeles\",\"status\":\"disabled\"}",
-          "idempotencyKey": "975984aa-46f5-454c-826d-c000fa733183"
+          "idempotencyKey": "49fdb84f-eb1d-4337-86d0-50059680a3b3"
         }
       ]
     },
@@ -2356,7 +2356,7 @@
         {
           "key": "POST /api/v1/platform/crawler-profiles",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"review_profile\",\"name\":\"审核档案引用\",\"browser_family\":\"chromium\",\"locale\":\"en-US\",\"timezone\":\"America/Los_Angeles\",\"status\":\"disabled\"}",
-          "idempotencyKey": "7b7dffbb-3d33-4eb6-ad8b-0714dfbb9d58"
+          "idempotencyKey": "cba387fb-2743-463f-9e5f-4f01425c803f"
         }
       ]
     },
@@ -2445,7 +2445,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets/00000000-0000-4000-8000-000000000803/revoke",
           "body": "{\"expected_version\":2,\"reason\":\"平台安全管理员确认撤销\"}",
-          "idempotencyKey": "fa069b4d-9d58-40d1-9ca6-82aa6a023e8f"
+          "idempotencyKey": "3a6186db-ff5b-45e2-a638-b2e065d67a11"
         }
       ]
     },
@@ -2526,7 +2526,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets/00000000-0000-4000-8000-000000000803/revoke",
           "body": "{\"expected_version\":2,\"reason\":\"平台安全管理员确认撤销\"}",
-          "idempotencyKey": "76dee394-80df-4477-85e4-d807bf1ed52f"
+          "idempotencyKey": "2008634b-db95-4fdd-bed7-ef1241cfcf28"
         }
       ]
     }
@@ -2536,7 +2536,7 @@
       "file": "390-detached-create-pending.png",
       "width": 390,
       "state": "detached-create-pending",
-      "sha256": "964985e713553ad6abe28ce77b3006a54a2c9b775efd916f75dfb6bef5de33a6",
+      "sha256": "8daf681db507a1524006f79e273caa9302cc97c2371d6152dc7c96f60d9599c1",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2544,7 +2544,7 @@
       "file": "390-detached-create-success.png",
       "width": 390,
       "state": "detached-create-success",
-      "sha256": "fb7359b23f4337baca21032a12d29db2983ab0b56c23c0c3e7a3bc9b94cb5bb3",
+      "sha256": "021cc9b180cdf76b49d07b31af994e81f62d94383372b15ae9e551123de723d3",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2552,7 +2552,7 @@
       "file": "390-detached-rotate-unknown.png",
       "width": 390,
       "state": "detached-rotate-unknown",
-      "sha256": "7dbda2be8a5eca34889173b357e797c13987bed5455c46aa447c8343aae0def6",
+      "sha256": "afa1edadeee55c8feaffce38cb80d84c9ed631424c6ed7eb5ed0685081edbf10",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2560,7 +2560,7 @@
       "file": "390-detached-profile-conflict.png",
       "width": 390,
       "state": "detached-profile-conflict",
-      "sha256": "23b906c6dc7a98a94176332f6638d8e9616191a44cfab9a9caf77e96d4e99561",
+      "sha256": "585b4f6d9a9fac48228314c7773969e7b02ecb9e8c5773f2058457b72868072c",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2592,7 +2592,7 @@
       "file": "760-detached-create-pending.png",
       "width": 760,
       "state": "detached-create-pending",
-      "sha256": "88bc1fe01d4dd21baa9848fa5b29de7be17bb6b0f29b78e3c5f5cd0d269ef30b",
+      "sha256": "02c2c3972f7587a6442fae54415c24f8d97566f628a579b77c2731c547070270",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2600,7 +2600,7 @@
       "file": "760-detached-create-success.png",
       "width": 760,
       "state": "detached-create-success",
-      "sha256": "ad749a33990e0bc309dff8388d531b6ea97f95aaa322ce2aabb4b57a18087c60",
+      "sha256": "db11b832d93b12577bdad4e8c9d256337d7ab3eb644321e2f00c9c8b28bac43f",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2608,7 +2608,7 @@
       "file": "760-detached-rotate-unknown.png",
       "width": 760,
       "state": "detached-rotate-unknown",
-      "sha256": "eca3e6df4ec5d5117c3677b02cce6e6284b601833432d066da4eb5731e7389b9",
+      "sha256": "46fd8532dd5d176a2643a9be7173b64332f5aa12f0018c185c45240aee4b4222",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2616,7 +2616,7 @@
       "file": "760-detached-profile-conflict.png",
       "width": 760,
       "state": "detached-profile-conflict",
-      "sha256": "7355e69080d8d5f28bde58caae786e26d7f4d6b44b088cf50cd19fc550f407c9",
+      "sha256": "4168d28b1beece0052f752b886bd31844806e6b643b13813936b076bf936db55",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2648,7 +2648,7 @@
       "file": "1024-detached-create-pending.png",
       "width": 1024,
       "state": "detached-create-pending",
-      "sha256": "b552f9279c17584a33bbc1df8b26474b687e220870181d54ad06b6ff38b15466",
+      "sha256": "3bfd869e48ef50e2562c352787caea0d6db45bd52f8a5482c92435ffa529c9d8",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2656,7 +2656,7 @@
       "file": "1024-detached-create-success.png",
       "width": 1024,
       "state": "detached-create-success",
-      "sha256": "c458d57c23a10e8080109de98f2b640f9b9b0b85446ce2cf0363a25a6588259d",
+      "sha256": "6c60921cf621d30f3bc61568c24bc34b02683b980a72853ad854804b2b1382ce",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2664,7 +2664,7 @@
       "file": "1024-detached-rotate-unknown.png",
       "width": 1024,
       "state": "detached-rotate-unknown",
-      "sha256": "407bcb83a83f35659cfb1570e3f9bb781684831306cb49fa01b564f88eab8885",
+      "sha256": "a85f95f3e11853340f546038b80a49cec10054d26d5093411028453ad8114f8a",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2672,7 +2672,7 @@
       "file": "1024-detached-profile-conflict.png",
       "width": 1024,
       "state": "detached-profile-conflict",
-      "sha256": "7110a16fa4949736d5e7deac1d2d8771e8d6ffe5c8f22372be39a5c855781a35",
+      "sha256": "8c4853e6c350d8eb4d567894bdb4e7a8ec6a92058dfcd6f81dd780b10fff1486",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2688,7 +2688,7 @@
       "file": "1024-revoke-pending.png",
       "width": 1024,
       "state": "revoke-pending",
-      "sha256": "50ca613321e30e9af0132201f8330c3090dfdc8625504675c12374bb5fb72132",
+      "sha256": "ad76dbf2251115d5c21c75006c383c9ee87878585563b0b4f62c354591cf0a56",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2696,7 +2696,7 @@
       "file": "1024-revoke-conflict.png",
       "width": 1024,
       "state": "revoke-conflict",
-      "sha256": "55ab1ac13231f3a67793c39172f46e53c04fc69de16466bc231229efbbc2cd0f",
+      "sha256": "a4d992795a070244026a7224e04191fb6932ded2ded08186b726e5d5b1c5e9fd",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2704,7 +2704,7 @@
       "file": "1440-detached-create-pending.png",
       "width": 1440,
       "state": "detached-create-pending",
-      "sha256": "52946eaded61e1fb4b290fddb15dd56f621a29d93515148e718bd1c32abed018",
+      "sha256": "bfa97b83914b41e09329536b870d0e96da480a47cca08021fa6c566789ba6195",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2712,7 +2712,7 @@
       "file": "1440-detached-create-success.png",
       "width": 1440,
       "state": "detached-create-success",
-      "sha256": "826a44f13b03f1d97c617317ca93f9d2265adb2c3bf328b87b0c6fc9fd9d0be8",
+      "sha256": "b00e391ffb63af7d299374ce89a63b33848583530b221f2e83cffb1af303f439",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2720,7 +2720,7 @@
       "file": "1440-detached-rotate-unknown.png",
       "width": 1440,
       "state": "detached-rotate-unknown",
-      "sha256": "fae842fec50f9bea0fad81a63d6101fb07f75740006cb9a4ed10665e6cebe4bc",
+      "sha256": "5d9b3530e1ace0ed5d3d1b741a9aec5222ad6fa70ae99226d07ec349a34a1f98",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2728,7 +2728,7 @@
       "file": "1440-detached-profile-conflict.png",
       "width": 1440,
       "state": "detached-profile-conflict",
-      "sha256": "aaebe2c8cb52fac7ac3e0278a19ed1617e731b63066f6cf6cf3e1bcccbb582f9",
+      "sha256": "53a25b6ff7c72f1808ac624a17ce3b7666ef29d86abbbce4bdbd0d70df9a949c",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2784,7 +2784,7 @@
     "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
     "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
     "apps/web/src/components/CrawlerSchedulerCenter.vue": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-    "apps/web/src/components/CredentialAssetCenter.vue": "854d5b7b32547f9d770f44753eab6f27fc48bc8f0c39415bab260e1d22cb44cf",
+    "apps/web/src/components/CredentialAssetCenter.vue": "d06cdc7dad91fbed93334f37648c7cb7e81500c280cb121cf554fc8b062a4dfa",
     "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
     "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
     "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
@@ -2927,7 +2927,7 @@
     "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css": "7e2411b46606e8cca9901ce1dfb024610b7d287c4278eb2ce5d7bc56a6b3c0a8",
     "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
     "scripts/verify-ui-phase2-credential-write-ownership.mjs": "46393345b0a6cbd833b31c28b8e3d3e8a7603fe001c8dbb5e2dea518d40c6a13",
-    "tests/e2e/m03-02-credential-assets.spec.ts": "753fcf81a88abdebf22305d53f55c2f7c0b4c76c3e133bd044b9aeb9e108a165"
+    "tests/e2e/m03-02-credential-assets.spec.ts": "f735f94d9f2d564e26608736c19cdd899ffbf30d88b0aabbb666550cb076703c"
   },
   "requestBoundary": "All credential, profile and navigation facts are authoritative M03-02 fixtures. Every POST is intercepted inside the isolated browser and checked for its original path, body and idempotency header. No real credential, helper, API write, encryption, database or production system is accessed.",
   "implementationBoundary": "Production Vue now keeps generic credential writes running without cancellation or replay, scopes modal feedback to the initiating page/editor/target, locks mutation controls while a prior write is pending, and reconciles detached success or unknown outcomes through a fresh read. C-direction styling remains review-only; real persistence, permissions, audit and deployment are not claimed."

@@ -1,6 +1,6 @@
 {
   "kind": "P50-CREDENTIAL-LOGIN-CACHE-IMPLEMENTATION-r1",
-  "generatedAt": "2026-09-11T19:18:42.814Z",
+  "generatedAt": "2026-09-11T19:49:05.655Z",
   "reviewOnly": true,
   "productionChanged": true,
   "deployed": false,
@@ -10,7 +10,7 @@
     "cache-helper-late-ignored"
   ],
   "ports": [
-    60954
+    50570
   ],
   "runs": [
     {
@@ -843,7 +843,7 @@
     "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
     "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
     "apps/web/src/components/CrawlerSchedulerCenter.vue": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-    "apps/web/src/components/CredentialAssetCenter.vue": "854d5b7b32547f9d770f44753eab6f27fc48bc8f0c39415bab260e1d22cb44cf",
+    "apps/web/src/components/CredentialAssetCenter.vue": "d06cdc7dad91fbed93334f37648c7cb7e81500c280cb121cf554fc8b062a4dfa",
     "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
     "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
     "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
@@ -987,8 +987,8 @@
     "design-plans/ui-phase-2-2026-09-07/implementation/credential-login-material-preview.css": "5eb2b981c695e6bdbeee358a3508d697b849f99222f0d89b9e923350cdaea5ea",
     "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
     "scripts/lib/ui-phase2-credential-login-material-preview.mjs": "7869a322a10702b53be1afde3ff0393e6547800e57b49eb351f0336d1a52a0e9",
-    "scripts/verify-ui-phase2-credential-login-material.mjs": "01e667c6a9c813d18b73a21f41c0456557c26cc6b6e5b9299cb7dda8dbcd1bcb",
-    "tests/e2e/m03-02-credential-assets.spec.ts": "753fcf81a88abdebf22305d53f55c2f7c0b4c76c3e133bd044b9aeb9e108a165"
+    "scripts/verify-ui-phase2-credential-login-material.mjs": "d0a16a1d5e14e5a0e34023ae689965bd08920a896115de257d4944c00a4ed8cc",
+    "tests/e2e/m03-02-credential-assets.spec.ts": "f735f94d9f2d564e26608736c19cdd899ffbf30d88b0aabbb666550cb076703c"
   },
   "materialBoundary": "The cached-page file and delayed helper result are synthetic and local. Navigation uses the actual App, Router, NavigationShell and KeepAlive. No save, external page, real helper, API write, encryption, database or production credential is used; material values are neither rendered nor persisted.",
   "proposalBoundary": "The production Vue component now invalidates the editor/material generation, aborts an active helper read and clears sensitive editor state when the actual KeepAlive page deactivates. A separately tested interrupted credential GET restarts on activation. C-direction styling remains review-only; pending writes, real helper/API/database/permissions and production deployment are not claimed."
