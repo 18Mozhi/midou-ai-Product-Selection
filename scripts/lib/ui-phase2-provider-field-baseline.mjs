@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { historicalProviderIsolationSource } from "./ui-phase2-provider-isolation-baseline.mjs";
 
 export const providerFieldRevision = {
   file: "apps/web/src/components/ProviderRegistry.vue",
@@ -11,7 +12,7 @@ const hash = (s) => createHash("sha256").update(s).digest("hex");
 let previous;
 // Exact historical capture association only. Current field semantics have independent raw-source tests.
 export function historicalProviderFieldSource(file, source) {
-  source = source.replaceAll("\r\n", "\n");
+  source = historicalProviderIsolationSource(file, source);
   if (file !== providerFieldRevision.file || hash(source) !== providerFieldRevision.after)
     return source;
   if (!previous) {

@@ -11,6 +11,7 @@ import {
   watch,
 } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
+import { useProviderEditorIsolation } from "../use-provider-editor-isolation";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../provider-registry.css";
@@ -342,6 +343,7 @@ async function load() {
     }
   }
 }
+useProviderEditorIsolation(editorPanel, () => editorOpen.value);
 let editorFocusGeneration = 0;
 function edit(item?: Provider, event?: Event) {
   editorFocusGeneration++;

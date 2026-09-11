@@ -6,12 +6,14 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { parse as parseSfc } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
+import { historicalProviderIsolationSource } from "../../scripts/lib/ui-phase2-provider-isolation-baseline.mjs";
 import {
   historicalProviderFieldSource,
   providerFieldRevision,
 } from "../../scripts/lib/ui-phase2-provider-field-baseline.mjs";
 
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+// Bind the immutable field-only capture, before modal isolation was connected.
+const read = (f) => historicalProviderIsolationSource(f, readFileSync(f, "utf8"));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = providerFieldRevision.file,
   source = read(file),

@@ -50,6 +50,12 @@ function setup() {
     AbortController,
     URL,
     Date,
+    // This VM suite isolates request ownership without DOM; the real modal hook has its
+    // own actual-App browser replay and lifecycle tests in provider-editor-isolation.
+    useProviderEditorIsolation: (panel, isOpen) => {
+      assert.equal(panel.value, null);
+      assert.equal(isOpen(), false);
+    },
     nextTick: () => {},
     onMounted: (f) => {
       hooks.mount = f;

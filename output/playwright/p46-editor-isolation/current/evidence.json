@@ -1,0 +1,3185 @@
+{
+  "kind": "P46-EDITOR-ISOLATION-r1",
+  "mode": "current",
+  "sourceHashes": {
+    "apps/web/index.html": "0376c4bf04227ac5dbb6bb43895e5ed97eef6ca8bde54f08774908d3f07d9d88",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AccountShell.vue": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/ApiCoverageDashboard.vue": "dfa6e82e10a8410c3ad761bf8d0f9c56bb018a29c3f9ba935a67014c16d1a126",
+    "apps/web/src/components/ApiFoundation.vue": "8329bdc20aa1d9f905c11ab81bce0ca1281a295b5d5732f16aeb65a0f2ea7b32",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/ApprovalWorkspace.vue": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+    "apps/web/src/components/AuditSecurityCenter.vue": "49e2dfcdc9e12cd7efcc7311b259daffb4fbb703187f2c1a026acabcb5a87a80",
+    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/components/AuthorizationCenter.vue": "accb7cbfe2f0dc35466a81de506d0ca60223db49f13fa32ebd40ba38ee038920",
+    "apps/web/src/components/AutomationRuleCenter.vue": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+    "apps/web/src/components/BackupRecoveryCenter.vue": "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
+    "apps/web/src/components/CapacityBoundaryCenter.vue": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
+    "apps/web/src/components/CollectionOperationsConsole.vue": "0e22a3d1ae404c05b96b321424be8489c6c3bd21f2223e33af09c3eebef3b856",
+    "apps/web/src/components/CollectionRuntimeCenter.vue": "e6829b2cc84321af56e830cbd60839eafa89f23937cb44eeccf6b79e2428b3b4",
+    "apps/web/src/components/CollectionRuntimeSurface.vue": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
+    "apps/web/src/components/CollectionTaskCenter.vue": "1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed",
+    "apps/web/src/components/CommercialOperationsCenter.vue": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
+    "apps/web/src/components/CompetitorMonitor.vue": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+    "apps/web/src/components/ConfigBoundary.vue": "36d9cdf35921c647740965aad0d6ed490ecbc0afdc9c80da6b861befbbc622cb",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+    "apps/web/src/components/CrawlerSchedulerCenter.vue": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+    "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
+    "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+    "apps/web/src/components/FileAuditFoundation.vue": "430edf42d733087abe6628a89214516d17b5afc8cc921ce148b7003f3392b184",
+    "apps/web/src/components/FileResilienceCenter.vue": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
+    "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4",
+    "apps/web/src/components/HomeDashboard.vue": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+    "apps/web/src/components/LandingRedirect.vue": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7",
+    "apps/web/src/components/LocalIdentity.vue": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
+    "apps/web/src/components/MySqlFoundation.vue": "b7d39ddfda7ddcd69ed1ca77290b074846b80acb933e7cdf1ef4467f0e3e73f3",
+    "apps/web/src/components/MySqlResilienceCenter.vue": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/NotFoundPage.vue": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b",
+    "apps/web/src/components/NotificationCenter.vue": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+    "apps/web/src/components/OnboardingGuide.vue": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088",
+    "apps/web/src/components/OpenPlatformCenter.vue": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
+    "apps/web/src/components/OpportunityAiPanel.vue": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
+    "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+    "apps/web/src/components/OpportunityDecisionPanel.vue": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+    "apps/web/src/components/OpportunityDetailInsights.vue": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
+    "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
+    "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
+    "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
+    "apps/web/src/components/OpportunityListPanel.vue": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+    "apps/web/src/components/OpportunityMobileShell.vue": "093aafdd1b27c39b89b8fac76aa90f9ac61337bd062607a51800b82c3938f934",
+    "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+    "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/components/PersonalCenter.vue": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+    "apps/web/src/components/PlatformAccountCenter.vue": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformContentPagination.vue": "2c59ac9fa920dd095d36718eb86638a58abaebc6dd99bd8b73e869af5a0e6402",
+    "apps/web/src/components/PlatformDashboard.vue": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+    "apps/web/src/components/PlatformDataCenter.vue": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
+    "apps/web/src/components/PlatformGovernanceCenter.vue": "76eae80f51225c3af676a17ab9c4ec94369262cc5e8c968be7fd62ef5f2280db",
+    "apps/web/src/components/PlatformLogCenter.vue": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+    "apps/web/src/components/PlatformManagementCenter.vue": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
+    "apps/web/src/components/PlatformManagementFilter.vue": "b1e608502ee29df66c4f813c38a6593ffc4c8bc5770183cfdfafbf968db689d9",
+    "apps/web/src/components/PlatformManagementRecordList.vue": "3ec74f90ff5740a58f70ea98fdc9c76835da9d223f01dd31d23ffd6a7cf78bfc",
+    "apps/web/src/components/PlatformMessageEditor.vue": "8bafb3374f744389257c36a27580dbf768a9b4a0991fa0ce748889bb2c093cea",
+    "apps/web/src/components/PlatformMessageWorkbench.vue": "7863a19cace6a921628b2e33e66434a5662868d8a33351abc1ef3d129a7382c2",
+    "apps/web/src/components/PlatformNotificationManagement.vue": "a91ffa14ffdbd1f17b01f0877b745288d96c4ea8574449721edbc61883f1cb18",
+    "apps/web/src/components/PlatformNotificationOperations.vue": "18c8b856cc26ed7aa7bf45f7375645ea23a5914b50425d84ee03efc17268cc6c",
+    "apps/web/src/components/PlatformNotificationPagination.vue": "6116c32da6df91e40433fd5f4e4f9cc82c59d20b5726df52ebfdafcaf08b1606",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.vue": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "b217ac9898675371d6a6b0406a2574784a7321fac93c233347299991289b0f8e",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.css": "a31b900bedbf1cafdf756eea8b7bd8742a5ec844fef9bcad0d8ffe643e39bb74",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/RedisFoundation.vue": "c39e3eecfad2441d0ca0bf157d59c7b507dbeb709051b39de7fded1982da4dea",
+    "apps/web/src/components/RedisResilienceCenter.vue": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
+    "apps/web/src/components/ReleaseRolloutCenter.vue": "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
+    "apps/web/src/components/ReportCenter.vue": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+    "apps/web/src/components/ResourceGrantCenter.vue": "80a3164ccef4a3c2f0e547f01ea0789c7f0c6b50f07858e07a2721ca8e196970",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+    "apps/web/src/components/RuntimeTopologyCenter.vue": "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
+    "apps/web/src/components/ScoreRuleConsole.vue": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+    "apps/web/src/components/SecurityOperationsCenter.vue": "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
+    "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
+    "apps/web/src/components/SourcingComparisonPanel.vue": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+    "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
+    "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+    "apps/web/src/components/SourcingWorkspaceDialogs.vue": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/TaskBatchActions.vue": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d",
+    "apps/web/src/components/TaskDetailPanel.vue": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
+    "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
+    "apps/web/src/components/TaskWorkspace.vue": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+    "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
+    "apps/web/src/components/TenancyChooser.vue": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
+    "apps/web/src/components/ThemeStudio.vue": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+    "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f",
+    "apps/web/src/components/TrendDashboard.vue": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+    "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
+    "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
+    "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
+    "apps/web/src/components/TrendRuleDialog.vue": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/components/UiStateShowcase.vue": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
+    "apps/web/src/components/VerificationFramework.vue": "aab55dcadf05e3427665faadb057f86a5fbe44dde8f022b0a7225f6c1ec6cccf",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/navigation-shell-scoped.css": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/route-catalog.generated.json": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/signal-ledger-workflows.css": "3a3bcb8ca4aa2c0b7dae11218223aaa9de25db45eb0704a2670ea156bf06229b",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/provider-approved-feedback.css": "6b21f3adefccd50f52268076f3dc6134eb66db02c8c62a8404a19fa2e2c45a9e",
+    "apps/web/src/styles/provider-approved-structure.css": "901f1088e4ff961a730204ab6e0ac2111b20bc1448a5001299c98f53f318308b",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "scripts/verify-ui-phase2-provider-editor-isolation.mjs": "cecf2ee3b8f6392edf09d7c898f26197072a37a80a2b75c29b88fd9f73410989",
+    "tests/e2e/m03-01-provider-registry.spec.ts": "caaa0e2af2081675ab743e18d43e2526758604c84bd72aa925ae701454cf226f"
+  },
+  "renderedRegistryHash": "b217ac9898675371d6a6b0406a2574784a7321fac93c233347299991289b0f8e",
+  "checks": [
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "production body class",
+      "actual": null
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "create background focus",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "create editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "create background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "create scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "scrim wheel stays",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "painted editor remains in place",
+      "actual": {
+        "x": 12,
+        "y": 12,
+        "width": 366,
+        "height": 976,
+        "scrollY": 0,
+        "viewportTop": 0
+      }
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "editor content remains scrollable",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "create-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "create-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "create return focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "dynamic sibling inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "dynamic sibling restored",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "dynamic-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "dynamic-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "preexisting inert restored",
+      "actual": "retained-before-open"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "preexisting scroll declaration restored",
+      "actual": [
+        "auto",
+        "important"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "preexisting-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "preexisting-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "history-away no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "history-away original overflow",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "cached return retains open editor",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "history-return background focus",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "history-return editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "history-return background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "history-return scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "history-return-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "history-return-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "detail isolates App",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "edit-handoff background focus",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "edit-handoff editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "edit-handoff background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "edit-handoff scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "pending background focus",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "pending editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "pending background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "pending scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "conflict background focus",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "conflict editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "conflict background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "conflict scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "edit-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "edit-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "edit returns record",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "no errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "name": "no unexpected requests",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "production body class",
+      "actual": null
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "create background focus",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "create editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "create background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "create scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "scrim wheel stays",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "painted editor remains in place",
+      "actual": {
+        "x": 12,
+        "y": 12,
+        "width": 736,
+        "height": 976,
+        "scrollY": 0,
+        "viewportTop": 0
+      }
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "editor content remains scrollable",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "create-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "create-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "create return focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "dynamic sibling inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "dynamic sibling restored",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "dynamic-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "dynamic-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "preexisting inert restored",
+      "actual": "retained-before-open"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "preexisting scroll declaration restored",
+      "actual": [
+        "auto",
+        "important"
+      ]
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "preexisting-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "preexisting-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "history-away no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "history-away original overflow",
+      "actual": ""
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "cached return retains open editor",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "history-return background focus",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "history-return editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "history-return background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "history-return scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "history-return-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "history-return-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "detail isolates App",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "edit-handoff background focus",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "edit-handoff editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "edit-handoff background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "edit-handoff scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "pending background focus",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "pending editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "pending background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "pending scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "conflict background focus",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "conflict editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "conflict background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "conflict scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "edit-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "edit-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "edit returns record",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "no errors",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "name": "no unexpected requests",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "production body class",
+      "actual": null
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "create background focus",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "create editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "create background inert",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "create scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "scrim wheel stays",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "painted editor remains in place",
+      "actual": {
+        "x": 101,
+        "y": 0,
+        "width": 660,
+        "height": 1000,
+        "scrollY": 0,
+        "viewportTop": 0
+      }
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "editor content remains scrollable",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "create-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "create-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "create return focus",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "dynamic sibling inert",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "dynamic sibling restored",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "dynamic-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "dynamic-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "preexisting inert restored",
+      "actual": "retained-before-open"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "preexisting scroll declaration restored",
+      "actual": [
+        "auto",
+        "important"
+      ]
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "preexisting-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "preexisting-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "history-away no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "history-away original overflow",
+      "actual": ""
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "cached return retains open editor",
+      "actual": 1
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "history-return background focus",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "history-return editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "history-return background inert",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "history-return scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "history-return-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "history-return-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "edit-handoff background focus",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "edit-handoff editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "edit-handoff background inert",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "edit-handoff scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "pending background focus",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "pending editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "pending background inert",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "pending scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "conflict background focus",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "conflict editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "conflict background inert",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "conflict scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "edit-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "edit-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "edit returns record",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "no errors",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "name": "no unexpected requests",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "production body class",
+      "actual": null
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "create background focus",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "create editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "create background inert",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "create scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "scrim wheel stays",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "painted editor remains in place",
+      "actual": {
+        "x": 720,
+        "y": 0,
+        "width": 720,
+        "height": 1000,
+        "scrollY": 0,
+        "viewportTop": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "editor content remains scrollable",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "create-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "create-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "create return focus",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "dynamic sibling inert",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "dynamic sibling restored",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "dynamic-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "dynamic-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "preexisting inert restored",
+      "actual": "retained-before-open"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "preexisting scroll declaration restored",
+      "actual": [
+        "auto",
+        "important"
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "preexisting-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "preexisting-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "history-away no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "history-away original overflow",
+      "actual": ""
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "cached return retains open editor",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "history-return background focus",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "history-return editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "history-return background inert",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "history-return scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "history-return-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "history-return-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "edit-handoff background focus",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "edit-handoff editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "edit-handoff background inert",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "edit-handoff scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "pending background focus",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "pending editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "pending background inert",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "pending scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "conflict background focus",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "conflict editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "conflict background inert",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "conflict scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "edit-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "edit-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "edit returns record",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "no errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "name": "no unexpected requests",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "production body class",
+      "actual": null
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "create background focus",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "create editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "create background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "create scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "scrim wheel stays",
+      "actual": 325
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "painted editor remains in place",
+      "actual": {
+        "x": 12,
+        "y": 12,
+        "width": 366,
+        "height": 544,
+        "scrollY": 325,
+        "viewportTop": 0
+      }
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "editor content remains scrollable",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "create-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "create-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "create return focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "dynamic sibling inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "dynamic sibling restored",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "dynamic-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "dynamic-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "preexisting inert restored",
+      "actual": "retained-before-open"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "preexisting scroll declaration restored",
+      "actual": [
+        "auto",
+        "important"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "preexisting-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "preexisting-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "history-away no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "history-away original overflow",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "cached return retains open editor",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "history-return background focus",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "history-return editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "history-return background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "history-return scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "history-return-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "history-return-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "detail isolates App",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "edit-handoff background focus",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "edit-handoff editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "edit-handoff background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "edit-handoff scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "pending background focus",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "pending editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "pending background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "pending scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "conflict background focus",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "conflict editor remains interactive",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "conflict background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "conflict scroll lock",
+      "actual": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "edit-close no leaked inert",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "edit-close original overflow",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "edit returns record",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "no errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "name": "no unexpected requests",
+      "actual": []
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "create",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "scrim-wheel",
+      "beforeY": 0,
+      "afterY": 0
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "scrim-wheel-layout",
+      "beforeGeometry": {
+        "x": 12,
+        "y": 12,
+        "width": 366,
+        "height": 976,
+        "scrollY": 0,
+        "viewportTop": 0
+      },
+      "afterGeometry": {
+        "x": 12,
+        "y": 12,
+        "width": 366,
+        "height": 976,
+        "scrollY": 0,
+        "viewportTop": 0
+      }
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "inner-scroll",
+      "top": 0,
+      "maximum": 35,
+      "after": 35
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "create-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "dynamic-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "preexisting-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "history-away",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "history-return",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "history-return-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "edit-handoff",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "pending",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "conflict",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "edit-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "create",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "scrim-wheel",
+      "beforeY": 0,
+      "afterY": 0
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "scrim-wheel-layout",
+      "beforeGeometry": {
+        "x": 12,
+        "y": 12,
+        "width": 736,
+        "height": 976,
+        "scrollY": 0,
+        "viewportTop": 0
+      },
+      "afterGeometry": {
+        "x": 12,
+        "y": 12,
+        "width": 736,
+        "height": 976,
+        "scrollY": 0,
+        "viewportTop": 0
+      }
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "inner-scroll",
+      "top": 0,
+      "maximum": 35,
+      "after": 35
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "create-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "dynamic-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "preexisting-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "history-away",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "history-return",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "history-return-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "edit-handoff",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "pending",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "conflict",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "edit-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "create",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "scrim-wheel",
+      "beforeY": 0,
+      "afterY": 0
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "scrim-wheel-layout",
+      "beforeGeometry": {
+        "x": 101,
+        "y": 0,
+        "width": 660,
+        "height": 1000,
+        "scrollY": 0,
+        "viewportTop": 0
+      },
+      "afterGeometry": {
+        "x": 101,
+        "y": 0,
+        "width": 660,
+        "height": 1000,
+        "scrollY": 0,
+        "viewportTop": 0
+      }
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "inner-scroll",
+      "top": 0,
+      "maximum": 0,
+      "after": 0
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "create-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "dynamic-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "preexisting-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "history-away",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "history-return",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "history-return-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "edit-handoff",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "pending",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "conflict",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "edit-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "create",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "scrim-wheel",
+      "beforeY": 0,
+      "afterY": 0
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "scrim-wheel-layout",
+      "beforeGeometry": {
+        "x": 720,
+        "y": 0,
+        "width": 720,
+        "height": 1000,
+        "scrollY": 0,
+        "viewportTop": 0
+      },
+      "afterGeometry": {
+        "x": 720,
+        "y": 0,
+        "width": 720,
+        "height": 1000,
+        "scrollY": 0,
+        "viewportTop": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "inner-scroll",
+      "top": 0,
+      "maximum": 0,
+      "after": 0
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "create-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "dynamic-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "preexisting-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "history-away",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "history-return",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "history-return-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "edit-handoff",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "pending",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "conflict",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "edit-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "create",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "scrim-wheel",
+      "beforeY": 325,
+      "afterY": 325
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "scrim-wheel-layout",
+      "beforeGeometry": {
+        "x": 12,
+        "y": 12,
+        "width": 366,
+        "height": 544,
+        "scrollY": 325,
+        "viewportTop": 0
+      },
+      "afterGeometry": {
+        "x": 12,
+        "y": 12,
+        "width": 366,
+        "height": 544,
+        "scrollY": 325,
+        "viewportTop": 0
+      }
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "inner-scroll",
+      "top": 0,
+      "maximum": 467,
+      "after": 320
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "create-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "dynamic-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "preexisting-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "history-away",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "history-return",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "history-return-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "edit-handoff",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "pending",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "conflict",
+      "focusEscaped": false,
+      "editorInert": false,
+      "targets": [
+        {
+          "class": "",
+          "inert": true
+        },
+        {
+          "class": "provider-runtime-tabs",
+          "inert": true
+        },
+        {
+          "class": "role-topbar",
+          "inert": true
+        }
+      ],
+      "overflow": "hidden"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "edit-close",
+      "inert": [],
+      "overflow": "",
+      "priority": ""
+    }
+  ],
+  "screenshots": [
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "create-open",
+      "file": "390x1000-create-open.png",
+      "sha256": "40a350bb63762bc16c613ee5d6809978c85f044a83a89be084f5c657396cb36c"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "scrim-wheel",
+      "file": "390x1000-scrim-wheel.png",
+      "sha256": "40a350bb63762bc16c613ee5d6809978c85f044a83a89be084f5c657396cb36c"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "history-away",
+      "file": "390x1000-history-away.png",
+      "sha256": "e84836b1398f4e2d74c7c433e671ad3b66d72a385a8cc3863728eb28999eca30"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "history-return",
+      "file": "390x1000-history-return.png",
+      "sha256": "524da3e1eb354d695724ce9cd17be1f57fd35b9b36a861e1cb6fabec44f79f84"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "edit-open",
+      "file": "390x1000-edit-open.png",
+      "sha256": "ce0eb8281713d60f984686fbac3f2cfff3d6cb0fd5d390e13b1a9b17aaddb4dc"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "pending-save",
+      "file": "390x1000-pending-save.png",
+      "sha256": "c78406a4605ab81046e48733583d1ab0e5553946655cc6afb057e48bad7cfc7a"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "conflict",
+      "file": "390x1000-conflict.png",
+      "sha256": "22bb779d74f93bbbb0a40fb30cd5b7fb4d11f3f47f557c94602b3b68b241c046"
+    },
+    {
+      "width": 390,
+      "height": 1000,
+      "state": "edit-closed",
+      "file": "390x1000-edit-closed.png",
+      "sha256": "bfb4dcdb70d5ed8ee1a0dff39c4a8401b2db51e81143c794d9b48d3d27dc1787"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "create-open",
+      "file": "760x1000-create-open.png",
+      "sha256": "9fc1053f5cb4206f1013c7da96639aefea0d9d98226e4c06958ff1513888ca48"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "scrim-wheel",
+      "file": "760x1000-scrim-wheel.png",
+      "sha256": "9fc1053f5cb4206f1013c7da96639aefea0d9d98226e4c06958ff1513888ca48"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "history-away",
+      "file": "760x1000-history-away.png",
+      "sha256": "3e4c87940ea0524ede52b62ec242e4af45e65d63a1a0289cebdde877dee0547b"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "history-return",
+      "file": "760x1000-history-return.png",
+      "sha256": "0f4d8c0ca9fbe1f687ba7f43d5497ed7c47dc6425fc90561aa86fefd2a00445a"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "edit-open",
+      "file": "760x1000-edit-open.png",
+      "sha256": "6cf379fa180882090dbfe6effe89a58319a6443d59d64000acf85dc4703c48a1"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "pending-save",
+      "file": "760x1000-pending-save.png",
+      "sha256": "3a676bdb82704ff1e82f3e9b61ba6ca16e428e0ab3e53a2167dade500ea672fa"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "conflict",
+      "file": "760x1000-conflict.png",
+      "sha256": "9d8a7bb4cf1456448c55b946a7f94006a26fec9b9d7b47ff4baab416dad06492"
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "state": "edit-closed",
+      "file": "760x1000-edit-closed.png",
+      "sha256": "d0d3c9d803bdf2ddd720adb78c1260d104c75bc2a94d689d7a5ba196d2830292"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "create-open",
+      "file": "761x1000-create-open.png",
+      "sha256": "f0772b7a6d5cae5d1f0d5d04d90e2252ce4e4570e224488b7a9f859673b9ccc9"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "scrim-wheel",
+      "file": "761x1000-scrim-wheel.png",
+      "sha256": "f0772b7a6d5cae5d1f0d5d04d90e2252ce4e4570e224488b7a9f859673b9ccc9"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "history-away",
+      "file": "761x1000-history-away.png",
+      "sha256": "e2713d74ff313b2340095d17def501b016899c465f113f645c1cb73104f4ab6a"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "history-return",
+      "file": "761x1000-history-return.png",
+      "sha256": "f0772b7a6d5cae5d1f0d5d04d90e2252ce4e4570e224488b7a9f859673b9ccc9"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "edit-open",
+      "file": "761x1000-edit-open.png",
+      "sha256": "f48424ec24bc89a0e0ea07f9d2be5b920e632ebf8f6b1f4ff7dff94718b01471"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "pending-save",
+      "file": "761x1000-pending-save.png",
+      "sha256": "4b19c6e2c4d182899e6113c9faeee825124df3e9a52551dc02616503af2c3df8"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "conflict",
+      "file": "761x1000-conflict.png",
+      "sha256": "028ef2f7e49aec0c9ef9fc65a7a32c41cd300371d668a3d60f9c63159c15985e"
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "state": "edit-closed",
+      "file": "761x1000-edit-closed.png",
+      "sha256": "9c0fdb75c0536412b35e891833b503bbc64fbaf50ae66febcfc077c1abe11c7a"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "create-open",
+      "file": "1440x1000-create-open.png",
+      "sha256": "5edcea86bfeb5115639cec13fcff26cf12db051416267d6805e79d27b6d4cd95"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "scrim-wheel",
+      "file": "1440x1000-scrim-wheel.png",
+      "sha256": "5edcea86bfeb5115639cec13fcff26cf12db051416267d6805e79d27b6d4cd95"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "history-away",
+      "file": "1440x1000-history-away.png",
+      "sha256": "d523a08f1858d927a5e1f49850003c94517fb0e1305cfbe59dc718d926809442"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "history-return",
+      "file": "1440x1000-history-return.png",
+      "sha256": "5edcea86bfeb5115639cec13fcff26cf12db051416267d6805e79d27b6d4cd95"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "edit-open",
+      "file": "1440x1000-edit-open.png",
+      "sha256": "bec908ccb5ade5c8f42311e10bc75d9736b6d5e107d423f1df2beef2513824f0"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "pending-save",
+      "file": "1440x1000-pending-save.png",
+      "sha256": "eaebc461b5f333899792d8400dd5854ea949f6ab3e2fdcddb129f2b1367351b0"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "conflict",
+      "file": "1440x1000-conflict.png",
+      "sha256": "3ca9080ad6642ae6bcf0518ceea41d66732c1d8116b2e61a5926819f88e78903"
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "state": "edit-closed",
+      "file": "1440x1000-edit-closed.png",
+      "sha256": "1c78e0ef8cebbf1c23c83fe0443f954eb4d03413af7d3870ff71e486a4380ba5"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "create-open",
+      "file": "390x568-create-open.png",
+      "sha256": "a015c1512614cb35100c7d9988c51e4f53916c28cd5b88cb0cc2199f40af8b0e"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "scrim-wheel",
+      "file": "390x568-scrim-wheel.png",
+      "sha256": "a015c1512614cb35100c7d9988c51e4f53916c28cd5b88cb0cc2199f40af8b0e"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "history-away",
+      "file": "390x568-history-away.png",
+      "sha256": "605a639b69e259efb40d2b1e401d287dca0da09072afbf1553bb9c211d689499"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "history-return",
+      "file": "390x568-history-return.png",
+      "sha256": "f653d7394fbcc88181cffbe6ccafcac0d6cde2f23c91d955af6e9bc852073829"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "edit-open",
+      "file": "390x568-edit-open.png",
+      "sha256": "ae6956c8de735cb17717eb2b3b2da221acd7762bcf04c8ef552a2dc8ab775ff5"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "pending-save",
+      "file": "390x568-pending-save.png",
+      "sha256": "dcbdfe3dd6ec328b230788e81acb31777bc19f4ba02e33370a1db7ee2d7dd73f"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "conflict",
+      "file": "390x568-conflict.png",
+      "sha256": "8ab8e9d189fbdb4cc270017c79503ce00f7ba8f9899b3ea2a159b4c8d7e28cc6"
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "state": "edit-closed",
+      "file": "390x568-edit-closed.png",
+      "sha256": "af6ee640f99c081868edf212679076cff24fa5fbab179cfcf93a6819ea1cd5d6"
+    }
+  ],
+  "network": [
+    {
+      "width": 390,
+      "height": 1000,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "公开趋势 RSS",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          }
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "height": 1000,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "公开趋势 RSS",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          }
+        }
+      ]
+    },
+    {
+      "width": 761,
+      "height": 1000,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "公开趋势 RSS",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          }
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "公开趋势 RSS",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          }
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 568,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "公开趋势 RSS",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          }
+        }
+      ]
+    }
+  ],
+  "processesClosed": true,
+  "scope": "Actual App with local GET and rejected held PUT; focus/inert/wheel/history/detail handoff and cleanup. Synthetic dynamic/preexisting DOM probes explicitly separate. Not real save/auth, full modal/screen-reader/production acceptance."
+}
