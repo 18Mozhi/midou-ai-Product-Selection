@@ -1,0 +1,7000 @@
+{
+  "kind": "P44-ADMIN-DETAIL-VUE-PREVIEW-r1",
+  "approval": "pending-user-review",
+  "scope": "Current P44 admins-route Vue scripts preserved; review-only C composition adds one restore-label presentation class and scoped blue restore style. Exact existing administrator fixture, not buyer detail; explicit security-flag/status/role/long-email variants preserve global summary. GET-only intercepted API; no real accounts or authorization. Identity, facts, empty memberships/sessions, selected-record role controls, read failure/retry and Escape checked. No role/status/password/session or membership writes. No full App/NavigationShell/KeepAlive, database, real MFA/RBAC, theme/density or whole-page acceptance. New detail combinations pending review, previous approvals not expanded.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminComparisonMobile.css": "9b74248f24827e8e1e4800b93090ef1fd680acaebf90754bc238680bebedddde",
+    "apps/web/src/components/PlatformAdminDirectoryMobile.css": "4c66844583a8a9711e29b0aa40d40b87ebd7409f53b64933d441b0c8bf46c82c",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-organization-actions.ts": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/admin-comparison-preview.css": "d0f92bb771f8f73da940c1762390db8e421850ee7899ddfbb716d46c0b787c43",
+    "design-plans/ui-phase-2-2026-09-07/implementation/admin-detail-preview.css": "8c99bd7cd511d5bdf109a61a8e8e6a47408a5647f7a9f618a7153baea166655d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/admin-page-assembly-preview.css": "3f0fdf05e91ee0119882d1c7e9b431c4c44736aba6b7c5f40dc40f53f2a2b060",
+    "design-plans/ui-phase-2-2026-09-07/implementation/admin-page-preview.css": "8299e7e73042f87d93c29699282760b04eefac6282e33a889c679e3d08dee5fb",
+    "design-plans/ui-phase-2-2026-09-07/implementation/user-page-preview.css": "8b3d914287a2ae901483c86003f0a1caf0fe9e2796112f5ea374e80886c31c43",
+    "scripts/lib/ui-phase2-admin-detail-preview.mjs": "361887d0db942dc3febe5615dc34bb278e0932d0939522475f734616045cfda8",
+    "scripts/lib/ui-phase2-admin-page-assembly-preview.mjs": "761ccbabad133d1f6b0817d4a6ae56ad5aa384abb3784a011377082b5b4d78c9",
+    "scripts/lib/ui-phase2-admin-page-preview.mjs": "51e16811180d185790b6a5846177249f95e6a1441a7aed7382a181fa71baa6a1",
+    "scripts/lib/ui-phase2-user-page-preview.mjs": "f26a37092547e5866112e43d4248ca6e8dc504949263cb8fb8919aa3a336ae83",
+    "scripts/verify-ui-phase2-admin-detail-preview.mjs": "044cf9259c633d2c9b4d3a20a53f2b2501c6f987aa3f9886e394a234552d42e6",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "38342328df211973700e916177faecc3cd1d40b7857ef52df544af90c5a792bb",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "d8afbd57af312feedf8a6c572afd19f6451dd6b980ba493764e07c8e2b08411f"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "preview:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "preview:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "preview exact admin UUID",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "preview-technical:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "preview-technical:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "loading:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "loading:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "facts:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "facts:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "access:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "access:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "close reached by keyboard",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "close-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "close-focus:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "error hides prior facts and actions",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "first-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "first-error:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "retry-wait:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "retry-wait:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "retry restores same admin identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "short-top:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "short-top:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "short-actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "short-actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "short screen footer close reachable",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 390,
+      "variant": "normal",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "待完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 390,
+      "variant": "password-pending",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "待完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 390,
+      "variant": "mfa-pending",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "待完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 390,
+      "variant": "both-pending",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "已停用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "disabled account role actions",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "membership submit matches account status",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "status action label unchanged",
+      "actual": "恢复登录"
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "restore-only presentation class",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "status action tone",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "restore blue background",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 390,
+      "variant": "disabled",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "撤销运营管理员",
+        "撤销安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 390,
+      "variant": "all-roles",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "授予超级管理员"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 390,
+      "variant": "no-roles",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "detail belongs to selected administrator",
+      "actual": "platform.administration.platform.administration.platform.administration.platform.administration.platform.administration.@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "native dialog accessible name matches identity",
+      "actual": "platform.administration.platform.administration.platform.administration.platform.administration.platform.administration.@example.test"
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "all requests GET",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "variant": "long-email",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "preview:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "preview:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "preview exact admin UUID",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "preview-technical:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "preview-technical:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "loading:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "loading:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "facts:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "facts:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "access:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "access:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "close reached by keyboard",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "close-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "close-focus:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "error hides prior facts and actions",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "first-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "first-error:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "retry-wait:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "retry-wait:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "retry restores same admin identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 760,
+      "variant": "normal",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "待完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 760,
+      "variant": "password-pending",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "待完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 760,
+      "variant": "mfa-pending",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "待完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 760,
+      "variant": "both-pending",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "已停用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "disabled account role actions",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "membership submit matches account status",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "status action label unchanged",
+      "actual": "恢复登录"
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "restore-only presentation class",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "status action tone",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "restore blue background",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 760,
+      "variant": "disabled",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "撤销运营管理员",
+        "撤销安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 760,
+      "variant": "all-roles",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "授予超级管理员"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 760,
+      "variant": "no-roles",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "detail belongs to selected administrator",
+      "actual": "platform.administration.platform.administration.platform.administration.platform.administration.platform.administration.@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "native dialog accessible name matches identity",
+      "actual": "platform.administration.platform.administration.platform.administration.platform.administration.platform.administration.@example.test"
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "all requests GET",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "variant": "long-email",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "loading:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "loading:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "facts:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "facts:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "access:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "access:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "close reached by keyboard",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "close-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "close-focus:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "error hides prior facts and actions",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "first-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "first-error:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "retry-wait:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "retry-wait:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "retry restores same admin identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 761,
+      "variant": "normal",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "待完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 761,
+      "variant": "password-pending",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "待完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 761,
+      "variant": "mfa-pending",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "待完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 761,
+      "variant": "both-pending",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "已停用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "disabled account role actions",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "membership submit matches account status",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "status action label unchanged",
+      "actual": "恢复登录"
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "restore-only presentation class",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "status action tone",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "restore blue background",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 761,
+      "variant": "disabled",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "撤销运营管理员",
+        "撤销安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 761,
+      "variant": "all-roles",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "授予超级管理员"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 761,
+      "variant": "no-roles",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "detail belongs to selected administrator",
+      "actual": "platform.administration.platform.administration.platform.administration.platform.administration.platform.administration.@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "native dialog accessible name matches identity",
+      "actual": "platform.administration.platform.administration.platform.administration.platform.administration.platform.administration.@example.test"
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "all requests GET",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "variant": "long-email",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "loading:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "loading:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "facts:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "facts:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "access:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "access:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "close reached by keyboard",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "close-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "close-focus:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "error hides prior facts and actions",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "first-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "first-error:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "retry-wait:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "retry-wait:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "retry restores same admin identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1440,
+      "variant": "normal",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "待完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1440,
+      "variant": "password-pending",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "待完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1440,
+      "variant": "mfa-pending",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "待完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1440,
+      "variant": "both-pending",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "已停用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "disabled account role actions",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "membership submit matches account status",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "status action label unchanged",
+      "actual": "恢复登录"
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "restore-only presentation class",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "status action tone",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "restore blue background",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1440,
+      "variant": "disabled",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "撤销运营管理员",
+        "撤销安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1440,
+      "variant": "all-roles",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "detail belongs to selected administrator",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "native dialog accessible name matches identity",
+      "actual": "admin@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "授予超级管理员"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1440,
+      "variant": "no-roles",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "directory identity",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "actual native detail dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "detail belongs to selected administrator",
+      "actual": "platform.administration.platform.administration.platform.administration.platform.administration.platform.administration.@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "native dialog accessible name matches identity",
+      "actual": "platform.administration.platform.administration.platform.administration.platform.administration.platform.administration.@example.test"
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "facts match original or explicit variant",
+      "actual": [
+        "正常使用",
+        "已完成",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "empty memberships explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "empty sessions explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "role actions match selected record roles",
+      "actual": [
+        "授予运营管理员",
+        "授予安全管理员",
+        "撤销超级管理员"
+      ]
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "disabled account role actions",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "membership submit matches account status",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "blue identity header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "default:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "status action label unchanged",
+      "actual": "停用登录"
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "restore-only presentation class",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "status action tone",
+      "actual": "rgb(174, 51, 69)"
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "actions:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "actions:surface fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "Escape remains on admin route",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "Escape leaves no visible dialog",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "all requests GET",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "variant": "long-email",
+      "name": "no browser errors",
+      "actual": []
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-normal-preview.png",
+      "width": 390,
+      "variant": "normal",
+      "state": "normal-preview",
+      "sha256": "85733a199b632d6e15819a43bd39fc4d791fb89dff50ad914353f085594be203",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 370,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-normal-preview-technical.png",
+      "width": 390,
+      "variant": "normal",
+      "state": "normal-preview-technical",
+      "sha256": "c984afcd74b66bd4e928edc03c5e168e3fef4a58c74faa35395b2c259eeb225e",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 370,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-normal-loading.png",
+      "width": 390,
+      "variant": "normal",
+      "state": "normal-loading",
+      "sha256": "b03d9451d5f2c25b5a6e87caaf87a3d34e3e6a60d0554af565a1fc082d88c329",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 60
+      }
+    },
+    {
+      "file": "390-normal-default.png",
+      "width": 390,
+      "variant": "normal",
+      "state": "normal-default",
+      "sha256": "dd278b37fa1d507a1c52ceeb42aceebd2486754eedaeb3ade9897be528fa60d9",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-normal-actions.png",
+      "width": 390,
+      "variant": "normal",
+      "state": "normal-actions",
+      "sha256": "b362df8426bc62f9d7fa5ef895b3047432709dc840db2257c8bbb4da29e1b089",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-normal-facts.png",
+      "width": 390,
+      "variant": "normal",
+      "state": "normal-facts",
+      "sha256": "c8c5ab9bd8316024e2a4210aad6b6e0c2a4b7b2f9a0c017f57cfed5ff327fb79",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 350,
+        "height": 155
+      }
+    },
+    {
+      "file": "390-normal-access.png",
+      "width": 390,
+      "variant": "normal",
+      "state": "normal-access",
+      "sha256": "ae99d319fb9b0a3e989fc46767b22d686a1e99a92262f6953885831ca39fc4a3",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 318,
+        "height": 355
+      }
+    },
+    {
+      "file": "390-normal-close-focus.png",
+      "width": 390,
+      "variant": "normal",
+      "state": "normal-close-focus",
+      "sha256": "08bc5306b6f51d0fa8194917daaa0ddc98f0bb2e0123fb3bc33fb5fd8fe51e1f",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-normal-first-error.png",
+      "width": 390,
+      "variant": "normal",
+      "state": "normal-first-error",
+      "sha256": "9c3499f453540dcc1a8df2697e1ff9ad48357f89e4a25fe57b52fda75138a6b8",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 148
+      }
+    },
+    {
+      "file": "390-normal-retry-wait.png",
+      "width": 390,
+      "variant": "normal",
+      "state": "normal-retry-wait",
+      "sha256": "b03d9451d5f2c25b5a6e87caaf87a3d34e3e6a60d0554af565a1fc082d88c329",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 60
+      }
+    },
+    {
+      "file": "390-normal-short-top.png",
+      "width": 390,
+      "variant": "normal",
+      "state": "normal-short-top",
+      "sha256": "28abc0665aa3aa6ce71092c852bccf8a574a06d119f0f3e481ce622cdf759153",
+      "viewport": {
+        "width": 390,
+        "height": 568
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 524
+      }
+    },
+    {
+      "file": "390-normal-short-actions.png",
+      "width": 390,
+      "variant": "normal",
+      "state": "normal-short-actions",
+      "sha256": "61d7e286f8294d25fab21e32d0118ab3bc84541761cbcc97c3c1e29b6391f5fc",
+      "viewport": {
+        "width": 390,
+        "height": 568
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 524
+      }
+    },
+    {
+      "file": "390-password-pending-default.png",
+      "width": 390,
+      "variant": "password-pending",
+      "state": "password-pending-default",
+      "sha256": "42f020cacc4a692efd72b8961631159c3b1533b197281618196e87ec828a031c",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-password-pending-actions.png",
+      "width": 390,
+      "variant": "password-pending",
+      "state": "password-pending-actions",
+      "sha256": "b362df8426bc62f9d7fa5ef895b3047432709dc840db2257c8bbb4da29e1b089",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-mfa-pending-default.png",
+      "width": 390,
+      "variant": "mfa-pending",
+      "state": "mfa-pending-default",
+      "sha256": "42f020cacc4a692efd72b8961631159c3b1533b197281618196e87ec828a031c",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-mfa-pending-actions.png",
+      "width": 390,
+      "variant": "mfa-pending",
+      "state": "mfa-pending-actions",
+      "sha256": "b362df8426bc62f9d7fa5ef895b3047432709dc840db2257c8bbb4da29e1b089",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-both-pending-default.png",
+      "width": 390,
+      "variant": "both-pending",
+      "state": "both-pending-default",
+      "sha256": "42f020cacc4a692efd72b8961631159c3b1533b197281618196e87ec828a031c",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-both-pending-actions.png",
+      "width": 390,
+      "variant": "both-pending",
+      "state": "both-pending-actions",
+      "sha256": "b362df8426bc62f9d7fa5ef895b3047432709dc840db2257c8bbb4da29e1b089",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-disabled-default.png",
+      "width": 390,
+      "variant": "disabled",
+      "state": "disabled-default",
+      "sha256": "72ca592b080f0c8c908391c85c61e04238647ea8fcc0fb239f41482311e996be",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-disabled-actions.png",
+      "width": 390,
+      "variant": "disabled",
+      "state": "disabled-actions",
+      "sha256": "082a9d9a6372f714a84b1b2008eb13dfa8c813ca196e8f0b2164fe837d0678f4",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-all-roles-default.png",
+      "width": 390,
+      "variant": "all-roles",
+      "state": "all-roles-default",
+      "sha256": "b44a7d864d023dfbab18f28664656534a8e3931b9e526435d56f0e3a6333d778",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-all-roles-actions.png",
+      "width": 390,
+      "variant": "all-roles",
+      "state": "all-roles-actions",
+      "sha256": "6ef576fcccee9d46a4bc5f065c1a1fa8088eedebc911fa7c4ab62230adfcea22",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-no-roles-default.png",
+      "width": 390,
+      "variant": "no-roles",
+      "state": "no-roles-default",
+      "sha256": "dd278b37fa1d507a1c52ceeb42aceebd2486754eedaeb3ade9897be528fa60d9",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-no-roles-actions.png",
+      "width": 390,
+      "variant": "no-roles",
+      "state": "no-roles-actions",
+      "sha256": "1f5e1e97a3bff1e30299f323c1697addc17b9a7f6098b6b2c2d4633c7336572e",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-long-email-default.png",
+      "width": 390,
+      "variant": "long-email",
+      "state": "long-email-default",
+      "sha256": "2a2224bf13114497ec70f3bbf8d1954a588f4bc2b6db207467b544a65d3e3733",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "390-long-email-actions.png",
+      "width": 390,
+      "variant": "long-email",
+      "state": "long-email-actions",
+      "sha256": "49c4c9642c640e2837e3899c800c9cb7f46023900b2a3502b8a77299a223ff86",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 352,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-normal-preview.png",
+      "width": 760,
+      "variant": "normal",
+      "state": "normal-preview",
+      "sha256": "2db67b8583e5b624a18dc6bdf83648f2c07b477c753d17d0a10a0bec895d4512",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-normal-preview-technical.png",
+      "width": 760,
+      "variant": "normal",
+      "state": "normal-preview-technical",
+      "sha256": "2b2df086ec927793a1f67331e9027f6275978e6476ba168cdcb256aaefe9a7ec",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-normal-loading.png",
+      "width": 760,
+      "variant": "normal",
+      "state": "normal-loading",
+      "sha256": "531d2efbad18b7dbb58e6649a056f61ae420a968a1fb71308c65d59b13d2d633",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 60
+      }
+    },
+    {
+      "file": "760-normal-default.png",
+      "width": 760,
+      "variant": "normal",
+      "state": "normal-default",
+      "sha256": "a573b2a8670a37e5b13d8fb5704810335cd9169ed74e82102723a19b5b446e8a",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-normal-actions.png",
+      "width": 760,
+      "variant": "normal",
+      "state": "normal-actions",
+      "sha256": "d802d0d868831841c6fe1c1d206f4d81acc4dfd8eb15b98bb744e74bbfe82ea8",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-normal-facts.png",
+      "width": 760,
+      "variant": "normal",
+      "state": "normal-facts",
+      "sha256": "8f4b18dc79aff6f114d5dc469ec7648dabc8929aa60120bc30a0caf25da6e577",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 720,
+        "height": 155
+      }
+    },
+    {
+      "file": "760-normal-access.png",
+      "width": 760,
+      "variant": "normal",
+      "state": "normal-access",
+      "sha256": "4aab1a112383a13cf28007a6cca8c4245f4ab5672e21579576f5f10580e476bd",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 688,
+        "height": 303
+      }
+    },
+    {
+      "file": "760-normal-close-focus.png",
+      "width": 760,
+      "variant": "normal",
+      "state": "normal-close-focus",
+      "sha256": "d632cc2d71d63dbd9e233950556a9f704f9e79060bb1d1fb6b7184e1251cd26b",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-normal-first-error.png",
+      "width": 760,
+      "variant": "normal",
+      "state": "normal-first-error",
+      "sha256": "cf49449c70ad93b4943b3764379909579008a6c26e2350ce7cc337bb327c6f11",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 148
+      }
+    },
+    {
+      "file": "760-normal-retry-wait.png",
+      "width": 760,
+      "variant": "normal",
+      "state": "normal-retry-wait",
+      "sha256": "531d2efbad18b7dbb58e6649a056f61ae420a968a1fb71308c65d59b13d2d633",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 60
+      }
+    },
+    {
+      "file": "760-password-pending-default.png",
+      "width": 760,
+      "variant": "password-pending",
+      "state": "password-pending-default",
+      "sha256": "b5e141757981c4cfdaee460ab7a2ab2609e71c8c1067c4ca6884ee0385a13de6",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-password-pending-actions.png",
+      "width": 760,
+      "variant": "password-pending",
+      "state": "password-pending-actions",
+      "sha256": "d802d0d868831841c6fe1c1d206f4d81acc4dfd8eb15b98bb744e74bbfe82ea8",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-mfa-pending-default.png",
+      "width": 760,
+      "variant": "mfa-pending",
+      "state": "mfa-pending-default",
+      "sha256": "b5e141757981c4cfdaee460ab7a2ab2609e71c8c1067c4ca6884ee0385a13de6",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-mfa-pending-actions.png",
+      "width": 760,
+      "variant": "mfa-pending",
+      "state": "mfa-pending-actions",
+      "sha256": "d802d0d868831841c6fe1c1d206f4d81acc4dfd8eb15b98bb744e74bbfe82ea8",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-both-pending-default.png",
+      "width": 760,
+      "variant": "both-pending",
+      "state": "both-pending-default",
+      "sha256": "b5e141757981c4cfdaee460ab7a2ab2609e71c8c1067c4ca6884ee0385a13de6",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-both-pending-actions.png",
+      "width": 760,
+      "variant": "both-pending",
+      "state": "both-pending-actions",
+      "sha256": "d802d0d868831841c6fe1c1d206f4d81acc4dfd8eb15b98bb744e74bbfe82ea8",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-disabled-default.png",
+      "width": 760,
+      "variant": "disabled",
+      "state": "disabled-default",
+      "sha256": "45e572dd6794a3b6d0eaf3138b2282789cd022df1710b376e4079c71ed2ef353",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-disabled-actions.png",
+      "width": 760,
+      "variant": "disabled",
+      "state": "disabled-actions",
+      "sha256": "3b40faf286aebad31439d6a21526805cb7a91261cd90ebbe6a477e165f0f682e",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-all-roles-default.png",
+      "width": 760,
+      "variant": "all-roles",
+      "state": "all-roles-default",
+      "sha256": "a573b2a8670a37e5b13d8fb5704810335cd9169ed74e82102723a19b5b446e8a",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-all-roles-actions.png",
+      "width": 760,
+      "variant": "all-roles",
+      "state": "all-roles-actions",
+      "sha256": "8ba9d34b11062ed58a9a4ea0c3cf3d5c8731c53c8f4bdb57a42936b02e6a4043",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-no-roles-default.png",
+      "width": 760,
+      "variant": "no-roles",
+      "state": "no-roles-default",
+      "sha256": "a573b2a8670a37e5b13d8fb5704810335cd9169ed74e82102723a19b5b446e8a",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-no-roles-actions.png",
+      "width": 760,
+      "variant": "no-roles",
+      "state": "no-roles-actions",
+      "sha256": "d7dc72d4ad568d816d36874d0483b1cb9c7c45a550f90659f3da7a28c0dd958a",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-long-email-default.png",
+      "width": 760,
+      "variant": "long-email",
+      "state": "long-email-default",
+      "sha256": "a8e0e480df9e4b7b17a55f888fad9287c61fcb72ac19d29f55c7a168684cbf43",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "760-long-email-actions.png",
+      "width": 760,
+      "variant": "long-email",
+      "state": "long-email-actions",
+      "sha256": "e4ffb8a55fde72da5c054f9cac3db46056eb042c3acad69facb28d13f1a0af32",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 722,
+        "height": 828
+      }
+    },
+    {
+      "file": "761-normal-loading.png",
+      "width": 761,
+      "variant": "normal",
+      "state": "normal-loading",
+      "sha256": "4e7a6058d1e83b49d92c243c738ca36b5b079d6d8dec7316ead662b3f7751ccf",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 60
+      }
+    },
+    {
+      "file": "761-normal-default.png",
+      "width": 761,
+      "variant": "normal",
+      "state": "normal-default",
+      "sha256": "0a1de4bfa3ea6126a9421b640c9528117adcfb94cfe93876f7f43204a13babde",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-normal-actions.png",
+      "width": 761,
+      "variant": "normal",
+      "state": "normal-actions",
+      "sha256": "7a33730626f4fb5311af85bde24145b412d08a1462ad9eb82b8faad68be40e15",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-normal-facts.png",
+      "width": 761,
+      "variant": "normal",
+      "state": "normal-facts",
+      "sha256": "2e4dd3cce51030f3eb1791cb7709a75a19eb660c9010dc677e492984710e6c6d",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 719,
+        "height": 91
+      }
+    },
+    {
+      "file": "761-normal-access.png",
+      "width": 761,
+      "variant": "normal",
+      "state": "normal-access",
+      "sha256": "66c207a7f91d17a4686dd8fab7bebd5f5c49a9e79ab8eab45d76a702c9a35fb6",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 671,
+        "height": 319
+      }
+    },
+    {
+      "file": "761-normal-close-focus.png",
+      "width": 761,
+      "variant": "normal",
+      "state": "normal-close-focus",
+      "sha256": "1672ed3df2422ed80eafe2033f6b937128c25f1255b0c748557d79ed55648649",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-normal-first-error.png",
+      "width": 761,
+      "variant": "normal",
+      "state": "normal-first-error",
+      "sha256": "aed9a559b177d118b54e478f8e25911594f9564d0c63e0f82663698207835c34",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 148
+      }
+    },
+    {
+      "file": "761-normal-retry-wait.png",
+      "width": 761,
+      "variant": "normal",
+      "state": "normal-retry-wait",
+      "sha256": "4e7a6058d1e83b49d92c243c738ca36b5b079d6d8dec7316ead662b3f7751ccf",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 60
+      }
+    },
+    {
+      "file": "761-password-pending-default.png",
+      "width": 761,
+      "variant": "password-pending",
+      "state": "password-pending-default",
+      "sha256": "3231f64a3c7b556d4f2d348c66cea27247baf854f6537b495fd0dbfc1e741f92",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-password-pending-actions.png",
+      "width": 761,
+      "variant": "password-pending",
+      "state": "password-pending-actions",
+      "sha256": "7a33730626f4fb5311af85bde24145b412d08a1462ad9eb82b8faad68be40e15",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-mfa-pending-default.png",
+      "width": 761,
+      "variant": "mfa-pending",
+      "state": "mfa-pending-default",
+      "sha256": "3231f64a3c7b556d4f2d348c66cea27247baf854f6537b495fd0dbfc1e741f92",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-mfa-pending-actions.png",
+      "width": 761,
+      "variant": "mfa-pending",
+      "state": "mfa-pending-actions",
+      "sha256": "7a33730626f4fb5311af85bde24145b412d08a1462ad9eb82b8faad68be40e15",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-both-pending-default.png",
+      "width": 761,
+      "variant": "both-pending",
+      "state": "both-pending-default",
+      "sha256": "3231f64a3c7b556d4f2d348c66cea27247baf854f6537b495fd0dbfc1e741f92",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-both-pending-actions.png",
+      "width": 761,
+      "variant": "both-pending",
+      "state": "both-pending-actions",
+      "sha256": "7a33730626f4fb5311af85bde24145b412d08a1462ad9eb82b8faad68be40e15",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-disabled-default.png",
+      "width": 761,
+      "variant": "disabled",
+      "state": "disabled-default",
+      "sha256": "49dea1e152347a423e25afcfe2f411a8fb103d23ec8fd6575e040d795f3c3a35",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-disabled-actions.png",
+      "width": 761,
+      "variant": "disabled",
+      "state": "disabled-actions",
+      "sha256": "0e7beabf66aaf90322b08646190f8169a4a0231f6a009315ed6214244b6af2a3",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-all-roles-default.png",
+      "width": 761,
+      "variant": "all-roles",
+      "state": "all-roles-default",
+      "sha256": "0a1de4bfa3ea6126a9421b640c9528117adcfb94cfe93876f7f43204a13babde",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-all-roles-actions.png",
+      "width": 761,
+      "variant": "all-roles",
+      "state": "all-roles-actions",
+      "sha256": "d601fae27679cab5c502da4c239e12dec6c18aa66364e451868a475f2ee0e2d3",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-no-roles-default.png",
+      "width": 761,
+      "variant": "no-roles",
+      "state": "no-roles-default",
+      "sha256": "0a1de4bfa3ea6126a9421b640c9528117adcfb94cfe93876f7f43204a13babde",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-no-roles-actions.png",
+      "width": 761,
+      "variant": "no-roles",
+      "state": "no-roles-actions",
+      "sha256": "17f364dd551938f58c1493fda7016e2e33800517ed8821a56d3e3131b49354dd",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-long-email-default.png",
+      "width": 761,
+      "variant": "long-email",
+      "state": "long-email-default",
+      "sha256": "403608dbd30ea598477368ab233eac27e9f6e33d1eacc60a98d0e2849166c8fa",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "761-long-email-actions.png",
+      "width": 761,
+      "variant": "long-email",
+      "state": "long-email-actions",
+      "sha256": "7a33730626f4fb5311af85bde24145b412d08a1462ad9eb82b8faad68be40e15",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 721,
+        "height": 810
+      }
+    },
+    {
+      "file": "1440-normal-loading.png",
+      "width": 1440,
+      "variant": "normal",
+      "state": "normal-loading",
+      "sha256": "77c281b1dcd5c1d7fae5ffad6156aa3f363ef350d619525e4d986d7556b73e2f",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 60
+      }
+    },
+    {
+      "file": "1440-normal-default.png",
+      "width": 1440,
+      "variant": "normal",
+      "state": "normal-default",
+      "sha256": "3f4ae42ac391311fa4a902885c49d11711134c2193e914e76e9aca0beadc63f6",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-normal-actions.png",
+      "width": 1440,
+      "variant": "normal",
+      "state": "normal-actions",
+      "sha256": "3f4ae42ac391311fa4a902885c49d11711134c2193e914e76e9aca0beadc63f6",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-normal-facts.png",
+      "width": 1440,
+      "variant": "normal",
+      "state": "normal-facts",
+      "sha256": "a51aa65f2040dc59ee3b996e14884a429bda23b49af5fdfbb4825f2476ec1b0c",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1098,
+        "height": 92
+      }
+    },
+    {
+      "file": "1440-normal-access.png",
+      "width": 1440,
+      "variant": "normal",
+      "state": "normal-access",
+      "sha256": "c679eb6cda98987723985718f257dccd944ac39a8959e9962ed846bc4363fa75",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 491,
+        "height": 319
+      }
+    },
+    {
+      "file": "1440-normal-close-focus.png",
+      "width": 1440,
+      "variant": "normal",
+      "state": "normal-close-focus",
+      "sha256": "0021a77a27e522e9bcb50b028dd550d1e835ad1b340c1804d39169502043ec35",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-normal-first-error.png",
+      "width": 1440,
+      "variant": "normal",
+      "state": "normal-first-error",
+      "sha256": "adc392c8c4ad5150855867f69151954492d1121569bb6be2ab7c32b34f3007e1",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 148
+      }
+    },
+    {
+      "file": "1440-normal-retry-wait.png",
+      "width": 1440,
+      "variant": "normal",
+      "state": "normal-retry-wait",
+      "sha256": "77c281b1dcd5c1d7fae5ffad6156aa3f363ef350d619525e4d986d7556b73e2f",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 60
+      }
+    },
+    {
+      "file": "1440-password-pending-default.png",
+      "width": 1440,
+      "variant": "password-pending",
+      "state": "password-pending-default",
+      "sha256": "6f6c36d097c799356efc05b9deecffd970bf5c9eb369f664d6df83ff506d4c71",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-password-pending-actions.png",
+      "width": 1440,
+      "variant": "password-pending",
+      "state": "password-pending-actions",
+      "sha256": "6f6c36d097c799356efc05b9deecffd970bf5c9eb369f664d6df83ff506d4c71",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-mfa-pending-default.png",
+      "width": 1440,
+      "variant": "mfa-pending",
+      "state": "mfa-pending-default",
+      "sha256": "6f6c36d097c799356efc05b9deecffd970bf5c9eb369f664d6df83ff506d4c71",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-mfa-pending-actions.png",
+      "width": 1440,
+      "variant": "mfa-pending",
+      "state": "mfa-pending-actions",
+      "sha256": "6f6c36d097c799356efc05b9deecffd970bf5c9eb369f664d6df83ff506d4c71",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-both-pending-default.png",
+      "width": 1440,
+      "variant": "both-pending",
+      "state": "both-pending-default",
+      "sha256": "6f6c36d097c799356efc05b9deecffd970bf5c9eb369f664d6df83ff506d4c71",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-both-pending-actions.png",
+      "width": 1440,
+      "variant": "both-pending",
+      "state": "both-pending-actions",
+      "sha256": "6f6c36d097c799356efc05b9deecffd970bf5c9eb369f664d6df83ff506d4c71",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-disabled-default.png",
+      "width": 1440,
+      "variant": "disabled",
+      "state": "disabled-default",
+      "sha256": "ec0c4fcde36a5852f800d975eced2b9f17510ded97a20f19026fa27892e17b65",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-disabled-actions.png",
+      "width": 1440,
+      "variant": "disabled",
+      "state": "disabled-actions",
+      "sha256": "ec0c4fcde36a5852f800d975eced2b9f17510ded97a20f19026fa27892e17b65",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-all-roles-default.png",
+      "width": 1440,
+      "variant": "all-roles",
+      "state": "all-roles-default",
+      "sha256": "464de1c3b1525559af25401b9ef9c2b243830db0a4f47092128b67c3b8c82558",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-all-roles-actions.png",
+      "width": 1440,
+      "variant": "all-roles",
+      "state": "all-roles-actions",
+      "sha256": "464de1c3b1525559af25401b9ef9c2b243830db0a4f47092128b67c3b8c82558",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-no-roles-default.png",
+      "width": 1440,
+      "variant": "no-roles",
+      "state": "no-roles-default",
+      "sha256": "d01fd942c2888c1ac5e3b5386e95482424ce5b3332ad764288c4f2035c550708",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-no-roles-actions.png",
+      "width": 1440,
+      "variant": "no-roles",
+      "state": "no-roles-actions",
+      "sha256": "d01fd942c2888c1ac5e3b5386e95482424ce5b3332ad764288c4f2035c550708",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 740
+      }
+    },
+    {
+      "file": "1440-long-email-default.png",
+      "width": 1440,
+      "variant": "long-email",
+      "state": "long-email-default",
+      "sha256": "27dc2263a10227fcad2ce666e0a74d17a36e477a97576190617ace4008b7da85",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 774
+      }
+    },
+    {
+      "file": "1440-long-email-actions.png",
+      "width": 1440,
+      "variant": "long-email",
+      "state": "long-email-actions",
+      "sha256": "27dc2263a10227fcad2ce666e0a74d17a36e477a97576190617ace4008b7da85",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1100,
+        "height": 774
+      }
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "password-pending"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "password-pending"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "password-pending"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "mfa-pending"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "mfa-pending"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "mfa-pending"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "both-pending"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "both-pending"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "both-pending"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "disabled"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "disabled"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "disabled"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "all-roles"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "all-roles"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "all-roles"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "no-roles"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "no-roles"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "no-roles"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "long-email"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "long-email"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "long-email"
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "password-pending"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "password-pending"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "password-pending"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "mfa-pending"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "mfa-pending"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "mfa-pending"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "both-pending"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "both-pending"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "both-pending"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "disabled"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "disabled"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "disabled"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "all-roles"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "all-roles"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "all-roles"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "no-roles"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "no-roles"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "no-roles"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "long-email"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "long-email"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "long-email"
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "password-pending"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "password-pending"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "password-pending"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "mfa-pending"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "mfa-pending"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "mfa-pending"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "both-pending"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "both-pending"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "both-pending"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "disabled"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "disabled"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "disabled"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "all-roles"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "all-roles"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "all-roles"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "no-roles"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "no-roles"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "no-roles"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "long-email"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "long-email"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "long-email"
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "password-pending"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "password-pending"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "password-pending"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "mfa-pending"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "mfa-pending"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "mfa-pending"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "both-pending"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "both-pending"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "both-pending"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "disabled"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "disabled"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "disabled"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "all-roles"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "all-roles"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "all-roles"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "no-roles"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "no-roles"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "no-roles"
+        },
+        {
+          "method": "GET",
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "status": 200,
+          "variant": "long-email"
+        },
+        {
+          "method": "GET",
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "long-email"
+        },
+        {
+          "method": "GET",
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000624",
+          "status": 200,
+          "variant": "long-email"
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    }
+  ],
+  "processesClosed": true
+}

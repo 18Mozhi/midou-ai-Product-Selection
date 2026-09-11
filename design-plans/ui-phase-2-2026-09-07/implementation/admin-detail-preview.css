@@ -1,0 +1,6 @@
+/* P44 review host only: use the existing restore-label condition, not inferred permission. */
+html body.p44-detail-review #app .p43-user-detail footer button.p44-detail-reenable:not(:disabled) {
+  color: #fff;
+  background: #294caf;
+  border-color: #294caf;
+}
