@@ -16,6 +16,35 @@ import ConfirmDialog from "./ConfirmDialog.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import TechnicalDetails from "./TechnicalDetails.vue";
+
+interface BatchReplayItem {
+  id: string;
+  task_id: string;
+  organization_id: string;
+  workspace_id: string;
+  error_code: string;
+}
+
+interface BatchReplaySnapshot {
+  id: string;
+  items: BatchReplayItem[];
+  reason: string;
+  impact: string;
+}
+
+interface BatchReplayFailure {
+  deadLetterId: string;
+  taskId: string;
+  reason: string;
+  unknown: boolean;
+}
+
+interface BatchReplaySettlement {
+  succeededIds: string[];
+  failures: BatchReplayFailure[];
+  requestId: string;
+}
+
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
 const route = useRoute(),
@@ -55,16 +84,18 @@ const state = ref("loading"),
   selectedDeadLetterIds = ref<string[]>([]),
   batchReason = ref(""),
   batchPreview = ref(false),
-  batchId = ref(""),
+  batchSnapshot = ref<BatchReplaySnapshot | null>(null),
   batchBusy = ref(false),
+  batchUnknown = ref(false),
   batchNotice = ref(""),
-  batchFailures = ref<Array<{ task: string; reason: string }>>([]),
+  batchFailures = ref<BatchReplayFailure[]>([]),
   sourcesExpanded = ref(false),
   rootCauseSection = ref<HTMLElement | null>(null);
 let activeController: AbortController | null = null,
   readSequence = 0,
   pageActive = true,
-  resumeRead = false;
+  resumeRead = false,
+  detachedBatchSettlement: BatchReplaySettlement | null = null;
 const sourceDisplayLimit = 8;
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const selectedDeadLetters = computed(() =>
@@ -83,6 +114,7 @@ const selectedDeadLetters = computed(() =>
       workspaceCount = new Set(items.map((item: any) => item.workspace_id)).size;
     return `${items.length} 条开放死信；${organizationCount} 个组织；${workspaceCount} 个工作区；根因：${rootSummary || "无"}。`;
   }),
+  batchConfirmationImpact = computed(() => batchSnapshot.value?.impact ?? batchImpact.value),
   scopeFilterCount = computed(
     () =>
       [org.value, workspace.value, provider.value, errorCode.value].filter(Boolean).length +
@@ -162,6 +194,10 @@ async function syncUrl(scope = readScope()) {
 }
 
 async function load(options: { updateUrl?: boolean } = {}) {
+  if (batchBusy.value) {
+    resumeRead = true;
+    return;
+  }
   const sequence = ++readSequence;
   activeController?.abort("superseded");
   activeController = null;
@@ -244,14 +280,15 @@ async function focusRootCause() {
   rootCauseSection.value?.scrollIntoView({ block: "start" });
   rootCauseSection.value?.focus();
 }
-function suspendRead(reason: "deactivated" | "unmounted") {
+function suspendPage(reason: "deactivated" | "unmounted") {
   const interrupted = Boolean(activeController);
   pageActive = false;
   readSequence += 1;
   activeController?.abort(reason);
   activeController = null;
   refreshing.value = false;
-  resumeRead = reason === "deactivated" && interrupted;
+  resumeRead ||= reason === "deactivated" && interrupted;
+  if (!batchBusy.value) cancelBatchPreview();
 }
 onMounted(async () => {
   await load();
@@ -276,12 +313,19 @@ watch(
     if (rootCause === "1" && previous?.[8] !== "1") await focusRootCause();
   },
 );
-onBeforeUnmount(() => suspendRead("unmounted"));
-onDeactivated(() => suspendRead("deactivated"));
+onBeforeUnmount(() => suspendPage("unmounted"));
+onDeactivated(() => suspendPage("deactivated"));
 onActivated(() => {
   pageActive = true;
   if (route.path !== "/platform-admin/collection/overview") return;
   const routeChanged = applyRouteScope();
+  if (detachedBatchSettlement) {
+    const settlement = detachedBatchSettlement;
+    detachedBatchSettlement = null;
+    resumeRead = false;
+    void applyBatchSettlement(settlement);
+    return;
+  }
   if (routeChanged || resumeRead) {
     resumeRead = false;
     void load({ updateUrl: false });
@@ -354,7 +398,7 @@ const when = (v: string | null) =>
   attemptRowKey = (item: any) => item.id,
   attemptDetailTitle = (item: any) => `第 ${item.attempt_number} 次尝试详情`,
   drillRootCause = async (value: string) => {
-    if (refreshing.value) return;
+    if (refreshing.value || batchBusy.value) return;
     errorCode.value = errorCode.value === value ? "" : value;
     attemptPage.value = 1;
     deadLetterPage.value = 1;
@@ -362,12 +406,14 @@ const when = (v: string | null) =>
   };
 
 function applyScope() {
+  if (batchBusy.value) return;
   attemptPage.value = 1;
   deadLetterPage.value = 1;
   void load();
 }
 
 function resetScope() {
+  if (batchBusy.value) return;
   org.value = "";
   workspace.value = "";
   provider.value = "";
@@ -379,7 +425,7 @@ function resetScope() {
 }
 
 function goToPage(kind: "attempts" | "dead_letters", page: number) {
-  if (refreshing.value || page < 1) return;
+  if (refreshing.value || batchBusy.value || page < 1) return;
   if (kind === "attempts") attemptPage.value = page;
   else deadLetterPage.value = page;
   void load();
@@ -410,6 +456,10 @@ function toggleDeadLetter(id: string, event: Event) {
 function previewBatchReplay() {
   batchNotice.value = "";
   batchFailures.value = [];
+  if (batchUnknown.value) {
+    batchNotice.value = "已有结果未知，请先到对应任务核查；当前页面不会自动重发。";
+    return;
+  }
   if (!selectedDeadLetters.value.length) {
     batchNotice.value = "请先选择要重放的开放死信。";
     return;
@@ -418,41 +468,93 @@ function previewBatchReplay() {
     batchNotice.value = "重放原因需要 2–500 字符。";
     return;
   }
-  batchId.value = crypto.randomUUID();
+  batchSnapshot.value = {
+    id: crypto.randomUUID(),
+    items: selectedDeadLetters.value.map((item: any) => ({
+      id: item.id,
+      task_id: item.task_id,
+      organization_id: item.organization_id,
+      workspace_id: item.workspace_id,
+      error_code: item.error_code,
+    })),
+    reason: batchReason.value.trim(),
+    impact: batchImpact.value,
+  };
   batchPreview.value = true;
 }
 
-async function confirmBatchReplay() {
+function cancelBatchPreview() {
   if (batchBusy.value) return;
+  batchPreview.value = false;
+  batchSnapshot.value = null;
+}
+
+const unknownWriteStatuses = new Set([0, 408, 425, 429, 502, 503, 504]);
+
+function batchFailure(error: unknown, item: BatchReplayItem): BatchReplayFailure {
+  const failure = error instanceof ApiClientError ? error : null;
+  const unknown = !failure || unknownWriteStatuses.has(failure.status);
+  return {
+    deadLetterId: item.id,
+    taskId: item.task_id,
+    unknown,
+    reason: unknown
+      ? "结果暂时无法确认。请先进入对应任务核对，不要立即重复提交。"
+      : failure.actionHint || "重放请求未完成，请查看任务详情与服务端日志。",
+  };
+}
+
+async function applyBatchSettlement(settlement: BatchReplaySettlement) {
+  if (!pageActive) {
+    detachedBatchSettlement = settlement;
+    return;
+  }
+  const succeeded = new Set(settlement.succeededIds);
+  selectedDeadLetterIds.value = selectedDeadLetterIds.value.filter((id) => !succeeded.has(id));
+  batchFailures.value = settlement.failures;
+  const unknownCount = settlement.failures.filter((failure) => failure.unknown).length;
+  const explicitFailureCount = settlement.failures.length - unknownCount;
+  batchUnknown.value ||= unknownCount > 0;
+  batchNotice.value = `本批请求已结束：创建新任务 ${succeeded.size} 条，明确失败 ${explicitFailureCount} 条，结果未知 ${unknownCount} 条。不是采集执行成功。`;
+  if (settlement.requestId) requestId.value = settlement.requestId;
+  resumeRead = false;
+  await load({ updateUrl: false });
+}
+
+async function confirmBatchReplay() {
+  const snapshot = batchSnapshot.value;
+  if (batchBusy.value || !snapshot) return;
   batchBusy.value = true;
   batchPreview.value = false;
-  const batchItems = [...selectedDeadLetters.value];
-  const succeeded = new Set<string>();
+  batchNotice.value = "正在逐条创建新任务；离开页面不等于取消已经提交的请求。";
   batchFailures.value = [];
-  for (const item of batchItems) {
+  const settlement: BatchReplaySettlement = {
+    succeededIds: [],
+    failures: [],
+    requestId: "",
+  };
+  for (const item of snapshot.items) {
     try {
-      await request(`/platform/collection/tasks/${item.task_id}/replay`, {
+      const response = await request(`/platform/collection/tasks/${item.task_id}/replay`, {
         method: "POST",
-        idempotencyKey: `dead-batch:${batchId.value}:${item.task_id}`,
-        body: { reason: batchReason.value.trim() },
+        idempotencyKey: `dead-batch:${snapshot.id}:${item.task_id}`,
+        body: { reason: snapshot.reason },
       });
-      succeeded.add(item.id);
+      settlement.succeededIds.push(item.id);
+      settlement.requestId = response.request_id;
     } catch (error) {
-      const failure = error instanceof ApiClientError ? error : null;
-      batchFailures.value.push({
-        task: item.task_id.slice(0, 8),
-        reason: failure?.actionHint ?? "重放请求失败，请查看任务详情与服务端日志。",
-      });
+      const failure = batchFailure(error, item);
+      settlement.failures.push(failure);
+      if (error instanceof ApiClientError) settlement.requestId = error.requestId;
     }
   }
-  selectedDeadLetterIds.value = selectedDeadLetterIds.value.filter((id) => !succeeded.has(id));
-  batchNotice.value = `批量重放完成：成功 ${succeeded.size} 条，失败 ${batchFailures.value.length} 条；每条均保留独立任务历史、幂等记录与审计。`;
   batchBusy.value = false;
-  await load({ updateUrl: false });
+  batchSnapshot.value = null;
+  await applyBatchSettlement(settlement);
 }
 </script>
 <template>
-  <section class="collection-ops">
+  <section class="collection-ops" :aria-busy="refreshing || batchBusy">
     <header>
       <div class="collection-ops-heading">
         <div>
@@ -462,7 +564,7 @@ async function confirmBatchReplay() {
             >来源配置、健康、任务尝试、死信和质量问题使用同一事实视图；敏感操作仍进入对应受控页面。</span
           >
         </div>
-        <button type="button" :disabled="refreshing" @click="load()">
+        <button type="button" :disabled="refreshing || batchBusy" @click="load()">
           {{ refreshing ? "正在刷新" : "刷新数据" }}
         </button>
       </div>
@@ -473,17 +575,19 @@ async function confirmBatchReplay() {
             ><input
               v-model="org"
               aria-label="组织内部编号筛选"
+              :disabled="batchBusy"
               placeholder="可选，输入组织内部编号" /></label
           ><label class="collection-filter-field"
             ><span>工作区内部编号</span
             ><input
               v-model="workspace"
               aria-label="工作区内部编号筛选"
+              :disabled="batchBusy"
               placeholder="可选，输入工作区内部编号"
           /></label>
           <label class="collection-filter-field"
             ><span>采集来源</span
-            ><select v-model="provider" aria-label="采集来源筛选">
+            ><select v-model="provider" aria-label="采集来源筛选" :disabled="batchBusy">
               <option value="">全部来源</option>
               <option
                 v-for="source in data?.source_options ?? []"
@@ -495,7 +599,7 @@ async function confirmBatchReplay() {
             </select></label
           ><label class="collection-filter-field"
             ><span>观测时间</span
-            ><select v-model="timeWindow" aria-label="观测时间筛选">
+            ><select v-model="timeWindow" aria-label="观测时间筛选" :disabled="batchBusy">
               <option value="24h">最近 24 小时</option>
               <option value="7d">最近 7 天</option>
               <option value="30d">最近 30 天</option>
@@ -503,10 +607,14 @@ async function confirmBatchReplay() {
             </select></label
           >
           <div class="collection-filter-actions">
-            <button type="button" :disabled="refreshing || !scopeFilterCount" @click="resetScope">
+            <button
+              type="button"
+              :disabled="refreshing || batchBusy || !scopeFilterCount"
+              @click="resetScope"
+            >
               重置
             </button>
-            <button type="submit" :disabled="refreshing">
+            <button type="submit" :disabled="refreshing || batchBusy">
               {{ refreshing ? "正在应用" : "应用范围" }}
             </button>
           </div>
@@ -515,7 +623,7 @@ async function confirmBatchReplay() {
     </header>
     <p v-if="refreshNotice" class="collection-refresh-notice" role="alert">
       {{ refreshNotice }}
-      <button type="button" :disabled="refreshing" @click="load()">重试</button>
+      <button type="button" :disabled="refreshing || batchBusy" @click="load()">重试</button>
     </p>
     <section v-if="state !== 'ready'" class="platform-dashboard-state" :data-kind="state">
       <h3>
@@ -536,7 +644,7 @@ async function confirmBatchReplay() {
       <p>{{ hint || "刷新或检查宝塔 Node API 与 MySQL 后重试。" }}</p>
       <TechnicalDetails :request-id="requestId" /><button
         v-if="!['loading', 'expired', 'forbidden'].includes(state)"
-        :disabled="refreshing"
+        :disabled="refreshing || batchBusy"
         @click="load()"
       >
         重新读取
@@ -680,6 +788,7 @@ async function confirmBatchReplay() {
               v-if="errorCode"
               type="button"
               class="collection-clear-root"
+              :disabled="batchBusy"
               @click="drillRootCause(errorCode)"
             >
               清除根因筛选
@@ -694,6 +803,7 @@ async function confirmBatchReplay() {
               <button
                 type="button"
                 :aria-pressed="errorCode === root.error_code"
+                :disabled="batchBusy"
                 @click="drillRootCause(root.error_code)"
               >
                 <b>{{ errorLabel(root.error_code) }}</b>
@@ -803,7 +913,7 @@ async function confirmBatchReplay() {
           >
             <button
               type="button"
-              :disabled="refreshing || data.pagination.attempts.page <= 1"
+              :disabled="refreshing || batchBusy || data.pagination.attempts.page <= 1"
               @click="goToPage('attempts', data.pagination.attempts.page - 1)"
             >
               上一页
@@ -815,7 +925,9 @@ async function confirmBatchReplay() {
             <button
               type="button"
               :disabled="
-                refreshing || data.pagination.attempts.page >= data.pagination.attempts.total_pages
+                refreshing ||
+                batchBusy ||
+                data.pagination.attempts.page >= data.pagination.attempts.total_pages
               "
               @click="goToPage('attempts', data.pagination.attempts.page + 1)"
             >
@@ -830,10 +942,10 @@ async function confirmBatchReplay() {
           </header>
           <p v-if="batchNotice" aria-live="polite">{{ batchNotice }}</p>
           <details v-if="batchFailures.length" class="collection-batch-failures">
-            <summary>查看失败条目（{{ batchFailures.length }}）</summary>
+            <summary>查看失败或未知条目（{{ batchFailures.length }}）</summary>
             <ul>
-              <li v-for="failure in batchFailures" :key="failure.task">
-                任务 {{ failure.task }}…：{{ failure.reason }}
+              <li v-for="failure in batchFailures" :key="failure.deadLetterId">
+                任务 {{ failure.taskId.slice(0, 8) }}…：{{ failure.reason }}
               </li>
             </ul>
           </details>
@@ -847,7 +959,7 @@ async function confirmBatchReplay() {
               <input
                 type="checkbox"
                 :checked="selectedDeadLetterIds.includes(d.id)"
-                :disabled="d.status !== 'open' || batchBusy"
+                :disabled="d.status !== 'open' || batchBusy || batchUnknown"
                 @change="toggleDeadLetter(d.id, $event)"
               />
               选择{{ errorLabel(d.error_code) }}死信 {{ d.task_id.slice(0, 8) }}…
@@ -857,12 +969,14 @@ async function confirmBatchReplay() {
               <textarea
                 v-model="batchReason"
                 maxlength="500"
+                :disabled="batchBusy || batchUnknown"
                 placeholder="说明恢复条件和重放原因（2–500 字）"
               ></textarea>
             </label>
-            <button type="button" :disabled="batchBusy" @click="previewBatchReplay">
+            <button type="button" :disabled="batchBusy || batchUnknown" @click="previewBatchReplay">
               {{ batchBusy ? "正在重放" : "预览批量重放" }}
             </button>
+            <p v-if="batchUnknown">已有结果未知，请先到对应任务核查；当前页面不会自动重发。</p>
           </details>
           <ul v-if="data.dead_letters.length">
             <li v-for="d in data.dead_letters" :key="d.id">
@@ -891,7 +1005,7 @@ async function confirmBatchReplay() {
           >
             <button
               type="button"
-              :disabled="refreshing || data.pagination.dead_letters.page <= 1"
+              :disabled="refreshing || batchBusy || data.pagination.dead_letters.page <= 1"
               @click="goToPage('dead_letters', data.pagination.dead_letters.page - 1)"
             >
               上一页
@@ -904,6 +1018,7 @@ async function confirmBatchReplay() {
               type="button"
               :disabled="
                 refreshing ||
+                batchBusy ||
                 data.pagination.dead_letters.page >= data.pagination.dead_letters.total_pages
               "
               @click="goToPage('dead_letters', data.pagination.dead_letters.page + 1)"
@@ -921,11 +1036,11 @@ async function confirmBatchReplay() {
       :open="batchPreview"
       title="确认批量重放开放死信？"
       description="系统将逐条调用既有受控重放事务；并发状态变化或已处理任务会安全失败，不会覆盖原任务。"
-      :impact="batchImpact"
+      :impact="batchConfirmationImpact"
       confirm-label="确认批量重放"
       destructive
       confirmation-text="确认重放"
-      @cancel="batchPreview = false"
+      @cancel="cancelBatchPreview"
       @confirm="confirmBatchReplay"
     />
   </section>

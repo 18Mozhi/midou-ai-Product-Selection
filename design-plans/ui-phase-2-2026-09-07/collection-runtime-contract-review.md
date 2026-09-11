@@ -1,5 +1,7 @@
 # B1c · 采集任务、总览与浏览器运行合同
 
+2026-09-12追加P52批量写入：[批量重放写入归属](P52-BATCH-WRITE-OWNERSHIP-IMPLEMENTATION.md)在预览时固定目标/原因/影响/batchId，串行POST保持独立幂等，成功只称创建新任务，明确失败与未知结果分开；未知不自动重发。KeepAlive离页不取消POST、不后台GET，返回先恢复当前URL范围再核对。旧实现新增双端8项全红，修复后UI2-CL52双端24/24、完整M06-03双端36/36。API/权限/事务/数据库不变，真实链路与C视觉仍待。
+
 2026-09-12追加P52：[读取生命周期与查询连续性](P52-READ-LIFECYCLE-IMPLEMENTATION.md)补齐同路由七字段恢复、查询快照/代次、快速查询旧读隔离、KeepAlive中断续读及attempts-only ready。旧代码新增双端8项全红，修复后UI2-CL52双端16/16、完整M06-03双端28/28。GET/查询/分页/权限/批量写入/API/数据库不变；401/403快照策略、C视觉与真实链路仍待。
 
 2026-09-12继续追加：P51 KeepAlive离页会中止等待中的列表GET、隔离旧代次并仅在返回任务页时续读；手机记录抽屉进入完整详情后关闭会返焦原任务记录。旧代码定向3失败/1通过，修复后双端4/4。缓存策略、路由、共享抽屉合同、API、权限、数据库和业务动作未改；完整C视觉与真实链路仍待。
@@ -117,11 +119,11 @@
 | O:376 | workspace | 范围存在/归属由后端核验 |
 | O:382 | provider | 来源ID选项来自完整source_options |
 | O:394 | timeWindow | 24h/7d/30d/all |
-| O:754 | batchReason | trim≥2、原始≤500；非冻结快照 |
+| O:754 | batchReason | trim≥2、原始≤500；预览时冻结进批次快照 |
 | R:392 | queryDraft | 提交到query后请求，≤160 |
 | R:399 | status | 查询提交生效，不立即GET |
 
-O:743的checkbox另外由:checked/:disabled及@change转发到toggleDeadLetter；状态非open/batchBusy禁用，不能把这个输入漏在10个v-model之外。ConfirmDialog共享影响勾选仅在destructive=true时出现，不能一概计入三个调用；T未传该prop，默认false，实际只输入“确认重放”。R也未传该prop，P53复核确认只输入“确认回收”。共享签认输入不在局部v-model数量内；O依其destructive调用保留影响勾选，不跨页套用。
+O:743的checkbox另外由:checked/:disabled及@change转发到toggleDeadLetter；状态非open、batchBusy或存在未知批结果时禁用，不能把这个输入漏在10个v-model之外。ConfirmDialog共享影响勾选仅在destructive=true时出现，不能一概计入三个调用；T未传该prop，默认false，实际只输入“确认重放”。R也未传该prop，P53复核确认只输入“确认回收”。共享签认输入不在局部v-model数量内；O依其destructive调用保留影响勾选，不跨页套用。
 
 T详情loading/error/loaded、死信确认；O范围抽屉、来源/尝试记录详情、批量确认；R运行记录详情、租约回收确认分别出桌面/移动及全部适用状态图。原生details/summary不是模态，仍需展开/折叠与键盘验收。当前共享记录抽屉无完整Tab闭环的源码保证，实际验证不能只断言role存在。
 
@@ -133,7 +135,7 @@ T详情loading/error/loaded、死信确认；O范围抽屉、来源/尝试记录
 | T详情 | GET tasks/{UUID}；每条子查询事实、尝试/事件/死信 | 空成功、无新内容、解析失败不同；缺result_kind不补猜 |
 | T或O单任务重放 | POST tasks/{id}/replay reason；collection:replay、Origin、Idempotency-Key | dead_letter锁定后新建scheduled任务，旧任务/尝试保留；不是恢复成功 |
 | O总览 | GET console范围、时间、两页码与精确错误；读有审计 | sources仅provider过滤；各统计表时间字段不同；root只数死信且不被当前error筛掉 |
-| O批量 | 最多20当前开放项；确认时复制items，串行单任务POST | 不整批回滚，reason在各次循环读取；失败未必全部继续留在新页选择 |
+| O批量 | 最多20当前开放项；预览固定items/reason/impact/batchId，串行单任务POST | 不整批回滚；成功、明确失败、结果未知分开，未知不自动重发；离页返回后按当前范围核对 |
 | R列表 | GET crawler-runtime page/q/status；25/页；q仅运行/错误/request/trace | profiles和run_metrics为全局，pagination为筛选集合 |
 | R回收 | POST crawler-runtime/recover-expired {}；同权限/Origin/幂等 | 全局过期租约，不是当前筛选，也不是OS终止或业务任务重放 |
 
@@ -152,7 +154,7 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | ID | 源码事实 / 待验场景 | 退出证据 |
 | --- | --- | --- |
 | CL-G01 | T与O的同路由查询、读取代次及等待中KeepAlive续读已局部修复；R快速查询与三页组织/角色变化仍待 | 继续可控迟到读/写、跨页返回和权限范围变化；当前CL51/CL52不外推到R |
-| CL-G02 | T重放关闭/换任务归属已局部修复；O批原因未冻结、过滤可变；R回收再刷新提示覆盖 | 继续精确body/目标/幂等/调用次数，离开与部分成功不误导；先复现不猜新业务规则 |
+| CL-G02 | T重放关闭/换任务归属及O批量快照/离页结算/未知不重发已局部修复；R回收再刷新提示覆盖仍待 | 继续R的精确body/目标/幂等/调用次数，离开与部分成功不误导；当前T/O证据不外推到R |
 | CL-G03 | T三态标题/关闭、可见焦点过滤、嵌套确认inert及移动二级转完整详情返焦已局部修复；O/R消费者与完整读屏仍待 | 继续真实键盘、焦点返回、错误关联与读屏可达，不能靠CSS或脚本改DOM绕过 |
 | CL-G04 | T已补automatically_replayed与空结果筛选保留；O已补attempts-only ready | 继续核对真实可达数据/过滤合同与总览呈现；不改任务状态机 |
 | CL-G05 | 三页初次与刷新失权的处理不同；路由能力与API能力不同 | 六角色真实允许/拒绝、当前快照安全展示和跨范围隔离，不能用Mock权限冒充 |
@@ -169,7 +171,7 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | --- | --- |
 | apps/web/src/components/CollectionRuntimeSurface.vue | f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335 |
 | apps/web/src/components/CollectionTaskCenter.vue | 1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed |
-| apps/web/src/components/CollectionOperationsConsole.vue | 0e22a3d1ae404c05b96b321424be8489c6c3bd21f2223e33af09c3eebef3b856 |
+| apps/web/src/components/CollectionOperationsConsole.vue | 5517b1727ba0ce55c1b0cbf139c807a185ba1dce4d1ce08b0a77c22a234d2ec1 |
 | apps/web/src/components/CollectionRuntimeCenter.vue | e6829b2cc84321af56e830cbd60839eafa89f23937cb44eeccf6b79e2428b3b4 |
 | apps/web/src/collection-tasks.css | 7219c3d2c3261327c8373e0d59d1cb5c748fe4400722b99684afb91c9c60a0b4 |
 | apps/web/src/collection-task-detail.css | cdeb6209781acc6ff747fb4728f9675d69479c53fd3a97dfdb9e0b5c17130544 |
@@ -195,6 +197,6 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | apps/api/src/crawler-runtime-service.ts | 7dda282fdefdd95a9d49ec4be11cc2f67e723122264da54b5de45cadae62f69a |
 | apps/api/src/mysql-crawler-runtime-repository.ts | ac4cc7dab79a4baccb55ecaff7582790a67b6eaab616ef096a9b63e2d9e8e518 |
 | tests/e2e/m03-05-collection-tasks.spec.ts | 9218c2552339e5c25f2920f9fc340d9b546e89621c0978f4208179ae66151afd |
-| tests/e2e/m06-03-collection-console.spec.ts | 66d280b839d4a9b203fa165fa56e7aaa02a9b120e304bb69b752752c9fd57a41 |
+| tests/e2e/m06-03-collection-console.spec.ts | f52a7bba2debe1c9b19bfaf68f68bed75ba5796aa3842b20ba0ad42af4dbaafb |
 | tests/e2e/m03-04-playwright-crawler.spec.ts | 8f648aee8d5cb1cdffc4534be30e5e64c18702567aeb3cb953cd6db7f5db695b |
 | scripts/lib/ui-phase2-inventory.mjs | fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb |

@@ -85,6 +85,43 @@ const data = {
   observed_at: "2026-08-08T12:00:00Z",
 };
 
+const secondBatchTaskId = "00000000-0000-4000-8000-000000000641";
+
+function batchConsoleData() {
+  return {
+    ...data,
+    dead_letters: [
+      data.dead_letters[0],
+      {
+        ...data.dead_letters[0],
+        id: "d2",
+        task_id: secondBatchTaskId,
+        organization_id: "00000000-0000-4000-8000-000000000642",
+        workspace_id: "00000000-0000-4000-8000-000000000643",
+        error_code: "timeout",
+      },
+    ],
+  };
+}
+
+async function previewTwoItemBatch(page: Page, reason = "解析器已完成固定样本回放") {
+  await page.getByText("批量安全重放", { exact: true }).click();
+  const panel = page.locator("details").filter({
+    has: page.getByRole("button", { name: "预览批量重放" }),
+  });
+  await panel.getByRole("checkbox").nth(0).check();
+  await panel.getByRole("checkbox").nth(1).check();
+  await panel.getByPlaceholder("说明恢复条件和重放原因（2–500 字）").fill(reason);
+  await panel.getByRole("button", { name: "预览批量重放" }).click();
+  return panel;
+}
+
+async function acknowledgeAndConfirmBatch(page: Page) {
+  await page.getByLabel("我已阅读影响范围，并确认只处理上述对象").check();
+  await page.getByPlaceholder("确认重放").fill("确认重放");
+  await page.getByRole("button", { name: "确认批量重放", exact: true }).click();
+}
+
 async function navigation(page: Page) {
   await page.route("**/api/v1/me/navigation?shell=platform_admin", (route) =>
     route.fulfill({
@@ -222,21 +259,7 @@ test("collection overview prioritizes unhealthy sources and keeps the complete c
 });
 
 test("M06-03.A17 batch safely replays explicitly selected open dead letters", async ({ page }) => {
-  const secondTaskId = "00000000-0000-4000-8000-000000000641";
-  const batchData = {
-    ...data,
-    dead_letters: [
-      data.dead_letters[0],
-      {
-        ...data.dead_letters[0],
-        id: "d2",
-        task_id: secondTaskId,
-        organization_id: "00000000-0000-4000-8000-000000000642",
-        workspace_id: "00000000-0000-4000-8000-000000000643",
-        error_code: "timeout",
-      },
-    ],
-  };
+  const batchData = batchConsoleData();
   const replays: Array<{ url: string; key: string; body: { reason: string } }> = [];
 
   await navigation(page);
@@ -276,7 +299,11 @@ test("M06-03.A17 batch safely replays explicitly selected open dead letters", as
   });
 
   await expect.poll(() => replays.length).toBe(2);
-  await expect(page.getByText(/批量重放完成：成功 2 条，失败 0 条/)).toBeVisible();
+  await expect(
+    page.getByText(
+      /本批请求已结束：创建新任务 2 条，明确失败 0 条，结果未知 0 条。不是采集执行成功。/,
+    ),
+  ).toBeVisible();
   expect(replays.map((replay) => replay.body.reason)).toEqual([
     "解析器已完成固定样本回放",
     "解析器已完成固定样本回放",
@@ -286,7 +313,195 @@ test("M06-03.A17 batch safely replays explicitly selected open dead letters", as
     expect(replay.key).toMatch(/^dead-batch:[0-9a-f-]{36}:[0-9a-f-]{36}$/);
   }
   expect(replays[0].url).toContain(data.dead_letters[0].task_id);
-  expect(replays[1].url).toContain(secondTaskId);
+  expect(replays[1].url).toContain(secondBatchTaskId);
+});
+
+test("UI2-CL52 freezes batch targets reason impact and identifiers when preview opens", async ({
+  page,
+}) => {
+  const replays: Array<{ url: string; key: string; body: { reason: string } }> = [];
+  await navigation(page);
+  await page.route("**/api/v1/platform/collection/console?**", (route) =>
+    route.fulfill({ json: envelope(batchConsoleData()) }),
+  );
+  await page.route("**/api/v1/platform/collection/tasks/*/replay", async (route) => {
+    const request = route.request();
+    replays.push({
+      url: request.url(),
+      key: request.headers()["idempotency-key"] ?? "",
+      body: request.postDataJSON(),
+    });
+    await route.fulfill({
+      json: envelope({ task: { id: "00000000-0000-4000-8000-000000000650" } }),
+    });
+  });
+  await page.goto("/platform-admin/collection/overview");
+  const panel = await previewTwoItemBatch(page, "  固定恢复原因  ");
+  await expect(page.getByText(/2 条开放死信；2 个组织；2 个工作区/)).toBeVisible();
+
+  await panel
+    .getByRole("checkbox")
+    .nth(1)
+    .evaluate((element) => {
+      const input = element as HTMLInputElement;
+      input.checked = false;
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+  await panel.getByPlaceholder("说明恢复条件和重放原因（2–500 字）").evaluate((element) => {
+    const textarea = element as HTMLTextAreaElement;
+    textarea.value = "确认之后被修改的原因";
+    textarea.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(page.getByText(/2 条开放死信；2 个组织；2 个工作区/)).toBeVisible();
+  await acknowledgeAndConfirmBatch(page);
+
+  await expect.poll(() => replays.length).toBe(2);
+  expect(replays.map((replay) => replay.body.reason)).toEqual(["固定恢复原因", "固定恢复原因"]);
+  expect(replays[0].url).toContain(data.dead_letters[0].task_id);
+  expect(replays[1].url).toContain(secondBatchTaskId);
+  expect(new Set(replays.map((replay) => replay.key)).size).toBe(2);
+});
+
+test("UI2-CL52 continues a frozen batch after an unknown result and prevents automatic replay", async ({
+  page,
+}) => {
+  let posts = 0;
+  await navigation(page);
+  await page.route("**/api/v1/platform/collection/console?**", (route) =>
+    route.fulfill({ json: envelope(batchConsoleData()) }),
+  );
+  await page.route("**/api/v1/platform/collection/tasks/*/replay", async (route) => {
+    posts += 1;
+    if (posts === 1) return route.abort("connectionfailed");
+    return route.fulfill({
+      json: envelope({ task: { id: "00000000-0000-4000-8000-000000000650" } }),
+    });
+  });
+  await page.goto("/platform-admin/collection/overview");
+  const panel = await previewTwoItemBatch(page);
+  await acknowledgeAndConfirmBatch(page);
+
+  await expect.poll(() => posts).toBe(2);
+  await expect(
+    page.getByText(
+      /本批请求已结束：创建新任务 1 条，明确失败 0 条，结果未知 1 条。不是采集执行成功。/,
+    ),
+  ).toBeVisible();
+  await expect(page.getByText("查看失败或未知条目（1）")).toBeVisible();
+  await expect(panel.getByRole("button", { name: "预览批量重放" })).toBeDisabled();
+  await expect(panel.getByText(/已有结果未知，请先到对应任务核查/)).toBeVisible();
+});
+
+test("UI2-CL52 separates partial replay settlement from a failed verification read", async ({
+  page,
+}) => {
+  let reads = 0;
+  let posts = 0;
+  await navigation(page);
+  await page.route("**/api/v1/platform/collection/console?**", (route) => {
+    reads += 1;
+    if (reads === 1) return route.fulfill({ json: envelope(batchConsoleData()) });
+    return route.fulfill({
+      status: 500,
+      json: {
+        error: {
+          code: "verification_read_failed",
+          message: "当前事实读取失败。",
+          action_hint: "请稍后重新读取当前事实。",
+        },
+        request_id: "cl52-read-failed",
+      },
+    });
+  });
+  await page.route("**/api/v1/platform/collection/tasks/*/replay", async (route) => {
+    posts += 1;
+    if (posts === 1)
+      return route.fulfill({
+        json: envelope({ task: { id: "00000000-0000-4000-8000-000000000650" } }),
+      });
+    return route.fulfill({
+      status: 409,
+      json: {
+        error: {
+          code: "dead_letter_changed",
+          message: "死信状态已经变化。",
+          action_hint: "请重新读取后核对该任务。",
+        },
+        request_id: "cl52-explicit-failure",
+      },
+    });
+  });
+  await page.goto("/platform-admin/collection/overview");
+  const panel = await previewTwoItemBatch(page);
+  await acknowledgeAndConfirmBatch(page);
+
+  await expect.poll(() => posts).toBe(2);
+  await expect(
+    page.getByText(
+      /本批请求已结束：创建新任务 1 条，明确失败 1 条，结果未知 0 条。不是采集执行成功。/,
+    ),
+  ).toBeVisible();
+  await expect(page.getByText("查看失败或未知条目（1）")).toBeVisible();
+  await expect(page.getByRole("alert")).toContainText("请稍后重新读取当前事实");
+  await expect(panel.getByText("已选择 1 / 20 条")).toBeVisible();
+});
+
+test("UI2-CL52 defers detached batch reconciliation until KeepAlive return", async ({ page }) => {
+  let overviewReads = 0;
+  const overviewQueries: string[] = [];
+  let posts = 0;
+  let releaseFirst!: () => void;
+  const heldFirst = new Promise<void>((resolve) => (releaseFirst = resolve));
+  let firstStarted!: () => void;
+  const enteredFirst = new Promise<void>((resolve) => (firstStarted = resolve));
+  await navigation(page);
+  await page.route("**/api/v1/platform/collection/console?**", (route) => {
+    overviewReads += 1;
+    overviewQueries.push(new URL(route.request().url()).search);
+    return route.fulfill({ json: envelope(batchConsoleData()) });
+  });
+  await page.route("**/api/v1/platform/collection/tasks?**", (route) =>
+    route.fulfill({
+      json: { data: [], meta: { page: 1, page_size: 50, total: 0 }, request_id: "cl52-tasks" },
+    }),
+  );
+  await page.route("**/api/v1/platform/collection/tasks/*/replay", async (route) => {
+    posts += 1;
+    if (posts === 1) {
+      firstStarted();
+      await heldFirst;
+    }
+    try {
+      await route.fulfill({
+        json: envelope({ task: { id: "00000000-0000-4000-8000-000000000650" } }),
+      });
+    } catch (error) {
+      if (!route.request().failure()) throw error;
+    }
+  });
+  await page.goto("/platform-admin/collection/overview");
+  await previewTwoItemBatch(page);
+  await acknowledgeAndConfirmBatch(page);
+  await enteredFirst;
+  await page.getByRole("link", { name: "任务详情", exact: true }).click();
+  await expect(page).toHaveURL(/\/platform-admin\/collection$/);
+  releaseFirst();
+  await expect.poll(() => posts).toBe(2);
+  await page.waitForTimeout(150);
+  expect(overviewReads).toBe(1);
+
+  await page.evaluate(() => {
+    history.pushState({}, "", "/platform-admin/collection/overview?window=7d");
+    window.dispatchEvent(new PopStateEvent("popstate", { state: history.state }));
+  });
+  await expect(page).toHaveURL(/\/platform-admin\/collection\/overview\?window=7d$/);
+  await expect.poll(() => overviewReads).toBe(2);
+  expect(overviewQueries.at(-1)).toContain("window=7d");
+  await expect(
+    page.getByText(
+      /本批请求已结束：创建新任务 2 条，明确失败 0 条，结果未知 0 条。不是采集执行成功。/,
+    ),
+  ).toBeVisible();
 });
 
 test("M06-03 pages complete attempt and dead-letter facts and preserves verified data on refresh failure", async ({
