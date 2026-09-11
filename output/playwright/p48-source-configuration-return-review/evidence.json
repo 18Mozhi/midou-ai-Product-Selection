@@ -1,0 +1,3207 @@
+{
+  "kind": "P48-SOURCE-CONFIGURATION-RETURN-REVIEW-r1",
+  "generatedAt": "2026-09-11T13:58:22.301Z",
+  "reviewOnly": true,
+  "productionChanged": false,
+  "deployed": false,
+  "mockedWritesOnly": true,
+  "processesClosed": true,
+  "ports": [
+    57259
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "scene": "saved-refreshing",
+      "outcome": "saved",
+      "capture": "refreshing",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "refreshing"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "83deb53f-3661-4ee1-ae01-f1e2de4bd1af"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "saved-success",
+      "outcome": "saved",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "success"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "f2e8b4a4-03f2-4066-89d8-7dceec00dcf4"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "saved-failed",
+      "outcome": "saved",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "failed"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "failed"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "eef6e887-a153-4e66-b0bc-4c188464cd13"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "saved-retry",
+      "outcome": "saved",
+      "capture": "refreshing",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "refreshing"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 3
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "9bdb3f08-3998-4d27-b6f9-b03ee7d88c97"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "partial-success",
+      "outcome": "partial",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "success"
+        },
+        {
+          "name": "return outcome",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 2
+        },
+        {
+          "name": "partial has one disabled PUT",
+          "actual": "disabled"
+        },
+        {
+          "name": "partial has one health check",
+          "actual": 1
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "18ebde9b-aef5-495c-b016-fa4e6f42c2cb"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "4c03f8c4-385c-4d35-a0cb-ef21f5e90a56"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "partial-failed",
+      "outcome": "partial",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "failed"
+        },
+        {
+          "name": "return outcome",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "failed"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 2
+        },
+        {
+          "name": "partial has one disabled PUT",
+          "actual": "disabled"
+        },
+        {
+          "name": "partial has one health check",
+          "actual": 1
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "7e9d2078-4c66-4351-b397-3d87ccef9520"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "a479c253-022e-4b13-b8a2-6130592f7a79"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "conflict-success",
+      "outcome": "conflict",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "success"
+        },
+        {
+          "name": "return outcome",
+          "actual": "conflict"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "da3e719d-7ec4-497b-98e3-c9754364bafa"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "conflict-failed",
+      "outcome": "conflict",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "failed"
+        },
+        {
+          "name": "return outcome",
+          "actual": "conflict"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "failed"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "ee6fc2c8-6477-4bcb-91f5-6b4c9b843c02"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "saved-refreshing",
+      "outcome": "saved",
+      "capture": "refreshing",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "refreshing"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "6cb207c8-c170-4974-a385-dfa5b65325fa"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "saved-success",
+      "outcome": "saved",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "success"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "bf3d4c89-fcdb-4dc9-874a-4695fe719247"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "saved-failed",
+      "outcome": "saved",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "failed"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "failed"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "1c210407-f351-40f1-ad7a-0367c1240f51"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "saved-retry",
+      "outcome": "saved",
+      "capture": "refreshing",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "refreshing"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 3
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "cecffddc-76eb-4015-b501-29ad64f9215a"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "partial-success",
+      "outcome": "partial",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "success"
+        },
+        {
+          "name": "return outcome",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 2
+        },
+        {
+          "name": "partial has one disabled PUT",
+          "actual": "disabled"
+        },
+        {
+          "name": "partial has one health check",
+          "actual": 1
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "1a7a6c02-c090-4d45-917d-e5af5d484956"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "00e15b81-631d-4cff-a1f3-45c9a2f44ecb"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "partial-failed",
+      "outcome": "partial",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "failed"
+        },
+        {
+          "name": "return outcome",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "failed"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 2
+        },
+        {
+          "name": "partial has one disabled PUT",
+          "actual": "disabled"
+        },
+        {
+          "name": "partial has one health check",
+          "actual": 1
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "ff82804d-55db-4b79-9a6e-7466bea3160a"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "87d49779-3b33-4804-bfce-a26583271527"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "conflict-success",
+      "outcome": "conflict",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "success"
+        },
+        {
+          "name": "return outcome",
+          "actual": "conflict"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "35432a68-f031-44c5-9d09-c2b4b5f6dcce"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "conflict-failed",
+      "outcome": "conflict",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "failed"
+        },
+        {
+          "name": "return outcome",
+          "actual": "conflict"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "failed"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "0e727b6a-831a-4207-9040-c017378076b4"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "saved-refreshing",
+      "outcome": "saved",
+      "capture": "refreshing",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "refreshing"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "681832a3-4bfe-4d8a-a635-654eb706f5bc"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "saved-success",
+      "outcome": "saved",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "success"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "cec1409b-a90a-4230-a439-c3c6aab268dc"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "saved-failed",
+      "outcome": "saved",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "failed"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "failed"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "363c7964-061e-4e1a-af0d-b242a3d56cba"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "saved-retry",
+      "outcome": "saved",
+      "capture": "refreshing",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "refreshing"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 3
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "252494e2-8648-439a-b46e-cd1c45361a82"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "partial-success",
+      "outcome": "partial",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "success"
+        },
+        {
+          "name": "return outcome",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 2
+        },
+        {
+          "name": "partial has one disabled PUT",
+          "actual": "disabled"
+        },
+        {
+          "name": "partial has one health check",
+          "actual": 1
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "3659c3ef-0268-4e7a-9411-f7c55d463217"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "00a6403e-4937-4d23-b457-d55085c1cd5f"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "partial-failed",
+      "outcome": "partial",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "failed"
+        },
+        {
+          "name": "return outcome",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "failed"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 2
+        },
+        {
+          "name": "partial has one disabled PUT",
+          "actual": "disabled"
+        },
+        {
+          "name": "partial has one health check",
+          "actual": 1
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "f9fc34be-1a2d-4c42-b8f8-69aa23ef4f24"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "282b3d60-238c-40f0-b521-192bbeb17778"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "conflict-success",
+      "outcome": "conflict",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "success"
+        },
+        {
+          "name": "return outcome",
+          "actual": "conflict"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "2d31ae7e-3d03-4632-88ab-9a23dc94cffc"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "conflict-failed",
+      "outcome": "conflict",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "failed"
+        },
+        {
+          "name": "return outcome",
+          "actual": "conflict"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "failed"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "04283ab7-0e8e-4c61-ac0b-0cef2c6c2be0"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "saved-refreshing",
+      "outcome": "saved",
+      "capture": "refreshing",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "refreshing"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "3c1af641-7fff-4cbc-8734-9c780bbfeaeb"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "saved-success",
+      "outcome": "saved",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "success"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "4b77567f-58f4-443d-8eb3-f3c6bdfce3f6"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "saved-failed",
+      "outcome": "saved",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "failed"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "failed"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "13ab9ee2-3263-467b-b50e-10f41e87933b"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "saved-retry",
+      "outcome": "saved",
+      "capture": "refreshing",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "refreshing"
+        },
+        {
+          "name": "return outcome",
+          "actual": "saved"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 3
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "4880091e-f4c9-4e7f-9f17-82e8a94dbd0a"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "partial-success",
+      "outcome": "partial",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "success"
+        },
+        {
+          "name": "return outcome",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 2
+        },
+        {
+          "name": "partial has one disabled PUT",
+          "actual": "disabled"
+        },
+        {
+          "name": "partial has one health check",
+          "actual": 1
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "e5172894-cc7c-4f50-a2e0-9be8642fda5a"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "bfd9f941-8128-4c51-8cce-d8a451219b20"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "partial-failed",
+      "outcome": "partial",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "failed"
+        },
+        {
+          "name": "return outcome",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "failed"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 2
+        },
+        {
+          "name": "partial has one disabled PUT",
+          "actual": "disabled"
+        },
+        {
+          "name": "partial has one health check",
+          "actual": 1
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "9206b4df-3586-43a8-bb45-16b51a560286"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "f4da1786-ebb4-4b90-9f76-2529b35f1a0e"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "conflict-success",
+      "outcome": "conflict",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "success"
+        },
+        {
+          "name": "return outcome",
+          "actual": "conflict"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "success"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "139ef99f-84b3-445f-b5b6-ae64b28eb107"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "conflict-failed",
+      "outcome": "conflict",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture state",
+          "actual": "failed"
+        },
+        {
+          "name": "return outcome",
+          "actual": "conflict"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "dialog closed before directory result",
+          "actual": 0
+        },
+        {
+          "name": "one source remains visible",
+          "actual": 1
+        },
+        {
+          "name": "global message suppressed",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final state",
+          "actual": "failed"
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "catalog read count",
+          "actual": 2
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "0ceddb3d-3296-4512-8346-4b86b2ec6450"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-saved-refreshing-return.png",
+      "width": 390,
+      "scene": "saved-refreshing",
+      "state": "refreshing",
+      "suffix": "return",
+      "sha256": "2b531d9050eaec6e88d55bb015593bf17ed966c02a02c970b1df1210d8cc12c4",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-saved-success-return.png",
+      "width": 390,
+      "scene": "saved-success",
+      "state": "success",
+      "suffix": "return",
+      "sha256": "c6b233b9c996e1c50306070f774bf234a94736870513b8a35f300526f8bc885e",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-saved-failed-return.png",
+      "width": 390,
+      "scene": "saved-failed",
+      "state": "failed",
+      "suffix": "return",
+      "sha256": "5305db1902a73025cdb074c2097e12f33c6d66f12e3d66400ee5836d83998e27",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-saved-failed-technical.png",
+      "width": 390,
+      "scene": "saved-failed",
+      "state": "failed",
+      "suffix": "technical",
+      "sha256": "2fd5a8527553accf3e1579883edd03bf7aa7fba5f7d6cb824755dbf4b02fcab6",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-saved-retry-return.png",
+      "width": 390,
+      "scene": "saved-retry",
+      "state": "refreshing",
+      "suffix": "return",
+      "sha256": "2b531d9050eaec6e88d55bb015593bf17ed966c02a02c970b1df1210d8cc12c4",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-partial-success-return.png",
+      "width": 390,
+      "scene": "partial-success",
+      "state": "success",
+      "suffix": "return",
+      "sha256": "d43854777c48ce87f4f87371ea7fe39a0622387497c1866fd971c1a7a169ceae",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-partial-failed-return.png",
+      "width": 390,
+      "scene": "partial-failed",
+      "state": "failed",
+      "suffix": "return",
+      "sha256": "8a8c2b15b62ffe7d8cbd89a5d88097762e0bfddf0860d4d9115bb2b95ef3231e",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-partial-failed-technical.png",
+      "width": 390,
+      "scene": "partial-failed",
+      "state": "failed",
+      "suffix": "technical",
+      "sha256": "71af0df9f5cd52f06c35a80dcf9d06399d42dad6e534f67f29b1aee3dc3cbc05",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-conflict-success-return.png",
+      "width": 390,
+      "scene": "conflict-success",
+      "state": "success",
+      "suffix": "return",
+      "sha256": "9ac1a9f3a5890527ca7134f5343b842921263ef5070abbbc69f1e658e9267abb",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-conflict-failed-return.png",
+      "width": 390,
+      "scene": "conflict-failed",
+      "state": "failed",
+      "suffix": "return",
+      "sha256": "d70ffd7941550da1c26666e6cecdd29ca01401401a75303d9f5b08db6763812a",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-conflict-failed-technical.png",
+      "width": 390,
+      "scene": "conflict-failed",
+      "state": "failed",
+      "suffix": "technical",
+      "sha256": "f843daaccb3dc3da017545d49b0a7b8309799c28192d27a53bb9f5cdc6049f66",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-saved-refreshing-return.png",
+      "width": 760,
+      "scene": "saved-refreshing",
+      "state": "refreshing",
+      "suffix": "return",
+      "sha256": "b1be62a083f1b3e955ec62e6ea143b1fcb2ab0f544a15497ed019a574f0a8847",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-saved-success-return.png",
+      "width": 760,
+      "scene": "saved-success",
+      "state": "success",
+      "suffix": "return",
+      "sha256": "3fa0c5ba9691c388e2d6245373ef56c779d688ff1ee4deffa9b2f6a61983969a",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-saved-failed-return.png",
+      "width": 760,
+      "scene": "saved-failed",
+      "state": "failed",
+      "suffix": "return",
+      "sha256": "f2be627380b2ce81a14ce071833ef3ab8e4a580fee640c5f74048c4d52a975f5",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-saved-retry-return.png",
+      "width": 760,
+      "scene": "saved-retry",
+      "state": "refreshing",
+      "suffix": "return",
+      "sha256": "b1be62a083f1b3e955ec62e6ea143b1fcb2ab0f544a15497ed019a574f0a8847",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-partial-success-return.png",
+      "width": 760,
+      "scene": "partial-success",
+      "state": "success",
+      "suffix": "return",
+      "sha256": "33266720e53e9df2f16783fb622b33ad5c07a7c8f62b1081ea34d5399aecbef1",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-partial-failed-return.png",
+      "width": 760,
+      "scene": "partial-failed",
+      "state": "failed",
+      "suffix": "return",
+      "sha256": "4c7b9f0a4c16dd8fca7b63a9079a3662a290a359183f1d2a3820c46f3a2e66d3",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-conflict-success-return.png",
+      "width": 760,
+      "scene": "conflict-success",
+      "state": "success",
+      "suffix": "return",
+      "sha256": "17cde4d1357272288951da6302a76004bc263cb219d57b772bde25d9f88eb14f",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-conflict-failed-return.png",
+      "width": 760,
+      "scene": "conflict-failed",
+      "state": "failed",
+      "suffix": "return",
+      "sha256": "c9393b5cdfe1e5515c41f031a3ed4453838136a1155a42394f65fc5e3da3fe37",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "1024-saved-refreshing-return.png",
+      "width": 1024,
+      "scene": "saved-refreshing",
+      "state": "refreshing",
+      "suffix": "return",
+      "sha256": "f23e1b68cee4f62ba8888e15f137693bb303b6ab63d11199e08e70f8ede13a57",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-saved-success-return.png",
+      "width": 1024,
+      "scene": "saved-success",
+      "state": "success",
+      "suffix": "return",
+      "sha256": "84ec89bf4a385abe65560f8ff2b9d313d2ef63b593d5affd650b89be2f3560dd",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-saved-failed-return.png",
+      "width": 1024,
+      "scene": "saved-failed",
+      "state": "failed",
+      "suffix": "return",
+      "sha256": "fb668db10cc9d8aaafcf90cce0fdfd5daeff546dbb64d3f247fdf007f0849fb6",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-saved-retry-return.png",
+      "width": 1024,
+      "scene": "saved-retry",
+      "state": "refreshing",
+      "suffix": "return",
+      "sha256": "f23e1b68cee4f62ba8888e15f137693bb303b6ab63d11199e08e70f8ede13a57",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-partial-success-return.png",
+      "width": 1024,
+      "scene": "partial-success",
+      "state": "success",
+      "suffix": "return",
+      "sha256": "a44980e679c0b941bbea534e1a62f658b0b4119f2cd431b421326ed7c8ba5fec",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-partial-failed-return.png",
+      "width": 1024,
+      "scene": "partial-failed",
+      "state": "failed",
+      "suffix": "return",
+      "sha256": "b0dc6c93004d46f3f4857e31b6efabaec8f3819b9b770ea1df83fe9147a6de29",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-conflict-success-return.png",
+      "width": 1024,
+      "scene": "conflict-success",
+      "state": "success",
+      "suffix": "return",
+      "sha256": "c1ea47d3ac1e896d9b2a5481a3099d77196b5e8b2b50dab9719cbef1e384e5f2",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-conflict-failed-return.png",
+      "width": 1024,
+      "scene": "conflict-failed",
+      "state": "failed",
+      "suffix": "return",
+      "sha256": "d21ca75d188020b17446d66f4d10eed46c9ac4633f4ce5de2fa45e987cfe8af6",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-saved-refreshing-return.png",
+      "width": 1440,
+      "scene": "saved-refreshing",
+      "state": "refreshing",
+      "suffix": "return",
+      "sha256": "814f9c557ff80861aabb3e6ac2d150817e43536b0f0bfdf09e5029619e691307",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-saved-success-return.png",
+      "width": 1440,
+      "scene": "saved-success",
+      "state": "success",
+      "suffix": "return",
+      "sha256": "f28bf8e4255901ba937df8d288effbd60a5b011a97fbf7fce0c489c58ff31528",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-saved-failed-return.png",
+      "width": 1440,
+      "scene": "saved-failed",
+      "state": "failed",
+      "suffix": "return",
+      "sha256": "282c42b5a6c50b560835ba2691b4a40fc4c60d559677cad4aa3da4eaaf359cd9",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-saved-retry-return.png",
+      "width": 1440,
+      "scene": "saved-retry",
+      "state": "refreshing",
+      "suffix": "return",
+      "sha256": "814f9c557ff80861aabb3e6ac2d150817e43536b0f0bfdf09e5029619e691307",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-partial-success-return.png",
+      "width": 1440,
+      "scene": "partial-success",
+      "state": "success",
+      "suffix": "return",
+      "sha256": "91a49610d19f7263fea9249aeed4668d58d5f6f2440ff5647f6fa45a9c2dbb46",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-partial-failed-return.png",
+      "width": 1440,
+      "scene": "partial-failed",
+      "state": "failed",
+      "suffix": "return",
+      "sha256": "28948bf03c5bc334a5cdd3da8b387aace33bf6b9724e0d25d935fca78c342492",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-conflict-success-return.png",
+      "width": 1440,
+      "scene": "conflict-success",
+      "state": "success",
+      "suffix": "return",
+      "sha256": "07115c4c56675803aa0124ff22938e9068ce69984fa28941801903c486f11faf",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-conflict-failed-return.png",
+      "width": 1440,
+      "scene": "conflict-failed",
+      "state": "failed",
+      "suffix": "return",
+      "sha256": "6c489adb7e05574180bc294e122338d806675cd03c19f753f220448d8e26b4b0",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/index.html": "0376c4bf04227ac5dbb6bb43895e5ed97eef6ca8bde54f08774908d3f07d9d88",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "66b064c2135275b9d173ef316692366823ef4f6276002796d9ed112183218cef",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/provider-adapters-c-detail.css": "094a11fe39b3701c35d6061f7a570e940b3bb00abcc0b2ed7f64ffeaea0c6bdd",
+    "apps/web/src/provider-adapters-c-feedback.css": "64b09e635e98f8865ea2fb3c8b33b1d21f447affd55061f3d01cf6667904bba2",
+    "apps/web/src/provider-adapters-c-page.css": "899ca57a21bceef95c7dc030bb7f92bae1755f324b1d26c3f0ba692dad736c86",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/route-catalog.generated.json": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-source-configuration-preview.css": "2bd757ad7bd01ed92ce3784552fc6d9f6e95a14ae0a46cb2aeedbe754fe715d8",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-source-configuration-return-preview.css": "1839b0c52bc9b51a24740815a2e6f7f1e3678a5d0e4846a781d3d1c76dff0731",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-source-configuration-states-preview.css": "ea8e427121b63b8d7a8b1bcc7e5d8d7acb863ef2cf7cc4ae27f680de84ff9d9f",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-sources-page-preview.css": "0ad5722b2920de2f07d92f37afb706266dde7726b4677a4bdbf8107cb00744e7",
+    "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
+    "scripts/lib/ui-phase2-provider-source-configuration-preview.mjs": "4a593c661cb10716756767b5ff273a5f5f643cc4d90ae8f0d025ba003332b78a",
+    "scripts/lib/ui-phase2-provider-source-configuration-return-preview.mjs": "023f9aa5f0b128df45628b056e10e80985cdd71130dafa1f97a29ac3c5ce50f0",
+    "scripts/lib/ui-phase2-provider-source-configuration-states-preview.mjs": "14f47595f57882d51fb77ab5aea0f02208e38fd6a40a14ec31d3e58c4ef10e20",
+    "scripts/verify-ui-phase2-provider-source-configuration-return.mjs": "7803054424fc750a7c8180ca3905bade041c507070ee781160e10fed5148276e",
+    "tests/e2e/m03-07-provider-sources.spec.ts": "29c1232a33cb260beeee6851f33c4558873d25e47e538d6a2e04c47eaa6ba5fe"
+  }
+}
