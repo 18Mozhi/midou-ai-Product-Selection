@@ -1,113 +1,25 @@
 {
-  "kind": "P50-CREDENTIAL-LOGIN-MATERIAL-REVIEW-r1",
-  "generatedAt": "2026-09-11T17:23:34.795Z",
+  "kind": "P50-CREDENTIAL-LOGIN-BOUNDARY-REVIEW-r1",
+  "generatedAt": "2026-09-11T17:24:24.931Z",
   "reviewOnly": true,
   "productionChanged": false,
   "deployed": false,
   "processesClosed": true,
   "states": [
-    "cookie-ready",
-    "cookie-invalid",
-    "browser-pending",
-    "browser-success",
-    "browser-empty",
-    "archive-ready"
+    "cookie-oversize",
+    "archive-invalid",
+    "archive-oversize",
+    "helper-unavailable",
+    "helper-timeout",
+    "source-switch"
   ],
   "ports": [
-    58764
+    59004
   ],
   "runs": [
     {
       "width": 390,
-      "state": "cookie-ready",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "selected mode",
-          "actual": "cookie_file"
-        },
-        {
-          "name": "save enabled",
-          "actual": true
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 390,
-      "state": "cookie-invalid",
+      "state": "cookie-oversize",
       "checks": [
         {
           "name": "initial source identity",
@@ -195,283 +107,7 @@
     },
     {
       "width": 390,
-      "state": "browser-pending",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "source locked while reading",
-          "actual": true
-        },
-        {
-          "name": "mode locked while reading",
-          "actual": true
-        },
-        {
-          "name": "cancel remains available",
-          "actual": true
-        },
-        {
-          "name": "save remains disabled",
-          "actual": true
-        },
-        {
-          "name": "selected mode",
-          "actual": "browser"
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 390,
-      "state": "browser-success",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "save enabled",
-          "actual": true
-        },
-        {
-          "name": "selected mode",
-          "actual": "browser"
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 390,
-      "state": "browser-empty",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "save remains disabled",
-          "actual": true
-        },
-        {
-          "name": "selected mode",
-          "actual": "browser"
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 390,
-      "state": "archive-ready",
+      "state": "archive-invalid",
       "checks": [
         {
           "name": "initial source identity",
@@ -482,182 +118,6 @@
           "actual": "archive"
         },
         {
-          "name": "save enabled",
-          "actual": true
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 760,
-      "state": "cookie-ready",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "selected mode",
-          "actual": "cookie_file"
-        },
-        {
-          "name": "save enabled",
-          "actual": true
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 760,
-      "state": "cookie-invalid",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "selected mode",
-          "actual": "cookie_file"
-        },
-        {
           "name": "save remains disabled",
           "actual": true
         },
@@ -734,284 +194,8 @@
       ]
     },
     {
-      "width": 760,
-      "state": "browser-pending",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "source locked while reading",
-          "actual": true
-        },
-        {
-          "name": "mode locked while reading",
-          "actual": true
-        },
-        {
-          "name": "cancel remains available",
-          "actual": true
-        },
-        {
-          "name": "save remains disabled",
-          "actual": true
-        },
-        {
-          "name": "selected mode",
-          "actual": "browser"
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 760,
-      "state": "browser-success",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "save enabled",
-          "actual": true
-        },
-        {
-          "name": "selected mode",
-          "actual": "browser"
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 760,
-      "state": "browser-empty",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "save remains disabled",
-          "actual": true
-        },
-        {
-          "name": "selected mode",
-          "actual": "browser"
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 760,
-      "state": "archive-ready",
+      "width": 390,
+      "state": "archive-oversize",
       "checks": [
         {
           "name": "initial source identity",
@@ -1022,7 +206,7 @@
           "actual": "archive"
         },
         {
-          "name": "save enabled",
+          "name": "save remains disabled",
           "actual": true
         },
         {
@@ -1098,8 +282,192 @@
       ]
     },
     {
-      "width": 1024,
-      "state": "cookie-ready",
+      "width": 390,
+      "state": "helper-unavailable",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "selected mode",
+          "actual": "browser"
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "state": "helper-timeout",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "source unlocked after timeout",
+          "actual": true
+        },
+        {
+          "name": "mode unlocked after timeout",
+          "actual": true
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "selected mode",
+          "actual": "browser"
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "state": "source-switch",
       "checks": [
         {
           "name": "initial source identity",
@@ -1110,7 +478,11 @@
           "actual": "cookie_file"
         },
         {
-          "name": "save enabled",
+          "name": "source identity changed",
+          "actual": "第二登录来源"
+        },
+        {
+          "name": "save remains disabled",
           "actual": true
         },
         {
@@ -1186,8 +558,8 @@
       ]
     },
     {
-      "width": 1024,
-      "state": "cookie-invalid",
+      "width": 760,
+      "state": "cookie-oversize",
       "checks": [
         {
           "name": "initial source identity",
@@ -1274,284 +646,8 @@
       ]
     },
     {
-      "width": 1024,
-      "state": "browser-pending",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "source locked while reading",
-          "actual": true
-        },
-        {
-          "name": "mode locked while reading",
-          "actual": true
-        },
-        {
-          "name": "cancel remains available",
-          "actual": true
-        },
-        {
-          "name": "save remains disabled",
-          "actual": true
-        },
-        {
-          "name": "selected mode",
-          "actual": "browser"
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 1024,
-      "state": "browser-success",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "save enabled",
-          "actual": true
-        },
-        {
-          "name": "selected mode",
-          "actual": "browser"
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 1024,
-      "state": "browser-empty",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "save remains disabled",
-          "actual": true
-        },
-        {
-          "name": "selected mode",
-          "actual": "browser"
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 1024,
-      "state": "archive-ready",
+      "width": 760,
+      "state": "archive-invalid",
       "checks": [
         {
           "name": "initial source identity",
@@ -1562,182 +658,6 @@
           "actual": "archive"
         },
         {
-          "name": "save enabled",
-          "actual": true
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 1440,
-      "state": "cookie-ready",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "selected mode",
-          "actual": "cookie_file"
-        },
-        {
-          "name": "save enabled",
-          "actual": true
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 1440,
-      "state": "cookie-invalid",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "selected mode",
-          "actual": "cookie_file"
-        },
-        {
           "name": "save remains disabled",
           "actual": true
         },
@@ -1814,284 +734,8 @@
       ]
     },
     {
-      "width": 1440,
-      "state": "browser-pending",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "source locked while reading",
-          "actual": true
-        },
-        {
-          "name": "mode locked while reading",
-          "actual": true
-        },
-        {
-          "name": "cancel remains available",
-          "actual": true
-        },
-        {
-          "name": "save remains disabled",
-          "actual": true
-        },
-        {
-          "name": "selected mode",
-          "actual": "browser"
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 1440,
-      "state": "browser-success",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "save enabled",
-          "actual": true
-        },
-        {
-          "name": "selected mode",
-          "actual": "browser"
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 1440,
-      "state": "browser-empty",
-      "checks": [
-        {
-          "name": "initial source identity",
-          "actual": "登录页来源"
-        },
-        {
-          "name": "save remains disabled",
-          "actual": true
-        },
-        {
-          "name": "selected mode",
-          "actual": "browser"
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all network requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "material values never render",
-          "actual": true
-        },
-        {
-          "name": "no material persistence",
-          "actual": true
-        },
-        {
-          "name": "no browser cookies created",
-          "actual": 0
-        },
-        {
-          "name": "target44 source",
-          "actual": true
-        },
-        {
-          "name": "target44 mode",
-          "actual": true
-        },
-        {
-          "name": "target44 cancel",
-          "actual": true
-        },
-        {
-          "name": "target44 save",
-          "actual": true
-        },
-        {
-          "name": "no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "footer actions remain in viewport",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "width": 1440,
-      "state": "archive-ready",
+      "width": 760,
+      "state": "archive-oversize",
       "checks": [
         {
           "name": "initial source identity",
@@ -2102,7 +746,1363 @@
           "actual": "archive"
         },
         {
-          "name": "save enabled",
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "state": "helper-unavailable",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "selected mode",
+          "actual": "browser"
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "state": "helper-timeout",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "source unlocked after timeout",
+          "actual": true
+        },
+        {
+          "name": "mode unlocked after timeout",
+          "actual": true
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "selected mode",
+          "actual": "browser"
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "state": "source-switch",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "selected mode",
+          "actual": "cookie_file"
+        },
+        {
+          "name": "source identity changed",
+          "actual": "第二登录来源"
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "state": "cookie-oversize",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "selected mode",
+          "actual": "cookie_file"
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "state": "archive-invalid",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "selected mode",
+          "actual": "archive"
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "state": "archive-oversize",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "selected mode",
+          "actual": "archive"
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "state": "helper-unavailable",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "selected mode",
+          "actual": "browser"
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "state": "helper-timeout",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "source unlocked after timeout",
+          "actual": true
+        },
+        {
+          "name": "mode unlocked after timeout",
+          "actual": true
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "selected mode",
+          "actual": "browser"
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "state": "source-switch",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "selected mode",
+          "actual": "cookie_file"
+        },
+        {
+          "name": "source identity changed",
+          "actual": "第二登录来源"
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "state": "cookie-oversize",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "selected mode",
+          "actual": "cookie_file"
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "state": "archive-invalid",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "selected mode",
+          "actual": "archive"
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "state": "archive-oversize",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "selected mode",
+          "actual": "archive"
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "state": "helper-unavailable",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "selected mode",
+          "actual": "browser"
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "state": "helper-timeout",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "source unlocked after timeout",
+          "actual": true
+        },
+        {
+          "name": "mode unlocked after timeout",
+          "actual": true
+        },
+        {
+          "name": "save remains disabled",
+          "actual": true
+        },
+        {
+          "name": "selected mode",
+          "actual": "browser"
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "state": "source-switch",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "selected mode",
+          "actual": "cookie_file"
+        },
+        {
+          "name": "source identity changed",
+          "actual": "第二登录来源"
+        },
+        {
+          "name": "save remains disabled",
           "actual": true
         },
         {
@@ -2180,194 +2180,194 @@
   ],
   "screenshots": [
     {
-      "file": "390-cookie-ready.png",
+      "file": "390-cookie-oversize.png",
       "width": 390,
-      "state": "cookie-ready",
-      "sha256": "512333449237b6bb3708c70bef083237f1740a381c8aa7e6b2e45555fdfd186f",
+      "state": "cookie-oversize",
+      "sha256": "5a8441fbca27caebf2580f0c9bdc111862bb330afb2926773be63f42e1a26451",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
     {
-      "file": "390-cookie-invalid.png",
+      "file": "390-archive-invalid.png",
       "width": 390,
-      "state": "cookie-invalid",
-      "sha256": "4fa665d927bedea77e0dcfb7652056071879b49734399413b3ce40ca0e4fbc50",
+      "state": "archive-invalid",
+      "sha256": "e11398415f3c2a5f7182641ae7ec2c3cbed842aaa3a17aa242848c6427f102d9",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
     {
-      "file": "390-browser-pending.png",
+      "file": "390-archive-oversize.png",
       "width": 390,
-      "state": "browser-pending",
-      "sha256": "7cf0242d957f23797f279fd9eea618bf0d7fa1dd78278f71b260efbf27d620b2",
+      "state": "archive-oversize",
+      "sha256": "1b52da897c13d994f609048a175427f5e0805b961f616c65df40659ea08215c3",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
     {
-      "file": "390-browser-success.png",
+      "file": "390-helper-unavailable.png",
       "width": 390,
-      "state": "browser-success",
-      "sha256": "f1709f176bf4ce87bb62b1e7cf1cd32e248d173cb1d9d03505f27b472436eee5",
+      "state": "helper-unavailable",
+      "sha256": "90637671e5018a06d6ef50d613b3ed7b000abe4ea682db04d7af2b83d955f0e8",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
     {
-      "file": "390-browser-empty.png",
+      "file": "390-helper-timeout.png",
       "width": 390,
-      "state": "browser-empty",
-      "sha256": "3a98fff54f36c7259ba9bb5c9439394a7904c423af91c6d77ea45ab99b598766",
+      "state": "helper-timeout",
+      "sha256": "65ce6be20ea268f3926f44a8cfa2c6baa9f5d0dd7b6be98351af233f93046212",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
     {
-      "file": "390-archive-ready.png",
+      "file": "390-source-switch.png",
       "width": 390,
-      "state": "archive-ready",
-      "sha256": "753bf29c7bc434faa010fe7fa195c6993ac6380ef5e7cb0129126cef224fab0f",
+      "state": "source-switch",
+      "sha256": "10a1c6e12b4b09449060399a636924f254ad6c72d52d98ffc494220b20a80fcd",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
     {
-      "file": "760-cookie-ready.png",
+      "file": "760-cookie-oversize.png",
       "width": 760,
-      "state": "cookie-ready",
-      "sha256": "e02b516937cf087bb0709c1eda51f85c5f614d862979db4dce12336e6ed35346",
+      "state": "cookie-oversize",
+      "sha256": "fa4d04377dc19a63d8cccd0328418d9b336538bc8a4f1f1f72cd0bc08ed81891",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
     {
-      "file": "760-cookie-invalid.png",
+      "file": "760-archive-invalid.png",
       "width": 760,
-      "state": "cookie-invalid",
-      "sha256": "c00784cbe384010a33df3859b1fe6c1b70873a487e3443de42a530650b9c630a",
+      "state": "archive-invalid",
+      "sha256": "54e843da43464aa0a3650e5578438de277ba1bf6d6b45ab42b5a58af8aa8790e",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
     {
-      "file": "760-browser-pending.png",
+      "file": "760-archive-oversize.png",
       "width": 760,
-      "state": "browser-pending",
-      "sha256": "8d359234cfacbc77d600a337e4eb8ea939fd6921bdcdca3e9671470a33ef4381",
+      "state": "archive-oversize",
+      "sha256": "6ad6efe646432d300d1743c9c17b0a675722e57af67057c2af3b77d76f87755c",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
     {
-      "file": "760-browser-success.png",
+      "file": "760-helper-unavailable.png",
       "width": 760,
-      "state": "browser-success",
-      "sha256": "7ec3f6974e73c03290f341dee36fb195398c97b1ad0c0315ddfa6205434103b6",
+      "state": "helper-unavailable",
+      "sha256": "6b932a3ccb97043c3a59a3f9a179384c06642553c69b6af50d5410623433b598",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
     {
-      "file": "760-browser-empty.png",
+      "file": "760-helper-timeout.png",
       "width": 760,
-      "state": "browser-empty",
-      "sha256": "bc4049f5df46524d1af64d0b91d543034b25a1b9d995a8b89deeb3a740f1b189",
+      "state": "helper-timeout",
+      "sha256": "786234ace79d1868ee472cb0e456a62b6d09bae96aad8f72424c97fc66235586",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
     {
-      "file": "760-archive-ready.png",
+      "file": "760-source-switch.png",
       "width": 760,
-      "state": "archive-ready",
-      "sha256": "81f45217bac2a70889870a479b232180599f369337fe4b5c1a195d4e9befa32f",
+      "state": "source-switch",
+      "sha256": "158d54b3388183a5d41db6e150d02b149b11ddac3b701598d4a84e459746e2c3",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
     {
-      "file": "1024-cookie-ready.png",
+      "file": "1024-cookie-oversize.png",
       "width": 1024,
-      "state": "cookie-ready",
-      "sha256": "82fbd92b8a1da4456de7cb25a4c78f31146a0cc1ac50368f995a1a53044049f9",
+      "state": "cookie-oversize",
+      "sha256": "4b503c6db4468311abc1330fef29fd3a390265bf7ab4cd7b5d7ca76f97a023d8",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
     {
-      "file": "1024-cookie-invalid.png",
+      "file": "1024-archive-invalid.png",
       "width": 1024,
-      "state": "cookie-invalid",
-      "sha256": "9cd70465905184d2fb3d32e33b10cdd96de6ac8fc7456fea9b0fd36b4b2e3821",
+      "state": "archive-invalid",
+      "sha256": "1af77c2878f7a332b32acf254f335b2514b7671414f3effc88a78fae458377c8",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
     {
-      "file": "1024-browser-pending.png",
+      "file": "1024-archive-oversize.png",
       "width": 1024,
-      "state": "browser-pending",
-      "sha256": "81bfecc6fdee911d7d8bc9090dcbed9c78e9b78b963d5df73de5cdef6968a26c",
+      "state": "archive-oversize",
+      "sha256": "a9e5078ddabbcffb50b832815d2f9282e79f804d88bb432fdac1960343a118ec",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
     {
-      "file": "1024-browser-success.png",
+      "file": "1024-helper-unavailable.png",
       "width": 1024,
-      "state": "browser-success",
-      "sha256": "47183b196852ba0e98e8aed4ce5b5f237e268f3bc3727cce8bcc914208fc7766",
+      "state": "helper-unavailable",
+      "sha256": "112d321a89016b807df8fdb5758fa7a5ea90e4c07f9ad110e00537b3950dbc1d",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
     {
-      "file": "1024-browser-empty.png",
+      "file": "1024-helper-timeout.png",
       "width": 1024,
-      "state": "browser-empty",
-      "sha256": "2034604843465290cc558e3577292091bef942582e205f871f44fcae6ea39a7d",
+      "state": "helper-timeout",
+      "sha256": "bb4745ce1666c2c50ec9d8d19e7d31a5ebdb8809044e0af58f9dd90fab109dcf",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
     {
-      "file": "1024-archive-ready.png",
+      "file": "1024-source-switch.png",
       "width": 1024,
-      "state": "archive-ready",
-      "sha256": "055b99776bc478e0ec887cea233468d4a82fee9bdd8b13ed7e69089d6a6632e2",
+      "state": "source-switch",
+      "sha256": "90ded651b8d06213b2b4dbd4850d97ededaf152189bec8bc93ae767ceb627b06",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
     {
-      "file": "1440-cookie-ready.png",
+      "file": "1440-cookie-oversize.png",
       "width": 1440,
-      "state": "cookie-ready",
-      "sha256": "f8a25a9e665767bbae26a3c0992985f74ee3c0d1d0e5d63e5e642c13012a60ae",
+      "state": "cookie-oversize",
+      "sha256": "71e04992fb4397e03779198885f6bf26b47dfefe7b2bd0a77538f0c9ff82a3e4",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
     {
-      "file": "1440-cookie-invalid.png",
+      "file": "1440-archive-invalid.png",
       "width": 1440,
-      "state": "cookie-invalid",
-      "sha256": "7e74e4e78600cab313805cbd4854e0ae9ea6f4e771c5c6134d48872f708b3c5b",
+      "state": "archive-invalid",
+      "sha256": "71980e91f3d39cb507c815565c1b19794841bbc7490bb9a7581a9b0d5840e8e9",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
     {
-      "file": "1440-browser-pending.png",
+      "file": "1440-archive-oversize.png",
       "width": 1440,
-      "state": "browser-pending",
-      "sha256": "66aefba81560d1118e5b5141f441638ef312b8a75b671c5f7583718819bc9bd8",
+      "state": "archive-oversize",
+      "sha256": "91d481a68f184d073d63ef616490fa16f9f9f7c6421d6930e434bca50b51a761",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
     {
-      "file": "1440-browser-success.png",
+      "file": "1440-helper-unavailable.png",
       "width": 1440,
-      "state": "browser-success",
-      "sha256": "8f7fc8f897b21b167f7d71c1644bdc33bf38264f3dd128cdd2edd3837099adc3",
+      "state": "helper-unavailable",
+      "sha256": "cb97edfde7ceded9e417e6b7bc4b1f2aa2f6f46fd303ff072a0f08167a836b17",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
     {
-      "file": "1440-browser-empty.png",
+      "file": "1440-helper-timeout.png",
       "width": 1440,
-      "state": "browser-empty",
-      "sha256": "7bc9c0d05144ec7e8df9ddc97af710ec643ff64975c2e69a873d6666c287db52",
+      "state": "helper-timeout",
+      "sha256": "5d86f3e90ad8580d2130af04295b226d2d67e717bc6faacd2ec9c74ec2e13c56",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
     {
-      "file": "1440-archive-ready.png",
+      "file": "1440-source-switch.png",
       "width": 1440,
-      "state": "archive-ready",
-      "sha256": "49a882a2fe14f704cd8f4146c98c94719c1cfc2ee54b119c223f6b91270610f1",
+      "state": "source-switch",
+      "sha256": "f3cb3e57672c3b485eaf92e8f36814d5cf3508c18219cd56c2b0a449189ded68",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     }
@@ -2546,6 +2546,6 @@
     "scripts/verify-ui-phase2-credential-login-material.mjs": "1bf1a95fde28b1bfda49cea6d618f9a5ef8238e495a6db40dcfde455f2ec9f2e",
     "tests/e2e/m03-02-credential-assets.spec.ts": "0b735d56167c0c9e86b4bc7a3f3f8e8c3b6bc04106c0286bb9b1d05353c16929"
   },
-  "materialBoundary": "All file contents and browser-helper cookies are synthetic in-memory review values. Screenshots expose filenames/counts and feedback only. No save action, external page, real helper, API write, encryption, database or production credential is used.",
-  "proposalBoundary": "The review transform separates browser material reading from credential saving, locks source/mode/repeated read while pending, keeps cancel available and labels pending/ready/warning states. It intentionally does not claim late-result ownership or post-close cleanup is solved."
+  "materialBoundary": "Oversize and invalid files are synthetic local buffers; helper denial and timeout are locally delivered or clock-driven. No file content is rendered or persisted and no save action, external page, real helper, API write, encryption, database or production credential is used.",
+  "proposalBoundary": "The boundary review preserves the exact 2,000,000 and 6,000,000 byte limits and extension allowlists, distinguishes the 15-second helper timeout from helper denial, and keeps recovery choices visible. It intentionally does not claim late-result ownership or post-close cleanup is solved."
 }

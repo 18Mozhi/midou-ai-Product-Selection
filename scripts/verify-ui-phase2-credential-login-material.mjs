@@ -9,9 +9,14 @@ import { createServer } from "vite";
 import { chromium, expect } from "@playwright/test";
 import { previewCredentialLoginMaterial } from "./lib/ui-phase2-credential-login-material-preview.mjs";
 
-assert.ok(process.argv.slice(2).every((arg) => arg === "--capture"));
-const capture = process.argv.includes("--capture"),
-  output = "output/playwright/p50-credential-login-material-review",
+const args = process.argv.slice(2);
+assert.ok(args.every((arg) => arg === "--capture" || arg === "--suite=boundary"));
+const capture = args.includes("--capture"),
+  suite = args.includes("--suite=boundary") ? "boundary" : "core",
+  output =
+    suite === "core"
+      ? "output/playwright/p50-credential-login-material-review"
+      : "output/playwright/p50-credential-login-boundary-review",
   component = "apps/web/src/components/CredentialAssetCenter.vue",
   pageCss = "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css",
   materialCss =
@@ -20,14 +25,24 @@ const capture = process.argv.includes("--capture"),
   read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   widths = [390, 760, 1024, 1440],
-  states = [
-    "cookie-ready",
-    "cookie-invalid",
-    "browser-pending",
-    "browser-success",
-    "browser-empty",
-    "archive-ready",
-  ];
+  states =
+    suite === "core"
+      ? [
+          "cookie-ready",
+          "cookie-invalid",
+          "browser-pending",
+          "browser-success",
+          "browser-empty",
+          "archive-ready",
+        ]
+      : [
+          "cookie-oversize",
+          "archive-invalid",
+          "archive-oversize",
+          "helper-unavailable",
+          "helper-timeout",
+          "source-switch",
+        ];
 
 const ast = ts.createSourceFile(fixture, await read(fixture), ts.ScriptTarget.Latest, true),
   declarations = [];
@@ -198,6 +213,8 @@ try {
             },
           });
         });
+        if (state === "helper-timeout")
+          await page.clock.install({ time: new Date("2026-09-11T06:00:00Z") });
         await page.goto(
           `${origin}/platform-admin/credentials?provider_id=${data.provider.id}&mode=login`,
         );
@@ -242,7 +259,16 @@ try {
           );
           check("selected mode", await mode.inputValue(), "cookie_file");
           check("save remains disabled", await save.isDisabled());
-        } else if (state.startsWith("browser-")) {
+        } else if (state === "cookie-oversize") {
+          await editor.locator('input[type="file"]').setInputFiles({
+            name: "oversize.cookies",
+            mimeType: "text/plain",
+            buffer: Buffer.alloc(2_000_001, "x"),
+          });
+          await expect(editor.getByRole("status")).toHaveText("Cookie 文件不能超过 2 兆字节。");
+          check("selected mode", await mode.inputValue(), "cookie_file");
+          check("save remains disabled", await save.isDisabled());
+        } else if (state.startsWith("browser-") || state.startsWith("helper-")) {
           await mode.selectOption("browser");
           const readButton = editor.getByRole("button", {
             name: "从当前浏览器读取 Cookie",
@@ -259,6 +285,14 @@ try {
               "cancel remains available",
               await editor.getByRole("button", { name: "取消", exact: true }).isEnabled(),
             );
+            check("save remains disabled", await save.isDisabled());
+          } else if (state === "helper-timeout") {
+            await page.clock.fastForward(15_001);
+            await expect(editor).toHaveAttribute("aria-busy", "false");
+            await expect(editor.getByRole("status")).toContainText("15 秒内没有收到浏览器助手响应");
+            await expect(editor.getByRole("status")).toContainText("改用 Cookie 文件上传");
+            check("source unlocked after timeout", await source.isEnabled());
+            check("mode unlocked after timeout", await mode.isEnabled());
             check("save remains disabled", await save.isDisabled());
           } else {
             await page.evaluate((resultState) => {
@@ -280,7 +314,10 @@ try {
                       type: "SCOUTOPS_BROWSER_BRIDGE_RESULT",
                       request_id: request.request_id,
                       ok: false,
-                      error: "browser_cookie_empty",
+                      error:
+                        resultState === "browser-empty"
+                          ? "browser_cookie_empty"
+                          : "browser_permission_denied",
                     },
                 location.origin,
               );
@@ -291,10 +328,14 @@ try {
             if (state === "browser-success") {
               await expect(editor.getByRole("status")).toContainText("已读取 2 条 Cookie");
               check("save enabled", await save.isEnabled());
-            } else {
+            } else if (state === "browser-empty") {
               await expect(editor.getByRole("status")).toContainText(
                 "当前浏览器没有这个来源可用的 Cookie",
               );
+              check("save remains disabled", await save.isDisabled());
+            } else {
+              await expect(editor.getByRole("status")).toContainText("浏览器助手没有返回可用材料");
+              await expect(editor.getByRole("status")).toContainText("检查当前来源权限");
               check("save remains disabled", await save.isDisabled());
             }
           }
@@ -309,6 +350,42 @@ try {
           await expect(editor.getByText(/已读取导入材料：review-profile\.tar\.gz/)).toBeVisible();
           check("selected mode", await mode.inputValue(), "archive");
           check("save enabled", await save.isEnabled());
+        } else if (state === "archive-invalid") {
+          await mode.selectOption("archive");
+          await editor.locator('input[type="file"]').setInputFiles({
+            name: "review-profile.zip",
+            mimeType: "application/zip",
+            buffer: Buffer.from("review-only"),
+          });
+          await expect(editor.getByRole("status")).toHaveText(
+            "完整浏览器档案请选择 .tar.gz 文件。",
+          );
+          check("selected mode", await mode.inputValue(), "archive");
+          check("save remains disabled", await save.isDisabled());
+        } else if (state === "archive-oversize") {
+          await mode.selectOption("archive");
+          await editor.locator('input[type="file"]').setInputFiles({
+            name: "oversize-profile.tar.gz",
+            mimeType: "application/gzip",
+            buffer: Buffer.alloc(6_000_001, "x"),
+          });
+          await expect(editor.getByRole("status")).toHaveText(
+            "浏览器档案压缩后不能超过 6 兆字节。",
+          );
+          check("selected mode", await mode.inputValue(), "archive");
+          check("save remains disabled", await save.isDisabled());
+        } else if (state === "source-switch") {
+          await source.selectOption({ label: data.secondProvider.name });
+          await expect(editor.locator(".login-provider-status strong")).toHaveText(
+            data.secondProvider.name,
+          );
+          check("selected mode", await mode.inputValue(), "cookie_file");
+          check(
+            "source identity changed",
+            await source.locator("option:checked").innerText(),
+            data.secondProvider.name,
+          );
+          check("save remains disabled", await save.isDisabled());
         }
 
         check(
@@ -409,7 +486,10 @@ for (const file of [...sources].sort()) {
   } catch {}
 }
 const evidence = {
-  kind: "P50-CREDENTIAL-LOGIN-MATERIAL-REVIEW-r1",
+  kind:
+    suite === "core"
+      ? "P50-CREDENTIAL-LOGIN-MATERIAL-REVIEW-r1"
+      : "P50-CREDENTIAL-LOGIN-BOUNDARY-REVIEW-r1",
   generatedAt: new Date().toISOString(),
   reviewOnly: true,
   productionChanged: false,
@@ -421,9 +501,13 @@ const evidence = {
   screenshots,
   sourceHashes,
   materialBoundary:
-    "All file contents and browser-helper cookies are synthetic in-memory review values. Screenshots expose filenames/counts and feedback only. No save action, external page, real helper, API write, encryption, database or production credential is used.",
+    suite === "core"
+      ? "All file contents and browser-helper cookies are synthetic in-memory review values. Screenshots expose filenames/counts and feedback only. No save action, external page, real helper, API write, encryption, database or production credential is used."
+      : "Oversize and invalid files are synthetic local buffers; helper denial and timeout are locally delivered or clock-driven. No file content is rendered or persisted and no save action, external page, real helper, API write, encryption, database or production credential is used.",
   proposalBoundary:
-    "The review transform separates browser material reading from credential saving, locks source/mode/repeated read while pending, keeps cancel available and labels pending/ready/warning states. It intentionally does not claim late-result ownership or post-close cleanup is solved.",
+    suite === "core"
+      ? "The review transform separates browser material reading from credential saving, locks source/mode/repeated read while pending, keeps cancel available and labels pending/ready/warning states. It intentionally does not claim late-result ownership or post-close cleanup is solved."
+      : "The boundary review preserves the exact 2,000,000 and 6,000,000 byte limits and extension allowlists, distinguishes the 15-second helper timeout from helper denial, and keeps recovery choices visible. It intentionally does not claim late-result ownership or post-close cleanup is solved.",
 };
 if (capture) {
   await writeFile(`${output}/evidence.json`, JSON.stringify(evidence, null, 2) + "\n");
@@ -433,9 +517,21 @@ if (capture) {
         `<article><h2>${shot.width}px · ${shot.state}</h2><a href="${shot.file}"><img src="${shot.file}" alt="${shot.width}px ${shot.state}"></a></article>`,
     )
     .join("");
+  const galleryKind = suite === "core" ? "状态" : "边界";
   await writeFile(
     `${output}/index.html`,
-    `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P50 登录材料状态评审</title><style>body{margin:0;padding:24px;background:#e9eef5;color:#142a46;font-family:sans-serif}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,390px),1fr));gap:24px}article{padding:14px;background:white;border:1px solid #cfd9e7}h1{grid-column:1/-1}h1,h2{margin:0 0 12px}h2{font-size:15px}img{display:block;width:100%;height:auto;border:1px solid #d8e0eb}</style><main><h1>P50 登录材料 · 六种实际 Vue 评审状态</h1>${cards}</main></html>`,
+    [
+      '<!doctype html><html lang="zh-CN"><meta charset="utf-8">',
+      '<meta name="viewport" content="width=device-width,initial-scale=1">',
+      `<title>P50 登录材料${galleryKind}评审</title>`,
+      "<style>body{margin:0;padding:24px;background:#e9eef5;color:#142a46;font-family:sans-serif}",
+      "main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,390px),1fr));gap:24px}",
+      "article{padding:14px;background:white;border:1px solid #cfd9e7}h1{grid-column:1/-1}",
+      "h1,h2{margin:0 0 12px}h2{font-size:15px}img{display:block;width:100%;height:auto;border:1px solid #d8e0eb}</style>",
+      `<main><h1>P50 登录材料 · 六种实际 Vue ${galleryKind}</h1>`,
+      cards,
+      "</main></html>",
+    ].join(""),
   );
 }
 console.log(

@@ -47,6 +47,20 @@ async function write`,
   );
   review = once(
     review,
+    `    message.value =
+      error instanceof Error && error.message === "browser_cookie_empty"
+        ? "当前浏览器没有这个来源可用的 Cookie。请先在刚打开的来源页面完成登录，再重新读取。"
+        : "未检测到浏览器助手或未授予该网站权限。请先下载并加载浏览器助手，或改用 Cookie 文件上传。";`,
+    `    message.value =
+      error instanceof Error && error.message === "browser_cookie_empty"
+        ? "当前浏览器没有这个来源可用的 Cookie。请先在刚打开的来源页面完成登录，再重新读取。"
+        : error instanceof Error && error.message === "browser_helper_unavailable"
+          ? "15 秒内没有收到浏览器助手响应。请确认助手已加载并授予当前来源权限，再重新读取；也可以改用 Cookie 文件上传。"
+          : "浏览器助手没有返回可用材料。请检查当前来源权限后重新读取，或改用 Cookie 文件上传。";`,
+    "browser material error copy must be unique",
+  );
+  review = once(
+    review,
     `          class="credential-editor login-editor"
           role="dialog"`,
     `          class="credential-editor login-editor"
