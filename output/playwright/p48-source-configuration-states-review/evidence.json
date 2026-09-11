@@ -1,0 +1,4485 @@
+{
+  "kind": "P48-SOURCE-CONFIGURATION-STATES-REVIEW-r1",
+  "generatedAt": "2026-09-11T13:48:26.263Z",
+  "reviewOnly": true,
+  "productionChanged": false,
+  "deployed": false,
+  "mockedWritesOnly": true,
+  "processesClosed": true,
+  "ports": [
+    55752
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "scene": "direct-saving",
+      "capture": "saving",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "saving"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "f0ef132a-66e7-453b-abf4-7709b0340aaa"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "direct-success",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "success"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "a5d28896-5523-4cdb-b086-a619ecd10489"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "direct-failure",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "failed"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "failed"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "caa506e1-ac72-4f3a-9aa7-af7f0b9f1fa5"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "version-conflict",
+      "capture": "conflict",
+      "final": "conflict",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "conflict"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "conflict"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "0cfd15b6-5c14-4227-9a4a-777f98efd31c"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "smoke-saving",
+      "capture": "saving_disabled",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "saving_disabled"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "1e53b6dc-67aa-49dd-9aed-a6b9d57eec1a"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "bc767527-0bdf-43e3-9cd0-9674dbcd54ca"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "bc0f6ae9-1716-40db-aa38-e571ff6f31a9"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "smoke-testing",
+      "capture": "smoke_testing",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "smoke_testing"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "a1f246d5-93e4-4396-a5c7-143c92ed21ee"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "00763fbc-4fc4-48d6-aa3e-196bc05cd36b"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "81d5003c-6704-4e82-99b8-ce79ddb41d3e"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "smoke-rejected",
+      "capture": "partial",
+      "final": "partial",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "partial"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "partial keeps one disabled write",
+          "actual": [
+            "disabled"
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "d3c21e53-4645-454e-82d5-f557f681a5d2"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "026a953d-0628-4240-ad34-6a1afc4ee04c"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "smoke-unavailable",
+      "capture": "partial",
+      "final": "partial",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "partial"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "partial keeps one disabled write",
+          "actual": [
+            "disabled"
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "bb5f550d-1f75-45ca-8fe7-4fbf83eaf1d9"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "0a6c6bf1-cc64-4429-b669-a5fbdb787691"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "enabling",
+      "capture": "enabling",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "enabling"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "6ee3dcbb-7c66-4ca9-899a-b5829781aa29"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "76f04744-d26b-41fb-8d0f-1ed37bb4dd0c"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "58d32b65-d810-4b06-ab6f-2974db4b0636"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "enable-failure",
+      "capture": "partial",
+      "final": "partial",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "partial"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "2a66de45-c746-43f1-90b1-90dd619b0e16"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "7631c861-372e-4483-94df-b40711e06919"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "625a4595-64ea-4c36-9fb1-b1b97177b6e1"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "smoke-success",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "success"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "cf57484e-347b-4fb0-9bf4-c835798f3625"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "20da9992-eb48-421f-80dc-5037a47c706b"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "e938d119-c580-4b67-bf27-a7be3fd6cf77"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "direct-saving",
+      "capture": "saving",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "saving"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "2689b46a-b7e1-4f0f-9c37-cc4af4e46b73"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "direct-success",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "success"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "5aa10709-3718-4fb4-be01-9151665da872"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "direct-failure",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "failed"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "failed"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "da8f209f-af3d-437e-9fc8-b3552b45e345"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "version-conflict",
+      "capture": "conflict",
+      "final": "conflict",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "conflict"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "conflict"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "61e67553-6f13-4353-9dab-d61bf8ddf3cd"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "smoke-saving",
+      "capture": "saving_disabled",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "saving_disabled"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "ab1ce7fa-40a2-49dc-92d6-10e10223c59d"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "3c8de64a-62f1-4573-9bcf-6eb80235979b"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "dce5d5a1-9d92-422e-ad48-6e057f9c9704"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "smoke-testing",
+      "capture": "smoke_testing",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "smoke_testing"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "029b82a8-4858-4dea-bf15-67ef98413b8e"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "52b52488-5ffc-4146-96c8-b3b21342528f"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "f8279c52-dd0b-478e-b6bf-48b3904895cd"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "smoke-rejected",
+      "capture": "partial",
+      "final": "partial",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "partial"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "partial keeps one disabled write",
+          "actual": [
+            "disabled"
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "1cdfd395-602a-47e2-ba14-e70a357f5ca1"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "bb5c1917-c46c-442a-83d5-d26484fc2b69"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "smoke-unavailable",
+      "capture": "partial",
+      "final": "partial",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "partial"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "partial keeps one disabled write",
+          "actual": [
+            "disabled"
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "3b78cae9-34d1-46cb-a551-1412ba3f9c86"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "36747e69-5e5d-4f55-a3ff-bddedff6b8c2"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "enabling",
+      "capture": "enabling",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "enabling"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "2f76fd6e-8143-432c-bab7-22b06ed99307"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "fd6d6ee2-5df4-451b-8974-c04f0a294c5a"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "f2874d06-055e-475b-b032-4b68eee9b821"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "enable-failure",
+      "capture": "partial",
+      "final": "partial",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "partial"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "43680ac3-658d-4856-9d3d-bf0b84397772"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "7607a840-e594-41ea-996c-fd72e813fad4"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "87ce7930-bcc6-43fa-80fd-48641d603b92"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "smoke-success",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "success"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "46f75150-6758-4613-9e6c-34b4cb12e5f8"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "f120739f-94f3-4c61-afca-279e7084c753"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "da0b5a15-82f2-47b6-a73d-59068d5c1373"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "direct-saving",
+      "capture": "saving",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "saving"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "7d7a5051-2dea-4307-88a6-2fca577d6f56"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "direct-success",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "success"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "5b8cbc0b-04a2-4e3c-bd8b-d33e7b0731a0"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "direct-failure",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "failed"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "failed"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "ce98585b-5374-471c-9912-0c60e50ad2b6"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "version-conflict",
+      "capture": "conflict",
+      "final": "conflict",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "conflict"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "conflict"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "bcf56f22-6e8b-4455-8c15-28bd0e40c8c8"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "smoke-saving",
+      "capture": "saving_disabled",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "saving_disabled"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "8cd7c687-ebe4-40e9-854f-df562fad3f29"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "0eb0cdc6-c424-4572-a468-a81e3c5b4f5d"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "bdaed22e-e2d3-4353-a9cf-88f732347d0a"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "smoke-testing",
+      "capture": "smoke_testing",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "smoke_testing"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "33e115f9-724b-4d77-9900-b2762cf60c73"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "bae8dc9e-c912-42c2-98b8-755ad0fb10f2"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "ad1fc980-a047-4c89-b7d2-01dba88f8bfb"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "smoke-rejected",
+      "capture": "partial",
+      "final": "partial",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "partial"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "partial keeps one disabled write",
+          "actual": [
+            "disabled"
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "ca9c1077-744b-4224-8a4e-69ea93a610cd"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "a3bf4ee2-afc9-4cb3-b256-605c458092ad"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "smoke-unavailable",
+      "capture": "partial",
+      "final": "partial",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "partial"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "partial keeps one disabled write",
+          "actual": [
+            "disabled"
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "8e902e5b-0154-4d58-821d-ba396df0d9e6"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "cc4adae5-fbbc-41ef-a5a3-7b6f18046d29"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "enabling",
+      "capture": "enabling",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "enabling"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "c0fb14d1-6bb5-4581-94ae-418f636243a7"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "72a229e1-f30e-43e5-be0b-650dc584ec51"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "75b09b01-b9af-4cb6-bd2c-6559b7d3eb5a"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "enable-failure",
+      "capture": "partial",
+      "final": "partial",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "partial"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "3180813f-a162-4c82-99e2-15f3735ae3fd"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "4d022f58-6608-40f8-84d6-6c90b1339171"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "5ec01ab3-7622-4fd6-b392-6c67c3c96416"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "smoke-success",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "success"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "1d5fe1d5-3ea1-427a-8f6b-2b542310df9c"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "4731b3eb-e62b-47c8-8edc-b1e7e110fe64"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "10162e61-9757-4bd6-893e-331b385ca943"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "direct-saving",
+      "capture": "saving",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "saving"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "442eeae5-890a-4cf4-b687-98d5af742386"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "direct-success",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "success"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "6892143c-80fc-4eb8-9df2-18f6cb00bcbc"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "direct-failure",
+      "capture": "failed",
+      "final": "failed",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "failed"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "failed"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "7d09ea21-2e10-4786-9a5f-35853db254d5"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "version-conflict",
+      "capture": "conflict",
+      "final": "conflict",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "conflict"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "conflict"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "direct write count",
+          "actual": 1
+        },
+        {
+          "name": "no health check",
+          "actual": 0
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":30,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "1b7eda36-d56b-492c-9c52-8582282ee6ac"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "smoke-saving",
+      "capture": "saving_disabled",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "saving_disabled"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "82e5f236-0659-4632-844e-ffd5a3f48508"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "960b815a-990e-4de9-b36c-9b25d3b30399"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "c5166463-dde1-4503-8036-5782c3c0667a"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "smoke-testing",
+      "capture": "smoke_testing",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "smoke_testing"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "16232da3-2db4-41d7-a8af-09890d98d175"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "54e43ef4-f80c-4d92-a9ec-e8852c56888c"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "4ec8b078-5240-44c4-b156-518e8ced074f"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "smoke-rejected",
+      "capture": "partial",
+      "final": "partial",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "partial"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "partial keeps one disabled write",
+          "actual": [
+            "disabled"
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "047f0064-333e-4ee7-8ec3-7f5a7b867eca"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "b3d12d95-a739-418f-9d1c-42bc0a029343"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "smoke-unavailable",
+      "capture": "partial",
+      "final": "partial",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "partial"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "partial keeps one disabled write",
+          "actual": [
+            "disabled"
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "ade324e1-a021-46f2-a0da-9cbb8681567b"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "1568f636-1ade-45b4-a1b3-4c1ab1cda448"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "enabling",
+      "capture": "enabling",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "enabling"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "true"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "a7974fff-612f-46e8-a786-6055ede4cc92"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "18d0843a-8fe1-4f0c-b3a1-f8378aeecc13"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "05c896c4-df83-40d7-818a-d2bee5b8a6c3"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "enable-failure",
+      "capture": "partial",
+      "final": "partial",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "partial"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "partial"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "1431ead5-5c9c-4cdb-985c-78fd323f82eb"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "63355494-3e00-40c0-bfe8-a49b5d8f2f29"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "4eb5b798-6944-405d-b59a-5b01c02051a4"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "smoke-success",
+      "capture": "success",
+      "final": "success",
+      "checks": [
+        {
+          "name": "capture stage",
+          "actual": "success"
+        },
+        {
+          "name": "feedback busy",
+          "actual": "false"
+        },
+        {
+          "name": "fields disabled while progressing",
+          "actual": false
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "final stage",
+          "actual": "success"
+        },
+        {
+          "name": "dialog remains until acknowledged",
+          "actual": true
+        },
+        {
+          "name": "all writes have idempotency keys",
+          "actual": true
+        },
+        {
+          "name": "one catalog GET",
+          "actual": 1
+        },
+        {
+          "name": "no catalog reread before acknowledgement",
+          "actual": 1
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        },
+        {
+          "name": "staged status order",
+          "actual": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        {
+          "name": "staged version order",
+          "actual": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "one health check",
+          "actual": 1
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"disabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":1}",
+          "idempotencyKey": "43cb36e4-f97f-45db-9b3d-4056bf299cc1"
+        },
+        {
+          "key": "POST /api/v1/platform/provider-adapters/00000000-0000-4000-8000-000000000001/health-check",
+          "body": null,
+          "idempotencyKey": "790863f2-1a81-47cf-80eb-1b96606a3966"
+        },
+        {
+          "key": "PUT /api/v1/platform/provider-sources/00000000-0000-4000-8000-000000000001/configuration",
+          "body": "{\"schedule_minutes\":15,\"timeout_ms\":20000,\"retry_limit\":3,\"status\":\"enabled\",\"reason\":\"调整来源采集配置\",\"expected_version\":2}",
+          "idempotencyKey": "8735cf09-b0af-4c02-8ef6-c8f2f5eac695"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-direct-saving-feedback.png",
+      "width": 390,
+      "scene": "direct-saving",
+      "stage": "saving",
+      "suffix": "feedback",
+      "sha256": "eca1859a06b0b0bf9a7bb9c8ace50ddb78badc6058482e3bab1016c78738e8f7",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-direct-success-feedback.png",
+      "width": 390,
+      "scene": "direct-success",
+      "stage": "success",
+      "suffix": "feedback",
+      "sha256": "aab109cd841f1d3e5b0ae6b245400c0fecc61b79f3d587813381e1dbd0be525d",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-direct-failure-feedback.png",
+      "width": 390,
+      "scene": "direct-failure",
+      "stage": "failed",
+      "suffix": "feedback",
+      "sha256": "af74535b36267fa0bac6e40df9b4b12cf69cd1d491be045b9d85e77d986066ff",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-direct-failure-technical.png",
+      "width": 390,
+      "scene": "direct-failure",
+      "stage": "failed",
+      "suffix": "technical",
+      "sha256": "b5ac2ac03a8855ceb7bf03d37dbe59426bc38cbc6558e1042d6a1cc096bd1c6e",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-version-conflict-feedback.png",
+      "width": 390,
+      "scene": "version-conflict",
+      "stage": "conflict",
+      "suffix": "feedback",
+      "sha256": "2172e33d0b13118bbbf34379966cc9e1888c11d07bef365ac524689a2f432cdf",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-version-conflict-technical.png",
+      "width": 390,
+      "scene": "version-conflict",
+      "stage": "conflict",
+      "suffix": "technical",
+      "sha256": "d68ad6fb560ae505e524c22248bcaa99336ba2875c86509645efc0004469791c",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-smoke-saving-feedback.png",
+      "width": 390,
+      "scene": "smoke-saving",
+      "stage": "saving_disabled",
+      "suffix": "feedback",
+      "sha256": "a8708a9774829f9c4031de8d54e55a2f47b2d5395df06afb53dc7686d0f38b6c",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-smoke-testing-feedback.png",
+      "width": 390,
+      "scene": "smoke-testing",
+      "stage": "smoke_testing",
+      "suffix": "feedback",
+      "sha256": "f83aeaaba3a53a493b29a6ee83629d48616e33cd09af12b692082b0a25ba8066",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-smoke-rejected-feedback.png",
+      "width": 390,
+      "scene": "smoke-rejected",
+      "stage": "partial",
+      "suffix": "feedback",
+      "sha256": "b709927e4fabd8b3321c9b2c9a0b5dd934ecd5cbf7f48f59f1a983b4a92ed584",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-smoke-rejected-technical.png",
+      "width": 390,
+      "scene": "smoke-rejected",
+      "stage": "partial",
+      "suffix": "technical",
+      "sha256": "d4d728ed3aa68e6656c0c68fad438ae5274637aa1a0c01b35f9a9dea69ad433a",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-smoke-unavailable-feedback.png",
+      "width": 390,
+      "scene": "smoke-unavailable",
+      "stage": "partial",
+      "suffix": "feedback",
+      "sha256": "9af55a54407149dac034c33f61073c2357830318b77d579502ff95b1bbf88a43",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-smoke-unavailable-technical.png",
+      "width": 390,
+      "scene": "smoke-unavailable",
+      "stage": "partial",
+      "suffix": "technical",
+      "sha256": "cffddf04834ad48bf53b8947a43556d241fa2cef14ff492701fdf13999418086",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-enabling-feedback.png",
+      "width": 390,
+      "scene": "enabling",
+      "stage": "enabling",
+      "suffix": "feedback",
+      "sha256": "52d3cfc98cbd9117e93cb33de537cf72a41f64109a6a4e938a9ee091567e7b9b",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-enable-failure-feedback.png",
+      "width": 390,
+      "scene": "enable-failure",
+      "stage": "partial",
+      "suffix": "feedback",
+      "sha256": "87fff14a7c4c057b7f381e417be5fd367d976a2dfe0bd152d51bf3aaf97d6dca",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-enable-failure-technical.png",
+      "width": 390,
+      "scene": "enable-failure",
+      "stage": "partial",
+      "suffix": "technical",
+      "sha256": "94b935b5a196ae930d9d10a2ae62309a2511e6f95b0e2379fb8477ffe7673cae",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-smoke-success-feedback.png",
+      "width": 390,
+      "scene": "smoke-success",
+      "stage": "success",
+      "suffix": "feedback",
+      "sha256": "e0e8b6910c9cf5eb7573b3e0d1067aa87fc681ca10042dd470169adfcb51b8c0",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-direct-saving-feedback.png",
+      "width": 760,
+      "scene": "direct-saving",
+      "stage": "saving",
+      "suffix": "feedback",
+      "sha256": "b2a6a814751bd8484bee5d26b229db378bda81f8d53bc94347fa7fc18d56f828",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-direct-success-feedback.png",
+      "width": 760,
+      "scene": "direct-success",
+      "stage": "success",
+      "suffix": "feedback",
+      "sha256": "37b1c8a74e54e0699a15040c7c07459e5112087452f0b30ff4c1ec01618b6064",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-direct-failure-feedback.png",
+      "width": 760,
+      "scene": "direct-failure",
+      "stage": "failed",
+      "suffix": "feedback",
+      "sha256": "ca3c17a456df20acbd7d28ec2e2c1fa10c24b9b97050d7be0b699e7cf85cd63f",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-version-conflict-feedback.png",
+      "width": 760,
+      "scene": "version-conflict",
+      "stage": "conflict",
+      "suffix": "feedback",
+      "sha256": "b8baa805ed6ca0ad0a2a3498496f859699b4a4ad295d9973c0c46c3d64910541",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-smoke-saving-feedback.png",
+      "width": 760,
+      "scene": "smoke-saving",
+      "stage": "saving_disabled",
+      "suffix": "feedback",
+      "sha256": "ed0a78989a166ccc4d5b6bb2393b918a26cf6dfb4a8e126e9c69326f407bdbfe",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-smoke-testing-feedback.png",
+      "width": 760,
+      "scene": "smoke-testing",
+      "stage": "smoke_testing",
+      "suffix": "feedback",
+      "sha256": "a5d089140f4cf25ba6b7d52f9b6a95820d1231ef84f31924a706c70a276c32e1",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-smoke-rejected-feedback.png",
+      "width": 760,
+      "scene": "smoke-rejected",
+      "stage": "partial",
+      "suffix": "feedback",
+      "sha256": "1ac56fd7f97ee9a65b916af0399036ed6eb1a1853429071be7d76c15066b0e57",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-smoke-unavailable-feedback.png",
+      "width": 760,
+      "scene": "smoke-unavailable",
+      "stage": "partial",
+      "suffix": "feedback",
+      "sha256": "86f35bae9beaa1a5a51e7d347722276b4dbd240775d1f1b61fe216769fa6f332",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-enabling-feedback.png",
+      "width": 760,
+      "scene": "enabling",
+      "stage": "enabling",
+      "suffix": "feedback",
+      "sha256": "0435b2eece7540ea1cbafb9d4496f99115038461ee42b7d02b03fc4bbbbf81f2",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-enable-failure-feedback.png",
+      "width": 760,
+      "scene": "enable-failure",
+      "stage": "partial",
+      "suffix": "feedback",
+      "sha256": "fef90d436149b0aebe2fccbdd927481392faa31ef416159d814221819440d3fb",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-smoke-success-feedback.png",
+      "width": 760,
+      "scene": "smoke-success",
+      "stage": "success",
+      "suffix": "feedback",
+      "sha256": "3de764095dfedf4090870efcff4e62ffdb0ba573db7e352be1cff6ee8b14bba7",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "1024-direct-saving-feedback.png",
+      "width": 1024,
+      "scene": "direct-saving",
+      "stage": "saving",
+      "suffix": "feedback",
+      "sha256": "07ee886286ae6bdb8f38c4235a666d7fc367b8d90f9e5716f5e6603370e98c9d",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-direct-success-feedback.png",
+      "width": 1024,
+      "scene": "direct-success",
+      "stage": "success",
+      "suffix": "feedback",
+      "sha256": "8f49e52de3ed388e2b48a1e3659e05107b0e36dc8bfad0f6cf45aa2bcb9e976b",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-direct-failure-feedback.png",
+      "width": 1024,
+      "scene": "direct-failure",
+      "stage": "failed",
+      "suffix": "feedback",
+      "sha256": "ee7685d2e94f43f450e1f54ca6eae9f814bd0e6dc44c62f2b73cc0c0c1686a66",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-version-conflict-feedback.png",
+      "width": 1024,
+      "scene": "version-conflict",
+      "stage": "conflict",
+      "suffix": "feedback",
+      "sha256": "b2020cf16b1a033afb742079b0d8360b3f4499c5b96409b4b338ea4e41716d62",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-smoke-saving-feedback.png",
+      "width": 1024,
+      "scene": "smoke-saving",
+      "stage": "saving_disabled",
+      "suffix": "feedback",
+      "sha256": "19bcedd7b091c7f1cc35b88152096ebd48ac306a634e50a07f92a29ed1dde588",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-smoke-testing-feedback.png",
+      "width": 1024,
+      "scene": "smoke-testing",
+      "stage": "smoke_testing",
+      "suffix": "feedback",
+      "sha256": "2ee0c8f1e002b1ab14a6a8202c75b294f02923e00d727356649199a855f6f97f",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-smoke-rejected-feedback.png",
+      "width": 1024,
+      "scene": "smoke-rejected",
+      "stage": "partial",
+      "suffix": "feedback",
+      "sha256": "cbbbdc7661971cdb9803864ee8a5dc37c822a2202df23306786888fdd7765fa8",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-smoke-unavailable-feedback.png",
+      "width": 1024,
+      "scene": "smoke-unavailable",
+      "stage": "partial",
+      "suffix": "feedback",
+      "sha256": "8af400717c48b9858e3f58d2432788911c4ce89e794cd46361076808227e77c7",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-enabling-feedback.png",
+      "width": 1024,
+      "scene": "enabling",
+      "stage": "enabling",
+      "suffix": "feedback",
+      "sha256": "7c4d61cb6715568f253c5fa1b07a29811187afc98f4d5305721f349718ef74d5",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-enable-failure-feedback.png",
+      "width": 1024,
+      "scene": "enable-failure",
+      "stage": "partial",
+      "suffix": "feedback",
+      "sha256": "0c3b36dfd8112d58f2fbaf603f5a958e39c1ab5b0528f4881a9753f26c558208",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-smoke-success-feedback.png",
+      "width": 1024,
+      "scene": "smoke-success",
+      "stage": "success",
+      "suffix": "feedback",
+      "sha256": "840f1182487e2733c7bada17559174bbf8d33952b5607f1ec533d890aea6f402",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-direct-saving-feedback.png",
+      "width": 1440,
+      "scene": "direct-saving",
+      "stage": "saving",
+      "suffix": "feedback",
+      "sha256": "27f3c21f3dc14124ee3f8a19c9ba99ef273d4a7f49a7708e5cb4f24a73e9fcd2",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-direct-success-feedback.png",
+      "width": 1440,
+      "scene": "direct-success",
+      "stage": "success",
+      "suffix": "feedback",
+      "sha256": "5a539f77a7f62a62801d0d5717a78a89ff68f85a097948acdc8e9fbcb1ea52a5",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-direct-failure-feedback.png",
+      "width": 1440,
+      "scene": "direct-failure",
+      "stage": "failed",
+      "suffix": "feedback",
+      "sha256": "4e1be9dc595928dac713e134d7e3277f3eb4386112c305012f832a92bb995c04",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-version-conflict-feedback.png",
+      "width": 1440,
+      "scene": "version-conflict",
+      "stage": "conflict",
+      "suffix": "feedback",
+      "sha256": "cf33b64a963edb9e800dab9107ba71d0fa5b897f8286a72adf80f531f3a81d8a",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-smoke-saving-feedback.png",
+      "width": 1440,
+      "scene": "smoke-saving",
+      "stage": "saving_disabled",
+      "suffix": "feedback",
+      "sha256": "74cad493dfea9bbc2bb1415e74e62d4394772b1363f2a4bbb3fe0a53c222b757",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-smoke-testing-feedback.png",
+      "width": 1440,
+      "scene": "smoke-testing",
+      "stage": "smoke_testing",
+      "suffix": "feedback",
+      "sha256": "271266cb0e6972e1548d897355dfea7a11ae747d0ccb32b798c924baa3e31127",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-smoke-rejected-feedback.png",
+      "width": 1440,
+      "scene": "smoke-rejected",
+      "stage": "partial",
+      "suffix": "feedback",
+      "sha256": "14d4fd312363b49562222bb0a57789f323ba15fff0141c6064098c7111b48b07",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-smoke-unavailable-feedback.png",
+      "width": 1440,
+      "scene": "smoke-unavailable",
+      "stage": "partial",
+      "suffix": "feedback",
+      "sha256": "2e83d93a3beb620219a78ea74e06007838cc9232b4b1cf2a3ecf8602bdc99422",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-enabling-feedback.png",
+      "width": 1440,
+      "scene": "enabling",
+      "stage": "enabling",
+      "suffix": "feedback",
+      "sha256": "40408766ce84bd22e4502380fcdf220a255c2d1ba5237d2d84aeb9f981dd860a",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-enable-failure-feedback.png",
+      "width": 1440,
+      "scene": "enable-failure",
+      "stage": "partial",
+      "suffix": "feedback",
+      "sha256": "be365cd36ee5040a060b660e7535015782126b363081e429a8cae115ad329950",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-smoke-success-feedback.png",
+      "width": 1440,
+      "scene": "smoke-success",
+      "stage": "success",
+      "suffix": "feedback",
+      "sha256": "811b51bccd9d69ef8d3db4651ff57cc428ebd89a31843e3dcf267b79ecf6a7ed",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/index.html": "0376c4bf04227ac5dbb6bb43895e5ed97eef6ca8bde54f08774908d3f07d9d88",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "66b064c2135275b9d173ef316692366823ef4f6276002796d9ed112183218cef",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/provider-adapters-c-detail.css": "094a11fe39b3701c35d6061f7a570e940b3bb00abcc0b2ed7f64ffeaea0c6bdd",
+    "apps/web/src/provider-adapters-c-feedback.css": "64b09e635e98f8865ea2fb3c8b33b1d21f447affd55061f3d01cf6667904bba2",
+    "apps/web/src/provider-adapters-c-page.css": "899ca57a21bceef95c7dc030bb7f92bae1755f324b1d26c3f0ba692dad736c86",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/route-catalog.generated.json": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-source-configuration-preview.css": "2bd757ad7bd01ed92ce3784552fc6d9f6e95a14ae0a46cb2aeedbe754fe715d8",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-source-configuration-states-preview.css": "ea8e427121b63b8d7a8b1bcc7e5d8d7acb863ef2cf7cc4ae27f680de84ff9d9f",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-sources-page-preview.css": "0ad5722b2920de2f07d92f37afb706266dde7726b4677a4bdbf8107cb00744e7",
+    "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
+    "scripts/lib/ui-phase2-provider-source-configuration-preview.mjs": "4a593c661cb10716756767b5ff273a5f5f643cc4d90ae8f0d025ba003332b78a",
+    "scripts/lib/ui-phase2-provider-source-configuration-states-preview.mjs": "14f47595f57882d51fb77ab5aea0f02208e38fd6a40a14ec31d3e58c4ef10e20",
+    "scripts/verify-ui-phase2-provider-source-configuration-states.mjs": "c8b7602dffb2db184e1ad1157eceed7d096fcfade4e3f3ebb88727df0d348514",
+    "tests/e2e/m03-07-provider-sources.spec.ts": "29c1232a33cb260beeee6851f33c4558873d25e47e538d6a2e04c47eaa6ba5fe"
+  }
+}

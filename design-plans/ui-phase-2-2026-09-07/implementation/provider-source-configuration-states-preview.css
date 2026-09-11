@@ -1,0 +1,114 @@
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback {
+  display: grid;
+  gap: 7px;
+  padding: 18px 32px;
+  border-bottom: 1px solid #cbdcf6;
+  border-left: 5px solid #3478df;
+  background: #edf5ff;
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback > p:first-child {
+  margin: 0;
+  color: #0f4cbd;
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback h4 {
+  margin: 0;
+  color: #172033;
+  font-size: 18px;
+  line-height: 1.35;
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback > p:last-of-type {
+  margin: 0;
+  color: #465b76;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback[data-stage="success"] {
+  border-color: #27865b;
+  background: #edf9f3;
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback[data-stage="success"] > p:first-child {
+  color: #18724b;
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback[data-stage="partial"],
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback[data-stage="conflict"] {
+  border-color: #d97706;
+  background: #fff8e8;
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback[data-stage="partial"] > p:first-child,
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback[data-stage="conflict"] > p:first-child {
+  color: #9a5200;
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback[data-stage="failed"] {
+  border-color: #c34444;
+  background: #fff1f1;
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback[data-stage="failed"] > p:first-child {
+  color: #a83232;
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback details {
+  width: fit-content;
+  color: #465b76;
+  font-size: 12px;
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback code {
+  display: block;
+  max-width: 100%;
+  padding: 8px 10px;
+  overflow-wrap: anywhere;
+  border-radius: 8px;
+  color: #243247;
+  background: rgb(255 255 255 / 72%);
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback h4:focus-visible {
+  outline: 3px solid #66a3ff;
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-form :is(input, select, textarea):disabled {
+  color: #687991;
+  background: #eef2f7;
+  cursor: wait;
+  opacity: 1;
+}
+
+body.p48-source-configuration-states-review .source-center .p48-source-configuration-actions button:disabled {
+  color: #75849a;
+  background: #e6ebf2;
+  cursor: wait;
+  opacity: 1;
+}
+
+@media (max-width: 760px) {
+  body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback {
+    padding: 16px 20px;
+  }
+}
+
+@media (forced-colors: active) {
+  body.p48-source-configuration-states-review .source-center .p48-source-configuration-save-feedback {
+    border: 2px solid CanvasText;
+  }
+}
