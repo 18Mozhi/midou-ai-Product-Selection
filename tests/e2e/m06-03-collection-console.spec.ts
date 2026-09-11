@@ -199,6 +199,98 @@ test("M06-03.A07/A08/A15 filters source and time, drills exact root cause, and r
   await attemptDrawer.getByRole("button", { name: "关闭详情" }).click();
 });
 
+test("UI2-CL52 isolates the overview while batch confirmation owns focus", async ({ page }) => {
+  await navigation(page);
+  await page.route("**/api/v1/platform/collection/console?**", (route) =>
+    route.fulfill({ json: envelope(batchConsoleData()) }),
+  );
+  await page.goto("/platform-admin/collection/overview");
+
+  const panel = await previewTwoItemBatch(page);
+  const overview = page.locator(".collection-ops");
+  const dialog = page.getByRole("alertdialog", { name: "确认批量重放开放死信？" });
+  const cancel = dialog.getByRole("button", { name: "取消" });
+  await expect(dialog).toBeVisible();
+  await expect(overview).toHaveAttribute("inert", "");
+  await expect(cancel).toBeFocused();
+
+  await page.keyboard.press("Shift+Tab");
+  await expect(dialog.getByPlaceholder("确认重放")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(overview).not.toHaveAttribute("inert", "");
+  await expect(panel.getByRole("button", { name: "预览批量重放" })).toBeFocused();
+});
+
+test("UI2-CL52 associates source disclosure and batch reason validation", async ({ page }) => {
+  await navigation(page);
+  const expandedSources = Array.from({ length: 9 }, (_, index) => ({
+    ...data.sources[0],
+    id: `00000000-0000-4000-8000-${String(730 + index).padStart(12, "0")}`,
+    name: `关联来源 ${index + 1}`,
+  }));
+  await page.route("**/api/v1/platform/collection/console?**", (route) =>
+    route.fulfill({ json: envelope({ ...batchConsoleData(), sources: expandedSources }) }),
+  );
+  await page.goto("/platform-admin/collection/overview");
+
+  const disclosure = page.getByRole("button", { name: /查看全部 9 个来源/ });
+  await expect(disclosure).toHaveAttribute("aria-controls", "collection-source-results");
+  await expect(page.locator("#collection-source-results")).toBeVisible();
+
+  await page.getByText("批量安全重放", { exact: true }).click();
+  const panel = page.locator("details").filter({
+    has: page.getByRole("button", { name: "预览批量重放" }),
+  });
+  await panel.getByRole("checkbox").first().check();
+  const reason = panel.getByLabel("批量重放原因");
+  await panel.getByRole("button", { name: "预览批量重放" }).click();
+
+  await expect(reason).toHaveAttribute("aria-invalid", "true");
+  await expect(reason).toHaveAttribute(
+    "aria-describedby",
+    "collection-batch-reason-help collection-batch-reason-error",
+  );
+  await expect(panel.getByText("重放原因需要 2–500 字符。", { exact: true })).toBeVisible();
+  await expect(reason).toBeFocused();
+
+  await reason.fill("解析器已完成固定样本回放");
+  await expect(reason).not.toHaveAttribute("aria-invalid", "true");
+  await expect(reason).toHaveAttribute("aria-describedby", "collection-batch-reason-help");
+  await expect(panel.getByText("重放原因需要 2–500 字符。", { exact: true })).toHaveCount(0);
+});
+
+test("UI2-CL52 preserves responsive record focus isolation and return", async ({ page }) => {
+  await navigation(page);
+  await page.route("**/api/v1/platform/collection/console?**", (route) =>
+    route.fulfill({ json: envelope(data) }),
+  );
+  await page.goto("/platform-admin/collection/overview");
+
+  if ((page.viewportSize()?.width ?? 0) > 760) {
+    await expect(page.getByRole("cell", { name: "第 2 次" })).toBeVisible();
+    return;
+  }
+
+  const trigger = page.getByRole("button", { name: /第 2 次尝试/ });
+  await trigger.click();
+  const drawer = page.getByRole("dialog", { name: "第 2 次尝试详情" });
+  const close = drawer.getByRole("button", { name: "关闭详情" });
+  const technicalDetails = drawer.locator("summary", { hasText: "技术详情" });
+  await expect(drawer).toBeVisible();
+  await expect(page.locator("#app")).toHaveAttribute("inert", "");
+  await expect(close).toBeFocused();
+
+  await page.keyboard.press("Shift+Tab");
+  await expect(technicalDetails).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(close).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(drawer).toHaveCount(0);
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  await expect(trigger).toBeFocused();
+});
+
 test("M06-03 distinguishes network login captcha and parser alert categories", async ({ page }) => {
   await navigation(page);
   await page.route("**/api/v1/platform/collection/console?**", (route) =>

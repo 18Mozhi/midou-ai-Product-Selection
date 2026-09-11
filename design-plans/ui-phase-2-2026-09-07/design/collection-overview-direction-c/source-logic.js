@@ -4,8 +4,11 @@ window.OVERVIEW_C_SOURCE = (bridge) => {
     ref,
     computed,
     nextTick,
+    onActivated,
     onBeforeUnmount,
+    onDeactivated,
     onMounted,
+    watch,
     useRoute,
     useRouter,
     defineProps,
@@ -70,41 +73,57 @@ window.OVERVIEW_C_SOURCE = (bridge) => {
   const request = createApiClient(props.apiBaseUrl);
   const route = useRoute(),
     router = useRouter(),
-    queryText = (name) => {
-      const value = route.query[name];
-      return typeof value === "string" ? value : "";
+    queryText = (value) => (typeof value === "string" ? value : ""),
+    queryPage = (value) => {
+      const text = queryText(value);
+      return /^\d{1,6}$/.test(text) && Number(text) > 0 ? Number(text) : 1;
     },
-    queryPage = (name) => {
-      const value = queryText(name);
-      return /^\d{1,6}$/.test(value) && Number(value) > 0 ? Number(value) : 1;
+    queryWindow = (value) => {
+      const text = queryText(value);
+      return ["24h", "7d", "30d", "all"].includes(text) ? text : "24h";
     },
-    initialWindow = ["24h", "7d", "30d", "all"].includes(queryText("window"))
-      ? queryText("window")
-      : "24h";
+    routeScope = () => ({
+      organizationId: queryText(route.query.organization_id),
+      workspaceId: queryText(route.query.workspace_id),
+      providerId: queryText(route.query.provider_id),
+      window: queryWindow(route.query.window),
+      errorCode: queryText(route.query.error_code),
+      attemptPage: queryPage(route.query.attempt_page),
+      deadLetterPage: queryPage(route.query.dead_letter_page),
+    }),
+    initialScope = routeScope();
   const state = ref("loading"),
     data = ref(null),
-    org = ref(queryText("organization_id")),
-    workspace = ref(queryText("workspace_id")),
-    provider = ref(queryText("provider_id")),
-    timeWindow = ref(initialWindow),
-    errorCode = ref(queryText("error_code")),
-    attemptPage = ref(queryPage("attempt_page")),
-    deadLetterPage = ref(queryPage("dead_letter_page")),
+    org = ref(initialScope.organizationId),
+    workspace = ref(initialScope.workspaceId),
+    provider = ref(initialScope.providerId),
+    timeWindow = ref(initialScope.window),
+    errorCode = ref(initialScope.errorCode),
+    attemptPage = ref(initialScope.attemptPage),
+    deadLetterPage = ref(initialScope.deadLetterPage),
     requestId = ref(""),
     hint = ref(""),
     refreshNotice = ref(""),
     refreshing = ref(false),
     selectedDeadLetterIds = ref([]),
     batchReason = ref(""),
+    batchReasonIssue = ref(""),
+    batchReasonField = ref(null),
     batchPreview = ref(false),
-    batchId = ref(""),
+    batchSnapshot = ref(null),
     batchBusy = ref(false),
+    batchUnknown = ref(false),
     batchNotice = ref(""),
     batchFailures = ref([]),
     sourcesExpanded = ref(false),
     rootCauseSection = ref(null);
-  let activeController = null;
+  let activeController = null,
+    readSequence = 0,
+    pageActive = true,
+    resumeRead = false,
+    detachedBatchSettlement = null;
   const sourceDisplayLimit = 8;
+  const batchReasonValidationMessage = "重放原因需要 2–500 字符。";
   const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   const selectedDeadLetters = computed(() =>
       (data.value?.dead_letters ?? []).filter(
@@ -122,6 +141,7 @@ window.OVERVIEW_C_SOURCE = (bridge) => {
         workspaceCount = new Set(items.map((item) => item.workspace_id)).size;
       return `${items.length} 条开放死信；${organizationCount} 个组织；${workspaceCount} 个工作区；根因：${rootSummary || "无"}。`;
     }),
+    batchConfirmationImpact = computed(() => batchSnapshot.value?.impact ?? batchImpact.value),
     scopeFilterCount = computed(
       () =>
         [org.value, workspace.value, provider.value, errorCode.value].filter(Boolean).length +
@@ -154,46 +174,89 @@ window.OVERVIEW_C_SOURCE = (bridge) => {
     if (provider.value && !uuidPattern.test(provider.value)) return "请选择有效的采集来源。";
     return "";
   }
-  async function syncUrl() {
+  const readScope = () => ({
+    organizationId: org.value.trim(),
+    workspaceId: workspace.value.trim(),
+    providerId: provider.value,
+    window: timeWindow.value,
+    errorCode: errorCode.value,
+    attemptPage: attemptPage.value,
+    deadLetterPage: deadLetterPage.value,
+  });
+  function applyRouteScope() {
+    const next = routeScope();
+    const changed =
+      org.value !== next.organizationId ||
+      workspace.value !== next.workspaceId ||
+      provider.value !== next.providerId ||
+      timeWindow.value !== next.window ||
+      errorCode.value !== next.errorCode ||
+      attemptPage.value !== next.attemptPage ||
+      deadLetterPage.value !== next.deadLetterPage;
+    if (!changed) return false;
+    org.value = next.organizationId;
+    workspace.value = next.workspaceId;
+    provider.value = next.providerId;
+    timeWindow.value = next.window;
+    errorCode.value = next.errorCode;
+    attemptPage.value = next.attemptPage;
+    deadLetterPage.value = next.deadLetterPage;
+    return true;
+  }
+  async function syncUrl(scope = readScope()) {
     const query = {};
-    if (org.value.trim()) query.organization_id = org.value.trim();
-    if (workspace.value.trim()) query.workspace_id = workspace.value.trim();
-    if (provider.value) query.provider_id = provider.value;
-    if (timeWindow.value !== "24h") query.window = timeWindow.value;
-    if (errorCode.value) query.error_code = errorCode.value;
-    if (attemptPage.value > 1) query.attempt_page = String(attemptPage.value);
-    if (deadLetterPage.value > 1) query.dead_letter_page = String(deadLetterPage.value);
+    if (scope.organizationId) query.organization_id = scope.organizationId;
+    if (scope.workspaceId) query.workspace_id = scope.workspaceId;
+    if (scope.providerId) query.provider_id = scope.providerId;
+    if (scope.window !== "24h") query.window = scope.window;
+    if (scope.errorCode) query.error_code = scope.errorCode;
+    if (scope.attemptPage > 1) query.attempt_page = String(scope.attemptPage);
+    if (scope.deadLetterPage > 1) query.dead_letter_page = String(scope.deadLetterPage);
     if (route.query.root_cause === "1") query.root_cause = "1";
     await router.replace({ query });
   }
   async function load(options = {}) {
-    if (refreshing.value) return;
+    if (batchBusy.value) {
+      resumeRead = true;
+      return;
+    }
+    const sequence = ++readSequence;
+    activeController?.abort("superseded");
+    activeController = null;
     const validation = scopeValidation();
     if (validation) {
       refreshNotice.value = validation;
+      if (!data.value) {
+        hint.value = validation;
+        state.value = "blocked";
+      }
+      refreshing.value = false;
       return;
     }
+    const scope = readScope();
     const hadData = Boolean(data.value);
     refreshing.value = true;
     refreshNotice.value = "";
     hint.value = "";
     if (!hadData) state.value = "loading";
     const q = new URLSearchParams();
-    if (org.value.trim()) q.set("organization_id", org.value.trim());
-    if (workspace.value.trim()) q.set("workspace_id", workspace.value.trim());
-    if (provider.value) q.set("provider_id", provider.value);
-    q.set("window", timeWindow.value);
-    if (errorCode.value) q.set("error_code", errorCode.value);
-    q.set("attempt_page", String(attemptPage.value));
-    q.set("dead_letter_page", String(deadLetterPage.value));
+    if (scope.organizationId) q.set("organization_id", scope.organizationId);
+    if (scope.workspaceId) q.set("workspace_id", scope.workspaceId);
+    if (scope.providerId) q.set("provider_id", scope.providerId);
+    q.set("window", scope.window);
+    if (scope.errorCode) q.set("error_code", scope.errorCode);
+    q.set("attempt_page", String(scope.attemptPage));
+    q.set("dead_letter_page", String(scope.deadLetterPage));
     activeController = new AbortController();
     const controller = activeController;
-    const timer = window.setTimeout(() => controller.abort(), 15_000);
+    const timer = window.setTimeout(() => controller.abort("request_timeout"), 15_000);
     try {
-      if (options.updateUrl !== false) await syncUrl();
+      if (options.updateUrl !== false) await syncUrl(scope);
+      if (sequence !== readSequence || !pageActive) return;
       const response = await request(`/platform/collection/console?${q}`, {
         signal: controller.signal,
       });
+      if (sequence !== readSequence || !pageActive) return;
       requestId.value = response.request_id;
       data.value = response.data;
       const openIds = new Set(
@@ -204,12 +267,16 @@ window.OVERVIEW_C_SOURCE = (bridge) => {
         response.data.sources.length +
         response.data.task_states.length +
         response.data.dead_letters.length +
-        response.data.quality.length
+        response.data.quality.length +
+        response.data.attempts.length
           ? "ready"
           : "empty";
     } catch (error) {
+      if (sequence !== readSequence || !pageActive) return;
       const failure = error instanceof ApiClientError ? error : null;
-      const message = controller.signal.aborted
+      const timedOut = controller.signal.aborted && controller.signal.reason === "request_timeout";
+      if (controller.signal.aborted && !timedOut) return;
+      const message = timedOut
         ? "读取超过 15 秒，已安全取消；当前已验证数据仍保留。"
         : (failure?.actionHint ?? "网络或服务异常，当前已验证数据仍保留。");
       if (hadData) {
@@ -225,18 +292,64 @@ window.OVERVIEW_C_SOURCE = (bridge) => {
     } finally {
       window.clearTimeout(timer);
       if (activeController === controller) activeController = null;
-      refreshing.value = false;
+      if (sequence === readSequence) refreshing.value = false;
     }
+  }
+  async function focusRootCause() {
+    await nextTick();
+    rootCauseSection.value?.scrollIntoView({ block: "start" });
+    rootCauseSection.value?.focus();
+  }
+  function suspendPage(reason) {
+    const interrupted = Boolean(activeController);
+    pageActive = false;
+    readSequence += 1;
+    activeController?.abort(reason);
+    activeController = null;
+    refreshing.value = false;
+    resumeRead ||= reason === "deactivated" && interrupted;
+    if (!batchBusy.value) cancelBatchPreview();
   }
   onMounted(async () => {
     await load();
-    if (route.query.root_cause === "1") {
-      await nextTick();
-      rootCauseSection.value?.scrollIntoView({ block: "start" });
-      rootCauseSection.value?.focus();
+    if (route.query.root_cause === "1") await focusRootCause();
+  });
+  watch(
+    () => [
+      route.path,
+      route.query.organization_id,
+      route.query.workspace_id,
+      route.query.provider_id,
+      route.query.window,
+      route.query.error_code,
+      route.query.attempt_page,
+      route.query.dead_letter_page,
+      route.query.root_cause,
+    ],
+    async ([path, , , , , , , , rootCause], previous) => {
+      if (path !== "/platform-admin/collection/overview" || !pageActive) return;
+      if (applyRouteScope()) await load({ updateUrl: false });
+      if (rootCause === "1" && previous?.[8] !== "1") await focusRootCause();
+    },
+  );
+  onBeforeUnmount(() => suspendPage("unmounted"));
+  onDeactivated(() => suspendPage("deactivated"));
+  onActivated(() => {
+    pageActive = true;
+    if (route.path !== "/platform-admin/collection/overview") return;
+    const routeChanged = applyRouteScope();
+    if (detachedBatchSettlement) {
+      const settlement = detachedBatchSettlement;
+      detachedBatchSettlement = null;
+      resumeRead = false;
+      void applyBatchSettlement(settlement);
+      return;
+    }
+    if (routeChanged || resumeRead) {
+      resumeRead = false;
+      void load({ updateUrl: false });
     }
   });
-  onBeforeUnmount(() => activeController?.abort());
   const when = (v) => (v ? new Date(v).toLocaleString("zh-CN", { hour12: false }) : "未检查"),
     linkLabels = {
       provider_registry: "来源配置",
@@ -297,18 +410,20 @@ window.OVERVIEW_C_SOURCE = (bridge) => {
     attemptRowKey = (item) => item.id,
     attemptDetailTitle = (item) => `第 ${item.attempt_number} 次尝试详情`,
     drillRootCause = async (value) => {
-      if (refreshing.value) return;
+      if (refreshing.value || batchBusy.value) return;
       errorCode.value = errorCode.value === value ? "" : value;
       attemptPage.value = 1;
       deadLetterPage.value = 1;
       await load();
     };
   function applyScope() {
+    if (batchBusy.value) return;
     attemptPage.value = 1;
     deadLetterPage.value = 1;
     void load();
   }
   function resetScope() {
+    if (batchBusy.value) return;
     org.value = "";
     workspace.value = "";
     provider.value = "";
@@ -319,7 +434,7 @@ window.OVERVIEW_C_SOURCE = (bridge) => {
     void load();
   }
   function goToPage(kind, page) {
-    if (refreshing.value || page < 1) return;
+    if (refreshing.value || batchBusy.value || page < 1) return;
     if (kind === "attempts") attemptPage.value = page;
     else deadLetterPage.value = page;
     void load();
@@ -344,47 +459,106 @@ window.OVERVIEW_C_SOURCE = (bridge) => {
     }
     selectedDeadLetterIds.value = [...selectedDeadLetterIds.value, id];
   }
+  function clearBatchReasonIssue() {
+    batchReasonIssue.value = "";
+    if (batchNotice.value === batchReasonValidationMessage) batchNotice.value = "";
+  }
   function previewBatchReplay() {
     batchNotice.value = "";
+    batchReasonIssue.value = "";
     batchFailures.value = [];
+    if (batchUnknown.value) {
+      batchNotice.value = "已有结果未知，请先到对应任务核查；当前页面不会自动重发。";
+      return;
+    }
     if (!selectedDeadLetters.value.length) {
       batchNotice.value = "请先选择要重放的开放死信。";
       return;
     }
     if (batchReason.value.trim().length < 2 || batchReason.value.length > 500) {
-      batchNotice.value = "重放原因需要 2–500 字符。";
+      batchNotice.value = batchReasonValidationMessage;
+      batchReasonIssue.value = batchReasonValidationMessage;
+      void nextTick(() => batchReasonField.value?.focus());
       return;
     }
-    batchId.value = crypto.randomUUID();
+    batchSnapshot.value = {
+      id: crypto.randomUUID(),
+      items: selectedDeadLetters.value.map((item) => ({
+        id: item.id,
+        task_id: item.task_id,
+        organization_id: item.organization_id,
+        workspace_id: item.workspace_id,
+        error_code: item.error_code,
+      })),
+      reason: batchReason.value.trim(),
+      impact: batchImpact.value,
+    };
     batchPreview.value = true;
   }
-  async function confirmBatchReplay() {
+  function cancelBatchPreview() {
     if (batchBusy.value) return;
+    batchPreview.value = false;
+    batchSnapshot.value = null;
+  }
+  const unknownWriteStatuses = new Set([0, 408, 425, 429, 502, 503, 504]);
+  function batchFailure(error, item) {
+    const failure = error instanceof ApiClientError ? error : null;
+    const unknown = !failure || unknownWriteStatuses.has(failure.status);
+    return {
+      deadLetterId: item.id,
+      taskId: item.task_id,
+      unknown,
+      reason: unknown
+        ? "结果暂时无法确认。请先进入对应任务核对，不要立即重复提交。"
+        : failure.actionHint || "重放请求未完成，请查看任务详情与服务端日志。",
+    };
+  }
+  async function applyBatchSettlement(settlement) {
+    if (!pageActive) {
+      detachedBatchSettlement = settlement;
+      return;
+    }
+    const succeeded = new Set(settlement.succeededIds);
+    selectedDeadLetterIds.value = selectedDeadLetterIds.value.filter((id) => !succeeded.has(id));
+    batchFailures.value = settlement.failures;
+    const unknownCount = settlement.failures.filter((failure) => failure.unknown).length;
+    const explicitFailureCount = settlement.failures.length - unknownCount;
+    batchUnknown.value ||= unknownCount > 0;
+    batchNotice.value = `本批请求已结束：创建新任务 ${succeeded.size} 条，明确失败 ${explicitFailureCount} 条，结果未知 ${unknownCount} 条。不是采集执行成功。`;
+    if (settlement.requestId) requestId.value = settlement.requestId;
+    resumeRead = false;
+    await load({ updateUrl: false });
+  }
+  async function confirmBatchReplay() {
+    const snapshot = batchSnapshot.value;
+    if (batchBusy.value || !snapshot) return;
     batchBusy.value = true;
     batchPreview.value = false;
-    const batchItems = [...selectedDeadLetters.value];
-    const succeeded = new Set();
+    batchNotice.value = "正在逐条创建新任务；离开页面不等于取消已经提交的请求。";
     batchFailures.value = [];
-    for (const item of batchItems) {
+    const settlement = {
+      succeededIds: [],
+      failures: [],
+      requestId: "",
+    };
+    for (const item of snapshot.items) {
       try {
-        await request(`/platform/collection/tasks/${item.task_id}/replay`, {
+        const response = await request(`/platform/collection/tasks/${item.task_id}/replay`, {
           method: "POST",
-          idempotencyKey: `dead-batch:${batchId.value}:${item.task_id}`,
-          body: { reason: batchReason.value.trim() },
+          idempotencyKey: `dead-batch:${snapshot.id}:${item.task_id}`,
+          body: { reason: snapshot.reason },
         });
-        succeeded.add(item.id);
+        settlement.succeededIds.push(item.id);
+        settlement.requestId = response.request_id;
       } catch (error) {
-        const failure = error instanceof ApiClientError ? error : null;
-        batchFailures.value.push({
-          task: item.task_id.slice(0, 8),
-          reason: failure?.actionHint ?? "重放请求失败，请查看任务详情与服务端日志。",
-        });
+        const failure = batchFailure(error, item);
+        settlement.failures.push(failure);
+        if (error instanceof ApiClientError) settlement.requestId = error.requestId;
       }
     }
-    selectedDeadLetterIds.value = selectedDeadLetterIds.value.filter((id) => !succeeded.has(id));
-    batchNotice.value = `批量重放完成：成功 ${succeeded.size} 条，失败 ${batchFailures.value.length} 条；每条均保留独立任务历史、幂等记录与审计。`;
     batchBusy.value = false;
-    await load({ updateUrl: false });
+    batchSnapshot.value = null;
+    await applyBatchSettlement(settlement);
   }
 
   return {
@@ -404,8 +578,9 @@ window.OVERVIEW_C_SOURCE = (bridge) => {
     selectedDeadLetterIds,
     batchReason,
     batchPreview,
-    batchId,
+    batchSnapshot,
     batchBusy,
+    batchUnknown,
     batchNotice,
     batchFailures,
     sourcesExpanded,

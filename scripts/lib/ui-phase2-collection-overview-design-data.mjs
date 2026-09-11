@@ -13,13 +13,20 @@ export async function buildOverviewData(repo) {
   const fixturePath = "tests/e2e/m06-03-collection-console.spec.ts";
   const fixture = parse(await read(fixturePath));
   const declarations = [];
+  const functions = [];
   const visit = (n) => {
     if (ts.isVariableDeclaration(n)) declarations.push(n);
+    if (ts.isFunctionDeclaration(n) && n.name) functions.push(n);
     ts.forEachChild(n, visit);
   };
   visit(fixture);
-  const decl = (name) =>
-    declarations.find((n) => n.name.getText(fixture) === name)?.getText(fixture);
+  const decl = (name, marker = "") =>
+    declarations
+      .find(
+        (n) => n.name.getText(fixture) === name && (!marker || n.getText(fixture).includes(marker)),
+      )
+      ?.getText(fixture);
+  const fn = (name) => functions.find((n) => n.name?.getText(fixture) === name)?.getText(fixture);
   const prefix = `const ${decl("providerId")}; const ${decl("data")};`;
   function run(text, bindings = {}) {
     const b = { ...bindings };
@@ -30,10 +37,12 @@ export async function buildOverviewData(repo) {
   const batch = plain(
     run(
       prefix +
-        `const ${decl("secondTaskId")};const ${decl("batchData")};globalThis.result=batchData;`,
+        `const ${decl("secondBatchTaskId")};${fn("batchConsoleData")};globalThis.result=batchConsoleData();`,
     ),
   );
-  const catalog = plain(run(prefix + `const ${decl("sources")};globalThis.result=sources;`));
+  const catalog = plain(
+    run(prefix + `const ${decl("sources", "length: 14")};globalThis.result=sources;`),
+  );
   const paged = plain(run(prefix + `const ${decl("paged")};globalThis.result=paged;`));
   assert.equal(catalog.length, 14);
   const vuePath = "apps/web/src/components/CollectionOperationsConsole.vue";
@@ -46,8 +55,8 @@ export async function buildOverviewData(repo) {
   const labelsPath = "apps/web/src/ui/status-labels.ts";
   const labels = compile((await read(labelsPath)).replaceAll("export ", ""));
   const names =
-    "state,data,org,workspace,provider,timeWindow,errorCode,attemptPage,deadLetterPage,requestId,hint,refreshNotice,refreshing,selectedDeadLetterIds,batchReason,batchPreview,batchId,batchBusy,batchNotice,batchFailures,sourcesExpanded,selectedDeadLetters,batchImpact,scopeFilterCount,orderedSources,visibleSources,hiddenSourceCount,scopeValidation,syncUrl,load,when,linkLabels,healthLabel,errorLabel,errorCategory,drillRootCause,applyScope,resetScope,goToPage,rangeLabel,toggleDeadLetter,previewBatchReplay,confirmBatchReplay,statusLabel";
-  const logic = `// Actual Vue script and status labels; inert bridge, not a Vue mount.\nwindow.OVERVIEW_C_SOURCE=(bridge)=>{const {ref,computed,nextTick,onBeforeUnmount,onMounted,useRoute,useRouter,defineProps,createApiClient,ApiClientError,window,AbortController,URLSearchParams,crypto}=bridge;\n${labels}\n${compile(stripped)}\nreturn {${names}};};`;
+    "state,data,org,workspace,provider,timeWindow,errorCode,attemptPage,deadLetterPage,requestId,hint,refreshNotice,refreshing,selectedDeadLetterIds,batchReason,batchPreview,batchSnapshot,batchBusy,batchUnknown,batchNotice,batchFailures,sourcesExpanded,selectedDeadLetters,batchImpact,scopeFilterCount,orderedSources,visibleSources,hiddenSourceCount,scopeValidation,syncUrl,load,when,linkLabels,healthLabel,errorLabel,errorCategory,drillRootCause,applyScope,resetScope,goToPage,rangeLabel,toggleDeadLetter,previewBatchReplay,confirmBatchReplay,statusLabel";
+  const logic = `// Actual Vue script and status labels; inert bridge, not a Vue mount.\nwindow.OVERVIEW_C_SOURCE=(bridge)=>{const {ref,computed,nextTick,onActivated,onBeforeUnmount,onDeactivated,onMounted,watch,useRoute,useRouter,defineProps,createApiClient,ApiClientError,window,AbortController,URLSearchParams,crypto}=bridge;\n${labels}\n${compile(stripped)}\nreturn {${names}};};`;
   class ApiClientError extends Error {
     constructor(kind) {
       super(kind);
@@ -62,8 +71,11 @@ export async function buildOverviewData(repo) {
     const calls = [],
       timers = [],
       unmount = [],
+      deactivated = [],
+      activated = [],
+      watchers = [],
       navigation = [];
-    const route = { query };
+    const route = { path: "/platform-admin/collection/overview", query };
     const c = b.window.OVERVIEW_C_SOURCE({
       ref: (value) => ({ value }),
       computed: (get) => ({
@@ -71,9 +83,12 @@ export async function buildOverviewData(repo) {
           return get();
         },
       }),
-      nextTick: async () => {},
+      nextTick: async (callback) => callback?.(),
       onMounted: () => {},
       onBeforeUnmount: (fn) => unmount.push(fn),
+      onDeactivated: (fn) => deactivated.push(fn),
+      onActivated: (fn) => activated.push(fn),
+      watch: (...args) => watchers.push(args),
       useRoute: () => route,
       useRouter: () => ({
         replace: async (v) => {
@@ -98,7 +113,7 @@ export async function buildOverviewData(repo) {
         clearTimeout: () => {},
       },
     });
-    return { c, calls, timers, unmount, navigation, route };
+    return { c, calls, timers, unmount, deactivated, activated, watchers, navigation, route };
   }
   const tick = async () => {
     for (let i = 0; i < 8; i++) await Promise.resolve();
@@ -140,16 +155,19 @@ export async function buildOverviewData(repo) {
       const work = x.c.load();
       await tick();
       assert.equal(x.timers[0].ms, 15000);
-      await x.c.load();
-      assert.equal(x.calls.length, 1);
-      if (kind === "timeout") x.timers[0].fn();
-      x.calls[0].reject(new ApiClientError(kind === "timeout" ? "blocked" : kind));
-      await work;
+      const replacement = x.c.load();
+      await tick();
+      assert.equal(x.calls.length, 2);
+      assert.equal(x.calls[0].options.signal.aborted, true);
+      x.calls[0].reject(new ApiClientError("blocked"));
+      if (kind === "timeout") x.timers[1].fn();
+      x.calls[1].reject(new ApiClientError(kind === "timeout" ? "blocked" : kind));
+      await Promise.all([work, replacement]);
       assert.equal(x.c.state.value, preserved ? "ready" : kind === "timeout" ? "blocked" : kind);
       if (preserved) assert.deepEqual(plain(x.c.data.value), original);
     }
   checks.push(
-    "Ten first/preserved error branches with actual 15-second abort callback and single-flight; no real clock or permission proof.",
+    "Ten first/preserved error branches with actual 15-second abort callback and superseded-read isolation; no real clock or permission proof.",
   );
   {
     const x = mount({
@@ -170,16 +188,19 @@ export async function buildOverviewData(repo) {
     x.c.timeWindow.value = "30d";
     x.c.applyScope();
     await tick();
-    assert.equal(x.calls.length, 1);
+    assert.equal(x.calls.length, 2);
+    assert.equal(x.calls[0].options.signal.aborted, true);
+    success(x.calls[1]);
     success(x.calls[0]);
     await work;
+    await tick();
     assert.equal(x.c.timeWindow.value, "30d");
     assert.equal(x.c.data.value.filters.window, "24h");
     x.c.org.value = "wrong";
     await x.c.load();
-    assert.equal(x.calls.length, 1);
+    assert.equal(x.calls.length, 2);
     checks.push(
-      "Initial URL/trim/exact paging and unknown-query removal verified; pending scope change ignored and draft/response mismatch reproduced.",
+      "Initial URL/trim/exact paging and unknown-query removal verified; a new scope supersedes the pending read and stale completion is ignored.",
     );
   }
   {
@@ -196,7 +217,7 @@ export async function buildOverviewData(repo) {
     await tick();
     success(x.calls[0], onlyAttempts);
     await work;
-    assert.equal(x.c.state.value, "empty");
+    assert.equal(x.c.state.value, "ready");
     assert.equal(x.c.data.value.attempts.length, 1);
     const work2 = x.c.load();
     await tick();
@@ -205,8 +226,9 @@ export async function buildOverviewData(repo) {
     success(x.calls[1]);
     await work2;
     assert.equal(x.c.state.value, "ready");
+    assert.deepEqual(plain(x.c.data.value), onlyAttempts);
     checks.push(
-      "Attempt-only response is hidden by ready predicate; success after abort still mutates source refs under controlled transport (not production reachability).",
+      "Attempt-only response remains factual ready content; a success resolved after unmount cannot mutate the retained snapshot.",
     );
   }
   {
@@ -222,19 +244,19 @@ export async function buildOverviewData(repo) {
     x.c.batchReason.value = "中途变更原因";
     success(x.calls[0]);
     await tick();
-    assert.equal(x.calls[1].options.body.reason, "中途变更原因");
+    assert.equal(x.calls[1].options.body.reason, "原始恢复原因");
     assert.equal(x.calls[0].options.body.reason, "原始恢复原因");
     assert.equal(new Set(x.calls.slice(0, 2).map((v) => v.options.idempotencyKey)).size, 2);
     x.calls[1].reject(new ApiClientError("blocked"));
     await tick();
-    assert.ok(x.c.batchNotice.value.includes("成功 1 条，失败 1 条"));
+    assert.ok(x.c.batchNotice.value.includes("创建新任务 1 条，明确失败 1 条，结果未知 0 条"));
     assert.deepEqual(plain(x.c.selectedDeadLetterIds.value), ["d2"]);
     x.calls[2].reject(new ApiClientError("blocked"));
     await work;
     assert.ok(x.c.refreshNotice.value);
     assert.ok(x.c.batchNotice.value);
     checks.push(
-      "Serial replay/single-flight/independent keys, partial selection and read/write messages verified; per-request reason drift reproduced.",
+      "Serial replay/single-flight/independent keys, frozen reason, partial settlement and separate read/write messages verified.",
     );
   }
   const servicePath = "apps/api/src/collection-console-service.ts";

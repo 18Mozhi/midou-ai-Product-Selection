@@ -83,6 +83,8 @@ const state = ref("loading"),
   refreshing = ref(false),
   selectedDeadLetterIds = ref<string[]>([]),
   batchReason = ref(""),
+  batchReasonIssue = ref(""),
+  batchReasonField = ref<HTMLTextAreaElement | null>(null),
   batchPreview = ref(false),
   batchSnapshot = ref<BatchReplaySnapshot | null>(null),
   batchBusy = ref(false),
@@ -97,6 +99,7 @@ let activeController: AbortController | null = null,
   resumeRead = false,
   detachedBatchSettlement: BatchReplaySettlement | null = null;
 const sourceDisplayLimit = 8;
+const batchReasonValidationMessage = "重放原因需要 2–500 字符。";
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const selectedDeadLetters = computed(() =>
     (data.value?.dead_letters ?? []).filter(
@@ -453,8 +456,14 @@ function toggleDeadLetter(id: string, event: Event) {
   selectedDeadLetterIds.value = [...selectedDeadLetterIds.value, id];
 }
 
+function clearBatchReasonIssue() {
+  batchReasonIssue.value = "";
+  if (batchNotice.value === batchReasonValidationMessage) batchNotice.value = "";
+}
+
 function previewBatchReplay() {
   batchNotice.value = "";
+  batchReasonIssue.value = "";
   batchFailures.value = [];
   if (batchUnknown.value) {
     batchNotice.value = "已有结果未知，请先到对应任务核查；当前页面不会自动重发。";
@@ -465,7 +474,9 @@ function previewBatchReplay() {
     return;
   }
   if (batchReason.value.trim().length < 2 || batchReason.value.length > 500) {
-    batchNotice.value = "重放原因需要 2–500 字符。";
+    batchNotice.value = batchReasonValidationMessage;
+    batchReasonIssue.value = batchReasonValidationMessage;
+    void nextTick(() => batchReasonField.value?.focus());
     return;
   }
   batchSnapshot.value = {
@@ -554,7 +565,7 @@ async function confirmBatchReplay() {
 }
 </script>
 <template>
-  <section class="collection-ops" :aria-busy="refreshing || batchBusy">
+  <section class="collection-ops" :aria-busy="refreshing || batchBusy" :inert="batchPreview">
     <header>
       <div class="collection-ops-heading">
         <div>
@@ -662,92 +673,94 @@ async function confirmBatchReplay() {
             <h3>来源与健康</h3>
             <span>共 {{ data.sources.length }} 个 · 异常优先</span>
           </header>
-          <ResponsiveDataView
-            v-if="data.sources.length"
-            title="来源与健康"
-            :rows="visibleSources"
-            :row-key="sourceRowKey"
-            :detail-title="sourceDetailTitle"
-          >
-            <template #desktop>
-              <table>
-                <thead>
-                  <tr>
-                    <th>来源</th>
-                    <th>状态</th>
-                    <th>健康</th>
-                    <th>连续失败</th>
-                    <th>最近检查</th>
-                    <th>技术详情</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="s in visibleSources" :key="s.id">
-                    <td>
-                      <b>{{ s.name }}</b
-                      ><small>{{ s.owner_label }}</small>
-                    </td>
-                    <td>{{ statusLabel(s.status) }}</td>
-                    <td>
-                      <i :data-health="s.health_status">{{ healthLabel(s.health_status) }}</i>
-                    </td>
-                    <td>{{ s.consecutive_failures }}</td>
-                    <td>{{ when(s.last_checked_at) }}</td>
-                    <td>
-                      <details>
-                        <summary>查看</summary>
-                        <code>{{ s.code }}</code>
-                      </details>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </template>
-            <template #summary="{ row: s }">
-              <span class="responsive-record-summary">
-                <strong>{{ s.name }}</strong>
-                <span>{{ statusLabel(s.status) }} · {{ healthLabel(s.health_status) }}</span>
-                <small>{{ s.owner_label }} · 最近检查 {{ when(s.last_checked_at) }}</small>
-              </span>
-            </template>
-            <template #detail="{ row: s }">
-              <dl>
-                <div>
-                  <dt>来源</dt>
-                  <dd>{{ s.name }}</dd>
-                </div>
-                <div>
-                  <dt>负责人</dt>
-                  <dd>{{ s.owner_label }}</dd>
-                </div>
-                <div>
-                  <dt>运行状态</dt>
-                  <dd>{{ statusLabel(s.status) }}</dd>
-                </div>
-                <div>
-                  <dt>健康状态</dt>
-                  <dd>{{ healthLabel(s.health_status) }}</dd>
-                </div>
-                <div>
-                  <dt>连续失败</dt>
-                  <dd>{{ s.consecutive_failures }}</dd>
-                </div>
-                <div>
-                  <dt>最近检查</dt>
-                  <dd>{{ when(s.last_checked_at) }}</dd>
-                </div>
-              </dl>
-              <details>
-                <summary>技术详情</summary>
-                <code>{{ s.code }}</code>
-              </details>
-            </template>
-          </ResponsiveDataView>
+          <div v-if="data.sources.length" id="collection-source-results">
+            <ResponsiveDataView
+              title="来源与健康"
+              :rows="visibleSources"
+              :row-key="sourceRowKey"
+              :detail-title="sourceDetailTitle"
+            >
+              <template #desktop>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>来源</th>
+                      <th>状态</th>
+                      <th>健康</th>
+                      <th>连续失败</th>
+                      <th>最近检查</th>
+                      <th>技术详情</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="s in visibleSources" :key="s.id">
+                      <td>
+                        <b>{{ s.name }}</b
+                        ><small>{{ s.owner_label }}</small>
+                      </td>
+                      <td>{{ statusLabel(s.status) }}</td>
+                      <td>
+                        <i :data-health="s.health_status">{{ healthLabel(s.health_status) }}</i>
+                      </td>
+                      <td>{{ s.consecutive_failures }}</td>
+                      <td>{{ when(s.last_checked_at) }}</td>
+                      <td>
+                        <details>
+                          <summary>查看</summary>
+                          <code>{{ s.code }}</code>
+                        </details>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </template>
+              <template #summary="{ row: s }">
+                <span class="responsive-record-summary">
+                  <strong>{{ s.name }}</strong>
+                  <span>{{ statusLabel(s.status) }} · {{ healthLabel(s.health_status) }}</span>
+                  <small>{{ s.owner_label }} · 最近检查 {{ when(s.last_checked_at) }}</small>
+                </span>
+              </template>
+              <template #detail="{ row: s }">
+                <dl>
+                  <div>
+                    <dt>来源</dt>
+                    <dd>{{ s.name }}</dd>
+                  </div>
+                  <div>
+                    <dt>负责人</dt>
+                    <dd>{{ s.owner_label }}</dd>
+                  </div>
+                  <div>
+                    <dt>运行状态</dt>
+                    <dd>{{ statusLabel(s.status) }}</dd>
+                  </div>
+                  <div>
+                    <dt>健康状态</dt>
+                    <dd>{{ healthLabel(s.health_status) }}</dd>
+                  </div>
+                  <div>
+                    <dt>连续失败</dt>
+                    <dd>{{ s.consecutive_failures }}</dd>
+                  </div>
+                  <div>
+                    <dt>最近检查</dt>
+                    <dd>{{ when(s.last_checked_at) }}</dd>
+                  </div>
+                </dl>
+                <details>
+                  <summary>技术详情</summary>
+                  <code>{{ s.code }}</code>
+                </details>
+              </template>
+            </ResponsiveDataView>
+          </div>
           <button
             v-if="data.sources.length > sourceDisplayLimit"
             type="button"
             class="collection-source-disclosure"
             :aria-expanded="sourcesExpanded"
+            aria-controls="collection-source-results"
             @click="sourcesExpanded = !sourcesExpanded"
           >
             {{
@@ -940,7 +953,9 @@ async function confirmBatchReplay() {
             <h3>开放与已重放死信</h3>
             <span>{{ rangeLabel(data.pagination?.dead_letters) }}</span>
           </header>
-          <p v-if="batchNotice" aria-live="polite">{{ batchNotice }}</p>
+          <div class="collection-batch-notice" aria-live="polite">
+            <p v-if="batchNotice">{{ batchNotice }}</p>
+          </div>
           <details v-if="batchFailures.length" class="collection-batch-failures">
             <summary>查看失败或未知条目（{{ batchFailures.length }}）</summary>
             <ul>
@@ -967,11 +982,29 @@ async function confirmBatchReplay() {
             <label>
               批量重放原因
               <textarea
+                ref="batchReasonField"
                 v-model="batchReason"
                 maxlength="500"
                 :disabled="batchBusy || batchUnknown"
+                :aria-invalid="batchReasonIssue ? 'true' : undefined"
+                :aria-describedby="
+                  batchReasonIssue
+                    ? 'collection-batch-reason-help collection-batch-reason-error'
+                    : 'collection-batch-reason-help'
+                "
                 placeholder="说明恢复条件和重放原因（2–500 字）"
+                @input="clearBatchReasonIssue"
               ></textarea>
+              <small id="collection-batch-reason-help"
+                >仅在确认依赖恢复后提交；已输入 {{ batchReason.trim().length }} / 500 字。</small
+              >
+              <small
+                v-if="batchReasonIssue"
+                id="collection-batch-reason-error"
+                class="collection-batch-failures"
+                role="alert"
+                >{{ batchReasonIssue }}</small
+              >
             </label>
             <button type="button" :disabled="batchBusy || batchUnknown" @click="previewBatchReplay">
               {{ batchBusy ? "正在重放" : "预览批量重放" }}

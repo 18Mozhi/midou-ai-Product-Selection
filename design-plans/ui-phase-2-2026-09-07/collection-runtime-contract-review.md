@@ -1,5 +1,7 @@
 # B1c · 采集任务、总览与浏览器运行合同
 
+2026-09-12追加P52可达性：[焦点与字段语义](P52-ACCESSIBILITY-IMPLEMENTATION.md)让批确认期间底层总览inert并在Escape后返焦，来源展开关联实际结果区，原因帮助/错误/焦点形成字段闭环；既有手机记录抽屉补齐隔离、Tab和返焦证据。旧实现新增4失败/2通过，修复后定向6/6、完整M06-03双端42/42。当前O扫描为29候选/5个v-model，新增候选仅是原因输入清错事件；下方66候选表保留初始合同定位，不把运行增量重算成新业务动作。API/权限/批量合同不变，真实链路与C视觉仍待。
+
 2026-09-12追加P52批量写入：[批量重放写入归属](P52-BATCH-WRITE-OWNERSHIP-IMPLEMENTATION.md)在预览时固定目标/原因/影响/batchId，串行POST保持独立幂等，成功只称创建新任务，明确失败与未知结果分开；未知不自动重发。KeepAlive离页不取消POST、不后台GET，返回先恢复当前URL范围再核对。旧实现新增双端8项全红，修复后UI2-CL52双端24/24、完整M06-03双端36/36。API/权限/事务/数据库不变，真实链路与C视觉仍待。
 
 2026-09-12追加P52：[读取生命周期与查询连续性](P52-READ-LIFECYCLE-IMPLEMENTATION.md)补齐同路由七字段恢复、查询快照/代次、快速查询旧读隔离、KeepAlive中断续读及attempts-only ready。旧代码新增双端8项全红，修复后UI2-CL52双端16/16、完整M06-03双端28/28。GET/查询/分页/权限/批量写入/API/数据库不变；401/403快照策略、C视觉与真实链路仍待。
@@ -170,16 +172,16 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | 源路径（仓库根相对） | LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/CollectionRuntimeSurface.vue | f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335 |
-| apps/web/src/components/CollectionTaskCenter.vue | 1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed |
-| apps/web/src/components/CollectionOperationsConsole.vue | 5517b1727ba0ce55c1b0cbf139c807a185ba1dce4d1ce08b0a77c22a234d2ec1 |
+| apps/web/src/components/CollectionTaskCenter.vue | 509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160 |
+| apps/web/src/components/CollectionOperationsConsole.vue | 7acded3c40ce98f08e87955cd161bba67874aca496d1768b34505bb35b527d7d |
 | apps/web/src/components/CollectionRuntimeCenter.vue | e6829b2cc84321af56e830cbd60839eafa89f23937cb44eeccf6b79e2428b3b4 |
-| apps/web/src/collection-tasks.css | 7219c3d2c3261327c8373e0d59d1cb5c748fe4400722b99684afb91c9c60a0b4 |
+| apps/web/src/collection-tasks.css | 4c5a0775200b22badcfc3c56ee193cd91c12901f603021eac5d43e8a291a15d4 |
 | apps/web/src/collection-task-detail.css | cdeb6209781acc6ff747fb4728f9675d69479c53fd3a97dfdb9e0b5c17130544 |
 | apps/web/src/styles/platform-operations.css | 7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9 |
 | apps/web/src/crawler-runtime.css | 3d6f9d1a19357079254d606047176d243bef82e4f9bdd76dec86fd6dfadcbd2a |
-| apps/web/src/components/ConfirmDialog.vue | 6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b |
+| apps/web/src/components/ConfirmDialog.vue | 3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424 |
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
-| apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
+| apps/web/src/components/ResponsiveFilterDrawer.vue | a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011 |
 | apps/web/src/components/UiStatePanel.vue | 8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164 |
 | apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
@@ -196,7 +198,7 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | apps/api/src/crawler-runtime-routes.ts | 69f5e8f0e9c5529aec86ed8c39ad2638551a4dffb6a1f43469b2b3dba8450477 |
 | apps/api/src/crawler-runtime-service.ts | 7dda282fdefdd95a9d49ec4be11cc2f67e723122264da54b5de45cadae62f69a |
 | apps/api/src/mysql-crawler-runtime-repository.ts | ac4cc7dab79a4baccb55ecaff7582790a67b6eaab616ef096a9b63e2d9e8e518 |
-| tests/e2e/m03-05-collection-tasks.spec.ts | 9218c2552339e5c25f2920f9fc340d9b546e89621c0978f4208179ae66151afd |
-| tests/e2e/m06-03-collection-console.spec.ts | f52a7bba2debe1c9b19bfaf68f68bed75ba5796aa3842b20ba0ad42af4dbaafb |
+| tests/e2e/m03-05-collection-tasks.spec.ts | 66bcb37988f1c064cff418506013a45b0b44c2d7eed6fa2d38e6a1420964fe96 |
+| tests/e2e/m06-03-collection-console.spec.ts | 6ef5270197d6a59ed4e5fabf92f4259c4bf831b8fbc0c891fa48034e8720dd76 |
 | tests/e2e/m03-04-playwright-crawler.spec.ts | 8f648aee8d5cb1cdffc4534be30e5e64c18702567aeb3cb953cd6db7f5db695b |
 | scripts/lib/ui-phase2-inventory.mjs | fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb |
