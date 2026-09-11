@@ -1,0 +1,4512 @@
+{
+  "kind": "P46-PROVIDER-EDITOR-VUE-PREVIEW-r1",
+  "approval": "pending-user-review",
+  "scope": "Actual current ProviderRegistry editor template/script unchanged; existing page review transform outside editor, new scoped editor CSS only. Original fixture, explicit new-form values, GET plus rejected POST/PUT intercepted only. All23 fields/four steps and five templates reviewed. Original read-only property residual and local timezone conversion observed, not fixed. No real persistence/permissions/admission/collection, no successful save/reload, stale write ownership or full App/KeepAlive/modal accessibility acceptance. Page-layout approval does not approve this editor.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.css": "a31b900bedbf1cafdf756eea8b7bd8742a5ec844fef9bcad0d8ffe643e39bb74",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "81dcd2938dd30c404d7285e1952bbcb0a57dd6d8cb214c036651d55b300fcfb8",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-editor-preview.css": "f7ae7af9a96fe79d8f9c498bfa7cd6025536c9250b0fe9be06ed4b794dce1f6a",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-page-preview.css": "791e840c6e32430e10b7fcfd1f56d11cc572679ba0e6e4a62d1f08b06636e7bd",
+    "scripts/lib/ui-phase2-provider-page-preview.mjs": "162d4d2ab907809c3ddac597a8519c5011c7af7c49ed255fc77630b9b5ba2bf1",
+    "scripts/verify-ui-phase2-provider-editor-preview.mjs": "2c80736aa927458ab9f03b313e3e943b0cc0d8d8274ebb60ffbf1a72ac151878",
+    "tests/e2e/m03-01-provider-registry.spec.ts": "caaa0e2af2081675ab743e18d43e2526758604c84bd72aa925ae701454cf226f"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/ProviderRegistry.vue": "02c6a48734ff36d17fe76008836ce3332c8dc53bbd2ecc9bb8e34d4d89e1ef8f"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "new dialog accessible title",
+      "actual": "provider-editor-title"
+    },
+    {
+      "width": 390,
+      "name": "code receives initial focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "list hidden while editor open",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "step 1 exact fields",
+      "actual": [
+        "来源代码（技术标识）",
+        "名称",
+        "目标 URL",
+        "负责人",
+        "接入模式"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "create-step-1:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-step-1:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-step-1-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-step-1-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "step 1 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "step 2 exact fields",
+      "actual": [
+        "市场",
+        "语言",
+        "字段清单",
+        "去重键",
+        "解析器版本",
+        "健康检查 URL"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "create-step-2:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-step-2:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-step-2-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-step-2-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "step 2 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "step 3 exact fields",
+      "actual": [
+        "频率（分钟）",
+        "并发",
+        "超时 ms",
+        "重试",
+        "熔断阈值",
+        "保留天数",
+        "失败规则"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "create-step-3:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-step-3:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-step-3-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-step-3-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "step 3 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "step 4 exact fields",
+      "actual": [
+        "平台条款复核",
+        "发布状态",
+        "条款参考 URL",
+        "条款版本",
+        "条款到期时间"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "create-step-4:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-step-4:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-step-4-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-step-4-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "step 4 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "new public RSS remains disabled",
+      "actual": "disabled"
+    },
+    {
+      "width": 390,
+      "name": "incomplete create disabled",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "invalid save gray background",
+      "actual": "rgb(232, 237, 244)"
+    },
+    {
+      "width": 390,
+      "name": "invalid step stays first",
+      "actual": "1\n基本信息"
+    },
+    {
+      "width": 390,
+      "name": "basic-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "basic-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "next passes valid first group",
+      "actual": "2\n范围与字段"
+    },
+    {
+      "width": 390,
+      "name": "scope-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "scope-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "all six numeric errors visible",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "name": "execution-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "execution-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "execution-errors-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "execution-errors-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "public enable missing terms disables save",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "publish-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "publish-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "publish-errors-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "publish-errors-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "template fields public_page",
+      "actual": "title,canonical_url,observed_at"
+    },
+    {
+      "width": 390,
+      "name": "template-public_page:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "template-public_page:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "template fields public_rss",
+      "actual": "title,summary,published_at,canonical_url,publisher"
+    },
+    {
+      "width": 390,
+      "name": "template-public_rss:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "template-public_rss:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "template fields authenticated_browser",
+      "actual": "title,canonical_url,observed_at"
+    },
+    {
+      "width": 390,
+      "name": "template-authenticated_browser:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "template-authenticated_browser:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "template fields import",
+      "actual": "title,external_id,observed_at"
+    },
+    {
+      "width": 390,
+      "name": "template-import:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "template-import:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "template fields manual",
+      "actual": "title,external_id,observed_at"
+    },
+    {
+      "width": 390,
+      "name": "template-manual:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "template-manual:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "busy disables save",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "busy save gray background",
+      "actual": "rgb(232, 237, 244)"
+    },
+    {
+      "width": 390,
+      "name": "create-saving:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-saving:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-failed:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-failed:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-error-trace:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-error-trace:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "fresh create body keys",
+      "actual": [
+        "access_mode",
+        "circuit_failure_threshold",
+        "code",
+        "concurrency_limit",
+        "dedupe_key",
+        "failure_rules",
+        "fields",
+        "healthcheck_url",
+        "languages",
+        "markets",
+        "name",
+        "owner_label",
+        "parser_version",
+        "retention_days",
+        "retry_limit",
+        "schedule_minutes",
+        "status",
+        "target_url",
+        "terms_expires_at",
+        "terms_reference_url",
+        "terms_review_status",
+        "terms_version",
+        "timeout_ms"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "fresh defaults no made-up release data",
+      "actual": [
+        "disabled",
+        "pending",
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "width": 390,
+      "name": "fresh arrays preserve comma contract",
+      "actual": [
+        "US"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "failed save keeps same title",
+      "actual": "登记来源"
+    },
+    {
+      "width": 390,
+      "name": "create close returns focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit correct existing source",
+      "actual": "public_signal_rss"
+    },
+    {
+      "width": 390,
+      "name": "one dialog after mobile handoff",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "edit-step-1:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-1:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-1-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-1-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-2:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-2:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-2-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-2-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-3:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-3:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-3-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-3-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-4:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-4:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-4-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-step-4-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "current edit local timestamp slicing",
+      "actual": "2027-08-07T17:00"
+    },
+    {
+      "width": 390,
+      "name": "edit-conflict:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit-conflict:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "edit expected version",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "actual readonly property retention",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "current timezone behavior observed not fixed",
+      "actual": "2027-08-07T09:00:00.000Z"
+    },
+    {
+      "width": 390,
+      "name": "edit then create still retains original readonly keys",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create after edit has no expected_version",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "create-after-edit-failed:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create-after-edit-failed:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "Tab reaches first step",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "step-focus:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "step-focus:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short-screen:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short-screen:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short-screen-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short-screen-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "Escape returns create focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "only one initial read and three rejected writes",
+      "actual": [
+        "GET",
+        "POST",
+        "PUT",
+        "POST"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "all write idempotency headers present",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "no unexpected requests",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "new dialog accessible title",
+      "actual": "provider-editor-title"
+    },
+    {
+      "width": 760,
+      "name": "code receives initial focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "list hidden while editor open",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "step 1 exact fields",
+      "actual": [
+        "来源代码（技术标识）",
+        "名称",
+        "目标 URL",
+        "负责人",
+        "接入模式"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "create-step-1:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-step-1:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-step-1-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-step-1-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "step 1 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "step 2 exact fields",
+      "actual": [
+        "市场",
+        "语言",
+        "字段清单",
+        "去重键",
+        "解析器版本",
+        "健康检查 URL"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "create-step-2:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-step-2:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-step-2-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-step-2-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "step 2 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "step 3 exact fields",
+      "actual": [
+        "频率（分钟）",
+        "并发",
+        "超时 ms",
+        "重试",
+        "熔断阈值",
+        "保留天数",
+        "失败规则"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "create-step-3:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-step-3:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-step-3-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-step-3-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "step 3 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "step 4 exact fields",
+      "actual": [
+        "平台条款复核",
+        "发布状态",
+        "条款参考 URL",
+        "条款版本",
+        "条款到期时间"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "create-step-4:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-step-4:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-step-4-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-step-4-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "step 4 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "new public RSS remains disabled",
+      "actual": "disabled"
+    },
+    {
+      "width": 760,
+      "name": "incomplete create disabled",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "invalid save gray background",
+      "actual": "rgb(232, 237, 244)"
+    },
+    {
+      "width": 760,
+      "name": "invalid step stays first",
+      "actual": "1\n基本信息"
+    },
+    {
+      "width": 760,
+      "name": "basic-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "basic-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "next passes valid first group",
+      "actual": "2\n范围与字段"
+    },
+    {
+      "width": 760,
+      "name": "scope-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "scope-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "all six numeric errors visible",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "name": "execution-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "execution-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "execution-errors-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "execution-errors-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "public enable missing terms disables save",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "publish-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "publish-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "publish-errors-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "publish-errors-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "template fields public_page",
+      "actual": "title,canonical_url,observed_at"
+    },
+    {
+      "width": 760,
+      "name": "template-public_page:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "template-public_page:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "template fields public_rss",
+      "actual": "title,summary,published_at,canonical_url,publisher"
+    },
+    {
+      "width": 760,
+      "name": "template-public_rss:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "template-public_rss:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "template fields authenticated_browser",
+      "actual": "title,canonical_url,observed_at"
+    },
+    {
+      "width": 760,
+      "name": "template-authenticated_browser:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "template-authenticated_browser:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "template fields import",
+      "actual": "title,external_id,observed_at"
+    },
+    {
+      "width": 760,
+      "name": "template-import:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "template-import:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "template fields manual",
+      "actual": "title,external_id,observed_at"
+    },
+    {
+      "width": 760,
+      "name": "template-manual:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "template-manual:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "busy disables save",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "busy save gray background",
+      "actual": "rgb(232, 237, 244)"
+    },
+    {
+      "width": 760,
+      "name": "create-saving:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-saving:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-failed:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-failed:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-error-trace:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-error-trace:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "fresh create body keys",
+      "actual": [
+        "access_mode",
+        "circuit_failure_threshold",
+        "code",
+        "concurrency_limit",
+        "dedupe_key",
+        "failure_rules",
+        "fields",
+        "healthcheck_url",
+        "languages",
+        "markets",
+        "name",
+        "owner_label",
+        "parser_version",
+        "retention_days",
+        "retry_limit",
+        "schedule_minutes",
+        "status",
+        "target_url",
+        "terms_expires_at",
+        "terms_reference_url",
+        "terms_review_status",
+        "terms_version",
+        "timeout_ms"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "fresh defaults no made-up release data",
+      "actual": [
+        "disabled",
+        "pending",
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "width": 760,
+      "name": "fresh arrays preserve comma contract",
+      "actual": [
+        "US"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "failed save keeps same title",
+      "actual": "登记来源"
+    },
+    {
+      "width": 760,
+      "name": "create close returns focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit correct existing source",
+      "actual": "public_signal_rss"
+    },
+    {
+      "width": 760,
+      "name": "one dialog after mobile handoff",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "edit-step-1:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-1:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-1-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-1-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-2:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-2:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-2-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-2-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-3:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-3:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-3-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-3-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-4:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-4:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-4-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-step-4-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "current edit local timestamp slicing",
+      "actual": "2027-08-07T17:00"
+    },
+    {
+      "width": 760,
+      "name": "edit-conflict:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit-conflict:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "edit expected version",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "actual readonly property retention",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "current timezone behavior observed not fixed",
+      "actual": "2027-08-07T09:00:00.000Z"
+    },
+    {
+      "width": 760,
+      "name": "edit then create still retains original readonly keys",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create after edit has no expected_version",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "create-after-edit-failed:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create-after-edit-failed:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "Tab reaches first step",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "step-focus:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "step-focus:page fits width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "Escape returns create focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "only one initial read and three rejected writes",
+      "actual": [
+        "GET",
+        "POST",
+        "PUT",
+        "POST"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "all write idempotency headers present",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "no unexpected requests",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "new dialog accessible title",
+      "actual": "provider-editor-title"
+    },
+    {
+      "width": 761,
+      "name": "code receives initial focus",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "list hidden while editor open",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "step 1 exact fields",
+      "actual": [
+        "来源代码（技术标识）",
+        "名称",
+        "目标 URL",
+        "负责人",
+        "接入模式"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "create-step-1:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-step-1:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-step-1-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-step-1-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "step 1 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "step 2 exact fields",
+      "actual": [
+        "市场",
+        "语言",
+        "字段清单",
+        "去重键",
+        "解析器版本",
+        "健康检查 URL"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "create-step-2:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-step-2:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-step-2-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-step-2-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "step 2 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "step 3 exact fields",
+      "actual": [
+        "频率（分钟）",
+        "并发",
+        "超时 ms",
+        "重试",
+        "熔断阈值",
+        "保留天数",
+        "失败规则"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "create-step-3:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-step-3:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-step-3-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-step-3-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "step 3 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "step 4 exact fields",
+      "actual": [
+        "平台条款复核",
+        "发布状态",
+        "条款参考 URL",
+        "条款版本",
+        "条款到期时间"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "create-step-4:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-step-4:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-step-4-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-step-4-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "step 4 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "new public RSS remains disabled",
+      "actual": "disabled"
+    },
+    {
+      "width": 761,
+      "name": "incomplete create disabled",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "invalid save gray background",
+      "actual": "rgb(232, 237, 244)"
+    },
+    {
+      "width": 761,
+      "name": "invalid step stays first",
+      "actual": "1\n基本信息"
+    },
+    {
+      "width": 761,
+      "name": "basic-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "basic-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "next passes valid first group",
+      "actual": "2\n范围与字段"
+    },
+    {
+      "width": 761,
+      "name": "scope-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "scope-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "all six numeric errors visible",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "name": "execution-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "execution-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "execution-errors-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "execution-errors-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "public enable missing terms disables save",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "publish-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "publish-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "publish-errors-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "publish-errors-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "template fields public_page",
+      "actual": "title,canonical_url,observed_at"
+    },
+    {
+      "width": 761,
+      "name": "template-public_page:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "template-public_page:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "template fields public_rss",
+      "actual": "title,summary,published_at,canonical_url,publisher"
+    },
+    {
+      "width": 761,
+      "name": "template-public_rss:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "template-public_rss:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "template fields authenticated_browser",
+      "actual": "title,canonical_url,observed_at"
+    },
+    {
+      "width": 761,
+      "name": "template-authenticated_browser:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "template-authenticated_browser:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "template fields import",
+      "actual": "title,external_id,observed_at"
+    },
+    {
+      "width": 761,
+      "name": "template-import:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "template-import:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "template fields manual",
+      "actual": "title,external_id,observed_at"
+    },
+    {
+      "width": 761,
+      "name": "template-manual:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "template-manual:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "busy disables save",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "busy save gray background",
+      "actual": "rgb(232, 237, 244)"
+    },
+    {
+      "width": 761,
+      "name": "create-saving:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-saving:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-failed:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-failed:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-error-trace:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-error-trace:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "fresh create body keys",
+      "actual": [
+        "access_mode",
+        "circuit_failure_threshold",
+        "code",
+        "concurrency_limit",
+        "dedupe_key",
+        "failure_rules",
+        "fields",
+        "healthcheck_url",
+        "languages",
+        "markets",
+        "name",
+        "owner_label",
+        "parser_version",
+        "retention_days",
+        "retry_limit",
+        "schedule_minutes",
+        "status",
+        "target_url",
+        "terms_expires_at",
+        "terms_reference_url",
+        "terms_review_status",
+        "terms_version",
+        "timeout_ms"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "fresh defaults no made-up release data",
+      "actual": [
+        "disabled",
+        "pending",
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "width": 761,
+      "name": "fresh arrays preserve comma contract",
+      "actual": [
+        "US"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "failed save keeps same title",
+      "actual": "登记来源"
+    },
+    {
+      "width": 761,
+      "name": "create close returns focus",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit correct existing source",
+      "actual": "public_signal_rss"
+    },
+    {
+      "width": 761,
+      "name": "one dialog after mobile handoff",
+      "actual": 1
+    },
+    {
+      "width": 761,
+      "name": "edit-step-1:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-1:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-1-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-1-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-2:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-2:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-2-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-2-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-3:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-3:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-3-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-3-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-4:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-4:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-4-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-step-4-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "current edit local timestamp slicing",
+      "actual": "2027-08-07T17:00"
+    },
+    {
+      "width": 761,
+      "name": "edit-conflict:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit-conflict:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "edit expected version",
+      "actual": 1
+    },
+    {
+      "width": 761,
+      "name": "actual readonly property retention",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "current timezone behavior observed not fixed",
+      "actual": "2027-08-07T09:00:00.000Z"
+    },
+    {
+      "width": 761,
+      "name": "edit then create still retains original readonly keys",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create after edit has no expected_version",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "name": "create-after-edit-failed:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create-after-edit-failed:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "Tab reaches first step",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "step-focus:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "step-focus:page fits width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "Escape returns create focus",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "only one initial read and three rejected writes",
+      "actual": [
+        "GET",
+        "POST",
+        "PUT",
+        "POST"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "all write idempotency headers present",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "no unexpected requests",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "new dialog accessible title",
+      "actual": "provider-editor-title"
+    },
+    {
+      "width": 1440,
+      "name": "code receives initial focus",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "list hidden while editor open",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "step 1 exact fields",
+      "actual": [
+        "来源代码（技术标识）",
+        "名称",
+        "目标 URL",
+        "负责人",
+        "接入模式"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "create-step-1:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-step-1:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-step-1-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-step-1-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "step 1 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "step 2 exact fields",
+      "actual": [
+        "市场",
+        "语言",
+        "字段清单",
+        "去重键",
+        "解析器版本",
+        "健康检查 URL"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "create-step-2:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-step-2:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-step-2-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-step-2-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "step 2 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "step 3 exact fields",
+      "actual": [
+        "频率（分钟）",
+        "并发",
+        "超时 ms",
+        "重试",
+        "熔断阈值",
+        "保留天数",
+        "失败规则"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "create-step-3:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-step-3:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-step-3-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-step-3-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "step 3 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "step 4 exact fields",
+      "actual": [
+        "平台条款复核",
+        "发布状态",
+        "条款参考 URL",
+        "条款版本",
+        "条款到期时间"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "create-step-4:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-step-4:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-step-4-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-step-4-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "step 4 controls meet 44px and 16px",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "new public RSS remains disabled",
+      "actual": "disabled"
+    },
+    {
+      "width": 1440,
+      "name": "incomplete create disabled",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "invalid save gray background",
+      "actual": "rgb(232, 237, 244)"
+    },
+    {
+      "width": 1440,
+      "name": "invalid step stays first",
+      "actual": "1\n基本信息"
+    },
+    {
+      "width": 1440,
+      "name": "basic-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "basic-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "next passes valid first group",
+      "actual": "2\n范围与字段"
+    },
+    {
+      "width": 1440,
+      "name": "scope-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "scope-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "all six numeric errors visible",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "name": "execution-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "execution-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "execution-errors-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "execution-errors-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "public enable missing terms disables save",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "publish-errors:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "publish-errors:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "publish-errors-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "publish-errors-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "template fields public_page",
+      "actual": "title,canonical_url,observed_at"
+    },
+    {
+      "width": 1440,
+      "name": "template-public_page:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "template-public_page:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "template fields public_rss",
+      "actual": "title,summary,published_at,canonical_url,publisher"
+    },
+    {
+      "width": 1440,
+      "name": "template-public_rss:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "template-public_rss:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "template fields authenticated_browser",
+      "actual": "title,canonical_url,observed_at"
+    },
+    {
+      "width": 1440,
+      "name": "template-authenticated_browser:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "template-authenticated_browser:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "template fields import",
+      "actual": "title,external_id,observed_at"
+    },
+    {
+      "width": 1440,
+      "name": "template-import:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "template-import:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "template fields manual",
+      "actual": "title,external_id,observed_at"
+    },
+    {
+      "width": 1440,
+      "name": "template-manual:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "template-manual:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "busy disables save",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "busy save gray background",
+      "actual": "rgb(232, 237, 244)"
+    },
+    {
+      "width": 1440,
+      "name": "create-saving:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-saving:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-failed:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-failed:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-error-trace:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-error-trace:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "fresh create body keys",
+      "actual": [
+        "access_mode",
+        "circuit_failure_threshold",
+        "code",
+        "concurrency_limit",
+        "dedupe_key",
+        "failure_rules",
+        "fields",
+        "healthcheck_url",
+        "languages",
+        "markets",
+        "name",
+        "owner_label",
+        "parser_version",
+        "retention_days",
+        "retry_limit",
+        "schedule_minutes",
+        "status",
+        "target_url",
+        "terms_expires_at",
+        "terms_reference_url",
+        "terms_review_status",
+        "terms_version",
+        "timeout_ms"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "fresh defaults no made-up release data",
+      "actual": [
+        "disabled",
+        "pending",
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "fresh arrays preserve comma contract",
+      "actual": [
+        "US"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "failed save keeps same title",
+      "actual": "登记来源"
+    },
+    {
+      "width": 1440,
+      "name": "create close returns focus",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit correct existing source",
+      "actual": "public_signal_rss"
+    },
+    {
+      "width": 1440,
+      "name": "one dialog after mobile handoff",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-1:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-1:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-1-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-1-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-2:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-2:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-2-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-2-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-3:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-3:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-3-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-3-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-4:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-4:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-4-bottom:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-step-4-bottom:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "current edit local timestamp slicing",
+      "actual": "2027-08-07T17:00"
+    },
+    {
+      "width": 1440,
+      "name": "edit-conflict:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit-conflict:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "edit expected version",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "name": "actual readonly property retention",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "current timezone behavior observed not fixed",
+      "actual": "2027-08-07T09:00:00.000Z"
+    },
+    {
+      "width": 1440,
+      "name": "edit then create still retains original readonly keys",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create after edit has no expected_version",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "name": "create-after-edit-failed:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create-after-edit-failed:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "Tab reaches first step",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "step-focus:dialog fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "step-focus:page fits width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "Escape returns create focus",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "only one initial read and three rejected writes",
+      "actual": [
+        "GET",
+        "POST",
+        "PUT",
+        "POST"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "all write idempotency headers present",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "no unexpected requests",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "no page errors",
+      "actual": []
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-create-step-1.png",
+      "width": 390,
+      "state": "create-step-1",
+      "sha256": "4e5c99c4f9b97f9fdd461f3e597e61454dccb549a30445050d15740603c9716d",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-create-step-1-bottom.png",
+      "width": 390,
+      "state": "create-step-1-bottom",
+      "sha256": "0da4b7e6f6ad4263e64b6a20fe266f260bb1af427887f14df60d9b1fa094b4bc",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-create-step-2.png",
+      "width": 390,
+      "state": "create-step-2",
+      "sha256": "e5c80961ff898ca9f49ebdb9a0372e3e34af068e854323daf39ef63bf94077cc",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-create-step-2-bottom.png",
+      "width": 390,
+      "state": "create-step-2-bottom",
+      "sha256": "8f8ced2a40b705a2f3aa5d47e324ef02be7aed937acd03d539a7a4ee1aaae3fe",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-create-step-3.png",
+      "width": 390,
+      "state": "create-step-3",
+      "sha256": "e1a6bceaf40f6efd7bbaf24af7f161e46c8a6eccf01d74bc5fe91d6f76e577dd",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-create-step-3-bottom.png",
+      "width": 390,
+      "state": "create-step-3-bottom",
+      "sha256": "6f7ba4b31f419921d18add625f901b47c89313f7551abd5fa6fa7b838c8bf987",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-create-step-4.png",
+      "width": 390,
+      "state": "create-step-4",
+      "sha256": "4c2d8aaf5e934e3567a342ab97c76a11ddf9784dcdd61e244c7f51a89e5927d0",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-create-step-4-bottom.png",
+      "width": 390,
+      "state": "create-step-4-bottom",
+      "sha256": "20e2ec5fa97c526601972202dd7adf41dfe56bce03039d7f09c71e4fa1da4a39",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-basic-errors.png",
+      "width": 390,
+      "state": "basic-errors",
+      "sha256": "6034b807fa62c76621961ebc0376b30d6f4d6fef39590a241058c9259a562228",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-scope-errors.png",
+      "width": 390,
+      "state": "scope-errors",
+      "sha256": "dbdfa187c996047395caf55c4bc23f220973ad327e8536c4ef4849cc88f89b34",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-execution-errors.png",
+      "width": 390,
+      "state": "execution-errors",
+      "sha256": "8eecd0a7e1c965319b4ab8393f5bfa9449e47e612bd942210ed630464d8e9d37",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-execution-errors-bottom.png",
+      "width": 390,
+      "state": "execution-errors-bottom",
+      "sha256": "c869a1ca76057e6a730cec0e00e74a6a2d1f065f5f2c7f5c8ba891e465f9a21c",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-publish-errors.png",
+      "width": 390,
+      "state": "publish-errors",
+      "sha256": "5083681eeb6f4613609bf56af2a96b5d314b2e6683279b12ee3e92c441d542c2",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-publish-errors-bottom.png",
+      "width": 390,
+      "state": "publish-errors-bottom",
+      "sha256": "6d95d35abbdff0a1291a3a92d3788a040a5680b710cff20fdac7294f05b14a63",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-template-public_page.png",
+      "width": 390,
+      "state": "template-public_page",
+      "sha256": "61eb59771bcb855c77d416af5405a83f8befd4bad4e5a246c79ab7563ffc52a9",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-template-public_rss.png",
+      "width": 390,
+      "state": "template-public_rss",
+      "sha256": "75d0bdea8df9b7e89e4aa56e7021309521ee4976bac3406bd311a9b2b5fac80e",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-template-authenticated_browser.png",
+      "width": 390,
+      "state": "template-authenticated_browser",
+      "sha256": "1a4f11803c0684e658124f9588eef953e456003cade3a2e7e511dcf80354daf7",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-template-import.png",
+      "width": 390,
+      "state": "template-import",
+      "sha256": "55f433451f1aac90d03ef013f96d6e57639c478ea0644593cdd8829878bde415",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-template-manual.png",
+      "width": 390,
+      "state": "template-manual",
+      "sha256": "1412cda08fbce85b9ca78b01d865ffdefd2709fe635d10f480c4b2b306adfeca",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-create-saving.png",
+      "width": 390,
+      "state": "create-saving",
+      "sha256": "5373a753be3a117f958d8e697082199ebd471bae1c63804efcdfa9c7c3313fa0",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-create-failed.png",
+      "width": 390,
+      "state": "create-failed",
+      "sha256": "0ab89c0231c719a70706fbbff9538877bd1dc6b472c1f0280f6925d3db08efc7",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-create-error-trace.png",
+      "width": 390,
+      "state": "create-error-trace",
+      "sha256": "1cf3849667db71b5efc13a6cee4fa1b9ca301f6f9d852bf7ab53c465da40c13b",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-edit-step-1.png",
+      "width": 390,
+      "state": "edit-step-1",
+      "sha256": "ac753f98ce91dc2b1a2be914bdb96c3cc7bc40163cceb373c70da49b7d0739f2",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-edit-step-1-bottom.png",
+      "width": 390,
+      "state": "edit-step-1-bottom",
+      "sha256": "7e67f53c02f319db61ce28e339836477067f734707f824f851b9f04eaa03d63f",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-edit-step-2.png",
+      "width": 390,
+      "state": "edit-step-2",
+      "sha256": "2ee8c7769e67c52f44b19c0302ce567facd91170d1f9a723ac03d42d724a6af1",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-edit-step-2-bottom.png",
+      "width": 390,
+      "state": "edit-step-2-bottom",
+      "sha256": "fd8004f3bfc487a1bb15e9d720a396a1d72154ee4fea56ad68afcddef3511fd2",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-edit-step-3.png",
+      "width": 390,
+      "state": "edit-step-3",
+      "sha256": "a21272c2bae8ee652e27f6ec8f25c151627b2722bcefd3621cd70cf5a3d8f34b",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-edit-step-3-bottom.png",
+      "width": 390,
+      "state": "edit-step-3-bottom",
+      "sha256": "a9c38bb474f438312d9ce0fcf90736c99d06ada2fcb723fadf67827058867e73",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-edit-step-4.png",
+      "width": 390,
+      "state": "edit-step-4",
+      "sha256": "7a5effbc302145bd6f995ee537dfb45273ae3693947b02abbd5708d653f3e304",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-edit-step-4-bottom.png",
+      "width": 390,
+      "state": "edit-step-4-bottom",
+      "sha256": "f03a0525820fc8dca6df66b8f223d31cb44b6473811ffc3a5d7c2b0f4523adbd",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-edit-conflict.png",
+      "width": 390,
+      "state": "edit-conflict",
+      "sha256": "57ba9bbc558b157e4e8de4375e8d1b4771bc301ccbdd9a5fb9a60cc8ed25e792",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-create-after-edit-failed.png",
+      "width": 390,
+      "state": "create-after-edit-failed",
+      "sha256": "3ea4dd437637af1822c660e6d4aaab37e092ba9cdfbefd4cf40e3c70134f684b",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-step-focus.png",
+      "width": 390,
+      "state": "step-focus",
+      "sha256": "d95559ecf6cf40fa40ce2542ff8b6ff65d274e451d24cfb0c549bdd9226b25b2",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-short-screen.png",
+      "width": 390,
+      "state": "short-screen",
+      "sha256": "4b8bcd77190b07982a0d8ca9105f5a0c8d7bbb7c18b6f8b1b1a1efbd1933e10e",
+      "imageDimensions": {
+        "width": 390,
+        "height": 568
+      }
+    },
+    {
+      "file": "390-short-screen-bottom.png",
+      "width": 390,
+      "state": "short-screen-bottom",
+      "sha256": "c422ae1b160e9d9d3584bbfb8e64e53bda4656956662668940514d9040a56a5e",
+      "imageDimensions": {
+        "width": 390,
+        "height": 568
+      }
+    },
+    {
+      "file": "760-create-step-1.png",
+      "width": 760,
+      "state": "create-step-1",
+      "sha256": "e2e7c88d85b5052e3a5f7a9aba457c8a11537bd7fcb69c423111a7b9fa6ceeeb",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-create-step-1-bottom.png",
+      "width": 760,
+      "state": "create-step-1-bottom",
+      "sha256": "234e076aa04b42785ae11cc43e1c0db944609641993c52ee87b5b965caf23327",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-create-step-2.png",
+      "width": 760,
+      "state": "create-step-2",
+      "sha256": "2ed71b7ffd20d108c318ec255305c94eb4befc602e9fb7727c165f03f43a1ef1",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-create-step-2-bottom.png",
+      "width": 760,
+      "state": "create-step-2-bottom",
+      "sha256": "e3e8306fdb005040da270a4d68cd58f6988647dfd2447d8600e51bf9452cd442",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-create-step-3.png",
+      "width": 760,
+      "state": "create-step-3",
+      "sha256": "5459e259856e671efb22a0d906b6698ef284bc45429a06a2055f63d94a6fdcda",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-create-step-3-bottom.png",
+      "width": 760,
+      "state": "create-step-3-bottom",
+      "sha256": "d9cf231bd3f93909f5f6aa84553bc05b65b756316df84ef81ca3e61b7f856cd3",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-create-step-4.png",
+      "width": 760,
+      "state": "create-step-4",
+      "sha256": "c1b0fbbf1f9c6995651e7e04419428bd2e9c575a5cd6de6a71cc22b7112ff6bf",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-create-step-4-bottom.png",
+      "width": 760,
+      "state": "create-step-4-bottom",
+      "sha256": "58960290d7e21d39c21cf1a6c3cbc01e1f48a3d4c7d14c94bbdad1ba56513d55",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-basic-errors.png",
+      "width": 760,
+      "state": "basic-errors",
+      "sha256": "57eb29c7c39c2e21633637a2c6b9496b801d997bd049cfdf4ff626413633365a",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-scope-errors.png",
+      "width": 760,
+      "state": "scope-errors",
+      "sha256": "15a434fb42cc1c684a0caef3af4bf233a6d388945898a4299c807fa959e5d5db",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-execution-errors.png",
+      "width": 760,
+      "state": "execution-errors",
+      "sha256": "e629b18cba7c47236a0ff55dccf0256da1e08c3b734e6f4330d3e2daef7b7202",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-execution-errors-bottom.png",
+      "width": 760,
+      "state": "execution-errors-bottom",
+      "sha256": "118e5e92f9deb09c8ffb9f5ab46acdda4d58746ec890740a5f47eb9a7db2d759",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-publish-errors.png",
+      "width": 760,
+      "state": "publish-errors",
+      "sha256": "ae2984e5c0d6e6502808da3ae46778ae0b7b46307791c768ca696c3067b4baed",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-publish-errors-bottom.png",
+      "width": 760,
+      "state": "publish-errors-bottom",
+      "sha256": "3ced635da1ad66e9c71970890e26e42a4e58de44d6f6e1475c1d6ca5cddc616c",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-template-public_page.png",
+      "width": 760,
+      "state": "template-public_page",
+      "sha256": "6826fc32491a07a7afe38214526c9ecac2a9d615906e6e78d271c14f4e9422c0",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-template-public_rss.png",
+      "width": 760,
+      "state": "template-public_rss",
+      "sha256": "968f2205ffda29a63fb9bcf491e3ac8712714ec2d13cb1a8a873a63c86abfb3f",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-template-authenticated_browser.png",
+      "width": 760,
+      "state": "template-authenticated_browser",
+      "sha256": "3d268e7bf8044cffc32ffe9b22186db602979b12143da8c07688522e64c4ea7d",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-template-import.png",
+      "width": 760,
+      "state": "template-import",
+      "sha256": "f71a5f0be68b77dca2eb1a3c7bc04f7a59557d056924af883ca8a074dc51f895",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-template-manual.png",
+      "width": 760,
+      "state": "template-manual",
+      "sha256": "73a7df81930628d6c05a71f0a91c61eff766af0a1353e2c642419b24001033e0",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-create-saving.png",
+      "width": 760,
+      "state": "create-saving",
+      "sha256": "a1b08b171e92ec17fe883eee4ffee89c76eb9a2fa982d9ba483d8c63d120a516",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-create-failed.png",
+      "width": 760,
+      "state": "create-failed",
+      "sha256": "163697b6ded3f9f34c8a838b693513c18cf56a71554193556b9f227a116d123c",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-create-error-trace.png",
+      "width": 760,
+      "state": "create-error-trace",
+      "sha256": "663c3177e1b89e2ba64a496f5ffbaf34324105bb665ad653b9426bc6e958b25a",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-edit-step-1.png",
+      "width": 760,
+      "state": "edit-step-1",
+      "sha256": "d7092d8c6b407ba3d2a90817d93ecb4a1724f92a68315b93e5b9139a762e6f4a",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-edit-step-1-bottom.png",
+      "width": 760,
+      "state": "edit-step-1-bottom",
+      "sha256": "c916ee2e0812e73f30f8995480edd37baf354886368646fecfeb12e62afe1168",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-edit-step-2.png",
+      "width": 760,
+      "state": "edit-step-2",
+      "sha256": "8342aade9f5245fb9e9f3c53ee1c9f797d52aadbb806b75283b8260a0050bd5a",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-edit-step-2-bottom.png",
+      "width": 760,
+      "state": "edit-step-2-bottom",
+      "sha256": "dc71b6bfa2ebdaca972b7ff7ccefe79932212d7680ff1eac3769083103b49f65",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-edit-step-3.png",
+      "width": 760,
+      "state": "edit-step-3",
+      "sha256": "b54b9d359c9da7460b41420f5f63cbd2f585f642723ef1fdb8dda712efb3c9ed",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-edit-step-3-bottom.png",
+      "width": 760,
+      "state": "edit-step-3-bottom",
+      "sha256": "c645571433a1f18f388ae9d5a25af81b069266d7e8fd765e9772ef4749303e5f",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-edit-step-4.png",
+      "width": 760,
+      "state": "edit-step-4",
+      "sha256": "55d1d126d182994c9b334470cdc7bec1d0d18ff236ad2701c98c54525dc88d2a",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-edit-step-4-bottom.png",
+      "width": 760,
+      "state": "edit-step-4-bottom",
+      "sha256": "88a60e0706f38857a6e2ecdb1d4fb2e5caeb22032d4ee8a35d6d2afd5385f8f5",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-edit-conflict.png",
+      "width": 760,
+      "state": "edit-conflict",
+      "sha256": "7567bb858cbb0e0278737a67c81128df0163695457c4594fd9d5c27a3d82175f",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-create-after-edit-failed.png",
+      "width": 760,
+      "state": "create-after-edit-failed",
+      "sha256": "7f6f686a039f5d1c4cdf2f0c5e6bd05265e25213d429678a6c4a9128cd29ad35",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-step-focus.png",
+      "width": 760,
+      "state": "step-focus",
+      "sha256": "e41ca239b0bdf7a9bda07b0f5befbf7fe0c1c350982430d65e68badc6a3b784a",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-create-step-1.png",
+      "width": 761,
+      "state": "create-step-1",
+      "sha256": "f5b0f0231243fa457cd7f82c7992f1c1c2d9748490d0f670c896cb0c8db41829",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-create-step-1-bottom.png",
+      "width": 761,
+      "state": "create-step-1-bottom",
+      "sha256": "f5b0f0231243fa457cd7f82c7992f1c1c2d9748490d0f670c896cb0c8db41829",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-create-step-2.png",
+      "width": 761,
+      "state": "create-step-2",
+      "sha256": "2fb292e4736fb4777b9433736b9b03559687c0c1d1c4cc51fa3c99e1a77d3dda",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-create-step-2-bottom.png",
+      "width": 761,
+      "state": "create-step-2-bottom",
+      "sha256": "d64ee189d9c1649b49e44c4cf18fbeada9b00267a2ab8f698f6fcf8eb50ce7b0",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-create-step-3.png",
+      "width": 761,
+      "state": "create-step-3",
+      "sha256": "ba64fd2971fbb2f9eae8b1cddd399dfc7bef21d15c13a5a083371b3fbf1c33f8",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-create-step-3-bottom.png",
+      "width": 761,
+      "state": "create-step-3-bottom",
+      "sha256": "de688f67e8e1701ee5a2889db8ee2ea4443c4e5946d30d37c6c883341bb30e2c",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-create-step-4.png",
+      "width": 761,
+      "state": "create-step-4",
+      "sha256": "ce323b2922344e7a388e47f74f34527ef0864c19582d36ce5e1d65af972423eb",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-create-step-4-bottom.png",
+      "width": 761,
+      "state": "create-step-4-bottom",
+      "sha256": "365ec0f07c6f7511f42ed9273b93b131c7eb30b4c9e4e8d31aa92c8710c44025",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-basic-errors.png",
+      "width": 761,
+      "state": "basic-errors",
+      "sha256": "79cec39b00d508de93c17d870a698c92cccfdaa03eb5afd09bec72c8e5df5a49",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-scope-errors.png",
+      "width": 761,
+      "state": "scope-errors",
+      "sha256": "b14b25507edf50f980731abdc8e2eef493da8eb06331d0234cb352f24d4d6379",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-execution-errors.png",
+      "width": 761,
+      "state": "execution-errors",
+      "sha256": "05f0b70357d6722a8ba36768aace28dfd4cb1ef6c0ce71ec8a783b5dcc2eb22d",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-execution-errors-bottom.png",
+      "width": 761,
+      "state": "execution-errors-bottom",
+      "sha256": "0b2fad97efc917e5f615022e593568114348a1722a18367787310f1dafe8e1ac",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-publish-errors.png",
+      "width": 761,
+      "state": "publish-errors",
+      "sha256": "cc155092745a80147977b090521ab7d874a5e872b684ea9fc8b00870f8a6e3b4",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-publish-errors-bottom.png",
+      "width": 761,
+      "state": "publish-errors-bottom",
+      "sha256": "cc155092745a80147977b090521ab7d874a5e872b684ea9fc8b00870f8a6e3b4",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-template-public_page.png",
+      "width": 761,
+      "state": "template-public_page",
+      "sha256": "fb6c6ace28d8b11f75b5d51262945272c53af3bc8cbf6702cf7151a1e5c03051",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-template-public_rss.png",
+      "width": 761,
+      "state": "template-public_rss",
+      "sha256": "5fb7f7f302bfae82349b894f5941632eaccf196badf02bfd8f7b3e20b70eba9f",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-template-authenticated_browser.png",
+      "width": 761,
+      "state": "template-authenticated_browser",
+      "sha256": "b68ce0ccc64cb69af6698f5e1a2525d4b396353fff5d6dcca5574ae921ad511a",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-template-import.png",
+      "width": 761,
+      "state": "template-import",
+      "sha256": "7b624c99d6c0c65b05589ce47e2a2746c73c5cec5f2bb1a5addc6fdae6018eef",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-template-manual.png",
+      "width": 761,
+      "state": "template-manual",
+      "sha256": "5d337017d351ef3658324727898a26af3727d35509013b9d219b415f11587f22",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-create-saving.png",
+      "width": 761,
+      "state": "create-saving",
+      "sha256": "6847511c84388ad43239df48bec95db7b3c0c97d529c17daf821dd559b67e33e",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-create-failed.png",
+      "width": 761,
+      "state": "create-failed",
+      "sha256": "994ddc6abeef698999e99e845c938ce165e232c75cea9ac787ba9f9183042b33",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-create-error-trace.png",
+      "width": 761,
+      "state": "create-error-trace",
+      "sha256": "39c010c319fec2b4ef9c43ab18a11b95f7f45444945ef006886a4bf372df1912",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-edit-step-1.png",
+      "width": 761,
+      "state": "edit-step-1",
+      "sha256": "9073ce96661021b3ee7f8f934adf8714c300601f2027ec7c71af4ab1cc596d12",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-edit-step-1-bottom.png",
+      "width": 761,
+      "state": "edit-step-1-bottom",
+      "sha256": "cb10a62653c0d24c112155f369f84a84d94fd6b5544a42b973ee5336305c7b8c",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-edit-step-2.png",
+      "width": 761,
+      "state": "edit-step-2",
+      "sha256": "e36e796f511d0b4ae189d300e6f911557d12c2332ace56736680ca0f77c6a17b",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-edit-step-2-bottom.png",
+      "width": 761,
+      "state": "edit-step-2-bottom",
+      "sha256": "031a569359a9c1501ae007d0b98849d488ee3f3e3ec61ce41084953c66409b6d",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-edit-step-3.png",
+      "width": 761,
+      "state": "edit-step-3",
+      "sha256": "3b6df28592e4064a8f09453414262254c6fd0da4ef0ec6905d7f433ecbd243a5",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-edit-step-3-bottom.png",
+      "width": 761,
+      "state": "edit-step-3-bottom",
+      "sha256": "36d68053224fafe30a22d071ef7b72839487745772d9fa4851eef0a9589b6c18",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-edit-step-4.png",
+      "width": 761,
+      "state": "edit-step-4",
+      "sha256": "660f9935bd468f0c66b4dc8e0dc352c85e8a4745db1150abb1f55e6b9376585f",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-edit-step-4-bottom.png",
+      "width": 761,
+      "state": "edit-step-4-bottom",
+      "sha256": "660f9935bd468f0c66b4dc8e0dc352c85e8a4745db1150abb1f55e6b9376585f",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-edit-conflict.png",
+      "width": 761,
+      "state": "edit-conflict",
+      "sha256": "9c5566694805c4f767227e893c05a5a1b79b1c5198796c213b30ce40859528e9",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-create-after-edit-failed.png",
+      "width": 761,
+      "state": "create-after-edit-failed",
+      "sha256": "2d840611620b3d27286b6ca13e30f54da23e883dab6f01a586c1f58f7365ad56",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-step-focus.png",
+      "width": 761,
+      "state": "step-focus",
+      "sha256": "4dc95dbf1e632f465af8887c7d3a377b49278caba862f869c00e155e90b085b2",
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-create-step-1.png",
+      "width": 1440,
+      "state": "create-step-1",
+      "sha256": "0970c3e4bd488b1a4bf3cebc2e997a8ef87f28b77ce4be6a32eadcc2abc561d1",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-create-step-1-bottom.png",
+      "width": 1440,
+      "state": "create-step-1-bottom",
+      "sha256": "0970c3e4bd488b1a4bf3cebc2e997a8ef87f28b77ce4be6a32eadcc2abc561d1",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-create-step-2.png",
+      "width": 1440,
+      "state": "create-step-2",
+      "sha256": "10cc28d24360555cf94f545d696992c72df998e364a90075fdbf5e794be3e312",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-create-step-2-bottom.png",
+      "width": 1440,
+      "state": "create-step-2-bottom",
+      "sha256": "9f624ce939f0b97777abe7347875c4f6e7eeb7b7b73d569f188b5ca8b86f7fd4",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-create-step-3.png",
+      "width": 1440,
+      "state": "create-step-3",
+      "sha256": "6c2dcb1f6fc83a0c543b15debc09a23c6aeb89b997c0b62edb7b751af228a7e3",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-create-step-3-bottom.png",
+      "width": 1440,
+      "state": "create-step-3-bottom",
+      "sha256": "490817e850ee268b35f59de383175572b327c700fc676d163fdc847cd23dfadd",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-create-step-4.png",
+      "width": 1440,
+      "state": "create-step-4",
+      "sha256": "1c638c9adfd1201e6d6260e4e8abb5f99e459cd135f5f42367147d4fd01189c7",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-create-step-4-bottom.png",
+      "width": 1440,
+      "state": "create-step-4-bottom",
+      "sha256": "1c638c9adfd1201e6d6260e4e8abb5f99e459cd135f5f42367147d4fd01189c7",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-basic-errors.png",
+      "width": 1440,
+      "state": "basic-errors",
+      "sha256": "08158f865073bb13742ea1e404c15d9ee0f3e3eafc3f1b2c333ae7ae8833d955",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-scope-errors.png",
+      "width": 1440,
+      "state": "scope-errors",
+      "sha256": "1a0b673569e34371b8754d1bf0516898da978452d338588c2ed1d9dc34495d7f",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-execution-errors.png",
+      "width": 1440,
+      "state": "execution-errors",
+      "sha256": "1e1d4ba35ebed47e0bd72de76249389738e06118bc9265cbca58ccff0c8d0185",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-execution-errors-bottom.png",
+      "width": 1440,
+      "state": "execution-errors-bottom",
+      "sha256": "9eb1a3eefb073b35e38c6989a0a43daa493ec7163df03d6bf1c3f0ab97526e0a",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-publish-errors.png",
+      "width": 1440,
+      "state": "publish-errors",
+      "sha256": "9d0cd68930d18c3da4c5b69fd5ad80ddcd8de1db65ce40e690386c4ac55328e4",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-publish-errors-bottom.png",
+      "width": 1440,
+      "state": "publish-errors-bottom",
+      "sha256": "9d0cd68930d18c3da4c5b69fd5ad80ddcd8de1db65ce40e690386c4ac55328e4",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-template-public_page.png",
+      "width": 1440,
+      "state": "template-public_page",
+      "sha256": "179abb7fa2ad725cd52d289530028fd45d2974ea8903742b1330e830a7c6845e",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-template-public_rss.png",
+      "width": 1440,
+      "state": "template-public_rss",
+      "sha256": "be80a8b630e00af91579d5dabdec891a55b316f09dad6308df02138377693d0b",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-template-authenticated_browser.png",
+      "width": 1440,
+      "state": "template-authenticated_browser",
+      "sha256": "d313487579aa9e837e19bb6da39dca8114b1b921f14abd61e8316b7d393456eb",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-template-import.png",
+      "width": 1440,
+      "state": "template-import",
+      "sha256": "4ceaf3be1cb3718c944b6107a8db7ba12ce94e6a621d738822752dee44e022cb",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-template-manual.png",
+      "width": 1440,
+      "state": "template-manual",
+      "sha256": "449142a5b065a60885dbebea7258f04ab932072f2a0581e389fbfe2820d86cdd",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-create-saving.png",
+      "width": 1440,
+      "state": "create-saving",
+      "sha256": "0730517a761581134b3226c9f8392eb074f9a6f25e5c5d0d98dc63f1e1420b66",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-create-failed.png",
+      "width": 1440,
+      "state": "create-failed",
+      "sha256": "6c03e7d4157a9c66a9fd6b735ed4fb32245ec92773595914cb91c19e2a96b518",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-create-error-trace.png",
+      "width": 1440,
+      "state": "create-error-trace",
+      "sha256": "fea8bce4a4b4bfba1db392879dd7b795f80384e6ba134296f25f1ee82b8b3ab2",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-edit-step-1.png",
+      "width": 1440,
+      "state": "edit-step-1",
+      "sha256": "772f33cd7227a3da97e0159629a2c765a784c660a2534bbba1de61a78dbd832d",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-edit-step-1-bottom.png",
+      "width": 1440,
+      "state": "edit-step-1-bottom",
+      "sha256": "772f33cd7227a3da97e0159629a2c765a784c660a2534bbba1de61a78dbd832d",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-edit-step-2.png",
+      "width": 1440,
+      "state": "edit-step-2",
+      "sha256": "db121bfc6a19a2cf014ece00ee16d6f16c04904717d76e3a59c393c93d92677e",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-edit-step-2-bottom.png",
+      "width": 1440,
+      "state": "edit-step-2-bottom",
+      "sha256": "7b1ab9806ba68c66aa7830b46e3d77e37c5027fdcdf8f61dc6c34753de40cb7b",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-edit-step-3.png",
+      "width": 1440,
+      "state": "edit-step-3",
+      "sha256": "dbb2ad7da820fdb470dc7932bbbca1df1c1166b6f328323bace9f5f49dd785fd",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-edit-step-3-bottom.png",
+      "width": 1440,
+      "state": "edit-step-3-bottom",
+      "sha256": "21994de1f35dd4f65e9560e7f197b9e1ad772766bdf39b03b69b57670ee1e0c2",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-edit-step-4.png",
+      "width": 1440,
+      "state": "edit-step-4",
+      "sha256": "81e1d9747b6f95e8a9ebb195aeebbda7c08c09deaa0f80cd1ace78dd2a7dc3bf",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-edit-step-4-bottom.png",
+      "width": 1440,
+      "state": "edit-step-4-bottom",
+      "sha256": "81e1d9747b6f95e8a9ebb195aeebbda7c08c09deaa0f80cd1ace78dd2a7dc3bf",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-edit-conflict.png",
+      "width": 1440,
+      "state": "edit-conflict",
+      "sha256": "18a1ec4f9443cacb464786479521d0e01679080dabf5c2504eb745b55f822848",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-create-after-edit-failed.png",
+      "width": 1440,
+      "state": "create-after-edit-failed",
+      "sha256": "cbe42a040d2983e72b5eeeb7c38f3ef762b37a8c2e3ae51423545c902ee75468",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-step-focus.png",
+      "width": 1440,
+      "state": "step-focus",
+      "sha256": "df6edf598cc70c315cb577d812b05087c0958dac4ce1eee879a588b537b384b1",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核来源",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "source_changed",
+              "empty_result"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "status": 503,
+          "idempotencyPresent": true
+        },
+        {
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "公开趋势 RSS",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "status": 409,
+          "idempotencyPresent": true
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_after_edit",
+            "name": "编辑后新建",
+            "target_url": "https://example.test/new",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z"
+          },
+          "status": 409,
+          "idempotencyPresent": true
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核来源",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "source_changed",
+              "empty_result"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "status": 503,
+          "idempotencyPresent": true
+        },
+        {
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "公开趋势 RSS",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "status": 409,
+          "idempotencyPresent": true
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_after_edit",
+            "name": "编辑后新建",
+            "target_url": "https://example.test/new",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z"
+          },
+          "status": 409,
+          "idempotencyPresent": true
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核来源",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "source_changed",
+              "empty_result"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "status": 503,
+          "idempotencyPresent": true
+        },
+        {
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "公开趋势 RSS",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "status": 409,
+          "idempotencyPresent": true
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_after_edit",
+            "name": "编辑后新建",
+            "target_url": "https://example.test/new",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z"
+          },
+          "status": 409,
+          "idempotencyPresent": true
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核来源",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "source_changed",
+              "empty_result"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "status": 503,
+          "idempotencyPresent": true
+        },
+        {
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "公开趋势 RSS",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "status": 409,
+          "idempotencyPresent": true
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_after_edit",
+            "name": "编辑后新建",
+            "target_url": "https://example.test/new",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z"
+          },
+          "status": 409,
+          "idempotencyPresent": true
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    }
+  ],
+  "processesClosed": true
+}

@@ -1,0 +1,271 @@
+/* P46 editor review only. No production imports or behavior changes. */
+html body.p46-editor-review #app .provider-editor-layer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(15, 31, 53, 0.55);
+  backdrop-filter: none;
+}
+html body.p46-editor-review #app .provider-editor {
+  width: min(100%, 1000px);
+  max-width: none;
+  max-height: calc(100dvh - 48px);
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  border: 1px solid #c9d6e8;
+  border-radius: 12px;
+  background: white;
+  color: #142a46;
+  box-shadow: none;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 0;
+  scroll-padding-block: 24px 96px;
+}
+html body.p46-editor-review #app .provider-editor > header {
+  grid-column: 1/-1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  padding: 24px 28px;
+  border: 0;
+  border-radius: 0;
+  background: #294caf;
+  color: white;
+}
+html body.p46-editor-review #app .provider-editor > header p {
+  margin: 0 0 8px;
+  color: #edf3ff;
+  font-size: 13px;
+  letter-spacing: 0;
+}
+html body.p46-editor-review #app .provider-editor > header h3 {
+  margin: 0;
+  color: white;
+  font-size: 26px;
+}
+html body.p46-editor-review #app .provider-editor :is(button, summary) {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #9db1cc;
+  border-radius: 6px;
+  color: #294caf;
+  background: white;
+  font-size: 14px;
+}
+html body.p46-editor-review #app .provider-editor > header button {
+  min-width: 44px;
+  color: white;
+  background: transparent;
+  border-color: #97ade1;
+  font-size: 22px;
+}
+html body.p46-editor-review #app .provider-editor-steps {
+  grid-column: 1;
+  grid-row: 2/5;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  margin: 0;
+  padding: 24px 16px;
+  background: #294caf;
+  border: 0;
+  border-radius: 0;
+}
+html body.p46-editor-review #app .provider-editor-steps li {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+html body.p46-editor-review #app .provider-editor-steps button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  color: white;
+  background: transparent;
+  border-color: transparent;
+}
+html body.p46-editor-review #app .provider-editor-steps span {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  color: inherit;
+  background: none;
+}
+html body.p46-editor-review #app .provider-editor-steps [aria-current="step"] {
+  background: white;
+  color: #294caf;
+}
+html body.p46-editor-review #app .provider-template-bar {
+  grid-column: 2;
+  grid-row: 2;
+  margin: 0;
+  padding: 20px 28px;
+  background: #eef2f7;
+  border: 0;
+  border-radius: 0;
+  color: #536b86;
+  gap: 12px;
+  font-size: 14px;
+}
+html body.p46-editor-review #app .provider-fields {
+  grid-column: 2;
+  grid-row: 3;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 20px;
+  margin: 0;
+  padding: 28px;
+}
+html body.p46-editor-review #app .provider-fields label {
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+  color: #536b86;
+  font-size: 14px;
+  font-weight: 500;
+}
+html body.p46-editor-review #app .provider-fields :is(input, select) {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 10px 12px;
+  color: #142a46;
+  background: white;
+  border: 1px solid #9db1cc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+html body.p46-editor-review #app .provider-fields small {
+  color: #a33332;
+  font-size: 13px;
+  line-height: 1.6;
+}
+html body.p46-editor-review #app .provider-publish-preview {
+  padding: 18px;
+  display: grid;
+  gap: 10px;
+  border: 0;
+  border-left: 3px solid #294caf;
+  border-radius: 0;
+  background: #eef2f7;
+  color: #536b86;
+  font-size: 14px;
+}
+html body.p46-editor-review #app .provider-publish-preview strong {
+  color: #142a46;
+}
+html body.p46-editor-review #app .provider-editor-message {
+  grid-column: 2;
+  grid-row: 4;
+  margin: 0 28px 24px;
+  padding: 16px;
+  border: 1px solid #e5bca4;
+  border-radius: 6px;
+  background: #fff8ef;
+  color: #75461f;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+html body.p46-editor-review #app .provider-editor-message code {
+  display: block;
+  margin-top: 10px;
+  color: #536b86;
+}
+html body.p46-editor-review #app .provider-editor > footer {
+  grid-column: 1/-1;
+  grid-row: 5;
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0;
+  padding: 18px 28px;
+  border: 0;
+  border-top: 1px solid #d8e1ed;
+  background: white;
+  color: #536b86;
+  font-size: 13px;
+}
+html body.p46-editor-review #app .provider-editor > footer > span {
+  flex: 1;
+}
+html body.p46-editor-review #app .provider-editor > footer button:not(.secondary) {
+  color: white;
+  background: #294caf;
+  border-color: #294caf;
+}
+html body.p46-editor-review #app .provider-editor button:disabled,
+html body.p46-editor-review #app .provider-editor > footer button:disabled {
+  color: #66748a;
+  background: #e8edf4;
+  border-color: #d8e1ed;
+  opacity: 1;
+  cursor: not-allowed;
+}
+html
+  body.p46-editor-review
+  #app
+  .provider-editor
+  :is(button, input, select, summary):focus-visible {
+  outline: 3px solid #4276df;
+  outline-offset: 3px;
+}
+html
+  body.p46-editor-review
+  #app
+  .provider-editor
+  :is(header, .provider-editor-steps)
+  button:focus-visible {
+  outline-color: white;
+}
+@media (max-width: 760px) {
+  html body.p46-editor-review #app .provider-editor-layer {
+    padding: 12px;
+  }
+  html body.p46-editor-review #app .provider-editor {
+    display: block;
+    max-height: calc(100dvh - 24px);
+  }
+  html body.p46-editor-review #app .provider-editor > header {
+    padding: 20px;
+  }
+  html body.p46-editor-review #app .provider-editor-steps {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 0 12px 20px;
+    gap: 8px;
+  }
+  html body.p46-editor-review #app .provider-editor-steps button {
+    padding: 10px 6px;
+    gap: 4px;
+  }
+  html body.p46-editor-review #app .provider-template-bar {
+    padding: 20px;
+    display: grid;
+    justify-items: start;
+  }
+  html body.p46-editor-review #app .provider-fields {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 24px 20px;
+  }
+  html body.p46-editor-review #app .provider-fields .wide {
+    grid-column: auto;
+  }
+  html body.p46-editor-review #app .provider-editor-message {
+    margin: 0 20px 20px;
+  }
+  html body.p46-editor-review #app .provider-editor > footer {
+    padding: 16px 20px;
+    gap: 12px;
+  }
+}
