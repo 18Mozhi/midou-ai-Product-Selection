@@ -1,0 +1,221 @@
+/* Review only: P48 first-load, empty, access, and dependency states. */
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center:has(.p48-source-state-panel)
+  :is(.source-guide-actions, .source-metrics, .source-help, .source-filter) {
+  display: none;
+}
+
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-state-host {
+  min-width: 0;
+}
+
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-state-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 12px 28px;
+  min-width: 0;
+  min-height: 240px;
+  padding: 28px;
+  border: 1px solid var(--p48-border);
+  border-left: 4px solid var(--p48-accent);
+  border-radius: 6px;
+  background: white;
+  color: var(--p48-ink);
+  text-align: left;
+}
+
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-state-panel[data-kind="empty"] {
+  border-left-color: #6e8199;
+}
+
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-state-panel:is([data-kind="expired"], [data-kind="forbidden"]) {
+  border-left-color: #53759f;
+}
+
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-state-panel[data-kind="blocked"] {
+  border-left-color: #a97016;
+}
+
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-state-panel[data-kind="error"] {
+  border-left-color: #a44a4a;
+}
+
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-state-eyebrow {
+  grid-column: 1;
+  margin: 0;
+  color: var(--p48-accent-strong);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-state-panel
+  h2 {
+  grid-column: 1;
+  margin: 0;
+  color: var(--p48-ink);
+  font-size: clamp(21px, 2vw, 27px);
+  line-height: 1.35;
+}
+
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-state-description {
+  grid-column: 1;
+  max-width: 680px;
+  margin: 0;
+  color: var(--p48-muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-state-technical {
+  grid-column: 1;
+  width: min(100%, 680px);
+  padding-top: 12px;
+  border-top: 1px solid var(--p48-border);
+  color: var(--p48-muted);
+  font-size: 13px;
+}
+
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-state-technical
+  summary {
+  min-height: 44px;
+  padding: 11px 0;
+  color: var(--p48-accent-strong);
+  cursor: pointer;
+}
+
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-state-technical
+  code {
+  display: block;
+  margin-top: 6px;
+  padding: 10px 12px;
+  background: var(--p48-panel-soft);
+  color: var(--p48-ink);
+  font-family: Consolas, monospace;
+  overflow-wrap: anywhere;
+}
+
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-source-state-primary {
+  grid-column: 2;
+  grid-row: 1 / span 4;
+  align-self: end;
+  min-width: 148px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--p48-accent);
+  border-radius: 6px;
+  background: var(--p48-accent);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  :is(.p48-source-state-primary, .p48-source-state-technical summary):focus-visible,
+html
+  body.p48-source-state-review:has(#app .source-center)
+  #app
+  .source-center
+  .source-guide
+  h2:focus {
+  outline: 3px solid var(--p48-focus);
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  html
+    body.p48-source-state-review:has(#app .source-center)
+    #app
+    .source-center
+    .p48-source-state-panel {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    padding: 22px 18px;
+    border-right: 0;
+    border-left-width: 4px;
+    border-radius: 0;
+  }
+
+  html
+    body.p48-source-state-review:has(#app .source-center)
+    #app
+    .source-center
+    .p48-source-state-primary {
+    grid-column: 1;
+    grid-row: auto;
+    width: 100%;
+  }
+}
+
+@media (forced-colors: active) {
+  html
+    body.p48-source-state-review:has(#app .source-center)
+    #app
+    .source-center
+    .p48-source-state-panel,
+  html
+    body.p48-source-state-review:has(#app .source-center)
+    #app
+    .source-center
+    .p48-source-state-primary {
+    border-color: CanvasText;
+  }
+}

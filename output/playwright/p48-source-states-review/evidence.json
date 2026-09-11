@@ -1,0 +1,2558 @@
+{
+  "kind": "P48-SOURCE-STATES-REVIEW-r1",
+  "reviewOnly": true,
+  "processesClosed": true,
+  "ports": [
+    49911
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "scene": "loading",
+      "kind": "loading",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "true"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "loading has no fabricated action",
+          "actual": 0
+        },
+        {
+          "name": "loading has no request ID",
+          "actual": 0
+        },
+        {
+          "name": "loading completes with original GET",
+          "actual": 1
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "empty",
+      "kind": "empty",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 2
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "expired",
+      "kind": "expired",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "expired reaches verified login route",
+          "actual": "/login"
+        },
+        {
+          "name": "expired adds no source GET",
+          "actual": 1
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "forbidden",
+      "kind": "forbidden",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 2
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "rate-limited",
+      "kind": "blocked",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 3
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 4
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "dependency",
+      "kind": "blocked",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 3
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 4
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "error",
+      "kind": "error",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 2
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "loading",
+      "kind": "loading",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "true"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "loading has no fabricated action",
+          "actual": 0
+        },
+        {
+          "name": "loading has no request ID",
+          "actual": 0
+        },
+        {
+          "name": "loading completes with original GET",
+          "actual": 1
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "empty",
+      "kind": "empty",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 2
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "expired",
+      "kind": "expired",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "expired reaches verified login route",
+          "actual": "/login"
+        },
+        {
+          "name": "expired adds no source GET",
+          "actual": 1
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "forbidden",
+      "kind": "forbidden",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 2
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "rate-limited",
+      "kind": "blocked",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 3
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 4
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "dependency",
+      "kind": "blocked",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 3
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 4
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "error",
+      "kind": "error",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 2
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "loading",
+      "kind": "loading",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "true"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "loading has no fabricated action",
+          "actual": 0
+        },
+        {
+          "name": "loading has no request ID",
+          "actual": 0
+        },
+        {
+          "name": "loading completes with original GET",
+          "actual": 1
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "empty",
+      "kind": "empty",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 2
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "expired",
+      "kind": "expired",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "expired reaches verified login route",
+          "actual": "/login"
+        },
+        {
+          "name": "expired adds no source GET",
+          "actual": 1
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "forbidden",
+      "kind": "forbidden",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 2
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "rate-limited",
+      "kind": "blocked",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 3
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 4
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "dependency",
+      "kind": "blocked",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 3
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 4
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "error",
+      "kind": "error",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 2
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "loading",
+      "kind": "loading",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "true"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "loading has no fabricated action",
+          "actual": 0
+        },
+        {
+          "name": "loading has no request ID",
+          "actual": 0
+        },
+        {
+          "name": "loading completes with original GET",
+          "actual": 1
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "empty",
+      "kind": "empty",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 2
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "expired",
+      "kind": "expired",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "expired reaches verified login route",
+          "actual": "/login"
+        },
+        {
+          "name": "expired adds no source GET",
+          "actual": 1
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "forbidden",
+      "kind": "forbidden",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 2
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "rate-limited",
+      "kind": "blocked",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 3
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 4
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "dependency",
+      "kind": "blocked",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 3
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 4
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "error",
+      "kind": "error",
+      "checks": [
+        {
+          "name": "safe initial attempts",
+          "actual": 1
+        },
+        {
+          "name": "state hides irrelevant directory chrome",
+          "actual": 0
+        },
+        {
+          "name": "no duplicated global message",
+          "actual": 0
+        },
+        {
+          "name": "loading busy truth",
+          "actual": "false"
+        },
+        {
+          "name": "one state heading",
+          "actual": 1
+        },
+        {
+          "name": "one visible recovery action",
+          "actual": 1
+        },
+        {
+          "name": "recovery action44",
+          "actual": true
+        },
+        {
+          "name": "one explicit recovery GET",
+          "actual": 2
+        },
+        {
+          "name": "recovery restores full result count",
+          "actual": "找到 146 个来源"
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-loading-state.png",
+      "width": 390,
+      "scene": "loading",
+      "suffix": "state",
+      "sha256": "1ffdd7f6609f7c1615385366f610036aad29cd0ceb0c26a93cec977dc3e3702b",
+      "pixelWidth": 362,
+      "pixelHeight": 139
+    },
+    {
+      "file": "390-empty-state.png",
+      "width": 390,
+      "scene": "empty",
+      "suffix": "state",
+      "sha256": "b8476553c7c4b5753f17be85776833bc64da427da231de01f6b7994e36b1786f",
+      "pixelWidth": 362,
+      "pixelHeight": 289
+    },
+    {
+      "file": "390-empty-technical.png",
+      "width": 390,
+      "scene": "empty",
+      "suffix": "technical",
+      "sha256": "a08be3d1e242ff5836b3d865a33ebbf13bd1b9c47452dff0ef88369ceba5ab86",
+      "pixelWidth": 362,
+      "pixelHeight": 330
+    },
+    {
+      "file": "390-expired-state.png",
+      "width": 390,
+      "scene": "expired",
+      "suffix": "state",
+      "sha256": "3cd39ca6e0f73a2ab41bb8435eeab4b88fd380862f08c2994d294c3f4e781552",
+      "pixelWidth": 362,
+      "pixelHeight": 289
+    },
+    {
+      "file": "390-expired-technical.png",
+      "width": 390,
+      "scene": "expired",
+      "suffix": "technical",
+      "sha256": "59515c470286ed75df445e2f4173b854ee9eb435924595207b1face751b56eb7",
+      "pixelWidth": 362,
+      "pixelHeight": 330
+    },
+    {
+      "file": "390-forbidden-state.png",
+      "width": 390,
+      "scene": "forbidden",
+      "suffix": "state",
+      "sha256": "6efe8cdecca30cd8e9813d8eee87e18124d70e3fc3316689a9a11b534d2e2ebd",
+      "pixelWidth": 362,
+      "pixelHeight": 289
+    },
+    {
+      "file": "390-forbidden-technical.png",
+      "width": 390,
+      "scene": "forbidden",
+      "suffix": "technical",
+      "sha256": "c8cee1e785333f55af476feaf9f91e237f127c200fd2b9840ad99426fe74e0b3",
+      "pixelWidth": 362,
+      "pixelHeight": 330
+    },
+    {
+      "file": "390-rate-limited-state.png",
+      "width": 390,
+      "scene": "rate-limited",
+      "suffix": "state",
+      "sha256": "0d69e2bb25bbb0563d5fc1255f75d280041aeeaed56f98b71dc0473d90896cd0",
+      "pixelWidth": 362,
+      "pixelHeight": 264
+    },
+    {
+      "file": "390-rate-limited-technical.png",
+      "width": 390,
+      "scene": "rate-limited",
+      "suffix": "technical",
+      "sha256": "1613f6711e7d6689f6097d54f7d368b539321e136ec4ac4fe8b490b8b6e693ec",
+      "pixelWidth": 362,
+      "pixelHeight": 305
+    },
+    {
+      "file": "390-dependency-state.png",
+      "width": 390,
+      "scene": "dependency",
+      "suffix": "state",
+      "sha256": "0a573665143afab7899b233a2ca34bfc6dde5792689c892f9c3e2ab44cfa3d88",
+      "pixelWidth": 362,
+      "pixelHeight": 264
+    },
+    {
+      "file": "390-dependency-technical.png",
+      "width": 390,
+      "scene": "dependency",
+      "suffix": "technical",
+      "sha256": "0761a311cc9781157ac873a732c2921d6956c959716abfc9e746f0c9048c36b3",
+      "pixelWidth": 362,
+      "pixelHeight": 305
+    },
+    {
+      "file": "390-error-state.png",
+      "width": 390,
+      "scene": "error",
+      "suffix": "state",
+      "sha256": "b8f217c89e42b20497e43a8529f3666638658ab172a7ccb6a98aa81765ae60b5",
+      "pixelWidth": 362,
+      "pixelHeight": 264
+    },
+    {
+      "file": "390-error-technical.png",
+      "width": 390,
+      "scene": "error",
+      "suffix": "technical",
+      "sha256": "9ae2094d099b222b5cbff700e762a64793656e6ea35b833197db354b350846fb",
+      "pixelWidth": 362,
+      "pixelHeight": 305
+    },
+    {
+      "file": "760-loading-state.png",
+      "width": 760,
+      "scene": "loading",
+      "suffix": "state",
+      "sha256": "d88148597b2552b9872d078801fa6fa9b315553d38ea59eccb0e314b07b1763a",
+      "pixelWidth": 732,
+      "pixelHeight": 140
+    },
+    {
+      "file": "760-empty-state.png",
+      "width": 760,
+      "scene": "empty",
+      "suffix": "state",
+      "sha256": "e459ac9a0fd401d8e388ade232d77719a2b6972a08cffab8260e6340035b21dd",
+      "pixelWidth": 732,
+      "pixelHeight": 265
+    },
+    {
+      "file": "760-expired-state.png",
+      "width": 760,
+      "scene": "expired",
+      "suffix": "state",
+      "sha256": "b91fc106da02fa09fdc32349548f83a8eec337867843bc8820bece4fac596c3e",
+      "pixelWidth": 732,
+      "pixelHeight": 265
+    },
+    {
+      "file": "760-forbidden-state.png",
+      "width": 760,
+      "scene": "forbidden",
+      "suffix": "state",
+      "sha256": "b31921346ac61caa368bc5fc28a49d1b104ebc794185c480f0137d19c1537130",
+      "pixelWidth": 732,
+      "pixelHeight": 265
+    },
+    {
+      "file": "760-rate-limited-state.png",
+      "width": 760,
+      "scene": "rate-limited",
+      "suffix": "state",
+      "sha256": "5128d42b96b3f0949cbfc601232aabbcd61c5c43ac173b62f66caa74ce1ae2f5",
+      "pixelWidth": 732,
+      "pixelHeight": 265
+    },
+    {
+      "file": "760-dependency-state.png",
+      "width": 760,
+      "scene": "dependency",
+      "suffix": "state",
+      "sha256": "1c24a26225756d9f0cc02039f9c808f115a805da70c84ae3bdd5da1aa3fcb4ef",
+      "pixelWidth": 732,
+      "pixelHeight": 265
+    },
+    {
+      "file": "760-error-state.png",
+      "width": 760,
+      "scene": "error",
+      "suffix": "state",
+      "sha256": "faff2e719886258dcef5a0deed949473bc55b4952dea4bc86f4883af4fa197c7",
+      "pixelWidth": 732,
+      "pixelHeight": 265
+    },
+    {
+      "file": "1024-loading-state.png",
+      "width": 1024,
+      "scene": "loading",
+      "suffix": "state",
+      "sha256": "f26c1c4205685d8593e11426cf626290e5bc5988a7c858b4bea2caf618f29d1e",
+      "pixelWidth": 960,
+      "pixelHeight": 241
+    },
+    {
+      "file": "1024-empty-state.png",
+      "width": 1024,
+      "scene": "empty",
+      "suffix": "state",
+      "sha256": "d562e38b67802e31b8eb6e20a5059e6d54e96c6b14bfa20aa0f805cd4ef568d4",
+      "pixelWidth": 960,
+      "pixelHeight": 241
+    },
+    {
+      "file": "1024-expired-state.png",
+      "width": 1024,
+      "scene": "expired",
+      "suffix": "state",
+      "sha256": "6091cad759ec746a6d007ffd10ba396ca680ac3969488c7b476a7c43d3d065d8",
+      "pixelWidth": 960,
+      "pixelHeight": 241
+    },
+    {
+      "file": "1024-forbidden-state.png",
+      "width": 1024,
+      "scene": "forbidden",
+      "suffix": "state",
+      "sha256": "d9d0f0b381e661fda94968c4428c68b3e4b6683b2c49cf5308df0f888ab82a1d",
+      "pixelWidth": 960,
+      "pixelHeight": 241
+    },
+    {
+      "file": "1024-rate-limited-state.png",
+      "width": 1024,
+      "scene": "rate-limited",
+      "suffix": "state",
+      "sha256": "f42058b3d085508794664315fe52623e730e7f129363ed96eef78dbedfc71e2e",
+      "pixelWidth": 960,
+      "pixelHeight": 241
+    },
+    {
+      "file": "1024-dependency-state.png",
+      "width": 1024,
+      "scene": "dependency",
+      "suffix": "state",
+      "sha256": "59575e5562f1d5fc0ff1770300b9094d57780d2f850ecf75a3ae0df84a5c72a4",
+      "pixelWidth": 960,
+      "pixelHeight": 241
+    },
+    {
+      "file": "1024-error-state.png",
+      "width": 1024,
+      "scene": "error",
+      "suffix": "state",
+      "sha256": "46c7146e119a075611fb755ec0410d8ad60e71d1d81039be9d77d17dcea1663e",
+      "pixelWidth": 960,
+      "pixelHeight": 241
+    },
+    {
+      "file": "1440-loading-state.png",
+      "width": 1440,
+      "scene": "loading",
+      "suffix": "state",
+      "sha256": "159fac107d4908e1a51b07c77e4d08479c55847b057b6e29f2c7259403ea357f",
+      "pixelWidth": 1348,
+      "pixelHeight": 241
+    },
+    {
+      "file": "1440-empty-state.png",
+      "width": 1440,
+      "scene": "empty",
+      "suffix": "state",
+      "sha256": "b7e9abcdcab6ba9c809672912ae0ec6452bd3cc68a3ce708e7c672b6eb5f7f44",
+      "pixelWidth": 1348,
+      "pixelHeight": 241
+    },
+    {
+      "file": "1440-expired-state.png",
+      "width": 1440,
+      "scene": "expired",
+      "suffix": "state",
+      "sha256": "3719b45d78bd6357b8b1c56240c3e053bc8263f17b52954c0cc9192db30a90c5",
+      "pixelWidth": 1348,
+      "pixelHeight": 241
+    },
+    {
+      "file": "1440-forbidden-state.png",
+      "width": 1440,
+      "scene": "forbidden",
+      "suffix": "state",
+      "sha256": "f168c27caebd8f2763396cba0a1468fe57fd1f5b07537ed400e463739d31904e",
+      "pixelWidth": 1348,
+      "pixelHeight": 241
+    },
+    {
+      "file": "1440-rate-limited-state.png",
+      "width": 1440,
+      "scene": "rate-limited",
+      "suffix": "state",
+      "sha256": "1b49586105070c5bd17a82ea185ffeb62172af94c06f9b25f415779d87f48127",
+      "pixelWidth": 1348,
+      "pixelHeight": 241
+    },
+    {
+      "file": "1440-dependency-state.png",
+      "width": 1440,
+      "scene": "dependency",
+      "suffix": "state",
+      "sha256": "f820c2259450df1a46fd6fbbbaa54b052c20f1fdb203c6217bb92788287e80e8",
+      "pixelWidth": 1348,
+      "pixelHeight": 241
+    },
+    {
+      "file": "1440-error-state.png",
+      "width": 1440,
+      "scene": "error",
+      "suffix": "state",
+      "sha256": "fb58f765c328176e5a5cc034367200c2844ad8778b3c174f80ae1b9b45c41821",
+      "pixelWidth": 1348,
+      "pixelHeight": 241
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/index.html": "0376c4bf04227ac5dbb6bb43895e5ed97eef6ca8bde54f08774908d3f07d9d88",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+    "apps/web/src/components/LocalIdentity.vue": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "66b064c2135275b9d173ef316692366823ef4f6276002796d9ed112183218cef",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.css": "a31b900bedbf1cafdf756eea8b7bd8742a5ec844fef9bcad0d8ffe643e39bb74",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/navigation-shell-scoped.css": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+    "apps/web/src/provider-adapters-c-detail.css": "094a11fe39b3701c35d6061f7a570e940b3bb00abcc0b2ed7f64ffeaea0c6bdd",
+    "apps/web/src/provider-adapters-c-feedback.css": "64b09e635e98f8865ea2fb3c8b33b1d21f447affd55061f3d01cf6667904bba2",
+    "apps/web/src/provider-adapters-c-page.css": "899ca57a21bceef95c7dc030bb7f92bae1755f324b1d26c3f0ba692dad736c86",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/route-catalog.generated.json": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/signal-ledger-workflows.css": "3a3bcb8ca4aa2c0b7dae11218223aaa9de25db45eb0704a2670ea156bf06229b",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/provider-approved-feedback.css": "6b21f3adefccd50f52268076f3dc6134eb66db02c8c62a8404a19fa2e2c45a9e",
+    "apps/web/src/styles/provider-approved-structure.css": "901f1088e4ff961a730204ab6e0ac2111b20bc1448a5001299c98f53f318308b",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-sources-page-preview.css": "0ad5722b2920de2f07d92f37afb706266dde7726b4677a4bdbf8107cb00744e7",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-sources-states-preview.css": "cd912f34921ea1edba32c81fb59c9ebfa1962b7f06559fc0158d887e5feee3a9",
+    "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
+    "scripts/lib/ui-phase2-provider-sources-states-preview.mjs": "94bc70487428740ca3030d59569c1305ed1940aea4654e0a0dbe8977503f1e92",
+    "scripts/verify-ui-phase2-provider-sources-states.mjs": "0c7e6d2577bd4624fe391275e1de1f669893856c2f96e170bc28955b2a82da3e",
+    "tests/e2e/m03-07-provider-sources.spec.ts": "29c1232a33cb260beeee6851f33c4558873d25e47e538d6a2e04c47eaa6ba5fe"
+  },
+  "boundary": "Actual App/current ProviderSourceCenter with exact review-only state template transform and P48 CSS. Seven first-load scenes preserve current HTTP-to-state mapping, safe GET retry counts,146-row recovery and verified /login route. No production/API/permission/write/external/deploy change; no real RBAC,MySQL,dependency or production verification."
+}
