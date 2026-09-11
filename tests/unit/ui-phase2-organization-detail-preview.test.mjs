@@ -1,5 +1,6 @@
 import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
+import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -81,7 +82,7 @@ test("P42 evidence binds exact source, images and six breakpoints", () => {
   assert.equal(e.checks.length, 141);
   assert.equal(e.screenshots.length, 42);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(reviewHash(read(file)), sha, file);
+    assert.equal(reviewHash(historicalFilterResetSource(file, read(file))), sha, file);
   for (const [file, transform] of Object.entries({
     [detail]: organizationDetailPreview,
     [reason]: organizationReasonPreview,

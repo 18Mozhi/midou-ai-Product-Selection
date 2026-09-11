@@ -1,5 +1,6 @@
 import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
+import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -37,7 +38,7 @@ test("Historical P39 creation preview preserves its original production source o
     /html body\.p39-create-preview #app dialog\[aria-label="新建用户或平台管理员"\]/,
   );
 });
-test("P39 creation exact42 PNG and121 browser checks have current source hashes", () => {
+test("P39 creation exact42 PNG and121 browser checks retain captured source revisions", () => {
   const e = JSON.parse(read(`${output}/evidence.json`));
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
@@ -49,7 +50,7 @@ test("P39 creation exact42 PNG and121 browser checks have current source hashes"
     [390, 760, 761, 1440],
   );
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
+    assert.equal(hash(historicalFilterResetSource(file, read(file))), sha, file);
   assert.deepEqual(
     readdirSync(output)
       .filter((f) => f.endsWith(".png"))

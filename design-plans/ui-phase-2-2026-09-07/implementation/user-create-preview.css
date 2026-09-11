@@ -1,0 +1,212 @@
+/* P43 only. Actual dialog in review host; no production import. */
+html body.p43-user-form-review #app dialog.p43-user-onboarding {
+  --pc-blue: #254a9c;
+  --pc-text: #202c3d;
+  --pc-muted: #58677b;
+  --pc-rule: #dbe1e9;
+  width: min(920px, calc(100% - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--pc-rule);
+  border-radius: 20px;
+  overflow: auto;
+  background: #fff;
+  color: var(--pc-text);
+  scroll-padding: 20px;
+}
+html body.p43-user-form-review #app dialog.p43-user-onboarding::backdrop {
+  background: rgb(25 42 69 / 50%);
+  backdrop-filter: none;
+}
+html
+  body.p43-user-form-review
+  #app
+  dialog.p43-user-onboarding
+  :is(form, h3, h4, p, small, label, input, select, button) {
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+html body.p43-user-form-review #app dialog.p43-user-onboarding form {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 0;
+  min-width: 0;
+  padding: 0;
+}
+html body.p43-user-form-review #app .p43-user-intro {
+  padding: 32px 26px;
+  color: #fff;
+  background: var(--pc-blue);
+}
+html body.p43-user-form-review #app .p43-user-intro small {
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+html body.p43-user-form-review #app .p43-user-intro h3 {
+  color: #fff;
+  font-size: 28px;
+  line-height: 1.4;
+  margin: 18px 0;
+}
+html body.p43-user-form-review #app .p43-user-intro p {
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.8;
+  margin: 0;
+}
+html body.p43-user-form-review #app .p43-user-fields-body {
+  background: #fff;
+  font-weight: 400;
+  padding: 28px 32px;
+  min-width: 0;
+  display: grid;
+  gap: 24px;
+}
+html body.p43-user-form-review #app .p43-user-field-group {
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+}
+html body.p43-user-form-review #app .p43-user-field-group + .p43-user-field-group {
+  padding-top: 24px;
+  border-top: 1px solid var(--pc-rule);
+}
+html body.p43-user-form-review #app .p43-user-field-group header {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+html body.p43-user-form-review #app .p43-user-field-group h4 {
+  font-size: 20px;
+  color: var(--pc-text);
+  margin: 0;
+}
+html body.p43-user-form-review #app .p43-user-field-group :is(p, small) {
+  color: var(--pc-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+}
+html body.p43-user-form-review #app .p43-user-field-group > small {
+  margin-top: -6px;
+}
+html body.p43-user-form-review #app .p43-user-field-group label {
+  margin: 0;
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+  color: var(--pc-text);
+  font-size: 16px;
+  font-weight: 600;
+}
+html body.p43-user-form-review #app dialog.p43-user-onboarding :is(input, select) {
+  min-width: 0;
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 12px;
+  border: 1px solid #6680a2;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--pc-text);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+html
+  body.p43-user-form-review
+  #app
+  dialog.p43-user-onboarding
+  :is(input, select, button):focus-visible {
+  outline: 3px solid var(--pc-blue);
+  outline-offset: 3px;
+}
+html body.p43-user-form-review #app dialog.p43-user-onboarding footer {
+  position: static;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 24px 0 0;
+  border-top: 1px solid var(--pc-rule);
+  background: #fff;
+}
+html body.p43-user-form-review #app dialog.p43-user-onboarding button {
+  min-width: 112px;
+  min-height: 48px;
+  padding: 11px 20px;
+  border: 1px solid var(--pc-blue);
+  border-radius: 8px;
+  background: var(--pc-blue);
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 700;
+  opacity: 1;
+  transform: none;
+  box-shadow: none;
+}
+html body.p43-user-form-review #app dialog.p43-user-onboarding button[type="button"] {
+  background: #fff;
+  color: var(--pc-blue);
+}
+html body.p43-user-form-review #app dialog.p43-user-onboarding button:not(:disabled):hover {
+  background: #193b80;
+  color: #fff;
+}
+html body.p43-user-form-review #app dialog.p43-user-onboarding button:not(:disabled):active {
+  box-shadow: inset 0 0 0 2px #fff;
+}
+html body.p43-user-form-review #app dialog.p43-user-onboarding button:disabled {
+  background: #edf1f6;
+  color: var(--pc-muted);
+  border-color: var(--pc-rule);
+  opacity: 1;
+  cursor: not-allowed;
+}
+html body.p43-user-form-review #app dialog.p43-user-onboarding .dialog-feedback--error {
+  padding: 12px 16px;
+  border: 1px solid #a32934;
+  border-radius: 8px;
+  background: #fff3f3;
+  color: #a32934;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+@media (max-width: 760px) {
+  html body.p43-user-form-review #app dialog.p43-user-onboarding {
+    width: calc(100% - 24px);
+    max-height: calc(100dvh - 24px);
+    border-radius: 12px;
+  }
+  html body.p43-user-form-review #app dialog.p43-user-onboarding form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html body.p43-user-form-review #app .p43-user-intro {
+    padding: 20px;
+  }
+  html body.p43-user-form-review #app .p43-user-intro h3 {
+    margin: 8px 0;
+    font-size: 24px;
+  }
+  html body.p43-user-form-review #app .p43-user-intro p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  html body.p43-user-form-review #app .p43-user-fields-body {
+    padding: 24px 20px;
+  }
+  html body.p43-user-form-review #app dialog.p43-user-onboarding footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  html body.p43-user-form-review #app dialog.p43-user-onboarding button {
+    width: 100%;
+    min-width: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body.p43-user-form-review #app dialog.p43-user-onboarding * {
+    transition: none;
+  }
+}

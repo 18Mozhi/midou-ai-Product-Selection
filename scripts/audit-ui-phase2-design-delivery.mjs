@@ -1,4 +1,8 @@
 import assert from "node:assert/strict";
+import {
+  historicalFilterResetSource,
+  filterResetRevision,
+} from "./lib/ui-phase2-filter-reset-baseline.mjs";
 import { createHash } from "node:crypto";
 import { readFile, readdir, writeFile, stat } from "node:fs/promises";
 import path from "node:path";
@@ -52,6 +56,7 @@ for (const file of [
   "scripts/audit-ui-phase2-design-delivery.mjs",
   "scripts/lib/ui-phase2-organization-action-baseline.mjs",
   "scripts/lib/ui-phase2-token-copy-baseline.mjs",
+  "scripts/lib/ui-phase2-filter-reset-baseline.mjs",
 ])
   inputHashes[file] = (await fileHashes(file)).lf;
 const packages = [];
@@ -70,7 +75,10 @@ for (const dir of (await readdir(path.join(root, "design"), { withFileTypes: tru
       (historical &&
         hash(historicalOrganizationActionSource(file, await text(file))) === expected) ||
       (tokenCopyRevisions[file]?.before === expected &&
-        hash(historicalTokenCopySource(file, await text(file))) === expected);
+        hash(historicalTokenCopySource(file, await text(file))) === expected) ||
+      (file === filterResetRevision.file &&
+        expected === filterResetRevision.before &&
+        hash(historicalFilterResetSource(file, await text(file))) === expected);
     sources.push({
       file,
       expected,

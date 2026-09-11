@@ -1,5 +1,6 @@
 import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
+import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -55,7 +56,7 @@ test("P39 review refuses changed source markup instead of silently rendering an 
     ),
   );
 });
-test("P39 captured evidence has current sources, exact images and honest template/fixture boundaries", () => {
+test("P39 evidence has captured source revisions, exact images and explicit fixture boundaries", () => {
   const e = JSON.parse(read(`${output}/evidence.json`));
   assert.equal(e.approval, "pending");
   assert.match(e.scope, /Not unchanged production template/);
@@ -63,7 +64,7 @@ test("P39 captured evidence has current sources, exact images and honest templat
   assert.equal(e.templateTransform.originalHash, hash(preview.original));
   assert.equal(e.templateTransform.reviewHash, hash(preview.form));
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
+    assert.equal(hash(historicalFilterResetSource(file, read(file))), sha, file);
   assert.equal(e.screenshots.length, 18);
   assert.equal(e.checks.length, 82);
   assert.deepEqual(

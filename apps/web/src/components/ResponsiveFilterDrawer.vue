@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 const props = withDefaults(defineProps<{ label?: string; activeCount?: number }>(), {
   label: "筛选条件",
@@ -13,6 +13,23 @@ const closeButton = ref<HTMLButtonElement | null>(null);
 const sheet = ref<HTMLElement | null>(null);
 let mediaQuery: MediaQueryList | null = null;
 const overlay = computed(() => mobile.value);
+
+watch(
+  () => props.activeCount,
+  async (count) => {
+    if (count || !overlay.value || !open.value) return;
+    const focused = document.activeElement;
+    if (!(focused instanceof HTMLButtonElement) || !sheet.value?.contains(focused)) return;
+    await nextTick();
+    if (
+      overlay.value &&
+      open.value &&
+      focused.disabled &&
+      (document.activeElement === focused || document.activeElement === document.body)
+    )
+      closeButton.value?.focus();
+  },
+);
 
 function syncViewport(event?: MediaQueryListEvent) {
   mobile.value = event?.matches ?? mediaQuery?.matches ?? false;

@@ -1,5 +1,6 @@
 import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
+import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -51,7 +52,7 @@ test("P39 composed template preserves complete original script and every native 
     accountPagePreview(original.replace('class="account-metrics"', 'class="different"')),
   );
 });
-test("P39 whole-page captures have six normal breakpoints, exact files and current sources", () => {
+test("P39 whole-page captures have six normal breakpoints, exact files and captured source revisions", () => {
   const e = JSON.parse(read(`${output}/evidence.json`));
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
@@ -63,7 +64,8 @@ test("P39 whole-page captures have six normal breakpoints, exact files and curre
     e.screenshots.filter((s) => s.state === "normal").map((s) => s.viewport.width),
     [390, 759, 760, 761, 1024, 1440],
   );
-  for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+  for (const [f, sha] of Object.entries(e.sourceHashes))
+    assert.equal(hash(historicalFilterResetSource(f, read(f))), sha, f);
   assert.deepEqual(
     readdirSync(output)
       .filter((f) => f.endsWith(".png"))

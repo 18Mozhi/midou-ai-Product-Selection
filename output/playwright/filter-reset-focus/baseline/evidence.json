@@ -1,0 +1,701 @@
+{
+  "kind": "FILTER-RESET-FOCUS",
+  "mode": "baseline-diagnosis",
+  "baseline": "07c492963f56e266864143cfadaa1e6f6ef5627d",
+  "scope": "Actual shared drawer and unchanged P43 parent with production CSS; intercepted account GET fixtures, synthetic slot boundary checks. Not new C approval/full App/all consumers/complete accessibility/real RBAC or production deployment.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "3ac56e41a5f5b78a4f01d6ee4298dacd0c80f243f414a7a48de8105eb292aa76",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-organization-actions.ts": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "scripts/verify-ui-phase2-filter-reset-focus.mjs": "80f8a7eda8c5e5f073bfca7d9733a2bd9a2695cd8e4d0d6caf5682c0aa98f525",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "click:reset focused before action",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "click:reset has zero filters",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "name": "click:focus repaired",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "click:Escape closes",
+      "actual": "true"
+    },
+    {
+      "width": 390,
+      "name": "click:URL retained",
+      "actual": "yes"
+    },
+    {
+      "width": 390,
+      "name": "click:query removed",
+      "actual": null
+    },
+    {
+      "width": 390,
+      "name": "keyboard:reset focused before action",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "keyboard:reset has zero filters",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "name": "keyboard:focus repaired",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "keyboard:Escape closes",
+      "actual": "true"
+    },
+    {
+      "width": 390,
+      "name": "keyboard:URL retained",
+      "actual": "yes"
+    },
+    {
+      "width": 390,
+      "name": "keyboard:query removed",
+      "actual": null
+    },
+    {
+      "width": 390,
+      "name": "exact account requests",
+      "actual": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "name": "text input focused before clear",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "text input keeps focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "outside focus not stolen",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "new native dialog retains focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "unmount leaves no drawer",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "zero errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "name": "only permitted GET",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "click:reset focused before action",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "click:reset has zero filters",
+      "actual": ""
+    },
+    {
+      "width": 760,
+      "name": "click:focus repaired",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "click:Escape closes",
+      "actual": "true"
+    },
+    {
+      "width": 760,
+      "name": "click:URL retained",
+      "actual": "yes"
+    },
+    {
+      "width": 760,
+      "name": "click:query removed",
+      "actual": null
+    },
+    {
+      "width": 760,
+      "name": "keyboard:reset focused before action",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "keyboard:reset has zero filters",
+      "actual": ""
+    },
+    {
+      "width": 760,
+      "name": "keyboard:focus repaired",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "keyboard:Escape closes",
+      "actual": "true"
+    },
+    {
+      "width": 760,
+      "name": "keyboard:URL retained",
+      "actual": "yes"
+    },
+    {
+      "width": 760,
+      "name": "keyboard:query removed",
+      "actual": null
+    },
+    {
+      "width": 760,
+      "name": "exact account requests",
+      "actual": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "name": "text input focused before clear",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "text input keeps focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "outside focus not stolen",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "new native dialog retains focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "unmount leaves no drawer",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "zero errors",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "only permitted GET",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "click:reset focused before action",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "click:reset has zero filters",
+      "actual": ""
+    },
+    {
+      "width": 761,
+      "name": "click:desktop not focused hidden close",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "name": "click:URL retained",
+      "actual": "yes"
+    },
+    {
+      "width": 761,
+      "name": "click:query removed",
+      "actual": null
+    },
+    {
+      "width": 761,
+      "name": "keyboard:reset focused before action",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "keyboard:reset has zero filters",
+      "actual": ""
+    },
+    {
+      "width": 761,
+      "name": "keyboard:desktop not focused hidden close",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "name": "keyboard:URL retained",
+      "actual": "yes"
+    },
+    {
+      "width": 761,
+      "name": "keyboard:query removed",
+      "actual": null
+    },
+    {
+      "width": 761,
+      "name": "exact account requests",
+      "actual": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ]
+    },
+    {
+      "width": 761,
+      "name": "text input focused before clear",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "text input keeps focus",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "outside focus not stolen",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "new native dialog retains focus",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "unmount leaves no drawer",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "zero errors",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "only permitted GET",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "click:reset focused before action",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "click:reset has zero filters",
+      "actual": ""
+    },
+    {
+      "width": 1440,
+      "name": "click:desktop not focused hidden close",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "name": "click:URL retained",
+      "actual": "yes"
+    },
+    {
+      "width": 1440,
+      "name": "click:query removed",
+      "actual": null
+    },
+    {
+      "width": 1440,
+      "name": "keyboard:reset focused before action",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "keyboard:reset has zero filters",
+      "actual": ""
+    },
+    {
+      "width": 1440,
+      "name": "keyboard:desktop not focused hidden close",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "name": "keyboard:URL retained",
+      "actual": "yes"
+    },
+    {
+      "width": 1440,
+      "name": "keyboard:query removed",
+      "actual": null
+    },
+    {
+      "width": 1440,
+      "name": "exact account requests",
+      "actual": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "text input focused before clear",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "text input keeps focus",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "outside focus not stolen",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "new native dialog retains focus",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "unmount leaves no drawer",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "zero errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "only permitted GET",
+      "actual": []
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-click-after-reset.png",
+      "width": 390,
+      "state": "click-after-reset",
+      "sha256": "f32eab3adf9a37c2590be55d3a10a0ee810ec5afe81b48ac934bf7fb5d2838fe"
+    },
+    {
+      "file": "390-click-after-escape.png",
+      "width": 390,
+      "state": "click-after-escape",
+      "sha256": "f32eab3adf9a37c2590be55d3a10a0ee810ec5afe81b48ac934bf7fb5d2838fe"
+    },
+    {
+      "file": "390-keyboard-after-reset.png",
+      "width": 390,
+      "state": "keyboard-after-reset",
+      "sha256": "2d0d7ef26f44f5b2ecdcb520f1ae5157ad1f2cac1e94d21657e05debaa73b37f"
+    },
+    {
+      "file": "390-keyboard-after-escape.png",
+      "width": 390,
+      "state": "keyboard-after-escape",
+      "sha256": "2d0d7ef26f44f5b2ecdcb520f1ae5157ad1f2cac1e94d21657e05debaa73b37f"
+    },
+    {
+      "file": "760-click-after-reset.png",
+      "width": 760,
+      "state": "click-after-reset",
+      "sha256": "9daf01d6e463e295eb26d978bdc76942965bb370b9178b1b1c3c505ded2d1c7c"
+    },
+    {
+      "file": "760-click-after-escape.png",
+      "width": 760,
+      "state": "click-after-escape",
+      "sha256": "9daf01d6e463e295eb26d978bdc76942965bb370b9178b1b1c3c505ded2d1c7c"
+    },
+    {
+      "file": "760-keyboard-after-reset.png",
+      "width": 760,
+      "state": "keyboard-after-reset",
+      "sha256": "98692c7e62c73d15489ade53e969a36667d60b71ea65bd5ad4b76ccbb38ad720"
+    },
+    {
+      "file": "760-keyboard-after-escape.png",
+      "width": 760,
+      "state": "keyboard-after-escape",
+      "sha256": "98692c7e62c73d15489ade53e969a36667d60b71ea65bd5ad4b76ccbb38ad720"
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {
+            "query": "buyer"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    }
+  ],
+  "processesClosed": true
+}

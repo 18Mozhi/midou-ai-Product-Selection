@@ -1,5 +1,6 @@
 import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
+import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -76,7 +77,7 @@ test("P40 rejects source drift and uses organization-specific help without inven
   assert.doesNotMatch(preview, /概览只展示组织记录/);
   assert.match(organizationRecordPreview(record), /p40-record-counts/);
 });
-test("P40 screenshots bind current sources, exact files and all six normal widths", () => {
+test("P40 screenshots bind captured source revisions, exact files and all six normal widths", () => {
   const e = JSON.parse(read(`${output}/evidence.json`));
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
@@ -84,7 +85,7 @@ test("P40 screenshots bind current sources, exact files and all six normal width
   assert.equal(e.screenshots.length, 36);
   assert.match(e.scope, /Not full App shell/);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(reviewHash(read(file)), sha, file);
+    assert.equal(reviewHash(historicalFilterResetSource(file, read(file))), sha, file);
   for (const [file, transform] of Object.entries(transforms))
     assert.equal(e.transformedHashes[file], reviewHash(transform(read(file))));
   assert.deepEqual(

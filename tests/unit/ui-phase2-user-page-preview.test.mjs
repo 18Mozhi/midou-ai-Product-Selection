@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -67,7 +68,7 @@ test("P43 transformation fails closed on mismatched source and unknown surface",
   assert.throws(() => userPagePreview(read(parent), "unknown"));
 });
 
-test("P43 actual Vue review evidence pins every current source and exact image set", () => {
+test("P43 actual Vue review evidence pins captured source revisions and exact image set", () => {
   const folder = "output/playwright/p43-page-vue-preview";
   const evidence = JSON.parse(read(`${folder}/evidence.json`));
   assert.equal(evidence.kind, "P43-PAGE-VUE-PREVIEW-r1");
@@ -77,7 +78,7 @@ test("P43 actual Vue review evidence pins every current source and exact image s
   assert.equal(evidence.screenshots.length, 68);
   assert.equal(Object.keys(evidence.sourceHashes).length, 36);
   for (const [file, value] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), value, file);
+    assert.equal(hash(historicalFilterResetSource(file, read(file))), value, file);
   for (const [file, surface] of [
     [parent, "parent"],
     [detail, "detail"],

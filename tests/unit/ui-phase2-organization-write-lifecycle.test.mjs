@@ -1,5 +1,6 @@
 import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
+import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -8,14 +9,14 @@ import { reviewHash } from "../../scripts/lib/ui-phase2-vue-review-host.mjs";
 const read = (file) => historicalOrganizationActionSource(file, readFileSync(file, "utf8"));
 const dir = "output/playwright/p42-write-lifecycle";
 const evidence = () => JSON.parse(read(`${dir}/evidence.json`));
-test("P42 lifecycle is explicitly diagnostic, bound to current sources and exact images", () => {
+test("P42 lifecycle is diagnostic, bound to captured source revisions and exact images", () => {
   const e = evidence();
   assert.equal(e.kind, "actual-vue-diagnostic-defects-not-acceptance");
   assert.equal(e.processesClosed, true);
   assert.equal(e.scenarios.length, 16);
   assert.equal(e.screenshots.length, 28);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(reviewHash(read(file)), sha, file);
+    assert.equal(reviewHash(historicalFilterResetSource(file, read(file))), sha, file);
   assert.deepEqual(
     readdirSync(dir)
       .filter((f) => f.endsWith(".png"))

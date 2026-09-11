@@ -1,5 +1,7 @@
 # P43 用户目录与详情 · 实际 Vue C 审核稿
 
+后续增量：[手机筛选重置焦点修复](FILTER-RESET-FOCUS-REVIEW.md)已在共享生产组件实施并独立回归，替代本文历史“仍待处理”焦点项。本文68图保持原始捕获版本并作精确历史源关联，不能当作修复后截图；构图依旧待审，未部署。
+
 起点为干净的 `main/1bab2ee4`。本批继续全73页目标，未默认批准P37或其他待审稿；P43原HTML研究、P44页面及旧图均不修改。
 
 [68张图册](../../output/playwright/p43-page-vue-preview/index.html) · [桌面目录](../../output/playwright/p43-page-vue-preview/1440-default.png) · [桌面详情](../../output/playwright/p43-page-vue-preview/1440-detail-top.png) · [手机详情](../../output/playwright/p43-page-vue-preview/390-detail-top.png) · [证据](../../output/playwright/p43-page-vue-preview/evidence.json)

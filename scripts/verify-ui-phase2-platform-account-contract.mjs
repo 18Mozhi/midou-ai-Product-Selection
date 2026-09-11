@@ -11,6 +11,10 @@ const root = fileURLToPath(new URL("../", import.meta.url));
 const folder = "design-plans/ui-phase-2-2026-09-07/";
 const contractPath = `${folder}platform-account-contract-review.md`;
 const userContractPath = `${folder}platform-user-design-contract.md`;
+const currentContractPath = `${folder}platform-account-current-contract.md`;
+const responsiveContractPath = `${folder}responsive-detail-focus-contract-review.md`;
+const responsiveFile = "apps/web/src/components/ResponsiveDataView.vue";
+const addedSource = "apps/web/src/use-platform-organization-actions.ts";
 const files = {
   D: "PlatformDashboard",
   C: "PlatformAccountCenter",
@@ -72,9 +76,34 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
   const source = (file) => read(resolve(root, file)).replaceAll("\r\n", "\n");
   const contract = source(contractPath);
   const userContract = source(userContractPath);
-  const candidates = [
+  const currentContract = source(currentContractPath);
+  const responsiveContract = source(responsiveContractPath);
+  const historicalCandidates = [
     ...`${contract}\n${userContract}`.matchAll(/^\|\s*([A-Z])\s*\|\s*([0-9a-f]{16}\.\d+)\s*\|/gm),
   ].map((match) => `${match[1]}#${match[2]}`);
+  // The old table is evidence, not the current template. Supersede only the
+  // explicitly documented shared component; all other candidate identities remain exact.
+  sameUnique(
+    historicalCandidates.filter((key) => key.startsWith("S#")),
+    [
+      "S#6da4dad42cb34c8d.1",
+      "S#4fa7deb3456a41ae.1",
+      "S#53d89072117d7eda.1",
+      "S#e23893d134b1daa1.1",
+      "S#847801b2ac6e7a17.1",
+    ],
+    "historical responsive candidates",
+  );
+  const responsiveCandidates = [
+    ...responsiveContract.matchAll(
+      /^\|\s*apps\/web\/src\/components\/ResponsiveDataView\.vue#([0-9a-f]{16}\.\d+)\s*\|/gm,
+    ),
+  ].map((match) => `S#${match[1]}`);
+  assert.equal(responsiveCandidates.length, 5, "current responsive candidates required");
+  const candidates = [
+    ...historicalCandidates.filter((key) => !key.startsWith("S#")),
+    ...responsiveCandidates,
+  ];
   const bindings = [...contract.matchAll(/^\|\s*([A-Z])\s*\|\s*([\w.]+)\s*\|/gm)]
     .filter((match) => !/^[0-9a-f]{16}\.\d+$/.test(match[2]))
     .map((match) => `${match[1]}#${match[2]}`);
@@ -98,6 +127,22 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
   assert.equal(bindings.length, 24);
 
   const hashes = [...contract.matchAll(/^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|/gm)];
+  const revisions = [
+    ...currentContract.matchAll(
+      /^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|\s*([0-9a-f]{64})\s*\|/gm,
+    ),
+  ].map((match) => ({ file: match[1].trim(), before: match[2], after: match[3] }));
+  sameUnique(
+    revisions.map((item) => item.file),
+    [
+      "PlatformDashboard",
+      "PlatformAccountCenter",
+      "ResponsiveDataView",
+      "ResponsiveFilterDrawer",
+    ].map((name) => `apps/web/src/components/${name}.vue`),
+    "explicit source revisions",
+  );
+  const revisionByFile = new Map(revisions.map((item) => [item.file, item]));
   sameUnique(
     hashes.map((match) => match[1].trim()),
     [...vueFiles, ...supportingSources],
@@ -105,15 +150,45 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
   );
   for (const match of hashes) {
     const file = match[1].trim();
+    const revision = revisionByFile.get(file);
+    if (revision) assert.equal(match[2], revision.before, `${file}: historical hash drift`);
     assert.equal(
       createHash("sha256").update(source(file)).digest("hex"),
-      match[2],
+      revision?.after ?? match[2],
       `${file}: hash drift`,
     );
   }
+  const responsiveHashes = [
+    ...responsiveContract.matchAll(/^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|/gm),
+  ];
+  sameUnique(
+    responsiveHashes.map((match) => match[1].trim()),
+    [responsiveFile],
+    "responsive supplement hash files",
+  );
+  assert.equal(
+    responsiveHashes[0][2],
+    revisionByFile.get(responsiveFile).after,
+    "responsive supplement hash drift",
+  );
+  // Extraction added a runtime dependency. Keep the original 32-source snapshot,
+  // but do not omit the new producer from the current verification surface.
+  const additionalHashes = [
+    ...currentContract.matchAll(/^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|\s*$/gm),
+  ];
+  sameUnique(
+    additionalHashes.map((match) => match[1].trim()),
+    [addedSource],
+    "additional source files",
+  );
+  assert.equal(
+    createHash("sha256").update(source(addedSource)).digest("hex"),
+    additionalHashes[0][2],
+    `${addedSource}: hash drift`,
+  );
   const coverage = JSON.parse(source(`${folder}coverage.json`));
   const routes = JSON.parse(source("config/route-catalog.json")).routes;
-  const documents = [contractPath, userContractPath];
+  const documents = [contractPath, userContractPath, currentContractPath, responsiveContractPath];
   for (let number = 38; number <= 45; number += 1) {
     const id = `P${number}`;
     const page = coverage.pages.find((item) => item.id === id);
@@ -146,7 +221,9 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
     pages: 8,
     candidates: candidates.length,
     bindings: bindings.length,
-    sources: hashes.length,
+    sources: hashes.length + additionalHashes.length,
+    historicalSources: hashes.length,
+    revisedSources: revisions.length,
     links,
   };
 }

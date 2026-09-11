@@ -1,4 +1,8 @@
 import test from "node:test";
+import {
+  historicalFilterResetSource,
+  filterResetRevision,
+} from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { reviewHash } from "../../scripts/lib/ui-phase2-vue-review-host.mjs";
@@ -27,7 +31,7 @@ test("current and baseline Vue runs retain exact source and PNG fingerprints wit
     assert.equal(e.checks.length, 98);
     assert.equal(e.screenshots.length, 28);
     for (const [f, sha] of Object.entries(e.sourceHashes))
-      assert.equal(reviewHash(read(f)), sha, f);
+      assert.equal(reviewHash(historicalFilterResetSource(f, read(f))), sha, f);
     const source =
       mode === "baseline"
         ? historicalOrganizationActionSource(
@@ -87,7 +91,9 @@ test("historical associations accept only exact reviewed source revisions", () =
   assert.ok(associations.length > 0);
   for (const association of associations) {
     const pair =
-      organizationActionRevisions[association.file] ?? tokenCopyRevisions[association.file];
+      organizationActionRevisions[association.file] ??
+      tokenCopyRevisions[association.file] ??
+      (association.file === filterResetRevision.file ? filterResetRevision : undefined);
     assert.ok(pair, `Unknown historical association: ${association.file}`);
     assert.equal(association.expected, pair.before);
     assert.equal(association.actual, pair.after);

@@ -8,9 +8,10 @@
     "design-plans/ui-phase-2-2026-09-07/coverage.json": "deb03542feef014f93eef82679eacc848bb187ada9bbbe03d7a3d029b2b46ea9",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "design-plans/ui-phase-2-2026-09-07/PAGES.md": "ca41a447eb5be9317f20642bd87acc71ae31f9fe00147f1a7a63b7c48d39320d",
-    "scripts/audit-ui-phase2-design-delivery.mjs": "bd7e80e68da562fed029599ba27912afdd01629a74402353bdb1c945a4995d92",
+    "scripts/audit-ui-phase2-design-delivery.mjs": "fed2f3bab68bdedb808f9620f419adae7cba4f85b1342974c3539a9390a53dd5",
     "scripts/lib/ui-phase2-organization-action-baseline.mjs": "fb7ae644405df28b8f8dac2173d1e5945d76de9bf54e4e82f47156866631237b",
     "scripts/lib/ui-phase2-token-copy-baseline.mjs": "bb93e58271aba9065cf4c5eeb31d2af806e6653119e3aca54e90e967722171bf",
+    "scripts/lib/ui-phase2-filter-reset-baseline.mjs": "940a916680e584cc5ee3dd90c04906243ce57caf962987ebd5c10048d4e6654a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "7e5cb0b62a259d6e436738a757cef13816ab6705d914469555a699755dff22aa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "56880356f7da1b3f3195d51f2c2c3dc6c880c73e5c1893315a0b9e1f3b39b2b4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "775a1ecbc546756cd56312fa9f730b316bc8b49499777431832a7371238331d9",
@@ -53,7 +54,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P40.md": "d83dfc9714d790070ac6ad9f9841ac9dffa400e93685d17949289ea2dd36be02",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P41.md": "a49cd4953dd9d3e48e4d9f26c0edac5c397718a1cab15920d966eee06c1b1257",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P42.md": "83b575cf49c568829e3f46b0af51d89c9bce488089a0a269aa80137727d2672a",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P43.md": "790d56da169a7dd14b78a2cd3fd8af1ae4f9cef8d94f632086bc7414bdfb9110",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P43.md": "526743d8d1d56f760313b5bd76510d3235a5c973ea6af4498959dd56e6dcfa2b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P44.md": "5fe39414203211633ee7aa40c6c603351b667467423d7dd5707f825b239fc6ee",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P45.md": "94bfebb53e5a96e8f8a5770833c237a5a072f6f7207eb43e4fdfc8b7cfbcdfe6",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P46.md": "b7414bd39468dbb72608c59868a1db59b403975072d31fdbc60cb40bb6f52f41",
@@ -1932,6 +1933,12 @@
           "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
           "actual": "3ac56e41a5f5b78a4f01d6ee4298dacd0c80f243f414a7a48de8105eb292aa76",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+          "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
       "checkedViewportWidths": [
@@ -1980,7 +1987,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/api-coverage-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/api-coverage-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+          "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -2577,7 +2591,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/collection-overview-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/collection-overview-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+          "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -2756,7 +2777,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+          "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -2904,7 +2932,14 @@
         "scripts/build-ui-phase2-data-composed-c.mjs",
         "scripts/verify-ui-phase2-data-composed-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+          "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -2979,7 +3014,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/data-controls-direction-c/control-overrides.css",
         "scripts/verify-ui-phase2-data-controls-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+          "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -3092,7 +3134,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/data-record-detail-direction-c/detail.css",
         "scripts/verify-ui-phase2-data-record-detail-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+          "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -3136,7 +3185,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+          "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -3618,7 +3674,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/logs-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+          "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4083,7 +4146,14 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-opportunity-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+          "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4724,7 +4794,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+          "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5959,7 +6036,14 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-trend-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+          "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390

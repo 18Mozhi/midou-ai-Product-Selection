@@ -1,0 +1,30 @@
+/* Review only. Explicit known titles encode presentation direction, not authorization. */
+html
+  body.p43-reasons-review
+  #app
+  .p43-reason-sheet:is(
+    [aria-label="恢复用户"],
+    [aria-label="授予运营管理员"],
+    [aria-label="授予安全管理员"],
+    [aria-label="授予超级管理员"]
+  )
+  .p43-security-content
+  button:not([type="button"]):not(:disabled) {
+  color: #fff;
+  background: #254a9c;
+  border-color: #254a9c;
+}
+html
+  body.p43-reasons-review
+  #app
+  .p43-reason-sheet:is(
+    [aria-label="恢复用户"],
+    [aria-label="授予运营管理员"],
+    [aria-label="授予安全管理员"],
+    [aria-label="授予超级管理员"]
+  )
+  .p43-security-content
+  button:not([type="button"]):not(:disabled):hover {
+  background: #193b80;
+  border-color: #193b80;
+}

@@ -1,0 +1,3950 @@
+{
+  "kind": "P43-PASSWORD-VUE-r1",
+  "approval": "pending-user-review",
+  "scope": "Actual users-route parent/detail/native password and shared reason; scripts and native controls preserved, review-only template/CSS. Original GET fixture and explicit password POST failure/success intercepted locally. Not target ownership, password clearing, reactivation semantics, real RBAC/SQL/audit/MFA, full App/KeepAlive or complete accessibility/production acceptance.",
+  "sourceHashes": {
+    "apps/api/src/mysql-platform-account-repository.ts": "96cc13077b24ba17643adc9b13ca14cd2e71ea49d3e13d3abceb7b86ed7b87c5",
+    "apps/api/src/platform-account-service.ts": "189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "3ac56e41a5f5b78a4f01d6ee4298dacd0c80f243f414a7a48de8105eb292aa76",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-organization-actions.ts": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/user-page-preview.css": "8b3d914287a2ae901483c86003f0a1caf0fe9e2796112f5ea374e80886c31c43",
+    "design-plans/ui-phase-2-2026-09-07/implementation/user-password-preview.css": "c1e89882b4866bac0fb041e0048e80150cc22a898171bde1978f74dc87f27d43",
+    "scripts/lib/ui-phase2-user-page-preview.mjs": "f26a37092547e5866112e43d4248ca6e8dc504949263cb8fb8919aa3a336ae83",
+    "scripts/lib/ui-phase2-user-password-preview.mjs": "61341abcee2dfcef6a64f803a9e8761914bf418cfd0a6042526f15443d5545bb",
+    "scripts/verify-ui-phase2-user-password-preview.mjs": "9f65e55d2a8f40b222995327a53e1087d50082cfef269d0ea9991f641e9941d9",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "d00f2fecd2ce86da2be59a36fc193cc55ad9895ff96044f010bc5f553b4610de",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "7a7e7c3f33c49af35d402856438b0c3448ceabf351cd34a19a4819a3a1ec6dbe",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "12bbc00062ebf11aae57e0d4faa5c9a86ad49c3e0753a7d3c7f2549d60e117f5"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "password initially focused",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password exact native contract",
+      "actual": {
+        "type": "password",
+        "required": true,
+        "min": 12,
+        "max": 128,
+        "autocomplete": "new-password"
+      }
+    },
+    {
+      "width": 390,
+      "name": "password controls 44px and16px",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-default:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "password-default:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "password-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "empty password native invalid",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "invalid password cannot open reason",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "password-required:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-required:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "password-required:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short password native invalid",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-short:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-short:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "password-short:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-valid:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-valid:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "password-valid:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-cancel-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-cancel-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "password-cancel-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password Escape returns detail trigger",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password reopen clears field",
+      "actual": ""
+    },
+    {
+      "width": 390,
+      "name": "confirm follows cancel",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-confirm-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-confirm-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "password-confirm-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-confirm-hover:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-confirm-hover:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "password-confirm-hover:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password native pressed",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-confirm-pressed:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-confirm-pressed:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "password-confirm-pressed:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "first confirmation sends no write",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "password remains open beneath reason",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason title preserves full impact",
+      "actual": "强制重置密码并撤销全部会话"
+    },
+    {
+      "width": 390,
+      "name": "reason native field contract",
+      "actual": {
+        "required": true,
+        "min": 2,
+        "max": 300
+      }
+    },
+    {
+      "width": 390,
+      "name": "reason original default",
+      "actual": "平台管理员人工操作"
+    },
+    {
+      "width": 390,
+      "name": "reason controls 44px and16px",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-default:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "reason-default:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "final confirmation has distinct risk color",
+      "actual": "rgb(163, 41, 52)"
+    },
+    {
+      "width": 390,
+      "name": "reason cancel returns password confirm",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason cancel retains password",
+      "actual": "[known synthetic value matched]"
+    },
+    {
+      "width": 390,
+      "name": "password-after-reason-cancel:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-after-reason-cancel:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "password-after-reason-cancel:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "reason-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason empty invalid",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-required:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-required:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "reason-required:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason short invalid",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "all invalid confirmation writes blocked",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "reason-short:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-short:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "reason-short:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-valid:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-valid:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "reason-valid:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-cancel-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-cancel-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "reason-cancel-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason confirm follows cancel",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-confirm-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-confirm-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "reason-confirm-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-confirm-hover:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-confirm-hover:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "reason-confirm-hover:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason native pressed",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-confirm-pressed:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason-confirm-pressed:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "reason-confirm-pressed:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason closes before original write",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "one precise pending write",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "pending password cancel and field still usable",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-pending:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-pending:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "password-pending:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "failure password retained",
+      "actual": "[known synthetic value matched]"
+    },
+    {
+      "width": 390,
+      "name": "failure remains in password dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "failure allows original retry",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-failure:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "password-failure:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "password-failure:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short-password-top:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short-password-top:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "short-password-top:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short-password-bottom:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short-password-bottom:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "short-password-bottom:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short password footer reachable",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short-reason-top:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short-reason-top:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "short-reason-top:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short-reason-bottom:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short-reason-bottom:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "short-reason-bottom:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short reason footer reachable",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason Escape returns password",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "retry resets default reason",
+      "actual": "平台管理员人工操作"
+    },
+    {
+      "width": 390,
+      "name": "success original parent message",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "success all three dialogs closed",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "unchanged URL context",
+      "actual": "password-review"
+    },
+    {
+      "width": 390,
+      "name": "exact fixture totals",
+      "actual": [
+        "GET",
+        "GET",
+        "POST",
+        "POST",
+        "GET"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "unexpected network",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "name": "browser errors",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "password initially focused",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password exact native contract",
+      "actual": {
+        "type": "password",
+        "required": true,
+        "min": 12,
+        "max": 128,
+        "autocomplete": "new-password"
+      }
+    },
+    {
+      "width": 760,
+      "name": "password controls 44px and16px",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-default:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "password-default:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "password-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "empty password native invalid",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "invalid password cannot open reason",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "password-required:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-required:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "password-required:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "short password native invalid",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-short:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-short:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "password-short:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-valid:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-valid:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "password-valid:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-cancel-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-cancel-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "password-cancel-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password Escape returns detail trigger",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password reopen clears field",
+      "actual": ""
+    },
+    {
+      "width": 760,
+      "name": "confirm follows cancel",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-confirm-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-confirm-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "password-confirm-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-confirm-hover:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-confirm-hover:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "password-confirm-hover:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password native pressed",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-confirm-pressed:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-confirm-pressed:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "password-confirm-pressed:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "first confirmation sends no write",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "password remains open beneath reason",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason title preserves full impact",
+      "actual": "强制重置密码并撤销全部会话"
+    },
+    {
+      "width": 760,
+      "name": "reason native field contract",
+      "actual": {
+        "required": true,
+        "min": 2,
+        "max": 300
+      }
+    },
+    {
+      "width": 760,
+      "name": "reason original default",
+      "actual": "平台管理员人工操作"
+    },
+    {
+      "width": 760,
+      "name": "reason controls 44px and16px",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-default:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "reason-default:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "final confirmation has distinct risk color",
+      "actual": "rgb(163, 41, 52)"
+    },
+    {
+      "width": 760,
+      "name": "reason cancel returns password confirm",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason cancel retains password",
+      "actual": "[known synthetic value matched]"
+    },
+    {
+      "width": 760,
+      "name": "password-after-reason-cancel:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-after-reason-cancel:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "password-after-reason-cancel:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "reason-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason empty invalid",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-required:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-required:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "reason-required:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason short invalid",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "all invalid confirmation writes blocked",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "reason-short:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-short:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "reason-short:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-valid:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-valid:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "reason-valid:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-cancel-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-cancel-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "reason-cancel-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason confirm follows cancel",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-confirm-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-confirm-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "reason-confirm-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-confirm-hover:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-confirm-hover:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "reason-confirm-hover:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason native pressed",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-confirm-pressed:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason-confirm-pressed:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "reason-confirm-pressed:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason closes before original write",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "one precise pending write",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "pending password cancel and field still usable",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-pending:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-pending:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "password-pending:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "failure password retained",
+      "actual": "[known synthetic value matched]"
+    },
+    {
+      "width": 760,
+      "name": "failure remains in password dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "failure allows original retry",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-failure:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "password-failure:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "password-failure:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "retry resets default reason",
+      "actual": "平台管理员人工操作"
+    },
+    {
+      "width": 760,
+      "name": "success original parent message",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "success all three dialogs closed",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "unchanged URL context",
+      "actual": "password-review"
+    },
+    {
+      "width": 760,
+      "name": "exact fixture totals",
+      "actual": [
+        "GET",
+        "GET",
+        "POST",
+        "POST",
+        "GET"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "unexpected network",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "browser errors",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "password initially focused",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password exact native contract",
+      "actual": {
+        "type": "password",
+        "required": true,
+        "min": 12,
+        "max": 128,
+        "autocomplete": "new-password"
+      }
+    },
+    {
+      "width": 761,
+      "name": "password controls 44px and16px",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-default:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "password-default:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "password-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "empty password native invalid",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "invalid password cannot open reason",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "name": "password-required:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-required:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "password-required:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "short password native invalid",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-short:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-short:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "password-short:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-valid:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-valid:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "password-valid:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-cancel-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-cancel-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "password-cancel-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password Escape returns detail trigger",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password reopen clears field",
+      "actual": ""
+    },
+    {
+      "width": 761,
+      "name": "confirm follows cancel",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-confirm-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-confirm-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "password-confirm-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-confirm-hover:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-confirm-hover:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "password-confirm-hover:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password native pressed",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-confirm-pressed:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-confirm-pressed:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "password-confirm-pressed:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "first confirmation sends no write",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "password remains open beneath reason",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason title preserves full impact",
+      "actual": "强制重置密码并撤销全部会话"
+    },
+    {
+      "width": 761,
+      "name": "reason native field contract",
+      "actual": {
+        "required": true,
+        "min": 2,
+        "max": 300
+      }
+    },
+    {
+      "width": 761,
+      "name": "reason original default",
+      "actual": "平台管理员人工操作"
+    },
+    {
+      "width": 761,
+      "name": "reason controls 44px and16px",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-default:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "reason-default:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "final confirmation has distinct risk color",
+      "actual": "rgb(163, 41, 52)"
+    },
+    {
+      "width": 761,
+      "name": "reason cancel returns password confirm",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason cancel retains password",
+      "actual": "[known synthetic value matched]"
+    },
+    {
+      "width": 761,
+      "name": "password-after-reason-cancel:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-after-reason-cancel:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "password-after-reason-cancel:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "reason-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason empty invalid",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-required:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-required:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "reason-required:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason short invalid",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "all invalid confirmation writes blocked",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "reason-short:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-short:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "reason-short:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-valid:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-valid:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "reason-valid:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-cancel-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-cancel-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "reason-cancel-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason confirm follows cancel",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-confirm-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-confirm-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "reason-confirm-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-confirm-hover:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-confirm-hover:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "reason-confirm-hover:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason native pressed",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-confirm-pressed:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason-confirm-pressed:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "reason-confirm-pressed:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason closes before original write",
+      "actual": false
+    },
+    {
+      "width": 761,
+      "name": "one precise pending write",
+      "actual": 1
+    },
+    {
+      "width": 761,
+      "name": "pending password cancel and field still usable",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-pending:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-pending:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "password-pending:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "failure password retained",
+      "actual": "[known synthetic value matched]"
+    },
+    {
+      "width": 761,
+      "name": "failure remains in password dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "failure allows original retry",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-failure:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "password-failure:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "password-failure:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "retry resets default reason",
+      "actual": "平台管理员人工操作"
+    },
+    {
+      "width": 761,
+      "name": "success original parent message",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "success all three dialogs closed",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "unchanged URL context",
+      "actual": "password-review"
+    },
+    {
+      "width": 761,
+      "name": "exact fixture totals",
+      "actual": [
+        "GET",
+        "GET",
+        "POST",
+        "POST",
+        "GET"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "unexpected network",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "password initially focused",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password exact native contract",
+      "actual": {
+        "type": "password",
+        "required": true,
+        "min": 12,
+        "max": 128,
+        "autocomplete": "new-password"
+      }
+    },
+    {
+      "width": 1440,
+      "name": "password controls 44px and16px",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-default:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "password-default:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "password-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "empty password native invalid",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "invalid password cannot open reason",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "name": "password-required:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-required:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "password-required:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "short password native invalid",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-short:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-short:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "password-short:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-valid:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-valid:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "password-valid:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-cancel-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-cancel-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "password-cancel-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password Escape returns detail trigger",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password reopen clears field",
+      "actual": ""
+    },
+    {
+      "width": 1440,
+      "name": "confirm follows cancel",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-confirm-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-confirm-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "password-confirm-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-confirm-hover:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-confirm-hover:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "password-confirm-hover:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password native pressed",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-confirm-pressed:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-confirm-pressed:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "password-confirm-pressed:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "first confirmation sends no write",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "password remains open beneath reason",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason title preserves full impact",
+      "actual": "强制重置密码并撤销全部会话"
+    },
+    {
+      "width": 1440,
+      "name": "reason native field contract",
+      "actual": {
+        "required": true,
+        "min": 2,
+        "max": 300
+      }
+    },
+    {
+      "width": 1440,
+      "name": "reason original default",
+      "actual": "平台管理员人工操作"
+    },
+    {
+      "width": 1440,
+      "name": "reason controls 44px and16px",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-default:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "reason-default:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "final confirmation has distinct risk color",
+      "actual": "rgb(163, 41, 52)"
+    },
+    {
+      "width": 1440,
+      "name": "reason cancel returns password confirm",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason cancel retains password",
+      "actual": "[known synthetic value matched]"
+    },
+    {
+      "width": 1440,
+      "name": "password-after-reason-cancel:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-after-reason-cancel:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "password-after-reason-cancel:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "reason-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason empty invalid",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-required:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-required:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "reason-required:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason short invalid",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "all invalid confirmation writes blocked",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "reason-short:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-short:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "reason-short:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-valid:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-valid:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "reason-valid:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-cancel-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-cancel-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "reason-cancel-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason confirm follows cancel",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-confirm-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-confirm-focus:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "reason-confirm-focus:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-confirm-hover:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-confirm-hover:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "reason-confirm-hover:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason native pressed",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-confirm-pressed:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason-confirm-pressed:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "reason-confirm-pressed:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason closes before original write",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "name": "one precise pending write",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "name": "pending password cancel and field still usable",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-pending:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-pending:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "password-pending:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "failure password retained",
+      "actual": "[known synthetic value matched]"
+    },
+    {
+      "width": 1440,
+      "name": "failure remains in password dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "failure allows original retry",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-failure:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "password-failure:blue heading white fields",
+      "actual": [
+        "rgb(37, 74, 156)",
+        "rgb(255, 255, 255)"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "password-failure:native top-layer dialog",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "retry resets default reason",
+      "actual": "平台管理员人工操作"
+    },
+    {
+      "width": 1440,
+      "name": "success original parent message",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "success all three dialogs closed",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "unchanged URL context",
+      "actual": "password-review"
+    },
+    {
+      "width": 1440,
+      "name": "exact fixture totals",
+      "actual": [
+        "GET",
+        "GET",
+        "POST",
+        "POST",
+        "GET"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "unexpected network",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "browser errors",
+      "actual": []
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-password-default.png",
+      "width": 390,
+      "state": "password-default",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "6929e3fa8ce5bf1b0024815894112fa1c2c1c8ff48b1980c41ca4f8197cf2e97",
+      "imageDimensions": {
+        "width": 366,
+        "height": 454
+      }
+    },
+    {
+      "file": "390-password-focus.png",
+      "width": 390,
+      "state": "password-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "5b508dd294399aaa1367dd60522425327c64715701b7e8ee82c28a70d17414ca",
+      "imageDimensions": {
+        "width": 366,
+        "height": 454
+      }
+    },
+    {
+      "file": "390-password-required.png",
+      "width": 390,
+      "state": "password-required",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "2e5a559f8d18087db1a0e76469c020b3ef1239bfad53c474ab9a90d61fbed5a1",
+      "imageDimensions": {
+        "width": 366,
+        "height": 454
+      }
+    },
+    {
+      "file": "390-password-short.png",
+      "width": 390,
+      "state": "password-short",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "33fba1f4f61487b8802044abcc0ac6973b5a544312f818b913d05917ed592de7",
+      "imageDimensions": {
+        "width": 366,
+        "height": 454
+      }
+    },
+    {
+      "file": "390-password-valid.png",
+      "width": 390,
+      "state": "password-valid",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "149a4299d18b02b06e5599736030f11c905f34b4e8ac086f33cefaf488d894ca",
+      "imageDimensions": {
+        "width": 366,
+        "height": 454
+      }
+    },
+    {
+      "file": "390-password-cancel-focus.png",
+      "width": 390,
+      "state": "password-cancel-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "149a4299d18b02b06e5599736030f11c905f34b4e8ac086f33cefaf488d894ca",
+      "imageDimensions": {
+        "width": 366,
+        "height": 454
+      }
+    },
+    {
+      "file": "390-password-confirm-focus.png",
+      "width": 390,
+      "state": "password-confirm-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "df4fa27205023e361ac8ac59becf90d8b16a1a01c8b27d30d2a8ba45799154ec",
+      "imageDimensions": {
+        "width": 366,
+        "height": 454
+      }
+    },
+    {
+      "file": "390-password-confirm-hover.png",
+      "width": 390,
+      "state": "password-confirm-hover",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "843efc26aa61c112f3cf583397144e2cff4597cfee1e1b4dc130aa59d8637c66",
+      "imageDimensions": {
+        "width": 366,
+        "height": 454
+      }
+    },
+    {
+      "file": "390-password-confirm-pressed.png",
+      "width": 390,
+      "state": "password-confirm-pressed",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "43047bdf2f1c871c2c39e67f5840f2c52f069ca419bc6161ca32f9d2c3f97934",
+      "imageDimensions": {
+        "width": 366,
+        "height": 454
+      }
+    },
+    {
+      "file": "390-reason-default.png",
+      "width": 390,
+      "state": "reason-default",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "c4a9a7e339f5f1b604229fad2baf2857163bd6cc61f5ae53e69fb65b8bfbe210",
+      "imageDimensions": {
+        "width": 366,
+        "height": 494
+      }
+    },
+    {
+      "file": "390-password-after-reason-cancel.png",
+      "width": 390,
+      "state": "password-after-reason-cancel",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "bc5133ad0c48ead51d988a0d25cd53c4d3903881c1297c04b7f23759dca3dcaf",
+      "imageDimensions": {
+        "width": 366,
+        "height": 454
+      }
+    },
+    {
+      "file": "390-reason-focus.png",
+      "width": 390,
+      "state": "reason-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "adb31f6ca70eed02604d3b995948685eeb03a932b11880b48a6af4f05170a3dc",
+      "imageDimensions": {
+        "width": 366,
+        "height": 494
+      }
+    },
+    {
+      "file": "390-reason-required.png",
+      "width": 390,
+      "state": "reason-required",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "3bbb5e4b3de07eeebb399da9f426ccd34dca2d4f03f15bdce7c1d1807d1259fd",
+      "imageDimensions": {
+        "width": 366,
+        "height": 494
+      }
+    },
+    {
+      "file": "390-reason-short.png",
+      "width": 390,
+      "state": "reason-short",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "29cf48397a0b31b88344b9ea4a97106fed8c7ad7e1fd3c123eb9c7e423d692b9",
+      "imageDimensions": {
+        "width": 366,
+        "height": 494
+      }
+    },
+    {
+      "file": "390-reason-valid.png",
+      "width": 390,
+      "state": "reason-valid",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "9f199bb117464ce63b2ae12e78aaed1473940a421d2b025ef02a3b107b86f480",
+      "imageDimensions": {
+        "width": 366,
+        "height": 494
+      }
+    },
+    {
+      "file": "390-reason-cancel-focus.png",
+      "width": 390,
+      "state": "reason-cancel-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "9f199bb117464ce63b2ae12e78aaed1473940a421d2b025ef02a3b107b86f480",
+      "imageDimensions": {
+        "width": 366,
+        "height": 494
+      }
+    },
+    {
+      "file": "390-reason-confirm-focus.png",
+      "width": 390,
+      "state": "reason-confirm-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "7757518494320ae8da2dee09bff932aceddbad350dc86507e36d0ca6a0717715",
+      "imageDimensions": {
+        "width": 366,
+        "height": 494
+      }
+    },
+    {
+      "file": "390-reason-confirm-hover.png",
+      "width": 390,
+      "state": "reason-confirm-hover",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "6e379bdef30eb0975d758ec4a534043ef0043dfabe2e68e472600e3c95860323",
+      "imageDimensions": {
+        "width": 366,
+        "height": 494
+      }
+    },
+    {
+      "file": "390-reason-confirm-pressed.png",
+      "width": 390,
+      "state": "reason-confirm-pressed",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "bd67d1e874b88ef624d70cab7224239b8884c7b13e33333e7a3744726190c9fb",
+      "imageDimensions": {
+        "width": 366,
+        "height": 494
+      }
+    },
+    {
+      "file": "390-password-pending.png",
+      "width": 390,
+      "state": "password-pending",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "ccba51c1cd7372b7cb14573bef198c8087fcb1174a5b8420a427fc06319e2589",
+      "imageDimensions": {
+        "width": 366,
+        "height": 454
+      }
+    },
+    {
+      "file": "390-password-failure.png",
+      "width": 390,
+      "state": "password-failure",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "sha256": "5d86f13cb58796af2a1dc19183c5be42f05263968f9debd88839a8e711771587",
+      "imageDimensions": {
+        "width": 366,
+        "height": 526
+      }
+    },
+    {
+      "file": "390-short-password-top.png",
+      "width": 390,
+      "state": "short-password-top",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 568
+      },
+      "sha256": "35ad6f6bbca617952210ce70e3a92ec6e574700f0bb7d468c26263205147ad1c",
+      "imageDimensions": {
+        "width": 366,
+        "height": 526
+      }
+    },
+    {
+      "file": "390-short-password-bottom.png",
+      "width": 390,
+      "state": "short-password-bottom",
+      "bottom": true,
+      "viewport": {
+        "width": 390,
+        "height": 568
+      },
+      "sha256": "35ad6f6bbca617952210ce70e3a92ec6e574700f0bb7d468c26263205147ad1c",
+      "imageDimensions": {
+        "width": 366,
+        "height": 526
+      }
+    },
+    {
+      "file": "390-short-reason-top.png",
+      "width": 390,
+      "state": "short-reason-top",
+      "bottom": false,
+      "viewport": {
+        "width": 390,
+        "height": 568
+      },
+      "sha256": "fb0689eea8a2e59724ae9523699909d931b188efa57536631231685db73b57a4",
+      "imageDimensions": {
+        "width": 366,
+        "height": 494
+      }
+    },
+    {
+      "file": "390-short-reason-bottom.png",
+      "width": 390,
+      "state": "short-reason-bottom",
+      "bottom": true,
+      "viewport": {
+        "width": 390,
+        "height": 568
+      },
+      "sha256": "fb0689eea8a2e59724ae9523699909d931b188efa57536631231685db73b57a4",
+      "imageDimensions": {
+        "width": 366,
+        "height": 494
+      }
+    },
+    {
+      "file": "760-password-default.png",
+      "width": 760,
+      "state": "password-default",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "199f371e16e04a425f986e8b6b1a8fd1599e2cc01599f667a54a6c8c09432bca",
+      "imageDimensions": {
+        "width": 736,
+        "height": 404
+      }
+    },
+    {
+      "file": "760-password-focus.png",
+      "width": 760,
+      "state": "password-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "c3d59f074404f9e6ffbafddf18647f18eb2baa6d8c391005040357c024187174",
+      "imageDimensions": {
+        "width": 736,
+        "height": 404
+      }
+    },
+    {
+      "file": "760-password-required.png",
+      "width": 760,
+      "state": "password-required",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "199f371e16e04a425f986e8b6b1a8fd1599e2cc01599f667a54a6c8c09432bca",
+      "imageDimensions": {
+        "width": 736,
+        "height": 404
+      }
+    },
+    {
+      "file": "760-password-short.png",
+      "width": 760,
+      "state": "password-short",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "577810acdd215fa0ef21f3e518c43a6fc0e899267b89228af3b84a96f8ee7e14",
+      "imageDimensions": {
+        "width": 736,
+        "height": 404
+      }
+    },
+    {
+      "file": "760-password-valid.png",
+      "width": 760,
+      "state": "password-valid",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "e4f9640a6b43f96e86793cd3c78bdbf3e52484bb3ba419e532e21a2df9e26c01",
+      "imageDimensions": {
+        "width": 736,
+        "height": 404
+      }
+    },
+    {
+      "file": "760-password-cancel-focus.png",
+      "width": 760,
+      "state": "password-cancel-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "e4f9640a6b43f96e86793cd3c78bdbf3e52484bb3ba419e532e21a2df9e26c01",
+      "imageDimensions": {
+        "width": 736,
+        "height": 404
+      }
+    },
+    {
+      "file": "760-password-confirm-focus.png",
+      "width": 760,
+      "state": "password-confirm-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "0880080474ad264962a0141c1a36697ba647244b2b4b1f18f77910353bf42adf",
+      "imageDimensions": {
+        "width": 736,
+        "height": 404
+      }
+    },
+    {
+      "file": "760-password-confirm-hover.png",
+      "width": 760,
+      "state": "password-confirm-hover",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "4ff514fb626c6e378fe5075fe707fbc339f0037809ced9c2ba9f1acc265d682f",
+      "imageDimensions": {
+        "width": 736,
+        "height": 404
+      }
+    },
+    {
+      "file": "760-password-confirm-pressed.png",
+      "width": 760,
+      "state": "password-confirm-pressed",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "c2d7daa4f8ee54580ff8adf439309d1b8811cfeb9e0ebeede185e82f56060262",
+      "imageDimensions": {
+        "width": 736,
+        "height": 404
+      }
+    },
+    {
+      "file": "760-reason-default.png",
+      "width": 760,
+      "state": "reason-default",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "ff81d1e480a62bfc1cdf1cd6e814eb93fa9ae80cc927f365941d508abedcbf3e",
+      "imageDimensions": {
+        "width": 736,
+        "height": 494
+      }
+    },
+    {
+      "file": "760-password-after-reason-cancel.png",
+      "width": 760,
+      "state": "password-after-reason-cancel",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "bdb263323e90a797167ba59364010093692a819a639f99628eb4614aa47d402b",
+      "imageDimensions": {
+        "width": 736,
+        "height": 404
+      }
+    },
+    {
+      "file": "760-reason-focus.png",
+      "width": 760,
+      "state": "reason-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "677cd8a3a2577a67667861f7918ff4b81033da6ec66cf355cd5323903f0da3bd",
+      "imageDimensions": {
+        "width": 736,
+        "height": 494
+      }
+    },
+    {
+      "file": "760-reason-required.png",
+      "width": 760,
+      "state": "reason-required",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "780dc2a3831951dfe6126f30e07c05d324d5cf23c87ae72679dd3a5391ffc6ad",
+      "imageDimensions": {
+        "width": 736,
+        "height": 494
+      }
+    },
+    {
+      "file": "760-reason-short.png",
+      "width": 760,
+      "state": "reason-short",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "d402bc5c7b20ebe53f0ebe6742225d4c7b0e891385896f1107855b1bc525c84f",
+      "imageDimensions": {
+        "width": 736,
+        "height": 494
+      }
+    },
+    {
+      "file": "760-reason-valid.png",
+      "width": 760,
+      "state": "reason-valid",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "998e25b23842e49b5644cb2629194875e5c95e54ee29670e421f295d03e24485",
+      "imageDimensions": {
+        "width": 736,
+        "height": 494
+      }
+    },
+    {
+      "file": "760-reason-cancel-focus.png",
+      "width": 760,
+      "state": "reason-cancel-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "998e25b23842e49b5644cb2629194875e5c95e54ee29670e421f295d03e24485",
+      "imageDimensions": {
+        "width": 736,
+        "height": 494
+      }
+    },
+    {
+      "file": "760-reason-confirm-focus.png",
+      "width": 760,
+      "state": "reason-confirm-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "1583a00feaa3317a537ad50aad4af092efa23affaa9e1faeae7faa188181476a",
+      "imageDimensions": {
+        "width": 736,
+        "height": 494
+      }
+    },
+    {
+      "file": "760-reason-confirm-hover.png",
+      "width": 760,
+      "state": "reason-confirm-hover",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "c2098679b98b16d224ad9af13fa10e6307bfbeb2ffbef218fafed09dd983fa12",
+      "imageDimensions": {
+        "width": 736,
+        "height": 494
+      }
+    },
+    {
+      "file": "760-reason-confirm-pressed.png",
+      "width": 760,
+      "state": "reason-confirm-pressed",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "b2ba0a7ca6683a15c76914c3d01db29fa75c74e87cc2e7771a32d4a1f6287537",
+      "imageDimensions": {
+        "width": 736,
+        "height": 494
+      }
+    },
+    {
+      "file": "760-password-pending.png",
+      "width": 760,
+      "state": "password-pending",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "1433c1e51c8874a458821d5bc5dffd76b87a9f799c4a45e640786499b73a0498",
+      "imageDimensions": {
+        "width": 736,
+        "height": 404
+      }
+    },
+    {
+      "file": "760-password-failure.png",
+      "width": 760,
+      "state": "password-failure",
+      "bottom": false,
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "sha256": "05fa3694cc9ecc186a86cfe8454d14cf5703106ab91f2f478d22c9a4766f0823",
+      "imageDimensions": {
+        "width": 736,
+        "height": 476
+      }
+    },
+    {
+      "file": "761-password-default.png",
+      "width": 761,
+      "state": "password-default",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "45295af50f8b3b6c86c629c3f42aaceaeefed05f54fb5e651027522030f293a4",
+      "imageDimensions": {
+        "width": 661,
+        "height": 428
+      }
+    },
+    {
+      "file": "761-password-focus.png",
+      "width": 761,
+      "state": "password-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "1d9cc8064ea2a42cc96f87d2702f5f6d6dd8f8954786d9952e24ae6859319633",
+      "imageDimensions": {
+        "width": 661,
+        "height": 428
+      }
+    },
+    {
+      "file": "761-password-required.png",
+      "width": 761,
+      "state": "password-required",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "45295af50f8b3b6c86c629c3f42aaceaeefed05f54fb5e651027522030f293a4",
+      "imageDimensions": {
+        "width": 661,
+        "height": 428
+      }
+    },
+    {
+      "file": "761-password-short.png",
+      "width": 761,
+      "state": "password-short",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "88dcee67b18dfa25b99bf92a847b7d64da0a73d269cd63d1f182b6f382e13c8a",
+      "imageDimensions": {
+        "width": 661,
+        "height": 428
+      }
+    },
+    {
+      "file": "761-password-valid.png",
+      "width": 761,
+      "state": "password-valid",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "f7d2087be411373959cca5d3bc7861b88ae538aa1082da18d69d90543b20047a",
+      "imageDimensions": {
+        "width": 661,
+        "height": 428
+      }
+    },
+    {
+      "file": "761-password-cancel-focus.png",
+      "width": 761,
+      "state": "password-cancel-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "f7d2087be411373959cca5d3bc7861b88ae538aa1082da18d69d90543b20047a",
+      "imageDimensions": {
+        "width": 661,
+        "height": 428
+      }
+    },
+    {
+      "file": "761-password-confirm-focus.png",
+      "width": 761,
+      "state": "password-confirm-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "59d1a151c29a2430092b91d13708c41db5f8a6eb45033aa6ca00d4c99c82ab8a",
+      "imageDimensions": {
+        "width": 661,
+        "height": 428
+      }
+    },
+    {
+      "file": "761-password-confirm-hover.png",
+      "width": 761,
+      "state": "password-confirm-hover",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "a37b198175b3f7887a04cff1fa57201feb2c04b8951735de56694cb21dc19bd4",
+      "imageDimensions": {
+        "width": 661,
+        "height": 428
+      }
+    },
+    {
+      "file": "761-password-confirm-pressed.png",
+      "width": 761,
+      "state": "password-confirm-pressed",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "36706bc2d7039539313123ce553f6a4e1d445396783855c08dbd6e828a43edb9",
+      "imageDimensions": {
+        "width": 661,
+        "height": 428
+      }
+    },
+    {
+      "file": "761-reason-default.png",
+      "width": 761,
+      "state": "reason-default",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "dadea7b62469ad66475f9c597d258d5a2234b3407761d4930304fbb8df5ee8ab",
+      "imageDimensions": {
+        "width": 661,
+        "height": 516
+      }
+    },
+    {
+      "file": "761-password-after-reason-cancel.png",
+      "width": 761,
+      "state": "password-after-reason-cancel",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "fd7986f7bd7c577b41140bd5b63cd239a0aca6cc3a30bfbdc567789b6a6647b5",
+      "imageDimensions": {
+        "width": 661,
+        "height": 428
+      }
+    },
+    {
+      "file": "761-reason-focus.png",
+      "width": 761,
+      "state": "reason-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "cfa3b66f899e385dd28f67a0546191734dc94e8f1eaa8b402c57282fa703ab86",
+      "imageDimensions": {
+        "width": 661,
+        "height": 516
+      }
+    },
+    {
+      "file": "761-reason-required.png",
+      "width": 761,
+      "state": "reason-required",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "86b7aded01c832329f5b2ddfd2f573219c1cc879485e4a4df5d338ab4579a2a1",
+      "imageDimensions": {
+        "width": 661,
+        "height": 516
+      }
+    },
+    {
+      "file": "761-reason-short.png",
+      "width": 761,
+      "state": "reason-short",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "81166e78c26893ae9365117bf373b15870f8d8d1b52bbdad1b3a3dce86c4d0f6",
+      "imageDimensions": {
+        "width": 661,
+        "height": 516
+      }
+    },
+    {
+      "file": "761-reason-valid.png",
+      "width": 761,
+      "state": "reason-valid",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "3e4598b1ebf0831510422143307d633d3be04be38f871489ab6453af3f55668d",
+      "imageDimensions": {
+        "width": 661,
+        "height": 516
+      }
+    },
+    {
+      "file": "761-reason-cancel-focus.png",
+      "width": 761,
+      "state": "reason-cancel-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "3e4598b1ebf0831510422143307d633d3be04be38f871489ab6453af3f55668d",
+      "imageDimensions": {
+        "width": 661,
+        "height": 516
+      }
+    },
+    {
+      "file": "761-reason-confirm-focus.png",
+      "width": 761,
+      "state": "reason-confirm-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "905575a4cd8e4e65162a7153ff20724045c48d93f0863fdd5235d53e48665b35",
+      "imageDimensions": {
+        "width": 661,
+        "height": 516
+      }
+    },
+    {
+      "file": "761-reason-confirm-hover.png",
+      "width": 761,
+      "state": "reason-confirm-hover",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "c4dea6a6f5f364ddd0a7dd8e6ff1068d4af3ad7a37bcb5ddc3a646a1624e677a",
+      "imageDimensions": {
+        "width": 661,
+        "height": 516
+      }
+    },
+    {
+      "file": "761-reason-confirm-pressed.png",
+      "width": 761,
+      "state": "reason-confirm-pressed",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "da2d674c066e6534600f7475a7deb51a3252af405254f7e7c0d69e1a3734cdb4",
+      "imageDimensions": {
+        "width": 661,
+        "height": 516
+      }
+    },
+    {
+      "file": "761-password-pending.png",
+      "width": 761,
+      "state": "password-pending",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "eef4aeec7e3df71fda5c19d814e77134f74f1cdbb01739c9eb5b134de66e8158",
+      "imageDimensions": {
+        "width": 661,
+        "height": 428
+      }
+    },
+    {
+      "file": "761-password-failure.png",
+      "width": 761,
+      "state": "password-failure",
+      "bottom": false,
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "sha256": "4a0ddeddeb7e3dbfbeb8f52a913cfb2aeafa70171d4e35fef2e91b6e5671a239",
+      "imageDimensions": {
+        "width": 661,
+        "height": 500
+      }
+    },
+    {
+      "file": "1440-password-default.png",
+      "width": 1440,
+      "state": "password-default",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "0278b24200a91659195f2b6f32ef67fb8d630365ab4203d2cf61ea961541d307",
+      "imageDimensions": {
+        "width": 660,
+        "height": 428
+      }
+    },
+    {
+      "file": "1440-password-focus.png",
+      "width": 1440,
+      "state": "password-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "cb4752e4716ca712c6a809c96d0ee9ee5cc724ba1a59eb5da8b788e07b279e15",
+      "imageDimensions": {
+        "width": 660,
+        "height": 428
+      }
+    },
+    {
+      "file": "1440-password-required.png",
+      "width": 1440,
+      "state": "password-required",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "0278b24200a91659195f2b6f32ef67fb8d630365ab4203d2cf61ea961541d307",
+      "imageDimensions": {
+        "width": 660,
+        "height": 428
+      }
+    },
+    {
+      "file": "1440-password-short.png",
+      "width": 1440,
+      "state": "password-short",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "17c8f8c8d4aa4961828e58cbeb670ec18ad6e9688e5e9335e022f75801d587b0",
+      "imageDimensions": {
+        "width": 660,
+        "height": 428
+      }
+    },
+    {
+      "file": "1440-password-valid.png",
+      "width": 1440,
+      "state": "password-valid",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "a4c7211ddfda61f88b3d529717ad95932e38b70582c14ecc04158887f1414e97",
+      "imageDimensions": {
+        "width": 660,
+        "height": 428
+      }
+    },
+    {
+      "file": "1440-password-cancel-focus.png",
+      "width": 1440,
+      "state": "password-cancel-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "a4c7211ddfda61f88b3d529717ad95932e38b70582c14ecc04158887f1414e97",
+      "imageDimensions": {
+        "width": 660,
+        "height": 428
+      }
+    },
+    {
+      "file": "1440-password-confirm-focus.png",
+      "width": 1440,
+      "state": "password-confirm-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "2b6f7781c5128f35525017254804162ca1f5635fa578d2508635202bab5c78f3",
+      "imageDimensions": {
+        "width": 660,
+        "height": 428
+      }
+    },
+    {
+      "file": "1440-password-confirm-hover.png",
+      "width": 1440,
+      "state": "password-confirm-hover",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "ee5e9234ea8f657dc2dd07d60a4b2d2a19ad7400e6e1d29af464a04811a6d878",
+      "imageDimensions": {
+        "width": 660,
+        "height": 428
+      }
+    },
+    {
+      "file": "1440-password-confirm-pressed.png",
+      "width": 1440,
+      "state": "password-confirm-pressed",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "ccae663a0f51b79295aee0172287fc3d0dbe1973aceb81bcf10b4080aefdc283",
+      "imageDimensions": {
+        "width": 660,
+        "height": 428
+      }
+    },
+    {
+      "file": "1440-reason-default.png",
+      "width": 1440,
+      "state": "reason-default",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "29bf0c4d09cf1de5116958a0afb42eee23e88983c1fce9caf491750ae62be0c7",
+      "imageDimensions": {
+        "width": 660,
+        "height": 516
+      }
+    },
+    {
+      "file": "1440-password-after-reason-cancel.png",
+      "width": 1440,
+      "state": "password-after-reason-cancel",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "a4c7211ddfda61f88b3d529717ad95932e38b70582c14ecc04158887f1414e97",
+      "imageDimensions": {
+        "width": 660,
+        "height": 428
+      }
+    },
+    {
+      "file": "1440-reason-focus.png",
+      "width": 1440,
+      "state": "reason-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "8be6667878068b7eb4b2f691820097d47c4b00fe5b6ea7d83c6b9b7dafc34cc4",
+      "imageDimensions": {
+        "width": 660,
+        "height": 516
+      }
+    },
+    {
+      "file": "1440-reason-required.png",
+      "width": 1440,
+      "state": "reason-required",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "b77b3b13b204e1292480177d42d6696fefaf667cb4028e195f5c45c43195ade9",
+      "imageDimensions": {
+        "width": 660,
+        "height": 516
+      }
+    },
+    {
+      "file": "1440-reason-short.png",
+      "width": 1440,
+      "state": "reason-short",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "7807118eed2d99224a393252dc2d5ec36f05c968d2c87210576e4c2758583b0f",
+      "imageDimensions": {
+        "width": 660,
+        "height": 516
+      }
+    },
+    {
+      "file": "1440-reason-valid.png",
+      "width": 1440,
+      "state": "reason-valid",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "9acda171bf790bae31534ebef08f972bf487ebee237cc430b90f5f3d397f9c5b",
+      "imageDimensions": {
+        "width": 660,
+        "height": 516
+      }
+    },
+    {
+      "file": "1440-reason-cancel-focus.png",
+      "width": 1440,
+      "state": "reason-cancel-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "9acda171bf790bae31534ebef08f972bf487ebee237cc430b90f5f3d397f9c5b",
+      "imageDimensions": {
+        "width": 660,
+        "height": 516
+      }
+    },
+    {
+      "file": "1440-reason-confirm-focus.png",
+      "width": 1440,
+      "state": "reason-confirm-focus",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "55781f4693653f9f6a6f5c1c153c5c4be9da6644b383adfeb1dea3eedc4f9871",
+      "imageDimensions": {
+        "width": 660,
+        "height": 516
+      }
+    },
+    {
+      "file": "1440-reason-confirm-hover.png",
+      "width": 1440,
+      "state": "reason-confirm-hover",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "e213d171a1927a77180272b2ccaaa279e42b68bb7fa2142f76da2948d6b7c5a3",
+      "imageDimensions": {
+        "width": 660,
+        "height": 516
+      }
+    },
+    {
+      "file": "1440-reason-confirm-pressed.png",
+      "width": 1440,
+      "state": "reason-confirm-pressed",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "7380865bd4ae514cddb2fbdf60df62427bcdcbf1d19fbd0d17dc92ad88615239",
+      "imageDimensions": {
+        "width": 660,
+        "height": 516
+      }
+    },
+    {
+      "file": "1440-password-pending.png",
+      "width": 1440,
+      "state": "password-pending",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "dfcb07a77bdfaddd54f81015afef1832197cd9c062bfbd9a89485dc43a697436",
+      "imageDimensions": {
+        "width": 660,
+        "height": 428
+      }
+    },
+    {
+      "file": "1440-password-failure.png",
+      "width": 1440,
+      "state": "password-failure",
+      "bottom": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "041d6c33bc08ff26626a852a9dedc12d19269f2bac28a2461474732a32ef928d",
+      "imageDimensions": {
+        "width": 660,
+        "height": 500
+      }
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": {
+            "temporary_password": "[known synthetic value matched]",
+            "reason": "隔离审核样例：核对账号登录状态后重置临时密码。"
+          },
+          "idempotencyKeyPresent": true,
+          "mode": "failure"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": {
+            "temporary_password": "[known synthetic value matched]",
+            "reason": "隔离审核样例：核对账号登录状态后重置临时密码。"
+          },
+          "idempotencyKeyPresent": true,
+          "mode": "success"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": {
+            "temporary_password": "[known synthetic value matched]",
+            "reason": "隔离审核样例：核对账号登录状态后重置临时密码。"
+          },
+          "idempotencyKeyPresent": true,
+          "mode": "failure"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": {
+            "temporary_password": "[known synthetic value matched]",
+            "reason": "隔离审核样例：核对账号登录状态后重置临时密码。"
+          },
+          "idempotencyKeyPresent": true,
+          "mode": "success"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": {
+            "temporary_password": "[known synthetic value matched]",
+            "reason": "隔离审核样例：核对账号登录状态后重置临时密码。"
+          },
+          "idempotencyKeyPresent": true,
+          "mode": "failure"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": {
+            "temporary_password": "[known synthetic value matched]",
+            "reason": "隔离审核样例：核对账号登录状态后重置临时密码。"
+          },
+          "idempotencyKeyPresent": true,
+          "mode": "success"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "query": {}
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": {
+            "temporary_password": "[known synthetic value matched]",
+            "reason": "隔离审核样例：核对账号登录状态后重置临时密码。"
+          },
+          "idempotencyKeyPresent": true,
+          "mode": "failure"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": {
+            "temporary_password": "[known synthetic value matched]",
+            "reason": "隔离审核样例：核对账号登录状态后重置临时密码。"
+          },
+          "idempotencyKeyPresent": true,
+          "mode": "success"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts",
+          "query": {}
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    }
+  ],
+  "processesClosed": true
+}

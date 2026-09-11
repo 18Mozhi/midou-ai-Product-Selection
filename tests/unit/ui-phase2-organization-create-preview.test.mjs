@@ -1,5 +1,6 @@
 import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
+import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -56,7 +57,7 @@ test("P41 presentation leaves the actual wizard script and every native directiv
   ])
     assert.ok(preview.includes(text));
 });
-test("P41 captured evidence binds current source, exact images and six step breakpoints", () => {
+test("P41 evidence binds captured source revisions, exact images and six step breakpoints", () => {
   const e = JSON.parse(read(`${output}/evidence.json`));
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
@@ -64,7 +65,7 @@ test("P41 captured evidence binds current source, exact images and six step brea
   assert.equal(e.screenshots.length, 34);
   assert.match(e.scope, /Not full App/);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(reviewHash(read(file)), sha, file);
+    assert.equal(reviewHash(historicalFilterResetSource(file, read(file))), sha, file);
   for (const [file, transform] of Object.entries({
     [wizard]: organizationCreatePreview,
     "apps/web/src/components/PlatformAccountCenter.vue": organizationListPreview,
