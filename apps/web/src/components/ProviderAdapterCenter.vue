@@ -64,7 +64,8 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   probing = ref<string | null>(null),
   refreshing = ref(false),
   lastUpdatedAt = ref<string | null>(null),
-  message = ref("");
+  message = ref(""),
+  probeFeedback = ref<{ providerId: string; message: string; requestId: string } | null>(null);
 const failure = (status: number): State =>
   status === 401
     ? "expired"
@@ -203,9 +204,15 @@ async function load() {
     refreshing.value = false;
   }
 }
-async function probe(item: AdapterSummary) {
+async function probe(item: AdapterSummary, event?: MouseEvent) {
   if (probing.value) return;
+  const trigger = event?.currentTarget;
+  if (trigger instanceof HTMLElement)
+    trigger.parentElement
+      ?.querySelector<HTMLElement>(".adapter-detail-feedback [role='status']")
+      ?.focus({ preventScroll: true });
   probing.value = item.id;
+  probeFeedback.value = null;
   message.value = "";
   try {
     const response = await request<AdapterSummary>(
@@ -223,6 +230,12 @@ async function probe(item: AdapterSummary) {
     requestId.value = apiError?.requestId ?? "";
     message.value = apiError?.actionHint ?? "依赖不可用，未伪造健康结果";
   } finally {
+    // Capture this settled probe before a later list read changes the shared message/trace.
+    probeFeedback.value = {
+      providerId: item.id,
+      message: message.value,
+      requestId: requestId.value,
+    };
     probing.value = null;
   }
 }
@@ -510,9 +523,26 @@ onMounted(load);
               <dd>{{ errorText(row.last_error_code) }}</dd>
             </div>
           </dl>
-          <button type="button" :disabled="probing !== null" @click="probe(row)">
+          <button type="button" :disabled="probing !== null" @click="probe(row, $event)">
             {{ probing === row.id ? "检查中…" : "执行健康检查" }}
           </button>
+          <div class="adapter-detail-feedback">
+            <p role="status" aria-atomic="true" tabindex="-1">
+              {{
+                probing === row.id
+                  ? "正在检查此来源，请稍候。"
+                  : probing !== null
+                    ? "另一来源正在检查，完成后可检查此来源。"
+                    : probeFeedback?.providerId === row.id
+                      ? probeFeedback.message
+                      : ""
+              }}
+            </p>
+            <details v-if="probeFeedback?.providerId === row.id && probeFeedback.requestId">
+              <summary>本次检查追踪</summary>
+              <code>{{ probeFeedback.requestId }}</code>
+            </details>
+          </div>
           <RouterLink
             v-if="row.runtime_circuit_state === 'open' && row.runtime_recovery_gate_met"
             to="/platform-admin/crawler-scheduler"
@@ -574,3 +604,29 @@ onMounted(load);
     </section>
   </section>
 </template>
+
+<style scoped>
+.adapter-detail-feedback {
+  color: var(--so-text);
+  overflow-wrap: anywhere;
+}
+.adapter-detail-feedback p {
+  margin: 0;
+  font-size: 16px;
+}
+.adapter-detail-feedback details {
+  margin-top: 8px;
+}
+.adapter-detail-feedback summary {
+  min-height: 44px;
+  color: var(--so-primary);
+  cursor: pointer;
+}
+.adapter-detail-feedback :is(summary, p):focus-visible {
+  outline: 3px solid var(--so-primary);
+  outline-offset: 3px;
+}
+.adapter-detail-feedback code {
+  font-size: 13px;
+}
+</style>

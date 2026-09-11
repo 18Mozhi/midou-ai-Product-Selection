@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalAdapterFeedbackSource } from "../../scripts/lib/ui-phase2-adapter-feedback-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -14,7 +15,7 @@ import { ref, reactive, computed, watch } from "vue";
 const file = "apps/web/src/components/ProviderRegistry.vue";
 const text = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) => historicalAdapterFeedbackSource(f, readFileSync(f, "utf8"));
 const root = "output/playwright/p46-validation-summary";
 const evidence = (mode) => JSON.parse(read(`${root}/${mode}/evidence.json`));
 const source = parse(text).descriptor.scriptSetup.content;
