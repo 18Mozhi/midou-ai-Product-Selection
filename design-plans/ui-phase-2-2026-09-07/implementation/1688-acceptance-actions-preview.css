@@ -1,0 +1,144 @@
+body.p49-acceptance-actions-review .p49-action__requirements {
+  margin: -8px 0 16px;
+  color: #60708a;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+body.p49-acceptance-actions-review .p49-action form {
+  margin-top: 0;
+}
+
+body.p49-acceptance-actions-review .p49-action label small {
+  color: #60708a;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+body.p49-acceptance-actions-review .p49-action select[aria-invalid="true"],
+body.p49-acceptance-actions-review .p49-action input[aria-invalid="true"] {
+  border-color: #b8322a;
+  box-shadow: 0 0 0 1px #b8322a;
+}
+
+body.p49-acceptance-actions-review .p49-action__progress {
+  margin-top: 12px;
+  padding: 11px 14px;
+  border-left: 4px solid #0756d8;
+  background: #eef4ff;
+  color: #31415a;
+  line-height: 1.6;
+}
+
+body.p49-acceptance-actions-review .p49-action__feedback,
+body.p49-acceptance-actions-review .p49-action__result {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: center;
+  margin-top: 14px;
+  padding: 17px 18px;
+  border: 1px solid #e7bbb7;
+  border-left: 5px solid #bd352d;
+  border-radius: 7px;
+  background: #fffafa;
+}
+
+body.p49-acceptance-actions-review .p49-action__feedback span,
+body.p49-acceptance-actions-review .p49-action__result > div > span {
+  color: #a72a22;
+  font-size: 12px;
+  font-weight: 760;
+  letter-spacing: 0.07em;
+}
+
+body.p49-acceptance-actions-review .p49-action__feedback strong,
+body.p49-acceptance-actions-review .p49-action__result > div > strong {
+  display: block;
+  margin-top: 4px;
+  color: #172033;
+  font-size: 17px;
+}
+
+body.p49-acceptance-actions-review .p49-action__feedback p,
+body.p49-acceptance-actions-review .p49-action__result p {
+  margin-top: 5px;
+  color: #60708a;
+  line-height: 1.6;
+}
+
+body.p49-acceptance-actions-review .p49-action__feedback > button {
+  min-width: 176px;
+  border-color: #a72a22;
+  color: #a72a22;
+}
+
+body.p49-acceptance-actions-review .p49-action__feedback[data-kind="submit"] > p {
+  max-width: 280px;
+  margin: 0;
+  padding-left: 18px;
+  border-left: 1px solid #e7bbb7;
+}
+
+body.p49-acceptance-actions-review .p49-action__result {
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.7fr) auto;
+  border-color: #b9ddc8;
+  border-left-color: #19784e;
+  background: #f7fcf9;
+}
+
+body.p49-acceptance-actions-review .p49-action__result > div > span {
+  color: #176a43;
+}
+
+body.p49-acceptance-actions-review .p49-action__result-warning {
+  padding-left: 18px;
+  border-left: 1px solid #dfc5a5;
+}
+
+body.p49-acceptance-actions-review .p49-action__result-warning strong {
+  color: #92500b;
+}
+
+body.p49-acceptance-actions-review .p49-action__result details {
+  margin: 0;
+}
+
+body.p49-acceptance-actions-review .p49-action__result summary {
+  min-width: 140px;
+}
+
+@media (max-width: 1100px) {
+  body.p49-acceptance-actions-review .p49-action__feedback,
+  body.p49-acceptance-actions-review .p49-action__result {
+    grid-template-columns: 1fr;
+  }
+
+  body.p49-acceptance-actions-review .p49-action__feedback[data-kind="submit"] > p,
+  body.p49-acceptance-actions-review .p49-action__result-warning {
+    padding: 12px 0 0;
+    border-top: 1px solid #dfc5a5;
+    border-left: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  body.p49-acceptance-actions-review .p49-action__feedback,
+  body.p49-acceptance-actions-review .p49-action__result {
+    gap: 13px;
+    padding: 16px 14px;
+  }
+
+  body.p49-acceptance-actions-review .p49-action__feedback > button,
+  body.p49-acceptance-actions-review .p49-action__result summary {
+    width: 100%;
+  }
+}
+
+@media (forced-colors: active) {
+  body.p49-acceptance-actions-review .p49-action__feedback,
+  body.p49-acceptance-actions-review .p49-action__result,
+  body.p49-acceptance-actions-review .p49-action__progress {
+    border: 2px solid CanvasText;
+  }
+}

@@ -1,0 +1,3946 @@
+{
+  "kind": "P49-ACCEPTANCE-ACTIONS-REVIEW-r1",
+  "generatedAt": "2026-09-11T15:57:13.107Z",
+  "reviewOnly": true,
+  "productionChanged": false,
+  "deployed": false,
+  "fixtureNotice": "Acceptance and scope facts are parsed from authoritative E2E fixtures. Empty/error/held/success variants are local review fixtures following the actual component and ApiClientError contracts.",
+  "behaviorBoundary": "Only the explicit acceptance POST scenes write to the intercepted local route. No enable/disable, polling, database write, permission mutation, credential access, external request, or deployment was performed.",
+  "accessibilityBoundary": "Review-only markup associates range errors with the invalid select, submission errors with the query, describes the disabled submit requirement, announces loading/submitting/feedback, and uses native buttons/details.",
+  "layoutMechanicalScan": {
+    "status": "not_run",
+    "reason": "The optional external scanner did not finish first-use initialization and remains unclaimed.",
+    "substituteChecks": [
+      "Vue SFC compile",
+      "PostCSS parse and selector isolation",
+      "four responsive widths",
+      "document overflow",
+      "44px representative targets",
+      "ARIA description and invalid ownership",
+      "exact POST body and idempotency key",
+      "safe GET retry and request counts",
+      "dual submission/reread feedback"
+    ]
+  },
+  "widths": [
+    390,
+    760,
+    1024,
+    1440
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "scene": "scope-loading",
+      "mode": "scope-loading",
+      "requestCount": 3,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 0
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "no-active-organizations",
+      "mode": "no-organizations",
+      "requestCount": 3,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 0
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "organizations-failed",
+      "mode": "organizations-failed",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 3
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 0
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 3
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "workspace-loading",
+      "mode": "workspace-loading",
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "no-active-workspaces",
+      "mode": "no-workspaces",
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "workspaces-failed",
+      "mode": "workspaces-failed",
+      "requestCount": 6,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 3
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 3
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "query-filled",
+      "mode": "query-filled",
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "submission-in-progress",
+      "mode": "submitting",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "submission-succeeded",
+      "mode": "succeeded",
+      "requestCount": 6,
+      "checks": [
+        {
+          "name": "dual reread warning absent on clean success",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 2
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "submission-failed",
+      "mode": "submit-failed",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "task result absent after failed POST",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 1
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "submission-forbidden",
+      "mode": "submit-forbidden",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "task result absent after failed POST",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 1
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "submission-session-expired",
+      "mode": "submit-expired",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "task result absent after failed POST",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 1
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "submitted-reread-failed",
+      "mode": "reread-failed",
+      "requestCount": 8,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 4
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 3
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "scope-loading",
+      "mode": "scope-loading",
+      "requestCount": 3,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 0
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "no-active-organizations",
+      "mode": "no-organizations",
+      "requestCount": 3,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 0
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "organizations-failed",
+      "mode": "organizations-failed",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 3
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 0
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 3
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "workspace-loading",
+      "mode": "workspace-loading",
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "no-active-workspaces",
+      "mode": "no-workspaces",
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "workspaces-failed",
+      "mode": "workspaces-failed",
+      "requestCount": 6,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 3
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 3
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "query-filled",
+      "mode": "query-filled",
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "submission-in-progress",
+      "mode": "submitting",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "submission-succeeded",
+      "mode": "succeeded",
+      "requestCount": 6,
+      "checks": [
+        {
+          "name": "dual reread warning absent on clean success",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 2
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "submission-failed",
+      "mode": "submit-failed",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "task result absent after failed POST",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 1
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "submission-forbidden",
+      "mode": "submit-forbidden",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "task result absent after failed POST",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 1
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "submission-session-expired",
+      "mode": "submit-expired",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "task result absent after failed POST",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 1
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "submitted-reread-failed",
+      "mode": "reread-failed",
+      "requestCount": 8,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 4
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 3
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "scope-loading",
+      "mode": "scope-loading",
+      "requestCount": 3,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 0
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "no-active-organizations",
+      "mode": "no-organizations",
+      "requestCount": 3,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 0
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "organizations-failed",
+      "mode": "organizations-failed",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 3
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 0
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 3
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "workspace-loading",
+      "mode": "workspace-loading",
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "no-active-workspaces",
+      "mode": "no-workspaces",
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "workspaces-failed",
+      "mode": "workspaces-failed",
+      "requestCount": 6,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 3
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 3
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "query-filled",
+      "mode": "query-filled",
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "submission-in-progress",
+      "mode": "submitting",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "submission-succeeded",
+      "mode": "succeeded",
+      "requestCount": 6,
+      "checks": [
+        {
+          "name": "dual reread warning absent on clean success",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 2
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "submission-failed",
+      "mode": "submit-failed",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "task result absent after failed POST",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 1
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "submission-forbidden",
+      "mode": "submit-forbidden",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "task result absent after failed POST",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 1
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "submission-session-expired",
+      "mode": "submit-expired",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "task result absent after failed POST",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 1
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "submitted-reread-failed",
+      "mode": "reread-failed",
+      "requestCount": 8,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 4
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 3
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "scope-loading",
+      "mode": "scope-loading",
+      "requestCount": 3,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 0
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "no-active-organizations",
+      "mode": "no-organizations",
+      "requestCount": 3,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 0
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "organizations-failed",
+      "mode": "organizations-failed",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 3
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 0
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 3
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "workspace-loading",
+      "mode": "workspace-loading",
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "no-active-workspaces",
+      "mode": "no-workspaces",
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "workspaces-failed",
+      "mode": "workspaces-failed",
+      "requestCount": 6,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 3
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 3
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "query-filled",
+      "mode": "query-filled",
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "submission-in-progress",
+      "mode": "submitting",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "submission-succeeded",
+      "mode": "succeeded",
+      "requestCount": 6,
+      "checks": [
+        {
+          "name": "dual reread warning absent on clean success",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 2
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 0
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "submission-failed",
+      "mode": "submit-failed",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "task result absent after failed POST",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 1
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "submission-forbidden",
+      "mode": "submit-forbidden",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "task result absent after failed POST",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 1
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "submission-session-expired",
+      "mode": "submit-expired",
+      "requestCount": 5,
+      "checks": [
+        {
+          "name": "task result absent after failed POST",
+          "actual": 0
+        },
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 1
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "submitted-reread-failed",
+      "mode": "reread-failed",
+      "requestCount": 8,
+      "checks": [
+        {
+          "name": "expected membership GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected workspace GET count",
+          "actual": 1
+        },
+        {
+          "name": "expected acceptance GET count",
+          "actual": 4
+        },
+        {
+          "name": "expected acceptance POST count",
+          "actual": 1
+        },
+        {
+          "name": "exact acceptance body",
+          "actual": {
+            "organization_id": "00000000-0000-4000-8000-000000000b72",
+            "workspace_id": "00000000-0000-4000-8000-000000000b73",
+            "query": "桌面灯",
+            "acceptance_run": true
+          }
+        },
+        {
+          "name": "idempotency key present",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "expected HTTP console errors",
+          "actual": 3
+        },
+        {
+          "name": "console errors are expected HTTP responses",
+          "actual": true
+        },
+        {
+          "name": "no unexpected writes",
+          "actual": 1
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-scope-loading-full.png",
+      "width": 390,
+      "scene": "scope-loading",
+      "suffix": "full",
+      "sha256": "fed325b201402c97afe7209333413c6f6aec332b40d7ed5361d0921ede07d894",
+      "pixelWidth": 390,
+      "pixelHeight": 3888
+    },
+    {
+      "file": "390-no-active-organizations-full.png",
+      "width": 390,
+      "scene": "no-active-organizations",
+      "suffix": "full",
+      "sha256": "18c6a49172b45125abe7ae342054691c6896bf9fac72f9140b41f120a859756b",
+      "pixelWidth": 390,
+      "pixelHeight": 4021
+    },
+    {
+      "file": "390-organizations-failed-full.png",
+      "width": 390,
+      "scene": "organizations-failed",
+      "suffix": "full",
+      "sha256": "2320543d565a433b364dc34bd84290bc1a0b3c029df0c3243c26c07499dafd5f",
+      "pixelWidth": 390,
+      "pixelHeight": 4021
+    },
+    {
+      "file": "390-workspace-loading-full.png",
+      "width": 390,
+      "scene": "workspace-loading",
+      "suffix": "full",
+      "sha256": "032d45c47ec122115af300a084d327324bbf211422bf6caf4bc62f0de6187c35",
+      "pixelWidth": 390,
+      "pixelHeight": 3888
+    },
+    {
+      "file": "390-no-active-workspaces-full.png",
+      "width": 390,
+      "scene": "no-active-workspaces",
+      "suffix": "full",
+      "sha256": "7bd4826d425ef1746172eb49723d76c91f08de6e0618189d9a2d2047ed0411d7",
+      "pixelWidth": 390,
+      "pixelHeight": 4021
+    },
+    {
+      "file": "390-workspaces-failed-full.png",
+      "width": 390,
+      "scene": "workspaces-failed",
+      "suffix": "full",
+      "sha256": "d28982ed52727fe79df6e8a68cd43f2dffab5bcef5c6cd2faef12b06ac2d0dad",
+      "pixelWidth": 390,
+      "pixelHeight": 4021
+    },
+    {
+      "file": "390-query-filled-full.png",
+      "width": 390,
+      "scene": "query-filled",
+      "suffix": "full",
+      "sha256": "a2ed26355643f7a0fe07c31283c6e10acde581824612bb3b77487fabbde05b0f",
+      "pixelWidth": 390,
+      "pixelHeight": 3840
+    },
+    {
+      "file": "390-submission-in-progress-full.png",
+      "width": 390,
+      "scene": "submission-in-progress",
+      "suffix": "full",
+      "sha256": "a0ee1876295e8c357815d50e848bb7edf90b0e575070705068e443b2c1cf3016",
+      "pixelWidth": 390,
+      "pixelHeight": 3888
+    },
+    {
+      "file": "390-submission-succeeded-full.png",
+      "width": 390,
+      "scene": "submission-succeeded",
+      "suffix": "full",
+      "sha256": "2415d05f6e18d2c0275a61f584976642f4afce561df0a5dda01232b0d7efc306",
+      "pixelWidth": 390,
+      "pixelHeight": 4203
+    },
+    {
+      "file": "390-submission-succeeded-task-details.png",
+      "width": 390,
+      "scene": "submission-succeeded",
+      "suffix": "task-details",
+      "sha256": "2fa16781d11a5adf00c4fe31d6354cd4efb5d47d155a7db5e24cc82e2af1f43c",
+      "pixelWidth": 390,
+      "pixelHeight": 4248
+    },
+    {
+      "file": "390-submission-failed-full.png",
+      "width": 390,
+      "scene": "submission-failed",
+      "suffix": "full",
+      "sha256": "8ef4aa13c30daa4fe29e544a6b60f2c730a7b569991ce365b941b63521ca0415",
+      "pixelWidth": 390,
+      "pixelHeight": 4041
+    },
+    {
+      "file": "390-submission-forbidden-full.png",
+      "width": 390,
+      "scene": "submission-forbidden",
+      "suffix": "full",
+      "sha256": "e3c9093eddc9f144b30bce5c292c8bd749026befdd5dba8f74d7f362f9bda977",
+      "pixelWidth": 390,
+      "pixelHeight": 4041
+    },
+    {
+      "file": "390-submission-session-expired-full.png",
+      "width": 390,
+      "scene": "submission-session-expired",
+      "suffix": "full",
+      "sha256": "13c078a69baf9c899f9f92e13b604ed5cf7443213f8601f7d4cc2d7abda89ec2",
+      "pixelWidth": 390,
+      "pixelHeight": 4041
+    },
+    {
+      "file": "390-submitted-reread-failed-full.png",
+      "width": 390,
+      "scene": "submitted-reread-failed",
+      "suffix": "full",
+      "sha256": "fab72ddc95c7dfdfb4c04365945dac0de8d4d49f38fbac1d7bb99febde725e9e",
+      "pixelWidth": 390,
+      "pixelHeight": 4338
+    },
+    {
+      "file": "390-submitted-reread-failed-task-details.png",
+      "width": 390,
+      "scene": "submitted-reread-failed",
+      "suffix": "task-details",
+      "sha256": "2d8429416a33aaa04826972d66a59304c33e64a3a6532cb44146e9ee77d82471",
+      "pixelWidth": 390,
+      "pixelHeight": 4383
+    },
+    {
+      "file": "760-scope-loading-full.png",
+      "width": 760,
+      "scene": "scope-loading",
+      "suffix": "full",
+      "sha256": "da2912f19fa3751e1473ac91167589a40728f0cadd8485bc065f4fe64613c78b",
+      "pixelWidth": 760,
+      "pixelHeight": 3710
+    },
+    {
+      "file": "760-no-active-organizations-full.png",
+      "width": 760,
+      "scene": "no-active-organizations",
+      "suffix": "full",
+      "sha256": "d3ac9c5c32705dde3d38469105921eaf9058a5b7e17e0c28aa31ae275453b5e2",
+      "pixelWidth": 760,
+      "pixelHeight": 3843
+    },
+    {
+      "file": "760-organizations-failed-full.png",
+      "width": 760,
+      "scene": "organizations-failed",
+      "suffix": "full",
+      "sha256": "7ad43f045662ce09c8ffeefe31baa5500801e3e86a935806972ed58054bcfa05",
+      "pixelWidth": 760,
+      "pixelHeight": 3843
+    },
+    {
+      "file": "760-workspace-loading-full.png",
+      "width": 760,
+      "scene": "workspace-loading",
+      "suffix": "full",
+      "sha256": "229298076c298824e27c05045b47e2c7a0db921015f2db2669f6db7d4098a150",
+      "pixelWidth": 760,
+      "pixelHeight": 3710
+    },
+    {
+      "file": "760-no-active-workspaces-full.png",
+      "width": 760,
+      "scene": "no-active-workspaces",
+      "suffix": "full",
+      "sha256": "d0e7f9e91f337d9da1f3c57ead543adfb1af3adc48f200e05f70ae9795b28809",
+      "pixelWidth": 760,
+      "pixelHeight": 3843
+    },
+    {
+      "file": "760-workspaces-failed-full.png",
+      "width": 760,
+      "scene": "workspaces-failed",
+      "suffix": "full",
+      "sha256": "611d0c0ea85ffc543d929f2a7f51f2c4a91bc94f0877aef2c2c7b665144d374a",
+      "pixelWidth": 760,
+      "pixelHeight": 3843
+    },
+    {
+      "file": "760-query-filled-full.png",
+      "width": 760,
+      "scene": "query-filled",
+      "suffix": "full",
+      "sha256": "9de6b63a71f0822047650cad6341ddf59b20bdf1b45cd1a985056a5507960d8c",
+      "pixelWidth": 760,
+      "pixelHeight": 3662
+    },
+    {
+      "file": "760-submission-in-progress-full.png",
+      "width": 760,
+      "scene": "submission-in-progress",
+      "suffix": "full",
+      "sha256": "39a68e2527d3452e5f4c875d7eea72cd18f86787e505822f8c8662a57fe88171",
+      "pixelWidth": 760,
+      "pixelHeight": 3710
+    },
+    {
+      "file": "760-submission-succeeded-full.png",
+      "width": 760,
+      "scene": "submission-succeeded",
+      "suffix": "full",
+      "sha256": "57234dba14022d2186260cf045b8c5c1a4f58aca0d82e382ce41dcc07b62b0e9",
+      "pixelWidth": 760,
+      "pixelHeight": 3975
+    },
+    {
+      "file": "760-submission-failed-full.png",
+      "width": 760,
+      "scene": "submission-failed",
+      "suffix": "full",
+      "sha256": "167db39ba0afd07e1e02a44475df540ea67e6e33b9b9cbf2149943bb2f21bcab",
+      "pixelWidth": 760,
+      "pixelHeight": 3863
+    },
+    {
+      "file": "760-submission-forbidden-full.png",
+      "width": 760,
+      "scene": "submission-forbidden",
+      "suffix": "full",
+      "sha256": "5a83d9bcf41ab7608b416244d4a1cf300696a30a82ce46f9828dcba4b17b8c28",
+      "pixelWidth": 760,
+      "pixelHeight": 3863
+    },
+    {
+      "file": "760-submission-session-expired-full.png",
+      "width": 760,
+      "scene": "submission-session-expired",
+      "suffix": "full",
+      "sha256": "8f9f81f4fb205aca03b296258a74a2071eb3f7ce273d7b877a7fb22a0861039d",
+      "pixelWidth": 760,
+      "pixelHeight": 3863
+    },
+    {
+      "file": "760-submitted-reread-failed-full.png",
+      "width": 760,
+      "scene": "submitted-reread-failed",
+      "suffix": "full",
+      "sha256": "e8da3f6cbcf2e98db4674e315e5ea61968e8d5ff77b0499595f0c9ada3a37147",
+      "pixelWidth": 760,
+      "pixelHeight": 4109
+    },
+    {
+      "file": "1024-scope-loading-full.png",
+      "width": 1024,
+      "scene": "scope-loading",
+      "suffix": "full",
+      "sha256": "c01f085baa97d2c10ae6e45b2dd3a408f2220cc467d060e58ee2db57796a815f",
+      "pixelWidth": 1024,
+      "pixelHeight": 2654
+    },
+    {
+      "file": "1024-no-active-organizations-full.png",
+      "width": 1024,
+      "scene": "no-active-organizations",
+      "suffix": "full",
+      "sha256": "c744b4b84d6a05865608b2c45e646fb8424d2df3ccb7ab4527b298c842a00612",
+      "pixelWidth": 1024,
+      "pixelHeight": 2796
+    },
+    {
+      "file": "1024-organizations-failed-full.png",
+      "width": 1024,
+      "scene": "organizations-failed",
+      "suffix": "full",
+      "sha256": "14f1fef73e894765705ed047c7a902e7d1b158080e6e7a4263af344c075aa40e",
+      "pixelWidth": 1024,
+      "pixelHeight": 2796
+    },
+    {
+      "file": "1024-workspace-loading-full.png",
+      "width": 1024,
+      "scene": "workspace-loading",
+      "suffix": "full",
+      "sha256": "3bf3d07d82e886e5e39487bef298f0470b90c535abd03c513adc45f0b2e26621",
+      "pixelWidth": 1024,
+      "pixelHeight": 2654
+    },
+    {
+      "file": "1024-no-active-workspaces-full.png",
+      "width": 1024,
+      "scene": "no-active-workspaces",
+      "suffix": "full",
+      "sha256": "66c13535ad5df44d9824b9f7bfad91478d44670c7d3081aca4db3241698b3a59",
+      "pixelWidth": 1024,
+      "pixelHeight": 2796
+    },
+    {
+      "file": "1024-workspaces-failed-full.png",
+      "width": 1024,
+      "scene": "workspaces-failed",
+      "suffix": "full",
+      "sha256": "2e45e529b9a1188ab67074cf83024d92d653eabc57c2bd76af473a7084587057",
+      "pixelWidth": 1024,
+      "pixelHeight": 2796
+    },
+    {
+      "file": "1024-query-filled-full.png",
+      "width": 1024,
+      "scene": "query-filled",
+      "suffix": "full",
+      "sha256": "669eb053dcdc090fc9d5e41956d1218b8fb4521a362a9a82b276c8aacb170486",
+      "pixelWidth": 1024,
+      "pixelHeight": 2606
+    },
+    {
+      "file": "1024-submission-in-progress-full.png",
+      "width": 1024,
+      "scene": "submission-in-progress",
+      "suffix": "full",
+      "sha256": "d940e85265b0c79339dd45931bfee191e39ea9af86deefbdc8f2b055b0f3f759",
+      "pixelWidth": 1024,
+      "pixelHeight": 2654
+    },
+    {
+      "file": "1024-submission-succeeded-full.png",
+      "width": 1024,
+      "scene": "submission-succeeded",
+      "suffix": "full",
+      "sha256": "5606ccee94073f6a65b22fad4b020f0b8e9f66d0fb55edfae039607962e4219b",
+      "pixelWidth": 1024,
+      "pixelHeight": 2927
+    },
+    {
+      "file": "1024-submission-failed-full.png",
+      "width": 1024,
+      "scene": "submission-failed",
+      "suffix": "full",
+      "sha256": "841ccca7937513505bd973f0c4505f86f2f1a57066e527a18b369ae3e3b173f9",
+      "pixelWidth": 1024,
+      "pixelHeight": 2816
+    },
+    {
+      "file": "1024-submission-forbidden-full.png",
+      "width": 1024,
+      "scene": "submission-forbidden",
+      "suffix": "full",
+      "sha256": "67b9db2274aeef8041c77f1959b817af6e70cb3cb8830256b81c6ed5c1bc5489",
+      "pixelWidth": 1024,
+      "pixelHeight": 2816
+    },
+    {
+      "file": "1024-submission-session-expired-full.png",
+      "width": 1024,
+      "scene": "submission-session-expired",
+      "suffix": "full",
+      "sha256": "669f832a327619f31fe376b5520e82b576cb8244a96ac82f15a9b765f9aed11e",
+      "pixelWidth": 1024,
+      "pixelHeight": 2816
+    },
+    {
+      "file": "1024-submitted-reread-failed-full.png",
+      "width": 1024,
+      "scene": "submitted-reread-failed",
+      "suffix": "full",
+      "sha256": "76733835e99e2c11e5a9928595fe2f225b4af5c7d9b1f42982c61df292d28951",
+      "pixelWidth": 1024,
+      "pixelHeight": 3011
+    },
+    {
+      "file": "1440-scope-loading-full.png",
+      "width": 1440,
+      "scene": "scope-loading",
+      "suffix": "full",
+      "sha256": "d1acdc729ad4aae10bbd4b2473cf8f6fde483b8dc6d1e1fe3ad8ee5688715769",
+      "pixelWidth": 1440,
+      "pixelHeight": 2059
+    },
+    {
+      "file": "1440-no-active-organizations-full.png",
+      "width": 1440,
+      "scene": "no-active-organizations",
+      "suffix": "full",
+      "sha256": "e42b3afd13467231018f31be1cbd1932e1b6ab16d13ec0aa4466ac7824416b52",
+      "pixelWidth": 1440,
+      "pixelHeight": 2137
+    },
+    {
+      "file": "1440-organizations-failed-full.png",
+      "width": 1440,
+      "scene": "organizations-failed",
+      "suffix": "full",
+      "sha256": "af785e2605948ef553a593fbe799742d2cf9dcfbd612adfdad756eff1fc3d9e3",
+      "pixelWidth": 1440,
+      "pixelHeight": 2137
+    },
+    {
+      "file": "1440-workspace-loading-full.png",
+      "width": 1440,
+      "scene": "workspace-loading",
+      "suffix": "full",
+      "sha256": "5695693e2da74282d457c3dec1012e49cbedb2f08f69a3209ef935c66c2b8a0c",
+      "pixelWidth": 1440,
+      "pixelHeight": 2059
+    },
+    {
+      "file": "1440-no-active-workspaces-full.png",
+      "width": 1440,
+      "scene": "no-active-workspaces",
+      "suffix": "full",
+      "sha256": "c7189ddc9fc42ed9cb93f6ffb4afa3aaa10bec8117fdf7a90156961b2192da35",
+      "pixelWidth": 1440,
+      "pixelHeight": 2137
+    },
+    {
+      "file": "1440-workspaces-failed-full.png",
+      "width": 1440,
+      "scene": "workspaces-failed",
+      "suffix": "full",
+      "sha256": "40f4aa9b11e1367234a719975b23fa5d50b82cda2a8b19b9e80e270a83a5c189",
+      "pixelWidth": 1440,
+      "pixelHeight": 2137
+    },
+    {
+      "file": "1440-query-filled-full.png",
+      "width": 1440,
+      "scene": "query-filled",
+      "suffix": "full",
+      "sha256": "aa7cb763e507821c3062df3dbc7c4a28bee1c486b8c449f4770f67a4b97f1260",
+      "pixelWidth": 1440,
+      "pixelHeight": 2011
+    },
+    {
+      "file": "1440-submission-in-progress-full.png",
+      "width": 1440,
+      "scene": "submission-in-progress",
+      "suffix": "full",
+      "sha256": "f5a202297072054a89dedbba195b50c37a19d7f7a779e85d17b43a5bb710cdb3",
+      "pixelWidth": 1440,
+      "pixelHeight": 2059
+    },
+    {
+      "file": "1440-submission-succeeded-full.png",
+      "width": 1440,
+      "scene": "submission-succeeded",
+      "suffix": "full",
+      "sha256": "4bbef97061884efe051d002827b0af5846ee69aa865cda9d6fe4fc5898d9d316",
+      "pixelWidth": 1440,
+      "pixelHeight": 2269
+    },
+    {
+      "file": "1440-submission-failed-full.png",
+      "width": 1440,
+      "scene": "submission-failed",
+      "suffix": "full",
+      "sha256": "6470a205331bf9d7350af4e511df8a8cd635a9c5dded92e17539d414139ecf78",
+      "pixelWidth": 1440,
+      "pixelHeight": 2137
+    },
+    {
+      "file": "1440-submission-forbidden-full.png",
+      "width": 1440,
+      "scene": "submission-forbidden",
+      "suffix": "full",
+      "sha256": "918bb63d8185a0c402b7df8413bda3db94350e45b983ad8f8cec9111750afa32",
+      "pixelWidth": 1440,
+      "pixelHeight": 2137
+    },
+    {
+      "file": "1440-submission-session-expired-full.png",
+      "width": 1440,
+      "scene": "submission-session-expired",
+      "suffix": "full",
+      "sha256": "62052e1575023d6dcc4ac8767779ab2104abcfddcb7167f0fe03492ef30749fb",
+      "pixelWidth": 1440,
+      "pixelHeight": 2137
+    },
+    {
+      "file": "1440-submitted-reread-failed-full.png",
+      "width": 1440,
+      "scene": "submitted-reread-failed",
+      "suffix": "full",
+      "sha256": "6c35328e7b698aca1d8c8ca3117541fc97bcabd4123f7fbcaf38e771f597a46f",
+      "pixelWidth": 1440,
+      "pixelHeight": 2269
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/index.html": "0376c4bf04227ac5dbb6bb43895e5ed97eef6ca8bde54f08774908d3f07d9d88",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "66b064c2135275b9d173ef316692366823ef4f6276002796d9ed112183218cef",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/provider-adapters-c-detail.css": "094a11fe39b3701c35d6061f7a570e940b3bb00abcc0b2ed7f64ffeaea0c6bdd",
+    "apps/web/src/provider-adapters-c-feedback.css": "64b09e635e98f8865ea2fb3c8b33b1d21f447affd55061f3d01cf6667904bba2",
+    "apps/web/src/provider-adapters-c-page.css": "899ca57a21bceef95c7dc030bb7f92bae1755f324b1d26c3f0ba692dad736c86",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/route-catalog.generated.json": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/1688-acceptance-actions-preview.css": "9b9e5c864a56d9d5bbd2834d74c05edcf465d54d585c4358c44944bf07dc96db",
+    "design-plans/ui-phase-2-2026-09-07/implementation/1688-acceptance-page-preview.css": "3feed0817b2b758bd2936efda1ac9e27ce02e1b635384923161870474c5d3ed7",
+    "design-plans/ui-phase-2-2026-09-07/implementation/1688-acceptance-read-states-preview.css": "f0997696385d452a9902f92f232eb0b5517b951b9d5b83a33db33863f5a34a65",
+    "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
+    "scripts/lib/ui-phase2-1688-acceptance-actions-preview.mjs": "2198a224fbb5877792143f537ff061808055dd8353940b98234f8905569133fc",
+    "scripts/lib/ui-phase2-1688-acceptance-design-data.mjs": "d48d151f489395743656c6451b76cf55fff80c0bfa301a06eb5a2c1b178886aa",
+    "scripts/lib/ui-phase2-1688-acceptance-page-preview.mjs": "77960767f79c658d58d24d4546cb19846ee46f74d75757df5f32a6b151508b8c",
+    "scripts/lib/ui-phase2-1688-acceptance-read-states-preview.mjs": "5c68212377e57da681d731b315ba4556df4a4c95aa35b3e8636821b2f1fbcf19",
+    "scripts/verify-ui-phase2-1688-acceptance-actions.mjs": "6387dd7e9455b723f18b36590e6284b4f2481060a75b28ec1bf366d9a2482918",
+    "tests/e2e/m03-07-provider-sources.spec.ts": "29c1232a33cb260beeee6851f33c4558873d25e47e538d6a2e04c47eaa6ba5fe"
+  },
+  "ports": [
+    58955
+  ],
+  "processesClosed": true
+}
