@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { historicalAdapterFeedbackSource } from "./ui-phase2-adapter-feedback-baseline.mjs";
+import { historicalAdapterReadSource } from "./ui-phase2-adapter-read-baseline.mjs";
 
 export const providerSummaryRevision = {
   file: "apps/web/src/components/ProviderRegistry.vue",
@@ -12,7 +13,7 @@ const hash = (s) => createHash("sha256").update(s).digest("hex");
 let previous;
 // Only associate exact immutable historical captures; current raw code is tested separately.
 export function historicalProviderSummarySource(file, source) {
-  source = historicalAdapterFeedbackSource(file, source);
+  source = historicalAdapterFeedbackSource(file, historicalAdapterReadSource(file, source));
   if (file !== providerSummaryRevision.file || hash(source) !== providerSummaryRevision.after)
     return source;
   if (!previous) {

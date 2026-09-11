@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalAdapterReadSource } from "../../scripts/lib/ui-phase2-adapter-read-baseline.mjs";
 import { historicalAdapterFeedbackSource } from "../../scripts/lib/ui-phase2-adapter-feedback-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -8,7 +9,8 @@ import { baseParse } from "@vue/compiler-dom";
 import postcss from "postcss";
 import ts from "typescript";
 
-const read = (f) => historicalAdapterFeedbackSource(f, readFileSync(f, "utf8"));
+const read = (f) =>
+  historicalAdapterFeedbackSource(f, historicalAdapterReadSource(f, readFileSync(f, "utf8")));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const component = "apps/web/src/components/ProviderAdapterCenter.vue";
 const preview =

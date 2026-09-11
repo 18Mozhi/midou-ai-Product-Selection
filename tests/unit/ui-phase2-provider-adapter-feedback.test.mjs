@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalAdapterReadSource } from "../../scripts/lib/ui-phase2-adapter-read-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -12,7 +13,7 @@ import {
 } from "../../scripts/lib/ui-phase2-adapter-feedback-baseline.mjs";
 
 const file = adapterFeedbackRevision.file;
-const source = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const source = historicalAdapterReadSource(file, readFileSync(file, "utf8"));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const old = historicalAdapterFeedbackSource(file, source);
 const row = { id: "source-a", name: "来源A", health_status: "ready" };
@@ -145,7 +146,7 @@ test("P47 current feedback evidence binds raw production, historic negative and 
   assert.equal(Object.keys(evidence.sourceHashes).length, 170);
   assert.equal(evidence.processesClosed, true);
   for (const [f, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(readFileSync(f, "utf8").replaceAll("\r\n", "\n")), sha, f);
+    assert.equal(hash(historicalAdapterReadSource(f, readFileSync(f, "utf8"))), sha, f);
   assert.deepEqual(
     readdirSync(evidenceRoot).sort(),
     [...evidence.screenshots.map((s) => s.file), "evidence.json", "index.html"].sort(),

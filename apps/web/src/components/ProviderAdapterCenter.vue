@@ -173,7 +173,13 @@ function resetFilters() {
   health.value = "all";
   sort.value = "attention";
 }
+let loadGeneration = 0,
+  probeRevision = 0;
 async function load() {
+  const generation = ++loadGeneration,
+    revision = probeRevision,
+    ownsRead = () =>
+      generation === loadGeneration && revision === probeRevision && probing.value === null;
   const preserve = items.value.length > 0;
   if (!preserve) state.value = "loading";
   refreshing.value = true;
@@ -184,12 +190,14 @@ async function load() {
     const response = await request<AdapterSummary[]>("/platform/provider-adapters", {
       signal: controller.signal,
     });
+    if (!ownsRead()) return;
     requestId.value = response.request_id;
     items.value = response.data;
     lastUpdatedAt.value = new Date().toISOString();
     state.value = items.value.length ? "ready" : "empty";
     if (preserve) message.value = `已刷新 ${items.value.length} 个来源适配器状态`;
   } catch (error) {
+    if (!ownsRead()) return;
     const apiError = error instanceof ApiClientError ? error : null;
     requestId.value = apiError?.requestId ?? "";
     if (preserve) {
@@ -201,11 +209,12 @@ async function load() {
     } else state.value = apiError ? failure(apiError.status) : "blocked";
   } finally {
     window.clearTimeout(timer);
-    refreshing.value = false;
+    if (generation === loadGeneration) refreshing.value = false;
   }
 }
 async function probe(item: AdapterSummary, event?: MouseEvent) {
   if (probing.value) return;
+  probeRevision += 1;
   const trigger = event?.currentTarget;
   if (trigger instanceof HTMLElement)
     trigger.parentElement
@@ -230,6 +239,8 @@ async function probe(item: AdapterSummary, event?: MouseEvent) {
     requestId.value = apiError?.requestId ?? "";
     message.value = apiError?.actionHint ?? "依赖不可用，未伪造健康结果";
   } finally {
+    // Reads started during this probe cannot publish after it settles either.
+    probeRevision += 1;
     // Capture this settled probe before a later list read changes the shared message/trace.
     probeFeedback.value = {
       providerId: item.id,
