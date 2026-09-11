@@ -701,6 +701,10 @@ onMounted(load);
           >管理员管理</RouterLink
         >
       </nav>
+      <header v-if="tab === 'admins'" class="admin-directory-heading">
+        <h3>可授权账号</h3>
+        <p>包含尚未授予平台角色的账号。进入详情后核对身份与当前授权。</p>
+      </header>
       <ResponsiveFilterDrawer :label="filterLabel" :active-count="activeFilterCount">
         <form class="account-filter" @submit.prevent="applyFilters">
           <input v-model="query" :placeholder="searchPlaceholder" /><select
@@ -841,3 +845,4 @@ onMounted(load);
 </template>
 <style scoped src="./PlatformAccountCenter.css"></style>
 <style src="./PlatformAdminComparisonMobile.css"></style>
+<style src="./PlatformAdminDirectoryMobile.css"></style>

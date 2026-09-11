@@ -1,3 +1,4 @@
+import { adminDirectoryHeading } from "../../scripts/lib/ui-phase2-admin-directory-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -216,7 +217,10 @@ test("unscoped writes still reread and parent template is unchanged", async () =
   assert.equal(h.box.loads, 1);
   assert.equal(
     parse(current).descriptor.template.content,
-    parse(baseline).descriptor.template.content,
+    parse(baseline).descriptor.template.content.replace(
+      "      <ResponsiveFilterDrawer",
+      adminDirectoryHeading + "      <ResponsiveFilterDrawer",
+    ),
   );
 });
 test("current restore retains active target status and original reason", async () => {

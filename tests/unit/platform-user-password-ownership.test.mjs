@@ -1,3 +1,4 @@
+import { adminDirectoryHeading } from "../../scripts/lib/ui-phase2-admin-directory-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -164,7 +165,10 @@ for (const outcome of [true, false]) {
 test("password fix leaves template and every other parent function unchanged", () => {
   assert.equal(
     parse(source).descriptor.template.content,
-    parse(baseline).descriptor.template.content,
+    parse(baseline).descriptor.template.content.replace(
+      "      <ResponsiveFilterDrawer",
+      adminDirectoryHeading + "      <ResponsiveFilterDrawer",
+    ),
   );
   assert.deepEqual(
     functions(source).filter((n) => n.name !== "resetPassword"),

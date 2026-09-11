@@ -1,0 +1,67 @@
+/* Approved P44 mobile directory only; other routes, desktop and dialogs stay unchanged. */
+.admin-directory-heading {
+  display: none;
+}
+@media (max-width: 760px) {
+  html[data-design="signal-ledger"]
+    #app
+    .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"]) {
+    > .admin-directory-heading {
+      display: block;
+      margin: 0 16px;
+      font-family: "Microsoft YaHei", sans-serif;
+      color: #142a46;
+      h3 {
+        margin: 0 0 6px;
+        font-family: "Microsoft YaHei", sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: #142a46;
+      }
+      p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.8;
+        color: #536b86;
+      }
+    }
+    > .account-table-wrap {
+      margin: 0 16px;
+      border: 1px solid #d8e1ed;
+      border-radius: 10px;
+      background: #fff;
+      color: #142a46;
+      font-family: "Microsoft YaHei", sans-serif;
+      .responsive-data-view__mobile {
+        gap: 0;
+      }
+      .responsive-data-view__mobile article {
+        border: 0;
+        border-bottom: 1px solid #d8e1ed;
+        border-radius: 0;
+        background: #fff;
+      }
+      .responsive-data-view__mobile article:last-child {
+        border-bottom: 0;
+      }
+      .responsive-data-view__mobile article > button {
+        padding: 20px 16px;
+        min-height: 44px;
+        color: #142a46;
+        background: #fff;
+      }
+      .responsive-record-summary strong {
+        font-family: Bahnschrift, "Microsoft YaHei", sans-serif;
+        font-size: 14px;
+        overflow-wrap: anywhere;
+      }
+      .responsive-record-summary small,
+      .responsive-data-view__action {
+        color: #536b86;
+      }
+      .responsive-record-summary small {
+        font-size: 13px;
+      }
+    }
+  }
+}

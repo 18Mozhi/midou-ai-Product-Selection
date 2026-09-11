@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalAdminDirectorySource } from "../../scripts/lib/ui-phase2-admin-directory-baseline.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
@@ -8,7 +9,7 @@ import {
   historicalAdminRoleFactsSource,
 } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = (file) => historicalAdminDirectorySource(file, readFileSync(file, "utf8"));
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const folder = "output/playwright/p44-mobile-role-facts-implementation/";
 const evidence = (mode) => JSON.parse(read(folder + mode + "/evidence.json"));

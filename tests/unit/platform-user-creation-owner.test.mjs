@@ -1,3 +1,4 @@
+import { adminDirectoryHeading } from "../../scripts/lib/ui-phase2-admin-directory-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -149,7 +150,10 @@ for (const boundary of ["close", "route-return", "deactivate", "unmount"]) {
 test("creation fix leaves template and unrelated parent functions intact", () => {
   assert.equal(
     parse(source).descriptor.template.content,
-    parse(baseline).descriptor.template.content,
+    parse(baseline).descriptor.template.content.replace(
+      "      <ResponsiveFilterDrawer",
+      adminDirectoryHeading + "      <ResponsiveFilterDrawer",
+    ),
   );
   const functions = (s) => {
     const ast = ts.createSourceFile(

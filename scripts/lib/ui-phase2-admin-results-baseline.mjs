@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { historicalAdminDirectorySource } from "./ui-phase2-admin-directory-baseline.mjs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 
@@ -23,7 +24,7 @@ export const adminRoleFactsRevision = {
 };
 // Associate the previous result captures with their exact CSS, not current acceptance.
 export function historicalAdminRoleFactsSource(file, source) {
-  source = source.replaceAll("\r\n", "\n");
+  source = historicalAdminDirectorySource(file, source);
   const r = adminRoleFactsRevision;
   if (file !== r.file || hash(source) === r.before) return source;
   // The older pre-results stylesheet is also a known historical input.

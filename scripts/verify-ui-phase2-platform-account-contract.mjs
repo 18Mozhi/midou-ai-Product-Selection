@@ -18,6 +18,7 @@ const addedSources = [
   "apps/web/src/use-platform-organization-actions.ts",
   "apps/web/src/use-user-creation-owner.ts",
   "apps/web/src/components/PlatformAdminComparisonMobile.css",
+  "apps/web/src/components/PlatformAdminDirectoryMobile.css",
 ];
 const files = {
   D: "PlatformDashboard",
