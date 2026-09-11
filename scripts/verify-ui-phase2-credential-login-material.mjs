@@ -12,21 +12,27 @@ import { previewCredentialLoginMaterial } from "./lib/ui-phase2-credential-login
 const args = process.argv.slice(2);
 assert.ok(
   args.every(
-    (arg) => arg === "--capture" || ["--suite=boundary", "--suite=lifecycle"].includes(arg),
+    (arg) =>
+      arg === "--capture" ||
+      ["--suite=boundary", "--suite=lifecycle", "--suite=cache"].includes(arg),
   ),
 );
 const capture = args.includes("--capture"),
-  suite = args.includes("--suite=lifecycle")
-    ? "lifecycle"
-    : args.includes("--suite=boundary")
-      ? "boundary"
-      : "core",
+  suite = args.includes("--suite=cache")
+    ? "cache"
+    : args.includes("--suite=lifecycle")
+      ? "lifecycle"
+      : args.includes("--suite=boundary")
+        ? "boundary"
+        : "core",
   output =
     suite === "core"
       ? "output/playwright/p50-credential-login-material-review"
       : suite === "boundary"
         ? "output/playwright/p50-credential-login-boundary-review"
-        : "output/playwright/p50-credential-login-lifecycle-review",
+        : suite === "lifecycle"
+          ? "output/playwright/p50-credential-login-lifecycle-review"
+          : "output/playwright/p50-credential-login-cache-review",
   component = "apps/web/src/components/CredentialAssetCenter.vue",
   pageCss = "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css",
   materialCss =
@@ -61,6 +67,7 @@ const capture = args.includes("--capture"),
       "profile-unknown",
       "profile-rejected",
     ],
+    cache: ["cache-material-cleared", "cache-helper-late-ignored"],
   }[suite];
 
 const ast = ts.createSourceFile(fixture, await read(fixture), ts.ScriptTarget.Latest, true),
@@ -224,16 +231,17 @@ try {
           }
           if (!url.pathname.startsWith("/api/")) return route.continue();
           const allowedGet = [
-              "GET /api/v1/me/navigation",
-              "GET /api/v1/auth/session-status",
-              "GET /api/v1/platform/credential-assets",
-              "GET /api/v1/platform/crawler-profiles",
-              "GET /api/v1/platform/credential-provider-options",
-            ],
-            allowedPost = [
-              "POST /api/v1/platform/credential-assets",
-              "POST /api/v1/platform/crawler-profiles",
-            ];
+            "GET /api/v1/me/navigation",
+            "GET /api/v1/auth/session-status",
+            "GET /api/v1/platform/credential-assets",
+            "GET /api/v1/platform/crawler-profiles",
+            "GET /api/v1/platform/credential-provider-options",
+          ];
+          if (suite === "cache") allowedGet.push("GET /api/v1/platform/dashboard");
+          const allowedPost = [
+            "POST /api/v1/platform/credential-assets",
+            "POST /api/v1/platform/crawler-profiles",
+          ];
           if (!allowedGet.includes(key) && !(suite === "lifecycle" && allowedPost.includes(key))) {
             unexpected.push(key);
             return route.abort();
@@ -284,6 +292,24 @@ try {
               json: { data: data.profile, request_id: "p50-lifecycle-profile" },
             });
           }
+          if (key === "GET /api/v1/platform/dashboard")
+            return route.fulfill({
+              json: {
+                data: {
+                  window: "24h",
+                  summary: {
+                    active_organizations: 0,
+                    active_users: 0,
+                    enabled_providers: 0,
+                    storage_bytes: 0,
+                  },
+                  queues: [],
+                  alerts: [],
+                  provider_health: [],
+                },
+                request_id: "p50-cache-dashboard",
+              },
+            });
           if (url.pathname.endsWith("/me/navigation"))
             return route.fulfill({ json: { data: data.navigation, request_id: "p50-nav" } });
           if (url.pathname.endsWith("/auth/session-status"))
@@ -599,13 +625,67 @@ try {
             await expect(editor.getByRole("status")).toContainText("关联运行档案");
             check("rejected profile resubmit locked", await save.isDisabled());
           }
+        } else if (state === "cache-material-cleared") {
+          await editor.locator('input[type="file"]').setInputFiles({
+            name: "cached-secret.cookies",
+            mimeType: "text/plain",
+            buffer: Buffer.from(
+              '[{"name":"cached","value":"p50-hidden-cache-secret","domain":"example.test"}]',
+            ),
+          });
+          await expect(save).toBeEnabled();
+          const dashboardLink = page
+            .getByRole("navigation", { name: "平台管理后台导航", exact: true })
+            .locator('a[href="/platform-admin"]');
+          await dashboardLink.evaluate((element) => element.click());
+          await expect(page).toHaveURL(/\/platform-admin$/);
+          await page.goBack();
+          await expect(page).toHaveURL(/\/platform-admin\/credentials\?/);
+          await expect(editor).toHaveCount(0);
+          await page.getByRole("button", { name: "配置网页登录", exact: true }).click();
+          await expect(editor).toBeVisible();
+          check("cached editor closed", true);
+          check("cached material cleared", await save.isDisabled());
+        } else if (state === "cache-helper-late-ignored") {
+          await mode.selectOption("browser");
+          await editor
+            .getByRole("button", { name: "从当前浏览器读取 Cookie", exact: true })
+            .click();
+          await expect.poll(() => page.evaluate(() => window.__p50BridgeRequests.length)).toBe(1);
+          const dashboardLink = page
+            .getByRole("navigation", { name: "平台管理后台导航", exact: true })
+            .locator('a[href="/platform-admin"]');
+          await dashboardLink.evaluate((element) => element.click());
+          await expect(page).toHaveURL(/\/platform-admin$/);
+          await page.evaluate(() => {
+            const request = window.__p50BridgeRequests[0];
+            window.postMessage(
+              {
+                type: "SCOUTOPS_BROWSER_BRIDGE_RESULT",
+                request_id: request.request_id,
+                ok: true,
+                data: { cookies: [{ name: "late", value: "p50-hidden-cache-late" }] },
+              },
+              location.origin,
+            );
+          });
+          await page.goBack();
+          await expect(page).toHaveURL(/\/platform-admin\/credentials\?/);
+          await expect(editor).toHaveCount(0);
+          await page.getByRole("button", { name: "配置网页登录", exact: true }).click();
+          await mode.selectOption("browser");
+          check("cached editor closed", await editor.isVisible());
+          check("cached helper result ignored", await save.isDisabled());
         }
 
         check(
           "three credential data GETs",
           requests.filter(
             (request) =>
-              request.key.startsWith("GET ") && request.key.includes("/api/v1/platform/"),
+              request.key.startsWith("GET ") &&
+              ["/credential-assets", "/crawler-profiles", "/credential-provider-options"].some(
+                (suffix) => request.key.endsWith(suffix),
+              ),
           ).length,
           3,
         );
@@ -643,6 +723,8 @@ try {
               "p50-hidden-asset-unknown",
               "p50-hidden-profile-unknown",
               "p50-hidden-profile-rejected",
+              "p50-hidden-cache-secret",
+              "p50-hidden-cache-late",
             ].every((value) => !document.body.textContent.includes(value)),
           ),
         );
@@ -666,6 +748,8 @@ try {
               "p50-hidden-asset-unknown",
               "p50-hidden-profile-unknown",
               "p50-hidden-profile-rejected",
+              "p50-hidden-cache-secret",
+              "p50-hidden-cache-late",
             ].every((value) => !persisted.includes(value));
           }),
         );
@@ -736,10 +820,12 @@ const evidence = {
       ? "P50-CREDENTIAL-LOGIN-MATERIAL-REVIEW-r1"
       : suite === "boundary"
         ? "P50-CREDENTIAL-LOGIN-BOUNDARY-REVIEW-r1"
-        : "P50-CREDENTIAL-LOGIN-LIFECYCLE-IMPLEMENTATION-r1",
+        : suite === "lifecycle"
+          ? "P50-CREDENTIAL-LOGIN-LIFECYCLE-IMPLEMENTATION-r1"
+          : "P50-CREDENTIAL-LOGIN-CACHE-IMPLEMENTATION-r1",
   generatedAt: new Date().toISOString(),
   reviewOnly: true,
-  productionChanged: suite === "lifecycle",
+  productionChanged: ["lifecycle", "cache"].includes(suite),
   deployed: false,
   processesClosed: true,
   states,
@@ -752,13 +838,17 @@ const evidence = {
       ? "All file contents and browser-helper cookies are synthetic in-memory review values. Screenshots expose filenames/counts and feedback only. No save action, external page, real helper, API write, encryption, database or production credential is used."
       : suite === "boundary"
         ? "Oversize and invalid files are synthetic local buffers; helper denial and timeout are locally delivered or clock-driven. No file content is rendered or persisted and no save action, external page, real helper, API write, encryption, database or production credential is used."
-        : "All lifecycle files and browser-helper values are synthetic and local. POST requests are intercepted in the isolated browser and never reach a backend, encryption service, database or production. Screenshots expose only filenames and status feedback; material values are neither rendered nor persisted.",
+        : suite === "lifecycle"
+          ? "All lifecycle files and browser-helper values are synthetic and local. POST requests are intercepted in the isolated browser and never reach a backend, encryption service, database or production. Screenshots expose only filenames and status feedback; material values are neither rendered nor persisted."
+          : "The cached-page file and delayed helper result are synthetic and local. Navigation uses the actual App, Router, NavigationShell and KeepAlive. No save, external page, real helper, API write, encryption, database or production credential is used; material values are neither rendered nor persisted.",
   proposalBoundary:
     suite === "core"
       ? "This is a visual review batch for the material-reading states. Production lifecycle ownership and post-close cleanup are now covered separately by the lifecycle implementation evidence; this batch does not claim real helper, API, database or production verification."
       : suite === "boundary"
         ? "This visual boundary review preserves the exact 2,000,000 and 6,000,000 byte limits and extension allowlists, distinguishes the 15-second helper timeout from helper denial, and keeps recovery choices visible. Production lifecycle ownership is covered separately; real helper, API, database and production verification are not claimed."
-        : "The production Vue component now binds file and helper results to the active editor/source/mode generation, clears prepared material on context change, locks close/cancel/source/mode during writes, and fails closed when either write outcome is unknown. C-direction styling remains a review-only transform. KeepAlive deactivation, real browser-helper, backend encryption, database writes and production deployment are not claimed.",
+        : suite === "lifecycle"
+          ? "The production Vue component binds file and helper results to the active editor/source/mode generation, clears prepared material on context change, locks close/cancel/source/mode during writes, and fails closed when either write outcome is unknown. C-direction styling remains a review-only transform. Real browser-helper, backend encryption, database writes and production deployment are not claimed."
+          : "The production Vue component now invalidates the editor/material generation, aborts an active helper read and clears sensitive editor state when the actual KeepAlive page deactivates. A separately tested interrupted credential GET restarts on activation. C-direction styling remains review-only; pending writes, real helper/API/database/permissions and production deployment are not claimed.",
 };
 if (capture) {
   await writeFile(`${output}/evidence.json`, JSON.stringify(evidence, null, 2) + "\n");
@@ -768,7 +858,14 @@ if (capture) {
         `<article><h2>${shot.width}px · ${shot.state}</h2><a href="${shot.file}"><img src="${shot.file}" alt="${shot.width}px ${shot.state}"></a></article>`,
     )
     .join("");
-  const galleryKind = suite === "core" ? "状态" : suite === "boundary" ? "边界" : "生命周期";
+  const galleryKind =
+    suite === "core"
+      ? "状态"
+      : suite === "boundary"
+        ? "边界"
+        : suite === "lifecycle"
+          ? "生命周期"
+          : "缓存返回";
   await writeFile(
     `${output}/index.html`,
     [

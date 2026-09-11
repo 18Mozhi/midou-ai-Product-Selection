@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from "vue";
+import {
+  computed,
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  reactive,
+  ref,
+} from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
@@ -87,7 +96,10 @@ let activeController: AbortController | null = null,
   editorReturnFocus: HTMLElement | null = null,
   editorGeneration = 0,
   loginMaterialGeneration = 0,
-  loginMaterialController: AbortController | null = null;
+  loginMaterialController: AbortController | null = null,
+  readGeneration = 0,
+  pageActive = true,
+  resumeRead = false;
 const failure = (s: number): State =>
     s === 401
       ? "expired"
@@ -171,21 +183,24 @@ const assetName = (assetId: string) =>
   assets.value.find((asset) => asset.id === assetId)?.name ?? "凭证引用不可用";
 async function load() {
   if (refreshing.value) return;
-  const preserve = lastUpdatedAt.value !== null;
+  const generation = ++readGeneration,
+    preserve = lastUpdatedAt.value !== null;
   if (!preserve) state.value = "loading";
   refreshing.value = true;
   message.value = "";
   refreshNotice.value = "";
-  activeController = new AbortController();
-  const timer = window.setTimeout(() => activeController?.abort(), 12_000);
+  const controller = new AbortController();
+  activeController = controller;
+  const timer = window.setTimeout(() => controller.abort(), 12_000);
   try {
     const [nextAssets, nextProfiles, nextProviders] = await Promise.all([
-      request<Asset[]>("/platform/credential-assets", { signal: activeController.signal }),
-      request<Profile[]>("/platform/crawler-profiles", { signal: activeController.signal }),
+      request<Asset[]>("/platform/credential-assets", { signal: controller.signal }),
+      request<Profile[]>("/platform/crawler-profiles", { signal: controller.signal }),
       request<Provider[]>("/platform/credential-provider-options", {
-        signal: activeController.signal,
+        signal: controller.signal,
       }),
     ]);
+    if (!pageActive || generation !== readGeneration || controller.signal.aborted) return;
     assets.value = nextAssets.data;
     profiles.value = nextProfiles.data;
     providers.value = nextProviders.data;
@@ -197,6 +212,7 @@ async function load() {
       refreshNotice.value = "凭证元数据与运行档案已刷新。";
     }
   } catch (error) {
+    if (!pageActive || generation !== readGeneration) return;
     const apiError = error instanceof ApiClientError ? error : null;
     const timedOut = error instanceof DOMException && error.name === "AbortError";
     requestId.value = apiError?.requestId ?? requestId.value;
@@ -211,8 +227,10 @@ async function load() {
     } else state.value = failure(apiError?.status ?? (timedOut ? 504 : 503));
   } finally {
     window.clearTimeout(timer);
-    activeController = null;
-    refreshing.value = false;
+    if (generation === readGeneration) {
+      if (activeController === controller) activeController = null;
+      refreshing.value = false;
+    }
   }
 }
 function focusEditor() {
@@ -640,11 +658,31 @@ onMounted(async () => {
     );
   }
 });
-onBeforeUnmount(() => {
+function suspendPage() {
+  if (!pageActive) return;
+  pageActive = false;
+  resumeRead = resumeRead || refreshing.value;
+  readGeneration += 1;
   activeController?.abort();
+  activeController = null;
+  refreshing.value = false;
   editorGeneration += 1;
   invalidateLoginMaterial();
+  editor.value = null;
+  selected.value = null;
+  revokeTarget.value = null;
   assetForm.value = "";
+  loginSaveStage.value = "idle";
+  editorReturnFocus = null;
+  message.value = "";
+}
+onDeactivated(suspendPage);
+onBeforeUnmount(suspendPage);
+onActivated(() => {
+  pageActive = true;
+  if (!resumeRead) return;
+  resumeRead = false;
+  void load();
 });
 </script>
 <template>

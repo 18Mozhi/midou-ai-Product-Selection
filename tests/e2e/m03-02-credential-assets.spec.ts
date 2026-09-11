@@ -80,6 +80,37 @@ async function nav(page: any, availableProviders = [provider]) {
     }),
   );
 }
+async function navigatePlatform(page: any, path: string) {
+  const link = page
+    .getByRole("navigation", { name: "平台管理后台导航", exact: true })
+    .locator(`a[href="${path}"]`);
+  await expect(link).toHaveCount(1);
+  // Browser back/forward can leave a modal without a pointer click; invoke the real RouterLink.
+  await link.evaluate((element: HTMLAnchorElement) => element.click());
+  await expect(page).toHaveURL(new RegExp(`${path.replaceAll("/", "\\/")}$`));
+}
+async function stubEmptyPlatformDashboard(page: any) {
+  await page.route("**/api/v1/platform/dashboard?**", (route: any) =>
+    route.fulfill({
+      json: {
+        data: {
+          window: "24h",
+          summary: {
+            active_organizations: 0,
+            active_users: 0,
+            enabled_providers: 0,
+            storage_bytes: 0,
+          },
+          queues: [],
+          alerts: [],
+          provider_health: [],
+        },
+        request_id: "m03-02-dashboard",
+        trace_id: "m03-02-dashboard",
+      },
+    }),
+  );
+}
 test("M03-02.A07/A08/A15 masked credential vault is responsive and visual", async ({ page }) => {
   await nav(page);
   await page.route("**/api/v1/platform/credential-assets", (r) =>
@@ -552,4 +583,118 @@ test("UI2-SC50 lifecycle distinguishes an unknown profile result after the asset
   await expect(dialog.getByRole("button", { name: "加密保存并启用", exact: true })).toBeDisabled();
   expect(assetWrites).toBe(1);
   expect(profileWrites).toBe(1);
+});
+
+test("UI2-SC50 KeepAlive deactivation closes the login editor and clears prepared material", async ({
+  page,
+}) => {
+  await nav(page, [provider, secondProvider]);
+  await stubEmptyPlatformDashboard(page);
+  let credentialReads = 0;
+  await page.route("**/api/v1/platform/credential-assets", (route) => {
+    credentialReads += 1;
+    return route.fulfill({
+      json: { data: [], request_id: "ui2-cache-assets", trace_id: "ui2-cache-assets" },
+    });
+  });
+  await page.goto(`/platform-admin/credentials?provider_id=${provider.id}&mode=login`);
+  let dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await dialog.locator('input[type="file"]').setInputFiles({
+    name: "cached-secret.cookies",
+    mimeType: "text/plain",
+    buffer: Buffer.from(
+      '[{"name":"cached","value":"synthetic-cache-secret","domain":"example.test"}]',
+    ),
+  });
+  await expect(dialog.getByText(/已读取导入材料：cached-secret\.cookies/)).toBeVisible();
+  await navigatePlatform(page, "/platform-admin");
+  await page.goBack();
+  await expect(page).toHaveURL(/\/platform-admin\/credentials\?/);
+  await expect(page.getByRole("dialog", { name: "导入已经登录的浏览器档案" })).toHaveCount(0);
+  await page.getByRole("button", { name: "配置网页登录", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await expect(dialog.locator(".archive-picker small")).toContainText("请选择 Cookie");
+  await expect(dialog.getByRole("button", { name: "加密保存并启用", exact: true })).toBeDisabled();
+  await expect(page.getByText("cached-secret.cookies")).toHaveCount(0);
+  expect(credentialReads).toBe(1);
+});
+
+test("UI2-SC50 KeepAlive deactivation rejects a late browser-helper result", async ({ page }) => {
+  await nav(page, [provider, secondProvider]);
+  await stubEmptyPlatformDashboard(page);
+  await page.route("**/api/v1/platform/credential-assets", (route) =>
+    route.fulfill({
+      json: { data: [], request_id: "ui2-cache-helper", trace_id: "ui2-cache-helper" },
+    }),
+  );
+  await page.goto(`/platform-admin/credentials?provider_id=${provider.id}&mode=login`);
+  await page.evaluate(() => {
+    window.addEventListener("message", (event) => {
+      if (event.data?.type === "SCOUTOPS_BROWSER_BRIDGE_REQUEST")
+        (window as any).__p50CachedBridgeRequest = event.data;
+    });
+  });
+  let dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await dialog.getByLabel("导入方式").selectOption("browser");
+  await dialog.getByRole("button", { name: "从当前浏览器读取 Cookie", exact: true }).click();
+  await expect
+    .poll(() => page.evaluate(() => Boolean((window as any).__p50CachedBridgeRequest)))
+    .toBe(true);
+  await navigatePlatform(page, "/platform-admin");
+  await page.evaluate(() => {
+    const request = (window as any).__p50CachedBridgeRequest;
+    window.postMessage(
+      {
+        type: "SCOUTOPS_BROWSER_BRIDGE_RESULT",
+        request_id: request.request_id,
+        ok: true,
+        data: { cookies: [{ name: "late", value: "synthetic-cache-late" }] },
+      },
+      location.origin,
+    );
+  });
+  await page.goBack();
+  await expect(page).toHaveURL(/\/platform-admin\/credentials\?/);
+  await expect(page.getByRole("dialog", { name: "导入已经登录的浏览器档案" })).toHaveCount(0);
+  await page.getByRole("button", { name: "配置网页登录", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await dialog.getByLabel("导入方式").selectOption("browser");
+  await expect(dialog.getByRole("button", { name: "加密保存并启用", exact: true })).toBeDisabled();
+  await expect(page.getByText(/已读取 1 条 Cookie/)).toHaveCount(0);
+});
+
+test("UI2-SC50 KeepAlive deactivation aborts and restarts an unfinished credential read", async ({
+  page,
+}) => {
+  await nav(page, [provider, secondProvider]);
+  await stubEmptyPlatformDashboard(page);
+  await page.unroute("**/api/v1/platform/crawler-profiles");
+  await page.unroute("**/api/v1/platform/credential-provider-options");
+  let releaseFirst = () => {},
+    totalReads = 0;
+  const firstReadGate = new Promise<void>((resolve) => {
+    releaseFirst = resolve;
+  });
+  for (const [pattern, response] of [
+    ["**/api/v1/platform/credential-assets", [asset]],
+    ["**/api/v1/platform/crawler-profiles", [profile]],
+    ["**/api/v1/platform/credential-provider-options", [provider, secondProvider]],
+  ] as const)
+    await page.route(pattern, async (route) => {
+      totalReads += 1;
+      if (totalReads <= 3) await firstReadGate;
+      try {
+        await route.fulfill({
+          json: { data: response, request_id: "ui2-cache-read", trace_id: "ui2-cache-read" },
+        });
+      } catch {}
+    });
+  await page.goto("/platform-admin/credentials");
+  await expect.poll(() => totalReads).toBe(3);
+  await navigatePlatform(page, "/platform-admin");
+  releaseFirst();
+  await page.goBack();
+  await expect(page).toHaveURL(/\/platform-admin\/credentials$/);
+  await expect(page.getByRole("heading", { name: "北美浏览器档案", exact: true })).toBeVisible();
+  expect(totalReads).toBe(6);
 });

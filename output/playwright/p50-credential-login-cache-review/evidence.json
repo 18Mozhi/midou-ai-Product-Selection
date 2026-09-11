@@ -1,37 +1,32 @@
 {
-  "kind": "P50-CREDENTIAL-PAGE-REVIEW-r1",
-  "generatedAt": "2026-09-11T18:30:36.330Z",
+  "kind": "P50-CREDENTIAL-LOGIN-CACHE-IMPLEMENTATION-r1",
+  "generatedAt": "2026-09-11T18:27:52.039Z",
   "reviewOnly": true,
-  "productionChanged": false,
+  "productionChanged": true,
   "deployed": false,
   "processesClosed": true,
+  "states": [
+    "cache-material-cleared",
+    "cache-helper-late-ignored"
+  ],
   "ports": [
-    52911,
-    52932
+    52080
   ],
   "runs": [
     {
-      "mode": "baseline",
       "width": 390,
+      "state": "cache-material-cleared",
       "checks": [
         {
-          "name": "three metric facts",
-          "actual": 3
+          "name": "initial source identity",
+          "actual": "登录页来源"
         },
         {
-          "name": "one credential asset",
-          "actual": 1
+          "name": "cached editor closed",
+          "actual": true
         },
         {
-          "name": "one runtime profile",
-          "actual": 1
-        },
-        {
-          "name": "two authenticated sources",
-          "actual": 2
-        },
-        {
-          "name": "no secret values in rendered text",
+          "name": "cached material cleared",
           "actual": true
         },
         {
@@ -39,71 +34,43 @@
           "actual": 3
         },
         {
-          "name": "all requests are GET without bodies",
+          "name": "all network requests are GET without bodies",
           "actual": true
         },
         {
-          "name": "header action computed styles",
-          "actual": {
-            "container": {
-              "backgroundColor": "rgb(228, 76, 27)",
-              "backgroundImage": "none",
-              "beforeBackground": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box"
-            },
-            "controls": [
-              {
-                "text": "下载浏览器助手",
-                "backgroundColor": "rgb(229, 224, 210)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "配置网页登录",
-                "backgroundColor": "rgb(229, 224, 210)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "关联运行档案",
-                "backgroundColor": "rgb(229, 224, 210)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "新建凭证资产",
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "backgroundImage": "linear-gradient(120deg, rgb(185, 51, 18), rgb(228, 76, 27))"
-              }
-            ]
-          }
-        },
-        {
-          "name": "page has no horizontal overflow",
+          "name": "material values never render",
           "actual": true
         },
         {
-          "name": "three import modes",
-          "actual": [
-            "上传 Cookie 文件",
-            "从当前浏览器读取",
-            "完整浏览器档案"
-          ]
+          "name": "no material persistence",
+          "actual": true
         },
         {
-          "name": "file input exists but no file selected",
-          "actual": 1
-        },
-        {
-          "name": "no password field in login editor",
+          "name": "no browser cookies created",
           "actual": 0
         },
         {
-          "name": "save disabled before material",
+          "name": "target44 source",
           "actual": true
         },
         {
-          "name": "opening editor adds no request",
-          "actual": 3
+          "name": "target44 mode",
+          "actual": true
         },
         {
-          "name": "editor has no horizontal overflow",
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
           "actual": true
         },
         {
@@ -118,168 +85,40 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
     {
-      "mode": "baseline",
-      "width": 1440,
-      "checks": [
-        {
-          "name": "three metric facts",
-          "actual": 3
-        },
-        {
-          "name": "one credential asset",
-          "actual": 1
-        },
-        {
-          "name": "one runtime profile",
-          "actual": 1
-        },
-        {
-          "name": "two authenticated sources",
-          "actual": 2
-        },
-        {
-          "name": "no secret values in rendered text",
-          "actual": true
-        },
-        {
-          "name": "three credential data GETs",
-          "actual": 3
-        },
-        {
-          "name": "all requests are GET without bodies",
-          "actual": true
-        },
-        {
-          "name": "header action computed styles",
-          "actual": {
-            "container": {
-              "backgroundColor": "rgb(228, 76, 27)",
-              "backgroundImage": "none",
-              "beforeBackground": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box"
-            },
-            "controls": [
-              {
-                "text": "下载浏览器助手",
-                "backgroundColor": "rgb(229, 224, 210)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "配置网页登录",
-                "backgroundColor": "rgb(229, 224, 210)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "关联运行档案",
-                "backgroundColor": "rgb(229, 224, 210)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "新建凭证资产",
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "backgroundImage": "linear-gradient(120deg, rgb(185, 51, 18), rgb(228, 76, 27))"
-              }
-            ]
-          }
-        },
-        {
-          "name": "page has no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "three import modes",
-          "actual": [
-            "上传 Cookie 文件",
-            "从当前浏览器读取",
-            "完整浏览器档案"
-          ]
-        },
-        {
-          "name": "file input exists but no file selected",
-          "actual": 1
-        },
-        {
-          "name": "no password field in login editor",
-          "actual": 0
-        },
-        {
-          "name": "save disabled before material",
-          "actual": true
-        },
-        {
-          "name": "opening editor adds no request",
-          "actual": 3
-        },
-        {
-          "name": "editor has no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "no unexpected network",
-          "actual": []
-        },
-        {
-          "name": "no runtime errors",
-          "actual": []
-        }
-      ],
-      "requests": [
-        {
-          "key": "GET /api/v1/me/navigation",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-assets",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
-        },
-        {
-          "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
-        }
-      ]
-    },
-    {
-      "mode": "review",
       "width": 390,
+      "state": "cache-helper-late-ignored",
       "checks": [
         {
-          "name": "three metric facts",
-          "actual": 3
+          "name": "initial source identity",
+          "actual": "登录页来源"
         },
         {
-          "name": "one credential asset",
-          "actual": 1
+          "name": "cached editor closed",
+          "actual": true
         },
         {
-          "name": "one runtime profile",
-          "actual": 1
-        },
-        {
-          "name": "two authenticated sources",
-          "actual": 2
-        },
-        {
-          "name": "no secret values in rendered text",
+          "name": "cached helper result ignored",
           "actual": true
         },
         {
@@ -287,103 +126,43 @@
           "actual": 3
         },
         {
-          "name": "all requests are GET without bodies",
+          "name": "all network requests are GET without bodies",
           "actual": true
         },
         {
-          "name": "header action computed styles",
-          "actual": {
-            "container": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "backgroundImage": "none",
-              "beforeBackground": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box"
-            },
-            "controls": [
-              {
-                "text": "下载浏览器助手",
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "配置网页登录",
-                "backgroundColor": "rgb(255, 255, 255)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "关联运行档案",
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "新建凭证资产",
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "backgroundImage": "none"
-              }
-            ]
-          }
-        },
-        {
-          "name": "login action is44",
+          "name": "material values never render",
           "actual": true
         },
         {
-          "name": "login action is focal white",
+          "name": "no material persistence",
           "actual": true
         },
         {
-          "name": "visible blue keyboard focus",
-          "actual": true
-        },
-        {
-          "name": "page has no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "three import modes",
-          "actual": [
-            "上传 Cookie 文件",
-            "从当前浏览器读取",
-            "完整浏览器档案"
-          ]
-        },
-        {
-          "name": "file input exists but no file selected",
-          "actual": 1
-        },
-        {
-          "name": "no password field in login editor",
+          "name": "no browser cookies created",
           "actual": 0
         },
         {
-          "name": "save disabled before material",
+          "name": "target44 source",
           "actual": true
         },
         {
-          "name": "opening editor adds no request",
-          "actual": 3
-        },
-        {
-          "name": "editor target44 source",
+          "name": "target44 mode",
           "actual": true
         },
         {
-          "name": "editor target44 mode",
+          "name": "target44 cancel",
           "actual": true
         },
         {
-          "name": "editor target44 cancel",
+          "name": "target44 save",
           "actual": true
         },
         {
-          "name": "editor target44 save",
+          "name": "no horizontal overflow",
           "actual": true
         },
         {
-          "name": "editor is single column on mobile",
-          "actual": 1
-        },
-        {
-          "name": "editor has no horizontal overflow",
+          "name": "footer actions remain in viewport",
           "actual": true
         },
         {
@@ -398,44 +177,40 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
     {
-      "mode": "review",
       "width": 760,
+      "state": "cache-material-cleared",
       "checks": [
         {
-          "name": "three metric facts",
-          "actual": 3
+          "name": "initial source identity",
+          "actual": "登录页来源"
         },
         {
-          "name": "one credential asset",
-          "actual": 1
+          "name": "cached editor closed",
+          "actual": true
         },
         {
-          "name": "one runtime profile",
-          "actual": 1
-        },
-        {
-          "name": "two authenticated sources",
-          "actual": 2
-        },
-        {
-          "name": "no secret values in rendered text",
+          "name": "cached material cleared",
           "actual": true
         },
         {
@@ -443,103 +218,43 @@
           "actual": 3
         },
         {
-          "name": "all requests are GET without bodies",
+          "name": "all network requests are GET without bodies",
           "actual": true
         },
         {
-          "name": "header action computed styles",
-          "actual": {
-            "container": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "backgroundImage": "none",
-              "beforeBackground": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box"
-            },
-            "controls": [
-              {
-                "text": "下载浏览器助手",
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "配置网页登录",
-                "backgroundColor": "rgb(255, 255, 255)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "关联运行档案",
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "新建凭证资产",
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "backgroundImage": "none"
-              }
-            ]
-          }
-        },
-        {
-          "name": "login action is44",
+          "name": "material values never render",
           "actual": true
         },
         {
-          "name": "login action is focal white",
+          "name": "no material persistence",
           "actual": true
         },
         {
-          "name": "visible blue keyboard focus",
-          "actual": true
-        },
-        {
-          "name": "page has no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "three import modes",
-          "actual": [
-            "上传 Cookie 文件",
-            "从当前浏览器读取",
-            "完整浏览器档案"
-          ]
-        },
-        {
-          "name": "file input exists but no file selected",
-          "actual": 1
-        },
-        {
-          "name": "no password field in login editor",
+          "name": "no browser cookies created",
           "actual": 0
         },
         {
-          "name": "save disabled before material",
+          "name": "target44 source",
           "actual": true
         },
         {
-          "name": "opening editor adds no request",
-          "actual": 3
-        },
-        {
-          "name": "editor target44 source",
+          "name": "target44 mode",
           "actual": true
         },
         {
-          "name": "editor target44 mode",
+          "name": "target44 cancel",
           "actual": true
         },
         {
-          "name": "editor target44 cancel",
+          "name": "target44 save",
           "actual": true
         },
         {
-          "name": "editor target44 save",
+          "name": "no horizontal overflow",
           "actual": true
         },
         {
-          "name": "editor is single column on mobile",
-          "actual": 1
-        },
-        {
-          "name": "editor has no horizontal overflow",
+          "name": "footer actions remain in viewport",
           "actual": true
         },
         {
@@ -554,44 +269,132 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
     {
-      "mode": "review",
+      "width": 760,
+      "state": "cache-helper-late-ignored",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "cached editor closed",
+          "actual": true
+        },
+        {
+          "name": "cached helper result ignored",
+          "actual": true
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
       "width": 1024,
+      "state": "cache-material-cleared",
       "checks": [
         {
-          "name": "three metric facts",
-          "actual": 3
+          "name": "initial source identity",
+          "actual": "登录页来源"
         },
         {
-          "name": "one credential asset",
-          "actual": 1
+          "name": "cached editor closed",
+          "actual": true
         },
         {
-          "name": "one runtime profile",
-          "actual": 1
-        },
-        {
-          "name": "two authenticated sources",
-          "actual": 2
-        },
-        {
-          "name": "no secret values in rendered text",
+          "name": "cached material cleared",
           "actual": true
         },
         {
@@ -599,103 +402,43 @@
           "actual": 3
         },
         {
-          "name": "all requests are GET without bodies",
+          "name": "all network requests are GET without bodies",
           "actual": true
         },
         {
-          "name": "header action computed styles",
-          "actual": {
-            "container": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "backgroundImage": "none",
-              "beforeBackground": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box"
-            },
-            "controls": [
-              {
-                "text": "下载浏览器助手",
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "配置网页登录",
-                "backgroundColor": "rgb(255, 255, 255)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "关联运行档案",
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "新建凭证资产",
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "backgroundImage": "none"
-              }
-            ]
-          }
-        },
-        {
-          "name": "login action is44",
+          "name": "material values never render",
           "actual": true
         },
         {
-          "name": "login action is focal white",
+          "name": "no material persistence",
           "actual": true
         },
         {
-          "name": "visible blue keyboard focus",
-          "actual": true
-        },
-        {
-          "name": "page has no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "three import modes",
-          "actual": [
-            "上传 Cookie 文件",
-            "从当前浏览器读取",
-            "完整浏览器档案"
-          ]
-        },
-        {
-          "name": "file input exists but no file selected",
-          "actual": 1
-        },
-        {
-          "name": "no password field in login editor",
+          "name": "no browser cookies created",
           "actual": 0
         },
         {
-          "name": "save disabled before material",
+          "name": "target44 source",
           "actual": true
         },
         {
-          "name": "opening editor adds no request",
-          "actual": 3
-        },
-        {
-          "name": "editor target44 source",
+          "name": "target44 mode",
           "actual": true
         },
         {
-          "name": "editor target44 mode",
+          "name": "target44 cancel",
           "actual": true
         },
         {
-          "name": "editor target44 cancel",
+          "name": "target44 save",
           "actual": true
         },
         {
-          "name": "editor target44 save",
+          "name": "no horizontal overflow",
           "actual": true
         },
         {
-          "name": "editor is single column on mobile",
-          "actual": 2
-        },
-        {
-          "name": "editor has no horizontal overflow",
+          "name": "footer actions remain in viewport",
           "actual": true
         },
         {
@@ -710,44 +453,40 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
     {
-      "mode": "review",
-      "width": 1440,
+      "width": 1024,
+      "state": "cache-helper-late-ignored",
       "checks": [
         {
-          "name": "three metric facts",
-          "actual": 3
+          "name": "initial source identity",
+          "actual": "登录页来源"
         },
         {
-          "name": "one credential asset",
-          "actual": 1
+          "name": "cached editor closed",
+          "actual": true
         },
         {
-          "name": "one runtime profile",
-          "actual": 1
-        },
-        {
-          "name": "two authenticated sources",
-          "actual": 2
-        },
-        {
-          "name": "no secret values in rendered text",
+          "name": "cached helper result ignored",
           "actual": true
         },
         {
@@ -755,103 +494,43 @@
           "actual": 3
         },
         {
-          "name": "all requests are GET without bodies",
+          "name": "all network requests are GET without bodies",
           "actual": true
         },
         {
-          "name": "header action computed styles",
-          "actual": {
-            "container": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "backgroundImage": "none",
-              "beforeBackground": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box"
-            },
-            "controls": [
-              {
-                "text": "下载浏览器助手",
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "配置网页登录",
-                "backgroundColor": "rgb(255, 255, 255)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "关联运行档案",
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "backgroundImage": "none"
-              },
-              {
-                "text": "新建凭证资产",
-                "backgroundColor": "rgba(0, 0, 0, 0)",
-                "backgroundImage": "none"
-              }
-            ]
-          }
-        },
-        {
-          "name": "login action is44",
+          "name": "material values never render",
           "actual": true
         },
         {
-          "name": "login action is focal white",
+          "name": "no material persistence",
           "actual": true
         },
         {
-          "name": "visible blue keyboard focus",
-          "actual": true
-        },
-        {
-          "name": "page has no horizontal overflow",
-          "actual": true
-        },
-        {
-          "name": "three import modes",
-          "actual": [
-            "上传 Cookie 文件",
-            "从当前浏览器读取",
-            "完整浏览器档案"
-          ]
-        },
-        {
-          "name": "file input exists but no file selected",
-          "actual": 1
-        },
-        {
-          "name": "no password field in login editor",
+          "name": "no browser cookies created",
           "actual": 0
         },
         {
-          "name": "save disabled before material",
+          "name": "target44 source",
           "actual": true
         },
         {
-          "name": "opening editor adds no request",
-          "actual": 3
-        },
-        {
-          "name": "editor target44 source",
+          "name": "target44 mode",
           "actual": true
         },
         {
-          "name": "editor target44 mode",
+          "name": "target44 cancel",
           "actual": true
         },
         {
-          "name": "editor target44 cancel",
+          "name": "target44 save",
           "actual": true
         },
         {
-          "name": "editor target44 save",
+          "name": "no horizontal overflow",
           "actual": true
         },
         {
-          "name": "editor is single column on mobile",
-          "actual": 2
-        },
-        {
-          "name": "editor has no horizontal overflow",
+          "name": "footer actions remain in viewport",
           "actual": true
         },
         {
@@ -866,131 +545,275 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "state": "cache-material-cleared",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "cached editor closed",
+          "actual": true
+        },
+        {
+          "name": "cached material cleared",
+          "actual": true
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "state": "cache-helper-late-ignored",
+      "checks": [
+        {
+          "name": "initial source identity",
+          "actual": "登录页来源"
+        },
+        {
+          "name": "cached editor closed",
+          "actual": true
+        },
+        {
+          "name": "cached helper result ignored",
+          "actual": true
+        },
+        {
+          "name": "three credential data GETs",
+          "actual": 3
+        },
+        {
+          "name": "all network requests are GET without bodies",
+          "actual": true
+        },
+        {
+          "name": "material values never render",
+          "actual": true
+        },
+        {
+          "name": "no material persistence",
+          "actual": true
+        },
+        {
+          "name": "no browser cookies created",
+          "actual": 0
+        },
+        {
+          "name": "target44 source",
+          "actual": true
+        },
+        {
+          "name": "target44 mode",
+          "actual": true
+        },
+        {
+          "name": "target44 cancel",
+          "actual": true
+        },
+        {
+          "name": "target44 save",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "footer actions remain in viewport",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-assets",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/crawler-profiles",
+          "body": null,
+          "idempotencyKey": null
+        },
+        {
+          "key": "GET /api/v1/platform/credential-provider-options",
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     }
   ],
   "screenshots": [
     {
-      "file": "baseline-390-default.png",
-      "mode": "baseline",
+      "file": "390-cache-material-cleared.png",
       "width": 390,
-      "suffix": "default",
-      "sha256": "c0ce277a8ac71350ee926aa545f6ebda56d112c20b0da736e62f2abcb679ac93",
+      "state": "cache-material-cleared",
+      "sha256": "3a1e6e948f35a8b83ee271c522b94ea2c7967681862979f1700b2cfb59c454dd",
       "pixelWidth": 390,
-      "pixelHeight": 2230
+      "pixelHeight": 1000
     },
     {
-      "file": "baseline-390-login-editor.png",
-      "mode": "baseline",
+      "file": "390-cache-helper-late-ignored.png",
       "width": 390,
-      "suffix": "login-editor",
-      "sha256": "e2e5e7f1d26f030320df0029f1d3856c57b4b6ab434a8f2eac327135bfe769b5",
+      "state": "cache-helper-late-ignored",
+      "sha256": "710e05d85ac4db5dc033cd1b0c4e5b07f21da60eced8c2ed4deddc7bc68ac6c3",
       "pixelWidth": 390,
-      "pixelHeight": 1100
+      "pixelHeight": 1000
     },
     {
-      "file": "baseline-1440-default.png",
-      "mode": "baseline",
-      "width": 1440,
-      "suffix": "default",
-      "sha256": "605a6945e69913a9e71763c7b24de5072b94a0fcc9900600551dad2f449796b2",
-      "pixelWidth": 1440,
-      "pixelHeight": 1764
-    },
-    {
-      "file": "baseline-1440-login-editor.png",
-      "mode": "baseline",
-      "width": 1440,
-      "suffix": "login-editor",
-      "sha256": "eff00fc2d648bf6590642a0590bc5bb9736c05d8ccf44b584053642a8eae853e",
-      "pixelWidth": 1440,
-      "pixelHeight": 1200
-    },
-    {
-      "file": "review-390-default.png",
-      "mode": "review",
-      "width": 390,
-      "suffix": "default",
-      "sha256": "adfefb74c5125feed734ea4eeab5d1c2b80db58fc2bad1941ac59816d7be0553",
-      "pixelWidth": 390,
-      "pixelHeight": 1983
-    },
-    {
-      "file": "review-390-login-editor.png",
-      "mode": "review",
-      "width": 390,
-      "suffix": "login-editor",
-      "sha256": "b1e3c436983a9888fb8efbe21d7eb0d3dbcde9c0ac3b21184902b5495cc405e9",
-      "pixelWidth": 390,
-      "pixelHeight": 1100
-    },
-    {
-      "file": "review-760-default.png",
-      "mode": "review",
+      "file": "760-cache-material-cleared.png",
       "width": 760,
-      "suffix": "default",
-      "sha256": "a37e9ed32441d2bf512d81d8c7ee69d4ef0d726656f141c37bb44d37a1648bba",
+      "state": "cache-material-cleared",
+      "sha256": "617734a705bd0f30eff695187893c31e305694531ff1d913f89ebd1f6ab6da41",
       "pixelWidth": 760,
-      "pixelHeight": 1988
+      "pixelHeight": 1000
     },
     {
-      "file": "review-760-login-editor.png",
-      "mode": "review",
+      "file": "760-cache-helper-late-ignored.png",
       "width": 760,
-      "suffix": "login-editor",
-      "sha256": "93271c9ca9af6acfa52e4fe445c395c1d2c89abc4660a08dde438e982bcd1a01",
+      "state": "cache-helper-late-ignored",
+      "sha256": "a20deead121c0827c0cc7a55c628ec1fae5c4c715a211f795f3213512a3388e4",
       "pixelWidth": 760,
+      "pixelHeight": 1000
+    },
+    {
+      "file": "1024-cache-material-cleared.png",
+      "width": 1024,
+      "state": "cache-material-cleared",
+      "sha256": "74469f6a994a79bad57886d2f5b8050360e6f0c5107449ba10f21375223d79bf",
+      "pixelWidth": 1024,
       "pixelHeight": 1100
     },
     {
-      "file": "review-1024-default.png",
-      "mode": "review",
+      "file": "1024-cache-helper-late-ignored.png",
       "width": 1024,
-      "suffix": "default",
-      "sha256": "d984735fc1c9d8e0c87a858ac71ac8df86f7fe50030280f3f2bfbd4820c31d30",
+      "state": "cache-helper-late-ignored",
+      "sha256": "04c36cf465e60197768611fc90670599ddaa73858f0b99e0fef55897a95f175e",
       "pixelWidth": 1024,
-      "pixelHeight": 1611
+      "pixelHeight": 1100
     },
     {
-      "file": "review-1024-login-editor.png",
-      "mode": "review",
-      "width": 1024,
-      "suffix": "login-editor",
-      "sha256": "83c3195fef3e214f7571558281dc9b4846b599724d34d25833602a41d83f540a",
-      "pixelWidth": 1024,
-      "pixelHeight": 1200
-    },
-    {
-      "file": "review-1440-default.png",
-      "mode": "review",
+      "file": "1440-cache-material-cleared.png",
       "width": 1440,
-      "suffix": "default",
-      "sha256": "3503b6fce188b3c049fa7f903b81e803e1366788b9c77ee60ef52ea4bf9f3f68",
+      "state": "cache-material-cleared",
+      "sha256": "7e39eec518d880b6fb99ad0f25bb03d974924402a5d63ac5f9bec3c0f397e174",
       "pixelWidth": 1440,
-      "pixelHeight": 1425
+      "pixelHeight": 1100
     },
     {
-      "file": "review-1440-login-editor.png",
-      "mode": "review",
+      "file": "1440-cache-helper-late-ignored.png",
       "width": 1440,
-      "suffix": "login-editor",
-      "sha256": "041b582760974e59f28a65f28376983aebd54edafd08f1bfc8803718283fe332",
+      "state": "cache-helper-late-ignored",
+      "sha256": "73b96cf77f914008a11769cb256e259b0416d28a181dc90dc20755f103e11b79",
       "pixelWidth": 1440,
-      "pixelHeight": 1200
+      "pixelHeight": 1100
     }
   ],
   "sourceHashes": {
@@ -1161,10 +984,12 @@
     "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
     "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
     "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css": "7e2411b46606e8cca9901ce1dfb024610b7d287c4278eb2ce5d7bc56a6b3c0a8",
+    "design-plans/ui-phase-2-2026-09-07/implementation/credential-login-material-preview.css": "5eb2b981c695e6bdbeee358a3508d697b849f99222f0d89b9e923350cdaea5ea",
     "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
-    "scripts/verify-ui-phase2-credential-assets-page.mjs": "a91d5649e73837efeac78532f5d72fd676bde605ec2c05e2dd01542e4a17267c",
+    "scripts/lib/ui-phase2-credential-login-material-preview.mjs": "7869a322a10702b53be1afde3ff0393e6547800e57b49eb351f0336d1a52a0e9",
+    "scripts/verify-ui-phase2-credential-login-material.mjs": "01e667c6a9c813d18b73a21f41c0456557c26cc6b6e5b9299cb7dda8dbcd1bcb",
     "tests/e2e/m03-02-credential-assets.spec.ts": "463cf61dded1047e5ac6ab9ebc8fcd5942e1a12b15416296ceaba63db7a79714"
   },
-  "fixtureBoundary": "Provider, asset, profile and navigation values are parsed from the authoritative M03-02 E2E fixture. The browser routes only local GET responses; no real credential, Cookie, extension, API write, encryption, database or production data is accessed.",
-  "visualBoundary": "Actual App, ProviderRuntimeSurface and untransformed CredentialAssetCenter. Review-only CSS creates the P50 credential custody hierarchy and login editor composition without changing production SFC, events or contracts."
+  "materialBoundary": "The cached-page file and delayed helper result are synthetic and local. Navigation uses the actual App, Router, NavigationShell and KeepAlive. No save, external page, real helper, API write, encryption, database or production credential is used; material values are neither rendered nor persisted.",
+  "proposalBoundary": "The production Vue component now invalidates the editor/material generation, aborts an active helper read and clears sensitive editor state when the actual KeepAlive page deactivates. A separately tested interrupted credential GET restarts on activation. C-direction styling remains review-only; pending writes, real helper/API/database/permissions and production deployment are not claimed."
 }

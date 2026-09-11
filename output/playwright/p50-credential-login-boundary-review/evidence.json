@@ -1,6 +1,6 @@
 {
   "kind": "P50-CREDENTIAL-LOGIN-BOUNDARY-REVIEW-r1",
-  "generatedAt": "2026-09-11T18:05:24.858Z",
+  "generatedAt": "2026-09-11T18:29:29.298Z",
   "reviewOnly": true,
   "productionChanged": false,
   "deployed": false,
@@ -14,7 +14,7 @@
     "source-switch"
   ],
   "ports": [
-    64799
+    52399
   ],
   "runs": [
     {
@@ -2455,7 +2455,7 @@
       "file": "1440-helper-timeout.png",
       "width": 1440,
       "state": "helper-timeout",
-      "sha256": "6ed735aa690cd9428daa43df23a8564e37308670eebd14fb50044a2f7f9c0610",
+      "sha256": "78dd392200cec631c1ab36491dcf0b5cbe93a6b941cea70a6817e8053b392336",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2495,7 +2495,7 @@
     "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
     "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
     "apps/web/src/components/CrawlerSchedulerCenter.vue": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-    "apps/web/src/components/CredentialAssetCenter.vue": "8013f2cc87474ecb2def1d73d8a0d6f3a579864eb755842d64c6d3bf9aeb14f0",
+    "apps/web/src/components/CredentialAssetCenter.vue": "3cb44c554452e64263b08f1b2ee21c89ceae9250e7acdb4ef1614f7168dceb39",
     "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
     "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
     "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
@@ -2639,8 +2639,8 @@
     "design-plans/ui-phase-2-2026-09-07/implementation/credential-login-material-preview.css": "5eb2b981c695e6bdbeee358a3508d697b849f99222f0d89b9e923350cdaea5ea",
     "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
     "scripts/lib/ui-phase2-credential-login-material-preview.mjs": "7869a322a10702b53be1afde3ff0393e6547800e57b49eb351f0336d1a52a0e9",
-    "scripts/verify-ui-phase2-credential-login-material.mjs": "b5d29b77bcd9d2c64e444eae1faf14d5a3015789eb69e67beb62b85ce46c2bc3",
-    "tests/e2e/m03-02-credential-assets.spec.ts": "9bec3d65cbb603d3105d916023f317e6f9cad3999894d06199ab2c13302dfdc2"
+    "scripts/verify-ui-phase2-credential-login-material.mjs": "01e667c6a9c813d18b73a21f41c0456557c26cc6b6e5b9299cb7dda8dbcd1bcb",
+    "tests/e2e/m03-02-credential-assets.spec.ts": "463cf61dded1047e5ac6ab9ebc8fcd5942e1a12b15416296ceaba63db7a79714"
   },
   "materialBoundary": "Oversize and invalid files are synthetic local buffers; helper denial and timeout are locally delivered or clock-driven. No file content is rendered or persisted and no save action, external page, real helper, API write, encryption, database or production credential is used.",
   "proposalBoundary": "This visual boundary review preserves the exact 2,000,000 and 6,000,000 byte limits and extension allowlists, distinguishes the 15-second helper timeout from helper denial, and keeps recovery choices visible. Production lifecycle ownership is covered separately; real helper, API, database and production verification are not claimed."
