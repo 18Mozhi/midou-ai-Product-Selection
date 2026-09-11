@@ -1,0 +1,3883 @@
+{
+  "kind": "P45-PERMISSION-PAGE-VUE-PREVIEW-r1",
+  "approval": "pending-user-review",
+  "scope": "Current P45 parent and comparison Vue scripts unchanged; review-only section composition/CSS. Original roles fixture and explicit empty/single/long variants. URL-bound filters may trigger original parent rereads. GET roles only, no accounts or writes, no real RBAC/DB/MFA. Auth-error retention and single-role reset pending/recovery observed without policy change. No full App/navigation/back-forward/KeepAlive or whole-page approval; prior P44 approvals do not apply.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminComparisonMobile.css": "9b74248f24827e8e1e4800b93090ef1fd680acaebf90754bc238680bebedddde",
+    "apps/web/src/components/PlatformAdminDirectoryMobile.css": "4c66844583a8a9711e29b0aa40d40b87ebd7409f53b64933d441b0c8bf46c82c",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-organization-actions.ts": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/permission-page-preview.css": "6a8e071840c71eead915151b887c92135e925ed11afd9dc988f6064e6aea7967",
+    "scripts/lib/ui-phase2-permission-page-preview.mjs": "99d43fd885832d08633cb4c16825da5b916f557457d589893b4a5151c4937b9f",
+    "scripts/verify-ui-phase2-permission-page-preview.mjs": "2f04eb825d254693e85b14d027e353fafaa45a4d2c1100f3cc77a924d653269e",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/PlatformRoleComparison.vue": "1b14f47ab4fcab53bd930a24a04f3606eb8a754a3ddcc8576cafeb4f71307e4c"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "loading:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "loading:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "only real role directory metrics",
+      "actual": [
+        "3",
+        "7",
+        "MySQL"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "administrator link target",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 390,
+      "name": "selected union six not global seven",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "name": "default reset disabled",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "context blue",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 390,
+      "name": "default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "default:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "default-top:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "default-top:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "Tab reaches left role",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "role focus white",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 390,
+      "name": "role-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "role-focus:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "same role no differences",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "role-only reset still disabled",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "same-none:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "same-none:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "same role show all three",
+      "actual": 3
+    },
+    {
+      "width": 390,
+      "name": "same-all:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "same-all:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "super and operations union seven",
+      "actual": 7
+    },
+    {
+      "width": 390,
+      "name": "super-all:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "super-all:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "super and operations four differences",
+      "actual": 4
+    },
+    {
+      "width": 390,
+      "name": "super-differences:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "super-differences:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "reset restores defaults",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "name": "case-insensitive code query",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "name": "code-search:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "code-search:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "security group two",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "name": "group:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "group:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "combined no result",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "search-empty:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "search-empty:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "five URL controls combined result",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "reload keeps exact URL",
+      "actual": "http://127.0.0.1:64347/platform-admin/permissions?keep=p45&left_role=platform_security_admin&right_role=platform_super_admin&show_all=1&capability_query=%E4%BC%9A%E8%AF%9D&capability_group=%E5%AE%89%E5%85%A8%E6%B2%BB%E7%90%86"
+    },
+    {
+      "width": 390,
+      "name": "reload restores all five controls",
+      "actual": [
+        "platform_security_admin",
+        "platform_super_admin",
+        false,
+        "会话",
+        "安全治理"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "reload combined result",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "url-restored:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "url-restored:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "reset removes only owned URL keys",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "name": "refresh busy disables native button",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh-pending:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh-pending:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "retained matrix after 500",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "name": "retained timestamp after 500",
+      "actual": "最近更新 12:00"
+    },
+    {
+      "width": 390,
+      "name": "stale notice after 500",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh-error-500:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh-error-500:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "retained matrix after 403",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "name": "retained timestamp after 403",
+      "actual": "最近更新 12:00"
+    },
+    {
+      "width": 390,
+      "name": "stale notice after 403",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh-error-403:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh-error-403:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "retained matrix after 401",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "name": "retained timestamp after 401",
+      "actual": "最近更新 12:00"
+    },
+    {
+      "width": 390,
+      "name": "stale notice after 401",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh-error-401:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh-error-401:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "initial error has no comparison",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "initial-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "initial-error:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "initial retry recovers",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "name": "retry-success:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "retry-success:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "empty directory hides metrics",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "empty:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "empty:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "single role initial fallback",
+      "actual": [
+        "platform_super_admin",
+        "platform_super_admin"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "single-role:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "single-role:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "single reset pending missing role options",
+      "actual": [
+        "",
+        ""
+      ]
+    },
+    {
+      "width": 390,
+      "name": "single-reset-pending:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "single-reset-pending:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "single reset recovers after actual reread",
+      "actual": [
+        "platform_super_admin",
+        "platform_super_admin"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "single-reset-recovered:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "single-reset-recovered:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "long-content:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "long-content:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "all requests roles GET only",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "no external requests",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "loading:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "loading:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "only real role directory metrics",
+      "actual": [
+        "3",
+        "7",
+        "MySQL"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "administrator link target",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 760,
+      "name": "selected union six not global seven",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "name": "default reset disabled",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "context blue",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 760,
+      "name": "default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "default:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "default-top:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "default-top:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "Tab reaches left role",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "role focus white",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 760,
+      "name": "role-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "role-focus:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "same role no differences",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "role-only reset still disabled",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "same-none:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "same-none:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "same role show all three",
+      "actual": 3
+    },
+    {
+      "width": 760,
+      "name": "same-all:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "same-all:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "super and operations union seven",
+      "actual": 7
+    },
+    {
+      "width": 760,
+      "name": "super-all:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "super-all:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "super and operations four differences",
+      "actual": 4
+    },
+    {
+      "width": 760,
+      "name": "super-differences:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "super-differences:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "reset restores defaults",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "name": "case-insensitive code query",
+      "actual": 2
+    },
+    {
+      "width": 760,
+      "name": "code-search:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "code-search:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "security group two",
+      "actual": 2
+    },
+    {
+      "width": 760,
+      "name": "group:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "group:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "combined no result",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "search-empty:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "search-empty:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "five URL controls combined result",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "reload keeps exact URL",
+      "actual": "http://127.0.0.1:64347/platform-admin/permissions?keep=p45&left_role=platform_security_admin&right_role=platform_super_admin&show_all=1&capability_query=%E4%BC%9A%E8%AF%9D&capability_group=%E5%AE%89%E5%85%A8%E6%B2%BB%E7%90%86"
+    },
+    {
+      "width": 760,
+      "name": "reload restores all five controls",
+      "actual": [
+        "platform_security_admin",
+        "platform_super_admin",
+        false,
+        "会话",
+        "安全治理"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "reload combined result",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "url-restored:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "url-restored:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "reset removes only owned URL keys",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "name": "refresh busy disables native button",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh-pending:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh-pending:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "retained matrix after 500",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "name": "retained timestamp after 500",
+      "actual": "最近更新 12:00"
+    },
+    {
+      "width": 760,
+      "name": "stale notice after 500",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh-error-500:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh-error-500:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "retained matrix after 403",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "name": "retained timestamp after 403",
+      "actual": "最近更新 12:00"
+    },
+    {
+      "width": 760,
+      "name": "stale notice after 403",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh-error-403:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh-error-403:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "retained matrix after 401",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "name": "retained timestamp after 401",
+      "actual": "最近更新 12:00"
+    },
+    {
+      "width": 760,
+      "name": "stale notice after 401",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh-error-401:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh-error-401:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "initial error has no comparison",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "initial-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "initial-error:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "initial retry recovers",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "name": "retry-success:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "retry-success:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "empty directory hides metrics",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "empty:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "empty:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "single role initial fallback",
+      "actual": [
+        "platform_super_admin",
+        "platform_super_admin"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "single-role:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "single-role:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "single reset pending missing role options",
+      "actual": [
+        "",
+        ""
+      ]
+    },
+    {
+      "width": 760,
+      "name": "single-reset-pending:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "single-reset-pending:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "single reset recovers after actual reread",
+      "actual": [
+        "platform_super_admin",
+        "platform_super_admin"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "single-reset-recovered:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "single-reset-recovered:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "long-content:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "long-content:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "all requests roles GET only",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "no external requests",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "loading:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "loading:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "only real role directory metrics",
+      "actual": [
+        "3",
+        "7",
+        "MySQL"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "administrator link target",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 761,
+      "name": "selected union six not global seven",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "name": "default reset disabled",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "context blue",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 761,
+      "name": "default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "default:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "default-top:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "default-top:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "Tab reaches left role",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "role focus white",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 761,
+      "name": "role-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "role-focus:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "same role no differences",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "role-only reset still disabled",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "same-none:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "same-none:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "same role show all three",
+      "actual": 3
+    },
+    {
+      "width": 761,
+      "name": "same-all:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "same-all:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "super and operations union seven",
+      "actual": 7
+    },
+    {
+      "width": 761,
+      "name": "super-all:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "super-all:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "super and operations four differences",
+      "actual": 4
+    },
+    {
+      "width": 761,
+      "name": "super-differences:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "super-differences:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "reset restores defaults",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "name": "case-insensitive code query",
+      "actual": 2
+    },
+    {
+      "width": 761,
+      "name": "code-search:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "code-search:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "security group two",
+      "actual": 2
+    },
+    {
+      "width": 761,
+      "name": "group:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "group:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "combined no result",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "search-empty:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "search-empty:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "five URL controls combined result",
+      "actual": 1
+    },
+    {
+      "width": 761,
+      "name": "reload keeps exact URL",
+      "actual": "http://127.0.0.1:64347/platform-admin/permissions?keep=p45&left_role=platform_security_admin&right_role=platform_super_admin&show_all=1&capability_query=%E4%BC%9A%E8%AF%9D&capability_group=%E5%AE%89%E5%85%A8%E6%B2%BB%E7%90%86"
+    },
+    {
+      "width": 761,
+      "name": "reload restores all five controls",
+      "actual": [
+        "platform_security_admin",
+        "platform_super_admin",
+        false,
+        "会话",
+        "安全治理"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "reload combined result",
+      "actual": 1
+    },
+    {
+      "width": 761,
+      "name": "url-restored:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "url-restored:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "reset removes only owned URL keys",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "name": "refresh busy disables native button",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh-pending:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh-pending:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "retained matrix after 500",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "name": "retained timestamp after 500",
+      "actual": "最近更新 12:00"
+    },
+    {
+      "width": 761,
+      "name": "stale notice after 500",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh-error-500:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh-error-500:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "retained matrix after 403",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "name": "retained timestamp after 403",
+      "actual": "最近更新 12:00"
+    },
+    {
+      "width": 761,
+      "name": "stale notice after 403",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh-error-403:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh-error-403:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "retained matrix after 401",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "name": "retained timestamp after 401",
+      "actual": "最近更新 12:00"
+    },
+    {
+      "width": 761,
+      "name": "stale notice after 401",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh-error-401:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh-error-401:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "initial error has no comparison",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "initial-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "initial-error:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "initial retry recovers",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "name": "retry-success:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "retry-success:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "empty directory hides metrics",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "empty:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "empty:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "single role initial fallback",
+      "actual": [
+        "platform_super_admin",
+        "platform_super_admin"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "single-role:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "single-role:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "single reset pending missing role options",
+      "actual": [
+        "",
+        ""
+      ]
+    },
+    {
+      "width": 761,
+      "name": "single-reset-pending:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "single-reset-pending:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "single reset recovers after actual reread",
+      "actual": [
+        "platform_super_admin",
+        "platform_super_admin"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "single-reset-recovered:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "single-reset-recovered:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "long-content:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "long-content:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "all requests roles GET only",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "no external requests",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "loading:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "loading:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "only real role directory metrics",
+      "actual": [
+        "3",
+        "7",
+        "MySQL"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "administrator link target",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1440,
+      "name": "selected union six not global seven",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "name": "default reset disabled",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "context blue",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 1440,
+      "name": "default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "default:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "default-top:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "default-top:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "Tab reaches left role",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "role focus white",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 1440,
+      "name": "role-focus:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "role-focus:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "same role no differences",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "role-only reset still disabled",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "same-none:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "same-none:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "same role show all three",
+      "actual": 3
+    },
+    {
+      "width": 1440,
+      "name": "same-all:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "same-all:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "super and operations union seven",
+      "actual": 7
+    },
+    {
+      "width": 1440,
+      "name": "super-all:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "super-all:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "super and operations four differences",
+      "actual": 4
+    },
+    {
+      "width": 1440,
+      "name": "super-differences:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "super-differences:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "reset restores defaults",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "name": "case-insensitive code query",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "name": "code-search:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "code-search:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "security group two",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "name": "group:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "group:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "combined no result",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "search-empty:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "search-empty:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "five URL controls combined result",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "name": "reload keeps exact URL",
+      "actual": "http://127.0.0.1:64347/platform-admin/permissions?keep=p45&left_role=platform_security_admin&right_role=platform_super_admin&show_all=1&capability_query=%E4%BC%9A%E8%AF%9D&capability_group=%E5%AE%89%E5%85%A8%E6%B2%BB%E7%90%86"
+    },
+    {
+      "width": 1440,
+      "name": "reload restores all five controls",
+      "actual": [
+        "platform_security_admin",
+        "platform_super_admin",
+        false,
+        "会话",
+        "安全治理"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "reload combined result",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "name": "url-restored:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "url-restored:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "reset removes only owned URL keys",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "name": "refresh busy disables native button",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh-pending:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh-pending:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "retained matrix after 500",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "name": "retained timestamp after 500",
+      "actual": "最近更新 12:00"
+    },
+    {
+      "width": 1440,
+      "name": "stale notice after 500",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh-error-500:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh-error-500:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "retained matrix after 403",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "name": "retained timestamp after 403",
+      "actual": "最近更新 12:00"
+    },
+    {
+      "width": 1440,
+      "name": "stale notice after 403",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh-error-403:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh-error-403:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "retained matrix after 401",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "name": "retained timestamp after 401",
+      "actual": "最近更新 12:00"
+    },
+    {
+      "width": 1440,
+      "name": "stale notice after 401",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh-error-401:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh-error-401:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "initial error has no comparison",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "initial-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "initial-error:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "initial retry recovers",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "name": "retry-success:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "retry-success:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "empty directory hides metrics",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "empty:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "empty:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "single role initial fallback",
+      "actual": [
+        "platform_super_admin",
+        "platform_super_admin"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "single-role:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "single-role:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "single reset pending missing role options",
+      "actual": [
+        "",
+        ""
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "single-reset-pending:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "single-reset-pending:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "single reset recovers after actual reread",
+      "actual": [
+        "platform_super_admin",
+        "platform_super_admin"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "single-reset-recovered:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "single-reset-recovered:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "long-content:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "long-content:no business dialogs",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "all requests roles GET only",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "no external requests",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "no browser errors",
+      "actual": []
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-loading.png",
+      "width": 390,
+      "state": "loading",
+      "sha256": "17e1d112bc5781b8fc9e19ea49d999961cd5d3ce0c708a6315784a9400792e40",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-default.png",
+      "width": 390,
+      "state": "default",
+      "sha256": "1f9d781847f83ebb6df6d88844c2d95988945d33c8b3b6fb7498dab1f7304f81",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 3139
+      }
+    },
+    {
+      "file": "390-default-top.png",
+      "width": 390,
+      "state": "default-top",
+      "sha256": "5d5d4e50af8a2a4b0539eb5054c0edd6b055f4451804b45aa5e64d7cd3c83279",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-role-focus.png",
+      "width": 390,
+      "state": "role-focus",
+      "sha256": "dcbf1c0136757147e0205a48929451d2453968826ae441b190f6f625f7eaef84",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-same-none.png",
+      "width": 390,
+      "state": "same-none",
+      "sha256": "3f5a81efe6c1938390f177428919d98dc27dd2d958ea6826c769ac2fd81c9ce1",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-same-all.png",
+      "width": 390,
+      "state": "same-all",
+      "sha256": "294034c41593d4f4f8be437a2c507cbbe6daa0aaffb31e9116886c1b14ec8c42",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-super-all.png",
+      "width": 390,
+      "state": "super-all",
+      "sha256": "69670c8f1f0de22e5d2856d4cbef70d29cbfb7e47d039a90a1751c291c8eb27b",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-super-differences.png",
+      "width": 390,
+      "state": "super-differences",
+      "sha256": "bc64ede0de9f27109312533eadd1d326b80f6028a81f61358e3c57ee74d509f3",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-code-search.png",
+      "width": 390,
+      "state": "code-search",
+      "sha256": "f5cda86f1332f15e20599902c57fab141bb4b0afe8f72410a4c796842a994967",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-group.png",
+      "width": 390,
+      "state": "group",
+      "sha256": "111fdb7acae24241b52fc00cf5f8f209d0b466740265ed7039b5b368ff40394a",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-search-empty.png",
+      "width": 390,
+      "state": "search-empty",
+      "sha256": "ac1a4cf44634212c69e9b719389e5d8df3033999f39da859b692095c19798283",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-url-restored.png",
+      "width": 390,
+      "state": "url-restored",
+      "sha256": "efa7d4b1d23e9e90fb7cf15e2c48fcfb9d1959fa51e0e1e0902ab704633928e9",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 1782
+      }
+    },
+    {
+      "file": "390-refresh-pending.png",
+      "width": 390,
+      "state": "refresh-pending",
+      "sha256": "7ddc3810fed723720f030a1db832d71252b5530f34e8b7c4beb4d6c61d4086d7",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 3139
+      }
+    },
+    {
+      "file": "390-refresh-error-500.png",
+      "width": 390,
+      "state": "refresh-error-500",
+      "sha256": "38665c518067b5a4bdd807d61003869f68df1511e68a5c5153cc5233dbcde568",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 3231
+      }
+    },
+    {
+      "file": "390-refresh-error-403.png",
+      "width": 390,
+      "state": "refresh-error-403",
+      "sha256": "38665c518067b5a4bdd807d61003869f68df1511e68a5c5153cc5233dbcde568",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 3231
+      }
+    },
+    {
+      "file": "390-refresh-error-401.png",
+      "width": 390,
+      "state": "refresh-error-401",
+      "sha256": "38665c518067b5a4bdd807d61003869f68df1511e68a5c5153cc5233dbcde568",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 3231
+      }
+    },
+    {
+      "file": "390-initial-error.png",
+      "width": 390,
+      "state": "initial-error",
+      "sha256": "11a49f6a003b657bcd7d6bca3759a4a8c1c1ba416d102fcccce53916a9599d7e",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-retry-success.png",
+      "width": 390,
+      "state": "retry-success",
+      "sha256": "1f9d781847f83ebb6df6d88844c2d95988945d33c8b3b6fb7498dab1f7304f81",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 3139
+      }
+    },
+    {
+      "file": "390-empty.png",
+      "width": 390,
+      "state": "empty",
+      "sha256": "908065eaeb121dae8b7ba487c90594b1dbab51cdfbd58a05baea5cae974a4920",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-single-role.png",
+      "width": 390,
+      "state": "single-role",
+      "sha256": "ab0bee6383c27e890911f6089615466fc16b27b61ac05415ae04afdb8e5ac60d",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 1587
+      }
+    },
+    {
+      "file": "390-single-reset-pending.png",
+      "width": 390,
+      "state": "single-reset-pending",
+      "sha256": "288a402aef200dccefb02cc88ddfdd76d55b7ace1140f22d6ada14cc4b96011d",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 1480
+      }
+    },
+    {
+      "file": "390-single-reset-recovered.png",
+      "width": 390,
+      "state": "single-reset-recovered",
+      "sha256": "ab0bee6383c27e890911f6089615466fc16b27b61ac05415ae04afdb8e5ac60d",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 1587
+      }
+    },
+    {
+      "file": "390-long-content.png",
+      "width": 390,
+      "state": "long-content",
+      "sha256": "1414a8e89e358a271eb5621f97e242bd27c45da0a9f8d115f49a617e24f72e09",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 3727
+      }
+    },
+    {
+      "file": "760-loading.png",
+      "width": 760,
+      "state": "loading",
+      "sha256": "42ff33ce3c144061f9c32633b9019b635f3900b14083c3fcf7330bc0d24bda11",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-default.png",
+      "width": 760,
+      "state": "default",
+      "sha256": "661896ddc2deece5780dbd3a3b69d60abdd388a1b3b0ff0adbaa5a17eedfc1f7",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 3032
+      }
+    },
+    {
+      "file": "760-default-top.png",
+      "width": 760,
+      "state": "default-top",
+      "sha256": "4127febefa912cd06b78c8eda6539ef9b4959bddfb3e641e5e617e42f200d657",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-role-focus.png",
+      "width": 760,
+      "state": "role-focus",
+      "sha256": "300f7040535a548ab9561b0ab94ef422b49801bf39fd1408e4f11e1af7dbab1b",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-same-none.png",
+      "width": 760,
+      "state": "same-none",
+      "sha256": "7084655f4f479b80dc3514aedcbc1a798919c3fb96219d644a3d87852f3fb0f2",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-same-all.png",
+      "width": 760,
+      "state": "same-all",
+      "sha256": "47fa44cb37c93a723b46470c825a3f0353c74fe1fc38e1a269a1a13fb39ca4f2",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-super-all.png",
+      "width": 760,
+      "state": "super-all",
+      "sha256": "6d3a5fb1d093b0cf2e01cbc61626f4d16cf071fd660dd2dd5567ddbd5063dc14",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-super-differences.png",
+      "width": 760,
+      "state": "super-differences",
+      "sha256": "ce65667add630c3a956ca5aa99fda3096d56cd293e8dc98c6c3db1456c4ca8c4",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-code-search.png",
+      "width": 760,
+      "state": "code-search",
+      "sha256": "f01ff94434fd09fb0f5a6cbcdded9b9980fbc8cde43b842c77ba4272075058fe",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-group.png",
+      "width": 760,
+      "state": "group",
+      "sha256": "76d092c4d4448112dc6628a81f3312c3abfe625d7e09e5a3e2df7be380a859cf",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-search-empty.png",
+      "width": 760,
+      "state": "search-empty",
+      "sha256": "b4d0e6f010e31358a7595e905b12aa5d6a69239bda78763240b7a7da0378fef9",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-url-restored.png",
+      "width": 760,
+      "state": "url-restored",
+      "sha256": "f91d60508f0f9e3a0ef28a82b07efcfcda994004de0d7e89d415c66631dc68c1",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 1675
+      }
+    },
+    {
+      "file": "760-refresh-pending.png",
+      "width": 760,
+      "state": "refresh-pending",
+      "sha256": "c6b808f5af01976fc138cd094eb7a2c2cd8047ea040e3884f769abe853fb0942",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 3032
+      }
+    },
+    {
+      "file": "760-refresh-error-500.png",
+      "width": 760,
+      "state": "refresh-error-500",
+      "sha256": "1e60a24fff9bb7f05abd1a76476db4cce1c10dd378f6a5669e36651d281d1421",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 3103
+      }
+    },
+    {
+      "file": "760-refresh-error-403.png",
+      "width": 760,
+      "state": "refresh-error-403",
+      "sha256": "1e60a24fff9bb7f05abd1a76476db4cce1c10dd378f6a5669e36651d281d1421",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 3103
+      }
+    },
+    {
+      "file": "760-refresh-error-401.png",
+      "width": 760,
+      "state": "refresh-error-401",
+      "sha256": "1e60a24fff9bb7f05abd1a76476db4cce1c10dd378f6a5669e36651d281d1421",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 3103
+      }
+    },
+    {
+      "file": "760-initial-error.png",
+      "width": 760,
+      "state": "initial-error",
+      "sha256": "27578016681e3062aae5a6bfcb02efce41296c45d807cbf57ab54d621529ee5a",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-retry-success.png",
+      "width": 760,
+      "state": "retry-success",
+      "sha256": "1f956392211d72338a2fb4698fdc316a171511c1b44b64eb6228f4de7a68aff7",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 3032
+      }
+    },
+    {
+      "file": "760-empty.png",
+      "width": 760,
+      "state": "empty",
+      "sha256": "86c9404e2b419836db72653caa642db8ce5135fb5289d22f42449d7bfd07aace",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-single-role.png",
+      "width": 760,
+      "state": "single-role",
+      "sha256": "e036e16055e58f961c2bff9e4e0c9aa9a93ea5c812a868d26abc40a9e81b5b9d",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 1480
+      }
+    },
+    {
+      "file": "760-single-reset-pending.png",
+      "width": 760,
+      "state": "single-reset-pending",
+      "sha256": "d581718258c1a53e544fd05896372e4ed68cccdc517c6e7a984299e1bee9723f",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 1373
+      }
+    },
+    {
+      "file": "760-single-reset-recovered.png",
+      "width": 760,
+      "state": "single-reset-recovered",
+      "sha256": "e036e16055e58f961c2bff9e4e0c9aa9a93ea5c812a868d26abc40a9e81b5b9d",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 1480
+      }
+    },
+    {
+      "file": "760-long-content.png",
+      "width": 760,
+      "state": "long-content",
+      "sha256": "fc66a535bb1085134e6a452fae0309c48e65dd3943b587a84f9c7d45fd99bb09",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 3127
+      }
+    },
+    {
+      "file": "761-loading.png",
+      "width": 761,
+      "state": "loading",
+      "sha256": "ef871e678a93717efc954e0427c123810e1024fdf9a3b497efd698edf065a05e",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-default.png",
+      "width": 761,
+      "state": "default",
+      "sha256": "6f2bd29809e4ebb83a8d15dcc5152fe9a651672748f26ec7bfa91a2083f1824a",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 2194
+      }
+    },
+    {
+      "file": "761-default-top.png",
+      "width": 761,
+      "state": "default-top",
+      "sha256": "d11d1bcf30b93711d9af6346a8561b6b155a682db59eb2b2394b03489e0251d3",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-role-focus.png",
+      "width": 761,
+      "state": "role-focus",
+      "sha256": "c7ecc38451108781dbac10e9b34c343fa7adf9bfe1250e717491b019ee78d94c",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-same-none.png",
+      "width": 761,
+      "state": "same-none",
+      "sha256": "615adb07b54a6641a22cd9f4e65d3ce3c785fdd3a732abf34e3eaa2216345ed8",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-same-all.png",
+      "width": 761,
+      "state": "same-all",
+      "sha256": "f4dd2a73b6da66265ca58a9b8303a74724fbfd6ae6c7e287691f6686efe3b59a",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-super-all.png",
+      "width": 761,
+      "state": "super-all",
+      "sha256": "d7ac44715dd31a14eb58496a6db471dccc76090287be03e3fab52b2d74ed65dc",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-super-differences.png",
+      "width": 761,
+      "state": "super-differences",
+      "sha256": "eb4831a78416792869f6b50381cff831a73f533a58cb44eff68ebd2e78b3c566",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-code-search.png",
+      "width": 761,
+      "state": "code-search",
+      "sha256": "f7bcdf762ee7d8299f38590504dd050f68568165ebe1854f7ff6655ceca927c9",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-group.png",
+      "width": 761,
+      "state": "group",
+      "sha256": "e5d2678efc8210ac9d120e5d55be45573315bb15b5a14e53739a6a942dcfb443",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-search-empty.png",
+      "width": 761,
+      "state": "search-empty",
+      "sha256": "399732fccc6da968a32d4c5488eb49fff68e6f82e9ae22b91ab6bf852fcc9bf8",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-url-restored.png",
+      "width": 761,
+      "state": "url-restored",
+      "sha256": "f836a08ae0bd8aa616813018f4f09865e86656eac443a3b0fd670f6256bfdc0b",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 1137
+      }
+    },
+    {
+      "file": "761-refresh-pending.png",
+      "width": 761,
+      "state": "refresh-pending",
+      "sha256": "e4652c57a03b07ec86ff4e603463122cd0a31d3ec8d4d8e296efa40178985f39",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 2194
+      }
+    },
+    {
+      "file": "761-refresh-error-500.png",
+      "width": 761,
+      "state": "refresh-error-500",
+      "sha256": "117648d5c1e40a0b9639bba8934624f3ae07212d96dff0af8fce0c0303cb50dc",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 2265
+      }
+    },
+    {
+      "file": "761-refresh-error-403.png",
+      "width": 761,
+      "state": "refresh-error-403",
+      "sha256": "117648d5c1e40a0b9639bba8934624f3ae07212d96dff0af8fce0c0303cb50dc",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 2265
+      }
+    },
+    {
+      "file": "761-refresh-error-401.png",
+      "width": 761,
+      "state": "refresh-error-401",
+      "sha256": "117648d5c1e40a0b9639bba8934624f3ae07212d96dff0af8fce0c0303cb50dc",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 2265
+      }
+    },
+    {
+      "file": "761-initial-error.png",
+      "width": 761,
+      "state": "initial-error",
+      "sha256": "2adad0374a68e34b63810e16501ef11f20ff0913525e32f0bb6331d64236e502",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-retry-success.png",
+      "width": 761,
+      "state": "retry-success",
+      "sha256": "6f2bd29809e4ebb83a8d15dcc5152fe9a651672748f26ec7bfa91a2083f1824a",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 2194
+      }
+    },
+    {
+      "file": "761-empty.png",
+      "width": 761,
+      "state": "empty",
+      "sha256": "753830a031fa260799895f15bb5130f2e577e481f47712f7975f0510b4c82418",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-single-role.png",
+      "width": 761,
+      "state": "single-role",
+      "sha256": "d84bc25ebdf1218cd5299a3193f06f7df0351db8ba1938e541a23fd7efd1d13c",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 1123
+      }
+    },
+    {
+      "file": "761-single-reset-pending.png",
+      "width": 761,
+      "state": "single-reset-pending",
+      "sha256": "c4020f70252c527ab1318978ed7c609b6eaee5493092f7c6d87f611806ea6de0",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 1002
+      }
+    },
+    {
+      "file": "761-single-reset-recovered.png",
+      "width": 761,
+      "state": "single-reset-recovered",
+      "sha256": "d84bc25ebdf1218cd5299a3193f06f7df0351db8ba1938e541a23fd7efd1d13c",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 1123
+      }
+    },
+    {
+      "file": "761-long-content.png",
+      "width": 761,
+      "state": "long-content",
+      "sha256": "6307210a00b98603270c3fce1a85e6768b8dcc9abd24b7bb9339f1aa7ae8a9d5",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 2422
+      }
+    },
+    {
+      "file": "1440-loading.png",
+      "width": 1440,
+      "state": "loading",
+      "sha256": "e383eb58dfdf51c0e95e737e2ac60c26864cd1e94d315abebe9d6b47d560672e",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-default.png",
+      "width": 1440,
+      "state": "default",
+      "sha256": "e8be19f575f960f91f0f086379e0e8041f921536b31534347ef6d407ff69d4bb",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 1571
+      }
+    },
+    {
+      "file": "1440-default-top.png",
+      "width": 1440,
+      "state": "default-top",
+      "sha256": "7526c3ca5fc48ca848d4ad8efb82c2625a19ccba544fea42a30b22c6c1aa9f27",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-role-focus.png",
+      "width": 1440,
+      "state": "role-focus",
+      "sha256": "42065cac679e76bbbc53462d1cfc8f8b416725f96077c8e666fcb447a828f5cc",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-same-none.png",
+      "width": 1440,
+      "state": "same-none",
+      "sha256": "4b4114e9554dccca894336bd8f71f040fadf86f69eb6968504b980fcf24255a6",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-same-all.png",
+      "width": 1440,
+      "state": "same-all",
+      "sha256": "d128ab38ed56e2ad93c618823620f78fdd80d38d2e7c9dd808176c91560b3143",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-super-all.png",
+      "width": 1440,
+      "state": "super-all",
+      "sha256": "12778b125c239979312e957c75381663e1472c2f81d404386877e3ee42e0f957",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-super-differences.png",
+      "width": 1440,
+      "state": "super-differences",
+      "sha256": "6643bf6d29f89c754328de70b0e56d5ce2f0ea5d7d1735b744a7a3e897145ece",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-code-search.png",
+      "width": 1440,
+      "state": "code-search",
+      "sha256": "cdabf449efe204dd3bb1ec1f6fac13c92002b812b904e0dcaea4bd0202d65500",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-group.png",
+      "width": 1440,
+      "state": "group",
+      "sha256": "cd207d8405da0adac779f4213f9b4faa1b66cec0d3ac4ec5a5104189e1690938",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-search-empty.png",
+      "width": 1440,
+      "state": "search-empty",
+      "sha256": "d1b4abec2a39694c0b1022ea3e46f8884c2e40440e5e94a59acbd0c905943891",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-url-restored.png",
+      "width": 1440,
+      "state": "url-restored",
+      "sha256": "417b8642881fd6e0b0df41f8dfb5b51a1f5391ac17ad4beacb433f159d3a5866",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 973
+      }
+    },
+    {
+      "file": "1440-refresh-pending.png",
+      "width": 1440,
+      "state": "refresh-pending",
+      "sha256": "ac7110f266aa4c7704e695d9afde91410bfe4f4b3cc0781bea1d558ec55670ad",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 1571
+      }
+    },
+    {
+      "file": "1440-refresh-error-500.png",
+      "width": 1440,
+      "state": "refresh-error-500",
+      "sha256": "bed71389e2cd2fb7b36b88a673ebd7244faa40c82b9c8e8d48f093e0df1ff245",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 1642
+      }
+    },
+    {
+      "file": "1440-refresh-error-403.png",
+      "width": 1440,
+      "state": "refresh-error-403",
+      "sha256": "bed71389e2cd2fb7b36b88a673ebd7244faa40c82b9c8e8d48f093e0df1ff245",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 1642
+      }
+    },
+    {
+      "file": "1440-refresh-error-401.png",
+      "width": 1440,
+      "state": "refresh-error-401",
+      "sha256": "bed71389e2cd2fb7b36b88a673ebd7244faa40c82b9c8e8d48f093e0df1ff245",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 1642
+      }
+    },
+    {
+      "file": "1440-initial-error.png",
+      "width": 1440,
+      "state": "initial-error",
+      "sha256": "19da95a5464241587c8bc91f8209ca4f58c0eabdafcf18166ae28c14e0da8560",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-retry-success.png",
+      "width": 1440,
+      "state": "retry-success",
+      "sha256": "e8be19f575f960f91f0f086379e0e8041f921536b31534347ef6d407ff69d4bb",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 1571
+      }
+    },
+    {
+      "file": "1440-empty.png",
+      "width": 1440,
+      "state": "empty",
+      "sha256": "e3176aa4e4146dda86856af15e440d8b818f9d6c9c7c75b7b11a2640ca0530f7",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-single-role.png",
+      "width": 1440,
+      "state": "single-role",
+      "sha256": "4047455981f3ab7ab90c30d302907b4edd1f435775be6edc85bcff1662b720e3",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 997
+      }
+    },
+    {
+      "file": "1440-single-reset-pending.png",
+      "width": 1440,
+      "state": "single-reset-pending",
+      "sha256": "da7afa02dcbb51380af09de2d201cb15e751bd91a4b13836a2d470a1b7ec170a",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-single-reset-recovered.png",
+      "width": 1440,
+      "state": "single-reset-recovered",
+      "sha256": "4047455981f3ab7ab90c30d302907b4edd1f435775be6edc85bcff1662b720e3",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 997
+      }
+    },
+    {
+      "file": "1440-long-content.png",
+      "width": 1440,
+      "state": "long-content",
+      "sha256": "12c9409b7d881b8c0e35f09dc4498dd1f30aff358e8a0ba906a6231002d6090e",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 1697
+      }
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 403,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 401,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "long"
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 403,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 401,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "long"
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 403,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 401,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "long"
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 403,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 401,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "single"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/roles",
+          "status": 200,
+          "variant": "long"
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    }
+  ],
+  "processesClosed": true
+}

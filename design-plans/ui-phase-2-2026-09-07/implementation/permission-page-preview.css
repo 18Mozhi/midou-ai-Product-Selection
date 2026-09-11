@@ -1,0 +1,335 @@
+/* P45 isolated C review. No production import, no shared P44 selector. */
+html body.p45-page-review {
+  margin: 0;
+  background: #eef2f7;
+  color: #142a46;
+}
+html body.p45-page-review #app {
+  max-width: 1440px;
+  margin: auto;
+  padding: 28px;
+  font-family: "Microsoft YaHei", sans-serif;
+}
+html body.p45-page-review #app .account-center {
+  display: block;
+  padding: 0;
+  background: transparent;
+}
+html body.p45-page-review #app .account-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 0 24px;
+  border: 0;
+  border-bottom: 1px solid #c9d6e8;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+html body.p45-page-review #app .account-hero h2 {
+  color: #142a46;
+  font-size: 28px;
+  margin: 8px 0;
+}
+html body.p45-page-review #app .account-hero p {
+  color: #294caf;
+  margin: 0;
+  font-size: 14px;
+}
+html body.p45-page-review #app .account-hero span {
+  color: #536b86;
+  font-size: 14px;
+}
+html body.p45-page-review #app .hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+html body.p45-page-review #app :is(button, a) {
+  min-height: 44px;
+  border: 1px solid #9db1cc;
+  border-radius: 6px;
+  background: #fff;
+  color: #294caf;
+  padding: 10px 14px;
+  font-size: 14px;
+  text-decoration: none;
+}
+html body.p45-page-review #app button:disabled {
+  background: #e8edf4;
+  color: #66748a;
+  border-color: #d8e1ed;
+  opacity: 1;
+  cursor: not-allowed;
+}
+html body.p45-page-review #app :is(input, select) {
+  min-width: 0;
+  width: 100%;
+  min-height: 48px;
+  background: #fff;
+  color: #142a46;
+  border: 1px solid #9db1cc;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 16px;
+}
+html body.p45-page-review #app :is(button, a, input, select):focus-visible {
+  outline: 3px solid #4276df;
+  outline-offset: 3px;
+}
+html body.p45-page-review #app .permission-metrics {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin: 20px 0 0;
+  padding: 0;
+  background: transparent;
+}
+html body.p45-page-review #app .permission-metrics article {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  padding: 0 24px 0 0;
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+  border-right: 1px solid #c9d6e8;
+  border-radius: 0;
+}
+html body.p45-page-review #app .permission-metrics article:last-child {
+  border-right: 0;
+}
+html body.p45-page-review #app .permission-metrics :is(small, span) {
+  color: #536b86;
+  font-size: 13px;
+}
+html body.p45-page-review #app .permission-metrics strong {
+  color: #142a46;
+  font-size: 18px;
+}
+html body.p45-page-review #app .account-updated {
+  color: #536b86;
+  font-size: 13px;
+  margin: 16px 0;
+}
+html body.p45-page-review #app :is(.account-state, .account-empty) {
+  padding: 36px 28px;
+  border: 1px solid #d8e1ed;
+  border-radius: 10px;
+  background: #fff;
+  color: #142a46;
+  display: grid;
+  gap: 16px;
+  justify-items: start;
+  text-align: left;
+}
+html body.p45-page-review #app .account-message {
+  padding: 16px 20px;
+  border: 1px solid #e5bca4;
+  border-radius: 8px;
+  color: #75461f;
+  background: #fff8ef;
+}
+html body.p45-page-review #app .role-comparison {
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  gap: 0;
+  background: transparent;
+  box-shadow: none;
+}
+html body.p45-page-review #app .role-comparison > header {
+  background: #fff;
+  padding: 24px;
+  border: 1px solid #d8e1ed;
+  border-bottom: 0;
+  border-radius: 12px 12px 0 0;
+  align-items: center;
+}
+html body.p45-page-review #app .role-comparison > header :is(p, h3) {
+  color: #142a46;
+}
+html body.p45-page-review #app .role-comparison > header span {
+  color: #536b86;
+  font-size: 14px;
+}
+html body.p45-page-review #app .role-comparison__toggle {
+  margin: 0;
+  color: #294caf;
+  font-size: 14px;
+}
+html body.p45-page-review #app .role-comparison__toggle input {
+  width: 20px;
+  height: 20px;
+  min-height: 20px;
+  padding: 0;
+  margin: 0;
+  accent-color: #294caf;
+}
+html body.p45-page-review #app .p45-workspace {
+  display: grid;
+  grid-template-columns: 310px minmax(0, 1fr);
+  border: 1px solid #d8e1ed;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+}
+html body.p45-page-review #app .p45-role-context {
+  min-width: 0;
+  padding: 28px 24px;
+  background: #294caf;
+  color: #fff;
+}
+html body.p45-page-review #app .role-comparison__selectors {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+}
+html body.p45-page-review #app .role-comparison__selectors label {
+  color: #fff;
+  font-size: 14px;
+  gap: 8px;
+}
+html body.p45-page-review #app .p45-role-context select:focus-visible {
+  outline-color: #fff;
+}
+html body.p45-page-review #app .role-comparison__summaries {
+  grid-template-columns: minmax(0, 1fr);
+  margin-top: 28px;
+  gap: 22px;
+}
+html body.p45-page-review #app .role-comparison__summaries article {
+  padding: 20px 0 0;
+  border: 0;
+  border-top: 1px solid #7795d8;
+  border-radius: 0;
+  background: none;
+  overflow-wrap: anywhere;
+}
+html body.p45-page-review #app .role-comparison__summaries strong {
+  color: #fff;
+  font-size: 17px;
+}
+html body.p45-page-review #app .role-comparison__summaries :is(span, small) {
+  color: #edf3ff;
+  font-size: 14px;
+  line-height: 1.7;
+  margin-top: 8px;
+}
+html body.p45-page-review #app .p45-reading {
+  min-width: 0;
+  background: #fff;
+  padding: 28px;
+}
+html body.p45-page-review #app .role-comparison__filters {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr) auto;
+  gap: 14px;
+}
+html body.p45-page-review #app .role-comparison__filters label {
+  color: #536b86;
+  font-size: 14px;
+}
+html body.p45-page-review #app .role-comparison__result {
+  padding: 16px;
+  margin: 22px 0 0;
+  background: #eef2f7;
+  color: #536b86;
+  font-size: 14px;
+}
+html body.p45-page-review #app .role-comparison__matrix {
+  gap: 0;
+}
+html body.p45-page-review #app .role-comparison__matrix article {
+  display: block;
+  padding: 22px 0;
+  background: #fff;
+  border: 0;
+  border-bottom: 1px solid #d8e1ed;
+  border-radius: 0;
+  overflow-wrap: anywhere;
+}
+html body.p45-page-review #app .role-comparison__matrix h4 {
+  color: #142a46;
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+html body.p45-page-review #app .role-comparison__matrix small {
+  color: #536b86;
+  font-size: 13px;
+}
+html body.p45-page-review #app .role-comparison__matrix dl {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+html body.p45-page-review #app .role-comparison__matrix dt {
+  color: #536b86;
+  font-size: 13px;
+}
+html body.p45-page-review #app .role-comparison__matrix dd {
+  color: #142a46;
+  font-size: 16px;
+  margin: 6px 0 0;
+}
+html body.p45-page-review #app .role-comparison__matrix dd[data-enabled="true"] {
+  color: #294caf;
+  font-weight: 700;
+}
+html body.p45-page-review #app .role-comparison__matrix > p {
+  background: #f6f8fc;
+  color: #536b86;
+  padding: 28px 16px;
+  text-align: left;
+}
+@media (max-width: 1100px) {
+  html body.p45-page-review #app .account-hero {
+    display: grid;
+  }
+  html body.p45-page-review #app .p45-workspace {
+    grid-template-columns: 265px minmax(0, 1fr);
+  }
+  html body.p45-page-review #app .p45-reading {
+    padding: 24px;
+  }
+  html body.p45-page-review #app .role-comparison__filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html body.p45-page-review #app .role-comparison__filters button {
+    justify-self: start;
+  }
+  html body.p45-page-review #app .role-comparison__matrix dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  html body.p45-page-review #app .role-comparison__matrix dl > div:last-child {
+    grid-column: 1/-1;
+  }
+}
+@media (max-width: 760px) {
+  html body.p45-page-review #app {
+    padding: 20px 16px;
+  }
+  html body.p45-page-review #app .permission-metrics {
+    display: grid;
+    gap: 12px;
+  }
+  html body.p45-page-review #app .permission-metrics article {
+    border: 0;
+    padding: 0;
+  }
+  html body.p45-page-review #app .role-comparison > header {
+    display: grid;
+    padding: 20px 16px;
+  }
+  html body.p45-page-review #app .p45-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html body.p45-page-review #app .p45-role-context {
+    padding: 24px 20px;
+  }
+  html body.p45-page-review #app .p45-reading {
+    padding: 20px 16px;
+  }
+  html body.p45-page-review #app .role-comparison__matrix dl {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
