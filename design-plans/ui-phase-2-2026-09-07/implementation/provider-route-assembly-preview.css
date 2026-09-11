@@ -1,0 +1,231 @@
+/* P46 full-route C assembly, review host only; not a global production theme. */
+html:has(body.p46-route-review) {
+  --so-font-ui: "Microsoft YaHei", sans-serif;
+  --so-font-display: "Microsoft YaHei", sans-serif;
+  --so-primary: #294caf;
+  --so-primary-strong: #203f98;
+  --so-primary-soft: #e5edf9;
+  --so-on-primary: #fff;
+  --so-text: #142a46;
+  --so-text-muted: #536b86;
+  --so-border: #d8e1ed;
+  --so-border-strong: #9db1cc;
+  --so-bg: #eef2f7;
+  --so-bg-elevated: #fff;
+  --so-panel: #fff;
+  --so-panel-soft: #f5f7fb;
+  --so-signal: #294caf;
+  --so-signal-soft: #e5edf9;
+}
+html body.p46-route-review {
+  margin: 0;
+  background: #eef2f7;
+  background-image: none;
+  color: #142a46;
+  font-family: "Microsoft YaHei", sans-serif;
+}
+html body.p46-route-review #app {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+html body.p46-route-review .assembly-disclaimer {
+  margin: 0;
+  padding: 8px 24px;
+  color: #536b86;
+  background: #f5f7fb;
+  font-size: 13px;
+}
+html body.p46-route-review #app .role-shell {
+  display: block;
+  padding: 0;
+  background: #eef2f7;
+}
+html body.p46-route-review #app .role-topbar {
+  position: relative;
+  inset: auto;
+  height: auto;
+  min-height: 72px;
+  padding: 12px 28px;
+  border: 0;
+  border-bottom: 1px solid #d8e1ed;
+  background: white;
+}
+html body.p46-route-review #app .role-brand > span {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: #294caf;
+  font-size: 20px;
+}
+html body.p46-route-review #app .role-brand > b {
+  font-family: "Microsoft YaHei", sans-serif;
+  letter-spacing: 0.04em;
+}
+html body.p46-route-review #app .role-top-actions {
+  gap: 8px;
+}
+html body.p46-route-review #app .role-top-actions :is(button, a),
+html body.p46-route-review #app .role-menu-toggle {
+  min-height: 44px;
+  border: 1px solid #d8e1ed;
+  border-radius: 6px;
+  color: #294caf;
+  background: white;
+}
+html body.p46-route-review #app .role-sidebar {
+  top: 0;
+  border: 0;
+  border-bottom: 1px solid #d8e1ed;
+  background: white;
+}
+html body.p46-route-review #app .role-sidebar :is(input, summary, a) {
+  color: #294466;
+}
+html body.p46-route-review #app .role-nav-menu {
+  border: 1px solid #d8e1ed;
+  border-radius: 8px;
+  background: white;
+}
+html body.p46-route-review #app .role-nav-menu a[aria-current="page"] {
+  color: #294caf;
+  background: #e5edf9;
+}
+html body.p46-route-review #app .role-content {
+  max-width: 1600px;
+  margin: auto;
+  padding: 24px 28px 40px;
+}
+html body.p46-route-review #app .role-page-breadcrumb {
+  min-height: 32px;
+  margin: 0 0 12px;
+  color: #536b86;
+}
+html body.p46-route-review #app .role-page-title {
+  display: block;
+  min-height: 0;
+  margin: 0 0 20px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+/* Decorative folio and old visual-system slogan are not business context. */
+html body.p46-route-review #app .role-page-folio,
+html body.p46-route-review #app .role-page-title p {
+  display: none;
+}
+html body.p46-route-review #app .role-page-title h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  font-family: "Microsoft YaHei", sans-serif;
+}
+html body.p46-route-review #app .role-context-rail {
+  margin: 0 0 28px;
+  border: 1px solid #d8e1ed;
+  border-radius: 8px;
+  background: #fff;
+}
+html body.p46-route-review #app .role-context-rail > div {
+  padding: 12px 20px;
+  border-color: #d8e1ed;
+}
+html body.p46-route-review #app .role-context-rail strong {
+  font-size: 14px;
+}
+html body.p46-route-review #app .role-context-drawer {
+  margin: 0 0 24px;
+  border: 1px solid #d8e1ed;
+  border-radius: 8px;
+  background: white;
+}
+html body.p46-route-review #app .role-context-drawer > summary {
+  border: 0;
+}
+html body.p46-route-review #app .provider-registry :is(h2, h3),
+html body.p46-route-review .responsive-data-view__drawer > header strong {
+  font-family: "Microsoft YaHei", sans-serif;
+  font-weight: 700;
+}
+html body.p46-route-review #app .role-mobile-nav {
+  border-top: 1px solid #d8e1ed;
+  background: white;
+}
+html body.p46-route-review #app .role-mobile-nav :is(a, button) {
+  border: 0;
+}
+html body.p46-route-review #app .role-mobile-nav [aria-current="page"] {
+  border-radius: 8px;
+  color: #294caf;
+  background: #e5edf9;
+}
+html body.p46-route-review #app .role-shell > .role-theme-menu {
+  border: 1px solid #d8e1ed;
+  border-radius: 8px;
+  background: white;
+}
+html body.p46-route-review #app .role-shell > .role-theme-menu button {
+  color: #294466;
+  background: white;
+}
+html body.p46-route-review #app .role-shell > .role-theme-menu [aria-pressed="true"] {
+  background: #e5edf9;
+}
+html
+  body.p46-route-review
+  #app
+  .role-shell
+  > :is(header, nav)
+  :is(button, a, input, summary):focus-visible {
+  outline: 3px solid #4276df;
+  outline-offset: 3px;
+}
+@media (max-width: 840px) {
+  html body.p46-route-review .assembly-disclaimer {
+    position: fixed;
+    inset: 0 0 auto;
+    height: 36px;
+    box-sizing: border-box;
+    padding: 8px 16px;
+    line-height: 20px;
+    z-index: 50;
+  }
+  html body.p46-route-review #app .role-shell {
+    padding-top: 100px;
+    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+  html body.p46-route-review #app .role-topbar {
+    position: fixed;
+    inset: 36px 0 auto;
+    height: 64px;
+    box-sizing: border-box;
+    z-index: 45;
+    padding: 10px 16px;
+    min-height: 64px;
+  }
+  html body.p46-route-review #app .role-sidebar {
+    top: 100px;
+    height: calc(100dvh - 100px);
+    border-right: 1px solid #d8e1ed;
+  }
+  html body.p46-route-review #app .role-content {
+    padding: 20px 16px 32px;
+  }
+  html body.p46-route-review #app .role-page-title h1 {
+    font-size: 26px;
+  }
+  html body.p46-route-review #app .role-page-title {
+    margin-bottom: 16px;
+  }
+}
+@media (min-width: 841px) {
+  html body.p46-route-review #app .role-sidebar-head {
+    display: none;
+  }
+  html body.p46-route-review #app .role-sidebar-utility a {
+    width: auto;
+    min-width: 176px;
+    overflow: visible;
+  }
+}
