@@ -1,0 +1,7035 @@
+{
+  "kind": "P49-ACCEPTANCE-ROBUSTNESS-REVIEW-r1",
+  "generatedAt": "2026-09-11T16:25:52.392Z",
+  "reviewOnly": true,
+  "productionChanged": false,
+  "deployed": false,
+  "themeBoundary": "Verified the repository's three current paper/light themes (deep-ocean, aurora-purple, cloud-white) and two densities. The repository exposes no dark theme, so dark mode is not claimed.",
+  "fixtureNotice": "The base/theme/density/narrow/landscape/zoom runs use the authoritative E2E acceptance fixture. Long and invalid content are explicitly synthetic review fixtures built from the same response shape; they are not production facts.",
+  "zoomBoundary": "The 200% stress uses CSS zoom on the isolated component at 1024px and 1440px. It is not browser UI zoom, OS text scaling, or assistive-technology certification.",
+  "behaviorBoundary": "Every run is GET-only against intercepted local routes. No acceptance POST, source enable/disable, database write, permission mutation, credential access, external request, or deployment was performed.",
+  "deviceBoundary": "Chromium emulation covered 320px, 390px, 760px, 844x390 landscape, 1024px and 1440px. Real phone/tablet hardware and Firefox, Safari, and Edge remain unverified.",
+  "layoutMechanicalScan": {
+    "status": "not_run",
+    "reason": "The optional external scanner remains outside this deterministic local review batch.",
+    "substituteChecks": [
+      "Vue SFC compile",
+      "PostCSS parse and selector isolation",
+      "three actual theme tokens and two density tokens",
+      "document and component horizontal overflow",
+      "interactive label clipping",
+      "44px coarse-pointer controls",
+      "320px and 844x390 landscape",
+      "synthetic long and invalid content",
+      "component CSS zoom 200%",
+      "GET-only network allowlist and zero runtime errors"
+    ]
+  },
+  "contract": {
+    "themes": [
+      "deep-ocean",
+      "aurora-purple",
+      "cloud-white"
+    ],
+    "densities": [
+      "standard",
+      "compact"
+    ],
+    "smallestWidth": 320,
+    "zoomStress": "component-css-zoom-200"
+  },
+  "themeColors": {
+    "deep-ocean": {
+      "info": "#365a76",
+      "panel": "#fffdf5"
+    },
+    "aurora-purple": {
+      "info": "#405c6d",
+      "panel": "#fbf4e5"
+    },
+    "cloud-white": {
+      "info": "#375e73",
+      "panel": "#ffffff"
+    }
+  },
+  "matrixCount": 40,
+  "runs": [
+    {
+      "kind": "theme-density",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 390,
+      "height": 980,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "deep-ocean",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 390,
+        "viewportWidth": 390,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 376,
+          "width": 362,
+          "clientWidth": 362,
+          "scrollWidth": 362
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#365a76",
+        "tokenPanel": "#fffdf5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(54, 90, 118), color(srgb 0.177725 0.280471 0.354039))",
+        "rootColumns": "362px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "deep-ocean"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 760,
+      "height": 980,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "deep-ocean",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 760,
+        "viewportWidth": 760,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 746,
+          "width": 732,
+          "clientWidth": 732,
+          "scrollWidth": 732
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#365a76",
+        "tokenPanel": "#fffdf5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "20px",
+        "verdictBackground": "linear-gradient(155deg, rgb(54, 90, 118), color(srgb 0.177725 0.280471 0.354039))",
+        "rootColumns": "732px",
+        "layoutGap": "28px",
+        "verdictPadding": "24px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "deep-ocean"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 1024,
+      "height": 1080,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "deep-ocean",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1024,
+        "viewportWidth": 1024,
+        "rootFits": true,
+        "rootRect": {
+          "left": 32.765625,
+          "right": 991.234375,
+          "width": 958.46875,
+          "clientWidth": 958,
+          "scrollWidth": 958
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#365a76",
+        "tokenPanel": "#fffdf5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(54, 90, 118), color(srgb 0.177725 0.280471 0.354039))",
+        "rootColumns": "280px 654.469px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "deep-ocean"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 1440,
+      "height": 1080,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "deep-ocean",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1440,
+        "viewportWidth": 1440,
+        "rootFits": true,
+        "rootRect": {
+          "left": 46.078125,
+          "right": 1393.921875,
+          "width": 1347.84375,
+          "clientWidth": 1348,
+          "scrollWidth": 1348
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#365a76",
+        "tokenPanel": "#fffdf5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(54, 90, 118), color(srgb 0.177725 0.280471 0.354039))",
+        "rootColumns": "330px 993.844px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "deep-ocean"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "deep-ocean",
+      "density": "compact",
+      "width": 390,
+      "height": 980,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "deep-ocean",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 390,
+        "viewportWidth": 390,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 376,
+          "width": 362,
+          "clientWidth": 362,
+          "scrollWidth": 362
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#365a76",
+        "tokenPanel": "#fffdf5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(54, 90, 118), color(srgb 0.177725 0.280471 0.354039))",
+        "rootColumns": "362px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "deep-ocean"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "deep-ocean",
+      "density": "compact",
+      "width": 760,
+      "height": 980,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "deep-ocean",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 760,
+        "viewportWidth": 760,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 746,
+          "width": 732,
+          "clientWidth": 732,
+          "scrollWidth": 732
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#365a76",
+        "tokenPanel": "#fffdf5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(54, 90, 118), color(srgb 0.177725 0.280471 0.354039))",
+        "rootColumns": "732px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "deep-ocean"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "deep-ocean",
+      "density": "compact",
+      "width": 1024,
+      "height": 1080,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "deep-ocean",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1024,
+        "viewportWidth": 1024,
+        "rootFits": true,
+        "rootRect": {
+          "left": 32.765625,
+          "right": 991.234375,
+          "width": 958.46875,
+          "clientWidth": 958,
+          "scrollWidth": 958
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#365a76",
+        "tokenPanel": "#fffdf5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(54, 90, 118), color(srgb 0.177725 0.280471 0.354039))",
+        "rootColumns": "280px 654.469px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "deep-ocean"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "deep-ocean",
+      "density": "compact",
+      "width": 1440,
+      "height": 1080,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "deep-ocean",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1440,
+        "viewportWidth": 1440,
+        "rootFits": true,
+        "rootRect": {
+          "left": 46.078125,
+          "right": 1393.921875,
+          "width": 1347.84375,
+          "clientWidth": 1348,
+          "scrollWidth": 1348
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#365a76",
+        "tokenPanel": "#fffdf5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(54, 90, 118), color(srgb 0.177725 0.280471 0.354039))",
+        "rootColumns": "330px 993.844px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "deep-ocean"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "aurora-purple",
+      "density": "standard",
+      "width": 390,
+      "height": 980,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "aurora-purple",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 390,
+        "viewportWidth": 390,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 376,
+          "width": 362,
+          "clientWidth": 362,
+          "scrollWidth": 362
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#405c6d",
+        "tokenPanel": "#fbf4e5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(64, 92, 109), color(srgb 0.216941 0.29051 0.33302))",
+        "rootColumns": "362px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "aurora-purple"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "aurora-purple",
+      "density": "standard",
+      "width": 760,
+      "height": 980,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "aurora-purple",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 760,
+        "viewportWidth": 760,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 746,
+          "width": 732,
+          "clientWidth": 732,
+          "scrollWidth": 732
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#405c6d",
+        "tokenPanel": "#fbf4e5",
+        "rootText": "rgb(33, 28, 23)",
+        "panelBackground": "rgb(251, 244, 229)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "20px",
+        "verdictBackground": "linear-gradient(155deg, rgb(64, 92, 109), color(srgb 0.216941 0.29051 0.33302))",
+        "rootColumns": "732px",
+        "layoutGap": "28px",
+        "verdictPadding": "24px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "aurora-purple"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "aurora-purple",
+      "density": "standard",
+      "width": 1024,
+      "height": 1080,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "aurora-purple",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1024,
+        "viewportWidth": 1024,
+        "rootFits": true,
+        "rootRect": {
+          "left": 32.765625,
+          "right": 991.234375,
+          "width": 958.46875,
+          "clientWidth": 958,
+          "scrollWidth": 958
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#405c6d",
+        "tokenPanel": "#fbf4e5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(64, 92, 109), color(srgb 0.216941 0.29051 0.33302))",
+        "rootColumns": "280px 654.469px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "aurora-purple"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "aurora-purple",
+      "density": "standard",
+      "width": 1440,
+      "height": 1080,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "aurora-purple",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1440,
+        "viewportWidth": 1440,
+        "rootFits": true,
+        "rootRect": {
+          "left": 46.078125,
+          "right": 1393.921875,
+          "width": 1347.84375,
+          "clientWidth": 1348,
+          "scrollWidth": 1348
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#405c6d",
+        "tokenPanel": "#fbf4e5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(64, 92, 109), color(srgb 0.216941 0.29051 0.33302))",
+        "rootColumns": "330px 993.844px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "aurora-purple"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "aurora-purple",
+      "density": "compact",
+      "width": 390,
+      "height": 980,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "aurora-purple",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 390,
+        "viewportWidth": 390,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 376,
+          "width": 362,
+          "clientWidth": 362,
+          "scrollWidth": 362
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#405c6d",
+        "tokenPanel": "#fbf4e5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(64, 92, 109), color(srgb 0.216941 0.29051 0.33302))",
+        "rootColumns": "362px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "aurora-purple"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "aurora-purple",
+      "density": "compact",
+      "width": 760,
+      "height": 980,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "aurora-purple",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 760,
+        "viewportWidth": 760,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 746,
+          "width": 732,
+          "clientWidth": 732,
+          "scrollWidth": 732
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#405c6d",
+        "tokenPanel": "#fbf4e5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(64, 92, 109), color(srgb 0.216941 0.29051 0.33302))",
+        "rootColumns": "732px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "aurora-purple"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "aurora-purple",
+      "density": "compact",
+      "width": 1024,
+      "height": 1080,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "aurora-purple",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1024,
+        "viewportWidth": 1024,
+        "rootFits": true,
+        "rootRect": {
+          "left": 32.765625,
+          "right": 991.234375,
+          "width": 958.46875,
+          "clientWidth": 958,
+          "scrollWidth": 958
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#405c6d",
+        "tokenPanel": "#fbf4e5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(64, 92, 109), color(srgb 0.216941 0.29051 0.33302))",
+        "rootColumns": "280px 654.469px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "aurora-purple"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "aurora-purple",
+      "density": "compact",
+      "width": 1440,
+      "height": 1080,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "aurora-purple",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1440,
+        "viewportWidth": 1440,
+        "rootFits": true,
+        "rootRect": {
+          "left": 46.078125,
+          "right": 1393.921875,
+          "width": 1347.84375,
+          "clientWidth": 1348,
+          "scrollWidth": 1348
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#405c6d",
+        "tokenPanel": "#fbf4e5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(64, 92, 109), color(srgb 0.216941 0.29051 0.33302))",
+        "rootColumns": "330px 993.844px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "aurora-purple"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "cloud-white",
+      "density": "standard",
+      "width": 390,
+      "height": 980,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "cloud-white",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 390,
+        "viewportWidth": 390,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 376,
+          "width": 362,
+          "clientWidth": 362,
+          "scrollWidth": 362
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#375e73",
+        "tokenPanel": "#ffffff",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(55, 94, 115), color(srgb 0.178353 0.289569 0.345569))",
+        "rootColumns": "362px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "cloud-white"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "cloud-white",
+      "density": "standard",
+      "width": 760,
+      "height": 980,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "cloud-white",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 760,
+        "viewportWidth": 760,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 746,
+          "width": 732,
+          "clientWidth": 732,
+          "scrollWidth": 732
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#375e73",
+        "tokenPanel": "#ffffff",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(55, 94, 115), color(srgb 0.178353 0.289569 0.345569))",
+        "rootColumns": "732px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "cloud-white"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "cloud-white",
+      "density": "standard",
+      "width": 1024,
+      "height": 1080,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "cloud-white",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1024,
+        "viewportWidth": 1024,
+        "rootFits": true,
+        "rootRect": {
+          "left": 32.765625,
+          "right": 991.234375,
+          "width": 958.46875,
+          "clientWidth": 958,
+          "scrollWidth": 958
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#375e73",
+        "tokenPanel": "#ffffff",
+        "rootText": "rgb(21, 22, 19)",
+        "panelBackground": "rgb(255, 255, 255)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "20px",
+        "verdictBackground": "linear-gradient(155deg, rgb(55, 94, 115), color(srgb 0.178353 0.289569 0.345569))",
+        "rootColumns": "280px 650.469px",
+        "layoutGap": "28px",
+        "verdictPadding": "28px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "cloud-white"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "cloud-white",
+      "density": "standard",
+      "width": 1440,
+      "height": 1080,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "cloud-white",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1440,
+        "viewportWidth": 1440,
+        "rootFits": true,
+        "rootRect": {
+          "left": 46.078125,
+          "right": 1393.921875,
+          "width": 1347.84375,
+          "clientWidth": 1348,
+          "scrollWidth": 1348
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#375e73",
+        "tokenPanel": "#ffffff",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(55, 94, 115), color(srgb 0.178353 0.289569 0.345569))",
+        "rootColumns": "330px 993.844px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "cloud-white"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 390,
+      "height": 980,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "cloud-white",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 390,
+        "viewportWidth": 390,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 376,
+          "width": 362,
+          "clientWidth": 362,
+          "scrollWidth": 362
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#375e73",
+        "tokenPanel": "#ffffff",
+        "rootText": "rgb(21, 22, 19)",
+        "panelBackground": "rgb(255, 255, 255)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(55, 94, 115), color(srgb 0.178353 0.289569 0.345569))",
+        "rootColumns": "362px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "cloud-white"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 760,
+      "height": 980,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "cloud-white",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 760,
+        "viewportWidth": 760,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 746,
+          "width": 732,
+          "clientWidth": 732,
+          "scrollWidth": 732
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#375e73",
+        "tokenPanel": "#ffffff",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(55, 94, 115), color(srgb 0.178353 0.289569 0.345569))",
+        "rootColumns": "732px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "cloud-white"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 1024,
+      "height": 1080,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "cloud-white",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1024,
+        "viewportWidth": 1024,
+        "rootFits": true,
+        "rootRect": {
+          "left": 32.765625,
+          "right": 991.234375,
+          "width": 958.46875,
+          "clientWidth": 958,
+          "scrollWidth": 958
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#375e73",
+        "tokenPanel": "#ffffff",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(55, 94, 115), color(srgb 0.178353 0.289569 0.345569))",
+        "rootColumns": "280px 654.469px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "cloud-white"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "theme-density",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 1440,
+      "height": 1080,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "cloud-white",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1440,
+        "viewportWidth": 1440,
+        "rootFits": true,
+        "rootRect": {
+          "left": 46.078125,
+          "right": 1393.921875,
+          "width": 1347.84375,
+          "clientWidth": 1348,
+          "scrollWidth": 1348
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#375e73",
+        "tokenPanel": "#ffffff",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(55, 94, 115), color(srgb 0.178353 0.289569 0.345569))",
+        "rootColumns": "330px 993.844px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "cloud-white"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "long-content",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 390,
+      "height": 980,
+      "fixture": "synthetic-long-content",
+      "metrics": {
+        "theme": "deep-ocean",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 390,
+        "viewportWidth": 390,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 376,
+          "width": 362,
+          "clientWidth": 362,
+          "scrollWidth": 362
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#365a76",
+        "tokenPanel": "#fffdf5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "20px",
+        "verdictBackground": "linear-gradient(155deg, rgb(54, 90, 118), color(srgb 0.177725 0.280471 0.354039))",
+        "rootColumns": "362px",
+        "layoutGap": "28px",
+        "verdictPadding": "24px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "deep-ocean"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "long-content",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 760,
+      "height": 980,
+      "fixture": "synthetic-long-content",
+      "metrics": {
+        "theme": "deep-ocean",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 760,
+        "viewportWidth": 760,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 746,
+          "width": 732,
+          "clientWidth": 732,
+          "scrollWidth": 732
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#365a76",
+        "tokenPanel": "#fffdf5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "20px",
+        "verdictBackground": "linear-gradient(155deg, rgb(54, 90, 118), color(srgb 0.177725 0.280471 0.354039))",
+        "rootColumns": "732px",
+        "layoutGap": "28px",
+        "verdictPadding": "24px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "deep-ocean"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "long-content",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 1024,
+      "height": 1080,
+      "fixture": "synthetic-long-content",
+      "metrics": {
+        "theme": "deep-ocean",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1024,
+        "viewportWidth": 1024,
+        "rootFits": true,
+        "rootRect": {
+          "left": 32.765625,
+          "right": 991.234375,
+          "width": 958.46875,
+          "clientWidth": 958,
+          "scrollWidth": 958
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#365a76",
+        "tokenPanel": "#fffdf5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "20px",
+        "verdictBackground": "linear-gradient(155deg, rgb(54, 90, 118), color(srgb 0.177725 0.280471 0.354039))",
+        "rootColumns": "280px 650.469px",
+        "layoutGap": "28px",
+        "verdictPadding": "28px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "deep-ocean"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "long-content",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 1440,
+      "height": 1080,
+      "fixture": "synthetic-long-content",
+      "metrics": {
+        "theme": "deep-ocean",
+        "density": "standard",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1440,
+        "viewportWidth": 1440,
+        "rootFits": true,
+        "rootRect": {
+          "left": 46.078125,
+          "right": 1393.921875,
+          "width": 1347.84375,
+          "clientWidth": 1348,
+          "scrollWidth": 1348
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#365a76",
+        "tokenPanel": "#fffdf5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "20px",
+        "verdictBackground": "linear-gradient(155deg, rgb(54, 90, 118), color(srgb 0.177725 0.280471 0.354039))",
+        "rootColumns": "330px 960.25px",
+        "layoutGap": "57.6px",
+        "verdictPadding": "28px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "deep-ocean"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "invalid-content",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 390,
+      "height": 980,
+      "fixture": "synthetic-invalid-content",
+      "metrics": {
+        "theme": "cloud-white",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 390,
+        "viewportWidth": 390,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 376,
+          "width": 362,
+          "clientWidth": 362,
+          "scrollWidth": 362
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#375e73",
+        "tokenPanel": "#ffffff",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(55, 94, 115), color(srgb 0.178353 0.289569 0.345569))",
+        "rootColumns": "362px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "cloud-white"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "invalid-content",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 760,
+      "height": 980,
+      "fixture": "synthetic-invalid-content",
+      "metrics": {
+        "theme": "cloud-white",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 760,
+        "viewportWidth": 760,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 746,
+          "width": 732,
+          "clientWidth": 732,
+          "scrollWidth": 732
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#375e73",
+        "tokenPanel": "#ffffff",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(55, 94, 115), color(srgb 0.178353 0.289569 0.345569))",
+        "rootColumns": "732px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "cloud-white"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "invalid-content",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 1024,
+      "height": 1080,
+      "fixture": "synthetic-invalid-content",
+      "metrics": {
+        "theme": "cloud-white",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1024,
+        "viewportWidth": 1024,
+        "rootFits": true,
+        "rootRect": {
+          "left": 32.765625,
+          "right": 991.234375,
+          "width": 958.46875,
+          "clientWidth": 958,
+          "scrollWidth": 958
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#375e73",
+        "tokenPanel": "#ffffff",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(55, 94, 115), color(srgb 0.178353 0.289569 0.345569))",
+        "rootColumns": "280px 654.469px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "cloud-white"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "invalid-content",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 1440,
+      "height": 1080,
+      "fixture": "synthetic-invalid-content",
+      "metrics": {
+        "theme": "cloud-white",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1440,
+        "viewportWidth": 1440,
+        "rootFits": true,
+        "rootRect": {
+          "left": 46.078125,
+          "right": 1393.921875,
+          "width": 1347.84375,
+          "clientWidth": 1348,
+          "scrollWidth": 1348
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#375e73",
+        "tokenPanel": "#ffffff",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(55, 94, 115), color(srgb 0.178353 0.289569 0.345569))",
+        "rootColumns": "330px 993.844px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "cloud-white"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "component-css-zoom-200",
+      "theme": "aurora-purple",
+      "density": "standard",
+      "width": 1024,
+      "height": 1080,
+      "fixture": "authoritative-original",
+      "zoom": true,
+      "metrics": {
+        "theme": "aurora-purple",
+        "density": "standard",
+        "zoom": "200",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1024,
+        "viewportWidth": 1024,
+        "rootFits": true,
+        "rootRect": {
+          "left": 32.765625,
+          "right": 512,
+          "width": 479.234375,
+          "clientWidth": 240,
+          "scrollWidth": 240
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 88
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 88
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 88
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 88
+          },
+          {
+            "text": "技术详情",
+            "height": 88
+          }
+        ],
+        "tokenInfo": "#405c6d",
+        "tokenPanel": "#fbf4e5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(64, 92, 109), color(srgb 0.216941 0.29051 0.33302))",
+        "rootColumns": "239.617px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "aurora-purple"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom marker",
+          "actual": "200"
+        }
+      ]
+    },
+    {
+      "kind": "component-css-zoom-200",
+      "theme": "aurora-purple",
+      "density": "standard",
+      "width": 1440,
+      "height": 1080,
+      "fixture": "authoritative-original",
+      "zoom": true,
+      "metrics": {
+        "theme": "aurora-purple",
+        "density": "standard",
+        "zoom": "200",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 1440,
+        "viewportWidth": 1440,
+        "rootFits": true,
+        "rootRect": {
+          "left": 46.078125,
+          "right": 720,
+          "width": 673.921875,
+          "clientWidth": 337,
+          "scrollWidth": 337
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 88
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 88
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 88
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 88
+          },
+          {
+            "text": "技术详情",
+            "height": 88
+          }
+        ],
+        "tokenInfo": "#405c6d",
+        "tokenPanel": "#fbf4e5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "20px",
+        "densityPadding": "20px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(64, 92, 109), color(srgb 0.216941 0.29051 0.33302))",
+        "rootColumns": "336.961px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "aurora-purple"
+        },
+        {
+          "name": "density applied",
+          "actual": "standard"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom marker",
+          "actual": "200"
+        }
+      ]
+    },
+    {
+      "kind": "smallest-width",
+      "theme": "deep-ocean",
+      "density": "compact",
+      "width": 320,
+      "height": 900,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "deep-ocean",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 320,
+        "viewportWidth": 320,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 306,
+          "width": 292,
+          "clientWidth": 292,
+          "scrollWidth": 292
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#365a76",
+        "tokenPanel": "#fffdf5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(54, 90, 118), color(srgb 0.177725 0.280471 0.354039))",
+        "rootColumns": "292px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "deep-ocean"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "smallest-width",
+      "theme": "aurora-purple",
+      "density": "compact",
+      "width": 320,
+      "height": 900,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "aurora-purple",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 320,
+        "viewportWidth": 320,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 306,
+          "width": 292,
+          "clientWidth": 292,
+          "scrollWidth": 292
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#405c6d",
+        "tokenPanel": "#fbf4e5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(64, 92, 109), color(srgb 0.216941 0.29051 0.33302))",
+        "rootColumns": "292px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "aurora-purple"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "smallest-width",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 320,
+      "height": 900,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "cloud-white",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 320,
+        "viewportWidth": 320,
+        "rootFits": true,
+        "rootRect": {
+          "left": 14,
+          "right": 306,
+          "width": 292,
+          "clientWidth": 292,
+          "scrollWidth": 292
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#375e73",
+        "tokenPanel": "#ffffff",
+        "rootText": "rgb(21, 22, 19)",
+        "panelBackground": "rgb(255, 255, 255)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(55, 94, 115), color(srgb 0.178353 0.289569 0.345569))",
+        "rootColumns": "292px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "cloud-white"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        },
+        {
+          "name": "narrow layout is single column",
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "kind": "mobile-landscape",
+      "theme": "deep-ocean",
+      "density": "compact",
+      "width": 844,
+      "height": 390,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "deep-ocean",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 844,
+        "viewportWidth": 844,
+        "rootFits": true,
+        "rootRect": {
+          "left": 27,
+          "right": 817,
+          "width": 790,
+          "clientWidth": 790,
+          "scrollWidth": 790
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#365a76",
+        "tokenPanel": "#fffdf5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(54, 90, 118), color(srgb 0.177725 0.280471 0.354039))",
+        "rootColumns": "280px 486px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "deep-ocean"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "mobile-landscape",
+      "theme": "aurora-purple",
+      "density": "compact",
+      "width": 844,
+      "height": 390,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "aurora-purple",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 844,
+        "viewportWidth": 844,
+        "rootFits": true,
+        "rootRect": {
+          "left": 27,
+          "right": 817,
+          "width": 790,
+          "clientWidth": 790,
+          "scrollWidth": 790
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#405c6d",
+        "tokenPanel": "#fbf4e5",
+        "rootText": "rgb(23, 24, 19)",
+        "panelBackground": "rgb(255, 253, 245)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(64, 92, 109), color(srgb 0.216941 0.29051 0.33302))",
+        "rootColumns": "280px 486px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "aurora-purple"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    },
+    {
+      "kind": "mobile-landscape",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 844,
+      "height": 390,
+      "fixture": "authoritative-original",
+      "metrics": {
+        "theme": "cloud-white",
+        "density": "compact",
+        "zoom": "none",
+        "colorScheme": "light",
+        "bodyClass": "p49-acceptance-review p49-acceptance-read-review p49-acceptance-actions-review p49-acceptance-robustness-review",
+        "documentFits": true,
+        "documentScrollWidth": 844,
+        "viewportWidth": 844,
+        "rootFits": true,
+        "rootRect": {
+          "left": 27,
+          "right": 817,
+          "width": 790,
+          "clientWidth": 790,
+          "scrollWidth": 790
+        },
+        "textClipping": [
+          {
+            "text": "刷新检查结果",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "配置或续期登录档案",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "发起登录验收运行",
+            "horizontal": false,
+            "vertical": false
+          },
+          {
+            "text": "技术详情",
+            "horizontal": false,
+            "vertical": false
+          }
+        ],
+        "touchHeights": [
+          {
+            "text": "刷新检查结果",
+            "height": 44
+          },
+          {
+            "text": "配置或续期登录档案",
+            "height": 44
+          },
+          {
+            "text": "定位 1688 固定样本",
+            "height": 44
+          },
+          {
+            "text": "发起登录验收运行",
+            "height": 44
+          },
+          {
+            "text": "技术详情",
+            "height": 44
+          }
+        ],
+        "tokenInfo": "#375e73",
+        "tokenPanel": "#ffffff",
+        "rootText": "rgb(21, 22, 19)",
+        "panelBackground": "rgb(255, 255, 255)",
+        "htmlDensityPadding": "14px",
+        "densityPadding": "14px",
+        "panelPadding": "14px",
+        "verdictBackground": "linear-gradient(155deg, rgb(55, 94, 115), color(srgb 0.178353 0.289569 0.345569))",
+        "rootColumns": "280px 486px",
+        "layoutGap": "24px",
+        "verdictPadding": "14px"
+      },
+      "requestCount": 4,
+      "checks": [
+        {
+          "name": "theme applied",
+          "actual": "cloud-white"
+        },
+        {
+          "name": "density applied",
+          "actual": "compact"
+        },
+        {
+          "name": "light-only theme mode",
+          "actual": "light"
+        },
+        {
+          "name": "robustness review body scope",
+          "actual": true
+        },
+        {
+          "name": "semantic info token resolved",
+          "actual": true
+        },
+        {
+          "name": "semantic panel token resolved",
+          "actual": true
+        },
+        {
+          "name": "density token resolves",
+          "actual": true
+        },
+        {
+          "name": "document has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "review root has no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "interactive labels are not clipped",
+          "actual": []
+        },
+        {
+          "name": "coarse pointer targets are at least 44px",
+          "actual": true
+        },
+        {
+          "name": "verdict uses themed gradient",
+          "actual": true
+        },
+        {
+          "name": "no unknown network",
+          "actual": []
+        },
+        {
+          "name": "GET-only review",
+          "actual": false
+        },
+        {
+          "name": "no page runtime errors",
+          "actual": []
+        },
+        {
+          "name": "no console errors",
+          "actual": []
+        },
+        {
+          "name": "component CSS zoom absent",
+          "actual": "none"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "theme-density-deep-ocean-standard-390x980-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 390,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "b76526b4d07a50710a359049c6945d2b467f2ee40703c4a7746bcdfdbffe3dfd",
+      "pixelWidth": 390,
+      "pixelHeight": 4083
+    },
+    {
+      "file": "theme-density-deep-ocean-standard-760x980-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 760,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "57ca4dc8b0e2616c46cb890ee4b1b1bebe71f03ffa5c64a7f3b4da307e28007b",
+      "pixelWidth": 760,
+      "pixelHeight": 3852
+    },
+    {
+      "file": "theme-density-deep-ocean-standard-1024x1080-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 1024,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "6ad3d259fba64cdcbffc54bb3697d1a82980c660a668a29e5ef7bd3a1e5db910",
+      "pixelWidth": 1024,
+      "pixelHeight": 2700
+    },
+    {
+      "file": "theme-density-deep-ocean-standard-1440x1080-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 1440,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "49dfd1d7d892d957c6b5eac3cbfea79d9e4f61fdac6544a1693def8634fef157",
+      "pixelWidth": 1440,
+      "pixelHeight": 2066
+    },
+    {
+      "file": "theme-density-deep-ocean-compact-390x980-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "deep-ocean",
+      "density": "compact",
+      "width": 390,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "7961011e7d5b93c0f8bdd43ccf0fe9b4b9a1e02191d9d8809e4fbedeb341cc1f",
+      "pixelWidth": 390,
+      "pixelHeight": 3913
+    },
+    {
+      "file": "theme-density-deep-ocean-compact-760x980-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "deep-ocean",
+      "density": "compact",
+      "width": 760,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "c09ff56a74bc4f7737e85af34af14917b8db308f17c13a214caee904f9533bd1",
+      "pixelWidth": 760,
+      "pixelHeight": 3682
+    },
+    {
+      "file": "theme-density-deep-ocean-compact-1024x1080-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "deep-ocean",
+      "density": "compact",
+      "width": 1024,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "207f6557583c6f24f3691437225625b814a7c55071f1af8a516f61d6944e6918",
+      "pixelWidth": 1024,
+      "pixelHeight": 2551
+    },
+    {
+      "file": "theme-density-deep-ocean-compact-1440x1080-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "deep-ocean",
+      "density": "compact",
+      "width": 1440,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "e28f35f87efd3acbf581bbf7a9a0ddd9e0f7e7b488d147b72756ffc0b17e9bbe",
+      "pixelWidth": 1440,
+      "pixelHeight": 1929
+    },
+    {
+      "file": "theme-density-aurora-purple-standard-390x980-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "aurora-purple",
+      "density": "standard",
+      "width": 390,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "14d1a960d246660cab3c2ee63e6afaee1c51feaa836f40ee7e7221c053f690b8",
+      "pixelWidth": 390,
+      "pixelHeight": 4083
+    },
+    {
+      "file": "theme-density-aurora-purple-standard-760x980-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "aurora-purple",
+      "density": "standard",
+      "width": 760,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "c91f46cf40a0850a981c2e5f628833b3a0a8e6c932df4e105109109584b21718",
+      "pixelWidth": 760,
+      "pixelHeight": 3852
+    },
+    {
+      "file": "theme-density-aurora-purple-standard-1024x1080-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "aurora-purple",
+      "density": "standard",
+      "width": 1024,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "54be9e236d8873eb886b025a23f7a8bcbc70ecfd5b24f0ac11dfd7a22289a193",
+      "pixelWidth": 1024,
+      "pixelHeight": 2700
+    },
+    {
+      "file": "theme-density-aurora-purple-standard-1440x1080-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "aurora-purple",
+      "density": "standard",
+      "width": 1440,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "2bc68f411711025731896d7200518cefd888109b1a98fb22165b9d9e5b1b6bdf",
+      "pixelWidth": 1440,
+      "pixelHeight": 2066
+    },
+    {
+      "file": "theme-density-aurora-purple-compact-390x980-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "aurora-purple",
+      "density": "compact",
+      "width": 390,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "91a653428a19f2d0cb8974cbc122d5aef252da9e437d363f806726ac909e1440",
+      "pixelWidth": 390,
+      "pixelHeight": 3913
+    },
+    {
+      "file": "theme-density-aurora-purple-compact-760x980-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "aurora-purple",
+      "density": "compact",
+      "width": 760,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "1517d40e9504bd6f22cd08dda0619cc9a80760068d2947fd5223095e12510d44",
+      "pixelWidth": 760,
+      "pixelHeight": 3682
+    },
+    {
+      "file": "theme-density-aurora-purple-compact-1024x1080-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "aurora-purple",
+      "density": "compact",
+      "width": 1024,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "f4b31473518d291989a5d9551c64e09757bcea3a56119c85cac07e09bb56e3d3",
+      "pixelWidth": 1024,
+      "pixelHeight": 2551
+    },
+    {
+      "file": "theme-density-aurora-purple-compact-1440x1080-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "aurora-purple",
+      "density": "compact",
+      "width": 1440,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "aeb4dedef8a2b9927a0084e7996fedd8d9058462acb6b7ba37cd12fae8e9d173",
+      "pixelWidth": 1440,
+      "pixelHeight": 1929
+    },
+    {
+      "file": "theme-density-cloud-white-standard-390x980-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "cloud-white",
+      "density": "standard",
+      "width": 390,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "bf71d583772ecaa08281b96c9b60ffeb7f9a861c4075ac66e073c25879ff4c3a",
+      "pixelWidth": 390,
+      "pixelHeight": 4083
+    },
+    {
+      "file": "theme-density-cloud-white-standard-760x980-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "cloud-white",
+      "density": "standard",
+      "width": 760,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "48699cf64f24c4f5a1e4a1f41dc24beb47df47846e57e25af8be0f8cf7f9c01a",
+      "pixelWidth": 760,
+      "pixelHeight": 3852
+    },
+    {
+      "file": "theme-density-cloud-white-standard-1024x1080-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "cloud-white",
+      "density": "standard",
+      "width": 1024,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "ddb3d7536c779d0d4ec9696e7b6d7088b8c947064ca7c703970125161eefc368",
+      "pixelWidth": 1024,
+      "pixelHeight": 2700
+    },
+    {
+      "file": "theme-density-cloud-white-standard-1440x1080-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "cloud-white",
+      "density": "standard",
+      "width": 1440,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "e6d96225c719941366adc042f233959870edf7c80f07bd216bd6bec46650d838",
+      "pixelWidth": 1440,
+      "pixelHeight": 2066
+    },
+    {
+      "file": "theme-density-cloud-white-compact-390x980-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 390,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "e0bc0ab23cdab2b9e5fcb0975f068651f49302cd8ac1df02f950de59c17630c7",
+      "pixelWidth": 390,
+      "pixelHeight": 3913
+    },
+    {
+      "file": "theme-density-cloud-white-compact-760x980-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 760,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "410a79a0c727f8624fc519236d241cbce949e86b3b3c69986135de8e86dc6315",
+      "pixelWidth": 760,
+      "pixelHeight": 3682
+    },
+    {
+      "file": "theme-density-cloud-white-compact-1024x1080-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 1024,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "b257bb73a713c81d5cbaedb8331fafc45246f5e00456c9db93c71f2c3f0db0dc",
+      "pixelWidth": 1024,
+      "pixelHeight": 2551
+    },
+    {
+      "file": "theme-density-cloud-white-compact-1440x1080-full.png",
+      "kind": "theme-density",
+      "fixture": "authoritative-original",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 1440,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "858c435cac4618f239a16d809d398d5608af866e05eababf794129cb8176911b",
+      "pixelWidth": 1440,
+      "pixelHeight": 1929
+    },
+    {
+      "file": "long-content-deep-ocean-standard-390x980-full.png",
+      "kind": "long-content",
+      "fixture": "synthetic-long-content",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 390,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "10bc1583005b1a6b006c9f29b7938699bd4edd5e08b8d54089295eb5ec128795",
+      "pixelWidth": 390,
+      "pixelHeight": 4948
+    },
+    {
+      "file": "long-content-deep-ocean-standard-390x980-technical-details.png",
+      "kind": "long-content",
+      "fixture": "synthetic-long-content",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 390,
+      "height": 980,
+      "suffix": "technical-details",
+      "sha256": "6eaa9339cc21ccdccb416dc9bf11589b16c8842bea098f062b4ae27c389a8407",
+      "pixelWidth": 390,
+      "pixelHeight": 5045
+    },
+    {
+      "file": "long-content-deep-ocean-standard-760x980-full.png",
+      "kind": "long-content",
+      "fixture": "synthetic-long-content",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 760,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "835c3449ccd479d37c357f94c5eeb4186b60beeaef2179a1c3c37e659d9d978b",
+      "pixelWidth": 760,
+      "pixelHeight": 4219
+    },
+    {
+      "file": "long-content-deep-ocean-standard-1024x1080-full.png",
+      "kind": "long-content",
+      "fixture": "synthetic-long-content",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 1024,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "308975df828d837232f3bd6603891e5127a15d9328998f132c7aa56a3857984f",
+      "pixelWidth": 1024,
+      "pixelHeight": 3309
+    },
+    {
+      "file": "long-content-deep-ocean-standard-1440x1080-full.png",
+      "kind": "long-content",
+      "fixture": "synthetic-long-content",
+      "theme": "deep-ocean",
+      "density": "standard",
+      "width": 1440,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "ab4ba906049812723781e2d6ec00198bdbf8657c99ad47b3a55c948bc35053c5",
+      "pixelWidth": 1440,
+      "pixelHeight": 2562
+    },
+    {
+      "file": "invalid-content-cloud-white-compact-390x980-full.png",
+      "kind": "invalid-content",
+      "fixture": "synthetic-invalid-content",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 390,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "6b46a78f8a2e582b654acb44276be45903b28f5d52d8ed2e8ff99703cd607377",
+      "pixelWidth": 390,
+      "pixelHeight": 4042
+    },
+    {
+      "file": "invalid-content-cloud-white-compact-760x980-full.png",
+      "kind": "invalid-content",
+      "fixture": "synthetic-invalid-content",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 760,
+      "height": 980,
+      "suffix": "full",
+      "sha256": "1ef0b4c39c391fae4f6d887890449a8e3aa0ddcadb8bfb98217a354224ec972f",
+      "pixelWidth": 760,
+      "pixelHeight": 3760
+    },
+    {
+      "file": "invalid-content-cloud-white-compact-1024x1080-full.png",
+      "kind": "invalid-content",
+      "fixture": "synthetic-invalid-content",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 1024,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "35ec1266535a255da2ba0c7d0437a761627a1b1ee64c818f449b6a76dabd70bd",
+      "pixelWidth": 1024,
+      "pixelHeight": 2577
+    },
+    {
+      "file": "invalid-content-cloud-white-compact-1440x1080-full.png",
+      "kind": "invalid-content",
+      "fixture": "synthetic-invalid-content",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 1440,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "feb5be82c9b73239ed92a62d0a1fba5914b2a9e3ced6fab7e99d38d33ddde7e3",
+      "pixelWidth": 1440,
+      "pixelHeight": 1948
+    },
+    {
+      "file": "invalid-content-cloud-white-compact-1440x1080-technical-details.png",
+      "kind": "invalid-content",
+      "fixture": "synthetic-invalid-content",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 1440,
+      "height": 1080,
+      "suffix": "technical-details",
+      "sha256": "16703eea7c82934655e5e86c2189cf078d98355bf905fd7edb0e5e3676525785",
+      "pixelWidth": 1440,
+      "pixelHeight": 2064
+    },
+    {
+      "file": "component-css-zoom-200-aurora-purple-standard-1024x1080-full.png",
+      "kind": "component-css-zoom-200",
+      "fixture": "authoritative-original",
+      "theme": "aurora-purple",
+      "density": "standard",
+      "width": 1024,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "86ee6e3c8f498036395deda4eebfab4d9af04eeeb320ad62e4e569178d463b02",
+      "pixelWidth": 1024,
+      "pixelHeight": 8894
+    },
+    {
+      "file": "component-css-zoom-200-aurora-purple-standard-1440x1080-full.png",
+      "kind": "component-css-zoom-200",
+      "fixture": "authoritative-original",
+      "theme": "aurora-purple",
+      "density": "standard",
+      "width": 1440,
+      "height": 1080,
+      "suffix": "full",
+      "sha256": "dc5bf8b84827be5315642cee5d848c9031798d651d10d394d01d66743b65ca45",
+      "pixelWidth": 1440,
+      "pixelHeight": 8170
+    },
+    {
+      "file": "smallest-width-deep-ocean-compact-320x900-full.png",
+      "kind": "smallest-width",
+      "fixture": "authoritative-original",
+      "theme": "deep-ocean",
+      "density": "compact",
+      "width": 320,
+      "height": 900,
+      "suffix": "full",
+      "sha256": "4c9c3ba1212d48d099d18e6434e7c2818750ded2e68d4516b1ea5759b40319b4",
+      "pixelWidth": 320,
+      "pixelHeight": 4055
+    },
+    {
+      "file": "smallest-width-aurora-purple-compact-320x900-full.png",
+      "kind": "smallest-width",
+      "fixture": "authoritative-original",
+      "theme": "aurora-purple",
+      "density": "compact",
+      "width": 320,
+      "height": 900,
+      "suffix": "full",
+      "sha256": "b308747675e73f8f9fab6fd9f89dd8ab356bf023d3616f16f9b5cbe9ed27be67",
+      "pixelWidth": 320,
+      "pixelHeight": 4055
+    },
+    {
+      "file": "smallest-width-cloud-white-compact-320x900-full.png",
+      "kind": "smallest-width",
+      "fixture": "authoritative-original",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 320,
+      "height": 900,
+      "suffix": "full",
+      "sha256": "a832503994a84fb4689d49062678b99479e69d56ac1b2506ee7f689ab9731a92",
+      "pixelWidth": 320,
+      "pixelHeight": 4055
+    },
+    {
+      "file": "mobile-landscape-deep-ocean-compact-844x390-full.png",
+      "kind": "mobile-landscape",
+      "fixture": "authoritative-original",
+      "theme": "deep-ocean",
+      "density": "compact",
+      "width": 844,
+      "height": 390,
+      "suffix": "full",
+      "sha256": "5925f95e80de88d9de1d35621afb1506fdf5aba6a90026787f57b1daf5038fa5",
+      "pixelWidth": 844,
+      "pixelHeight": 2803
+    },
+    {
+      "file": "mobile-landscape-aurora-purple-compact-844x390-full.png",
+      "kind": "mobile-landscape",
+      "fixture": "authoritative-original",
+      "theme": "aurora-purple",
+      "density": "compact",
+      "width": 844,
+      "height": 390,
+      "suffix": "full",
+      "sha256": "dfee1cf4d34a4a54790ac28bfb7e46e2aa14c3097a61f702c6a29d9fd5c6be0a",
+      "pixelWidth": 844,
+      "pixelHeight": 2803
+    },
+    {
+      "file": "mobile-landscape-cloud-white-compact-844x390-full.png",
+      "kind": "mobile-landscape",
+      "fixture": "authoritative-original",
+      "theme": "cloud-white",
+      "density": "compact",
+      "width": 844,
+      "height": 390,
+      "suffix": "full",
+      "sha256": "a8de337f4243c0b69c3829283a3a7de3e92ee8a42271387268890ab4d096894e",
+      "pixelWidth": 844,
+      "pixelHeight": 2803
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/index.html": "0376c4bf04227ac5dbb6bb43895e5ed97eef6ca8bde54f08774908d3f07d9d88",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "66b064c2135275b9d173ef316692366823ef4f6276002796d9ed112183218cef",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/provider-adapters-c-detail.css": "094a11fe39b3701c35d6061f7a570e940b3bb00abcc0b2ed7f64ffeaea0c6bdd",
+    "apps/web/src/provider-adapters-c-feedback.css": "64b09e635e98f8865ea2fb3c8b33b1d21f447affd55061f3d01cf6667904bba2",
+    "apps/web/src/provider-adapters-c-page.css": "899ca57a21bceef95c7dc030bb7f92bae1755f324b1d26c3f0ba692dad736c86",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/route-catalog.generated.json": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/1688-acceptance-actions-preview.css": "9b9e5c864a56d9d5bbd2834d74c05edcf465d54d585c4358c44944bf07dc96db",
+    "design-plans/ui-phase-2-2026-09-07/implementation/1688-acceptance-page-preview.css": "3feed0817b2b758bd2936efda1ac9e27ce02e1b635384923161870474c5d3ed7",
+    "design-plans/ui-phase-2-2026-09-07/implementation/1688-acceptance-read-states-preview.css": "f0997696385d452a9902f92f232eb0b5517b951b9d5b83a33db33863f5a34a65",
+    "design-plans/ui-phase-2-2026-09-07/implementation/1688-acceptance-robustness-preview.css": "25f7cac274cd24a5b73b541c79d05a4c8a33bc1d9693744e77682ec2ec8291aa",
+    "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
+    "scripts/lib/ui-phase2-1688-acceptance-actions-preview.mjs": "2198a224fbb5877792143f537ff061808055dd8353940b98234f8905569133fc",
+    "scripts/lib/ui-phase2-1688-acceptance-design-data.mjs": "d48d151f489395743656c6451b76cf55fff80c0bfa301a06eb5a2c1b178886aa",
+    "scripts/lib/ui-phase2-1688-acceptance-page-preview.mjs": "77960767f79c658d58d24d4546cb19846ee46f74d75757df5f32a6b151508b8c",
+    "scripts/lib/ui-phase2-1688-acceptance-read-states-preview.mjs": "5c68212377e57da681d731b315ba4556df4a4c95aa35b3e8636821b2f1fbcf19",
+    "scripts/lib/ui-phase2-1688-acceptance-robustness-preview.mjs": "c38975b53a031c33bd65080dffa9a1a34d63fe6ec652fd014ca74851b8578670",
+    "scripts/verify-ui-phase2-1688-acceptance-robustness.mjs": "b6d8e850f31a39cb93d6326834e6fe8922aa962f57eefa8e970b566a6be0795e",
+    "tests/e2e/m03-07-provider-sources.spec.ts": "29c1232a33cb260beeee6851f33c4558873d25e47e538d6a2e04c47eaa6ba5fe"
+  },
+  "ports": [
+    49807
+  ],
+  "processesClosed": true
+}

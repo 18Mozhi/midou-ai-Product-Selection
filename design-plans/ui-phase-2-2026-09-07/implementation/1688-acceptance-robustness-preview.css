@@ -1,0 +1,294 @@
+body.p49-acceptance-robustness-review .p49-robustness {
+  --p49-blue: var(--so-info);
+  --p49-blue-deep: color-mix(in srgb, var(--so-info) 72%, var(--so-text));
+  --p49-ink: var(--so-text);
+  --p49-muted: var(--so-text-muted);
+  --p49-line: var(--so-border);
+  --p49-soft: var(--so-panel-soft);
+  --p49-section-gap: calc(var(--so-density-gap) * 2);
+  color: var(--so-text);
+}
+
+body.p49-acceptance-robustness-review .p49-robustness,
+body.p49-acceptance-robustness-review .p49-robustness * {
+  min-width: 0;
+}
+
+body.p49-acceptance-robustness-review .p49-robustness :where(p, dd, li, small, code, time, strong) {
+  overflow-wrap: anywhere;
+}
+
+body.p49-acceptance-robustness-review .p49-acceptance__masthead {
+  border-color: var(--so-border);
+}
+
+body.p49-acceptance-robustness-review .p49-acceptance__masthead p,
+body.p49-acceptance-robustness-review .p49-acceptance__body section > header p,
+body.p49-acceptance-robustness-review .p49-robustness summary {
+  color: var(--so-info);
+}
+
+body.p49-acceptance-robustness-review .p49-acceptance__masthead span,
+body.p49-acceptance-robustness-review .acceptance-1688__gates article > p,
+body.p49-acceptance-robustness-review .acceptance-1688__matrix article > p,
+body.p49-acceptance-robustness-review .acceptance-1688__actions > p,
+body.p49-acceptance-robustness-review .acceptance-1688__run > p,
+body.p49-acceptance-robustness-review .p49-action__requirements,
+body.p49-acceptance-robustness-review .p49-action label small {
+  color: var(--so-text-muted);
+}
+
+body.p49-acceptance-robustness-review .p49-robustness button,
+body.p49-acceptance-robustness-review .p49-robustness a {
+  border-color: var(--so-border);
+  background: var(--so-panel);
+  color: var(--so-text);
+}
+
+body.p49-acceptance-robustness-review .p49-robustness button:disabled {
+  border-color: var(--so-border);
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
+  opacity: var(--so-disabled-opacity);
+}
+
+body.p49-acceptance-robustness-review
+  .p49-robustness
+  :where(button, a, summary, input, select):focus-visible {
+  outline-color: var(--so-focus);
+}
+
+body.p49-acceptance-robustness-review .acceptance-1688__verdict {
+  background: linear-gradient(155deg, var(--so-info), var(--p49-blue-deep));
+  color: var(--so-on-primary);
+  box-shadow: var(--so-shadow-card);
+}
+
+body.p49-acceptance-robustness-review .acceptance-1688__verdict :where(h3, dd) {
+  color: var(--so-on-primary);
+}
+
+body.p49-acceptance-robustness-review .acceptance-1688__verdict :where(p, dt) {
+  color: color-mix(in srgb, var(--so-on-primary) 78%, transparent);
+}
+
+body.p49-acceptance-robustness-review .p49-acceptance__body,
+body.p49-acceptance-robustness-review .p49-acceptance__body > section,
+body.p49-acceptance-robustness-review .p49-acceptance__diagnostics > section {
+  background: var(--so-panel);
+}
+
+body.p49-acceptance-robustness-review .p49-acceptance__body {
+  padding: var(--so-density-padding);
+}
+
+body.p49-acceptance-robustness-review .p49-acceptance__body > section,
+body.p49-acceptance-robustness-review .p49-acceptance__diagnostics > section {
+  padding-bottom: var(--p49-section-gap);
+}
+
+body.p49-acceptance-robustness-review .p49-acceptance__body > section + section,
+body.p49-acceptance-robustness-review .p49-acceptance__diagnostics,
+body.p49-acceptance-robustness-review .acceptance-1688__gates,
+body.p49-acceptance-robustness-review .acceptance-1688__gates article,
+body.p49-acceptance-robustness-review .acceptance-1688__matrix,
+body.p49-acceptance-robustness-review .acceptance-1688__matrix article,
+body.p49-acceptance-robustness-review .acceptance-1688__run,
+body.p49-acceptance-robustness-review .acceptance-1688__run dl > div {
+  border-color: var(--so-border);
+}
+
+body.p49-acceptance-robustness-review .acceptance-1688__card-title > span,
+body.p49-acceptance-robustness-review .acceptance-1688__gates dd,
+body.p49-acceptance-robustness-review .acceptance-1688__run dd,
+body.p49-acceptance-robustness-review .p49-action__feedback strong,
+body.p49-acceptance-robustness-review .p49-action__result > div > strong {
+  color: var(--so-text);
+}
+
+body.p49-acceptance-robustness-review .acceptance-1688__card-title strong {
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
+}
+
+body.p49-acceptance-robustness-review
+  [data-gate-state="passed"]
+  .acceptance-1688__card-title
+  strong,
+body.p49-acceptance-robustness-review
+  [data-matrix-state="covered"]
+  .acceptance-1688__card-title
+  strong {
+  background: var(--so-success-soft);
+  color: var(--so-success);
+}
+
+body.p49-acceptance-robustness-review
+  [data-gate-state="blocked"]
+  .acceptance-1688__card-title
+  strong,
+body.p49-acceptance-robustness-review
+  [data-matrix-state="invalid"]
+  .acceptance-1688__card-title
+  strong {
+  background: var(--so-danger-soft);
+  color: var(--so-danger);
+}
+
+body.p49-acceptance-robustness-review .acceptance-1688__actions nav a:first-child,
+body.p49-acceptance-robustness-review .acceptance-1688__start-button {
+  border-color: var(--so-primary);
+  background: var(--so-primary);
+  color: var(--so-on-primary);
+}
+
+body.p49-acceptance-robustness-review .acceptance-1688__start form,
+body.p49-acceptance-robustness-review .p49-acceptance__matrix-meta {
+  border-color: var(--so-border);
+  background: var(--so-panel-soft);
+}
+
+body.p49-acceptance-robustness-review .acceptance-1688__start :where(input, select) {
+  border-color: var(--so-border);
+  background: var(--so-panel);
+  color: var(--so-text);
+}
+
+body.p49-acceptance-robustness-review .p49-action select[aria-invalid="true"],
+body.p49-acceptance-robustness-review .p49-action input[aria-invalid="true"] {
+  border-color: var(--so-danger);
+  box-shadow: 0 0 0 1px var(--so-danger);
+}
+
+body.p49-acceptance-robustness-review .p49-action__progress {
+  border-color: var(--so-info);
+  background: var(--so-info-soft);
+  color: var(--so-text);
+}
+
+body.p49-acceptance-robustness-review .p49-action__feedback {
+  border-color: var(--so-danger-border);
+  background: var(--so-danger-soft);
+}
+
+body.p49-acceptance-robustness-review .p49-action__feedback span {
+  color: var(--so-danger);
+}
+
+body.p49-acceptance-robustness-review .p49-action__feedback > button {
+  border-color: var(--so-danger);
+  background: var(--so-panel);
+  color: var(--so-danger);
+}
+
+body.p49-acceptance-robustness-review .p49-action__result {
+  border-color: var(--so-success-border);
+  background: var(--so-success-soft);
+}
+
+body.p49-acceptance-robustness-review .p49-action__result > div > span {
+  color: var(--so-success);
+}
+
+body.p49-acceptance-robustness-review .p49-action__result-warning {
+  border-color: var(--so-warning-border);
+}
+
+body.p49-acceptance-robustness-review .p49-action__result-warning strong {
+  color: var(--so-warning);
+}
+
+html[data-density="compact"] body.p49-acceptance-robustness-review .p49-acceptance__layout {
+  gap: var(--so-space-5);
+  padding-top: var(--so-space-5);
+}
+
+html[data-density="compact"] body.p49-acceptance-robustness-review .acceptance-1688__verdict {
+  gap: var(--so-density-gap);
+  padding: var(--so-density-padding);
+}
+
+html[data-density="compact"] body.p49-acceptance-robustness-review .acceptance-1688__gates article,
+html[data-density="compact"]
+  body.p49-acceptance-robustness-review
+  .acceptance-1688__matrix
+  article {
+  padding-block: var(--so-density-padding);
+}
+
+html[data-p49-zoom="200"] body.p49-acceptance-robustness-review .p49-robustness {
+  width: 50%;
+  zoom: 2;
+}
+
+html[data-p49-zoom="200"] body.p49-acceptance-robustness-review .p49-acceptance__layout,
+html[data-p49-zoom="200"] body.p49-acceptance-robustness-review .acceptance-1688__start form,
+html[data-p49-zoom="200"] body.p49-acceptance-robustness-review .p49-acceptance__diagnostics,
+html[data-p49-zoom="200"] body.p49-acceptance-robustness-review .acceptance-1688__gates,
+html[data-p49-zoom="200"] body.p49-acceptance-robustness-review .acceptance-1688__matrix,
+html[data-p49-zoom="200"] body.p49-acceptance-robustness-review .acceptance-1688__gates article,
+html[data-p49-zoom="200"] body.p49-acceptance-robustness-review .acceptance-1688__matrix article,
+html[data-p49-zoom="200"] body.p49-acceptance-robustness-review .acceptance-1688__actions {
+  grid-template-columns: 1fr;
+}
+
+html[data-p49-zoom="200"] body.p49-acceptance-robustness-review .acceptance-1688__verdict {
+  position: relative;
+  top: auto;
+}
+
+html[data-p49-zoom="200"]
+  body.p49-acceptance-robustness-review
+  :where(.p49-acceptance__masthead, .p49-acceptance__body section > header) {
+  align-items: stretch;
+  flex-direction: column;
+}
+
+html[data-p49-zoom="200"] body.p49-acceptance-robustness-review .acceptance-1688__refresh {
+  justify-items: stretch;
+}
+
+html[data-p49-zoom="200"]
+  body.p49-acceptance-robustness-review
+  :where(.acceptance-1688__refresh small, .p49-acceptance__body section > header small) {
+  text-align: left;
+}
+
+html[data-p49-zoom="200"]
+  body.p49-acceptance-robustness-review
+  :where(.acceptance-1688__query, .acceptance-1688__start-button) {
+  grid-column: auto;
+}
+
+html[data-p49-zoom="200"] body.p49-acceptance-robustness-review .acceptance-1688__run {
+  border-top: 1px solid var(--so-border);
+  border-left: 0;
+}
+
+@media (max-width: 760px) {
+  body.p49-acceptance-robustness-review .p49-acceptance__body {
+    padding: var(--so-density-padding);
+  }
+
+  body.p49-acceptance-robustness-review .acceptance-1688__gates article > dl > div {
+    grid-template-columns: 1fr;
+  }
+
+  body.p49-acceptance-robustness-review .acceptance-1688__actions nav a,
+  body.p49-acceptance-robustness-review .p49-action button,
+  body.p49-acceptance-robustness-review .p49-action summary {
+    white-space: normal;
+  }
+}
+
+@media (pointer: coarse) {
+  body.p49-acceptance-robustness-review .p49-robustness :where(button, a, summary, input, select) {
+    min-height: var(--so-touch-target);
+  }
+}
+
+@media (forced-colors: active) {
+  body.p49-acceptance-robustness-review .p49-robustness :where(button, a, input, select) {
+    border: 1px solid CanvasText;
+  }
+}
