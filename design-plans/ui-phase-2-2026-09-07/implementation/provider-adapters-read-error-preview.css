@@ -1,0 +1,139 @@
+/* Review only: initial generic read error, not expired/forbidden/blocked or other pages. */
+html
+  body.p47-read-error-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="error"] {
+  display: block;
+  min-height: 0;
+  padding: 24px;
+  text-align: left;
+}
+html
+  body.p47-read-error-review
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="error"]
+  > .ui-state-symbol,
+html
+  body.p47-read-error-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="error"]
+  > p {
+  display: none;
+}
+html
+  body.p47-read-error-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="error"]
+  > h2 {
+  margin: 0 0 12px;
+  font-size: 22px;
+  line-height: 1.5;
+  letter-spacing: normal;
+}
+html
+  body.p47-read-error-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="error"]
+  > div {
+  margin: 0;
+  line-height: 1.75;
+  color: var(--p47-muted);
+}
+html
+  body.p47-read-error-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="error"]
+  > dl {
+  display: block;
+  margin: 20px 0 0;
+  padding: 12px 14px;
+  border: 1px solid var(--p47-border);
+  background: var(--p47-canvas);
+  color: var(--p47-muted);
+  text-align: left;
+}
+html
+  body.p47-read-error-review
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="error"]
+  > dl
+  > div {
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+html
+  body.p47-read-error-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="error"]
+  dt {
+  margin: 0 0 4px;
+  font-size: 12px;
+}
+html
+  body.p47-read-error-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="error"]
+  dd {
+  margin: 0;
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+html
+  body.p47-read-error-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="error"]
+  footer {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 24px;
+}
+html
+  body.p47-read-error-review
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="error"]
+  footer
+  .primary {
+  min-width: 144px;
+  min-height: 44px;
+}
+html
+  body.p47-read-error-review
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="error"]
+  footer
+  .primary:focus-visible {
+  outline: 2px solid var(--p47-focus);
+  outline-offset: 3px;
+}
+@media (max-width: 760px) {
+  html
+    body.p47-read-error-review:has(#app .adapter-center--c)
+    #app
+    .adapter-center--c
+    .ui-state-panel[data-kind="error"] {
+    padding: 20px;
+  }
+  html
+    body.p47-read-error-review
+    #app
+    .adapter-center--c
+    .ui-state-panel[data-kind="error"]
+    footer
+    .primary {
+    width: 100%;
+  }
+}
