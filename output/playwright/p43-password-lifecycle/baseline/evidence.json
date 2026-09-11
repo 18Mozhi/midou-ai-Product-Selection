@@ -1,0 +1,2433 @@
+{
+  "kind": "P43-PASSWORD-LIFECYCLE",
+  "mode": "baseline-diagnosis",
+  "approval": "not-user-approved",
+  "sourceHashes": {
+    "apps/api/src/mysql-platform-account-repository.ts": "96cc13077b24ba17643adc9b13ca14cd2e71ea49d3e13d3abceb7b86ed7b87c5",
+    "apps/api/src/platform-account-service.ts": "189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "ec3f2b6535f9625c3fd5d1c3542679ff8887bf65b727e5696b556945a45a861f",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-organization-actions.ts": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/user-page-preview.css": "8b3d914287a2ae901483c86003f0a1caf0fe9e2796112f5ea374e80886c31c43",
+    "design-plans/ui-phase-2-2026-09-07/implementation/user-password-preview.css": "c1e89882b4866bac0fb041e0048e80150cc22a898171bde1978f74dc87f27d43",
+    "scripts/lib/ui-phase2-user-page-preview.mjs": "f26a37092547e5866112e43d4248ca6e8dc504949263cb8fb8919aa3a336ae83",
+    "scripts/lib/ui-phase2-user-password-preview.mjs": "61341abcee2dfcef6a64f803a9e8761914bf418cfd0a6042526f15443d5545bb",
+    "scripts/verify-ui-phase2-user-password-lifecycle.mjs": "981d1aa1457518a7611d792cddc1ea581b2e6af5e35ac6a1026c59a13d2b5d37",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "993756aa3abca6690bcf841a07da92020c696efa070a42eb3074299d96067c63",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "7a7e7c3f33c49af35d402856438b0c3448ceabf351cd34a19a4819a3a1ec6dbe",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "12bbc00062ebf11aae57e0d4faa5c9a86ad49c3e0753a7d3c7f2549d60e117f5"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "detail after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "original reread count",
+      "actual": 3
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "detail after original response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "password after original response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "original reread count",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "detail after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "original reread count",
+      "actual": 3
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "detail after original response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "original reread count",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "detail after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "original reread count",
+      "actual": 3
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "detail after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "original reread count",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "replacement detail is open before old response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "replacement detail account verified",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "replacement reset is still disabled",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "detail after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "original reread count",
+      "actual": 4
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "replacement detail is open before old response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "replacement detail account verified",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "replacement reset is still disabled",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "detail after original response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "original reread count",
+      "actual": 3
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "replacement detail is open before old response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "replacement detail account verified",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "replacement reset is still disabled",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "detail after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "original reread count",
+      "actual": 4
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "replacement detail is open before old response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "replacement detail account verified",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "replacement reset is still disabled",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "detail after original response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "original reread count",
+      "actual": 3
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "detail after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "original reread count",
+      "actual": 3
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "detail after original response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "password after original response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "original reread count",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "detail after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "original reread count",
+      "actual": 3
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "detail after original response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "original reread count",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "detail after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "original reread count",
+      "actual": 3
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "detail after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "original reread count",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "replacement detail is open before old response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "replacement detail account verified",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "replacement reset is still disabled",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "detail after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "original reread count",
+      "actual": 4
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "replacement detail is open before old response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "replacement detail account verified",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "replacement reset is still disabled",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "detail after original response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "original reread count",
+      "actual": 3
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "replacement detail is open before old response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "replacement detail account verified",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "replacement reset is still disabled",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "detail after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "original reread count",
+      "actual": 4
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "one original-account POST held",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "detail reset trigger is disabled during write",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "replacement detail is open before old response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "replacement detail account verified",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "replacement reset is still disabled",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "detail after original response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "password after original response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "error feedback stays in valid original detail scope",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "original reread count",
+      "actual": 3
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "never writes second account",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-normal-success-pending.png",
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "8a792103b3d533cac503ecdda20ad9d1a7226abc226163cbe0700067fa7e591b"
+    },
+    {
+      "file": "390-normal-success-after-response.png",
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "b11dd3df7be106177a2f513e59a4074be6cb87903de1725cd748677ff5f2d6ec"
+    },
+    {
+      "file": "390-normal-failure-pending.png",
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "8a792103b3d533cac503ecdda20ad9d1a7226abc226163cbe0700067fa7e591b"
+    },
+    {
+      "file": "390-normal-failure-after-response.png",
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "dc7d9f30e57630a010d9046f5736411ccf63c822a5f96c7f68a244dde7a70d13"
+    },
+    {
+      "file": "390-close-password-success-pending.png",
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "8a792103b3d533cac503ecdda20ad9d1a7226abc226163cbe0700067fa7e591b"
+    },
+    {
+      "file": "390-close-password-success-after-response.png",
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "b11dd3df7be106177a2f513e59a4074be6cb87903de1725cd748677ff5f2d6ec"
+    },
+    {
+      "file": "390-close-password-failure-pending.png",
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "8a792103b3d533cac503ecdda20ad9d1a7226abc226163cbe0700067fa7e591b"
+    },
+    {
+      "file": "390-close-password-failure-after-response.png",
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "f4610ae3342d4d59850f568e867c46dd17cf285a167219877864f89bde59fcd7"
+    },
+    {
+      "file": "390-close-detail-success-pending.png",
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "8a792103b3d533cac503ecdda20ad9d1a7226abc226163cbe0700067fa7e591b"
+    },
+    {
+      "file": "390-close-detail-success-after-response.png",
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "b11dd3df7be106177a2f513e59a4074be6cb87903de1725cd748677ff5f2d6ec"
+    },
+    {
+      "file": "390-close-detail-failure-pending.png",
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "8a792103b3d533cac503ecdda20ad9d1a7226abc226163cbe0700067fa7e591b"
+    },
+    {
+      "file": "390-close-detail-failure-after-response.png",
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "743f5e4512fd583f2df23d332f35fd909186ad99b4fb5a5c565cc2155fa54540"
+    },
+    {
+      "file": "390-reopen-account-success-pending.png",
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "8a792103b3d533cac503ecdda20ad9d1a7226abc226163cbe0700067fa7e591b"
+    },
+    {
+      "file": "390-reopen-account-success-after-response.png",
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "b11dd3df7be106177a2f513e59a4074be6cb87903de1725cd748677ff5f2d6ec"
+    },
+    {
+      "file": "390-reopen-account-failure-pending.png",
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "8a792103b3d533cac503ecdda20ad9d1a7226abc226163cbe0700067fa7e591b"
+    },
+    {
+      "file": "390-reopen-account-failure-after-response.png",
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "22444485f49591987c377d6a6475a52d6ac6ea5c39446faeacffb4b8030338f5"
+    },
+    {
+      "file": "390-switch-account-success-pending.png",
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "8a792103b3d533cac503ecdda20ad9d1a7226abc226163cbe0700067fa7e591b"
+    },
+    {
+      "file": "390-switch-account-success-after-response.png",
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "b63dc2a14519d40248a5a9e110994d4de09b9e3db94c87eac759ae18b0fb21b4"
+    },
+    {
+      "file": "390-switch-account-failure-pending.png",
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "8a792103b3d533cac503ecdda20ad9d1a7226abc226163cbe0700067fa7e591b"
+    },
+    {
+      "file": "390-switch-account-failure-after-response.png",
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "a4ba50eac9d662b1f978efec089a3d12a70aedf61eff3dd31ba1873fad0cf0d5"
+    },
+    {
+      "file": "1440-normal-success-pending.png",
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "382f72457dd68e0cc14697fa0adb8ea98f948f05c58748b1c36ed0c49df88515"
+    },
+    {
+      "file": "1440-normal-success-after-response.png",
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "2533eea605d0762ab32d6dd2653c80262a52ffcfa97899c2f37e65478338852f"
+    },
+    {
+      "file": "1440-normal-failure-pending.png",
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "382f72457dd68e0cc14697fa0adb8ea98f948f05c58748b1c36ed0c49df88515"
+    },
+    {
+      "file": "1440-normal-failure-after-response.png",
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "e7584e52f096ef27d7b8b161bfc04b1bcd9d96d2a7a285946cb50785746ed665"
+    },
+    {
+      "file": "1440-close-password-success-pending.png",
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "382f72457dd68e0cc14697fa0adb8ea98f948f05c58748b1c36ed0c49df88515"
+    },
+    {
+      "file": "1440-close-password-success-after-response.png",
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "4fc5bb8a4e84611cc0e0fa6fad517bca9d80bb22cf956975aa8c3fe99f329e86"
+    },
+    {
+      "file": "1440-close-password-failure-pending.png",
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "382f72457dd68e0cc14697fa0adb8ea98f948f05c58748b1c36ed0c49df88515"
+    },
+    {
+      "file": "1440-close-password-failure-after-response.png",
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "288cfdee82a66d7f3138780a56320edcd0a1a205f412d49d50e3ab4ef77d43d3"
+    },
+    {
+      "file": "1440-close-detail-success-pending.png",
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "382f72457dd68e0cc14697fa0adb8ea98f948f05c58748b1c36ed0c49df88515"
+    },
+    {
+      "file": "1440-close-detail-success-after-response.png",
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "07118c2e99e0fa7c3c2b9038c636d4253491c97bf8fb30eef4bbaa0565ff8338"
+    },
+    {
+      "file": "1440-close-detail-failure-pending.png",
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "382f72457dd68e0cc14697fa0adb8ea98f948f05c58748b1c36ed0c49df88515"
+    },
+    {
+      "file": "1440-close-detail-failure-after-response.png",
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "bf53eef2297d0c97c99fee125c436b0787528457cfc0e8508c56f5f79cb3608d"
+    },
+    {
+      "file": "1440-reopen-account-success-pending.png",
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "382f72457dd68e0cc14697fa0adb8ea98f948f05c58748b1c36ed0c49df88515"
+    },
+    {
+      "file": "1440-reopen-account-success-after-response.png",
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "7692a18def0853d856fbb4dc18a415a3362a9aca9696d527512614ecf76736ca"
+    },
+    {
+      "file": "1440-reopen-account-failure-pending.png",
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "382f72457dd68e0cc14697fa0adb8ea98f948f05c58748b1c36ed0c49df88515"
+    },
+    {
+      "file": "1440-reopen-account-failure-after-response.png",
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "3026ce03ed2d98aedd3fc2ae8b47b0edc2c3f30859c083a957b142af945521c8"
+    },
+    {
+      "file": "1440-switch-account-success-pending.png",
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "382f72457dd68e0cc14697fa0adb8ea98f948f05c58748b1c36ed0c49df88515"
+    },
+    {
+      "file": "1440-switch-account-success-after-response.png",
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "8a76a88a9e41a64b09ef347c84a8be55a5f8341ec9d1faef98cda0a46c009c23"
+    },
+    {
+      "file": "1440-switch-account-failure-pending.png",
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "549a19339b6b8941ffa0e42fa3a683f110e4cd0387495a5c8fbcaea1e339e923"
+    },
+    {
+      "file": "1440-switch-account-failure-after-response.png",
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "2d2b0b7f3abe0a387b4318c6362d3e42f84bfe68eb5b78de3d9ba91d8546ab8a"
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 390,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 390,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000629"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 390,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000629"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close-password",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close-detail",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-account",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000629"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "scenario": "switch-account",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621/password",
+          "body": "exact original synthetic password/reason matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000629"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    }
+  ],
+  "processesClosed": true,
+  "scope": "Actual Vue parent/detail/password/reason with C review composition. A is original E2E fixture; B is explicit synthetic second account with empty memberships/sessions. Intercepted requests only. No forced disabled button, internal Vue mutation or real user/permission/SQL/full App acceptance."
+}

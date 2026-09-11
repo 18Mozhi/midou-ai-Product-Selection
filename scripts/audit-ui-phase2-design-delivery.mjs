@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { historicalPasswordSource, passwordRevision } from "./lib/ui-phase2-password-baseline.mjs";
 import {
   historicalUserCreationSource,
   userCreationRevisions,
@@ -62,6 +63,7 @@ for (const file of [
   "scripts/lib/ui-phase2-token-copy-baseline.mjs",
   "scripts/lib/ui-phase2-filter-reset-baseline.mjs",
   "scripts/lib/ui-phase2-user-creation-baseline.mjs",
+  "scripts/lib/ui-phase2-password-baseline.mjs",
 ])
   inputHashes[file] = (await fileHashes(file)).lf;
 const packages = [];
@@ -81,6 +83,9 @@ for (const dir of (await readdir(path.join(root, "design"), { withFileTypes: tru
         hash(historicalOrganizationActionSource(file, await text(file))) === expected) ||
       (tokenCopyRevisions[file]?.before === expected &&
         hash(historicalTokenCopySource(file, await text(file))) === expected) ||
+      (file === passwordRevision.file &&
+        expected === passwordRevision.before &&
+        hash(historicalPasswordSource(file, await text(file))) === expected) ||
       (userCreationRevisions[file]?.before === expected &&
         hash(historicalUserCreationSource(file, await text(file))) === expected) ||
       (file === filterResetRevision.file &&

@@ -146,7 +146,7 @@ for (const boundary of ["close", "route-return", "deactivate", "unmount"]) {
     assert.equal(h.box.userForm.temporary_password, "FixtureOnly-123");
   });
 }
-test("creation fix leaves template, password flow and all other parent functions intact", () => {
+test("creation fix leaves template and unrelated parent functions intact", () => {
   assert.equal(
     parse(source).descriptor.template.content,
     parse(baseline).descriptor.template.content,
@@ -158,10 +158,13 @@ test("creation fix leaves template, password flow and all other parent functions
       ts.ScriptTarget.Latest,
       true,
     );
-    return ast.statements
-      .filter(ts.isFunctionDeclaration)
-      .filter((n) => !["openCreateUser", "createUser"].includes(n.name.text))
-      .map((n) => n.getText(ast));
+    return (
+      ast.statements
+        .filter(ts.isFunctionDeclaration)
+        // Password ownership is independently compared against b93caa7f in its direct test.
+        .filter((n) => !["openCreateUser", "createUser", "resetPassword"].includes(n.name.text))
+        .map((n) => n.getText(ast))
+    );
   };
   assert.deepEqual(functions(source), functions(baseline));
 });

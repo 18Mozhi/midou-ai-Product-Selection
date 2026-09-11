@@ -9,7 +9,7 @@
 | 文件 | 历史 LF SHA-256 | 当前 LF SHA-256 | 已有依据 |
 | --- | --- | --- | --- |
 | apps/web/src/components/PlatformDashboard.vue | 7935e4cdeca4991615f554ff0c66cf5e623454269fa0771ff06b861f15ca5a95 | b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498 | ea005452 历史时间窗/在途读取修复；[当前语义合同](platform-overview-semantic-contract-review.md) |
-| apps/web/src/components/PlatformAccountCenter.vue | 2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474 | ec3f2b6535f9625c3fd5d1c3542679ff8887bf65b727e5696b556945a45a861f | b6da851d组织操作抽取后追加[创建回执归属](P43-CREATE-OWNERSHIP-REVIEW.md)；01af0262时点3ac56e41保留为历史图依据 |
+| apps/web/src/components/PlatformAccountCenter.vue | 2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474 | a1ba7d5a1d8bd8acf801dda4b84b98f23523d0ca7f43c6b216dfacde5c47db20 | 组织/创建修复后追加[改密回执归属](P43-PASSWORD-OWNERSHIP-REVIEW.md)；3ac56e41与ec3f2b65保留为此前图的历史依据 |
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa | b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99 | [焦点与缓存停用增量](responsive-detail-focus-contract-review.md) |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 | a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011 | [重置禁用焦点修复](FILTER-RESET-FOCUS-REVIEW.md) |
 

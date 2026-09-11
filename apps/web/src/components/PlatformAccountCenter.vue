@@ -528,8 +528,10 @@ function openPassword(item: any) {
 }
 async function resetPassword() {
   if (!selected.value) return;
+  const isCurrent = captureDetailAction();
   passwordError.value = "";
   askReason("强制重置密码并撤销全部会话", async (why) => {
+    if (!isCurrent()) return;
     if (
       await write(
         `/platform/accounts/users/${selected.value.id}/password`,
@@ -538,11 +540,13 @@ async function resetPassword() {
           reason: why,
         },
         "POST",
-        (value) => (passwordError.value = value),
+        (value) => isCurrent() && (passwordError.value = value),
       )
     ) {
-      passwordOpen.value = false;
-      detailOpen.value = false;
+      if (isCurrent()) {
+        passwordOpen.value = false;
+        detailOpen.value = false;
+      }
       message.value = "临时密码已更新，全部活动会话已撤销。";
     }
   });

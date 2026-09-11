@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { historicalPasswordSource } from "./ui-phase2-password-baseline.mjs";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 
@@ -20,6 +21,7 @@ export function historicalUserCreationSource(file, source) {
   source = source.replaceAll("\r\n", "\n");
   const revision = userCreationRevisions[file];
   if (!revision || hash(source) === revision.before) return source;
+  source = historicalPasswordSource(file, source);
   assert.equal(hash(source), revision.after, `Unreviewed user creation source: ${file}`);
   if (!cache.has(file)) {
     const old = execFileSync("git", ["show", `${userCreationBaseline}:${file}`], {

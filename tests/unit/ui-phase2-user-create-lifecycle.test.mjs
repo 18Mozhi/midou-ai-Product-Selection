@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalPasswordSource } from "../../scripts/lib/ui-phase2-password-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -24,7 +25,11 @@ test("creation regression retains distinct exact baseline/current Vue sources an
     assert(!text.includes("NewDraftFixtureOnly-456"));
     for (const [file, sha] of Object.entries(e.sourceHashes))
       assert.equal(
-        hash(mode === "baseline" ? historicalUserCreationSource(file, read(file)) : read(file)),
+        hash(
+          mode === "baseline"
+            ? historicalUserCreationSource(file, read(file))
+            : historicalPasswordSource(file, read(file)),
+        ),
         sha,
         file,
       );
@@ -69,7 +74,7 @@ test("actual browser response evidence distinguishes defect from intended curren
 });
 test("historical creation associations are exact, unrelated sources are never substituted", () => {
   for (const [file, revision] of Object.entries(userCreationRevisions)) {
-    assert.equal(hash(read(file)), revision.after);
+    assert.equal(hash(historicalPasswordSource(file, read(file))), revision.after);
     assert.equal(hash(historicalUserCreationSource(file, read(file))), revision.before);
     assert.throws(
       () => historicalUserCreationSource(file, read(file) + "\n// unknown"),

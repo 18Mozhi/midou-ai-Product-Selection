@@ -296,6 +296,7 @@ test("all unrelated parent functions remain textually unchanged", () => {
     // Independently covered against 01af0262 in platform-user-creation-owner.test.mjs.
     "openCreateUser",
     "createUser",
+    "resetPassword", // Independently covered in platform-user-password-ownership.test.mjs.
     "load",
     "write",
     "closeOrganizationDetail",
