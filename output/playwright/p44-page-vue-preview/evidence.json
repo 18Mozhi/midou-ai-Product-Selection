@@ -1,0 +1,2551 @@
+{
+  "kind": "P44-PAGE-VUE-PREVIEW-r1",
+  "approval": "pending-user-review",
+  "scope": "Actual parent/admin records/detail/role comparison Vue scripts. Review-only parent composition and C CSS. Original overview and roles plus explicit no-role row derived from the original user, and synthetic long/empty variants; global summary untouched. GET-only intercepted API, no real accounts or authorization. Comparison retains original layout and old matrix after role failure without explicit stale-matrix notice. Creation default/cancel only; no full App/KeepAlive, write, database, theme/density or whole-page acceptance.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "a1ba7d5a1d8bd8acf801dda4b84b98f23523d0ca7f43c6b216dfacde5c47db20",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-organization-actions.ts": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/admin-page-preview.css": "8299e7e73042f87d93c29699282760b04eefac6282e33a889c679e3d08dee5fb",
+    "design-plans/ui-phase-2-2026-09-07/implementation/user-page-preview.css": "8b3d914287a2ae901483c86003f0a1caf0fe9e2796112f5ea374e80886c31c43",
+    "scripts/lib/ui-phase2-admin-page-preview.mjs": "51e16811180d185790b6a5846177249f95e6a1441a7aed7382a181fa71baa6a1",
+    "scripts/lib/ui-phase2-user-page-preview.mjs": "f26a37092547e5866112e43d4248ca6e8dc504949263cb8fb8919aa3a336ae83",
+    "scripts/verify-ui-phase2-admin-page-preview.mjs": "42e77e24f093bb123f8d348a5b5525e5571f49f0295f0456c121819170099151",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "42c25e8a357be0e8ff243f259fa35ddf4cb5c18628f1ef756f1942e7743a20bb",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "7a7e7c3f33c49af35d402856438b0c3448ceabf351cd34a19a4819a3a1ec6dbe"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "loading:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "loading:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "authorizable accounts include no-role user",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "name": "global administrators from summary",
+      "actual": "2"
+    },
+    {
+      "width": 390,
+      "name": "no-role text explicit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "current navigation",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 390,
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "default:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "directory:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "directory:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "initial comparison six differences",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "name": "same role has zero differences",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "comparison-zero:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "comparison-zero:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "same role show-all has three capabilities",
+      "actual": 3
+    },
+    {
+      "width": 390,
+      "name": "comparison-all:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "comparison-all:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "comparison search no result",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "comparison-search-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "comparison-search-empty:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "comparison resets six differences",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "name": "comparison changes no URL",
+      "actual": "http://127.0.0.1:56922/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 390,
+      "name": "comparison changes no request",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "name": "filters:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "filters:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "email filter one no-role user",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "email query exact",
+      "actual": {
+        "query": "buyer"
+      }
+    },
+    {
+      "width": 390,
+      "name": "unrelated query retained",
+      "actual": "p44"
+    },
+    {
+      "width": 390,
+      "name": "global count not filtered count",
+      "actual": "2"
+    },
+    {
+      "width": 390,
+      "name": "filtered-no-role:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "filtered-no-role:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "status and email exact",
+      "actual": {
+        "query": "buyer",
+        "status": "disabled"
+      }
+    },
+    {
+      "width": 390,
+      "name": "filtered empty no records",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "filtered-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "filtered-empty:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "empty reset both query fields",
+      "actual": {}
+    },
+    {
+      "width": 390,
+      "name": "reset restores two accounts",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "name": "mobile-preview:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "mobile-preview:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "preview exact user ID",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "mobile-technical:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "mobile-technical:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "detail actual user identity",
+      "actual": "buyer@example.test"
+    },
+    {
+      "width": 390,
+      "name": "detail remains native modal",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "detail-entry:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "detail-entry:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "detail closes without route change",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 390,
+      "name": "admin creation defaults operations role",
+      "actual": "platform_operations_admin"
+    },
+    {
+      "width": 390,
+      "name": "creation cancel no request",
+      "actual": 9
+    },
+    {
+      "width": 390,
+      "name": "long-multiple-roles:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "long-multiple-roles:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "role failure retains accounts",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "name": "role failure retains old comparison",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "name": "role failure notice visible",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "old matrix notice not separately exposed",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "roles-refresh-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "roles-refresh-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "account failure retains records",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "name": "accounts-refresh-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "accounts-refresh-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "first account failure hides directory",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "accounts-first-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "accounts-first-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "unfiltered empty title",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "no-accounts:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "no-accounts:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "empty role directory keeps accounts",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "name": "empty role directory hides comparison",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "no-role-directory:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "no-role-directory:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "name": "all requests GET",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "loading:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "loading:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "authorizable accounts include no-role user",
+      "actual": 2
+    },
+    {
+      "width": 760,
+      "name": "global administrators from summary",
+      "actual": "2"
+    },
+    {
+      "width": 760,
+      "name": "no-role text explicit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "current navigation",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 760,
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "default:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "directory:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "directory:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "initial comparison six differences",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "name": "same role has zero differences",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "comparison-zero:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "comparison-zero:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "same role show-all has three capabilities",
+      "actual": 3
+    },
+    {
+      "width": 760,
+      "name": "comparison-all:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "comparison-all:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "comparison search no result",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "comparison-search-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "comparison-search-empty:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "comparison resets six differences",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "name": "comparison changes no URL",
+      "actual": "http://127.0.0.1:56922/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 760,
+      "name": "comparison changes no request",
+      "actual": 2
+    },
+    {
+      "width": 760,
+      "name": "filters:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "filters:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "email filter one no-role user",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "email query exact",
+      "actual": {
+        "query": "buyer"
+      }
+    },
+    {
+      "width": 760,
+      "name": "unrelated query retained",
+      "actual": "p44"
+    },
+    {
+      "width": 760,
+      "name": "global count not filtered count",
+      "actual": "2"
+    },
+    {
+      "width": 760,
+      "name": "filtered-no-role:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "filtered-no-role:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "status and email exact",
+      "actual": {
+        "query": "buyer",
+        "status": "disabled"
+      }
+    },
+    {
+      "width": 760,
+      "name": "filtered empty no records",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "filtered-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "filtered-empty:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "empty reset both query fields",
+      "actual": {}
+    },
+    {
+      "width": 760,
+      "name": "reset restores two accounts",
+      "actual": 2
+    },
+    {
+      "width": 760,
+      "name": "mobile-preview:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "mobile-preview:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "preview exact user ID",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "mobile-technical:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "mobile-technical:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "detail actual user identity",
+      "actual": "buyer@example.test"
+    },
+    {
+      "width": 760,
+      "name": "detail remains native modal",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "detail-entry:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "detail-entry:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "detail closes without route change",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 760,
+      "name": "admin creation defaults operations role",
+      "actual": "platform_operations_admin"
+    },
+    {
+      "width": 760,
+      "name": "creation cancel no request",
+      "actual": 9
+    },
+    {
+      "width": 760,
+      "name": "long-multiple-roles:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "long-multiple-roles:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "role failure retains accounts",
+      "actual": 2
+    },
+    {
+      "width": 760,
+      "name": "role failure retains old comparison",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "name": "role failure notice visible",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "old matrix notice not separately exposed",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "roles-refresh-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "roles-refresh-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "account failure retains records",
+      "actual": 2
+    },
+    {
+      "width": 760,
+      "name": "accounts-refresh-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "accounts-refresh-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "first account failure hides directory",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "accounts-first-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "accounts-first-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "unfiltered empty title",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "no-accounts:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "no-accounts:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "empty role directory keeps accounts",
+      "actual": 2
+    },
+    {
+      "width": 760,
+      "name": "empty role directory hides comparison",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "no-role-directory:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "no-role-directory:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "all requests GET",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "loading:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "loading:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "authorizable accounts include no-role user",
+      "actual": 2
+    },
+    {
+      "width": 761,
+      "name": "global administrators from summary",
+      "actual": "2"
+    },
+    {
+      "width": 761,
+      "name": "no-role text explicit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "current navigation",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 761,
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "default:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "directory:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "directory:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "initial comparison six differences",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "name": "same role has zero differences",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "comparison-zero:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "comparison-zero:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "same role show-all has three capabilities",
+      "actual": 3
+    },
+    {
+      "width": 761,
+      "name": "comparison-all:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "comparison-all:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "comparison search no result",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "comparison-search-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "comparison-search-empty:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "comparison resets six differences",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "name": "comparison changes no URL",
+      "actual": "http://127.0.0.1:56922/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 761,
+      "name": "comparison changes no request",
+      "actual": 2
+    },
+    {
+      "width": 761,
+      "name": "filters:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "filters:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "email filter one no-role user",
+      "actual": 1
+    },
+    {
+      "width": 761,
+      "name": "email query exact",
+      "actual": {
+        "query": "buyer"
+      }
+    },
+    {
+      "width": 761,
+      "name": "unrelated query retained",
+      "actual": "p44"
+    },
+    {
+      "width": 761,
+      "name": "global count not filtered count",
+      "actual": "2"
+    },
+    {
+      "width": 761,
+      "name": "filtered-no-role:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "filtered-no-role:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "status and email exact",
+      "actual": {
+        "query": "buyer",
+        "status": "disabled"
+      }
+    },
+    {
+      "width": 761,
+      "name": "filtered empty no records",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "filtered-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "filtered-empty:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "empty reset both query fields",
+      "actual": {}
+    },
+    {
+      "width": 761,
+      "name": "reset restores two accounts",
+      "actual": 2
+    },
+    {
+      "width": 761,
+      "name": "detail actual user identity",
+      "actual": "buyer@example.test"
+    },
+    {
+      "width": 761,
+      "name": "detail remains native modal",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "detail-entry:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "detail-entry:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "detail closes without route change",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 761,
+      "name": "admin creation defaults operations role",
+      "actual": "platform_operations_admin"
+    },
+    {
+      "width": 761,
+      "name": "creation cancel no request",
+      "actual": 9
+    },
+    {
+      "width": 761,
+      "name": "long-multiple-roles:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "long-multiple-roles:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "role failure retains accounts",
+      "actual": 2
+    },
+    {
+      "width": 761,
+      "name": "role failure retains old comparison",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "name": "role failure notice visible",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "old matrix notice not separately exposed",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "roles-refresh-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "roles-refresh-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "account failure retains records",
+      "actual": 2
+    },
+    {
+      "width": 761,
+      "name": "accounts-refresh-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "accounts-refresh-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "first account failure hides directory",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "accounts-first-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "accounts-first-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "unfiltered empty title",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "no-accounts:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "no-accounts:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "empty role directory keeps accounts",
+      "actual": 2
+    },
+    {
+      "width": 761,
+      "name": "empty role directory hides comparison",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "no-role-directory:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "no-role-directory:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "all requests GET",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "loading:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "loading:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "authorizable accounts include no-role user",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "name": "global administrators from summary",
+      "actual": "2"
+    },
+    {
+      "width": 1440,
+      "name": "no-role text explicit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "current navigation",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1440,
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "default:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "directory:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "directory:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "initial comparison six differences",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "name": "same role has zero differences",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "comparison-zero:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "comparison-zero:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "same role show-all has three capabilities",
+      "actual": 3
+    },
+    {
+      "width": 1440,
+      "name": "comparison-all:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "comparison-all:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "comparison search no result",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "comparison-search-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "comparison-search-empty:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "comparison resets six differences",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "name": "comparison changes no URL",
+      "actual": "http://127.0.0.1:56922/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 1440,
+      "name": "comparison changes no request",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "name": "filters:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "filters:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "email filter one no-role user",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "name": "email query exact",
+      "actual": {
+        "query": "buyer"
+      }
+    },
+    {
+      "width": 1440,
+      "name": "unrelated query retained",
+      "actual": "p44"
+    },
+    {
+      "width": 1440,
+      "name": "global count not filtered count",
+      "actual": "2"
+    },
+    {
+      "width": 1440,
+      "name": "filtered-no-role:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "filtered-no-role:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "status and email exact",
+      "actual": {
+        "query": "buyer",
+        "status": "disabled"
+      }
+    },
+    {
+      "width": 1440,
+      "name": "filtered empty no records",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "filtered-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "filtered-empty:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "empty reset both query fields",
+      "actual": {}
+    },
+    {
+      "width": 1440,
+      "name": "reset restores two accounts",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "name": "detail actual user identity",
+      "actual": "buyer@example.test"
+    },
+    {
+      "width": 1440,
+      "name": "detail remains native modal",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "detail-entry:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "detail-entry:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "detail closes without route change",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1440,
+      "name": "admin creation defaults operations role",
+      "actual": "platform_operations_admin"
+    },
+    {
+      "width": 1440,
+      "name": "creation cancel no request",
+      "actual": 9
+    },
+    {
+      "width": 1440,
+      "name": "long-multiple-roles:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "long-multiple-roles:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "role failure retains accounts",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "name": "role failure retains old comparison",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "name": "role failure notice visible",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "old matrix notice not separately exposed",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "roles-refresh-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "roles-refresh-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "account failure retains records",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "name": "accounts-refresh-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "accounts-refresh-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "first account failure hides directory",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "accounts-first-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "accounts-first-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "unfiltered empty title",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "no-accounts:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "no-accounts:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "empty role directory keeps accounts",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "name": "empty role directory hides comparison",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "no-role-directory:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "no-role-directory:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "all requests GET",
+      "actual": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-loading.png",
+      "width": 390,
+      "state": "loading",
+      "sha256": "d099c3b15a0ccee868a2ec6466774908bc2786e3a1221a24183ad30207c28438"
+    },
+    {
+      "file": "390-default.png",
+      "width": 390,
+      "state": "default",
+      "sha256": "91cbd4303e6bb409224e41b210ce179ba8f656339f6d46b0aa01bcb31844e736"
+    },
+    {
+      "file": "390-directory.png",
+      "width": 390,
+      "state": "directory",
+      "sha256": "28bfd32d5557df1b2c972de3d7a2d8381a953f7748bb12777ba5da9c8f4b8e74"
+    },
+    {
+      "file": "390-comparison-zero.png",
+      "width": 390,
+      "state": "comparison-zero",
+      "sha256": "3f0a9ab28a5d2e70428419578eb380cd095ff8f6efc43131f7566c6391ad2a95"
+    },
+    {
+      "file": "390-comparison-all.png",
+      "width": 390,
+      "state": "comparison-all",
+      "sha256": "306bdcaf6c9127c074a846cd6bcaaf24192644c1cb0ee3f71c3879563a3b2990"
+    },
+    {
+      "file": "390-comparison-search-empty.png",
+      "width": 390,
+      "state": "comparison-search-empty",
+      "sha256": "009a24e1b171e8c286c12ec01ab753cd308628308c13d49d8d6162afc683b72b"
+    },
+    {
+      "file": "390-filters.png",
+      "width": 390,
+      "state": "filters",
+      "sha256": "e03bfcdca3297c05a038719fea59a96cde3afe4fe0839b1170853d86dd467289"
+    },
+    {
+      "file": "390-filtered-no-role.png",
+      "width": 390,
+      "state": "filtered-no-role",
+      "sha256": "132599681bc243d6f17473ae5705bfe5b38808b6c2713c2c2d083bc0494f49bd"
+    },
+    {
+      "file": "390-filtered-empty.png",
+      "width": 390,
+      "state": "filtered-empty",
+      "sha256": "7e876c5a0a529a0b6f0fccaba220df6cf165b31ddbc15d1b1dac85c4bff0da42"
+    },
+    {
+      "file": "390-mobile-preview.png",
+      "width": 390,
+      "state": "mobile-preview",
+      "sha256": "71e3c7b16812ca82a54f4bd5bbd9961e21933c4224e111d76827ea4a63244d47"
+    },
+    {
+      "file": "390-mobile-technical.png",
+      "width": 390,
+      "state": "mobile-technical",
+      "sha256": "3676c0c01a96a1361cf281de458a1aa7fa1f7e6eabc8f5a2ab91209c6a0ad665"
+    },
+    {
+      "file": "390-detail-entry.png",
+      "width": 390,
+      "state": "detail-entry",
+      "sha256": "44f5a3f50a39a649370d4085e350e6c68a317fe5af6c262b9db441f2eda897f5"
+    },
+    {
+      "file": "390-long-multiple-roles.png",
+      "width": 390,
+      "state": "long-multiple-roles",
+      "sha256": "5cb30b6d1383a4b3779d337dd1e26689a26921d70e3913d94cc9bd8eeabeeba6"
+    },
+    {
+      "file": "390-roles-refresh-error.png",
+      "width": 390,
+      "state": "roles-refresh-error",
+      "sha256": "7f74442d56d9b397ee396caf26fda5b18945de2204aa4a0d57c0421036e20451"
+    },
+    {
+      "file": "390-accounts-refresh-error.png",
+      "width": 390,
+      "state": "accounts-refresh-error",
+      "sha256": "1da40115245d13694750e6f37d191241214300a9e958702749913e4a272d6a05"
+    },
+    {
+      "file": "390-accounts-first-error.png",
+      "width": 390,
+      "state": "accounts-first-error",
+      "sha256": "fa2dfb09363cdc41be6a2db126f1179d74b6e989a553a3afd9a7c83da8d48cc3"
+    },
+    {
+      "file": "390-no-accounts.png",
+      "width": 390,
+      "state": "no-accounts",
+      "sha256": "ef3f2b8221e9eead53b24d1967c02b38970a6d4fb2f1ea10a3a1fb26ab24aa4e"
+    },
+    {
+      "file": "390-no-role-directory.png",
+      "width": 390,
+      "state": "no-role-directory",
+      "sha256": "d91d2d467ab5892688dbde6c2b02bbfa8918d82aca7b066794aba3d0c35badd2"
+    },
+    {
+      "file": "760-loading.png",
+      "width": 760,
+      "state": "loading",
+      "sha256": "eb54d4df4297f1921e010799f0d9f99d83381087903c75c0154d51137e6eb220"
+    },
+    {
+      "file": "760-default.png",
+      "width": 760,
+      "state": "default",
+      "sha256": "9d1f998139a11d58fba2036f1ee3f46ddadc286802a255ebf7934ae31224cf69"
+    },
+    {
+      "file": "760-directory.png",
+      "width": 760,
+      "state": "directory",
+      "sha256": "9e5dd4c800b30e5b8b7c5da9d10d0383fa195a4e0fa2a68b3ac4c14fca597dc7"
+    },
+    {
+      "file": "760-comparison-zero.png",
+      "width": 760,
+      "state": "comparison-zero",
+      "sha256": "f1c0ec0de1c3629e13c46541dd08cc50c873288ad671918781eab8d7658b9d59"
+    },
+    {
+      "file": "760-comparison-all.png",
+      "width": 760,
+      "state": "comparison-all",
+      "sha256": "a93d17d4ed9c2fcb5ebf6b698845b282a69aabaf994746474e734d64838a2116"
+    },
+    {
+      "file": "760-comparison-search-empty.png",
+      "width": 760,
+      "state": "comparison-search-empty",
+      "sha256": "91dd1aa59e41a156a744099370c14f698e0ce98b0dd9a0845c8065d272f43d9f"
+    },
+    {
+      "file": "760-filters.png",
+      "width": 760,
+      "state": "filters",
+      "sha256": "6b3c16b1514d3b74d95e975241e6f76a297cb021e6950aa6479fa9f50b0bc633"
+    },
+    {
+      "file": "760-filtered-no-role.png",
+      "width": 760,
+      "state": "filtered-no-role",
+      "sha256": "89383719c46aee8b742ac0685a06a153d43fbd81d7795d350c20e1f6b8648024"
+    },
+    {
+      "file": "760-filtered-empty.png",
+      "width": 760,
+      "state": "filtered-empty",
+      "sha256": "e4930e829a8b9a11d5d60b11653ac3936dbee1846af7601afc0407e5b9334d6a"
+    },
+    {
+      "file": "760-mobile-preview.png",
+      "width": 760,
+      "state": "mobile-preview",
+      "sha256": "0f333cbbdfab63a7560495c67d670eadd57895ea9f9b710123de4702a55466ea"
+    },
+    {
+      "file": "760-mobile-technical.png",
+      "width": 760,
+      "state": "mobile-technical",
+      "sha256": "2384379d20d2b8c95a06a7f71cac74c6152174319f1fc0a0591de88357f500a9"
+    },
+    {
+      "file": "760-detail-entry.png",
+      "width": 760,
+      "state": "detail-entry",
+      "sha256": "26b08fe2aef89692b90c11ce665f2a47651e85009e9c18ad6d250857337010da"
+    },
+    {
+      "file": "760-long-multiple-roles.png",
+      "width": 760,
+      "state": "long-multiple-roles",
+      "sha256": "5b9cb3ff6e2fc6df58f7bb55e9a6f30e899c87ee656604d6dcbb0704634c8626"
+    },
+    {
+      "file": "760-roles-refresh-error.png",
+      "width": 760,
+      "state": "roles-refresh-error",
+      "sha256": "12bb3b030e3cf4d6a8151ff480cd8a4a138d2df72aeb5545538b3ea6c8004e4f"
+    },
+    {
+      "file": "760-accounts-refresh-error.png",
+      "width": 760,
+      "state": "accounts-refresh-error",
+      "sha256": "e934b9dfea36f700e91ab70f52f4ba56f26a75f35db67e97caa63f74d3582891"
+    },
+    {
+      "file": "760-accounts-first-error.png",
+      "width": 760,
+      "state": "accounts-first-error",
+      "sha256": "2c93696ea38173a86394937c850065af3d4e76137c111f29ab3c4ec13f356915"
+    },
+    {
+      "file": "760-no-accounts.png",
+      "width": 760,
+      "state": "no-accounts",
+      "sha256": "39d1b6d769efd6d4895601ac0f324e07c22ae93ab4cd0f9ecaa0a1108eceef33"
+    },
+    {
+      "file": "760-no-role-directory.png",
+      "width": 760,
+      "state": "no-role-directory",
+      "sha256": "af18781638a1af907e027a65eaacf3581121a58cdc0efa3da63641ce2dec0770"
+    },
+    {
+      "file": "761-loading.png",
+      "width": 761,
+      "state": "loading",
+      "sha256": "85a0a65f9dcd30c8dac63bf665a8f60129396933e0ce00ebddadcba8b4981c4b"
+    },
+    {
+      "file": "761-default.png",
+      "width": 761,
+      "state": "default",
+      "sha256": "18ec68beeeb4aaa53881280390f019dd973fc8cd3a275049ac2ac0c2c118b377"
+    },
+    {
+      "file": "761-directory.png",
+      "width": 761,
+      "state": "directory",
+      "sha256": "156db814b405346dba09a83ea3f13d0d0fdc9845362d0eb75b7d85e8c4262afe"
+    },
+    {
+      "file": "761-comparison-zero.png",
+      "width": 761,
+      "state": "comparison-zero",
+      "sha256": "a582706568f205f448751b1f2b3e93d49f93c59946ae92e91a1f35ea015804c6"
+    },
+    {
+      "file": "761-comparison-all.png",
+      "width": 761,
+      "state": "comparison-all",
+      "sha256": "2ae65953f462f50738590c0fbcfeb4e51a7a459bb08594536f29bdfee3c6d179"
+    },
+    {
+      "file": "761-comparison-search-empty.png",
+      "width": 761,
+      "state": "comparison-search-empty",
+      "sha256": "b65845327677769813f4a9fbde25d6d2d63c2c8831bf7c3f93908c78f45310a5"
+    },
+    {
+      "file": "761-filters.png",
+      "width": 761,
+      "state": "filters",
+      "sha256": "3ebc28a225d8feb0cf79dcd2b01ba9fa2af6e92610086267678aadc0b58603b3"
+    },
+    {
+      "file": "761-filtered-no-role.png",
+      "width": 761,
+      "state": "filtered-no-role",
+      "sha256": "960ca3576b189c462d8fc31befc49e72117e0e0384a87e4b76774e86c1662337"
+    },
+    {
+      "file": "761-filtered-empty.png",
+      "width": 761,
+      "state": "filtered-empty",
+      "sha256": "f906abd707ebdf032d112b7b94b53dd6add09ec8228f65f90268dfb6d35c9ec9"
+    },
+    {
+      "file": "761-detail-entry.png",
+      "width": 761,
+      "state": "detail-entry",
+      "sha256": "e0db0e0f53e2b34849aeb49a24d4db273324bcca2e1cb1723674f0b5c878c0e6"
+    },
+    {
+      "file": "761-long-multiple-roles.png",
+      "width": 761,
+      "state": "long-multiple-roles",
+      "sha256": "3359f34f11305e1ac24c11066f2a8c31bc3930f41e70bd784f2d0ab346923644"
+    },
+    {
+      "file": "761-roles-refresh-error.png",
+      "width": 761,
+      "state": "roles-refresh-error",
+      "sha256": "4416b5ca78292b1770c7bc6aad58c841c6fde39cfe33f846f4b748ef190b29c7"
+    },
+    {
+      "file": "761-accounts-refresh-error.png",
+      "width": 761,
+      "state": "accounts-refresh-error",
+      "sha256": "0460cce787c15e4da9f70c376abfbd47f6a9dd346f3e339d78a8de405cafeab2"
+    },
+    {
+      "file": "761-accounts-first-error.png",
+      "width": 761,
+      "state": "accounts-first-error",
+      "sha256": "26d6131765e42e5633971dca8cba0d1dc2b95ebacaea8fd71962671c6bec5961"
+    },
+    {
+      "file": "761-no-accounts.png",
+      "width": 761,
+      "state": "no-accounts",
+      "sha256": "19aaf584744b3e7cc4389ec3fa6d93727c752d74927aff6ab5aa231f13c75bbd"
+    },
+    {
+      "file": "761-no-role-directory.png",
+      "width": 761,
+      "state": "no-role-directory",
+      "sha256": "1a835cc51d5c68ffaa9804f39df95332dd5ce863bd898a2fab8e02f1fbc9f74e"
+    },
+    {
+      "file": "1440-loading.png",
+      "width": 1440,
+      "state": "loading",
+      "sha256": "f771ff6433c55cdca32a12688ddf8332c228dad452bbfbab6948278ad12de945"
+    },
+    {
+      "file": "1440-default.png",
+      "width": 1440,
+      "state": "default",
+      "sha256": "afc7b517818e9c99bc18fae00ebe57f2dbe53ca11b1a8acc3c5fd9de0e9fbcae"
+    },
+    {
+      "file": "1440-directory.png",
+      "width": 1440,
+      "state": "directory",
+      "sha256": "ae62745ec205d776c28816dba6d9ca8d557d8eea248a756fbb15db9349e8dc33"
+    },
+    {
+      "file": "1440-comparison-zero.png",
+      "width": 1440,
+      "state": "comparison-zero",
+      "sha256": "bc970df4ecc40bd1f4362de7f723522a04e17a33385c34b235f663b244adb11e"
+    },
+    {
+      "file": "1440-comparison-all.png",
+      "width": 1440,
+      "state": "comparison-all",
+      "sha256": "19c9e4e6db68a697efd48a40185a33abdb345814170ff4e98098fc6521cb3634"
+    },
+    {
+      "file": "1440-comparison-search-empty.png",
+      "width": 1440,
+      "state": "comparison-search-empty",
+      "sha256": "347ec137be7c36735f60332fc145a4e87f34f766ef2a47c488d93c1cdfbacfc9"
+    },
+    {
+      "file": "1440-filters.png",
+      "width": 1440,
+      "state": "filters",
+      "sha256": "27586faff6af3376764fde6d8138cf8884dec376fee3dee9299087d7964c7734"
+    },
+    {
+      "file": "1440-filtered-no-role.png",
+      "width": 1440,
+      "state": "filtered-no-role",
+      "sha256": "1f50257195504b8356f960b41c68adc7e693a53e50f0c9ba05fa0badadc0f379"
+    },
+    {
+      "file": "1440-filtered-empty.png",
+      "width": 1440,
+      "state": "filtered-empty",
+      "sha256": "880afead3fc505dc594c1a2337128ca211500894b14831f9c8071c8a71df73b7"
+    },
+    {
+      "file": "1440-detail-entry.png",
+      "width": 1440,
+      "state": "detail-entry",
+      "sha256": "3b7b575e58a165a62ea120c0022b76a2c0d69cf4d64fab9810fdac2baddb1c9a"
+    },
+    {
+      "file": "1440-long-multiple-roles.png",
+      "width": 1440,
+      "state": "long-multiple-roles",
+      "sha256": "0629d782102a6dd43fd838fc2ef28af9dd5ee5746e954a8436f1f7b7e3b062ce"
+    },
+    {
+      "file": "1440-roles-refresh-error.png",
+      "width": 1440,
+      "state": "roles-refresh-error",
+      "sha256": "5901e28589307a196fd12ddac4a9690be43c326b3026642f4a1a49c1adcb8907"
+    },
+    {
+      "file": "1440-accounts-refresh-error.png",
+      "width": 1440,
+      "state": "accounts-refresh-error",
+      "sha256": "8413acafa55de721044e32a67059941e401e781da4e1c96766d140f1b1da886d"
+    },
+    {
+      "file": "1440-accounts-first-error.png",
+      "width": 1440,
+      "state": "accounts-first-error",
+      "sha256": "e78a68cc35caa544fa5a0f8b6fd70897a8d0bc77ea850f8570735231afde10cc"
+    },
+    {
+      "file": "1440-no-accounts.png",
+      "width": 1440,
+      "state": "no-accounts",
+      "sha256": "a3209edd140534bd1cca0900e133340fd5e3aee652dca323ac533b5d2cebc76a"
+    },
+    {
+      "file": "1440-no-role-directory.png",
+      "width": 1440,
+      "state": "no-role-directory",
+      "sha256": "c63264a65b5d25647f01786ad8885e63ba51853d0f861875273527dbdba0f2df"
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "buyer"
+          },
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "buyer",
+            "status": "disabled"
+          },
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "roles-empty"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "roles-empty"
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "buyer"
+          },
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "buyer",
+            "status": "disabled"
+          },
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "roles-empty"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "roles-empty"
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "buyer"
+          },
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "buyer",
+            "status": "disabled"
+          },
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "roles-empty"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "roles-empty"
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "buyer"
+          },
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "buyer",
+            "status": "disabled"
+          },
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "roles-empty"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "roles-empty"
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    }
+  ],
+  "processesClosed": true
+}

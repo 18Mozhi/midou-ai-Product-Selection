@@ -1,0 +1,40 @@
+/* Review-only P44 layout; shared C language from the separately tracked P43 draft. */
+.p44-page-preview #app .account-table-wrap th:first-child {
+  width: 42%;
+}
+.p44-page-preview #app .account-table-wrap th:nth-child(2) {
+  width: auto;
+}
+.p44-page-preview #app .account-table-wrap th:last-child {
+  width: 136px;
+}
+.p44-page-preview #app .account-table-wrap td button {
+  white-space: nowrap;
+}
+.p44-page-preview #app .account-table-wrap td {
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+}
+.p44-page-preview #app .p44-comparison:has(> *) {
+  padding-top: 24px;
+  margin-top: 8px;
+  border-top: 2px solid #cbd6e5;
+}
+.p44-page-preview #app .p44-comparison:empty {
+  display: none;
+}
+.p44-page-preview #app .p43-directory-heading p {
+  line-height: 1.8;
+  max-width: 62ch;
+}
+@media (max-width: 760px) {
+  .p44-page-preview #app .p43-context header {
+    margin-bottom: 12px;
+  }
+  .p44-page-preview #app .p43-context h3 {
+    font-size: 20px;
+  }
+  .p44-page-preview #app .p43-directory-heading h3 {
+    font-size: 22px;
+  }
+}

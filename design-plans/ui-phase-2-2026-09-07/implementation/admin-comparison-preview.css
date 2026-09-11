@@ -1,0 +1,169 @@
+/* P44 role comparison review only; original Vue template and data remain unchanged. */
+.p44-role-review #app .role-comparison {
+  padding: 0;
+  gap: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  color: #142a46;
+  background: #fff;
+}
+.p44-role-review #app .role-comparison > header {
+  padding: 24px;
+  align-items: center;
+  background: #294caf;
+  color: #fff;
+}
+.p44-role-review #app .role-comparison > header :is(p, h3, span) {
+  color: #fff;
+}
+.p44-role-review #app .role-comparison > header span {
+  max-width: 52ch;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.p44-role-review #app .role-comparison__toggle {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #91a8de;
+  border-radius: 6px;
+  flex-shrink: 0;
+  color: #fff;
+}
+.p44-role-review #app .role-comparison__toggle input {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  padding: 0;
+  margin: 0;
+  accent-color: #294caf;
+}
+.p44-role-review #app .role-comparison__toggle input:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+}
+.p44-role-review #app .role-comparison__selectors {
+  padding: 24px 24px 16px;
+  gap: 20px;
+}
+.p44-role-review #app .role-comparison__filters {
+  padding: 0 24px 24px;
+  gap: 12px;
+  border-bottom: 1px solid #d8e1ed;
+}
+.p44-role-review #app .role-comparison :is(select, input[type="text"], input:not([type])) {
+  border-radius: 6px;
+  font-size: 16px;
+  min-width: 0;
+  width: 100%;
+}
+.p44-role-review #app .role-comparison__filters button {
+  border-radius: 6px;
+  color: #294caf;
+  background: #fff;
+}
+.p44-role-review
+  #app
+  .role-comparison
+  :is(select, input:not([type="checkbox"]), button):focus-visible {
+  outline: 3px solid #4276df;
+  outline-offset: 3px;
+}
+.p44-role-review #app .role-comparison__filters button:disabled {
+  color: #66748a;
+  background: #e8edf4;
+  border-color: #d8e1ed;
+  opacity: 1;
+}
+.p44-role-review #app .role-comparison__summaries {
+  margin: 0 24px;
+  padding: 20px 0;
+  gap: 20px;
+  border-bottom: 1px solid #d8e1ed;
+}
+.p44-role-review #app .role-comparison__summaries article {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  line-height: 1.7;
+}
+.p44-role-review #app .role-comparison__summaries small {
+  font-size: 13px;
+}
+.p44-role-review #app .role-comparison__result {
+  padding: 18px 24px;
+  font-size: 14px;
+  background: #f4f7fc;
+}
+.p44-role-review #app .role-comparison__matrix {
+  padding: 0 24px 24px;
+  gap: 0;
+}
+.p44-role-review #app .role-comparison__matrix article {
+  padding: 18px 0;
+  border: 0;
+  border-bottom: 1px solid #d8e1ed;
+  border-radius: 0;
+  background: #fff;
+}
+.p44-role-review #app .role-comparison__matrix dt {
+  font-size: 13px;
+  line-height: 1.6;
+}
+.p44-role-review #app .role-comparison__matrix dd {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.p44-role-review #app .role-comparison__matrix > p {
+  margin-top: 20px;
+  text-align: left;
+  background: #f4f7fc;
+  border-left: 3px solid #9db1cc;
+}
+@media (max-width: 900px) {
+  .p44-role-review #app .role-comparison > header {
+    display: grid;
+  }
+  .p44-role-review #app .role-comparison__toggle {
+    justify-self: start;
+  }
+  .p44-role-review #app .role-comparison__filters {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .p44-role-review #app .role-comparison__filters button {
+    grid-column: 1/-1;
+    justify-self: start;
+  }
+  .p44-role-review #app .role-comparison__matrix article {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 760px) {
+  .p44-role-review #app .role-comparison > header {
+    padding: 20px 16px;
+  }
+  .p44-role-review #app .role-comparison__selectors,
+  .p44-role-review #app .role-comparison__filters {
+    padding: 20px 16px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .p44-role-review #app .role-comparison__filters {
+    padding-top: 0;
+  }
+  .p44-role-review #app .role-comparison__summaries {
+    margin: 0 16px;
+    grid-template-columns: 1fr;
+  }
+  .p44-role-review #app .role-comparison__result {
+    padding: 16px;
+  }
+  .p44-role-review #app .role-comparison__matrix {
+    padding: 0 16px 20px;
+  }
+  .p44-role-review #app .role-comparison__matrix dl {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}

@@ -1,0 +1,1246 @@
+{
+  "kind": "P44-COMPARISON-VUE-r1",
+  "approval": "pending-user-review",
+  "scope": "Actual PlatformRoleComparison template/script unchanged; review-only CSS in actual P44 parent host. Original three-role fixture, no authority inference or real writes. Native focus/selected/disabled,6/0/3 capability states and platform group2, URL unchanged and two intercepted GETs per width. Approved directory package remains unmodified. No production import/full App/real RBAC/theme-density/full accessibility acceptance.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "a1ba7d5a1d8bd8acf801dda4b84b98f23523d0ca7f43c6b216dfacde5c47db20",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-organization-actions.ts": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/admin-comparison-preview.css": "d0f92bb771f8f73da940c1762390db8e421850ee7899ddfbb716d46c0b787c43",
+    "design-plans/ui-phase-2-2026-09-07/implementation/admin-page-preview.css": "8299e7e73042f87d93c29699282760b04eefac6282e33a889c679e3d08dee5fb",
+    "design-plans/ui-phase-2-2026-09-07/implementation/user-page-preview.css": "8b3d914287a2ae901483c86003f0a1caf0fe9e2796112f5ea374e80886c31c43",
+    "scripts/lib/ui-phase2-admin-page-preview.mjs": "51e16811180d185790b6a5846177249f95e6a1441a7aed7382a181fa71baa6a1",
+    "scripts/lib/ui-phase2-user-page-preview.mjs": "f26a37092547e5866112e43d4248ca6e8dc504949263cb8fb8919aa3a336ae83",
+    "scripts/verify-ui-phase2-admin-comparison-preview.mjs": "b9d0d02aa8e56a5bfab4bac0caa424924eb9adce5fe7da5292e348d25f082a0c",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "42c25e8a357be0e8ff243f259fa35ddf4cb5c18628f1ef756f1942e7743a20bb",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "7a7e7c3f33c49af35d402856438b0c3448ceabf351cd34a19a4819a3a1ec6dbe"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "default six capabilities",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "name": "blue header white heading",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 390,
+      "name": "checkbox native size",
+      "actual": {
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "width": 390,
+      "name": "checkbox target label at least44",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "controls-default:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "controls-default:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "selected-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "selected-focus:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "role focus blue",
+      "actual": "rgb(66, 118, 223)"
+    },
+    {
+      "width": 390,
+      "name": "role-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "role-focus:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "permission-facts:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "permission-facts:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "matrix-first:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "matrix-first:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "noncolor ownership text",
+      "actual": [
+        "拥有",
+        "无"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "same role no differences",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "same-role-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "same-role-empty:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "show all includes three capabilities",
+      "actual": 3
+    },
+    {
+      "width": 390,
+      "name": "same-role-all:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "same-role-all:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "search no results",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "search maxlength80",
+      "actual": "80"
+    },
+    {
+      "width": 390,
+      "name": "search-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "search-empty:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reset-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reset-focus:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reset restores six",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "name": "reset now disabled",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "disabled neutral",
+      "actual": "rgb(232, 237, 244)"
+    },
+    {
+      "width": 390,
+      "name": "reset-disabled:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reset-disabled:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "group two platform capabilities",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "name": "group-filter:page fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "group-filter:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "comparison URL untouched",
+      "actual": "http://127.0.0.1:58352/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 390,
+      "name": "only two original GET requests",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "name": "request targets",
+      "actual": [
+        "accounts",
+        "roles"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "default six capabilities",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "name": "blue header white heading",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 760,
+      "name": "checkbox native size",
+      "actual": {
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "width": 760,
+      "name": "checkbox target label at least44",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "controls-default:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "controls-default:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "selected-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "selected-focus:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "role focus blue",
+      "actual": "rgb(66, 118, 223)"
+    },
+    {
+      "width": 760,
+      "name": "role-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "role-focus:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "permission-facts:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "permission-facts:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "matrix-first:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "matrix-first:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "noncolor ownership text",
+      "actual": [
+        "拥有",
+        "无"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "same role no differences",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "same-role-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "same-role-empty:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "show all includes three capabilities",
+      "actual": 3
+    },
+    {
+      "width": 760,
+      "name": "same-role-all:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "same-role-all:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "search no results",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "search maxlength80",
+      "actual": "80"
+    },
+    {
+      "width": 760,
+      "name": "search-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "search-empty:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reset-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reset-focus:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reset restores six",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "name": "reset now disabled",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "disabled neutral",
+      "actual": "rgb(232, 237, 244)"
+    },
+    {
+      "width": 760,
+      "name": "reset-disabled:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reset-disabled:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "group two platform capabilities",
+      "actual": 2
+    },
+    {
+      "width": 760,
+      "name": "group-filter:page fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "group-filter:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "comparison URL untouched",
+      "actual": "http://127.0.0.1:58352/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 760,
+      "name": "only two original GET requests",
+      "actual": 2
+    },
+    {
+      "width": 760,
+      "name": "request targets",
+      "actual": [
+        "accounts",
+        "roles"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "default six capabilities",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "name": "blue header white heading",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 761,
+      "name": "checkbox native size",
+      "actual": {
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "width": 761,
+      "name": "checkbox target label at least44",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "controls-default:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "controls-default:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "selected-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "selected-focus:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "role focus blue",
+      "actual": "rgb(66, 118, 223)"
+    },
+    {
+      "width": 761,
+      "name": "role-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "role-focus:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "permission-facts:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "permission-facts:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "matrix-first:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "matrix-first:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "noncolor ownership text",
+      "actual": [
+        "拥有",
+        "无"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "same role no differences",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "same-role-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "same-role-empty:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "show all includes three capabilities",
+      "actual": 3
+    },
+    {
+      "width": 761,
+      "name": "same-role-all:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "same-role-all:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "search no results",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "search maxlength80",
+      "actual": "80"
+    },
+    {
+      "width": 761,
+      "name": "search-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "search-empty:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reset-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reset-focus:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reset restores six",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "name": "reset now disabled",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "disabled neutral",
+      "actual": "rgb(232, 237, 244)"
+    },
+    {
+      "width": 761,
+      "name": "reset-disabled:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reset-disabled:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "group two platform capabilities",
+      "actual": 2
+    },
+    {
+      "width": 761,
+      "name": "group-filter:page fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "group-filter:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "comparison URL untouched",
+      "actual": "http://127.0.0.1:58352/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 761,
+      "name": "only two original GET requests",
+      "actual": 2
+    },
+    {
+      "width": 761,
+      "name": "request targets",
+      "actual": [
+        "accounts",
+        "roles"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "default six capabilities",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "name": "blue header white heading",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 1440,
+      "name": "checkbox native size",
+      "actual": {
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "width": 1440,
+      "name": "checkbox target label at least44",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "controls-default:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "controls-default:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "selected-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "selected-focus:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "role focus blue",
+      "actual": "rgb(66, 118, 223)"
+    },
+    {
+      "width": 1440,
+      "name": "role-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "role-focus:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "permission-facts:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "permission-facts:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "matrix-first:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "matrix-first:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "noncolor ownership text",
+      "actual": [
+        "拥有",
+        "无"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "same role no differences",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "same-role-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "same-role-empty:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "show all includes three capabilities",
+      "actual": 3
+    },
+    {
+      "width": 1440,
+      "name": "same-role-all:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "same-role-all:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "search no results",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "search maxlength80",
+      "actual": "80"
+    },
+    {
+      "width": 1440,
+      "name": "search-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "search-empty:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reset-focus:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reset-focus:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reset restores six",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "name": "reset now disabled",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "disabled neutral",
+      "actual": "rgb(232, 237, 244)"
+    },
+    {
+      "width": 1440,
+      "name": "reset-disabled:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reset-disabled:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "group two platform capabilities",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "name": "group-filter:page fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "group-filter:comparison fits",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "comparison URL untouched",
+      "actual": "http://127.0.0.1:58352/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 1440,
+      "name": "only two original GET requests",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "name": "request targets",
+      "actual": [
+        "accounts",
+        "roles"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "no page errors",
+      "actual": []
+    }
+  ],
+  "screenshots": [
+    {
+      "width": 390,
+      "state": "controls-default",
+      "file": "390-controls-default.png",
+      "sha256": "334c3b208445b67e45aaaae460ecaf802329101af6dbd73e512b79f51cf1cdd0"
+    },
+    {
+      "width": 390,
+      "state": "selected-focus",
+      "file": "390-selected-focus.png",
+      "sha256": "5cfffe503afa031e4a27b8a337328842052f8e86feb096925e3781ec4694253e"
+    },
+    {
+      "width": 390,
+      "state": "role-focus",
+      "file": "390-role-focus.png",
+      "sha256": "89036afa9264f2ff4b1de285370a7e9bf6f748ffaa3a3bff0140a36a8a7be6ba"
+    },
+    {
+      "width": 390,
+      "state": "permission-facts",
+      "file": "390-permission-facts.png",
+      "sha256": "46e862abba5da101e17ed9d1dad80e53665f2a6ae8286f9a484657a5472efb51"
+    },
+    {
+      "width": 390,
+      "state": "matrix-first",
+      "file": "390-matrix-first.png",
+      "sha256": "93cc4c4ff1f2912b5ef176a56b812cb6d68388a96053407b6a9cbd597b51ed5e"
+    },
+    {
+      "width": 390,
+      "state": "same-role-empty",
+      "file": "390-same-role-empty.png",
+      "sha256": "b839db6b4858010426d74039fd9416348a813dd5c7c94ad014f1271a79e40e73"
+    },
+    {
+      "width": 390,
+      "state": "same-role-all",
+      "file": "390-same-role-all.png",
+      "sha256": "eca89c21b71216dffe8f4946215fe04c60489089ee3811b00cf2ddb4543b33c0"
+    },
+    {
+      "width": 390,
+      "state": "search-empty",
+      "file": "390-search-empty.png",
+      "sha256": "eb72dd881b9330af4f674eb2c86e92b1aadc3e83a31be8bfb2166e87262351e8"
+    },
+    {
+      "width": 390,
+      "state": "reset-focus",
+      "file": "390-reset-focus.png",
+      "sha256": "0a9c5320b083ca17f9703cff8e28c37121b87e3f934ed1f768c1e6fcf92b1191"
+    },
+    {
+      "width": 390,
+      "state": "reset-disabled",
+      "file": "390-reset-disabled.png",
+      "sha256": "9cd882e2cfd2b1ccc1f2139e6a4052691b31ada3cf74c2525ae73c6ab9b96ce3"
+    },
+    {
+      "width": 390,
+      "state": "group-filter",
+      "file": "390-group-filter.png",
+      "sha256": "221771474802a6101bf80fd82c7034fa6b41ede066ca11462ef60c4714eb2d95"
+    },
+    {
+      "width": 760,
+      "state": "controls-default",
+      "file": "760-controls-default.png",
+      "sha256": "450fa51119118b9ce7c7d68005587f15b4bc741397ef9f32ea35928d79a78899"
+    },
+    {
+      "width": 760,
+      "state": "selected-focus",
+      "file": "760-selected-focus.png",
+      "sha256": "1868bcd8d000f3a9071cb83a04b37e2e4ee2062f2583fd57d1b7931a8265e5c1"
+    },
+    {
+      "width": 760,
+      "state": "role-focus",
+      "file": "760-role-focus.png",
+      "sha256": "62d69de4dab528f8a7f5036f6f8c708aa2d5103296747b06cad18903294ee1c9"
+    },
+    {
+      "width": 760,
+      "state": "permission-facts",
+      "file": "760-permission-facts.png",
+      "sha256": "00a8f8f8dcc6c66c6a0e431eac04a29effdf663cb174854fbbf17b5748604835"
+    },
+    {
+      "width": 760,
+      "state": "matrix-first",
+      "file": "760-matrix-first.png",
+      "sha256": "fff9aa218fa12e94635c06622266aa7f3ee549172d8fe1a16445117d74188927"
+    },
+    {
+      "width": 760,
+      "state": "same-role-empty",
+      "file": "760-same-role-empty.png",
+      "sha256": "e5cd9dbb4cc7e8496ba5b13037490b55a2879c6ed80b3e2fe801e88bca9b763b"
+    },
+    {
+      "width": 760,
+      "state": "same-role-all",
+      "file": "760-same-role-all.png",
+      "sha256": "ad7dd55183849eaead05236e8afe90f962c1824b4de0cf6439a489ca41deb079"
+    },
+    {
+      "width": 760,
+      "state": "search-empty",
+      "file": "760-search-empty.png",
+      "sha256": "a9b58ad65a2c733f3f6c0687fa6373bd22e3b9e6c0c8dcb860de90fbb0f05c1d"
+    },
+    {
+      "width": 760,
+      "state": "reset-focus",
+      "file": "760-reset-focus.png",
+      "sha256": "a42e5433c2c20d4b645a3dc4babfc1d4b896ed1102f0e3591da752e26542f761"
+    },
+    {
+      "width": 760,
+      "state": "reset-disabled",
+      "file": "760-reset-disabled.png",
+      "sha256": "cbb5f9e3434be31c83a49444bb4562f78c0054c47462a7d88ba2fd7bed60d30e"
+    },
+    {
+      "width": 760,
+      "state": "group-filter",
+      "file": "760-group-filter.png",
+      "sha256": "b1ba6c66d2b8a1066189b2bd4717832c5a52185d64073d0f4194404b7b46e98b"
+    },
+    {
+      "width": 761,
+      "state": "controls-default",
+      "file": "761-controls-default.png",
+      "sha256": "8973cc54901d2959f5c4599299822757093b6211e01655ac5ad0a16be2ee8cb7"
+    },
+    {
+      "width": 761,
+      "state": "selected-focus",
+      "file": "761-selected-focus.png",
+      "sha256": "3668f514f8f98298b4c96d445a8a29bdf89f29ff12b891ec7a1d18b9b16e6eb2"
+    },
+    {
+      "width": 761,
+      "state": "role-focus",
+      "file": "761-role-focus.png",
+      "sha256": "d1b175a4e8c45b489f0c52f589cb0d18063cfd8ecb41568c36016ef9b329ba29"
+    },
+    {
+      "width": 761,
+      "state": "permission-facts",
+      "file": "761-permission-facts.png",
+      "sha256": "253542c0ed1bd5087a29e50c6aecbd08aa9e4816e81e5c01d20d74581c6ab610"
+    },
+    {
+      "width": 761,
+      "state": "matrix-first",
+      "file": "761-matrix-first.png",
+      "sha256": "c786a5c19f8bf66def92c706b6f74805a7c68b3e099b5c19e1d60ff8a0e762a5"
+    },
+    {
+      "width": 761,
+      "state": "same-role-empty",
+      "file": "761-same-role-empty.png",
+      "sha256": "308a5b9e6f3862bbfdd9c25a5c09eac3ff8021db89bfb785d81e31f788f63b5c"
+    },
+    {
+      "width": 761,
+      "state": "same-role-all",
+      "file": "761-same-role-all.png",
+      "sha256": "aed202c97edffaf6fb548d6afd80d3b92f2cfda1c658105b760a3826eda286dd"
+    },
+    {
+      "width": 761,
+      "state": "search-empty",
+      "file": "761-search-empty.png",
+      "sha256": "4314796fadc846250a9c0369af82be3acde7e7cb89343df3b7e37d8f47161c2e"
+    },
+    {
+      "width": 761,
+      "state": "reset-focus",
+      "file": "761-reset-focus.png",
+      "sha256": "36a5331127c6f1b773df29d96eecbaa9e196aa11cc0fcfab175a42d5339f85c4"
+    },
+    {
+      "width": 761,
+      "state": "reset-disabled",
+      "file": "761-reset-disabled.png",
+      "sha256": "707275a951d4d799ddb01892fa527689b28deb75ac48f8ced8afc244ded6db5a"
+    },
+    {
+      "width": 761,
+      "state": "group-filter",
+      "file": "761-group-filter.png",
+      "sha256": "f0f3a308843108ee62d7866feb118e8bfa19a11a3fa04f058895ca14237f81da"
+    },
+    {
+      "width": 1440,
+      "state": "controls-default",
+      "file": "1440-controls-default.png",
+      "sha256": "ababa000811a55a974e6d06fb2eac09ffc373b9748e234febc59ab37054c518c"
+    },
+    {
+      "width": 1440,
+      "state": "selected-focus",
+      "file": "1440-selected-focus.png",
+      "sha256": "8b2f182d5574e38097af2b51941c42fdc942d15c1ec3d1e6640084ebec43832b"
+    },
+    {
+      "width": 1440,
+      "state": "role-focus",
+      "file": "1440-role-focus.png",
+      "sha256": "2ab002db3e17946937e6b1c5d35fab3c7acbf5c192aa8d276517bc7512424acc"
+    },
+    {
+      "width": 1440,
+      "state": "permission-facts",
+      "file": "1440-permission-facts.png",
+      "sha256": "a21098efbcb3a2e3d174a82eb2d470f3753c023e4938d20e6470a96628a8ffff"
+    },
+    {
+      "width": 1440,
+      "state": "matrix-first",
+      "file": "1440-matrix-first.png",
+      "sha256": "a21098efbcb3a2e3d174a82eb2d470f3753c023e4938d20e6470a96628a8ffff"
+    },
+    {
+      "width": 1440,
+      "state": "same-role-empty",
+      "file": "1440-same-role-empty.png",
+      "sha256": "d9eabd3752dfcb50c5662ce94cfa1d65ee82e647dcf6d438526d960687ab01fb"
+    },
+    {
+      "width": 1440,
+      "state": "same-role-all",
+      "file": "1440-same-role-all.png",
+      "sha256": "c982ff9e1f7908d8664385b10ed3af9352543d60242b16520d4ff7af97085e16"
+    },
+    {
+      "width": 1440,
+      "state": "search-empty",
+      "file": "1440-search-empty.png",
+      "sha256": "2e4163f02d22e287d2d5778351c513950e389631773a029628a7eea6c7c551e8"
+    },
+    {
+      "width": 1440,
+      "state": "reset-focus",
+      "file": "1440-reset-focus.png",
+      "sha256": "62ea732cfbe709f3ba547ace2ae09b73921afb53230af14606372f6ac4dc04f0"
+    },
+    {
+      "width": 1440,
+      "state": "reset-disabled",
+      "file": "1440-reset-disabled.png",
+      "sha256": "aa3e57ce2f022d96f929404b6c9bb2998729c6422e30717bce77983d03b46e41"
+    },
+    {
+      "width": 1440,
+      "state": "group-filter",
+      "file": "1440-group-filter.png",
+      "sha256": "f87efa536f769994151f1cf9631b6629eb7c5bc4affc75860911ae2944618eb4"
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    }
+  ],
+  "processesClosed": true
+}
