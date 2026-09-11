@@ -1,4 +1,13 @@
 import { test, expect } from "@playwright/test";
+test.beforeEach(async ({ page, baseURL }) => {
+  const origin = new URL(baseURL!).origin;
+  await page.route("**/*", (route) => {
+    const url = new URL(route.request().url());
+    return url.origin === origin && !url.pathname.startsWith("/api/")
+      ? route.continue()
+      : route.abort();
+  });
+});
 const navigation = {
     shell: "platform_admin",
     organization_id: null,
@@ -123,11 +132,11 @@ test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visu
     }),
   );
   await page.goto("/platform-admin/providers/adapters");
-  await expect(page.getByRole("heading", { name: "适配器运行时", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "采集程序", level: 1 })).toBeVisible();
   await expect(page.getByText("统一采集、标准化与健康检查合同")).toBeVisible();
   const semanticText = await page.evaluate(() => {
     const probe = document.createElement("span");
-    probe.style.color = "var(--so-text)";
+    probe.style.color = "var(--p47-ink)";
     document.body.append(probe);
     const expected = getComputedStyle(probe).color,
       actual = [
@@ -158,7 +167,11 @@ test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visu
   } else {
     await expect(page.getByText("尚未登记适配器")).toBeVisible();
     await expect(page.getByText(/连续失败 3 \/ 阈值 3/)).toBeVisible();
-    await page.getByRole("button", { name: "健康检查" }).last().click();
+    await page
+      .locator(".adapter-table-wrap tbody tr")
+      .filter({ hasText: "登录态商品来源" })
+      .getByRole("button", { name: "健康检查", exact: true })
+      .click();
     await expect(page.getByRole("link", { name: "前往解除暂停" })).toBeVisible();
   }
   await expect(page.getByRole("status")).toContainText("健康检查通过");
@@ -178,6 +191,7 @@ test("M03-03.A08/A16 filters and empty results are explicit", async ({ page }, t
     }),
   );
   await page.goto("/platform-admin/providers/adapters");
+  await page.getByText("更多筛选与排序", { exact: true }).click();
   await page.getByLabel("接入模式").selectOption("manual");
   await expect(page.getByRole("heading", { name: "没有符合筛选条件的适配器" })).toBeVisible();
   await page.getByRole("button", { name: "清除筛选" }).click();
@@ -209,6 +223,7 @@ for (const cause of ["query", "provider-status", "registration", "combined"] as 
     });
     await page.goto("/platform-admin/providers/adapters");
     await expect(page.getByText("2 个结果", { exact: true })).toBeVisible();
+    await page.getByText("更多筛选与排序", { exact: true }).click();
     await page.getByRole("combobox", { name: "排序", exact: true }).selectOption("recent");
     if (cause === "query" || cause === "combined")
       await page.getByLabel("搜索来源", { exact: true }).fill("no-such-adapter");
@@ -277,6 +292,7 @@ test("adapter catalog search, registration filter, reset and pagination bound th
   ).toBeVisible();
   await page.getByRole("button", { name: "重置" }).click();
   await expect(page.getByText("45 个结果")).toBeVisible();
+  await page.getByText("更多筛选与排序", { exact: true }).click();
   await page.getByLabel("登记状态").selectOption("unregistered");
   await expect(page.getByText("15 个结果")).toBeVisible();
 });

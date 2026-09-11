@@ -1,3 +1,4 @@
+import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -6,7 +7,8 @@ import { parse } from "@vue/compiler-sfc";
 import { providerPagePreview } from "../../scripts/lib/ui-phase2-provider-page-preview.mjs";
 import { historicalProviderFocusSource } from "../../scripts/lib/ui-phase2-provider-focus-baseline.mjs";
 
-const read = (f) => historicalProviderFocusSource(f, readFileSync(f, "utf8"));
+const read = (f) =>
+  historicalProviderFocusSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p46-provider-detail-vue-preview";
 const source = "apps/web/src/components/ProviderRegistry.vue";

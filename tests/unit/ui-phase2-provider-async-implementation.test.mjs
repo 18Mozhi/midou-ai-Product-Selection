@@ -1,3 +1,4 @@
+import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -10,7 +11,8 @@ import {
   providerAsyncRevisions,
 } from "../../scripts/lib/ui-phase2-provider-async-baseline.mjs";
 
-const read = (f) => historicalProviderFeedbackSource(f, readFileSync(f, "utf8"));
+const read = (f) =>
+  historicalProviderFeedbackSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = "apps/web/src/components/ProviderRegistry.vue",
   current = read(file),

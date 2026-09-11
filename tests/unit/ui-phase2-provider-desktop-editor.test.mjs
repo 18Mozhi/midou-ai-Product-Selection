@@ -1,3 +1,4 @@
+import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -11,7 +12,8 @@ const root = "output/playwright/p46-desktop-editor";
 const preview =
   "design-plans/ui-phase-2-2026-09-07/implementation/provider-desktop-editor-preview.css";
 const registry = "apps/web/src/components/ProviderRegistry.vue";
-const read = (f) => historicalProviderSummarySource(f, readFileSync(f, "utf8"));
+const read = (f) =>
+  historicalProviderSummarySource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const evidence = (mode) => JSON.parse(read(`${root}/${mode}/evidence.json`));
 

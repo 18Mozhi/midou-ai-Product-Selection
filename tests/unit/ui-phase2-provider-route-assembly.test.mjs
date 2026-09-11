@@ -1,3 +1,4 @@
+import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -7,7 +8,8 @@ import { historicalProviderKeyboardSource } from "../../scripts/lib/ui-phase2-pr
 import { providerPagePreview } from "../../scripts/lib/ui-phase2-provider-page-preview.mjs";
 
 // Approved assembly is immutable historical evidence; the keyboard suite binds raw current sources.
-const read = (f) => historicalProviderKeyboardSource(f, readFileSync(f, "utf8"));
+const read = (f) =>
+  historicalProviderKeyboardSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const folder = "output/playwright/p46-route-assembly-review";
 const e = JSON.parse(read(folder + "/evidence.json"));

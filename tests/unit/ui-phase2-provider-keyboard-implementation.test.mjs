@@ -1,3 +1,4 @@
+import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -11,7 +12,8 @@ import {
 import { providerPagePreview } from "../../scripts/lib/ui-phase2-provider-page-preview.mjs";
 
 // Preserve the keyboard-only capture; the structure suite binds raw current sources.
-const read = (f) => historicalProviderStructureSource(f, readFileSync(f, "utf8"));
+const read = (f) =>
+  historicalProviderStructureSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = "apps/web/src/components/ProviderRegistry.vue";
 const current = read(file);

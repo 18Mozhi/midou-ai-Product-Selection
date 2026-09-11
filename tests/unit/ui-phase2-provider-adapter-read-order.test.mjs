@@ -1,3 +1,4 @@
+import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import { historicalAdapterReadSource } from "../../scripts/lib/ui-phase2-adapter-read-baseline.mjs";
 import assert from "node:assert/strict";
@@ -10,7 +11,7 @@ import { ref, computed } from "vue";
 import { adapterReadRevision } from "../../scripts/lib/ui-phase2-adapter-read-baseline.mjs";
 
 const file = adapterReadRevision.file;
-const source = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const source = historicalAdapterCSource(file, readFileSync(file, "utf8")).replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const old = historicalAdapterReadSource(file, source);
 const row = { id: "source-a", name: "来源A", health_status: "ready" };
@@ -223,7 +224,11 @@ test("P47 read-order actual browser evidence binds current raw files and exact48
   assert.equal(Object.keys(evidence.sourceHashes).length, 166);
   assert.equal(evidence.processesClosed, true);
   for (const [f, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(readFileSync(f, "utf8").replaceAll("\r\n", "\n")), sha, f);
+    assert.equal(
+      hash(historicalAdapterCSource(f, readFileSync(f, "utf8")).replaceAll("\r\n", "\n")),
+      sha,
+      f,
+    );
   assert.deepEqual(
     readdirSync(evidenceRoot).sort(),
     [...evidence.screenshots.map((s) => s.file), "evidence.json", "index.html"].sort(),

@@ -1,3 +1,4 @@
+import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -13,7 +14,8 @@ import {
 } from "../../scripts/lib/ui-phase2-provider-field-baseline.mjs";
 
 // Bind the immutable field-only capture, before modal isolation was connected.
-const read = (f) => historicalProviderIsolationSource(f, readFileSync(f, "utf8"));
+const read = (f) =>
+  historicalProviderIsolationSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = providerFieldRevision.file,
   source = read(file),

@@ -5,6 +5,9 @@ import ResponsiveDataView from "./ResponsiveDataView.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../provider-adapters.css";
 import "../provider-adapters-contrast.css";
+import "../provider-adapters-c-page.css";
+import "../provider-adapters-c-detail.css";
+import "../provider-adapters-c-feedback.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface AdapterSummary {
   id: string;
@@ -253,12 +256,12 @@ async function probe(item: AdapterSummary, event?: MouseEvent) {
 onMounted(load);
 </script>
 <template>
-  <section class="adapter-center">
+  <section class="adapter-center adapter-center--c">
     <header class="adapter-heading">
       <div>
         <p>来源适配器运行状态</p>
-        <h2>适配器运行时</h2>
-        <span>统一采集、标准化与健康检查合同；真实实现按来源代码注册。</span>
+        <h2>采集诊断目录</h2>
+        <span>健康检查只验证当前探针，不代表采集成功，也不会自动解除来源暂停。</span>
       </div>
       <div class="adapter-heading-actions">
         <small v-if="lastUpdatedAt">最近刷新 {{ lastUpdatedAt.slice(11, 19) }}</small>
@@ -271,6 +274,7 @@ onMounted(load);
     <UiStatePanel
       v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
+      :primary-label="state === 'loading' ? '' : '重新读取状态'"
       :request-id="requestId"
       @primary="load"
     />
@@ -303,51 +307,57 @@ onMounted(load);
             placeholder="名称、代码、版本或错误码"
             autocomplete="off"
         /></label>
-        <label
-          >接入模式<select v-model="mode">
-            <option value="all">全部模式</option>
-            <option
-              v-for="value in [
-                'public_page',
-                'public_rss',
-                'authenticated_browser',
-                'import',
-                'manual',
-              ]"
-              :key="value"
-              :value="value"
+        <button type="button" class="adapter-reset" @click="resetFilters">重置</button>
+        <details class="adapter-advanced">
+          <summary>更多筛选与排序</summary>
+          <div class="adapter-advanced-fields">
+            <label
+              >接入模式<select v-model="mode">
+                <option value="all">全部模式</option>
+                <option
+                  v-for="value in [
+                    'public_page',
+                    'public_rss',
+                    'authenticated_browser',
+                    'import',
+                    'manual',
+                  ]"
+                  :key="value"
+                  :value="value"
+                >
+                  {{ accessModeText(value) }}
+                </option>
+              </select></label
+            ><label
+              >来源状态<select v-model="providerStatus">
+                <option value="all">全部状态</option>
+                <option value="enabled">已启用</option>
+                <option value="disabled">未启用</option>
+                <option value="draft">草稿</option>
+              </select></label
+            ><label
+              >登记状态<select v-model="registration">
+                <option value="all">全部状态</option>
+                <option value="registered">已登记</option>
+                <option value="unregistered">待登记</option>
+              </select></label
+            ><label
+              >健康状态<select v-model="health">
+                <option value="all">全部状态</option>
+                <option value="unknown">待检查</option>
+                <option value="ready">健康</option>
+                <option value="degraded">降级</option>
+                <option value="blocked">受阻</option>
+              </select></label
+            ><label
+              >排序<select v-model="sort">
+                <option value="attention">需关注优先</option>
+                <option value="name">名称顺序</option>
+                <option value="recent">最近检查</option>
+              </select></label
             >
-              {{ accessModeText(value) }}
-            </option>
-          </select></label
-        ><label
-          >来源状态<select v-model="providerStatus">
-            <option value="all">全部状态</option>
-            <option value="enabled">已启用</option>
-            <option value="disabled">未启用</option>
-            <option value="draft">草稿</option>
-          </select></label
-        ><label
-          >登记状态<select v-model="registration">
-            <option value="all">全部状态</option>
-            <option value="registered">已登记</option>
-            <option value="unregistered">待登记</option>
-          </select></label
-        ><label
-          >健康状态<select v-model="health">
-            <option value="all">全部状态</option>
-            <option value="unknown">待检查</option>
-            <option value="ready">健康</option>
-            <option value="degraded">降级</option>
-            <option value="blocked">受阻</option>
-          </select></label
-        ><label
-          >排序<select v-model="sort">
-            <option value="attention">需关注优先</option>
-            <option value="name">名称顺序</option>
-            <option value="recent">最近检查</option>
-          </select></label
-        ><button type="button" class="adapter-reset" @click="resetFilters">重置</button>
+          </div>
+        </details>
         <span>{{ filtered.length }} 个结果</span>
       </div>
       <section v-if="state === 'empty'" class="adapter-empty">
@@ -368,18 +378,15 @@ onMounted(load);
         :detail-title="(item) => item.name"
       >
         <template #desktop>
-          <div class="adapter-table-wrap">
+          <div class="adapter-table-wrap" role="region" aria-label="来源适配器诊断表" tabindex="0">
             <table>
               <thead>
                 <tr>
-                  <th>来源</th>
-                  <th>运行方式</th>
-                  <th>实现</th>
-                  <th>健康</th>
-                  <th>24 小时运行</th>
-                  <th>错误预算与恢复门</th>
-                  <th>最近检查</th>
-                  <th></th>
+                  <th>程序与来源</th>
+                  <th>健康探针</th>
+                  <th>24 小时实际采集</th>
+                  <th>暂停与恢复</th>
+                  <th>操作</th>
                 </tr>
               </thead>
               <tbody>
@@ -387,12 +394,10 @@ onMounted(load);
                   <td>
                     <strong>{{ item.name }}</strong
                     ><small>{{ providerStatusText(item.provider_status) }}</small>
-                  </td>
-                  <td>
+
                     <span>{{ accessModeText(item.access_mode) }}</span
                     ><small>采集 · 标准化 · 健康检查</small>
-                  </td>
-                  <td>
+
                     <b :data-registered="item.adapter_registered">{{
                       item.adapter_registered ? "已登记" : "待登记"
                     }}</b>
@@ -404,6 +409,17 @@ onMounted(load);
                       >{{ errorText(item.last_error_code) }} · 连续
                       {{ item.consecutive_failures }} 次</small
                     >
+
+                    <div class="adapter-check-facts">
+                      {{
+                        item.last_checked_at
+                          ? item.last_checked_at.slice(0, 19).replace("T", " ")
+                          : "尚未检查"
+                      }}
+                      <small v-if="item.last_latency_ms !== null"
+                        >{{ item.last_latency_ms }} ms · 版本 {{ item.version }}</small
+                      >
+                    </div>
                   </td>
                   <td>
                     <b :data-runtime-category="item.latest_runtime_category">{{
@@ -436,16 +452,6 @@ onMounted(load);
                     >
                   </td>
                   <td>
-                    {{
-                      item.last_checked_at
-                        ? item.last_checked_at.slice(0, 19).replace("T", " ")
-                        : "尚未检查"
-                    }}
-                    <small v-if="item.last_latency_ms !== null"
-                      >{{ item.last_latency_ms }} ms · 版本 {{ item.version }}</small
-                    >
-                  </td>
-                  <td>
                     <button type="button" :disabled="probing !== null" @click="probe(item)">
                       {{ probing === item.id ? "检查中…" : "健康检查" }}
                     </button>
@@ -462,136 +468,164 @@ onMounted(load);
               >{{ accessModeText(row.access_mode) }} ·
               {{ row.adapter_registered ? "已登记" : "待登记" }}</small
             >
+            <small class="adapter-mobile-runtime"
+              >{{ runtimeCategoryText(row.latest_runtime_category) }} ·
+              {{ row.runtime_sample_count_24h }} 个样本</small
+            ><small class="adapter-mobile-circuit">{{ circuitText(row) }}</small>
           </span>
         </template>
         <template #detail="{ row }">
-          <dl>
-            <div>
-              <dt>运行方式</dt>
-              <dd>{{ accessModeText(row.access_mode) }}</dd>
-            </div>
-            <div>
-              <dt>来源状态</dt>
-              <dd>{{ providerStatusText(row.provider_status) }}</dd>
-            </div>
-            <div>
-              <dt>适配器</dt>
-              <dd>{{ row.adapter_registered ? "已登记" : "待登记" }}</dd>
-            </div>
-            <div>
-              <dt>健康状态</dt>
-              <dd>{{ healthText(row.health_status) }}</dd>
-            </div>
-            <div>
-              <dt>最近运行类别</dt>
-              <dd>{{ runtimeCategoryText(row.latest_runtime_category) }}</dd>
-            </div>
-            <div>
-              <dt>24 小时成功率</dt>
-              <dd>
-                {{ percentText(row.runtime_success_rate_basis_points_24h) }}（{{
-                  row.runtime_sample_count_24h
-                }}
-                个样本）
-              </dd>
-            </div>
-            <div>
-              <dt>24 小时 P95</dt>
-              <dd>{{ row.runtime_duration_p95_ms_24h ?? "—" }} ms</dd>
-            </div>
-            <div>
-              <dt>错误预算</dt>
-              <dd>
-                连续失败 {{ row.runtime_consecutive_failures }} / 阈值
-                {{ row.runtime_failure_threshold }}，剩余 {{ row.runtime_error_budget_remaining }}
-              </dd>
-            </div>
-            <div>
-              <dt>来源运行状态</dt>
-              <dd>{{ circuitText(row) }}；{{ recoveryText(row) }}</dd>
-            </div>
-            <div>
-              <dt>运行问题分布</dt>
-              <dd>
-                网络 {{ row.runtime_network_failure_count_24h }} · 解析
-                {{ row.runtime_parser_failure_count_24h }} · 登录
-                {{ row.runtime_login_failure_count_24h }} · 空结果
-                {{ row.runtime_empty_success_count_24h }}
-              </dd>
-            </div>
-            <div>
-              <dt>最近检查</dt>
-              <dd>
-                {{
-                  row.last_checked_at
-                    ? row.last_checked_at.slice(0, 19).replace("T", " ")
-                    : "尚未检查"
-                }}
-              </dd>
-            </div>
-            <div>
-              <dt>检查结果</dt>
-              <dd>{{ errorText(row.last_error_code) }}</dd>
-            </div>
-          </dl>
-          <button type="button" :disabled="probing !== null" @click="probe(row, $event)">
-            {{ probing === row.id ? "检查中…" : "执行健康检查" }}
-          </button>
-          <div class="adapter-detail-feedback">
-            <p role="status" aria-atomic="true" tabindex="-1">
-              {{
-                probing === row.id
-                  ? "正在检查此来源，请稍候。"
-                  : probing !== null
-                    ? "另一来源正在检查，完成后可检查此来源。"
-                    : probeFeedback?.providerId === row.id
-                      ? probeFeedback.message
-                      : ""
-              }}
+          <div class="p47-diagnostic-detail">
+            <p class="p47-detail-boundary">
+              健康检查只验证当前探针，不代表采集成功，也不会自动解除来源暂停。
             </p>
-            <details v-if="probeFeedback?.providerId === row.id && probeFeedback.requestId">
-              <summary>本次检查追踪</summary>
-              <code>{{ probeFeedback.requestId }}</code>
+            <section class="p47-detail-section">
+              <h3>来源身份</h3>
+              <dl>
+                <div>
+                  <dt>运行方式</dt>
+                  <dd>{{ accessModeText(row.access_mode) }}</dd>
+                </div>
+                <div>
+                  <dt>来源状态</dt>
+                  <dd>{{ providerStatusText(row.provider_status) }}</dd>
+                </div>
+                <div>
+                  <dt>适配器</dt>
+                  <dd>{{ row.adapter_registered ? "已登记" : "待登记" }}</dd>
+                </div>
+              </dl>
+            </section>
+            <section class="p47-detail-section">
+              <h3>健康探针</h3>
+              <dl>
+                <div>
+                  <dt>健康状态</dt>
+                  <dd>{{ healthText(row.health_status) }}</dd>
+                </div>
+                <div>
+                  <dt>最近检查</dt>
+                  <dd>
+                    {{
+                      row.last_checked_at
+                        ? row.last_checked_at.slice(0, 19).replace("T", " ")
+                        : "尚未检查"
+                    }}
+                  </dd>
+                </div>
+                <div>
+                  <dt>检查结果</dt>
+                  <dd>{{ errorText(row.last_error_code) }}</dd>
+                </div>
+              </dl>
+              <button type="button" :disabled="probing !== null" @click="probe(row, $event)">
+                {{ probing === row.id ? "检查中…" : "执行健康检查" }}
+              </button>
+              <div class="adapter-detail-feedback">
+                <p role="status" aria-atomic="true" tabindex="-1">
+                  {{
+                    probing === row.id
+                      ? "正在检查此来源，请稍候。"
+                      : probing !== null
+                        ? "另一来源正在检查，完成后可检查此来源。"
+                        : probeFeedback?.providerId === row.id
+                          ? probeFeedback.message
+                          : ""
+                  }}
+                </p>
+                <details v-if="probeFeedback?.providerId === row.id && probeFeedback.requestId">
+                  <summary>本次检查追踪</summary>
+                  <code>{{ probeFeedback.requestId }}</code>
+                </details>
+              </div>
+            </section>
+            <section class="p47-detail-section">
+              <h3>24 小时实际采集</h3>
+              <dl>
+                <div>
+                  <dt>最近运行类别</dt>
+                  <dd>{{ runtimeCategoryText(row.latest_runtime_category) }}</dd>
+                </div>
+                <div>
+                  <dt>24 小时成功率</dt>
+                  <dd>
+                    {{ percentText(row.runtime_success_rate_basis_points_24h) }}（{{
+                      row.runtime_sample_count_24h
+                    }}
+                    个样本）
+                  </dd>
+                </div>
+                <div>
+                  <dt>24 小时 P95</dt>
+                  <dd>{{ row.runtime_duration_p95_ms_24h ?? "—" }} ms</dd>
+                </div>
+                <div>
+                  <dt>运行问题分布</dt>
+                  <dd>
+                    网络 {{ row.runtime_network_failure_count_24h }} · 解析
+                    {{ row.runtime_parser_failure_count_24h }} · 登录
+                    {{ row.runtime_login_failure_count_24h }} · 空结果
+                    {{ row.runtime_empty_success_count_24h }}
+                  </dd>
+                </div>
+              </dl>
+            </section>
+            <section class="p47-detail-section">
+              <h3>暂停与恢复</h3>
+              <dl>
+                <div>
+                  <dt>错误预算</dt>
+                  <dd>
+                    连续失败 {{ row.runtime_consecutive_failures }} / 阈值
+                    {{ row.runtime_failure_threshold }}，剩余
+                    {{ row.runtime_error_budget_remaining }}
+                  </dd>
+                </div>
+                <div>
+                  <dt>来源运行状态</dt>
+                  <dd>{{ circuitText(row) }}；{{ recoveryText(row) }}</dd>
+                </div>
+              </dl>
+              <RouterLink
+                v-if="row.runtime_circuit_state === 'open' && row.runtime_recovery_gate_met"
+                to="/platform-admin/crawler-scheduler"
+                >前往采集调度解除暂停</RouterLink
+              >
+            </section>
+            <details>
+              <summary>技术详情</summary>
+              <dl>
+                <div>
+                  <dt>来源 ID</dt>
+                  <dd>{{ row.id }}</dd>
+                </div>
+                <div>
+                  <dt>来源代码</dt>
+                  <dd>{{ row.code }}</dd>
+                </div>
+                <div>
+                  <dt>接入模式代码</dt>
+                  <dd>{{ row.access_mode }}</dd>
+                </div>
+                <div>
+                  <dt>适配器版本</dt>
+                  <dd>{{ row.adapter_version ?? "—" }}</dd>
+                </div>
+                <div>
+                  <dt>错误码</dt>
+                  <dd>{{ row.last_error_code ?? "—" }}</dd>
+                </div>
+                <div>
+                  <dt>运行错误码</dt>
+                  <dd>{{ row.runtime_last_error_code ?? "—" }}</dd>
+                </div>
+                <div>
+                  <dt>暂停时间</dt>
+                  <dd>{{ row.runtime_circuit_opened_at ?? "—" }}</dd>
+                </div>
+              </dl>
             </details>
           </div>
-          <RouterLink
-            v-if="row.runtime_circuit_state === 'open' && row.runtime_recovery_gate_met"
-            to="/platform-admin/crawler-scheduler"
-            >前往采集调度解除暂停</RouterLink
-          >
-          <details>
-            <summary>技术详情</summary>
-            <dl>
-              <div>
-                <dt>来源 ID</dt>
-                <dd>{{ row.id }}</dd>
-              </div>
-              <div>
-                <dt>来源代码</dt>
-                <dd>{{ row.code }}</dd>
-              </div>
-              <div>
-                <dt>接入模式代码</dt>
-                <dd>{{ row.access_mode }}</dd>
-              </div>
-              <div>
-                <dt>适配器版本</dt>
-                <dd>{{ row.adapter_version ?? "—" }}</dd>
-              </div>
-              <div>
-                <dt>错误码</dt>
-                <dd>{{ row.last_error_code ?? "—" }}</dd>
-              </div>
-              <div>
-                <dt>运行错误码</dt>
-                <dd>{{ row.runtime_last_error_code ?? "—" }}</dd>
-              </div>
-              <div>
-                <dt>暂停时间</dt>
-                <dd>{{ row.runtime_circuit_opened_at ?? "—" }}</dd>
-              </div>
-            </dl>
-          </details>
         </template>
       </ResponsiveDataView>
       <nav v-if="filtered.length" class="adapter-pagination" aria-label="来源适配器分页">
@@ -609,7 +643,7 @@ onMounted(load);
       <aside class="adapter-boundary">
         <strong>运行边界</strong>
         <p>
-          API、RSS、公开页、授权页、导入与手工来源共用同一适配器合同；请求字段来自已注册来源定义，任务租约与凭证使用均由后端控制。
+          API、RSS、公开页、授权页、导入与手工来源共用同一适配器合同；请求字段来自已注册来源定义，任务租约与凭证使用均由后端控制。统一采集、标准化与健康检查合同；真实实现按来源代码注册。
         </p>
       </aside>
     </section>

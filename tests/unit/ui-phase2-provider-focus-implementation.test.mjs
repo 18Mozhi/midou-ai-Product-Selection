@@ -1,3 +1,4 @@
+import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import { historicalProviderAsyncSource } from "../../scripts/lib/ui-phase2-provider-async-baseline.mjs";
 import assert from "node:assert/strict";
@@ -13,7 +14,8 @@ import {
   providerFocusRevision,
 } from "../../scripts/lib/ui-phase2-provider-focus-baseline.mjs";
 
-const read = (f) => historicalProviderAsyncSource(f, readFileSync(f, "utf8"));
+const read = (f) =>
+  historicalProviderAsyncSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const file = providerFocusRevision.file,
   current = read(file);

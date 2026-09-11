@@ -1,3 +1,4 @@
+import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -10,7 +11,8 @@ import {
   providerIsolationRevision,
 } from "../../scripts/lib/ui-phase2-provider-isolation-baseline.mjs";
 
-const read = (f) => historicalProviderSummarySource(f, readFileSync(f, "utf8"));
+const read = (f) =>
+  historicalProviderSummarySource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = providerIsolationRevision.file,
   source = read(file),
