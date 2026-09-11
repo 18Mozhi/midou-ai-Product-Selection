@@ -1,0 +1,166 @@
+body.p49-acceptance-read-review .p49-read__state {
+  position: relative;
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) auto;
+  gap: 22px;
+  align-items: center;
+  min-height: 260px;
+  margin-top: 28px;
+  overflow: hidden;
+  padding: clamp(24px, 4vw, 52px);
+  border: 1px solid #dbe2ed;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 20px 60px rgba(23, 48, 83, 0.08);
+}
+
+body.p49-acceptance-read-review .p49-read__state::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 7px;
+  background: #0756d8;
+}
+
+body.p49-acceptance-read-review .p49-read__state[data-kind="error"]::before {
+  background: #c33b32;
+}
+
+body.p49-acceptance-read-review .p49-read__state > span {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border-radius: 50%;
+  background: #e7efff;
+  color: #0756d8;
+  font-weight: 800;
+}
+
+body.p49-acceptance-read-review .p49-read__state[data-kind="error"] > span {
+  background: #ffebe8;
+  color: #a72a22;
+}
+
+body.p49-acceptance-read-review .p49-read__state > div {
+  max-width: 720px;
+}
+
+body.p49-acceptance-read-review .p49-read__state > div > p:first-child,
+body.p49-acceptance-read-review .p49-read__notice span {
+  color: #0756d8;
+  font-size: 12px;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+}
+
+body.p49-acceptance-read-review .p49-read__state[data-kind="error"] > div > p:first-child,
+body.p49-acceptance-read-review .p49-read__notice[data-tone="danger"] span {
+  color: #a72a22;
+}
+
+body.p49-acceptance-read-review .p49-read__state h3 {
+  margin-top: 7px;
+  color: #172033;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+body.p49-acceptance-read-review .p49-read__state h3 + p {
+  margin-top: 12px;
+  color: #60708a;
+  line-height: 1.75;
+}
+
+body.p49-acceptance-read-review .p49-read__state details {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid #dbe2ed;
+}
+
+body.p49-acceptance-read-review .p49-read__state details p,
+body.p49-acceptance-read-review .p49-read__state details code {
+  margin-top: 8px;
+  color: #60708a;
+  line-height: 1.6;
+}
+
+body.p49-acceptance-read-review .p49-read__state > a,
+body.p49-acceptance-read-review .p49-read__state > button {
+  min-width: 150px;
+  border-color: #0756d8;
+  background: #0756d8;
+  color: #fff;
+}
+
+body.p49-acceptance-read-review .p49-read__state[data-kind="error"] > button {
+  border-color: #a72a22;
+  background: #fff;
+  color: #a72a22;
+}
+
+body.p49-acceptance-read-review .p49-read__notice {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 22px;
+  align-items: center;
+  margin-top: 20px;
+  padding: 17px 20px;
+  border: 1px solid #dbe2ed;
+  border-left: 5px solid #1a7d50;
+  border-radius: 7px;
+  background: #fff;
+}
+
+body.p49-acceptance-read-review .p49-read__notice[data-tone="danger"] {
+  border-color: #ebc6c2;
+  border-left-color: #c33b32;
+  background: #fffafa;
+}
+
+body.p49-acceptance-read-review .p49-read__notice strong {
+  display: block;
+  margin-top: 4px;
+  color: #172033;
+  font-size: 17px;
+}
+
+body.p49-acceptance-read-review .p49-read__notice p {
+  margin-top: 5px;
+  color: #60708a;
+  line-height: 1.6;
+}
+
+body.p49-acceptance-read-review .p49-read__notice > button {
+  min-width: 130px;
+  border-color: #a72a22;
+  background: #fff;
+  color: #a72a22;
+}
+
+@media (max-width: 760px) {
+  body.p49-acceptance-read-review .p49-read__state {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding: 26px 20px 24px;
+  }
+
+  body.p49-acceptance-read-review .p49-read__state > a,
+  body.p49-acceptance-read-review .p49-read__state > button,
+  body.p49-acceptance-read-review .p49-read__notice > button {
+    width: 100%;
+  }
+
+  body.p49-acceptance-read-review .p49-read__notice {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+@media (forced-colors: active) {
+  body.p49-acceptance-read-review .p49-read__state,
+  body.p49-acceptance-read-review .p49-read__notice {
+    border: 2px solid CanvasText;
+  }
+}
