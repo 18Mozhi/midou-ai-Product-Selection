@@ -1,0 +1,2121 @@
+{
+  "kind": "P44-PAGE-BOUNDARY-VUE-PREVIEW-r1",
+  "variant": "baseline",
+  "approval": "pending-user-review",
+  "scope": "1200/1201 breakpoint and six keyboard focus targets only. Independent supplement using current Vue and unchanged assembled C review CSS; original72 images preserved. Original overview and roles plus explicit no-role row derived from the original user, and synthetic long/empty variants; global summary untouched. GET-only intercepted API, no real accounts or authorization. Comparison visuals assembled, original old matrix after role failure remains without explicit stale-matrix notice. Creation default/cancel only; no full App/NavigationShell/KeepAlive, write, database, theme/density or whole-page acceptance. All new composition images pending review; earlier scoped approvals remain separate.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminComparisonMobile.css": "9b74248f24827e8e1e4800b93090ef1fd680acaebf90754bc238680bebedddde",
+    "apps/web/src/components/PlatformAdminDirectoryMobile.css": "4c66844583a8a9711e29b0aa40d40b87ebd7409f53b64933d441b0c8bf46c82c",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-organization-actions.ts": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/admin-comparison-preview.css": "d0f92bb771f8f73da940c1762390db8e421850ee7899ddfbb716d46c0b787c43",
+    "design-plans/ui-phase-2-2026-09-07/implementation/admin-page-assembly-preview.css": "3f0fdf05e91ee0119882d1c7e9b431c4c44736aba6b7c5f40dc40f53f2a2b060",
+    "design-plans/ui-phase-2-2026-09-07/implementation/admin-page-preview.css": "8299e7e73042f87d93c29699282760b04eefac6282e33a889c679e3d08dee5fb",
+    "design-plans/ui-phase-2-2026-09-07/implementation/user-page-preview.css": "8b3d914287a2ae901483c86003f0a1caf0fe9e2796112f5ea374e80886c31c43",
+    "scripts/lib/ui-phase2-admin-page-assembly-preview.mjs": "761ccbabad133d1f6b0817d4a6ae56ad5aa384abb3784a011377082b5b4d78c9",
+    "scripts/lib/ui-phase2-admin-page-preview.mjs": "51e16811180d185790b6a5846177249f95e6a1441a7aed7382a181fa71baa6a1",
+    "scripts/lib/ui-phase2-user-page-preview.mjs": "f26a37092547e5866112e43d4248ca6e8dc504949263cb8fb8919aa3a336ae83",
+    "scripts/verify-ui-phase2-admin-page-boundary-preview.mjs": "4cc86eb31330f206e3ca4a62cad534d4762a13704e13987097d2611b63d79f42",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "38342328df211973700e916177faecc3cd1d40b7857ef52df544af90c5a792bb",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "7a7e7c3f33c49af35d402856438b0c3448ceabf351cd34a19a4819a3a1ec6dbe"
+  },
+  "checks": [
+    {
+      "width": 1200,
+      "name": "loading:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "loading:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "authorizable accounts include no-role user",
+      "actual": 2
+    },
+    {
+      "width": 1200,
+      "name": "global administrators from summary",
+      "actual": "2"
+    },
+    {
+      "width": 1200,
+      "name": "no-role text explicit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "current navigation",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1200,
+      "name": "assembly blue comparison header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 1200,
+      "name": "assembly neutral page background",
+      "actual": "rgb(238, 242, 247)"
+    },
+    {
+      "width": 1200,
+      "name": "assembly context placement",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "default:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "default-top:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "default-top:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "create:reached by Tab",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "create:focus visible",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "create:outline nonzero",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "create:outline solid",
+      "actual": "solid"
+    },
+    {
+      "width": 1200,
+      "name": "create:inside viewport",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "keyboard-create:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "keyboard-create:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "navigation:reached by Tab",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "navigation:focus visible",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "navigation:outline nonzero",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "navigation:outline solid",
+      "actual": "solid"
+    },
+    {
+      "width": 1200,
+      "name": "navigation:inside viewport",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "keyboard-navigation:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "keyboard-navigation:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "email:reached by Tab",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "email:focus visible",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "email:outline nonzero",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "email:outline solid",
+      "actual": "solid"
+    },
+    {
+      "width": 1200,
+      "name": "email:inside viewport",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "keyboard-email:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "keyboard-email:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "differences:reached by Tab",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "differences:focus visible",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "differences:outline nonzero",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "differences:outline solid",
+      "actual": "solid"
+    },
+    {
+      "width": 1200,
+      "name": "differences:inside viewport",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "keyboard-differences:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "keyboard-differences:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "left-role:reached by Tab",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "left-role:focus visible",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "left-role:outline nonzero",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "left-role:outline solid",
+      "actual": "solid"
+    },
+    {
+      "width": 1200,
+      "name": "left-role:inside viewport",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "keyboard-left-role:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "keyboard-left-role:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "comparison reset initially disabled",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "comparison reset enabled with search",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "reset:reached by Tab",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "reset:focus visible",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "reset:outline nonzero",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "reset:outline solid",
+      "actual": "solid"
+    },
+    {
+      "width": 1200,
+      "name": "reset:inside viewport",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "keyboard-reset:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "keyboard-reset:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "keyboard traversal no requests",
+      "actual": 2
+    },
+    {
+      "width": 1200,
+      "name": "keyboard traversal no URL changes",
+      "actual": "http://127.0.0.1:58208/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 1200,
+      "name": "directory:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "directory:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "initial comparison six differences",
+      "actual": 6
+    },
+    {
+      "width": 1200,
+      "name": "same role has zero differences",
+      "actual": 0
+    },
+    {
+      "width": 1200,
+      "name": "comparison-zero:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "comparison-zero:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "same role show-all has three capabilities",
+      "actual": 3
+    },
+    {
+      "width": 1200,
+      "name": "comparison-all:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "comparison-all:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "comparison search no result",
+      "actual": 0
+    },
+    {
+      "width": 1200,
+      "name": "comparison-search-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "comparison-search-empty:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "comparison resets six differences",
+      "actual": 6
+    },
+    {
+      "width": 1200,
+      "name": "comparison changes no URL",
+      "actual": "http://127.0.0.1:58208/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 1200,
+      "name": "comparison changes no request",
+      "actual": 2
+    },
+    {
+      "width": 1200,
+      "name": "filters:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "filters:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "email filter one no-role user",
+      "actual": 1
+    },
+    {
+      "width": 1200,
+      "name": "email query exact",
+      "actual": {
+        "query": "buyer"
+      }
+    },
+    {
+      "width": 1200,
+      "name": "unrelated query retained",
+      "actual": "p44"
+    },
+    {
+      "width": 1200,
+      "name": "global count not filtered count",
+      "actual": "2"
+    },
+    {
+      "width": 1200,
+      "name": "filtered-no-role:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "filtered-no-role:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "status and email exact",
+      "actual": {
+        "query": "buyer",
+        "status": "disabled"
+      }
+    },
+    {
+      "width": 1200,
+      "name": "filtered empty no records",
+      "actual": 0
+    },
+    {
+      "width": 1200,
+      "name": "filtered-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "filtered-empty:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "empty reset both query fields",
+      "actual": {}
+    },
+    {
+      "width": 1200,
+      "name": "reset restores two accounts",
+      "actual": 2
+    },
+    {
+      "width": 1200,
+      "name": "detail actual user identity",
+      "actual": "buyer@example.test"
+    },
+    {
+      "width": 1200,
+      "name": "detail remains native modal",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "detail-entry:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "detail-entry:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "detail closes without route change",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1200,
+      "name": "admin creation defaults operations role",
+      "actual": "platform_operations_admin"
+    },
+    {
+      "width": 1200,
+      "name": "creation cancel no request",
+      "actual": 9
+    },
+    {
+      "width": 1200,
+      "name": "long-multiple-roles:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "long-multiple-roles:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "role failure retains accounts",
+      "actual": 2
+    },
+    {
+      "width": 1200,
+      "name": "role failure retains old comparison",
+      "actual": 6
+    },
+    {
+      "width": 1200,
+      "name": "role failure notice visible",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "old matrix notice not separately exposed",
+      "actual": 0
+    },
+    {
+      "width": 1200,
+      "name": "roles-refresh-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "roles-refresh-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "account failure retains records",
+      "actual": 2
+    },
+    {
+      "width": 1200,
+      "name": "accounts-refresh-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "accounts-refresh-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "first account failure hides directory",
+      "actual": 0
+    },
+    {
+      "width": 1200,
+      "name": "accounts-first-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "accounts-first-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "unfiltered empty title",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "no-accounts:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "no-accounts:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "empty role directory keeps accounts",
+      "actual": 2
+    },
+    {
+      "width": 1200,
+      "name": "empty role directory hides comparison",
+      "actual": 0
+    },
+    {
+      "width": 1200,
+      "name": "no-role-directory:page fits",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "no-role-directory:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1200,
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1200,
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1200,
+      "name": "all requests GET",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "loading:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "loading:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "authorizable accounts include no-role user",
+      "actual": 2
+    },
+    {
+      "width": 1201,
+      "name": "global administrators from summary",
+      "actual": "2"
+    },
+    {
+      "width": 1201,
+      "name": "no-role text explicit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "current navigation",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1201,
+      "name": "assembly blue comparison header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 1201,
+      "name": "assembly neutral page background",
+      "actual": "rgb(238, 242, 247)"
+    },
+    {
+      "width": 1201,
+      "name": "assembly context placement",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "default:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "default:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "default-top:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "default-top:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "create:reached by Tab",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "create:focus visible",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "create:outline nonzero",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "create:outline solid",
+      "actual": "solid"
+    },
+    {
+      "width": 1201,
+      "name": "create:inside viewport",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "keyboard-create:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "keyboard-create:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "navigation:reached by Tab",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "navigation:focus visible",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "navigation:outline nonzero",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "navigation:outline solid",
+      "actual": "solid"
+    },
+    {
+      "width": 1201,
+      "name": "navigation:inside viewport",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "keyboard-navigation:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "keyboard-navigation:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "email:reached by Tab",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "email:focus visible",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "email:outline nonzero",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "email:outline solid",
+      "actual": "solid"
+    },
+    {
+      "width": 1201,
+      "name": "email:inside viewport",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "keyboard-email:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "keyboard-email:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "differences:reached by Tab",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "differences:focus visible",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "differences:outline nonzero",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "differences:outline solid",
+      "actual": "solid"
+    },
+    {
+      "width": 1201,
+      "name": "differences:inside viewport",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "keyboard-differences:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "keyboard-differences:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "left-role:reached by Tab",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "left-role:focus visible",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "left-role:outline nonzero",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "left-role:outline solid",
+      "actual": "solid"
+    },
+    {
+      "width": 1201,
+      "name": "left-role:inside viewport",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "keyboard-left-role:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "keyboard-left-role:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "comparison reset initially disabled",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "comparison reset enabled with search",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "reset:reached by Tab",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "reset:focus visible",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "reset:outline nonzero",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "reset:outline solid",
+      "actual": "solid"
+    },
+    {
+      "width": 1201,
+      "name": "reset:inside viewport",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "keyboard-reset:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "keyboard-reset:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "keyboard traversal no requests",
+      "actual": 2
+    },
+    {
+      "width": 1201,
+      "name": "keyboard traversal no URL changes",
+      "actual": "http://127.0.0.1:58208/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 1201,
+      "name": "directory:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "directory:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "initial comparison six differences",
+      "actual": 6
+    },
+    {
+      "width": 1201,
+      "name": "same role has zero differences",
+      "actual": 0
+    },
+    {
+      "width": 1201,
+      "name": "comparison-zero:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "comparison-zero:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "same role show-all has three capabilities",
+      "actual": 3
+    },
+    {
+      "width": 1201,
+      "name": "comparison-all:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "comparison-all:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "comparison search no result",
+      "actual": 0
+    },
+    {
+      "width": 1201,
+      "name": "comparison-search-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "comparison-search-empty:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "comparison resets six differences",
+      "actual": 6
+    },
+    {
+      "width": 1201,
+      "name": "comparison changes no URL",
+      "actual": "http://127.0.0.1:58208/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 1201,
+      "name": "comparison changes no request",
+      "actual": 2
+    },
+    {
+      "width": 1201,
+      "name": "filters:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "filters:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "email filter one no-role user",
+      "actual": 1
+    },
+    {
+      "width": 1201,
+      "name": "email query exact",
+      "actual": {
+        "query": "buyer"
+      }
+    },
+    {
+      "width": 1201,
+      "name": "unrelated query retained",
+      "actual": "p44"
+    },
+    {
+      "width": 1201,
+      "name": "global count not filtered count",
+      "actual": "2"
+    },
+    {
+      "width": 1201,
+      "name": "filtered-no-role:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "filtered-no-role:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "status and email exact",
+      "actual": {
+        "query": "buyer",
+        "status": "disabled"
+      }
+    },
+    {
+      "width": 1201,
+      "name": "filtered empty no records",
+      "actual": 0
+    },
+    {
+      "width": 1201,
+      "name": "filtered-empty:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "filtered-empty:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "empty reset both query fields",
+      "actual": {}
+    },
+    {
+      "width": 1201,
+      "name": "reset restores two accounts",
+      "actual": 2
+    },
+    {
+      "width": 1201,
+      "name": "detail actual user identity",
+      "actual": "buyer@example.test"
+    },
+    {
+      "width": 1201,
+      "name": "detail remains native modal",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "detail-entry:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "detail-entry:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "detail closes without route change",
+      "actual": "/platform-admin/admins"
+    },
+    {
+      "width": 1201,
+      "name": "admin creation defaults operations role",
+      "actual": "platform_operations_admin"
+    },
+    {
+      "width": 1201,
+      "name": "creation cancel no request",
+      "actual": 9
+    },
+    {
+      "width": 1201,
+      "name": "long-multiple-roles:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "long-multiple-roles:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "role failure retains accounts",
+      "actual": 2
+    },
+    {
+      "width": 1201,
+      "name": "role failure retains old comparison",
+      "actual": 6
+    },
+    {
+      "width": 1201,
+      "name": "role failure notice visible",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "old matrix notice not separately exposed",
+      "actual": 0
+    },
+    {
+      "width": 1201,
+      "name": "roles-refresh-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "roles-refresh-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "account failure retains records",
+      "actual": 2
+    },
+    {
+      "width": 1201,
+      "name": "accounts-refresh-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "accounts-refresh-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "first account failure hides directory",
+      "actual": 0
+    },
+    {
+      "width": 1201,
+      "name": "accounts-first-error:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "accounts-first-error:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "unfiltered empty title",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "no-accounts:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "no-accounts:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "empty role directory keeps accounts",
+      "actual": 2
+    },
+    {
+      "width": 1201,
+      "name": "empty role directory hides comparison",
+      "actual": 0
+    },
+    {
+      "width": 1201,
+      "name": "no-role-directory:page fits",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "no-role-directory:dialogs fit",
+      "actual": true
+    },
+    {
+      "width": 1201,
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1201,
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1201,
+      "name": "all requests GET",
+      "actual": true
+    }
+  ],
+  "focusObservations": [
+    {
+      "width": 1200,
+      "name": "create",
+      "actual": {
+        "focusVisible": true,
+        "outlineColor": "rgb(23, 24, 19)",
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "outlineOffset": "3px",
+        "x": 146,
+        "y": 179.390625,
+        "width": 124,
+        "height": 44,
+        "inViewport": true,
+        "outlineInViewport": true
+      },
+      "trace": [
+        {
+          "tag": "BUTTON",
+          "text": "新建组织",
+          "type": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "新建管理员",
+          "type": null
+        }
+      ],
+      "expectedColor": "rgb(66, 118, 223)",
+      "matchesDesign": false
+    },
+    {
+      "width": 1200,
+      "name": "navigation",
+      "actual": {
+        "focusVisible": true,
+        "outlineColor": "rgb(255, 255, 255)",
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "outlineOffset": "3px",
+        "x": 788.65625,
+        "y": 421.078125,
+        "width": 361.34375,
+        "height": 44,
+        "inViewport": true,
+        "outlineInViewport": true
+      },
+      "trace": [
+        {
+          "tag": "BUTTON",
+          "text": "刷新数据",
+          "type": null
+        },
+        {
+          "tag": "A",
+          "text": "组织管理",
+          "type": null
+        },
+        {
+          "tag": "A",
+          "text": "用户管理",
+          "type": null
+        },
+        {
+          "tag": "A",
+          "text": "管理员管理",
+          "type": null
+        }
+      ],
+      "expectedColor": "rgb(255, 255, 255)",
+      "matchesDesign": false
+    },
+    {
+      "width": 1200,
+      "name": "email",
+      "actual": {
+        "focusVisible": true,
+        "outlineColor": "rgb(23, 24, 19)",
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "outlineOffset": "3px",
+        "x": 49,
+        "y": 639.875,
+        "width": 544.828125,
+        "height": 44,
+        "inViewport": true,
+        "outlineInViewport": true
+      },
+      "trace": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "type": null
+        }
+      ],
+      "expectedColor": "rgb(66, 118, 223)",
+      "matchesDesign": false
+    },
+    {
+      "width": 1200,
+      "name": "differences",
+      "actual": {
+        "focusVisible": true,
+        "outlineColor": "rgb(255, 255, 255)",
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineOffset": "4px",
+        "x": 1042,
+        "y": 680.765625,
+        "width": 20,
+        "height": 20,
+        "inViewport": true,
+        "outlineInViewport": true
+      },
+      "trace": [
+        {
+          "tag": "SELECT",
+          "text": "全部状态正常使用已停用",
+          "type": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "搜索",
+          "type": null
+        },
+        {
+          "tag": "SUMMARY",
+          "text": "列设置",
+          "type": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "首列已冻结",
+          "type": "button"
+        },
+        {
+          "tag": "SELECT",
+          "text": "标准紧凑",
+          "type": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "账号详情",
+          "type": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "账号详情",
+          "type": null
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "type": "checkbox"
+        }
+      ],
+      "expectedColor": "rgb(255, 255, 255)",
+      "matchesDesign": true
+    },
+    {
+      "width": 1200,
+      "name": "left-role",
+      "actual": {
+        "focusVisible": true,
+        "outlineColor": "rgb(66, 118, 223)",
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineOffset": "3px",
+        "x": 53,
+        "y": 808.171875,
+        "width": 537,
+        "height": 44,
+        "inViewport": true,
+        "outlineInViewport": true
+      },
+      "trace": [
+        {
+          "tag": "SELECT",
+          "text": "平台运营管理员平台安全管理员平台超级管理员",
+          "type": null
+        }
+      ],
+      "expectedColor": "rgb(66, 118, 223)",
+      "matchesDesign": true
+    },
+    {
+      "width": 1200,
+      "name": "reset",
+      "actual": {
+        "focusVisible": true,
+        "outlineColor": "rgb(66, 118, 223)",
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineOffset": "3px",
+        "x": 1085,
+        "y": 856.171875,
+        "width": 62,
+        "height": 44,
+        "inViewport": true,
+        "outlineInViewport": false
+      },
+      "trace": [
+        {
+          "tag": "SELECT",
+          "text": "全部分组安全治理采集治理平台治理通知与报表",
+          "type": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "重置",
+          "type": "button"
+        }
+      ],
+      "expectedColor": "rgb(66, 118, 223)",
+      "matchesDesign": true
+    },
+    {
+      "width": 1201,
+      "name": "create",
+      "actual": {
+        "focusVisible": true,
+        "outlineColor": "rgb(23, 24, 19)",
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "outlineOffset": "3px",
+        "x": 955,
+        "y": 90.1875,
+        "width": 124,
+        "height": 44,
+        "inViewport": true,
+        "outlineInViewport": true
+      },
+      "trace": [
+        {
+          "tag": "BUTTON",
+          "text": "新建组织",
+          "type": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "新建管理员",
+          "type": null
+        }
+      ],
+      "expectedColor": "rgb(66, 118, 223)",
+      "matchesDesign": false
+    },
+    {
+      "width": 1201,
+      "name": "navigation",
+      "actual": {
+        "focusVisible": true,
+        "outlineColor": "rgb(255, 255, 255)",
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "outlineOffset": "3px",
+        "x": 50,
+        "y": 815.578125,
+        "width": 196,
+        "height": 44,
+        "inViewport": true,
+        "outlineInViewport": true
+      },
+      "trace": [
+        {
+          "tag": "BUTTON",
+          "text": "刷新数据",
+          "type": null
+        },
+        {
+          "tag": "A",
+          "text": "组织管理",
+          "type": null
+        },
+        {
+          "tag": "A",
+          "text": "用户管理",
+          "type": null
+        },
+        {
+          "tag": "A",
+          "text": "管理员管理",
+          "type": null
+        }
+      ],
+      "expectedColor": "rgb(255, 255, 255)",
+      "matchesDesign": false
+    },
+    {
+      "width": 1201,
+      "name": "email",
+      "actual": {
+        "focusVisible": true,
+        "outlineColor": "rgb(23, 24, 19)",
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "outlineOffset": "3px",
+        "x": 313,
+        "y": 337.1875,
+        "width": 391.40625,
+        "height": 44,
+        "inViewport": true,
+        "outlineInViewport": true
+      },
+      "trace": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "type": null
+        }
+      ],
+      "expectedColor": "rgb(66, 118, 223)",
+      "matchesDesign": false
+    },
+    {
+      "width": 1201,
+      "name": "differences",
+      "actual": {
+        "focusVisible": true,
+        "outlineColor": "rgb(255, 255, 255)",
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineOffset": "4px",
+        "x": 1043,
+        "y": 879.078125,
+        "width": 20,
+        "height": 20,
+        "inViewport": true,
+        "outlineInViewport": false
+      },
+      "trace": [
+        {
+          "tag": "SELECT",
+          "text": "全部状态正常使用已停用",
+          "type": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "搜索",
+          "type": null
+        },
+        {
+          "tag": "SUMMARY",
+          "text": "列设置",
+          "type": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "首列已冻结",
+          "type": "button"
+        },
+        {
+          "tag": "SELECT",
+          "text": "标准紧凑",
+          "type": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "账号详情",
+          "type": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "账号详情",
+          "type": null
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "type": "checkbox"
+        }
+      ],
+      "expectedColor": "rgb(255, 255, 255)",
+      "matchesDesign": true
+    },
+    {
+      "width": 1201,
+      "name": "left-role",
+      "actual": {
+        "focusVisible": true,
+        "outlineColor": "rgb(66, 118, 223)",
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineOffset": "3px",
+        "x": 317,
+        "y": 428.484375,
+        "width": 405.5,
+        "height": 44,
+        "inViewport": true,
+        "outlineInViewport": true
+      },
+      "trace": [
+        {
+          "tag": "SELECT",
+          "text": "平台运营管理员平台安全管理员平台超级管理员",
+          "type": null
+        }
+      ],
+      "expectedColor": "rgb(66, 118, 223)",
+      "matchesDesign": true
+    },
+    {
+      "width": 1201,
+      "name": "reset",
+      "actual": {
+        "focusVisible": true,
+        "outlineColor": "rgb(66, 118, 223)",
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "outlineOffset": "3px",
+        "x": 1086,
+        "y": 515.484375,
+        "width": 62,
+        "height": 44,
+        "inViewport": true,
+        "outlineInViewport": true
+      },
+      "trace": [
+        {
+          "tag": "SELECT",
+          "text": "全部分组安全治理采集治理平台治理通知与报表",
+          "type": null
+        },
+        {
+          "tag": "BUTTON",
+          "text": "重置",
+          "type": "button"
+        }
+      ],
+      "expectedColor": "rgb(66, 118, 223)",
+      "matchesDesign": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "1200-default.png",
+      "width": 1200,
+      "state": "default",
+      "sha256": "6c1ced47152c201b52b5928a5c034931649d61db9e11ed2a9f48408255e83503"
+    },
+    {
+      "file": "1200-default-top.png",
+      "width": 1200,
+      "state": "default-top",
+      "sha256": "b4dcde8963cdaa5ab103e55046e07ffe915c7d4f4e29c3ce5ef42f1879f87257"
+    },
+    {
+      "file": "1200-keyboard-create.png",
+      "width": 1200,
+      "state": "keyboard-create",
+      "sha256": "b3984646d2e4710c746653b6c25cdd451222454bfe6ba4869adc6b12fa5ae6c3"
+    },
+    {
+      "file": "1200-keyboard-navigation.png",
+      "width": 1200,
+      "state": "keyboard-navigation",
+      "sha256": "dc89d9066e6b60088ae32c711bb33933899b55e73dc6d38c4a4ab1d626429707"
+    },
+    {
+      "file": "1200-keyboard-email.png",
+      "width": 1200,
+      "state": "keyboard-email",
+      "sha256": "75fc304868052692578de3b9dcee87eea3752cb88d4d7650f83ecd5932658072"
+    },
+    {
+      "file": "1200-keyboard-differences.png",
+      "width": 1200,
+      "state": "keyboard-differences",
+      "sha256": "1569c39f1633fcda52c156ceb05a11b31472c8c6b5128a421af3ca9021ac52d8"
+    },
+    {
+      "file": "1200-keyboard-left-role.png",
+      "width": 1200,
+      "state": "keyboard-left-role",
+      "sha256": "310da7ff3bf7163f7938cd1d454a2b6c48a4b617c5b65417dd61924be55a28bb"
+    },
+    {
+      "file": "1200-keyboard-reset.png",
+      "width": 1200,
+      "state": "keyboard-reset",
+      "sha256": "1c8b1486d34421aa7d783bab4f3c4f8ba0f3b5a81d0c7b99ed8b1cf6dccc088e"
+    },
+    {
+      "file": "1201-default.png",
+      "width": 1201,
+      "state": "default",
+      "sha256": "f43ed901f155d229ec4566dd2f832d1e77e6f3bec2bcc1d809fb52a5eb483d4b"
+    },
+    {
+      "file": "1201-default-top.png",
+      "width": 1201,
+      "state": "default-top",
+      "sha256": "8716b5d5e9a9632c7012745dc456c4ea850a1ef3d50d8ff427ccb079a28d27dc"
+    },
+    {
+      "file": "1201-keyboard-create.png",
+      "width": 1201,
+      "state": "keyboard-create",
+      "sha256": "48de80cf24a9c2f54dd5505a93fb9e89fdd97b9d7ed9298348e39bbea958cac4"
+    },
+    {
+      "file": "1201-keyboard-navigation.png",
+      "width": 1201,
+      "state": "keyboard-navigation",
+      "sha256": "3631145236815a3a3a5665162ed2aefa9279545c7d63047054e53c3e8611e543"
+    },
+    {
+      "file": "1201-keyboard-email.png",
+      "width": 1201,
+      "state": "keyboard-email",
+      "sha256": "1360c20ec4c3ef1ead7b4338f72f9a90bf7d0eb929517048baef77f022686380"
+    },
+    {
+      "file": "1201-keyboard-differences.png",
+      "width": 1201,
+      "state": "keyboard-differences",
+      "sha256": "5eb70db0338fe57e7a8bbc70cf367b564cd8fd3c4881fbddb03caf6fea67caa1"
+    },
+    {
+      "file": "1201-keyboard-left-role.png",
+      "width": 1201,
+      "state": "keyboard-left-role",
+      "sha256": "b92e920248fea98a2dc44c72a02763f07c0809cf5b3a5ed6056f7bd244b2fade"
+    },
+    {
+      "file": "1201-keyboard-reset.png",
+      "width": 1201,
+      "state": "keyboard-reset",
+      "sha256": "cfd2764b00b552bae781027ccc4c80d82f9e85164b316426b75df39d2c991697"
+    }
+  ],
+  "observations": [
+    {
+      "width": 1200,
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "buyer"
+          },
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "buyer",
+            "status": "disabled"
+          },
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "roles-empty"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "roles-empty"
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    },
+    {
+      "width": 1201,
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "buyer"
+          },
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "buyer",
+            "status": "disabled"
+          },
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "long"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 500,
+          "variant": "long"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "roles-empty"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET",
+          "query": {},
+          "status": 200,
+          "variant": "roles-empty"
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    }
+  ],
+  "processesClosed": true
+}

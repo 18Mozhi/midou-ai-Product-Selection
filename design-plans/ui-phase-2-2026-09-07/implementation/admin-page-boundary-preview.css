@@ -1,0 +1,41 @@
+/* P44 review-only supplement. Resolve the global legacy focus cascade locally. */
+html[data-design="signal-ledger"]
+  body.p44-boundary
+  #app
+  .account-center
+  :is(button, a, input, select, textarea, summary) {
+  scroll-margin-block: 8px;
+}
+
+html[data-design="signal-ledger"]
+  body.p44-boundary
+  #app
+  .account-center
+  :is(button, a, input, select, textarea, summary):focus-visible {
+  outline: 3px solid #4276df;
+  outline-offset: 3px;
+}
+
+html[data-design="signal-ledger"]
+  body.p44-boundary
+  #app
+  .account-center
+  .p43-context
+  a:focus-visible,
+html[data-design="signal-ledger"]
+  body.p44-boundary
+  #app
+  .account-center
+  .role-comparison__toggle
+  input:focus-visible {
+  outline-color: #fff;
+}
+
+html[data-design="signal-ledger"]
+  body.p44-boundary
+  #app
+  .account-center
+  .role-comparison__toggle
+  input:focus-visible {
+  outline-offset: 4px;
+}
