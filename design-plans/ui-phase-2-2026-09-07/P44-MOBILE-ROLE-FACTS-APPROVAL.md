@@ -2,6 +2,8 @@
 
 2026-09-11，用户回复：“角色资料组合通过，继续其他状态”。
 
+后续[手机角色资料生产源码接入](P44-MOBILE-ROLE-FACTS-IMPLEMENTATION-REVIEW.md)另行记录；本文件保留批准发生时范围和原图，不扩大为整页或生产验收。
+
 对应[390px角色资料图](../../output/playwright/p44-comparison-vue-preview/390-permission-facts.png)，PNG SHA256：`46e862abba5da101e17ed9d1dad80e53665f2a6ae8286f9a484657a5472efb51`。
 
 仅上方运营/安全管理员的上下排列、角色名称、职责说明及各自权限数量获批。下方6项能力及逐条结果、其他状态、其他宽度、整页、真实权限与生产验收不包含。原图是实际Vue审核样例，保留制图时整包pending状态；本记录不代表该资料区已生产接入。

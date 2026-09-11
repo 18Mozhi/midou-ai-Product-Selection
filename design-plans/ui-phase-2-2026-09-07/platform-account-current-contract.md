@@ -24,7 +24,7 @@ PlatformAccountCenter 已抽出组织操作组合函数、增加创建反馈归�
 | --- | --- |
 | apps/web/src/use-platform-organization-actions.ts | 3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb |
 | apps/web/src/use-user-creation-owner.ts | cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e |
-| apps/web/src/components/PlatformAdminComparisonMobile.css | aab8b73f01e26f8da808c60e5cdef04dfb67504d179292e0d4a9f3209670a64d |
+| apps/web/src/components/PlatformAdminComparisonMobile.css | 9b74248f24827e8e1e4800b93090ef1fd680acaebf90754bc238680bebedddde |
 
 ## 运行与失败边界
 

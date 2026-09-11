@@ -9,9 +9,10 @@ import postcss from "postcss";
 import {
   adminResultsRevisions,
   historicalAdminResultsSource,
+  historicalAdminRoleFactsSource,
 } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = (file) => historicalAdminRoleFactsSource(file, readFileSync(file, "utf8"));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p44-mobile-results-implementation/";
 const evidence = (mode) => JSON.parse(read(folder + mode + "/evidence.json"));

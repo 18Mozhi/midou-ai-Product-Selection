@@ -15,9 +15,33 @@ export const adminResultsRevisions = {
 };
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const cache = new Map();
+export const adminRoleFactsRevision = {
+  file: "apps/web/src/components/PlatformAdminComparisonMobile.css",
+  baseline: "66ea2f60",
+  before: "aab8b73f01e26f8da808c60e5cdef04dfb67504d179292e0d4a9f3209670a64d",
+  after: "9b74248f24827e8e1e4800b93090ef1fd680acaebf90754bc238680bebedddde",
+};
+// Associate the previous result captures with their exact CSS, not current acceptance.
+export function historicalAdminRoleFactsSource(file, source) {
+  source = source.replaceAll("\r\n", "\n");
+  const r = adminRoleFactsRevision;
+  if (file !== r.file || hash(source) === r.before) return source;
+  // The older pre-results stylesheet is also a known historical input.
+  if (hash(source) === adminResultsRevisions[file].before) return source;
+  assert.equal(hash(source), r.after, `Unreviewed admin results source: ${file}`);
+  const key = "role-facts:" + file;
+  if (!cache.has(key)) {
+    const old = execFileSync("git", ["show", `${r.baseline}:${file}`], {
+      encoding: "utf8",
+    }).replaceAll("\r\n", "\n");
+    assert.equal(hash(old), r.before);
+    cache.set(key, old);
+  }
+  return cache.get(key);
+}
 // Exact association for existing captured artifacts, never current acceptance.
 export function historicalAdminResultsSource(file, source) {
-  source = source.replaceAll("\r\n", "\n");
+  source = historicalAdminRoleFactsSource(file, source);
   const revision = adminResultsRevisions[file];
   if (!revision || hash(source) === revision.before) return source;
   assert.equal(hash(source), revision.after, `Unreviewed admin results source: ${file}`);

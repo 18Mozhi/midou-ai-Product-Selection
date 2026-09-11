@@ -11,9 +11,15 @@ import { execFileSync } from "node:child_process";
 
 const capture = process.argv.includes("--capture");
 const baseline = process.argv.includes("--baseline");
-assert.ok(process.argv.slice(2).every((arg) => ["--capture", "--baseline"].includes(arg)));
+const roleFacts = process.argv.includes("--role-facts");
+assert.ok(
+  process.argv.slice(2).every((arg) => ["--capture", "--baseline", "--role-facts"].includes(arg)),
+);
+const baselineCommit = roleFacts ? "66ea2f60" : "67cb00f3";
 const output =
-  "output/playwright/p44-mobile-results-implementation/" + (baseline ? "baseline" : "current");
+  "output/playwright/" +
+  (roleFacts ? "p44-mobile-role-facts-implementation/" : "p44-mobile-results-implementation/") +
+  (baseline ? "baseline" : "current");
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const parent = "apps/web/src/components/PlatformAccountCenter.vue";
@@ -29,7 +35,7 @@ const transformed = Object.fromEntries(
   targetFiles.map((file) => [
     file,
     baseline
-      ? execFileSync("git", ["show", "67cb00f3:" + file], { encoding: "utf8" }).replaceAll(
+      ? execFileSync("git", ["show", baselineCommit + ":" + file], { encoding: "utf8" }).replaceAll(
           "\r\n",
           "\n",
         )
@@ -198,13 +204,25 @@ try {
                 .filter((n) => n.textContent.includes("P44 approved mobile controls"))
                 .some((n) => n.textContent.includes("role-comparison--same-role-result")),
             ),
-          !baseline,
+          roleFacts || !baseline,
         );
+        if (roleFacts)
+          check(
+            "served role facts stylesheet",
+            await page
+              .locator("style")
+              .evaluateAll((nodes) =>
+                nodes.some((n) => n.textContent.includes("Role facts use backend names")),
+              ),
+            !baseline,
+          );
         const initialUrl = page.url(),
           active = !baseline && width <= 760 && routeName === "admins";
         const shot = async (state) => {
+          if (roleFacts && !["role-facts", "same-role-all", "reset-default"].includes(state))
+            return;
           await comp
-            .locator(".role-comparison__result")
+            .locator(roleFacts ? ".role-comparison__summaries" : ".role-comparison__result")
             .evaluate((n) => scrollTo(0, n.getBoundingClientRect().top + scrollY - 24));
           await page.evaluate(() => document.fonts.ready);
           // Give Chromium's native focus ring time to settle. Its antialiased edge may
@@ -227,6 +245,8 @@ try {
           }
         };
         check("six original differences", await matrix.count(), 6);
+        await comp.evaluate((n) => n.getBoundingClientRect().height);
+        await page.waitForTimeout(50);
         const styles = await comp.evaluate((n) => {
           const style = (selector, keys) => {
             const s = getComputedStyle(n.querySelector(selector));
@@ -415,9 +435,91 @@ try {
                 "rgb(244, 247, 252)",
               );
           }
-          states.push({ name, appearance });
+          let facts;
+          if (roleFacts) {
+            facts = await comp.locator(".role-comparison__summaries").evaluate((n) => {
+              const style = (el) => {
+                const s = getComputedStyle(el);
+                return Object.fromEntries(
+                  [
+                    "color",
+                    "fontFamily",
+                    "fontSize",
+                    "fontWeight",
+                    "lineHeight",
+                    "padding",
+                    "border",
+                    "borderRadius",
+                    "backgroundColor",
+                  ].map((k) => [k, s[k]]),
+                );
+              };
+              return [...n.querySelectorAll("article")].map((article) => {
+                const box = article.getBoundingClientRect();
+                return {
+                  name: article.querySelector("strong").textContent,
+                  description: article.querySelector("span").textContent,
+                  count: article.querySelector("small").textContent,
+                  box: { x: box.x, y: box.y, width: box.width, height: box.height },
+                  article: style(article),
+                  title: style(article.querySelector("strong")),
+                  descriptionStyle: style(article.querySelector("span")),
+                  countStyle: style(article.querySelector("small")),
+                };
+              });
+            });
+            const selected = await comp
+              .locator(".role-comparison__selectors select")
+              .evaluateAll((nodes) => nodes.map((n) => n.value));
+            check(
+              name + ":unaltered backend role facts",
+              facts.map(({ name, description, count }) => ({ name, description, count })),
+              selected.map((code) => {
+                const role = fixture.platformRoles.find((r) => r.code === code);
+                return {
+                  name: role.name,
+                  description: role.description,
+                  count: `${role.capabilities.length} 项权限`,
+                };
+              }),
+            );
+            if (active) {
+              check(
+                name + ":white role facts region",
+                appearance.summaries.backgroundColor,
+                "rgb(255, 255, 255)",
+              );
+              check(
+                name + ":stacked role facts",
+                facts[1].box.y >= facts[0].box.y + facts[0].box.height + 19,
+              );
+              check(
+                name + ":title hierarchy",
+                facts.every(
+                  (f) =>
+                    f.title.fontSize === "16px" &&
+                    f.title.fontWeight === "700" &&
+                    f.title.color === "rgb(20, 42, 70)",
+                ),
+              );
+              check(
+                name + ":muted role details",
+                facts.every(
+                  (f) =>
+                    f.descriptionStyle.color === "rgb(83, 107, 134)" &&
+                    f.countStyle.fontSize === "13px",
+                ),
+              );
+              check(
+                name + ":unboxed roles",
+                facts.every((f) => f.article.padding === "0px" && f.article.borderRadius === "0px"),
+              );
+            }
+          }
+          states.push({ name, appearance, ...(roleFacts ? { facts } : {}) });
           await shot(name);
         };
+        if (roleFacts) await record("role-facts");
         await comp
           .getByRole("combobox", { name: "右侧角色", exact: true })
           .selectOption("platform_operations_admin");
@@ -473,20 +575,23 @@ try {
     if (f && !f.startsWith("..") && !f.includes("node_modules") && /\.(vue|ts|css)$/.test(f))
       sources.add(f);
   }
+  if (roleFacts) sources.add("scripts/verify-ui-phase2-admin-mobile-results-implementation.mjs");
   const sourceHashes = Object.fromEntries(
     await Promise.all(
       [...sources].sort().map(async (f) => [f, hash(transformed[f] ?? (await read(f)))]),
     ),
   );
   if (capture) {
+    const title = roleFacts ? "P44 手机角色资料" : "P44 手机结果";
     await writeFile(
       output + "/evidence.json",
       JSON.stringify(
         {
-          kind: "P44-MOBILE-RESULTS-IMPLEMENTATION",
+          kind: roleFacts
+            ? "P44-MOBILE-ROLE-FACTS-IMPLEMENTATION"
+            : "P44-MOBILE-RESULTS-IMPLEMENTATION",
           baseline,
-          scope:
-            "Actual production parent and styles, no review CSS or template transforms; baseline role template/CSS from 67cb00f3. Two routes/four widths, approved same-role result regions only, read-only HTTP fixtures. No full App/real permissions/deployment acceptance.",
+          scope: `Actual production parent and styles, no review CSS or template transforms; baseline role template/CSS from ${baselineCommit}. Two routes/four widths, ${roleFacts ? "role facts region" : "approved same-role result regions only"}, read-only HTTP fixtures. No full App/real permissions/deployment acceptance.`,
           sourceHashes,
           checks,
           screenshots,
@@ -499,7 +604,11 @@ try {
     );
     await writeFile(
       output + "/index.html",
-      '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P44 手机结果生产源对照</title><style>body{font:16px/1.6 "Microsoft YaHei";background:#eef2f7;margin:24px}article{background:white;padding:20px;margin:24px 0}img{max-width:100%;height:auto}</style><h1>P44 手机结果 ' +
+      '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' +
+        title +
+        '生产源对照</title><style>body{font:16px/1.6 "Microsoft YaHei";background:#eef2f7;margin:24px}article{background:white;padding:20px;margin:24px 0}img{max-width:100%;height:auto}</style><h1>' +
+        title +
+        " " +
         (baseline ? "旧版" : "当前生产源码") +
         "</h1><p>本地实际Vue+HTTP测试样例；未部署。</p>" +
         screenshots

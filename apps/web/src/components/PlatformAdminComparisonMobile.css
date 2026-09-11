@@ -1,4 +1,4 @@
-/* P44 approved mobile controls and unfiltered same-role results only. */
+/* P44 approved mobile controls, role facts and unfiltered same-role results. */
 @media (max-width: 760px) {
   html[data-design="signal-ledger"]
     #app
@@ -201,5 +201,42 @@
     color: #536b86;
     background: #f4f7fc;
     border-left: 3px solid #9db1cc;
+  }
+}
+
+/* Role facts use backend names, descriptions and counts without changing their content. */
+@media (max-width: 760px) {
+  html[data-design="signal-ledger"]
+    #app
+    .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"])
+    .role-comparison__summaries {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    margin: -16px -4px;
+    padding: 20px 16px;
+    border-bottom: 1px solid #d8e1ed;
+    font-family: "Microsoft YaHei", sans-serif;
+    font-size: 16px;
+    color: #142a46;
+    background: #fff;
+    article {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      line-height: 1.7;
+      background: transparent;
+    }
+    strong {
+      font-size: 16px;
+      font-weight: 700;
+      color: #142a46;
+    }
+    span,
+    small {
+      color: #536b86;
+    }
+    small {
+      font-size: 13px;
+    }
   }
 }
