@@ -4,6 +4,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { createRequire } from "node:module";
 import path from "node:path";
+import { historicalProviderKeyboardSource } from "../../scripts/lib/ui-phase2-provider-keyboard-baseline.mjs";
 import { parse } from "@vue/compiler-sfc";
 import { scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";
 import {
@@ -11,7 +12,8 @@ import {
   historicalProviderFeedbackSource,
 } from "../../scripts/lib/ui-phase2-provider-feedback-baseline.mjs";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+// This suite preserves the pre-keyboard approved feedback capture, not current-source coverage.
+const read = (file) => historicalProviderKeyboardSource(file, readFileSync(file, "utf8"));
 const hash = (data) => createHash("sha256").update(data).digest("hex");
 const file = "apps/web/src/components/ProviderRegistry.vue";
 const current = read(file),

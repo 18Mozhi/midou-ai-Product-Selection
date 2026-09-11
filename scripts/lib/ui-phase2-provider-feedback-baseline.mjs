@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { historicalProviderKeyboardSource } from "./ui-phase2-provider-keyboard-baseline.mjs";
 
 export const providerFeedbackRevisions = [
   {
@@ -18,7 +19,7 @@ const cache = new Map(),
   hash = (s) => createHash("sha256").update(s).digest("hex");
 // Exact historical association, not a current-source acceptance shortcut.
 export function historicalProviderFeedbackSource(file, source) {
-  source = source.replaceAll("\r\n", "\n");
+  source = historicalProviderKeyboardSource(file, source);
   const r = providerFeedbackRevisions.find((r) => r.file === file);
   if (!r || hash(source) !== r.after) return source;
   if (!cache.has(file)) {

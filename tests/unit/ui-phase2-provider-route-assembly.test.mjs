@@ -3,9 +3,11 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
+import { historicalProviderKeyboardSource } from "../../scripts/lib/ui-phase2-provider-keyboard-baseline.mjs";
 import { providerPagePreview } from "../../scripts/lib/ui-phase2-provider-page-preview.mjs";
 
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+// Approved assembly is immutable historical evidence; the keyboard suite binds raw current sources.
+const read = (f) => historicalProviderKeyboardSource(f, readFileSync(f, "utf8"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const folder = "output/playwright/p46-route-assembly-review";
 const e = JSON.parse(read(folder + "/evidence.json"));
@@ -13,7 +15,7 @@ const widths = [390, 760, 761, 840, 841, 1440];
 const registry = read("apps/web/src/components/ProviderRegistry.vue");
 const runner = read("scripts/verify-ui-phase2-provider-route-assembly.mjs");
 
-test("P46 full-route evidence binds raw current entry, shell, component and review sources", () => {
+test("P46 approved full-route evidence binds exact pre-keyboard entry and sources", () => {
   assert.equal(e.kind, "P46-REAL-ROUTE-C-ASSEMBLY-r1");
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 168);

@@ -1,5 +1,9 @@
 # P46/P47 · 来源定义与适配器事实合同
 
+2026-09-11键盘签名同步：编辑定义e277037d626f08f0.1承接为d36ecadeb20b9988.1，表单事件3f2a491e2f9e8f03.1承接为eb72344b9c9f3d10.1；仍归PR46-EDITOR与PR46-CLOSE/SAVE，增加Tab约束并非新增业务动作，R22总数不变。下表Registry更新当前指纹，其余源未改。反馈外观时点历史指纹 `ec671e2cf8c1d55f88d97df05d7a14849235961b4e4f66f838ca0cf6fb76971f` 保留用于旧图精确关联，不回写原图。
+
+2026-09-11键盘增量：[P46编辑窗Tab边界](P46-EDITOR-KEYBOARD-IMPLEMENTATION.md)。当前Registry LF SHA256 `768d2d9cef24b0cedddb7f2c69e0d5a3e3055f2a5a8fd2a868616b2c78bc9c19`；仅本地键盘handler/事件和兜底tabindex，原模型、请求、日期、保存归属与样式逐字还原不变。六宽度388检查，旧源指纹/图为历史关联，不覆盖当前实现；未部署。
+
 日期：2026-09-08；实施基线main/c306e88，接续55a7439后的P46/P47与UI2-PR47在途草稿。范围仅B1a两页，不是W06八页完成，也不是正式设计、生产或用户验收通过。
 
 逐页规格：[P46来源设置](page-specs/P46.md)、[P47采集程序](page-specs/P47.md)。两页各有十节；拟议布局待正式风格审核。静态记录来自实际Vue AST和handler/API/服务/仓储，不能把静态数量当运行时业务动作分母。最终图、全按钮状态、共享模态可访问性及真实授权仍须后续补验。
@@ -43,8 +47,8 @@ API的compatibility_matrix聚合留存HTML/DOM的页面指纹与解析版本，�
 | R    | 83d11b8719b1c99d.1 | PR46-PAGE-PREV     | 本地上一页，边界禁用                                                                             |
 | R    | bd43d7b540116c32.1 | PR46-PAGE-NEXT     | 本地下一页，边界禁用                                                                             |
 | R    | 51517865bc5117a4.1 | PR46-CLOSE         | 自定义遮罩mousedown.self.prevent调用closeEditor，防默认鼠标聚焦覆盖恢复目标                      |
-| R    | e277037d626f08f0.1 | PR46-EDITOR        | role=dialog定义；创建/编辑×四步，不是八个独立定义                                                |
-| R    | 3f2a491e2f9e8f03.1 | PR46-CLOSE/SAVE    | 表单Escape关闭，submit.prevent保存；和提交按钮同调用链                                           |
+| R    | d36ecadeb20b9988.1 | PR46-EDITOR        | role=dialog定义；创建/编辑×四步，不是八个独立定义                                                |
+| R    | eb72344b9c9f3d10.1 | PR46-CLOSE/SAVE    | 表单Escape关闭，submit.prevent保存；和提交按钮同调用链                                           |
 | R    | e03ff4bf86eb6a89.1 | PR46-CLOSE         | 编辑器命名关闭按钮                                                                               |
 | R    | 71fedaee68dde679.1 | PR46-STEP-JUMP     | v-for四步骤，直接跳步不做当前组校验                                                              |
 | R    | 83ffe5899e1ccfcf.1 | PR46-TEMPLATE      | 按五模式应用技术模板，覆盖共用策略及fields/failure_rules                                         |
@@ -155,7 +159,7 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 | 文件                                               | SHA-256                                                          |
 | -------------------------------------------------- | ---------------------------------------------------------------- |
 | apps/web/src/components/ProviderRuntimeSurface.vue | a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6 |
-| apps/web/src/components/ProviderRegistry.vue       | ec671e2cf8c1d55f88d97df05d7a14849235961b4e4f66f838ca0cf6fb76971f |
+| apps/web/src/components/ProviderRegistry.vue       | 768d2d9cef24b0cedddb7f2c69e0d5a3e3055f2a5a8fd2a868616b2c78bc9c19 |
 | apps/web/src/components/ProviderAdapterCenter.vue  | 0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075 |
 | apps/web/src/components/ResponsiveDataView.vue     | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/TableViewControls.vue      | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |

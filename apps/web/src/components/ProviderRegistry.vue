@@ -398,6 +398,35 @@ function edit(item?: Provider, event?: Event) {
   );
   void nextTick(() => editorPanel.value?.querySelector<HTMLElement>("input, select")?.focus());
 }
+function containEditorTab(event: KeyboardEvent) {
+  const panel = editorPanel.value;
+  if (event.key !== "Tab" || event.defaultPrevented || event.ctrlKey || event.metaKey || !panel)
+    return;
+  const available = [
+    ...panel.querySelectorAll<HTMLElement>(
+      "button,input,select,textarea,a[href],summary,[tabindex]",
+    ),
+  ].filter(
+    (element) =>
+      element.tabIndex >= 0 &&
+      !element.matches(":disabled") &&
+      !element.closest("[inert]") &&
+      element.checkVisibility({ visibilityProperty: true }),
+  );
+  const first = available[0],
+    last = available.at(-1),
+    active = document.activeElement;
+  if (!first || !last) {
+    event.preventDefault();
+    panel.focus();
+  } else if (event.shiftKey && (active === first || !available.includes(active as HTMLElement))) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && (active === last || !available.includes(active as HTMLElement))) {
+    event.preventDefault();
+    first.focus();
+  }
+}
 function closeEditor() {
   const providerId = editing.value?.id,
     trigger = editorTrigger.value,
@@ -863,7 +892,9 @@ onActivated(() => {
         role="dialog"
         aria-modal="true"
         aria-labelledby="provider-editor-title"
+        tabindex="-1"
         novalidate
+        @keydown="containEditorTab"
         @keydown.esc.stop.prevent="closeEditor"
         @submit.prevent="save"
       >

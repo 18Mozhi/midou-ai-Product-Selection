@@ -10,13 +10,21 @@ import { chromium, expect } from "@playwright/test";
 import { providerPagePreview } from "./lib/ui-phase2-provider-page-preview.mjs";
 
 const capture = process.argv.includes("--capture");
-assert.ok(process.argv.slice(2).every((v) => v === "--capture"));
-const output = "output/playwright/p46-route-assembly-review";
+const keyboardTrap = process.argv.includes("--keyboard-trap");
+assert.ok(process.argv.slice(2).every((v) => ["--capture", "--keyboard-trap"].includes(v)));
+const output =
+  "output/playwright/" +
+  (keyboardTrap ? "p46-editor-keyboard-implementation" : "p46-route-assembly-review");
 const read = async (f) => (await readFile(f, "utf8")).replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const registry = "apps/web/src/components/ProviderRegistry.vue";
 const original = await read(registry),
   preview = providerPagePreview(original);
+assert.ok(
+  keyboardTrap ||
+    hash(original) === "ec671e2cf8c1d55f88d97df05d7a14849235961b4e4f66f838ca0cf6fb76971f",
+  "Original assembly is historical; use --keyboard-trap for current source, do not overwrite approved evidence",
+);
 const fixture = "tests/e2e/m03-01-provider-registry.spec.ts";
 const ast = ts.createSourceFile(fixture, await read(fixture), ts.ScriptTarget.Latest, true);
 const declarations = ast.statements
@@ -242,6 +250,36 @@ try {
               .filter({ hasText: "公开趋势 RSS" })
               .getByRole("button", { name: "编辑", exact: true });
       const editor = () => page.locator(".provider-editor");
+      const keyboardBoundary = async (label) => {
+        if (!keyboardTrap) return;
+        const focusable = editor().locator(
+          "button,input,select,textarea,a[href],summary,[tabindex]",
+        );
+        const indices = await focusable.evaluateAll((nodes) =>
+          nodes.flatMap((n, i) =>
+            n.tabIndex >= 0 &&
+            !n.matches(":disabled") &&
+            !n.closest("[inert]") &&
+            n.checkVisibility({ visibilityProperty: true })
+              ? [i]
+              : [],
+          ),
+        );
+        assert.ok(indices.length > 1);
+        const first = focusable.nth(indices[0]),
+          last = focusable.nth(indices.at(-1));
+        await last.focus();
+        await page.keyboard.press("Tab");
+        check(label + " forward wraps", await first.evaluate((n) => n === document.activeElement));
+        await page.keyboard.press("Shift+Tab");
+        check(label + " reverse wraps", await last.evaluate((n) => n === document.activeElement));
+        await first.focus();
+        await page.keyboard.press("Tab");
+        check(
+          label + " middle moves normally",
+          await focusable.nth(indices[1]).evaluate((n) => n === document.activeElement),
+        );
+      };
       const close = async () => {
         await page.getByRole("button", { name: "关闭来源设置编辑", exact: true }).click();
         await expect(editor()).toHaveCount(0);
@@ -304,6 +342,7 @@ try {
           .evaluate((n) => n === document.activeElement),
       );
       await shot("create-step1", ".provider-editor > header");
+      await keyboardBoundary("create step1");
       await page.getByRole("button", { name: "下一步", exact: true }).click();
       check(
         "invalid first step retained",
@@ -321,6 +360,7 @@ try {
       ]) {
         await page.getByRole("button", { name: step + " " + name, exact: true }).click();
         await shot("create-step" + step, ".provider-fields");
+        await keyboardBoundary("create step" + step);
       }
       // Record the real keyboard boundary; an escaping focus is a gap, not a pass.
       await editor().locator('button[type="submit"]').focus();
@@ -333,6 +373,7 @@ try {
           label: document.activeElement?.getAttribute("aria-label"),
         })),
       });
+      if (keyboardTrap) check("editor Tab remains inside", focus.at(-1).inside);
       await close();
       check(
         "create close returns trigger",
@@ -373,6 +414,7 @@ try {
       }
       await expect(editor()).toBeVisible();
       await shot("edit-step1", ".provider-editor > header");
+      await keyboardBoundary("edit step1");
       await page.getByRole("button", { name: "4 合规与发布", exact: true }).click();
       await editor().locator('button[type="submit"]').click();
       for (let i = 0; i < 500 && !releaseWrite; i++) await new Promise((r) => setTimeout(r, 10));
@@ -384,13 +426,27 @@ try {
         "edit write button disabled",
         await editor().locator('button[type="submit"]').isDisabled(),
       );
+      await keyboardBoundary("pending save skips disabled submit");
       releaseWrite();
       releaseWrite = null;
       await settle();
       check("edit conflict keeps editor", await editor().count(), 1);
       await expect(page.locator(".provider-editor-message")).toContainText("请重新核对来源版本。");
       await shot("edit-conflict", ".provider-editor-message");
-      await close();
+      await keyboardBoundary("conflict with collapsed technical details");
+      if (keyboardTrap) {
+        await page.locator(".provider-editor-message summary").click();
+        await keyboardBoundary("conflict with expanded technical details");
+        await page.keyboard.press("Escape");
+        await expect(editor()).toHaveCount(0);
+        await settle();
+        check(
+          "Escape returns record",
+          await recordButton().evaluate((n) => n === document.activeElement),
+        );
+      } else {
+        await close();
+      }
       check(
         "edit close returns record",
         await recordButton().evaluate((n) => n === document.activeElement),
@@ -472,11 +528,14 @@ try {
       output + "/evidence.json",
       JSON.stringify(
         {
-          kind: "P46-REAL-ROUTE-C-ASSEMBLY-r1",
+          kind: keyboardTrap
+            ? "P46-EDITOR-KEYBOARD-IMPLEMENTATION-r1"
+            : "P46-REAL-ROUTE-C-ASSEMBLY-r1",
           sourceHashes,
           transformedRegistryHash: hash(preview),
-          scope:
-            "Actual index/main/router/App/NavigationShell and ProviderRuntimeSurface. Review-only CSS and two existing presentation replacements in Registry; no script or runtime contract edits. Supplied navigation/session/provider/adapters GET and rejected PUT only, no real auth or persistence. Full frontend route replay is not production, full RBAC, complete modal or all-state acceptance.",
+          scope: keyboardTrap
+            ? "Actual App/NavigationShell/KeepAlive with current Registry Tab handler and fallback tabindex; original form/save/contracts unchanged. C CSS remains review-only. Six-width forward/reverse/interior traversal, disabled submit and technical details, Escape return; local intercepted GET/rejected PUT only. Not production, real auth/persistence or complete modal/all-state acceptance."
+            : "Actual index/main/router/App/NavigationShell and ProviderRuntimeSurface. Review-only CSS and two existing presentation replacements in Registry; no script or runtime contract edits. Supplied navigation/session/provider/adapters GET and rejected PUT only, no real auth or persistence. Full frontend route replay is not production, full RBAC, complete modal or all-state acceptance.",
           checks,
           screenshots,
           observations,
@@ -488,7 +547,7 @@ try {
     );
     await writeFile(
       output + "/index.html",
-      '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P46真实路由整体审核</title><style>body{font:16px/1.6 sans-serif;margin:24px}img{max-width:100%}article{margin-bottom:40px}</style><h1>P46 真实前端入口 · C 整体联动审核</h1><p>本地接口样例，未批准/未上线。Tab边界观察不等于完整模态通过。</p>' +
+      '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P46真实路由整体审核</title><style>body{font:16px/1.6 sans-serif;margin:24px}img{max-width:100%}article{margin-bottom:40px}</style><h1>P46 真实前端入口 · C 整体联动审核</h1><p>本地接口样例，未上线。结构批准范围见对应审核文档；键盘回放不等于完整模态通过。</p>' +
         screenshots
           .map(
             (s) =>
