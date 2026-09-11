@@ -1,0 +1,3739 @@
+{
+  "kind": "P48-PARSER-SAMPLES-REVIEW-r1",
+  "generatedAt": "2026-09-11T14:55:19.828Z",
+  "reviewOnly": true,
+  "fixtureNotice": "All provider, candidate, sample, review, and replay values are synthetic review fixtures.",
+  "productionChanged": false,
+  "deployed": false,
+  "processesClosed": true,
+  "ports": [
+    49277
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "scene": "loading",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "sample content hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "pending-review",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "candidate",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw browser job id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "empty",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "self-review",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "self-review input hidden",
+          "actual": 0
+        },
+        {
+          "name": "self-review actions hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "approved",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "rejected",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "replay-passed",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "replay-changed",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "replay-failed",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "loading",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "sample content hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "pending-review",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "candidate",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw browser job id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "empty",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "self-review",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "self-review input hidden",
+          "actual": 0
+        },
+        {
+          "name": "self-review actions hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "approved",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "rejected",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "replay-passed",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "replay-changed",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "replay-failed",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "loading",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "sample content hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "pending-review",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "candidate",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw browser job id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "empty",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "self-review",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "self-review input hidden",
+          "actual": 0
+        },
+        {
+          "name": "self-review actions hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "approved",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "rejected",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "replay-passed",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "replay-changed",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "replay-failed",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "loading",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "sample content hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "pending-review",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "candidate",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw browser job id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "empty",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "self-review",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "self-review input hidden",
+          "actual": 0
+        },
+        {
+          "name": "self-review actions hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "approved",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "rejected",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "replay-passed",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "replay-changed",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "replay-failed",
+      "fixtureKind": "synthetic-review-fixture",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "raw creator id hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one parser-samples GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000003/parser-samples",
+          "body": null
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-loading-top.png",
+      "width": 390,
+      "scene": "loading",
+      "suffix": "top",
+      "sha256": "29bedb12205e071bb196885b39f491a75b55381a95053a674c866fe0dbb1abff",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-pending-review-top.png",
+      "width": 390,
+      "scene": "pending-review",
+      "suffix": "top",
+      "sha256": "92b72c8a326a1a7455ed61cf0ad8972c51002966867784172a359df9643d087e",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-pending-review-detail-bottom.png",
+      "width": 390,
+      "scene": "pending-review",
+      "suffix": "detail-bottom",
+      "sha256": "9cf0addd12ad39b2e44181c606d6afc18b59336b828fea398ea604ac2a24b2ab",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-candidate-top.png",
+      "width": 390,
+      "scene": "candidate",
+      "suffix": "top",
+      "sha256": "aa47b68a1f9df6a91ed9170469abd7aa2f43bb513e333a7ab8c9a53a48de7c2d",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-candidate-detail-bottom.png",
+      "width": 390,
+      "scene": "candidate",
+      "suffix": "detail-bottom",
+      "sha256": "73526d7862dd33f7a3a419c40a5581f39a482c16aa1265be51a30a66a1276db9",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-empty-top.png",
+      "width": 390,
+      "scene": "empty",
+      "suffix": "top",
+      "sha256": "29bedb12205e071bb196885b39f491a75b55381a95053a674c866fe0dbb1abff",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-self-review-top.png",
+      "width": 390,
+      "scene": "self-review",
+      "suffix": "top",
+      "sha256": "92b72c8a326a1a7455ed61cf0ad8972c51002966867784172a359df9643d087e",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-approved-top.png",
+      "width": 390,
+      "scene": "approved",
+      "suffix": "top",
+      "sha256": "8f00547733edbbc570c04d95f02ef9b18bca422bb50b8eaa163b88b7633d8520",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-rejected-top.png",
+      "width": 390,
+      "scene": "rejected",
+      "suffix": "top",
+      "sha256": "91b4b8e2531f8e72467fc132146dd3abca632af04428849ec610547882b12488",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-replay-passed-top.png",
+      "width": 390,
+      "scene": "replay-passed",
+      "suffix": "top",
+      "sha256": "6f22939f7e3b6420ec68857269e39fc135d65456bf0f745a0bfa231c8fd002bd",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-replay-changed-top.png",
+      "width": 390,
+      "scene": "replay-changed",
+      "suffix": "top",
+      "sha256": "e4bcf039f7f1554742a3cffde4234624f720e3a342d08d171851813ea375a420",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-replay-changed-detail-bottom.png",
+      "width": 390,
+      "scene": "replay-changed",
+      "suffix": "detail-bottom",
+      "sha256": "f3ec939e5f9c9027397c72477577b0f0aa0eabfc9e1b4a9439b360fab8bcdd44",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-replay-failed-top.png",
+      "width": 390,
+      "scene": "replay-failed",
+      "suffix": "top",
+      "sha256": "0ae38ce8dcd6e8f595e7eb77a62461656beb07013fefbaa2d1a47471e4dc8a82",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-loading-top.png",
+      "width": 760,
+      "scene": "loading",
+      "suffix": "top",
+      "sha256": "7a279ed1d7c4d7bb8012480df1013deeece732a5b9771bcfe41aa9c4f1b46353",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-pending-review-top.png",
+      "width": 760,
+      "scene": "pending-review",
+      "suffix": "top",
+      "sha256": "a0ab71c1a3672240945084039f992c3384a84626389402c548af6be294ebe856",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-pending-review-detail-bottom.png",
+      "width": 760,
+      "scene": "pending-review",
+      "suffix": "detail-bottom",
+      "sha256": "65a003eb8420fa7e442ce98ea74e9c7bb13e02d9f28bce739ef2447fdd5b889b",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-candidate-top.png",
+      "width": 760,
+      "scene": "candidate",
+      "suffix": "top",
+      "sha256": "b8c527a2907d405876d2790cac84d796c0900779f1e1814dc1334952059e02bf",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-candidate-detail-bottom.png",
+      "width": 760,
+      "scene": "candidate",
+      "suffix": "detail-bottom",
+      "sha256": "ca2d0fc8b4e3bd7a576a53c10c156f679aec7a874d28e28d74c14efdd536d6fa",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-empty-top.png",
+      "width": 760,
+      "scene": "empty",
+      "suffix": "top",
+      "sha256": "7a279ed1d7c4d7bb8012480df1013deeece732a5b9771bcfe41aa9c4f1b46353",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-self-review-top.png",
+      "width": 760,
+      "scene": "self-review",
+      "suffix": "top",
+      "sha256": "a0ab71c1a3672240945084039f992c3384a84626389402c548af6be294ebe856",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-approved-top.png",
+      "width": 760,
+      "scene": "approved",
+      "suffix": "top",
+      "sha256": "71ac2a86a7b78c27f4f652f22ec2be62d533a21b968cf8b82ab1d1a53114d579",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-rejected-top.png",
+      "width": 760,
+      "scene": "rejected",
+      "suffix": "top",
+      "sha256": "798767131fb7152a6c5366ddc40cab72311b482af5a3c07051260f2110ac7061",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-replay-passed-top.png",
+      "width": 760,
+      "scene": "replay-passed",
+      "suffix": "top",
+      "sha256": "923113f441d12898b83cad68089692e1cea4283a236547ae294480bd94176233",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-replay-changed-top.png",
+      "width": 760,
+      "scene": "replay-changed",
+      "suffix": "top",
+      "sha256": "9cfd2774c878c9f21d4897ed1b134babb71b2a9533ddc9b015221c8ec16ac4a5",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-replay-changed-detail-bottom.png",
+      "width": 760,
+      "scene": "replay-changed",
+      "suffix": "detail-bottom",
+      "sha256": "ff9d6cdbb20e38e497b5ab57f93f3fee2dab040583c0569f85fee7ffda01bb65",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-replay-failed-top.png",
+      "width": 760,
+      "scene": "replay-failed",
+      "suffix": "top",
+      "sha256": "65b49611720c3688c91e0c0d2c031ce76427890511d36f09895a1f1e566f231f",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "1024-loading-top.png",
+      "width": 1024,
+      "scene": "loading",
+      "suffix": "top",
+      "sha256": "e61823aedf04c1c82052e1314802fb537c0157317c2031c9595d43f4b128f7a1",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-pending-review-top.png",
+      "width": 1024,
+      "scene": "pending-review",
+      "suffix": "top",
+      "sha256": "e609ebc0e08972a7dd7013d7d4f2da1a5bcecf6aa83b80a90ba90db6e3d65707",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-candidate-top.png",
+      "width": 1024,
+      "scene": "candidate",
+      "suffix": "top",
+      "sha256": "9aa6b0f3ebfc26a395e504fad62207ea09ac1c8880ac8630a5de2e4c901e9226",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-empty-top.png",
+      "width": 1024,
+      "scene": "empty",
+      "suffix": "top",
+      "sha256": "c873bd961362d844444fd281362949506b32e3786f1012686a6aee85b5bd5fbe",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-self-review-top.png",
+      "width": 1024,
+      "scene": "self-review",
+      "suffix": "top",
+      "sha256": "17b6bccdf66f06d66e57115ae4a38bc3b57328bdb04244c9d6414b9a1eb726c0",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-approved-top.png",
+      "width": 1024,
+      "scene": "approved",
+      "suffix": "top",
+      "sha256": "6c3bd1cada32202467b60ccad23d55e52b4a043180cce249efc2e156c5d35551",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-rejected-top.png",
+      "width": 1024,
+      "scene": "rejected",
+      "suffix": "top",
+      "sha256": "9d24b59a4732bc749ad92b66ce4579ad7b7760aa7b96d8bb81035f79f1fe8a76",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-replay-passed-top.png",
+      "width": 1024,
+      "scene": "replay-passed",
+      "suffix": "top",
+      "sha256": "1c69fbbbb5b5747bd0403a4cb94f116decd1236ecd25326b8a86bea66c948171",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-replay-changed-top.png",
+      "width": 1024,
+      "scene": "replay-changed",
+      "suffix": "top",
+      "sha256": "0aa132c2620909bf901f792eb05f5e881227a9ce4ed50a9ff3ae6dcf0fe1f6e7",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-replay-failed-top.png",
+      "width": 1024,
+      "scene": "replay-failed",
+      "suffix": "top",
+      "sha256": "7415f6929852c98c380c9de46ea6e278678222e9edde501dfff065c16f7e2532",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-loading-top.png",
+      "width": 1440,
+      "scene": "loading",
+      "suffix": "top",
+      "sha256": "245f6d6fd03524e568930db1f901997eae783c1a8aeeff2a1f360abcc0d4206e",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-pending-review-top.png",
+      "width": 1440,
+      "scene": "pending-review",
+      "suffix": "top",
+      "sha256": "4e3079987bac3f9377c0dbd6f1fc8e01d19c9e21b5002a5a1c03ac76cb399cd8",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-candidate-top.png",
+      "width": 1440,
+      "scene": "candidate",
+      "suffix": "top",
+      "sha256": "40679e5d24842246092e725cd5109a2cb743e5f41b86dee0a1eaa54a26c3efdf",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-empty-top.png",
+      "width": 1440,
+      "scene": "empty",
+      "suffix": "top",
+      "sha256": "9f8c81af6b2e6810c143ee9b5679e4df0a1a9319733292ae418c47be3fd1839d",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-self-review-top.png",
+      "width": 1440,
+      "scene": "self-review",
+      "suffix": "top",
+      "sha256": "d9c3e392795c222ed21235b1224b1631b244b3e9e72dcdf583d8d1236d10f0aa",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-approved-top.png",
+      "width": 1440,
+      "scene": "approved",
+      "suffix": "top",
+      "sha256": "4728e43ef747ed2d31013b39cf6444cfa96745b5d7842e5bb24f0d3a2d198e44",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-rejected-top.png",
+      "width": 1440,
+      "scene": "rejected",
+      "suffix": "top",
+      "sha256": "40146d64859539cff007e1119c94399794ba1235ab0211b596396ccde3e246f2",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-replay-passed-top.png",
+      "width": 1440,
+      "scene": "replay-passed",
+      "suffix": "top",
+      "sha256": "e0c323d80b900863da6ad1fd16c6933a8f2e97304ad21fe0f8c0bc68ecaa85bf",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-replay-changed-top.png",
+      "width": 1440,
+      "scene": "replay-changed",
+      "suffix": "top",
+      "sha256": "a9553a4d5ddf6e99942b2391480ec09ffe907a5e22d5f98776be9f82950b4b05",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-replay-failed-top.png",
+      "width": 1440,
+      "scene": "replay-failed",
+      "suffix": "top",
+      "sha256": "2727729bb507bd953e774ac84a87ea1fe5f6168c0778bb73a7ab887154fb5dff",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/index.html": "0376c4bf04227ac5dbb6bb43895e5ed97eef6ca8bde54f08774908d3f07d9d88",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "66b064c2135275b9d173ef316692366823ef4f6276002796d9ed112183218cef",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/provider-adapters-c-detail.css": "094a11fe39b3701c35d6061f7a570e940b3bb00abcc0b2ed7f64ffeaea0c6bdd",
+    "apps/web/src/provider-adapters-c-feedback.css": "64b09e635e98f8865ea2fb3c8b33b1d21f447affd55061f3d01cf6667904bba2",
+    "apps/web/src/provider-adapters-c-page.css": "899ca57a21bceef95c7dc030bb7f92bae1755f324b1d26c3f0ba692dad736c86",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/route-catalog.generated.json": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-parser-samples-preview.css": "d96785b682b23bfa915ce680a4113980f3e65458b2005b82a5243067110634d5",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-sources-page-preview.css": "0ad5722b2920de2f07d92f37afb706266dde7726b4677a4bdbf8107cb00744e7",
+    "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
+    "scripts/lib/ui-phase2-provider-parser-samples-preview.mjs": "d1ed0d7b1497989410b1b71784180fa51b045287ae9b39f152b732a6abdb56a5",
+    "scripts/verify-ui-phase2-provider-parser-samples.mjs": "ad0de432696c1b0bb13258a05b9ddb1e3f237e05974e61e83f15ab44ef98f414",
+    "tests/e2e/m03-07-provider-sources.spec.ts": "29c1232a33cb260beeee6851f33c4558873d25e47e538d6a2e04c47eaa6ba5fe"
+  }
+}

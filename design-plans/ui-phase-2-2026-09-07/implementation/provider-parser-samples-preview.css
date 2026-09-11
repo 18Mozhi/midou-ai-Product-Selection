@@ -1,0 +1,739 @@
+body.p48-parser-samples-review .source-center .p48-parser-samples-modal {
+  padding: 24px;
+  background: rgb(15 23 42 / 72%);
+  backdrop-filter: blur(10px);
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-panel {
+  width: min(940px, 100%);
+  max-height: calc(100dvh - 48px);
+  gap: 0;
+  padding: 0;
+  overflow: auto;
+  border: 0;
+  border-radius: 24px;
+  background: #f8fafc;
+  box-shadow: 0 30px 80px rgb(15 23 42 / 30%);
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-identity {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 32px 26px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 88% 16%, rgb(255 255 255 / 18%), transparent 27%),
+    linear-gradient(135deg, #0f4cbd 0%, #1769e0 56%, #0b3e9d 100%);
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-identity > div {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-identity p,
+body.p48-parser-samples-review .source-center .p48-parser-samples-identity h3 {
+  margin: 0;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-identity > div > p:first-child,
+body.p48-parser-samples-review .source-center .p48-parser-samples-gates > header p,
+body.p48-parser-samples-review .source-center .p48-parser-samples-section > header p,
+body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result > header p,
+body.p48-parser-samples-review .source-center .p48-parser-samples-state > p:first-child {
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-identity h3 {
+  color: inherit;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.18;
+  outline: none;
+}
+
+body.p48-parser-samples-review
+  .source-center
+  .p48-parser-samples-identity
+  > div
+  > p:nth-of-type(2) {
+  max-width: 650px;
+  color: rgb(255 255 255 / 82%);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-meta span {
+  padding: 6px 10px;
+  border: 1px solid rgb(255 255 255 / 26%);
+  border-radius: 999px;
+  color: rgb(255 255 255 / 92%);
+  background: rgb(255 255 255 / 10%);
+  font-size: 12px;
+  line-height: 1;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-identity > button {
+  flex: 0 0 44px;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 12px;
+  color: #fff;
+  background: rgb(255 255 255 / 10%);
+  font-size: 25px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-body {
+  display: grid;
+  gap: 24px;
+  padding: 24px 32px 32px;
+  background: #f8fafc;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-gates {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  border-left: 4px solid #1769e0;
+  background: #eaf3ff;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-gates > header p,
+body.p48-parser-samples-review .source-center .p48-parser-samples-gates > header h4,
+body.p48-parser-samples-review .source-center .p48-parser-samples-gates > p {
+  margin: 0;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-gates > header p {
+  color: #0f4cbd;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-gates > header h4 {
+  margin-top: 4px;
+  color: #172033;
+  font-size: 19px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-gates ol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #c5d8f3;
+  list-style: none;
+  background: #c5d8f3;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-gates li {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 10px;
+  align-items: start;
+  min-width: 0;
+  padding: 14px;
+  background: #fff;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-gates li > span {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: #1769e0;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-gates li div {
+  display: grid;
+  gap: 4px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-gates li strong {
+  color: #172033;
+  font-size: 14px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-gates li small,
+body.p48-parser-samples-review .source-center .p48-parser-samples-gates > p {
+  color: #526985;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-state {
+  display: grid;
+  gap: 6px;
+  min-height: 250px;
+  place-content: center;
+  padding: 32px;
+  border: 1px dashed #bdcadb;
+  border-radius: 16px;
+  color: #64748b;
+  text-align: center;
+  background: #f1f5f9;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-state p,
+body.p48-parser-samples-review .source-center .p48-parser-samples-state h4 {
+  margin: 0;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-state > p:first-child {
+  color: #0f4cbd;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-state h4 {
+  color: #172033;
+  font-size: 20px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-state > p:last-child {
+  line-height: 1.65;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result {
+  display: grid;
+  gap: 12px;
+  padding: 18px 20px;
+  border: 1px solid #9bc9b3;
+  border-left: 5px solid #178253;
+  color: #285a45;
+  background: #eefaf4;
+}
+
+body.p48-parser-samples-review
+  .source-center
+  .p48-parser-samples-replay-result[data-status="changed"],
+body.p48-parser-samples-review
+  .source-center
+  .p48-parser-samples-replay-result[data-status="failed"] {
+  border-color: #e2c486;
+  border-left-color: #b66a00;
+  color: #64481d;
+  background: #fff8e8;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result header p,
+body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result header h4,
+body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result > p {
+  margin: 0;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result header p {
+  color: #126c45;
+}
+
+body.p48-parser-samples-review
+  .source-center
+  .p48-parser-samples-replay-result[data-status="changed"]
+  header
+  p,
+body.p48-parser-samples-review
+  .source-center
+  .p48-parser-samples-replay-result[data-status="failed"]
+  header
+  p {
+  color: #8d5200;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result header h4 {
+  margin-top: 3px;
+  color: #172033;
+  font-size: 18px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result ol {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: #fff;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result li {
+  display: grid;
+  grid-template-columns: minmax(140px, 1.2fr) minmax(100px, 1fr) 24px minmax(100px, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+  padding: 9px 12px;
+  border: 1px solid #d7e0eb;
+  color: #526176;
+  font-size: 13px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result li + li {
+  border-top: 0;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result li code {
+  overflow-wrap: anywhere;
+  color: #243247;
+}
+
+body.p48-parser-samples-review
+  .source-center
+  .p48-parser-samples-replay-result
+  li
+  > span:nth-child(3) {
+  color: #8b9aaf;
+  text-align: center;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result li strong {
+  color: #0f4cbd;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result details,
+body.p48-parser-samples-review .source-center .p48-parser-candidate-list details,
+body.p48-parser-samples-review .source-center .p48-parser-sample-actions details {
+  color: #53657d;
+  font-size: 12px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result summary,
+body.p48-parser-samples-review .source-center .p48-parser-candidate-list summary,
+body.p48-parser-samples-review .source-center .p48-parser-sample-actions summary {
+  min-height: 44px;
+  width: max-content;
+  cursor: pointer;
+  line-height: 44px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-section {
+  display: grid;
+  gap: 14px;
+  padding-top: 2px;
+}
+
+body.p48-parser-samples-review
+  .source-center
+  .p48-parser-samples-section
+  + .p48-parser-samples-section {
+  padding-top: 22px;
+  border-top: 1px solid #dbe4f0;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-section > header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-section > header p,
+body.p48-parser-samples-review .source-center .p48-parser-samples-section > header h4 {
+  margin: 0;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-section > header p {
+  color: #0f4cbd;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-section > header h4 {
+  margin-top: 3px;
+  color: #172033;
+  font-size: 19px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-section > header > span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-candidate-list,
+body.p48-parser-samples-review .source-center .p48-parser-sample-list {
+  display: grid;
+  gap: 12px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-candidate-list article {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 18px;
+  align-items: center;
+  margin: 0;
+  padding: 16px 18px;
+  border: 1px solid #d5dfeb;
+  border-radius: 12px;
+  background: #fff;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-candidate-list article > div {
+  display: grid;
+  gap: 4px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-candidate-list article strong {
+  color: #172033;
+  font-size: 15px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-candidate-list article span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-candidate-list button,
+body.p48-parser-samples-review .source-center .p48-parser-sample-actions > button,
+body.p48-parser-samples-review .source-center .p48-parser-sample-review button,
+body.p48-parser-samples-review .source-center .p48-parser-samples-actions button {
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-candidate-list button,
+body.p48-parser-samples-review .source-center .p48-parser-sample-actions > button,
+body.p48-parser-samples-review .source-center .p48-parser-sample-review button:first-child {
+  border: 1px solid #a9c4ea;
+  color: #0f4cbd;
+  background: #fff;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-empty {
+  display: grid;
+  gap: 6px;
+  padding: 20px;
+  border: 1px dashed #bdcadb;
+  border-radius: 12px;
+  color: #64748b;
+  background: #f1f5f9;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-empty strong {
+  color: #243247;
+  font-size: 15px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-empty p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-list > article {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 18px 20px;
+  border: 1px solid #d5dfeb;
+  border-radius: 14px;
+  background: #fff;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-list > article > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+body.p48-parser-samples-review
+  .source-center
+  .p48-parser-sample-list
+  > article
+  > header
+  > div:first-child {
+  display: grid;
+  gap: 4px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-list > article > header strong {
+  color: #172033;
+  font-size: 17px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-list > article > header span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-statuses {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: 7px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-statuses span {
+  padding: 7px 9px;
+  border-radius: 999px;
+  color: #42546a;
+  background: #edf1f6;
+  font-weight: 680;
+}
+
+body.p48-parser-samples-review
+  .source-center
+  .p48-parser-sample-statuses
+  span[data-replay="passed"],
+body.p48-parser-samples-review
+  .source-center
+  .p48-parser-sample-statuses
+  span[data-review="approved"] {
+  color: #126c45;
+  background: #ddf4e8;
+}
+
+body.p48-parser-samples-review
+  .source-center
+  .p48-parser-sample-statuses
+  span[data-replay="changed"],
+body.p48-parser-samples-review
+  .source-center
+  .p48-parser-sample-statuses
+  span[data-replay="failed"],
+body.p48-parser-samples-review
+  .source-center
+  .p48-parser-sample-statuses
+  span[data-review="rejected"] {
+  color: #8d5200;
+  background: #fff0cf;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-list dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  border: 1px solid #dbe4f0;
+  background: #dbe4f0;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-list dl > div {
+  display: grid;
+  gap: 4px;
+  padding: 13px 14px;
+  background: #f8fafc;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-list dt {
+  color: #64748b;
+  font-size: 12px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-list dd {
+  margin: 0;
+  color: #243247;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-review {
+  display: grid;
+  gap: 10px;
+  padding-top: 15px;
+  border-top: 1px solid #dbe4f0;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-review label {
+  display: grid;
+  gap: 7px;
+  color: #243247;
+  font-size: 14px;
+  font-weight: 680;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-review input {
+  min-width: 0;
+  min-height: 46px;
+  padding: 11px 12px;
+  border: 1px solid #b8c5d6;
+  border-radius: 10px;
+  color: #172033;
+  background: #fff;
+  font-size: 16px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-review small {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 450;
+  line-height: 1.5;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-review .sample-review-actions {
+  display: flex;
+  gap: 10px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-review button.secondary {
+  border: 1px solid #d2b0b0;
+  color: #893737;
+  background: #fff;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-review button:disabled,
+body.p48-parser-samples-review .source-center .p48-parser-candidate-list button:disabled,
+body.p48-parser-samples-review .source-center .p48-parser-sample-actions > button:disabled {
+  border-color: #d5dfeb;
+  color: #8795a8;
+  background: #eef2f6;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-self-note {
+  margin: 0;
+  padding: 13px 15px;
+  border-left: 4px solid #77869a;
+  color: #42546a;
+  background: #f1f4f8;
+  line-height: 1.6;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-sample-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 32px;
+  border-top: 1px solid #dbe4f0;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 -12px 24px rgb(15 23 42 / 6%);
+  backdrop-filter: blur(12px);
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-actions p {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-actions button {
+  flex: 0 0 auto;
+  border: 1px solid #b8c5d6;
+  color: #243247;
+  background: #fff;
+}
+
+body.p48-parser-samples-review .source-center .p48-parser-samples-panel :focus-visible {
+  outline: 3px solid #66a3ff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  body.p48-parser-samples-review .source-center .p48-parser-samples-modal {
+    align-items: stretch;
+    padding: 0;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-samples-panel {
+    width: 100%;
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-samples-identity,
+  body.p48-parser-samples-review .source-center .p48-parser-samples-body {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-samples-identity {
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-samples-identity h3 {
+    font-size: 25px;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-samples-body {
+    gap: 20px;
+    padding-top: 20px;
+    padding-bottom: 24px;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-samples-gates ol,
+  body.p48-parser-samples-review .source-center .p48-parser-sample-list dl {
+    grid-template-columns: 1fr;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-candidate-list article,
+  body.p48-parser-samples-review .source-center .p48-parser-sample-list > article > header {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-candidate-list article {
+    gap: 10px;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-candidate-list button {
+    width: 100%;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-sample-statuses {
+    justify-content: start;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result li {
+    grid-template-columns: 1fr 18px 1fr;
+    gap: 6px;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result li code {
+    grid-column: 1 / -1;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-sample-review .sample-review-actions,
+  body.p48-parser-samples-review .source-center .p48-parser-sample-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-sample-actions details {
+    grid-column: 1 / -1;
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-samples-actions {
+    display: grid;
+    gap: 10px;
+    padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+  }
+
+  body.p48-parser-samples-review .source-center .p48-parser-samples-actions button {
+    width: 100%;
+  }
+}
+
+@media (forced-colors: active) {
+  body.p48-parser-samples-review .source-center .p48-parser-samples-panel,
+  body.p48-parser-samples-review .source-center .p48-parser-samples-identity,
+  body.p48-parser-samples-review .source-center .p48-parser-samples-gates,
+  body.p48-parser-samples-review .source-center .p48-parser-samples-replay-result,
+  body.p48-parser-samples-review .source-center .p48-parser-sample-list > article {
+    border: 1px solid CanvasText;
+  }
+}
