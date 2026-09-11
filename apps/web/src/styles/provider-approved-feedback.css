@@ -1,0 +1,56 @@
+/* P46: only the two approved mobile feedback regions; no page/editor layout import. */
+@media (max-width: 760px) {
+  html[data-design="signal-ledger"]
+    body
+    #app
+    .provider-registry
+    .provider-editor
+    button[data-waiting-previous="true"]:disabled {
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid #d8e1ed;
+    border-radius: 6px;
+    color: #66748a;
+    background: #e8edf4;
+    font-family: "Microsoft YaHei", sans-serif;
+    font-size: 14px;
+    opacity: 1;
+    cursor: not-allowed;
+  }
+
+  html[data-design="signal-ledger"]
+    body
+    #app
+    .provider-registry
+    > .provider-feedback[data-refresh-incomplete="true"],
+  html[data-design="signal-ledger"]
+    body
+    #app
+    .provider-registry
+    > .provider-feedback[data-refresh-incomplete="true"]
+    + .provider-feedback[data-tone="warning"] {
+    display: grid;
+    padding: 16px;
+    color: #75461f;
+    background: #fff8ef;
+    border: 1px solid #e5bca4;
+    border-radius: 8px;
+    font-family: "Microsoft YaHei", sans-serif;
+  }
+
+  html[data-design="signal-ledger"]
+    body
+    #app
+    .provider-registry
+    > .provider-feedback[data-refresh-incomplete="true"]
+    + .provider-feedback[data-tone="warning"]
+    > button {
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid #9db1cc;
+    border-radius: 6px;
+    background: #fff;
+    color: #294caf;
+    font-size: 14px;
+  }
+}

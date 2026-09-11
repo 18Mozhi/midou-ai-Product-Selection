@@ -4,12 +4,13 @@ import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
 import ts from "typescript";
+import { historicalProviderFeedbackSource } from "../../scripts/lib/ui-phase2-provider-feedback-baseline.mjs";
 import {
   historicalProviderAsyncSource,
   providerAsyncRevisions,
 } from "../../scripts/lib/ui-phase2-provider-async-baseline.mjs";
 
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) => historicalProviderFeedbackSource(f, readFileSync(f, "utf8"));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = "apps/web/src/components/ProviderRegistry.vue",
   current = read(file),
@@ -79,7 +80,7 @@ test("P46 historical mapping recognizes only exact known changes and keeps earli
   );
 });
 
-test("P46 actual async Vue120 formal pictures and source hashes match exact baseline/current files", () => {
+test("P46 historical async Vue120 formal pictures and source hashes match exact captured files", () => {
   for (const mode of ["baseline", "current"]) {
     const e = evidence(mode),
       dir = folder + "/" + mode;

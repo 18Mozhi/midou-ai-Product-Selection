@@ -2,6 +2,8 @@
 
 2026-09-11，用户回复：“这两种反馈组合通过，继续其他状态”。
 
+后续[获批手机反馈外观接入](P46-APPROVED-FEEDBACK-IMPLEMENTATION.md)另行记录；仅局部外观，不代表整张组合布局已生产接入。本文件保留批准发生时的范围和原图。
+
 批准仅限以下已展示的390px实际Vue审核图中的反馈文案与排列：
 
 1. [等待上一项保存](../../output/playwright/p46-provider-async-implementation/current/review-390-late-success-create-pending-new.png)：禁用按钮及本次展示的反馈组合。PNG SHA256：`5d30dcef0f4343c5c1c01547a95c52546e97510c4bc58043e0bcd7b08f7e6714`。

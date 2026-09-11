@@ -51,7 +51,7 @@ API的compatibility_matrix聚合留存HTML/DOM的页面指纹与解析版本，�
 | R    | 1c008f867673db60.2 | PR46-TECH-FEEDBACK | 编辑反馈关联号技术详情                                                                           |
 | R    | 4ba7742e75103fa4.1 | PR46-STEP-PREV     | 上一步，内存字段保留                                                                             |
 | R    | d0e6c4e6deaeab8a.1 | PR46-STEP-NEXT     | 校验当前组再下一步                                                                               |
-| R    | c00a014dd9020f4f.1 | PR46-SAVE          | type=submit；创建POST/编辑PUT+expected_version，同一实例串行；新窗等待上一项保存，结果按代次归属 |
+| R    | addbc979a88d3d3a.1 | PR46-SAVE          | type=submit；创建POST/编辑PUT+expected_version，同一实例串行；新窗等待上一项保存，结果按代次归属 |
 | A    | 92930355cc4e2a4f.1 | PR47-LOAD          | 刷新，refreshing禁用                                                                             |
 | A    | 3d1c1781d275b76d.1 | PR47-DEFINE        | 页头返回P46，仅导航                                                                              |
 | A    | d2b72f6631a5008b.1 | PR47-LOAD          | 状态primary调用load；不是登录或返回工作台                                                        |
@@ -140,6 +140,8 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 
 ## 7. 当前源指纹（LF SHA-256）
 
+2026-09-11获批反馈外观增量：Registry仅增加两项展示属性及独立CSS引用，完整script不变。保存按钮因data属性签名从c00a014dd9020f4f.1变为addbc979a88d3d3a.1；其余21候选不变，无新增业务动作。当前Registry指纹见下表，新CSS及全部43当前源由[80图接入证据](P46-APPROVED-FEEDBACK-IMPLEMENTATION.md)直接校验。其他14源未改，旧图按精确历史关联保留。
+
 2026-09-11异步归属增量：Registry指纹更新到本批实现，其他14源不变。保存按钮新增等待上一项保存文案，包含该文本的遮罩/编辑定义/表单候选签名同步为51517865bc5117a4.1、e277037d626f08f0.1、3f2a491e2f9e8f03.1，提交按钮为c00a014dd9020f4f.1；分别承接78dd668ea43102ff.1、33a2c5d568a6c67c.1、fab2f2181783074f.1、476b79a4175dbc41.1。事件/业务归属和R22总数不变，不能算新增业务动作。读取成功/失败/finally、保存旧结果、缓存返回及独立编辑关联号的当前证据见[P46异步归属实施](P46-ASYNC-OWNERSHIP-IMPLEMENTATION.md)，旧字段/日期/未知写入结果与完整模态验收仍待。
 
 2026-09-11仅将ProviderRegistry源指纹更新到焦点实施版本；其余14源未改。下方2026-09-09描述是历史增量范围，旧图库保留对应旧指纹，不据当前映射改写旧图。生产CSS还包含本页手机焦点框解除裁切的三行规则，完整当前40源及前后对照见本批实施证据。
@@ -153,7 +155,7 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 | 文件                                               | SHA-256                                                          |
 | -------------------------------------------------- | ---------------------------------------------------------------- |
 | apps/web/src/components/ProviderRuntimeSurface.vue | a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6 |
-| apps/web/src/components/ProviderRegistry.vue       | ffb8a98b8df1c966ee092cf1377f51c2ab67748d66377cda5734ac9646906df3 |
+| apps/web/src/components/ProviderRegistry.vue       | ec671e2cf8c1d55f88d97df05d7a14849235961b4e4f66f838ca0cf6fb76971f |
 | apps/web/src/components/ProviderAdapterCenter.vue  | 0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075 |
 | apps/web/src/components/ResponsiveDataView.vue     | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/TableViewControls.vue      | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |

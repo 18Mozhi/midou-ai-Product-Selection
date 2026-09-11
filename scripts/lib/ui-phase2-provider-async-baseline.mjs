@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { historicalProviderFeedbackSource } from "./ui-phase2-provider-feedback-baseline.mjs";
 
 export const providerAsyncRevisions = [
   {
@@ -17,7 +18,7 @@ export const providerAsyncRevisions = [
 const cached = new Map(),
   hash = (s) => createHash("sha256").update(s).digest("hex");
 export function historicalProviderAsyncSource(file, source) {
-  source = source.replaceAll("\r\n", "\n");
+  source = historicalProviderFeedbackSource(file, source);
   const r = providerAsyncRevisions.find((r) => r.file === file);
   if (!r || hash(source) !== r.after) return source;
   if (!cached.has(file)) {

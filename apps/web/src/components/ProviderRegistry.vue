@@ -601,7 +601,13 @@ onActivated(() => {
         >本页“已启用”只描述来源定义。公开页面/订阅源还必须完成条款复核；登录浏览器还受登录态、验证码与风控影响；最终采集结果请到“采集管理”核验。</span
       >
     </aside>
-    <p v-if="successMessage" class="provider-feedback" data-tone="success" role="status">
+    <p
+      v-if="successMessage"
+      class="provider-feedback"
+      data-tone="success"
+      :data-refresh-incomplete="loadMessage ? true : undefined"
+      role="status"
+    >
       {{ successMessage }}
     </p>
     <p v-if="loadMessage" class="provider-feedback" data-tone="warning" role="status">
@@ -1044,7 +1050,14 @@ onActivated(() => {
             ></span
           >
           <button v-if="editorStep < 4" type="button" @click="nextStep">下一步</button>
-          <button v-else type="submit" :disabled="saving || Object.keys(formErrors).length > 0">
+          <button
+            v-else
+            type="submit"
+            :disabled="saving || Object.keys(formErrors).length > 0"
+            :data-waiting-previous="
+              saving && pendingSaveGeneration !== editorFocusGeneration ? true : undefined
+            "
+          >
             {{
               saving
                 ? pendingSaveGeneration === editorFocusGeneration
@@ -1060,3 +1073,5 @@ onActivated(() => {
     </div>
   </section>
 </template>
+
+<style src="../styles/provider-approved-feedback.css"></style>
