@@ -1,0 +1,289 @@
+/* Review only: P48 mobile filter disclosure and inline source detail. */
+html
+  body.p48-mobile-detail-review:has(#app .source-center)
+  #app
+  .source-center
+  .p48-mobile-filter-toggle,
+html
+  body.p48-mobile-detail-review:has(#app .source-center)
+  #app
+  .source-center
+  .source-list
+  :is(.p48-mobile-record-summary, .p48-mobile-detail-trigger, .p48-mobile-detail-back) {
+  display: none;
+}
+
+html
+  body.p48-mobile-detail-review:has(#app .source-center)
+  #app
+  .source-center
+  :is(.p48-mobile-filter-fields, .p48-source-record-body) {
+  display: contents;
+}
+
+html
+  body.p48-mobile-detail-review:has(#app .source-center)
+  #app
+  .source-center
+  .source-list
+  article
+  > .p48-source-record-body
+  > p {
+  margin: 0;
+  color: var(--p48-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+@media (min-width: 761px) and (max-width: 1180px) {
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    .source-list
+    article
+    > .p48-source-record-body
+    > footer {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  html body.p48-mobile-detail-review:has(#app .source-center) #app .source-center .source-filter {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    .source-filter
+    .source-search {
+    grid-column: 1 / -1;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    .p48-mobile-filter-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid var(--p48-border-strong);
+    border-radius: 6px;
+    background: white;
+    color: var(--p48-accent-strong);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    .p48-mobile-filter-fields {
+    display: none;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    .p48-mobile-filter-fields.is-open {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    max-height: min(48vh, 440px);
+    padding: 4px 3px 12px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    .source-result-count {
+    justify-self: end;
+    white-space: nowrap;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    .source-list
+    article.p48-mobile-hidden,
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    .source-purpose-group.p48-mobile-group-hidden {
+    display: none;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    .source-list
+    .p48-mobile-record-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 14px;
+    margin: 0;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    .p48-mobile-record-summary
+    div {
+    min-width: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    .source-list
+    .p48-mobile-detail-trigger,
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    .source-list
+    .p48-mobile-detail-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--p48-accent);
+    border-radius: 6px;
+    background: var(--p48-accent);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    .p48-source-record-body {
+    display: none;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    article.p48-mobile-selected
+    .p48-mobile-record-summary,
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    article.p48-mobile-selected
+    .p48-mobile-detail-trigger {
+    display: none;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    article.p48-mobile-selected
+    .p48-source-record-body {
+    display: grid;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    article.p48-mobile-selected
+    .p48-mobile-detail-back {
+    order: -1;
+    background: white;
+    color: var(--p48-accent-strong);
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    article.p48-mobile-selected
+    .p48-source-record-body
+    > :is(p, dl, footer) {
+    margin: 0;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center.p48-mobile-detail-open
+    :is(.source-metrics, .source-help, .source-filter, .source-pagination) {
+    display: none;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center.p48-mobile-detail-open
+    .source-guide-actions {
+    display: none;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center.p48-mobile-detail-open
+    .source-purpose-head {
+    padding-bottom: 10px;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center.p48-mobile-detail-open
+    .source-purpose-head
+    > span {
+    display: none;
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center.p48-mobile-detail-open
+    article.p48-mobile-selected {
+    border-top: 1px solid var(--p48-border);
+    border-bottom: 1px solid var(--p48-border);
+  }
+
+  html
+    body.p48-mobile-detail-review:has(#app .source-center)
+    #app
+    .source-center
+    :is(
+      .p48-mobile-filter-toggle,
+      .p48-mobile-detail-trigger,
+      .p48-mobile-detail-back
+    ):focus-visible {
+    outline: 3px solid var(--p48-focus);
+    outline-offset: 3px;
+  }
+}
