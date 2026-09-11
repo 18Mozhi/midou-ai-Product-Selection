@@ -1,0 +1,159 @@
+body.p48-source-version-actions-review .source-center .p48-source-version-action-feedback {
+  display: grid;
+  gap: 7px;
+  padding: 18px 20px;
+  border: 1px solid #b9cbe3;
+  border-left: 5px solid #1769e0;
+  color: #29415f;
+  background: #eef6ff;
+}
+
+body.p48-source-version-actions-review .source-center .p48-source-version-action-feedback > p,
+body.p48-source-version-actions-review .source-center .p48-source-version-action-feedback h4 {
+  margin: 0;
+}
+
+body.p48-source-version-actions-review .source-center .p48-source-version-action-feedback > p:first-child {
+  color: #0f4cbd;
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body.p48-source-version-actions-review .source-center .p48-source-version-action-feedback h4 {
+  color: #172033;
+  font-size: 18px;
+  line-height: 1.4;
+  outline: none;
+}
+
+body.p48-source-version-actions-review .source-center .p48-source-version-action-feedback > p:not(:first-child) {
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+body.p48-source-version-actions-review
+  .source-center
+  .p48-source-version-action-feedback[data-stage="success"] {
+  border-color: #9bc9b3;
+  border-left-color: #178253;
+  color: #285a45;
+  background: #eefaf4;
+}
+
+body.p48-source-version-actions-review
+  .source-center
+  .p48-source-version-action-feedback[data-stage="success"]
+  > p:first-child {
+  color: #126c45;
+}
+
+body.p48-source-version-actions-review
+  .source-center
+  .p48-source-version-action-feedback[data-stage="conflict"] {
+  border-color: #e2c486;
+  border-left-color: #b66a00;
+  color: #64481d;
+  background: #fff8e8;
+}
+
+body.p48-source-version-actions-review
+  .source-center
+  .p48-source-version-action-feedback[data-stage="conflict"]
+  > p:first-child {
+  color: #8d5200;
+}
+
+body.p48-source-version-actions-review
+  .source-center
+  .p48-source-version-action-feedback[data-stage="forbidden"] {
+  border-color: #c4cfde;
+  border-left-color: #68798f;
+  color: #42546a;
+  background: #f3f6fa;
+}
+
+body.p48-source-version-actions-review
+  .source-center
+  .p48-source-version-action-feedback[data-stage="forbidden"]
+  > p:first-child {
+  color: #526176;
+}
+
+body.p48-source-version-actions-review
+  .source-center
+  .p48-source-version-action-feedback[data-stage="failed"] {
+  border-color: #e4b8b8;
+  border-left-color: #a53b3b;
+  color: #714242;
+  background: #fff4f3;
+}
+
+body.p48-source-version-actions-review
+  .source-center
+  .p48-source-version-action-feedback[data-stage="failed"]
+  > p:first-child {
+  color: #913737;
+}
+
+body.p48-source-version-actions-review .source-center .p48-source-version-action-feedback details {
+  margin-top: 2px;
+  color: #53657d;
+  font-size: 12px;
+}
+
+body.p48-source-version-actions-review .source-center .p48-source-version-action-feedback summary {
+  min-height: 44px;
+  width: max-content;
+  cursor: pointer;
+  line-height: 44px;
+}
+
+body.p48-source-version-actions-review .source-center .p48-source-version-action-feedback code {
+  display: block;
+  overflow-wrap: anywhere;
+  padding: 8px 0 2px;
+}
+
+body.p48-source-version-actions-review .source-center .p48-source-version-action-feedback button {
+  justify-self: start;
+  min-height: 44px;
+  margin-top: 3px;
+  padding: 10px 16px;
+  border: 1px solid #9dbbe3;
+  border-radius: 10px;
+  color: #0f4cbd;
+  background: #fff;
+  font-weight: 700;
+}
+
+body.p48-source-version-actions-review .source-center .p48-source-versions-rollback textarea:disabled {
+  border-color: #d2dbe7;
+  color: #6f7f93;
+  background: #eef2f6;
+}
+
+body.p48-source-version-actions-review
+  .source-center
+  .p48-source-versions-timeline
+  header
+  > button:disabled {
+  cursor: not-allowed;
+}
+
+@media (max-width: 760px) {
+  body.p48-source-version-actions-review .source-center .p48-source-version-action-feedback {
+    padding: 16px;
+  }
+
+  body.p48-source-version-actions-review .source-center .p48-source-version-action-feedback button {
+    width: 100%;
+  }
+}
+
+@media (forced-colors: active) {
+  body.p48-source-version-actions-review .source-center .p48-source-version-action-feedback {
+    border: 2px solid CanvasText;
+  }
+}

@@ -1,0 +1,3791 @@
+{
+  "kind": "P48-SOURCE-VERSION-ACTIONS-REVIEW-r1",
+  "generatedAt": "2026-09-11T14:31:33.611Z",
+  "reviewOnly": true,
+  "productionChanged": false,
+  "deployed": false,
+  "writesInterceptedLocally": true,
+  "processesClosed": true,
+  "ports": [
+    62189
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "scene": "submitting",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "all restore actions disabled while pending",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 2,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "3535d40e-cc86-42b5-a243-c8a48999ce63"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "success",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 2,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "27fbc508-3c3f-4ff0-8c1d-bae9e9b56ef0"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "conflict",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 2,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "478d77c6-0fd2-4f0b-a843-6086ec945b54"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "forbidden",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 1,
+        "versionCalls": 1,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "23a7c6b9-b5f8-4679-a35c-525bf744cefa"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "failed",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 1,
+        "versionCalls": 1,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "297a287e-2b9d-4afc-b8dd-26fcdab311bd"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "catalog-failed",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 3,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "c0e57a28-e6ae-4187-b3ef-6ff7824cdb40"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "history-failed",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 3,
+        "versionCalls": 3,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "25a93b9c-cf0f-420a-ae39-c27837e077a6"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "initial-read-failed",
+      "checks": [
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 0
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 1,
+        "versionCalls": 4,
+        "rollbackCalls": 0
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "submitting",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "all restore actions disabled while pending",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 2,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "b8975ff9-cac9-4f48-b713-e67b9387a4c5"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "success",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 2,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "0fc6a17e-4ba8-48ba-bb9d-7f1952ca0aa7"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "conflict",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 2,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "41eb1579-8570-482c-8486-e31ddfc46eac"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "forbidden",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 1,
+        "versionCalls": 1,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "5630bf60-0d86-4f36-9c5f-316ac270e7f5"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "failed",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 1,
+        "versionCalls": 1,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "656ef068-a968-4c0b-a2e3-01dc97154102"
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "catalog-failed",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 3,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "2ef2566b-f0d1-41cb-8f1f-be0abfbbad96"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "history-failed",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 3,
+        "versionCalls": 3,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "a3312e81-143c-4387-a00a-70f5fd60cb60"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "initial-read-failed",
+      "checks": [
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 0
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 1,
+        "versionCalls": 4,
+        "rollbackCalls": 0
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "submitting",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "all restore actions disabled while pending",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 2,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "66cd9af4-f606-421b-a527-5a31e346961a"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "success",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 2,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "d0384775-6d65-42d8-9915-5b6564b74edd"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "conflict",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 2,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "21f5eb54-d24e-4567-b82d-56ea8b3cf848"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "forbidden",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 1,
+        "versionCalls": 1,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "5099afa1-e1a1-4c11-a8bb-f90fdc50b36f"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "failed",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 1,
+        "versionCalls": 1,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "0f760928-c506-41b1-a1d5-600c8117e14d"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "catalog-failed",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 3,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "1313567d-7aa1-4564-8e5d-5a739599dd3a"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "history-failed",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 3,
+        "versionCalls": 3,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "26c60405-7968-4e47-ac73-d118a2f199ff"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "initial-read-failed",
+      "checks": [
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 0
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 1,
+        "versionCalls": 4,
+        "rollbackCalls": 0
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "submitting",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "all restore actions disabled while pending",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 2,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "c493972b-a981-4d1a-bd83-6f614778bdfa"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "success",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 2,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "c2e26516-7a01-4c3a-8ad0-c38b1a0394bb"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "conflict",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 2,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "13d90f74-2d3e-4751-ade7-8306cb9c0f4a"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "forbidden",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 1,
+        "versionCalls": 1,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "f030c471-8a1f-46e4-b32e-7d42432b85fb"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "failed",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 1,
+        "versionCalls": 1,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "be76d4b8-f301-436c-88cd-82d9c0179d68"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "catalog-failed",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 3,
+        "versionCalls": 2,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "a8d34f45-c886-40df-8c64-b5b8032cf2d9"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "history-failed",
+      "checks": [
+        {
+          "name": "rollback body",
+          "actual": {
+            "target_version": 2,
+            "expected_version": 3,
+            "reason": "恢复稳定采集设置"
+          }
+        },
+        {
+          "name": "rollback idempotency key",
+          "actual": true
+        },
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 1
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 3,
+        "versionCalls": 3,
+        "rollbackCalls": 1
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "POST /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/rollbacks",
+          "body": "{\"target_version\":2,\"expected_version\":3,\"reason\":\"恢复稳定采集设置\"}",
+          "idempotencyKey": "a304a2d6-570b-4ad6-a2a3-5e02654e57ed"
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "initial-read-failed",
+      "checks": [
+        {
+          "name": "no duplicate page message",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "background remains inert",
+          "actual": true
+        },
+        {
+          "name": "44px action feedback controls",
+          "actual": true
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "rollback calls",
+          "actual": 0
+        },
+        {
+          "name": "rollback requests are POST",
+          "actual": true
+        },
+        {
+          "name": "GET requests have no bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "counts": {
+        "sourceCalls": 1,
+        "versionCalls": 4,
+        "rollbackCalls": 0
+      },
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null,
+          "idempotencyKey": ""
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-submitting-submitting.png",
+      "width": 390,
+      "scene": "submitting",
+      "suffix": "submitting",
+      "sha256": "d43c25ba3f01565a6038bf1955c925f32079b218d48e0c18db45b88e60db2f61",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-submitting-confirmed.png",
+      "width": 390,
+      "scene": "submitting",
+      "suffix": "confirmed",
+      "sha256": "ffc992b5c1d29bbbb6240f6e6d3ed4773fad771db38b0a5e20c70251361f57bb",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-success-success.png",
+      "width": 390,
+      "scene": "success",
+      "suffix": "success",
+      "sha256": "3f5e84cab9020052fbcdcc55ca33ca7be8425e8f382774b1e2dfabfab18defb5",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-conflict-conflict.png",
+      "width": 390,
+      "scene": "conflict",
+      "suffix": "conflict",
+      "sha256": "d0ac97c31082005cfe9bf2f79f90de922ece9373837d1ece02728f5f55d7fa51",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-conflict-recovered.png",
+      "width": 390,
+      "scene": "conflict",
+      "suffix": "recovered",
+      "sha256": "e22e34bab7a1b031d5a251b9f5cc363d14cbf6282d3c1d81bc08ca3a4ee77273",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-forbidden-forbidden.png",
+      "width": 390,
+      "scene": "forbidden",
+      "suffix": "forbidden",
+      "sha256": "653fa98bae72960a8e4a567b153c72f04554fa4aeb37172c8b1f331a47e16660",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-failed-failed.png",
+      "width": 390,
+      "scene": "failed",
+      "suffix": "failed",
+      "sha256": "f3b2ad31a45ef06c3564b2b685353c0a4609796a711d2b0ca40c2c38ab90e4b4",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-catalog-failed-sync-failed.png",
+      "width": 390,
+      "scene": "catalog-failed",
+      "suffix": "sync-failed",
+      "sha256": "bbbf240478443cc071b2fe8cae9e2326d2791f2cacc21200630da06500b74876",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-catalog-failed-recovered.png",
+      "width": 390,
+      "scene": "catalog-failed",
+      "suffix": "recovered",
+      "sha256": "2c4529d2b23951a24d5cab364e9f4d9736391d69d1a87308ed98c1e785b4d403",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-history-failed-sync-failed.png",
+      "width": 390,
+      "scene": "history-failed",
+      "suffix": "sync-failed",
+      "sha256": "d1383249404217d41dc08a0259baec06766b68478bbf3be798e9071dfe893806",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-history-failed-recovered.png",
+      "width": 390,
+      "scene": "history-failed",
+      "suffix": "recovered",
+      "sha256": "2c4529d2b23951a24d5cab364e9f4d9736391d69d1a87308ed98c1e785b4d403",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-initial-read-failed-read-failed.png",
+      "width": 390,
+      "scene": "initial-read-failed",
+      "suffix": "read-failed",
+      "sha256": "f155c5b205fccac32b4b0a64b75379b38f7428cd1003ce86699099d9c8d458fe",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-initial-read-failed-recovered.png",
+      "width": 390,
+      "scene": "initial-read-failed",
+      "suffix": "recovered",
+      "sha256": "bb59dd7e776d4d56ce18f98f2baeac8675f754d6301d6f9fb879eeebc959a744",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-submitting-submitting.png",
+      "width": 760,
+      "scene": "submitting",
+      "suffix": "submitting",
+      "sha256": "c1da16e377f475ac866ef78ea80f20625ae7e4c9f35a98f505b6d3aa84fe623a",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-submitting-confirmed.png",
+      "width": 760,
+      "scene": "submitting",
+      "suffix": "confirmed",
+      "sha256": "70a58b3b16bc13e74452b89934a8eaa71e1681bf4d830785e9bba095855c4db2",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-success-success.png",
+      "width": 760,
+      "scene": "success",
+      "suffix": "success",
+      "sha256": "70a58b3b16bc13e74452b89934a8eaa71e1681bf4d830785e9bba095855c4db2",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-conflict-conflict.png",
+      "width": 760,
+      "scene": "conflict",
+      "suffix": "conflict",
+      "sha256": "c0d084d9f46859baab635aadd5ed486a1add231f617724f2542016b6dd365481",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-conflict-recovered.png",
+      "width": 760,
+      "scene": "conflict",
+      "suffix": "recovered",
+      "sha256": "8995fbeccc6a3384747afb4bd0f050e85e5d6f2454b6139bf43ee1a0d4effafc",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-forbidden-forbidden.png",
+      "width": 760,
+      "scene": "forbidden",
+      "suffix": "forbidden",
+      "sha256": "8627de75d25d8c83342927802bd0c747c2aa2e4b431d28846b930d6e4c17719b",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-failed-failed.png",
+      "width": 760,
+      "scene": "failed",
+      "suffix": "failed",
+      "sha256": "92b9bf8d0fa4048ea49f007d02ebdffda7153ae0567670264134ee595982c12d",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-catalog-failed-sync-failed.png",
+      "width": 760,
+      "scene": "catalog-failed",
+      "suffix": "sync-failed",
+      "sha256": "37555e37177bc7cb5305dc810b6b00121f66d1b4af193d76c48980532a771391",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-catalog-failed-recovered.png",
+      "width": 760,
+      "scene": "catalog-failed",
+      "suffix": "recovered",
+      "sha256": "ddf12f475f73d3d1bca3cd7cda649ef7a1bc1991dec4cd254bb19a30b64a7f6d",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-history-failed-sync-failed.png",
+      "width": 760,
+      "scene": "history-failed",
+      "suffix": "sync-failed",
+      "sha256": "cfab5b48fee803c0cae51a55cc71b606d3f5318d27d93abb165a96bd1c49a0b7",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-history-failed-recovered.png",
+      "width": 760,
+      "scene": "history-failed",
+      "suffix": "recovered",
+      "sha256": "ddf12f475f73d3d1bca3cd7cda649ef7a1bc1991dec4cd254bb19a30b64a7f6d",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-initial-read-failed-read-failed.png",
+      "width": 760,
+      "scene": "initial-read-failed",
+      "suffix": "read-failed",
+      "sha256": "f200ba83baebad75052a044204a9247e375eae80f4776ede9150c9f9a6db249b",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-initial-read-failed-recovered.png",
+      "width": 760,
+      "scene": "initial-read-failed",
+      "suffix": "recovered",
+      "sha256": "8ac63519cdd851016e42cf9c6e40e0fe9fc71279a62e69abc47097d08f9cd080",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "1024-submitting-submitting.png",
+      "width": 1024,
+      "scene": "submitting",
+      "suffix": "submitting",
+      "sha256": "27b714f8330b7c8da9a8eecc7ffc9dcbad2de5b2f84bebf9e316fc1c4d4978f8",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-submitting-confirmed.png",
+      "width": 1024,
+      "scene": "submitting",
+      "suffix": "confirmed",
+      "sha256": "755437081c7302e0c03dd3b50b6930b64909609988cbedb468f6fabe9049ed9a",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-success-success.png",
+      "width": 1024,
+      "scene": "success",
+      "suffix": "success",
+      "sha256": "508b42341824f03a3b8a66a16bce82760d6f8602ee27ef5d659579063e87f3ee",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-conflict-conflict.png",
+      "width": 1024,
+      "scene": "conflict",
+      "suffix": "conflict",
+      "sha256": "c2ffe009f9599fdf612c62fc48e70460c889835a44421ff48613d78b959ca9fc",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-conflict-recovered.png",
+      "width": 1024,
+      "scene": "conflict",
+      "suffix": "recovered",
+      "sha256": "0136915da97ff4d9e45594c84513b9a4b05d2eff652962d733cbcb75720586bb",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-forbidden-forbidden.png",
+      "width": 1024,
+      "scene": "forbidden",
+      "suffix": "forbidden",
+      "sha256": "661ec0cbfcef09abdc242542b2c5965bb5e48cc4ec2e8d41cc044f6ae6fa6659",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-failed-failed.png",
+      "width": 1024,
+      "scene": "failed",
+      "suffix": "failed",
+      "sha256": "6b90cd957cecf24bcc8497be7ea447f495bb97767ec12066aba2a02caed5621d",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-catalog-failed-sync-failed.png",
+      "width": 1024,
+      "scene": "catalog-failed",
+      "suffix": "sync-failed",
+      "sha256": "7d1d54b86b02ba8b71ad5cec5cd3a4222d8088dc7e7560e9ab58c39247d29280",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-catalog-failed-recovered.png",
+      "width": 1024,
+      "scene": "catalog-failed",
+      "suffix": "recovered",
+      "sha256": "79bba1540317390e6eb9c8b68cfd8f9af43315b4187f344b96f118e2f6974e66",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-history-failed-sync-failed.png",
+      "width": 1024,
+      "scene": "history-failed",
+      "suffix": "sync-failed",
+      "sha256": "33e3162ccaa9f043d103114475d67bf85f408b21c5b89fb8a5548d5c27e2ede2",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-history-failed-recovered.png",
+      "width": 1024,
+      "scene": "history-failed",
+      "suffix": "recovered",
+      "sha256": "79bba1540317390e6eb9c8b68cfd8f9af43315b4187f344b96f118e2f6974e66",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-initial-read-failed-read-failed.png",
+      "width": 1024,
+      "scene": "initial-read-failed",
+      "suffix": "read-failed",
+      "sha256": "db871c043dad4cf5c7b0ceb155e28def8c40a268391badcff5b3296fef608b3d",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-initial-read-failed-recovered.png",
+      "width": 1024,
+      "scene": "initial-read-failed",
+      "suffix": "recovered",
+      "sha256": "e7da08dbc716187c3b0c164e26c2f718d98a41a99a5303d5669d0cc0fa641a6a",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-submitting-submitting.png",
+      "width": 1440,
+      "scene": "submitting",
+      "suffix": "submitting",
+      "sha256": "46f4a7055bd9d15bed89192270e6cb49bc1d31815e8189b85a20865def049ca7",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-submitting-confirmed.png",
+      "width": 1440,
+      "scene": "submitting",
+      "suffix": "confirmed",
+      "sha256": "f1faaaa5ff8de5373eed2d034c97991e2fc21868d99930dc91ea42866ff578b9",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-success-success.png",
+      "width": 1440,
+      "scene": "success",
+      "suffix": "success",
+      "sha256": "1cba1ec06333ae8546a4e5a580b4974ca20aa7a1fb16fd95b9d8e24aa83f12fd",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-conflict-conflict.png",
+      "width": 1440,
+      "scene": "conflict",
+      "suffix": "conflict",
+      "sha256": "1ccc8ff6ffac5667cd1e4d733bf89aad7764d335650b80beafceb330e347bfe4",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-conflict-recovered.png",
+      "width": 1440,
+      "scene": "conflict",
+      "suffix": "recovered",
+      "sha256": "08e6138d647f98fcae70e939d0980b832f1a34c9fabbde373d381935492b5e78",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-forbidden-forbidden.png",
+      "width": 1440,
+      "scene": "forbidden",
+      "suffix": "forbidden",
+      "sha256": "5dfb837655cb01a606db32850ec3bc734e464c695948ab699f41c76ddb3267df",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-failed-failed.png",
+      "width": 1440,
+      "scene": "failed",
+      "suffix": "failed",
+      "sha256": "b325340aea544f59788c0d76f3e4bb676b977db255e760dad6352a45c4496d99",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-catalog-failed-sync-failed.png",
+      "width": 1440,
+      "scene": "catalog-failed",
+      "suffix": "sync-failed",
+      "sha256": "e3e9e3d7f605da216931f2e8c8ef9aba9e9a6bf0be007dcafa829b45a02d7c18",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-catalog-failed-recovered.png",
+      "width": 1440,
+      "scene": "catalog-failed",
+      "suffix": "recovered",
+      "sha256": "418512c0ac6d9f6209e94bfdfc5e30a9addbd95c3003efcc5ba28a57f1f2dfc0",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-history-failed-sync-failed.png",
+      "width": 1440,
+      "scene": "history-failed",
+      "suffix": "sync-failed",
+      "sha256": "65ecf236a63952db1d5715d01bbf507ec8483aa8df37ea862259c1ba38d0ce47",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-history-failed-recovered.png",
+      "width": 1440,
+      "scene": "history-failed",
+      "suffix": "recovered",
+      "sha256": "418512c0ac6d9f6209e94bfdfc5e30a9addbd95c3003efcc5ba28a57f1f2dfc0",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-initial-read-failed-read-failed.png",
+      "width": 1440,
+      "scene": "initial-read-failed",
+      "suffix": "read-failed",
+      "sha256": "27b4c7d36802dcbdd463adce67c6d655941fb8420b709aa05d44ce986039ffa2",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-initial-read-failed-recovered.png",
+      "width": 1440,
+      "scene": "initial-read-failed",
+      "suffix": "recovered",
+      "sha256": "ed5dd523faf9252209047e233d7bfb58c037d4f7b4b1544bd5daff0b7379b377",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/index.html": "0376c4bf04227ac5dbb6bb43895e5ed97eef6ca8bde54f08774908d3f07d9d88",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "66b064c2135275b9d173ef316692366823ef4f6276002796d9ed112183218cef",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/provider-adapters-c-detail.css": "094a11fe39b3701c35d6061f7a570e940b3bb00abcc0b2ed7f64ffeaea0c6bdd",
+    "apps/web/src/provider-adapters-c-feedback.css": "64b09e635e98f8865ea2fb3c8b33b1d21f447affd55061f3d01cf6667904bba2",
+    "apps/web/src/provider-adapters-c-page.css": "899ca57a21bceef95c7dc030bb7f92bae1755f324b1d26c3f0ba692dad736c86",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/route-catalog.generated.json": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-source-version-actions-preview.css": "48e98ab5830b7c000c46d9bfdd9d1fa021605a35c3694e2852d7dc66a46666f6",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-source-versions-preview.css": "879159b39d4c91cd248b77463019e303354ae3ee5c88dca41a948e6b863a3b45",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-sources-page-preview.css": "0ad5722b2920de2f07d92f37afb706266dde7726b4677a4bdbf8107cb00744e7",
+    "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
+    "scripts/lib/ui-phase2-provider-source-version-actions-preview.mjs": "46dddcb43c73e828641ca02d38c32dcaffd6f4694d048414ee0ca50943396c08",
+    "scripts/lib/ui-phase2-provider-source-versions-preview.mjs": "1b045004475658bb1acd252273494f39e14f1c9689caa1e11e9256e935ad06d0",
+    "scripts/verify-ui-phase2-provider-source-version-actions.mjs": "4916cf7832a7a3f81943533a2f0a653a76f10074677bf4aba0809d282aa21566",
+    "tests/e2e/m03-07-provider-sources.spec.ts": "29c1232a33cb260beeee6851f33c4558873d25e47e538d6a2e04c47eaa6ba5fe"
+  }
+}
