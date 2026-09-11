@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -58,6 +58,14 @@ interface RunMetrics {
   abnormal: number;
   duplicate_risk: number;
 }
+interface RuntimeScope {
+  query: string;
+  status: string;
+  page: number;
+}
+type RecoverySettlement =
+  | { kind: "success"; recovered: number; requestId: string }
+  | { kind: "failure"; message: string; requestId: string; unknown: boolean };
 const props = defineProps<{ apiBaseUrl: string }>(),
   request = createApiClient(props.apiBaseUrl),
   route = useRoute(),
@@ -83,7 +91,9 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   pagination = ref<Pagination>({ page: 1, page_size: 25, total: 0, total_pages: 0 }),
   runMetrics = ref<RunMetrics>({ total: 0, abnormal: 0, duplicate_risk: 0 }),
   requestId = ref(""),
-  message = ref(""),
+  readNotice = ref(""),
+  recoveryNotice = ref(""),
+  recoveryUnknown = ref(false),
   query = ref(queryValue("q").trim()),
   queryDraft = ref(query.value),
   status = ref(initialStatus),
@@ -92,7 +102,11 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   confirming = ref(false),
   saving = ref(false),
   refreshing = ref(false);
-let activeController: AbortController | null = null;
+let activeController: AbortController | null = null,
+  readSequence = 0,
+  pageActive = true,
+  resumeRead = false,
+  detachedRecovery: RecoverySettlement | null = null;
 const activeLeases = computed(() => profiles.value.filter((item) => item.lease)),
   expiredLeaseRisks = computed(() =>
     profiles.value.filter(
@@ -101,6 +115,21 @@ const activeLeases = computed(() => profiles.value.filter((item) => item.lease))
         observedAt.value &&
         new Date(item.lease.expires_at).getTime() <= new Date(observedAt.value).getTime(),
     ),
+  ),
+  recoveryHelp = computed(() =>
+    recoveryUnknown.value
+      ? "本次回收结果未知；核对正式运维记录前，本页不会再次提交。"
+      : saving.value
+        ? "回收请求已提交；离开页面不等于取消已经提交的请求。"
+        : !observedAt.value
+          ? "尚未取得运行快照，不能判断是否存在过期租约。"
+          : expiredLeaseRisks.value.length
+            ? `当前快照观测到 ${expiredLeaseRisks.value.length} 个过期占用；实际回收范围是执行时的全局过期租约。`
+            : "当前快照未观测到过期租约，无需回收。",
+  ),
+  recoveryImpact = computed(
+    () =>
+      `当前快照观测到 ${expiredLeaseRisks.value.length} 个过期占用；实际执行数量可能变化。不会终止有效租约，也不会删除运行历史、浏览器档案或凭证。`,
   );
 const failure = (kind: ApiFailureKind): State =>
   kind === "expired" || kind === "forbidden"
@@ -108,27 +137,56 @@ const failure = (kind: ApiFailureKind): State =>
     : kind === "blocked" || kind === "rate_limited"
       ? "blocked"
       : "error";
-async function syncUrl() {
+const routeScope = (): RuntimeScope => {
+  const routeStatus = queryValue("status"),
+    routePage = queryValue("page");
+  return {
+    query: queryValue("q").trim(),
+    status: allowedStatuses.has(routeStatus) ? routeStatus : "all",
+    page: /^\d{1,6}$/.test(routePage) && Number(routePage) > 0 ? Number(routePage) : 1,
+  };
+};
+const readScope = (): RuntimeScope => ({
+  query: query.value,
+  status: status.value,
+  page: page.value,
+});
+function applyRouteScope() {
+  const next = routeScope(),
+    changed =
+      query.value !== next.query || status.value !== next.status || page.value !== next.page;
+  if (!changed) return false;
+  query.value = next.query;
+  queryDraft.value = next.query;
+  status.value = next.status;
+  page.value = next.page;
+  return true;
+}
+async function syncUrl(scope = readScope()) {
   const next: Record<string, string> = {};
-  if (query.value) next.q = query.value;
-  if (status.value !== "all") next.status = status.value;
-  if (page.value > 1) next.page = String(page.value);
+  if (scope.query) next.q = scope.query;
+  if (scope.status !== "all") next.status = scope.status;
+  if (scope.page > 1) next.page = String(scope.page);
   await router.replace({ query: next });
 }
 async function load(options: { updateUrl?: boolean } = {}) {
-  if (refreshing.value) return;
+  const sequence = ++readSequence;
+  activeController?.abort("superseded");
+  activeController = null;
+  const scope = readScope();
   const hadData = Boolean(observedAt.value);
   refreshing.value = true;
   if (!hadData) state.value = "loading";
-  message.value = "";
-  const search = new URLSearchParams({ page: String(page.value) });
-  if (query.value) search.set("q", query.value);
-  if (status.value !== "all") search.set("status", status.value);
+  readNotice.value = "";
+  const search = new URLSearchParams({ page: String(scope.page) });
+  if (scope.query) search.set("q", scope.query);
+  if (scope.status !== "all") search.set("status", scope.status);
   const controller = new AbortController();
   activeController = controller;
-  const timer = window.setTimeout(() => controller.abort(), 15_000);
+  const timer = window.setTimeout(() => controller.abort("request_timeout"), 15_000);
   try {
-    if (options.updateUrl !== false) await syncUrl();
+    if (options.updateUrl !== false) await syncUrl(scope);
+    if (sequence !== readSequence || !pageActive) return;
     const response = await request<{
       profiles: Profile[];
       runs: Run[];
@@ -137,45 +195,49 @@ async function load(options: { updateUrl?: boolean } = {}) {
       filters: { status: RunStatus | null; query: string | null };
       observed_at: string;
     }>(`/platform/crawler-runtime?${search}`, { signal: controller.signal });
+    if (sequence !== readSequence || !pageActive) return;
     requestId.value = response.request_id;
     profiles.value = response.data.profiles;
     runs.value = response.data.runs;
     runMetrics.value = response.data.run_metrics;
     pagination.value = response.data.pagination;
-    const requestedPage = page.value;
+    const requestedPage = scope.page;
     page.value = response.data.pagination.page;
     observedAt.value = response.data.observed_at;
     state.value = profiles.value.length || runMetrics.value.total ? "ready" : "empty";
-    if (requestedPage !== page.value) await syncUrl();
+    if (requestedPage !== page.value) await syncUrl({ ...scope, page: page.value });
   } catch (error) {
+    if (sequence !== readSequence || !pageActive) return;
     const apiError = error instanceof ApiClientError ? error : null,
-      hint = controller.signal.aborted
+      timedOut = controller.signal.aborted && controller.signal.reason === "request_timeout",
+      hint = timedOut
         ? "读取超过 15 秒，已安全取消；当前已验证数据仍保留。"
         : (apiError?.actionHint ?? "网络或服务异常，当前已验证数据仍保留。");
+    if (controller.signal.aborted && !timedOut) return;
     requestId.value = apiError?.requestId ?? requestId.value;
     if (hadData) {
-      message.value = hint.includes("当前已验证数据仍保留")
+      readNotice.value = hint.includes("当前已验证数据仍保留")
         ? hint
         : `${hint} 当前已验证数据仍保留。`;
       state.value = "ready";
     } else {
-      message.value = hint;
+      readNotice.value = hint;
       state.value = apiError ? failure(apiError.kind) : "blocked";
     }
   } finally {
     window.clearTimeout(timer);
     if (activeController === controller) activeController = null;
-    refreshing.value = false;
+    if (sequence === readSequence) refreshing.value = false;
   }
 }
 function applyFilters() {
-  if (refreshing.value) return;
+  if (refreshing.value || saving.value) return;
   query.value = queryDraft.value.trim();
   page.value = 1;
   void load();
 }
 function resetFilters() {
-  if (refreshing.value) return;
+  if (refreshing.value || saving.value) return;
   query.value = "";
   queryDraft.value = "";
   status.value = "all";
@@ -183,31 +245,69 @@ function resetFilters() {
   void load();
 }
 function goToPage(nextPage: number) {
-  if (refreshing.value || nextPage < 1 || nextPage > pagination.value.total_pages) return;
+  if (refreshing.value || saving.value || nextPage < 1 || nextPage > pagination.value.total_pages)
+    return;
   page.value = nextPage;
   void load();
 }
 async function recover() {
-  if (saving.value || expiredLeaseRisks.value.length === 0) return;
+  if (saving.value || recoveryUnknown.value || expiredLeaseRisks.value.length === 0) return;
   saving.value = true;
+  recoveryNotice.value = "回收请求已提交，结果尚未确认；请勿重复提交。";
+  let settlement: RecoverySettlement;
   try {
     const response = await request<{ recovered: number }>(
       "/platform/crawler-runtime/recover-expired",
       { method: "POST", body: {} },
     );
-    requestId.value = response.request_id;
-    const notice = `已回收 ${response.data.recovered} 个过期租约`;
-    await load({ updateUrl: false });
-    message.value = notice;
+    settlement = {
+      kind: "success",
+      recovered: response.data.recovered,
+      requestId: response.request_id,
+    };
   } catch (error) {
     if (error instanceof ApiClientError) {
-      requestId.value = error.requestId;
-      message.value = error.actionHint;
-    } else message.value = "依赖不可用，未执行回收";
+      settlement =
+        error.status === 0
+          ? {
+              kind: "failure",
+              message: "回收结果未知。服务器可能已经处理；请先核对正式运维记录，不要重复提交。",
+              requestId: error.requestId,
+              unknown: true,
+            }
+          : {
+              kind: "failure",
+              message: error.actionHint,
+              requestId: error.requestId,
+              unknown: false,
+            };
+    } else
+      settlement = {
+        kind: "failure",
+        message: "回收结果未知。服务器可能已经处理；请先核对正式运维记录，不要重复提交。",
+        requestId: requestId.value,
+        unknown: true,
+      };
   } finally {
     saving.value = false;
     confirming.value = false;
   }
+  if (!pageActive) {
+    detachedRecovery = settlement;
+    return;
+  }
+  await applyRecoverySettlement(settlement);
+}
+async function applyRecoverySettlement(settlement: RecoverySettlement) {
+  requestId.value = settlement.requestId;
+  if (settlement.kind === "failure") {
+    recoveryUnknown.value = settlement.unknown;
+    recoveryNotice.value = settlement.message;
+    return;
+  }
+  recoveryUnknown.value = false;
+  recoveryNotice.value = `已回收 ${settlement.recovered} 个过期租约；正在重新读取当前事实。`;
+  await load({ updateUrl: false });
 }
 const time = (value: string | null) =>
   value
@@ -263,11 +363,50 @@ const rangeLabel = computed(() => {
     end = Math.min(pagination.value.page * pagination.value.page_size, pagination.value.total);
   return `${start}–${end} / ${pagination.value.total} 条`;
 });
+function suspendPage(reason: "deactivated" | "unmounted") {
+  const interrupted = Boolean(activeController);
+  pageActive = false;
+  readSequence += 1;
+  activeController?.abort(reason);
+  activeController = null;
+  refreshing.value = false;
+  resumeRead ||= reason === "deactivated" && interrupted;
+  confirming.value = false;
+}
 onMounted(() => load());
-onBeforeUnmount(() => activeController?.abort());
+watch(
+  () => [route.path, route.query.q, route.query.status, route.query.page] as const,
+  ([path]) => {
+    if (path !== "/platform-admin/collection/browser-runtime" || !pageActive) return;
+    if (applyRouteScope()) void load({ updateUrl: false });
+  },
+);
+onBeforeUnmount(() => suspendPage("unmounted"));
+onDeactivated(() => suspendPage("deactivated"));
+onActivated(() => {
+  pageActive = true;
+  if (route.path !== "/platform-admin/collection/browser-runtime") return;
+  const routeChanged = applyRouteScope();
+  if (detachedRecovery) {
+    const settlement = detachedRecovery;
+    detachedRecovery = null;
+    resumeRead = false;
+    void applyRecoverySettlement(settlement);
+    return;
+  }
+  if (routeChanged || resumeRead) {
+    resumeRead = false;
+    void load({ updateUrl: false });
+  }
+});
 </script>
 <template>
-  <section class="crawler-center" aria-labelledby="crawler-title">
+  <section
+    class="crawler-center"
+    aria-labelledby="crawler-title"
+    :aria-busy="refreshing || saving"
+    :inert="confirming"
+  >
     <header class="crawler-title">
       <div>
         <p>网页采集运行中心</p>
@@ -275,19 +414,22 @@ onBeforeUnmount(() => activeController?.abort());
         <span>查看哪些网页登录档案正在使用、哪些运行失败，以及失败发生的时间和原因。</span>
       </div>
       <div class="crawler-title-actions">
-        <button type="button" class="secondary" :disabled="refreshing" @click="load()">
+        <button type="button" class="secondary" :disabled="refreshing || saving" @click="load()">
           {{ refreshing ? "刷新中…" : "刷新数据" }}
         </button>
         <button
           type="button"
-          :disabled="saving || refreshing || expiredLeaseRisks.length === 0"
+          :disabled="saving || refreshing || recoveryUnknown || expiredLeaseRisks.length === 0"
+          aria-describedby="crawler-recovery-help"
           @click="confirming = true"
         >
           {{ saving ? "回收中…" : "回收过期运行" }}
         </button>
+        <small id="crawler-recovery-help">{{ recoveryHelp }}</small>
       </div>
     </header>
-    <p v-if="message" class="crawler-notice" aria-live="polite">{{ message }}</p>
+    <p class="crawler-notice" role="status" aria-live="polite">{{ recoveryNotice }}</p>
+    <p class="crawler-notice" role="status" aria-live="polite">{{ readNotice }}</p>
     <UiStatePanel
       v-if="state !== 'ready'"
       :kind="state"
@@ -391,12 +533,13 @@ onBeforeUnmount(() => activeController?.abort());
               <input
                 v-model="queryDraft"
                 aria-label="搜索运行"
+                :disabled="refreshing || saving"
                 maxlength="160"
                 placeholder="运行 ID / 错误码 / trace_id"
             /></label>
             <label>
               <span>运行状态</span>
-              <select v-model="status" aria-label="运行状态">
+              <select v-model="status" aria-label="运行状态" :disabled="refreshing || saving">
                 <option value="all">全部状态</option>
                 <option value="running">运行中</option>
                 <option value="succeeded">成功</option>
@@ -407,8 +550,13 @@ onBeforeUnmount(() => activeController?.abort());
                 <option value="cancelled">已取消</option>
               </select>
             </label>
-            <button type="submit" :disabled="refreshing">查询</button>
-            <button type="button" class="secondary" :disabled="refreshing" @click="resetFilters">
+            <button type="submit" :disabled="refreshing || saving">查询</button>
+            <button
+              type="button"
+              class="secondary"
+              :disabled="refreshing || saving"
+              @click="resetFilters"
+            >
               重置
             </button>
           </form>
@@ -531,7 +679,7 @@ onBeforeUnmount(() => activeController?.abort());
         <nav v-if="pagination.total_pages > 1" class="crawler-pagination" aria-label="运行记录分页">
           <button
             type="button"
-            :disabled="refreshing || pagination.page <= 1"
+            :disabled="refreshing || saving || pagination.page <= 1"
             @click="goToPage(pagination.page - 1)"
           >
             上一页
@@ -539,7 +687,7 @@ onBeforeUnmount(() => activeController?.abort());
           <span>{{ rangeLabel }} · 第 {{ pagination.page }} / {{ pagination.total_pages }} 页</span>
           <button
             type="button"
-            :disabled="refreshing || pagination.page >= pagination.total_pages"
+            :disabled="refreshing || saving || pagination.page >= pagination.total_pages"
             @click="goToPage(pagination.page + 1)"
           >
             下一页
@@ -553,9 +701,11 @@ onBeforeUnmount(() => activeController?.abort());
       :open="confirming"
       title="回收所有已过期租约？"
       description="仅回收服务端确认已经过期的档案租约，并把对应运行标记为超时。"
-      impact="不会终止有效租约，不会删除运行历史、浏览器档案或凭证。"
+      :impact="recoveryImpact"
       confirm-label="确认回收"
       confirmation-text="确认回收"
+      :busy="saving"
+      busy-label="回收中…"
       @cancel="confirming = false"
       @confirm="recover"
     />

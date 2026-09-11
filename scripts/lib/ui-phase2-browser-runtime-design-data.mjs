@@ -40,12 +40,13 @@ export async function buildRuntimeDesignData(repo) {
     .map((n) => n.getFullText(script))
     .join("\n");
   const names =
-    "state,profiles,runs,pagination,runMetrics,requestId,message,query,queryDraft,status,page,observedAt,confirming,saving,refreshing,activeLeases,expiredLeaseRisks,failure,syncUrl,load,applyFilters,resetFilters,goToPage,recover,time,statusText,errorText,expiryForecast,leaseExpired,rangeLabel,allowedStatuses";
-  const logic = `// Actual Vue script + original E2E snapshot, not a Vue mount or HTTP.\nwindow.RUNTIME_C_SOURCE=(bridge)=>{const {ref,computed,onBeforeUnmount,onMounted,useRoute,useRouter,defineProps,createApiClient,ApiClientError,window,AbortController,URLSearchParams}=bridge;\n${compile(stripped)}\nreturn {${names}};};\nwindow.RUNTIME_C_FIXTURE=(url)=>{${compile(fixtureSource)}\nreturn runtimeSnapshot(url);};`;
+    "state,profiles,runs,pagination,runMetrics,requestId,readNotice,recoveryNotice,recoveryUnknown,query,queryDraft,status,page,observedAt,confirming,saving,refreshing,activeLeases,expiredLeaseRisks,recoveryHelp,recoveryImpact,failure,routeScope,readScope,applyRouteScope,syncUrl,load,applyFilters,resetFilters,goToPage,recover,applyRecoverySettlement,time,statusText,errorText,expiryForecast,leaseExpired,rangeLabel,allowedStatuses";
+  const logic = `// Actual Vue script + original E2E snapshot, not a Vue mount or HTTP.\nwindow.RUNTIME_C_SOURCE=(bridge)=>{const {ref,computed,onActivated,onBeforeUnmount,onDeactivated,onMounted,watch,useRoute,useRouter,defineProps,createApiClient,ApiClientError,window,AbortController,URLSearchParams}=bridge;\n${compile(stripped)}\nreturn {${names}};};\nwindow.RUNTIME_C_FIXTURE=(url)=>{${compile(fixtureSource)}\nreturn runtimeSnapshot(url);};`;
   class ApiClientError extends Error {
-    constructor(kind) {
+    constructor(kind, status = 500) {
       super(kind);
       this.kind = kind;
+      this.status = status;
       this.actionHint = `合成${kind}`;
       this.requestId = "inert-request";
     }
@@ -56,8 +57,11 @@ export async function buildRuntimeDesignData(repo) {
     const calls = [],
       timers = [],
       unmount = [],
+      deactivate = [],
+      activate = [],
+      watchers = [],
       navigations = [],
-      route = { query };
+      route = { path: "/platform-admin/collection/browser-runtime", query };
     const c = b.window.RUNTIME_C_SOURCE({
       ref: (value) => ({ value }),
       computed: (get) => ({
@@ -67,6 +71,9 @@ export async function buildRuntimeDesignData(repo) {
       }),
       onMounted: () => {},
       onBeforeUnmount: (fn) => unmount.push(fn),
+      onDeactivated: (fn) => deactivate.push(fn),
+      onActivated: (fn) => activate.push(fn),
+      watch: (source, callback) => watchers.push({ source, callback }),
       useRoute: () => route,
       useRouter: () => ({
         replace: async (v) => {
@@ -90,7 +97,7 @@ export async function buildRuntimeDesignData(repo) {
         clearTimeout: () => {},
       },
     });
-    return { c, calls, timers, unmount, route, navigations };
+    return { c, calls, timers, unmount, deactivate, activate, watchers, route, navigations };
   }
   const setData = (c, d = original) => {
     c.profiles.value = plain(d.profiles);
@@ -161,7 +168,6 @@ export async function buildRuntimeDesignData(repo) {
       if (preserved) setData(x.c);
       const work = x.c.load();
       await tick();
-      await x.c.load();
       assert.equal(x.calls.length, 1);
       assert.equal(x.timers[0].ms, 15000);
       if (kind === "timeout") x.timers[0].fn();
@@ -174,7 +180,7 @@ export async function buildRuntimeDesignData(repo) {
       if (preserved) assert.deepEqual(plain(x.c.profiles.value), original.profiles);
     }
   checks.push(
-    "Ten initial/preserved read failures, actual single-flight and 15-second abort callback; no real timers or role authorization.",
+    "Ten initial/preserved read failures and 15-second abort callback; no real timers or role authorization.",
   );
   {
     const x = mount({ q: " trace-success ", status: "succeeded", page: "99", unknown: "drop" });
@@ -186,25 +192,35 @@ export async function buildRuntimeDesignData(repo) {
     await work;
     assert.equal(x.c.page.value, 1);
     assert.equal(x.route.query.page, undefined);
-    x.c.queryDraft.value = "new-draft";
-    const read = x.c.load();
+    const staleRead = x.c.load();
     await tick();
+    x.c.query.value = "TRACE-SUCCESS";
+    x.c.queryDraft.value = "TRACE-SUCCESS";
     x.c.status.value = "blocked";
-    x.c.applyFilters();
-    assert.equal(x.calls.length, 2);
+    x.c.page.value = 1;
+    const latestRead = x.c.load();
+    await tick();
+    assert.equal(x.calls.length, 3);
+    assert.equal(x.calls[1].options.signal.aborted, true);
+    success(x.calls[2], {
+      ...original,
+      profiles: [{ ...original.profiles[0], name: "latest" }],
+    });
+    await tick();
+    await latestRead;
     success(x.calls[1]);
-    await read;
+    await staleRead;
     assert.equal(x.c.status.value, "blocked");
-    assert.equal(x.c.runs.value.length, 3);
+    assert.equal(x.c.profiles.value[0].name, "latest");
     const read2 = x.c.load();
     await tick();
     x.unmount[0]();
-    assert.equal(x.calls[2].options.signal.aborted, true);
-    success(x.calls[2]);
+    assert.equal(x.calls[3].options.signal.aborted, true);
+    success(x.calls[3]);
     await read2;
     assert.equal(x.c.state.value, "ready");
     checks.push(
-      "Initial trim/URL correction verified; in-flight status/draft mismatch and ignored-abort late reference updates reproduced in inert source bridge.",
+      "Initial trim/URL correction, superseded read abort and stale response isolation verified in the inert source bridge.",
     );
   }
   {
@@ -220,15 +236,17 @@ export async function buildRuntimeDesignData(repo) {
     await tick();
     x.calls[1].reject(new ApiClientError("blocked"));
     await work;
-    assert.equal(x.c.message.value, "已回收 1 个过期租约");
+    assert.ok(x.c.recoveryNotice.value.includes("已回收 1 个过期租约"));
+    assert.ok(x.c.readNotice.value.includes("合成blocked"));
     assert.equal(x.c.confirming.value, false);
     const failed = x.c.recover();
     await tick();
     x.calls[2].reject(new Error("transport unknown"));
     await failed;
-    assert.equal(x.c.message.value, "依赖不可用，未执行回收");
+    assert.equal(x.c.recoveryUnknown.value, true);
+    assert.ok(x.c.recoveryNotice.value.includes("回收结果未知"));
     checks.push(
-      "Exact empty-body recovery and single-flight; successful write overwrites refresh failure, generic transport failure incorrectly asserts no execution. No real recovery.",
+      "Exact empty-body recovery and single-flight; successful write stays separate from failed verification, while unknown transport blocks resubmission. No real recovery.",
     );
   }
   const confirmPath = "apps/web/src/components/ConfirmDialog.vue",

@@ -273,3 +273,230 @@ test("M03-04.A08/A09/A16 empty forbidden and dependency states are truthful", as
   await page.reload();
   await expect(page.locator('[data-kind="blocked"]')).toBeVisible();
 });
+
+test("UI2-CL53 isolates the runtime page while recovery confirmation owns focus", async ({
+  page,
+}) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/crawler-runtime?**", (route) =>
+    route.fulfill({
+      json: {
+        data: runtimeSnapshot(route.request().url()),
+        request_id: "cl53-focus",
+        trace_id: "cl53-focus",
+      },
+    }),
+  );
+  await page.goto(runtimePath);
+
+  const trigger = page.getByRole("button", { name: "回收过期运行" });
+  await trigger.click();
+  const runtime = page.locator(".crawler-center");
+  const dialog = page.getByRole("alertdialog", { name: "回收所有已过期租约？" });
+  const cancel = dialog.getByRole("button", { name: "取消" });
+  await expect(runtime).toHaveAttribute("inert", "");
+  await expect(cancel).toBeFocused();
+
+  await page.keyboard.press("Shift+Tab");
+  await expect(dialog.getByPlaceholder("确认回收")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(runtime).not.toHaveAttribute("inert", "");
+  await expect(trigger).toBeFocused();
+});
+
+test("UI2-CL53 restores same-route filters and supersedes an older runtime read", async ({
+  page,
+}) => {
+  await nav(page);
+  let reads = 0;
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => (release = resolve));
+  let entered!: () => void;
+  const started = new Promise<void>((resolve) => (entered = resolve));
+  await page.route("**/api/v1/platform/crawler-runtime?**", async (route) => {
+    const read = ++reads;
+    const url = new URL(route.request().url());
+    if (read === 2) {
+      entered();
+      await held;
+    }
+    const snapshot = runtimeSnapshot(route.request().url());
+    const requestedPage = Number(url.searchParams.get("page") ?? "1");
+    try {
+      await route.fulfill({
+        json: {
+          data: {
+            ...snapshot,
+            profiles:
+              url.searchParams.get("q") === "trace-success"
+                ? [{ ...profiles[0], name: "历史恢复档案" }]
+                : profiles,
+            pagination: {
+              ...snapshot.pagination,
+              page: requestedPage,
+              total: 50,
+              total_pages: 2,
+            },
+          },
+          request_id: `cl53-read-${read}`,
+          trace_id: `cl53-read-${read}`,
+        },
+      });
+    } catch (error) {
+      if (!route.request().failure()) throw error;
+    }
+  });
+  await page.goto(runtimePath);
+  await page.getByRole("button", { name: "刷新数据" }).click();
+  await started;
+  await page.evaluate(() => {
+    history.pushState(
+      {},
+      "",
+      "/platform-admin/collection/browser-runtime?q=trace-success&status=succeeded&page=2",
+    );
+    window.dispatchEvent(new PopStateEvent("popstate", { state: history.state }));
+  });
+  try {
+    await expect.poll(() => reads).toBeGreaterThanOrEqual(3);
+  } finally {
+    release();
+  }
+
+  await expect(page.getByLabel("搜索运行")).toHaveValue("trace-success");
+  await expect(page.getByLabel("运行状态")).toHaveValue("succeeded");
+  await expect(page.getByText("历史恢复档案", { exact: true })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "运行记录分页" })).toContainText("第 2 / 2 页");
+});
+
+test("UI2-CL53 keeps recovery success separate from a failed verification read", async ({
+  page,
+}) => {
+  await nav(page);
+  let reads = 0;
+  await page.route("**/api/v1/platform/crawler-runtime?**", (route) => {
+    reads += 1;
+    if (reads === 1)
+      return route.fulfill({
+        json: {
+          data: runtimeSnapshot(route.request().url()),
+          request_id: "cl53-initial",
+          trace_id: "cl53-initial",
+        },
+      });
+    return route.fulfill({
+      status: 500,
+      json: {
+        error: {
+          code: "verification_read_failed",
+          message: "当前事实读取失败。",
+          action_hint: "请稍后重新读取当前事实。",
+        },
+        request_id: "cl53-read-failed",
+      },
+    });
+  });
+  await page.route("**/api/v1/platform/crawler-runtime/recover-expired", (route) =>
+    route.fulfill({
+      json: {
+        data: { recovered: 1 },
+        request_id: "cl53-recovered",
+        trace_id: "cl53-recovered",
+      },
+    }),
+  );
+  await page.goto(runtimePath);
+  await page.getByRole("button", { name: "回收过期运行" }).click();
+  await page.getByPlaceholder("确认回收").fill("确认回收");
+  await page.getByRole("button", { name: "确认回收" }).click();
+
+  await expect(page.getByText(/已回收 1 个过期租约/)).toBeVisible();
+  await expect(page.getByText(/请稍后重新读取当前事实.*当前已验证数据仍保留/)).toBeVisible();
+});
+
+test("UI2-CL53 treats a lost recovery response as unknown and blocks resubmission", async ({
+  page,
+}) => {
+  await nav(page);
+  let posts = 0;
+  await page.route("**/api/v1/platform/crawler-runtime?**", (route) =>
+    route.fulfill({
+      json: {
+        data: runtimeSnapshot(route.request().url()),
+        request_id: "cl53-unknown-list",
+        trace_id: "cl53-unknown-list",
+      },
+    }),
+  );
+  await page.route("**/api/v1/platform/crawler-runtime/recover-expired", (route) => {
+    posts += 1;
+    return route.abort("connectionfailed");
+  });
+  await page.goto(runtimePath);
+  await page.getByRole("button", { name: "回收过期运行" }).click();
+  await page.getByPlaceholder("确认回收").fill("确认回收");
+  await page.getByRole("button", { name: "确认回收" }).click();
+
+  await expect(page.getByText(/回收结果未知.*不要重复提交/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "回收过期运行" })).toBeDisabled();
+  expect(posts).toBe(1);
+});
+
+test("UI2-CL53 defers detached recovery verification until KeepAlive return", async ({ page }) => {
+  await nav(page);
+  let runtimeReads = 0;
+  await page.route("**/api/v1/platform/crawler-runtime?**", (route) => {
+    runtimeReads += 1;
+    return route.fulfill({
+      json: {
+        data: runtimeSnapshot(route.request().url()),
+        request_id: `cl53-detached-read-${runtimeReads}`,
+        trace_id: `cl53-detached-read-${runtimeReads}`,
+      },
+    });
+  });
+  await page.route("**/api/v1/platform/collection/tasks?**", (route) =>
+    route.fulfill({
+      json: { data: [], meta: { page: 1, page_size: 50, total: 0 }, request_id: "cl53-tasks" },
+    }),
+  );
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => (release = resolve));
+  let entered!: () => void;
+  const started = new Promise<void>((resolve) => (entered = resolve));
+  let finished!: () => void;
+  const completed = new Promise<void>((resolve) => (finished = resolve));
+  await page.route("**/api/v1/platform/crawler-runtime/recover-expired", async (route) => {
+    entered();
+    await held;
+    try {
+      await route.fulfill({
+        json: {
+          data: { recovered: 1 },
+          request_id: "cl53-detached-recovered",
+          trace_id: "cl53-detached-recovered",
+        },
+      });
+    } finally {
+      finished();
+    }
+  });
+  await page.goto(runtimePath);
+  await page.getByRole("button", { name: "回收过期运行" }).click();
+  await page.getByPlaceholder("确认回收").fill("确认回收");
+  await page.getByRole("button", { name: "确认回收" }).click();
+  await started;
+  await page.evaluate(() => {
+    (document.querySelector('a[href="/platform-admin/collection"]') as HTMLElement | null)?.click();
+  });
+  await expect(page).toHaveURL(/\/platform-admin\/collection$/);
+  release();
+  await completed;
+  await expect.poll(() => runtimeReads).toBe(1);
+
+  await page.goBack();
+  await expect(page).toHaveURL(/\/platform-admin\/collection\/browser-runtime$/);
+  await expect.poll(() => runtimeReads).toBeGreaterThanOrEqual(2);
+  await expect(page.getByText(/已回收 1 个过期租约/)).toBeVisible();
+});

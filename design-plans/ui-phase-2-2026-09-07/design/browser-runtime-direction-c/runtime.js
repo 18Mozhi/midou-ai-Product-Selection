@@ -14,8 +14,11 @@
         return get();
       },
     }),
+    onActivated: () => {},
     onMounted: () => {},
     onBeforeUnmount: () => {},
+    onDeactivated: () => {},
+    watch: () => {},
     useRoute: () => ({ query: {} }),
     useRouter: () => ({ replace: () => {} }),
     defineProps: () => ({}),

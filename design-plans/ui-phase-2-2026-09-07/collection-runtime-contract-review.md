@@ -1,5 +1,7 @@
 # B1c · 采集任务、总览与浏览器运行合同
 
+2026-09-12追加P53：[读取、回收与焦点归属](P53-INTERACTION-OWNERSHIP-IMPLEMENTATION.md)补齐同路由q/status/page恢复、GET快照/代次与KeepAlive续读；回收POST离页不取消、不后台核对，返回后才应用结算。成功与核对失败分开播报，无HTTP响应标记结果未知并锁定重提；确认期间底层P53 inert。旧实现前四组双端8项全红，修复后五组双端10/10、完整M03-04双端16/16。API、权限、空body、服务端事务和数据库不变；真实回收、生产与C视觉审核仍待。
+
 2026-09-12追加P52可达性：[焦点与字段语义](P52-ACCESSIBILITY-IMPLEMENTATION.md)让批确认期间底层总览inert并在Escape后返焦，来源展开关联实际结果区，原因帮助/错误/焦点形成字段闭环；既有手机记录抽屉补齐隔离、Tab和返焦证据。旧实现新增4失败/2通过，修复后定向6/6、完整M06-03双端42/42。当前O扫描为29候选/5个v-model，新增候选仅是原因输入清错事件；下方66候选表保留初始合同定位，不把运行增量重算成新业务动作。API/权限/批量合同不变，真实链路与C视觉仍待。
 
 2026-09-12追加P52批量写入：[批量重放写入归属](P52-BATCH-WRITE-OWNERSHIP-IMPLEMENTATION.md)在预览时固定目标/原因/影响/batchId，串行POST保持独立幂等，成功只称创建新任务，明确失败与未知结果分开；未知不自动重发。KeepAlive离页不取消POST、不后台GET，返回先恢复当前URL范围再核对。旧实现新增双端8项全红，修复后UI2-CL52双端24/24、完整M06-03双端36/36。API/权限/事务/数据库不变，真实链路与C视觉仍待。
@@ -155,9 +157,9 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 
 | ID | 源码事实 / 待验场景 | 退出证据 |
 | --- | --- | --- |
-| CL-G01 | T与O的同路由查询、读取代次及等待中KeepAlive续读已局部修复；R快速查询与三页组织/角色变化仍待 | 继续可控迟到读/写、跨页返回和权限范围变化；当前CL51/CL52不外推到R |
-| CL-G02 | T重放关闭/换任务归属及O批量快照/离页结算/未知不重发已局部修复；R回收再刷新提示覆盖仍待 | 继续R的精确body/目标/幂等/调用次数，离开与部分成功不误导；当前T/O证据不外推到R |
-| CL-G03 | T三态标题/关闭、可见焦点过滤、嵌套确认inert及移动二级转完整详情返焦已局部修复；O/R消费者与完整读屏仍待 | 继续真实键盘、焦点返回、错误关联与读屏可达，不能靠CSS或脚本改DOM绕过 |
+| CL-G01 | T、O与R的同路由查询、读取代次及等待中KeepAlive续读已局部修复；三页组织/角色变化仍待 | 继续跨范围权限变化与真实读链；当前隔离响应不外推到生产权限 |
+| CL-G02 | T重放、O批量及R全局回收已补写入归属、离页结算和未知不重发；R回收后核对失败独立提示 | 继续真实幂等、审计、数据库与运行恢复核查；本地成功不等于生产恢复 |
+| CL-G03 | T详情、T/O/R确认和三页共享手机详情已有局部焦点证据；完整读屏与全部消费者仍待 | 继续真实键盘、焦点返回、错误关联与读屏可达，不能靠CSS或脚本改DOM绕过 |
 | CL-G04 | T已补automatically_replayed与空结果筛选保留；O已补attempts-only ready | 继续核对真实可达数据/过滤合同与总览呈现；不改任务状态机 |
 | CL-G05 | 三页初次与刷新失权的处理不同；路由能力与API能力不同 | 六角色真实允许/拒绝、当前快照安全展示和跨范围隔离，不能用Mock权限冒充 |
 | CL-G06 | 指标范围、登录期限与真实运行含义不同 | 正式新图明确范围/时间/未知，真实API与SQL核对，不新增假指标 |
@@ -174,11 +176,11 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | apps/web/src/components/CollectionRuntimeSurface.vue | f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335 |
 | apps/web/src/components/CollectionTaskCenter.vue | 509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160 |
 | apps/web/src/components/CollectionOperationsConsole.vue | 7acded3c40ce98f08e87955cd161bba67874aca496d1768b34505bb35b527d7d |
-| apps/web/src/components/CollectionRuntimeCenter.vue | e6829b2cc84321af56e830cbd60839eafa89f23937cb44eeccf6b79e2428b3b4 |
+| apps/web/src/components/CollectionRuntimeCenter.vue | 39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9 |
 | apps/web/src/collection-tasks.css | 4c5a0775200b22badcfc3c56ee193cd91c12901f603021eac5d43e8a291a15d4 |
 | apps/web/src/collection-task-detail.css | cdeb6209781acc6ff747fb4728f9675d69479c53fd3a97dfdb9e0b5c17130544 |
 | apps/web/src/styles/platform-operations.css | 7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9 |
-| apps/web/src/crawler-runtime.css | 3d6f9d1a19357079254d606047176d243bef82e4f9bdd76dec86fd6dfadcbd2a |
+| apps/web/src/crawler-runtime.css | 544a5f1f6b2e9d851a98385377db29f909e867a720fbdd78b20e28bee1bcfcad |
 | apps/web/src/components/ConfirmDialog.vue | 3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424 |
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011 |
@@ -200,5 +202,5 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | apps/api/src/mysql-crawler-runtime-repository.ts | ac4cc7dab79a4baccb55ecaff7582790a67b6eaab616ef096a9b63e2d9e8e518 |
 | tests/e2e/m03-05-collection-tasks.spec.ts | 66bcb37988f1c064cff418506013a45b0b44c2d7eed6fa2d38e6a1420964fe96 |
 | tests/e2e/m06-03-collection-console.spec.ts | 6ef5270197d6a59ed4e5fabf92f4259c4bf831b8fbc0c891fa48034e8720dd76 |
-| tests/e2e/m03-04-playwright-crawler.spec.ts | 8f648aee8d5cb1cdffc4534be30e5e64c18702567aeb3cb953cd6db7f5db695b |
+| tests/e2e/m03-04-playwright-crawler.spec.ts | f49ea67728ed94dab151725403d5cec0e3b46338798d6104cafd879bc2afe287 |
 | scripts/lib/ui-phase2-inventory.mjs | fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb |

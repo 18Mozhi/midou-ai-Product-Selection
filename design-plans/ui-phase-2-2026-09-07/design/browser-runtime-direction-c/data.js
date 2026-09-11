@@ -131,9 +131,9 @@ window.RUNTIME_C_DATA = {
   checks: [
     "Actual global 3 profiles/1 occupied/1 expired and 3-day/null/invalid/0/1/7-day expiry boundaries at response observed_at; no live login test.",
     "Original fixture exact run/error/request/trace filter sequences preserve global profiles/metrics; source/domain is not a search target.",
-    "Ten initial/preserved read failures, actual single-flight and 15-second abort callback; no real timers or role authorization.",
-    "Initial trim/URL correction verified; in-flight status/draft mismatch and ignored-abort late reference updates reproduced in inert source bridge.",
-    "Exact empty-body recovery and single-flight; successful write overwrites refresh failure, generic transport failure incorrectly asserts no execution. No real recovery.",
+    "Ten initial/preserved read failures and 15-second abort callback; no real timers or role authorization.",
+    "Initial trim/URL correction, superseded read abort and stale response isolation verified in the inert source bridge.",
+    "Exact empty-body recovery and single-flight; successful write stays separate from failed verification, while unknown transport blocks resubmission. No real recovery.",
     "Runtime ConfirmDialog omits destructive: typed confirmation only; old P53 impact-checkbox claim is incorrect.",
     "Actual service validates 25-page-size default, seven statuses, trimmed 160-character query and control rejection using inert repository.",
     "Actual repository list against synthetic query adapter verifies four SQL intents, unfiltered profile/metric scope, literal INSTR search, page clamp/offset and output conversion; no database or SQL execution.",
