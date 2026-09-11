@@ -1,0 +1,54 @@
+html body.p47-empty-review:has(#app .adapter-center--c) #app .adapter-center--c .adapter-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 24px;
+  background: #f6f8fb;
+  border: 1px solid #d9e1ec;
+  border-radius: 8px;
+  text-align: left;
+}
+html body.p47-empty-review:has(#app .adapter-center--c) #app .adapter-center--c .adapter-empty h3 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.5;
+  color: #152b49;
+}
+html body.p47-empty-review:has(#app .adapter-center--c) #app .adapter-center--c .adapter-empty p {
+  margin: 0;
+  max-width: 56ch;
+  color: #53657c;
+  font-size: 14px;
+  line-height: 1.8;
+}
+html
+  body.p47-empty-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-empty
+  :is(a, button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  margin-top: 8px;
+  padding: 10px 16px;
+  border: 1px solid #185adb;
+  border-radius: 6px;
+  color: white;
+  background: #185adb;
+  font-size: 14px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+html
+  body.p47-empty-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-empty
+  :is(a, button):focus-visible {
+  outline: 3px solid #185adb;
+  outline-offset: 3px;
+}
