@@ -698,3 +698,199 @@ test("UI2-SC50 KeepAlive deactivation aborts and restarts an unfinished credenti
   await expect(page.getByRole("heading", { name: "北美浏览器档案", exact: true })).toBeVisible();
   expect(totalReads).toBe(6);
 });
+
+test("UI2-SC50 detached asset creation locks mutations and refreshes confirmed facts", async ({
+  page,
+}) => {
+  await nav(page, [provider, secondProvider]);
+  await stubEmptyPlatformDashboard(page);
+  const createdAsset = {
+    ...asset,
+    id: "00000000-0000-4000-8000-000000000806",
+    name: "离页后已确认资产",
+    kind: "api_key",
+    version: 1,
+  };
+  let releaseWrite = () => {},
+    writeStarted = false,
+    assetReads = 0;
+  const writeGate = new Promise<void>((resolve) => {
+    releaseWrite = resolve;
+  });
+  await page.route("**/api/v1/platform/credential-assets", async (route) => {
+    if (route.request().method() === "POST") {
+      writeStarted = true;
+      await writeGate;
+      return route.fulfill({
+        status: 201,
+        json: {
+          data: createdAsset,
+          request_id: "ui2-detached-asset-write",
+          trace_id: "ui2-detached-asset-write",
+        },
+      });
+    }
+    assetReads += 1;
+    return route.fulfill({
+      json: {
+        data: assetReads > 1 ? [asset, createdAsset] : [asset],
+        request_id: `ui2-detached-asset-read-${assetReads}`,
+        trace_id: `ui2-detached-asset-read-${assetReads}`,
+      },
+    });
+  });
+  await page.goto("/platform-admin/credentials");
+  await page.getByRole("button", { name: "新建凭证资产", exact: true }).click();
+  const editor = page.getByRole("dialog", { name: "创建凭证资产" });
+  await editor.getByLabel("名称").fill("离页后已确认资产");
+  await editor.getByLabel("需要加密保存的内容").fill("synthetic-detached-secret");
+  await editor.getByRole("button", { name: "加密保存", exact: true }).click();
+  await expect.poll(() => writeStarted).toBe(true);
+  await navigatePlatform(page, "/platform-admin");
+  await page.goBack();
+  await expect(page.getByRole("button", { name: "配置网页登录", exact: true })).toBeDisabled();
+  await expect(page.getByRole("status")).toContainText("凭证资产保存仍在等待服务器响应");
+  releaseWrite();
+  await expect(page.getByRole("heading", { name: createdAsset.name, exact: true })).toBeVisible();
+  await expect(page.getByRole("status")).toContainText("凭证资产保存已完成");
+  expect(assetReads).toBe(2);
+});
+
+test("UI2-SC50 detached rotation treats a network result as unknown and rereads facts", async ({
+  page,
+}) => {
+  await nav(page, [provider, secondProvider]);
+  await stubEmptyPlatformDashboard(page);
+  let releaseWrite = () => {},
+    writeStarted = false,
+    assetReads = 0;
+  const writeGate = new Promise<void>((resolve) => {
+    releaseWrite = resolve;
+  });
+  await page.route("**/api/v1/platform/credential-assets/*/rotate", async (route) => {
+    writeStarted = true;
+    await writeGate;
+    await route.abort("failed");
+  });
+  await page.route("**/api/v1/platform/credential-assets", (route) => {
+    assetReads += 1;
+    return route.fulfill({
+      json: {
+        data: [asset],
+        request_id: `ui2-detached-rotate-read-${assetReads}`,
+        trace_id: `ui2-detached-rotate-read-${assetReads}`,
+      },
+    });
+  });
+  await page.goto("/platform-admin/credentials");
+  await page.getByRole("button", { name: "更新资料", exact: true }).click();
+  const editor = page.getByRole("dialog", { name: `轮换 ${asset.name}` });
+  await editor.getByLabel("需要加密保存的内容").fill("synthetic-rotate-secret");
+  await editor.getByRole("button", { name: "确认轮换", exact: true }).click();
+  await expect.poll(() => writeStarted).toBe(true);
+  await navigatePlatform(page, "/platform-admin");
+  await page.goBack();
+  await expect(page.getByRole("status")).toContainText("凭证资料轮换仍在等待服务器响应");
+  releaseWrite();
+  await expect(page.getByRole("status")).toContainText("凭证资料轮换结果暂时无法确认");
+  await expect(page.getByRole("status")).toContainText("请核对后再操作");
+  expect(assetReads).toBe(2);
+});
+
+test("UI2-SC50 detached profile failure belongs to the returned credential page", async ({
+  page,
+}) => {
+  await nav(page, [provider, secondProvider]);
+  await stubEmptyPlatformDashboard(page);
+  let releaseWrite = () => {},
+    writeStarted = false;
+  const writeGate = new Promise<void>((resolve) => {
+    releaseWrite = resolve;
+  });
+  await page.route("**/api/v1/platform/credential-assets", (route) =>
+    route.fulfill({
+      json: { data: [asset], request_id: "ui2-profile-assets", trace_id: "ui2-profile-assets" },
+    }),
+  );
+  await page.route("**/api/v1/platform/crawler-profiles", async (route) => {
+    if (route.request().method() === "POST") {
+      writeStarted = true;
+      await writeGate;
+      return route.fulfill({
+        status: 409,
+        json: {
+          error: {
+            code: "crawler_profile_version_conflict",
+            message: "档案引用冲突",
+            action_hint: "档案引用冲突，请重新读取后重试。",
+          },
+          request_id: "ui2-detached-profile-conflict",
+          trace_id: "ui2-detached-profile-conflict",
+        },
+      });
+    }
+    return route.fulfill({
+      json: { data: [profile], request_id: "ui2-profile-read", trace_id: "ui2-profile-read" },
+    });
+  });
+  await page.goto("/platform-admin/credentials");
+  await page.getByRole("button", { name: "关联运行档案", exact: true }).click();
+  const profileEditor = page.getByRole("dialog", { name: "创建浏览器档案引用" });
+  await profileEditor.getByLabel("内部标识").fill("detached_profile");
+  await profileEditor.getByLabel("名称").fill("离页档案引用");
+  await profileEditor
+    .getByRole("button", {
+      name: "保存档案引用",
+      exact: true,
+    })
+    .click();
+  await expect.poll(() => writeStarted).toBe(true);
+  await navigatePlatform(page, "/platform-admin");
+  await page.goBack();
+  await expect(page.getByRole("status")).toContainText("运行档案关联仍在等待服务器响应");
+  releaseWrite();
+  await expect(page.getByRole("status")).toContainText("档案引用冲突，请重新读取后重试。");
+  await expect(page.getByText("ui2-detached-profile-conflict", { exact: true })).toBeVisible();
+});
+
+test("UI2-SC50 revoke locks its confirmation and renders the owned failure", async ({ page }) => {
+  await nav(page, [provider, secondProvider]);
+  let releaseWrite = () => {},
+    writeStarted = false;
+  const writeGate = new Promise<void>((resolve) => {
+    releaseWrite = resolve;
+  });
+  await page.route("**/api/v1/platform/credential-assets/*/revoke", async (route) => {
+    writeStarted = true;
+    await writeGate;
+    return route.fulfill({
+      status: 409,
+      json: {
+        error: {
+          code: "credential_version_conflict",
+          message: "凭证版本冲突",
+          action_hint: "凭证版本已经变化，请重新读取后再撤销。",
+        },
+        request_id: "ui2-revoke-conflict",
+        trace_id: "ui2-revoke-conflict",
+      },
+    });
+  });
+  await page.route("**/api/v1/platform/credential-assets", (route) =>
+    route.fulfill({
+      json: { data: [asset], request_id: "ui2-revoke-read", trace_id: "ui2-revoke-read" },
+    }),
+  );
+  await page.goto("/platform-admin/credentials");
+  await page.getByRole("button", { name: "撤销", exact: true }).click();
+  const dialog = page.getByRole("alertdialog");
+  await dialog.getByRole("checkbox").check();
+  await dialog.getByPlaceholder("确认撤销").fill("确认撤销");
+  await dialog.getByRole("button", { name: "撤销资产", exact: true }).click();
+  await expect.poll(() => writeStarted).toBe(true);
+  await expect(dialog.getByRole("button", { name: "取消", exact: true })).toBeDisabled();
+  await expect(dialog.getByRole("button", { name: "正在撤销…", exact: true })).toBeDisabled();
+  releaseWrite();
+  await expect(dialog).toContainText("凭证版本已经变化，请重新读取后再撤销。");
+  await expect(dialog).toContainText("ui2-revoke-conflict");
+});

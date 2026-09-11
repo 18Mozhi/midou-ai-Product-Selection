@@ -554,6 +554,10 @@ html[data-design="signal-ledger"] .confirm-dialog > aside {
   border-left: 8px solid var(--so-signal);
   background: var(--so-bg-elevated);
 }
+html[data-design="signal-ledger"] .confirm-status {
+  border-left-color: var(--so-danger);
+  background: color-mix(in srgb, var(--so-danger) 7%, var(--so-bg-elevated));
+}
 
 html[data-design="signal-ledger"] .confirm-dialog footer,
 html[data-design="signal-ledger"] .audited-reason-dialog footer {

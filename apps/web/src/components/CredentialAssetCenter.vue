@@ -18,6 +18,18 @@ import "../credential-login.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type EditorKind = "asset" | "rotate" | "profile" | "login";
 type LoginSaveStage = "idle" | "asset" | "profile" | "partial" | "unknown";
+type DetachedWriteOutcome = "success" | "unknown" | "failure";
+interface WriteResult<T> {
+  data: T | null;
+  error: ApiClientError | null;
+  requestId: string;
+}
+interface DetachedWriteSettlement {
+  label: string;
+  outcome: DetachedWriteOutcome;
+  actionHint: string;
+  requestId: string;
+}
 interface Asset {
   id: string;
   provider_id: string;
@@ -66,7 +78,9 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   refreshing = ref(false),
   lastUpdatedAt = ref<string | null>(null),
   refreshNotice = ref(""),
-  refreshNoticeTone = ref<"success" | "danger">("success"),
+  refreshNoticeTone = ref<"info" | "success" | "danger">("success"),
+  refreshNoticeRequestId = ref(""),
+  pendingWriteLabel = ref(""),
   editorPanel = ref<HTMLElement | null>(null),
   loginFileName = ref(""),
   loginPayload = ref(""),
@@ -98,8 +112,11 @@ let activeController: AbortController | null = null,
   loginMaterialGeneration = 0,
   loginMaterialController: AbortController | null = null,
   readGeneration = 0,
+  pageVisit = 0,
+  revokeGeneration = 0,
   pageActive = true,
-  resumeRead = false;
+  resumeRead = false,
+  detachedWriteSettlement: DetachedWriteSettlement | null = null;
 const failure = (s: number): State =>
     s === 401
       ? "expired"
@@ -125,6 +142,11 @@ const failure = (s: number): State =>
       saving.value ||
       loginMaterialBusy.value ||
       !["idle", "asset", "profile"].includes(loginSaveStage.value),
+  ),
+  pendingWriteNotice = computed(() =>
+    pendingWriteLabel.value && !editor.value && !revokeTarget.value
+      ? `${pendingWriteLabel.value}仍在等待服务器响应，暂时不能开始新的凭证修改。`
+      : "",
   ),
   compatibilityRows = computed(() =>
     loginProviders.value.map((provider) => {
@@ -182,13 +204,14 @@ const providerName = (providerId: string) =>
 const assetName = (assetId: string) =>
   assets.value.find((asset) => asset.id === assetId)?.name ?? "凭证引用不可用";
 async function load() {
-  if (refreshing.value) return;
+  if (refreshing.value) return false;
   const generation = ++readGeneration,
     preserve = lastUpdatedAt.value !== null;
   if (!preserve) state.value = "loading";
   refreshing.value = true;
   message.value = "";
   refreshNotice.value = "";
+  refreshNoticeRequestId.value = "";
   const controller = new AbortController();
   activeController = controller;
   const timer = window.setTimeout(() => controller.abort(), 12_000);
@@ -200,7 +223,7 @@ async function load() {
         signal: controller.signal,
       }),
     ]);
-    if (!pageActive || generation !== readGeneration || controller.signal.aborted) return;
+    if (!pageActive || generation !== readGeneration || controller.signal.aborted) return false;
     assets.value = nextAssets.data;
     profiles.value = nextProfiles.data;
     providers.value = nextProviders.data;
@@ -211,8 +234,9 @@ async function load() {
       refreshNoticeTone.value = "success";
       refreshNotice.value = "凭证元数据与运行档案已刷新。";
     }
+    return true;
   } catch (error) {
-    if (!pageActive || generation !== readGeneration) return;
+    if (!pageActive || generation !== readGeneration) return false;
     const apiError = error instanceof ApiClientError ? error : null;
     const timedOut = error instanceof DOMException && error.name === "AbortError";
     requestId.value = apiError?.requestId ?? requestId.value;
@@ -225,6 +249,7 @@ async function load() {
         ? "刷新超过 12 秒，已保留上一次成功读取的数据。"
         : `${message.value} 已保留上一次成功读取的数据。`;
     } else state.value = failure(apiError?.status ?? (timedOut ? 504 : 503));
+    return false;
   } finally {
     window.clearTimeout(timer);
     if (generation === readGeneration) {
@@ -288,6 +313,7 @@ function trapEditorFocus(event: KeyboardEvent) {
   }
 }
 function openAsset() {
+  if (saving.value) return;
   editorGeneration += 1;
   editor.value = "asset";
   selected.value = null;
@@ -303,6 +329,7 @@ function openAsset() {
   focusEditor();
 }
 function openRotate(asset: Asset) {
+  if (saving.value) return;
   editorGeneration += 1;
   editor.value = "rotate";
   selected.value = asset;
@@ -315,6 +342,7 @@ function openRotate(asset: Asset) {
   focusEditor();
 }
 function openProfile() {
+  if (saving.value) return;
   editorGeneration += 1;
   editor.value = "profile";
   selected.value = null;
@@ -333,6 +361,7 @@ function openProfile() {
   focusEditor();
 }
 function openLogin(provider?: Provider) {
+  if (saving.value) return;
   editorGeneration += 1;
   invalidateLoginMaterial();
   loginProvider.value = provider ?? loginProviders.value[0] ?? null;
@@ -504,60 +533,141 @@ async function writeOutcome<T = any>(
   path: string,
   body: unknown,
   isCurrent: () => boolean = () => true,
-) {
+): Promise<WriteResult<T>> {
   saving.value = true;
   if (isCurrent()) message.value = "";
   try {
     const response = await request<T>(path, { method: "POST", body });
     if (isCurrent()) requestId.value = response.request_id;
-    return { data: response.data, error: null as ApiClientError | null };
+    return { data: response.data, error: null, requestId: response.request_id };
   } catch (error) {
     const apiError = error instanceof ApiClientError ? error : null;
     if (isCurrent()) {
       requestId.value = apiError?.requestId ?? requestId.value;
       message.value = apiError?.actionHint ?? "依赖不可用，未写入";
     }
-    return { data: null, error: apiError };
+    return { data: null, error: apiError, requestId: apiError?.requestId ?? "" };
   } finally {
     saving.value = false;
     if (isCurrent()) assetForm.value = "";
   }
 }
-async function write(path: string, body: unknown) {
-  return (await writeOutcome(path, body)).data;
+function beginOwnedWrite(label: string) {
+  pendingWriteLabel.value = label;
+  refreshNotice.value = "";
+  refreshNoticeRequestId.value = "";
+}
+function detachedSettlement<T>(label: string, result: WriteResult<T>): DetachedWriteSettlement {
+  return {
+    label,
+    outcome: result.data ? "success" : result.error?.status ? "failure" : "unknown",
+    actionHint: result.error?.actionHint ?? "",
+    requestId: result.requestId,
+  };
+}
+async function applyDetachedWriteSettlement(settlement: DetachedWriteSettlement) {
+  if (!pageActive) {
+    detachedWriteSettlement = settlement;
+    return;
+  }
+  if (settlement.outcome === "failure") {
+    refreshNoticeTone.value = "danger";
+    refreshNotice.value = settlement.actionHint || `${settlement.label}未完成，请重新打开后重试。`;
+    refreshNoticeRequestId.value = settlement.requestId;
+    return;
+  }
+  const refreshed = await load();
+  if (!pageActive) {
+    detachedWriteSettlement = settlement;
+    return;
+  }
+  refreshNoticeTone.value = settlement.outcome === "success" && refreshed ? "success" : "danger";
+  refreshNotice.value =
+    settlement.outcome === "success"
+      ? refreshed
+        ? `${settlement.label}已完成，当前凭证资料已重新读取。`
+        : `${settlement.label}已完成，但当前资料未能刷新，请点击“刷新数据”重试。`
+      : refreshed
+        ? `${settlement.label}结果暂时无法确认，已重新读取当前资料；请核对后再操作。`
+        : `${settlement.label}结果暂时无法确认，当前资料也未能刷新；请稍后点击“刷新数据”核对，避免重复提交。`;
+  refreshNoticeRequestId.value = settlement.requestId;
+}
+async function settleDetachedWrite<T>(label: string, result: WriteResult<T>) {
+  pendingWriteLabel.value = "";
+  await applyDetachedWriteSettlement(detachedSettlement(label, result));
 }
 async function saveAsset() {
   if (saving.value) return;
-  const ok =
-    editor.value === "rotate" && selected.value
-      ? await write(`/platform/credential-assets/${selected.value.id}/rotate`, {
-          secret_payload: {
-            encoding: assetForm.encoding,
-            value: assetForm.value,
+  const submittedEditor = editor.value;
+  if (submittedEditor !== "asset" && submittedEditor !== "rotate") return;
+  const selectedId = selected.value?.id ?? "",
+    generation = editorGeneration,
+    visit = pageVisit,
+    label = submittedEditor === "rotate" ? "凭证资料轮换" : "凭证资产保存",
+    isCurrent = () =>
+      pageActive &&
+      pageVisit === visit &&
+      editorGeneration === generation &&
+      editor.value === submittedEditor &&
+      (submittedEditor !== "rotate" || selected.value?.id === selectedId);
+  beginOwnedWrite(label);
+  const result =
+    submittedEditor === "rotate" && selected.value
+      ? await writeOutcome(
+          `/platform/credential-assets/${selected.value.id}/rotate`,
+          {
+            secret_payload: {
+              encoding: assetForm.encoding,
+              value: assetForm.value,
+            },
+            expected_version: selected.value.version,
+            expires_at: assetForm.expires_at ? new Date(assetForm.expires_at).toISOString() : null,
           },
-          expected_version: selected.value.version,
-          expires_at: assetForm.expires_at ? new Date(assetForm.expires_at).toISOString() : null,
-        })
-      : await write("/platform/credential-assets", {
-          provider_id: assetForm.provider_id,
-          name: assetForm.name,
-          kind: assetForm.kind,
-          secret_payload: {
-            encoding: assetForm.encoding,
-            value: assetForm.value,
+          isCurrent,
+        )
+      : await writeOutcome(
+          "/platform/credential-assets",
+          {
+            provider_id: assetForm.provider_id,
+            name: assetForm.name,
+            kind: assetForm.kind,
+            secret_payload: {
+              encoding: assetForm.encoding,
+              value: assetForm.value,
+            },
+            expires_at: assetForm.expires_at ? new Date(assetForm.expires_at).toISOString() : null,
           },
-          expires_at: assetForm.expires_at ? new Date(assetForm.expires_at).toISOString() : null,
-        });
-  if (ok) {
-    editor.value = null;
-    selected.value = null;
+          isCurrent,
+        );
+  if (!isCurrent()) {
+    await settleDetachedWrite(label, result);
+    return;
+  }
+  pendingWriteLabel.value = "";
+  if (result.data) {
+    finishCloseEditor();
     await load();
   }
 }
 async function saveProfile() {
   if (saving.value) return;
-  if (await write("/platform/crawler-profiles", profileForm)) {
-    editor.value = null;
+  const generation = editorGeneration,
+    visit = pageVisit,
+    label = "运行档案关联",
+    isCurrent = () =>
+      pageActive &&
+      pageVisit === visit &&
+      editorGeneration === generation &&
+      editor.value === "profile";
+  beginOwnedWrite(label);
+  const result = await writeOutcome<Profile>("/platform/crawler-profiles", profileForm, isCurrent);
+  if (!isCurrent()) {
+    await settleDetachedWrite(label, result);
+    return;
+  }
+  pendingWriteLabel.value = "";
+  if (result.data) {
+    finishCloseEditor();
     await load();
   }
 }
@@ -635,15 +745,45 @@ async function revoke() {
   if (saving.value) return;
   const target = revokeTarget.value;
   if (!target) return;
-  if (
-    await write(`/platform/credential-assets/${target.id}/revoke`, {
+  const generation = revokeGeneration,
+    visit = pageVisit,
+    label = "凭证资产撤销",
+    isCurrent = () =>
+      pageActive &&
+      pageVisit === visit &&
+      revokeGeneration === generation &&
+      revokeTarget.value?.id === target.id;
+  beginOwnedWrite(label);
+  const result = await writeOutcome<Asset>(
+    `/platform/credential-assets/${target.id}/revoke`,
+    {
       expected_version: target.version,
       reason: "平台安全管理员确认撤销",
-    })
-  ) {
+    },
+    isCurrent,
+  );
+  if (!isCurrent()) {
+    await settleDetachedWrite(label, result);
+    return;
+  }
+  pendingWriteLabel.value = "";
+  if (result.data) {
+    revokeGeneration += 1;
     revokeTarget.value = null;
     await load();
   }
+}
+function openRevoke(asset: Asset) {
+  if (saving.value) return;
+  revokeGeneration += 1;
+  revokeTarget.value = asset;
+  message.value = "";
+}
+function closeRevoke() {
+  if (saving.value) return;
+  revokeGeneration += 1;
+  revokeTarget.value = null;
+  message.value = "";
 }
 onMounted(async () => {
   await load();
@@ -661,12 +801,14 @@ onMounted(async () => {
 function suspendPage() {
   if (!pageActive) return;
   pageActive = false;
+  pageVisit += 1;
   resumeRead = resumeRead || refreshing.value;
   readGeneration += 1;
   activeController?.abort();
   activeController = null;
   refreshing.value = false;
   editorGeneration += 1;
+  revokeGeneration += 1;
   invalidateLoginMaterial();
   editor.value = null;
   selected.value = null;
@@ -680,6 +822,13 @@ onDeactivated(suspendPage);
 onBeforeUnmount(suspendPage);
 onActivated(() => {
   pageActive = true;
+  if (detachedWriteSettlement) {
+    const settlement = detachedWriteSettlement;
+    detachedWriteSettlement = null;
+    resumeRead = false;
+    void applyDetachedWriteSettlement(settlement);
+    return;
+  }
   if (!resumeRead) return;
   resumeRead = false;
   void load();
@@ -698,7 +847,7 @@ onActivated(() => {
       <div class="credential-header-actions">
         <div class="credential-refresh-meta">
           <small>最近读取 {{ lastUpdatedLabel }}</small>
-          <button type="button" :disabled="refreshing" @click="load">
+          <button type="button" :disabled="refreshing || saving" @click="load">
             {{ refreshing ? "刷新中…" : "刷新数据" }}
           </button>
         </div>
@@ -708,12 +857,23 @@ onActivated(() => {
             href="/browser-helper/scoutops-browser-helper.zip"
             download="scoutops-browser-helper.zip"
             >下载浏览器助手</a
-          ><button type="button" @click="openLogin()">配置网页登录</button
-          ><button type="button" @click="openProfile">关联运行档案</button
-          ><button type="button" class="primary" @click="openAsset">新建凭证资产</button>
+          ><button type="button" :disabled="saving" @click="openLogin()">配置网页登录</button
+          ><button type="button" :disabled="saving" @click="openProfile">关联运行档案</button
+          ><button type="button" class="primary" :disabled="saving" @click="openAsset">
+            新建凭证资产
+          </button>
         </div>
       </div>
     </header>
+    <p
+      v-if="pendingWriteNotice"
+      class="credential-refresh-notice"
+      data-tone="info"
+      role="status"
+      aria-live="polite"
+    >
+      {{ pendingWriteNotice }}
+    </p>
     <p
       v-if="refreshNotice"
       class="credential-refresh-notice"
@@ -721,7 +881,7 @@ onActivated(() => {
       role="status"
       aria-live="polite"
     >
-      {{ refreshNotice }}
+      {{ refreshNotice }} <code v-if="refreshNoticeRequestId">{{ refreshNoticeRequestId }}</code>
     </p>
     <UiStatePanel
       v-if="state !== 'ready' && state !== 'empty'"
@@ -749,7 +909,7 @@ onActivated(() => {
         <p>
           如果来源需要网页登录，点击“配置网页登录”并导入已登录的浏览器档案；普通接口密钥或账号资料也可以单独加密保存。
         </p>
-        <button type="button" @click="openAsset">创建第一个凭证</button>
+        <button type="button" :disabled="saving" @click="openAsset">创建第一个凭证</button>
       </section>
       <div v-else class="credential-grid">
         <article v-for="asset in assets" :key="asset.id" :data-status="asset.status">
@@ -798,13 +958,17 @@ onActivated(() => {
             </div>
           </dl>
           <footer>
-            <button type="button" :disabled="asset.status === 'revoked'" @click="openRotate(asset)">
+            <button
+              type="button"
+              :disabled="saving || asset.status === 'revoked'"
+              @click="openRotate(asset)"
+            >
               更新资料</button
             ><button
               type="button"
               class="danger"
-              :disabled="asset.status === 'revoked'"
-              @click="revokeTarget = asset"
+              :disabled="saving || asset.status === 'revoked'"
+              @click="openRevoke(asset)"
             >
               撤销
             </button>
@@ -952,6 +1116,7 @@ onActivated(() => {
               type="button"
               aria-label="关闭凭证编辑"
               title="关闭凭证编辑"
+              :disabled="saving"
               @click="closeEditor"
             >
               ×
@@ -1028,6 +1193,7 @@ onActivated(() => {
               type="button"
               aria-label="关闭浏览器档案编辑"
               title="关闭浏览器档案编辑"
+              :disabled="saving"
               @click="closeEditor"
             >
               ×
@@ -1065,6 +1231,9 @@ onActivated(() => {
             >
           </div>
           <p v-if="!browserAssets.length">需要先导入一个可用的网页登录档案。</p>
+          <p v-if="message" role="status">
+            {{ message }} <code v-if="requestId">{{ requestId }}</code>
+          </p>
           <footer>
             <button type="button" class="secondary" :disabled="saving" @click="closeEditor">
               取消
@@ -1196,9 +1365,13 @@ onActivated(() => {
       :description="`${revokeTarget?.name ?? ''} 撤销后不能轮换或用于新档案。`"
       impact="只撤销当前平台资产；不会删除历史密文与审计。后续任务必须改用其他已授权凭证。"
       confirm-label="撤销资产"
+      busy-label="正在撤销…"
+      :busy="saving"
+      :status-message="message"
+      :status-request-id="requestId"
       destructive
       confirmation-text="确认撤销"
-      @cancel="revokeTarget = null"
+      @cancel="closeRevoke"
       @confirm="revoke"
     />
   </section>

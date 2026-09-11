@@ -11,8 +11,21 @@ const props = withDefaults(
     cancelLabel?: string;
     destructive?: boolean;
     confirmationText?: string;
+    busy?: boolean;
+    busyLabel?: string;
+    statusMessage?: string;
+    statusRequestId?: string;
   }>(),
-  { confirmLabel: "确认", cancelLabel: "取消", destructive: false, confirmationText: "" },
+  {
+    confirmLabel: "确认",
+    cancelLabel: "取消",
+    destructive: false,
+    confirmationText: "",
+    busy: false,
+    busyLabel: "处理中…",
+    statusMessage: "",
+    statusRequestId: "",
+  },
 );
 const emit = defineEmits<{ confirm: []; cancel: [] }>();
 const acknowledged = ref(false),
@@ -21,13 +34,15 @@ const acknowledged = ref(false),
   cancelButton = ref<HTMLButtonElement | null>(null);
 let returnFocus: HTMLElement | null = null;
 let previousBodyOverflow: string | null = null;
-const enabled = computed(() =>
-  canConfirm({
-    destructive: props.destructive,
-    acknowledged: acknowledged.value,
-    confirmationText: props.confirmationText,
-    typedText: typedText.value,
-  }),
+const enabled = computed(
+  () =>
+    !props.busy &&
+    canConfirm({
+      destructive: props.destructive,
+      acknowledged: acknowledged.value,
+      confirmationText: props.confirmationText,
+      typedText: typedText.value,
+    }),
 );
 function lockPageScroll() {
   if (previousBodyOverflow !== null) return;
@@ -61,12 +76,13 @@ watch(
 );
 onBeforeUnmount(unlockPageScroll);
 function cancel() {
+  if (props.busy) return;
   emit("cancel");
 }
 function keydown(event: KeyboardEvent) {
   if (event.key === "Escape") {
     event.preventDefault();
-    cancel();
+    if (!props.busy) cancel();
     return;
   }
   if (event.key !== "Tab" || !dialog.value) return;
@@ -108,6 +124,12 @@ function keydown(event: KeyboardEvent) {
           <strong>影响范围</strong>
           <p>{{ impact }}</p>
         </aside>
+        <aside v-if="statusMessage" class="confirm-status" data-tone="danger" role="status">
+          <strong>本次操作未完成</strong>
+          <p>
+            {{ statusMessage }} <code v-if="statusRequestId">{{ statusRequestId }}</code>
+          </p>
+        </aside>
         <label v-if="destructive" class="confirm-check"
           ><input
             v-model="acknowledged"
@@ -120,7 +142,8 @@ function keydown(event: KeyboardEvent) {
             :placeholder="confirmationText"
         /></label>
         <footer>
-          <button ref="cancelButton" type="button" @click="cancel">{{ cancelLabel }}</button
+          <button ref="cancelButton" type="button" :disabled="busy" @click="cancel">
+            {{ cancelLabel }}</button
           ><button
             class="confirm-submit"
             :class="{ 'is-danger': destructive }"
@@ -128,7 +151,7 @@ function keydown(event: KeyboardEvent) {
             :disabled="!enabled"
             @click="emit('confirm')"
           >
-            {{ confirmLabel }}
+            {{ busy ? busyLabel : confirmLabel }}
           </button>
         </footer>
       </section>

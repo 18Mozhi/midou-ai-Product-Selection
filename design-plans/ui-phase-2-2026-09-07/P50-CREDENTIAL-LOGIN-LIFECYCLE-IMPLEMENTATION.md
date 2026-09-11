@@ -33,4 +33,4 @@
 
 ## 待审与未覆盖
 
-本批只申请七种生命周期反馈与控件锁定的视觉/交互审核，不代表真实浏览器助手、服务端 Cookie 域校验、真实加密/MySQL、权限或生产验收。KeepAlive 停用清理已转入 `P50-CREDENTIAL-LOGIN-CACHE-IMPLEMENTATION.md` 的独立实施与图证；其他资产/轮换/撤销弹窗的写入归属、主题/密度和全 73 页仍待后续完成。
+本批只申请七种生命周期反馈与控件锁定的视觉/交互审核，不代表真实浏览器助手、服务端 Cookie 域校验、真实加密/MySQL、权限或生产验收。KeepAlive 停用清理与通用四类写入归属分别见 `P50-CREDENTIAL-LOGIN-CACHE-IMPLEMENTATION.md`、`P50-CREDENTIAL-WRITE-OWNERSHIP-IMPLEMENTATION.md`；登录两段写离页对账、主题/密度和全 73 页仍待后续完成。

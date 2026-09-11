@@ -1389,6 +1389,13 @@
   color: var(--so-text-muted);
   line-height: 1.55;
 }
+.confirm-status {
+  border-left-color: var(--so-danger);
+  background: color-mix(in srgb, var(--so-danger) 7%, transparent);
+}
+.confirm-status :is(strong, code) {
+  color: var(--so-danger);
+}
 .confirm-check,
 .confirm-phrase {
   margin-top: 16px;

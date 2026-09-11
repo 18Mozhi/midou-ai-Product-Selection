@@ -15,6 +15,8 @@ const hash = (value) => createHash("sha256").update(value).digest("hex");
 const output = "output/playwright/responsive-data-view-focus";
 const baseline = (file) =>
   execFileSync("git", ["show", `ea005452:${file}`], { encoding: "utf8" }).replaceAll("\r\n", "\n");
+const p50Base = (file) =>
+  execFileSync("git", ["show", `7398aa8a:${file}`], { encoding: "utf8" }).replaceAll("\r\n", "\n");
 
 test("shared detail focus evidence binds actual Vue, existing dialog primitives and all four images", () => {
   const evidence = JSON.parse(read(`${output}/evidence.json`));
@@ -53,7 +55,7 @@ test("historical contract rebind permits only the tested exact revision and pres
   assert.equal(responsiveFocusContractHash("unrelated-file", "unchanged"), "unchanged");
 });
 
-test("twenty consumer files, existing modal helpers and original detail styling are unchanged", () => {
+test("unrelated consumers and modal helpers are unchanged while P50 revisions stay evidence-bound", () => {
   const root = "apps/web/src/components";
   const consumers = readdirSync(root).filter(
     (file) =>
@@ -61,13 +63,21 @@ test("twenty consumer files, existing modal helpers and original detail styling 
   );
   assert.equal(consumers.length, 20);
   for (const file of [
-    ...consumers.map((file) => `${root}/${file}`),
-    `${root}/ConfirmDialog.vue`,
+    ...consumers
+      .filter((file) => file !== "CredentialAssetCenter.vue")
+      .map((file) => `${root}/${file}`),
     `${root}/AuditedReasonDialog.vue`,
     "apps/web/src/use-modal-dialog.ts",
     "apps/web/src/main.ts",
   ])
-    assert.equal(read(file), baseline(file), file);
+    assert.equal(read(file), p50Base(file), file);
+  const p50Evidence = JSON.parse(
+    read("output/playwright/p50-credential-write-ownership-review/evidence.json"),
+  );
+  for (const file of [`${root}/CredentialAssetCenter.vue`, `${root}/ConfirmDialog.vue`])
+    assert.equal(hash(read(file)), p50Evidence.sourceHashes[file], file);
+  assert.match(read(`${root}/ConfirmDialog.vue`), /busy\?: boolean/);
+  assert.match(read(`${root}/ConfirmDialog.vue`), /if \(props\.busy\) return/);
   const file = responsiveFocusRevision.file;
   const added = "\n.responsive-data-view__overlay--suspended {\n  z-index: 99;\n}\n";
   const current = read(file).split("<style scoped>")[1];
