@@ -1,0 +1,156 @@
+html
+  body.p47-access-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"]) {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 12px;
+  min-height: 0;
+  padding: 24px;
+  border: 1px solid #d4deea;
+  border-left: 4px solid #3867b7;
+  border-radius: 6px;
+  background: #f7f9fc;
+  text-align: left;
+}
+html
+  body.p47-access-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="forbidden"] {
+  border-left-color: #6f8197;
+}
+html
+  body.p47-access-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="blocked"] {
+  border-left-color: #a97016;
+}
+html
+  body.p47-access-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"])
+  > :is(.ui-state-symbol, p) {
+  display: none;
+}
+html
+  body.p47-access-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"])
+  h2 {
+  margin: 0;
+  color: #162b49;
+  font-size: 20px;
+  line-height: 1.5;
+}
+html
+  body.p47-access-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"])
+  > div {
+  color: #53657b;
+  font-size: 14px;
+  line-height: 1.8;
+}
+html
+  body.p47-access-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"])
+  dl {
+  width: 100%;
+  margin: 4px 0 0;
+  padding: 4px 0 0;
+  display: block;
+  border: 0;
+  border-top: 1px solid #dce3ed;
+  border-radius: 0;
+  background: transparent;
+}
+html
+  body.p47-access-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"])
+  dl
+  > div {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  gap: 12px;
+  padding-top: 12px;
+}
+html
+  body.p47-access-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"])
+  :is(dt, dd) {
+  margin: 0;
+  color: #53657b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+html
+  body.p47-access-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"])
+  dd {
+  font-family: Consolas, monospace;
+  overflow-wrap: anywhere;
+}
+html
+  body.p47-access-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"])
+  footer {
+  width: 100%;
+  margin-top: 4px;
+}
+html
+  body.p47-access-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"])
+  footer
+  .primary {
+  min-width: 132px;
+  min-height: 44px;
+  border-radius: 6px;
+  background: #185adb;
+  color: white;
+}
+html
+  body.p47-access-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"])
+  footer
+  .primary:focus-visible,
+html
+  body.p47-access-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-heading:focus {
+  outline: 3px solid #185adb;
+  outline-offset: 3px;
+}
+@media (max-width: 640px) {
+  html
+    body.p47-access-review:has(#app .adapter-center--c)
+    #app
+    .adapter-center--c
+    .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"])
+    footer
+    .primary {
+    width: 100%;
+  }
+}
