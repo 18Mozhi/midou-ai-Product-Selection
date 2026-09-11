@@ -60,6 +60,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   pendingSaveGeneration = ref<number | null>(null),
   editorRequestId = ref(""),
   message = ref(""),
+  validationScope = ref<"step" | "all" | null>(null),
   searchQuery = ref(""),
   statusFilter = ref("all"),
   accessModeFilter = ref("all"),
@@ -298,6 +299,21 @@ const list = (v: string) =>
   currentStepErrors = computed(() =>
     Object.entries(formErrors.value).filter(([field]) => stepForField[field] === editorStep.value),
   );
+watch(
+  [editorStep, currentStepErrors, () => Object.keys(formErrors.value).length],
+  ([step, errors, total], [previousStep]) => {
+    const scope = validationScope.value;
+    if (!scope) return;
+    const count = scope === "step" ? errors.length : total;
+    if (!count || (scope === "step" && step !== previousStep)) {
+      validationScope.value = null;
+      message.value = "";
+      return;
+    }
+    message.value =
+      scope === "step" ? `当前步骤还有 ${count} 项需要修正。` : `还有 ${count} 项即时校验未通过。`;
+  },
+);
 let pageActive = true,
   pageVisit = 0,
   resumeRead = false;
@@ -356,6 +372,7 @@ function edit(item?: Provider, event?: Event) {
   editing.value = item ?? null;
   editorOpen.value = true;
   editorStep.value = 1;
+  validationScope.value = null;
   message.value = "";
   editorRequestId.value = "";
   Object.assign(
@@ -435,6 +452,7 @@ function closeEditor() {
     generation = editorFocusGeneration;
   editing.value = null;
   editorOpen.value = false;
+  validationScope.value = null;
   message.value = "";
   // Table controls render their toolbar on a second tick; focus after layout has settled.
   void nextTick(() =>
@@ -467,6 +485,7 @@ function closeEditor() {
   );
 }
 function applyTemplate() {
+  validationScope.value = null;
   const shared = {
     schedule_minutes: 30,
     concurrency_limit: 1,
@@ -495,10 +514,13 @@ function applyTemplate() {
 }
 function nextStep() {
   if (currentStepErrors.value.length) {
+    validationScope.value = "step";
+    editorRequestId.value = "";
     message.value = `当前步骤还有 ${currentStepErrors.value.length} 项需要修正。`;
     return;
   }
   editorStep.value = Math.min(4, editorStep.value + 1);
+  validationScope.value = null;
   message.value = "";
 }
 async function save() {
@@ -507,6 +529,8 @@ async function save() {
     editorStep.value = Math.min(
       ...Object.keys(formErrors.value).map((field) => stepForField[field] ?? 4),
     );
+    validationScope.value = "all";
+    editorRequestId.value = "";
     message.value = `还有 ${Object.keys(formErrors.value).length} 项即时校验未通过。`;
     return;
   }
@@ -516,6 +540,7 @@ async function save() {
   pendingSaveGeneration.value = generation;
   const ownsEditor = () =>
     pageActive && pageVisit === visit && editorOpen.value && generation === editorFocusGeneration;
+  validationScope.value = null;
   message.value = "";
   editorRequestId.value = "";
   successMessage.value = "";
@@ -559,6 +584,7 @@ async function save() {
     if (!ownsEditor()) return;
     const apiError = error instanceof ApiClientError ? error : null;
     editorRequestId.value = apiError?.requestId ?? "";
+    validationScope.value = null;
     message.value = apiError?.actionHint ?? "依赖不可用，未保存";
   } finally {
     saving.value = false;

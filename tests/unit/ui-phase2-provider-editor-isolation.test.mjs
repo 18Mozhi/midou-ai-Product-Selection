@@ -4,12 +4,13 @@ import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import vm from "node:vm";
 import ts from "typescript";
+import { historicalProviderSummarySource } from "../../scripts/lib/ui-phase2-provider-summary-baseline.mjs";
 import {
   historicalProviderIsolationSource,
   providerIsolationRevision,
 } from "../../scripts/lib/ui-phase2-provider-isolation-baseline.mjs";
 
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) => historicalProviderSummarySource(f, readFileSync(f, "utf8"));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = providerIsolationRevision.file,
   source = read(file),

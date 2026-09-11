@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { historicalProviderSummarySource } from "./ui-phase2-provider-summary-baseline.mjs";
 
 export const providerIsolationRevision = {
   file: "apps/web/src/components/ProviderRegistry.vue",
@@ -11,7 +12,7 @@ const hash = (s) => createHash("sha256").update(s).digest("hex");
 let previous;
 // Associate immutable pre-isolation evidence only; current raw source has separate gates.
 export function historicalProviderIsolationSource(file, source) {
-  source = source.replaceAll("\r\n", "\n");
+  source = historicalProviderSummarySource(file, source);
   if (file !== providerIsolationRevision.file || hash(source) !== providerIsolationRevision.after)
     return source;
   if (!previous) {

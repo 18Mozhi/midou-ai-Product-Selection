@@ -5,12 +5,13 @@ import { createHash } from "node:crypto";
 import { createRequire } from "node:module";
 import path from "node:path";
 import postcss from "postcss";
+import { historicalProviderSummarySource } from "../../scripts/lib/ui-phase2-provider-summary-baseline.mjs";
 
 const root = "output/playwright/p46-desktop-editor";
 const preview =
   "design-plans/ui-phase-2-2026-09-07/implementation/provider-desktop-editor-preview.css";
 const registry = "apps/web/src/components/ProviderRegistry.vue";
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) => historicalProviderSummarySource(f, readFileSync(f, "utf8"));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const evidence = (mode) => JSON.parse(read(`${root}/${mode}/evidence.json`));
 
