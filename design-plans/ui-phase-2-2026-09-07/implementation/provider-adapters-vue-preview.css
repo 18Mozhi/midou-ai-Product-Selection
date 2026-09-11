@@ -1,0 +1,901 @@
+/* Local C identity tokens; existing theme IDs/preferences and non-P46 palettes remain unchanged. */
+html:has(body.p47-adapter-review #app .adapter-center) {
+  --p47-ink: #142a46;
+  --p47-canvas: #eef2f7;
+  --p47-panel: #fff;
+  --p47-accent: #294caf;
+  --p47-muted: #536b86;
+  --p47-border-strong: #9db1cc;
+  --p47-border: #d8e1ed;
+  --p47-divider: #c9d6e8;
+  --p47-on-accent-muted: #edf3ff;
+  --p47-on-accent-border: #97ade1;
+  --p47-error: #a33332;
+  --p47-disabled-ink: #66748a;
+  --p47-disabled-panel: #e8edf4;
+  --p47-focus: #4276df;
+  --p47-secondary-ink: #294466;
+  --p47-accent-soft: #e5edf9;
+  --p47-scrim: rgba(15, 31, 53, 0.55);
+}
+/* P46 approved frame + mobile editor structure. No preview host, detail or error-state styling. */
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-menu-search input {
+  background: var(--p47-canvas);
+  border-color: var(--p47-border);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-menu-search {
+  background: var(--p47-canvas);
+  border-color: var(--p47-border);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-nav-groups details > summary {
+  background: var(--p47-panel);
+  border-color: var(--p47-border);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-mobile-nav :is(a, button, i) {
+  color: var(--p47-accent);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .provider-runtime-surface {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .provider-runtime-tabs {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--p47-accent);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .provider-runtime-tabs a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 12px;
+  color: var(--p47-panel);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 14px;
+  text-decoration: none;
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .provider-runtime-tabs
+  a[aria-current="page"] {
+  background: var(--p47-panel);
+  color: var(--p47-accent);
+  font-weight: 700;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .provider-runtime-tabs a:focus-visible {
+  outline: 3px solid var(--p47-panel);
+  outline-offset: 3px;
+}
+@media (max-width: 1100px) {
+  html body.p47-adapter-review:has(#app .adapter-center) #app .provider-runtime-surface {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .provider-runtime-tabs {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .provider-runtime-tabs a {
+    flex: 1 1 150px;
+  }
+}
+@media (max-width: 760px) {
+  html body.p47-adapter-review:has(#app .adapter-center) #app .provider-runtime-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 12px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .provider-runtime-tabs a {
+    padding: 10px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .provider-runtime-tabs a:last-child {
+    grid-column: 1/-1;
+  }
+}
+
+html:has(body.p47-adapter-review #app .adapter-center) {
+  --so-font-ui: "Microsoft YaHei", sans-serif;
+  --so-font-display: "Microsoft YaHei", sans-serif;
+}
+html body.p47-adapter-review:has(#app .adapter-center) {
+  margin: 0;
+  background: var(--p47-canvas);
+  background-image: none;
+  color: var(--p47-ink);
+  font-family: "Microsoft YaHei", sans-serif;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-shell {
+  display: block;
+  padding: 0;
+  background: var(--p47-canvas);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-topbar {
+  position: relative;
+  inset: auto;
+  height: auto;
+  min-height: 72px;
+  padding: 12px 28px;
+  border: 0;
+  border-bottom: 1px solid var(--p47-border);
+  background: var(--p47-panel);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-brand > span {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--p47-accent);
+  font-size: 20px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-brand > b {
+  font-family: "Microsoft YaHei", sans-serif;
+  letter-spacing: 0.04em;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-top-actions {
+  gap: 8px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-top-actions :is(button, a),
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-menu-toggle {
+  min-height: 44px;
+  border: 1px solid var(--p47-border);
+  border-radius: 6px;
+  color: var(--p47-accent);
+  background: var(--p47-panel);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-sidebar {
+  top: 0;
+  border: 0;
+  border-bottom: 1px solid var(--p47-border);
+  background: var(--p47-panel);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-sidebar :is(input, summary, a) {
+  color: var(--p47-secondary-ink);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-nav-menu {
+  border: 1px solid var(--p47-border);
+  border-radius: 8px;
+  background: var(--p47-panel);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-nav-menu a[aria-current="page"] {
+  color: var(--p47-accent);
+  background: var(--p47-accent-soft);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-content {
+  max-width: 1600px;
+  margin: auto;
+  padding: 24px 28px 40px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-page-breadcrumb {
+  min-height: 32px;
+  margin: 0 0 12px;
+  color: var(--p47-muted);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-page-title {
+  display: block;
+  min-height: 0;
+  margin: 0 0 20px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-page-folio,
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-page-title p {
+  display: none;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-page-title h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  font-family: "Microsoft YaHei", sans-serif;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-context-rail {
+  margin: 0 0 28px;
+  border: 1px solid var(--p47-border);
+  border-radius: 8px;
+  background: var(--p47-panel);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-context-rail > div {
+  padding: 12px 20px;
+  border-color: var(--p47-border);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-context-rail strong {
+  font-size: 14px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-context-drawer {
+  margin: 0 0 24px;
+  border: 1px solid var(--p47-border);
+  border-radius: 8px;
+  background: var(--p47-panel);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-context-drawer > summary {
+  border: 0;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-mobile-nav {
+  border-top: 1px solid var(--p47-border);
+  background: var(--p47-panel);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-mobile-nav :is(a, button) {
+  border: 0;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-mobile-nav [aria-current="page"] {
+  border-radius: 8px;
+  color: var(--p47-accent);
+  background: var(--p47-accent-soft);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-shell > .role-theme-menu {
+  border: 1px solid var(--p47-border);
+  border-radius: 8px;
+  background: var(--p47-panel);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .role-shell > .role-theme-menu button {
+  color: var(--p47-secondary-ink);
+  background: var(--p47-panel);
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .role-shell
+  > .role-theme-menu
+  [aria-pressed="true"] {
+  background: var(--p47-accent-soft);
+}
+@media (max-width: 840px) {
+  html body.p47-adapter-review:has(#app .adapter-center) #app .role-shell {
+    padding-top: 64px;
+    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .role-topbar {
+    position: fixed;
+    inset: 0 0 auto;
+    height: 64px;
+    box-sizing: border-box;
+    z-index: 45;
+    padding: 10px 16px;
+    min-height: 64px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .role-sidebar {
+    top: 64px;
+    height: calc(100dvh - 64px);
+    border-right: 1px solid var(--p47-border);
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .role-content {
+    padding: 20px 16px 32px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .role-page-title h1 {
+    font-size: 26px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .role-page-title {
+    margin-bottom: 16px;
+  }
+}
+@media (min-width: 841px) {
+  html body.p47-adapter-review:has(#app .adapter-center) #app .role-sidebar-head {
+    display: none;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .role-sidebar-utility a {
+    width: auto;
+    min-width: 176px;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 760px) {
+}
+
+@media (max-width: 840px) {
+  html body.p47-adapter-review:has(#app .adapter-center) #app .provider-runtime-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    padding: 8px;
+    overflow-x: auto;
+    scroll-padding: 8px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .provider-runtime-tabs a {
+    flex: 0 0 auto;
+    min-height: 44px;
+    padding: 10px;
+    font-size: 14px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .provider-runtime-tabs a:last-child {
+    grid-column: auto;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading :is(h2, p) {
+    display: none;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading {
+    padding: 0 0 16px;
+    gap: 12px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading-actions small {
+    width: auto;
+    order: 3;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    padding: 12px 0;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics span {
+    display: none;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics strong {
+    font-size: 22px;
+  }
+}
+/* P47 current Vue review only: diagnostic groups, original handlers and data. */
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-center {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+  color: var(--p47-ink);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading {
+  padding: 0 0 20px;
+  border: 0;
+  border-bottom: 1px solid var(--p47-border);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  gap: 24px;
+  align-items: center;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading h2 {
+  font:
+    700 26px/1.4 "Microsoft YaHei",
+    sans-serif;
+  color: var(--p47-ink);
+  margin: 6px 0;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading p {
+  color: var(--p47-accent);
+  font:
+    500 13px/1.5 "Microsoft YaHei",
+    sans-serif;
+  letter-spacing: 0;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading span {
+  font-size: 14px;
+  color: var(--p47-muted);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading-actions {
+  max-width: 300px;
+  gap: 10px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading-actions small {
+  width: 100%;
+  font-size: 13px;
+  color: var(--p47-muted);
+  text-align: right;
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .adapter-center
+  :is(button, a, summary) {
+  min-height: 44px;
+  font-size: 16px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-center :is(button, a) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border: 1px solid var(--p47-border-strong);
+  border-radius: 6px;
+  box-shadow: none;
+  background: white;
+  color: var(--p47-accent);
+  text-decoration: none;
+  line-height: 1.4;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading-actions button {
+  background: var(--p47-accent);
+  color: white;
+  border-color: var(--p47-accent);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-center :is(button, a):hover {
+  background: var(--p47-accent-soft);
+  color: var(--p47-accent);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-center :is(button, a):active {
+  background: var(--p47-divider);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-center button:disabled {
+  background: var(--p47-disabled-panel);
+  color: var(--p47-disabled-ink);
+  border-color: var(--p47-border);
+  cursor: not-allowed;
+  opacity: 1;
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .adapter-center
+  :is(button, a, input, select, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--p47-focus);
+  outline-offset: 3px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-intro {
+  margin: 0;
+  padding: 16px 20px;
+  border-left: 3px solid var(--p47-accent);
+  background: white;
+  color: var(--p47-muted);
+  font-size: 14px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics {
+  gap: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 16px 0;
+  border-bottom: 1px solid var(--p47-border);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics article {
+  padding: 0 18px;
+  background: none;
+  border: 0;
+  border-right: 1px solid var(--p47-border);
+  border-radius: 0;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics article:first-child {
+  padding-left: 0;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics article:last-child {
+  border-right: 0;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics strong {
+  font-size: 26px;
+  line-height: 1.3;
+  color: var(--p47-ink);
+  margin: 4px 0;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics :is(small, span) {
+  font-size: 13px;
+  color: var(--p47-muted);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-toolbar {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  margin: 20px 0;
+  padding: 24px;
+  background: white;
+  border: 1px solid var(--p47-border);
+  border-radius: 8px;
+  align-items: end;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-toolbar label {
+  min-width: 0;
+  font-size: 14px;
+  color: var(--p47-muted);
+  gap: 8px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-toolbar :is(input, select) {
+  font-size: 16px;
+  min-height: 48px;
+  border: 1px solid var(--p47-border-strong);
+  border-radius: 6px;
+  padding: 10px 12px;
+  background: white;
+  color: var(--p47-ink);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-search {
+  grid-column: 1;
+  grid-row: 1;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-reset {
+  grid-column: 2;
+  grid-row: 1;
+  width: auto;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-advanced {
+  grid-column: 1/-1;
+  grid-row: 2;
+  border-top: 1px solid var(--p47-border);
+  padding-top: 8px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-advanced > summary {
+  cursor: pointer;
+  align-content: center;
+  color: var(--p47-accent);
+  padding: 8px 0;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-advanced-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  padding: 16px 0 0;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-toolbar > span {
+  grid-column: 1/-1;
+  grid-row: 3;
+  justify-self: start;
+  color: var(--p47-ink);
+  font-size: 16px;
+  font-weight: 700;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .table-view-controls {
+  background: white;
+  border: 1px solid var(--p47-border);
+  color: var(--p47-muted);
+  padding: 12px;
+  gap: 12px;
+  margin-bottom: 0;
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .table-view-controls
+  :is(select, input) {
+  accent-color: var(--p47-accent);
+  font-size: 14px;
+  color: var(--p47-ink);
+  background: white;
+  border-color: var(--p47-border-strong);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap {
+  border: 1px solid var(--p47-border);
+  border-radius: 0 0 8px 8px;
+  overflow: auto;
+  background: white;
+  scroll-padding: 10px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap table {
+  min-width: 980px;
+  width: 100%;
+  table-layout: fixed;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap :is(th, td) {
+  padding: 16px 14px;
+  border-bottom: 1px solid var(--p47-border);
+  color: var(--p47-ink);
+  overflow-wrap: anywhere;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap th {
+  background: var(--p47-canvas);
+  color: var(--p47-muted);
+  font-size: 13px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap th:nth-child(1) {
+  width: 21%;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap th:nth-child(2) {
+  width: 19%;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap th:nth-child(3) {
+  width: 22%;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap th:nth-child(4) {
+  width: 25%;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap th:nth-child(5) {
+  width: 13%;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap td {
+  background: white;
+  font-size: 16px;
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .adapter-table-wrap
+  td
+  :is(small, span) {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--p47-muted);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap b {
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap td > strong {
+  margin-bottom: 8px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap td > b {
+  margin-top: 6px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap td button {
+  font-size: 14px;
+  padding: 10px 8px;
+  white-space: normal;
+  width: 100%;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-pagination {
+  padding: 16px 0;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--p47-muted);
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .adapter-center
+  :is(.adapter-empty, .adapter-boundary, .adapter-message) {
+  border: 1px solid var(--p47-border);
+  border-radius: 8px;
+  padding: 24px;
+  background: white;
+  color: var(--p47-ink);
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .adapter-center
+  :is(.adapter-empty, .adapter-boundary)
+  p {
+  color: var(--p47-muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-message {
+  margin-top: 16px;
+  line-height: 1.7;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-message summary {
+  color: var(--p47-accent);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-center .ui-state-panel {
+  background: white;
+  border: 1px solid var(--p47-border);
+  border-radius: 8px;
+  box-shadow: none;
+  color: var(--p47-ink);
+  padding: 28px;
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .adapter-center
+  .ui-state-panel
+  :is(h2, p, div, dd, dt) {
+  color: inherit;
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .adapter-center
+  .ui-state-panel
+  footer
+  button:not(.primary) {
+  display: none;
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .adapter-center
+  .ui-state-panel
+  footer
+  .primary {
+  background: var(--p47-accent);
+  color: white;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .responsive-data-view__mobile {
+  gap: 14px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .responsive-data-view__mobile article {
+  border: 1px solid var(--p47-border);
+  border-radius: 8px;
+  background: white;
+  padding: 0;
+  overflow: visible;
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .responsive-data-view__mobile
+  article
+  > button {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px;
+  border: 0;
+  color: var(--p47-ink);
+  text-align: left;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .responsive-record-summary {
+  display: grid;
+  gap: 8px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .responsive-record-summary strong {
+  font-size: 16px;
+  color: var(--p47-ink);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .responsive-record-summary small {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--p47-muted);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-mobile-circuit {
+  padding-top: 8px;
+  border-top: 1px solid var(--p47-border);
+}
+@media (max-width: 1023px) {
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading {
+    display: grid;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading-actions {
+    max-width: none;
+    justify-content: flex-start;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading-actions small {
+    text-align: left;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-advanced-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics article {
+    padding: 0;
+    border: 0;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-toolbar {
+    padding: 20px 16px;
+    gap: 16px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading h2 {
+    font-size: 24px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading-actions {
+    gap: 10px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-advanced-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-intro {
+    padding: 16px;
+    font-size: 14px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-pagination {
+    flex-wrap: wrap;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-pagination span {
+    font-size: 13px;
+  }
+  html
+    body.p47-adapter-review:has(#app .adapter-center)
+    #app
+    .adapter-center
+    :is(.adapter-empty, .adapter-boundary, .adapter-message) {
+    padding: 20px 16px;
+  }
+}
+/* Compact diagnostic hierarchy; remove remaining inherited ledger table chrome. */
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .adapter-center
+  :is(h2, h3, strong, th, td, button, a, small, b) {
+  font-family: "Microsoft YaHei", sans-serif;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics article {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 8px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics strong {
+  font-size: 24px;
+  margin: 0;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics span {
+  grid-column: 1/-1;
+  margin-top: 6px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-toolbar {
+  padding: 20px;
+  gap: 12px;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-toolbar > span {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+  align-self: start;
+  margin-top: 18px;
+  pointer-events: none;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-advanced > summary {
+  padding-right: 110px;
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .adapter-table-wrap
+  :is(table, thead, tbody, tr) {
+  border: 0;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap :is(th, td) {
+  border: 0;
+  border-bottom: 1px solid var(--p47-border);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap td b {
+  background: var(--p47-canvas);
+  color: var(--p47-ink);
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .adapter-table-wrap
+  b:is(
+    [data-health="ready"],
+    [data-registered="true"],
+    [data-circuit="closed"],
+    [data-runtime-category="healthy"]
+  ) {
+  background: #e7f2ed;
+  color: #21644c;
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .adapter-table-wrap
+  b:is([data-health="blocked"], [data-registered="false"], [data-circuit="open"]) {
+  background: #faebe6;
+  color: #963e29;
+}
+html
+  body.p47-adapter-review:has(#app .adapter-center)
+  #app
+  .adapter-table-wrap
+  b:is(
+    [data-health="degraded"],
+    [data-runtime-category="network"],
+    [data-runtime-category="parser"],
+    [data-runtime-category="login"],
+    [data-runtime-category="other"]
+  ) {
+  background: #fff2d7;
+  color: #785318;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-check-facts {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--p47-muted);
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .table-view-controls button {
+  background: white;
+  color: var(--p47-accent);
+  border-color: var(--p47-border-strong);
+}
+@media (max-width: 840px) {
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-metrics article {
+    display: block;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-toolbar {
+    padding: 16px;
+  }
+  html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-heading-actions small {
+    width: auto;
+  }
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .table-view-controls summary {
+  background: white;
+  color: var(--p47-accent);
+  border-color: var(--p47-border-strong);
+  font-family: "Microsoft YaHei", sans-serif;
+}
+html body.p47-adapter-review:has(#app .adapter-center) #app .adapter-table-wrap th {
+  letter-spacing: 0;
+  font-weight: 500;
+}
