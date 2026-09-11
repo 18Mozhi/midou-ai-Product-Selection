@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -87,6 +87,7 @@ const route = useRoute(),
     "failed_terminal",
     "dead_letter",
     "manually_replayed",
+    "automatically_replayed",
   ] as const;
 const state = ref<ViewState>("loading"),
   tasks = ref<Task[]>([]),
@@ -357,25 +358,40 @@ async function openTask(id: string, options: { updateUrl?: boolean } = {}) {
 }
 async function replay() {
   if (!detail.value || saving.value) return;
+  const sourceTaskId = detail.value.task.id;
+  const ownerSequence = detailSequence;
+  const reason = replayReason.value.trim();
   saving.value = true;
   confirming.value = false;
   replayIssue.value = "";
   try {
-    const response = await request<Detail>(
-      `/platform/collection/tasks/${detail.value.task.id}/replay`,
-      { method: "POST", body: { reason: replayReason.value.trim() } },
-    );
+    const response = await request<Detail>(`/platform/collection/tasks/${sourceTaskId}/replay`, {
+      method: "POST",
+      body: { reason },
+    });
     requestId.value = response.request_id;
     const successNotice = `已创建重放任务 ${response.data.task.id.slice(0, 8)}…，原任务与全部尝试记录已保留。`;
-    detail.value = response.data;
     replayReason.value = "";
-    await router.replace({ query: { ...route.query, task: response.data.task.id } });
     await load({ preserve: true });
     notice.value = successNotice;
+    if (
+      ownerSequence === detailSequence &&
+      detail.value?.task.id === sourceTaskId &&
+      route.query.task === sourceTaskId
+    ) {
+      detail.value = response.data;
+      await router.replace({ query: { ...route.query, task: response.data.task.id } });
+    }
   } catch (error) {
     const apiError = error instanceof ApiClientError ? error : null;
     requestId.value = apiError?.requestId ?? requestId.value;
-    replayIssue.value = apiError?.actionHint ?? "依赖不可用，未执行重放。";
+    const issue =
+      !apiError || apiError.status === 0 || [408, 425, 429, 502, 503, 504].includes(apiError.status)
+        ? "重放结果暂时无法确认。请重新读取任务列表核对后再操作，不要立即重复提交。"
+        : apiError.actionHint || "重放请求未完成。";
+    if (ownerSequence === detailSequence && detail.value?.task.id === sourceTaskId)
+      replayIssue.value = issue;
+    else notice.value = issue;
   } finally {
     saving.value = false;
   }
@@ -398,6 +414,16 @@ function closeDetail() {
   }
   void nextTick(() => returnFocus?.focus());
 }
+function suspendDetail() {
+  detailController?.abort("deactivated");
+  detailSequence += 1;
+  detail.value = null;
+  detailIssue.value = "";
+  detailLoading.value = false;
+  replayReason.value = "";
+  replayIssue.value = "";
+  returnFocus = null;
+}
 function detailKeydown(event: KeyboardEvent) {
   if (event.key === "Escape") {
     event.preventDefault();
@@ -409,7 +435,13 @@ function detailKeydown(event: KeyboardEvent) {
     ...detailPanel.value.querySelectorAll<HTMLElement>(
       "a[href],button:not([disabled]),textarea:not([disabled]),summary,[tabindex]:not([tabindex='-1'])",
     ),
-  ];
+  ].filter(
+    (element) =>
+      !element.hidden &&
+      element.getAttribute("aria-hidden") !== "true" &&
+      element.getClientRects().length > 0 &&
+      getComputedStyle(element).visibility !== "hidden",
+  );
   const first = focusable[0],
     last = focusable.at(-1);
   if (!first || !last) return;
@@ -433,7 +465,9 @@ async function changePage(nextPage: number) {
   query.value = "";
   syncListQuery();
   await load();
-  document.querySelector(".collection-task-table-card")?.scrollIntoView({ behavior: "smooth" });
+  document.querySelector(".collection-task-table-card")?.scrollIntoView({
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+  });
 }
 watch(
   () => route.query.task,
@@ -472,6 +506,11 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   listController?.abort("unmounted");
   detailController?.abort("unmounted");
+  document.body.classList.remove("collection-detail-open");
+});
+onDeactivated(() => {
+  confirming.value = false;
+  suspendDetail();
   document.body.classList.remove("collection-detail-open");
 });
 </script>
@@ -562,6 +601,7 @@ onBeforeUnmount(() => {
                 <option value="failed_terminal">终止失败</option>
                 <option value="dead_letter">死信</option>
                 <option value="manually_replayed">已人工重放</option>
+                <option value="automatically_replayed">凭证续期后已自动重放</option>
               </optgroup>
             </select>
           </div>
@@ -719,38 +759,47 @@ onBeforeUnmount(() => {
           aria-live="polite"
           @keydown="detailKeydown"
         >
+          <header>
+            <div>
+              <p>采集任务详情</p>
+              <h3 id="collection-detail-title">
+                {{
+                  detail
+                    ? `任务 ${detail.task.id.slice(0, 8)}…`
+                    : detailIssue
+                      ? "任务详情未能读取"
+                      : "正在读取任务详情"
+                }}
+              </h3>
+              <span id="collection-detail-description">{{
+                detail
+                  ? `${label(detail.task.status)} · 更新于 ${time(detail.task.updated_at)}`
+                  : detailIssue || "超过 15 秒会自动停止等待，不会显示上一条任务的数据。"
+              }}</span>
+            </div>
+            <button
+              ref="detailCloseButton"
+              type="button"
+              aria-label="关闭任务详情"
+              title="关闭任务详情"
+              @click="closeDetail"
+            >
+              ×
+            </button>
+          </header>
           <div v-if="detailLoading" class="collection-detail-state">
             <span class="collection-detail-spinner" aria-hidden="true"></span>
             <strong>正在读取任务详情…</strong>
-            <small>超过 15 秒会自动停止等待，不会显示上一条任务的数据。</small>
+            <small>可以先关闭；返回后会按当前任务链接重新读取。</small>
           </div>
           <div v-else-if="detailIssue" class="collection-detail-state" role="alert">
             <strong>任务详情未能读取</strong>
             <span>{{ detailIssue }}</span>
             <div>
               <button type="button" @click="openTask(String(route.query.task || ''))">重试</button>
-              <button type="button" @click="closeDetail">关闭</button>
             </div>
           </div>
-          <template v-else-if="detail"
-            ><header>
-              <div>
-                <p>采集任务详情</p>
-                <h3 id="collection-detail-title">任务 {{ detail.task.id.slice(0, 8) }}…</h3>
-                <span id="collection-detail-description"
-                  >{{ label(detail.task.status) }} · 更新于 {{ time(detail.task.updated_at) }}</span
-                >
-              </div>
-              <button
-                ref="detailCloseButton"
-                type="button"
-                aria-label="关闭任务详情"
-                title="关闭任务详情"
-                @click="closeDetail"
-              >
-                ×
-              </button>
-            </header>
+          <template v-else-if="detail">
             <div class="collection-detail-summary">
               <article>
                 <small>状态</small><strong>{{ label(detail.task.status) }}</strong>
@@ -879,7 +928,12 @@ onBeforeUnmount(() => {
               </dl>
             </details>
             <footer v-if="detail.task.status === 'dead_letter'" id="collection-replay">
-              <div v-if="replayIssue" class="collection-replay-issue" role="alert">
+              <div
+                v-if="replayIssue"
+                id="collection-replay-error"
+                class="collection-replay-issue"
+                role="alert"
+              >
                 {{ replayIssue }}
               </div>
               <label
@@ -888,7 +942,12 @@ onBeforeUnmount(() => {
                   rows="3"
                   maxlength="500"
                   required
-                  aria-describedby="collection-replay-help"
+                  :aria-invalid="Boolean(replayIssue)"
+                  :aria-describedby="
+                    replayIssue
+                      ? 'collection-replay-help collection-replay-error'
+                      : 'collection-replay-help'
+                  "
                   placeholder="说明恢复条件和重放原因（2–500 字）"
                 ></textarea></label
               ><small id="collection-replay-help"

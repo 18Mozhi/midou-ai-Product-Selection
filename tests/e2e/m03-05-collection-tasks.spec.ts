@@ -504,6 +504,8 @@ for (const outcome of ["success", "failure"] as const) {
     await entered;
     await expect(page).toHaveURL(new RegExp(`task=${ids.dead}`));
     await expect(page.getByText("正在读取任务详情…", { exact: true })).toBeVisible();
+    await expect(page.getByRole("dialog", { name: "正在读取任务详情" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "关闭任务详情" })).toBeFocused();
     await page.goBack();
     await expect(page).not.toHaveURL(/task=/);
     await expect(page.locator(".collection-task-detail")).toHaveCount(0);
@@ -526,3 +528,91 @@ for (const outcome of ["success", "failure"] as const) {
     await expect(page.locator(".collection-task-detail")).toHaveCount(0);
   });
 }
+
+test("UI2-CL51 exposes the automatically replayed server state as a URL-backed filter", async ({
+  page,
+}) => {
+  await nav(page);
+  const reads: string[] = [];
+  await page.route("**/api/v1/platform/collection/tasks?**", (route) => {
+    reads.push(route.request().url());
+    return route.fulfill({
+      status: 200,
+      json: {
+        data: reads.length === 1 ? tasks : [],
+        meta: { page: 1, page_size: 50, total: reads.length === 1 ? tasks.length : 0 },
+        request_id: "ui2-cl51-auto-filter",
+      },
+    });
+  });
+  await page.goto("/platform-admin/collection");
+  await page.getByRole("combobox", { name: "采集任务状态" }).selectOption("automatically_replayed");
+  await expect(page).toHaveURL(/status=automatically_replayed/);
+  await expect
+    .poll(() => reads.some((url) => url.includes("status=automatically_replayed")))
+    .toBe(true);
+});
+
+test("UI2-CL51 a completed replay never reopens a detail that the operator closed", async ({
+  page,
+}) => {
+  await nav(page);
+  await list(page);
+  await page.route(`**/api/v1/platform/collection/tasks/${ids.dead}`, (route) =>
+    route.fulfill({ json: { data: detail(), request_id: "ui2-cl51-owner-detail" } }),
+  );
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => (release = resolve));
+  let started!: () => void;
+  const entered = new Promise<void>((resolve) => (started = resolve));
+  await page.route(`**/api/v1/platform/collection/tasks/${ids.dead}/replay`, async (route) => {
+    started();
+    await held;
+    await route.fulfill({
+      json: {
+        data: detail({ ...tasks[1], id: ids.replay, status: "scheduled", attempt_count: 0 }),
+        request_id: "ui2-cl51-owner-replay",
+      },
+    });
+  });
+  await page.goto("/platform-admin/collection");
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await page.getByRole("button", { name: /死信 · 0 条证据/ }).click();
+    await page.getByRole("button", { name: "打开完整任务详情" }).click();
+  } else await page.getByRole("button", { name: "查看" }).nth(1).click();
+  await page.getByPlaceholder("说明恢复条件和重放原因（2–500 字）").fill("依赖已经恢复");
+  await page.getByRole("button", { name: "人工重放" }).click();
+  await page.getByPlaceholder("确认重放").fill("确认重放");
+  await page.getByRole("button", { name: "确认重放" }).click();
+  await entered;
+  await page.getByRole("button", { name: "关闭任务详情" }).click();
+  await expect(page).not.toHaveURL(/task=/);
+  release();
+  await expect(page.getByText(/已创建重放任务/)).toBeVisible();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page).not.toHaveURL(new RegExp(`task=${ids.replay}`));
+});
+
+test("UI2-CL51 reports an unknown replay outcome without claiming it did not execute", async ({
+  page,
+}) => {
+  await nav(page);
+  await list(page);
+  await page.route(`**/api/v1/platform/collection/tasks/${ids.dead}`, (route) =>
+    route.fulfill({ json: { data: detail(), request_id: "ui2-cl51-unknown-detail" } }),
+  );
+  await page.route(`**/api/v1/platform/collection/tasks/${ids.dead}/replay`, (route) =>
+    route.abort("failed"),
+  );
+  await page.goto("/platform-admin/collection");
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await page.getByRole("button", { name: /死信 · 0 条证据/ }).click();
+    await page.getByRole("button", { name: "打开完整任务详情" }).click();
+  } else await page.getByRole("button", { name: "查看" }).nth(1).click();
+  await page.getByPlaceholder("说明恢复条件和重放原因（2–500 字）").fill("依赖已经恢复");
+  await page.getByRole("button", { name: "人工重放" }).click();
+  await page.getByPlaceholder("确认重放").fill("确认重放");
+  await page.getByRole("button", { name: "确认重放" }).click();
+  await expect(page.getByRole("alert")).toContainText("重放结果暂时无法确认");
+  await expect(page.getByRole("alert")).not.toContainText("未执行重放");
+});
