@@ -1,0 +1,146 @@
+html
+  body.p47-refresh-failure-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-refresh-failure {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 20px;
+  align-items: start;
+  margin: 16px 0;
+  padding: 20px 22px;
+  border: 1px solid #c5d2e4;
+  border-left: 4px solid #3867b7;
+  border-radius: 6px;
+  background: #f5f8fc;
+  color: #182d4a;
+}
+html
+  body.p47-refresh-failure-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-refresh-failure
+  > :not(button) {
+  grid-column: 1;
+}
+html
+  body.p47-refresh-failure-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-refresh-failure
+  > small {
+  color: #526984;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+html
+  body.p47-refresh-failure-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-refresh-failure
+  h3 {
+  margin: 0;
+  color: #162a47;
+  font-size: 18px;
+  line-height: 1.5;
+}
+html
+  body.p47-refresh-failure-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-refresh-failure
+  :is(p, span) {
+  margin: 0;
+  color: #52647a;
+  font-size: 14px;
+  line-height: 1.7;
+}
+html
+  body.p47-refresh-failure-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-refresh-failure
+  details {
+  margin-top: 2px;
+}
+html
+  body.p47-refresh-failure-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-refresh-failure
+  summary {
+  min-height: 44px;
+  padding: 10px 0;
+  color: #1e56a8;
+  cursor: pointer;
+}
+html
+  body.p47-refresh-failure-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-refresh-failure
+  code {
+  display: block;
+  padding: 8px 0;
+  color: #52647a;
+  font:
+    13px/1.6 Consolas,
+    monospace;
+  overflow-wrap: anywhere;
+}
+html
+  body.p47-refresh-failure-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-refresh-failure
+  button {
+  grid-column: 2;
+  grid-row: 1 / span 5;
+  min-width: 112px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid #185adb;
+  border-radius: 6px;
+  background: #185adb;
+  color: white;
+  font-size: 14px;
+}
+html
+  body.p47-refresh-failure-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-refresh-failure
+  :is(summary, button):focus-visible {
+  outline: 3px solid #185adb;
+  outline-offset: 3px;
+}
+html
+  body.p47-refresh-failure-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-heading:focus {
+  outline: 3px solid #185adb;
+  outline-offset: 3px;
+}
+@media (max-width: 640px) {
+  html
+    body.p47-refresh-failure-review:has(#app .adapter-center--c)
+    #app
+    .adapter-center--c
+    .adapter-refresh-failure {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 18px;
+  }
+  html
+    body.p47-refresh-failure-review:has(#app .adapter-center--c)
+    #app
+    .adapter-center--c
+    .adapter-refresh-failure
+    button {
+    grid-column: 1;
+    grid-row: auto;
+    width: 100%;
+    margin-top: 4px;
+  }
+}
