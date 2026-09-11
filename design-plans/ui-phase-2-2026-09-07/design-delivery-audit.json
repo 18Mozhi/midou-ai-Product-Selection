@@ -8,12 +8,13 @@
     "design-plans/ui-phase-2-2026-09-07/coverage.json": "deb03542feef014f93eef82679eacc848bb187ada9bbbe03d7a3d029b2b46ea9",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "design-plans/ui-phase-2-2026-09-07/PAGES.md": "ca41a447eb5be9317f20642bd87acc71ae31f9fe00147f1a7a63b7c48d39320d",
-    "scripts/audit-ui-phase2-design-delivery.mjs": "4fb5608e16344aff53446f7d357df122c82372eebbda70166f2ab7b5c37dd184",
+    "scripts/audit-ui-phase2-design-delivery.mjs": "0da5c8e7d9ceda6c8183848969e4615152c6cd9cdedf9c65564a1d60f7bcac03",
     "scripts/lib/ui-phase2-organization-action-baseline.mjs": "120bf0d7417c51e38c31b8dc38f009a32feb5553bcae49e6064c680fd178ba47",
     "scripts/lib/ui-phase2-token-copy-baseline.mjs": "bb93e58271aba9065cf4c5eeb31d2af806e6653119e3aca54e90e967722171bf",
     "scripts/lib/ui-phase2-filter-reset-baseline.mjs": "940a916680e584cc5ee3dd90c04906243ce57caf962987ebd5c10048d4e6654a",
     "scripts/lib/ui-phase2-user-creation-baseline.mjs": "0de1f363d021bb5a7601cd8f12b17f1bb7f6406db179ef10cfe1fb6b98ec236e",
-    "scripts/lib/ui-phase2-password-baseline.mjs": "5937a6641b4e587b80f640f8e5a96d6d7a6c0ab113c917e41802f4a6f9cbd355",
+    "scripts/lib/ui-phase2-password-baseline.mjs": "44bbd10895a491ba672294d97e5eb06cd639c8d4e611a9443ec7aabeacdd6714",
+    "scripts/lib/ui-phase2-admin-controls-baseline.mjs": "e4f0395e79a6ee1b774ebe33c3d54cb961841e503af39b16908e570827ff1e23",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "7e5cb0b62a259d6e436738a757cef13816ab6705d914469555a699755dff22aa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "56880356f7da1b3f3195d51f2c2c3dc6c880c73e5c1893315a0b9e1f3b39b2b4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "775a1ecbc546756cd56312fa9f730b316bc8b49499777431832a7371238331d9",
@@ -57,7 +58,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P41.md": "a49cd4953dd9d3e48e4d9f26c0edac5c397718a1cab15920d966eee06c1b1257",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P42.md": "83b575cf49c568829e3f46b0af51d89c9bce488089a0a269aa80137727d2672a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P43.md": "5364f1662602ac40128f347b69aa6410c27432f295e79c4bc1f5ce2b1f4c99aa",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P44.md": "393eba69e38d5f31aa8bcbd22cb396d3948109a38f208c0fc38994f4792f930b",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P44.md": "48f2baec9ac8afbd624feb1ea1c407228363f64cedc3ee548a587c4a39ec8a28",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P45.md": "94bfebb53e5a96e8f8a5770833c237a5a072f6f7207eb43e4fdfc8b7cfbcdfe6",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P46.md": "b7414bd39468dbb72608c59868a1db59b403975072d31fdbc60cb40bb6f52f41",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P47.md": "50587152105d13bf52d59f9081aeac664b040cf61aaf5c471dfd9da690cc071a",
@@ -1879,7 +1880,7 @@
         {
           "file": "apps/web/src/components/PlatformAccountCenter.vue",
           "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
-          "actual": "a1ba7d5a1d8bd8acf801dda4b84b98f23523d0ca7f43c6b216dfacde5c47db20",
+          "actual": "fd9b68b4f22ce7bb832ff5090c478104cac1c63f8722ed5a7274cb3ceb0480d1",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -1933,7 +1934,7 @@
         {
           "file": "apps/web/src/components/PlatformAccountCenter.vue",
           "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
-          "actual": "a1ba7d5a1d8bd8acf801dda4b84b98f23523d0ca7f43c6b216dfacde5c47db20",
+          "actual": "fd9b68b4f22ce7bb832ff5090c478104cac1c63f8722ed5a7274cb3ceb0480d1",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -4609,7 +4610,7 @@
         {
           "file": "apps/web/src/components/PlatformAccountCenter.vue",
           "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
-          "actual": "a1ba7d5a1d8bd8acf801dda4b84b98f23523d0ca7f43c6b216dfacde5c47db20",
+          "actual": "fd9b68b4f22ce7bb832ff5090c478104cac1c63f8722ed5a7274cb3ceb0480d1",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -4844,7 +4845,7 @@
         {
           "file": "apps/web/src/components/PlatformAccountCenter.vue",
           "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
-          "actual": "a1ba7d5a1d8bd8acf801dda4b84b98f23523d0ca7f43c6b216dfacde5c47db20",
+          "actual": "fd9b68b4f22ce7bb832ff5090c478104cac1c63f8722ed5a7274cb3ceb0480d1",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -6093,7 +6094,7 @@
         {
           "file": "apps/web/src/components/PlatformAccountCenter.vue",
           "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
-          "actual": "a1ba7d5a1d8bd8acf801dda4b84b98f23523d0ca7f43c6b216dfacde5c47db20",
+          "actual": "fd9b68b4f22ce7bb832ff5090c478104cac1c63f8722ed5a7274cb3ceb0480d1",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],

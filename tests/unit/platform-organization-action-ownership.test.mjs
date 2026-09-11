@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import vm from "node:vm";
 import ts from "typescript";
+import { parse } from "@vue/compiler-sfc";
 const file = "apps/web/src/components/PlatformAccountCenter.vue";
 const current = readFileSync(file, "utf8");
 const controller = readFileSync("apps/web/src/use-platform-organization-actions.ts", "utf8");
@@ -213,7 +214,10 @@ test("unscoped writes still reread and parent template is unchanged", async () =
   h.resolve({ ok: true });
   await run;
   assert.equal(h.box.loads, 1);
-  assert.equal(current.split("<template>")[1], baseline.split("<template>")[1]);
+  assert.equal(
+    parse(current).descriptor.template.content,
+    parse(baseline).descriptor.template.content,
+  );
 });
 test("current restore retains active target status and original reason", async () => {
   const h = harness();

@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalAdminControlsSource } from "../../scripts/lib/ui-phase2-admin-controls-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -14,7 +15,8 @@ test("P44 comparison evidence uses current actual sources and exact formal image
   assert.equal(e.checks.length, 164);
   assert.equal(e.screenshots.length, 44);
   assert.equal(Object.keys(e.sourceHashes).length, 40);
-  for (const [f, h] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), h, f);
+  for (const [f, h] of Object.entries(e.sourceHashes))
+    assert.equal(hash(historicalAdminControlsSource(f, read(f))), h, f);
   assert.deepEqual(
     readdirSync(folder).sort(),
     ["index.html", "evidence.json", ...e.screenshots.map((s) => s.file)].sort(),
@@ -60,6 +62,15 @@ test("P44 local approvals stay exact without promoting whole comparison package"
     read("design-plans/ui-phase-2-2026-09-07/P44-MOBILE-COMPARISON-CONTROLS-APPROVAL.md"),
     /比较控件组合通过，继续其他状态/,
   );
+  assert.equal(
+    hash(readFileSync(folder + "/390-same-role-all.png")),
+    "eca89c21b71216dffe8f4946215fe04c60489089ee3811b00cf2ddb4543b33c0",
+  );
+  const allApproval = read(
+    "design-plans/ui-phase-2-2026-09-07/P44-MOBILE-SAME-ROLE-ALL-APPROVAL.md",
+  );
+  assert.match(allApproval, /结果区域通过，继续其他状态/);
+  assert.match(allApproval, /不包含上方角色资料、其他状态、其他宽度、整页或真实权限验收/);
   const e = JSON.parse(read(folder + "/evidence.json"));
   assert.match(e.scope, /template\/script unchanged/);
   assert.match(e.scope, /no authority inference or real writes/);

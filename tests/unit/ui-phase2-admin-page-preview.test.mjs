@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalAdminControlsSource } from "../../scripts/lib/ui-phase2-admin-controls-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -77,12 +78,15 @@ test("P44 review pins actual source and exact image inventories", () => {
   assert.equal(e.screenshots.length, 68);
   assert.equal(Object.keys(e.sourceHashes).length, 39);
   for (const [file, value] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), value, file);
+    assert.equal(hash(historicalAdminControlsSource(file, read(file))), value, file);
   for (const [file, surface] of [
     [parent, "parent"],
     [detail, "detail"],
   ])
-    assert.equal(hash(adminPagePreview(read(file), surface)), e.transformedHashes[file]);
+    assert.equal(
+      hash(adminPagePreview(historicalAdminControlsSource(file, read(file)), surface)),
+      e.transformedHashes[file],
+    );
   assert.deepEqual(
     readdirSync(folder).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),

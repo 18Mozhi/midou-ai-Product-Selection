@@ -17,6 +17,7 @@ const responsiveFile = "apps/web/src/components/ResponsiveDataView.vue";
 const addedSources = [
   "apps/web/src/use-platform-organization-actions.ts",
   "apps/web/src/use-user-creation-owner.ts",
+  "apps/web/src/components/PlatformAdminComparisonMobile.css",
 ];
 const files = {
   D: "PlatformDashboard",

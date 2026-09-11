@@ -1,4 +1,5 @@
 import test from "node:test";
+import { adminControlsRevision } from "../../scripts/lib/ui-phase2-admin-controls-baseline.mjs";
 import { passwordRevision } from "../../scripts/lib/ui-phase2-password-baseline.mjs";
 import {
   historicalUserCreationSource,
@@ -104,6 +105,7 @@ test("historical associations accept only exact reviewed source revisions", () =
       tokenCopyRevisions[association.file],
       userCreationRevisions[association.file],
       association.file === passwordRevision.file ? passwordRevision : undefined,
+      association.file === adminControlsRevision.file ? adminControlsRevision : undefined,
       association.file === filterResetRevision.file ? filterResetRevision : undefined,
     ].find((candidate) => candidate?.before === association.expected);
     assert.ok(pair, `Unknown historical association: ${association.file}`);
@@ -111,7 +113,7 @@ test("historical associations accept only exact reviewed source revisions", () =
     assert.equal(
       association.actual,
       association.file === passwordRevision.file
-        ? passwordRevision.after
+        ? adminControlsRevision.after
         : (userCreationRevisions[association.file]?.after ?? pair.after),
     );
     assert.equal(association.encoding, "historical-LF-exact-revision-not-current-acceptance");

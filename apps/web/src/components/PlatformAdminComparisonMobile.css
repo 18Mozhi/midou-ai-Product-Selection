@@ -1,0 +1,110 @@
+/* P44 approved mobile controls only. P45, desktop and result surfaces stay unchanged. */
+@media (max-width: 760px) {
+  html[data-design="signal-ledger"]
+    #app
+    .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"])
+    .role-comparison {
+    > header,
+    .role-comparison__selectors,
+    .role-comparison__filters {
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+    > header {
+      display: grid;
+      gap: 18px;
+      margin: -20px -20px -16px;
+      padding: 20px 16px;
+      border-radius: 12px 12px 0 0;
+      background: #294caf;
+      color: #fff;
+      :is(p, h3, span) {
+        color: #fff;
+      }
+      h3 {
+        font-family: "Microsoft YaHei", sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+      }
+      p {
+        font-size: 13px;
+        font-weight: 800;
+      }
+      span {
+        max-width: 52ch;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+    }
+    .role-comparison__toggle {
+      justify-self: start;
+      min-height: 44px;
+      padding: 8px 12px;
+      border: 1px solid #91a8de;
+      border-radius: 6px;
+      color: #fff;
+      input {
+        width: 20px;
+        height: 20px;
+        min-width: 20px;
+        min-height: 20px;
+        padding: 0;
+        margin: 0;
+        accent-color: #294caf;
+      }
+      input:focus-visible {
+        outline: 3px solid #fff;
+        outline-offset: 4px;
+      }
+    }
+    .role-comparison__selectors,
+    .role-comparison__filters {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+      margin-left: -4px;
+      margin-right: -4px;
+      color: #142a46;
+      background: #fff;
+      label {
+        color: #536b86;
+      }
+      :is(select, input) {
+        box-sizing: border-box;
+        min-height: 44px;
+        min-width: 0;
+        width: 100%;
+        padding: 9px 11px;
+        font-size: 16px;
+        border: 1px solid #9db1cc;
+        border-radius: 6px;
+        color: #142a46;
+        background: #fff;
+      }
+      :is(select, input, button):focus-visible {
+        outline: 3px solid #4276df;
+        outline-offset: 3px;
+      }
+    }
+    .role-comparison__selectors {
+      padding: 20px 0;
+      margin-bottom: -16px;
+    }
+    .role-comparison__filters {
+      padding: 0 0 20px;
+      border-bottom: 1px solid #d8e1ed;
+      button {
+        justify-self: start;
+        min-height: 44px;
+        border-radius: 6px;
+        border-color: #9db1cc;
+        color: #294caf;
+        background: #fff;
+      }
+      button:disabled {
+        opacity: 1;
+        color: #66748a;
+        border-color: #d8e1ed;
+        background: #e8edf4;
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalAdminControlsSource } from "../../scripts/lib/ui-phase2-admin-controls-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -22,7 +23,10 @@ test("password ownership preserves exact before/after Vue sources and 80 diagnos
     assert.equal(e.checks.length, 220);
     assert.equal(e.screenshots.length, 40);
     assert(!text.includes("PasswordLifecycleFixture-123"));
-    const captured = (f) => (mode === "baseline" ? historicalPasswordSource(f, read(f)) : read(f));
+    const captured = (f) =>
+      mode === "baseline"
+        ? historicalPasswordSource(f, read(f))
+        : historicalAdminControlsSource(f, read(f));
     for (const [file, sha] of Object.entries(e.sourceHashes))
       assert.equal(hash(captured(file)), sha, file);
     for (const [file, surface] of [
@@ -73,7 +77,10 @@ test("real replacement-detail flow distinguishes old closing defect and current 
   }
 });
 test("password history mapping rejects unregistered revisions instead of accepting arbitrary source drift", () => {
-  assert.equal(hash(read(passwordRevision.file)), passwordRevision.after);
+  assert.equal(
+    hash(historicalAdminControlsSource(passwordRevision.file, read(passwordRevision.file))),
+    passwordRevision.after,
+  );
   assert.equal(
     hash(historicalPasswordSource(passwordRevision.file, read(passwordRevision.file))),
     passwordRevision.before,

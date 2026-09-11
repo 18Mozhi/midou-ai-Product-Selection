@@ -840,3 +840,4 @@ onMounted(load);
   </section>
 </template>
 <style scoped src="./PlatformAccountCenter.css"></style>
+<style src="./PlatformAdminComparisonMobile.css"></style>

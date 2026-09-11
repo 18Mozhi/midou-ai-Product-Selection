@@ -9,7 +9,7 @@
 | 文件 | 历史 LF SHA-256 | 当前 LF SHA-256 | 已有依据 |
 | --- | --- | --- | --- |
 | apps/web/src/components/PlatformDashboard.vue | 7935e4cdeca4991615f554ff0c66cf5e623454269fa0771ff06b861f15ca5a95 | b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498 | ea005452 历史时间窗/在途读取修复；[当前语义合同](platform-overview-semantic-contract-review.md) |
-| apps/web/src/components/PlatformAccountCenter.vue | 2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474 | a1ba7d5a1d8bd8acf801dda4b84b98f23523d0ca7f43c6b216dfacde5c47db20 | 组织/创建修复后追加[改密回执归属](P43-PASSWORD-OWNERSHIP-REVIEW.md)；3ac56e41与ec3f2b65保留为此前图的历史依据 |
+| apps/web/src/components/PlatformAccountCenter.vue | 2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474 | fd9b68b4f22ce7bb832ff5090c478104cac1c63f8722ed5a7274cb3ceb0480d1 | 组织/创建/改密修复后仅追加P44获批手机控件样式导入；3ac56e41/ec3f2b65/a1ba7d5a保留为历史图依据 |
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa | b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99 | [焦点与缓存停用增量](responsive-detail-focus-contract-review.md) |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 | a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011 | [重置禁用焦点修复](FILTER-RESET-FOCUS-REVIEW.md) |
 
@@ -17,12 +17,13 @@
 
 只替换 S（ResponsiveDataView）这一个明确别名的五个候选，读取已有 [当前动作归属表](responsive-detail-focus-contract-review.md)，不重复维护一套新签名。原表五个历史身份仍严格核对；其中三个新位置接续、两个身份不变。其余123个候选和全部24个 v-model 与真实Vue逐项相等。候选身份不能替代交互语义、运行时动作分母、动态弹窗或所有消费组件验收。
 
-PlatformAccountCenter 已抽出组织操作组合函数并增加创建反馈归属，因此当前检查增加这两个真实依赖，不把原32源文件误称完整当前调用链。原32源历史表保留，当前34源是本工具的明确静态核对范围，不代表全项目源码分母。
+PlatformAccountCenter 已抽出组织操作组合函数、增加创建反馈归属并接入P44手机比较控件样式，因此当前检查增加这三个真实依赖，不把原32源文件误称完整当前调用链。原32源历史表保留，当前35源是本工具的明确静态核对范围，不代表全项目源码分母。
 
 | 新增核对文件 | 当前 LF SHA-256 |
 | --- | --- |
 | apps/web/src/use-platform-organization-actions.ts | 3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb |
 | apps/web/src/use-user-creation-owner.ts | cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e |
+| apps/web/src/components/PlatformAdminComparisonMobile.css | 492517572b9ff66dad74bf08c5372caab32bb09adf3deb08d8aa728c61bebbe7 |
 
 ## 运行与失败边界
 

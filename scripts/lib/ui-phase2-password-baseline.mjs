@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { historicalAdminControlsSource } from "./ui-phase2-admin-controls-baseline.mjs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 
@@ -14,6 +15,7 @@ let cached;
 export function historicalPasswordSource(file, source) {
   source = source.replaceAll("\r\n", "\n");
   if (file !== passwordRevision.file || hash(source) === passwordRevision.before) return source;
+  source = historicalAdminControlsSource(file, source);
   assert.equal(hash(source), passwordRevision.after, `Unreviewed password source: ${file}`);
   if (!cached) {
     cached = execFileSync("git", ["show", `${passwordRevision.baseline}:${file}`], {

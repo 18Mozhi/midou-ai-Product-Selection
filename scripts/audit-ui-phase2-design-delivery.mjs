@@ -1,4 +1,8 @@
 import assert from "node:assert/strict";
+import {
+  historicalAdminControlsSource,
+  adminControlsRevision,
+} from "./lib/ui-phase2-admin-controls-baseline.mjs";
 import { historicalPasswordSource, passwordRevision } from "./lib/ui-phase2-password-baseline.mjs";
 import {
   historicalUserCreationSource,
@@ -64,6 +68,7 @@ for (const file of [
   "scripts/lib/ui-phase2-filter-reset-baseline.mjs",
   "scripts/lib/ui-phase2-user-creation-baseline.mjs",
   "scripts/lib/ui-phase2-password-baseline.mjs",
+  "scripts/lib/ui-phase2-admin-controls-baseline.mjs",
 ])
   inputHashes[file] = (await fileHashes(file)).lf;
 const packages = [];
@@ -79,6 +84,9 @@ for (const dir of (await readdir(path.join(root, "design"), { withFileTypes: tru
     const actual = await fileHashes(file);
     const historical = organizationActionRevisions[file]?.before === expected;
     const associated =
+      (file === adminControlsRevision.file &&
+        expected === adminControlsRevision.before &&
+        hash(historicalAdminControlsSource(file, await text(file))) === expected) ||
       (historical &&
         hash(historicalOrganizationActionSource(file, await text(file))) === expected) ||
       (tokenCopyRevisions[file]?.before === expected &&
