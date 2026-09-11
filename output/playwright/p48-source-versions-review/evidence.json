@@ -1,0 +1,1886 @@
+{
+  "kind": "P48-SOURCE-VERSIONS-REVIEW-r1",
+  "generatedAt": "2026-09-11T14:12:16.343Z",
+  "reviewOnly": true,
+  "productionChanged": false,
+  "deployed": false,
+  "processesClosed": true,
+  "ports": [
+    59114
+  ],
+  "runs": [
+    {
+      "width": 390,
+      "scene": "loading",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "rollback reason hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "history",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "reason-required",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "all restore actions disabled",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "no-visible-change",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "two no-diff messages",
+          "actual": 2
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scene": "empty",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "rollback reason hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "loading",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "rollback reason hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "history",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "reason-required",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "all restore actions disabled",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "no-visible-change",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "two no-diff messages",
+          "actual": 2
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "scene": "empty",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "rollback reason hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "loading",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "rollback reason hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "history",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "reason-required",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "all restore actions disabled",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "no-visible-change",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "two no-diff messages",
+          "actual": 2
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scene": "empty",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "rollback reason hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "loading",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "rollback reason hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "history",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "reason-required",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "all restore actions disabled",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "no-visible-change",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "two no-diff messages",
+          "actual": 2
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scene": "empty",
+      "checks": [
+        {
+          "name": "dialog title focused",
+          "actual": true
+        },
+        {
+          "name": "background inert",
+          "actual": true
+        },
+        {
+          "name": "rollback reason hidden",
+          "actual": 0
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "44px representative controls",
+          "actual": [
+            true,
+            true
+          ]
+        },
+        {
+          "name": "tab loop stays in dialog",
+          "actual": true
+        },
+        {
+          "name": "escape restores trigger",
+          "actual": true
+        },
+        {
+          "name": "background inert cleared",
+          "actual": 0
+        },
+        {
+          "name": "one source GET",
+          "actual": 1
+        },
+        {
+          "name": "one versions GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-sources/10000000-0000-4000-8000-000000000001/configuration/versions",
+          "body": null
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-loading-top.png",
+      "width": 390,
+      "scene": "loading",
+      "suffix": "top",
+      "sha256": "f8c10069951add38195308286cb216b45834af44f9f97e74c1052d2df205b937",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-history-top.png",
+      "width": 390,
+      "scene": "history",
+      "suffix": "top",
+      "sha256": "6f89115c90720e4323e19ca236f4831f931898eba66e50b8bbae258affc1a635",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-history-history-bottom.png",
+      "width": 390,
+      "scene": "history",
+      "suffix": "history-bottom",
+      "sha256": "6226f09336187d167c05c610f96fcd139ba5ba863d1729545cc652114e81b917",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-reason-required-top.png",
+      "width": 390,
+      "scene": "reason-required",
+      "suffix": "top",
+      "sha256": "bcd08eb428ac633a91ea9e8508ef78560d358d67d5b7cc377b6dca5bd5f61c12",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-reason-required-history-bottom.png",
+      "width": 390,
+      "scene": "reason-required",
+      "suffix": "history-bottom",
+      "sha256": "f47667b7ce3974aa33f1891e7eaba8de292715a0c1410321f2665e4b5bfd2b78",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-no-visible-change-top.png",
+      "width": 390,
+      "scene": "no-visible-change",
+      "suffix": "top",
+      "sha256": "854f0127a038aec45a5c6200bab2f8332e94178d101000d480735e4328c9f230",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-no-visible-change-history-bottom.png",
+      "width": 390,
+      "scene": "no-visible-change",
+      "suffix": "history-bottom",
+      "sha256": "eca21a65ac3b793347ef66ea70dbeb67b2ed990f08c2f8a109416aa848d960c4",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "390-empty-top.png",
+      "width": 390,
+      "scene": "empty",
+      "suffix": "top",
+      "sha256": "fed4def67b7896eea53bc5ca10305196e90d75a1cb57b73ec0b98243fbc0a662",
+      "pixelWidth": 390,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-loading-top.png",
+      "width": 760,
+      "scene": "loading",
+      "suffix": "top",
+      "sha256": "56c24670bbb24ee036f8de9cfe215e76add1db0f0504bb4a03966b457d1d685d",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-history-top.png",
+      "width": 760,
+      "scene": "history",
+      "suffix": "top",
+      "sha256": "debe81df29e3a6e0aaa018374f6c21ddb5da9eb913cd8a32c178b5a543ed48fc",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-history-history-bottom.png",
+      "width": 760,
+      "scene": "history",
+      "suffix": "history-bottom",
+      "sha256": "125f2dcc8c2e2ce39445bd5504988ad717f9179c305a076c88c239085a9cce72",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-reason-required-top.png",
+      "width": 760,
+      "scene": "reason-required",
+      "suffix": "top",
+      "sha256": "e7ef6adf8c58dd348f7fd54ae135cd43488b2beb0a5d53472e789a235f328a55",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-reason-required-history-bottom.png",
+      "width": 760,
+      "scene": "reason-required",
+      "suffix": "history-bottom",
+      "sha256": "c8f6ddfd66ba3f0033450a79e02e5742daaaf2e78979028d6afea569d75746aa",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-no-visible-change-top.png",
+      "width": 760,
+      "scene": "no-visible-change",
+      "suffix": "top",
+      "sha256": "4431737fce3719cc885bf3ebf2bce19ae0691afad656ab3354e471f78886970c",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-no-visible-change-history-bottom.png",
+      "width": 760,
+      "scene": "no-visible-change",
+      "suffix": "history-bottom",
+      "sha256": "91067721afe8a2de6af0a31452e086a20255cbfade353700c821fad03e2d0f7a",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "760-empty-top.png",
+      "width": 760,
+      "scene": "empty",
+      "suffix": "top",
+      "sha256": "d3ac3eec1fd76504a91feba399ebbbf5dddd53184dc379f77d2462a0dbc2d8e0",
+      "pixelWidth": 760,
+      "pixelHeight": 1040
+    },
+    {
+      "file": "1024-loading-top.png",
+      "width": 1024,
+      "scene": "loading",
+      "suffix": "top",
+      "sha256": "7c13813e4afa66c7d49db417eea58409ef1be4f5f88efe8abc58b325123c58c0",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-history-top.png",
+      "width": 1024,
+      "scene": "history",
+      "suffix": "top",
+      "sha256": "e9bf0ea88c80c84e1643cccd1afef7db0559066c2da71900a4adac76b98116d6",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-reason-required-top.png",
+      "width": 1024,
+      "scene": "reason-required",
+      "suffix": "top",
+      "sha256": "95bf97c0b8e876de3809fad87325e2b9f2ea9854b3f6dce30e1d5122f574c7d8",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-no-visible-change-top.png",
+      "width": 1024,
+      "scene": "no-visible-change",
+      "suffix": "top",
+      "sha256": "b08f02e9cb18e25602fe9e8306e4b1c16e5965dacf4cf73c77caf15361f582b7",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1024-empty-top.png",
+      "width": 1024,
+      "scene": "empty",
+      "suffix": "top",
+      "sha256": "3cfbbea565a53f6b4b43de0f268bdb0d3d4f402b88aa936901177d575a6d0569",
+      "pixelWidth": 1024,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-loading-top.png",
+      "width": 1440,
+      "scene": "loading",
+      "suffix": "top",
+      "sha256": "fb11a39ba1a6e30320730b6d5ef6fb9083cf66747a16172dba5a2fecdc7daad5",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-history-top.png",
+      "width": 1440,
+      "scene": "history",
+      "suffix": "top",
+      "sha256": "f452cdadaca140ad321d5224f9746f2756533558b275092885cc48cf220b25cb",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-reason-required-top.png",
+      "width": 1440,
+      "scene": "reason-required",
+      "suffix": "top",
+      "sha256": "7a49d8e637b1f5df5044d4a178812e617e2841a8f203a2a99dd92b17359ac34c",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-no-visible-change-top.png",
+      "width": 1440,
+      "scene": "no-visible-change",
+      "suffix": "top",
+      "sha256": "1971d7f7fd8c583992617cbb025efef7b0df5e4477043992c6ef3f0a37fe37a2",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    },
+    {
+      "file": "1440-empty-top.png",
+      "width": 1440,
+      "scene": "empty",
+      "suffix": "top",
+      "sha256": "3eab3352c2ffa0910226d492f6f6ec120b756772bb927829aada28bc46a53026",
+      "pixelWidth": 1440,
+      "pixelHeight": 1100
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/index.html": "0376c4bf04227ac5dbb6bb43895e5ed97eef6ca8bde54f08774908d3f07d9d88",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "66b064c2135275b9d173ef316692366823ef4f6276002796d9ed112183218cef",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/provider-adapters-c-detail.css": "094a11fe39b3701c35d6061f7a570e940b3bb00abcc0b2ed7f64ffeaea0c6bdd",
+    "apps/web/src/provider-adapters-c-feedback.css": "64b09e635e98f8865ea2fb3c8b33b1d21f447affd55061f3d01cf6667904bba2",
+    "apps/web/src/provider-adapters-c-page.css": "899ca57a21bceef95c7dc030bb7f92bae1755f324b1d26c3f0ba692dad736c86",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/route-catalog.generated.json": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-source-versions-preview.css": "879159b39d4c91cd248b77463019e303354ae3ee5c88dca41a948e6b863a3b45",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-sources-page-preview.css": "0ad5722b2920de2f07d92f37afb706266dde7726b4677a4bdbf8107cb00744e7",
+    "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
+    "scripts/lib/ui-phase2-provider-source-versions-preview.mjs": "1b045004475658bb1acd252273494f39e14f1c9689caa1e11e9256e935ad06d0",
+    "scripts/verify-ui-phase2-provider-source-versions.mjs": "3064a552b15a6e772c890680173e408978d7dd5fb38871a4ceee455c38e9623a",
+    "tests/e2e/m03-07-provider-sources.spec.ts": "29c1232a33cb260beeee6851f33c4558873d25e47e538d6a2e04c47eaa6ba5fe"
+  }
+}

@@ -1,0 +1,489 @@
+body.p48-source-versions-review .source-center .p48-source-versions-modal {
+  padding: 24px;
+  background: rgb(15 23 42 / 72%);
+  backdrop-filter: blur(10px);
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-panel {
+  width: min(920px, 100%);
+  max-height: calc(100dvh - 48px);
+  gap: 0;
+  padding: 0;
+  overflow: auto;
+  border: 0;
+  border-radius: 24px;
+  background: #f8fafc;
+  box-shadow: 0 30px 80px rgb(15 23 42 / 30%);
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-identity {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 32px 26px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 88% 16%, rgb(255 255 255 / 18%), transparent 27%),
+    linear-gradient(135deg, #0f4cbd 0%, #1769e0 56%, #0b3e9d 100%);
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-identity > div {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-identity p,
+body.p48-source-versions-review .source-center .p48-source-versions-identity h3 {
+  margin: 0;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-identity > div > p:first-child,
+body.p48-source-versions-review .source-center .p48-source-versions-rollback header p,
+body.p48-source-versions-review .source-center .p48-source-versions-state > p:first-child {
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-identity h3 {
+  color: inherit;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.18;
+  outline: none;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-identity > div > p:nth-of-type(2) {
+  max-width: 650px;
+  color: rgb(255 255 255 / 82%);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-meta span {
+  padding: 6px 10px;
+  border: 1px solid rgb(255 255 255 / 26%);
+  border-radius: 999px;
+  color: rgb(255 255 255 / 92%);
+  background: rgb(255 255 255 / 10%);
+  font-size: 12px;
+  line-height: 1;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-identity > button {
+  flex: 0 0 44px;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 12px;
+  color: #fff;
+  background: rgb(255 255 255 / 10%);
+  font-size: 25px;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-body {
+  display: grid;
+  gap: 24px;
+  padding: 24px 32px 32px;
+  background: #f8fafc;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-privacy {
+  margin: 0;
+  padding: 13px 15px;
+  border-left: 4px solid #1769e0;
+  color: #24436c;
+  background: #eaf3ff;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-rollback {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.7fr) minmax(0, 1.3fr);
+  gap: 22px;
+  align-items: start;
+  padding: 2px 0 22px;
+  border-bottom: 1px solid #dbe4f0;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-rollback header p,
+body.p48-source-versions-review .source-center .p48-source-versions-rollback header h4,
+body.p48-source-versions-review .source-center .p48-source-versions-rollback label span,
+body.p48-source-versions-review .source-center .p48-source-versions-rollback small {
+  margin: 0;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-rollback header p {
+  color: #0f4cbd;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-rollback header h4 {
+  margin-top: 4px;
+  color: #172033;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-rollback label {
+  display: grid;
+  gap: 7px;
+  color: #243247;
+  font-size: 14px;
+  font-weight: 680;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-rollback textarea {
+  min-height: 86px;
+  padding: 11px 12px;
+  resize: vertical;
+  border: 1px solid #b8c5d6;
+  border-radius: 10px;
+  color: #172033;
+  background: #fff;
+  font: inherit;
+  font-weight: 450;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-rollback small {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 450;
+  line-height: 1.5;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-state {
+  display: grid;
+  gap: 6px;
+  min-height: 250px;
+  place-content: center;
+  padding: 32px;
+  border: 1px dashed #bdcadb;
+  border-radius: 16px;
+  color: #64748b;
+  text-align: center;
+  background: #f1f5f9;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-state > p,
+body.p48-source-versions-review .source-center .p48-source-versions-state h4 {
+  margin: 0;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-state > p:first-child {
+  color: #0f4cbd;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-state h4 {
+  color: #172033;
+  font-size: 20px;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-state > p:last-child {
+  line-height: 1.65;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline {
+  position: relative;
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0 0 0 34px;
+  list-style: none;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline::before {
+  position: absolute;
+  top: 17px;
+  bottom: 17px;
+  left: 10px;
+  width: 2px;
+  background: #c9d5e5;
+  content: "";
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline > li {
+  position: relative;
+  display: grid;
+  gap: 16px;
+  padding: 0 0 28px;
+  background: transparent;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline > li::before {
+  position: absolute;
+  top: 12px;
+  left: -30px;
+  z-index: 1;
+  width: 12px;
+  height: 12px;
+  border: 3px solid #f8fafc;
+  border-radius: 50%;
+  background: #8ca0b8;
+  box-shadow: 0 0 0 2px #b8c5d6;
+  content: "";
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline > li[data-current="true"]::before {
+  background: #1769e0;
+  box-shadow: 0 0 0 3px #aacbff;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 20px;
+  border: 1px solid #d5dfeb;
+  border-radius: 14px 14px 0 0;
+  background: #fff;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline > li[data-current="true"] > header {
+  border-color: #b5d1fa;
+  background: #eef6ff;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline header > div {
+  display: grid;
+  gap: 3px;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline header p,
+body.p48-source-versions-review .source-center .p48-source-versions-timeline header h4,
+body.p48-source-versions-review .source-center .p48-source-versions-timeline header time {
+  margin: 0;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline header p {
+  color: #0f4cbd;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline header h4 {
+  color: #172033;
+  font-size: 17px;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline header time {
+  color: #64748b;
+  font-size: 12px;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline header > strong {
+  padding: 7px 10px;
+  border-radius: 999px;
+  color: #0b4aa2;
+  background: #dcecff;
+  font-size: 12px;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline header > button,
+body.p48-source-versions-review .source-center .p48-source-versions-actions button {
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 10px;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline header > button {
+  border: 1px solid #aac4e8;
+  color: #0f4cbd;
+  background: #fff;
+  font-weight: 700;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline header > button:disabled {
+  border-color: #d5dfeb;
+  color: #8795a8;
+  background: #eef2f6;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > ul,
+body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > p {
+  margin: -16px 0 0;
+  padding: 14px 20px;
+  border: 1px solid #d5dfeb;
+  border-top: 0;
+  border-radius: 0 0 14px 14px;
+  background: #fff;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > ul {
+  display: grid;
+  gap: 0;
+  list-style: none;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > ul > li {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.8fr) minmax(100px, 1fr) 24px minmax(100px, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+  color: #526176;
+  font-size: 13px;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > ul > li + li {
+  border-top: 1px solid #e3e9f1;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > ul > li > span:first-child {
+  color: #243247;
+  font-weight: 680;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > ul > li > span:nth-child(3) {
+  color: #8b9aaf;
+  text-align: center;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > ul > li > strong {
+  color: #0f4cbd;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > p {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 32px;
+  border-top: 1px solid #dbe4f0;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 -12px 24px rgb(15 23 42 / 6%);
+  backdrop-filter: blur(12px);
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-actions p {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-actions button {
+  flex: 0 0 auto;
+  border: 1px solid #b8c5d6;
+  color: #243247;
+  background: #fff;
+}
+
+body.p48-source-versions-review .source-center .p48-source-versions-panel :focus-visible {
+  outline: 3px solid #66a3ff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  body.p48-source-versions-review .source-center .p48-source-versions-modal {
+    align-items: stretch;
+    padding: 0;
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-panel {
+    width: 100%;
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-identity,
+  body.p48-source-versions-review .source-center .p48-source-versions-body {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-identity {
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-identity h3 {
+    font-size: 25px;
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-body {
+    gap: 20px;
+    padding-top: 20px;
+    padding-bottom: 24px;
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-rollback {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-timeline {
+    padding-left: 24px;
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-timeline::before {
+    left: 5px;
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-timeline > li::before {
+    left: -25px;
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > header {
+    display: grid;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-timeline header > strong,
+  body.p48-source-versions-review .source-center .p48-source-versions-timeline header > button {
+    justify-self: start;
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > ul,
+  body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > p {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > ul > li {
+    grid-template-columns: minmax(86px, 0.9fr) minmax(72px, 1fr) 18px minmax(72px, 1fr);
+    gap: 6px;
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-actions {
+    display: grid;
+    gap: 10px;
+    padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+  }
+
+  body.p48-source-versions-review .source-center .p48-source-versions-actions button {
+    width: 100%;
+  }
+}
+
+@media (forced-colors: active) {
+  body.p48-source-versions-review .source-center .p48-source-versions-panel,
+  body.p48-source-versions-review .source-center .p48-source-versions-identity,
+  body.p48-source-versions-review .source-center .p48-source-versions-privacy,
+  body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > header,
+  body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > ul,
+  body.p48-source-versions-review .source-center .p48-source-versions-timeline > li > p {
+    border: 1px solid CanvasText;
+  }
+}
