@@ -13,7 +13,7 @@ const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
     "design-plans/ui-phase-2-2026-09-07/implementation/credential-login-material-preview.css",
   root = "output/playwright/p50-credential-login-material-review";
 
-test("P50 material review transforms and compiles the actual login editor", () => {
+test("P50 material review wraps and compiles the lifecycle-safe login editor", () => {
   const source = read(component),
     review = previewCredentialLoginMaterial(source),
     parsed = parse(review);
@@ -27,19 +27,20 @@ test("P50 material review transforms and compiles the actual login editor", () =
     }).errors,
     [],
   );
-  assert.equal(source.includes("loginMaterialBusy"), false);
+  assert.equal(source.includes("loginMaterialBusy"), true);
   assert.equal(source.includes("p50-login-material-scroll"), false);
   for (const marker of [
     "loginMaterialBusy",
     "p50-login-material-scroll",
-    "p50-login-material-ready",
-    ':aria-busy="loginMaterialBusy"',
+    ':aria-busy="saving || loginMaterialBusy"',
     '{{ loginMaterialBusy ? "读取中…" : "从当前浏览器读取 Cookie" }}',
-    "loginMaterialBusy || !loginProvider || !loginPayload",
+    "loginSaveStage === 'unknown'",
+    ':data-tone="',
   ])
     assert.ok(review.includes(marker), marker);
-  assert.ok(review.includes("if (loginMaterialBusy.value) return"));
-  assert.ok(review.includes("loginMaterialBusy.value = false"));
+  assert.ok(source.includes("generation !== loginMaterialGeneration"));
+  assert.ok(source.includes("resetLoginMaterialContext"));
+  assert.ok(source.includes("写入结果暂时无法确认"));
   assert.ok(review.includes("取消</button"));
 });
 

@@ -357,3 +357,199 @@ test("UI2-SC50 partial login save guides recovery without recreating the asset",
     status: "disabled",
   });
 });
+
+test("UI2-SC50 lifecycle source switch invalidates prepared login material", async ({ page }) => {
+  await nav(page, [provider, secondProvider]);
+  await page.route("**/api/v1/platform/credential-assets", (route) =>
+    route.fulfill({
+      json: { data: [], request_id: "ui2-source-switch", trace_id: "ui2-source-switch" },
+    }),
+  );
+  await page.goto(`/platform-admin/credentials?provider_id=${provider.id}&mode=login`);
+  const dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" }),
+    save = dialog.getByRole("button", { name: "加密保存并启用", exact: true });
+  await dialog.locator('input[type="file"]').setInputFiles({
+    name: "source-bound.cookies",
+    mimeType: "text/plain",
+    buffer: Buffer.from('[{"name":"study","value":"synthetic","domain":"example.test"}]'),
+  });
+  await expect(save).toBeEnabled();
+  await dialog.getByLabel("需要登录的来源").selectOption({ label: secondProvider.name });
+  await expect(dialog.locator(".login-provider-status strong")).toHaveText(secondProvider.name);
+  await expect(dialog.locator(".archive-picker small")).toContainText("请选择 Cookie");
+  await expect(save).toBeDisabled();
+});
+
+test("UI2-SC50 lifecycle ignores a file result after close and reopen", async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = File.prototype.text;
+    Object.defineProperty(File.prototype, "text", {
+      configurable: true,
+      value(this: File) {
+        if (this.name !== "late.cookies") return original.call(this);
+        return new Promise<string>((resolve, reject) => {
+          (window as any).__p50PendingFile = true;
+          (window as any).__p50ResolveFile = () => original.call(this).then(resolve, reject);
+        });
+      },
+    });
+  });
+  await nav(page, [provider, secondProvider]);
+  await page.route("**/api/v1/platform/credential-assets", (route) =>
+    route.fulfill({ json: { data: [], request_id: "ui2-late-file", trace_id: "ui2-late-file" } }),
+  );
+  await page.goto(`/platform-admin/credentials?provider_id=${provider.id}&mode=login`);
+  let dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await dialog.locator('input[type="file"]').setInputFiles({
+    name: "late.cookies",
+    mimeType: "text/plain",
+    buffer: Buffer.from('[{"name":"late","value":"synthetic","domain":"example.test"}]'),
+  });
+  await expect
+    .poll(() => page.evaluate(() => Boolean((window as any).__p50PendingFile)))
+    .toBe(true);
+  await dialog.getByRole("button", { name: "取消", exact: true }).click();
+  await page.getByRole("button", { name: "配置网页登录", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await dialog.getByLabel("需要登录的来源").selectOption({ label: secondProvider.name });
+  await page.evaluate(() => (window as any).__p50ResolveFile());
+  await expect(dialog.locator(".archive-picker small")).toContainText("请选择 Cookie");
+  await expect(dialog.getByRole("button", { name: "加密保存并启用", exact: true })).toBeDisabled();
+});
+
+test("UI2-SC50 lifecycle ignores a browser helper result after close and reopen", async ({
+  page,
+}) => {
+  await nav(page, [provider, secondProvider]);
+  await page.route("**/api/v1/platform/credential-assets", (route) =>
+    route.fulfill({
+      json: { data: [], request_id: "ui2-late-helper", trace_id: "ui2-late-helper" },
+    }),
+  );
+  await page.goto(`/platform-admin/credentials?provider_id=${provider.id}&mode=login`);
+  await page.evaluate(() => {
+    window.addEventListener("message", (event) => {
+      if (event.data?.type === "SCOUTOPS_BROWSER_BRIDGE_REQUEST")
+        (window as any).__p50BridgeRequest = event.data;
+    });
+  });
+  let dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await dialog.getByLabel("导入方式").selectOption("browser");
+  await dialog.getByRole("button", { name: "从当前浏览器读取 Cookie", exact: true }).click();
+  await expect
+    .poll(() => page.evaluate(() => Boolean((window as any).__p50BridgeRequest)))
+    .toBe(true);
+  await dialog.getByRole("button", { name: "取消", exact: true }).click();
+  await page.getByRole("button", { name: "配置网页登录", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await dialog.getByLabel("需要登录的来源").selectOption({ label: secondProvider.name });
+  await dialog.getByLabel("导入方式").selectOption("browser");
+  await page.evaluate(() => {
+    const request = (window as any).__p50BridgeRequest;
+    window.postMessage(
+      {
+        type: "SCOUTOPS_BROWSER_BRIDGE_RESULT",
+        request_id: request.request_id,
+        ok: true,
+        data: { cookies: [{ name: "late", value: "synthetic", domain: "example.test" }] },
+      },
+      location.origin,
+    );
+  });
+  await expect(dialog.locator(".login-provider-status strong")).toHaveText(secondProvider.name);
+  await expect(dialog.getByRole("button", { name: "加密保存并启用", exact: true })).toBeDisabled();
+});
+
+test("UI2-SC50 lifecycle locks a pending save and fails closed on an unknown asset result", async ({
+  page,
+}) => {
+  await nav(page);
+  let releaseWrite = () => {},
+    writes = 0;
+  const gate = new Promise<void>((resolve) => {
+    releaseWrite = resolve;
+  });
+  await page.route("**/api/v1/platform/credential-assets", async (route) => {
+    if (route.request().method() === "GET") {
+      await route.fulfill({
+        json: { data: [], request_id: "ui2-unknown-get", trace_id: "ui2-unknown-get" },
+      });
+      return;
+    }
+    writes += 1;
+    await gate;
+    await route.abort("failed");
+  });
+  await page.goto(`/platform-admin/credentials?provider_id=${provider.id}&mode=login`);
+  const dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await dialog.locator('input[type="file"]').setInputFiles({
+    name: "unknown.cookies",
+    mimeType: "text/plain",
+    buffer: Buffer.from('[{"name":"study","value":"synthetic","domain":"example.test"}]'),
+  });
+  await dialog.getByRole("button", { name: "加密保存并启用", exact: true }).click();
+  await expect(dialog.getByRole("button", { name: "关闭", exact: true })).toBeDisabled();
+  await expect(dialog.getByRole("button", { name: "取消", exact: true })).toBeDisabled();
+  await expect(dialog.getByLabel("需要登录的来源")).toBeDisabled();
+  await expect(dialog.getByLabel("导入方式")).toBeDisabled();
+  releaseWrite();
+  await expect(dialog.getByRole("status")).toContainText("写入结果暂时无法确认");
+  await expect(dialog.getByRole("status")).toContainText("不要重新导入");
+  await expect(dialog.getByRole("button", { name: "加密保存并启用", exact: true })).toBeDisabled();
+  expect(writes).toBe(1);
+});
+
+test("UI2-SC50 lifecycle distinguishes an unknown profile result after the asset is saved", async ({
+  page,
+}) => {
+  await nav(page);
+  const savedAsset = {
+    ...asset,
+    name: "登录页来源 Cookie登录档案",
+    kind: "cookie_bundle",
+    version: 1,
+  };
+  let assetWrites = 0,
+    profileWrites = 0;
+  await page.route("**/api/v1/platform/credential-assets", async (route) => {
+    if (route.request().method() === "GET") {
+      await route.fulfill({
+        json: {
+          data: [],
+          request_id: "ui2-profile-unknown-get",
+          trace_id: "ui2-profile-unknown-get",
+        },
+      });
+      return;
+    }
+    assetWrites += 1;
+    await route.fulfill({
+      status: 201,
+      json: { data: savedAsset, request_id: "ui2-profile-asset", trace_id: "ui2-profile-asset" },
+    });
+  });
+  await page.route("**/api/v1/platform/crawler-profiles", async (route) => {
+    if (route.request().method() === "GET") {
+      await route.fulfill({
+        json: { data: [], request_id: "ui2-profile-get", trace_id: "ui2-profile-get" },
+      });
+      return;
+    }
+    profileWrites += 1;
+    await route.abort("failed");
+  });
+  await page.goto(`/platform-admin/credentials?provider_id=${provider.id}&mode=login`);
+  const dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await dialog.locator('input[type="file"]').setInputFiles({
+    name: "profile-unknown.cookies",
+    mimeType: "text/plain",
+    buffer: Buffer.from('[{"name":"study","value":"synthetic","domain":"example.test"}]'),
+  });
+  await dialog.getByRole("button", { name: "加密保存并启用", exact: true }).click();
+  await expect(dialog.getByRole("status")).toContainText("加密档案已保存");
+  await expect(dialog.getByRole("status")).toContainText("运行档案的写入结果暂时无法确认");
+  await expect(dialog.getByRole("status")).toContainText("不要重新导入或直接重复关联");
+  await expect(dialog.getByRole("button", { name: "加密保存并启用", exact: true })).toBeDisabled();
+  expect(assetWrites).toBe(1);
+  expect(profileWrites).toBe(1);
+});

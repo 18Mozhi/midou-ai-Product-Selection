@@ -1,6 +1,6 @@
 {
   "kind": "P50-CREDENTIAL-LOGIN-BOUNDARY-REVIEW-r1",
-  "generatedAt": "2026-09-11T17:24:24.931Z",
+  "generatedAt": "2026-09-11T18:05:24.858Z",
   "reviewOnly": true,
   "productionChanged": false,
   "deployed": false,
@@ -14,7 +14,7 @@
     "source-switch"
   ],
   "ports": [
-    59004
+    64799
   ],
   "runs": [
     {
@@ -89,19 +89,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -177,19 +181,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -265,19 +273,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -353,19 +365,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -449,19 +465,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -541,19 +561,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -629,19 +653,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -717,19 +745,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -805,19 +837,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -893,19 +929,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -989,19 +1029,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -1081,19 +1125,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -1169,19 +1217,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -1257,19 +1309,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -1345,19 +1401,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -1433,19 +1493,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -1529,19 +1593,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -1621,19 +1689,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -1709,19 +1781,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -1797,19 +1873,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -1885,19 +1965,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -1973,19 +2057,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -2069,19 +2157,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     },
@@ -2161,19 +2253,23 @@
       "requests": [
         {
           "key": "GET /api/v1/me/navigation",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-assets",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/crawler-profiles",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         },
         {
           "key": "GET /api/v1/platform/credential-provider-options",
-          "body": null
+          "body": null,
+          "idempotencyKey": null
         }
       ]
     }
@@ -2183,7 +2279,7 @@
       "file": "390-cookie-oversize.png",
       "width": 390,
       "state": "cookie-oversize",
-      "sha256": "5a8441fbca27caebf2580f0c9bdc111862bb330afb2926773be63f42e1a26451",
+      "sha256": "ca0bae7b60f6cf2d58b9e0cd125b4fbc77e8c11fa3c4ad7a53037595199ed58c",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2191,7 +2287,7 @@
       "file": "390-archive-invalid.png",
       "width": 390,
       "state": "archive-invalid",
-      "sha256": "e11398415f3c2a5f7182641ae7ec2c3cbed842aaa3a17aa242848c6427f102d9",
+      "sha256": "fe126e5e955a6f0e4ae29b3497e59f466e74bdf0ddb03e634947a30a1ae3def6",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2199,7 +2295,7 @@
       "file": "390-archive-oversize.png",
       "width": 390,
       "state": "archive-oversize",
-      "sha256": "1b52da897c13d994f609048a175427f5e0805b961f616c65df40659ea08215c3",
+      "sha256": "92f977460c26fe853f730834e163d7a26ed7fb50fafadd6d5e092b190c636b9f",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2207,7 +2303,7 @@
       "file": "390-helper-unavailable.png",
       "width": 390,
       "state": "helper-unavailable",
-      "sha256": "90637671e5018a06d6ef50d613b3ed7b000abe4ea682db04d7af2b83d955f0e8",
+      "sha256": "005d4cc2c2f96560ab5517ec88e2f2166499f463371bbea376fc472011efae22",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2215,7 +2311,7 @@
       "file": "390-helper-timeout.png",
       "width": 390,
       "state": "helper-timeout",
-      "sha256": "65ce6be20ea268f3926f44a8cfa2c6baa9f5d0dd7b6be98351af233f93046212",
+      "sha256": "417aa910f5e823e75316e17d550b7454e12114b2b0f4b02038ecf9015e288256",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2223,7 +2319,7 @@
       "file": "390-source-switch.png",
       "width": 390,
       "state": "source-switch",
-      "sha256": "10a1c6e12b4b09449060399a636924f254ad6c72d52d98ffc494220b20a80fcd",
+      "sha256": "ba9298d2ff7d54bedd923ca054a7d98f99439d1460aca270e88219926c2ff354",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2231,7 +2327,7 @@
       "file": "760-cookie-oversize.png",
       "width": 760,
       "state": "cookie-oversize",
-      "sha256": "fa4d04377dc19a63d8cccd0328418d9b336538bc8a4f1f1f72cd0bc08ed81891",
+      "sha256": "596e69cc94471546867655550aa86d11497147c6f55271360c887fc800802dd0",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2239,7 +2335,7 @@
       "file": "760-archive-invalid.png",
       "width": 760,
       "state": "archive-invalid",
-      "sha256": "54e843da43464aa0a3650e5578438de277ba1bf6d6b45ab42b5a58af8aa8790e",
+      "sha256": "1cfa7e71a7a5cebd65b7aa100b483a2d92c9d731298336e8d49fe66e7d8e6f45",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2247,7 +2343,7 @@
       "file": "760-archive-oversize.png",
       "width": 760,
       "state": "archive-oversize",
-      "sha256": "6ad6efe646432d300d1743c9c17b0a675722e57af67057c2af3b77d76f87755c",
+      "sha256": "5a745ce9e60560bf45c3d420303c159a4b319c9c01f67a814de7be7af21aae50",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2255,7 +2351,7 @@
       "file": "760-helper-unavailable.png",
       "width": 760,
       "state": "helper-unavailable",
-      "sha256": "6b932a3ccb97043c3a59a3f9a179384c06642553c69b6af50d5410623433b598",
+      "sha256": "627ce087c6e5be857b71fa8702320b3b63bc0253b5ee95dd82c132da1d39664c",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2263,7 +2359,7 @@
       "file": "760-helper-timeout.png",
       "width": 760,
       "state": "helper-timeout",
-      "sha256": "786234ace79d1868ee472cb0e456a62b6d09bae96aad8f72424c97fc66235586",
+      "sha256": "ecd5ac0d74d9ff7baeacb21592019a109f59bf842611268e8ea87e41ba926d87",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2271,7 +2367,7 @@
       "file": "760-source-switch.png",
       "width": 760,
       "state": "source-switch",
-      "sha256": "158d54b3388183a5d41db6e150d02b149b11ddac3b701598d4a84e459746e2c3",
+      "sha256": "76fca9893b4a16f38cd24b3a111a21ebd4f0c1c4729a634be9e727e154aa00ca",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2279,7 +2375,7 @@
       "file": "1024-cookie-oversize.png",
       "width": 1024,
       "state": "cookie-oversize",
-      "sha256": "4b503c6db4468311abc1330fef29fd3a390265bf7ab4cd7b5d7ca76f97a023d8",
+      "sha256": "63173aee095ce7cd316974dd2b58f2299fc94e898c3a1deadb02f402d74ce2ee",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2287,7 +2383,7 @@
       "file": "1024-archive-invalid.png",
       "width": 1024,
       "state": "archive-invalid",
-      "sha256": "1af77c2878f7a332b32acf254f335b2514b7671414f3effc88a78fae458377c8",
+      "sha256": "adbbd6327b35d981286a7a0603316c77f1e38edadf2c86ab9bb4d996bdaabb99",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2295,7 +2391,7 @@
       "file": "1024-archive-oversize.png",
       "width": 1024,
       "state": "archive-oversize",
-      "sha256": "a9e5078ddabbcffb50b832815d2f9282e79f804d88bb432fdac1960343a118ec",
+      "sha256": "e2bc6a577c5c084c1dab4f06ab7f37128700950f4745fb14535be307f2a7a06e",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2303,7 +2399,7 @@
       "file": "1024-helper-unavailable.png",
       "width": 1024,
       "state": "helper-unavailable",
-      "sha256": "112d321a89016b807df8fdb5758fa7a5ea90e4c07f9ad110e00537b3950dbc1d",
+      "sha256": "778721b002df797f20e3cbdc94463e3f0b049c7cc8084f3fea8dadfe030f50c8",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2311,7 +2407,7 @@
       "file": "1024-helper-timeout.png",
       "width": 1024,
       "state": "helper-timeout",
-      "sha256": "bb4745ce1666c2c50ec9d8d19e7d31a5ebdb8809044e0af58f9dd90fab109dcf",
+      "sha256": "bc263f496deaca948d73ba89d198a78b9fab341c4c6fbedb442aee1803d7f73a",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2319,7 +2415,7 @@
       "file": "1024-source-switch.png",
       "width": 1024,
       "state": "source-switch",
-      "sha256": "90ded651b8d06213b2b4dbd4850d97ededaf152189bec8bc93ae767ceb627b06",
+      "sha256": "23275a43ef43be35ed41281cfd4c0cfc4130d8aacf3eccf13a834f16b9973f49",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2327,7 +2423,7 @@
       "file": "1440-cookie-oversize.png",
       "width": 1440,
       "state": "cookie-oversize",
-      "sha256": "71e04992fb4397e03779198885f6bf26b47dfefe7b2bd0a77538f0c9ff82a3e4",
+      "sha256": "fc1da614b30740fd21b1be0e5639b39c9c1f8464e3ad96f7d63a2d901a57e8ee",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2335,7 +2431,7 @@
       "file": "1440-archive-invalid.png",
       "width": 1440,
       "state": "archive-invalid",
-      "sha256": "71980e91f3d39cb507c815565c1b19794841bbc7490bb9a7581a9b0d5840e8e9",
+      "sha256": "ed0fca8f2cbc06c86d9c13635146a122cc6ec043a7e9bbd7b81ec361d03e8c2b",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2343,7 +2439,7 @@
       "file": "1440-archive-oversize.png",
       "width": 1440,
       "state": "archive-oversize",
-      "sha256": "91d481a68f184d073d63ef616490fa16f9f9f7c6421d6930e434bca50b51a761",
+      "sha256": "106ff30613805f5ef15373805d4ce48357f53d84832ea1a160b0b684613695ac",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2351,7 +2447,7 @@
       "file": "1440-helper-unavailable.png",
       "width": 1440,
       "state": "helper-unavailable",
-      "sha256": "cb97edfde7ceded9e417e6b7bc4b1f2aa2f6f46fd303ff072a0f08167a836b17",
+      "sha256": "b35d4d282ffb4b2a06a6e9df7227b0e6395a493291538e3300a075915cf19fca",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2359,7 +2455,7 @@
       "file": "1440-helper-timeout.png",
       "width": 1440,
       "state": "helper-timeout",
-      "sha256": "5d86f3e90ad8580d2130af04295b226d2d67e717bc6faacd2ec9c74ec2e13c56",
+      "sha256": "6ed735aa690cd9428daa43df23a8564e37308670eebd14fb50044a2f7f9c0610",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2367,7 +2463,7 @@
       "file": "1440-source-switch.png",
       "width": 1440,
       "state": "source-switch",
-      "sha256": "f3cb3e57672c3b485eaf92e8f36814d5cf3508c18219cd56c2b0a449189ded68",
+      "sha256": "aa9c50f3749684468b4777c7fde78f8a9afb2cb7deb0124744292f2790485e8b",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     }
@@ -2399,7 +2495,7 @@
     "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
     "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
     "apps/web/src/components/CrawlerSchedulerCenter.vue": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/CredentialAssetCenter.vue": "8013f2cc87474ecb2def1d73d8a0d6f3a579864eb755842d64c6d3bf9aeb14f0",
     "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
     "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
     "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
@@ -2540,12 +2636,12 @@
     "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
     "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
     "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css": "7e2411b46606e8cca9901ce1dfb024610b7d287c4278eb2ce5d7bc56a6b3c0a8",
-    "design-plans/ui-phase-2-2026-09-07/implementation/credential-login-material-preview.css": "1f7c0239e9ab9ab2cbee33faf93207c98a179f1f1f77851e280158d1d67a5355",
+    "design-plans/ui-phase-2-2026-09-07/implementation/credential-login-material-preview.css": "5eb2b981c695e6bdbeee358a3508d697b849f99222f0d89b9e923350cdaea5ea",
     "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
-    "scripts/lib/ui-phase2-credential-login-material-preview.mjs": "722a5044e897633f1a4fa24c119c027b5a48ba8740a9040de84123388f9c8269",
-    "scripts/verify-ui-phase2-credential-login-material.mjs": "1bf1a95fde28b1bfda49cea6d618f9a5ef8238e495a6db40dcfde455f2ec9f2e",
-    "tests/e2e/m03-02-credential-assets.spec.ts": "0b735d56167c0c9e86b4bc7a3f3f8e8c3b6bc04106c0286bb9b1d05353c16929"
+    "scripts/lib/ui-phase2-credential-login-material-preview.mjs": "7869a322a10702b53be1afde3ff0393e6547800e57b49eb351f0336d1a52a0e9",
+    "scripts/verify-ui-phase2-credential-login-material.mjs": "b5d29b77bcd9d2c64e444eae1faf14d5a3015789eb69e67beb62b85ce46c2bc3",
+    "tests/e2e/m03-02-credential-assets.spec.ts": "9bec3d65cbb603d3105d916023f317e6f9cad3999894d06199ab2c13302dfdc2"
   },
   "materialBoundary": "Oversize and invalid files are synthetic local buffers; helper denial and timeout are locally delivered or clock-driven. No file content is rendered or persisted and no save action, external page, real helper, API write, encryption, database or production credential is used.",
-  "proposalBoundary": "The boundary review preserves the exact 2,000,000 and 6,000,000 byte limits and extension allowlists, distinguishes the 15-second helper timeout from helper denial, and keeps recovery choices visible. It intentionally does not claim late-result ownership or post-close cleanup is solved."
+  "proposalBoundary": "This visual boundary review preserves the exact 2,000,000 and 6,000,000 byte limits and extension allowlists, distinguishes the 15-second helper timeout from helper denial, and keeps recovery choices visible. Production lifecycle ownership is covered separately; real helper, API, database and production verification are not claimed."
 }

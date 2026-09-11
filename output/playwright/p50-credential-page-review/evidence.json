@@ -1,13 +1,13 @@
 {
   "kind": "P50-CREDENTIAL-PAGE-REVIEW-r1",
-  "generatedAt": "2026-09-11T16:56:36.580Z",
+  "generatedAt": "2026-09-11T17:59:25.681Z",
   "reviewOnly": true,
   "productionChanged": false,
   "deployed": false,
   "processesClosed": true,
   "ports": [
-    53287,
-    53304
+    63874,
+    63907
   ],
   "runs": [
     {
@@ -889,7 +889,7 @@
       "mode": "baseline",
       "width": 390,
       "suffix": "default",
-      "sha256": "c5ace0c5253fac076717755943ce72b3fc2a24ddb13a69a3cd5f59bba7d48fe4",
+      "sha256": "c0ce277a8ac71350ee926aa545f6ebda56d112c20b0da736e62f2abcb679ac93",
       "pixelWidth": 390,
       "pixelHeight": 2230
     },
@@ -1020,7 +1020,7 @@
     "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
     "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
     "apps/web/src/components/CrawlerSchedulerCenter.vue": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/CredentialAssetCenter.vue": "8013f2cc87474ecb2def1d73d8a0d6f3a579864eb755842d64c6d3bf9aeb14f0",
     "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
     "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
     "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
@@ -1163,7 +1163,7 @@
     "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css": "7e2411b46606e8cca9901ce1dfb024610b7d287c4278eb2ce5d7bc56a6b3c0a8",
     "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
     "scripts/verify-ui-phase2-credential-assets-page.mjs": "a91d5649e73837efeac78532f5d72fd676bde605ec2c05e2dd01542e4a17267c",
-    "tests/e2e/m03-02-credential-assets.spec.ts": "0b735d56167c0c9e86b4bc7a3f3f8e8c3b6bc04106c0286bb9b1d05353c16929"
+    "tests/e2e/m03-02-credential-assets.spec.ts": "9bec3d65cbb603d3105d916023f317e6f9cad3999894d06199ab2c13302dfdc2"
   },
   "fixtureBoundary": "Provider, asset, profile and navigation values are parsed from the authoritative M03-02 E2E fixture. The browser routes only local GET responses; no real credential, Cookie, extension, API write, encryption, database or production data is accessed.",
   "visualBoundary": "Actual App, ProviderRuntimeSurface and untransformed CredentialAssetCenter. Review-only CSS creates the P50 credential custody hierarchy and login editor composition without changing production SFC, events or contracts."

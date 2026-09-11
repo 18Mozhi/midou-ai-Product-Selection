@@ -7,6 +7,8 @@ import ResponsiveDataView from "./ResponsiveDataView.vue";
 import "../credential-assets.css";
 import "../credential-login.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+type EditorKind = "asset" | "rotate" | "profile" | "login";
+type LoginSaveStage = "idle" | "asset" | "profile" | "partial" | "unknown";
 interface Asset {
   id: string;
   provider_id: string;
@@ -48,7 +50,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   providers = ref<Provider[]>([]),
   requestId = ref(""),
   message = ref(""),
-  editor = ref<"asset" | "rotate" | "profile" | "login" | null>(null),
+  editor = ref<EditorKind | null>(null),
   selected = ref<Asset | null>(null),
   revokeTarget = ref<Asset | null>(null),
   saving = ref(false),
@@ -61,6 +63,8 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   loginPayload = ref(""),
   loginProvider = ref<Provider | null>(null),
   loginMode = ref<"cookie_file" | "archive" | "browser">("cookie_file"),
+  loginMaterialBusy = ref(false),
+  loginSaveStage = ref<LoginSaveStage>("idle"),
   assetForm = reactive({
     provider_id: "",
     name: "",
@@ -80,7 +84,10 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     status: "disabled",
   });
 let activeController: AbortController | null = null,
-  editorReturnFocus: HTMLElement | null = null;
+  editorReturnFocus: HTMLElement | null = null,
+  editorGeneration = 0,
+  loginMaterialGeneration = 0,
+  loginMaterialController: AbortController | null = null;
 const failure = (s: number): State =>
     s === 401
       ? "expired"
@@ -100,6 +107,12 @@ const failure = (s: number): State =>
   ),
   loginNeedsAuthentication = computed(
     () => loginProvider.value?.access_mode === "authenticated_browser",
+  ),
+  loginControlsLocked = computed(
+    () =>
+      saving.value ||
+      loginMaterialBusy.value ||
+      !["idle", "asset", "profile"].includes(loginSaveStage.value),
   ),
   compatibilityRows = computed(() =>
     loginProviders.value.map((provider) => {
@@ -212,14 +225,32 @@ function focusEditor() {
       ?.focus();
   });
 }
-function closeEditor() {
+function invalidateLoginMaterial() {
+  loginMaterialGeneration += 1;
+  loginMaterialController?.abort();
+  loginMaterialController = null;
+  loginMaterialBusy.value = false;
+  loginFileName.value = "";
+  loginPayload.value = "";
+}
+function finishCloseEditor() {
+  editorGeneration += 1;
+  invalidateLoginMaterial();
   editor.value = null;
   selected.value = null;
   assetForm.value = "";
-  loginPayload.value = "";
+  loginSaveStage.value = "idle";
   const returnTarget = editorReturnFocus;
   editorReturnFocus = null;
   void nextTick(() => returnTarget?.focus());
+}
+function closeEditor() {
+  if (saving.value) return;
+  finishCloseEditor();
+}
+function resetLoginMaterialContext() {
+  invalidateLoginMaterial();
+  message.value = "来源或导入方式已变化，请重新准备登录材料。";
 }
 function trapEditorFocus(event: KeyboardEvent) {
   const focusable = Array.from(
@@ -239,6 +270,7 @@ function trapEditorFocus(event: KeyboardEvent) {
   }
 }
 function openAsset() {
+  editorGeneration += 1;
   editor.value = "asset";
   selected.value = null;
   message.value = "";
@@ -253,6 +285,7 @@ function openAsset() {
   focusEditor();
 }
 function openRotate(asset: Asset) {
+  editorGeneration += 1;
   editor.value = "rotate";
   selected.value = asset;
   message.value = "";
@@ -264,6 +297,7 @@ function openRotate(asset: Asset) {
   focusEditor();
 }
 function openProfile() {
+  editorGeneration += 1;
   editor.value = "profile";
   selected.value = null;
   message.value = "";
@@ -281,20 +315,23 @@ function openProfile() {
   focusEditor();
 }
 function openLogin(provider?: Provider) {
+  editorGeneration += 1;
+  invalidateLoginMaterial();
   loginProvider.value = provider ?? loginProviders.value[0] ?? null;
-  loginFileName.value = "";
-  loginPayload.value = "";
   loginMode.value = "cookie_file";
+  loginSaveStage.value = "idle";
   message.value = "";
   editor.value = "login";
   focusEditor();
 }
 async function chooseLoginArchive(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0];
-  loginFileName.value = "";
-  loginPayload.value = "";
+  invalidateLoginMaterial();
+  const generation = loginMaterialGeneration,
+    providerId = loginProvider.value?.id ?? null,
+    mode = loginMode.value;
   if (!file) return;
-  if (loginMode.value === "archive") {
+  if (mode === "archive") {
     if (!file.name.toLowerCase().endsWith(".tar.gz")) {
       message.value = "完整浏览器档案请选择 .tar.gz 文件。";
       return;
@@ -303,13 +340,6 @@ async function chooseLoginArchive(event: Event) {
       message.value = "浏览器档案压缩后不能超过 6 兆字节。";
       return;
     }
-    const dataUrl = await new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result ?? ""));
-      reader.onerror = () => reject(reader.error);
-      reader.readAsDataURL(file);
-    });
-    loginPayload.value = dataUrl.slice(dataUrl.indexOf(",") + 1);
   } else {
     if (!/\.(json|txt|cookies)$/i.test(file.name)) {
       message.value = "Cookie 请上传 .json、.txt 或 .cookies 文件。";
@@ -319,9 +349,35 @@ async function chooseLoginArchive(event: Event) {
       message.value = "Cookie 文件不能超过 2 兆字节。";
       return;
     }
-    loginPayload.value = await file.text();
   }
-  loginFileName.value = file.name;
+  loginMaterialBusy.value = true;
+  message.value = "正在读取所选登录材料…";
+  try {
+    const payload =
+      mode === "archive"
+        ? await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(String(reader.result ?? ""));
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+          }).then((dataUrl) => dataUrl.slice(dataUrl.indexOf(",") + 1))
+        : await file.text();
+    if (
+      generation !== loginMaterialGeneration ||
+      editor.value !== "login" ||
+      loginProvider.value?.id !== providerId ||
+      loginMode.value !== mode
+    )
+      return;
+    loginPayload.value = payload;
+    loginFileName.value = file.name;
+    message.value = `已读取导入材料：${file.name}。内容不会在页面回显。`;
+  } catch {
+    if (generation === loginMaterialGeneration && editor.value === "login")
+      message.value = "登录材料读取失败，请重新选择文件。";
+  } finally {
+    if (generation === loginMaterialGeneration) loginMaterialBusy.value = false;
+  }
 }
 function openLoginPage() {
   const url = loginProvider.value?.target_url;
@@ -331,13 +387,19 @@ function openLoginPage() {
   }
   window.open(url, "_blank", "noopener,noreferrer");
 }
-function browserBridge<T>(action: string, payload: Record<string, unknown>) {
+function browserBridge<T>(action: string, payload: Record<string, unknown>, signal?: AbortSignal) {
   return new Promise<T>((resolve, reject) => {
     const request_id = crypto.randomUUID();
-    const timeout = window.setTimeout(() => {
+    let timeout = 0;
+    const cleanup = () => {
+      window.clearTimeout(timeout);
       window.removeEventListener("message", receive);
-      reject(new Error("browser_helper_unavailable"));
-    }, 15000);
+      signal?.removeEventListener("abort", abort);
+    };
+    function abort() {
+      cleanup();
+      reject(new DOMException("Browser helper request aborted", "AbortError"));
+    }
     function receive(event: MessageEvent) {
       if (
         event.source !== window ||
@@ -345,12 +407,20 @@ function browserBridge<T>(action: string, payload: Record<string, unknown>) {
         event.data?.request_id !== request_id
       )
         return;
-      window.clearTimeout(timeout);
-      window.removeEventListener("message", receive);
+      cleanup();
       if (!event.data.ok) reject(new Error(String(event.data.error || "browser_helper_failed")));
       else resolve(event.data.data as T);
     }
+    if (signal?.aborted) {
+      abort();
+      return;
+    }
     window.addEventListener("message", receive);
+    signal?.addEventListener("abort", abort, { once: true });
+    timeout = window.setTimeout(() => {
+      cleanup();
+      reject(new Error("browser_helper_unavailable"));
+    }, 15000);
     window.postMessage(
       {
         type: "SCOUTOPS_BROWSER_BRIDGE_REQUEST",
@@ -363,46 +433,80 @@ function browserBridge<T>(action: string, payload: Record<string, unknown>) {
   });
 }
 async function acquireBrowserCookies() {
+  if (loginMaterialBusy.value || saving.value || loginSaveStage.value !== "idle") return;
   const provider = loginProvider.value;
   if (!provider?.target_url?.startsWith("http")) {
     message.value = "请先选择有真实网址的来源。";
     return;
   }
-  saving.value = true;
-  message.value = "正在请求浏览器助手读取当前来源域名的 Cookie…";
+  invalidateLoginMaterial();
+  const generation = loginMaterialGeneration,
+    providerId = provider.id;
+  loginMaterialController = new AbortController();
+  loginMaterialBusy.value = true;
+  message.value = "正在从当前浏览器读取所选来源的登录材料…";
   try {
-    const result = await browserBridge<{ cookies: unknown[] }>("cookies.read", {
-      target_url: provider.target_url,
-    });
+    const result = await browserBridge<{ cookies: unknown[] }>(
+      "cookies.read",
+      { target_url: provider.target_url },
+      loginMaterialController.signal,
+    );
+    if (
+      generation !== loginMaterialGeneration ||
+      editor.value !== "login" ||
+      loginProvider.value?.id !== providerId ||
+      loginMode.value !== "browser"
+    )
+      return;
     loginPayload.value = JSON.stringify(result.cookies);
     loginFileName.value = `浏览器读取 · ${result.cookies.length} 条 Cookie`;
     loginMode.value = "browser";
     message.value = `已读取 ${result.cookies.length} 条 Cookie；确认来源后点击“加密保存并启用”。`;
   } catch (error) {
+    if (
+      generation !== loginMaterialGeneration ||
+      editor.value !== "login" ||
+      (error instanceof DOMException && error.name === "AbortError")
+    )
+      return;
     message.value =
       error instanceof Error && error.message === "browser_cookie_empty"
         ? "当前浏览器没有这个来源可用的 Cookie。请先在刚打开的来源页面完成登录，再重新读取。"
-        : "未检测到浏览器助手或未授予该网站权限。请先下载并加载浏览器助手，或改用 Cookie 文件上传。";
+        : error instanceof Error && error.message === "browser_helper_unavailable"
+          ? "15 秒内没有收到浏览器助手响应。请确认助手已加载并授予当前来源权限，再重新读取；也可以改用 Cookie 文件上传。"
+          : "浏览器助手没有返回可用材料。请检查当前来源权限后重新读取，或改用 Cookie 文件上传。";
+  } finally {
+    if (generation === loginMaterialGeneration) {
+      loginMaterialBusy.value = false;
+      loginMaterialController = null;
+    }
+  }
+}
+async function writeOutcome<T = any>(
+  path: string,
+  body: unknown,
+  isCurrent: () => boolean = () => true,
+) {
+  saving.value = true;
+  if (isCurrent()) message.value = "";
+  try {
+    const response = await request<T>(path, { method: "POST", body });
+    if (isCurrent()) requestId.value = response.request_id;
+    return { data: response.data, error: null as ApiClientError | null };
+  } catch (error) {
+    const apiError = error instanceof ApiClientError ? error : null;
+    if (isCurrent()) {
+      requestId.value = apiError?.requestId ?? requestId.value;
+      message.value = apiError?.actionHint ?? "依赖不可用，未写入";
+    }
+    return { data: null, error: apiError };
   } finally {
     saving.value = false;
+    if (isCurrent()) assetForm.value = "";
   }
 }
 async function write(path: string, body: unknown) {
-  saving.value = true;
-  message.value = "";
-  try {
-    const response = await request<any>(path, { method: "POST", body });
-    requestId.value = response.request_id;
-    return response.data;
-  } catch (error) {
-    const apiError = error instanceof ApiClientError ? error : null;
-    requestId.value = apiError?.requestId ?? requestId.value;
-    message.value = apiError?.actionHint ?? "依赖不可用，未写入";
-    return null;
-  } finally {
-    saving.value = false;
-    assetForm.value = "";
-  }
+  return (await writeOutcome(path, body)).data;
 }
 async function saveAsset() {
   if (saving.value) return;
@@ -443,41 +547,69 @@ async function saveLogin() {
   if (saving.value) return;
   const provider = loginProvider.value;
   if (!provider || !loginPayload.value) return;
-  const stamp = Date.now().toString(36),
+  const generation = editorGeneration,
+    isCurrent = () => editor.value === "login" && editorGeneration === generation,
+    mode = loginMode.value,
+    payload = loginPayload.value,
+    stamp = Date.now().toString(36),
     codeBase =
       provider.code
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "_")
         .replace(/^_|_$/g, "")
         .slice(0, 45) || "source";
-  const asset = await write("/platform/credential-assets", {
-    provider_id: provider.id,
-    name: `${provider.name} ${loginMode.value === "archive" ? "浏览器" : "Cookie"}登录档案`,
-    kind: loginMode.value === "archive" ? "browser_profile" : "cookie_bundle",
-    secret_payload: {
-      encoding: loginMode.value === "archive" ? "base64" : "utf8",
-      value: loginPayload.value,
+  loginSaveStage.value = "asset";
+  const assetResult = await writeOutcome<Asset>(
+    "/platform/credential-assets",
+    {
+      provider_id: provider.id,
+      name: `${provider.name} ${mode === "archive" ? "浏览器" : "Cookie"}登录档案`,
+      kind: mode === "archive" ? "browser_profile" : "cookie_bundle",
+      secret_payload: {
+        encoding: mode === "archive" ? "base64" : "utf8",
+        value: payload,
+      },
+      expires_at: null,
     },
-    expires_at: null,
-  });
-  if (!asset) return;
-  const profile = await write("/platform/crawler-profiles", {
-    provider_id: provider.id,
-    credential_asset_id: asset.id,
-    code: `${codeBase}_login_${stamp}`.slice(0, 80),
-    name: `${provider.name} 网页采集档案`,
-    browser_family: "chromium",
-    locale: "zh-CN",
-    timezone: "Asia/Shanghai",
-    status: "active",
-  });
-  loginPayload.value = "";
-  if (!profile) {
-    message.value =
-      "加密档案已保存，但运行档案未创建。请关闭此窗口并刷新数据，再点击“关联运行档案”，选择刚保存的档案继续；无需重新导入。";
+    isCurrent,
+  );
+  if (!isCurrent()) return;
+  if (!assetResult.data) {
+    if (assetResult.error?.status === 0) {
+      invalidateLoginMaterial();
+      loginSaveStage.value = "unknown";
+      message.value =
+        "凭证资产写入结果暂时无法确认，可能已经保存。请关闭此窗口并刷新数据后核对；不要重新导入或重复提交。";
+    } else loginSaveStage.value = "idle";
     return;
   }
-  editor.value = null;
+  invalidateLoginMaterial();
+  loginSaveStage.value = "profile";
+  const profileResult = await writeOutcome<Profile>(
+    "/platform/crawler-profiles",
+    {
+      provider_id: provider.id,
+      credential_asset_id: assetResult.data.id,
+      code: `${codeBase}_login_${stamp}`.slice(0, 80),
+      name: `${provider.name} 网页采集档案`,
+      browser_family: "chromium",
+      locale: "zh-CN",
+      timezone: "Asia/Shanghai",
+      status: "active",
+    },
+    isCurrent,
+  );
+  if (!isCurrent()) return;
+  if (!profileResult.data) {
+    loginSaveStage.value = profileResult.error?.status === 0 ? "unknown" : "partial";
+    message.value =
+      profileResult.error?.status === 0
+        ? "加密档案已保存，但运行档案的写入结果暂时无法确认。请关闭此窗口并刷新数据后核对；不要重新导入或直接重复关联。"
+        : "加密档案已保存，但运行档案未创建。请关闭此窗口并刷新数据，再点击“关联运行档案”，选择刚保存的档案继续；无需重新导入。";
+    return;
+  }
+  loginSaveStage.value = "idle";
+  finishCloseEditor();
   await load();
   message.value = `${provider.name} 网页登录档案已加密保存；该来源完成解析验收后，采集任务才会使用此档案。`;
 }
@@ -508,7 +640,12 @@ onMounted(async () => {
     );
   }
 });
-onBeforeUnmount(() => activeController?.abort());
+onBeforeUnmount(() => {
+  activeController?.abort();
+  editorGeneration += 1;
+  invalidateLoginMaterial();
+  assetForm.value = "";
+});
 </script>
 <template>
   <section class="credential-center" :aria-busy="refreshing">
@@ -904,6 +1041,7 @@ onBeforeUnmount(() => activeController?.abort());
           role="dialog"
           aria-modal="true"
           aria-label="导入已经登录的浏览器档案"
+          :aria-busy="saving || loginMaterialBusy"
           @keydown.tab="trapEditorFocus"
           @submit.prevent="saveLogin"
         >
@@ -912,7 +1050,9 @@ onBeforeUnmount(() => activeController?.abort());
               <p>配置网页登录</p>
               <h3>导入已经登录的浏览器档案</h3>
             </div>
-            <button type="button" aria-label="关闭" @click="closeEditor">×</button>
+            <button type="button" aria-label="关闭" :disabled="saving" @click="closeEditor()">
+              ×
+            </button>
           </header>
           <aside class="login-guide">
             <strong>支持哪些格式？</strong>
@@ -928,7 +1068,12 @@ onBeforeUnmount(() => activeController?.abort());
           </aside>
           <div class="credential-fields">
             <label
-              >需要登录的来源<select v-model="loginProvider" required>
+              >需要登录的来源<select
+                v-model="loginProvider"
+                required
+                :disabled="loginControlsLocked"
+                @change="resetLoginMaterialContext"
+              >
                 <option :value="null" disabled>请选择</option>
                 <option v-for="item in loginProviders" :key="item.id" :value="item">
                   {{ item.name }}
@@ -937,10 +1082,8 @@ onBeforeUnmount(() => activeController?.abort());
             ><label
               >导入方式<select
                 v-model="loginMode"
-                @change="
-                  loginPayload = '';
-                  loginFileName = '';
-                "
+                :disabled="loginControlsLocked"
+                @change="resetLoginMaterialContext"
               >
                 <option value="cookie_file">上传 Cookie 文件</option>
                 <option value="browser">从当前浏览器读取</option>
@@ -956,6 +1099,7 @@ onBeforeUnmount(() => activeController?.abort());
                     : '.json,.txt,.cookies,application/json,text/plain'
                 "
                 required
+                :disabled="loginControlsLocked"
                 @change="chooseLoginArchive"
               /><small>{{
                 loginFileName ||
@@ -971,23 +1115,38 @@ onBeforeUnmount(() => activeController?.abort());
               <span v-if="loginNeedsAuthentication">该来源需要登录状态</span>
               <span v-else>该来源是公开页面，可不登录直接测试</span>
             </div>
-            <button type="button" @click="openLoginPage">
+            <button type="button" :disabled="loginControlsLocked" @click="openLoginPage">
               打开{{ loginNeedsAuthentication ? "登录" : "来源" }}页面 ↗
             </button>
             <button
               v-if="loginMode === 'browser'"
               type="button"
-              :disabled="saving"
+              :disabled="loginControlsLocked"
               @click="acquireBrowserCookies"
             >
-              从当前浏览器读取 Cookie
+              {{ loginMaterialBusy ? "读取中…" : "从当前浏览器读取 Cookie" }}
             </button>
           </aside>
           <p v-if="message" role="status">{{ message }}</p>
           <footer>
-            <button type="button" @click="closeEditor">取消</button
-            ><button :disabled="saving || !loginProvider || !loginPayload">
-              {{ saving ? "加密保存中…" : "加密保存并启用" }}
+            <button type="button" :disabled="saving" @click="closeEditor()">取消</button
+            ><button
+              :disabled="
+                saving ||
+                loginMaterialBusy ||
+                loginSaveStage === 'partial' ||
+                loginSaveStage === 'unknown' ||
+                !loginProvider ||
+                !loginPayload
+              "
+            >
+              {{
+                saving && loginSaveStage === "asset"
+                  ? "正在保存凭证资产…"
+                  : saving && loginSaveStage === "profile"
+                    ? "正在创建运行档案…"
+                    : "加密保存并启用"
+              }}
             </button>
           </footer>
         </form>

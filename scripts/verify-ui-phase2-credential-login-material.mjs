@@ -10,13 +10,23 @@ import { chromium, expect } from "@playwright/test";
 import { previewCredentialLoginMaterial } from "./lib/ui-phase2-credential-login-material-preview.mjs";
 
 const args = process.argv.slice(2);
-assert.ok(args.every((arg) => arg === "--capture" || arg === "--suite=boundary"));
+assert.ok(
+  args.every(
+    (arg) => arg === "--capture" || ["--suite=boundary", "--suite=lifecycle"].includes(arg),
+  ),
+);
 const capture = args.includes("--capture"),
-  suite = args.includes("--suite=boundary") ? "boundary" : "core",
+  suite = args.includes("--suite=lifecycle")
+    ? "lifecycle"
+    : args.includes("--suite=boundary")
+      ? "boundary"
+      : "core",
   output =
     suite === "core"
       ? "output/playwright/p50-credential-login-material-review"
-      : "output/playwright/p50-credential-login-boundary-review",
+      : suite === "boundary"
+        ? "output/playwright/p50-credential-login-boundary-review"
+        : "output/playwright/p50-credential-login-lifecycle-review",
   component = "apps/web/src/components/CredentialAssetCenter.vue",
   pageCss = "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css",
   materialCss =
@@ -25,24 +35,33 @@ const capture = args.includes("--capture"),
   read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   widths = [390, 760, 1024, 1440],
-  states =
-    suite === "core"
-      ? [
-          "cookie-ready",
-          "cookie-invalid",
-          "browser-pending",
-          "browser-success",
-          "browser-empty",
-          "archive-ready",
-        ]
-      : [
-          "cookie-oversize",
-          "archive-invalid",
-          "archive-oversize",
-          "helper-unavailable",
-          "helper-timeout",
-          "source-switch",
-        ];
+  states = {
+    core: [
+      "cookie-ready",
+      "cookie-invalid",
+      "browser-pending",
+      "browser-success",
+      "browser-empty",
+      "archive-ready",
+    ],
+    boundary: [
+      "cookie-oversize",
+      "archive-invalid",
+      "archive-oversize",
+      "helper-unavailable",
+      "helper-timeout",
+      "source-switch",
+    ],
+    lifecycle: [
+      "source-cleared",
+      "file-late-ignored",
+      "helper-late-ignored",
+      "saving-asset",
+      "asset-unknown",
+      "profile-unknown",
+      "profile-rejected",
+    ],
+  }[suite];
 
 const ast = ts.createSourceFile(fixture, await read(fixture), ts.ScriptTarget.Latest, true),
   declarations = [];
@@ -150,6 +169,12 @@ try {
           unexpected = [],
           errors = [],
           checks = [];
+        let releaseAssetWrite = () => {},
+          assetWriteStarted = false,
+          screenshotTaken = false;
+        const assetWriteGate = new Promise((resolve) => {
+          releaseAssetWrite = resolve;
+        });
         const check = (name, actual, expected = true) => {
             assert.deepEqual(actual, expected, `${width}/${state}:${name}`);
             checks.push({ name, actual });
@@ -167,16 +192,29 @@ try {
               pixelWidth: bytes.readUInt32BE(16),
               pixelHeight: bytes.readUInt32BE(20),
             });
+            screenshotTaken = true;
           };
-        await page.addInitScript(() => {
+        await page.addInitScript((reviewState) => {
           window.__p50BridgeRequests = [];
           window.addEventListener("message", (event) => {
             if (event.data?.type === "SCOUTOPS_BROWSER_BRIDGE_REQUEST")
               window.__p50BridgeRequests.push(event.data);
           });
-        });
+          if (reviewState !== "file-late-ignored") return;
+          const original = File.prototype.text;
+          Object.defineProperty(File.prototype, "text", {
+            configurable: true,
+            value() {
+              if (this.name !== "late.cookies") return original.call(this);
+              return new Promise((resolve, reject) => {
+                window.__p50PendingFile = true;
+                window.__p50ResolveFile = () => original.call(this).then(resolve, reject);
+              });
+            },
+          });
+        }, state);
         page.on("pageerror", (error) => errors.push(error.message));
-        await page.route("**/*", (route) => {
+        await page.route("**/*", async (route) => {
           const request = route.request(),
             url = new URL(request.url()),
             key = `${request.method()} ${url.pathname}`;
@@ -185,19 +223,67 @@ try {
             return route.abort();
           }
           if (!url.pathname.startsWith("/api/")) return route.continue();
-          if (
-            ![
+          const allowedGet = [
               "GET /api/v1/me/navigation",
               "GET /api/v1/auth/session-status",
               "GET /api/v1/platform/credential-assets",
               "GET /api/v1/platform/crawler-profiles",
               "GET /api/v1/platform/credential-provider-options",
-            ].includes(key)
-          ) {
+            ],
+            allowedPost = [
+              "POST /api/v1/platform/credential-assets",
+              "POST /api/v1/platform/crawler-profiles",
+            ];
+          if (!allowedGet.includes(key) && !(suite === "lifecycle" && allowedPost.includes(key))) {
             unexpected.push(key);
             return route.abort();
           }
-          requests.push({ key, body: request.postData() });
+          requests.push({
+            key,
+            body: request.postData(),
+            idempotencyKey: request.headers()["idempotency-key"] ?? null,
+          });
+          if (key === "POST /api/v1/platform/credential-assets") {
+            assetWriteStarted = true;
+            if (state === "saving-asset") {
+              await assetWriteGate;
+              return route.fulfill({
+                status: 503,
+                json: {
+                  error: { code: "dependency_unavailable", message: "隔离写入失败" },
+                  request_id: "p50-saving-release",
+                },
+              });
+            }
+            if (state === "asset-unknown") return route.abort("failed");
+            return route.fulfill({
+              status: 201,
+              json: {
+                data: {
+                  ...data.asset,
+                  name: `${data.provider.name} Cookie登录档案`,
+                  kind: "cookie_bundle",
+                  version: 1,
+                },
+                request_id: "p50-lifecycle-asset",
+              },
+            });
+          }
+          if (key === "POST /api/v1/platform/crawler-profiles") {
+            if (state === "profile-unknown") return route.abort("failed");
+            if (state === "profile-rejected")
+              return route.fulfill({
+                status: 503,
+                json: {
+                  error: { code: "dependency_unavailable", message: "隔离档案创建失败" },
+                  request_id: "p50-profile-rejected",
+                },
+              });
+            return route.fulfill({
+              status: 201,
+              json: { data: data.profile, request_id: "p50-lifecycle-profile" },
+            });
+          }
           if (url.pathname.endsWith("/me/navigation"))
             return route.fulfill({ json: { data: data.navigation, request_id: "p50-nav" } });
           if (url.pathname.endsWith("/auth/session-status"))
@@ -221,7 +307,8 @@ try {
         const editor = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" }),
           source = editor.getByLabel("需要登录的来源"),
           mode = editor.getByLabel("导入方式"),
-          save = editor.getByRole("button", { name: "加密保存并启用", exact: true });
+          save = editor.locator(":scope > footer button").last(),
+          cancel = editor.getByRole("button", { name: "取消", exact: true });
         await expect(editor).toBeVisible();
         await expect(source.locator("option:checked")).toHaveText(data.provider.name);
         check(
@@ -268,7 +355,15 @@ try {
           await expect(editor.getByRole("status")).toHaveText("Cookie 文件不能超过 2 兆字节。");
           check("selected mode", await mode.inputValue(), "cookie_file");
           check("save remains disabled", await save.isDisabled());
-        } else if (state.startsWith("browser-") || state.startsWith("helper-")) {
+        } else if (
+          [
+            "browser-pending",
+            "browser-success",
+            "browser-empty",
+            "helper-unavailable",
+            "helper-timeout",
+          ].includes(state)
+        ) {
           await mode.selectOption("browser");
           const readButton = editor.getByRole("button", {
             name: "从当前浏览器读取 Cookie",
@@ -386,17 +481,153 @@ try {
             data.secondProvider.name,
           );
           check("save remains disabled", await save.isDisabled());
+        } else if (state === "source-cleared") {
+          await editor.locator('input[type="file"]').setInputFiles({
+            name: "source-bound.cookies",
+            mimeType: "text/plain",
+            buffer: Buffer.from(
+              '[{"name":"source-bound","value":"p50-hidden-source-bound","domain":"example.test"}]',
+            ),
+          });
+          await expect(save).toBeEnabled();
+          await source.selectOption({ label: data.secondProvider.name });
+          await expect(editor.locator(".archive-picker small")).toContainText("请选择 Cookie");
+          await expect(editor.getByRole("status")).toContainText("来源或导入方式已变化");
+          check(
+            "source identity changed",
+            await source.locator("option:checked").innerText(),
+            data.secondProvider.name,
+          );
+          check("prepared material cleared", await save.isDisabled());
+        } else if (state === "file-late-ignored") {
+          await editor.locator('input[type="file"]').setInputFiles({
+            name: "late.cookies",
+            mimeType: "text/plain",
+            buffer: Buffer.from(
+              '[{"name":"late","value":"p50-hidden-late-file","domain":"example.test"}]',
+            ),
+          });
+          await expect.poll(() => page.evaluate(() => Boolean(window.__p50PendingFile))).toBe(true);
+          await cancel.click();
+          await page.getByRole("button", { name: "配置网页登录", exact: true }).click();
+          const reopened = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+          await reopened
+            .getByLabel("需要登录的来源")
+            .selectOption({ label: data.secondProvider.name });
+          await page.evaluate(() => window.__p50ResolveFile());
+          await expect(reopened.locator(".archive-picker small")).toContainText("请选择 Cookie");
+          check(
+            "late file result ignored",
+            await reopened.locator(":scope > footer button").last().isDisabled(),
+          );
+          check(
+            "reopened source identity",
+            await reopened.getByLabel("需要登录的来源").locator("option:checked").innerText(),
+            data.secondProvider.name,
+          );
+        } else if (state === "helper-late-ignored") {
+          await mode.selectOption("browser");
+          await editor
+            .getByRole("button", { name: "从当前浏览器读取 Cookie", exact: true })
+            .click();
+          await expect.poll(() => page.evaluate(() => window.__p50BridgeRequests.length)).toBe(1);
+          await cancel.click();
+          await page.getByRole("button", { name: "配置网页登录", exact: true }).click();
+          const reopened = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+          await reopened
+            .getByLabel("需要登录的来源")
+            .selectOption({ label: data.secondProvider.name });
+          await reopened.getByLabel("导入方式").selectOption("browser");
+          await page.evaluate(() => {
+            const request = window.__p50BridgeRequests[0];
+            window.postMessage(
+              {
+                type: "SCOUTOPS_BROWSER_BRIDGE_RESULT",
+                request_id: request.request_id,
+                ok: true,
+                data: { cookies: [{ name: "late", value: "p50-hidden-late-helper" }] },
+              },
+              location.origin,
+            );
+          });
+          check(
+            "late helper result ignored",
+            await reopened.locator(":scope > footer button").last().isDisabled(),
+          );
+          check(
+            "reopened source identity",
+            await reopened.getByLabel("需要登录的来源").locator("option:checked").innerText(),
+            data.secondProvider.name,
+          );
+        } else if (
+          ["saving-asset", "asset-unknown", "profile-unknown", "profile-rejected"].includes(state)
+        ) {
+          await editor.locator('input[type="file"]').setInputFiles({
+            name: `${state}.cookies`,
+            mimeType: "text/plain",
+            buffer: Buffer.from(
+              `[{"name":"${state}","value":"p50-hidden-${state}","domain":"example.test"}]`,
+            ),
+          });
+          await save.click();
+          if (state === "saving-asset") {
+            await expect.poll(() => assetWriteStarted).toBe(true);
+            await expect(save).toHaveText("正在保存凭证资产…");
+            check(
+              "header close locked while saving",
+              await editor.getByRole("button", { name: "关闭", exact: true }).isDisabled(),
+            );
+            check("cancel locked while saving", await cancel.isDisabled());
+            check("source locked while saving", await source.isDisabled());
+            check("mode locked while saving", await mode.isDisabled());
+            await page.evaluate(() => document.fonts.ready);
+            await picture();
+            releaseAssetWrite();
+            await expect(editor.getByRole("status")).toContainText("请求未完成，请稍后重试");
+          } else if (state === "asset-unknown") {
+            await expect(editor.getByRole("status")).toContainText("凭证资产写入结果暂时无法确认");
+            await expect(editor.getByRole("status")).toContainText("不要重新导入或重复提交");
+            check("unknown asset resubmit locked", await save.isDisabled());
+          } else if (state === "profile-unknown") {
+            await expect(editor.getByRole("status")).toContainText("加密档案已保存");
+            await expect(editor.getByRole("status")).toContainText(
+              "运行档案的写入结果暂时无法确认",
+            );
+            check("unknown profile resubmit locked", await save.isDisabled());
+          } else {
+            await expect(editor.getByRole("status")).toContainText("运行档案未创建");
+            await expect(editor.getByRole("status")).toContainText("关联运行档案");
+            check("rejected profile resubmit locked", await save.isDisabled());
+          }
         }
 
         check(
           "three credential data GETs",
-          requests.filter((request) => request.key.includes("/api/v1/platform/")).length,
+          requests.filter(
+            (request) =>
+              request.key.startsWith("GET ") && request.key.includes("/api/v1/platform/"),
+          ).length,
           3,
         );
         check(
           "all network requests are GET without bodies",
-          requests.every((request) => request.key.startsWith("GET ") && request.body === null),
+          requests
+            .filter((request) => request.key.startsWith("GET "))
+            .every((request) => request.body === null),
         );
+        if (suite === "lifecycle") {
+          const writes = requests.filter((request) => request.key.startsWith("POST ")),
+            expectedWrites = ["profile-unknown", "profile-rejected"].includes(state)
+              ? 2
+              : ["saving-asset", "asset-unknown"].includes(state)
+                ? 1
+                : 0;
+          check("expected isolated writes", writes.length, expectedWrites);
+          check(
+            "writes carry bodies and idempotency keys",
+            writes.every((request) => Boolean(request.body && request.idempotencyKey)),
+          );
+        }
         check(
           "material values never render",
           await page.evaluate(() =>
@@ -405,6 +636,13 @@ try {
               "p50-hidden-browser-a",
               "p50-hidden-browser-b",
               "p50-hidden-archive-material",
+              "p50-hidden-source-bound",
+              "p50-hidden-late-file",
+              "p50-hidden-late-helper",
+              "p50-hidden-saving-asset",
+              "p50-hidden-asset-unknown",
+              "p50-hidden-profile-unknown",
+              "p50-hidden-profile-rejected",
             ].every((value) => !document.body.textContent.includes(value)),
           ),
         );
@@ -421,6 +659,13 @@ try {
               "p50-hidden-browser-a",
               "p50-hidden-browser-b",
               "p50-hidden-archive-material",
+              "p50-hidden-source-bound",
+              "p50-hidden-late-file",
+              "p50-hidden-late-helper",
+              "p50-hidden-saving-asset",
+              "p50-hidden-asset-unknown",
+              "p50-hidden-profile-unknown",
+              "p50-hidden-profile-rejected",
             ].every((value) => !persisted.includes(value));
           }),
         );
@@ -428,7 +673,7 @@ try {
         for (const [name, control] of [
           ["source", source],
           ["mode", mode],
-          ["cancel", editor.getByRole("button", { name: "取消", exact: true })],
+          ["cancel", cancel],
           ["save", save],
         ])
           check(
@@ -456,7 +701,7 @@ try {
         check("no unexpected network", unexpected, []);
         check("no runtime errors", errors, []);
         await page.evaluate(() => document.fonts.ready);
-        await picture();
+        if (!screenshotTaken) await picture();
         runs.push({ width, state, checks, requests });
       } finally {
         await context.close();
@@ -489,10 +734,12 @@ const evidence = {
   kind:
     suite === "core"
       ? "P50-CREDENTIAL-LOGIN-MATERIAL-REVIEW-r1"
-      : "P50-CREDENTIAL-LOGIN-BOUNDARY-REVIEW-r1",
+      : suite === "boundary"
+        ? "P50-CREDENTIAL-LOGIN-BOUNDARY-REVIEW-r1"
+        : "P50-CREDENTIAL-LOGIN-LIFECYCLE-IMPLEMENTATION-r1",
   generatedAt: new Date().toISOString(),
   reviewOnly: true,
-  productionChanged: false,
+  productionChanged: suite === "lifecycle",
   deployed: false,
   processesClosed: true,
   states,
@@ -503,11 +750,15 @@ const evidence = {
   materialBoundary:
     suite === "core"
       ? "All file contents and browser-helper cookies are synthetic in-memory review values. Screenshots expose filenames/counts and feedback only. No save action, external page, real helper, API write, encryption, database or production credential is used."
-      : "Oversize and invalid files are synthetic local buffers; helper denial and timeout are locally delivered or clock-driven. No file content is rendered or persisted and no save action, external page, real helper, API write, encryption, database or production credential is used.",
+      : suite === "boundary"
+        ? "Oversize and invalid files are synthetic local buffers; helper denial and timeout are locally delivered or clock-driven. No file content is rendered or persisted and no save action, external page, real helper, API write, encryption, database or production credential is used."
+        : "All lifecycle files and browser-helper values are synthetic and local. POST requests are intercepted in the isolated browser and never reach a backend, encryption service, database or production. Screenshots expose only filenames and status feedback; material values are neither rendered nor persisted.",
   proposalBoundary:
     suite === "core"
-      ? "The review transform separates browser material reading from credential saving, locks source/mode/repeated read while pending, keeps cancel available and labels pending/ready/warning states. It intentionally does not claim late-result ownership or post-close cleanup is solved."
-      : "The boundary review preserves the exact 2,000,000 and 6,000,000 byte limits and extension allowlists, distinguishes the 15-second helper timeout from helper denial, and keeps recovery choices visible. It intentionally does not claim late-result ownership or post-close cleanup is solved.",
+      ? "This is a visual review batch for the material-reading states. Production lifecycle ownership and post-close cleanup are now covered separately by the lifecycle implementation evidence; this batch does not claim real helper, API, database or production verification."
+      : suite === "boundary"
+        ? "This visual boundary review preserves the exact 2,000,000 and 6,000,000 byte limits and extension allowlists, distinguishes the 15-second helper timeout from helper denial, and keeps recovery choices visible. Production lifecycle ownership is covered separately; real helper, API, database and production verification are not claimed."
+        : "The production Vue component now binds file and helper results to the active editor/source/mode generation, clears prepared material on context change, locks close/cancel/source/mode during writes, and fails closed when either write outcome is unknown. C-direction styling remains a review-only transform. KeepAlive deactivation, real browser-helper, backend encryption, database writes and production deployment are not claimed.",
 };
 if (capture) {
   await writeFile(`${output}/evidence.json`, JSON.stringify(evidence, null, 2) + "\n");
@@ -517,7 +768,7 @@ if (capture) {
         `<article><h2>${shot.width}px · ${shot.state}</h2><a href="${shot.file}"><img src="${shot.file}" alt="${shot.width}px ${shot.state}"></a></article>`,
     )
     .join("");
-  const galleryKind = suite === "core" ? "状态" : "边界";
+  const galleryKind = suite === "core" ? "状态" : suite === "boundary" ? "边界" : "生命周期";
   await writeFile(
     `${output}/index.html`,
     [
@@ -528,7 +779,7 @@ if (capture) {
       "main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,390px),1fr));gap:24px}",
       "article{padding:14px;background:white;border:1px solid #cfd9e7}h1{grid-column:1/-1}",
       "h1,h2{margin:0 0 12px}h2{font-size:15px}img{display:block;width:100%;height:auto;border:1px solid #d8e0eb}</style>",
-      `<main><h1>P50 登录材料 · 六种实际 Vue ${galleryKind}</h1>`,
+      `<main><h1>P50 登录材料 · ${states.length} 种实际 Vue ${galleryKind}</h1>`,
       cards,
       "</main></html>",
     ].join(""),
