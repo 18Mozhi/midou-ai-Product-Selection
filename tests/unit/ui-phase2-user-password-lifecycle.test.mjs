@@ -1,3 +1,4 @@
+import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
 import { historicalAdminControlsSource } from "../../scripts/lib/ui-phase2-admin-controls-baseline.mjs";
 import assert from "node:assert/strict";
@@ -9,7 +10,8 @@ import {
 } from "../../scripts/lib/ui-phase2-password-baseline.mjs";
 import { userPagePreview } from "../../scripts/lib/ui-phase2-user-page-preview.mjs";
 import { userPasswordPreview } from "../../scripts/lib/ui-phase2-user-password-preview.mjs";
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = (file) =>
+  historicalAdminResultsSource(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n"));
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 test("password ownership preserves exact before/after Vue sources and 80 diagnostic/regression images", () => {
   for (const mode of ["baseline", "current"]) {

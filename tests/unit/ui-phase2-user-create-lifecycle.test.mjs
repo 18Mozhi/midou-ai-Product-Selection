@@ -1,3 +1,4 @@
+import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
 import { historicalPasswordSource } from "../../scripts/lib/ui-phase2-password-baseline.mjs";
 import assert from "node:assert/strict";
@@ -7,7 +8,8 @@ import {
   historicalUserCreationSource,
   userCreationRevisions,
 } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = (file) =>
+  historicalAdminResultsSource(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n"));
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 
 test("creation regression retains distinct exact baseline/current Vue sources and 64 images", () => {

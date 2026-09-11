@@ -1,3 +1,4 @@
+import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
 import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
 import assert from "node:assert/strict";
@@ -6,7 +7,8 @@ import { createHash } from "node:crypto";
 import { userReasonCases } from "../../scripts/lib/ui-phase2-user-reason-cases.mjs";
 import { userPasswordPreview } from "../../scripts/lib/ui-phase2-user-password-preview.mjs";
 import { userPagePreview } from "../../scripts/lib/ui-phase2-user-page-preview.mjs";
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) =>
+  historicalAdminResultsSource(f, readFileSync(f, "utf8").replaceAll("\r\n", "\n"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const folder = "output/playwright/p43-reasons-vue-preview";
 const evidence = () => JSON.parse(read(folder + "/evidence.json"));

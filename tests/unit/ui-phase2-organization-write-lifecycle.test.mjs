@@ -1,3 +1,4 @@
+import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
 import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
@@ -6,7 +7,11 @@ import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { reviewHash } from "../../scripts/lib/ui-phase2-vue-review-host.mjs";
 // Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
-const read = (file) => historicalOrganizationActionSource(file, readFileSync(file, "utf8"));
+const read = (file) =>
+  historicalAdminResultsSource(
+    file,
+    historicalOrganizationActionSource(file, readFileSync(file, "utf8")),
+  );
 const dir = "output/playwright/p42-write-lifecycle";
 const evidence = () => JSON.parse(read(`${dir}/evidence.json`));
 test("P42 lifecycle is diagnostic, bound to captured source revisions and exact images", () => {

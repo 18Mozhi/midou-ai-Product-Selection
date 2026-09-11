@@ -1,3 +1,4 @@
+import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
 import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
 import assert from "node:assert/strict";
@@ -8,7 +9,8 @@ import { baseParse } from "@vue/compiler-dom";
 import { userCreatePreview } from "../../scripts/lib/ui-phase2-user-create-preview.mjs";
 import { userPagePreview } from "../../scripts/lib/ui-phase2-user-page-preview.mjs";
 
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) =>
+  historicalAdminResultsSource(f, readFileSync(f, "utf8").replaceAll("\r\n", "\n"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const child = "apps/web/src/components/PlatformAccountDialogs.vue";
 const parent = "apps/web/src/components/PlatformAccountCenter.vue";

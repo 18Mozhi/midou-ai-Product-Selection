@@ -1,3 +1,7 @@
+import {
+  historicalAdminResultsSource,
+  adminResultsRevisions,
+} from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
 import { adminControlsRevision } from "../../scripts/lib/ui-phase2-admin-controls-baseline.mjs";
 import { passwordRevision } from "../../scripts/lib/ui-phase2-password-baseline.mjs";
@@ -19,7 +23,8 @@ import {
 } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import { organizationListPreview } from "../../scripts/lib/ui-phase2-organization-list-preview.mjs";
 import { tokenCopyRevisions } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) =>
+  historicalAdminResultsSource(f, readFileSync(f, "utf8").replaceAll("\r\n", "\n"));
 const evidence = (mode) =>
   JSON.parse(read(`output/playwright/p42-write-ownership/${mode}/evidence.json`));
 test("current and baseline Vue runs retain exact source and PNG fingerprints without relabeling old defects", () => {
@@ -103,6 +108,7 @@ test("historical associations accept only exact reviewed source revisions", () =
     const pair = [
       organizationActionRevisions[association.file],
       tokenCopyRevisions[association.file],
+      adminResultsRevisions[association.file],
       userCreationRevisions[association.file],
       association.file === passwordRevision.file ? passwordRevision : undefined,
       association.file === adminControlsRevision.file ? adminControlsRevision : undefined,

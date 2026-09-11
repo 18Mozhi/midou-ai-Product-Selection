@@ -153,7 +153,18 @@ watch([compareLeft, compareRight, differencesOnly, capabilityQuery, capabilityGr
 </script>
 
 <template>
-  <section class="role-comparison">
+  <section
+    class="role-comparison"
+    :class="{
+      'role-comparison--same-role-result': Boolean(
+        !persistSelection &&
+        comparedRoles.left &&
+        comparedRoles.right &&
+        compareLeft === compareRight &&
+        !activeFilterCount,
+      ),
+    }"
+  >
     <header>
       <div>
         <p>平台权限</p>

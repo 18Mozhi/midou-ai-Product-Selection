@@ -1,10 +1,12 @@
+import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
 import { historicalAdminControlsSource } from "../../scripts/lib/ui-phase2-admin-controls-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) =>
+  historicalAdminResultsSource(f, readFileSync(f, "utf8").replaceAll("\r\n", "\n"));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p44-comparison-vue-preview";
 test("P44 comparison evidence uses current actual sources and exact formal images", () => {
@@ -73,6 +75,14 @@ test("P44 local approvals stay exact without promoting whole comparison package"
   assert.match(allApproval, /不包含上方角色资料、其他状态、其他宽度、整页或真实权限验收/);
   const e = JSON.parse(read(folder + "/evidence.json"));
   assert.match(e.scope, /template\/script unchanged/);
+  assert.equal(
+    hash(readFileSync(folder + "/390-permission-facts.png")),
+    "46e862abba5da101e17ed9d1dad80e53665f2a6ae8286f9a484657a5472efb51",
+  );
+  assert.match(
+    read("design-plans/ui-phase-2-2026-09-07/P44-MOBILE-ROLE-FACTS-APPROVAL.md"),
+    /角色资料组合通过，继续其他状态/,
+  );
   assert.match(e.scope, /no authority inference or real writes/);
   assert.ok(!read("apps/web/src/main.ts").includes("admin-comparison-preview"));
   assert.ok(!read("apps/web/src/components/PlatformRoleComparison.vue").includes("p44-"));

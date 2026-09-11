@@ -1,3 +1,4 @@
+import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
 import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
 import assert from "node:assert/strict";
@@ -11,7 +12,8 @@ import {
   filterResetRevision,
   historicalFilterResetSource,
 } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) =>
+  historicalAdminResultsSource(f, readFileSync(f, "utf8").replaceAll("\r\n", "\n"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const source = read(filterResetRevision.file);
 const old = execFileSync(

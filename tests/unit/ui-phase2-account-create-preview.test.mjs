@@ -1,3 +1,4 @@
+import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
 import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
@@ -8,7 +9,8 @@ import { execFileSync } from "node:child_process";
 
 const output = "output/playwright/p39-create-user-preview";
 // Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
-const read = (f) => historicalOrganizationActionSource(f, readFileSync(f, "utf8"));
+const read = (f) =>
+  historicalAdminResultsSource(f, historicalOrganizationActionSource(f, readFileSync(f, "utf8")));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const style = "design-plans/ui-phase-2-2026-09-07/implementation/account-create-preview.css";
 const script = "scripts/verify-ui-phase2-account-create-preview.mjs";

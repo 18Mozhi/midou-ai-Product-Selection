@@ -1,3 +1,4 @@
+import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
 import { historicalAdminControlsSource } from "../../scripts/lib/ui-phase2-admin-controls-baseline.mjs";
 import assert from "node:assert/strict";
@@ -7,7 +8,8 @@ import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import { adminPagePreview } from "../../scripts/lib/ui-phase2-admin-page-preview.mjs";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = (file) =>
+  historicalAdminResultsSource(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n"));
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const parent = "apps/web/src/components/PlatformAccountCenter.vue";
 const detail = "apps/web/src/components/PlatformUserDetailDialog.vue";

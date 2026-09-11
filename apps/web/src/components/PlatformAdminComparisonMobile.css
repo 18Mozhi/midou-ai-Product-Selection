@@ -1,4 +1,4 @@
-/* P44 approved mobile controls only. P45, desktop and result surfaces stay unchanged. */
+/* P44 approved mobile controls and unfiltered same-role results only. */
 @media (max-width: 760px) {
   html[data-design="signal-ledger"]
     #app
@@ -106,5 +106,100 @@
         background: #e8edf4;
       }
     }
+  }
+  html[data-design="signal-ledger"]
+    #app
+    .account-center
+    .role-comparison.role-comparison--same-role-result
+    .role-comparison__result {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding: 16px;
+    font-size: 14px;
+    color: #536b86;
+    background: #f4f7fc;
+  }
+  html[data-design="signal-ledger"]
+    #app
+    .account-center
+    .role-comparison.role-comparison--same-role-result
+    .role-comparison__matrix {
+    margin-left: -4px;
+    margin-right: -4px;
+    gap: 0;
+    color: #142a46;
+    background: #fff;
+  }
+  html[data-design="signal-ledger"]
+    #app
+    .account-center
+    .role-comparison.role-comparison--same-role-result
+    .role-comparison__matrix
+    article {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 18px 0;
+    border: 0;
+    border-bottom: 1px solid #d8e1ed;
+    border-radius: 0;
+    color: #142a46;
+    background: #fff;
+  }
+  html[data-design="signal-ledger"]
+    #app
+    .account-center
+    .role-comparison.role-comparison--same-role-result
+    .role-comparison__matrix
+    h4 {
+    font-family: "Microsoft YaHei", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  html[data-design="signal-ledger"]
+    #app
+    .account-center
+    .role-comparison.role-comparison--same-role-result
+    .role-comparison__matrix
+    dl {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  html[data-design="signal-ledger"]
+    #app
+    .account-center
+    .role-comparison.role-comparison--same-role-result
+    .role-comparison__matrix
+    dt {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #536b86;
+  }
+  html[data-design="signal-ledger"]
+    #app
+    .account-center
+    .role-comparison.role-comparison--same-role-result
+    .role-comparison__matrix
+    dd {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  html[data-design="signal-ledger"]
+    #app
+    .account-center
+    .role-comparison.role-comparison--same-role-result
+    .role-comparison__matrix
+    dd[data-enabled="true"] {
+    color: #294caf;
+  }
+  html[data-design="signal-ledger"]
+    #app
+    .account-center
+    .role-comparison.role-comparison--same-role-result
+    .role-comparison__matrix
+    > p {
+    margin-top: 20px;
+    text-align: left;
+    color: #536b86;
+    background: #f4f7fc;
+    border-left: 3px solid #9db1cc;
   }
 }

@@ -1,3 +1,4 @@
+import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
 import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
 import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
@@ -7,7 +8,8 @@ import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 
 const folder = "output/playwright/p42-shell-lifecycle";
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = (file) =>
+  historicalAdminResultsSource(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n"));
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const evidence = JSON.parse(read(`${folder}/evidence.json`));
 test("P42 full app capture binds actual loaded sources and exact screenshot inventory", () => {

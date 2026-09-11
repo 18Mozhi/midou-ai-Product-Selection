@@ -2,12 +2,13 @@
 
 2026-09-11。修正独立验证工具把历史快照误作当前源码的缺口。旧 [平台账号合同](platform-account-contract-review.md) 与 [用户设计合同](platform-user-design-contract.md) 原表、图片、批准范围均保留；本文件不是新视觉批准或生产验收。
 
-## 四处明确源码修订
+## 五处明确源码修订
 
-历史列必须与原表逐项相等；当前列必须与真实文件的 LF SHA-256 逐项相等。只接续这四个文件，其余原表28个文件仍逐项严格核对；不采用“任意旧哈希也可通过”的宽松回退。
+历史列必须与原表逐项相等；当前列必须与真实文件的 LF SHA-256 逐项相等。只接续这五个文件，其余原表27个文件仍逐项严格核对；不采用“任意旧哈希也可通过”的宽松回退。
 
 | 文件 | 历史 LF SHA-256 | 当前 LF SHA-256 | 已有依据 |
 | --- | --- | --- | --- |
+| apps/web/src/components/PlatformRoleComparison.vue | d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba | 53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809 | 同角色结果局部C展示class；完整脚本/原模板内容与控件保持 |
 | apps/web/src/components/PlatformDashboard.vue | 7935e4cdeca4991615f554ff0c66cf5e623454269fa0771ff06b861f15ca5a95 | b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498 | ea005452 历史时间窗/在途读取修复；[当前语义合同](platform-overview-semantic-contract-review.md) |
 | apps/web/src/components/PlatformAccountCenter.vue | 2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474 | fd9b68b4f22ce7bb832ff5090c478104cac1c63f8722ed5a7274cb3ceb0480d1 | 组织/创建/改密修复后仅追加P44获批手机控件样式导入；3ac56e41/ec3f2b65/a1ba7d5a保留为历史图依据 |
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa | b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99 | [焦点与缓存停用增量](responsive-detail-focus-contract-review.md) |
@@ -23,7 +24,7 @@ PlatformAccountCenter 已抽出组织操作组合函数、增加创建反馈归�
 | --- | --- |
 | apps/web/src/use-platform-organization-actions.ts | 3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb |
 | apps/web/src/use-user-creation-owner.ts | cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e |
-| apps/web/src/components/PlatformAdminComparisonMobile.css | 492517572b9ff66dad74bf08c5372caab32bb09adf3deb08d8aa728c61bebbe7 |
+| apps/web/src/components/PlatformAdminComparisonMobile.css | aab8b73f01e26f8da808c60e5cdef04dfb67504d179292e0d4a9f3209670a64d |
 
 ## 运行与失败边界
 

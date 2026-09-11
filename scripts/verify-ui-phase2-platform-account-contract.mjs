@@ -141,6 +141,7 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
     [
       "PlatformDashboard",
       "PlatformAccountCenter",
+      "PlatformRoleComparison",
       "ResponsiveDataView",
       "ResponsiveFilterDrawer",
     ].map((name) => `apps/web/src/components/${name}.vue`),

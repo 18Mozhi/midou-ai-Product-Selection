@@ -1,5 +1,7 @@
 # P44 手机相同角色无差异结果局部批准
 
+后续[生产源码局部接入及对照](P44-MOBILE-RESULTS-IMPLEMENTATION-REVIEW.md)另行记录，不覆盖本批准图或扩大范围。
+
 2026-09-11，用户回复：“无差异结果区域通过，继续其他状态”。
 
 对应[390px同角色无差异图](../../output/playwright/p44-comparison-vue-preview/390-same-role-empty.png)，PNG SHA256：`b839db6b4858010426d74039fd9416348a813dd5c7c94ad014f1271a79e40e73`。

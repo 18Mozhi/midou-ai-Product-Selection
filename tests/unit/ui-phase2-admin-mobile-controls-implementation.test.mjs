@@ -1,3 +1,4 @@
+import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -7,7 +8,8 @@ import {
   historicalAdminControlsSource,
 } from "../../scripts/lib/ui-phase2-admin-controls-baseline.mjs";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = (file) =>
+  historicalAdminResultsSource(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n"));
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const root = "output/playwright/p44-mobile-controls-implementation/";
 const evidence = (mode) => JSON.parse(read(root + mode + "/evidence.json"));

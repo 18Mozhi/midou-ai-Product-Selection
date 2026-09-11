@@ -1,3 +1,4 @@
+import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
 import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
@@ -13,7 +14,11 @@ import {
 import { reviewHash } from "../../scripts/lib/ui-phase2-vue-review-host.mjs";
 
 // Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
-const read = (file) => historicalOrganizationActionSource(file, readFileSync(file, "utf8"));
+const read = (file) =>
+  historicalAdminResultsSource(
+    file,
+    historicalOrganizationActionSource(file, readFileSync(file, "utf8")),
+  );
 const transforms = {
   "apps/web/src/components/PlatformAccountCenter.vue": organizationListPreview,
   "apps/web/src/components/PlatformOrganizationRecords.vue": organizationRecordPreview,

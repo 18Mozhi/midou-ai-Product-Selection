@@ -1,5 +1,7 @@
 # P44 手机同角色显示全部 · 结果区域批准
 
+后续[生产源码局部接入及对照](P44-MOBILE-RESULTS-IMPLEMENTATION-REVIEW.md)另行记录，不覆盖本批准图或扩大范围。
+
 2026-09-11，用户明确回复：“结果区域通过，继续其他状态”。
 
 对应[390px同角色显示全部图](../../output/playwright/p44-comparison-vue-preview/390-same-role-all.png)，完整PNG SHA256：`eca89c21b71216dffe8f4946215fe04c60489089ee3811b00cf2ddb4543b33c0`。

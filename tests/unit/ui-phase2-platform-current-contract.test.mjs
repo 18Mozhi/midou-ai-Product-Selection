@@ -46,7 +46,7 @@ test("platform current contract strictly reconciles history and all 35 current s
       bindings: 24,
       sources: 35,
       historicalSources: 32,
-      revisedSources: 4,
+      revisedSources: 5,
       links: undefined,
     },
   );
@@ -56,6 +56,7 @@ test("platform current contract strictly reconciles history and all 35 current s
 for (const name of [
   "PlatformDashboard",
   "PlatformAccountCenter",
+  "PlatformRoleComparison",
   "ResponsiveDataView",
   "ResponsiveFilterDrawer",
   "PlatformAccountDialogs",
