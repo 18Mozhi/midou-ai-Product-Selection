@@ -668,3 +668,86 @@ test("UI2-CL51 isolates the task detail while replay confirmation owns focus", a
   await expect(detailPanel).not.toHaveAttribute("inert", "");
   await expect(replayButton).toBeFocused();
 });
+
+test("UI2-CL51 restores page and status when browser history changes the same route", async ({
+  page,
+}) => {
+  await nav(page);
+  const reads: string[] = [];
+  await page.route("**/api/v1/platform/collection/tasks?**", (route) => {
+    const url = new URL(route.request().url());
+    reads.push(url.search);
+    const historical = url.searchParams.get("status") === "dead_letter";
+    return route.fulfill({
+      json: {
+        data: historical ? [tasks[1]] : tasks,
+        meta: { page: historical ? 2 : 1, page_size: 50, total: historical ? 51 : tasks.length },
+        request_id: "ui2-cl51-history-list",
+      },
+    });
+  });
+  await page.goto("/platform-admin/collection");
+  await expect(page.getByRole("combobox", { name: "采集任务状态" })).toHaveValue("all");
+  await page.evaluate(() => {
+    history.pushState({}, "", "/platform-admin/collection?page=2&status=dead_letter");
+    window.dispatchEvent(new PopStateEvent("popstate", { state: history.state }));
+  });
+  await expect(page.getByRole("combobox", { name: "采集任务状态" })).toHaveValue("dead_letter");
+  await page.goBack();
+  await expect(page.getByRole("combobox", { name: "采集任务状态" })).toHaveValue("all");
+  await page.goForward();
+  await expect(page.getByRole("combobox", { name: "采集任务状态" })).toHaveValue("dead_letter");
+  await expect(page.getByText("第 2 / 2 页")).toBeVisible();
+  await expect.poll(() => reads.some((query) => query.includes("status=dead_letter"))).toBe(true);
+});
+
+test("UI2-CL51 same-route status changes supersede an older pending list read", async ({
+  page,
+}) => {
+  await nav(page);
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => (release = resolve));
+  let started!: () => void;
+  const entered = new Promise<void>((resolve) => (started = resolve));
+  const reads: string[] = [];
+  await page.route("**/api/v1/platform/collection/tasks?**", async (route) => {
+    const url = new URL(route.request().url());
+    const selected = url.searchParams.get("status") ?? "all";
+    reads.push(selected);
+    if (selected === "dead_letter") {
+      started();
+      await held;
+    }
+    try {
+      await route.fulfill({
+        json: {
+          data:
+            selected === "running" ? [tasks[2]] : selected === "dead_letter" ? [tasks[1]] : tasks,
+          meta: { page: 1, page_size: 50, total: selected === "all" ? tasks.length : 1 },
+          request_id: `ui2-cl51-${selected}`,
+        },
+      });
+    } catch (error) {
+      if (!route.request().failure()) throw error;
+    }
+  });
+  await page.goto("/platform-admin/collection");
+  await page.getByRole("combobox", { name: "采集任务状态" }).selectOption("dead_letter");
+  await entered;
+  await page.evaluate(() => {
+    history.pushState({}, "", "/platform-admin/collection?status=running");
+    window.dispatchEvent(new PopStateEvent("popstate", { state: history.state }));
+  });
+  await expect.poll(() => reads.includes("running")).toBe(true);
+  release();
+  await expect(page.getByRole("combobox", { name: "采集任务状态" })).toHaveValue("running");
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await expect(page.getByText("执行中 · 0 条证据")).toBeVisible();
+    await expect(page.getByText("死信 · 0 条证据")).toHaveCount(0);
+  } else {
+    const rows = page.locator(".collection-task-table-card tbody tr");
+    await expect(rows).toHaveCount(1);
+    await expect(rows.first()).toContainText("执行中");
+    await expect(rows.first()).not.toContainText("死信");
+  }
+});

@@ -110,6 +110,7 @@ const state = ref<ViewState>("loading"),
   detailCloseButton = ref<HTMLButtonElement | null>(null);
 let listController: AbortController | null = null,
   detailController: AbortController | null = null,
+  listSequence = 0,
   detailSequence = 0,
   detailOpenedFromList = false,
   returnFocus: HTMLElement | null = null;
@@ -266,6 +267,14 @@ const timeoutController = (kind: "list" | "detail") => {
   else detailController = controller;
   return { controller, stop: () => window.clearTimeout(timer) };
 };
+const statusFromRoute = (value: unknown) =>
+  typeof value === "string" && taskStatuses.includes(value as (typeof taskStatuses)[number])
+    ? value
+    : "all";
+const pageFromRoute = (value: unknown) => {
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : 1;
+};
 const syncListQuery = () => {
   const queryParams = { ...route.query };
   if (page.value > 1) queryParams.page = String(page.value);
@@ -275,37 +284,43 @@ const syncListQuery = () => {
   void router.replace({ query: queryParams });
 };
 async function load(options: { preserve?: boolean } = {}) {
-  if (listLoading.value) return;
+  const sequence = ++listSequence;
+  const requestedPage = page.value;
+  const requestedStatus = status.value;
+  listController?.abort("superseded");
   listLoading.value = true;
   listIssue.value = "";
   if (!options.preserve || !tasks.value.length) state.value = "loading";
   const params = new URLSearchParams({
-    page: String(page.value),
+    page: String(requestedPage),
     page_size: String(pageSize),
   });
-  if (status.value !== "all") params.set("status", status.value);
-  listController?.abort("superseded");
+  if (requestedStatus !== "all") params.set("status", requestedStatus);
   const timeout = timeoutController("list");
   try {
     const response = await request<Task[]>(`/platform/collection/tasks?${params}`, {
       signal: timeout.controller.signal,
     });
+    if (sequence !== listSequence) return;
     requestId.value = response.request_id;
     tasks.value = response.data ?? [];
     total.value = (response.meta as { total?: number } | undefined)?.total ?? tasks.value.length;
-    if (!tasks.value.length && total.value > 0 && page.value > 1) {
-      page.value = Math.min(page.value - 1, Math.ceil(total.value / pageSize));
+    if (!tasks.value.length && total.value > 0 && requestedPage > 1) {
+      page.value = Math.min(requestedPage - 1, Math.ceil(total.value / pageSize));
       syncListQuery();
-      listLoading.value = false;
       timeout.stop();
       await load();
       return;
     }
     state.value = tasks.value.length ? "ready" : "empty";
   } catch (error) {
+    if (sequence !== listSequence) return;
     const apiError = error instanceof ApiClientError ? error : null;
     requestId.value = apiError?.requestId ?? "";
-    const message = timeout.controller.signal.aborted
+    const timedOut =
+      timeout.controller.signal.aborted && timeout.controller.signal.reason === "request_timeout";
+    if (timeout.controller.signal.aborted && !timedOut) return;
+    const message = timedOut
       ? "任务列表读取超过 15 秒，已停止等待；当前页面数据未被覆盖。"
       : apiError?.actionHint || "任务列表暂不可用，请稍后重试。";
     if (tasks.value.length && options.preserve) {
@@ -315,7 +330,7 @@ async function load(options: { preserve?: boolean } = {}) {
   } finally {
     timeout.stop();
     if (listController === timeout.controller) listController = null;
-    listLoading.value = false;
+    if (sequence === listSequence) listLoading.value = false;
   }
 }
 async function openTask(id: string, options: { updateUrl?: boolean } = {}) {
@@ -479,6 +494,19 @@ async function changePage(nextPage: number) {
   });
 }
 watch(
+  () => [route.path, route.query.page, route.query.status] as const,
+  async ([path, routePage, routeStatus]) => {
+    if (path !== "/platform-admin/collection") return;
+    const nextPage = pageFromRoute(routePage);
+    const nextStatus = statusFromRoute(routeStatus);
+    if (page.value === nextPage && status.value === nextStatus) return;
+    page.value = nextPage;
+    status.value = nextStatus;
+    query.value = "";
+    await load();
+  },
+);
+watch(
   () => route.query.task,
   async (value) => {
     const taskId = typeof value === "string" && /^[0-9a-f-]{36}$/i.test(value) ? value : "";
@@ -502,17 +530,14 @@ watch(detailOpen, async (open) => {
   detailCloseButton.value?.focus();
 });
 onMounted(async () => {
-  const initialStatus = typeof route.query.status === "string" ? route.query.status : "";
-  status.value = taskStatuses.includes(initialStatus as (typeof taskStatuses)[number])
-    ? initialStatus
-    : "all";
-  const initialPage = Number(route.query.page);
-  page.value = Number.isInteger(initialPage) && initialPage > 0 ? initialPage : 1;
+  status.value = statusFromRoute(route.query.status);
+  page.value = pageFromRoute(route.query.page);
   await load();
   const taskId = typeof route.query.task === "string" ? route.query.task : "";
   if (taskId && /^[0-9a-f-]{36}$/i.test(taskId)) await openTask(taskId);
 });
 onBeforeUnmount(() => {
+  listSequence += 1;
   listController?.abort("unmounted");
   detailController?.abort("unmounted");
   document.body.classList.remove("collection-detail-open");

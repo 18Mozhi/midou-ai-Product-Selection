@@ -19,16 +19,24 @@
 - 打开重放确认后，底层任务详情设置原生 `inert`；确认层取得焦点并保持既有短语校验、Tab 循环和 Escape 取消，关闭后焦点返回“人工重放”。
 - 该增量只调整既有读取/确认呈现，不改变重放请求、确认短语或状态筛选参数。
 
+## 同路由历史与列表读取归属
+
+- `page` / `status` 继续只从既有 query 读取并以 `replace` 写回；组件新增同路由 watcher，浏览器 back/forward 改变 query 时不依赖重新挂载即可恢复控件和服务端读取。
+- watcher 只在 `/platform-admin/collection` 激活，离开采集任务页时不会把其他路由的空 query 错写回缓存实例。
+- 每次列表读取固定自己的 page/status 快照和递增代次；新读取先中止旧读取，迟到成功、错误和 finally 均无权覆盖新状态或提前解除 loading。
+- 15 秒超时仍使用原提示；`superseded` / `unmounted` abort 不再冒充读取超时。越界页回退继续沿用原有效页规则，并由新代次重新读取。
+- 未改变 URL 字段、GET 参数、分页大小、状态枚举、重试器或服务端合同。
+
 ## 证据
 
 - 永久 E2E：`tests/e2e/m03-05-collection-tasks.spec.ts`。
 - 新增断言覆盖稳定 loading 对话框名称与初焦点、自动重放 URL 筛选、关闭后的迟到成功隔离、未知写入结果措辞。
-- `desktop-chromium` 与 `mobile-390` 完整 P51 套件共 28/28 通过；空结果/嵌套焦点增量双端定向 6/6，`npm run build:web` 通过。
+- 上一增量 `desktop-chromium` 与 `mobile-390` 完整 P51 套件共 28/28 通过；同路由/读取归属先在旧代码双红，修复后双端定向 4/4，最终完整 P51 双端套件 32/32 通过；`build:web` 同批通过。
 - 本批不调用真实 API、MySQL、Redis、Worker 或外部来源；所有新增写入用例均由 Playwright 本地拦截。
 - C 方向完整视觉仍由 [63 场景图册](design/collection-tasks-direction-c/README.md)承担；本批不以现有生产 CSS 截图冒充新视觉审批。
 
 ## 未关闭范围
 
 - C 方向默认桌面/手机布局及其余场景仍需用户逐组审核后再进入生产视觉。
-- page/status 同路由历史恢复、完整主题/密度/200% 缩放、移动记录转完整详情焦点、真实权限/API/MySQL/Worker 和宝塔生产验收仍未完成。
+- KeepAlive 离页中的列表读取恢复、完整主题/密度/200% 缩放、移动记录转完整详情焦点、真实权限/API/MySQL/Worker 和宝塔生产验收仍未完成。
 - 未部署，无重启要求。
