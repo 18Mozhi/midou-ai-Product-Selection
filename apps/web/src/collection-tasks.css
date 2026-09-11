@@ -190,13 +190,44 @@
   color: var(--so-danger);
 }
 .collection-task-table-card td button,
-.collection-task-detail footer button {
+.collection-task-detail footer button,
+.collection-task-empty button {
   border: 0;
   border-radius: 8px;
   background: var(--so-primary-strong);
   color: var(--so-on-primary);
   padding: 8px 12px;
   font-weight: 750;
+}
+.collection-task-empty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 180px;
+  margin-top: 16px;
+  padding: 28px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel-soft);
+}
+.collection-task-empty div {
+  display: grid;
+  gap: 7px;
+}
+.collection-task-empty small,
+.collection-task-empty p {
+  margin: 0;
+  color: var(--so-text-muted);
+}
+.collection-task-empty h4 {
+  margin: 0;
+  color: var(--so-text);
+  font-size: 18px;
+}
+.collection-task-empty button {
+  flex: 0 0 auto;
+  min-height: 44px;
 }
 .collection-pagination {
   display: flex;
@@ -457,12 +488,16 @@
     width: 100%;
   }
   .collection-inline-issue,
-  .collection-pagination {
+  .collection-pagination,
+  .collection-task-empty {
     align-items: stretch;
     flex-direction: column;
   }
   .collection-pagination {
     text-align: center;
+  }
+  .collection-task-empty button {
+    width: 100%;
   }
   .collection-task-table-wrap {
     margin-inline: -20px;

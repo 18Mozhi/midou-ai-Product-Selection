@@ -616,3 +616,55 @@ test("UI2-CL51 reports an unknown replay outcome without claiming it did not exe
   await expect(page.getByRole("alert")).toContainText("重放结果暂时无法确认");
   await expect(page.getByRole("alert")).not.toContainText("未执行重放");
 });
+
+test("UI2-CL51 keeps server filters available when the selected status has no tasks", async ({
+  page,
+}) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/collection/tasks?**", (route) => {
+    const selectedStatus = new URL(route.request().url()).searchParams.get("status");
+    return route.fulfill({
+      json: {
+        data: selectedStatus ? [] : tasks,
+        meta: { page: 1, page_size: 50, total: selectedStatus ? 0 : tasks.length },
+        request_id: "ui2-cl51-empty-filter",
+      },
+    });
+  });
+  await page.goto("/platform-admin/collection?status=automatically_replayed");
+  await expect(page.locator('[data-kind="empty"]')).toContainText("当前状态下没有任务");
+  await expect(page.getByRole("combobox", { name: "采集任务状态" })).toHaveValue(
+    "automatically_replayed",
+  );
+  await expect(page.getByRole("textbox", { name: "筛选当前页采集任务" })).toBeVisible();
+  await page.getByRole("button", { name: "查看全部状态" }).click();
+  await expect(page).not.toHaveURL(/status=/);
+  await expect(page.getByText("采集任务", { exact: true }).first()).toBeVisible();
+});
+
+test("UI2-CL51 isolates the task detail while replay confirmation owns focus", async ({ page }) => {
+  await nav(page);
+  await list(page);
+  await page.route(`**/api/v1/platform/collection/tasks/${ids.dead}`, (route) =>
+    route.fulfill({ json: { data: detail(), request_id: "ui2-cl51-confirm-focus" } }),
+  );
+  await page.goto("/platform-admin/collection");
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await page.getByRole("button", { name: /死信 · 0 条证据/ }).click();
+    await page.getByRole("button", { name: "打开完整任务详情" }).click();
+  } else await page.getByRole("button", { name: "查看" }).nth(1).click();
+  const replayButton = page.getByRole("button", { name: "人工重放" });
+  await page.getByPlaceholder("说明恢复条件和重放原因（2–500 字）").fill("依赖已经恢复");
+  await replayButton.click();
+  const detailPanel = page.locator(".collection-task-detail");
+  const confirm = page.getByRole("alertdialog", { name: "重放这个死信任务？" });
+  await expect(confirm).toBeVisible();
+  await expect(detailPanel).toHaveAttribute("inert", "");
+  await expect(confirm.getByRole("button", { name: "取消" })).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(confirm.getByPlaceholder("确认重放")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(confirm).toBeHidden();
+  await expect(detailPanel).not.toHaveAttribute("inert", "");
+  await expect(replayButton).toBeFocused();
+});

@@ -459,6 +459,15 @@ async function changeStatus() {
   syncListQuery();
   await load();
 }
+async function recoverEmpty() {
+  if (status.value !== "all") {
+    status.value = "all";
+    page.value = 1;
+    query.value = "";
+    syncListQuery();
+  }
+  await load();
+}
 async function changePage(nextPage: number) {
   if (listLoading.value || nextPage < 1 || nextPage > totalPages.value) return;
   page.value = nextPage;
@@ -531,7 +540,7 @@ onDeactivated(() => {
       </div>
     </header>
     <UiStatePanel
-      v-if="state !== 'ready'"
+      v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
       :request-id="requestId"
       @primary="() => load()"
@@ -607,6 +616,7 @@ onDeactivated(() => {
           </div>
         </header>
         <ResponsiveDataView
+          v-if="state === 'ready'"
           :rows="filtered"
           :row-key="(item) => item.id"
           title="采集任务队列"
@@ -734,6 +744,22 @@ onDeactivated(() => {
             </details>
           </template>
         </ResponsiveDataView>
+        <section v-else class="collection-task-empty" data-kind="empty" aria-live="polite">
+          <div>
+            <small>当前服务端范围</small>
+            <h4>{{ status === "all" ? "尚无采集任务" : "当前状态下没有任务" }}</h4>
+            <p>
+              {{
+                status === "all"
+                  ? "任务队列当前为空。这里不会补造普通采集任务入口。"
+                  : `没有状态为“${label(status)}”的任务，可保留当前条件等待刷新，或返回全部状态。`
+              }}
+            </p>
+          </div>
+          <button type="button" :disabled="listLoading" @click="recoverEmpty">
+            {{ listLoading ? "正在读取…" : status === "all" ? "重新读取" : "查看全部状态" }}
+          </button>
+        </section>
         <nav v-if="totalPages > 1" class="collection-pagination" aria-label="采集任务分页">
           <button type="button" :disabled="page <= 1 || listLoading" @click="changePage(page - 1)">
             上一页
@@ -752,6 +778,7 @@ onDeactivated(() => {
         <aside
           ref="detailPanel"
           class="collection-task-detail"
+          :inert="confirming"
           role="dialog"
           aria-modal="true"
           aria-labelledby="collection-detail-title"

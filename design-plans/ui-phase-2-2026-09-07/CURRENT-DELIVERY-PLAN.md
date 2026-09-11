@@ -1,5 +1,7 @@
 # 第二阶段完整实施计划 · 当前领取与审核入口
 
+最新P51空结果/确认焦点：[P51详情可达性与重放归属](P51-INTERACTION-OWNERSHIP-IMPLEMENTATION.md)追加服务端0条保留范围和两项筛选、指定状态返回全部状态，以及重放确认期间底层详情inert与Escape返焦。原API、状态参数、确认短语不变，未部署。默认C布局仍是当前审核组；page/status历史、移动二级入口、完整视觉与真实链路继续。
+
 最新P51交互实施：[详情可达性与重放归属](P51-INTERACTION-OWNERSHIP-IMPLEMENTATION.md)。生产CollectionTaskCenter补齐自动重放状态筛选、详情三态常驻标题/关闭、可见控件焦点循环与reduced-motion；人工重放固定提交快照，关闭或切换后迟到成功不重开详情，未知结果不误称未执行。新增双端E2E，本批未改API/状态机/权限/数据库/env/依赖且未部署。C方向默认桌面/手机布局作为下一审核组；其余61场景、空结果筛选、嵌套确认焦点、page/status历史和真实链路继续。
 
 最新P50弹窗焦点闭环：[五类弹窗顶层模态与返焦](P50-CREDENTIAL-EDITOR-FOCUS-IMPLEMENTATION.md)。生产CredentialAssetCenter的创建、轮换、档案引用与登录导入改用原生dialog和共享useModalDialog；撤销继续既有ConfirmDialog。初焦点、Tab/Shift+Tab、Escape、遮罩和成功/取消返焦均有真实Vue用例，M03-02桌面/手机48/48。5状态×390/760/1024/1440共20次236项检查、20图、170加载源；全部只读本地GET，未部署。五种弹窗待审；到期/时区/域、真实保存/扩展/加密/MySQL/权限及P50其余验收继续。
