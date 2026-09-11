@@ -1,0 +1,563 @@
+body.p48-compatibility-review .source-center .p48-compatibility-modal {
+  padding: 24px;
+  background: rgb(15 23 42 / 72%);
+  backdrop-filter: blur(10px);
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-panel {
+  width: min(1080px, 100%);
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+  max-height: calc(100dvh - 48px);
+  gap: 0;
+  padding: 0;
+  overflow: auto;
+  border: 0;
+  border-radius: 24px;
+  background: #f8fafc;
+  box-shadow: 0 30px 80px rgb(15 23 42 / 30%);
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-identity {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 32px 26px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 88% 16%, rgb(255 255 255 / 18%), transparent 27%),
+    linear-gradient(135deg, #0f4cbd 0%, #1769e0 56%, #0b3e9d 100%);
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-identity > div {
+  flex: 1 1 auto;
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-identity p,
+body.p48-compatibility-review .source-center .p48-compatibility-identity h3 {
+  margin: 0;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-identity > div > p:first-child,
+body.p48-compatibility-review .source-center .p48-compatibility-summary > div > p,
+body.p48-compatibility-review .source-center .p48-compatibility-ledger > header p,
+body.p48-compatibility-review .source-center .p48-compatibility-state > p:first-child {
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-identity h3 {
+  overflow-wrap: anywhere;
+  color: inherit;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.18;
+  outline: none;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-identity > div > p:nth-of-type(2) {
+  max-width: 720px;
+  color: rgb(255 255 255 / 82%);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-meta {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-meta span {
+  min-width: 0;
+  max-width: 100%;
+  padding: 6px 10px;
+  overflow-wrap: anywhere;
+  border: 1px solid rgb(255 255 255 / 26%);
+  border-radius: 999px;
+  color: rgb(255 255 255 / 92%);
+  background: rgb(255 255 255 / 10%);
+  font-size: 12px;
+  line-height: 1.35;
+  white-space: normal;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-identity > button {
+  flex: 0 0 44px;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 12px;
+  color: #fff;
+  background: rgb(255 255 255 / 10%);
+  font-size: 25px;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  min-width: 0;
+  padding: 24px 32px 32px;
+  background: #f8fafc;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-boundary {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: baseline;
+  padding: 15px 18px;
+  border-left: 4px solid #1769e0;
+  color: #526985;
+  background: #eaf3ff;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-boundary strong {
+  color: #0f4cbd;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-boundary p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-state {
+  display: grid;
+  gap: 7px;
+  min-height: 290px;
+  place-content: center;
+  padding: 36px;
+  border: 1px dashed #bdcadb;
+  border-radius: 16px;
+  color: #64748b;
+  text-align: center;
+  background: #f1f5f9;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-state[data-kind="error"] {
+  border-color: #d9b877;
+  color: #74531f;
+  background: #fff8e8;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-state p,
+body.p48-compatibility-review .source-center .p48-compatibility-state h4 {
+  margin: 0;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-state > p:first-child {
+  color: #0f4cbd;
+}
+
+body.p48-compatibility-review
+  .source-center
+  .p48-compatibility-state[data-kind="error"]
+  > p:first-child {
+  color: #8d5200;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-state h4 {
+  color: #172033;
+  font-size: 20px;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-state > p:last-child {
+  max-width: 620px;
+  line-height: 1.65;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-summary {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(420px, 1.4fr);
+  gap: 24px;
+  align-items: center;
+  padding: 20px 22px;
+  border: 1px solid #cad7e8;
+  background: #fff;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-summary > div > p,
+body.p48-compatibility-review .source-center .p48-compatibility-summary h4,
+body.p48-compatibility-review .source-center .p48-compatibility-summary dl,
+body.p48-compatibility-review .source-center .p48-compatibility-summary dt,
+body.p48-compatibility-review .source-center .p48-compatibility-summary dd {
+  margin: 0;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-summary > div > p {
+  color: #0f4cbd;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-summary h4 {
+  margin-top: 4px;
+  color: #172033;
+  font-size: 20px;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-summary dl {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid #d7e0eb;
+  background: #d7e0eb;
+  gap: 1px;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-summary dl > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 10px 12px;
+  background: #f8fafc;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-summary dt {
+  color: #64748b;
+  font-size: 12px;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-summary dd {
+  color: #172033;
+  font-size: 19px;
+  font-weight: 750;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  min-width: 0;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger > header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger > header p,
+body.p48-compatibility-review .source-center .p48-compatibility-ledger > header h4 {
+  margin: 0;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger > header p {
+  color: #0f4cbd;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger > header h4 {
+  margin-top: 3px;
+  color: #172033;
+  font-size: 20px;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger > header > span {
+  color: #526985;
+  white-space: nowrap;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  color: #243247;
+  background: #fff;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger th,
+body.p48-compatibility-review .source-center .p48-compatibility-ledger td {
+  padding: 12px 10px;
+  overflow-wrap: anywhere;
+  border: 1px solid #d7e0eb;
+  text-align: left;
+  vertical-align: top;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger th {
+  color: #526985;
+  background: #edf3fa;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger th:nth-child(1) {
+  width: 19%;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger th:nth-child(2) {
+  width: 12%;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger th:nth-child(3) {
+  width: 23%;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger th:nth-child(4) {
+  width: 10%;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger th:nth-child(5) {
+  width: 13%;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger th:nth-child(6) {
+  width: 23%;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger td > strong {
+  display: block;
+  color: #172033;
+  font-family: ui-monospace, "Cascadia Code", monospace;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger td > code {
+  color: #334155;
+  font-size: 12px;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-cell-label {
+  display: none;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger i {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  color: #526176;
+  background: #edf1f6;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger i[data-status="compatible"] {
+  color: #11653f;
+  background: #dff5e9;
+}
+
+body.p48-compatibility-review
+  .source-center
+  .p48-compatibility-ledger
+  i[data-status="incompatible"],
+body.p48-compatibility-review .source-center .p48-compatibility-ledger i[data-status="mixed"] {
+  color: #8a5100;
+  background: #fff0cf;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger details {
+  margin-top: 5px;
+  color: #526985;
+  font-size: 12px;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger summary {
+  width: max-content;
+  min-height: 44px;
+  cursor: pointer;
+  line-height: 44px;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-ledger details code {
+  display: block;
+  max-width: 100%;
+  padding: 8px;
+  overflow-wrap: anywhere;
+  color: #334155;
+  background: #f1f5f9;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-width: 0;
+  padding: 14px 32px 16px;
+  border-top: 1px solid #d7e0eb;
+  background: rgb(255 255 255 / 96%);
+  backdrop-filter: blur(12px);
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-actions p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.55;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-actions button {
+  min-width: 88px;
+  min-height: 44px;
+  color: #243247;
+  background: #fff;
+}
+
+body.p48-compatibility-review .source-center .p48-compatibility-panel :focus-visible {
+  outline: 3px solid #1769e0;
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  body.p48-compatibility-review .source-center .p48-compatibility-modal {
+    display: block;
+    padding: 0;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-panel {
+    width: 100%;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-identity,
+  body.p48-compatibility-review .source-center .p48-compatibility-body {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-identity {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 44px;
+    gap: 14px;
+    padding-top: 26px;
+    padding-bottom: 24px;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-identity h3 {
+    font-size: 26px;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-body {
+    gap: 20px;
+    padding-top: 20px;
+    padding-bottom: 26px;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-boundary {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-state {
+    min-height: 360px;
+    padding: 28px 20px;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-summary {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 18px;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-summary dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-ledger table,
+  body.p48-compatibility-review .source-center .p48-compatibility-ledger tbody,
+  body.p48-compatibility-review .source-center .p48-compatibility-ledger tr,
+  body.p48-compatibility-review .source-center .p48-compatibility-ledger td {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-ledger table {
+    table-layout: auto;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-ledger thead {
+    display: none;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-ledger tbody {
+    display: grid;
+    gap: 14px;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-ledger tr {
+    border: 1px solid #cad7e8;
+    background: #fff;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-ledger td {
+    display: grid;
+    grid-template-columns: 102px minmax(0, 1fr);
+    gap: 12px;
+    min-height: 48px;
+    align-items: start;
+    padding: 11px 14px;
+    border: 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-ledger td:last-child {
+    border-bottom: 0;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-cell-label {
+    display: block;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-ledger td > details {
+    grid-column: 2;
+    min-width: 0;
+    margin-top: 0;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-ledger details code {
+    width: 100%;
+    min-width: 0;
+    word-break: break-all;
+    white-space: normal;
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-actions {
+    display: grid;
+    gap: 10px;
+    padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+  }
+
+  body.p48-compatibility-review .source-center .p48-compatibility-actions button {
+    width: 100%;
+  }
+}
+
+@media (forced-colors: active) {
+  body.p48-compatibility-review .source-center .p48-compatibility-panel,
+  body.p48-compatibility-review .source-center .p48-compatibility-identity,
+  body.p48-compatibility-review .source-center .p48-compatibility-boundary,
+  body.p48-compatibility-review .source-center .p48-compatibility-summary,
+  body.p48-compatibility-review .source-center .p48-compatibility-ledger table,
+  body.p48-compatibility-review .source-center .p48-compatibility-state {
+    border: 1px solid CanvasText;
+  }
+}
