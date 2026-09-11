@@ -23,49 +23,49 @@ API的compatibility_matrix聚合留存HTML/DOM的页面指纹与解析版本，�
 
 文件别名：S=ProviderRuntimeSurface.vue，R=ProviderRegistry.vue，A=ProviderAdapterCenter.vue；均在apps/web/src/components。完整candidateId为该路径加`#`和下表签名。41个直接静态候选=S5+R22+A14；包含同一个提交的form/button以及定义/事件，不是41个独立业务动作。条件分支和重复行需要运行时扩展，不据此冻结全站分母。
 
-| 文件 | 签名               | 动作/定义归属      | 实际入口、条件与结果                                                        |
-| ---- | ------------------ | ------------------ | --------------------------------------------------------------------------- |
-| S    | 7d0657958d2afe06.1 | PR-NAV46           | RouterLink到P46；aria-current按routePath                                    |
-| S    | c91c2e71e426b739.1 | PR-NAV47           | RouterLink到P47                                                             |
-| S    | d6812914ba6d07da.1 | PR-NAV48           | RouterLink到来源频道，独立B1b                                               |
-| S    | c56767a09d40c33b.1 | PR-NAV49           | superadmin可见，去1688检查                                                  |
-| S    | 23ee0a87fa977a0d.1 | PR-NAV50           | superadmin可见，去凭证                                                      |
-| R    | 7895edf33d41a47a.1 | PR46-CREATE        | 页头edit(undefined,event)，内存技术默认值、disabled                         |
-| R    | 3eebd05a35b5e2d1.1 | PR46-LOAD          | loadMessage时再次读取，保留快照                                             |
-| R    | d2b72f6631a5008b.1 | PR46-LOAD          | UiStatePanel primary调用load；默认动作文案差异见PR-G04                      |
-| R    | de4c1cd1ccf4c8da.1 | PR46-CREATE        | 空目录且编辑器关闭时创建，与页头同业务动作                                  |
-| R    | 27f5c560567881c4.1 | PR46-LOAD          | 列表工具栏刷新，refreshing禁用                                              |
-| R    | 0da6a9c39b0f685c.1 | PR46-RESET         | 重置5筛选/排序控件，watch回第1页                                            |
-| R    | f9d454b64dd4b22a.1 | PR46-RESET         | 过滤无结果时同一完整重置                                                    |
-| R    | f8fbe8533c9685db.1 | PR46-EDIT          | 桌面行edit(item,event)，来源ID标记支持重挂载后的焦点定位                    |
-| R    | 5d4463e03e3aa18b.1 | PR46-EDIT          | 移动详情先close预览再edit；关闭编辑后按来源ID找回当前入口                   |
-| R    | 1c008f867673db60.1 | PR46-TECH-ROW      | 原生details/summary展开ID/目标/解析等技术值                                 |
-| R    | 83d11b8719b1c99d.1 | PR46-PAGE-PREV     | 本地上一页，边界禁用                                                        |
-| R    | bd43d7b540116c32.1 | PR46-PAGE-NEXT     | 本地下一页，边界禁用                                                        |
-| R    | 78dd668ea43102ff.1 | PR46-CLOSE         | 自定义遮罩mousedown.self.prevent调用closeEditor，防默认鼠标聚焦覆盖恢复目标 |
-| R    | 33a2c5d568a6c67c.1 | PR46-EDITOR        | role=dialog定义；创建/编辑×四步，不是八个独立定义                           |
-| R    | fab2f2181783074f.1 | PR46-CLOSE/SAVE    | 表单Escape关闭，submit.prevent保存；和提交按钮同调用链                      |
-| R    | e03ff4bf86eb6a89.1 | PR46-CLOSE         | 编辑器命名关闭按钮                                                          |
-| R    | 71fedaee68dde679.1 | PR46-STEP-JUMP     | v-for四步骤，直接跳步不做当前组校验                                         |
-| R    | 83ffe5899e1ccfcf.1 | PR46-TEMPLATE      | 按五模式应用技术模板，覆盖共用策略及fields/failure_rules                    |
-| R    | 1c008f867673db60.2 | PR46-TECH-FEEDBACK | 编辑反馈关联号技术详情                                                      |
-| R    | 4ba7742e75103fa4.1 | PR46-STEP-PREV     | 上一步，内存字段保留                                                        |
-| R    | d0e6c4e6deaeab8a.1 | PR46-STEP-NEXT     | 校验当前组再下一步                                                          |
-| R    | 476b79a4175dbc41.1 | PR46-SAVE          | type=submit；创建POST/编辑PUT+expected_version，busy防重复                  |
-| A    | 92930355cc4e2a4f.1 | PR47-LOAD          | 刷新，refreshing禁用                                                        |
-| A    | 3d1c1781d275b76d.1 | PR47-DEFINE        | 页头返回P46，仅导航                                                         |
-| A    | d2b72f6631a5008b.1 | PR47-LOAD          | 状态primary调用load；不是登录或返回工作台                                   |
-| A    | 0da6a9c39b0f685c.1 | PR47-RESET         | 工具栏完整resetFilters                                                      |
-| A    | d1614ad8db6bddf9.1 | PR47-DEFINE        | 无来源时“登记来源”去P46，不是登记程序                                       |
-| A    | 2c7db35d039ef2f4.1 | PR47-RESET         | 过滤空态“清除筛选”，本批改为同一完整resetFilters                            |
-| A    | 96211fe8b4dfe48d.1 | PR47-RECOVER       | 桌面open且恢复门满足时链接P70，不发恢复请求                                 |
-| A    | b02f109125f46ed4.1 | PR47-PROBE         | 桌面probe(item)，probing非空禁用全部探针按钮                                |
-| A    | efa5a28bbc761600.1 | PR47-PROBE         | 移动详情probe(row)，相同接口/副作用                                         |
-| A    | 2cf3eb393d8269a0.1 | PR47-RECOVER       | 移动同条件去采集调度                                                        |
-| A    | 1c008f867673db60.1 | PR47-TECH-ROW      | 移动详情技术标识/错误码                                                     |
-| A    | 369397a871aefe1e.1 | PR47-PAGE-PREV     | 本地上一页                                                                  |
-| A    | e193aebbbf403ff8.1 | PR47-PAGE-NEXT     | 本地下一页                                                                  |
-| A    | 1c008f867673db60.2 | PR47-TECH-FEEDBACK | 反馈关联号展开                                                              |
+| 文件 | 签名               | 动作/定义归属      | 实际入口、条件与结果                                                                             |
+| ---- | ------------------ | ------------------ | ------------------------------------------------------------------------------------------------ |
+| S    | 7d0657958d2afe06.1 | PR-NAV46           | RouterLink到P46；aria-current按routePath                                                         |
+| S    | c91c2e71e426b739.1 | PR-NAV47           | RouterLink到P47                                                                                  |
+| S    | d6812914ba6d07da.1 | PR-NAV48           | RouterLink到来源频道，独立B1b                                                                    |
+| S    | c56767a09d40c33b.1 | PR-NAV49           | superadmin可见，去1688检查                                                                       |
+| S    | 23ee0a87fa977a0d.1 | PR-NAV50           | superadmin可见，去凭证                                                                           |
+| R    | 7895edf33d41a47a.1 | PR46-CREATE        | 页头edit(undefined,event)，内存技术默认值、disabled                                              |
+| R    | 3eebd05a35b5e2d1.1 | PR46-LOAD          | loadMessage时再次读取，保留快照                                                                  |
+| R    | d2b72f6631a5008b.1 | PR46-LOAD          | UiStatePanel primary调用load；默认动作文案差异见PR-G04                                           |
+| R    | de4c1cd1ccf4c8da.1 | PR46-CREATE        | 空目录且编辑器关闭时创建，与页头同业务动作                                                       |
+| R    | 27f5c560567881c4.1 | PR46-LOAD          | 列表工具栏刷新，refreshing禁用                                                                   |
+| R    | 0da6a9c39b0f685c.1 | PR46-RESET         | 重置5筛选/排序控件，watch回第1页                                                                 |
+| R    | f9d454b64dd4b22a.1 | PR46-RESET         | 过滤无结果时同一完整重置                                                                         |
+| R    | f8fbe8533c9685db.1 | PR46-EDIT          | 桌面行edit(item,event)，来源ID标记支持重挂载后的焦点定位                                         |
+| R    | 5d4463e03e3aa18b.1 | PR46-EDIT          | 移动详情先close预览再edit；关闭编辑后按来源ID找回当前入口                                        |
+| R    | 1c008f867673db60.1 | PR46-TECH-ROW      | 原生details/summary展开ID/目标/解析等技术值                                                      |
+| R    | 83d11b8719b1c99d.1 | PR46-PAGE-PREV     | 本地上一页，边界禁用                                                                             |
+| R    | bd43d7b540116c32.1 | PR46-PAGE-NEXT     | 本地下一页，边界禁用                                                                             |
+| R    | 51517865bc5117a4.1 | PR46-CLOSE         | 自定义遮罩mousedown.self.prevent调用closeEditor，防默认鼠标聚焦覆盖恢复目标                      |
+| R    | e277037d626f08f0.1 | PR46-EDITOR        | role=dialog定义；创建/编辑×四步，不是八个独立定义                                                |
+| R    | 3f2a491e2f9e8f03.1 | PR46-CLOSE/SAVE    | 表单Escape关闭，submit.prevent保存；和提交按钮同调用链                                           |
+| R    | e03ff4bf86eb6a89.1 | PR46-CLOSE         | 编辑器命名关闭按钮                                                                               |
+| R    | 71fedaee68dde679.1 | PR46-STEP-JUMP     | v-for四步骤，直接跳步不做当前组校验                                                              |
+| R    | 83ffe5899e1ccfcf.1 | PR46-TEMPLATE      | 按五模式应用技术模板，覆盖共用策略及fields/failure_rules                                         |
+| R    | 1c008f867673db60.2 | PR46-TECH-FEEDBACK | 编辑反馈关联号技术详情                                                                           |
+| R    | 4ba7742e75103fa4.1 | PR46-STEP-PREV     | 上一步，内存字段保留                                                                             |
+| R    | d0e6c4e6deaeab8a.1 | PR46-STEP-NEXT     | 校验当前组再下一步                                                                               |
+| R    | c00a014dd9020f4f.1 | PR46-SAVE          | type=submit；创建POST/编辑PUT+expected_version，同一实例串行；新窗等待上一项保存，结果按代次归属 |
+| A    | 92930355cc4e2a4f.1 | PR47-LOAD          | 刷新，refreshing禁用                                                                             |
+| A    | 3d1c1781d275b76d.1 | PR47-DEFINE        | 页头返回P46，仅导航                                                                              |
+| A    | d2b72f6631a5008b.1 | PR47-LOAD          | 状态primary调用load；不是登录或返回工作台                                                        |
+| A    | 0da6a9c39b0f685c.1 | PR47-RESET         | 工具栏完整resetFilters                                                                           |
+| A    | d1614ad8db6bddf9.1 | PR47-DEFINE        | 无来源时“登记来源”去P46，不是登记程序                                                            |
+| A    | 2c7db35d039ef2f4.1 | PR47-RESET         | 过滤空态“清除筛选”，本批改为同一完整resetFilters                                                 |
+| A    | 96211fe8b4dfe48d.1 | PR47-RECOVER       | 桌面open且恢复门满足时链接P70，不发恢复请求                                                      |
+| A    | b02f109125f46ed4.1 | PR47-PROBE         | 桌面probe(item)，probing非空禁用全部探针按钮                                                     |
+| A    | efa5a28bbc761600.1 | PR47-PROBE         | 移动详情probe(row)，相同接口/副作用                                                              |
+| A    | 2cf3eb393d8269a0.1 | PR47-RECOVER       | 移动同条件去采集调度                                                                             |
+| A    | 1c008f867673db60.1 | PR47-TECH-ROW      | 移动详情技术标识/错误码                                                                          |
+| A    | 369397a871aefe1e.1 | PR47-PAGE-PREV     | 本地上一页                                                                                       |
+| A    | e193aebbbf403ff8.1 | PR47-PAGE-NEXT     | 本地下一页                                                                                       |
+| A    | 1c008f867673db60.2 | PR47-TECH-FEEDBACK | 反馈关联号展开                                                                                   |
 
 历史A空结果候选3670aecf7cfb60e1.1（仅清mode/health）对应现在2c7db35d039ef2f4.1（resetFilters），语义仍PR47-RESET；保留此映射，不把候选变化冒充新增功能。全局生成清单和旧图库保持原来源，R01按实际影响更新，不只替换hash。
 
@@ -140,6 +140,8 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 
 ## 7. 当前源指纹（LF SHA-256）
 
+2026-09-11异步归属增量：Registry指纹更新到本批实现，其他14源不变。保存按钮新增等待上一项保存文案，包含该文本的遮罩/编辑定义/表单候选签名同步为51517865bc5117a4.1、e277037d626f08f0.1、3f2a491e2f9e8f03.1，提交按钮为c00a014dd9020f4f.1；分别承接78dd668ea43102ff.1、33a2c5d568a6c67c.1、fab2f2181783074f.1、476b79a4175dbc41.1。事件/业务归属和R22总数不变，不能算新增业务动作。读取成功/失败/finally、保存旧结果、缓存返回及独立编辑关联号的当前证据见[P46异步归属实施](P46-ASYNC-OWNERSHIP-IMPLEMENTATION.md)，旧字段/日期/未知写入结果与完整模态验收仍待。
+
 2026-09-11仅将ProviderRegistry源指纹更新到焦点实施版本；其余14源未改。下方2026-09-09描述是历史增量范围，旧图库保留对应旧指纹，不据当前映射改写旧图。生产CSS还包含本页手机焦点框解除裁切的三行规则，完整当前40源及前后对照见本批实施证据。
 
 2026-09-09 P47设计增量：[PROVIDER-ADAPTERS-C-r1图册](design/provider-adapters-direction-c/README.md)，48场景双端96主图＋15连续详情局部，共111PNG（含2工具图）。原2/45行独立AST夹具、源13排序筛选/20-20-5/复位与夹页、真实load/probe/服务summary惰性执行；旧GET覆盖新探针版本复现归PR-G03。样本SQL列表全局LIMIT5000，不能宣称24h全量；原夹具未登记却ready的合成返回不证明实际后端。原型蓝目录/白诊断、手机展开筛选、native详情与迟到/未知保护为提案，以下15源未变；真实Vue/API/MySQL/权限/审计/采集及恢复仍未验证。具体稿未批准，下一P48，不将P46或P47图计作W06整体完成。
@@ -151,7 +153,7 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 | 文件                                               | SHA-256                                                          |
 | -------------------------------------------------- | ---------------------------------------------------------------- |
 | apps/web/src/components/ProviderRuntimeSurface.vue | a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6 |
-| apps/web/src/components/ProviderRegistry.vue       | 2e6aed1eb23b4402719d2d031a61215aad27be0613c36b2f9f4477971638d20c |
+| apps/web/src/components/ProviderRegistry.vue       | ffb8a98b8df1c966ee092cf1377f51c2ab67748d66377cda5734ac9646906df3 |
 | apps/web/src/components/ProviderAdapterCenter.vue  | 0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075 |
 | apps/web/src/components/ResponsiveDataView.vue     | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/TableViewControls.vue      | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |

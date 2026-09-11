@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
+import {
+  computed,
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -46,6 +56,8 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   editorOpen = ref(false),
   editorStep = ref(1),
   saving = ref(false),
+  pendingSaveGeneration = ref<number | null>(null),
+  editorRequestId = ref(""),
   message = ref(""),
   searchQuery = ref(""),
   statusFilter = ref("all"),
@@ -285,11 +297,16 @@ const list = (v: string) =>
   currentStepErrors = computed(() =>
     Object.entries(formErrors.value).filter(([field]) => stepForField[field] === editorStep.value),
   );
+let pageActive = true,
+  pageVisit = 0,
+  resumeRead = false;
 async function load() {
+  if (!pageActive) return false;
   loadController.value?.abort();
   const controller = new AbortController();
   loadController.value = controller;
   loadMessage.value = "";
+  successMessage.value = "";
   refreshing.value = Boolean(items.value.length);
   if (!items.value.length) state.value = "loading";
   const timeout = window.setTimeout(() => controller.abort("provider_registry_timeout"), 12000);
@@ -297,12 +314,15 @@ async function load() {
     const response = await request<Provider[]>("/platform/providers", {
       signal: controller.signal,
     });
+    if (!pageActive || controller !== loadController.value) return false;
+    if (controller.signal.aborted) throw new Error("provider_registry_read_aborted");
     requestId.value = response.request_id;
     items.value = response.data;
     state.value = items.value.length ? "ready" : "empty";
     page.value = 1;
+    return true;
   } catch (error) {
-    if (controller !== loadController.value) return;
+    if (!pageActive || controller !== loadController.value) return false;
     const apiError = error instanceof ApiClientError ? error : null;
     requestId.value = apiError?.requestId ?? "";
     const nextState = apiError ? failure(apiError.status) : "blocked";
@@ -313,10 +333,13 @@ async function load() {
           ? "刷新超过 12 秒，已保留上次成功数据。"
           : `刷新失败：${apiError?.actionHint ?? "请稍后重试。"} 已保留上次成功数据。`;
     } else state.value = nextState;
+    return false;
   } finally {
     window.clearTimeout(timeout);
-    refreshing.value = false;
-    if (loadController.value === controller) loadController.value = null;
+    if (loadController.value === controller) {
+      refreshing.value = false;
+      loadController.value = null;
+    }
   }
 }
 let editorFocusGeneration = 0;
@@ -332,6 +355,7 @@ function edit(item?: Provider, event?: Event) {
   editorOpen.value = true;
   editorStep.value = 1;
   message.value = "";
+  editorRequestId.value = "";
   Object.assign(
     form,
     item
@@ -447,7 +471,7 @@ function nextStep() {
   message.value = "";
 }
 async function save() {
-  if (saving.value) return;
+  if (saving.value || !pageActive || !editorOpen.value) return;
   if (Object.keys(formErrors.value).length) {
     editorStep.value = Math.min(
       ...Object.keys(formErrors.value).map((field) => stepForField[field] ?? 4),
@@ -456,7 +480,14 @@ async function save() {
     return;
   }
   saving.value = true;
+  const generation = editorFocusGeneration,
+    visit = pageVisit;
+  pendingSaveGeneration.value = generation;
+  const ownsEditor = () =>
+    pageActive && pageVisit === visit && editorOpen.value && generation === editorFocusGeneration;
   message.value = "";
+  editorRequestId.value = "";
+  successMessage.value = "";
   const body = {
       ...form,
       markets: list(form.markets),
@@ -479,16 +510,28 @@ async function save() {
       method: editing.value ? "PUT" : "POST",
       body,
     });
-    requestId.value = response.request_id;
+    if (!ownsEditor()) return;
+    editorRequestId.value = response.request_id;
     closeEditor();
-    await load();
-    successMessage.value = `${savedName}已${action}，来源定义列表已刷新。`;
+    const refreshed = await load();
+    if (
+      !pageActive ||
+      pageVisit !== visit ||
+      generation !== editorFocusGeneration ||
+      editorOpen.value
+    )
+      return;
+    successMessage.value = refreshed
+      ? `${savedName}已${action}，来源定义列表已刷新。`
+      : `${savedName}已${action}；列表未能刷新，请重新读取。`;
   } catch (error) {
+    if (!ownsEditor()) return;
     const apiError = error instanceof ApiClientError ? error : null;
-    requestId.value = apiError?.requestId ?? "";
+    editorRequestId.value = apiError?.requestId ?? "";
     message.value = apiError?.actionHint ?? "依赖不可用，未保存";
   } finally {
     saving.value = false;
+    pendingSaveGeneration.value = null;
   }
 }
 function resetFilters() {
@@ -505,7 +548,24 @@ watch(pageCount, (count) => {
   if (page.value > count) page.value = count;
 });
 onMounted(load);
-onBeforeUnmount(() => loadController.value?.abort());
+function suspendPage() {
+  pageActive = false;
+  pageVisit++;
+  editorFocusGeneration++;
+  resumeRead = Boolean(loadController.value);
+  loadController.value?.abort();
+  loadController.value = null;
+  refreshing.value = false;
+}
+onDeactivated(suspendPage);
+onBeforeUnmount(suspendPage);
+onActivated(() => {
+  pageActive = true;
+  if (resumeRead) {
+    resumeRead = false;
+    void load();
+  }
+});
 </script>
 <template>
   <section ref="registryRoot" class="provider-registry">
@@ -969,9 +1029,9 @@ onBeforeUnmount(() => loadController.value?.abort());
         </div>
         <div v-if="message" class="provider-editor-message" role="status">
           <span>{{ message }}</span>
-          <details v-if="requestId">
+          <details v-if="editorRequestId">
             <summary>技术详情</summary>
-            <code>{{ requestId }}</code>
+            <code>{{ editorRequestId }}</code>
           </details>
         </div>
         <footer>
@@ -985,7 +1045,15 @@ onBeforeUnmount(() => loadController.value?.abort());
           >
           <button v-if="editorStep < 4" type="button" @click="nextStep">下一步</button>
           <button v-else type="submit" :disabled="saving || Object.keys(formErrors).length > 0">
-            {{ saving ? "保存中…" : editing ? "保存新版本" : "创建来源" }}
+            {{
+              saving
+                ? pendingSaveGeneration === editorFocusGeneration
+                  ? "保存中…"
+                  : "等待上一项保存…"
+                : editing
+                  ? "保存新版本"
+                  : "创建来源"
+            }}
           </button>
         </footer>
       </form>

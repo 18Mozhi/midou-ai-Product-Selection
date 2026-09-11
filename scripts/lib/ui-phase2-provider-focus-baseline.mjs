@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { historicalProviderAsyncSource } from "./ui-phase2-provider-async-baseline.mjs";
 
 export const providerFocusRevision = {
   file: "apps/web/src/components/ProviderRegistry.vue",
@@ -18,7 +19,7 @@ export const providerFocusStyleRevision = {
 const cached = new Map();
 // Historical screenshots keep their original source association, never current acceptance.
 export function historicalProviderFocusSource(file, source) {
-  source = source.replaceAll("\r\n", "\n");
+  source = historicalProviderAsyncSource(file, source);
   const r = [providerFocusRevision, providerFocusStyleRevision].find((r) => r.file === file);
   if (!r || hash(source) !== r.after) return source;
   if (!cached.has(file)) {

@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalProviderAsyncSource } from "../../scripts/lib/ui-phase2-provider-async-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -12,7 +13,7 @@ import {
   providerFocusRevision,
 } from "../../scripts/lib/ui-phase2-provider-focus-baseline.mjs";
 
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) => historicalProviderAsyncSource(f, readFileSync(f, "utf8"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const file = providerFocusRevision.file,
   current = read(file);
@@ -212,7 +213,7 @@ test("P46 archived source mapping rejects unknown drift instead of masking it", 
   }
 });
 
-test("P46 current actual Vue evidence pins baseline comparisons, no writes and focus restoration", () => {
+test("P46 historical focus evidence pins its original sources, comparisons and restoration", () => {
   for (const mode of ["baseline", "current"]) {
     const e = evidence(mode),
       directory = root + "/" + mode;

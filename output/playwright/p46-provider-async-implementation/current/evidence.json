@@ -1,0 +1,4194 @@
+{
+  "kind": "P46-ASYNC-OWNERSHIP-r1",
+  "mode": "current",
+  "scope": "Current actual ProviderRuntimeSurface/Registry in an isolated KeepAlive harness, not full NavigationShell/App. Historical baseline af60b101 versus current; production and C review CSS separately,390/1440. Original fixtures and explicitly entered test drafts; all GET/POST/PUT intercepted, supplied success/error only, no real persistence or permissions. Preserve existing request bodies and serial pending save; late results, refresh truth, separate editor/read request IDs and cached return checked. Focus/field residual/date/full modal acceptance not expanded.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "ffb8a98b8df1c966ee092cf1377f51c2ab67748d66377cda5734ac9646906df3",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.css": "a31b900bedbf1cafdf756eea8b7bd8742a5ec844fef9bcad0d8ffe643e39bb74",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-detail-preview.css": "6f1bece39def0bba8c1e9cf69b1fafe0993d9564898716ea7bb6ea6545c6a99a",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-editor-preview.css": "f7ae7af9a96fe79d8f9c498bfa7cd6025536c9250b0fe9be06ed4b794dce1f6a",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-page-preview.css": "791e840c6e32430e10b7fcfd1f56d11cc572679ba0e6e4a62d1f08b06636e7bd",
+    "scripts/lib/ui-phase2-provider-async-baseline.mjs": "ea7ad07ab9afc30fe597270c549970938e9d3985ef1707f77cdbf9df2463e349",
+    "scripts/verify-ui-phase2-provider-async.mjs": "c8e55ee26aa57a200be0ef4173c35331069602148cd311ab16a9c91fcfa097fd",
+    "tests/e2e/m03-01-provider-registry.spec.ts": "caaa0e2af2081675ab743e18d43e2526758604c84bd72aa925ae701454cf226f"
+  },
+  "checks": [
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "original write method",
+      "actual": "POST"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "original expected version presence",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "serial pending disabled",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "new window pending label",
+      "actual": "等待上一项保存…"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "new editor remains",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "new draft name retained",
+      "actual": "新窗口草稿"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "feedback belongs to current window",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "no stale editor request id",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "stale success does not reload",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "serial pending disabled",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "new window pending label",
+      "actual": "等待上一项保存…"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "new editor remains",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "new draft name retained",
+      "actual": "新窗口草稿"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "feedback belongs to current window",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "no stale editor request id",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "stale success does not reload",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "name": "original write method",
+      "actual": "POST"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "name": "original expected version presence",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "name": "save is confirmed",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "name": "refresh fact matches outcome",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "name": "current save closes editor",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "save is confirmed",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "refresh fact matches outcome",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "current save closes editor",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "failed refresh retained snapshot",
+      "actual": "1"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "manual retry retained",
+      "actual": 3
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "obsolete save-refresh caption cleared on retry",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "name": "original write method",
+      "actual": "POST"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "name": "original expected version presence",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "name": "editor survives earlier refresh",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "name": "old success not posted into new window session",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "name": "editor technical id isolated from read",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "name": "no inactive followup read",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "name": "cached editor retained",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "name": "cached editor has no stale error",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "name": "no inactive followup read",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "name": "cached editor retained",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "name": "cached editor has no stale error",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "read-deactivate",
+      "name": "read count after cached return",
+      "actual": 2
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "read-deactivate",
+      "name": "exact returned list",
+      "actual": "1"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "read-deactivate",
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "read-deactivate",
+      "name": "no unexpected network",
+      "actual": []
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "original write method",
+      "actual": "POST"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "original expected version presence",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "serial pending disabled",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "new window pending label",
+      "actual": "等待上一项保存…"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "new editor remains",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "new draft name retained",
+      "actual": "新窗口草稿"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "feedback belongs to current window",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "no stale editor request id",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "stale success does not reload",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "serial pending disabled",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "new window pending label",
+      "actual": "等待上一项保存…"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "new editor remains",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "new draft name retained",
+      "actual": "新窗口草稿"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "feedback belongs to current window",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "no stale editor request id",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "stale success does not reload",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "name": "original write method",
+      "actual": "POST"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "name": "original expected version presence",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "name": "save is confirmed",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "name": "refresh fact matches outcome",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "name": "current save closes editor",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "save is confirmed",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "refresh fact matches outcome",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "current save closes editor",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "failed refresh retained snapshot",
+      "actual": "1"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "manual retry retained",
+      "actual": 3
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "obsolete save-refresh caption cleared on retry",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "name": "original write method",
+      "actual": "POST"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "name": "original expected version presence",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "name": "editor survives earlier refresh",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "name": "old success not posted into new window session",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "name": "editor technical id isolated from read",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "name": "no inactive followup read",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "name": "cached editor retained",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "name": "cached editor has no stale error",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "name": "no inactive followup read",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "name": "cached editor retained",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "name": "cached editor has no stale error",
+      "actual": 0
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "read-deactivate",
+      "name": "read count after cached return",
+      "actual": 2
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "read-deactivate",
+      "name": "exact returned list",
+      "actual": "1"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "read-deactivate",
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "read-deactivate",
+      "name": "no unexpected network",
+      "actual": []
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "original write method",
+      "actual": "POST"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "original expected version presence",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "serial pending disabled",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "new window pending label",
+      "actual": "等待上一项保存…"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "new editor remains",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "new draft name retained",
+      "actual": "新窗口草稿"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "feedback belongs to current window",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "no stale editor request id",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-success-create",
+      "name": "stale success does not reload",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "serial pending disabled",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "new window pending label",
+      "actual": "等待上一项保存…"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "new editor remains",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "new draft name retained",
+      "actual": "新窗口草稿"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "feedback belongs to current window",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "no stale editor request id",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "name": "stale success does not reload",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "name": "original write method",
+      "actual": "POST"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "name": "original expected version presence",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "name": "save is confirmed",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "name": "refresh fact matches outcome",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "name": "current save closes editor",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "save is confirmed",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "refresh fact matches outcome",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "current save closes editor",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "failed refresh retained snapshot",
+      "actual": "1"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "manual retry retained",
+      "actual": 3
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "name": "obsolete save-refresh caption cleared on retry",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "name": "original write method",
+      "actual": "POST"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "name": "original expected version presence",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "name": "editor survives earlier refresh",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "name": "old success not posted into new window session",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "name": "editor technical id isolated from read",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "name": "no inactive followup read",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "name": "cached editor retained",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "name": "cached editor has no stale error",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "name": "no inactive followup read",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "name": "cached editor retained",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "name": "cached editor has no stale error",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "read-deactivate",
+      "name": "read count after cached return",
+      "actual": 2
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "read-deactivate",
+      "name": "exact returned list",
+      "actual": "1"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "read-deactivate",
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "read-deactivate",
+      "name": "no unexpected network",
+      "actual": []
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "original write method",
+      "actual": "POST"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "original expected version presence",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "serial pending disabled",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "new window pending label",
+      "actual": "等待上一项保存…"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "new editor remains",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "new draft name retained",
+      "actual": "新窗口草稿"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "feedback belongs to current window",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "no stale editor request id",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "name": "stale success does not reload",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "serial pending disabled",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "new window pending label",
+      "actual": "等待上一项保存…"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "new editor remains",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "new draft name retained",
+      "actual": "新窗口草稿"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "feedback belongs to current window",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "no stale editor request id",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "name": "stale success does not reload",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "name": "original write method",
+      "actual": "POST"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "name": "original expected version presence",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "name": "save is confirmed",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "name": "refresh fact matches outcome",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "name": "current save closes editor",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "save is confirmed",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "refresh fact matches outcome",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "current save closes editor",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "failed refresh retained snapshot",
+      "actual": "1"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "manual retry retained",
+      "actual": 3
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "name": "obsolete save-refresh caption cleared on retry",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "name": "original write method",
+      "actual": "POST"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "name": "original expected version presence",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "name": "editor survives earlier refresh",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "name": "old success not posted into new window session",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "name": "editor technical id isolated from read",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "name": "no inactive followup read",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "name": "cached editor retained",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "name": "cached editor has no stale error",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "name": "original write method",
+      "actual": "PUT"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "name": "original expected version presence",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "name": "write keeps idempotency",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "name": "no inactive followup read",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "name": "cached editor retained",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "name": "cached editor has no stale error",
+      "actual": 0
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "read-deactivate",
+      "name": "read count after cached return",
+      "actual": 2
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "read-deactivate",
+      "name": "exact returned list",
+      "actual": "1"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "read-deactivate",
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "read-deactivate",
+      "name": "no unexpected network",
+      "actual": []
+    }
+  ],
+  "screenshots": [
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-success-create",
+      "state": "pending-new",
+      "file": "production-390-late-success-create-pending-new.png",
+      "sha256": "3ccc10318ee03d6aca0e23de4263f3029cbbb9a5268fcbca3bd2468324468ea0"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-success-create",
+      "state": "settled",
+      "file": "production-390-late-success-create-settled.png",
+      "sha256": "cf662f25ede96e3773d1c44c6d6278b764fde9f7008dddf7d5dee9baf2ab061e"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "state": "pending-new",
+      "file": "production-390-late-failure-edit-pending-new.png",
+      "sha256": "3ccc10318ee03d6aca0e23de4263f3029cbbb9a5268fcbca3bd2468324468ea0"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "state": "settled",
+      "file": "production-390-late-failure-edit-settled.png",
+      "sha256": "cf662f25ede96e3773d1c44c6d6278b764fde9f7008dddf7d5dee9baf2ab061e"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "state": "settled",
+      "file": "production-390-refresh-success-create-settled.png",
+      "sha256": "bf682afb9e5bbad791c3f4ee41c89180325ff86108b648b1996edd951eb1ae14"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "state": "settled",
+      "file": "production-390-refresh-failure-edit-settled.png",
+      "sha256": "89b3202433e0784a521f7863303db0f9d66203d3b9d807efed27f3eb152c211b"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "state": "retried",
+      "file": "production-390-refresh-failure-edit-retried.png",
+      "sha256": "af99b8557c5ce71a595e60a71a06f4154e14f629da6fd027285cb438b16cae83"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "state": "pending-new",
+      "file": "production-390-reload-new-create-pending-new.png",
+      "sha256": "77a6fb8d430d38b2a9fc09f55c5f17baba8733bf66502a5dbda746a179b78cba"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "state": "settled",
+      "file": "production-390-reload-new-create-settled.png",
+      "sha256": "5a349bd3859c6e3f6c0fb27949e1f351ba573c7d2fae700a23d9fa0817addc07"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "state": "away",
+      "file": "production-390-inactive-success-edit-away.png",
+      "sha256": "5fc70d788ed523f8608a24182688214740b8a03a6bef75ec05c0625d6401a05a"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "state": "returned",
+      "file": "production-390-inactive-success-edit-returned.png",
+      "sha256": "dc65f7fd8e24eb16fd750fa4a7435e746bdc58caf86cf4303eb00847962ed6a5"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "state": "away",
+      "file": "production-390-inactive-failure-edit-away.png",
+      "sha256": "5fc70d788ed523f8608a24182688214740b8a03a6bef75ec05c0625d6401a05a"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "state": "returned",
+      "file": "production-390-inactive-failure-edit-returned.png",
+      "sha256": "dc65f7fd8e24eb16fd750fa4a7435e746bdc58caf86cf4303eb00847962ed6a5"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "read-deactivate",
+      "state": "away",
+      "file": "production-390-read-deactivate-away.png",
+      "sha256": "cf10d74a3f78b3f176615dfdbbef28d5b4ad8075e836f30fb45590e5fc77d084"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "read-deactivate",
+      "state": "returned",
+      "file": "production-390-read-deactivate-returned.png",
+      "sha256": "059311f170a8de42acbbec4a6a89fc434c90a82a74b337811d813fd7140c0941"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "state": "pending-new",
+      "file": "production-1440-late-success-create-pending-new.png",
+      "sha256": "9a3db912d1d764423b9024f4088d84dd6ec912b24aa5836cf3f78a7e68ca3c0f"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "state": "settled",
+      "file": "production-1440-late-success-create-settled.png",
+      "sha256": "a2b5b1c18ad4b4839e57b15d5fd666b506939a0a2adec41c93ffecd6e519bcf6"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "state": "pending-new",
+      "file": "production-1440-late-failure-edit-pending-new.png",
+      "sha256": "9a3db912d1d764423b9024f4088d84dd6ec912b24aa5836cf3f78a7e68ca3c0f"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "state": "settled",
+      "file": "production-1440-late-failure-edit-settled.png",
+      "sha256": "a2b5b1c18ad4b4839e57b15d5fd666b506939a0a2adec41c93ffecd6e519bcf6"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "state": "settled",
+      "file": "production-1440-refresh-success-create-settled.png",
+      "sha256": "f16a3911629d8a5221b8b5f763a9dfa5afc6047a974a93d4f8f1209e0f98c1d4"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "state": "settled",
+      "file": "production-1440-refresh-failure-edit-settled.png",
+      "sha256": "efb603c147f9799b9fdc2c4899ea46ead8734147c68be223516eeb68fabaca2c"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "state": "retried",
+      "file": "production-1440-refresh-failure-edit-retried.png",
+      "sha256": "3c42a01296d0cd536b0be829bd9682629052d73dec65b56a7ddbfb16b4ffffdd"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "state": "pending-new",
+      "file": "production-1440-reload-new-create-pending-new.png",
+      "sha256": "1a0901b5881afd4060254adb5e74aa8c2557c12c1bc51b5f86b0371514a5c1ba"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "state": "settled",
+      "file": "production-1440-reload-new-create-settled.png",
+      "sha256": "5ef0c506fe44a6cf1d9a0a32c79c12c97d3204e6ccc7d58f0ce9232fade18f57"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "state": "away",
+      "file": "production-1440-inactive-success-edit-away.png",
+      "sha256": "a493dd2cda54fd0ca9708f02682a58aa38d9ddec4f1290d4cdc59801fb8b9aaf"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "state": "returned",
+      "file": "production-1440-inactive-success-edit-returned.png",
+      "sha256": "9da99d265ab7afc38a0bff102c16209989a3018cda22b5c00e7e96497e02f53d"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "state": "away",
+      "file": "production-1440-inactive-failure-edit-away.png",
+      "sha256": "a493dd2cda54fd0ca9708f02682a58aa38d9ddec4f1290d4cdc59801fb8b9aaf"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "state": "returned",
+      "file": "production-1440-inactive-failure-edit-returned.png",
+      "sha256": "9da99d265ab7afc38a0bff102c16209989a3018cda22b5c00e7e96497e02f53d"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "read-deactivate",
+      "state": "away",
+      "file": "production-1440-read-deactivate-away.png",
+      "sha256": "a493dd2cda54fd0ca9708f02682a58aa38d9ddec4f1290d4cdc59801fb8b9aaf"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "read-deactivate",
+      "state": "returned",
+      "file": "production-1440-read-deactivate-returned.png",
+      "sha256": "b463d08e9ffd02c289c518b9879eb136afe4ba5d30586f5bd725e2d880f8d7fc"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-success-create",
+      "state": "pending-new",
+      "file": "review-390-late-success-create-pending-new.png",
+      "sha256": "5d30dcef0f4343c5c1c01547a95c52546e97510c4bc58043e0bcd7b08f7e6714"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-success-create",
+      "state": "settled",
+      "file": "review-390-late-success-create-settled.png",
+      "sha256": "600395d1d9a61dac51d3687074385c977107696a06e986f996b4b7ece4ad3001"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "state": "pending-new",
+      "file": "review-390-late-failure-edit-pending-new.png",
+      "sha256": "5d30dcef0f4343c5c1c01547a95c52546e97510c4bc58043e0bcd7b08f7e6714"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "state": "settled",
+      "file": "review-390-late-failure-edit-settled.png",
+      "sha256": "600395d1d9a61dac51d3687074385c977107696a06e986f996b4b7ece4ad3001"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "state": "settled",
+      "file": "review-390-refresh-success-create-settled.png",
+      "sha256": "559c1c6ff14d92fd7da63e48dc1e86f4700ed10435ccb5fd75750d30673c26c2"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "state": "settled",
+      "file": "review-390-refresh-failure-edit-settled.png",
+      "sha256": "5685cc1a78b937358d1041b2314bf4b3302a16cf2519d6c678ddb8822461c1bd"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "state": "retried",
+      "file": "review-390-refresh-failure-edit-retried.png",
+      "sha256": "83b80337a9a0591287819a0ce2fbd3888213b6bf85483b130652d753155c06cc"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "state": "pending-new",
+      "file": "review-390-reload-new-create-pending-new.png",
+      "sha256": "801f2a9f523721ebd50724d720668d76b6ad12a80d2ac0125befeff734735fd8"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "state": "settled",
+      "file": "review-390-reload-new-create-settled.png",
+      "sha256": "a9fda9b5b346d61e08a2756d2d79ce6e9dcda8bc12e9382521e273518fad44fa"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "state": "away",
+      "file": "review-390-inactive-success-edit-away.png",
+      "sha256": "1eae36e3e842d617f70ffe7353f23b2434baaea8a013d8b6ec5eea27738ae13d"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "state": "returned",
+      "file": "review-390-inactive-success-edit-returned.png",
+      "sha256": "1eda5fb561042be5bdb23fefe9888e7fe507ac201d5cbcd114f42d8ad74327fd"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "state": "away",
+      "file": "review-390-inactive-failure-edit-away.png",
+      "sha256": "1eae36e3e842d617f70ffe7353f23b2434baaea8a013d8b6ec5eea27738ae13d"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "state": "returned",
+      "file": "review-390-inactive-failure-edit-returned.png",
+      "sha256": "1eda5fb561042be5bdb23fefe9888e7fe507ac201d5cbcd114f42d8ad74327fd"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "read-deactivate",
+      "state": "away",
+      "file": "review-390-read-deactivate-away.png",
+      "sha256": "1eae36e3e842d617f70ffe7353f23b2434baaea8a013d8b6ec5eea27738ae13d"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "read-deactivate",
+      "state": "returned",
+      "file": "review-390-read-deactivate-returned.png",
+      "sha256": "09e65700edddf9a5d46bd56dc6c9989f7f5a8cb12a75702d87ed8cf93fc72435"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "state": "pending-new",
+      "file": "review-1440-late-success-create-pending-new.png",
+      "sha256": "38e3dadef2675ae133cea8506472b8bbb769e8728cc21c0062f8d211b6767245"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "state": "settled",
+      "file": "review-1440-late-success-create-settled.png",
+      "sha256": "a11c0dda1b560dd98a467043e1cc9f5b34d1f296b82fcb04935757df20bcdb89"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "state": "pending-new",
+      "file": "review-1440-late-failure-edit-pending-new.png",
+      "sha256": "9f761221d3597dd9fb4c3291633913e2fdd242e7623bfa249bf83b3969831c0e"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "state": "settled",
+      "file": "review-1440-late-failure-edit-settled.png",
+      "sha256": "a11c0dda1b560dd98a467043e1cc9f5b34d1f296b82fcb04935757df20bcdb89"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "state": "settled",
+      "file": "review-1440-refresh-success-create-settled.png",
+      "sha256": "9b30802cc59653544a0b8accd2ad1fd610d74f0fbeb5d8ab64f8a9330215e327"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "state": "settled",
+      "file": "review-1440-refresh-failure-edit-settled.png",
+      "sha256": "aad297811ce92cacce5cf62426e9be6a2ebafbc33519bba23994e2634cf32821"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "state": "retried",
+      "file": "review-1440-refresh-failure-edit-retried.png",
+      "sha256": "35405377e041edb7c417f539a88ed77deaa5a6ddeff9bee4553ff56e54741fac"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "state": "pending-new",
+      "file": "review-1440-reload-new-create-pending-new.png",
+      "sha256": "e8a231b4c3b81fc7ea265aabedc02a233ece2465e2d1947a98fb1a1e25b797e3"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "state": "settled",
+      "file": "review-1440-reload-new-create-settled.png",
+      "sha256": "e18b89c2cb29d3b74e170f40009b419def94790a9793b39a236258a174d34057"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "state": "away",
+      "file": "review-1440-inactive-success-edit-away.png",
+      "sha256": "787b28c615dd05a9c1811302c0baf8b2b3d7f95930385cb38bb85a49dab0b84b"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "state": "returned",
+      "file": "review-1440-inactive-success-edit-returned.png",
+      "sha256": "6a1706c98311f9f68c05dfd2b78753095fbd191e249c2db9dff98aa111a2e925"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "state": "away",
+      "file": "review-1440-inactive-failure-edit-away.png",
+      "sha256": "787b28c615dd05a9c1811302c0baf8b2b3d7f95930385cb38bb85a49dab0b84b"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "state": "returned",
+      "file": "review-1440-inactive-failure-edit-returned.png",
+      "sha256": "6a1706c98311f9f68c05dfd2b78753095fbd191e249c2db9dff98aa111a2e925"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "read-deactivate",
+      "state": "away",
+      "file": "review-1440-read-deactivate-away.png",
+      "sha256": "787b28c615dd05a9c1811302c0baf8b2b3d7f95930385cb38bb85a49dab0b84b"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "read-deactivate",
+      "state": "returned",
+      "file": "review-1440-read-deactivate-returned.png",
+      "sha256": "eb4293f9851241a2b9b7d5acdf7b6c8fe44023b40fdf3449d82c69c8076dad49"
+    }
+  ],
+  "observations": [
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-success-create",
+      "requests": [
+        {
+          "scenario": "late-success-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "late-success-create",
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "idempotencyPresent": true,
+          "status": 201
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "requests": [
+        {
+          "scenario": "late-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "late-failure-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 409
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "requests": [
+        {
+          "scenario": "refresh-success-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "refresh-success-create",
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "idempotencyPresent": true,
+          "status": 201
+        },
+        {
+          "scenario": "refresh-success-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "requests": [
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 200
+        },
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 500
+        },
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "requests": [
+        {
+          "scenario": "reload-new-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "reload-new-create",
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "idempotencyPresent": true,
+          "status": 201
+        },
+        {
+          "scenario": "reload-new-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "requests": [
+        {
+          "scenario": "inactive-success-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "inactive-success-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "requests": [
+        {
+          "scenario": "inactive-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "inactive-failure-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 409
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "scenario": "read-deactivate",
+      "requests": [
+        {
+          "scenario": "read-deactivate",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "read-deactivate",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "requests": [
+        {
+          "scenario": "late-success-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "late-success-create",
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "idempotencyPresent": true,
+          "status": 201
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "requests": [
+        {
+          "scenario": "late-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "late-failure-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 409
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "requests": [
+        {
+          "scenario": "refresh-success-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "refresh-success-create",
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "idempotencyPresent": true,
+          "status": 201
+        },
+        {
+          "scenario": "refresh-success-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "requests": [
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 200
+        },
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 500
+        },
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "requests": [
+        {
+          "scenario": "reload-new-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "reload-new-create",
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "idempotencyPresent": true,
+          "status": 201
+        },
+        {
+          "scenario": "reload-new-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "requests": [
+        {
+          "scenario": "inactive-success-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "inactive-success-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "requests": [
+        {
+          "scenario": "inactive-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "inactive-failure-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 409
+        }
+      ]
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "scenario": "read-deactivate",
+      "requests": [
+        {
+          "scenario": "read-deactivate",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "read-deactivate",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-success-create",
+      "requests": [
+        {
+          "scenario": "late-success-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "late-success-create",
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "idempotencyPresent": true,
+          "status": 201
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "late-failure-edit",
+      "requests": [
+        {
+          "scenario": "late-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "late-failure-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 409
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-success-create",
+      "requests": [
+        {
+          "scenario": "refresh-success-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "refresh-success-create",
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "idempotencyPresent": true,
+          "status": 201
+        },
+        {
+          "scenario": "refresh-success-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "refresh-failure-edit",
+      "requests": [
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 200
+        },
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 500
+        },
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "reload-new-create",
+      "requests": [
+        {
+          "scenario": "reload-new-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "reload-new-create",
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "idempotencyPresent": true,
+          "status": 201
+        },
+        {
+          "scenario": "reload-new-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-success-edit",
+      "requests": [
+        {
+          "scenario": "inactive-success-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "inactive-success-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "inactive-failure-edit",
+      "requests": [
+        {
+          "scenario": "inactive-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "inactive-failure-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 409
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "scenario": "read-deactivate",
+      "requests": [
+        {
+          "scenario": "read-deactivate",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "read-deactivate",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-success-create",
+      "requests": [
+        {
+          "scenario": "late-success-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "late-success-create",
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "idempotencyPresent": true,
+          "status": 201
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "late-failure-edit",
+      "requests": [
+        {
+          "scenario": "late-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "late-failure-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 409
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-success-create",
+      "requests": [
+        {
+          "scenario": "refresh-success-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "refresh-success-create",
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "idempotencyPresent": true,
+          "status": 201
+        },
+        {
+          "scenario": "refresh-success-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "refresh-failure-edit",
+      "requests": [
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 200
+        },
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 500
+        },
+        {
+          "scenario": "refresh-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "reload-new-create",
+      "requests": [
+        {
+          "scenario": "reload-new-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "reload-new-create",
+          "method": "POST",
+          "path": "/api/v1/platform/providers",
+          "body": {
+            "code": "review_source",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "login_expired",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": null,
+            "owner_label": "平台运营",
+            "terms_review_status": "pending",
+            "terms_reference_url": null,
+            "terms_version": null,
+            "terms_expires_at": null,
+            "status": "disabled"
+          },
+          "idempotencyPresent": true,
+          "status": 201
+        },
+        {
+          "scenario": "reload-new-create",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-success-edit",
+      "requests": [
+        {
+          "scenario": "inactive-success-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "inactive-success-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "inactive-failure-edit",
+      "requests": [
+        {
+          "scenario": "inactive-failure-edit",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "inactive-failure-edit",
+          "method": "PUT",
+          "path": "/api/v1/platform/providers/00000000-0000-4000-8000-000000000702",
+          "body": {
+            "code": "public_signal_rss",
+            "name": "审核保存",
+            "target_url": "https://example.test/feed",
+            "access_mode": "public_rss",
+            "markets": [
+              "US",
+              "CA"
+            ],
+            "languages": [
+              "en-US"
+            ],
+            "fields": [
+              "title",
+              "summary",
+              "published_at",
+              "canonical_url",
+              "publisher"
+            ],
+            "schedule_minutes": 30,
+            "concurrency_limit": 1,
+            "timeout_ms": 15000,
+            "retry_limit": 2,
+            "circuit_failure_threshold": 5,
+            "dedupe_key": "canonical_url",
+            "retention_days": 365,
+            "failure_rules": [
+              "timeout",
+              "rate_limited",
+              "parser_changed",
+              "empty"
+            ],
+            "parser_version": "v1",
+            "healthcheck_url": "https://example.test/health",
+            "owner_label": "平台运营",
+            "terms_review_status": "approved",
+            "terms_reference_url": "https://example.test/terms",
+            "terms_version": "2026-08",
+            "terms_expires_at": "2027-08-07T09:00:00.000Z",
+            "status": "disabled",
+            "id": "00000000-0000-4000-8000-000000000702",
+            "terms_reviewed_at": "2026-08-07T17:00:00.000Z",
+            "version": 1,
+            "updated_at": "2026-08-07T17:00:00.000Z",
+            "expected_version": 1
+          },
+          "idempotencyPresent": true,
+          "status": 409
+        }
+      ]
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "scenario": "read-deactivate",
+      "requests": [
+        {
+          "scenario": "read-deactivate",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        },
+        {
+          "scenario": "read-deactivate",
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "body": null,
+          "idempotencyPresent": false,
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "processesClosed": true
+}
