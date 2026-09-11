@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -56,15 +57,19 @@ test("P43 create composition preserves full script, conditions, bindings, native
     /drift/,
   );
 });
-test("P43 creation evidence pins current production plus review-only composition and every PNG", () => {
+test("P43 creation evidence pins captured production plus review-only composition and every PNG", () => {
   const e = JSON.parse(read(`${folder}/evidence.json`));
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
   assert.equal(e.checks.length, 293);
   assert.equal(e.screenshots.length, 86);
-  for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+  for (const [f, sha] of Object.entries(e.sourceHashes))
+    assert.equal(hash(historicalUserCreationSource(f, read(f))), sha, f);
   assert.equal(e.transformedHashes[child], hash(userCreatePreview(read(child))));
-  assert.equal(e.transformedHashes[parent], hash(userPagePreview(read(parent), "parent")));
+  assert.equal(
+    e.transformedHashes[parent],
+    hash(userPagePreview(historicalUserCreationSource(parent, read(parent)), "parent")),
+  );
   assert.deepEqual(
     readdirSync(folder).sort(),
     ["index.html", "evidence.json", ...e.screenshots.map((s) => s.file)].sort(),

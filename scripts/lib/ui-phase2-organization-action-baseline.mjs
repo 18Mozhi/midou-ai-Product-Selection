@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { historicalUserCreationSource } from "./ui-phase2-user-creation-baseline.mjs";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 
@@ -25,6 +26,7 @@ export function historicalOrganizationActionSource(file, source) {
   source = source.replaceAll("\r\n", "\n");
   const revision = organizationActionRevisions[file];
   if (!revision || hash(source) === revision.before) return source;
+  source = historicalUserCreationSource(file, source);
   assert.equal(hash(source), revision.after, `Unreviewed organization action source: ${file}`);
   if (!cache.has(file)) {
     const old = execFileSync("git", ["show", `${organizationActionBaseline}:${file}`], {

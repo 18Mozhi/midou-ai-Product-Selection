@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
 import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
@@ -15,7 +16,12 @@ test("P42 full app capture binds actual loaded sources and exact screenshot inve
   assert.equal(evidence.screenshots.length, 44);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
     assert.equal(
-      hash(historicalFilterResetSource(file, historicalTokenCopySource(file, read(file)))),
+      hash(
+        historicalUserCreationSource(
+          file,
+          historicalFilterResetSource(file, historicalTokenCopySource(file, read(file))),
+        ),
+      ),
       sha,
       file,
     );

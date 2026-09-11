@@ -1,0 +1,1773 @@
+{
+  "kind": "P43-CREATE-LIFECYCLE",
+  "mode": "baseline-diagnosis",
+  "approval": "not-user-approved",
+  "sourceHashes": {
+    "apps/api/src/mysql-platform-account-repository.ts": "96cc13077b24ba17643adc9b13ca14cd2e71ea49d3e13d3abceb7b86ed7b87c5",
+    "apps/api/src/platform-account-service.ts": "189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "3ac56e41a5f5b78a4f01d6ee4298dacd0c80f243f414a7a48de8105eb292aa76",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-organization-actions.ts": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/user-create-preview.css": "fc6c42fc18d3149ba6747183cbbc8198de74e65054ea68fa21c09272e8c67861",
+    "design-plans/ui-phase-2-2026-09-07/implementation/user-page-preview.css": "8b3d914287a2ae901483c86003f0a1caf0fe9e2796112f5ea374e80886c31c43",
+    "scripts/lib/ui-phase2-user-create-preview.mjs": "ea006f86efeac01336078c51081940e5c41f460d15a23c9ac48f9d48227b9e05",
+    "scripts/lib/ui-phase2-user-page-preview.mjs": "f26a37092547e5866112e43d4248ca6e8dc504949263cb8fb8919aa3a336ae83",
+    "scripts/lib/ui-phase2-user-password-preview.mjs": "61341abcee2dfcef6a64f803a9e8761914bf418cfd0a6042526f15443d5545bb",
+    "scripts/verify-ui-phase2-user-create-lifecycle.mjs": "a6bae20c34871d462d689977c643fb913ab9333b8feb090b8cd91cbb4a98a36e",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "d00f2fecd2ce86da2be59a36fc193cc55ad9895ff96044f010bc5f553b4610de",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "7a7e7c3f33c49af35d402856438b0c3448ceabf351cd34a19a4819a3a1ec6dbe",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "51e1fe9964adc13269c9774ac5d45fb6c802106b3082f2ba058d4b4a869f6834"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "open state after response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "error belongs to original still-open form",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "original reread behavior preserved",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "open state after response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "error belongs to original still-open form",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "original reread behavior preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "open state after response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "error belongs to original still-open form",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "original reread behavior preserved",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "open state after response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "error belongs to original still-open form",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "original reread behavior preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "reopened native dialog before old response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "new draft present before old response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "open state after response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "error belongs to original still-open form",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "new email is unchanged",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "new password is unchanged",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "original reread behavior preserved",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "reopened native dialog before old response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "new draft present before old response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "open state after response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "error belongs to original still-open form",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "new email is unchanged",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "new password is unchanged",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "original reread behavior preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "reopened native dialog before old response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "new draft present before old response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "open state after response",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "error belongs to original still-open form",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "new email is unchanged",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "new password is unchanged",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "original reread behavior preserved",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "reopened native dialog before old response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "new draft present before old response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "open state after response",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "error belongs to original still-open form",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "new email is unchanged",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "new password is unchanged",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "original reread behavior preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "open state after response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "error belongs to original still-open form",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "original reread behavior preserved",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "open state after response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "error belongs to original still-open form",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "original reread behavior preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "open state after response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "error belongs to original still-open form",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "original reread behavior preserved",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "open state after response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "error belongs to original still-open form",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "original reread behavior preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "reopened native dialog before old response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "new draft present before old response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "open state after response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "error belongs to original still-open form",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "new email is unchanged",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "new password is unchanged",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "original reread behavior preserved",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "reopened native dialog before old response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "new draft present before old response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "open state after response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "error belongs to original still-open form",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "new email is unchanged",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "new password is unchanged",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "original reread behavior preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "reopened native dialog before old response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "new draft present before old response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "open state after response",
+      "actual": false
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "error belongs to original still-open form",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "new email is unchanged",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "new password is unchanged",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "original success notification preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "original reread behavior preserved",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "name": "no unexpected traffic",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "one request pending",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "reopened native dialog before old response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "new draft present before old response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "open state after response",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "error belongs to original still-open form",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "new email is unchanged",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "new password is unchanged",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "original success notification preserved",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "original reread behavior preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "no second create",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "no browser errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "name": "no unexpected traffic",
+      "actual": []
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-normal-success-pending.png",
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "32fef1ea10c25c427ded37c198844e03cf77d206ff775ca5d41af14b15127ee2"
+    },
+    {
+      "file": "390-normal-success-after-response.png",
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "103cf31ab69f8df8e8e5d3ebd2486a6712eab79991d89a038967a5bd75a85c12"
+    },
+    {
+      "file": "390-normal-failure-pending.png",
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "32fef1ea10c25c427ded37c198844e03cf77d206ff775ca5d41af14b15127ee2"
+    },
+    {
+      "file": "390-normal-failure-after-response.png",
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "98e713a3e6cf71fba7730ce36eb1db1be032562148f85ff4e30c88d41242fa91"
+    },
+    {
+      "file": "390-close-success-pending.png",
+      "width": 390,
+      "scenario": "close",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "32fef1ea10c25c427ded37c198844e03cf77d206ff775ca5d41af14b15127ee2"
+    },
+    {
+      "file": "390-close-success-after-response.png",
+      "width": 390,
+      "scenario": "close",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "103cf31ab69f8df8e8e5d3ebd2486a6712eab79991d89a038967a5bd75a85c12"
+    },
+    {
+      "file": "390-close-failure-pending.png",
+      "width": 390,
+      "scenario": "close",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "32fef1ea10c25c427ded37c198844e03cf77d206ff775ca5d41af14b15127ee2"
+    },
+    {
+      "file": "390-close-failure-after-response.png",
+      "width": 390,
+      "scenario": "close",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "736fa2cbe15b0ec73f3199c1ea9522fd4041b9a4993236c6d320837b5ed9e568"
+    },
+    {
+      "file": "390-reopen-success-pending.png",
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "32fef1ea10c25c427ded37c198844e03cf77d206ff775ca5d41af14b15127ee2"
+    },
+    {
+      "file": "390-reopen-success-after-response.png",
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "a50b96777fb17fb451ff01978ee0f88fdd8bdb346f0fb9afe0f5ea6142756216"
+    },
+    {
+      "file": "390-reopen-failure-pending.png",
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "32fef1ea10c25c427ded37c198844e03cf77d206ff775ca5d41af14b15127ee2"
+    },
+    {
+      "file": "390-reopen-failure-after-response.png",
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "5a29192c4c4e4946e78f5188a5051d54c0f1da637cc1bdc97d2c5294e5310891"
+    },
+    {
+      "file": "390-reopen-twice-success-pending.png",
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "32fef1ea10c25c427ded37c198844e03cf77d206ff775ca5d41af14b15127ee2"
+    },
+    {
+      "file": "390-reopen-twice-success-after-response.png",
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "41c5f010fb902d38d04f6d603a7822daaca61a407275da79e2c9263c45b15241"
+    },
+    {
+      "file": "390-reopen-twice-failure-pending.png",
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "32fef1ea10c25c427ded37c198844e03cf77d206ff775ca5d41af14b15127ee2"
+    },
+    {
+      "file": "390-reopen-twice-failure-after-response.png",
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "5a29192c4c4e4946e78f5188a5051d54c0f1da637cc1bdc97d2c5294e5310891"
+    },
+    {
+      "file": "1440-normal-success-pending.png",
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "273edbdcd3dd2a9d52ed186ec7d9e1449c6c6f30f16bcbcebfc88635a16a58d5"
+    },
+    {
+      "file": "1440-normal-success-after-response.png",
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "e3e325a5c177bfb3cdf2a3f6c78ccdd353b1ab877f4ec5eb00bb3ea3afe3a397"
+    },
+    {
+      "file": "1440-normal-failure-pending.png",
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "273edbdcd3dd2a9d52ed186ec7d9e1449c6c6f30f16bcbcebfc88635a16a58d5"
+    },
+    {
+      "file": "1440-normal-failure-after-response.png",
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "267e71761000e26b873c4bed7fc385b705d359fd7e349ce02a12ae5f16decabe"
+    },
+    {
+      "file": "1440-close-success-pending.png",
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "273edbdcd3dd2a9d52ed186ec7d9e1449c6c6f30f16bcbcebfc88635a16a58d5"
+    },
+    {
+      "file": "1440-close-success-after-response.png",
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "f1247422b09d4f66e9412dbcf6f676c4777d4d55d6e7525ddf3539d672e731ce"
+    },
+    {
+      "file": "1440-close-failure-pending.png",
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "fc8e734b9e4d3a6ab4dde80571502357507e6f1f68ba72648c980901e6954842"
+    },
+    {
+      "file": "1440-close-failure-after-response.png",
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "d0adccd57a6dfc6795e4240e5ebabceb640818df527f1e87ebaecb5862052558"
+    },
+    {
+      "file": "1440-reopen-success-pending.png",
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "fc8e734b9e4d3a6ab4dde80571502357507e6f1f68ba72648c980901e6954842"
+    },
+    {
+      "file": "1440-reopen-success-after-response.png",
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "8c4c6f26dca6abd5fb8a9b81bfb392b158c2499419a05fccd68cf881d38c7265"
+    },
+    {
+      "file": "1440-reopen-failure-pending.png",
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "273edbdcd3dd2a9d52ed186ec7d9e1449c6c6f30f16bcbcebfc88635a16a58d5"
+    },
+    {
+      "file": "1440-reopen-failure-after-response.png",
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "7380fb2bc06615674c99917d5d21ac901ccd656d03633bcc71f920c05418ccb1"
+    },
+    {
+      "file": "1440-reopen-twice-success-pending.png",
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "state": "pending",
+      "sha256": "273edbdcd3dd2a9d52ed186ec7d9e1449c6c6f30f16bcbcebfc88635a16a58d5"
+    },
+    {
+      "file": "1440-reopen-twice-success-after-response.png",
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "state": "after-response",
+      "sha256": "f45f66cc853011046f70724559ed76caee0520f37f8171b100a1af63c452f10d"
+    },
+    {
+      "file": "1440-reopen-twice-failure-pending.png",
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "state": "pending",
+      "sha256": "273edbdcd3dd2a9d52ed186ec7d9e1449c6c6f30f16bcbcebfc88635a16a58d5"
+    },
+    {
+      "file": "1440-reopen-twice-failure-after-response.png",
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "state": "after-response",
+      "sha256": "260d9d6b340c460407fdc1bd5905fde3a50f0269e6fdc39d151ea75fe8e663b5"
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 390,
+      "scenario": "normal",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 390,
+      "scenario": "close",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 390,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 390,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 1440,
+      "scenario": "normal",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 1440,
+      "scenario": "close",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "success",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    },
+    {
+      "width": 1440,
+      "scenario": "reopen-twice",
+      "outcome": "failure",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/platform/accounts/users",
+          "body": "exact five-field synthetic body matched; password omitted"
+        }
+      ],
+      "errors": [],
+      "unexpected": [],
+      "behavior": "baseline diagnosis, not desired behavior"
+    }
+  ],
+  "processesClosed": true,
+  "scope": "Actual Vue parent/native dialog; review-only C composition. Intercepted synthetic requests only. Cancel/reopen during POST; no real accounts, full App/KeepAlive, permission or production acceptance."
+}

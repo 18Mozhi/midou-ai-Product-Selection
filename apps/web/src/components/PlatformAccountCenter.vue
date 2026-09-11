@@ -5,6 +5,7 @@ import type { RoleCapabilitySummary } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
 import { usePlatformUserDetail } from "../use-platform-user-detail";
 import { usePlatformOrganizationActions } from "../use-platform-organization-actions";
+import { useUserCreationOwner } from "../use-user-creation-owner";
 import type { AccountData, AccountTab, MembershipInput } from "../platform-account-types";
 import AppIcon from "./AppIcon.vue";
 import OrganizationCreationWizard from "./OrganizationCreationWizard.vue";
@@ -74,6 +75,10 @@ const props = withDefaults(
     organization_role_code: "member",
   }),
   passwordForm = reactive({ temporary_password: "" });
+const createUserOwner = useUserCreationOwner(
+  () => createUserOpen.value,
+  () => props.routePath,
+);
 const {
   detailOpen,
   detail,
@@ -483,6 +488,7 @@ function syncOrganizationRoute() {
   organizationMissing.value = false;
 }
 function openCreateUser(asAdmin = false) {
+  createUserOwner.invalidate();
   createUserError.value = "";
   userForm.email = "";
   userForm.temporary_password = "";
@@ -496,6 +502,7 @@ function closeCreateUser() {
   createUserError.value = "";
 }
 async function createUser() {
+  const isCurrent = createUserOwner.capture();
   createUserError.value = "";
   if (
     await write(
@@ -506,10 +513,10 @@ async function createUser() {
         platform_role_code: userForm.platform_role_code || null,
       },
       "POST",
-      (value) => (createUserError.value = value),
+      (value) => isCurrent() && (createUserError.value = value),
     )
   ) {
-    createUserOpen.value = false;
+    if (isCurrent()) createUserOpen.value = false;
     message.value = "账号已创建；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。";
   }
 }

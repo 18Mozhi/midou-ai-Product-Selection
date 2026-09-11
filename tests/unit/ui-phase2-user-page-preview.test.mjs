@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
 import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -78,12 +79,19 @@ test("P43 actual Vue review evidence pins captured source revisions and exact im
   assert.equal(evidence.screenshots.length, 68);
   assert.equal(Object.keys(evidence.sourceHashes).length, 36);
   for (const [file, value] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(historicalFilterResetSource(file, read(file))), value, file);
+    assert.equal(
+      hash(historicalUserCreationSource(file, historicalFilterResetSource(file, read(file)))),
+      value,
+      file,
+    );
   for (const [file, surface] of [
     [parent, "parent"],
     [detail, "detail"],
   ])
-    assert.equal(hash(userPagePreview(read(file), surface)), evidence.transformedHashes[file]);
+    assert.equal(
+      hash(userPagePreview(historicalUserCreationSource(file, read(file)), surface)),
+      evidence.transformedHashes[file],
+    );
   assert.deepEqual(
     readdirSync(folder).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((s) => s.file)].sort(),

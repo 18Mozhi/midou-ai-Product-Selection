@@ -9,7 +9,7 @@
 | 文件 | 历史 LF SHA-256 | 当前 LF SHA-256 | 已有依据 |
 | --- | --- | --- | --- |
 | apps/web/src/components/PlatformDashboard.vue | 7935e4cdeca4991615f554ff0c66cf5e623454269fa0771ff06b861f15ca5a95 | b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498 | ea005452 历史时间窗/在途读取修复；[当前语义合同](platform-overview-semantic-contract-review.md) |
-| apps/web/src/components/PlatformAccountCenter.vue | 2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474 | 3ac56e41a5f5b78a4f01d6ee4298dacd0c80f243f414a7a48de8105eb292aa76 | b6da851d 组织操作归属抽取；[修复与回归](P42-WRITE-OWNERSHIP-REVIEW.md) |
+| apps/web/src/components/PlatformAccountCenter.vue | 2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474 | ec3f2b6535f9625c3fd5d1c3542679ff8887bf65b727e5696b556945a45a861f | b6da851d组织操作抽取后追加[创建回执归属](P43-CREATE-OWNERSHIP-REVIEW.md)；01af0262时点3ac56e41保留为历史图依据 |
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa | b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99 | [焦点与缓存停用增量](responsive-detail-focus-contract-review.md) |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 | a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011 | [重置禁用焦点修复](FILTER-RESET-FOCUS-REVIEW.md) |
 
@@ -17,11 +17,12 @@
 
 只替换 S（ResponsiveDataView）这一个明确别名的五个候选，读取已有 [当前动作归属表](responsive-detail-focus-contract-review.md)，不重复维护一套新签名。原表五个历史身份仍严格核对；其中三个新位置接续、两个身份不变。其余123个候选和全部24个 v-model 与真实Vue逐项相等。候选身份不能替代交互语义、运行时动作分母、动态弹窗或所有消费组件验收。
 
-PlatformAccountCenter 已抽出组织操作组合函数，因此当前检查增加该真实依赖，不把原32源文件误称完整当前调用链。原32源历史表保留，当前33源是本工具的明确静态核对范围，不代表全项目源码分母。
+PlatformAccountCenter 已抽出组织操作组合函数并增加创建反馈归属，因此当前检查增加这两个真实依赖，不把原32源文件误称完整当前调用链。原32源历史表保留，当前34源是本工具的明确静态核对范围，不代表全项目源码分母。
 
 | 新增核对文件 | 当前 LF SHA-256 |
 | --- | --- |
 | apps/web/src/use-platform-organization-actions.ts | 3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb |
+| apps/web/src/use-user-creation-owner.ts | cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e |
 
 ## 运行与失败边界
 
@@ -35,6 +36,8 @@ node --test tests/unit/ui-phase2-platform-current-contract.test.mjs
 此接续解决此前独立检查的历史漂移失败；不豁免测试，也不推定P43等待审组合已通过。视觉回归、真实权限、完整App、全部73页重构与宝塔交付仍按各自证据和用户批准推进。
 
 ## 本轮验证与收尾
+
+以下为01af0262时点记录；随后创建归属修复更新当前父指纹并增加第34源，见上表与独立对照报告，不能沿用以下“无需重新构建”到新生产源码。
 
 独立检查8页/128候选/24模型/33当前源通过，新增17项正负测试与750项相关回归全部通过；73路由/153必需文档门禁、格式和diff检查通过。首次负例自身的哈希替换长度不等导致提前失败，已修正为等长变更并完整复测，未改检查预期来放行错误。焦点修复后前端构建结果沿用同一源码版本的已通过记录，后续只改审核文件与工具，不重复构建。
 

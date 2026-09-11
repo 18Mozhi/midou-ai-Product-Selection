@@ -14,7 +14,10 @@ const userContractPath = `${folder}platform-user-design-contract.md`;
 const currentContractPath = `${folder}platform-account-current-contract.md`;
 const responsiveContractPath = `${folder}responsive-detail-focus-contract-review.md`;
 const responsiveFile = "apps/web/src/components/ResponsiveDataView.vue";
-const addedSource = "apps/web/src/use-platform-organization-actions.ts";
+const addedSources = [
+  "apps/web/src/use-platform-organization-actions.ts",
+  "apps/web/src/use-user-creation-owner.ts",
+];
 const files = {
   D: "PlatformDashboard",
   C: "PlatformAccountCenter",
@@ -178,14 +181,17 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
   ];
   sameUnique(
     additionalHashes.map((match) => match[1].trim()),
-    [addedSource],
+    addedSources,
     "additional source files",
   );
-  assert.equal(
-    createHash("sha256").update(source(addedSource)).digest("hex"),
-    additionalHashes[0][2],
-    `${addedSource}: hash drift`,
-  );
+  for (const match of additionalHashes) {
+    const file = match[1].trim();
+    assert.equal(
+      createHash("sha256").update(source(file)).digest("hex"),
+      match[2],
+      `${file}: hash drift`,
+    );
+  }
   const coverage = JSON.parse(source(`${folder}coverage.json`));
   const routes = JSON.parse(source("config/route-catalog.json")).routes;
   const documents = [contractPath, userContractPath, currentContractPath, responsiveContractPath];

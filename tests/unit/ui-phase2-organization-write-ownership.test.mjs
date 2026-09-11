@@ -1,5 +1,9 @@
 import test from "node:test";
 import {
+  historicalUserCreationSource,
+  userCreationRevisions,
+} from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
+import {
   historicalFilterResetSource,
   filterResetRevision,
 } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
@@ -31,14 +35,18 @@ test("current and baseline Vue runs retain exact source and PNG fingerprints wit
     assert.equal(e.checks.length, 98);
     assert.equal(e.screenshots.length, 28);
     for (const [f, sha] of Object.entries(e.sourceHashes))
-      assert.equal(reviewHash(historicalFilterResetSource(f, read(f))), sha, f);
+      assert.equal(
+        reviewHash(historicalUserCreationSource(f, historicalFilterResetSource(f, read(f)))),
+        sha,
+        f,
+      );
     const source =
       mode === "baseline"
         ? historicalOrganizationActionSource(
             organizationActionParent,
             read(organizationActionParent),
           )
-        : read(organizationActionParent);
+        : historicalUserCreationSource(organizationActionParent, read(organizationActionParent));
     assert.equal(
       e.transformedHashes[organizationActionParent],
       reviewHash(organizationListPreview(source)),
@@ -78,7 +86,7 @@ test("closed current actions neither reopen nor reread, reasons on history navig
 });
 test("historical associations accept only exact reviewed source revisions", () => {
   for (const [file, pair] of Object.entries(organizationActionRevisions)) {
-    assert.equal(reviewHash(read(file)), pair.after);
+    assert.equal(reviewHash(historicalUserCreationSource(file, read(file))), pair.after);
     assert.equal(reviewHash(historicalOrganizationActionSource(file, read(file))), pair.before);
     assert.throws(
       () => historicalOrganizationActionSource(file, read(file) + "\n// unknown delta"),
@@ -90,13 +98,15 @@ test("historical associations accept only exact reviewed source revisions", () =
   const associations = audit.packages.flatMap((p) => p.historicalSourceAssociations ?? []);
   assert.ok(associations.length > 0);
   for (const association of associations) {
-    const pair =
-      organizationActionRevisions[association.file] ??
-      tokenCopyRevisions[association.file] ??
-      (association.file === filterResetRevision.file ? filterResetRevision : undefined);
+    const pair = [
+      organizationActionRevisions[association.file],
+      tokenCopyRevisions[association.file],
+      userCreationRevisions[association.file],
+      association.file === filterResetRevision.file ? filterResetRevision : undefined,
+    ].find((candidate) => candidate?.before === association.expected);
     assert.ok(pair, `Unknown historical association: ${association.file}`);
     assert.equal(association.expected, pair.before);
-    assert.equal(association.actual, pair.after);
+    assert.equal(association.actual, userCreationRevisions[association.file]?.after ?? pair.after);
     assert.equal(association.encoding, "historical-LF-exact-revision-not-current-acceptance");
   }
 });

@@ -293,6 +293,9 @@ test("all unrelated parent functions remain textually unchanged", () => {
   const old = functions(baseline),
     now = functions(current);
   const excluded = new Set([
+    // Independently covered against 01af0262 in platform-user-creation-owner.test.mjs.
+    "openCreateUser",
+    "createUser",
     "load",
     "write",
     "closeOrganizationDetail",

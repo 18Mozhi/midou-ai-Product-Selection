@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -30,7 +31,7 @@ test("P43 ten non-password reason variants have exact original semantic titles",
   assert.equal(userReasonCases.filter((c) => c.role !== null).length, 3);
   assert.deepEqual(evidence().cases, userReasonCases);
 });
-test("P43 reason evidence binds current sources, shared transformations and280 exact PNGs", () => {
+test("P43 reason evidence binds captured sources, shared transformations and280 exact PNGs", () => {
   const e = evidence();
   assert.equal(e.kind, "P43-REASONS-VUE-r1");
   assert.equal(e.approval, "pending-user-review");
@@ -38,12 +39,16 @@ test("P43 reason evidence binds current sources, shared transformations and280 e
   assert.equal(e.checks.length, 1244);
   assert.equal(e.screenshots.length, 280);
   assert.equal(Object.keys(e.sourceHashes).length, 42);
-  for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+  for (const [f, sha] of Object.entries(e.sourceHashes))
+    assert.equal(hash(historicalUserCreationSource(f, read(f))), sha, f);
   for (const [file, surface] of [
     ["apps/web/src/components/PlatformAccountCenter.vue", "parent"],
     ["apps/web/src/components/PlatformUserDetailDialog.vue", "detail"],
   ])
-    assert.equal(e.transformedHashes[file], hash(userPagePreview(read(file), surface)));
+    assert.equal(
+      e.transformedHashes[file],
+      hash(userPagePreview(historicalUserCreationSource(file, read(file)), surface)),
+    );
   const child = "apps/web/src/components/PlatformAccountDialogs.vue";
   assert.equal(e.transformedHashes[child], hash(userPasswordPreview(read(child))));
   assert.deepEqual(

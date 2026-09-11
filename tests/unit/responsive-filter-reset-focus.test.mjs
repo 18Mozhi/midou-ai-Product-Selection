@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -125,7 +126,12 @@ test("old diagnosis and current four-width browser evidence remain distinct", ()
     assert.equal(e.processesClosed, true);
     for (const [file, sha] of Object.entries(e.sourceHashes))
       assert.equal(
-        hash(mode === "baseline" ? historicalFilterResetSource(file, read(file)) : read(file)),
+        hash(
+          historicalUserCreationSource(
+            file,
+            mode === "baseline" ? historicalFilterResetSource(file, read(file)) : read(file),
+          ),
+        ),
         sha,
         file,
       );

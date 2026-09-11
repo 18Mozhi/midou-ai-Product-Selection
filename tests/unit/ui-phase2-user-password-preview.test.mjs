@@ -1,4 +1,5 @@
 import test from "node:test";
+import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -56,7 +57,7 @@ test("P43 password/reason composition preserves scripts, all native controls and
     /drift/,
   );
 });
-test("P43 password captures have exact current source revisions, transformed code and88 images", () => {
+test("P43 password captures have exact historical source revisions, transformed code and88 images", () => {
   const e = JSON.parse(read(folder + "/evidence.json"));
   assert.equal(e.kind, "P43-PASSWORD-VUE-r1");
   assert.equal(e.approval, "pending-user-review");
@@ -64,12 +65,16 @@ test("P43 password captures have exact current source revisions, transformed cod
   assert.equal(e.checks.length, 415);
   assert.equal(e.screenshots.length, 88);
   assert.equal(Object.keys(e.sourceHashes).length, 40);
-  for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+  for (const [f, sha] of Object.entries(e.sourceHashes))
+    assert.equal(hash(historicalUserCreationSource(f, read(f))), sha, f);
   for (const [file, surface] of [
     ["apps/web/src/components/PlatformAccountCenter.vue", "parent"],
     ["apps/web/src/components/PlatformUserDetailDialog.vue", "detail"],
   ])
-    assert.equal(e.transformedHashes[file], hash(userPagePreview(read(file), surface)));
+    assert.equal(
+      e.transformedHashes[file],
+      hash(userPagePreview(historicalUserCreationSource(file, read(file)), surface)),
+    );
   assert.equal(e.transformedHashes[child], hash(userPasswordPreview(read(child))));
   assert.deepEqual(
     readdirSync(folder).sort(),
