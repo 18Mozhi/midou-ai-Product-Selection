@@ -1,0 +1,2216 @@
+{
+  "kind": "P43-PAGE-VUE-PREVIEW-r1",
+  "approval": "pending-user-review",
+  "scope": "Actual parent, user records, detail, membership and shared modal scripts. Review-only parent/detail template composition and scoped CSS. Original single-row fixture and explicit long/disabled clones; global summary untouched. Original detail fixture omits membership organization_id, so this is not join eligibility acceptance. GET-only fixture API; reason dialog remains original appearance, cancellation only. No full App/navigation, real accounts/permissions/writes, password clearing, role semantics or complete accessibility acceptance.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountCenter.vue": "3ac56e41a5f5b78a4f01d6ee4298dacd0c80f243f414a7a48de8105eb292aa76",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-platform-organization-actions.ts": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/user-page-preview.css": "8b3d914287a2ae901483c86003f0a1caf0fe9e2796112f5ea374e80886c31c43",
+    "scripts/lib/ui-phase2-user-page-preview.mjs": "f26a37092547e5866112e43d4248ca6e8dc504949263cb8fb8919aa3a336ae83",
+    "scripts/verify-ui-phase2-user-page-preview.mjs": "67daca188fc90425ea9d9bff5a20e42bfc59067d5f31922f0041ce17f454219c",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "d00f2fecd2ce86da2be59a36fc193cc55ad9895ff96044f010bc5f553b4610de",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "7a7e7c3f33c49af35d402856438b0c3448ceabf351cd34a19a4819a3a1ec6dbe"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "loading:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "loading:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "original fixture row count",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "ready search enabled",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "global summary not row total",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "users current navigation",
+      "actual": "/platform-admin/users"
+    },
+    {
+      "width": 390,
+      "name": "default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "default:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "filters:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "filters:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "search parameters",
+      "actual": {
+        "query": "missing@example.test"
+      }
+    },
+    {
+      "width": 390,
+      "name": "unrelated URL retained",
+      "actual": "p43"
+    },
+    {
+      "width": 390,
+      "name": "empty has zero records",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "empty:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "empty:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reset query",
+      "actual": {}
+    },
+    {
+      "width": 390,
+      "name": "reset record",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "mobile-preview:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "mobile-preview:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "preview ID exact",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "mobile-technical:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "mobile-technical:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "detail-loading:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "detail-loading:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "detail is native modal",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "identity readable on blue",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 390,
+      "name": "close readable on blue",
+      "actual": {
+        "color": "rgb(255, 255, 255)",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "width": 390,
+      "name": "detail exact email",
+      "actual": "buyer@example.test"
+    },
+    {
+      "width": 390,
+      "name": "detail organizations preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "detail sessions preserved",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "three fixed role actions",
+      "actual": 3
+    },
+    {
+      "width": 390,
+      "name": "detail-top:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "detail-top:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "five organization roles",
+      "actual": 5
+    },
+    {
+      "width": 390,
+      "name": "original missing membership ID is not corrected",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "membership native constraints",
+      "actual": {
+        "min": 2,
+        "max": 300,
+        "required": true
+      }
+    },
+    {
+      "width": 390,
+      "name": "membership-fields:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "membership-fields:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "access-sections:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "access-sections:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "access-actions:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "access-actions:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "status-reason-original:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "status-reason-original:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason cancel retains detail",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reason cancel no HTTP",
+      "actual": 4
+    },
+    {
+      "width": 390,
+      "name": "detail closed",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "detail-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "detail-error:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "detail retry restores identity",
+      "actual": "buyer@example.test"
+    },
+    {
+      "width": 390,
+      "name": "disabled membership action disabled",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "disabled all role actions disabled",
+      "actual": 3
+    },
+    {
+      "width": 390,
+      "name": "disabled role neutral",
+      "actual": "rgb(102, 116, 138)"
+    },
+    {
+      "width": 390,
+      "name": "empty detail memberships",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "empty sessions",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "disabled-detail:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "disabled-detail:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "disabled-actions:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "disabled-actions:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "long-record:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "long-record:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh error keeps list",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "refresh-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh-error:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "first error has no list",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "first-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "first-error:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "no unexpected API or external request",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "name": "zero page errors",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "loading:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "loading:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "original fixture row count",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "ready search enabled",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "global summary not row total",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "users current navigation",
+      "actual": "/platform-admin/users"
+    },
+    {
+      "width": 760,
+      "name": "default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "default:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "filters:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "filters:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "search parameters",
+      "actual": {
+        "query": "missing@example.test"
+      }
+    },
+    {
+      "width": 760,
+      "name": "unrelated URL retained",
+      "actual": "p43"
+    },
+    {
+      "width": 760,
+      "name": "empty has zero records",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "empty:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "empty:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reset query",
+      "actual": {}
+    },
+    {
+      "width": 760,
+      "name": "reset record",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "mobile-preview:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "mobile-preview:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "preview ID exact",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "mobile-technical:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "mobile-technical:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "detail-loading:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "detail-loading:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "detail is native modal",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "identity readable on blue",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 760,
+      "name": "close readable on blue",
+      "actual": {
+        "color": "rgb(255, 255, 255)",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "width": 760,
+      "name": "detail exact email",
+      "actual": "buyer@example.test"
+    },
+    {
+      "width": 760,
+      "name": "detail organizations preserved",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "detail sessions preserved",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "three fixed role actions",
+      "actual": 3
+    },
+    {
+      "width": 760,
+      "name": "detail-top:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "detail-top:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "five organization roles",
+      "actual": 5
+    },
+    {
+      "width": 760,
+      "name": "original missing membership ID is not corrected",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "membership native constraints",
+      "actual": {
+        "min": 2,
+        "max": 300,
+        "required": true
+      }
+    },
+    {
+      "width": 760,
+      "name": "membership-fields:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "membership-fields:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "access-sections:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "access-sections:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "access-actions:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "access-actions:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "status-reason-original:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "status-reason-original:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason cancel retains detail",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reason cancel no HTTP",
+      "actual": 4
+    },
+    {
+      "width": 760,
+      "name": "detail closed",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "detail-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "detail-error:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "detail retry restores identity",
+      "actual": "buyer@example.test"
+    },
+    {
+      "width": 760,
+      "name": "disabled membership action disabled",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "disabled all role actions disabled",
+      "actual": 3
+    },
+    {
+      "width": 760,
+      "name": "disabled role neutral",
+      "actual": "rgb(102, 116, 138)"
+    },
+    {
+      "width": 760,
+      "name": "empty detail memberships",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "empty sessions",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "disabled-detail:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "disabled-detail:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "disabled-actions:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "disabled-actions:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "long-record:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "long-record:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh error keeps list",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "refresh-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh-error:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "first error has no list",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "first-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "first-error:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "no unexpected API or external request",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "zero page errors",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "loading:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "loading:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "original fixture row count",
+      "actual": 1
+    },
+    {
+      "width": 761,
+      "name": "ready search enabled",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "global summary not row total",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "users current navigation",
+      "actual": "/platform-admin/users"
+    },
+    {
+      "width": 761,
+      "name": "default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "default:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "filters:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "filters:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "search parameters",
+      "actual": {
+        "query": "missing@example.test"
+      }
+    },
+    {
+      "width": 761,
+      "name": "unrelated URL retained",
+      "actual": "p43"
+    },
+    {
+      "width": 761,
+      "name": "empty has zero records",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "empty:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "empty:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reset query",
+      "actual": {}
+    },
+    {
+      "width": 761,
+      "name": "reset record",
+      "actual": 1
+    },
+    {
+      "width": 761,
+      "name": "detail-loading:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "detail-loading:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "detail is native modal",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "identity readable on blue",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 761,
+      "name": "close readable on blue",
+      "actual": {
+        "color": "rgb(255, 255, 255)",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "width": 761,
+      "name": "detail exact email",
+      "actual": "buyer@example.test"
+    },
+    {
+      "width": 761,
+      "name": "detail organizations preserved",
+      "actual": 1
+    },
+    {
+      "width": 761,
+      "name": "detail sessions preserved",
+      "actual": 1
+    },
+    {
+      "width": 761,
+      "name": "three fixed role actions",
+      "actual": 3
+    },
+    {
+      "width": 761,
+      "name": "detail-top:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "detail-top:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "five organization roles",
+      "actual": 5
+    },
+    {
+      "width": 761,
+      "name": "original missing membership ID is not corrected",
+      "actual": 1
+    },
+    {
+      "width": 761,
+      "name": "membership native constraints",
+      "actual": {
+        "min": 2,
+        "max": 300,
+        "required": true
+      }
+    },
+    {
+      "width": 761,
+      "name": "membership-fields:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "membership-fields:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "access-sections:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "access-sections:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "access-actions:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "access-actions:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "status-reason-original:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "status-reason-original:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason cancel retains detail",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reason cancel no HTTP",
+      "actual": 4
+    },
+    {
+      "width": 761,
+      "name": "detail closed",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "detail-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "detail-error:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "detail retry restores identity",
+      "actual": "buyer@example.test"
+    },
+    {
+      "width": 761,
+      "name": "disabled membership action disabled",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "disabled all role actions disabled",
+      "actual": 3
+    },
+    {
+      "width": 761,
+      "name": "disabled role neutral",
+      "actual": "rgb(102, 116, 138)"
+    },
+    {
+      "width": 761,
+      "name": "empty detail memberships",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "empty sessions",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "disabled-detail:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "disabled-detail:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "disabled-actions:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "disabled-actions:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "long-record:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "long-record:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh error keeps list",
+      "actual": 1
+    },
+    {
+      "width": 761,
+      "name": "refresh-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh-error:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "first error has no list",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "first-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "first-error:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "no unexpected API or external request",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "zero page errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "loading:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "loading:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "original fixture row count",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "name": "ready search enabled",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "global summary not row total",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "users current navigation",
+      "actual": "/platform-admin/users"
+    },
+    {
+      "width": 1440,
+      "name": "default:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "default:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "filters:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "filters:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "search parameters",
+      "actual": {
+        "query": "missing@example.test"
+      }
+    },
+    {
+      "width": 1440,
+      "name": "unrelated URL retained",
+      "actual": "p43"
+    },
+    {
+      "width": 1440,
+      "name": "empty has zero records",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "empty:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "empty:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reset query",
+      "actual": {}
+    },
+    {
+      "width": 1440,
+      "name": "reset record",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "name": "detail-loading:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "detail-loading:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "detail is native modal",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "identity readable on blue",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 1440,
+      "name": "close readable on blue",
+      "actual": {
+        "color": "rgb(255, 255, 255)",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "width": 1440,
+      "name": "detail exact email",
+      "actual": "buyer@example.test"
+    },
+    {
+      "width": 1440,
+      "name": "detail organizations preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "name": "detail sessions preserved",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "name": "three fixed role actions",
+      "actual": 3
+    },
+    {
+      "width": 1440,
+      "name": "detail-top:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "detail-top:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "five organization roles",
+      "actual": 5
+    },
+    {
+      "width": 1440,
+      "name": "original missing membership ID is not corrected",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "name": "membership native constraints",
+      "actual": {
+        "min": 2,
+        "max": 300,
+        "required": true
+      }
+    },
+    {
+      "width": 1440,
+      "name": "membership-fields:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "membership-fields:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "access-sections:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "access-sections:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "access-actions:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "access-actions:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "status-reason-original:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "status-reason-original:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason cancel retains detail",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reason cancel no HTTP",
+      "actual": 4
+    },
+    {
+      "width": 1440,
+      "name": "detail closed",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "detail-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "detail-error:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "detail retry restores identity",
+      "actual": "buyer@example.test"
+    },
+    {
+      "width": 1440,
+      "name": "disabled membership action disabled",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "disabled all role actions disabled",
+      "actual": 3
+    },
+    {
+      "width": 1440,
+      "name": "disabled role neutral",
+      "actual": "rgb(102, 116, 138)"
+    },
+    {
+      "width": 1440,
+      "name": "empty detail memberships",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "empty sessions",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "disabled-detail:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "disabled-detail:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "disabled-actions:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "disabled-actions:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "long-record:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "long-record:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh error keeps list",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "name": "refresh-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh-error:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "first error has no list",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "first-error:no horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "first-error:visible dialogs fit width",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "no unexpected API or external request",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "zero page errors",
+      "actual": []
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-loading.png",
+      "width": 390,
+      "state": "loading",
+      "sha256": "4202fc4fe478519510e3668e34688b834cb6557f631a0674c30b8b82beb2b871"
+    },
+    {
+      "file": "390-default.png",
+      "width": 390,
+      "state": "default",
+      "sha256": "a1fcc66cf2ee732cd5bcbaf8cc7cdb8da29fec6ec9edfca7e96956f7dc5e58db"
+    },
+    {
+      "file": "390-filters.png",
+      "width": 390,
+      "state": "filters",
+      "sha256": "72cf2350945b9275c6c7cf22f0c8e9f6ad90a21d0258ae1b1602c91ff0b836ad"
+    },
+    {
+      "file": "390-empty.png",
+      "width": 390,
+      "state": "empty",
+      "sha256": "cb494097d4791d376d5e60a8c4ece6de4bf143108cfdaefeefccac106923eda3"
+    },
+    {
+      "file": "390-mobile-preview.png",
+      "width": 390,
+      "state": "mobile-preview",
+      "sha256": "fded4b108b97c4d84ea880eb4a1fe4d20f3d3a91219e1ced0542cfa8036d44cc"
+    },
+    {
+      "file": "390-mobile-technical.png",
+      "width": 390,
+      "state": "mobile-technical",
+      "sha256": "38d9d4a988696b4973c3a97840989300788568ccb025ece230b764ed6c4c95e8"
+    },
+    {
+      "file": "390-detail-loading.png",
+      "width": 390,
+      "state": "detail-loading",
+      "sha256": "1d62ddde960deedf78dc2e46a8e7e6aaf77f58d0aea1465cb2c328c16b23ac3d"
+    },
+    {
+      "file": "390-detail-top.png",
+      "width": 390,
+      "state": "detail-top",
+      "sha256": "9c04d893782aed4721ebe46cdb392c09f3a0cdae6d8e50043ed43eea154d9165"
+    },
+    {
+      "file": "390-membership-fields.png",
+      "width": 390,
+      "state": "membership-fields",
+      "sha256": "13edaa96d89d3bfbb0ad87ffbb70ed6eddc624352062cb5efddf2d3149344753"
+    },
+    {
+      "file": "390-access-sections.png",
+      "width": 390,
+      "state": "access-sections",
+      "sha256": "13898402641d23ff0e5ccf602aaddfbea838520f89ddef435fb88656a31d6618"
+    },
+    {
+      "file": "390-access-actions.png",
+      "width": 390,
+      "state": "access-actions",
+      "sha256": "13898402641d23ff0e5ccf602aaddfbea838520f89ddef435fb88656a31d6618"
+    },
+    {
+      "file": "390-status-reason-original.png",
+      "width": 390,
+      "state": "status-reason-original",
+      "sha256": "2c52ca38c9f4b1b256366ed29503eac17e5dfaaa0a8136cc387d4cc1fcb9a760"
+    },
+    {
+      "file": "390-detail-error.png",
+      "width": 390,
+      "state": "detail-error",
+      "sha256": "2a65e899a24af38552719c923633d29630d74878aaed682e5e149fa4f0aa4437"
+    },
+    {
+      "file": "390-disabled-detail.png",
+      "width": 390,
+      "state": "disabled-detail",
+      "sha256": "9b3961bd85c115d1b97f2e25aa043dd735fdec4524dfb060545f09f693c9be3e"
+    },
+    {
+      "file": "390-disabled-actions.png",
+      "width": 390,
+      "state": "disabled-actions",
+      "sha256": "5c274063d230f7758dd9f7ab91e04c2b83d7dcf36f4b05ad66b518cf37d775ab"
+    },
+    {
+      "file": "390-long-record.png",
+      "width": 390,
+      "state": "long-record",
+      "sha256": "0e3d7c999d5e60be294f7844e626aeed462bf54e682bc08d0dfa57ef0c57161d"
+    },
+    {
+      "file": "390-refresh-error.png",
+      "width": 390,
+      "state": "refresh-error",
+      "sha256": "f5f2583233e983aee53ab9c2ed89da6786f16b336adac99bf7b346b00b8e35f3"
+    },
+    {
+      "file": "390-first-error.png",
+      "width": 390,
+      "state": "first-error",
+      "sha256": "8b5420f55efbe97aaa22428d84d9cb0a01ac05c4fc51c6c7aafd85a8a0d34069"
+    },
+    {
+      "file": "760-loading.png",
+      "width": 760,
+      "state": "loading",
+      "sha256": "dd0300dc3a3c1964e655ec0a6ee9021a13731db90a2c1d741e5bf5b61d63784e"
+    },
+    {
+      "file": "760-default.png",
+      "width": 760,
+      "state": "default",
+      "sha256": "a92ff9a2254f85d0f193ea53e3656f19fb407d89b51b6de033aa09800a1c11fd"
+    },
+    {
+      "file": "760-filters.png",
+      "width": 760,
+      "state": "filters",
+      "sha256": "4a5debac9d482e007e9b0b3de45607188b18841f380c8821d03d43ed8689dc6f"
+    },
+    {
+      "file": "760-empty.png",
+      "width": 760,
+      "state": "empty",
+      "sha256": "10dd40e0a15b0252b97055f950ab5d3938b0461127f37cb8b0f5d707e6554bc5"
+    },
+    {
+      "file": "760-mobile-preview.png",
+      "width": 760,
+      "state": "mobile-preview",
+      "sha256": "afc2aabe40f1ac50f90f2b2317f1ad288a0fa6db15303c692d343bfe90d1da4b"
+    },
+    {
+      "file": "760-mobile-technical.png",
+      "width": 760,
+      "state": "mobile-technical",
+      "sha256": "614f3a881f13a342783cce909e228ac0903c08bc09afa4376c2d056846d2b941"
+    },
+    {
+      "file": "760-detail-loading.png",
+      "width": 760,
+      "state": "detail-loading",
+      "sha256": "d4950aaf8cb4501b045a61afa1840e04051f9e1edf6f60975660d202ba75b740"
+    },
+    {
+      "file": "760-detail-top.png",
+      "width": 760,
+      "state": "detail-top",
+      "sha256": "8bd33435f0f9b7c4b6f6e97f3b580530a87d23474e56712e81d328ce9bfd07ec"
+    },
+    {
+      "file": "760-membership-fields.png",
+      "width": 760,
+      "state": "membership-fields",
+      "sha256": "9aa219ee47dec38f6e0350fce7436a03d2b9e66815fc2c367fadeaf6cac9f265"
+    },
+    {
+      "file": "760-access-sections.png",
+      "width": 760,
+      "state": "access-sections",
+      "sha256": "f99e889cc1a3f184b0f428377cc79655987dd860ba73efa4f09a4d943f553c51"
+    },
+    {
+      "file": "760-access-actions.png",
+      "width": 760,
+      "state": "access-actions",
+      "sha256": "f99e889cc1a3f184b0f428377cc79655987dd860ba73efa4f09a4d943f553c51"
+    },
+    {
+      "file": "760-status-reason-original.png",
+      "width": 760,
+      "state": "status-reason-original",
+      "sha256": "0887ebcd89ace623e1b5b7e4c00ba140bea33ecac071d381d271ca64de597668"
+    },
+    {
+      "file": "760-detail-error.png",
+      "width": 760,
+      "state": "detail-error",
+      "sha256": "4e2b49955a8701c1edfe0f7e70ba01944307aa64084aab572f8141327ed36a2b"
+    },
+    {
+      "file": "760-disabled-detail.png",
+      "width": 760,
+      "state": "disabled-detail",
+      "sha256": "ac17c3afac7ef07afe005d06c06f50fb6de198699b03848ada4325e635fe41ba"
+    },
+    {
+      "file": "760-disabled-actions.png",
+      "width": 760,
+      "state": "disabled-actions",
+      "sha256": "72a6f763c023b4b763c65c4fad8b79502663ca2517a609f625ecd7e17d9463de"
+    },
+    {
+      "file": "760-long-record.png",
+      "width": 760,
+      "state": "long-record",
+      "sha256": "ac4c1887cd360f057abac734ee1552b6222e1daa1a5eb2ade7ad38c43f7dd76f"
+    },
+    {
+      "file": "760-refresh-error.png",
+      "width": 760,
+      "state": "refresh-error",
+      "sha256": "bcabe9f40a0e18beabcd83b65e9b4f83e44739baedf28bc9e1bfe14517653952"
+    },
+    {
+      "file": "760-first-error.png",
+      "width": 760,
+      "state": "first-error",
+      "sha256": "bfa8d345c0b09155497cade0f558397f0ffae2c4a3664959d7f2154d8dca67e5"
+    },
+    {
+      "file": "761-loading.png",
+      "width": 761,
+      "state": "loading",
+      "sha256": "8f432e4ae5c6364c08432a5ee2461799846c39a0b1f9693d2b9273cdb43fe152"
+    },
+    {
+      "file": "761-default.png",
+      "width": 761,
+      "state": "default",
+      "sha256": "b50b4e992edda64aeeeee55af899dac38ea7b9d99e2f6628fa8ebab48b39d421"
+    },
+    {
+      "file": "761-filters.png",
+      "width": 761,
+      "state": "filters",
+      "sha256": "c4d26b2871e18bdf12823d33158ad9eb8c3b89c3a4cfcbdb0e305507dbb9676f"
+    },
+    {
+      "file": "761-empty.png",
+      "width": 761,
+      "state": "empty",
+      "sha256": "3d5ed7a3b7e15bfcee402c0463ca89d7f46fcb03525aae432399b674f4fb2853"
+    },
+    {
+      "file": "761-detail-loading.png",
+      "width": 761,
+      "state": "detail-loading",
+      "sha256": "1250141990d5ae40a1716b7f13631a3429680451d7546cc171780f34c7b65dc5"
+    },
+    {
+      "file": "761-detail-top.png",
+      "width": 761,
+      "state": "detail-top",
+      "sha256": "1c31d9390f566ebca91b816e94bc2eec085f913153053289202fb23c44481ec9"
+    },
+    {
+      "file": "761-membership-fields.png",
+      "width": 761,
+      "state": "membership-fields",
+      "sha256": "cd9ec1ad996d933575585accf9ff4acb176afad55a4178fa56b022e483f38e4b"
+    },
+    {
+      "file": "761-access-sections.png",
+      "width": 761,
+      "state": "access-sections",
+      "sha256": "3b54a9052c6979085a25c951024aa8142a59a444438078231d7d9f5db43802c1"
+    },
+    {
+      "file": "761-access-actions.png",
+      "width": 761,
+      "state": "access-actions",
+      "sha256": "3b54a9052c6979085a25c951024aa8142a59a444438078231d7d9f5db43802c1"
+    },
+    {
+      "file": "761-status-reason-original.png",
+      "width": 761,
+      "state": "status-reason-original",
+      "sha256": "d1d05036f5a7b1b9e73b06b405af64358b67066a59669b57e23053583a20c4f4"
+    },
+    {
+      "file": "761-detail-error.png",
+      "width": 761,
+      "state": "detail-error",
+      "sha256": "43f3af5de59b774262755cc43a2630bb4408c4e970b6477afcc39365cfe53f77"
+    },
+    {
+      "file": "761-disabled-detail.png",
+      "width": 761,
+      "state": "disabled-detail",
+      "sha256": "b38b95d33b41e788cd13aac325c1da0206b75dcc0222bfdca693407b717187b4"
+    },
+    {
+      "file": "761-disabled-actions.png",
+      "width": 761,
+      "state": "disabled-actions",
+      "sha256": "c481ff763488ab8af24583cdac15aa0fc68999c9a06b44a189df775afec0e8b3"
+    },
+    {
+      "file": "761-long-record.png",
+      "width": 761,
+      "state": "long-record",
+      "sha256": "662dd5714c06301c0428983909a1f104354ddb8927f55d58e4cf5ceb815532f8"
+    },
+    {
+      "file": "761-refresh-error.png",
+      "width": 761,
+      "state": "refresh-error",
+      "sha256": "154907e91d384738ef7c4ecc720a4e9d05f7e0cd5dfe314291a6b8e8a9948655"
+    },
+    {
+      "file": "761-first-error.png",
+      "width": 761,
+      "state": "first-error",
+      "sha256": "19d545f254388e4f1b97f6608de64f9350c95ebdba00eadf01595d2cfc0c216d"
+    },
+    {
+      "file": "1440-loading.png",
+      "width": 1440,
+      "state": "loading",
+      "sha256": "df2b1545dc20eb6f248de6c2dcf48f77b1572d7a86d6211ecfa76fad40bad7ae"
+    },
+    {
+      "file": "1440-default.png",
+      "width": 1440,
+      "state": "default",
+      "sha256": "0ef5bd3120cf46fafee417e01cfec6b913543f81df3b4ee11533c0c7c924dd8d"
+    },
+    {
+      "file": "1440-filters.png",
+      "width": 1440,
+      "state": "filters",
+      "sha256": "e81ec5d6e08bb4e3b044d916052f6e8bb01b38f618bc33ba2f1917a2fb4e61fd"
+    },
+    {
+      "file": "1440-empty.png",
+      "width": 1440,
+      "state": "empty",
+      "sha256": "56eeb726e3dc32449dd6d5b06378fcc01f293e247ddedbc609f317b702b23d8d"
+    },
+    {
+      "file": "1440-detail-loading.png",
+      "width": 1440,
+      "state": "detail-loading",
+      "sha256": "1cf6558531cb78697497d0a8f6aa3e1f2b709a9b2bd980f76c6091d620dfe849"
+    },
+    {
+      "file": "1440-detail-top.png",
+      "width": 1440,
+      "state": "detail-top",
+      "sha256": "1a0ca5b511b8e94302277d90794bfa93720a0060cf9e72da6c05d652083288d0"
+    },
+    {
+      "file": "1440-membership-fields.png",
+      "width": 1440,
+      "state": "membership-fields",
+      "sha256": "86f0630c55267ccb4e034120065dd5200f171d61c3f10b23070e31936b371d89"
+    },
+    {
+      "file": "1440-access-sections.png",
+      "width": 1440,
+      "state": "access-sections",
+      "sha256": "86f0630c55267ccb4e034120065dd5200f171d61c3f10b23070e31936b371d89"
+    },
+    {
+      "file": "1440-access-actions.png",
+      "width": 1440,
+      "state": "access-actions",
+      "sha256": "86f0630c55267ccb4e034120065dd5200f171d61c3f10b23070e31936b371d89"
+    },
+    {
+      "file": "1440-status-reason-original.png",
+      "width": 1440,
+      "state": "status-reason-original",
+      "sha256": "483aac1570c19b4af9ac7d44b4d4459d99355cdb7f472a06416e2b5abe836e43"
+    },
+    {
+      "file": "1440-detail-error.png",
+      "width": 1440,
+      "state": "detail-error",
+      "sha256": "c71f1637d4ad5c27d46ce1317adca69c4bfd4a41c5fad790e57bd2bc7b9986ad"
+    },
+    {
+      "file": "1440-disabled-detail.png",
+      "width": 1440,
+      "state": "disabled-detail",
+      "sha256": "594f49240df9816359be263bc3c9806d6aa0322ad526f76359f5706987d7829a"
+    },
+    {
+      "file": "1440-disabled-actions.png",
+      "width": 1440,
+      "state": "disabled-actions",
+      "sha256": "594f49240df9816359be263bc3c9806d6aa0322ad526f76359f5706987d7829a"
+    },
+    {
+      "file": "1440-long-record.png",
+      "width": 1440,
+      "state": "long-record",
+      "sha256": "7a476c7cc83140326e096af4cf04dfb3c83c200614acb6470c975e3e6a0ec3ef"
+    },
+    {
+      "file": "1440-refresh-error.png",
+      "width": 1440,
+      "state": "refresh-error",
+      "sha256": "cdf4f9f016a5c248c8f14d0e8616830d92a864c0559e804e50e16f4d29802925"
+    },
+    {
+      "file": "1440-first-error.png",
+      "width": 1440,
+      "state": "first-error",
+      "sha256": "b963f9ca698975ce243e42b900ac04df9be9f495c997bcd9fb715986b8ed44c5"
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "missing@example.test"
+          },
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 500
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "disabled",
+          "status": 200
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "disabled",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "long",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "long",
+          "status": 500
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "long",
+          "status": 500
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "missing@example.test"
+          },
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 500
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "disabled",
+          "status": 200
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "disabled",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "long",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "long",
+          "status": 500
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "long",
+          "status": 500
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "missing@example.test"
+          },
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 500
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "disabled",
+          "status": 200
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "disabled",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "long",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "long",
+          "status": 500
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "long",
+          "status": 500
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {
+            "query": "missing@example.test"
+          },
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 500
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "original",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "disabled",
+          "status": 200
+        },
+        {
+          "target": "detail",
+          "path": "/api/v1/platform/accounts/users/00000000-0000-4000-8000-000000000621",
+          "method": "GET",
+          "query": {},
+          "variant": "disabled",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "long",
+          "status": 200
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "long",
+          "status": 500
+        },
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET",
+          "query": {},
+          "variant": "long",
+          "status": 500
+        }
+      ],
+      "unexpected": [],
+      "errors": []
+    }
+  ],
+  "processesClosed": true
+}
