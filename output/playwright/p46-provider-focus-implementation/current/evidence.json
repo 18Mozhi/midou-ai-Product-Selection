@@ -1,0 +1,2816 @@
+{
+  "kind": "P46-EDITOR-FOCUS-IMPLEMENTATION-r1",
+  "mode": "current",
+  "scope": "Actual untransformed ProviderRuntimeSurface and Registry, production styles and review CSS separately. Historical baseline651e9898 vs current source. GET fixtures only; no writes or production backend. Close button/Escape/scrim, page-two identity, breakpoint resize, removed record during pending read, header and empty create. Not save lifecycle, full App/KeepAlive or modal accessibility acceptance.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "2e6aed1eb23b4402719d2d031a61215aad27be0613c36b2f9f4477971638d20c",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.css": "a31b900bedbf1cafdf756eea8b7bd8742a5ec844fef9bcad0d8ffe643e39bb74",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-detail-preview.css": "6f1bece39def0bba8c1e9cf69b1fafe0993d9564898716ea7bb6ea6545c6a99a",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-editor-preview.css": "f7ae7af9a96fe79d8f9c498bfa7cd6025536c9250b0fe9be06ed4b794dce1f6a",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-page-preview.css": "791e840c6e32430e10b7fcfd1f56d11cc572679ba0e6e4a62d1f08b06636e7bd",
+    "scripts/lib/ui-phase2-provider-focus-baseline.mjs": "034d45633716446e2a79204afb377123285e051c4977778dde99a41fa190f16a",
+    "scripts/verify-ui-phase2-provider-focus.mjs": "e5266b8c9cf1deb46633c77c484df3914e9fdb9ff3c55b23755d6b88c4f68177",
+    "tests/e2e/m03-01-provider-registry.spec.ts": "caaa0e2af2081675ab743e18d43e2526758604c84bd72aa925ae701454cf226f"
+  },
+  "checks": [
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "record button focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "record button is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "record button visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "record button in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "record button not inert",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "page two retained button",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "record escape focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "record escape is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "record escape visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "record escape in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "record escape not inert",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "keyboard return focus visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "keyboard outline style",
+      "actual": "solid"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "keyboard outline width",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "mobile focus outline not clipped",
+      "actual": "visible"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "page two retained escape",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "resize focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "resize target visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "resize target in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "removed row fallback",
+      "actual": "＋ 新建来源"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "header create returns focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "empty create returns focus",
+      "actual": "登记第一个来源"
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "three loads plus one refresh",
+      "actual": 4
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "name": "no unexpected network",
+      "actual": []
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record button focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record button is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record button visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record button in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record button not inert",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "page two retained button",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record escape focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record escape is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record escape visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record escape in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record escape not inert",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "keyboard return focus visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "keyboard outline style",
+      "actual": "solid"
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "keyboard outline width",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "mobile focus outline not clipped",
+      "actual": "visible"
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "page two retained escape",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record scrim focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record scrim is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record scrim visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record scrim in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "record scrim not inert",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "page two retained scrim",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "resize focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "resize target visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "resize target in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "removed row fallback",
+      "actual": "＋ 新建来源"
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "header create returns focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "empty create returns focus",
+      "actual": "登记第一个来源"
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "three loads plus one refresh",
+      "actual": 4
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "name": "no unexpected network",
+      "actual": []
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record button focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record button is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record button visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record button in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record button not inert",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "page two retained button",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record escape focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record escape is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record escape visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record escape in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record escape not inert",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "keyboard return focus visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "keyboard outline style",
+      "actual": "solid"
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "keyboard outline width",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "page two retained escape",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record scrim focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record scrim is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record scrim visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record scrim in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "record scrim not inert",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "page two retained scrim",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "resize focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "resize target visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "resize target in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "removed row fallback",
+      "actual": "＋ 新建来源"
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "header create returns focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "empty create returns focus",
+      "actual": "登记第一个来源"
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "three loads plus one refresh",
+      "actual": 4
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "name": "no unexpected network",
+      "actual": []
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record button focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record button is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record button visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record button in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record button not inert",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "page two retained button",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record escape focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record escape is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record escape visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record escape in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record escape not inert",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "keyboard return focus visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "keyboard outline style",
+      "actual": "solid"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "keyboard outline width",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "page two retained escape",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record scrim focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record scrim is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record scrim visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record scrim in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "record scrim not inert",
+      "actual": false
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "page two retained scrim",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "resize focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "resize target visible",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "resize target in viewport",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "removed row fallback",
+      "actual": "＋ 新建来源"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "header create returns focus",
+      "actual": true
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "empty create returns focus",
+      "actual": "登记第一个来源"
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "three loads plus one refresh",
+      "actual": 4
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "name": "no unexpected network",
+      "actual": []
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record button focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record button is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record button visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record button in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record button not inert",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "page two retained button",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record escape focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record escape is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record escape visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record escape in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record escape not inert",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "keyboard return focus visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "keyboard outline style",
+      "actual": "solid"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "keyboard outline width",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "mobile focus outline not clipped",
+      "actual": "visible"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "page two retained escape",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record scrim focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record scrim is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record scrim visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record scrim in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "record scrim not inert",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "page two retained scrim",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "resize focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "resize target visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "resize target in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "removed row fallback",
+      "actual": "＋ 新建来源"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "header create returns focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "empty create returns focus",
+      "actual": "登记第一个来源"
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "three loads plus one refresh",
+      "actual": 4
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "name": "no unexpected network",
+      "actual": []
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record button focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record button is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record button visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record button in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record button not inert",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "page two retained button",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record escape focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record escape is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record escape visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record escape in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record escape not inert",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "keyboard return focus visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "keyboard outline style",
+      "actual": "solid"
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "keyboard outline width",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "mobile focus outline not clipped",
+      "actual": "visible"
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "page two retained escape",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record scrim focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record scrim is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record scrim visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record scrim in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "record scrim not inert",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "page two retained scrim",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "resize focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "resize target visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "resize target in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "removed row fallback",
+      "actual": "＋ 新建来源"
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "header create returns focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "empty create returns focus",
+      "actual": "登记第一个来源"
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "three loads plus one refresh",
+      "actual": 4
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "name": "no unexpected network",
+      "actual": []
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record button focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record button is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record button visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record button in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record button not inert",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "page two retained button",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record escape focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record escape is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record escape visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record escape in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record escape not inert",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "keyboard return focus visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "keyboard outline style",
+      "actual": "solid"
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "keyboard outline width",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "page two retained escape",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record scrim focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record scrim is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record scrim visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record scrim in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "record scrim not inert",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "page two retained scrim",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "resize focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "resize target visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "resize target in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "removed row fallback",
+      "actual": "＋ 新建来源"
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "header create returns focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "empty create returns focus",
+      "actual": "登记第一个来源"
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "three loads plus one refresh",
+      "actual": 4
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "name": "no unexpected network",
+      "actual": []
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record button focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record button is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record button visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record button in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record button not inert",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "page two retained button",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record escape focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record escape is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record escape visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record escape in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record escape not inert",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "keyboard return focus visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "keyboard outline style",
+      "actual": "solid"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "keyboard outline width",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "page two retained escape",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record scrim focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record scrim is button",
+      "actual": "BUTTON"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record scrim visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record scrim in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "record scrim not inert",
+      "actual": false
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "page two retained scrim",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "resize focus",
+      "actual": "00000000-0000-4000-8000-000000000819"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "resize target visible",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "resize target in viewport",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "selected code exists in fixture",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "single dialog after handoff",
+      "actual": 1
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "editor owns initial focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "removed row fallback",
+      "actual": "＋ 新建来源"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "header create returns focus",
+      "actual": true
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "empty create returns focus",
+      "actual": "登记第一个来源"
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "three loads plus one refresh",
+      "actual": 4
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "name": "no unexpected network",
+      "actual": []
+    }
+  ],
+  "screenshots": [
+    {
+      "surface": "production",
+      "width": 390,
+      "state": "default",
+      "file": "production-390-default.png",
+      "sha256": "6ca215b6d712f30a8c0512097152d74c931f87c39f0a72fa4c8f965dce2be921",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "state": "record-button",
+      "file": "production-390-record-button.png",
+      "sha256": "4584a807a868487b9a0ddd758a5581627fd08351b9eb2159e760cf4d7016b604",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "state": "record-escape",
+      "file": "production-390-record-escape.png",
+      "sha256": "6130cd4e6959665c4ddcd73e89299d5b1267369b20f20358459d49e7dcd51124",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "state": "missing-record",
+      "file": "production-390-missing-record.png",
+      "sha256": "e11de92ce92e1b4b872c946f6776009acb1a98fdc50bffb8341463eab6562b5b",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "state": "header-create",
+      "file": "production-390-header-create.png",
+      "sha256": "e628305e83cb46210f9c4cb295997f363bd34001efffb50b705e2e8cfb0f3c7e",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 390,
+      "state": "empty-create",
+      "file": "production-390-empty-create.png",
+      "sha256": "8d2ccef6adc3ea4d9e7e7e685d724059a6a8f70533fc1b4085286c496c1537e2",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "state": "default",
+      "file": "production-760-default.png",
+      "sha256": "b3a5011ad894ef066fe39d1b4a9ad98ced8b1318ec63701b095678f8af1061ee",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "state": "record-button",
+      "file": "production-760-record-button.png",
+      "sha256": "1d9f1bf7425fdcda7fd0a4662dbe6346229d0753365a16a4ff7ba9b4485313e8",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "state": "record-escape",
+      "file": "production-760-record-escape.png",
+      "sha256": "0c73b1bc40da94c740f632ff948ffcb4a4561e81b06dce2856844dd22c6d5b40",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "state": "record-scrim",
+      "file": "production-760-record-scrim.png",
+      "sha256": "1d9f1bf7425fdcda7fd0a4662dbe6346229d0753365a16a4ff7ba9b4485313e8",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "state": "missing-record",
+      "file": "production-760-missing-record.png",
+      "sha256": "f0dbc3f7419b5f6dd62146fdf9d04bdabe5905122dad52547a88c2dc648d365e",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "state": "header-create",
+      "file": "production-760-header-create.png",
+      "sha256": "6e82fc494b33f2c16e8b563ef82813a27ebd7d95e15efcbdb03c79ebf754cdf2",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "state": "empty-create",
+      "file": "production-760-empty-create.png",
+      "sha256": "7855824918dc87cfccd54f0ff0d4e15b25ca4515bd728aa061b567c5e6fab208",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "state": "default",
+      "file": "production-761-default.png",
+      "sha256": "ac80cbe180710d2b4da77299f38f1b72ba8413a590dbaa53295a44b1ef7a2c09",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "state": "record-button",
+      "file": "production-761-record-button.png",
+      "sha256": "08c750b51d19d36cdaaf0f98259482a4a703433d4158ce4876b7a05c66c3f5c0",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "state": "record-escape",
+      "file": "production-761-record-escape.png",
+      "sha256": "c02237b676f4ccecd1d833e8583c04c7cba58bb4b8da473444292099ac414d3b",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "state": "record-scrim",
+      "file": "production-761-record-scrim.png",
+      "sha256": "6f659475e78634433d3baa5f573d54cc70d729646ced338f55dd1cdd8f84c28c",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "state": "missing-record",
+      "file": "production-761-missing-record.png",
+      "sha256": "a3386c2f203ffc694114bc908a5f066af7df5fd41ebf6e8553a88cea62223d15",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "state": "header-create",
+      "file": "production-761-header-create.png",
+      "sha256": "a04a6976fd57e2b28d10a867cd968dae2b086542bd76a3222399087f186770ab",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "state": "empty-create",
+      "file": "production-761-empty-create.png",
+      "sha256": "bb06430477d401ec8f7fe5b7079c6cd061bef2aab16d4dc34d4d20a7d593497e",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "state": "default",
+      "file": "production-1440-default.png",
+      "sha256": "a1f7dd074adbd760236ebd86a51861be811dac4dea967f4942b67f699d739e1e",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "state": "record-button",
+      "file": "production-1440-record-button.png",
+      "sha256": "efa3e608c2d3df4ac24416e3e9d04f4ed037c9c8c52713887fc4a16d7301aa75",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "state": "record-escape",
+      "file": "production-1440-record-escape.png",
+      "sha256": "cf5e287410ffa423119c173f72c5c4e04bd7d3ad8efe1bb672ca0124ef9a7488",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "state": "record-scrim",
+      "file": "production-1440-record-scrim.png",
+      "sha256": "e8fbf5a57d25bc7c511a0122a6de73dea9668c7f44060211c14a5feb75dfcb9b",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "state": "missing-record",
+      "file": "production-1440-missing-record.png",
+      "sha256": "572f03fba8d6d37a208bed415e8884670079f50cc3e93d9b290114f8de88c3fa",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "state": "header-create",
+      "file": "production-1440-header-create.png",
+      "sha256": "0007227c17f4ef103141fa0dfa8f015654ce380abaf94eb4a96a966b384ebb35",
+      "height": 900
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "state": "empty-create",
+      "file": "production-1440-empty-create.png",
+      "sha256": "b15ae23113a96505123cb12b1c134b10752512df9873d2fe059d52931c454938",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "state": "default",
+      "file": "review-390-default.png",
+      "sha256": "65912760b181dc561ab114946ad803629cfe593b8409df8d3fbda6ce7524a1da",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "state": "record-button",
+      "file": "review-390-record-button.png",
+      "sha256": "fce8c40f6188e73cbf27b846dd410212c00ca9b9a15246883fc8941c6a0927c7",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "state": "record-escape",
+      "file": "review-390-record-escape.png",
+      "sha256": "6fdf1c00a18958b3e7be26d480cd3d9dfa1c54b09117d3f146aec7e33da6d98e",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "state": "record-scrim",
+      "file": "review-390-record-scrim.png",
+      "sha256": "fce8c40f6188e73cbf27b846dd410212c00ca9b9a15246883fc8941c6a0927c7",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "state": "missing-record",
+      "file": "review-390-missing-record.png",
+      "sha256": "59b2b707ea716a209b584f6f3ba2cc7417b5aecdd0eb686a35973e33ae0b9489",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "state": "header-create",
+      "file": "review-390-header-create.png",
+      "sha256": "83548c915dc816e14c4efa37346426b44b15f7f51ee0e6e61bba49cec9ee881b",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "state": "empty-create",
+      "file": "review-390-empty-create.png",
+      "sha256": "596425b8c33f774eebaf560a5e9f1923c41fde9843f2be0f5fcc791e733370b2",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "state": "default",
+      "file": "review-760-default.png",
+      "sha256": "b7c520ec62ed492276b43bbe45b2b7aaead3de6f5823ce0bb9d5c4ea65dc7794",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "state": "record-button",
+      "file": "review-760-record-button.png",
+      "sha256": "4ec9b654269a47c783286d9f6c19b7fe08fbc44d7e5085d40083b25dbd64f553",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "state": "record-escape",
+      "file": "review-760-record-escape.png",
+      "sha256": "44e09f438836435d2b288c5af71ce3d59556282f8c44dce079ff8efaac7735a4",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "state": "record-scrim",
+      "file": "review-760-record-scrim.png",
+      "sha256": "4ec9b654269a47c783286d9f6c19b7fe08fbc44d7e5085d40083b25dbd64f553",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "state": "missing-record",
+      "file": "review-760-missing-record.png",
+      "sha256": "4993aa6544d6594b291c7ccc9689a55438e32fc3439ce5e85ac891734f4cbf72",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "state": "header-create",
+      "file": "review-760-header-create.png",
+      "sha256": "1cb77c474c57a06f98a932c5306eafb297514f4c0055ab8643b40ac2ff5660d8",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "state": "empty-create",
+      "file": "review-760-empty-create.png",
+      "sha256": "10a6466fced7094ce55d55c1ac32c004989d0da2d2628187a14ec28dc108c02c",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "state": "default",
+      "file": "review-761-default.png",
+      "sha256": "29220fc5a42a2014964cd20144dce4a71f1742c7fc89e00e0b9aed9612d31675",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "state": "record-button",
+      "file": "review-761-record-button.png",
+      "sha256": "807fe16fc2af5a0f512e2c65eaae7afc4118c4c5c4a4b05ffef23b4844e9f023",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "state": "record-escape",
+      "file": "review-761-record-escape.png",
+      "sha256": "accbad4862bb847ea39e6c40bf4b4d37de5ec076d9ac77a6b465ec2dd488f1a7",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "state": "record-scrim",
+      "file": "review-761-record-scrim.png",
+      "sha256": "accbad4862bb847ea39e6c40bf4b4d37de5ec076d9ac77a6b465ec2dd488f1a7",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "state": "missing-record",
+      "file": "review-761-missing-record.png",
+      "sha256": "c5b1b73f2891e01ba019d3ded50df9c68d8643c6fbb6a644e3a4d4f9589ee238",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "state": "header-create",
+      "file": "review-761-header-create.png",
+      "sha256": "751690e02b64728fb49f3ac8c2c2a218051eca82d3d4479901dbd6746694615a",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "state": "empty-create",
+      "file": "review-761-empty-create.png",
+      "sha256": "f4f0c5c9b27b023ed629ed7717955341d5349838c0bf66674d77b55eeaedf728",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "state": "default",
+      "file": "review-1440-default.png",
+      "sha256": "96c2a67aa94e6d86109eebed5e7fea450beb458f2f7496476d6780da548734c3",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "state": "record-button",
+      "file": "review-1440-record-button.png",
+      "sha256": "240222bfd3aeeba99b69ea2620f61a969371acc6d4857b75b81727d0cfa6472e",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "state": "record-escape",
+      "file": "review-1440-record-escape.png",
+      "sha256": "cfb0a72a65d4b17c5b890a12ee518b0eac31ac8504f0eb4502bc8cb1c6c0f93f",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "state": "record-scrim",
+      "file": "review-1440-record-scrim.png",
+      "sha256": "cfb0a72a65d4b17c5b890a12ee518b0eac31ac8504f0eb4502bc8cb1c6c0f93f",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "state": "missing-record",
+      "file": "review-1440-missing-record.png",
+      "sha256": "c84b096c3ea033ec472fbe4bd96cebd3eae563e8b1e984a961caf2480b725958",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "state": "header-create",
+      "file": "review-1440-header-create.png",
+      "sha256": "21812e46b97b30db0fde7be3e016441e0c1445620969a1f3028317464490f3c1",
+      "height": 900
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "state": "empty-create",
+      "file": "review-1440-empty-create.png",
+      "sha256": "b16e8108f72270279d35d4604a141bfe0bc5681789b4a81f2043846ab9a52950",
+      "height": 900
+    }
+  ],
+  "observations": [
+    {
+      "surface": "production",
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "surface": "production",
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "surface": "production",
+      "width": 761,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "surface": "production",
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "surface": "review",
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "surface": "review",
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "surface": "review",
+      "width": 761,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "surface": "review",
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    }
+  ],
+  "processesClosed": true
+}

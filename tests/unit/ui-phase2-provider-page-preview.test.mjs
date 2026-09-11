@@ -4,8 +4,9 @@ import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
 import { providerPagePreview } from "../../scripts/lib/ui-phase2-provider-page-preview.mjs";
+import { historicalProviderFocusSource } from "../../scripts/lib/ui-phase2-provider-focus-baseline.mjs";
 
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) => historicalProviderFocusSource(f, readFileSync(f, "utf8"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const folder = "output/playwright/p46-provider-page-vue-preview";
 const source = "apps/web/src/components/ProviderRegistry.vue";
@@ -37,7 +38,7 @@ test("P46 preview changes only two exact presentation strings; all original code
   assert.doesNotMatch(original, /@secondary=/);
 });
 
-test("P46 source and formal image manifest match current files exactly", () => {
+test("P46 historical page source and formal image manifest keep exact associations", () => {
   const e = evidence();
   assert.equal(e.kind, "P46-PROVIDER-PAGE-VUE-PREVIEW-r1");
   assert.equal(e.approval, "pending-user-review");

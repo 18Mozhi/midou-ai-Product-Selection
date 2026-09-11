@@ -4,8 +4,9 @@ import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
 import { providerPagePreview } from "../../scripts/lib/ui-phase2-provider-page-preview.mjs";
+import { historicalProviderFocusSource } from "../../scripts/lib/ui-phase2-provider-focus-baseline.mjs";
 
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) => historicalProviderFocusSource(f, readFileSync(f, "utf8"));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p46-provider-detail-vue-preview";
 const source = "apps/web/src/components/ProviderRegistry.vue";
@@ -23,7 +24,7 @@ const variants = [
   "long",
 ];
 
-test("P46 detail slot and script remain the actual production Vue", () => {
+test("P46 historical detail slot and script keep their original Vue association", () => {
   const original = read(source),
     transformed = providerPagePreview(original);
   const slot = (s) => s.match(/<template #detail="[^"]*">[\s\S]*?<\/template>/g);
@@ -36,7 +37,7 @@ test("P46 detail slot and script remain the actual production Vue", () => {
   assert.ok(evidence().sourceHashes["apps/web/src/components/ResponsiveDataView.vue"]);
 });
 
-test("P46 detail current source and exact68 image inventory are pinned", () => {
+test("P46 detail historical source and exact68 image inventory are pinned", () => {
   const e = evidence();
   assert.equal(e.kind, "P46-PROVIDER-DETAIL-VUE-PREVIEW-r1");
   assert.equal(e.approval, "pending-user-review");
@@ -128,7 +129,7 @@ test("P46 detail10 supplied variants preserve9+5 facts and limited focus checks 
   }
 });
 
-test("P46 detail CSS is isolated and editor-close BODY focus remains an explicit gap", () => {
+test("P46 historical detail CSS is isolated and BODY focus evidence is not rewritten", () => {
   assert.doesNotMatch(read("apps/web/src/main.ts"), /provider-detail-preview/);
   assert.match(
     read("design-plans/ui-phase-2-2026-09-07/implementation/provider-detail-preview.css"),

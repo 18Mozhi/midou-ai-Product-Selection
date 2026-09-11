@@ -54,6 +54,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   sortOrder = ref("name_asc"),
   page = ref(1),
   pageSize = 20,
+  registryRoot = ref<HTMLElement | null>(null),
   editorPanel = ref<HTMLFormElement | null>(null),
   editorTrigger = ref<HTMLElement | null>(null),
   loadController = ref<AbortController | null>(null),
@@ -318,7 +319,9 @@ async function load() {
     if (loadController.value === controller) loadController.value = null;
   }
 }
+let editorFocusGeneration = 0;
 function edit(item?: Provider, event?: Event) {
+  editorFocusGeneration++;
   editorTrigger.value =
     event?.currentTarget instanceof HTMLElement
       ? event.currentTarget
@@ -372,10 +375,41 @@ function edit(item?: Provider, event?: Event) {
   void nextTick(() => editorPanel.value?.querySelector<HTMLElement>("input, select")?.focus());
 }
 function closeEditor() {
+  const providerId = editing.value?.id,
+    trigger = editorTrigger.value,
+    generation = editorFocusGeneration;
   editing.value = null;
   editorOpen.value = false;
   message.value = "";
-  void nextTick(() => editorTrigger.value?.focus());
+  // Table controls render their toolbar on a second tick; focus after layout has settled.
+  void nextTick(() =>
+    window.requestAnimationFrame(() => {
+      const root = registryRoot.value;
+      if (!root?.isConnected || editorOpen.value || generation !== editorFocusGeneration) return;
+      const available = (element: HTMLElement | null): element is HTMLElement =>
+        Boolean(
+          element?.isConnected &&
+          !element.matches(":disabled") &&
+          !element.closest("[inert]") &&
+          element.checkVisibility({ visibilityProperty: true }),
+        );
+      if (!available(root)) return;
+      // Do not take focus from another dialog opened during the close handoff.
+      if (document.activeElement?.closest('[role="dialog"], [role="alertdialog"], dialog[open]'))
+        return;
+      const rowButton = providerId
+        ? [...root.querySelectorAll<HTMLElement>("[data-provider-focus-id]")]
+            .filter((element) => element.dataset.providerFocusId === providerId)
+            .map((element) => element.closest<HTMLButtonElement>("button"))
+            .find(available)
+        : null;
+      const emptyCreate = root.querySelector<HTMLButtonElement>(".provider-empty > button"),
+        headerCreate = root.querySelector<HTMLButtonElement>(".provider-hero > button"),
+        target = [trigger, rowButton ?? null, emptyCreate, headerCreate].find(available);
+      target?.focus();
+      editorTrigger.value = null;
+    }),
+  );
 }
 function applyTemplate() {
   const shared = {
@@ -474,7 +508,7 @@ onMounted(load);
 onBeforeUnmount(() => loadController.value?.abort());
 </script>
 <template>
-  <section class="provider-registry">
+  <section ref="registryRoot" class="provider-registry">
     <header class="provider-hero">
       <div class="provider-hero-copy">
         <p>来源合同与执行门禁</p>
@@ -635,14 +669,22 @@ onBeforeUnmount(() => loadController.value?.abort());
                     }}</small
                   >
                 </td>
-                <td><button type="button" @click="edit(item, $event)">编辑</button></td>
+                <td>
+                  <button
+                    type="button"
+                    :data-provider-focus-id="item.id"
+                    @click="edit(item, $event)"
+                  >
+                    编辑
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </template>
       <template #summary="{ row }">
-        <span class="responsive-record-summary">
+        <span class="responsive-record-summary" :data-provider-focus-id="row.id">
           <strong>{{ row.name }}</strong>
           <small
             >{{ accessModeText(row.access_mode) }} · {{ row.markets.join(" · ") }} · 每
@@ -747,7 +789,7 @@ onBeforeUnmount(() => loadController.value?.abort());
       v-if="editorOpen"
       class="provider-editor-layer"
       role="presentation"
-      @mousedown.self="closeEditor"
+      @mousedown.self.prevent="closeEditor"
     >
       <form
         ref="editorPanel"

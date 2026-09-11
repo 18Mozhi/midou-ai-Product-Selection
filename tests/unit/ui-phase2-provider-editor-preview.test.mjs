@@ -4,14 +4,15 @@ import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
 import { providerPagePreview } from "../../scripts/lib/ui-phase2-provider-page-preview.mjs";
+import { historicalProviderFocusSource } from "../../scripts/lib/ui-phase2-provider-focus-baseline.mjs";
 
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) => historicalProviderFocusSource(f, readFileSync(f, "utf8"));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p46-provider-editor-vue-preview";
 const source = "apps/web/src/components/ProviderRegistry.vue";
 const evidence = () => JSON.parse(read(folder + "/evidence.json"));
 
-test("P46 current editor template, all23 field models and script are unchanged", () => {
+test("P46 historical editor template, all23 field models and script keep exact associations", () => {
   const original = read(source),
     transformed = providerPagePreview(original);
   const marker = '    <div\n      v-if="editorOpen"';
@@ -34,7 +35,7 @@ test("P46 current editor template, all23 field models and script are unchanged",
   );
 });
 
-test("P46 editor formal source and134 image inventory are pinned to current files", () => {
+test("P46 editor historical source and134 image inventory remain pinned", () => {
   const e = evidence();
   assert.equal(e.kind, "P46-PROVIDER-EDITOR-VUE-PREVIEW-r1");
   assert.equal(e.approval, "pending-user-review");

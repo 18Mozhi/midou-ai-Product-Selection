@@ -1,0 +1,11 @@
+{
+  "scope": "Seven default images are byte-identical. The production1440 comparison has the exact known numeral raster difference below; not a claim of all-eight pixel identity. These same two hashes swapped sides across repeated captures, so the difference is not consistently associated with the focus patch. Source contract proves no non-focus template/style changes; underlying raster cause is not established.",
+  "file": "production-1440-default.png",
+  "baselineSha256": "3d2dd6585fbf2bc6d1bbab828a8d49a2361cec47e1f5f5f243cab1a7760c78d3",
+  "currentSha256": "a1f7dd074adbd760236ebd86a51861be811dac4dea967f4942b67f699d739e1e",
+  "dimensions": [1440, 900],
+  "changedPixels": 1681,
+  "maximumChannelDelta": 24,
+  "bounds": [18, 351, 1147, 378],
+  "region": "Four overview counts only, manually inspected; no geometry shift observed. Unknown new pixel changes must fail verification."
+}
