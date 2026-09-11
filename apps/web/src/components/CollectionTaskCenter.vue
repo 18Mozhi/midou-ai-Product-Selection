@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from "vue";
+import {
+  computed,
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -113,7 +122,8 @@ let listController: AbortController | null = null,
   listSequence = 0,
   detailSequence = 0,
   detailOpenedFromList = false,
-  returnFocus: HTMLElement | null = null;
+  returnFocus: HTMLElement | null = null,
+  resumeListRead = false;
 const filtered = computed(() =>
   tasks.value.filter(
     (item) =>
@@ -336,7 +346,17 @@ async function load(options: { preserve?: boolean } = {}) {
 async function openTask(id: string, options: { updateUrl?: boolean } = {}) {
   if (options.updateUrl) {
     const active = document.activeElement;
-    returnFocus = active instanceof HTMLElement ? active : null;
+    const mobileRecord = [...document.querySelectorAll<HTMLElement>("[data-collection-task-id]")]
+      .find((element) => element.dataset.collectionTaskId === id)
+      ?.closest("button");
+    returnFocus =
+      active instanceof HTMLElement && active.closest(".responsive-data-view__drawer")
+        ? mobileRecord instanceof HTMLElement
+          ? mobileRecord
+          : null
+        : active instanceof HTMLElement
+          ? active
+          : null;
     detailOpenedFromList = true;
     await router.push({ query: { ...route.query, task: id } });
     return;
@@ -439,6 +459,14 @@ function suspendDetail() {
   replayIssue.value = "";
   returnFocus = null;
 }
+function suspendList(reason: "deactivated" | "unmounted") {
+  const interrupted = Boolean(listController);
+  listSequence += 1;
+  listController?.abort(reason);
+  listController = null;
+  listLoading.value = false;
+  resumeListRead = reason === "deactivated" && interrupted;
+}
 function detailKeydown(event: KeyboardEvent) {
   if (event.key === "Escape") {
     event.preventDefault();
@@ -537,15 +565,20 @@ onMounted(async () => {
   if (taskId && /^[0-9a-f-]{36}$/i.test(taskId)) await openTask(taskId);
 });
 onBeforeUnmount(() => {
-  listSequence += 1;
-  listController?.abort("unmounted");
+  suspendList("unmounted");
   detailController?.abort("unmounted");
   document.body.classList.remove("collection-detail-open");
 });
 onDeactivated(() => {
+  suspendList("deactivated");
   confirming.value = false;
   suspendDetail();
   document.body.classList.remove("collection-detail-open");
+});
+onActivated(() => {
+  if (!resumeListRead || route.path !== "/platform-admin/collection") return;
+  resumeListRead = false;
+  void load({ preserve: tasks.value.length > 0 });
 });
 </script>
 
@@ -700,7 +733,7 @@ onDeactivated(() => {
             </table>
           </template>
           <template #summary="{ row }">
-            <span class="responsive-record-summary">
+            <span class="responsive-record-summary" :data-collection-task-id="row.id">
               <strong>{{ label(row.status) }} · {{ row.available_result_count }} 条证据</strong>
               <small>{{ label(row.coverage_status) }} · {{ time(row.updated_at) }}</small>
             </span>

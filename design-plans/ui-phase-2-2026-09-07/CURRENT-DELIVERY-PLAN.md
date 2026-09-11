@@ -1,5 +1,7 @@
 # 第二阶段完整实施计划 · 当前领取与审核入口
 
+最新P51生命周期/返焦：[P51详情可达性与重放归属](P51-INTERACTION-OWNERSHIP-IMPLEMENTATION.md)追加KeepAlive离页中止等待列表GET并仅在返回时续读，以及手机记录抽屉转完整详情后返焦原记录。旧代码双端定向3失败/1通过，修复后4/4，最终P51桌面/手机完整36/36且web构建通过；缓存策略、路由、共享抽屉合同、API和业务动作不变，未部署。具体C视觉审核与真实链路继续。
+
 最新P51路由/读取归属：[P51详情可达性与重放归属](P51-INTERACTION-OWNERSHIP-IMPLEMENTATION.md)追加page/status同路由back/forward恢复与列表GET查询快照/代次；新读取abort旧请求，迟到分支不覆盖新状态。旧代码双红、修复后双端定向4/4，最终P51桌面/手机完整32/32且web构建通过；URL、GET、分页、状态机不变，未部署。默认C布局仍待审；KeepAlive离页读取、移动二级入口、完整视觉与真实链路继续。
 
 最新P51空结果/确认焦点：[P51详情可达性与重放归属](P51-INTERACTION-OWNERSHIP-IMPLEMENTATION.md)追加服务端0条保留范围和两项筛选、指定状态返回全部状态，以及重放确认期间底层详情inert与Escape返焦。原API、状态参数、确认短语不变，未部署。默认C布局仍是当前审核组；page/status历史、移动二级入口、完整视觉与真实链路继续。

@@ -751,3 +751,77 @@ test("UI2-CL51 same-route status changes supersede an older pending list read", 
     await expect(rows.first()).not.toContainText("死信");
   }
 });
+
+test("UI2-CL51 resumes a list read that was interrupted by KeepAlive deactivation", async ({
+  page,
+}) => {
+  await nav(page);
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => (release = resolve));
+  let started!: () => void;
+  const entered = new Promise<void>((resolve) => (started = resolve));
+  let reads = 0;
+  await page.route("**/api/v1/platform/collection/tasks?**", async (route) => {
+    reads += 1;
+    if (reads === 2) {
+      started();
+      await held;
+    }
+    try {
+      await route.fulfill({
+        json: {
+          data: reads >= 3 ? [tasks[2]] : tasks,
+          meta: { page: 1, page_size: 50, total: reads >= 3 ? 1 : tasks.length },
+          request_id: `ui2-cl51-keepalive-${reads}`,
+        },
+      });
+    } catch (error) {
+      if (!route.request().failure()) throw error;
+    }
+  });
+  await page.goto("/platform-admin/collection");
+  await expect(page.getByRole("heading", { name: "采集任务监控", level: 2 })).toBeVisible();
+  await page.getByRole("button", { name: "刷新任务" }).click();
+  await entered;
+  await page.getByRole("link", { name: "网页登录采集（高级）", exact: true }).click();
+  await expect(page).toHaveURL(/\/platform-admin\/collection\/browser-runtime$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/\/platform-admin\/collection$/);
+  try {
+    await expect.poll(() => reads).toBeGreaterThanOrEqual(3);
+  } finally {
+    release();
+  }
+  await expect(page.getByRole("combobox", { name: "采集任务状态" })).toBeEnabled();
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await expect(page.getByText("执行中 · 0 条证据")).toBeVisible();
+  } else {
+    const rows = page.locator(".collection-task-table-card tbody tr");
+    await expect(rows).toHaveCount(1);
+    await expect(rows.first()).toContainText("执行中");
+  }
+});
+
+test("UI2-CL51 returns focus from full detail to its originating task record", async ({ page }) => {
+  await nav(page);
+  await list(page);
+  await page.route(`**/api/v1/platform/collection/tasks/${ids.dead}`, (route) =>
+    route.fulfill({ json: { data: detail(), request_id: "ui2-cl51-return-focus" } }),
+  );
+  await page.goto("/platform-admin/collection");
+  let trigger;
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    trigger = page.getByRole("button", { name: /死信 · 0 条证据/ });
+    await trigger.click();
+    await page.getByRole("button", { name: "打开完整任务详情" }).click();
+  } else {
+    const row = page.locator(".collection-task-table-card tbody tr").filter({ hasText: "死信" });
+    trigger = row.getByRole("button", { name: "查看" });
+    await trigger.click();
+  }
+  const detailDialog = page.getByRole("dialog", { name: /任务 00000000/ });
+  await expect(detailDialog).toBeVisible();
+  await detailDialog.getByRole("button", { name: "关闭任务详情" }).click();
+  await expect(detailDialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
