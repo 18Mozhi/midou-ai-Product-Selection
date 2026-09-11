@@ -3,12 +3,14 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import postcss from "postcss";
+import { historicalProviderFieldSource } from "../../scripts/lib/ui-phase2-provider-field-baseline.mjs";
 import {
   historicalProviderStructureSource,
   providerStructureRevisions,
 } from "../../scripts/lib/ui-phase2-provider-structure-baseline.mjs";
 
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+// This suite binds the immutable structure-only capture before field semantics.
+const read = (f) => historicalProviderFieldSource(f, readFileSync(f, "utf8"));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = "apps/web/src/components/ProviderRegistry.vue";
 const current = read(file);

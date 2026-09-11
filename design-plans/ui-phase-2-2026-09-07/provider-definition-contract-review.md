@@ -1,5 +1,7 @@
 # P46/P47 · 来源定义与适配器事实合同
 
+2026-09-11字段语义：[23字段名称与20错误关联](P46-FIELD-SEMANTICS-IMPLEMENTATION.md)。原script/样式/校验/模型与业务动作保持，Registry当前LF指纹为ebd8b3876f9911ca6d5a0be6bac7a9352d977fa2446f4407342e54cd92b1fe1c；下方87728等保留历史证据。PR-G02字段错误关联本项已修复，完整模态/背景隔离/必填宣告与真实读屏器未验，非整项关闭。
+
 2026-09-11结构接入：[P46已批准结构](P46-APPROVED-STRUCTURE-IMPLEMENTATION.md)。仅新增局部CSS引用，完整script/template及R22候选不变。Registry当前LF指纹更新为87728f892d895f3be4ecb0ecf016125745ea99fc9898f4d3c8c1845013b19a90；下方768d2d9c等保留对应旧证据。前后264图验证真实入口不注入审核样式，未部署，未扩大批准范围。
 
 2026-09-11键盘签名同步：编辑定义e277037d626f08f0.1承接为d36ecadeb20b9988.1，表单事件3f2a491e2f9e8f03.1承接为eb72344b9c9f3d10.1；仍归PR46-EDITOR与PR46-CLOSE/SAVE，增加Tab约束并非新增业务动作，R22总数不变。下表Registry更新当前指纹，其余源未改。反馈外观时点历史指纹 `ec671e2cf8c1d55f88d97df05d7a14849235961b4e4f66f838ca0cf6fb76971f` 保留用于旧图精确关联，不回写原图。
@@ -161,7 +163,7 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 | 文件                                               | SHA-256                                                          |
 | -------------------------------------------------- | ---------------------------------------------------------------- |
 | apps/web/src/components/ProviderRuntimeSurface.vue | a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6 |
-| apps/web/src/components/ProviderRegistry.vue       | 87728f892d895f3be4ecb0ecf016125745ea99fc9898f4d3c8c1845013b19a90 |
+| apps/web/src/components/ProviderRegistry.vue       | ebd8b3876f9911ca6d5a0be6bac7a9352d977fa2446f4407342e54cd92b1fe1c |
 | apps/web/src/components/ProviderAdapterCenter.vue  | 0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075 |
 | apps/web/src/components/ResponsiveDataView.vue     | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/TableViewControls.vue      | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |

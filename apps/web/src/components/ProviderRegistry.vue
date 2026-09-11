@@ -930,19 +930,57 @@ onActivated(() => {
         </div>
         <div v-if="editorStep === 1" class="provider-fields">
           <label
-            >来源代码（技术标识）<input v-model.trim="form.code" autocomplete="off" />
-            <small v-if="formErrors.code">{{ formErrors.code }}</small></label
+            ><span id="provider-field-code-label">来源代码（技术标识）</span
+            ><input
+              aria-labelledby="provider-field-code-label"
+              :aria-invalid="Boolean(formErrors.code)"
+              :aria-describedby="formErrors.code ? 'provider-field-code-error' : undefined"
+              v-model.trim="form.code"
+              autocomplete="off"
+            />
+            <small v-if="formErrors.code" id="provider-field-code-error">{{
+              formErrors.code
+            }}</small></label
           ><label
-            >名称<input v-model="form.name" />
-            <small v-if="formErrors.name">{{ formErrors.name }}</small></label
+            ><span id="provider-field-name-label">名称</span
+            ><input
+              aria-labelledby="provider-field-name-label"
+              :aria-invalid="Boolean(formErrors.name)"
+              :aria-describedby="formErrors.name ? 'provider-field-name-error' : undefined"
+              v-model="form.name"
+            />
+            <small v-if="formErrors.name" id="provider-field-name-error">{{
+              formErrors.name
+            }}</small></label
           ><label class="wide"
-            >目标 URL<input v-model="form.target_url" />
-            <small v-if="formErrors.target_url">{{ formErrors.target_url }}</small></label
+            ><span id="provider-field-target_url-label">目标 URL</span
+            ><input
+              aria-labelledby="provider-field-target_url-label"
+              :aria-invalid="Boolean(formErrors.target_url)"
+              :aria-describedby="
+                formErrors.target_url ? 'provider-field-target_url-error' : undefined
+              "
+              v-model="form.target_url"
+            />
+            <small v-if="formErrors.target_url" id="provider-field-target_url-error">{{
+              formErrors.target_url
+            }}</small></label
           ><label
-            >负责人<input v-model="form.owner_label" />
-            <small v-if="formErrors.owner_label">{{ formErrors.owner_label }}</small></label
+            ><span id="provider-field-owner_label-label">负责人</span
+            ><input
+              aria-labelledby="provider-field-owner_label-label"
+              :aria-invalid="Boolean(formErrors.owner_label)"
+              :aria-describedby="
+                formErrors.owner_label ? 'provider-field-owner_label-error' : undefined
+              "
+              v-model="form.owner_label"
+            />
+            <small v-if="formErrors.owner_label" id="provider-field-owner_label-error">{{
+              formErrors.owner_label
+            }}</small></label
           ><label
-            >接入模式<select v-model="form.access_mode">
+            ><span id="provider-field-access_mode-label">接入模式</span
+            ><select aria-labelledby="provider-field-access_mode-label" v-model="form.access_mode">
               <option
                 v-for="v in [
                   'public_page',
@@ -961,93 +999,264 @@ onActivated(() => {
         </div>
         <div v-else-if="editorStep === 2" class="provider-fields">
           <label
-            >市场<input v-model="form.markets" placeholder="US,CN" />
-            <small v-if="formErrors.markets">{{ formErrors.markets }}</small></label
+            ><span id="provider-field-markets-label">市场</span
+            ><input
+              aria-labelledby="provider-field-markets-label"
+              :aria-invalid="Boolean(formErrors.markets)"
+              :aria-describedby="formErrors.markets ? 'provider-field-markets-error' : undefined"
+              v-model="form.markets"
+              placeholder="US,CN"
+            />
+            <small v-if="formErrors.markets" id="provider-field-markets-error">{{
+              formErrors.markets
+            }}</small></label
           ><label
-            >语言<input v-model="form.languages" placeholder="en-US,zh-CN" />
-            <small v-if="formErrors.languages">{{ formErrors.languages }}</small></label
+            ><span id="provider-field-languages-label">语言</span
+            ><input
+              aria-labelledby="provider-field-languages-label"
+              :aria-invalid="Boolean(formErrors.languages)"
+              :aria-describedby="
+                formErrors.languages ? 'provider-field-languages-error' : undefined
+              "
+              v-model="form.languages"
+              placeholder="en-US,zh-CN"
+            />
+            <small v-if="formErrors.languages" id="provider-field-languages-error">{{
+              formErrors.languages
+            }}</small></label
           ><label class="wide"
-            >字段清单<input v-model="form.fields" />
-            <small v-if="formErrors.fields">{{ formErrors.fields }}</small></label
+            ><span id="provider-field-fields-label">字段清单</span
+            ><input
+              aria-labelledby="provider-field-fields-label"
+              :aria-invalid="Boolean(formErrors.fields)"
+              :aria-describedby="formErrors.fields ? 'provider-field-fields-error' : undefined"
+              v-model="form.fields"
+            />
+            <small v-if="formErrors.fields" id="provider-field-fields-error">{{
+              formErrors.fields
+            }}</small></label
           ><label
-            >去重键<input v-model="form.dedupe_key" />
-            <small v-if="formErrors.dedupe_key">{{ formErrors.dedupe_key }}</small></label
+            ><span id="provider-field-dedupe_key-label">去重键</span
+            ><input
+              aria-labelledby="provider-field-dedupe_key-label"
+              :aria-invalid="Boolean(formErrors.dedupe_key)"
+              :aria-describedby="
+                formErrors.dedupe_key ? 'provider-field-dedupe_key-error' : undefined
+              "
+              v-model="form.dedupe_key"
+            />
+            <small v-if="formErrors.dedupe_key" id="provider-field-dedupe_key-error">{{
+              formErrors.dedupe_key
+            }}</small></label
           ><label
-            >解析器版本<input v-model="form.parser_version" />
-            <small v-if="formErrors.parser_version">{{ formErrors.parser_version }}</small></label
+            ><span id="provider-field-parser_version-label">解析器版本</span
+            ><input
+              aria-labelledby="provider-field-parser_version-label"
+              :aria-invalid="Boolean(formErrors.parser_version)"
+              :aria-describedby="
+                formErrors.parser_version ? 'provider-field-parser_version-error' : undefined
+              "
+              v-model="form.parser_version"
+            />
+            <small v-if="formErrors.parser_version" id="provider-field-parser_version-error">{{
+              formErrors.parser_version
+            }}</small></label
           ><label class="wide"
-            >健康检查 URL<input v-model="form.healthcheck_url" />
-            <small v-if="formErrors.healthcheck_url">{{ formErrors.healthcheck_url }}</small></label
+            ><span id="provider-field-healthcheck_url-label">健康检查 URL</span
+            ><input
+              aria-labelledby="provider-field-healthcheck_url-label"
+              :aria-invalid="Boolean(formErrors.healthcheck_url)"
+              :aria-describedby="
+                formErrors.healthcheck_url ? 'provider-field-healthcheck_url-error' : undefined
+              "
+              v-model="form.healthcheck_url"
+            />
+            <small v-if="formErrors.healthcheck_url" id="provider-field-healthcheck_url-error">{{
+              formErrors.healthcheck_url
+            }}</small></label
           >
         </div>
         <div v-else-if="editorStep === 3" class="provider-fields">
           <label
-            >频率（分钟）<input
+            ><span id="provider-field-schedule_minutes-label">频率（分钟）</span
+            ><input
+              aria-labelledby="provider-field-schedule_minutes-label"
+              :aria-invalid="Boolean(formErrors.schedule_minutes)"
+              :aria-describedby="
+                formErrors.schedule_minutes ? 'provider-field-schedule_minutes-error' : undefined
+              "
               v-model.number="form.schedule_minutes"
               type="number"
               min="1"
               max="10080"
             />
-            <small v-if="formErrors.schedule_minutes">{{
+            <small v-if="formErrors.schedule_minutes" id="provider-field-schedule_minutes-error">{{
               formErrors.schedule_minutes
             }}</small></label
           ><label
-            >并发<input v-model.number="form.concurrency_limit" type="number" min="1" max="20" />
-            <small v-if="formErrors.concurrency_limit">{{
-              formErrors.concurrency_limit
+            ><span id="provider-field-concurrency_limit-label">并发</span
+            ><input
+              aria-labelledby="provider-field-concurrency_limit-label"
+              :aria-invalid="Boolean(formErrors.concurrency_limit)"
+              :aria-describedby="
+                formErrors.concurrency_limit ? 'provider-field-concurrency_limit-error' : undefined
+              "
+              v-model.number="form.concurrency_limit"
+              type="number"
+              min="1"
+              max="20"
+            />
+            <small
+              v-if="formErrors.concurrency_limit"
+              id="provider-field-concurrency_limit-error"
+              >{{ formErrors.concurrency_limit }}</small
+            ></label
+          ><label
+            ><span id="provider-field-timeout_ms-label">超时 ms</span
+            ><input
+              aria-labelledby="provider-field-timeout_ms-label"
+              :aria-invalid="Boolean(formErrors.timeout_ms)"
+              :aria-describedby="
+                formErrors.timeout_ms ? 'provider-field-timeout_ms-error' : undefined
+              "
+              v-model.number="form.timeout_ms"
+              type="number"
+              min="1000"
+              max="120000"
+            />
+            <small v-if="formErrors.timeout_ms" id="provider-field-timeout_ms-error">{{
+              formErrors.timeout_ms
             }}</small></label
           ><label
-            >超时 ms<input v-model.number="form.timeout_ms" type="number" min="1000" max="120000" />
-            <small v-if="formErrors.timeout_ms">{{ formErrors.timeout_ms }}</small></label
+            ><span id="provider-field-retry_limit-label">重试</span
+            ><input
+              aria-labelledby="provider-field-retry_limit-label"
+              :aria-invalid="Boolean(formErrors.retry_limit)"
+              :aria-describedby="
+                formErrors.retry_limit ? 'provider-field-retry_limit-error' : undefined
+              "
+              v-model.number="form.retry_limit"
+              type="number"
+              min="0"
+              max="10"
+            />
+            <small v-if="formErrors.retry_limit" id="provider-field-retry_limit-error">{{
+              formErrors.retry_limit
+            }}</small></label
           ><label
-            >重试<input v-model.number="form.retry_limit" type="number" min="0" max="10" />
-            <small v-if="formErrors.retry_limit">{{ formErrors.retry_limit }}</small></label
-          ><label
-            >熔断阈值<input
+            ><span id="provider-field-circuit_failure_threshold-label">熔断阈值</span
+            ><input
+              aria-labelledby="provider-field-circuit_failure_threshold-label"
+              :aria-invalid="Boolean(formErrors.circuit_failure_threshold)"
+              :aria-describedby="
+                formErrors.circuit_failure_threshold
+                  ? 'provider-field-circuit_failure_threshold-error'
+                  : undefined
+              "
               v-model.number="form.circuit_failure_threshold"
               type="number"
               min="1"
               max="20"
             />
-            <small v-if="formErrors.circuit_failure_threshold">{{
-              formErrors.circuit_failure_threshold
-            }}</small></label
+            <small
+              v-if="formErrors.circuit_failure_threshold"
+              id="provider-field-circuit_failure_threshold-error"
+              >{{ formErrors.circuit_failure_threshold }}</small
+            ></label
           ><label
-            >保留天数<input v-model.number="form.retention_days" type="number" min="1" max="3650" />
-            <small v-if="formErrors.retention_days">{{ formErrors.retention_days }}</small></label
+            ><span id="provider-field-retention_days-label">保留天数</span
+            ><input
+              aria-labelledby="provider-field-retention_days-label"
+              :aria-invalid="Boolean(formErrors.retention_days)"
+              :aria-describedby="
+                formErrors.retention_days ? 'provider-field-retention_days-error' : undefined
+              "
+              v-model.number="form.retention_days"
+              type="number"
+              min="1"
+              max="3650"
+            />
+            <small v-if="formErrors.retention_days" id="provider-field-retention_days-error">{{
+              formErrors.retention_days
+            }}</small></label
           ><label class="wide"
-            >失败规则<input v-model="form.failure_rules" />
-            <small v-if="formErrors.failure_rules">{{ formErrors.failure_rules }}</small></label
+            ><span id="provider-field-failure_rules-label">失败规则</span
+            ><input
+              aria-labelledby="provider-field-failure_rules-label"
+              :aria-invalid="Boolean(formErrors.failure_rules)"
+              :aria-describedby="
+                formErrors.failure_rules ? 'provider-field-failure_rules-error' : undefined
+              "
+              v-model="form.failure_rules"
+            />
+            <small v-if="formErrors.failure_rules" id="provider-field-failure_rules-error">{{
+              formErrors.failure_rules
+            }}</small></label
           >
         </div>
         <div v-else class="provider-fields">
           <label
-            >平台条款复核<select v-model="form.terms_review_status">
+            ><span id="provider-field-terms_review_status-label">平台条款复核</span
+            ><select
+              aria-labelledby="provider-field-terms_review_status-label"
+              v-model="form.terms_review_status"
+            >
               <option value="pending">待复核</option>
               <option value="approved">已批准</option>
               <option value="rejected">已拒绝</option>
             </select></label
           ><label
-            >发布状态<select v-model="form.status">
+            ><span id="provider-field-status-label">发布状态</span
+            ><select aria-labelledby="provider-field-status-label" v-model="form.status">
               <option value="draft">草稿</option>
               <option value="disabled">未启用</option>
               <option value="enabled">已启用</option>
             </select></label
           ><label class="wide"
-            >条款参考 URL<input
+            ><span id="provider-field-terms_reference_url-label">条款参考 URL</span
+            ><input
+              aria-labelledby="provider-field-terms_reference_url-label"
+              :aria-invalid="Boolean(formErrors.terms_reference_url)"
+              :aria-describedby="
+                formErrors.terms_reference_url
+                  ? 'provider-field-terms_reference_url-error'
+                  : undefined
+              "
               v-model="form.terms_reference_url"
               type="url"
               placeholder="https://…"
             />
-            <small v-if="formErrors.terms_reference_url">{{
-              formErrors.terms_reference_url
+            <small
+              v-if="formErrors.terms_reference_url"
+              id="provider-field-terms_reference_url-error"
+              >{{ formErrors.terms_reference_url }}</small
+            ></label
+          ><label
+            ><span id="provider-field-terms_version-label">条款版本</span
+            ><input
+              aria-labelledby="provider-field-terms_version-label"
+              :aria-invalid="Boolean(formErrors.terms_version)"
+              :aria-describedby="
+                formErrors.terms_version ? 'provider-field-terms_version-error' : undefined
+              "
+              v-model="form.terms_version"
+              placeholder="例如 2026-08"
+            />
+            <small v-if="formErrors.terms_version" id="provider-field-terms_version-error">{{
+              formErrors.terms_version
             }}</small></label
           ><label
-            >条款版本<input v-model="form.terms_version" placeholder="例如 2026-08" />
-            <small v-if="formErrors.terms_version">{{ formErrors.terms_version }}</small></label
-          ><label
-            >条款到期时间<input v-model="form.terms_expires_at" type="datetime-local" />
-            <small v-if="formErrors.terms_expires_at">{{
+            ><span id="provider-field-terms_expires_at-label">条款到期时间</span
+            ><input
+              aria-labelledby="provider-field-terms_expires_at-label"
+              :aria-invalid="Boolean(formErrors.terms_expires_at)"
+              :aria-describedby="
+                formErrors.terms_expires_at ? 'provider-field-terms_expires_at-error' : undefined
+              "
+              v-model="form.terms_expires_at"
+              type="datetime-local"
+            />
+            <small v-if="formErrors.terms_expires_at" id="provider-field-terms_expires_at-error">{{
               formErrors.terms_expires_at
             }}</small></label
           >

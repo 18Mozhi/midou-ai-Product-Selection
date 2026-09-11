@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { historicalProviderFieldSource } from "./ui-phase2-provider-field-baseline.mjs";
 
 export const providerStructureRevisions = [
   {
@@ -23,7 +24,7 @@ const cache = new Map();
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 // Historical evidence only. Raw current structure is verified separately.
 export function historicalProviderStructureSource(file, source) {
-  source = source.replaceAll("\r\n", "\n");
+  source = historicalProviderFieldSource(file, source);
   const r = providerStructureRevisions.find((r) => r.file === file);
   if (!r || hash(source) !== r.after) return source;
   if (!cache.has(file)) {
