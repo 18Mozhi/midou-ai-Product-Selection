@@ -27,6 +27,7 @@ test("native business dialogs share modal top-layer and focus-return behavior", 
   assert.match(modal, /showModal\(\)/);
   assert.match(modal, /returnFocus\?\.focus\(\)/);
   assert.match(modal, /event\.preventDefault\(\)/);
+  assert.match(modal, /discardReturnFocus/);
 
   const opaqueDialogStyles = await Promise.all(
     [

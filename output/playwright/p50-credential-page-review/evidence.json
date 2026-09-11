@@ -1,13 +1,13 @@
 {
   "kind": "P50-CREDENTIAL-PAGE-REVIEW-r1",
-  "generatedAt": "2026-09-11T19:46:40.328Z",
+  "generatedAt": "2026-09-11T20:38:07.277Z",
   "reviewOnly": true,
   "productionChanged": false,
   "deployed": false,
   "processesClosed": true,
   "ports": [
-    49591,
-    49627
+    63951,
+    64008
   ],
   "runs": [
     {
@@ -889,7 +889,7 @@
       "mode": "baseline",
       "width": 390,
       "suffix": "default",
-      "sha256": "c5ace0c5253fac076717755943ce72b3fc2a24ddb13a69a3cd5f59bba7d48fe4",
+      "sha256": "c0ce277a8ac71350ee926aa545f6ebda56d112c20b0da736e62f2abcb679ac93",
       "pixelWidth": 390,
       "pixelHeight": 2230
     },
@@ -898,7 +898,7 @@
       "mode": "baseline",
       "width": 390,
       "suffix": "login-editor",
-      "sha256": "e2e5e7f1d26f030320df0029f1d3856c57b4b6ab434a8f2eac327135bfe769b5",
+      "sha256": "bea67b998e49117e802583afed2351dbfcabd2a8f1aad9c42d77d9afb631c552",
       "pixelWidth": 390,
       "pixelHeight": 1100
     },
@@ -916,7 +916,7 @@
       "mode": "baseline",
       "width": 1440,
       "suffix": "login-editor",
-      "sha256": "eff00fc2d648bf6590642a0590bc5bb9736c05d8ccf44b584053642a8eae853e",
+      "sha256": "4ec9c3e1ef2fe0c8411f7687b3d617e8fcbb7480d4613ee847d89af3fbda31ab",
       "pixelWidth": 1440,
       "pixelHeight": 1200
     },
@@ -934,7 +934,7 @@
       "mode": "review",
       "width": 390,
       "suffix": "login-editor",
-      "sha256": "b1e3c436983a9888fb8efbe21d7eb0d3dbcde9c0ac3b21184902b5495cc405e9",
+      "sha256": "266ae660d31925403dd137bca706c387a03b57bfeb5ff5869e3d4c2ca9fa9169",
       "pixelWidth": 390,
       "pixelHeight": 1100
     },
@@ -952,7 +952,7 @@
       "mode": "review",
       "width": 760,
       "suffix": "login-editor",
-      "sha256": "93271c9ca9af6acfa52e4fe445c395c1d2c89abc4660a08dde438e982bcd1a01",
+      "sha256": "89912f08a0506851ac1942cdcdc55a0ae6a475807e7405492119c2014ee70200",
       "pixelWidth": 760,
       "pixelHeight": 1100
     },
@@ -970,7 +970,7 @@
       "mode": "review",
       "width": 1024,
       "suffix": "login-editor",
-      "sha256": "f71d1c00705d2ef4ff442f140cf5863da1c25192e38302f8c5e6d65930842982",
+      "sha256": "823a140ccf5a31db58a7cd3d019837043f211f36e8a395f5bc9edca1a2b4a440",
       "pixelWidth": 1024,
       "pixelHeight": 1200
     },
@@ -988,7 +988,7 @@
       "mode": "review",
       "width": 1440,
       "suffix": "login-editor",
-      "sha256": "041b582760974e59f28a65f28376983aebd54edafd08f1bfc8803718283fe332",
+      "sha256": "835622d9729fe22598f0b51b700656b9f6b2c2c097e9ab7df7dba00960caad2d",
       "pixelWidth": 1440,
       "pixelHeight": 1200
     }
@@ -1020,7 +1020,7 @@
     "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
     "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
     "apps/web/src/components/CrawlerSchedulerCenter.vue": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-    "apps/web/src/components/CredentialAssetCenter.vue": "d06cdc7dad91fbed93334f37648c7cb7e81500c280cb121cf554fc8b062a4dfa",
+    "apps/web/src/components/CredentialAssetCenter.vue": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
     "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
     "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
     "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
@@ -1125,7 +1125,7 @@
     "apps/web/src/components/UiStateShowcase.vue": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
     "apps/web/src/components/VerificationFramework.vue": "aab55dcadf05e3427665faadb057f86a5fbe44dde8f022b0a7225f6c1ec6cccf",
     "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
-    "apps/web/src/credential-assets.css": "57a84bb3a44e788fbb94de6b5855a0dffb7c070edc8be79d3b092df2427e93c3",
+    "apps/web/src/credential-assets.css": "f2afdaa53d385b3ff0c7a8e1d79e66103353a3755257834142f887a8ec5e43f0",
     "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
     "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
     "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
@@ -1155,15 +1155,15 @@
     "apps/web/src/styles/provider-approved-feedback.css": "6b21f3adefccd50f52268076f3dc6134eb66db02c8c62a8404a19fa2e2c45a9e",
     "apps/web/src/styles/provider-approved-structure.css": "901f1088e4ff961a730204ab6e0ac2111b20bc1448a5001299c98f53f318308b",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
-    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
     "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
     "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
     "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
     "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
-    "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css": "7e2411b46606e8cca9901ce1dfb024610b7d287c4278eb2ce5d7bc56a6b3c0a8",
+    "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css": "8c87ec7fb2b0070a275d90816636287e4d12e065a17165aa704e459e2390472d",
     "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
-    "scripts/verify-ui-phase2-credential-assets-page.mjs": "a91d5649e73837efeac78532f5d72fd676bde605ec2c05e2dd01542e4a17267c",
-    "tests/e2e/m03-02-credential-assets.spec.ts": "f735f94d9f2d564e26608736c19cdd899ffbf30d88b0aabbb666550cb076703c"
+    "scripts/verify-ui-phase2-credential-assets-page.mjs": "8aa63db0290d8c23dfc66a6c98db705468cca26ae0522f77f43b536e40a1064e",
+    "tests/e2e/m03-02-credential-assets.spec.ts": "98b997aa88f7678f38fa28f7385e0e718341bd3f9c7b4f87417df5250f472c88"
   },
   "fixtureBoundary": "Provider, asset, profile and navigation values are parsed from the authoritative M03-02 E2E fixture. The browser routes only local GET responses; no real credential, Cookie, extension, API write, encryption, database or production data is accessed.",
   "visualBoundary": "Actual App, ProviderRuntimeSurface and untransformed CredentialAssetCenter. Review-only CSS creates the P50 credential custody hierarchy and login editor composition without changing production SFC, events or contracts."

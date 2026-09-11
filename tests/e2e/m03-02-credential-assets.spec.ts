@@ -148,6 +148,108 @@ test("M03-02.A07/A08/A15 masked credential vault is responsive and visual", asyn
   await expect(editor).toBeHidden();
   await expect(createAssetButton).toBeFocused();
 });
+test("UI2-SC50 all credential editors use the modal top layer and restore their trigger", async ({
+  page,
+}) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/credential-assets", (route) =>
+    route.fulfill({
+      json: { data: [asset], request_id: "ui2-editor-focus-assets" },
+    }),
+  );
+  await page.goto("/platform-admin/credentials");
+  const cases = [
+    {
+      trigger: page.getByRole("button", { name: "新建凭证资产", exact: true }),
+      dialogName: "创建凭证资产",
+      firstField: "所属来源",
+      closeName: "关闭凭证编辑",
+    },
+    {
+      trigger: page.getByRole("button", { name: "更新资料", exact: true }),
+      dialogName: `轮换 ${asset.name}`,
+      firstField: "内容格式",
+      closeName: "关闭凭证编辑",
+    },
+    {
+      trigger: page.getByRole("button", { name: "关联运行档案", exact: true }),
+      dialogName: "创建浏览器档案引用",
+      firstField: "网页登录档案",
+      closeName: "关闭浏览器档案编辑",
+    },
+    {
+      trigger: page.getByRole("button", { name: "配置网页登录", exact: true }),
+      dialogName: "导入已经登录的浏览器档案",
+      firstField: "需要登录的来源",
+      closeName: "关闭网页登录档案导入",
+    },
+  ];
+  for (const item of cases) {
+    await item.trigger.click();
+    const dialog = page.getByRole("dialog", { name: item.dialogName });
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toHaveJSProperty("tagName", "DIALOG");
+    await expect(dialog).toHaveAttribute("open", "");
+    await expect(dialog.getByLabel(item.firstField)).toBeFocused();
+    const close = dialog.getByRole("button", { name: item.closeName, exact: true }),
+      lastFocusable = dialog
+        .locator(
+          "button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])",
+        )
+        .last();
+    await close.focus();
+    await page.keyboard.press("Shift+Tab");
+    await expect(lastFocusable).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(close).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toHaveCount(0);
+    await expect(item.trigger).toBeFocused();
+  }
+});
+test("UI2-SC50 credential editor backdrop and successful save return focus", async ({ page }) => {
+  await nav(page);
+  const created = {
+    ...asset,
+    id: "00000000-0000-4000-8000-000000000813",
+    name: "焦点闭环资产",
+    kind: "api_key",
+    version: 1,
+  };
+  let saved = false;
+  await page.route("**/api/v1/platform/credential-assets", async (route) => {
+    if (route.request().method() === "POST") {
+      saved = true;
+      return route.fulfill({
+        status: 201,
+        json: { data: created, request_id: "ui2-editor-focus-created" },
+      });
+    }
+    return route.fulfill({
+      json: {
+        data: saved ? [asset, created] : [asset],
+        request_id: "ui2-editor-focus-read",
+      },
+    });
+  });
+  await page.goto("/platform-admin/credentials");
+  const trigger = page.getByRole("button", { name: "新建凭证资产", exact: true });
+  await trigger.click();
+  let dialog = page.getByRole("dialog", { name: "创建凭证资产" });
+  await dialog.dispatchEvent("mousedown");
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+
+  await trigger.click();
+  dialog = page.getByRole("dialog", { name: "创建凭证资产" });
+  await dialog.getByLabel("名称").fill(created.name);
+  await dialog.getByLabel("需要加密保存的内容").fill("synthetic-focus-secret");
+  await dialog.getByRole("button", { name: "加密保存", exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await expect(page.getByRole("heading", { name: created.name, exact: true })).toBeVisible();
+  await expect(page.getByText("synthetic-focus-secret")).toHaveCount(0);
+});
 test("M03-02.A08/A09/A16 revoke is explicit and fail closed", async ({ page }) => {
   await nav(page);
   await page.route("**/api/v1/platform/credential-assets", (r) =>
@@ -519,7 +621,9 @@ test("UI2-SC50 lifecycle locks a pending save and fails closed on an unknown ass
     buffer: Buffer.from('[{"name":"study","value":"synthetic","domain":"example.test"}]'),
   });
   await dialog.getByRole("button", { name: "加密保存并启用", exact: true }).click();
-  await expect(dialog.getByRole("button", { name: "关闭", exact: true })).toBeDisabled();
+  await expect(
+    dialog.getByRole("button", { name: "关闭网页登录档案导入", exact: true }),
+  ).toBeDisabled();
   await expect(dialog.getByRole("button", { name: "取消", exact: true })).toBeDisabled();
   await expect(dialog.getByLabel("需要登录的来源")).toBeDisabled();
   await expect(dialog.getByLabel("导入方式")).toBeDisabled();

@@ -27,7 +27,10 @@ test("P50 page review keeps the actual credential component and contracts", () =
   for (const preserved of [
     'class="credential-center"',
     'class="credential-editor login-editor"',
-    'aria-label="导入已经登录的浏览器档案"',
+    "<dialog",
+    'ref="editorDialog"',
+    'id="credential-login-editor-title"',
+    '@cancel="handleEditorCancel"',
     '@submit.prevent="saveLogin"',
     '@click="openLogin()"',
     '@click="openProfile"',

@@ -67,7 +67,6 @@ test("unrelated consumers and modal helpers are unchanged while P50 revisions st
       .filter((file) => file !== "CredentialAssetCenter.vue")
       .map((file) => `${root}/${file}`),
     `${root}/AuditedReasonDialog.vue`,
-    "apps/web/src/use-modal-dialog.ts",
     "apps/web/src/main.ts",
   ])
     assert.equal(read(file), p50Base(file), file);
@@ -78,6 +77,14 @@ test("unrelated consumers and modal helpers are unchanged while P50 revisions st
     assert.equal(hash(read(file)), p50Evidence.sourceHashes[file], file);
   assert.match(read(`${root}/ConfirmDialog.vue`), /busy\?: boolean/);
   assert.match(read(`${root}/ConfirmDialog.vue`), /if \(props\.busy\) return/);
+  const editorFocusEvidence = JSON.parse(
+    read("output/playwright/p50-credential-editor-focus-review/evidence.json"),
+  );
+  assert.equal(
+    hash(read("apps/web/src/use-modal-dialog.ts")),
+    editorFocusEvidence.sourceHashes["apps/web/src/use-modal-dialog.ts"],
+  );
+  assert.match(read("apps/web/src/use-modal-dialog.ts"), /discardReturnFocus/);
   const file = responsiveFocusRevision.file;
   const added = "\n.responsive-data-view__overlay--suspended {\n  z-index: 99;\n}\n";
   const current = read(file).split("<style scoped>")[1];

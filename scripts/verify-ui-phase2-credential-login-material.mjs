@@ -442,9 +442,10 @@ try {
           `${origin}/platform-admin/credentials?provider_id=${data.provider.id}&mode=login`,
         );
         const editor = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" }),
+          editorPanel = editor.locator(".credential-editor.login-editor"),
           source = editor.getByLabel("需要登录的来源"),
           mode = editor.getByLabel("导入方式"),
-          save = editor.locator(":scope > footer button").last(),
+          save = editorPanel.locator(":scope > footer button").last(),
           cancel = editor.getByRole("button", { name: "取消", exact: true });
         await expect(editor).toBeVisible();
         await expect(source.locator("option:checked")).toHaveText(data.provider.name);
@@ -510,7 +511,7 @@ try {
           await expect.poll(() => page.evaluate(() => window.__p50BridgeRequests.length)).toBe(1);
           if (state === "browser-pending") {
             await expect(editor.getByRole("button", { name: "读取中…" })).toBeDisabled();
-            await expect(editor).toHaveAttribute("aria-busy", "true");
+            await expect(editorPanel).toHaveAttribute("aria-busy", "true");
             check("source locked while reading", await source.isDisabled());
             check("mode locked while reading", await mode.isDisabled());
             check(
@@ -520,7 +521,7 @@ try {
             check("save remains disabled", await save.isDisabled());
           } else if (state === "helper-timeout") {
             await page.clock.fastForward(15_001);
-            await expect(editor).toHaveAttribute("aria-busy", "false");
+            await expect(editorPanel).toHaveAttribute("aria-busy", "false");
             await expect(editor.getByRole("status")).toContainText("15 秒内没有收到浏览器助手响应");
             await expect(editor.getByRole("status")).toContainText("改用 Cookie 文件上传");
             check("source unlocked after timeout", await source.isEnabled());
@@ -554,7 +555,7 @@ try {
                 location.origin,
               );
             }, state);
-            await expect(editor).toHaveAttribute("aria-busy", "false");
+            await expect(editorPanel).toHaveAttribute("aria-busy", "false");
             await expect(source).toBeEnabled();
             await expect(mode).toBeEnabled();
             if (state === "browser-success") {
@@ -655,7 +656,10 @@ try {
           await expect(reopened.locator(".archive-picker small")).toContainText("请选择 Cookie");
           check(
             "late file result ignored",
-            await reopened.locator(":scope > footer button").last().isDisabled(),
+            await reopened
+              .locator(".credential-editor.login-editor > footer button")
+              .last()
+              .isDisabled(),
           );
           check(
             "reopened source identity",
@@ -689,7 +693,10 @@ try {
           });
           check(
             "late helper result ignored",
-            await reopened.locator(":scope > footer button").last().isDisabled(),
+            await reopened
+              .locator(".credential-editor.login-editor > footer button")
+              .last()
+              .isDisabled(),
           );
           check(
             "reopened source identity",
@@ -712,7 +719,9 @@ try {
             await expect(save).toHaveText("正在保存凭证资产…");
             check(
               "header close locked while saving",
-              await editor.getByRole("button", { name: "关闭", exact: true }).isDisabled(),
+              await editor
+                .getByRole("button", { name: "关闭网页登录档案导入", exact: true })
+                .isDisabled(),
             );
             check("cancel locked while saving", await cancel.isDisabled());
             check("source locked while saving", await source.isDisabled());
@@ -972,7 +981,7 @@ try {
             );
           check(
             "no horizontal overflow",
-            await editor.evaluate(
+            await editorPanel.evaluate(
               (element) =>
                 element.scrollWidth <= element.clientWidth + 1 &&
                 document.documentElement.scrollWidth <= window.innerWidth + 1,
@@ -980,7 +989,7 @@ try {
           );
           check(
             "footer actions remain in viewport",
-            await editor.locator(":scope > footer").evaluate((element) => {
+            await editorPanel.locator(":scope > footer").evaluate((element) => {
               const rect = element.getBoundingClientRect();
               return rect.top >= 0 && rect.bottom <= window.innerHeight + 1;
             }),

@@ -10,6 +10,7 @@ import {
   ref,
 } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
+import { useModalDialog } from "../use-modal-dialog";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
@@ -108,7 +109,6 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     status: "disabled",
   });
 let activeController: AbortController | null = null,
-  editorReturnFocus: HTMLElement | null = null,
   editorGeneration = 0,
   loginMaterialGeneration = 0,
   loginMaterialController: AbortController | null = null,
@@ -118,6 +118,14 @@ let activeController: AbortController | null = null,
   pageActive = true,
   resumeRead = false,
   detachedWriteSettlement: DetachedWriteSettlement | null = null;
+const {
+  dialogElement: editorDialog,
+  handleCancel: handleEditorCancel,
+  discardReturnFocus: discardEditorReturnFocus,
+} = useModalDialog(
+  () => Boolean(editor.value),
+  () => closeEditor(),
+);
 const failure = (s: number): State =>
     s === 401
       ? "expired"
@@ -260,13 +268,14 @@ async function load() {
   }
 }
 function focusEditor() {
-  editorReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   void nextTick(() => {
-    editorPanel.value
-      ?.querySelector<HTMLElement>(
-        ".credential-fields input, .credential-fields select, .credential-fields textarea",
-      )
-      ?.focus();
+    window.requestAnimationFrame(() => {
+      editorPanel.value
+        ?.querySelector<HTMLElement>(
+          ".credential-fields input, .credential-fields select, .credential-fields textarea",
+        )
+        ?.focus();
+    });
   });
 }
 function invalidateLoginMaterial() {
@@ -284,9 +293,6 @@ function finishCloseEditor() {
   selected.value = null;
   assetForm.value = "";
   loginSaveStage.value = "idle";
-  const returnTarget = editorReturnFocus;
-  editorReturnFocus = null;
-  void nextTick(() => returnTarget?.focus());
 }
 function closeEditor() {
   if (saving.value) return;
@@ -861,13 +867,13 @@ function suspendPage() {
   refreshing.value = false;
   editorGeneration += 1;
   revokeGeneration += 1;
+  discardEditorReturnFocus();
   invalidateLoginMaterial();
   editor.value = null;
   selected.value = null;
   revokeTarget.value = null;
   assetForm.value = "";
   loginSaveStage.value = "idle";
-  editorReturnFocus = null;
   message.value = "";
 }
 onDeactivated(suspendPage);
@@ -1139,19 +1145,24 @@ onActivated(() => {
       </section>
     </section>
     <Teleport to="body">
-      <div
+      <dialog
         v-if="editor"
+        ref="editorDialog"
         class="credential-editor-backdrop"
-        @mousedown.self="closeEditor"
-        @keydown.esc="closeEditor"
+        :aria-labelledby="
+          editor === 'login'
+            ? 'credential-login-editor-title'
+            : editor === 'profile'
+              ? 'credential-profile-editor-title'
+              : 'credential-asset-editor-title'
+        "
+        @cancel="handleEditorCancel"
+        @mousedown.self.prevent="closeEditor"
       >
         <form
           v-if="editor === 'asset' || editor === 'rotate'"
           ref="editorPanel"
           class="credential-editor"
-          role="dialog"
-          aria-modal="true"
-          :aria-label="editor === 'rotate' ? `轮换 ${selected?.name}` : '创建凭证资产'"
           @keydown.tab="trapEditorFocus"
           @submit.prevent="saveAsset"
         >
@@ -1160,7 +1171,7 @@ onActivated(() => {
               <p>
                 {{ editor === "rotate" ? "更新加密资料" : "新建加密资料" }}
               </p>
-              <h3>
+              <h3 id="credential-asset-editor-title">
                 {{ editor === "rotate" ? `轮换 ${selected?.name}` : "创建凭证资产" }}
               </h3>
             </div>
@@ -1230,16 +1241,13 @@ onActivated(() => {
           v-if="editor === 'profile'"
           ref="editorPanel"
           class="credential-editor"
-          role="dialog"
-          aria-modal="true"
-          aria-label="创建浏览器档案引用"
           @keydown.tab="trapEditorFocus"
           @submit.prevent="saveProfile"
         >
           <header>
             <div>
               <p>关联网页采集档案</p>
-              <h3>创建浏览器档案引用</h3>
+              <h3 id="credential-profile-editor-title">创建浏览器档案引用</h3>
             </div>
             <button
               type="button"
@@ -1297,9 +1305,6 @@ onActivated(() => {
           v-if="editor === 'login'"
           ref="editorPanel"
           class="credential-editor login-editor"
-          role="dialog"
-          aria-modal="true"
-          aria-label="导入已经登录的浏览器档案"
           :aria-busy="saving || loginMaterialBusy"
           @keydown.tab="trapEditorFocus"
           @submit.prevent="saveLogin"
@@ -1307,9 +1312,14 @@ onActivated(() => {
           <header>
             <div>
               <p>配置网页登录</p>
-              <h3>导入已经登录的浏览器档案</h3>
+              <h3 id="credential-login-editor-title">导入已经登录的浏览器档案</h3>
             </div>
-            <button type="button" aria-label="关闭" :disabled="saving" @click="closeEditor()">
+            <button
+              type="button"
+              aria-label="关闭网页登录档案导入"
+              :disabled="saving"
+              @click="closeEditor()"
+            >
               ×
             </button>
           </header>
@@ -1409,7 +1419,7 @@ onActivated(() => {
             </button>
           </footer>
         </form>
-      </div>
+      </dialog>
     </Teleport>
     <ConfirmDialog
       :open="Boolean(revokeTarget)"

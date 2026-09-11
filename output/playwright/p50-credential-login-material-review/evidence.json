@@ -1,6 +1,6 @@
 {
   "kind": "P50-CREDENTIAL-LOGIN-MATERIAL-REVIEW-r1",
-  "generatedAt": "2026-09-11T19:47:18.517Z",
+  "generatedAt": "2026-09-11T20:39:22.922Z",
   "reviewOnly": true,
   "productionChanged": false,
   "deployed": false,
@@ -14,7 +14,7 @@
     "archive-ready"
   ],
   "ports": [
-    49762
+    64423
   ],
   "runs": [
     {
@@ -2279,7 +2279,7 @@
       "file": "390-cookie-ready.png",
       "width": 390,
       "state": "cookie-ready",
-      "sha256": "5651969097dec6db777d65bbee04db422ec6144bf2c6d67c225c8e4036eeac12",
+      "sha256": "727075f419ecc8a228400eb1924f48a7bb656f60ca8b330039d6331d1c1cdcdf",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2287,7 +2287,7 @@
       "file": "390-cookie-invalid.png",
       "width": 390,
       "state": "cookie-invalid",
-      "sha256": "37d93f53ebde331834b740ea08a0e2cacaa01e9c6e27930f8dfba3cf28eb9374",
+      "sha256": "428413806fc9de4bf57e46b2af173cde7d1616e1d3abb7e579d91081abf91752",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2295,7 +2295,7 @@
       "file": "390-browser-pending.png",
       "width": 390,
       "state": "browser-pending",
-      "sha256": "4149d296f0ad0c8c1792ee05656c5663d2f0c9ecbc28ddc43d248045e3305dd2",
+      "sha256": "533685d76a200032d702174a4f73e2e99ade9efd7592e23b51e0a45721d4b7fa",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2303,7 +2303,7 @@
       "file": "390-browser-success.png",
       "width": 390,
       "state": "browser-success",
-      "sha256": "f1709f176bf4ce87bb62b1e7cf1cd32e248d173cb1d9d03505f27b472436eee5",
+      "sha256": "f53ba5d6ec16ff682930507041d8a3c1a4ff271a6af2e3fb4ddc031a9b9ee4dc",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2311,7 +2311,7 @@
       "file": "390-browser-empty.png",
       "width": 390,
       "state": "browser-empty",
-      "sha256": "24c0c071639f146f2d968ddcdd1d9ddf369a35a27ac692c1ac3e622bafcc141e",
+      "sha256": "a21faec854541843a949447917d72aec3fd525fb87ff4fd87bbe575ec0e0aaaa",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2319,7 +2319,7 @@
       "file": "390-archive-ready.png",
       "width": 390,
       "state": "archive-ready",
-      "sha256": "a9877c0db19c44cdd5cae7ba1cb863f069a00325859d842f8f4051d6f36b2a84",
+      "sha256": "7a506de2d95d51899f9b3bf1b0fac93a6845bbe5a2a796eb863db63e6a621f58",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2327,7 +2327,7 @@
       "file": "760-cookie-ready.png",
       "width": 760,
       "state": "cookie-ready",
-      "sha256": "f51b453d1232b20be7fc8e26c35c1045481fabc70d9f23be61e2cda3e67f8cf1",
+      "sha256": "7f8f31095b38157453f4c3fb22f0c1ea44ea71c3c54a4ce69a6ecc78c8e70c31",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2335,7 +2335,7 @@
       "file": "760-cookie-invalid.png",
       "width": 760,
       "state": "cookie-invalid",
-      "sha256": "cb733f72b73b1e18b7fb4733fd252e0ba12c949393cfa9deaf4e0f67990e566d",
+      "sha256": "18d767252678fbee50bf5863f7435054d715aa4fc576f1411375b064786f252a",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2343,7 +2343,7 @@
       "file": "760-browser-pending.png",
       "width": 760,
       "state": "browser-pending",
-      "sha256": "428885a3a5785a27ba7fef7c75d9f12236bb92284c88058e3ce97018c9398d9c",
+      "sha256": "508271df22520712752910c2424055f6bc8ab2dbfe1e6c61cf942e588a8513fc",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2351,7 +2351,7 @@
       "file": "760-browser-success.png",
       "width": 760,
       "state": "browser-success",
-      "sha256": "8a4cce21bb8e17e043056fab6e795656a31ace1781189e54518179478f4deee3",
+      "sha256": "095a4dd5f6faaa0cf67e7a86c3ea00302b6d405555fc64954103e2aa89511f39",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2359,7 +2359,7 @@
       "file": "760-browser-empty.png",
       "width": 760,
       "state": "browser-empty",
-      "sha256": "68fbc5bc998f6956f7f0eac71b262b81909ac9f1ca160173f7d53c8c5807b1b0",
+      "sha256": "b82d38363cd457d92507e8fdf338961d286d3bbf084af9415859d953d93db25d",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2367,7 +2367,7 @@
       "file": "760-archive-ready.png",
       "width": 760,
       "state": "archive-ready",
-      "sha256": "d03d5183c7badcc51082fe4d99cfcf7a79bd1297b5ab912db1beaa98e9ea4523",
+      "sha256": "71104352ac27f512203569315fe76d9c6ffc316c60cb40a0a2a2dfdf35384abf",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2375,7 +2375,7 @@
       "file": "1024-cookie-ready.png",
       "width": 1024,
       "state": "cookie-ready",
-      "sha256": "c1074066a963ebb962fe59440aa0f1b877ec6976c0660fba0d01e67f7de3eb22",
+      "sha256": "f9c37ac3c436f1f9a9ed811dfd42d8db10f22981e48a9d9f9b2fa6ca2ad89b7d",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2383,7 +2383,7 @@
       "file": "1024-cookie-invalid.png",
       "width": 1024,
       "state": "cookie-invalid",
-      "sha256": "2e6b010033b2377a2a70cdc5e6294f8a18050fc75cd88d4bdd5d2067b35763e2",
+      "sha256": "22ad829131aebdc7a554f924b805313c0476c6fbd090828712baf83992c0dd0a",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2391,7 +2391,7 @@
       "file": "1024-browser-pending.png",
       "width": 1024,
       "state": "browser-pending",
-      "sha256": "c123e9572696aa2c27c1d5108a4514bc5f42d7deb2e4d9d8aa01d483d3c354b1",
+      "sha256": "b07e1ea74d6a669bb4b1348252e2c0180c615eb0a9b0c2959d0edc76c8a37547",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2399,7 +2399,7 @@
       "file": "1024-browser-success.png",
       "width": 1024,
       "state": "browser-success",
-      "sha256": "ad99fcf3e64eb230afc9576e6ad569a345bd9bb48be4b1c3d5ca99adef674456",
+      "sha256": "5eff152455703847ac0e0e7a28d8d27658ff525589c8893d3649369db56504cc",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2407,7 +2407,7 @@
       "file": "1024-browser-empty.png",
       "width": 1024,
       "state": "browser-empty",
-      "sha256": "2da11ffd0be7270755d1c062050e68a26f058ae37ba3f296e908727a81693ab8",
+      "sha256": "fa96d95d7d25d81def4e9c4c5e8ca95329917e37476b6372d67535d3b1731e19",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2415,7 +2415,7 @@
       "file": "1024-archive-ready.png",
       "width": 1024,
       "state": "archive-ready",
-      "sha256": "6bdaecc3347942ad7c2bf4f947cebe4d900309d1ea3033f939b2b3b0e485343d",
+      "sha256": "faa309dbc8946ec1d49790dccfcf8954d918017b4dff819b1547c588f7db907f",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -2423,7 +2423,7 @@
       "file": "1440-cookie-ready.png",
       "width": 1440,
       "state": "cookie-ready",
-      "sha256": "c18b14ee5292a3a52aca64c1d6a70c99110379f35705abbac3434a9c059c6e2c",
+      "sha256": "67d67eb364f3fd14e0b48d5042ef94d234fc4f47cf866d6eb831ce573061ff27",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2431,7 +2431,7 @@
       "file": "1440-cookie-invalid.png",
       "width": 1440,
       "state": "cookie-invalid",
-      "sha256": "125c0ad62fb6b34968b26c1078fc38795238926bf3fe057b3cce31024a1c46ce",
+      "sha256": "0b1fc09144dd9974fad4b6784ce5a52e35964995144ca1862d540720317fd16c",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2439,7 +2439,7 @@
       "file": "1440-browser-pending.png",
       "width": 1440,
       "state": "browser-pending",
-      "sha256": "7b67615f733802db1776d305b3d26f8fdfd761ad7496febd8cc3e45ae9499bc3",
+      "sha256": "b24ab715f3ae30bf5acee9dcccb5384dc3b702b2e3cc5b48179969c25e2af8c0",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2447,7 +2447,7 @@
       "file": "1440-browser-success.png",
       "width": 1440,
       "state": "browser-success",
-      "sha256": "8f7fc8f897b21b167f7d71c1644bdc33bf38264f3dd128cdd2edd3837099adc3",
+      "sha256": "5077e59ada3395f0bb94af1bb09a3d2af7b7f892a646fa706f950c42646c0976",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2455,7 +2455,7 @@
       "file": "1440-browser-empty.png",
       "width": 1440,
       "state": "browser-empty",
-      "sha256": "fb5036a84f1756bd3e68d555cb515f109304b78abd1c2cd6208a8f348ea93c6b",
+      "sha256": "880b892d89f5f85d073e86ad74808ca3649fb743fad8b52cf354f0007bea5f59",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -2463,7 +2463,7 @@
       "file": "1440-archive-ready.png",
       "width": 1440,
       "state": "archive-ready",
-      "sha256": "ff8c751cc3910386fe936cc80f7466fbeb0e2cd3b21641b40dfd4c60bc025094",
+      "sha256": "a20aecd89c8ad44acbcdb119d323929cf4bbe4f522fc0ff61b96a9f57b7f1d75",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     }
@@ -2495,7 +2495,7 @@
     "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
     "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
     "apps/web/src/components/CrawlerSchedulerCenter.vue": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-    "apps/web/src/components/CredentialAssetCenter.vue": "d06cdc7dad91fbed93334f37648c7cb7e81500c280cb121cf554fc8b062a4dfa",
+    "apps/web/src/components/CredentialAssetCenter.vue": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
     "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
     "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
     "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
@@ -2600,7 +2600,7 @@
     "apps/web/src/components/UiStateShowcase.vue": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
     "apps/web/src/components/VerificationFramework.vue": "aab55dcadf05e3427665faadb057f86a5fbe44dde8f022b0a7225f6c1ec6cccf",
     "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
-    "apps/web/src/credential-assets.css": "57a84bb3a44e788fbb94de6b5855a0dffb7c070edc8be79d3b092df2427e93c3",
+    "apps/web/src/credential-assets.css": "f2afdaa53d385b3ff0c7a8e1d79e66103353a3755257834142f887a8ec5e43f0",
     "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
     "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
     "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
@@ -2630,17 +2630,17 @@
     "apps/web/src/styles/provider-approved-feedback.css": "6b21f3adefccd50f52268076f3dc6134eb66db02c8c62a8404a19fa2e2c45a9e",
     "apps/web/src/styles/provider-approved-structure.css": "901f1088e4ff961a730204ab6e0ac2111b20bc1448a5001299c98f53f318308b",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
-    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
     "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
     "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
     "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
     "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
-    "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css": "7e2411b46606e8cca9901ce1dfb024610b7d287c4278eb2ce5d7bc56a6b3c0a8",
+    "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css": "8c87ec7fb2b0070a275d90816636287e4d12e065a17165aa704e459e2390472d",
     "design-plans/ui-phase-2-2026-09-07/implementation/credential-login-material-preview.css": "5eb2b981c695e6bdbeee358a3508d697b849f99222f0d89b9e923350cdaea5ea",
     "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
     "scripts/lib/ui-phase2-credential-login-material-preview.mjs": "7869a322a10702b53be1afde3ff0393e6547800e57b49eb351f0336d1a52a0e9",
-    "scripts/verify-ui-phase2-credential-login-material.mjs": "d0a16a1d5e14e5a0e34023ae689965bd08920a896115de257d4944c00a4ed8cc",
-    "tests/e2e/m03-02-credential-assets.spec.ts": "f735f94d9f2d564e26608736c19cdd899ffbf30d88b0aabbb666550cb076703c"
+    "scripts/verify-ui-phase2-credential-login-material.mjs": "d2f31dcb6956144491b82228d902f83fce1224a339142cf6b0ad32ccc1a583e2",
+    "tests/e2e/m03-02-credential-assets.spec.ts": "98b997aa88f7678f38fa28f7385e0e718341bd3f9c7b4f87417df5250f472c88"
   },
   "materialBoundary": "All file contents and browser-helper cookies are synthetic in-memory review values. Screenshots expose filenames/counts and feedback only. No save action, external page, real helper, API write, encryption, database or production credential is used.",
   "proposalBoundary": "This is a visual review batch for the material-reading states. Production lifecycle ownership and post-close cleanup are now covered separately by the lifecycle implementation evidence; this batch does not claim real helper, API, database or production verification."

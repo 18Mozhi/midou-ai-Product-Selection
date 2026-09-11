@@ -1,6 +1,6 @@
 {
   "kind": "P50-CREDENTIAL-LOGIN-LIFECYCLE-IMPLEMENTATION-r1",
-  "generatedAt": "2026-09-11T19:48:45.936Z",
+  "generatedAt": "2026-09-11T20:39:33.688Z",
   "reviewOnly": true,
   "productionChanged": true,
   "deployed": false,
@@ -15,7 +15,7 @@
     "profile-rejected"
   ],
   "ports": [
-    50300
+    64425
   ],
   "runs": [
     {
@@ -427,7 +427,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"saving-asset\\\",\\\"value\\\":\\\"p50-hidden-saving-asset\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "e928597f-2770-45cd-8c1a-dbb3023ea67b"
+          "idempotencyKey": "1a98d6e6-7e6f-4912-8f33-367647d1c3b5"
         }
       ]
     },
@@ -528,7 +528,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"asset-unknown\\\",\\\"value\\\":\\\"p50-hidden-asset-unknown\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "7668e41e-3127-4056-8065-5a7643332a3f"
+          "idempotencyKey": "a724dc3f-aa13-4a52-ab5f-89852d8dd02b"
         }
       ]
     },
@@ -629,12 +629,12 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"profile-unknown\\\",\\\"value\\\":\\\"p50-hidden-profile-unknown\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "62876a61-c0dd-4625-ae57-d8c19c08063a"
+          "idempotencyKey": "31ea17e4-b448-4e5d-bd60-e9dbf91136c9"
         },
         {
           "key": "POST /api/v1/platform/crawler-profiles",
-          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxdcfyq\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
-          "idempotencyKey": "3c144a2b-4f73-43a1-a222-3172359ca7a5"
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxf5loj\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "90e0c6e5-0bb7-4a3b-ab73-cfc36693f74e"
         }
       ]
     },
@@ -735,12 +735,12 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"profile-rejected\\\",\\\"value\\\":\\\"p50-hidden-profile-rejected\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "bc619f43-e96f-4d6f-ae2b-677f24f5f34f"
+          "idempotencyKey": "ec2323f2-4b81-4c28-9814-908d4b9504c2"
         },
         {
           "key": "POST /api/v1/platform/crawler-profiles",
-          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxdcgra\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
-          "idempotencyKey": "9892f030-1e05-494a-9a6b-132cba7a48a1"
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxf5mm8\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "6fbef52f-7a4a-4204-b98f-36ed90356dc5"
         }
       ]
     },
@@ -1153,7 +1153,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"saving-asset\\\",\\\"value\\\":\\\"p50-hidden-saving-asset\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "cb8c269e-5f5d-4d6f-bc10-23c98190ccfa"
+          "idempotencyKey": "e73a849c-9c88-4e73-b3bb-d5f70d52265b"
         }
       ]
     },
@@ -1254,7 +1254,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"asset-unknown\\\",\\\"value\\\":\\\"p50-hidden-asset-unknown\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "29be1908-1ab3-4808-9c18-766b76b18aae"
+          "idempotencyKey": "f9c57bb4-2f65-4d43-bf3d-74f292ac83ae"
         }
       ]
     },
@@ -1355,12 +1355,12 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"profile-unknown\\\",\\\"value\\\":\\\"p50-hidden-profile-unknown\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "d31bcd82-de7e-4223-80cb-427dad4ce4be"
+          "idempotencyKey": "c3688400-d2cd-4170-9f30-57ee1c6c041d"
         },
         {
           "key": "POST /api/v1/platform/crawler-profiles",
-          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxdclwl\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
-          "idempotencyKey": "8f7a3839-3a75-40d3-a681-ed9802254508"
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxf5t5r\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "ec3efe8f-e1cc-4aa4-a4ba-d1a1aefcbf32"
         }
       ]
     },
@@ -1461,12 +1461,12 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"profile-rejected\\\",\\\"value\\\":\\\"p50-hidden-profile-rejected\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "1927568f-089b-490a-9452-c044259c5adf"
+          "idempotencyKey": "c95ff02e-d836-491b-b937-3b458f87be69"
         },
         {
           "key": "POST /api/v1/platform/crawler-profiles",
-          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxdcmsn\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
-          "idempotencyKey": "c6eab6a1-15d9-4904-9b2b-b780b9f47461"
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxf5ual\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "35a1c12f-7eb4-4394-9e87-9d2efa216e21"
         }
       ]
     },
@@ -1879,7 +1879,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"saving-asset\\\",\\\"value\\\":\\\"p50-hidden-saving-asset\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "c4116e72-ea24-4505-9119-c0e318d206e4"
+          "idempotencyKey": "ea1095de-7c6e-4aca-a1c4-82b5fa542cf3"
         }
       ]
     },
@@ -1980,7 +1980,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"asset-unknown\\\",\\\"value\\\":\\\"p50-hidden-asset-unknown\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "45a9e328-9b6d-47eb-bfc3-df1e23b18e48"
+          "idempotencyKey": "e0a7c14c-536f-4db0-8431-9c1e72df928d"
         }
       ]
     },
@@ -2081,12 +2081,12 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"profile-unknown\\\",\\\"value\\\":\\\"p50-hidden-profile-unknown\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "d4c88efd-0b3b-4ef0-a3d0-3bf3001f740e"
+          "idempotencyKey": "5771d38e-7c29-4c0a-a076-b5c4a41e33c2"
         },
         {
           "key": "POST /api/v1/platform/crawler-profiles",
-          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxdcshf\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
-          "idempotencyKey": "9e2eff3f-f9ae-4abf-a2e0-6f3d04a02f0f"
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxf61o8\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "8c3e7a82-f36c-42a3-bce3-83483be0ff2a"
         }
       ]
     },
@@ -2187,12 +2187,12 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"profile-rejected\\\",\\\"value\\\":\\\"p50-hidden-profile-rejected\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "35370a0b-8844-4b5c-b6aa-c4ea13ca34aa"
+          "idempotencyKey": "65f27106-a6a5-47e5-a0c5-3c6d60ca197f"
         },
         {
           "key": "POST /api/v1/platform/crawler-profiles",
-          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxdcthp\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
-          "idempotencyKey": "221e8c28-b441-4b7a-b6f0-f34b6b7e049b"
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxf62wq\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "d50ac2eb-761a-408a-bfcf-6611bdb6dee5"
         }
       ]
     },
@@ -2605,7 +2605,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"saving-asset\\\",\\\"value\\\":\\\"p50-hidden-saving-asset\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "c6d825e2-42d5-4372-a671-40876b52a8e7"
+          "idempotencyKey": "b458475d-6c8d-417a-89b3-92e62876045b"
         }
       ]
     },
@@ -2706,7 +2706,7 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"asset-unknown\\\",\\\"value\\\":\\\"p50-hidden-asset-unknown\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "eab4f684-0bfd-475d-a441-e5d1b480738c"
+          "idempotencyKey": "5626f55a-6783-40d1-ba9c-6eac9ec3448d"
         }
       ]
     },
@@ -2807,12 +2807,12 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"profile-unknown\\\",\\\"value\\\":\\\"p50-hidden-profile-unknown\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "755e6def-9f14-49d6-b2b2-81f177eeba0c"
+          "idempotencyKey": "8855945d-dc61-47c5-911b-520d48761f2e"
         },
         {
           "key": "POST /api/v1/platform/crawler-profiles",
-          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxdd03m\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
-          "idempotencyKey": "83877280-9e92-4db8-9d3d-8ee2d0badc20"
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxf6bi6\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "364557c6-5da2-47bf-b31a-1c9138a31a5e"
         }
       ]
     },
@@ -2913,12 +2913,12 @@
         {
           "key": "POST /api/v1/platform/credential-assets",
           "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"name\":\"登录页来源 Cookie登录档案\",\"kind\":\"cookie_bundle\",\"secret_payload\":{\"encoding\":\"utf8\",\"value\":\"[{\\\"name\\\":\\\"profile-rejected\\\",\\\"value\\\":\\\"p50-hidden-profile-rejected\\\",\\\"domain\\\":\\\"example.test\\\"}]\"},\"expires_at\":null}",
-          "idempotencyKey": "3d8d808d-3f2b-43c4-ad45-304e1ab7b277"
+          "idempotencyKey": "65349c3a-2dc9-4d05-8f26-cc3480be94f8"
         },
         {
           "key": "POST /api/v1/platform/crawler-profiles",
-          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxdd1dy\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
-          "idempotencyKey": "4830dab0-6dfd-4100-afae-43610607ddc8"
+          "body": "{\"provider_id\":\"00000000-0000-4000-8000-000000000802\",\"credential_asset_id\":\"00000000-0000-4000-8000-000000000803\",\"code\":\"browser_source_login_mtxf6d12\",\"name\":\"登录页来源 网页采集档案\",\"browser_family\":\"chromium\",\"locale\":\"zh-CN\",\"timezone\":\"Asia/Shanghai\",\"status\":\"active\"}",
+          "idempotencyKey": "782c610c-3c20-4f54-8d03-9e462d0a326c"
         }
       ]
     }
@@ -2928,7 +2928,7 @@
       "file": "390-source-cleared.png",
       "width": 390,
       "state": "source-cleared",
-      "sha256": "0c54c3f80eaf504ed63ab65984f608a4182d92dc116e04155caa689422f0726f",
+      "sha256": "f1be1cab08533ca80e62b652014f77b3812a5cf82d85fa16454c8fe8e5a625b8",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2936,7 +2936,7 @@
       "file": "390-file-late-ignored.png",
       "width": 390,
       "state": "file-late-ignored",
-      "sha256": "ba9298d2ff7d54bedd923ca054a7d98f99439d1460aca270e88219926c2ff354",
+      "sha256": "e6db0c164533f2fb84ca912ac4e15b173cb864183170e57b25c6760fa77315a9",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2944,7 +2944,7 @@
       "file": "390-helper-late-ignored.png",
       "width": 390,
       "state": "helper-late-ignored",
-      "sha256": "3fc785960e989e589d8f83f6689caa26016a2edceb247f35620ad389a3315575",
+      "sha256": "f30be675c8bd306bcaf4d115a3d731a5490ab77093267fd8c9b116a054ff58bb",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2952,7 +2952,7 @@
       "file": "390-saving-asset.png",
       "width": 390,
       "state": "saving-asset",
-      "sha256": "c51fd6f7b7284c1b7a35acca9e6691f81495fdbdf1f603599075b3141d0f0e7f",
+      "sha256": "a4ad5628962e60150ea3279abc4862e75e78b10ab416762b836a6e00601cd309",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2960,7 +2960,7 @@
       "file": "390-asset-unknown.png",
       "width": 390,
       "state": "asset-unknown",
-      "sha256": "f7ed45f1b2630c4b855ecf21138d897131f1253380e9a65406bc35744d0fd13f",
+      "sha256": "aa2e659f87242f67ffb1403a6e74f90a6ea061dea4010c8b35b3716ff0f4d95e",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2968,7 +2968,7 @@
       "file": "390-profile-unknown.png",
       "width": 390,
       "state": "profile-unknown",
-      "sha256": "f07673d5a98c7d024614940b7819854af0b2dcefd27a0c7f1f749e1816f2c289",
+      "sha256": "40c5de950c83685d7ed008e74d9ae3d84c85131799106102be0ffc9420ce6fec",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2976,7 +2976,7 @@
       "file": "390-profile-rejected.png",
       "width": 390,
       "state": "profile-rejected",
-      "sha256": "5c221bf2f1173388b07f9c9c5b2917f4506516240ab591b8ba891b1d29e3b031",
+      "sha256": "a68988c6a087f60654f7529fe59953f7a2fd1402472ca4021e64f52cf7cd227d",
       "pixelWidth": 390,
       "pixelHeight": 1000
     },
@@ -2984,7 +2984,7 @@
       "file": "760-source-cleared.png",
       "width": 760,
       "state": "source-cleared",
-      "sha256": "9e5ac4c3e0dee86ebae42bdb56fe792cee68c3e99b00a1fe8da173e5ceb13f48",
+      "sha256": "3b089f9b7151ddb6de339be8f4db5fde6902625d504841dd6784e842bc80f55d",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -2992,7 +2992,7 @@
       "file": "760-file-late-ignored.png",
       "width": 760,
       "state": "file-late-ignored",
-      "sha256": "76fca9893b4a16f38cd24b3a111a21ebd4f0c1c4729a634be9e727e154aa00ca",
+      "sha256": "68c4d6a406d2bb614e2e00255ade51dcfda0250bdd6b3a24211a8c9529c66734",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -3000,7 +3000,7 @@
       "file": "760-helper-late-ignored.png",
       "width": 760,
       "state": "helper-late-ignored",
-      "sha256": "521651406d41195a0e3a295d00e4b568a56f32ec94c0412bc3570cac86d0d43e",
+      "sha256": "981133488cc55e22969d6cd1f1fc85c8321d2f79d842683125f2b5f76a77a4d6",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -3008,7 +3008,7 @@
       "file": "760-saving-asset.png",
       "width": 760,
       "state": "saving-asset",
-      "sha256": "d5dd94593ffc8405cda38ddebb82c3e77fc34d33deb4b063015947b0f1ccc7d9",
+      "sha256": "ed7f2870e0de9e6538f0ea919af8758a223d8cde73118c1ac682ee4da789a030",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -3016,7 +3016,7 @@
       "file": "760-asset-unknown.png",
       "width": 760,
       "state": "asset-unknown",
-      "sha256": "2abfa1f4dd1629f345c1ed619ebec4e9fb05d4a474d13a3b9a759353311fac7c",
+      "sha256": "7fa234ce9d4ceb792bccbcbc4c5e5019550d86977c973250c71b8a7e414fe208",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -3024,7 +3024,7 @@
       "file": "760-profile-unknown.png",
       "width": 760,
       "state": "profile-unknown",
-      "sha256": "c2fa7b71b42b5c298a3e5f7bbfcb7ee69e647b7c2ff189f2e5427196c84d0b43",
+      "sha256": "0f1d1bc9e8a9a27fee3f2e858da61a824372735fc0798c36815aa3d4bcfffab9",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -3032,7 +3032,7 @@
       "file": "760-profile-rejected.png",
       "width": 760,
       "state": "profile-rejected",
-      "sha256": "dd06de8543a756e951eef6be1e7dbe5f7f1af873cbdfa1013caf12b9613a4f2d",
+      "sha256": "8dd49f480b4af2bfe51e39840ce6c5604c9a6dda3c5575f10197e7da9a975b6b",
       "pixelWidth": 760,
       "pixelHeight": 1000
     },
@@ -3040,7 +3040,7 @@
       "file": "1024-source-cleared.png",
       "width": 1024,
       "state": "source-cleared",
-      "sha256": "dd2480d7c751423864f073f6c73d622d1397c580016ec36e294ec37bf4d5a6ee",
+      "sha256": "dcabc7772d24e3bbfe8a52623c2ba38167635eec3fb7374fd80e91663bd07157",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -3048,7 +3048,7 @@
       "file": "1024-file-late-ignored.png",
       "width": 1024,
       "state": "file-late-ignored",
-      "sha256": "23275a43ef43be35ed41281cfd4c0cfc4130d8aacf3eccf13a834f16b9973f49",
+      "sha256": "354b9023b150824427e189643239908de6ff3d248066ae97f4476f4365af897e",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -3056,7 +3056,7 @@
       "file": "1024-helper-late-ignored.png",
       "width": 1024,
       "state": "helper-late-ignored",
-      "sha256": "bb91ee78514fdc7e292ba4837973b75213a6937d32f0685e848335d6b30d2c79",
+      "sha256": "f82bd7618befc9ff408e1b64760a3423c3c5ab7e94279617449180c8989624d5",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -3064,7 +3064,7 @@
       "file": "1024-saving-asset.png",
       "width": 1024,
       "state": "saving-asset",
-      "sha256": "63a9126cda9a2adfe0d359cc9844a3983eef0c7b1a7e2323508fdc38db2ebfe2",
+      "sha256": "a78acdecf76b2ddec23050f9aa122cf426bb8cfacf2ef42e1726b92ccc5c8963",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -3072,7 +3072,7 @@
       "file": "1024-asset-unknown.png",
       "width": 1024,
       "state": "asset-unknown",
-      "sha256": "11d7842544e729c4339e401607577ae5c999e01752810020b8ebcf9849121169",
+      "sha256": "a0ea8102bf7b287a5837c06672e34fda673d6bb4f0f9f460fbb1fa5369201256",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -3080,7 +3080,7 @@
       "file": "1024-profile-unknown.png",
       "width": 1024,
       "state": "profile-unknown",
-      "sha256": "6a5f0314ed2ebb15b77f61b698b65a483838a9933d5537e749288795c4c55bdb",
+      "sha256": "6350420b202070c5463e0ca3f521ef4a6ba13797d1d632166bac17b0a2ddef17",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -3088,7 +3088,7 @@
       "file": "1024-profile-rejected.png",
       "width": 1024,
       "state": "profile-rejected",
-      "sha256": "25556ff42466fc89ea7284ee357a97796a592ed3ec6f8a5e71358c342baeab67",
+      "sha256": "a500f19c679d462073fc3315a09d3dc47ca4d7a85cb3616c4f7d9563a9cf8264",
       "pixelWidth": 1024,
       "pixelHeight": 1100
     },
@@ -3096,7 +3096,7 @@
       "file": "1440-source-cleared.png",
       "width": 1440,
       "state": "source-cleared",
-      "sha256": "7c0ce3745509d120366b1995985b83e95451f0abddd4711d9716203aacff74a3",
+      "sha256": "cfd29300b4ac79f9e5ea94eba293cc4f9480999f7c6ff5c30980c69620317ef4",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -3104,7 +3104,7 @@
       "file": "1440-file-late-ignored.png",
       "width": 1440,
       "state": "file-late-ignored",
-      "sha256": "aa9c50f3749684468b4777c7fde78f8a9afb2cb7deb0124744292f2790485e8b",
+      "sha256": "b2c8f2e3b279324654c342d1f644f1e86e1b669d3344758663acd0e656ebc201",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -3112,7 +3112,7 @@
       "file": "1440-helper-late-ignored.png",
       "width": 1440,
       "state": "helper-late-ignored",
-      "sha256": "10b707c148aacd45ad74382f582f6236ead289b951370340647b5673a67ab535",
+      "sha256": "a38b7292e40ac9abc3a35e509f8aba46cd38301b213e2284db7104b590f02440",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -3120,7 +3120,7 @@
       "file": "1440-saving-asset.png",
       "width": 1440,
       "state": "saving-asset",
-      "sha256": "426d2bd6e0cb8055299fd735f14583ba6b5294c69fa589a309102149aa1be2ea",
+      "sha256": "54d11a17a54c783a7b6fe067edf80a84e463f34b2997acee87f9cbfb537faa60",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -3128,7 +3128,7 @@
       "file": "1440-asset-unknown.png",
       "width": 1440,
       "state": "asset-unknown",
-      "sha256": "99806918889b53e88da8284960ae57bab862faac5bbf23ffe1bcb66b79303877",
+      "sha256": "a25357748d854ae0c215e624bf6fc454cb6efcafc4cf0bd3e8e69c02d97f3963",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -3136,7 +3136,7 @@
       "file": "1440-profile-unknown.png",
       "width": 1440,
       "state": "profile-unknown",
-      "sha256": "81cd86317cf1448ac188b98069bbadbfa0eb19064dd8ede0d344b1c20e2d524c",
+      "sha256": "8a5e6db3feec7aa9c4e10b1cc4fd7ea8d88e852a1613cdfbc3b55615edd08b2e",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     },
@@ -3144,7 +3144,7 @@
       "file": "1440-profile-rejected.png",
       "width": 1440,
       "state": "profile-rejected",
-      "sha256": "20a2325b63e11a90cb812696eae34c5891db95fb36e247be315f11c363124db6",
+      "sha256": "2b50c63cfdb7b832e8c91d927790cffc65e5e1a5b179c807b1c07b6a737d7a87",
       "pixelWidth": 1440,
       "pixelHeight": 1100
     }
@@ -3176,7 +3176,7 @@
     "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
     "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
     "apps/web/src/components/CrawlerSchedulerCenter.vue": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-    "apps/web/src/components/CredentialAssetCenter.vue": "d06cdc7dad91fbed93334f37648c7cb7e81500c280cb121cf554fc8b062a4dfa",
+    "apps/web/src/components/CredentialAssetCenter.vue": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
     "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
     "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
     "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
@@ -3281,7 +3281,7 @@
     "apps/web/src/components/UiStateShowcase.vue": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
     "apps/web/src/components/VerificationFramework.vue": "aab55dcadf05e3427665faadb057f86a5fbe44dde8f022b0a7225f6c1ec6cccf",
     "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
-    "apps/web/src/credential-assets.css": "57a84bb3a44e788fbb94de6b5855a0dffb7c070edc8be79d3b092df2427e93c3",
+    "apps/web/src/credential-assets.css": "f2afdaa53d385b3ff0c7a8e1d79e66103353a3755257834142f887a8ec5e43f0",
     "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
     "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
     "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
@@ -3311,17 +3311,17 @@
     "apps/web/src/styles/provider-approved-feedback.css": "6b21f3adefccd50f52268076f3dc6134eb66db02c8c62a8404a19fa2e2c45a9e",
     "apps/web/src/styles/provider-approved-structure.css": "901f1088e4ff961a730204ab6e0ac2111b20bc1448a5001299c98f53f318308b",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
-    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
     "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
     "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
     "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
     "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
-    "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css": "7e2411b46606e8cca9901ce1dfb024610b7d287c4278eb2ce5d7bc56a6b3c0a8",
+    "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css": "8c87ec7fb2b0070a275d90816636287e4d12e065a17165aa704e459e2390472d",
     "design-plans/ui-phase-2-2026-09-07/implementation/credential-login-material-preview.css": "5eb2b981c695e6bdbeee358a3508d697b849f99222f0d89b9e923350cdaea5ea",
     "packages/config/dist/browser.js": "b9734c2f259eba4aa74634366a010902091443c20c48a9a2eed2cbccfaa93870",
     "scripts/lib/ui-phase2-credential-login-material-preview.mjs": "7869a322a10702b53be1afde3ff0393e6547800e57b49eb351f0336d1a52a0e9",
-    "scripts/verify-ui-phase2-credential-login-material.mjs": "d0a16a1d5e14e5a0e34023ae689965bd08920a896115de257d4944c00a4ed8cc",
-    "tests/e2e/m03-02-credential-assets.spec.ts": "f735f94d9f2d564e26608736c19cdd899ffbf30d88b0aabbb666550cb076703c"
+    "scripts/verify-ui-phase2-credential-login-material.mjs": "d2f31dcb6956144491b82228d902f83fce1224a339142cf6b0ad32ccc1a583e2",
+    "tests/e2e/m03-02-credential-assets.spec.ts": "98b997aa88f7678f38fa28f7385e0e718341bd3f9c7b4f87417df5250f472c88"
   },
   "materialBoundary": "All lifecycle files and browser-helper values are synthetic and local. POST requests are intercepted in the isolated browser and never reach a backend, encryption service, database or production. Screenshots expose only filenames and status feedback; material values are neither rendered nor persisted.",
   "proposalBoundary": "The production Vue component binds file and helper results to the active editor/source/mode generation, clears prepared material on context change, locks close/cancel/source/mode during writes, and fails closed when either write outcome is unknown. C-direction styling remains a review-only transform. Real browser-helper, backend encryption, database writes and production deployment are not claimed."

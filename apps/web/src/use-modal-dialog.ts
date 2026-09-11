@@ -27,9 +27,13 @@ export function useModalDialog(isOpen: () => boolean, requestClose: () => void) 
     requestClose();
   }
 
+  function discardReturnFocus() {
+    returnFocus = null;
+  }
+
   onUnmounted(() => {
     if (dialogElement.value?.open) dialogElement.value.close();
   });
 
-  return { dialogElement, handleCancel };
+  return { dialogElement, handleCancel, discardReturnFocus };
 }

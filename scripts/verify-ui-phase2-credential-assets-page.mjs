@@ -266,7 +266,8 @@ try {
         await picture("default", true);
 
         await loginButton.click();
-        const editor = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+        const editor = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" }),
+          editorPanel = editor.locator(".credential-editor.login-editor");
         await expect(editor).toBeVisible();
         await expect(editor.getByLabel("需要登录的来源")).toBeFocused();
         await expect(editor.getByLabel("需要登录的来源").locator("option:checked")).toHaveText(
@@ -315,7 +316,7 @@ try {
             );
           check(
             "editor is single column on mobile",
-            await editor.evaluate(
+            await editorPanel.evaluate(
               (element) => getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/).length,
             ),
             width <= 760 ? 1 : 2,
@@ -323,7 +324,7 @@ try {
         }
         check(
           "editor has no horizontal overflow",
-          await editor.evaluate(
+          await editorPanel.evaluate(
             (element) =>
               element.scrollWidth <= element.clientWidth + 1 &&
               document.documentElement.scrollWidth <= window.innerWidth + 1,
