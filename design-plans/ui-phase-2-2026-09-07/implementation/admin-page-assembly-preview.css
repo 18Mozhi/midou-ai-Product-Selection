@@ -1,0 +1,55 @@
+/* Review-only composition: reconcile locally implemented mobile offsets with a whole C page. */
+html[data-design="signal-ledger"]
+  body.p44-assembled
+  #app
+  .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"])
+  .role-comparison {
+  color: #142a46;
+  background: #fff;
+  > header {
+    margin: 0;
+  }
+  .role-comparison__selectors,
+  .role-comparison__filters {
+    margin: 0;
+  }
+  .role-comparison__summaries {
+    margin: 0 24px;
+    padding: 20px 0;
+  }
+  .role-comparison__result {
+    margin: 0;
+    padding: 18px 24px;
+  }
+  .role-comparison__matrix {
+    margin: 0;
+    padding: 0 24px 24px;
+  }
+}
+@media (max-width: 760px) {
+  html[data-design="signal-ledger"]
+    body.p44-assembled
+    #app
+    .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"])
+    .role-comparison {
+    > header {
+      padding: 20px 16px;
+      border-radius: 0;
+    }
+    .role-comparison__selectors {
+      padding: 20px 16px;
+    }
+    .role-comparison__filters {
+      padding: 0 16px 20px;
+    }
+    .role-comparison__summaries {
+      margin: 0 16px;
+    }
+    .role-comparison__result {
+      padding: 16px;
+    }
+    .role-comparison__matrix {
+      padding: 0 16px 20px;
+    }
+  }
+}
