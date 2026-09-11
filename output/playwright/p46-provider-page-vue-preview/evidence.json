@@ -1,0 +1,3971 @@
+{
+  "kind": "P46-PROVIDER-PAGE-VUE-PREVIEW-r1",
+  "approval": "pending-user-review",
+  "scope": "Actual ProviderRuntimeSurface and ProviderRegistry, original scripts/bindings/data unchanged. Review-only list/navigation CSS, named action column and truthful existing reload label; unused secondary action hidden only in this review. Original25 fixtures and explicit empty/long variants. GET-only intercepted provider directory; no real RBAC/MySQL/collection or provider writes. Editor and mobile details unchanged, not redesigned/accepted; mobile open-close only. No full App/navigation destination or lifecycle acceptance; prior page approvals do not apply.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.css": "a31b900bedbf1cafdf756eea8b7bd8742a5ec844fef9bcad0d8ffe643e39bb74",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "81dcd2938dd30c404d7285e1952bbcb0a57dd6d8cb214c036651d55b300fcfb8",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-page-preview.css": "791e840c6e32430e10b7fcfd1f56d11cc572679ba0e6e4a62d1f08b06636e7bd",
+    "scripts/lib/ui-phase2-provider-page-preview.mjs": "162d4d2ab907809c3ddac597a8519c5011c7af7c49ed255fc77630b9b5ba2bf1",
+    "scripts/verify-ui-phase2-provider-page-preview.mjs": "9a25eede6f34fe4822f897451cddd5e55299aa78c3bbe8c60a1234e00dea70e5",
+    "tests/e2e/m03-01-provider-registry.spec.ts": "caaa0e2af2081675ab743e18d43e2526758604c84bd72aa925ae701454cf226f"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/ProviderRegistry.vue": "02c6a48734ff36d17fe76008836ce3332c8dc53bbd2ecc9bb8e34d4d89e1ef8f"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "loading:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "global counts",
+      "actual": [
+        "25",
+        "1",
+        "1",
+        "24"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "five source navigation destinations",
+      "actual": [
+        "/platform-admin/providers",
+        "/platform-admin/providers/adapters",
+        "/platform-admin/providers/sources",
+        "/platform-admin/providers/sources/1688-acceptance",
+        "/platform-admin/credentials"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "first page exact name order",
+      "actual": [
+        "待复核公开来源",
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "previous initially disabled",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "default:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "default-top:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "navigation native Tab focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "navigation-focus:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create native Tab focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "create blue action",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 390,
+      "name": "create-focus:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "filters:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "records:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "second page five names",
+      "actual": [
+        "来源定义 19",
+        "来源定义 20",
+        "来源定义 21",
+        "来源定义 22",
+        "来源定义 23"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "next last disabled",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "page-two:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "search keeps blocked definition",
+      "actual": [
+        "待复核公开来源"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "filter not global counts",
+      "actual": [
+        "25",
+        "1",
+        "1",
+        "24"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "filter resets page and hides pager",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "blocked-filter:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "reset restores page one",
+      "actual": [
+        "待复核公开来源",
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "enabled filter",
+      "actual": [
+        "待复核公开来源"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "combined filter empty",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "name": "filter-empty:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "manual mode empty",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "name": "case insensitive code search",
+      "actual": [
+        "公开趋势 RSS"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "code-search:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "stable update order",
+      "actual": [
+        "公开趋势 RSS",
+        "待复核公开来源",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "recent-order:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "admission order",
+      "actual": [
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18",
+        "来源定义 19"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "admission-order:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "filters reset before controls",
+      "actual": [
+        "待复核公开来源",
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "search focus visible",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "search-focus:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "original mobile details handoff exists",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "detail close focus returns to original record",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "local filters and pagination require only initial GET",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "query unchanged by local filters",
+      "actual": "?keep=p46"
+    },
+    {
+      "width": 390,
+      "name": "refresh-pending:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh 500 retains 25",
+      "actual": "25"
+    },
+    {
+      "width": 390,
+      "name": "refresh 500 declares stale",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh-error-500:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh 403 retains 25",
+      "actual": "25"
+    },
+    {
+      "width": 390,
+      "name": "refresh 403 declares stale",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh-error-403:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh 401 retains 25",
+      "actual": "25"
+    },
+    {
+      "width": 390,
+      "name": "refresh 401 declares stale",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "refresh-error-401:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "retry clears stale feedback",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "initial 500 hides records",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "initial 500 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "initial-error:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "initial 403 hides records",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "initial 403 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "initial-forbidden:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "initial 401 hides records",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "initial 401 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "initial-expired:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "initial 429 hides records",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "initial 429 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 390,
+      "name": "initial-blocked:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "empty has no false metrics",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "empty:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "long-name:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "no writes or extra API",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "no unexpected requests",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "name": "no browser exceptions",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "loading:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "global counts",
+      "actual": [
+        "25",
+        "1",
+        "1",
+        "24"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "five source navigation destinations",
+      "actual": [
+        "/platform-admin/providers",
+        "/platform-admin/providers/adapters",
+        "/platform-admin/providers/sources",
+        "/platform-admin/providers/sources/1688-acceptance",
+        "/platform-admin/credentials"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "first page exact name order",
+      "actual": [
+        "待复核公开来源",
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "previous initially disabled",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "default:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "default-top:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "navigation native Tab focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "navigation-focus:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create native Tab focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "create blue action",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 760,
+      "name": "create-focus:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "filters:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "records:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "second page five names",
+      "actual": [
+        "来源定义 19",
+        "来源定义 20",
+        "来源定义 21",
+        "来源定义 22",
+        "来源定义 23"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "next last disabled",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "page-two:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "search keeps blocked definition",
+      "actual": [
+        "待复核公开来源"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "filter not global counts",
+      "actual": [
+        "25",
+        "1",
+        "1",
+        "24"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "filter resets page and hides pager",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "blocked-filter:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "reset restores page one",
+      "actual": [
+        "待复核公开来源",
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "enabled filter",
+      "actual": [
+        "待复核公开来源"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "combined filter empty",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "filter-empty:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "manual mode empty",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "case insensitive code search",
+      "actual": [
+        "公开趋势 RSS"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "code-search:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "stable update order",
+      "actual": [
+        "公开趋势 RSS",
+        "待复核公开来源",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "recent-order:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "admission order",
+      "actual": [
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18",
+        "来源定义 19"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "admission-order:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "filters reset before controls",
+      "actual": [
+        "待复核公开来源",
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "search focus visible",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "search-focus:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "original mobile details handoff exists",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "detail close focus returns to original record",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "local filters and pagination require only initial GET",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "query unchanged by local filters",
+      "actual": "?keep=p46"
+    },
+    {
+      "width": 760,
+      "name": "refresh-pending:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh 500 retains 25",
+      "actual": "25"
+    },
+    {
+      "width": 760,
+      "name": "refresh 500 declares stale",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh-error-500:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh 403 retains 25",
+      "actual": "25"
+    },
+    {
+      "width": 760,
+      "name": "refresh 403 declares stale",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh-error-403:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh 401 retains 25",
+      "actual": "25"
+    },
+    {
+      "width": 760,
+      "name": "refresh 401 declares stale",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "refresh-error-401:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "retry clears stale feedback",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "initial 500 hides records",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "initial 500 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "initial-error:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "initial 403 hides records",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "initial 403 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "initial-forbidden:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "initial 401 hides records",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "initial 401 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "initial-expired:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "initial 429 hides records",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "initial 429 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 760,
+      "name": "initial-blocked:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "empty has no false metrics",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "empty:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "long-name:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "no writes or extra API",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "no unexpected requests",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "no browser exceptions",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "loading:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "global counts",
+      "actual": [
+        "25",
+        "1",
+        "1",
+        "24"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "five source navigation destinations",
+      "actual": [
+        "/platform-admin/providers",
+        "/platform-admin/providers/adapters",
+        "/platform-admin/providers/sources",
+        "/platform-admin/providers/sources/1688-acceptance",
+        "/platform-admin/credentials"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "first page exact name order",
+      "actual": [
+        "待复核公开来源",
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "previous initially disabled",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "default:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "default-top:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "navigation native Tab focus",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "navigation-focus:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create native Tab focus",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "create blue action",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 761,
+      "name": "create-focus:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "filters:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "records:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "second page five names",
+      "actual": [
+        "来源定义 19",
+        "来源定义 20",
+        "来源定义 21",
+        "来源定义 22",
+        "来源定义 23"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "next last disabled",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "page-two:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "search keeps blocked definition",
+      "actual": [
+        "待复核公开来源"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "filter not global counts",
+      "actual": [
+        "25",
+        "1",
+        "1",
+        "24"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "filter resets page and hides pager",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "blocked-filter:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "reset restores page one",
+      "actual": [
+        "待复核公开来源",
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "enabled filter",
+      "actual": [
+        "待复核公开来源"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "combined filter empty",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "filter-empty:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "manual mode empty",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "case insensitive code search",
+      "actual": [
+        "公开趋势 RSS"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "code-search:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "stable update order",
+      "actual": [
+        "公开趋势 RSS",
+        "待复核公开来源",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "recent-order:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "admission order",
+      "actual": [
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18",
+        "来源定义 19"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "admission-order:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "filters reset before controls",
+      "actual": [
+        "待复核公开来源",
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "search focus visible",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "search-focus:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "seven named columns",
+      "actual": [
+        "来源",
+        "模式 / 市场",
+        "频率 / 并发",
+        "超时 / 重试",
+        "解析器",
+        "状态",
+        "操作"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "columns:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "freeze follows first visible column",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "hidden-first-column:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "unfreeze",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "compact-unfrozen:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "table scroll reaches right columns",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "table-right:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "local filters and pagination require only initial GET",
+      "actual": 1
+    },
+    {
+      "width": 761,
+      "name": "query unchanged by local filters",
+      "actual": "?keep=p46"
+    },
+    {
+      "width": 761,
+      "name": "refresh-pending:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh 500 retains 25",
+      "actual": "25"
+    },
+    {
+      "width": 761,
+      "name": "refresh 500 declares stale",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh-error-500:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh 403 retains 25",
+      "actual": "25"
+    },
+    {
+      "width": 761,
+      "name": "refresh 403 declares stale",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh-error-403:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh 401 retains 25",
+      "actual": "25"
+    },
+    {
+      "width": 761,
+      "name": "refresh 401 declares stale",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "refresh-error-401:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "retry clears stale feedback",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "initial 500 hides records",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "initial 500 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "initial-error:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "initial 403 hides records",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "initial 403 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "initial-forbidden:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "initial 401 hides records",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "initial 401 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "initial-expired:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "initial 429 hides records",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "initial 429 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 761,
+      "name": "initial-blocked:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "empty has no false metrics",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "name": "empty:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "long-name:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "no writes or extra API",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "name": "no unexpected requests",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "name": "no browser exceptions",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "loading:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "global counts",
+      "actual": [
+        "25",
+        "1",
+        "1",
+        "24"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "five source navigation destinations",
+      "actual": [
+        "/platform-admin/providers",
+        "/platform-admin/providers/adapters",
+        "/platform-admin/providers/sources",
+        "/platform-admin/providers/sources/1688-acceptance",
+        "/platform-admin/credentials"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "first page exact name order",
+      "actual": [
+        "待复核公开来源",
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "previous initially disabled",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "default:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "default-top:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "navigation native Tab focus",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "navigation-focus:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create native Tab focus",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "create blue action",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 1440,
+      "name": "create-focus:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "filters:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "records:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "second page five names",
+      "actual": [
+        "来源定义 19",
+        "来源定义 20",
+        "来源定义 21",
+        "来源定义 22",
+        "来源定义 23"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "next last disabled",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "page-two:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "search keeps blocked definition",
+      "actual": [
+        "待复核公开来源"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "filter not global counts",
+      "actual": [
+        "25",
+        "1",
+        "1",
+        "24"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "filter resets page and hides pager",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "blocked-filter:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "reset restores page one",
+      "actual": [
+        "待复核公开来源",
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "enabled filter",
+      "actual": [
+        "待复核公开来源"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "combined filter empty",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "filter-empty:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "manual mode empty",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "case insensitive code search",
+      "actual": [
+        "公开趋势 RSS"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "code-search:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "stable update order",
+      "actual": [
+        "公开趋势 RSS",
+        "待复核公开来源",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "recent-order:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "admission order",
+      "actual": [
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18",
+        "来源定义 19"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "admission-order:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "filters reset before controls",
+      "actual": [
+        "待复核公开来源",
+        "公开趋势 RSS",
+        "来源定义 01",
+        "来源定义 02",
+        "来源定义 03",
+        "来源定义 04",
+        "来源定义 05",
+        "来源定义 06",
+        "来源定义 07",
+        "来源定义 08",
+        "来源定义 09",
+        "来源定义 10",
+        "来源定义 11",
+        "来源定义 12",
+        "来源定义 13",
+        "来源定义 14",
+        "来源定义 15",
+        "来源定义 16",
+        "来源定义 17",
+        "来源定义 18"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "search focus visible",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "search-focus:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "seven named columns",
+      "actual": [
+        "来源",
+        "模式 / 市场",
+        "频率 / 并发",
+        "超时 / 重试",
+        "解析器",
+        "状态",
+        "操作"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "columns:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "freeze follows first visible column",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "hidden-first-column:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "unfreeze",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "compact-unfrozen:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "table scroll reaches right columns",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "table-right:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "local filters and pagination require only initial GET",
+      "actual": 1
+    },
+    {
+      "width": 1440,
+      "name": "query unchanged by local filters",
+      "actual": "?keep=p46"
+    },
+    {
+      "width": 1440,
+      "name": "refresh-pending:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh 500 retains 25",
+      "actual": "25"
+    },
+    {
+      "width": 1440,
+      "name": "refresh 500 declares stale",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh-error-500:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh 403 retains 25",
+      "actual": "25"
+    },
+    {
+      "width": 1440,
+      "name": "refresh 403 declares stale",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh-error-403:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh 401 retains 25",
+      "actual": "25"
+    },
+    {
+      "width": 1440,
+      "name": "refresh 401 declares stale",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "refresh-error-401:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "retry clears stale feedback",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "initial 500 hides records",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "initial 500 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "initial-error:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "initial 403 hides records",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "initial 403 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "initial-forbidden:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "initial 401 hides records",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "initial 401 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "initial-expired:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "initial 429 hides records",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "initial 429 only real reload action",
+      "actual": [
+        "重新读取来源"
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "initial-blocked:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "empty has no false metrics",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "name": "empty:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "long-name:no page horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "no writes or extra API",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "name": "no unexpected requests",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "name": "no browser exceptions",
+      "actual": []
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-loading.png",
+      "width": 390,
+      "state": "loading",
+      "sha256": "d2d587fdddf5710481008e9ecd402e6a7278e098c0aca7962f92c5cb01398b6a",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 939
+      }
+    },
+    {
+      "file": "390-default.png",
+      "width": 390,
+      "state": "default",
+      "sha256": "cfd95f636f4aec3e46ee13937c0d810004384aaddca977bb7f4ca71daf0f901f",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 5287
+      }
+    },
+    {
+      "file": "390-default-top.png",
+      "width": 390,
+      "state": "default-top",
+      "sha256": "c2e2e229917d6e7ae31d45bafe8925e73780c2f57f6e3d770f34fbd904a6067f",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-navigation-focus.png",
+      "width": 390,
+      "state": "navigation-focus",
+      "sha256": "b3aef11329165d43e4a5155c4bda17f84449426b32174fcf3c62be0fbc6043ca",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-create-focus.png",
+      "width": 390,
+      "state": "create-focus",
+      "sha256": "3563b64bc4b009b436568ad0d9f243ba71fe6528d47b330ae3777b6146318474",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-filters.png",
+      "width": 390,
+      "state": "filters",
+      "sha256": "90ae7c6615f581f5abac995e600fd2075d513093ad79b57145dce5c31a087712",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-records.png",
+      "width": 390,
+      "state": "records",
+      "sha256": "d009d338e3c969888c761695a178ad400145a57dc56cf96cf19eb702b035f211",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-page-two.png",
+      "width": 390,
+      "state": "page-two",
+      "sha256": "c640b5b48c22064e8f618612c43e61f89ed27490beda8b7e47747e7724e20cd6",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 2590
+      }
+    },
+    {
+      "file": "390-blocked-filter.png",
+      "width": 390,
+      "state": "blocked-filter",
+      "sha256": "a87fa07c695cb7684e580dc24816656af72f00fd2f1d4684f2d70523f1a60b47",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 1749
+      }
+    },
+    {
+      "file": "390-filter-empty.png",
+      "width": 390,
+      "state": "filter-empty",
+      "sha256": "585142c8d17792bacc0d1e552101ba21d381bfe2d9fe1da05d9add096c68f2bb",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 1810
+      }
+    },
+    {
+      "file": "390-code-search.png",
+      "width": 390,
+      "state": "code-search",
+      "sha256": "4e51d659ad60013b806fef773d195c3765c69998dc3fd09696bb555a4411c4cd",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 1749
+      }
+    },
+    {
+      "file": "390-recent-order.png",
+      "width": 390,
+      "state": "recent-order",
+      "sha256": "675de24ee965148e13a58c4a5cd0cfc50ee99f1df15cc8c625a18e72b2946461",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-admission-order.png",
+      "width": 390,
+      "state": "admission-order",
+      "sha256": "0b1eea2b46e4325ae148386981734b452a5ba695b15562a0ac696179ebf434dc",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-search-focus.png",
+      "width": 390,
+      "state": "search-focus",
+      "sha256": "fa85dee2555346b66c106bd1d9d3a3eeb4f68144e9e271b1f093c3fd667c0620",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-refresh-pending.png",
+      "width": 390,
+      "state": "refresh-pending",
+      "sha256": "70f4768bd5530fc871b2e8d9ae5aa3810fc1cd2cb0eeea1d759c4b14eadb6d9a",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 5287
+      }
+    },
+    {
+      "file": "390-refresh-error-500.png",
+      "width": 390,
+      "state": "refresh-error-500",
+      "sha256": "90809e9da98156eb8709e783039e09560feee7b376f010ca424ae627dcf12ea0",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 5429
+      }
+    },
+    {
+      "file": "390-refresh-error-403.png",
+      "width": 390,
+      "state": "refresh-error-403",
+      "sha256": "90809e9da98156eb8709e783039e09560feee7b376f010ca424ae627dcf12ea0",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 5429
+      }
+    },
+    {
+      "file": "390-refresh-error-401.png",
+      "width": 390,
+      "state": "refresh-error-401",
+      "sha256": "90809e9da98156eb8709e783039e09560feee7b376f010ca424ae627dcf12ea0",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 5429
+      }
+    },
+    {
+      "file": "390-initial-error.png",
+      "width": 390,
+      "state": "initial-error",
+      "sha256": "42fb4407540c23f1cbf9eeedaafb6ea4c7d9d6cdb4d9bfdedf1c422a6a755ada",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 939
+      }
+    },
+    {
+      "file": "390-initial-forbidden.png",
+      "width": 390,
+      "state": "initial-forbidden",
+      "sha256": "5459e42ac3dc16f1533a7c2ee378f96d21bba8ef887e2d87304429824760db1b",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 939
+      }
+    },
+    {
+      "file": "390-initial-expired.png",
+      "width": 390,
+      "state": "initial-expired",
+      "sha256": "bc454e5c698799d4aba72727c272792479c2e56c6239284b68747164ae33dedf",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 939
+      }
+    },
+    {
+      "file": "390-initial-blocked.png",
+      "width": 390,
+      "state": "initial-blocked",
+      "sha256": "6dd7d21725899400b1f4faebf1dc9b0c1e9ebf369e15afc4a57c32de2aec1143",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 939
+      }
+    },
+    {
+      "file": "390-empty.png",
+      "width": 390,
+      "state": "empty",
+      "sha256": "596425b8c33f774eebaf560a5e9f1923c41fde9843f2be0f5fcc791e733370b2",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-long-name.png",
+      "width": 390,
+      "state": "long-name",
+      "sha256": "b4e460eae586305a0c66d693501a0999076853b6ba534252e74d7a1ba78fb0c0",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-loading.png",
+      "width": 760,
+      "state": "loading",
+      "sha256": "57071e84e7920189cd4369d39639c8e6e2694035cf9f73a9024a1784f3679dd2",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 918
+      }
+    },
+    {
+      "file": "760-default.png",
+      "width": 760,
+      "state": "default",
+      "sha256": "49523602d032e139059348ab389e507ac1a389dda5b93babcd60a8f512cfa858",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 5021
+      }
+    },
+    {
+      "file": "760-default-top.png",
+      "width": 760,
+      "state": "default-top",
+      "sha256": "45b0388ee36083567f04ad5f2f7e39ae7c135caa4b0e80f9b810bb0c6579c261",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-navigation-focus.png",
+      "width": 760,
+      "state": "navigation-focus",
+      "sha256": "1f661119bda88bc5f452d524ecdac9782ac7b5187a4826f7fb9af90bb2023827",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-create-focus.png",
+      "width": 760,
+      "state": "create-focus",
+      "sha256": "3619cc5bd9515545f4041c05af17c74cabd53092c672e4d094de6ff5dbc5d24a",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-filters.png",
+      "width": 760,
+      "state": "filters",
+      "sha256": "7294afe514b54f33e26e1c7dc016ffd37d482aeb5ebe78fa55baadc4ff4889ed",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-records.png",
+      "width": 760,
+      "state": "records",
+      "sha256": "3f2ca0cbc9224ef47a86d9e5a653c03121672572c59205caf1fcbd1a8f982888",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-page-two.png",
+      "width": 760,
+      "state": "page-two",
+      "sha256": "799578eb9c2b39b6bb4eb5292e45d879ddb7f75582ce6447e2c220eec7b96e54",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 2324
+      }
+    },
+    {
+      "file": "760-blocked-filter.png",
+      "width": 760,
+      "state": "blocked-filter",
+      "sha256": "ea4ce7f5136703439c4169865558fcd873ba3892e09736a1f114fca36c89b9e7",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 1483
+      }
+    },
+    {
+      "file": "760-filter-empty.png",
+      "width": 760,
+      "state": "filter-empty",
+      "sha256": "f8b32d6f12c1760fd98b8176a6db5b150db506e6587863298a3c9c03126fdc14",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 1523
+      }
+    },
+    {
+      "file": "760-code-search.png",
+      "width": 760,
+      "state": "code-search",
+      "sha256": "f3e8d3fa4bbad5f32647f7520972f1266f6d3d8ee6fabf364a7f187c5928b268",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 1483
+      }
+    },
+    {
+      "file": "760-recent-order.png",
+      "width": 760,
+      "state": "recent-order",
+      "sha256": "5aa2478826467d254d23674c8211aa229ba93a327bb2389fb06d947d300bb207",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-admission-order.png",
+      "width": 760,
+      "state": "admission-order",
+      "sha256": "1396befa970497a401dca2fcb814ded48c6be4b36b30f3097754bf02abef95f1",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-search-focus.png",
+      "width": 760,
+      "state": "search-focus",
+      "sha256": "44db842a3ad52ebbba5620c50c8ce55a19d9571a9652c251b9c9324946df1840",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-refresh-pending.png",
+      "width": 760,
+      "state": "refresh-pending",
+      "sha256": "fb10849ce34ba6b1c012449bacc764b132c25f7f4dd8bf609ddfd5614063015f",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 5021
+      }
+    },
+    {
+      "file": "760-refresh-error-500.png",
+      "width": 760,
+      "state": "refresh-error-500",
+      "sha256": "50638ad0eddad5caec586d8370ec58172d39fe20156e094b88cc2c376c80fe92",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 5142
+      }
+    },
+    {
+      "file": "760-refresh-error-403.png",
+      "width": 760,
+      "state": "refresh-error-403",
+      "sha256": "50638ad0eddad5caec586d8370ec58172d39fe20156e094b88cc2c376c80fe92",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 5142
+      }
+    },
+    {
+      "file": "760-refresh-error-401.png",
+      "width": 760,
+      "state": "refresh-error-401",
+      "sha256": "50638ad0eddad5caec586d8370ec58172d39fe20156e094b88cc2c376c80fe92",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 5142
+      }
+    },
+    {
+      "file": "760-initial-error.png",
+      "width": 760,
+      "state": "initial-error",
+      "sha256": "0fcd29007ad68f380410c92b6db0ab0dcdb4cbe3df5d7d445db8371708baa73c",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 918
+      }
+    },
+    {
+      "file": "760-initial-forbidden.png",
+      "width": 760,
+      "state": "initial-forbidden",
+      "sha256": "b2270e39edef161eff06526f16bf39c7c84ba580384e8b6c18bea23cd468c246",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 918
+      }
+    },
+    {
+      "file": "760-initial-expired.png",
+      "width": 760,
+      "state": "initial-expired",
+      "sha256": "9db33d04568f8955d436eca85c10964e40218fe1d574721bf6c83797172a519f",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 918
+      }
+    },
+    {
+      "file": "760-initial-blocked.png",
+      "width": 760,
+      "state": "initial-blocked",
+      "sha256": "996c5dcfd7a67c0c54dffcd1b2878e74d6f816ff0a5af416358db666c186907d",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 918
+      }
+    },
+    {
+      "file": "760-empty.png",
+      "width": 760,
+      "state": "empty",
+      "sha256": "10a6466fced7094ce55d55c1ac32c004989d0da2d2628187a14ec28dc108c02c",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-long-name.png",
+      "width": 760,
+      "state": "long-name",
+      "sha256": "71d48b3046c882403907b479b0aeeb88ece4d5b3bdc1e59337a1d99a9ed48606",
+      "viewport": {
+        "width": 760,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-loading.png",
+      "width": 761,
+      "state": "loading",
+      "sha256": "893d42e3830414a170a6184240fa0f670e188c246ac69f776a348f9160007ad2",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-default.png",
+      "width": 761,
+      "state": "default",
+      "sha256": "8f07289921f5e04ae10cfce53740eb5e214e81ca36467524aa6ad2e953272c66",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 3449
+      }
+    },
+    {
+      "file": "761-default-top.png",
+      "width": 761,
+      "state": "default-top",
+      "sha256": "98dbdf97ae5aebb64765a62758a922d5152b83d70e88eb274d61d6a768788d5b",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-navigation-focus.png",
+      "width": 761,
+      "state": "navigation-focus",
+      "sha256": "d0e0dffb21a5dabf1764ba6059176d1c63f4153b679cdf3bd56dfd6b6608c202",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-create-focus.png",
+      "width": 761,
+      "state": "create-focus",
+      "sha256": "67b79b81ba3ea73fcaebe65713420ffe696be685bbf372a5e8822fbca797b6de",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-filters.png",
+      "width": 761,
+      "state": "filters",
+      "sha256": "c5525d715c9fcd9af48ce9d37f04b3af6adc7c63251cf5b9a9bd1f1891892b84",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-records.png",
+      "width": 761,
+      "state": "records",
+      "sha256": "3b079baa4dce1f3512b5f075ccacfacf7a680b1f146f27ca0183aa6100868b76",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-page-two.png",
+      "width": 761,
+      "state": "page-two",
+      "sha256": "bedd49f584df3fbebd73f78ed0016dc02aaa14a90c162e3f54df6d11b89d8e5c",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 1874
+      }
+    },
+    {
+      "file": "761-blocked-filter.png",
+      "width": 761,
+      "state": "blocked-filter",
+      "sha256": "09301e77f069279fc095a0f5b84fa262750291a8d05af13ad4aeeb067581fae4",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 1369
+      }
+    },
+    {
+      "file": "761-filter-empty.png",
+      "width": 761,
+      "state": "filter-empty",
+      "sha256": "832c732aa61888bcfdd160718310b2c685b2c91fa08cf1cffb0af970334ecf92",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 1306
+      }
+    },
+    {
+      "file": "761-code-search.png",
+      "width": 761,
+      "state": "code-search",
+      "sha256": "50a0d09a438415405db592574a21a9ed329792c5d69e96613dccf1b76f91142b",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 1369
+      }
+    },
+    {
+      "file": "761-recent-order.png",
+      "width": 761,
+      "state": "recent-order",
+      "sha256": "d723c504036610e3eb31cfe2f4509d555b7ae16a132050b5cdf72cd18512e776",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-admission-order.png",
+      "width": 761,
+      "state": "admission-order",
+      "sha256": "81ec27ac9f7c487e0bf3be01101481e1f216230d849ef91784af6606fce5fd63",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-search-focus.png",
+      "width": 761,
+      "state": "search-focus",
+      "sha256": "6ab784142abe8df37cc0c4e606a8d2c37bc80dd259b610867578f839cd808507",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-columns.png",
+      "width": 761,
+      "state": "columns",
+      "sha256": "74375f091131989092a4cafbae74d714e76f2533b89f244efd69e640882b0da4",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-hidden-first-column.png",
+      "width": 761,
+      "state": "hidden-first-column",
+      "sha256": "35ed33e024f6cc1d78b475cceaf748a68a8b39bf10817af33c48e759882ca8db",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-compact-unfrozen.png",
+      "width": 761,
+      "state": "compact-unfrozen",
+      "sha256": "6cb2915ad3f53944649be0add190f513a6b259a7db06ab71df95981e5a2a0360",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-table-right.png",
+      "width": 761,
+      "state": "table-right",
+      "sha256": "06d17f2dd3fa783398d9260d5409ce552685eafc63217060684ae2ed5941f454",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-refresh-pending.png",
+      "width": 761,
+      "state": "refresh-pending",
+      "sha256": "a84fe4825de2a74482ac3c1a4022b0f0212f4051f031f937bedb20de69c5b896",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 3449
+      }
+    },
+    {
+      "file": "761-refresh-error-500.png",
+      "width": 761,
+      "state": "refresh-error-500",
+      "sha256": "5e627fd7b16d809bfae3f49de4ad175cc642ed6a8cfb24d96de8e126969ae39b",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 3539
+      }
+    },
+    {
+      "file": "761-refresh-error-403.png",
+      "width": 761,
+      "state": "refresh-error-403",
+      "sha256": "5e627fd7b16d809bfae3f49de4ad175cc642ed6a8cfb24d96de8e126969ae39b",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 3539
+      }
+    },
+    {
+      "file": "761-refresh-error-401.png",
+      "width": 761,
+      "state": "refresh-error-401",
+      "sha256": "5e627fd7b16d809bfae3f49de4ad175cc642ed6a8cfb24d96de8e126969ae39b",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 3539
+      }
+    },
+    {
+      "file": "761-initial-error.png",
+      "width": 761,
+      "state": "initial-error",
+      "sha256": "0d73ec65a4e26a67e53f6b243ad9042029dda2666eff7fa26b963e430a12578c",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-initial-forbidden.png",
+      "width": 761,
+      "state": "initial-forbidden",
+      "sha256": "a201b2c97a403567a2bd963ab482b935430cb525dd9cfd36a51ad53a2064de00",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-initial-expired.png",
+      "width": 761,
+      "state": "initial-expired",
+      "sha256": "bb8c5bd01339f5a239091ce5b9db19918ba2e22dbb8c12b9b8241d11763f393d",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-initial-blocked.png",
+      "width": 761,
+      "state": "initial-blocked",
+      "sha256": "60541e08b50212a7d3c7ed2ced71e4d2ef63dd11b7282b991f757ad4d2383428",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-empty.png",
+      "width": 761,
+      "state": "empty",
+      "sha256": "ebbb7111f8b5d4f16bb5122ef1644d31cc513a10f6a0b0599b089481959a1298",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "761-long-name.png",
+      "width": 761,
+      "state": "long-name",
+      "sha256": "73d0830677fb6f3e604b8d579561a6c39e89a405cf8e327ca48a12c276c44da0",
+      "viewport": {
+        "width": 761,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 761,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-loading.png",
+      "width": 1440,
+      "state": "loading",
+      "sha256": "947e0a6774a1ff53cd79628b46ef536d0b3cc00fe6d29585598563a7abaccc4f",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-default.png",
+      "width": 1440,
+      "state": "default",
+      "sha256": "6b9fddba36904d78938d83f21510e4c93fcc98a5e5f76615f277d8da52a8fa80",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 3066
+      }
+    },
+    {
+      "file": "1440-default-top.png",
+      "width": 1440,
+      "state": "default-top",
+      "sha256": "1ccfeae6bbaed52a10a926952fbf71c75ba661b2a462668af50db2e149d92404",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-navigation-focus.png",
+      "width": 1440,
+      "state": "navigation-focus",
+      "sha256": "6fb7c9ba6a6ffad2d85676f15d9d410a60dd50db85736573a81e4055a90ce410",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-create-focus.png",
+      "width": 1440,
+      "state": "create-focus",
+      "sha256": "78e44904986dd0bf65ed34dc463ad7a6941fbf1b258a3711409ec908012f4563",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-filters.png",
+      "width": 1440,
+      "state": "filters",
+      "sha256": "6f5fd393bb94601d4159cdce3412a0ee7cb4b7e971148518b82e1086bc6c107f",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-records.png",
+      "width": 1440,
+      "state": "records",
+      "sha256": "0780be4952f8b1ceed0fa87aadefaa05c7694c9e2675832a4d182d3c74d742c3",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-page-two.png",
+      "width": 1440,
+      "state": "page-two",
+      "sha256": "2486ea513348c6368beaeef14cef713ec683720ddd8b7b2cc85d44c396b61b45",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 1491
+      }
+    },
+    {
+      "file": "1440-blocked-filter.png",
+      "width": 1440,
+      "state": "blocked-filter",
+      "sha256": "f0aba88bdce73fe3e3749bf5624ed1b324cba2f7a6a9cf58408ea2f74366dc21",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 986
+      }
+    },
+    {
+      "file": "1440-filter-empty.png",
+      "width": 1440,
+      "state": "filter-empty",
+      "sha256": "cc4bf8a4e58feb522f37b58078d3d81150556db70041e3217231497309f80ef2",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 924
+      }
+    },
+    {
+      "file": "1440-code-search.png",
+      "width": 1440,
+      "state": "code-search",
+      "sha256": "3a1bff7783fbccf3e4f9ee89fa954708a1178c1b98daa37e937679f84ce60f69",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 986
+      }
+    },
+    {
+      "file": "1440-recent-order.png",
+      "width": 1440,
+      "state": "recent-order",
+      "sha256": "fbe6bb797a6932d631d18bc589ca9e4ae54a760be9a0de0977e81608bee6c404",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-admission-order.png",
+      "width": 1440,
+      "state": "admission-order",
+      "sha256": "bef25763a8dd43a53c3ddd71285e43c8d3737994a6b8d3b9cd261ad90512f864",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-search-focus.png",
+      "width": 1440,
+      "state": "search-focus",
+      "sha256": "85018711cbf109fd2a5c930545ee9b1befcffda649a97b1765e200dc2bcdcf67",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-columns.png",
+      "width": 1440,
+      "state": "columns",
+      "sha256": "ecffe4eb16c047d3e69bb78e0889bc9dd091c2d5de592d6d937ab4f0ff46c0ce",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-hidden-first-column.png",
+      "width": 1440,
+      "state": "hidden-first-column",
+      "sha256": "ed8b02fe81e0ad7ca53072707c1338c597a5dc460b5f51a34e2fb2b8eda4ad48",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-compact-unfrozen.png",
+      "width": 1440,
+      "state": "compact-unfrozen",
+      "sha256": "674912fa5638c648b492f0792b924454b284b59a12733f47c4267f4b9c1063b1",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-table-right.png",
+      "width": 1440,
+      "state": "table-right",
+      "sha256": "674912fa5638c648b492f0792b924454b284b59a12733f47c4267f4b9c1063b1",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-refresh-pending.png",
+      "width": 1440,
+      "state": "refresh-pending",
+      "sha256": "fbac3625ff41d28cb295c2f82c90a32dbcbb15332c5a2477b586d450d7c73109",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 3066
+      }
+    },
+    {
+      "file": "1440-refresh-error-500.png",
+      "width": 1440,
+      "state": "refresh-error-500",
+      "sha256": "2acf566e46d3703495fc3b417421de31f72eb16af32c1d95c05cdaf5fe33294f",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 3156
+      }
+    },
+    {
+      "file": "1440-refresh-error-403.png",
+      "width": 1440,
+      "state": "refresh-error-403",
+      "sha256": "2acf566e46d3703495fc3b417421de31f72eb16af32c1d95c05cdaf5fe33294f",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 3156
+      }
+    },
+    {
+      "file": "1440-refresh-error-401.png",
+      "width": 1440,
+      "state": "refresh-error-401",
+      "sha256": "2acf566e46d3703495fc3b417421de31f72eb16af32c1d95c05cdaf5fe33294f",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 3156
+      }
+    },
+    {
+      "file": "1440-initial-error.png",
+      "width": 1440,
+      "state": "initial-error",
+      "sha256": "1900f8e9823193cd9fd4042bc8a2386b1f06397c877d31918f6ef7b29637f6d7",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-initial-forbidden.png",
+      "width": 1440,
+      "state": "initial-forbidden",
+      "sha256": "52fb71340274f0fac916a023f10b475979b1854b0b421cc8706fc5dfcc37082b",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-initial-expired.png",
+      "width": 1440,
+      "state": "initial-expired",
+      "sha256": "6350a84d3b0ce0d8f0a9449fe69fb18c2fd43a1426f5397f5a56214f50069827",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-initial-blocked.png",
+      "width": 1440,
+      "state": "initial-blocked",
+      "sha256": "40b7901b8a686e5e9ff497248aa5e1ca2d623a049df5951e55c0a83ca776093c",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-empty.png",
+      "width": 1440,
+      "state": "empty",
+      "sha256": "b16e8108f72270279d35d4604a141bfe0bc5681789b4a81f2043846ab9a52950",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "1440-long-name.png",
+      "width": 1440,
+      "state": "long-name",
+      "sha256": "f8b9ed3ccad8b6d9512bb890b86df8588cb3eaf1ce08908bdb0b9117e8b6dbb4",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "imageDimensions": {
+        "width": 1440,
+        "height": 900
+      }
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 403,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 401,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 403,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 401,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 429,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 429,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 429,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "long"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 403,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 401,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 403,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 401,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 429,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 429,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 429,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "long"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 761,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 403,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 401,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 403,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 401,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 429,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 429,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 429,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "long"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 403,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 401,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 500,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 403,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 401,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 429,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 429,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 429,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "normal"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "empty"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "status": 200,
+          "variant": "long"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    }
+  ],
+  "processesClosed": true
+}

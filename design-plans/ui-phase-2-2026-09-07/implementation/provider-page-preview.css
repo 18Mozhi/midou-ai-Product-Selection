@@ -1,0 +1,467 @@
+/* P46 C review only. Original editor/drawer styles intentionally excluded. */
+html body.p46-page-review {
+  margin: 0;
+  color: #142a46;
+  background: #eef2f7;
+}
+html body.p46-page-review #app {
+  padding: 28px;
+  max-width: 1600px;
+  margin: auto;
+  font-family: "Microsoft YaHei", sans-serif;
+}
+html body.p46-page-review #app .provider-runtime-surface {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+html body.p46-page-review #app .provider-runtime-tabs {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  border: 0;
+  border-radius: 10px;
+  background: #294caf;
+}
+html body.p46-page-review #app .provider-runtime-tabs a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 12px;
+  color: #fff;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 14px;
+  text-decoration: none;
+}
+html body.p46-page-review #app .provider-runtime-tabs a[aria-current="page"] {
+  background: #fff;
+  color: #294caf;
+  font-weight: 700;
+}
+html body.p46-page-review #app .provider-runtime-tabs a:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+html body.p46-page-review #app .provider-registry {
+  margin: 0;
+  min-width: 0;
+}
+html body.p46-page-review #app .provider-hero {
+  padding: 0 0 24px;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid #c9d6e8;
+  border-radius: 0;
+  box-shadow: none;
+}
+html body.p46-page-review #app .provider-hero h2 {
+  margin: 8px 0;
+  color: #142a46;
+  font-size: 28px;
+}
+html body.p46-page-review #app .provider-hero p {
+  color: #294caf;
+  letter-spacing: 0;
+  font-size: 14px;
+}
+html body.p46-page-review #app .provider-hero span {
+  font-size: 14px;
+  color: #536b86;
+}
+html
+  body.p46-page-review
+  #app
+  .provider-registry
+  > :where(:not(.provider-editor-layer))
+  :is(button, summary) {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #9db1cc;
+  border-radius: 6px;
+  background: #fff;
+  color: #294caf;
+  font-size: 14px;
+}
+html body.p46-page-review #app .provider-hero > button,
+html body.p46-page-review #app .provider-empty > button,
+html body.p46-page-review #app .ui-state-panel button.primary {
+  background: #294caf;
+  color: white;
+  border-color: #294caf;
+}
+html
+  body.p46-page-review
+  #app
+  .provider-registry
+  > :where(:not(.provider-editor-layer))
+  button:disabled {
+  color: #66748a;
+  background: #e8edf4;
+  border-color: #d8e1ed;
+  opacity: 1;
+}
+html
+  body.p46-page-review
+  #app
+  .provider-registry
+  > :where(:not(.provider-editor-layer))
+  :is(input, select) {
+  min-height: 48px;
+  min-width: 0;
+  padding: 10px 12px;
+  font-size: 16px;
+  color: #142a46;
+  background: white;
+  border: 1px solid #9db1cc;
+  border-radius: 6px;
+}
+html
+  body.p46-page-review
+  #app
+  .provider-registry
+  > :where(:not(.provider-editor-layer))
+  :is(button, input, select, summary):focus-visible {
+  outline: 3px solid #4276df;
+  outline-offset: 3px;
+}
+html body.p46-page-review #app .provider-overview {
+  gap: 0;
+  margin: 20px 0;
+}
+html body.p46-page-review #app .provider-overview article {
+  padding: 0 16px;
+  border: 0;
+  border-right: 1px solid #c9d6e8;
+  border-radius: 0;
+  background: none;
+  gap: 6px;
+}
+html body.p46-page-review #app .provider-overview article:first-child {
+  padding-left: 0;
+}
+html body.p46-page-review #app .provider-overview article:last-child {
+  border: 0;
+}
+html body.p46-page-review #app .provider-overview strong {
+  font-size: 24px;
+  color: #142a46;
+}
+html body.p46-page-review #app .provider-overview :is(span, small) {
+  font-size: 13px;
+  color: #536b86;
+}
+html body.p46-page-review #app .provider-truth-note {
+  padding: 16px 20px;
+  border: 0;
+  border-left: 3px solid #294caf;
+  border-radius: 0;
+  background: #e5edf9;
+  color: #294466;
+  font-size: 14px;
+  line-height: 1.7;
+}
+html body.p46-page-review #app .provider-truth-note strong {
+  color: #294caf;
+}
+html body.p46-page-review #app .provider-list-tools {
+  margin-top: 24px;
+  padding: 24px;
+  border: 1px solid #d8e1ed;
+  border-radius: 10px 10px 0 0;
+  background: white;
+}
+html body.p46-page-review #app .provider-list-heading h3 {
+  font-size: 20px;
+  color: #142a46;
+}
+html body.p46-page-review #app .provider-list-heading span {
+  font-size: 14px;
+  color: #536b86;
+}
+html body.p46-page-review #app .provider-filters {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+html body.p46-page-review #app .provider-filters label {
+  min-width: 0;
+  color: #536b86;
+  font-size: 14px;
+}
+html body.p46-page-review #app .provider-filters :is(input, select) {
+  width: 100%;
+}
+html body.p46-page-review #app .provider-reset {
+  justify-self: start;
+}
+html body.p46-page-review #app .responsive-data-view {
+  padding: 20px 24px;
+  background: white;
+  border: 1px solid #d8e1ed;
+  border-top: 0;
+  min-width: 0;
+}
+html body.p46-page-review #app .table-view-controls__toolbar {
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+html body.p46-page-review #app .table-view-controls__toolbar label {
+  color: #536b86;
+  font-size: 14px;
+}
+html body.p46-page-review #app .table-view-controls__toolbar fieldset {
+  background: white;
+  color: #142a46;
+  border: 1px solid #9db1cc;
+}
+html body.p46-page-review #app .table-view-controls__toolbar input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  min-height: 20px;
+  min-block-size: 20px;
+  min-inline-size: 20px;
+  padding: 0;
+  accent-color: #294caf;
+}
+html body.p46-page-review #app .provider-table-wrap {
+  border: 0;
+  border-radius: 0;
+}
+html body.p46-page-review #app .provider-table-wrap table {
+  min-width: 1000px;
+  font-size: 14px;
+}
+html body.p46-page-review #app .provider-table-wrap :is(th, td) {
+  padding: 18px 14px;
+  border: 0;
+  border-bottom: 1px solid #d8e1ed;
+  background: white;
+  color: #142a46;
+}
+html body.p46-page-review #app .provider-table-wrap th {
+  background: #eef2f7;
+  font-size: 13px;
+  color: #536b86;
+}
+html body.p46-page-review #app .provider-table-wrap small {
+  color: #536b86;
+  font-size: 13px;
+}
+html body.p46-page-review #app .provider-table-wrap [data-table-density="compact"] :is(th, td) {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+html body.p46-page-review #app [data-admission] {
+  color: #294caf;
+  background: #eaf0fc;
+  border: 0;
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-style: normal;
+  font-size: 13px;
+}
+html body.p46-page-review #app [data-admission="inactive"] {
+  color: #536b86;
+  background: #eef2f7;
+}
+html body.p46-page-review #app [data-admission="blocked"] {
+  color: #8b4527;
+  background: #fff0e7;
+}
+html body.p46-page-review #app .provider-pagination {
+  margin: 0;
+  padding: 20px 24px;
+  border: 1px solid #d8e1ed;
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+  color: #536b86;
+  background: white;
+}
+html body.p46-page-review #app .provider-feedback {
+  padding: 16px;
+  color: #75461f;
+  background: #fff8ef;
+  border: 1px solid #e5bca4;
+  border-radius: 8px;
+}
+html body.p46-page-review #app :is(.provider-empty, .ui-state-panel) {
+  padding: 28px;
+  margin-top: 20px;
+  border: 1px solid #d8e1ed;
+  border-radius: 10px;
+  background: white;
+  color: #142a46;
+  text-align: left;
+}
+html body.p46-page-review #app .provider-empty p {
+  color: #536b86;
+}
+/* This caller has no secondary handler; don't present an inert recovery action in the proposal. */
+html body.p46-page-review #app .ui-state-panel {
+  display: grid;
+  justify-items: start;
+  gap: 16px;
+}
+html body.p46-page-review #app .ui-state-panel .ui-state-symbol {
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  border-radius: 6px;
+  color: #294caf;
+  background: #eaf0fc;
+  font-size: 22px;
+}
+html body.p46-page-review #app .ui-state-panel > p {
+  margin: 0;
+  color: #536b86;
+  font-size: 13px;
+  letter-spacing: 0;
+}
+html body.p46-page-review #app .ui-state-panel h2 {
+  margin: 0;
+  color: #142a46;
+  font-size: 22px;
+}
+html body.p46-page-review #app .ui-state-panel > div:not(.ui-state-skeleton) {
+  color: #536b86;
+  font-size: 16px;
+  line-height: 1.7;
+}
+html body.p46-page-review #app .ui-state-panel dl {
+  width: 100%;
+  margin: 0;
+  padding: 16px;
+  border: 0;
+  border-radius: 6px;
+  background: #eef2f7;
+  color: #142a46;
+}
+html body.p46-page-review #app .ui-state-panel dt {
+  color: #536b86;
+  font-size: 13px;
+}
+html body.p46-page-review #app .ui-state-panel dd {
+  color: #142a46;
+  font-size: 14px;
+}
+html body.p46-page-review #app .ui-state-panel footer {
+  margin: 0;
+  justify-content: start;
+}
+html body.p46-page-review #app .ui-state-panel footer button:not(.primary) {
+  display: none;
+}
+@media (max-width: 1100px) {
+  html body.p46-page-review #app .provider-runtime-surface {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  html body.p46-page-review #app .provider-runtime-tabs {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  html body.p46-page-review #app .provider-runtime-tabs a {
+    flex: 1 1 150px;
+  }
+}
+@media (max-width: 760px) {
+  html body.p46-page-review #app {
+    padding: 20px 16px;
+  }
+  html body.p46-page-review #app .provider-runtime-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 12px;
+  }
+  html body.p46-page-review #app .provider-runtime-tabs a {
+    padding: 10px;
+  }
+  html body.p46-page-review #app .provider-runtime-tabs a:last-child {
+    grid-column: 1/-1;
+  }
+  html body.p46-page-review #app .provider-hero {
+    display: grid;
+    gap: 20px;
+  }
+  html body.p46-page-review #app .provider-hero > button {
+    justify-self: start;
+  }
+  html body.p46-page-review #app .provider-overview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 16px;
+  }
+  html body.p46-page-review #app .provider-overview article {
+    padding: 0;
+    border: 0;
+  }
+  html body.p46-page-review #app .provider-truth-note {
+    display: grid;
+    gap: 6px;
+    padding: 16px;
+  }
+  html body.p46-page-review #app .provider-list-tools {
+    padding: 20px 16px;
+  }
+  html body.p46-page-review #app .provider-list-heading {
+    display: grid;
+    gap: 16px;
+  }
+  html body.p46-page-review #app .provider-list-heading > button {
+    justify-self: start;
+  }
+  html body.p46-page-review #app .provider-filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html body.p46-page-review #app .responsive-data-view {
+    padding: 0 16px;
+  }
+  html body.p46-page-review #app .responsive-data-view__mobile {
+    gap: 0;
+  }
+  html body.p46-page-review #app .responsive-data-view__mobile article {
+    background: white;
+    border: 0;
+    border-bottom: 1px solid #d8e1ed;
+    border-radius: 0;
+  }
+  html body.p46-page-review #app .responsive-data-view__mobile article > button {
+    padding: 24px 0;
+    border: 0;
+    border-radius: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  html body.p46-page-review #app .responsive-record-summary {
+    gap: 10px;
+  }
+  html body.p46-page-review #app .responsive-record-summary strong {
+    color: #142a46;
+    font-size: 18px;
+  }
+  html body.p46-page-review #app .responsive-record-summary small {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #536b86;
+  }
+  html body.p46-page-review #app .responsive-record-summary em {
+    justify-self: start;
+  }
+  html body.p46-page-review #app .responsive-data-view__action {
+    justify-self: start;
+    color: #294caf;
+    font-size: 14px;
+  }
+  html body.p46-page-review #app .provider-pagination {
+    padding: 20px 16px;
+    display: grid;
+    gap: 16px;
+  }
+  html body.p46-page-review #app .provider-feedback {
+    display: grid;
+  }
+}
