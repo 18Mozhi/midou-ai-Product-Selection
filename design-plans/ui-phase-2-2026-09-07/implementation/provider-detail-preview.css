@@ -1,0 +1,121 @@
+/* P46 body-teleported mobile detail review only; no shared production import. */
+html body.p46-detail-review .responsive-data-view__scrim {
+  background: rgba(15, 31, 53, 0.55);
+}
+html body.p46-detail-review .responsive-data-view__drawer {
+  inset: 12px auto auto 50%;
+  transform: translateX(-50%);
+  width: min(640px, calc(100% - 24px));
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  border: 1px solid #c9d6e8;
+  border-radius: 12px;
+  background: white;
+  color: #142a46;
+  box-shadow: none;
+  scroll-padding-block: 20px;
+}
+html body.p46-detail-review .responsive-data-view__drawer > header {
+  margin: 0;
+  padding: 24px;
+  background: #294caf;
+  color: white;
+  align-items: start;
+  gap: 20px;
+}
+html body.p46-detail-review .responsive-data-view__drawer > header div {
+  min-width: 0;
+  gap: 8px;
+}
+html body.p46-detail-review .responsive-data-view__drawer > header strong {
+  color: white;
+  font-size: 22px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+html body.p46-detail-review .responsive-data-view__drawer > header small {
+  color: #edf3ff;
+  font-size: 13px;
+}
+html body.p46-detail-review .responsive-data-view__drawer > header button {
+  min-width: 44px;
+  min-height: 44px;
+  flex-shrink: 0;
+  padding: 8px;
+  border: 1px solid #97ade1;
+  border-radius: 6px;
+  background: transparent;
+  color: white;
+  font-size: 22px;
+}
+html body.p46-detail-review .responsive-data-view__details {
+  padding: 24px;
+  gap: 24px;
+}
+html body.p46-detail-review .responsive-data-view__details dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 24px;
+}
+html body.p46-detail-review .responsive-data-view__details dl > div {
+  min-width: 0;
+  padding: 0 0 16px;
+  border: 0;
+  border-bottom: 1px solid #d8e1ed;
+  background: transparent;
+}
+html body.p46-detail-review .responsive-data-view__details dt {
+  color: #536b86;
+  font-size: 13px;
+}
+html body.p46-detail-review .responsive-data-view__details dd {
+  color: #142a46;
+  font-size: 16px;
+  line-height: 1.7;
+  margin: 8px 0 0;
+  overflow-wrap: anywhere;
+}
+html body.p46-detail-review .responsive-data-view__details > button {
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 1px solid #294caf;
+  border-radius: 6px;
+  background: #294caf;
+  color: white;
+  font-size: 16px;
+}
+html body.p46-detail-review .responsive-data-view__details > details {
+  padding: 0;
+  border: 1px solid #d8e1ed;
+  border-radius: 6px;
+  background: #f5f7fb;
+}
+html body.p46-detail-review .responsive-data-view__details summary {
+  min-height: 48px;
+  padding: 12px 16px;
+  color: #294caf;
+  font-size: 14px;
+}
+html body.p46-detail-review .responsive-data-view__details details dl {
+  grid-template-columns: minmax(0, 1fr);
+  padding: 16px;
+}
+html body.p46-detail-review .responsive-data-view__drawer :is(button, summary):focus-visible {
+  outline: 3px solid #4276df;
+  outline-offset: 3px;
+}
+html body.p46-detail-review .responsive-data-view__drawer > header button:focus-visible {
+  outline-color: white;
+}
+@media (max-width: 480px) {
+  html body.p46-detail-review .responsive-data-view__drawer > header {
+    padding: 20px;
+  }
+  html body.p46-detail-review .responsive-data-view__details {
+    padding: 20px;
+  }
+  html body.p46-detail-review .responsive-data-view__details dl {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+}

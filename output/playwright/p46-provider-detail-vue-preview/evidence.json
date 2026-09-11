@@ -1,0 +1,3187 @@
+{
+  "kind": "P46-PROVIDER-DETAIL-VUE-PREVIEW-r1",
+  "approval": "pending-user-review",
+  "scope": "Actual current ResponsiveDataView and ProviderRegistry detail slot unchanged; scoped body-teleported C CSS only. Existing page/editor preview CSS reused without edits. Original two fixture definitions plus explicit single-record variants. GET directory only, no writes or real RBAC/persistence/terms approval/collection. Detail nine facts and five technical facts, inert/Tab/Escape and handoff inspected; editor close focus separately observed, not claimed fixed. Not full App/KeepAlive/assistive technology or full-page acceptance; prior page/editor approvals do not apply.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.css": "a31b900bedbf1cafdf756eea8b7bd8742a5ec844fef9bcad0d8ffe643e39bb74",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "81dcd2938dd30c404d7285e1952bbcb0a57dd6d8cb214c036651d55b300fcfb8",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-detail-preview.css": "6f1bece39def0bba8c1e9cf69b1fafe0993d9564898716ea7bb6ea6545c6a99a",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-editor-preview.css": "f7ae7af9a96fe79d8f9c498bfa7cd6025536c9250b0fe9be06ed4b794dce1f6a",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-page-preview.css": "791e840c6e32430e10b7fcfd1f56d11cc572679ba0e6e4a62d1f08b06636e7bd",
+    "scripts/lib/ui-phase2-provider-page-preview.mjs": "162d4d2ab907809c3ddac597a8519c5011c7af7c49ed255fc77630b9b5ba2bf1",
+    "scripts/verify-ui-phase2-provider-detail-preview.mjs": "fa80cab9006b8689e385323c564cdd469580147ba0987e09fc05b7aeeb4d8ca3",
+    "tests/e2e/m03-01-provider-registry.spec.ts": "caaa0e2af2081675ab743e18d43e2526758604c84bd72aa925ae701454cf226f"
+  },
+  "transformedHashes": {
+    "apps/web/src/components/ProviderRegistry.vue": "02c6a48734ff36d17fe76008836ce3332c8dc53bbd2ecc9bb8e34d4d89e1ef8f"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "name": "normal:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 390,
+      "name": "normal:background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "normal:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "normal:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "公开订阅源"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "未启用"
+        ],
+        [
+          "执行门禁",
+          "未进入调度 · 来源定义未启用"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "normal-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "normal-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "normal:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "public_rss"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "normal-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "Shift Tab wraps to technical summary",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "summary-focus:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "Tab wraps to close",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "close-focus:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short-screen:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "short-screen-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "one editor replaces detail",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "name": "detail gone on editor handoff",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "name": "background released for editor",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "editor initial code matches selected",
+      "actual": "public_signal_rss"
+    },
+    {
+      "width": 390,
+      "name": "editor owns focus after handoff",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "editor-handoff:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "normal:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "normal:inert released",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "blocked:title belongs to selected record",
+      "actual": "待复核公开来源"
+    },
+    {
+      "width": 390,
+      "name": "blocked:background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "blocked:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "blocked:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "公开订阅源"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "已启用"
+        ],
+        [
+          "执行门禁",
+          "执行受阻 · 公开采集条款尚未批准"
+        ],
+        [
+          "条款复核",
+          "待复核"
+        ],
+        [
+          "条款版本",
+          "未登记"
+        ],
+        [
+          "条款到期",
+          "未登记"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "blocked-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "blocked-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "blocked:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000703"
+        ],
+        [
+          "来源代码",
+          "pending_public_source"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "public_rss"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "blocked-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "blocked:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "blocked:inert released",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "compliant:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 390,
+      "name": "compliant:background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "compliant:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "compliant:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "公开订阅源"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "已启用"
+        ],
+        [
+          "执行门禁",
+          "合规门禁已满足 · 仅表示公开采集准入条件完整，不代表采集任务已成功"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "compliant-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "compliant-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "compliant:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "public_rss"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "compliant-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "compliant:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "compliant:inert released",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "login:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 390,
+      "name": "login:background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "login:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "login:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "登录浏览器"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "已启用"
+        ],
+        [
+          "执行门禁",
+          "需运行时登录门禁 · 定义已启用，执行仍取决于登录态、风控与采集程序状态"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "login-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "login-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "login:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "authenticated_browser"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "login-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "login:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "login:inert released",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "import:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 390,
+      "name": "import:background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "import:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "import:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "文件导入"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "已启用"
+        ],
+        [
+          "执行门禁",
+          "等待导入 · 定义已启用，数据进入仍取决于对应导入或人工流程"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "import-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "import-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "import:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "import"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "import-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "import:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "import:inert released",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "manual:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 390,
+      "name": "manual:background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "manual:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "manual:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "人工录入"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "已启用"
+        ],
+        [
+          "执行门禁",
+          "等待人工录入 · 定义已启用，数据进入仍取决于对应导入或人工流程"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "manual-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "manual-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "manual:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "manual"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "manual-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "manual:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "manual:inert released",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "expired:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 390,
+      "name": "expired:background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "expired:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "expired:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "公开订阅源"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "已启用"
+        ],
+        [
+          "执行门禁",
+          "执行受阻 · 公开采集条款已过期或缺少有效期"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2020/1/1 08:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "expired-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "expired-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "expired:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "public_rss"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "expired-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "expired:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "expired:inert released",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "rejected:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 390,
+      "name": "rejected:background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "rejected:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "rejected:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "公开订阅源"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "已启用"
+        ],
+        [
+          "执行门禁",
+          "执行受阻 · 公开采集条款已拒绝"
+        ],
+        [
+          "条款复核",
+          "已拒绝"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "rejected-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "rejected-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "rejected:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "public_rss"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "rejected-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "rejected:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "rejected:inert released",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "draft:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 390,
+      "name": "draft:background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "draft:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "draft:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "公开订阅源"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "草稿"
+        ],
+        [
+          "执行门禁",
+          "未进入调度 · 定义仍为草稿"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "draft-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "draft-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "draft:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "public_rss"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "draft-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "draft:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "draft:inert released",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "long:title belongs to selected record",
+      "actual": "公开趋势 RSS公开趋势 RSS公开趋势 RSS公开趋势 RSS公开趋势 RSS公开趋势 RSS公开趋势 RSS公开趋势 RSS"
+    },
+    {
+      "width": 390,
+      "name": "long:background inert",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "long:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "long:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "公开订阅源"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "未启用"
+        ],
+        [
+          "执行门禁",
+          "未进入调度 · 来源定义未启用"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "long-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "long-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "long:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/"
+        ],
+        [
+          "接入模式代码",
+          "public_rss"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "name": "long-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "long:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "long:inert released",
+      "actual": false
+    },
+    {
+      "width": 390,
+      "name": "one read per supplied variant",
+      "actual": 10
+    },
+    {
+      "width": 390,
+      "name": "all GET directory only",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "name": "URL unchanged",
+      "actual": "?keep=p46"
+    },
+    {
+      "width": 390,
+      "name": "no unexpected network",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "name": "no page errors",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "normal:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 760,
+      "name": "normal:background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "normal:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "normal:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "公开订阅源"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "未启用"
+        ],
+        [
+          "执行门禁",
+          "未进入调度 · 来源定义未启用"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "normal-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "normal-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "normal:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "public_rss"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "normal-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "Shift Tab wraps to technical summary",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "summary-focus:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "Tab wraps to close",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "close-focus:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "one editor replaces detail",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "name": "detail gone on editor handoff",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "name": "background released for editor",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "editor initial code matches selected",
+      "actual": "public_signal_rss"
+    },
+    {
+      "width": 760,
+      "name": "editor owns focus after handoff",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "editor-handoff:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "normal:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "normal:inert released",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "blocked:title belongs to selected record",
+      "actual": "待复核公开来源"
+    },
+    {
+      "width": 760,
+      "name": "blocked:background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "blocked:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "blocked:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "公开订阅源"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "已启用"
+        ],
+        [
+          "执行门禁",
+          "执行受阻 · 公开采集条款尚未批准"
+        ],
+        [
+          "条款复核",
+          "待复核"
+        ],
+        [
+          "条款版本",
+          "未登记"
+        ],
+        [
+          "条款到期",
+          "未登记"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "blocked-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "blocked-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "blocked:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000703"
+        ],
+        [
+          "来源代码",
+          "pending_public_source"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "public_rss"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "blocked-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "blocked:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "blocked:inert released",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "compliant:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 760,
+      "name": "compliant:background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "compliant:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "compliant:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "公开订阅源"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "已启用"
+        ],
+        [
+          "执行门禁",
+          "合规门禁已满足 · 仅表示公开采集准入条件完整，不代表采集任务已成功"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "compliant-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "compliant-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "compliant:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "public_rss"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "compliant-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "compliant:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "compliant:inert released",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "login:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 760,
+      "name": "login:background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "login:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "login:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "登录浏览器"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "已启用"
+        ],
+        [
+          "执行门禁",
+          "需运行时登录门禁 · 定义已启用，执行仍取决于登录态、风控与采集程序状态"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "login-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "login-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "login:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "authenticated_browser"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "login-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "login:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "login:inert released",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "import:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 760,
+      "name": "import:background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "import:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "import:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "文件导入"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "已启用"
+        ],
+        [
+          "执行门禁",
+          "等待导入 · 定义已启用，数据进入仍取决于对应导入或人工流程"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "import-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "import-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "import:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "import"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "import-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "import:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "import:inert released",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "manual:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 760,
+      "name": "manual:background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "manual:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "manual:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "人工录入"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "已启用"
+        ],
+        [
+          "执行门禁",
+          "等待人工录入 · 定义已启用，数据进入仍取决于对应导入或人工流程"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "manual-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "manual-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "manual:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "manual"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "manual-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "manual:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "manual:inert released",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "expired:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 760,
+      "name": "expired:background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "expired:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "expired:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "公开订阅源"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "已启用"
+        ],
+        [
+          "执行门禁",
+          "执行受阻 · 公开采集条款已过期或缺少有效期"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2020/1/1 08:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "expired-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "expired-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "expired:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "public_rss"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "expired-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "expired:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "expired:inert released",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "rejected:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 760,
+      "name": "rejected:background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "rejected:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "rejected:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "公开订阅源"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "已启用"
+        ],
+        [
+          "执行门禁",
+          "执行受阻 · 公开采集条款已拒绝"
+        ],
+        [
+          "条款复核",
+          "已拒绝"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "rejected-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "rejected-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "rejected:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "public_rss"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "rejected-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "rejected:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "rejected:inert released",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "draft:title belongs to selected record",
+      "actual": "公开趋势 RSS"
+    },
+    {
+      "width": 760,
+      "name": "draft:background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "draft:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "draft:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "公开订阅源"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "草稿"
+        ],
+        [
+          "执行门禁",
+          "未进入调度 · 定义仍为草稿"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "draft-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "draft-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "draft:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/feed"
+        ],
+        [
+          "接入模式代码",
+          "public_rss"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "draft-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "draft:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "draft:inert released",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "long:title belongs to selected record",
+      "actual": "公开趋势 RSS公开趋势 RSS公开趋势 RSS公开趋势 RSS公开趋势 RSS公开趋势 RSS公开趋势 RSS公开趋势 RSS"
+    },
+    {
+      "width": 760,
+      "name": "long:background inert",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "long:initial close focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "long:nine exact facts",
+      "actual": [
+        [
+          "接入方式",
+          "公开订阅源"
+        ],
+        [
+          "市场 / 语言",
+          "US · CA / en-US"
+        ],
+        [
+          "调度",
+          "每 30 分钟 · 并发 1"
+        ],
+        [
+          "超时 / 重试",
+          "15000ms · 2 次"
+        ],
+        [
+          "当前状态",
+          "未启用"
+        ],
+        [
+          "执行门禁",
+          "未进入调度 · 来源定义未启用"
+        ],
+        [
+          "条款复核",
+          "已批准"
+        ],
+        [
+          "条款版本",
+          "2026-08"
+        ],
+        [
+          "条款到期",
+          "2027/8/8 01:00:00"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "long-default:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "long-facts-bottom:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "long:five exact technical facts",
+      "actual": [
+        [
+          "来源 ID",
+          "00000000-0000-4000-8000-000000000702"
+        ],
+        [
+          "来源代码",
+          "public_signal_rss"
+        ],
+        [
+          "目标地址",
+          "https://example.test/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/path/"
+        ],
+        [
+          "接入模式代码",
+          "public_rss"
+        ],
+        [
+          "解析器 / 定义版本",
+          "v1 / 1"
+        ]
+      ]
+    },
+    {
+      "width": 760,
+      "name": "long-technical:no dialog horizontal overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "long:Escape returns record focus",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "long:inert released",
+      "actual": false
+    },
+    {
+      "width": 760,
+      "name": "one read per supplied variant",
+      "actual": 10
+    },
+    {
+      "width": 760,
+      "name": "all GET directory only",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "name": "URL unchanged",
+      "actual": "?keep=p46"
+    },
+    {
+      "width": 760,
+      "name": "no unexpected network",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "name": "no page errors",
+      "actual": []
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "390-normal-default.png",
+      "width": 390,
+      "state": "normal-default",
+      "sha256": "48b75c1e78112385f6494d7840716bb6ab301e7ecc5a63882bedeb753a82631e",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-normal-facts-bottom.png",
+      "width": 390,
+      "state": "normal-facts-bottom",
+      "sha256": "455cdb62163cdbb2ad6e2b78f38dceb520be9a94776c485b5bfb16af177c547e",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-normal-technical.png",
+      "width": 390,
+      "state": "normal-technical",
+      "sha256": "7fda05283368160e86f578ad5a56e003bf395140d8342443c9da569c33e02a31",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-summary-focus.png",
+      "width": 390,
+      "state": "summary-focus",
+      "sha256": "13a71a6c493f6d5f39bc9d9be93f9d1a3cf02b75402908a00b41b679f2d58119",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-close-focus.png",
+      "width": 390,
+      "state": "close-focus",
+      "sha256": "7ac5f88defd1c55a1ce6e05ba5be4f0421008f1187c02a569183e8d6c6e994dc",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-short-screen.png",
+      "width": 390,
+      "state": "short-screen",
+      "sha256": "e61e58df0bdf05f097a8e27b3b8ad1520a3710a9ad08d183a3961731f1998ae0",
+      "imageDimensions": {
+        "width": 390,
+        "height": 568
+      }
+    },
+    {
+      "file": "390-short-screen-bottom.png",
+      "width": 390,
+      "state": "short-screen-bottom",
+      "sha256": "307fc0d6445f4ddccd1ac7df5278033b5fe2f66041b61cc599e3d2993e5deb0c",
+      "imageDimensions": {
+        "width": 390,
+        "height": 568
+      }
+    },
+    {
+      "file": "390-editor-handoff.png",
+      "width": 390,
+      "state": "editor-handoff",
+      "sha256": "86ed7d302c32bdde23bfd4df57065adaae03d8641797fee775c4751d52151dd7",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-blocked-default.png",
+      "width": 390,
+      "state": "blocked-default",
+      "sha256": "6450425b3d58a3583d4e51ec78c98ec2a690dc42b40d611b7649b4debe6b39af",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-blocked-facts-bottom.png",
+      "width": 390,
+      "state": "blocked-facts-bottom",
+      "sha256": "8325a09d81d26fa8149b3b86fa5a7442e4f3968900c45334cee03c85c4599246",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-blocked-technical.png",
+      "width": 390,
+      "state": "blocked-technical",
+      "sha256": "94e1ad1309cab72688cf005f7fbc524a9564c846f3b95f80e99629a87efb19d8",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-compliant-default.png",
+      "width": 390,
+      "state": "compliant-default",
+      "sha256": "ca3a3f38d409956a428ff2747ec57426a773ee377fa4bffec79d03e4c48ce278",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-compliant-facts-bottom.png",
+      "width": 390,
+      "state": "compliant-facts-bottom",
+      "sha256": "d07a7a8c4e2a2088cfa2cd2af6021a2bea3db835af8fb5a7a1a37843bcdf2b6e",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-compliant-technical.png",
+      "width": 390,
+      "state": "compliant-technical",
+      "sha256": "4d611f9cd84fcdca61b94bb738206b9ca56b17eaaf373b249dae3f03e191aaee",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-login-default.png",
+      "width": 390,
+      "state": "login-default",
+      "sha256": "7fae6ca211442d8750906723c182daa13a1951e645bd5892d48e8b5ed1426866",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-login-facts-bottom.png",
+      "width": 390,
+      "state": "login-facts-bottom",
+      "sha256": "ad90bf89eafb6c426a00311e6a376cce262c06095b39954063e0f88e5022c3f4",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-login-technical.png",
+      "width": 390,
+      "state": "login-technical",
+      "sha256": "7df06d83152191b4708aff370885a0a7ac0271108bc458b312ba1cde80def44b",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-import-default.png",
+      "width": 390,
+      "state": "import-default",
+      "sha256": "c6a087e7667f7cc337c8feec7561aa5bdeecfd06f3a628ad17be74a5bfc8ad4d",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-import-facts-bottom.png",
+      "width": 390,
+      "state": "import-facts-bottom",
+      "sha256": "622e75b6b8ed45179383ef02e7a17cc330e3354a0ef9d20550f1db115448cbbc",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-import-technical.png",
+      "width": 390,
+      "state": "import-technical",
+      "sha256": "cfb82d2d437fa91fcb5a298fa0f0b301edab0e25b7a11c53f1d14661de83f842",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-manual-default.png",
+      "width": 390,
+      "state": "manual-default",
+      "sha256": "a6092a2ea31cf71ab2fd1b5ab4ef64f9b193aae89f6bd3657b3d319c20046a79",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-manual-facts-bottom.png",
+      "width": 390,
+      "state": "manual-facts-bottom",
+      "sha256": "ca76f46207e30335ba0d7952704a496ef110be023e04bff9f46d43d96ff8a57a",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-manual-technical.png",
+      "width": 390,
+      "state": "manual-technical",
+      "sha256": "65c535f92d943d02bf5511f9cb30575a77d5381d48e73b3d033ee2ebb4e1d42d",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-expired-default.png",
+      "width": 390,
+      "state": "expired-default",
+      "sha256": "d018af8db68a5a663351cfce6439af837cf71c299716fbbbdfb160497b64c203",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-expired-facts-bottom.png",
+      "width": 390,
+      "state": "expired-facts-bottom",
+      "sha256": "b545bc741d1e87001f6da89d616a685fcf9aa8f5296d999f30ee34ad0efa6adb",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-expired-technical.png",
+      "width": 390,
+      "state": "expired-technical",
+      "sha256": "38846aca295077ab40ee3b6bd9e8f181b23932026c64bd518415ecf58afc3785",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-rejected-default.png",
+      "width": 390,
+      "state": "rejected-default",
+      "sha256": "6eae1392798f4eac3d70e4201ec3d72c799a0568bb3d78296f4805076ce00452",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-rejected-facts-bottom.png",
+      "width": 390,
+      "state": "rejected-facts-bottom",
+      "sha256": "dab7fad8e2f7583a60e98fbd6f1a9c2452f23129236922a1615f155502c4cfc5",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-rejected-technical.png",
+      "width": 390,
+      "state": "rejected-technical",
+      "sha256": "a78395ee66aefff2a7eaa5f113a3657d0f5dfeebb9beec9728f7edcb6b5aa0c7",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-draft-default.png",
+      "width": 390,
+      "state": "draft-default",
+      "sha256": "ab82eb0db769de8df09890ad0fb2d6d329e7b250b9e74d1c2293a58e4888a6e1",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-draft-facts-bottom.png",
+      "width": 390,
+      "state": "draft-facts-bottom",
+      "sha256": "13b817c2085e2227877c6f347c5a8490bf70ff3881124843f3e874ed30609b98",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-draft-technical.png",
+      "width": 390,
+      "state": "draft-technical",
+      "sha256": "7fda05283368160e86f578ad5a56e003bf395140d8342443c9da569c33e02a31",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-long-default.png",
+      "width": 390,
+      "state": "long-default",
+      "sha256": "eea31a05c7c810d246f1bf2f4f14269483a34b235aa1603ec720324f879e0ae1",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-long-facts-bottom.png",
+      "width": 390,
+      "state": "long-facts-bottom",
+      "sha256": "ada5c878e19224c210ec5a1dfc0859db89a97f6823245214be99ed4c9f04b8b6",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "390-long-technical.png",
+      "width": 390,
+      "state": "long-technical",
+      "sha256": "4735cfa84b724acff241824a86166c753b0fdb2d0ead4889d1663a69d601dc67",
+      "imageDimensions": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-normal-default.png",
+      "width": 760,
+      "state": "normal-default",
+      "sha256": "4584637d48c703355a3d4ab995f9e8f22a22db184bb9c316a1b19da279fe0412",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-normal-facts-bottom.png",
+      "width": 760,
+      "state": "normal-facts-bottom",
+      "sha256": "4584637d48c703355a3d4ab995f9e8f22a22db184bb9c316a1b19da279fe0412",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-normal-technical.png",
+      "width": 760,
+      "state": "normal-technical",
+      "sha256": "fd861260c8c5753e262db6551c2bafb80e18b219d22f560cff7034dffaf8a40b",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-summary-focus.png",
+      "width": 760,
+      "state": "summary-focus",
+      "sha256": "1c0cc31913563c536ace1c9e8aab7fc5502c8d1f0094e12126825177577e407e",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-close-focus.png",
+      "width": 760,
+      "state": "close-focus",
+      "sha256": "9813f881051dc30006f15fdadbf142e2f45c139e9fbe3bf1bc16bf1a83d8ef3d",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-editor-handoff.png",
+      "width": 760,
+      "state": "editor-handoff",
+      "sha256": "c4c12ee5bbaa9b4dabf58096804364d8e07b749264e0a1eadb3a55f241cc2432",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-blocked-default.png",
+      "width": 760,
+      "state": "blocked-default",
+      "sha256": "7777bdfe16071b31336d8efcfce4806e20a553d80b771f47982fcecbecfe6c52",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-blocked-facts-bottom.png",
+      "width": 760,
+      "state": "blocked-facts-bottom",
+      "sha256": "7777bdfe16071b31336d8efcfce4806e20a553d80b771f47982fcecbecfe6c52",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-blocked-technical.png",
+      "width": 760,
+      "state": "blocked-technical",
+      "sha256": "d2f78d48549b99002a64b02231db8c685717a5905818c0ea113de8a6c961af83",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-compliant-default.png",
+      "width": 760,
+      "state": "compliant-default",
+      "sha256": "7dac4965198bc3f0a43259408544bc26817ce9086feb8d0d0cb90a077236e72a",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-compliant-facts-bottom.png",
+      "width": 760,
+      "state": "compliant-facts-bottom",
+      "sha256": "7dac4965198bc3f0a43259408544bc26817ce9086feb8d0d0cb90a077236e72a",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-compliant-technical.png",
+      "width": 760,
+      "state": "compliant-technical",
+      "sha256": "05938e60757689d0bd3f166423298f956dcbbaa194499ae013cd8561146cb715",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-login-default.png",
+      "width": 760,
+      "state": "login-default",
+      "sha256": "d64d51729cb22e5351013d0d0bb7f062c000677020e5adb4f998c67a0bedfc0a",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-login-facts-bottom.png",
+      "width": 760,
+      "state": "login-facts-bottom",
+      "sha256": "d64d51729cb22e5351013d0d0bb7f062c000677020e5adb4f998c67a0bedfc0a",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-login-technical.png",
+      "width": 760,
+      "state": "login-technical",
+      "sha256": "ea5e5261263204dcc4ce2ffcff5b34a95fb8cbfeadc523405744c8fc80f9bcb7",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-import-default.png",
+      "width": 760,
+      "state": "import-default",
+      "sha256": "d9419c5e34d3e061d333ae3f7fcb23b0391992bc355c0811228cdf5800d753de",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-import-facts-bottom.png",
+      "width": 760,
+      "state": "import-facts-bottom",
+      "sha256": "d9419c5e34d3e061d333ae3f7fcb23b0391992bc355c0811228cdf5800d753de",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-import-technical.png",
+      "width": 760,
+      "state": "import-technical",
+      "sha256": "907cc98c55a1701a243526aa22146ebee5fa6fad68347ca993a5c0f7cd652d1f",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-manual-default.png",
+      "width": 760,
+      "state": "manual-default",
+      "sha256": "929ea7d65604a90c652a3fc492d99bf9c55e64ea6e78f493cfe35fffde020b7d",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-manual-facts-bottom.png",
+      "width": 760,
+      "state": "manual-facts-bottom",
+      "sha256": "929ea7d65604a90c652a3fc492d99bf9c55e64ea6e78f493cfe35fffde020b7d",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-manual-technical.png",
+      "width": 760,
+      "state": "manual-technical",
+      "sha256": "69d075551c955008232b99055a2f1fa7f830f6996fd4f7d80ccd2b9ae4ef2f3b",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-expired-default.png",
+      "width": 760,
+      "state": "expired-default",
+      "sha256": "c11f8dec1350d16c49ab127e38e523e1fed595778e57b284fe8b727f2e2239bf",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-expired-facts-bottom.png",
+      "width": 760,
+      "state": "expired-facts-bottom",
+      "sha256": "c11f8dec1350d16c49ab127e38e523e1fed595778e57b284fe8b727f2e2239bf",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-expired-technical.png",
+      "width": 760,
+      "state": "expired-technical",
+      "sha256": "685a4536bc41d1cdb041640da8dde413dd3d852c5bccd7e9015bd1e04f6ea6cc",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-rejected-default.png",
+      "width": 760,
+      "state": "rejected-default",
+      "sha256": "0f4d4956ca01537153c12335a0fc7d8c38f56efdc5a9fda737a2ff20b5d6df98",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-rejected-facts-bottom.png",
+      "width": 760,
+      "state": "rejected-facts-bottom",
+      "sha256": "0f4d4956ca01537153c12335a0fc7d8c38f56efdc5a9fda737a2ff20b5d6df98",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-rejected-technical.png",
+      "width": 760,
+      "state": "rejected-technical",
+      "sha256": "a36ceeb7162ff785b064cd6e17526ea2fa32ca4c282f4eaabf0cfd102c58bc37",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-draft-default.png",
+      "width": 760,
+      "state": "draft-default",
+      "sha256": "9a2eb22eda938e5a29165809972e8e036c4a035bf2a026cb5cda3b6122c6ba21",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-draft-facts-bottom.png",
+      "width": 760,
+      "state": "draft-facts-bottom",
+      "sha256": "9a2eb22eda938e5a29165809972e8e036c4a035bf2a026cb5cda3b6122c6ba21",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-draft-technical.png",
+      "width": 760,
+      "state": "draft-technical",
+      "sha256": "222e511f9d62e0f56a8b30c80522c20d5b7ebfabeb04bd2668efb92839e90118",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-long-default.png",
+      "width": 760,
+      "state": "long-default",
+      "sha256": "906972a70f836484a34f5f665f179c114ee680b26a3d45b18b7e31443835c871",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-long-facts-bottom.png",
+      "width": 760,
+      "state": "long-facts-bottom",
+      "sha256": "906972a70f836484a34f5f665f179c114ee680b26a3d45b18b7e31443835c871",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "file": "760-long-technical.png",
+      "width": 760,
+      "state": "long-technical",
+      "sha256": "a13a141fe9ec154a8db9dcc9c1ee0c6d63f78d6d0600e9be113f3446cf5cf647",
+      "imageDimensions": {
+        "width": 760,
+        "height": 900
+      }
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "editorCloseFocus": {
+        "tag": "BODY",
+        "connected": true,
+        "insideRecord": false
+      }
+    },
+    {
+      "width": 390,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000703"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 760,
+      "editorCloseFocus": {
+        "tag": "BODY",
+        "connected": true,
+        "insideRecord": false
+      }
+    },
+    {
+      "width": 760,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000703"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/platform/providers",
+          "id": "00000000-0000-4000-8000-000000000702"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    }
+  ],
+  "processesClosed": true
+}
