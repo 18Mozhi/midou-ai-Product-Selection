@@ -1,0 +1,82 @@
+html
+  body.p47-loading-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="loading"] {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  min-height: 0;
+  gap: 12px;
+  padding: 24px;
+  border: 1px solid #d9e1ec;
+  border-radius: 8px;
+  background: white;
+  text-align: left;
+}
+html
+  body.p47-loading-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="loading"]
+  > p {
+  display: none;
+}
+html
+  body.p47-loading-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="loading"]
+  h2 {
+  order: -2;
+  margin: 0;
+  color: #152b49;
+  font-size: 18px;
+  line-height: 1.5;
+}
+html
+  body.p47-loading-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="loading"]
+  > div:not(.ui-state-skeleton) {
+  order: -1;
+  color: #53657c;
+  font-size: 14px;
+  line-height: 1.8;
+}
+html
+  body.p47-loading-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="loading"]
+  .ui-state-skeleton {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  margin: 8px 0 0;
+}
+html
+  body.p47-loading-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="loading"]
+  .ui-state-skeleton
+  i {
+  height: 12px;
+  width: 100%;
+  margin: 0;
+  background: #edf1f7;
+  border-radius: 3px;
+  animation: none;
+}
+html
+  body.p47-loading-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="loading"]
+  .ui-state-skeleton
+  i:last-child {
+  width: 66%;
+}
