@@ -384,6 +384,183 @@ test("M06-03.A08/A16 empty forbidden blocked", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "采集控制台依赖受阻" })).toBeVisible();
 });
 
+test("UI2-CL52 restores every supported filter and page from same-route history", async ({
+  page,
+}) => {
+  await navigation(page);
+  const requests: string[] = [];
+  await page.route("**/api/v1/platform/collection/console?**", (route) => {
+    const url = new URL(route.request().url());
+    requests.push(url.search);
+    const attemptPage = Number(url.searchParams.get("attempt_page") ?? 1);
+    const deadLetterPage = Number(url.searchParams.get("dead_letter_page") ?? 1);
+    return route.fulfill({
+      json: envelope({
+        ...data,
+        pagination: {
+          attempts: { page: attemptPage, page_size: 50, total: 200, total_pages: 4 },
+          dead_letters: { page: deadLetterPage, page_size: 50, total: 200, total_pages: 4 },
+        },
+      }),
+    });
+  });
+  await page.goto("/platform-admin/collection/overview");
+  await expect(page.getByRole("heading", { name: "来源与采集控制台", level: 2 })).toBeVisible();
+  const historyQuery = new URLSearchParams({
+    organization_id: "00000000-0000-4000-8000-000000000632",
+    workspace_id: "00000000-0000-4000-8000-000000000633",
+    provider_id: providerId,
+    window: "7d",
+    error_code: "timeout",
+    attempt_page: "2",
+    dead_letter_page: "3",
+  });
+  await page.evaluate((query) => {
+    history.pushState({}, "", `/platform-admin/collection/overview?${query}`);
+    window.dispatchEvent(new PopStateEvent("popstate", { state: history.state }));
+  }, historyQuery.toString());
+  await expect(page.getByLabel("组织内部编号筛选")).toHaveValue(
+    "00000000-0000-4000-8000-000000000632",
+  );
+  await expect(page.getByLabel("工作区内部编号筛选")).toHaveValue(
+    "00000000-0000-4000-8000-000000000633",
+  );
+  await expect(page.getByLabel("采集来源筛选")).toHaveValue(providerId);
+  await expect(page.getByLabel("观测时间筛选")).toHaveValue("7d");
+  await expect
+    .poll(() => requests.some((query) => query.includes("error_code=timeout")))
+    .toBe(true);
+  await expect(page.getByRole("navigation", { name: "最近尝试分页" })).toContainText("第 2 / 4 页");
+  await expect(page.getByRole("navigation", { name: "死信记录分页" })).toContainText("第 3 / 4 页");
+});
+
+test("UI2-CL52 same-route history supersedes an older pending overview read", async ({ page }) => {
+  await navigation(page);
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => (release = resolve));
+  let started!: () => void;
+  const entered = new Promise<void>((resolve) => (started = resolve));
+  let reads = 0;
+  await page.route("**/api/v1/platform/collection/console?**", async (route) => {
+    const read = ++reads;
+    const url = new URL(route.request().url());
+    if (read === 2) {
+      started();
+      await held;
+    }
+    try {
+      await route.fulfill({
+        json: envelope({
+          ...data,
+          sources:
+            url.searchParams.get("window") === "7d"
+              ? [{ ...data.sources[0], name: "七日范围来源" }]
+              : data.sources,
+        }),
+      });
+    } catch (error) {
+      if (!route.request().failure()) throw error;
+    }
+  });
+  await page.goto("/platform-admin/collection/overview");
+  await page.getByRole("button", { name: "刷新数据" }).click();
+  await entered;
+  await page.evaluate(() => {
+    history.pushState({}, "", "/platform-admin/collection/overview?window=7d");
+    window.dispatchEvent(new PopStateEvent("popstate", { state: history.state }));
+  });
+  try {
+    await expect.poll(() => reads).toBeGreaterThanOrEqual(3);
+  } finally {
+    release();
+  }
+  await expect(page.getByLabel("观测时间筛选")).toHaveValue("7d");
+  const sourceSection = page.getByRole("heading", { name: "来源与健康" }).locator("../..");
+  const sourceName =
+    (page.viewportSize()?.width ?? 0) <= 760
+      ? sourceSection
+          .locator(".responsive-data-view__mobile strong")
+          .filter({ hasText: "七日范围来源" })
+      : sourceSection.locator("tbody b").filter({ hasText: "七日范围来源" });
+  await expect(sourceName).toBeVisible();
+});
+
+test("UI2-CL52 resumes an overview read interrupted by KeepAlive deactivation", async ({
+  page,
+}) => {
+  await navigation(page);
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => (release = resolve));
+  let started!: () => void;
+  const entered = new Promise<void>((resolve) => (started = resolve));
+  let reads = 0;
+  await page.route("**/api/v1/platform/collection/console?**", async (route) => {
+    const read = ++reads;
+    if (read === 2) {
+      started();
+      await held;
+    }
+    try {
+      await route.fulfill({
+        json: envelope({
+          ...data,
+          sources: read >= 3 ? [{ ...data.sources[0], name: "返回续读来源" }] : data.sources,
+        }),
+      });
+    } catch (error) {
+      if (!route.request().failure()) throw error;
+    }
+  });
+  await page.route("**/api/v1/platform/collection/tasks?**", (route) =>
+    route.fulfill({
+      json: { data: [], meta: { page: 1, page_size: 50, total: 0 }, request_id: "cl52-task" },
+    }),
+  );
+  await page.goto("/platform-admin/collection/overview");
+  await page.getByRole("button", { name: "刷新数据" }).click();
+  await entered;
+  await page.getByRole("link", { name: "任务详情", exact: true }).click();
+  await expect(page).toHaveURL(/\/platform-admin\/collection$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/\/platform-admin\/collection\/overview$/);
+  try {
+    await expect.poll(() => reads).toBeGreaterThanOrEqual(3);
+  } finally {
+    release();
+  }
+  const sourceSection = page.getByRole("heading", { name: "来源与健康" }).locator("../..");
+  const sourceName =
+    (page.viewportSize()?.width ?? 0) <= 760
+      ? sourceSection
+          .locator(".responsive-data-view__mobile strong")
+          .filter({ hasText: "返回续读来源" })
+      : sourceSection.locator("tbody b").filter({ hasText: "返回续读来源" });
+  await expect(sourceName).toBeVisible();
+});
+
+test("UI2-CL52 renders an attempts-only response as factual ready content", async ({ page }) => {
+  await navigation(page);
+  await page.route("**/api/v1/platform/collection/console?**", (route) =>
+    route.fulfill({
+      json: envelope({
+        ...data,
+        sources: [],
+        task_states: [],
+        dead_letters: [],
+        quality: [],
+        root_causes: [],
+      }),
+    }),
+  );
+  await page.goto("/platform-admin/collection/overview");
+  await expect(page.getByRole("heading", { name: "当前范围没有采集事实" })).toHaveCount(0);
+  if ((page.viewportSize()?.width ?? 0) <= 760) {
+    await expect(page.getByRole("button", { name: /第 2 次尝试 · 终止失败/ })).toBeVisible();
+  } else {
+    await expect(page.getByRole("cell", { name: "第 2 次" })).toBeVisible();
+  }
+});
+
 for (const sourceCount of [0, 1, 8, 9]) {
   test(`UI2-CL52 source health empty state matches ${sourceCount} records`, async ({ page }) => {
     await navigation(page);

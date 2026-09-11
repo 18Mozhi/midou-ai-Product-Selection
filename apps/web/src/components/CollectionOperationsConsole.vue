@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
+import {
+  computed,
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import { statusLabel } from "../ui/status-labels";
@@ -11,26 +20,34 @@ const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
 const route = useRoute(),
   router = useRouter(),
-  queryText = (name: string) => {
-    const value = route.query[name];
-    return typeof value === "string" ? value : "";
+  queryText = (value: unknown) => (typeof value === "string" ? value : ""),
+  queryPage = (value: unknown) => {
+    const text = queryText(value);
+    return /^\d{1,6}$/.test(text) && Number(text) > 0 ? Number(text) : 1;
   },
-  queryPage = (name: string) => {
-    const value = queryText(name);
-    return /^\d{1,6}$/.test(value) && Number(value) > 0 ? Number(value) : 1;
+  queryWindow = (value: unknown) => {
+    const text = queryText(value);
+    return ["24h", "7d", "30d", "all"].includes(text) ? text : "24h";
   },
-  initialWindow = ["24h", "7d", "30d", "all"].includes(queryText("window"))
-    ? queryText("window")
-    : "24h";
+  routeScope = () => ({
+    organizationId: queryText(route.query.organization_id),
+    workspaceId: queryText(route.query.workspace_id),
+    providerId: queryText(route.query.provider_id),
+    window: queryWindow(route.query.window),
+    errorCode: queryText(route.query.error_code),
+    attemptPage: queryPage(route.query.attempt_page),
+    deadLetterPage: queryPage(route.query.dead_letter_page),
+  }),
+  initialScope = routeScope();
 const state = ref("loading"),
   data = ref<any>(null),
-  org = ref(queryText("organization_id")),
-  workspace = ref(queryText("workspace_id")),
-  provider = ref(queryText("provider_id")),
-  timeWindow = ref(initialWindow),
-  errorCode = ref(queryText("error_code")),
-  attemptPage = ref(queryPage("attempt_page")),
-  deadLetterPage = ref(queryPage("dead_letter_page")),
+  org = ref(initialScope.organizationId),
+  workspace = ref(initialScope.workspaceId),
+  provider = ref(initialScope.providerId),
+  timeWindow = ref(initialScope.window),
+  errorCode = ref(initialScope.errorCode),
+  attemptPage = ref(initialScope.attemptPage),
+  deadLetterPage = ref(initialScope.deadLetterPage),
   requestId = ref(""),
   hint = ref(""),
   refreshNotice = ref(""),
@@ -44,7 +61,10 @@ const state = ref("loading"),
   batchFailures = ref<Array<{ task: string; reason: string }>>([]),
   sourcesExpanded = ref(false),
   rootCauseSection = ref<HTMLElement | null>(null);
-let activeController: AbortController | null = null;
+let activeController: AbortController | null = null,
+  readSequence = 0,
+  pageActive = true,
+  resumeRead = false;
 const sourceDisplayLimit = 8;
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const selectedDeadLetters = computed(() =>
@@ -97,47 +117,88 @@ function scopeValidation() {
   return "";
 }
 
-async function syncUrl() {
+const readScope = () => ({
+  organizationId: org.value.trim(),
+  workspaceId: workspace.value.trim(),
+  providerId: provider.value,
+  window: timeWindow.value,
+  errorCode: errorCode.value,
+  attemptPage: attemptPage.value,
+  deadLetterPage: deadLetterPage.value,
+});
+
+function applyRouteScope() {
+  const next = routeScope();
+  const changed =
+    org.value !== next.organizationId ||
+    workspace.value !== next.workspaceId ||
+    provider.value !== next.providerId ||
+    timeWindow.value !== next.window ||
+    errorCode.value !== next.errorCode ||
+    attemptPage.value !== next.attemptPage ||
+    deadLetterPage.value !== next.deadLetterPage;
+  if (!changed) return false;
+  org.value = next.organizationId;
+  workspace.value = next.workspaceId;
+  provider.value = next.providerId;
+  timeWindow.value = next.window;
+  errorCode.value = next.errorCode;
+  attemptPage.value = next.attemptPage;
+  deadLetterPage.value = next.deadLetterPage;
+  return true;
+}
+
+async function syncUrl(scope = readScope()) {
   const query: Record<string, string> = {};
-  if (org.value.trim()) query.organization_id = org.value.trim();
-  if (workspace.value.trim()) query.workspace_id = workspace.value.trim();
-  if (provider.value) query.provider_id = provider.value;
-  if (timeWindow.value !== "24h") query.window = timeWindow.value;
-  if (errorCode.value) query.error_code = errorCode.value;
-  if (attemptPage.value > 1) query.attempt_page = String(attemptPage.value);
-  if (deadLetterPage.value > 1) query.dead_letter_page = String(deadLetterPage.value);
+  if (scope.organizationId) query.organization_id = scope.organizationId;
+  if (scope.workspaceId) query.workspace_id = scope.workspaceId;
+  if (scope.providerId) query.provider_id = scope.providerId;
+  if (scope.window !== "24h") query.window = scope.window;
+  if (scope.errorCode) query.error_code = scope.errorCode;
+  if (scope.attemptPage > 1) query.attempt_page = String(scope.attemptPage);
+  if (scope.deadLetterPage > 1) query.dead_letter_page = String(scope.deadLetterPage);
   if (route.query.root_cause === "1") query.root_cause = "1";
   await router.replace({ query });
 }
 
 async function load(options: { updateUrl?: boolean } = {}) {
-  if (refreshing.value) return;
+  const sequence = ++readSequence;
+  activeController?.abort("superseded");
+  activeController = null;
   const validation = scopeValidation();
   if (validation) {
     refreshNotice.value = validation;
+    if (!data.value) {
+      hint.value = validation;
+      state.value = "blocked";
+    }
+    refreshing.value = false;
     return;
   }
+  const scope = readScope();
   const hadData = Boolean(data.value);
   refreshing.value = true;
   refreshNotice.value = "";
   hint.value = "";
   if (!hadData) state.value = "loading";
   const q = new URLSearchParams();
-  if (org.value.trim()) q.set("organization_id", org.value.trim());
-  if (workspace.value.trim()) q.set("workspace_id", workspace.value.trim());
-  if (provider.value) q.set("provider_id", provider.value);
-  q.set("window", timeWindow.value);
-  if (errorCode.value) q.set("error_code", errorCode.value);
-  q.set("attempt_page", String(attemptPage.value));
-  q.set("dead_letter_page", String(deadLetterPage.value));
+  if (scope.organizationId) q.set("organization_id", scope.organizationId);
+  if (scope.workspaceId) q.set("workspace_id", scope.workspaceId);
+  if (scope.providerId) q.set("provider_id", scope.providerId);
+  q.set("window", scope.window);
+  if (scope.errorCode) q.set("error_code", scope.errorCode);
+  q.set("attempt_page", String(scope.attemptPage));
+  q.set("dead_letter_page", String(scope.deadLetterPage));
   activeController = new AbortController();
   const controller = activeController;
-  const timer = window.setTimeout(() => controller.abort(), 15_000);
+  const timer = window.setTimeout(() => controller.abort("request_timeout"), 15_000);
   try {
-    if (options.updateUrl !== false) await syncUrl();
+    if (options.updateUrl !== false) await syncUrl(scope);
+    if (sequence !== readSequence || !pageActive) return;
     const response = await request<any>(`/platform/collection/console?${q}`, {
       signal: controller.signal,
     });
+    if (sequence !== readSequence || !pageActive) return;
     requestId.value = response.request_id;
     data.value = response.data;
     const openIds = new Set(
@@ -150,12 +211,16 @@ async function load(options: { updateUrl?: boolean } = {}) {
       response.data.sources.length +
       response.data.task_states.length +
       response.data.dead_letters.length +
-      response.data.quality.length
+      response.data.quality.length +
+      response.data.attempts.length
         ? "ready"
         : "empty";
   } catch (error) {
+    if (sequence !== readSequence || !pageActive) return;
     const failure = error instanceof ApiClientError ? error : null;
-    const message = controller.signal.aborted
+    const timedOut = controller.signal.aborted && controller.signal.reason === "request_timeout";
+    if (controller.signal.aborted && !timedOut) return;
+    const message = timedOut
       ? "读取超过 15 秒，已安全取消；当前已验证数据仍保留。"
       : (failure?.actionHint ?? "网络或服务异常，当前已验证数据仍保留。");
     if (hadData) {
@@ -171,18 +236,57 @@ async function load(options: { updateUrl?: boolean } = {}) {
   } finally {
     window.clearTimeout(timer);
     if (activeController === controller) activeController = null;
-    refreshing.value = false;
+    if (sequence === readSequence) refreshing.value = false;
   }
+}
+async function focusRootCause() {
+  await nextTick();
+  rootCauseSection.value?.scrollIntoView({ block: "start" });
+  rootCauseSection.value?.focus();
+}
+function suspendRead(reason: "deactivated" | "unmounted") {
+  const interrupted = Boolean(activeController);
+  pageActive = false;
+  readSequence += 1;
+  activeController?.abort(reason);
+  activeController = null;
+  refreshing.value = false;
+  resumeRead = reason === "deactivated" && interrupted;
 }
 onMounted(async () => {
   await load();
-  if (route.query.root_cause === "1") {
-    await nextTick();
-    rootCauseSection.value?.scrollIntoView({ block: "start" });
-    rootCauseSection.value?.focus();
+  if (route.query.root_cause === "1") await focusRootCause();
+});
+watch(
+  () =>
+    [
+      route.path,
+      route.query.organization_id,
+      route.query.workspace_id,
+      route.query.provider_id,
+      route.query.window,
+      route.query.error_code,
+      route.query.attempt_page,
+      route.query.dead_letter_page,
+      route.query.root_cause,
+    ] as const,
+  async ([path, , , , , , , , rootCause], previous) => {
+    if (path !== "/platform-admin/collection/overview" || !pageActive) return;
+    if (applyRouteScope()) await load({ updateUrl: false });
+    if (rootCause === "1" && previous?.[8] !== "1") await focusRootCause();
+  },
+);
+onBeforeUnmount(() => suspendRead("unmounted"));
+onDeactivated(() => suspendRead("deactivated"));
+onActivated(() => {
+  pageActive = true;
+  if (route.path !== "/platform-admin/collection/overview") return;
+  const routeChanged = applyRouteScope();
+  if (routeChanged || resumeRead) {
+    resumeRead = false;
+    void load({ updateUrl: false });
   }
 });
-onBeforeUnmount(() => activeController?.abort());
 const when = (v: string | null) =>
     v ? new Date(v).toLocaleString("zh-CN", { hour12: false }) : "未检查",
   linkLabels: Record<string, string> = {
