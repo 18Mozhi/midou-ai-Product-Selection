@@ -1,10 +1,18 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
-const props = withDefaults(defineProps<{ label?: string; activeCount?: number }>(), {
-  label: "筛选条件",
-  activeCount: 0,
-});
+const props = withDefaults(
+  defineProps<{
+    label?: string;
+    activeCount?: number;
+    appearance?: "default" | "governance";
+  }>(),
+  {
+    label: "筛选条件",
+    activeCount: 0,
+    appearance: "default",
+  },
+);
 
 const open = ref(false);
 const mobile = ref(false);
@@ -105,7 +113,10 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
     <Teleport to="body" :disabled="!overlay">
       <div
         class="responsive-filter-drawer__portal"
-        :class="{ 'responsive-filter-drawer--overlay': overlay }"
+        :class="{
+          'responsive-filter-drawer--overlay': overlay,
+          'responsive-filter-drawer--governance': appearance === 'governance',
+        }"
         @keydown="handleKeydown"
       >
         <div
@@ -148,6 +159,19 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
 <style scoped>
 .responsive-filter-drawer__portal {
   display: contents;
+}
+
+.responsive-filter-drawer--governance {
+  --so-bg: #f3f6fb;
+  --so-bg-elevated: #ffffff;
+  --so-panel: #ffffff;
+  --so-panel-soft: #edf2f9;
+  --so-text: #17243d;
+  --so-text-muted: #627089;
+  --so-border: #cfd9e8;
+  --so-primary: #2d63cd;
+  --so-primary-strong: #214da8;
+  --so-on-primary: #ffffff;
 }
 
 .responsive-filter-drawer__trigger,

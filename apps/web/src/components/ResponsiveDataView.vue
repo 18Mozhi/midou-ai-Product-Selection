@@ -8,6 +8,7 @@ const props = defineProps<{
   title: string;
   detailTitle: (row: DataRow) => string;
   emptyMessage?: string;
+  appearance?: "default" | "governance";
 }>();
 
 const selectedKey = shallowRef<string | null>(null),
@@ -117,7 +118,7 @@ function handleTab(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="responsive-data-view">
+  <div class="responsive-data-view" :data-appearance="appearance || 'default'">
     <TableViewControls class="responsive-data-view__desktop"
       ><slot name="desktop" :show="show"
     /></TableViewControls>
@@ -137,6 +138,7 @@ function handleTab(event: KeyboardEvent) {
         v-if="selected"
         ref="overlay"
         class="responsive-data-view__overlay"
+        :class="{ 'responsive-data-view__overlay--governance': appearance === 'governance' }"
         @keydown.esc="close"
         @keydown="handleTab"
       >
@@ -179,6 +181,20 @@ function handleTab(event: KeyboardEvent) {
   position: fixed;
   z-index: 260;
   inset: 0;
+}
+
+.responsive-data-view__overlay--governance {
+  --so-bg: #f3f6fb;
+  --so-bg-elevated: #ffffff;
+  --so-panel: #ffffff;
+  --so-panel-soft: #edf2f9;
+  --so-text: #17243d;
+  --so-text-muted: #627089;
+  --so-border: #cfd9e8;
+  --so-primary: #2d63cd;
+  --so-primary-strong: #214da8;
+  --so-on-primary: #ffffff;
+  --so-shadow: 0 16px 40px color-mix(in srgb, #17243d 16%, transparent);
 }
 
 .responsive-data-view__overlay--suspended {

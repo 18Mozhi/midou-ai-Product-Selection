@@ -1,10 +1,12 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import vm from "node:vm";
 import ts from "typescript";
 
 export async function buildGovernanceDesignData(repo) {
+  const proposalRevision = "ce50835aa9972dd2b50b1977270cc998b09ba5fd";
   const sourcePaths = [
     "apps/web/src/components/PlatformGovernanceCenter.vue",
     "apps/api/src/platform-dashboard-service.ts",
@@ -12,7 +14,16 @@ export async function buildGovernanceDesignData(repo) {
     "apps/api/src/mysql-platform-dashboard-repository.ts",
     "tests/e2e/m06-02-platform-dashboard.spec.ts",
   ];
-  const read = (f) => readFile(path.join(repo, f), "utf8");
+  const historicalSources = new Set([sourcePaths[0], sourcePaths[4]]);
+  const read = (f) =>
+    historicalSources.has(f)
+      ? Promise.resolve(
+          execFileSync("git", ["show", `${proposalRevision}:${f}`], {
+            cwd: repo,
+            encoding: "utf8",
+          }),
+        )
+      : readFile(path.join(repo, f), "utf8");
   const parse = (v) => ts.createSourceFile("input.ts", v, ts.ScriptTarget.Latest, true);
   const compile = (v) =>
     ts.transpileModule(v, {

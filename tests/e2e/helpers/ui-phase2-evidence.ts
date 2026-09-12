@@ -17,7 +17,7 @@ export async function finalizePhase2Evidence(testInfo: TestInfo) {
 export async function capturePhase2Evidence(
   page: Page,
   testInfo: TestInfo,
-  pageId: "P17" | "P31" | "P54" | "P61",
+  pageId: "P17" | "P31" | "P54" | "P55" | "P61",
   state: string,
   assertions: string[],
 ) {
@@ -28,6 +28,7 @@ export async function capturePhase2Evidence(
     P17: "/opportunities/scoring-rules",
     P31: "/org-admin/roles",
     P54: "/platform-admin/data",
+    P55: "/platform-admin/governance",
     P61: "/platform-admin/status",
   }[pageId];
   if (url.hostname !== "127.0.0.1" || url.pathname !== expectedPath)
@@ -41,11 +42,13 @@ export async function capturePhase2Evidence(
   const filename = `${pageId}-${viewport.width}-${state}`;
   const qualityP54 = pageId === "P54" && state.startsWith("quality-");
   const outputRelative =
-      pageId === "P54"
-        ? qualityP54
-          ? "design/data-quality-direction-c/vue-implementation"
-          : "design/data-records-direction-c/vue-implementation"
-        : "runtime/representatives",
+      pageId === "P55"
+        ? "design/governance-direction-c/vue-implementation"
+        : pageId === "P54"
+          ? qualityP54
+            ? "design/data-quality-direction-c/vue-implementation"
+            : "design/data-records-direction-c/vue-implementation"
+          : "runtime/representatives",
     output = path.join(root, outputRelative);
   const hash = (content: string | Buffer) =>
     createHash("sha256")
@@ -73,9 +76,9 @@ export async function capturePhase2Evidence(
         })),
     }));
     const dialog = (await page.locator('dialog[open], [role="alertdialog"]').count()) > 0;
-    const p54MobileViewport = pageId === "P54" && viewport.width === 390;
+    const focusedMobileViewport = (pageId === "P54" || pageId === "P55") && viewport.width === 390;
     if (!dialog) {
-      if (p54MobileViewport)
+      if (focusedMobileViewport)
         await page.evaluate(
           ({ selector, offset }) => {
             const target = document.querySelector(selector);
@@ -83,20 +86,28 @@ export async function capturePhase2Evidence(
             const top = target.getBoundingClientRect().top + window.scrollY - offset;
             window.scrollTo(0, Math.max(0, top));
           },
-          qualityP54
-            ? state.includes("unknown")
-              ? { selector: ".quality-feedback", offset: 110 }
-              : state === "quality-default"
-                ? { selector: ".quality-title", offset: 58 }
-                : { selector: ".quality-task", offset: 58 }
-            : state.includes("unknown")
-              ? { selector: ".platform-data-feedback", offset: 110 }
-              : { selector: ".platform-data-hero", offset: 58 },
+          pageId === "P55"
+            ? state === "governance-directory"
+              ? { selector: ".governance-directory", offset: 58 }
+              : state === "governance-default"
+                ? { selector: ".governance-hero", offset: 58 }
+                : state === "governance-forbidden"
+                  ? { selector: ".governance-state", offset: 58 }
+                  : { selector: ".governance-context", offset: 58 }
+            : qualityP54
+              ? state.includes("unknown")
+                ? { selector: ".quality-feedback", offset: 110 }
+                : state === "quality-default"
+                  ? { selector: ".quality-title", offset: 58 }
+                  : { selector: ".quality-task", offset: 58 }
+              : state.includes("unknown")
+                ? { selector: ".platform-data-feedback", offset: 110 }
+                : { selector: ".platform-data-hero", offset: 58 },
         );
       else await page.evaluate(() => window.scrollTo(0, 0));
     }
     await mkdir(output, { recursive: true });
-    const fullPage = !dialog && !p54MobileViewport;
+    const fullPage = !dialog && !focusedMobileViewport;
     await page.screenshot({
       path: path.join(output, `${filename}.png`),
       fullPage,
@@ -149,6 +160,19 @@ export async function capturePhase2Evidence(
             "apps/web/src/components/AuditedReasonDialog.vue",
           ];
       for (const source of p54Sources) {
+        sourceFiles[source] = hash(await readFile(source, "utf8"));
+      }
+    }
+    if (pageId === "P55") {
+      for (const source of [
+        "apps/web/src/components/PlatformGovernanceCenter.vue",
+        "apps/web/src/components/ResponsiveDataView.vue",
+        "apps/web/src/components/ResponsiveFilterDrawer.vue",
+        "apps/web/src/components/TableViewControls.vue",
+        "apps/web/src/components/TechnicalDetails.vue",
+        "apps/web/src/use-modal-dialog.ts",
+        "apps/web/src/platform-governance.css",
+      ]) {
         sourceFiles[source] = hash(await readFile(source, "utf8"));
       }
     }

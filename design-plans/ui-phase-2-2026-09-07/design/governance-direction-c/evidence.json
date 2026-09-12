@@ -2,23 +2,37 @@
   "proposal": "GOVERNANCE-C-r1",
   "contractRebindings": [
     {
-      "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
-      "old": "dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66",
-      "current": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-      "commit": "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
-      "reason": "Audited reason dialog focus-test additions; historical table retained."
+      "file": "apps/web/src/components/PlatformDataCenter.vue",
+      "old": "10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4",
+      "current": "73f961e34f708defa5ab73cf2e03c349e8b58e8369a399ca80cbb98ad15d8b5f",
+      "baseline": "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
+      "reason": "P54 current records implementation is independent from this frozen proposal."
+    },
+    {
+      "file": "apps/web/src/components/DataQualityCenter.vue",
+      "old": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+      "current": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+      "baseline": "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
+      "reason": "P54 current quality implementation is independent from this frozen proposal."
+    },
+    {
+      "file": "tests/e2e/m03-06-evidence-data-quality.spec.ts",
+      "old": "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
+      "current": "88f67bd991684fe5bc3d6c8adbea9df78501d755b9bc173beb2db60ed253635d",
+      "baseline": "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
+      "reason": "P54 current interaction tests are independent from this frozen proposal."
     }
   ],
   "sourceHashes": {
-    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "342d8b7c7b4ed11359c6050a9fff6b03a69e790ee851689b9190b829242ffbef",
     "apps/web/src/components/PlatformGovernanceCenter.vue": "76eae80f51225c3af676a17ab9c4ec94369262cc5e8c968be7fd62ef5f2280db",
     "apps/api/src/platform-dashboard-service.ts": "568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e",
     "apps/api/src/platform-dashboard-routes.ts": "1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30",
     "apps/api/src/mysql-platform-dashboard-repository.ts": "b290af1c03b2767c79bb565f9ec256550250acc4be0cc787de12b81e9b8dcd28",
     "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
     "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.css": "107e3760b83961d388dfe03a72d77a436b7f8794e10353ef1d9f5e71f2d14b78",
-    "scripts/lib/ui-phase2-governance-design-data.mjs": "d0c71ea198d14cb41e350a707e10d05211f8781ddbe02d056e3e9568e08902a6",
-    "scripts/verify-ui-phase2-governance-c.mjs": "0f314bfcd9bceeaa7aafb3d04857ac3f922fd14a67fb6cebed60fce865481d80",
+    "scripts/lib/ui-phase2-governance-design-data.mjs": "54803a1b4c4851b8e089619afe28bcf8211900d746f080afa5b0806728ad6192",
+    "scripts/verify-ui-phase2-governance-c.mjs": "20067fb3e93066b9100097a734725c53bdf90bdca6173a41d883a05139b9ebf3",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "design-plans/ui-phase-2-2026-09-07/design/governance-direction-c/index.html": "db83dac4cf084522c128d76d41f24a26e55f8c148f34d38cbb6d5b35faf9d93d",
     "design-plans/ui-phase-2-2026-09-07/design/governance-direction-c/governance.css": "3b7c8ad798e07509718c969c8ff3fc45e3f4cb2af2c25ff253c8f90f782f3849",

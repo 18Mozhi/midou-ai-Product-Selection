@@ -1,0 +1,511 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P55",
+  "route": "/platform-admin/governance",
+  "status": "source-reviewed-not-user-approved",
+  "contract": "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/PlatformGovernanceCenter.vue": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048"
+  },
+  "implementationSourceHashes": {
+    "apps/web/src/components/ResponsiveDataView.vue": "739ac85b109ec7c2557909d1f267d1b67a8384aa385afb80f2fd512502d17f7a",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "727009735e3fb767e5f5d84c4a83f2dcc63a8f09e05623c3cb1609103ece9be4",
+    "tests/e2e/m06-02-platform-dashboard.spec.ts": "a39d80a78761cd4382bbc2d8684f5334af4f6b3285c0c719932bf83f4da72069",
+    "tests/e2e/helpers/ui-phase2-evidence.ts": "abd086f312d681eb400c31cef5e607c2473ede21e8cf53a7433ac4bdb0974957"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "reason": "一处共享手机详情、一处原生桌面详情和一处响应式筛选；共享组件内部按钮不重复计为P55局部候选。"
+  },
+  "inputs": {
+    "governance": ["queryDraft", "statusDraft"]
+  },
+  "actions": [
+    {
+      "actionId": "DG55-SECTION",
+      "label": "切换五类治理目录",
+      "kind": "read",
+      "routeApplicability": "P55-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformGovernanceCenter.vue#da39e75f0c29a10d.1"
+      ],
+      "condition": "五类目录循环；读取中禁用，同分类早退",
+      "handler": "selectSection清状态/页码后读取GET治理目录",
+      "variants": [
+        "score_rules",
+        "cost_rules",
+        "approval_templates",
+        "automation_rules",
+        "releases"
+      ],
+      "scenes": [
+        {
+          "package": "governance-direction-c",
+          "scene": "default"
+        },
+        {
+          "package": "governance-direction-c",
+          "scene": "automation"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-governance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的GOVERNANCE-C-r1静态提案与源惰性验证；当前Vue行为另由m06-02夹具覆盖。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "当前夹具覆盖分类与保留快照；真实跨组织计数和生产缓存返回待验。"
+    },
+    {
+      "actionId": "DG55-PROVIDER",
+      "label": "进入来源版本管理",
+      "kind": "navigation",
+      "routeApplicability": "P55-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformGovernanceCenter.vue#763f45cd6b7c3560.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#763f45cd6b7c3560.2"
+      ],
+      "condition": "桌面目录底部或手机记录区后显示",
+      "handler": "RouterLink固定到/platform-admin/providers",
+      "variants": ["desktop", "mobile"],
+      "scenes": [
+        {
+          "package": "governance-direction-c",
+          "scene": "provider-route"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-governance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的GOVERNANCE-C-r1静态提案与源惰性验证；当前Vue行为另由m06-02夹具覆盖。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "本轮只核对href与双端可达，未执行真实目标页权限或跨组织导航。"
+    },
+    {
+      "actionId": "DG55-LOAD",
+      "label": "刷新或重新加载治理事实",
+      "kind": "read",
+      "routeApplicability": "P55-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformGovernanceCenter.vue#08baa16283bd4f61.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#98e49bfa8722733e.1"
+      ],
+      "condition": "头部刷新在读取中禁用；首次失败非loading时显示重试",
+      "handler": "load GET /platform/management?domain=governance；代次隔离并保留成功快照",
+      "variants": ["refresh", "retry", "first-error", "retained-error", "reactivation"],
+      "scenes": [
+        {
+          "package": "governance-direction-c",
+          "scene": "loading"
+        },
+        {
+          "package": "governance-direction-c",
+          "scene": "error"
+        },
+        {
+          "package": "governance-direction-c",
+          "scene": "retained-forbidden"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-governance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的GOVERNANCE-C-r1静态提案与源惰性验证；当前Vue行为另由m06-02夹具覆盖。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "当前Vue夹具覆盖双端与KeepAlive；真实网络重试、权限和生产生命周期待验。"
+    },
+    {
+      "actionId": "DG55-WORKBENCH",
+      "label": "进入所属治理工作台",
+      "kind": "navigation",
+      "routeApplicability": "P55-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformGovernanceCenter.vue#a5bd47ee42556f27.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#339a9f00e20513ad.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#e06a7289ed736f28.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#25ff23ae940dd1c3.1"
+      ],
+      "condition": "顶部入口按目标分类；行、手机详情和桌面详情按成功快照recordSection",
+      "handler": "RouterLink；自动化行附rule与action=edit，其余使用分类固定href",
+      "variants": ["target-header", "desktop-row", "mobile-detail", "desktop-dialog"],
+      "scenes": [
+        {
+          "package": "governance-direction-c",
+          "scene": "score_rules-route"
+        },
+        {
+          "package": "governance-direction-c",
+          "scene": "automation_rules-route"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-governance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的GOVERNANCE-C-r1静态提案与源惰性验证；当前Vue行为另由m06-02夹具覆盖。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "当前测试核对快照归属与精确href；不代表目标页有写入权限或已执行导航。"
+    },
+    {
+      "actionId": "DG55-FILTER",
+      "label": "筛选与重置当前治理目录",
+      "kind": "read",
+      "routeApplicability": "P55-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformGovernanceCenter.vue#adbd9ecccfb8b14c.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#7967356d90bb2be5.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#84ddf55965c63e53.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#d2bd484790411f68.1"
+      ],
+      "condition": "筛选依当前分类；读取中锁定，重置仅在存在草稿或已应用条件时可用",
+      "handler": "ResponsiveFilterDrawer；applyFilters/resetFilters规范化草稿、回到第一页并读取",
+      "variants": ["drawer", "submit", "apply", "reset", "query", "status"],
+      "scenes": [
+        {
+          "package": "governance-direction-c",
+          "scene": "filter-draft"
+        },
+        {
+          "package": "governance-direction-c",
+          "scene": "filter-applied"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-governance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的GOVERNANCE-C-r1静态提案与源惰性验证；当前Vue行为另由m06-02夹具覆盖。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "当前夹具覆盖URL、草稿和空结果；真实SQL LIKE、全状态选项与软键盘待验。"
+    },
+    {
+      "actionId": "DG55-DETAIL",
+      "label": "打开或关闭桌面治理详情",
+      "kind": "local",
+      "routeApplicability": "P55-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformGovernanceCenter.vue#e6fe66816eb31ec7.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#a96089c835f25daa.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#78a618fc321fc7ea.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#a9ad4a103838db20.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#ef25aec09f768729.1"
+      ],
+      "condition": "桌面行打开；selected存在时原生dialog显示",
+      "handler": "selected赋值触发useModalDialog；顶部/底部按钮和cancel/Escape清除selected并返焦",
+      "variants": ["open", "native-dialog", "cancel", "top-close", "footer-close"],
+      "scenes": [
+        {
+          "package": "governance-direction-c",
+          "scene": "score_rules-detail"
+        },
+        {
+          "package": "governance-direction-c",
+          "scene": "automation_rules-detail"
+        },
+        {
+          "package": "governance-direction-c",
+          "scene": "long-detail"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-governance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的GOVERNANCE-C-r1静态提案与源惰性验证；当前Vue行为另由m06-02夹具覆盖。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "当前夹具覆盖双端字段、焦点与取消；真实长数据、全部主题和屏幕阅读器待验。"
+    },
+    {
+      "actionId": "DG55-TECH",
+      "label": "展开治理技术标识",
+      "kind": "local",
+      "routeApplicability": "P55-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformGovernanceCenter.vue#495e04b542eaa8d6.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#1c008f867673db60.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#1c008f867673db60.2"
+      ],
+      "condition": "桌面行、手机详情和桌面原生详情中按记录显示",
+      "handler": "原生details/summary；仅展开现有ID、版本等只读事实",
+      "variants": ["desktop-row", "mobile-detail", "desktop-dialog"],
+      "scenes": [
+        {
+          "package": "governance-direction-c",
+          "scene": "score_rules-technical"
+        },
+        {
+          "package": "governance-direction-c",
+          "scene": "automation_rules-technical"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-governance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的GOVERNANCE-C-r1静态提案与源惰性验证；当前Vue行为另由m06-02夹具覆盖。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "未引入复制或写入；真实长ID、读屏播报和所有空字段待验。"
+    },
+    {
+      "actionId": "DG55-PAGE",
+      "label": "治理目录服务端分页",
+      "kind": "read",
+      "routeApplicability": "P55-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformGovernanceCenter.vue#053cd828dd3324d8.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#b7a08810a69e9930.1"
+      ],
+      "condition": "上一页在第1页禁用，下一页在末页禁用；读取中均锁定",
+      "handler": "goToPage校验目标页后GET，服务端收束页码并更新URL",
+      "variants": ["previous", "next", "pending", "first", "last", "failed"],
+      "scenes": [
+        {
+          "package": "governance-direction-c",
+          "scene": "page-first"
+        },
+        {
+          "package": "governance-direction-c",
+          "scene": "page-last"
+        },
+        {
+          "package": "governance-direction-c",
+          "scene": "page-failed"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-governance-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的GOVERNANCE-C-r1静态提案与源惰性验证；当前Vue行为另由m06-02夹具覆盖。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "当前夹具覆盖0/1/20/21/100边界；真实大表性能和历史返回待验。"
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": ["apps/web/src/components/PlatformGovernanceCenter.vue"],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/PlatformGovernanceCenter.vue": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+        "binding": "queryDraft",
+        "meaning": "当前分类的搜索草稿，maxlength 120；提交trim后进入URL与GET",
+        "remaining": "真实输入法、超长服务错误和跨分类草稿策略待人工验。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+        "binding": "statusDraft",
+        "meaning": "当前分类允许的状态草稿；切分类后清空",
+        "remaining": "五类全部真实状态组合待生产数据验证。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "蓝色五分类目录和桌面来源版本历史，只控制治理读取范围。",
+        "remaining": "共享外壳和真实角色目录仍待验。",
+        "variants": [
+          {
+            "name": "governance-directory",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "governance-direction-c",
+                "scene": "default"
+              }
+            ],
+            "remaining": "静态场景登记目录关系；当前Vue图另行审核。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+        "tag": "ResponsiveFilterDrawer",
+        "ordinal": 1,
+        "shape": "responsive-filter",
+        "sourceBehavior": "桌面内联、760px以下抽屉；使用governance外观，不改变默认消费者。",
+        "remaining": "所有主题与真实软键盘待验。",
+        "variants": [
+          {
+            "name": "governance-filter",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "governance-direction-c",
+                "scene": "filter-draft"
+              }
+            ],
+            "remaining": "当前Vue夹具覆盖开关/提交；静态图不是运行验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "搜索和状态筛选的原生提交表单。",
+        "remaining": "浏览器自动填充与真实服务校验待验。",
+        "variants": [
+          {
+            "name": "governance-filter-form",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [
+              {
+                "package": "governance-direction-c",
+                "scene": "filter-applied"
+              }
+            ],
+            "remaining": "只对应当前分类筛选，不代表跨分类搜索。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+        "tag": "ResponsiveDataView",
+        "ordinal": 1,
+        "shape": "responsive-row-detail",
+        "sourceBehavior": "桌面表格、手机摘要与等价详情；使用governance外观。",
+        "remaining": "全部动态类别/状态与读屏待验。",
+        "variants": [
+          {
+            "name": "score-rules",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "governance-direction-c",
+                "scene": "score_rules-detail"
+              }
+            ],
+            "remaining": "评分规则代表场景。"
+          },
+          {
+            "name": "automation-rules",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "governance-direction-c",
+                "scene": "automation_rules-detail"
+              }
+            ],
+            "remaining": "自动化完整字段及0频控边界已夹具覆盖；真实数据待验。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "桌面记录原生详情，由useModalDialog管理打开、Escape、返焦与关闭。",
+        "remaining": "真实浏览器辅助技术和全主题待验。",
+        "variants": [
+          {
+            "name": "governance-desktop-detail",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "governance-direction-c",
+                "scene": "automation_rules-detail"
+              }
+            ],
+            "remaining": "当前Vue已有夹具；静态场景仅为设计关联。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "ResponsiveDataView与ResponsiveFilterDrawer只新增可选governance外观，默认消费者保持原样；其他页面仍需各自回归。",
+      "TableViewControls和TechnicalDetails内部控件不纳入本页23个局部源位置，仍按共享消费者单独验收。"
+    ]
+  },
+  "compositionGaps": [
+    "12张当前Vue图覆盖目录、默认、自动化详情、筛选无结果、权限拒绝和保留快照失败；不是每个动态行与六态的穷尽。",
+    "真实MySQL、RBAC、目标工作台导航、生产KeepAlive历史和全局共享外壳仍待验。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "23个局部源位置归并8组，不把共享组件内部控件重复计入本页业务动作。",
+    "本页没有写入动作；所有工作台链接仍由目标页权限独立约束。"
+  ]
+}

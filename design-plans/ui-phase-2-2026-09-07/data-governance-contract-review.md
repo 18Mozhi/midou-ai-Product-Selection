@@ -1,5 +1,7 @@
 # B2a · 数据中心与治理目录事实合同
 
+2026-09-12 P55治理目录实现追加：[P55治理交互实现](P55-GOVERNANCE-INTERACTION-IMPLEMENTATION.md)把 C 方向五分类蓝色目录、白色版本/责任工作区、桌面表格与原生详情、手机等价详情、温和权限提示和独立空结果装入真实Vue。当前23个局部候选归并为8组动作；查询草稿、成功快照和目标范围分离，KeepAlive停用时中止读取并以代次隔离迟到响应，激活后刷新且不重写URL。`rate_limit_count=0`按事实展示，不再被truthy判断隐藏。API、SQL、字段、权限和写入合同未改；12张当前Vue图、双端夹具及源码映射不等于真实DB/RBAC/生产或用户批准。
+
 2026-09-12 P54证据质量实现追加：[P54-证据与质量交互实现](P54-QUALITY-INTERACTION-IMPLEMENTATION.md)将蓝色核对路径、白色三任务工作区、原生溯源/原因窗、手机等价选择、冻结批处理、下载单飞、独立写入/重读反馈和未知结果防重装入真实Vue。质量动作清单按当前源码重绑为39个候选；连同近期记录共58个源位置/18语义组，7个v-model、9容器/14消费者变体。双端20项夹具回归和14张当前Vue图已生成；真实DB/RBAC/文件/审计/生产及用户批准仍待验。
 
 2026-09-11 共享复制增量：TechnicalDetails 的哈希行已更新为当前实现；其余历史描述不扩大为最新验收。复制拒绝现有就地反馈、重试和迟到结果隔离，见 [共享复制反馈复核](TECHNICAL-COPY-FEEDBACK-REVIEW.md)。无 API、权限或复制内容调整。
@@ -67,17 +69,17 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 
 | 待验ID | 证据与后续动作                                                                                                            | 当前结论                                                            |
 | ------ | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| DG-G01 | 两父页及质量子页仅onBeforeUnmount abort，无完整onDeactivated/历史watch；Tab切换后旧读取、分页失败与缓存返回需受控终态复现 | 本批只修分类/已应用范围的记录解释，不宣称请求生命周期全部闭环       |
+| DG-G01 | P54/P55已补读取代次、onDeactivated中止和onActivated刷新；真实长历史、生产缓存返回及跨标签页仍需受控终态复现             | 当前Vue夹具已覆盖离开不读、返回刷新和迟到响应隔离，不扩大为生产闭环 |
 | DG-G02 | exportCsv原因await之后/下载命名仍读取可变entity；授权下载无单飞；质量详情GET无代次                                        | 需验证导出/下载/详情归属与取消，未用本批范围提示替代                |
 | DG-G03 | 单问题/批处理POST成功后load吞错，再由成功notice覆盖；ConfirmDialog无busy、父函数缺saving早退                              | 需可靠复现写成功但读失败及重复确认/取消，不按网络异常自行回滚或重发 |
 | DG-G04 | 问题checkbox只在desktop模板，移动摘要/详情无选择入口；过滤/下钻可能保留选择集                                             | 需补真实移动批选与影响范围一致性测试；不能称全部按钮手机可达        |
-| DG-G05 | ResponsiveDataView未显式Tab圈定；质量aside无初焦点；P55移动缺少部分自动化特有字段；表格控件部分热区<44                    | 后续正式布局和对应消费者回归，不在当前局部修复中大范围改公共组件    |
+| DG-G05 | P55移动详情已补自动化特有字段并沿用共享抽屉Tab圈定；质量aside初焦点和其他表格控件部分热区<44                              | P55双端夹具已验字段等价；其他消费者与真实软键盘仍需逐页复核          |
 | DG-G06 | 质量当前页检索/深链/对账下钻范围有限；供应商列语义、空数字转换、桌面空反馈、原模块权限落点需细分                          | 保留真实合同，不编接口/搜索/统计；有业务冲突先确认                  |
 | DG-G07 | 正式方向未获审；当前无本批正式图、真实MySQL/文件完整性/生产审计和用户签收                                                 | 全站G0未冻结、G1–G5仍待验，规格58/73不代表重设计完成率              |
 
 ## 5. 局部控件候选、字段绑定与源码指纹
 
-下列清单来自三个局部Vue的AST扫描并逐项关联真实handler。68个候选由19+27+22组成，包含表单事件、控件、脚本调用、弹窗定义/调用的重复位置，不是68个去重业务动作；9个v-model另列。ResponsiveDataView不会被本扫描自动当作dialog调用，已在第3节人工补四种场景。全局actions/dialogs/coverage由审计脚本在本轮收尾时重新生成，但生成成功不等于用户批准或真实服务验收。
+下列清单来自三个局部Vue的AST扫描并逐项关联真实handler。81个当前候选由19+39+23组成，包含表单事件、控件、弹窗定义/调用的重复位置，不是81个去重业务动作；9个v-model另列。ResponsiveDataView不会被本扫描自动当作dialog调用，已在第3节人工补四种场景。P55的23个局部位置另见`action-reviews/P55.json`归并为8组；全局生成成功不等于用户批准或真实服务验收。
 
 ### PlatformDataCenter
 
@@ -166,37 +168,38 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 
 ### PlatformGovernanceCenter
 
-文件：`apps/web/src/components/PlatformGovernanceCenter.vue`；候选22项。
+文件：`apps/web/src/components/PlatformGovernanceCenter.vue`；当前候选23项。
 
-| 源签名.序号        | 行  | 类型                  | 语义归属                          |
-| ------------------ | --- | --------------------- | --------------------------------- |
-| 08baa16283bd4f61.1 | 312 | control               | DG55-LOAD · 刷新事实              |
-| a5bd47ee42556f27.1 | 315 | control               | DG55-WORKBENCH · 目标分类顶部入口 |
-| 1a97224c567e5a16.1 | 318 | dialog-component-call | DG55-FILTER · 共享筛选抽屉        |
-| e89421a25cd6a707.1 | 319 | form-event            | DG55-FILTER · 表单提交            |
-| 84ddf55965c63e53.1 | 334 | control               | DG55-FILTER · 应用                |
-| d2bd484790411f68.1 | 335 | control               | DG55-FILTER · 重置                |
-| 7c508e0f69cc08ef.1 | 357 | control               | DG55-LOAD · 首错重试              |
-| afe46eeebe1ea9c0.1 | 366 | control               | DG55-SECTION · 五分类选择         |
-| e6fe66816eb31ec7.1 | 425 | control               | DG55-DETAIL · 桌面原生详情        |
-| 339a9f00e20513ad.1 | 426 | control               | DG55-WORKBENCH · 桌面所属入口     |
-| 1c008f867673db60.1 | 432 | control               | DG55-TECH · 桌面记录              |
-| 1c008f867673db60.2 | 482 | control               | DG55-TECH · 移动记录              |
-| e06a7289ed736f28.1 | 494 | control               | DG55-WORKBENCH · 移动所属入口     |
-| 053cd828dd3324d8.1 | 502 | control               | DG55-PAGE · 上一页                |
-| b7a08810a69e9930.1 | 510 | control               | DG55-PAGE · 下一页                |
-| 763f45cd6b7c3560.1 | 529 | control               | DG55-PROVIDER · 来源版本          |
-| a96089c835f25daa.1 | 539 | dialog-definition     | DG55-DETAIL · 原生dialog定义      |
-| 78a618fc321fc7ea.1 | 539 | event-binding         | DG55-DETAIL · 原生cancel事件      |
-| a9ad4a103838db20.1 | 551 | control               | DG55-DETAIL · 顶部关闭            |
-| 1c008f867673db60.3 | 603 | control               | DG55-TECH · 原生详情标识          |
-| ef25aec09f768729.1 | 616 | control               | DG55-DETAIL · 底部关闭            |
-| 25ff23ae940dd1c3.1 | 617 | control               | DG55-WORKBENCH · 原生详情所属入口 |
+| 源签名.序号        | 行 | 类型                  | 语义归属                          |
+| ------------------ | --: | --------------------- | --------------------------------- |
+| da39e75f0c29a10d.1 | 372 | control               | DG55-SECTION · 五分类选择         |
+| 763f45cd6b7c3560.1 | 401 | control               | DG55-PROVIDER · 桌面来源版本      |
+| 08baa16283bd4f61.1 | 413 | control               | DG55-LOAD · 刷新事实              |
+| a5bd47ee42556f27.1 | 416 | control               | DG55-WORKBENCH · 目标分类顶部入口 |
+| adbd9ecccfb8b14c.1 | 422 | dialog-component-call | DG55-FILTER · 共享筛选抽屉        |
+| 7967356d90bb2be5.1 | 427 | form-event            | DG55-FILTER · 表单提交            |
+| 84ddf55965c63e53.1 | 444 | control               | DG55-FILTER · 应用                |
+| d2bd484790411f68.1 | 445 | control               | DG55-FILTER · 重置                |
+| 98e49bfa8722733e.1 | 486 | control               | DG55-LOAD · 首错重试              |
+| e6fe66816eb31ec7.1 | 576 | control               | DG55-DETAIL · 桌面原生详情        |
+| 339a9f00e20513ad.1 | 577 | control               | DG55-WORKBENCH · 桌面所属入口     |
+| 495e04b542eaa8d6.1 | 582 | control               | DG55-TECH · 桌面技术标识          |
+| 1c008f867673db60.1 | 654 | control               | DG55-TECH · 移动技术详情          |
+| e06a7289ed736f28.1 | 666 | control               | DG55-WORKBENCH · 移动所属入口     |
+| 053cd828dd3324d8.1 | 675 | control               | DG55-PAGE · 上一页                |
+| b7a08810a69e9930.1 | 683 | control               | DG55-PAGE · 下一页                |
+| 763f45cd6b7c3560.2 | 707 | control               | DG55-PROVIDER · 手机来源版本      |
+| a96089c835f25daa.1 | 720 | dialog-definition     | DG55-DETAIL · 原生dialog定义      |
+| 78a618fc321fc7ea.1 | 720 | event-binding         | DG55-DETAIL · 原生cancel事件      |
+| a9ad4a103838db20.1 | 732 | control               | DG55-DETAIL · 顶部关闭            |
+| 1c008f867673db60.2 | 791 | control               | DG55-TECH · 原生详情标识          |
+| ef25aec09f768729.1 | 804 | control               | DG55-DETAIL · 底部关闭            |
+| 25ff23ae940dd1c3.1 | 805 | control               | DG55-WORKBENCH · 原生详情所属入口 |
 
 字段绑定：
 
-- 第322行：`queryDraft`。
-- 第326行：`statusDraft`。
+- 第431行：`queryDraft`。
+- 第439行：`statusDraft`。
 
 质量checkbox第721行通过checked/change双向转发selectedIssueIds；共享textarea/确认短语/表格密度等绑定按第3节另验，不混入这9处局部v-model。
 
@@ -207,7 +210,7 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 | 文件                                                 | LF SHA-256                                                       |
 | ---------------------------------------------------- | ---------------------------------------------------------------- |
 | apps/web/src/components/PlatformDataCenter.vue       | 10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4 |
-| apps/web/src/components/PlatformGovernanceCenter.vue | 76eae80f51225c3af676a17ab9c4ec94369262cc5e8c968be7fd62ef5f2280db |
+| apps/web/src/components/PlatformGovernanceCenter.vue | aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048 |
 | apps/web/src/components/DataQualityCenter.vue        | 92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c |
 | apps/api/src/platform-dashboard-routes.ts            | 1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30 |
 | apps/api/src/platform-dashboard-service.ts           | 568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e |
@@ -219,17 +222,17 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 | apps/web/src/use-audited-reason.ts                   | e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab |
 | apps/web/src/use-modal-dialog.ts                     | 5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc |
 | apps/web/src/ui/state-contract.ts                    | 9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a |
-| apps/web/src/components/ResponsiveDataView.vue       | 52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c |
-| apps/web/src/components/ResponsiveFilterDrawer.vue   | a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011 |
+| apps/web/src/components/ResponsiveDataView.vue       | 739ac85b109ec7c2557909d1f267d1b67a8384aa385afb80f2fd512502d17f7a |
+| apps/web/src/components/ResponsiveFilterDrawer.vue   | 727009735e3fb767e5f5d84c4a83f2dcc63a8f09e05623c3cb1609103ece9be4 |
 | apps/web/src/components/TableViewControls.vue        | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
 | apps/web/src/components/TechnicalDetails.vue         | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 | apps/web/src/components/AuditedReasonDialog.vue      | 3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a |
 | apps/web/src/components/ConfirmDialog.vue            | 3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424 |
 | apps/web/src/components/UiStatePanel.vue             | 8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164 |
 | config/route-catalog.json                            | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
-| tests/e2e/m06-02-platform-dashboard.spec.ts          | ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0 |
+| tests/e2e/m06-02-platform-dashboard.spec.ts          | a39d80a78761cd4382bbc2d8684f5334af4f6b3285c0c719932bf83f4da72069 |
 | tests/e2e/m03-06-evidence-data-quality.spec.ts       | e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb |
 | tests/unit/platform-data-center.test.mjs             | dd0629fc25dbefe1e4e14458bfcc68cba707f1d2f515e545fad0e24c6af533ac |
-| tests/unit/platform-governance.test.mjs              | 282907ebf35a276e8e5112a832f12592153b848e08c056f354f61fed71213bbd |
+| tests/unit/platform-governance.test.mjs              | ac52496955c78c1bf7c2a383c32b6993a94b232b66b523eff55ff011b8268fce |
 
 2026-09-10 P32恢复组合增量：共享原因组件新增仅显式workspaceRestore上下文启用的目标说明与C样式；其他调用的默认请求结构、原因校验和提交关闭顺序不变。真实Vue双端94检查/20图及默认/替换/关闭单测见[P32落地说明](P32-VUE-RESTORE-REVIEW.md)。本表同步已验证来源，不扩展其他页面或生产验收；旧指纹保存在07902a2e。

@@ -427,7 +427,7 @@ test("UI2-P54 locks record scope during export and blocks repeat after an unknow
 
 test("UI2-DG55 retained governance records keep their original workbench and version", async ({
   page,
-}) => {
+}, testInfo) => {
   await nav(page);
   let release!: () => void;
   let started!: () => void;
@@ -503,6 +503,11 @@ test("UI2-DG55 retained governance records keep their original workbench and ver
   await expect(page.getByText("自动化读取失败，请刷新事实。", { exact: true })).toBeVisible();
   await assertScore();
   await expect(page.getByRole("status").filter({ hasText: "仍显示" })).toContainText("评分规则");
+  await capturePhase2Evidence(page, testInfo, "P55", "governance-retained-failed", [
+    "新分类读取失败后保留原评分规则快照",
+    "范围提示说明当前仍显示的分类与版本",
+    "行入口仍指向原所属工作台",
+  ]);
   await page.getByRole("button", { name: "刷新事实", exact: true }).click();
   if (mobile) await page.getByRole("button", { name: /^隔离自动化 · 启用/ }).click();
   else await page.getByRole("table").getByRole("button", { name: "查看详情" }).click();
@@ -516,6 +521,249 @@ test("UI2-DG55 retained governance records keep their original workbench and ver
     "/automations?rule=auto-55&action=edit",
   );
   expect(autoReads).toBe(2);
+});
+
+test("UI2-DG55 C directory exposes factual counts and complete automation details", async ({
+  page,
+}, testInfo) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/management?**", (route) => {
+    const section = new URL(route.request().url()).searchParams.get("section") ?? "score_rules";
+    const automation = section === "automation_rules";
+    return route.fulfill({
+      json: env({
+        domain: "governance",
+        section,
+        summary: {
+          score_rules: 3,
+          cost_rules: 2,
+          approval_templates: 4,
+          automation_rules: 1,
+          releases: 2,
+          provider_versions: 7,
+        },
+        items: [
+          automation
+            ? {
+                id: "automation-c-55",
+                name: "竞品价格变化通知",
+                organization_name: "合成组织",
+                workspace_name: "合成工作区",
+                trigger_event_type: "competitor.changed",
+                condition_severity: "any",
+                action_type: "notify_owner",
+                action_title: "竞品价格变化：通知负责人",
+                rate_limit_count: 0,
+                rate_limit_window_minutes: 60,
+                status: "active",
+                version: 3,
+                updated_at: "2026-09-12T08:00:00.000Z",
+              }
+            : {
+                id: "score-c-55",
+                name: "全渠道评分基线",
+                version_code: "score-2026-09",
+                organization_name: "平台全局",
+                workspace_name: null,
+                status: "active",
+                revision: 6,
+                updated_at: "2026-09-12T08:00:00.000Z",
+              },
+        ],
+        pagination: { page: 1, page_size: 20, total: 1, total_pages: 1 },
+        provider_versions_latest_at: "2026-09-12T07:30:00.000Z",
+        observed_at: "2026-09-12T08:00:00.000Z",
+      }),
+    });
+  });
+
+  await page.goto("/platform-admin/governance");
+  await expect(page.getByRole("heading", { name: "规则、工作流与自动化", level: 2 })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "治理数据类型" })).toContainText("评分规则");
+  const mobile = (page.viewportSize()?.width ?? 1000) <= 760;
+  if (mobile)
+    await expect(page.getByRole("button", { name: /^全渠道评分基线 · 启用/ })).toBeVisible();
+  else await expect(page.getByText("全渠道评分基线", { exact: true })).toBeVisible();
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+    .toBe(true);
+  await capturePhase2Evidence(page, testInfo, "P55", "governance-directory", [
+    "桌面为左侧蓝色目录，手机为可横向滚动的顶部目录",
+    "五类全量计数与当前分类状态可同时辨认",
+    "目录不混入任何写操作",
+  ]);
+  await capturePhase2Evidence(page, testInfo, "P55", "governance-default", [
+    "蓝色五分类版本目录显示全量计数",
+    "白色工作面优先呈现成功快照与记录版本",
+    "来源配置历史作为相关事实而非第六类规则",
+  ]);
+
+  await page
+    .getByRole("navigation", { name: "治理数据类型" })
+    .getByRole("button", { name: /自动化规则/ })
+    .click();
+  await expect(page).toHaveURL(/section=automation_rules/);
+  if (mobile) await page.getByRole("button", { name: /^竞品价格变化通知 · 启用/ }).click();
+  else await page.getByRole("table").getByRole("button", { name: "查看详情" }).click();
+  const detail = page.getByRole("dialog", {
+    name: mobile ? "竞品价格变化通知" : "竞品价格变化通知详情",
+    exact: true,
+  });
+  await expect(detail.getByText("竞品发生变化", { exact: true })).toBeVisible();
+  await expect(detail.getByText("通知负责人", { exact: true })).toBeVisible();
+  await expect(detail.getByText("竞品价格变化：通知负责人", { exact: true })).toBeVisible();
+  await expect(detail.getByText("0 次 / 60 分钟", { exact: true })).toBeVisible();
+  await expect(detail.getByRole("link", { name: "进入规则编辑" })).toHaveAttribute(
+    "href",
+    "/automations?rule=automation-c-55&action=edit",
+  );
+  await capturePhase2Evidence(page, testInfo, "P55", "governance-automation-detail", [
+    "自动化详情在桌面与手机均展示触发、动作和频控",
+    "0 次频控按原始事实显示而不隐藏",
+    "编辑入口绑定当前自动化规则 ID",
+  ]);
+});
+
+test("UI2-DG55 C directory distinguishes a filtered empty result from global counts", async ({
+  page,
+}, testInfo) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/management?**", (route) => {
+    const url = new URL(route.request().url());
+    const filtered = url.searchParams.has("query") || url.searchParams.has("status");
+    return route.fulfill({
+      json: env({
+        domain: "governance",
+        section: "score_rules",
+        summary: {
+          score_rules: 8,
+          cost_rules: 3,
+          approval_templates: 2,
+          automation_rules: 5,
+          releases: 1,
+          provider_versions: 9,
+        },
+        items: filtered
+          ? []
+          : [
+              {
+                id: "score-filter-55",
+                name: "标准评分规则",
+                status: "active",
+                revision: 2,
+                updated_at: "2026-09-12T08:00:00.000Z",
+              },
+            ],
+        pagination: {
+          page: 1,
+          page_size: 20,
+          total: filtered ? 0 : 1,
+          total_pages: filtered ? 0 : 1,
+        },
+        provider_versions_latest_at: "2026-09-12T07:30:00.000Z",
+        observed_at: "2026-09-12T08:00:00.000Z",
+      }),
+    });
+  });
+
+  await page.goto("/platform-admin/governance");
+  const mobile = (page.viewportSize()?.width ?? 1000) <= 760;
+  if (mobile) await page.getByRole("button", { name: "筛选治理记录" }).click();
+  const filterScope = mobile
+    ? page.getByRole("dialog", { name: "筛选治理记录" })
+    : page.locator(".governance-filter");
+  await filterScope.getByPlaceholder("搜索规则、版本、组织或工作区").fill("不存在");
+  await filterScope.getByLabel("治理状态").selectOption("active");
+  await filterScope.getByRole("button", { name: "应用筛选" }).click();
+  await expect(
+    mobile
+      ? page.locator(".responsive-data-view__empty")
+      : page.locator(".governance-table__empty"),
+  ).toContainText("当前分类没有匹配记录");
+  await expect(page.getByRole("navigation", { name: "治理数据类型" })).toContainText("8");
+  await capturePhase2Evidence(page, testInfo, "P55", "governance-filtered-empty", [
+    "筛选结果显示 0 条而不冒充全局无规则",
+    "左侧全量计数和来源历史仍保留",
+    "已应用的搜索与状态反映在 URL 中",
+  ]);
+  await expect(page).toHaveURL(/q=%E4%B8%8D%E5%AD%98%E5%9C%A8/);
+  await expect(page).toHaveURL(/status=active/);
+});
+
+test("UI2-DG55 C directory presents a gentle first-load permission state", async ({
+  page,
+}, testInfo) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/management?**", (route) =>
+    route.fulfill({
+      status: 403,
+      json: {
+        error: {
+          code: "forbidden",
+          message: "无权读取治理目录",
+          action_hint: "权限调整后重新加载。",
+        },
+        request_id: "governance-forbidden-55",
+        trace_id: "governance-forbidden-55",
+      },
+    }),
+  );
+
+  await page.goto("/platform-admin/governance");
+  await expect(page.getByRole("heading", { name: "当前无法查看治理目录" })).toBeVisible();
+  await expect(page.getByText(/当前权限还不能读取这些内容/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "重新加载" })).toBeVisible();
+  await capturePhase2Evidence(page, testInfo, "P55", "governance-forbidden", [
+    "权限拒绝文案说明当前状态和可恢复下一步",
+    "不展示伪造的规则计数或记录",
+    "重新加载是唯一主操作",
+  ]);
+});
+
+test("UI2-DG55 cached governance suspends off-route reads and refreshes on return", async ({
+  page,
+}) => {
+  await nav(page);
+  let governanceReads = 0;
+  await page.route("**/api/v1/platform/dashboard?**", (route) =>
+    route.fulfill({ json: env(dashboard) }),
+  );
+  await page.route("**/api/v1/platform/management?**", (route) => {
+    governanceReads += 1;
+    return route.fulfill({
+      json: env({
+        domain: "governance",
+        section: "score_rules",
+        summary: { score_rules: 1, provider_versions: 0 },
+        items: [
+          {
+            id: `cached-score-${governanceReads}`,
+            name: `缓存评分规则 ${governanceReads}`,
+            status: "active",
+            revision: governanceReads,
+            updated_at: "2026-09-12T08:00:00.000Z",
+          },
+        ],
+        pagination: { page: 1, page_size: 20, total: 1, total_pages: 1 },
+        observed_at: "2026-09-12T08:00:00.000Z",
+      }),
+    });
+  });
+
+  await page.goto("/platform-admin/governance");
+  const mobile = (page.viewportSize()?.width ?? 1000) <= 760;
+  const visibleRecord = (revision: number) =>
+    mobile
+      ? page.getByRole("button", { name: new RegExp(`^缓存评分规则 ${revision} · 启用`) })
+      : page.getByText(`缓存评分规则 ${revision}`, { exact: true });
+  await expect(visibleRecord(1)).toBeVisible();
+  expect(governanceReads).toBe(1);
+  await page.goto("/platform-admin");
+  await expect(page.getByRole("heading", { name: "平台运行概览", level: 2 })).toBeVisible();
+  expect(governanceReads).toBe(1);
+  await page.goto("/platform-admin/governance");
+  await expect(visibleRecord(2)).toBeVisible();
+  expect(governanceReads).toBe(2);
 });
 
 test("API coverage dashboard exposes the current production truth dimensions on desktop and mobile", async ({

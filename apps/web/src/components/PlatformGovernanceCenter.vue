@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
@@ -137,6 +137,26 @@ const hasLoadedFacts = computed(() => Boolean(data.value?.observed_at));
 const activeFilterCount = computed(
   () => Number(Boolean(queryDraft.value.trim())) + Number(Boolean(statusDraft.value)),
 );
+const sectionDescription = computed(
+  () =>
+    ({
+      score_rules: "核对评分口径、版本与归属，再进入评分规则工作台处理。",
+      cost_rules: "核对费用和风险规则的市场范围、版本与责任组织。",
+      approval_templates: "核对已发布或归档的审批模板及其业务资源范围。",
+      automation_rules: "核对触发条件、执行动作、频率限制与当前版本。",
+      releases: "核对发布阶段、构建标识与回滚状态，不在本页执行发布。",
+    })[recordSection.value],
+);
+const searchPlaceholder = computed(
+  () =>
+    ({
+      score_rules: "搜索规则、版本、组织或工作区",
+      cost_rules: "搜索名称、版本、市场、平台或组织",
+      approval_templates: "搜索名称、资源类型、组织或工作区",
+      automation_rules: "搜索名称、触发事件、动作标题或组织",
+      releases: "搜索应用版本、构建标识或发布阶段",
+    })[section.value],
+);
 const rangeLabel = computed(() => {
   if (!pagination.value.total) return "0 条";
   const start = (pagination.value.page - 1) * pagination.value.page_size + 1,
@@ -174,6 +194,26 @@ const statusName = (value: unknown) =>
       rolled_back: "已回滚",
     }) as Record<string, string>
   )[String(value)] ?? String(value ?? "—");
+const statusTone = (value: unknown) =>
+  (
+    ({
+      active: "positive",
+      approved: "positive",
+      published: "positive",
+      healthy: "positive",
+      preflight_passed: "positive",
+      paused: "quiet",
+      draft: "quiet",
+      planned: "quiet",
+      archived: "quiet",
+      pending_approval: "attention",
+      deploying: "attention",
+      failed: "danger",
+      rejected: "danger",
+      retired: "danger",
+      rolled_back: "danger",
+    }) as Record<string, string>
+  )[String(value)] ?? "quiet";
 const typeName = (value: unknown) =>
   (
     ({
@@ -216,8 +256,11 @@ async function syncUrl() {
   if (page.value > 1) next.page = String(page.value);
   await router.replace({ query: next });
 }
+let requestGeneration = 0;
+let wasDeactivated = false;
 async function load(options: { updateUrl?: boolean } = {}) {
   if (refreshing.value) return;
+  const generation = ++requestGeneration;
   const hadData = hasLoadedFacts.value;
   const scope = { section: section.value, query: query.value, status: status.value };
   refreshing.value = true;
@@ -239,6 +282,7 @@ async function load(options: { updateUrl?: boolean } = {}) {
     const response = await request<any>(`/platform/management?${params}`, {
       signal: controller.signal,
     });
+    if (generation !== requestGeneration || controller.signal.aborted) return;
     requestId.value = response.request_id;
     data.value = response.data;
     page.value = response.data.pagination.page;
@@ -246,6 +290,7 @@ async function load(options: { updateUrl?: boolean } = {}) {
     if (options.updateUrl !== false) await syncUrl();
     state.value = response.data.pagination.total ? "ready" : "empty";
   } catch (error) {
+    if (generation !== requestGeneration) return;
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? requestId.value;
     message.value = controller.signal.aborted
@@ -254,8 +299,10 @@ async function load(options: { updateUrl?: boolean } = {}) {
     state.value = hadData ? "ready" : failure ? failureState(failure) : "blocked";
   } finally {
     window.clearTimeout(timer);
-    if (activeController === controller) activeController = null;
-    refreshing.value = false;
+    if (activeController === controller) {
+      activeController = null;
+      refreshing.value = false;
+    }
   }
 }
 function selectSection(value: Section) {
@@ -295,247 +342,383 @@ function goToPage(nextPage: number) {
   void load();
 }
 onMounted(() => void load());
-onBeforeUnmount(() => activeController?.abort());
+onActivated(() => {
+  if (!wasDeactivated) return;
+  wasDeactivated = false;
+  refreshing.value = false;
+  void load({ updateUrl: false });
+});
+onDeactivated(() => {
+  wasDeactivated = true;
+  ++requestGeneration;
+  activeController?.abort();
+  activeController = null;
+  refreshing.value = false;
+  selected.value = null;
+});
+onBeforeUnmount(() => {
+  ++requestGeneration;
+  activeController?.abort();
+});
 </script>
 
 <template>
-  <section class="platform-governance">
-    <header>
-      <div>
-        <p>平台规则中心</p>
-        <h2>规则、工作流与自动化</h2>
-        <span
-          >统一核对跨组织规则版本、审批、自动化和发布回滚；写操作进入对应受权限保护的工作台。</span
-        >
-      </div>
-      <div class="governance-header-actions">
-        <button type="button" :disabled="refreshing" @click="load()">
-          {{ refreshing ? "刷新中…" : "刷新事实" }}
-        </button>
-        <RouterLink :to="current.href">{{ current.action }}</RouterLink>
-      </div>
-    </header>
-    <ResponsiveFilterDrawer label="筛选治理记录" :active-count="activeFilterCount">
-      <form @submit.prevent="applyFilters">
-        <label>
-          <span>搜索</span>
-          <input v-model="queryDraft" placeholder="搜索规则、版本、组织或工作区" maxlength="120" />
-        </label>
-        <label>
-          <span>状态</span>
-          <select v-model="statusDraft" aria-label="治理状态">
-            <option value="">全部状态</option>
-            <option v-for="value in statusOptions" :key="value" :value="value">
-              {{ statusName(value) }}
-            </option>
-          </select>
-        </label>
-        <div class="governance-filter-actions">
-          <button type="submit" :disabled="refreshing">应用筛选</button>
-          <button type="button" :disabled="refreshing || !activeFilterCount" @click="resetFilters">
-            重置
-          </button>
-        </div>
-      </form>
-    </ResponsiveFilterDrawer>
-    <p v-if="message" class="governance-notice">{{ message }}</p>
-    <p v-if="scopeMismatch" class="governance-notice" role="status">
-      新范围尚未读取成功，仍显示：{{ snapshotLabel }}。记录详情与工作台入口保持原范围。
-    </p>
-    <section v-if="!hasLoadedFacts && state !== 'ready'" class="governance-state">
-      <h3>
-        {{
-          state === "loading"
-            ? "正在读取治理事实"
-            : state === "expired"
-              ? "登录状态已失效"
-              : state === "forbidden"
-                ? "当前账号无平台治理权限"
-                : "治理数据暂不可用"
-        }}
-      </h3>
-      <button v-if="state !== 'loading'" @click="load()">重新加载</button>
-    </section>
-    <template v-else>
-      <div class="governance-summary">
-        <article v-for="(value, key) in data.summary" :key="key">
-          <small>{{ summaryName(String(key)) }}总量</small><strong>{{ value }}</strong>
-        </article>
+  <section class="platform-governance" :aria-busy="refreshing">
+    <aside class="governance-directory">
+      <div class="governance-directory__intro">
+        <p>平台治理</p>
+        <h2>治理版本目录</h2>
+        <span>跨组织事实 · 不切换当前组织</span>
       </div>
       <nav aria-label="治理数据类型">
         <button
           v-for="item in sections"
           :key="item.value"
+          type="button"
           :aria-current="section === item.value ? 'page' : undefined"
           :disabled="refreshing"
           @click="selectSection(item.value)"
         >
-          {{ item.label }}
+          <span>{{ item.label }}</span>
+          <b>{{ hasLoadedFacts ? (data.summary[item.value] ?? "—") : "—" }}</b>
         </button>
       </nav>
-      <div class="governance-table">
-        <ResponsiveDataView
-          :rows="rows"
-          :row-key="(item) => item.id"
-          :title="recordType.label"
-          :detail-title="(item) => item.name"
-          empty-message="当前分类没有匹配记录。"
-        >
-          <template #desktop
-            ><table>
-              <thead>
-                <tr>
-                  <th>名称 / 版本</th>
-                  <th>组织 / 工作区</th>
-                  <th>类型</th>
-                  <th>状态</th>
-                  <th>版本</th>
-                  <th>更新时间</th>
-                  <th>操作</th>
-                  <th>技术信息</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in rows" :key="item.id">
-                  <td>
-                    <strong>{{ item.name }}</strong>
-                  </td>
-                  <td>
-                    {{ item.organization_name || "平台全局"
-                    }}<small>{{ item.workspace_name || item.stage || "—" }}</small>
-                  </td>
-                  <td>
-                    {{
-                      typeName(
-                        item.trigger_event_type ||
-                          item.resource_type ||
-                          item.platform ||
-                          recordSection,
-                      )
-                    }}
-                  </td>
-                  <td>
-                    <b>{{ statusName(item.status) }}</b>
-                  </td>
-                  <td>{{ versionText(item) }}</td>
-                  <td>
-                    {{ item.updated_at ? new Date(item.updated_at).toLocaleString("zh-CN") : "—" }}
-                  </td>
-                  <td>
-                    <button type="button" @click="selected = item">查看详情</button
-                    ><RouterLink :to="editHref(item)">{{
-                      recordSection === "automation_rules" ? "编辑规则" : "进入工作台"
-                    }}</RouterLink>
-                  </td>
-                  <td>
-                    <details>
-                      <summary>技术详情</summary>
-                      <code>{{ item.version_code || item.id }}</code>
-                    </details>
-                  </td>
-                </tr>
-              </tbody>
-            </table></template
-          >
-          <template #summary="{ row }">
-            <span class="responsive-record-summary">
-              <strong>{{ row.name }} · {{ statusName(row.status) }}</strong>
-              <small>{{ row.organization_name || "平台全局" }} · {{ versionText(row) }}</small>
-            </span>
-          </template>
-          <template #detail="{ row }">
-            <dl>
-              <div>
-                <dt>所属组织</dt>
-                <dd>{{ row.organization_name || "平台全局" }}</dd>
-              </div>
-              <div>
-                <dt>工作区或阶段</dt>
-                <dd>{{ row.workspace_name || row.stage || "—" }}</dd>
-              </div>
-              <div>
-                <dt>类型</dt>
-                <dd>
-                  {{
-                    typeName(
-                      row.trigger_event_type || row.resource_type || row.platform || recordSection,
-                    )
-                  }}
-                </dd>
-              </div>
-              <div>
-                <dt>当前状态</dt>
-                <dd>{{ statusName(row.status) }}</dd>
-              </div>
-              <div>
-                <dt>版本</dt>
-                <dd>{{ versionText(row) }}</dd>
-              </div>
-              <div>
-                <dt>更新时间</dt>
-                <dd>
-                  {{ row.updated_at ? new Date(row.updated_at).toLocaleString("zh-CN") : "—" }}
-                </dd>
-              </div>
-            </dl>
-            <details>
-              <summary>技术详情</summary>
-              <dl>
-                <div>
-                  <dt>记录 ID</dt>
-                  <dd>{{ row.id }}</dd>
-                </div>
-                <div v-if="row.version_code">
-                  <dt>版本代码</dt>
-                  <dd>{{ row.version_code }}</dd>
-                </div>
-              </dl>
-            </details>
-            <RouterLink :to="editHref(row)">{{
-              recordSection === "automation_rules" ? "进入规则编辑" : "进入所属工作台"
-            }}</RouterLink>
-          </template>
-        </ResponsiveDataView>
-        <footer class="governance-pagination" aria-label="治理记录分页">
-          <span>{{ rangeLabel }}</span>
-          <nav v-if="pagination.total_pages > 1" aria-label="治理页码">
-            <button
-              type="button"
-              :disabled="refreshing || pagination.page <= 1"
-              @click="goToPage(pagination.page - 1)"
-            >
-              上一页
-            </button>
-            <span>第 {{ pagination.page }} / {{ pagination.total_pages }} 页</span>
-            <button
-              type="button"
-              :disabled="refreshing || pagination.page >= pagination.total_pages"
-              @click="goToPage(pagination.page + 1)"
-            >
-              下一页
-            </button>
-          </nav>
-        </footer>
-      </div>
-      <aside>
-        <strong>配置版本</strong
-        ><span
-          >来源配置历史版本 {{ data.summary.provider_versions }} 个；最近变更
-          {{
+      <p class="governance-directory__note">
+        分类数字是全量统计，不随当前筛选变化。未返回的值显示“—”。
+      </p>
+      <section class="governance-provider governance-provider--desktop">
+        <small>相关事实</small>
+        <h3>来源配置历史</h3>
+        <p>
+          <strong>{{ hasLoadedFacts ? (data.summary.provider_versions ?? "—") : "—" }}</strong>
+          个历史版本
+        </p>
+        <span>
+          最近变更：{{
             data.provider_versions_latest_at
               ? new Date(data.provider_versions_latest_at).toLocaleString("zh-CN")
-              : "暂无"
-          }}。</span
-        ><RouterLink to="/platform-admin/providers">进入来源版本管理</RouterLink>
-      </aside>
-      <footer>
-        跨组织查看不会绕过业务权限；编辑、启停和发布仍使用版本锁并写入审计记录。
-        <span v-if="data.observed_at">
-          事实时间 {{ new Date(data.observed_at).toLocaleString("zh-CN") }}
+              : "尚未读取"
+          }}
         </span>
-        <TechnicalDetails :request-id="requestId" />
-      </footer>
-    </template>
+        <RouterLink to="/platform-admin/providers">进入来源版本管理</RouterLink>
+      </section>
+    </aside>
+
+    <div class="governance-main">
+      <header class="governance-hero">
+        <div>
+          <p>版本清楚，操作有归属</p>
+          <h2>规则、工作流与自动化</h2>
+          <span>在这里核对治理事实，在所属工作台处理。</span>
+        </div>
+        <div class="governance-header-actions">
+          <button type="button" :disabled="refreshing" @click="load()">
+            {{ refreshing ? "刷新中…" : "刷新事实" }}
+          </button>
+          <RouterLink class="governance-primary-action" :to="current.href">
+            {{ current.action }}
+          </RouterLink>
+        </div>
+      </header>
+
+      <ResponsiveFilterDrawer
+        label="筛选治理记录"
+        :active-count="activeFilterCount"
+        appearance="governance"
+      >
+        <form class="governance-filter" @submit.prevent="applyFilters">
+          <label>
+            <span>搜索{{ current.label }}</span>
+            <input v-model="queryDraft" :placeholder="searchPlaceholder" maxlength="120" />
+            <small>搜索只作用于当前分类的服务端字段。</small>
+          </label>
+          <label>
+            <span>状态</span>
+            <select v-model="statusDraft" aria-label="治理状态">
+              <option value="">全部状态</option>
+              <option v-for="value in statusOptions" :key="value" :value="value">
+                {{ statusName(value) }}
+              </option>
+            </select>
+            <small>选项依当前治理类型切换。</small>
+          </label>
+          <div class="governance-filter-actions">
+            <button type="submit" :disabled="refreshing">应用筛选</button>
+            <button
+              type="button"
+              :disabled="refreshing || !activeFilterCount"
+              @click="resetFilters"
+            >
+              重置
+            </button>
+          </div>
+        </form>
+      </ResponsiveFilterDrawer>
+
+      <div class="governance-feedback" aria-live="polite">
+        <p v-if="message" class="governance-notice">{{ message }}</p>
+        <p v-if="scopeMismatch" class="governance-notice" role="status">
+          新范围尚未读取成功，仍显示：{{ snapshotLabel }}。记录详情与工作台入口保持原范围。
+        </p>
+      </div>
+
+      <section v-if="!hasLoadedFacts && state !== 'ready'" class="governance-state" role="status">
+        <span aria-hidden="true">{{ state === "loading" ? "···" : "!" }}</span>
+        <p>治理事实</p>
+        <h3>
+          {{
+            state === "loading"
+              ? "正在读取治理事实"
+              : state === "expired"
+                ? "登录状态已失效"
+                : state === "forbidden"
+                  ? "当前无法查看治理目录"
+                  : "治理数据暂不可用"
+          }}
+        </h3>
+        <p>
+          {{
+            state === "forbidden"
+              ? "当前权限还不能读取这些内容。权限调整后，可以重新加载。"
+              : state === "loading"
+                ? "正在核对版本、组织归属与当前状态。"
+                : "请根据上方提示重试；本页不会自动发起写操作。"
+          }}
+        </p>
+        <button v-if="state !== 'loading'" type="button" @click="load()">重新加载</button>
+      </section>
+
+      <template v-else>
+        <section class="governance-context" aria-labelledby="governance-context-title">
+          <div>
+            <small>当前成功快照</small>
+            <h3 id="governance-context-title">{{ recordType.label }}</h3>
+            <p>{{ sectionDescription }}</p>
+          </div>
+          <dl>
+            <div>
+              <dt>搜索</dt>
+              <dd>{{ snapshotScope?.query || "不限" }}</dd>
+            </div>
+            <div>
+              <dt>状态</dt>
+              <dd>{{ snapshotScope?.status ? statusName(snapshotScope.status) : "全部" }}</dd>
+            </div>
+            <div>
+              <dt>页码</dt>
+              <dd>第 {{ pagination.page }} 页</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="governance-table" :aria-label="`${recordType.label}记录`">
+          <div class="governance-table__heading">
+            <div>
+              <strong>{{ rangeLabel }}</strong>
+              <span>筛选后的服务端总量 · 每页 20 条</span>
+            </div>
+          </div>
+          <ResponsiveDataView
+            :rows="rows"
+            :row-key="(item) => item.id"
+            :title="recordType.label"
+            :detail-title="(item) => item.name"
+            appearance="governance"
+            empty-message="当前分类没有匹配记录。调整搜索或状态；全局计数仍保留。"
+          >
+            <template #desktop>
+              <table>
+                <thead>
+                  <tr>
+                    <th>记录与版本</th>
+                    <th>组织与类型</th>
+                    <th>状态</th>
+                    <th>更新时间</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-if="!rows.length">
+                    <td class="governance-table__empty" colspan="5">
+                      <strong>当前分类没有匹配记录</strong>
+                      <span>调整搜索或状态；全局计数和来源历史仍保留。</span>
+                    </td>
+                  </tr>
+                  <tr v-for="item in rows" :key="item.id">
+                    <td>
+                      <strong>{{ item.name }}</strong>
+                      <span class="governance-version">{{ versionText(item) }}</span>
+                    </td>
+                    <td>
+                      <strong>{{ item.organization_name || "平台全局" }}</strong>
+                      <small>{{ item.workspace_name || item.stage || "—" }}</small>
+                      <small>
+                        {{
+                          typeName(
+                            item.trigger_event_type ||
+                              item.resource_type ||
+                              item.platform ||
+                              recordSection,
+                          )
+                        }}
+                      </small>
+                    </td>
+                    <td>
+                      <span class="governance-status" :data-tone="statusTone(item.status)">
+                        {{ statusName(item.status) }}
+                      </span>
+                    </td>
+                    <td>
+                      {{
+                        item.updated_at ? new Date(item.updated_at).toLocaleString("zh-CN") : "—"
+                      }}
+                    </td>
+                    <td>
+                      <div class="governance-row-actions">
+                        <button type="button" @click="selected = item">查看详情</button>
+                        <RouterLink :to="editHref(item)">
+                          {{ recordSection === "automation_rules" ? "编辑规则" : "进入工作台" }}
+                        </RouterLink>
+                      </div>
+                      <details>
+                        <summary>技术标识</summary>
+                        <code>{{ item.version_code || item.id }}</code>
+                      </details>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </template>
+            <template #summary="{ row }">
+              <span class="responsive-record-summary">
+                <strong>{{ row.name }} · {{ statusName(row.status) }}</strong>
+                <small>{{ versionText(row) }} · {{ row.organization_name || "平台全局" }}</small>
+              </span>
+            </template>
+            <template #detail="{ row }">
+              <div class="governance-mobile-detail">
+                <div class="governance-detail-lead">
+                  <small>{{ recordType.label }}</small>
+                  <span class="governance-version">{{ versionText(row) }}</span>
+                  <span class="governance-status" :data-tone="statusTone(row.status)">
+                    {{ statusName(row.status) }}
+                  </span>
+                </div>
+                <dl>
+                  <div>
+                    <dt>所属组织</dt>
+                    <dd>{{ row.organization_name || "平台全局" }}</dd>
+                  </div>
+                  <div>
+                    <dt>工作区或阶段</dt>
+                    <dd>{{ row.workspace_name || row.stage || "—" }}</dd>
+                  </div>
+                  <div>
+                    <dt>类型</dt>
+                    <dd>{{ typeName(recordSection) }}</dd>
+                  </div>
+                  <div>
+                    <dt>更新时间</dt>
+                    <dd>
+                      {{ row.updated_at ? new Date(row.updated_at).toLocaleString("zh-CN") : "—" }}
+                    </dd>
+                  </div>
+                  <div v-if="row.trigger_event_type">
+                    <dt>触发条件</dt>
+                    <dd>{{ typeName(row.trigger_event_type) }}</dd>
+                  </div>
+                  <div v-if="row.condition_severity">
+                    <dt>严重程度</dt>
+                    <dd>
+                      {{
+                        row.condition_severity === "any"
+                          ? "不限"
+                          : statusName(row.condition_severity)
+                      }}
+                    </dd>
+                  </div>
+                  <div v-if="row.action_type">
+                    <dt>执行动作</dt>
+                    <dd>{{ typeName(row.action_type) }}</dd>
+                  </div>
+                  <div v-if="row.action_title">
+                    <dt>动作标题</dt>
+                    <dd>{{ row.action_title }}</dd>
+                  </div>
+                  <div v-if="row.rate_limit_count !== undefined && row.rate_limit_count !== null">
+                    <dt>执行频率上限</dt>
+                    <dd>
+                      {{ row.rate_limit_count }} 次 / {{ row.rate_limit_window_minutes }} 分钟
+                    </dd>
+                  </div>
+                </dl>
+                <details>
+                  <summary>技术详情</summary>
+                  <dl>
+                    <div>
+                      <dt>记录 ID</dt>
+                      <dd>{{ row.id }}</dd>
+                    </div>
+                    <div v-if="row.version_code">
+                      <dt>版本代码</dt>
+                      <dd>{{ row.version_code }}</dd>
+                    </div>
+                  </dl>
+                </details>
+                <RouterLink class="governance-detail-action" :to="editHref(row)">
+                  {{ recordSection === "automation_rules" ? "进入规则编辑" : "进入所属工作台" }}
+                </RouterLink>
+              </div>
+            </template>
+          </ResponsiveDataView>
+          <footer class="governance-pagination" aria-label="治理记录分页">
+            <span>按更新时间、ID 倒序</span>
+            <nav v-if="pagination.total_pages > 1" aria-label="治理页码">
+              <button
+                type="button"
+                :disabled="refreshing || pagination.page <= 1"
+                @click="goToPage(pagination.page - 1)"
+              >
+                上一页
+              </button>
+              <span>第 {{ pagination.page }} / {{ pagination.total_pages }} 页</span>
+              <button
+                type="button"
+                :disabled="refreshing || pagination.page >= pagination.total_pages"
+                @click="goToPage(pagination.page + 1)"
+              >
+                下一页
+              </button>
+            </nav>
+          </footer>
+        </section>
+
+        <section class="governance-provider governance-provider--mobile">
+          <small>相关事实</small>
+          <h3>来源配置历史</h3>
+          <p>
+            <strong>{{ data.summary.provider_versions ?? "—" }}</strong> 个历史版本
+          </p>
+          <span>
+            最近变更：{{
+              data.provider_versions_latest_at
+                ? new Date(data.provider_versions_latest_at).toLocaleString("zh-CN")
+                : "尚未读取"
+            }}
+          </span>
+          <RouterLink to="/platform-admin/providers">进入来源版本管理</RouterLink>
+        </section>
+
+        <footer class="governance-footnote">
+          <p>跨组织查看不会绕过业务权限；编辑、启停和发布仍使用所属工作台的权限和版本锁。</p>
+          <span v-if="data.observed_at">
+            事实时间 {{ new Date(data.observed_at).toLocaleString("zh-CN") }}
+          </span>
+          <TechnicalDetails :request-id="requestId" />
+        </footer>
+      </template>
+    </div>
+
     <dialog
       ref="detailDialogElement"
       class="governance-detail"
@@ -550,6 +733,12 @@ onBeforeUnmount(() => activeController?.abort());
           </div>
           <button aria-label="关闭" @click="selected = null">×</button>
         </header>
+        <div class="governance-detail-lead">
+          <span class="governance-version">{{ versionText(selected) }}</span>
+          <span class="governance-status" :data-tone="statusTone(selected.status)">
+            {{ statusName(selected.status) }}
+          </span>
+        </div>
         <dl>
           <div>
             <dt>所属组织</dt>
@@ -560,19 +749,16 @@ onBeforeUnmount(() => activeController?.abort());
             <dd>{{ selected.workspace_name || selected.stage || "—" }}</dd>
           </div>
           <div>
-            <dt>当前状态</dt>
-            <dd>{{ statusName(selected.status) }}</dd>
-          </div>
-          <div>
-            <dt>版本</dt>
-            <dd>
-              {{ versionText(selected) }}
-            </dd>
+            <dt>类型</dt>
+            <dd>{{ typeName(recordSection) }}</dd>
           </div>
           <div v-if="selected.trigger_event_type">
             <dt>触发条件</dt>
+            <dd>{{ typeName(selected.trigger_event_type) }}</dd>
+          </div>
+          <div v-if="selected.condition_severity">
+            <dt>严重程度</dt>
             <dd>
-              {{ typeName(selected.trigger_event_type) }}，严重程度
               {{
                 selected.condition_severity === "any"
                   ? "不限"
@@ -582,9 +768,13 @@ onBeforeUnmount(() => activeController?.abort());
           </div>
           <div v-if="selected.action_type">
             <dt>执行动作</dt>
-            <dd>{{ typeName(selected.action_type) }}：{{ selected.action_title }}</dd>
+            <dd>{{ typeName(selected.action_type) }}</dd>
           </div>
-          <div v-if="selected.rate_limit_count">
+          <div v-if="selected.action_title">
+            <dt>动作标题</dt>
+            <dd>{{ selected.action_title }}</dd>
+          </div>
+          <div v-if="selected.rate_limit_count !== undefined && selected.rate_limit_count !== null">
             <dt>执行频率上限</dt>
             <dd>
               {{ selected.rate_limit_count }} 次 / {{ selected.rate_limit_window_minutes }} 分钟
@@ -614,7 +804,7 @@ onBeforeUnmount(() => activeController?.abort());
         </details>
         <footer>
           <button @click="selected = null">关闭</button
-          ><RouterLink :to="editHref(selected)">{{
+          ><RouterLink class="governance-detail-action" :to="editHref(selected)">{{
             recordSection === "automation_rules" ? "进入规则编辑" : "进入所属工作台"
           }}</RouterLink>
         </footer>
@@ -623,256 +813,4 @@ onBeforeUnmount(() => activeController?.abort());
   </section>
 </template>
 
-<style scoped>
-.platform-governance {
-  display: grid;
-  gap: 16px;
-  color: var(--so-text);
-}
-.platform-governance > header {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 22px;
-  border: 1px solid var(--so-border);
-  border-radius: 16px;
-  background: var(--so-panel);
-}
-.platform-governance p {
-  margin: 0;
-}
-.platform-governance header p {
-  color: var(--so-primary);
-  font-size: 13px;
-  font-weight: 850;
-  letter-spacing: 0.16em;
-}
-.platform-governance h2 {
-  margin: 7px 0;
-}
-.platform-governance header span,
-.platform-governance footer,
-.platform-governance small {
-  color: var(--so-text-muted);
-}
-.platform-governance a,
-.platform-governance button {
-  padding: 9px 12px;
-  border: 1px solid var(--so-border);
-  border-radius: 9px;
-  background: var(--so-panel-soft);
-  color: var(--so-text);
-  text-decoration: none;
-}
-.governance-header-actions {
-  display: flex;
-  align-self: flex-start;
-  gap: 8px;
-}
-.governance-header-actions a {
-  align-self: flex-start;
-  background: var(--so-primary-strong);
-  color: var(--so-on-primary);
-}
-.platform-governance form,
-.platform-governance nav {
-  display: flex;
-  gap: 8px;
-}
-.platform-governance input,
-.platform-governance select {
-  padding: 9px 12px;
-  border: 1px solid var(--so-border);
-  border-radius: 9px;
-  background: var(--so-panel-soft);
-  color: var(--so-text);
-}
-.platform-governance form input:first-child {
-  flex: 1;
-}
-.platform-governance form label {
-  display: grid;
-  flex: 1;
-  gap: 5px;
-  color: var(--so-text-muted);
-  font-size: var(--so-font-meta);
-}
-.platform-governance form label:nth-child(2) {
-  max-width: 220px;
-}
-.governance-filter-actions {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-}
-.platform-governance nav {
-  flex-wrap: wrap;
-}
-.platform-governance nav button[aria-current="page"] {
-  background: var(--so-primary-strong);
-  color: var(--so-on-primary);
-}
-.governance-summary {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 9px;
-}
-.governance-summary article,
-.governance-table,
-.platform-governance aside,
-.governance-state,
-.governance-notice {
-  padding: 16px;
-  border: 1px solid var(--so-border);
-  border-radius: 13px;
-  background: var(--so-panel);
-}
-.governance-summary small,
-.governance-summary strong,
-.governance-table small {
-  display: block;
-}
-.governance-summary strong {
-  margin-top: 6px;
-  font-size: 23px;
-}
-.governance-table {
-  overflow: auto;
-}
-.governance-table table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.governance-table th,
-.governance-table td {
-  padding: 11px 9px;
-  border-bottom: 1px solid var(--so-border);
-  text-align: left;
-  font-size: 13px;
-}
-.governance-table td small {
-  margin-top: 4px;
-}
-.governance-pagination {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding-top: 14px;
-  text-align: left;
-}
-.governance-pagination nav {
-  align-items: center;
-}
-.governance-table details summary,
-.platform-governance footer details summary,
-.governance-detail > section > details summary {
-  display: inline-flex;
-  min-height: var(--so-touch-target);
-  align-items: center;
-  color: var(--so-primary);
-  cursor: pointer;
-}
-.governance-table code,
-.platform-governance footer span,
-.governance-detail > section > details dd {
-  overflow-wrap: anywhere;
-}
-.platform-governance aside {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.platform-governance aside span {
-  flex: 1;
-  color: var(--so-text-muted);
-}
-.platform-governance footer {
-  text-align: right;
-  font-size: 13px;
-}
-.governance-detail {
-  position: fixed;
-  inset: 50% auto auto 50%;
-  transform: translate(-50%, -50%);
-  width: min(620px, calc(100% - 28px));
-  max-height: calc(100vh - 32px);
-  overflow: auto;
-  padding: 0;
-  border: 1px solid var(--so-border);
-  border-radius: 16px;
-  background: var(--so-bg-elevated);
-  color: var(--so-text);
-  z-index: 100;
-}
-.governance-detail section {
-  padding: 22px;
-}
-.governance-detail header,
-.governance-detail footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-}
-.governance-detail header h3 {
-  margin: 5px 0 0;
-}
-.governance-detail header button {
-  border: 0;
-  background: transparent;
-  font-size: 24px;
-}
-.governance-detail dl {
-  display: grid;
-  gap: 8px;
-  margin: 18px 0;
-}
-.governance-detail dl div {
-  display: grid;
-  grid-template-columns: 145px 1fr;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--so-border);
-}
-.governance-detail dt {
-  color: var(--so-text-muted);
-}
-.governance-detail dd {
-  margin: 0;
-}
-.governance-detail footer {
-  justify-content: flex-end;
-}
-.governance-detail footer a {
-  background: var(--so-primary-strong);
-  color: var(--so-on-primary);
-}
-@media (max-width: 760px) {
-  .platform-governance > header,
-  .platform-governance form,
-  .platform-governance aside,
-  .governance-pagination {
-    flex-direction: column;
-  }
-  .governance-header-actions,
-  .governance-filter-actions,
-  .governance-pagination nav {
-    width: 100%;
-  }
-  .governance-header-actions > *,
-  .governance-filter-actions > *,
-  .governance-pagination nav > button {
-    flex: 1;
-    text-align: center;
-  }
-  .platform-governance form label:nth-child(2) {
-    max-width: none;
-  }
-  .platform-governance form input,
-  .platform-governance form select,
-  .platform-governance form button {
-    width: 100%;
-  }
-}
-</style>
+<style src="../platform-governance.css"></style>

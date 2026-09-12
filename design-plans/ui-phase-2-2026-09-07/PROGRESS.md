@@ -1,5 +1,15 @@
 # 第二阶段实施记录
 
+## 2026-09-12 · P55治理目录真实Vue闭环
+
+从干净main/6c8ebaa6接续，依ui-skills-root选择interface-design/adapt/Vue约束，将旧PlatformGovernanceCenter的通用大标题、KPI卡片和同款表格改为深蓝五分类目录与白色版本/责任工作区。桌面表格和原生详情、手机横向目录和等价详情均保留五类真实字段与原工作台路径；筛选无结果、首次权限拒绝和保留快照失败分开呈现。共享详情和筛选只新增可选governance外观，默认调用方不变。
+
+交互补读取代次、AbortController、onDeactivated中止/清详情、onActivated返回刷新且不重写URL；等待与失败期间记录类型/版本/链接继续绑定成功快照。自动化手机与桌面均展示触发、严重度、动作和频控，`rate_limit_count=0`不再被隐藏。API、SQL、字段、权限、分页和本页只读合同未改。
+
+新增P55 23源位置→8动作组、2个v-model和5容器/6消费者变体的机器清单，局部合同校验通过；全局审计仍有既有P46/P47的64个未引用候选，不由本批掩盖。真实Vue六状态×双端=12张PNG和12份JSON进入审核；静态GOVERNANCE-C-r1固定回放main/ce50835a，避免当前实现改写历史提案。
+
+本批未部署、无需重启。真实MySQL/RBAC、目标工作台跨组织编辑、长历史、读屏/软键盘、共享NavigationShell重构、生产与用户批准待验；正式截图和JSON为交付物，Playwright失败产物在提交前清理。
+
 ## 2026-09-12 · P54证据与质量真实Vue闭环
 
 从干净main/3d297b78接续，依ui-skills-root选择interface-design/adapt/Vue约束，将旧DataQualityCenter彻底改为蓝色证据核对轨与白色三任务工作区。原始证据、规范版本、字段来源、质量问题、核对运行和七项指标保持真实边界，不合成总分或扩大平台范围。父级以active显式通知KeepAlive可见性。

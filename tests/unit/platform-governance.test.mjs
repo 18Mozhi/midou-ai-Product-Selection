@@ -85,6 +85,13 @@ test("platform governance covers rules workflows automation versions approvals r
     assert.match(repository, new RegExp(table));
   assert.match(web, /useRoute\(\)/);
   assert.match(web, /AbortController/);
+  assert.match(web, /onDeactivated\(\(\) =>/);
+  assert.match(web, /onActivated\(\(\) =>/);
+  assert.match(web, /generation !== requestGeneration/);
+  assert.match(
+    web,
+    /if \(activeController === controller\) \{\s*activeController = null;\s*refreshing\.value = false;/,
+  );
   assert.match(web, /page_size/);
   assert.match(repository, /pagination:/);
   assert.match(repository, /LIMIT \? OFFSET \?/);
