@@ -1,4 +1,7 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Locator } from "@playwright/test";
+import { capturePhase2Evidence, finalizePhase2Evidence } from "./helpers/ui-phase2-evidence";
+
+test.afterEach(async ({}, testInfo) => finalizePhase2Evidence(testInfo));
 
 const ids = {
   evidence: "00000000-0000-4000-8000-000000000a61",
@@ -114,25 +117,57 @@ async function dashboard(
     }),
   );
 }
+async function selectCurrentIssue(page: any) {
+  await page.getByRole("button", { name: "质量问题" }).click();
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await page.getByRole("button", { name: /标题准确率 · 待处理/ }).click();
+    await page.getByRole("checkbox", { name: "选择此问题用于批量处理" }).check();
+    await page.getByRole("button", { name: "关闭详情" }).last().click();
+    return;
+  }
+  await page.getByRole("checkbox", { name: "选择 标题准确率" }).check();
+}
 
-test("M03-06.A07/A08/A15 evidence quality dashboard is responsive and visual", async ({ page }) => {
+test("M03-06.A07/A08/A15 evidence quality dashboard is responsive and visual", async ({
+  page,
+}, testInfo) => {
   await nav(page);
   await dashboard(page);
   await page.goto("/platform-admin/data");
   await page.getByRole("button", { name: "证据与质量" }).click();
-  await expect(page.getByRole("heading", { name: "证据与数据质量", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "从证据，核对每个结论", level: 2 })).toBeVisible();
   await expect(page.getByText("Market Evidence").first()).toBeVisible();
+  await capturePhase2Evidence(page, testInfo, "P54", "quality-default", [
+    "原始证据、规范版本、字段来源与质量问题构成连续审计链",
+    "蓝色任务轨与白色工作区清晰分离",
+    "桌面数据表或手机摘要列表使用同一真实Vue数据",
+  ]);
   if ((page.viewportSize()?.width ?? 1000) <= 760) {
     await expect(page.getByRole("button", { name: /Market Evidence · 18.3 KB/ })).toBeVisible();
     await page.getByRole("button", { name: /Market Evidence · 18.3 KB/ }).click();
     await expect(page.getByText("4 天内到期").last()).toBeVisible();
-    await page.getByText("技术详情").click();
+    await page
+      .getByRole("dialog", { name: /Market Evidence/ })
+      .getByText("技术详情")
+      .click();
     await expect(page.getByText(ids.evidence, { exact: true })).toBeVisible();
     await page.getByRole("button", { name: "关闭详情" }).last().click();
   } else {
     await expect(page.getByText("18.3 KB", { exact: true })).toBeVisible();
     await expect(page.getByText("4 天内到期").first()).toBeVisible();
   }
+  await page.getByRole("button", { name: "质量问题" }).click();
+  await capturePhase2Evidence(page, testInfo, "P54", "quality-issues", [
+    "问题处置与证据读取分区明确",
+    "批量操作先选择问题并预览影响范围",
+    "严重级别、状态、门槛与解析版本同时可见",
+  ]);
+  await page.getByRole("button", { name: "核对运行" }).click();
+  await capturePhase2Evidence(page, testInfo, "P54", "quality-runs", [
+    "核对批次展示样本量、指标门槛与通过状态",
+    "批次可以下钻异常字段、样本和解析版本",
+    "批次视图不与质量处置表单混排",
+  ]);
 });
 test("data quality run drills into affected fields, samples and parser version", async ({
   page,
@@ -191,7 +226,7 @@ test("M02-01 semantic roles keep data quality readable in every theme", async ({
 });
 test("M03-06.A08/A09/A15 evidence lineage and confirmed issue resolution preserve history", async ({
   page,
-}) => {
+}, testInfo) => {
   await nav(page);
   await dashboard(page);
   await page.route(`**/api/v1/platform/data/evidence/${ids.evidence}`, (route) =>
@@ -248,6 +283,11 @@ test("M03-06.A08/A09/A15 evidence lineage and confirmed issue resolution preserv
     await page.getByRole("button", { name: "读取完整溯源" }).click();
   } else await page.getByRole("button", { name: "详情" }).click();
   await expect(page.getByText("$.title · copy-v1")).toBeVisible();
+  await capturePhase2Evidence(page, testInfo, "P54", "quality-lineage", [
+    "原始证据、规范记录、字段来源和质量问题在同一原生模态中分段展示",
+    "完整溯源保留请求和追踪标识",
+    "关闭后键盘焦点返回触发入口",
+  ]);
   await page.getByRole("button", { name: "关闭证据详情" }).click();
   await page.getByRole("button", { name: "质量问题" }).click();
   if ((page.viewportSize()?.width ?? 1000) <= 760) {
@@ -259,6 +299,11 @@ test("M03-06.A08/A09/A15 evidence lineage and confirmed issue resolution preserv
     .fill("已按原文重新核对标题字段");
   await page.getByRole("button", { name: "确认前检查" }).click();
   await page.getByPlaceholder("确认解决").fill("确认解决");
+  await capturePhase2Evidence(page, testInfo, "P54", "quality-resolve-confirm", [
+    "解决原因在当前问题上下文中填写",
+    "提交前再次展示不可改写历史的后果说明",
+    "逐字确认与取消操作均在焦点约束内",
+  ]);
   await page.getByRole("button", { name: "确认解决" }).click();
   await expect.poll(() => resolved).toBe(true);
 });
@@ -309,4 +354,211 @@ test("M03-06.A08/A16 empty forbidden and dependency states are truthful", async 
   await page.reload();
   await page.getByRole("button", { name: "证据与质量" }).click();
   await expect(page.locator('[data-kind="blocked"]')).toBeVisible();
+});
+
+test("UI2-P54 preserves the quality search workspace while switching data views", async ({
+  page,
+}) => {
+  await nav(page);
+  await dashboard(page);
+  await page.goto("/platform-admin/data");
+  await page.getByRole("button", { name: "证据与质量" }).click();
+  const search = page.getByRole("textbox", { name: "搜索证据与质量" });
+  await search.fill("Market Evidence");
+  await search.press("Tab");
+  await expect(page).toHaveURL(/quality_q=Market(?:\+|%20)Evidence/);
+  await page.getByRole("button", { name: "近期记录" }).click();
+  await page.getByRole("button", { name: "证据与质量" }).click();
+  await expect(search).toHaveValue("Market Evidence");
+  await expect(page).toHaveURL(/quality_q=Market(?:\+|%20)Evidence/);
+});
+
+test("UI2-P54 evidence lineage uses a native modal and returns keyboard focus", async ({
+  page,
+}) => {
+  await nav(page);
+  await dashboard(page);
+  await page.route(`**/api/v1/platform/data/evidence/${ids.evidence}`, (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        data: {
+          evidence,
+          normalized_records: [],
+          field_provenance: [],
+          quality_issues: [issue],
+        },
+        request_id: "ui2-quality-detail",
+        trace_id: "ui2-quality-detail",
+      }),
+    }),
+  );
+  await page.goto("/platform-admin/data");
+  await page.getByRole("button", { name: "证据与质量" }).click();
+  let returnTarget: Locator;
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    returnTarget = page.getByRole("button", { name: /Market Evidence · 18.3 KB/ });
+    await returnTarget.click();
+    await page.getByRole("button", { name: "读取完整溯源" }).click();
+  } else {
+    returnTarget = page.getByRole("button", { name: "详情" });
+    await returnTarget.click();
+  }
+  const dialog = page.getByRole("dialog", { name: "证据完整溯源" });
+  await expect(dialog).toBeVisible();
+  await expect(page.getByRole("button", { name: "关闭证据详情" })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(returnTarget).toBeFocused();
+});
+
+test("UI2-P54 freezes the reviewed batch scope before the typed confirmation", async ({
+  page,
+}, testInfo) => {
+  await nav(page);
+  await dashboard(page, {
+    evidence: [evidence],
+    issues: [issue],
+    reconciliationRuns: [run],
+    memberOptions: [],
+    totalEvidence: 1,
+    totalIssues: 1,
+    observedAt: "2026-09-02T12:00:00.000Z",
+  });
+  let submitted: any = null;
+  await page.route("**/api/v1/platform/data-quality/issues/batch", async (route) => {
+    submitted = route.request().postDataJSON();
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        data: [{ ...issue, status: "resolved", version: 2 }],
+        request_id: "ui2-quality-batch",
+        trace_id: "ui2-quality-batch",
+      }),
+    });
+  });
+  await page.goto("/platform-admin/data");
+  await page.getByRole("button", { name: "证据与质量" }).click();
+  await selectCurrentIssue(page);
+  await page.getByPlaceholder("说明归因、指派或关闭依据").fill("核对来源后记录归因");
+  await page.getByRole("button", { name: "预览影响范围" }).click();
+  await capturePhase2Evidence(page, testInfo, "P54", "quality-batch-confirm", [
+    "批量处置先冻结动作、对象版本、原因和影响范围",
+    "确认层展示已审阅范围而非读取可变表单值",
+    "逐字确认前不会提交写操作",
+  ]);
+  await page.evaluate(() => {
+    const action = document.querySelector<HTMLSelectElement>(".quality-batch-toolbar select");
+    const reason = document.querySelector<HTMLInputElement>(
+      '.quality-batch-toolbar input[placeholder="说明归因、指派或关闭依据"]',
+    );
+    if (!action || !reason) throw new Error("batch controls missing");
+    action.value = "close";
+    action.dispatchEvent(new Event("change", { bubbles: true }));
+    reason.value = "确认后发生的界面变化";
+    reason.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await page.getByPlaceholder("确认处理").fill("确认处理");
+  await page.getByRole("button", { name: "确认批量处理" }).click();
+  await expect.poll(() => submitted).not.toBeNull();
+  expect(submitted).toEqual({
+    items: [{ id: ids.issue, expected_version: 1 }],
+    action: "attribute",
+    reason: "核对来源后记录归因",
+    assignee_membership_id: null,
+  });
+});
+
+test("UI2-P54 keeps write success separate when the following quality reload fails", async ({
+  page,
+}) => {
+  await nav(page);
+  let reads = 0;
+  await page.route("**/api/v1/platform/data-quality?**", (route) => {
+    reads += 1;
+    if (reads === 1)
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          data: {
+            evidence: [evidence],
+            issues: [issue],
+            reconciliationRuns: [run],
+            totalEvidence: 1,
+            totalIssues: 1,
+            observedAt: "2026-09-02T12:00:00.000Z",
+          },
+          request_id: "ui2-quality-first-read",
+          trace_id: "ui2-quality-first-read",
+        }),
+      });
+    return route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({
+        error: {
+          code: "dependency_unavailable",
+          message: "刷新失败",
+          action_hint: "质量问题已处理，但最新列表暂时无法读取。",
+        },
+        request_id: "ui2-quality-reload-failed",
+        trace_id: "ui2-quality-reload-failed",
+      }),
+    });
+  });
+  await page.route(`**/api/v1/platform/data-quality/issues/${ids.issue}/resolve`, (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        data: { ...issue, status: "resolved", version: 2 },
+        request_id: "ui2-quality-resolved",
+        trace_id: "ui2-quality-resolved",
+      }),
+    }),
+  );
+  await page.goto("/platform-admin/data");
+  await page.getByRole("button", { name: "证据与质量" }).click();
+  await selectCurrentIssue(page);
+  if ((page.viewportSize()?.width ?? 1000) <= 760) {
+    await page.getByRole("button", { name: /标题准确率 · 待处理/ }).click();
+    await page.getByRole("button", { name: "记录解决" }).click();
+  } else await page.getByRole("button", { name: "记录解决" }).click();
+  await page.getByPlaceholder("说明修复方式与验证依据（2–500 字）").fill("重新核对原始标题");
+  await page.getByRole("button", { name: "确认前检查" }).click();
+  await page.getByPlaceholder("确认解决").fill("确认解决");
+  await page.getByRole("button", { name: "确认解决" }).click();
+  await expect(page.getByText(/已记录解决原因。原始证据和历史核对未被改写/)).toBeVisible();
+  await expect(page.getByText("质量问题已处理，但最新列表暂时无法读取。")).toBeVisible();
+});
+
+test("UI2-P54 blocks a repeated batch write after an unknown result until a successful read", async ({
+  page,
+}, testInfo) => {
+  await nav(page);
+  await dashboard(page);
+  await page.route("**/api/v1/platform/data-quality/issues/batch", (route) =>
+    route.abort("failed"),
+  );
+  await page.goto("/platform-admin/data");
+  await page.getByRole("button", { name: "证据与质量" }).click();
+  await selectCurrentIssue(page);
+  await page.getByPlaceholder("说明归因、指派或关闭依据").fill("核对来源后记录归因");
+  const preview = page.getByRole("button", { name: "预览影响范围" });
+  await preview.click();
+  await page.getByPlaceholder("确认处理").fill("确认处理");
+  await page.getByRole("button", { name: "确认批量处理" }).click();
+  await expect(page.getByText(/批量处理结果未知/)).toBeVisible();
+  await expect(preview).toBeDisabled();
+  await capturePhase2Evidence(page, testInfo, "P54", "quality-batch-unknown", [
+    "无HTTP结果时明确标记操作结果未知",
+    "同一快照禁止再次预览和重复提交",
+    "仅成功重新读取后解除未知结果锁定",
+  ]);
+  await page.getByRole("button", { name: "刷新读取" }).click();
+  await selectCurrentIssue(page);
+  await expect(preview).toBeEnabled();
 });

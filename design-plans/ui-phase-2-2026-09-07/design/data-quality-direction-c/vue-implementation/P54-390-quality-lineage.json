@@ -3,24 +3,27 @@
   "testStatus": "passed",
   "kind": "vue-existing-e2e-fixture-baseline-not-production",
   "pageId": "P54",
-  "state": "records-default",
+  "state": "quality-lineage",
   "concretePath": "/platform-admin/data",
   "viewport": {
     "width": 390,
     "height": 844
   },
   "fullPage": false,
-  "file": "design/data-records-direction-c/vue-implementation/P54-390-records-default.png",
-  "sha256": "24ab1cb208e39dd2c0bbeb535bf8c848f7b7cbcf66207d18f6e24a6cbb31a98f",
+  "file": "design/data-quality-direction-c/vue-implementation/P54-390-quality-lineage.png",
+  "sha256": "50d360773bfb752ca50a87ce28d22c183b247023f96064f32d8461f665e36ee6",
   "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
   "sourceRevision": "4b835881c081af808713c76af323d866993f44c9",
-  "testFile": "tests/e2e/m06-02-platform-dashboard.spec.ts",
-  "testFileSha256": "ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0",
+  "testFile": "tests/e2e/m03-06-evidence-data-quality.spec.ts",
+  "testFileSha256": "88f67bd991684fe5bc3d6c8adbea9df78501d755b9bc173beb2db60ed253635d",
   "captureHelperSha256": "5f670cf78ceba74e3d643825d9043542e58979ad296a561f24989f79aea65dc4",
   "sourceFiles": {
     "apps/web/src/components/PlatformDataCenter.vue": "73f961e34f708defa5ab73cf2e03c349e8b58e8369a399ca80cbb98ad15d8b5f",
+    "apps/web/src/components/DataQualityCenter.vue": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
     "apps/web/src/components/ResponsiveDataView.vue": "52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c",
-    "apps/web/src/components/AuditedReasonDialog.vue": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a"
+    "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
+    "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
+    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc"
   },
   "stylesheets": {
     "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
@@ -101,14 +104,14 @@
     "apps/web/src/trends-quality.css": "c6b37c674ecaa123a2ab72b027ee5a8aca90b9d7d5916bbfe52fba0705cbeac9",
     "apps/web/src/trends.css": "9dbec248cab8a4f50e7d43b4b11958f30f59575230d058891e49649c6b931b25"
   },
-  "testTitle": "UI2-P54 locks record scope during export and blocks repeat after an unknown result",
+  "testTitle": "M03-06.A08/A09/A15 evidence lineage and confirmed issue resolution preserve history",
   "browser": "chromium",
   "os": "win32",
-  "capturedAt": "2026-09-12T00:45:06.644Z",
+  "capturedAt": "2026-09-12T00:44:19.478Z",
   "assertions": [
-    "C方向蓝色类型目录与白色记录工作面可见",
-    "当前快照、筛选范围与最近100条说明彼此分开",
-    "真实Vue桌面表格或手机摘要卡已渲染"
+    "原始证据、规范记录、字段来源和质量问题在同一原生模态中分段展示",
+    "完整溯源保留请求和追踪标识",
+    "关闭后键盘焦点返回触发入口"
   ],
   "controls": [
     {
@@ -209,37 +212,43 @@
     },
     {
       "tag": "button",
-      "name": "热点",
+      "name": "刷新读取",
       "disabled": false,
       "insideDialog": false
     },
     {
       "tag": "button",
-      "name": "机会",
+      "name": "证据",
       "disabled": false,
       "insideDialog": false
     },
     {
       "tag": "button",
-      "name": "竞品",
+      "name": "质量问题",
       "disabled": false,
       "insideDialog": false
     },
     {
       "tag": "button",
-      "name": "供应商",
+      "name": "核对运行",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "input",
+      "name": "搜索证据与质量",
       "disabled": false,
       "insideDialog": false
     },
     {
       "tag": "button",
-      "name": "筛选近期数据调",
-      "disabled": false,
+      "name": "清除搜索",
+      "disabled": true,
       "insideDialog": false
     },
     {
       "tag": "button",
-      "name": "导出范围热点 · 展示中测试组织 · 测试工作区查看详情",
+      "name": "Market Evidence · 18.3 KBapplication/json · 08/07 20:00查看详情",
       "disabled": false,
       "insideDialog": false
     },
@@ -254,6 +263,18 @@
       "name": "下一页",
       "disabled": true,
       "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "关闭证据详情",
+      "disabled": false,
+      "insideDialog": true
+    },
+    {
+      "tag": "summary",
+      "name": "技术标识",
+      "disabled": false,
+      "insideDialog": true
     },
     {
       "tag": "summary",

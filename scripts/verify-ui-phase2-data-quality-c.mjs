@@ -35,33 +35,53 @@ const contracts = [...contract.matchAll(/^\| ([^|]+?) \| ([a-f0-9]{64}) \|\r?$/g
 assert.equal(contracts.length, 25);
 const contractRebindings = [
   {
-    file: "tests/e2e/m06-02-platform-dashboard.spec.ts",
-    old: "dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66",
-    current: "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-    commit: "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
-    reason: "Audited reason dialog focus-test additions; historical table retained.",
+    file: "apps/web/src/components/PlatformDataCenter.vue",
+    old: "10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4",
+    current: "73f961e34f708defa5ab73cf2e03c349e8b58e8369a399ca80cbb98ad15d8b5f",
+    baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
+    reason: "Quality workspace activation is explicit while the historical proposal stays frozen.",
+  },
+  {
+    file: "apps/web/src/components/DataQualityCenter.vue",
+    old: "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+    current: "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+    baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
+    reason: "The C direction now runs in Vue; the original proposal source remains reproducible.",
+  },
+  {
+    file: "tests/e2e/m03-06-evidence-data-quality.spec.ts",
+    old: "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
+    current: "88f67bd991684fe5bc3d6c8adbea9df78501d755b9bc173beb2db60ed253635d",
+    baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
+    reason: "Current interaction and evidence tests are additive to the frozen proposal fixture.",
   },
 ];
-for (const [, f, h] of contracts) {
+for (const [, rawFile, h] of contracts) {
+  const f = rawFile.trim();
   const binding = contractRebindings.find((v) => v.file === f);
   if (binding) {
     assert.equal(h, binding.old);
+    const beforeRevision = binding.baseline ?? `${binding.commit}^`;
     assert.equal(
       hash(
         lf(
-          execFileSync("git", ["show", `${binding.commit}^:${f}`], { cwd: repo, encoding: "utf8" }),
+          execFileSync("git", ["show", `${beforeRevision}:${f}`], { cwd: repo, encoding: "utf8" }),
         ),
       ),
       binding.old,
     );
-    assert.equal(
-      hash(
-        lf(
-          execFileSync("git", ["show", `${binding.commit}:${f}`], { cwd: repo, encoding: "utf8" }),
+    if (binding.commit)
+      assert.equal(
+        hash(
+          lf(
+            execFileSync("git", ["show", `${binding.commit}:${f}`], {
+              cwd: repo,
+              encoding: "utf8",
+            }),
+          ),
         ),
-      ),
-      binding.current,
-    );
+        binding.current,
+      );
   }
   assert.equal(
     hash(lf(await readFile(path.join(repo, f), "utf8"))),
@@ -79,9 +99,25 @@ const sourcePaths = [
     (f) => relative + "/" + f,
   ),
 ];
+const historicalProposalSources = new Set([
+  "apps/web/src/components/DataQualityCenter.vue",
+  "tests/e2e/m03-06-evidence-data-quality.spec.ts",
+]);
 const sourceHashes = Object.fromEntries(
   await Promise.all(
-    sourcePaths.map(async (f) => [f, hash(lf(await readFile(path.join(repo, f), "utf8")))]),
+    sourcePaths.map(async (f) => [
+      f,
+      hash(
+        lf(
+          historicalProposalSources.has(f)
+            ? execFileSync("git", ["show", `3d297b78d6e26abe803a10bd1a688fc4254d38bb:${f}`], {
+                cwd: repo,
+                encoding: "utf8",
+              })
+            : await readFile(path.join(repo, f), "utf8"),
+        ),
+      ),
+    ]),
   ),
 );
 if (!capture) {
@@ -367,7 +403,10 @@ try {
     );
   }
   assert.deepEqual(
-    (await readdir(root)).sort(),
+    (await readdir(root, { withFileTypes: true }))
+      .filter((entry) => entry.isFile())
+      .map((entry) => entry.name)
+      .sort(),
     [
       ...expected,
       "index.html",

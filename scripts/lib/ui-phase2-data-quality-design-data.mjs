@@ -1,11 +1,13 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
 import vm from "node:vm";
 import ts from "typescript";
 
 // Inert source execution: no Vue mount, HTTP, database, file download or authorization grant.
 export async function buildDataQualityDesignData(repo) {
+  const proposalRevision = "3d297b78d6e26abe803a10bd1a688fc4254d38bb";
   const sourcePaths = [
     "apps/web/src/components/DataQualityCenter.vue",
     "apps/web/src/components/ConfirmDialog.vue",
@@ -14,7 +16,16 @@ export async function buildDataQualityDesignData(repo) {
     "apps/api/src/mysql-data-quality-repository.ts",
     "tests/e2e/m03-06-evidence-data-quality.spec.ts",
   ];
-  const read = (p) => readFile(path.join(repo, p), "utf8");
+  const historicalSources = new Set([sourcePaths[0], sourcePaths[5]]);
+  const read = (p) =>
+    historicalSources.has(p)
+      ? Promise.resolve(
+          execFileSync("git", ["show", `${proposalRevision}:${p}`], {
+            cwd: repo,
+            encoding: "utf8",
+          }),
+        )
+      : readFile(path.join(repo, p), "utf8");
   const parse = (s) => ts.createSourceFile("source.ts", s, ts.ScriptTarget.Latest, true);
   const compile = (s) =>
     ts.transpileModule(s, {

@@ -1,5 +1,7 @@
 # B2a · 数据中心与治理目录事实合同
 
+2026-09-12 P54证据质量实现追加：[P54-证据与质量交互实现](P54-QUALITY-INTERACTION-IMPLEMENTATION.md)将蓝色核对路径、白色三任务工作区、原生溯源/原因窗、手机等价选择、冻结批处理、下载单飞、独立写入/重读反馈和未知结果防重装入真实Vue。质量动作清单按当前源码重绑为39个候选；连同近期记录共58个源位置/18语义组，7个v-model、9容器/14消费者变体。双端20项夹具回归和14张当前Vue图已生成；真实DB/RBAC/文件/审计/生产及用户批准仍待验。
+
 2026-09-11 共享复制增量：TechnicalDetails 的哈希行已更新为当前实现；其余历史描述不扩大为最新验收。复制拒绝现有就地反馈、重试和迟到结果隔离，见 [共享复制反馈复核](TECHNICAL-COPY-FEEDBACK-REVIEW.md)。无 API、权限或复制内容调整。
 
 2026-09-12 P54近期记录实现追加：[P54-近期记录交互实现](P54-RECORDS-INTERACTION-IMPLEMENTATION.md)将 C 方向装入真实 Vue，包含蓝色四类目录、白色筛选/快照/记录面、桌面与手机共用详情、同路由历史恢复、质量工作态保留、读取代际隔离、KeepAlive 中止与导出未知结果锁。新增三组场景在桌面/手机均通过，共6项；实际 Vue 双端图与未知结果图进入审核。API、字段、权限、SQL和数据质量内部实现未改，真实CSV、审计、生产与用户批准仍待验。
@@ -50,12 +52,14 @@ api-client仅GET/HEAD对安全状态/网络失败最多三次读取，非GET不�
 | P54近期、证据、问题；P55治理 | ResponsiveDataView；移动摘要按钮→记录抽屉，关闭/遮罩/Escape及焦点返回                          | 四种调用场景不能以一次共享测试替代；Tab圈定缺口单列                                       |
 | 四种表格                     | TableViewControls；列设置summary、各列checkbox、至少保留一列、冻结首个可见列、standard/compact | 分类切换后列标签及显隐/冻结状态；本地组件状态不是全局偏好持久化                           |
 | P54导出                      | askExportReason + AuditedReasonDialog原生dialog；textarea、取消/关闭/Escape、2–300校验、submit | 原因输入初焦点、边界、处理中、失败、未知结果及下载文件归属；真实服务幂等与CSV内容仍需验收 |
-| P54单问题/批处理             | 两个ConfirmDialog；输入确认解决/确认处理、取消/遮罩/Escape/确认                                | 单问题表单和批量选择是不同消费者；busy未传入确认组件，不能声称全部防重通过                |
-| P54证据详情/解决原因         | 内嵌aside，不是modal；关闭、字段/血缘阅读、原因预检查                                          | 详情焦点/可发现性、迟到请求、表单关闭与写入反馈，不能套用useModalDialog自动通过           |
+| P54单问题/批处理             | 两个ConfirmDialog；输入确认解决/确认处理、取消/遮罩/Escape/确认，并接收busy与就地失败状态      | 单问题表单和批量选择是不同消费者；本地夹具通过不替代真实幂等、权限、事务与审计            |
+| P54证据详情/解决原因         | 两个原生dialog/useModalDialog；完整溯源与原因预检分开，移动抽屉关闭后再交接焦点                | 详情代次/取消/返焦已有双端回归；真实字段来源、权限、文件和写入并发仍需独立验收            |
 | P55桌面详情                  | 原生dialog/useModalDialog，selected来自当前行；两个关闭按钮、Escape、技术展开、所属工作台      | 行类型/版本/链接随原快照；移动另用共享抽屉，两者特有字段是否等价另验                      |
 | P54/P55页尾                  | TechnicalDetails的summary与复制请求编号按钮                                                    | Clipboard失败、读屏名、长ID换行及离开后的反馈；不是业务下载或原文复制                     |
 
 ## 4. 本批复现、修复与未验范围
+
+P54质量当前实现为读取与详情各自使用代次/AbortController，KeepAlive停用中止GET；完整溯源和原因表单为原生模态。批量预览冻结对象/版本/动作/原因/成员，单问题和批量确认均在saving期间锁定；下载按证据单飞。无HTTP结果保留未知锁，只有成功重读解除；写成功和随后重读失败分开播报。上述已有桌面/手机fixture回归，但不证明真实数据库、文件、权限、审计或生产行为。
 
 UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信号/来源表头；UI2-DG55：在旧评分成功后挂起自动化读取，原生详情无法继续显示revision=2。原始两个桌面定向用例都在目标断言处失败；不是改测数据或只验源字符串。修复后还验证404失败保留原解释/链接、重新读取成功切换新类型/版本；404避免共享GET重试干扰。
 
@@ -108,37 +112,49 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 
 ### DataQualityCenter
 
-文件：`apps/web/src/components/DataQualityCenter.vue`；候选27项。
+文件：`apps/web/src/components/DataQualityCenter.vue`；候选39项。
 
-| 源签名.序号        | 行  | 类型                  | 语义归属                        |
-| ------------------ | --- | --------------------- | ------------------------------- |
-| 25af292333a00121.1 | 450 | event-binding         | Q54-LOAD · 状态重试             |
-| 962cb06e44ff9bc9.1 | 511 | control               | Q54-TAB · 证据                  |
-| 30e8ea79455855f2.1 | 516 | control               | Q54-TAB · 问题                  |
-| 65223b82b82a6bdf.1 | 521 | control               | Q54-TAB · 核对运行              |
-| 7bd92702b23c9693.1 | 572 | control               | Q54-EVIDENCE · 桌面证据详情     |
-| ae9bd960542d86e4.1 | 573 | control               | Q54-DOWNLOAD · 桌面授权下载     |
-| 57c01717dbdca94f.1 | 611 | control               | Q54-EVIDENCE · 移动完整溯源     |
-| 1314e818824ce060.1 | 620 | control               | Q54-DOWNLOAD · 移动授权下载     |
-| 1c008f867673db60.1 | 623 | control               | Q54-TECH · 证据标识             |
-| f2fe7b9e26309877.1 | 662 | control               | Q54-RUN · 返回全部问题          |
-| e1512e639fd3f6dc.1 | 694 | control               | Q54-BATCH · 影响预览            |
-| 72968bdd17422980.1 | 721 | event-binding         | Q54-SELECT · 开放问题checkbox   |
-| 232fadd70e14fb44.1 | 754 | control               | Q54-EVIDENCE · 问题关联证据     |
-| 4feb3476c1a70841.1 | 761 | control               | Q54-RESOLVE · 桌面解决表单      |
-| b4391f4667c57834.1 | 831 | control               | Q54-EVIDENCE · 移动关联证据     |
-| eaff8a0f18b4cd6c.1 | 842 | control               | Q54-RESOLVE · 移动解决表单      |
-| 1c008f867673db60.2 | 853 | control               | Q54-TECH · 问题标识             |
-| 6b65e8ff40f32c66.1 | 883 | control               | Q54-RUN · 异常字段样本下钻      |
-| 6318a60e090bab69.1 | 893 | control               | Q54-PAGE · 上一页               |
-| 36fa4dddd2d51dd7.1 | 897 | control               | Q54-PAGE · 下一页               |
-| 1052dd42c6994868.1 | 912 | control               | Q54-EVIDENCE · 关闭完整溯源     |
-| 87db0311c644aa85.1 | 953 | control               | Q54-RESOLVE · 关闭原因表单      |
-| e4b44826587c4dcd.1 | 963 | control               | Q54-RESOLVE · 确认前检查        |
-| d9a4caa16a647610.1 | 967 | event-binding         | Q54-RESOLVE · 确认/取消事件     |
-| a2e5b3b777187bdd.1 | 967 | dialog-component-call | Q54-RESOLVE · ConfirmDialog调用 |
-| 80aac8ff27852b4d.1 | 977 | event-binding         | Q54-BATCH · 确认/取消事件       |
-| d8aabe3a13b05163.1 | 977 | dialog-component-call | Q54-BATCH · ConfirmDialog调用   |
+| 源签名.序号        | 行   | 类型                  | 语义归属                        |
+| ------------------ | ---- | --------------------- | ------------------------------- |
+| 15912fa115381d2d.1 | 769  | event-binding         | Q54-LOAD · 首次状态恢复         |
+| 0c3266c5e4ec717f.1 | 841  | control               | Q54-LOAD · 工作区刷新           |
+| 3c02110a0877635d.1 | 851  | control               | Q54-TAB · 证据                  |
+| b2556958fd8ef037.1 | 857  | control               | Q54-TAB · 质量问题              |
+| aa2356189420d59b.1 | 863  | control               | Q54-TAB · 核对运行              |
+| 50981bed37222bb6.1 | 889  | event-binding         | Q54-SEARCH · 检索变更同步       |
+| 2310ecf26c0ac332.1 | 896  | control               | Q54-SEARCH · 清除检索           |
+| c56baf2a56445da0.1 | 946  | control               | Q54-EVIDENCE · 桌面完整溯源     |
+| 5443375c8e9e7547.1 | 948  | control               | Q54-DOWNLOAD · 桌面受控下载     |
+| 0703818483f3ea40.1 | 1003 | control               | Q54-EVIDENCE · 移动完整溯源     |
+| 203fccdcb63ff0e1.1 | 1006 | control               | Q54-DOWNLOAD · 移动受控下载     |
+| 1c008f867673db60.1 | 1019 | control               | Q54-TECH · 证据标识             |
+| f2fe7b9e26309877.1 | 1062 | control               | Q54-RUN · 返回全部问题          |
+| 91f486fb0dc95d45.1 | 1076 | control               | Q54-SELECT · 清除选择           |
+| c0a8ac3c192bbfe4.1 | 1106 | control               | Q54-BATCH · 影响预览            |
+| 89c4ebef359431bf.1 | 1141 | event-binding         | Q54-SELECT · 桌面问题选择       |
+| 1abe71571b4dfe5d.1 | 1179 | control               | Q54-EVIDENCE · 桌面关联证据     |
+| eb0caf70507d0ae7.1 | 1187 | control               | Q54-RESOLVE · 桌面解决表单      |
+| a59648cf951ee036.1 | 1221 | event-binding         | Q54-SELECT · 移动问题选择       |
+| c8ae47474adb97d3.1 | 1279 | control               | Q54-EVIDENCE · 移动关联证据     |
+| 37daad70b2e75d59.1 | 1287 | control               | Q54-RESOLVE · 移动解决表单      |
+| 1c008f867673db60.2 | 1298 | control               | Q54-TECH · 问题标识             |
+| 6b65e8ff40f32c66.1 | 1328 | control               | Q54-RUN · 异常字段样本下钻      |
+| 6318a60e090bab69.1 | 1338 | control               | Q54-PAGE · 上一页               |
+| 36fa4dddd2d51dd7.1 | 1342 | control               | Q54-PAGE · 下一页               |
+| 2c714917657e61eb.1 | 1351 | dialog-definition     | Q54-EVIDENCE · 完整溯源原生窗   |
+| 4b8b7c1b554343b3.1 | 1351 | event-binding         | Q54-EVIDENCE · 完整溯源取消     |
+| 8a6a073e931655a9.1 | 1364 | control               | Q54-EVIDENCE · 关闭完整溯源     |
+| 2fa1de5ac75409c9.1 | 1375 | control               | Q54-EVIDENCE · 失败后重读       |
+| 495e04b542eaa8d6.1 | 1435 | control               | Q54-TECH · 溯源技术标识         |
+| bfa0dacb9030e23d.1 | 1457 | dialog-definition     | Q54-RESOLVE · 原因原生窗        |
+| f662156f502d2ebe.1 | 1457 | event-binding         | Q54-RESOLVE · 原因窗取消        |
+| 9c1ba8320560a191.1 | 1470 | control               | Q54-RESOLVE · 顶部关闭原因窗    |
+| 2798723322952c96.1 | 1506 | control               | Q54-RESOLVE · 底部取消原因窗    |
+| cb0cfd08fa44e9c8.1 | 1507 | control               | Q54-RESOLVE · 确认前检查        |
+| d3df84c3780de261.1 | 1522 | event-binding         | Q54-RESOLVE · 确认/取消事件     |
+| 5a462ae4421ffff4.1 | 1522 | dialog-component-call | Q54-RESOLVE · ConfirmDialog调用 |
+| d0581b00f2b934eb.1 | 1536 | event-binding         | Q54-BATCH · 确认/取消事件       |
+| 05d2e10fd98621ac.1 | 1536 | dialog-component-call | Q54-BATCH · ConfirmDialog调用   |
 
 字段绑定：
 

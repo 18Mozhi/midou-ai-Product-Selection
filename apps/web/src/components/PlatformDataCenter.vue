@@ -745,7 +745,7 @@ onActivated(() => {
     </div>
 
     <div v-if="qualityVisited" v-show="tab === 'quality'" class="platform-data-quality-pane">
-      <DataQualityCenter :api-base-url="apiBaseUrl" />
+      <DataQualityCenter :api-base-url="apiBaseUrl" :active="tab === 'quality'" />
     </div>
     <AuditedReasonDialog
       :open="exportReasonOpen"

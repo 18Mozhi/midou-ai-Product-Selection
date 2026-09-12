@@ -2,23 +2,37 @@
   "proposal": "DATA-QUALITY-C-r1",
   "contractRebindings": [
     {
-      "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
-      "old": "dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66",
-      "current": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-      "commit": "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
-      "reason": "Audited reason dialog focus-test additions; historical table retained."
+      "file": "apps/web/src/components/PlatformDataCenter.vue",
+      "old": "10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4",
+      "current": "73f961e34f708defa5ab73cf2e03c349e8b58e8369a399ca80cbb98ad15d8b5f",
+      "baseline": "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
+      "reason": "Quality workspace activation is explicit while the historical proposal stays frozen."
+    },
+    {
+      "file": "apps/web/src/components/DataQualityCenter.vue",
+      "old": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+      "current": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+      "baseline": "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
+      "reason": "The C direction now runs in Vue; the original proposal source remains reproducible."
+    },
+    {
+      "file": "tests/e2e/m03-06-evidence-data-quality.spec.ts",
+      "old": "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
+      "current": "88f67bd991684fe5bc3d6c8adbea9df78501d755b9bc173beb2db60ed253635d",
+      "baseline": "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
+      "reason": "Current interaction and evidence tests are additive to the frozen proposal fixture."
     }
   ],
   "sourceHashes": {
-    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "86e109870bed9731f32a5beae9a5f8a316d31dcb5c5b163681e8523a8b79fde8",
     "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
-    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+    "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
     "apps/api/src/data-quality-service.ts": "39bcb82436d7b520e4597bbe8e1bc8e2930e260f564050cd17790c943659a6fc",
     "apps/api/src/data-quality-routes.ts": "b937aae166ac5f0993b967643dc18e68eef8c2422123aa15cf6ea78e3e3d806c",
     "apps/api/src/mysql-data-quality-repository.ts": "43e62fdd3a08b3866a66c1e4e7d6c528365edbf2db72716d596e91323b414cd2",
     "tests/e2e/m03-06-evidence-data-quality.spec.ts": "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
-    "scripts/lib/ui-phase2-data-quality-design-data.mjs": "91fdcbbadc6f12c20f8d6ebea9f72b7dee390ccca618324d0e0c4b709157462a",
-    "scripts/verify-ui-phase2-data-quality-c.mjs": "5ecc5635ec030d6e1000145b0f2e5e99283fb9d7e4a0a87444eea3caad24ed66",
+    "scripts/lib/ui-phase2-data-quality-design-data.mjs": "cc334c54de7a2ea1cba48898bd572b5385add437e09f90cbb644f9bf8ebdfc1f",
+    "scripts/verify-ui-phase2-data-quality-c.mjs": "a5022038047c8914578a74310af96cbe4063229dbf72a81f0f3d82a6056fb8ae",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/index.html": "2af5828081d89f747203e122b29304a0546b7425043ae058593ec6cf6f13e353",
     "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.css": "107e3760b83961d388dfe03a72d77a436b7f8794e10353ef1d9f5e71f2d14b78",

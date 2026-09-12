@@ -5,12 +5,13 @@
   "status": "source-reviewed-not-user-approved",
   "contract": "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformDataCenter.vue": "10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4",
-    "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c"
+    "apps/web/src/components/PlatformDataCenter.vue": "73f961e34f708defa5ab73cf2e03c349e8b58e8369a399ca80cbb98ad15d8b5f",
+    "apps/web/src/components/DataQualityCenter.vue": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120"
   },
   "implementationSourceHashes": {
     "tests/e2e/m06-02-platform-dashboard.spec.ts": "ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0",
-    "tests/e2e/helpers/ui-phase2-evidence.ts": "9a53ef21ce0ffa1d716489da32aaab4a7fbdeef0a8781a335b90bd60343daa67"
+    "tests/e2e/helpers/ui-phase2-evidence.ts": "5f670cf78ceba74e3d643825d9043542e58979ad296a561f24989f79aea65dc4",
+    "tests/e2e/m03-06-evidence-data-quality.spec.ts": "88f67bd991684fe5bc3d6c8adbea9df78501d755b9bc173beb2db60ed253635d"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -773,9 +774,12 @@
       "label": "质量状态恢复读取",
       "kind": "read",
       "routeApplicability": "P54-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/DataQualityCenter.vue#25af292333a00121.1"],
-      "condition": "state非ready时UiStatePanel primary；是否可按由共享状态组件决定",
-      "handler": "load GET /platform/data-quality?page=&page_size=20&status=all",
+      "sourceCandidateIds": [
+        "apps/web/src/components/DataQualityCenter.vue#15912fa115381d2d.1",
+        "apps/web/src/components/DataQualityCenter.vue#0c3266c5e4ec717f.1"
+      ],
+      "condition": "首次状态页由UiStatePanel恢复；ready工作区提供独立刷新，写入中禁用",
+      "handler": "refreshQuality -> load GET /platform/data-quality?page=&page_size=20&status=all",
       "variants": ["loading", "empty", "error", "forbidden", "expired", "blocked", "primary"],
       "scenes": [
         {
@@ -844,7 +848,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "原ready模板没有独立刷新按钮；稿中刷新/清搜索按钮属于待审新增呈现。实际状态组件primary可达性与权限未验。",
+      "remaining": "ready刷新、读取代次和未知写入解锁已有双端夹具回归；真实权限、数据库和生产恢复仍未验。",
       "visualStateReferences": {
         "default": {
           "package": "data-controls-direction-c",
@@ -874,12 +878,12 @@
       "kind": "read",
       "routeApplicability": "P54-local-caller-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#962cb06e44ff9bc9.1",
-        "apps/web/src/components/DataQualityCenter.vue#30e8ea79455855f2.1",
-        "apps/web/src/components/DataQualityCenter.vue#65223b82b82a6bdf.1"
+        "apps/web/src/components/DataQualityCenter.vue#3c02110a0877635d.1",
+        "apps/web/src/components/DataQualityCenter.vue#b2556958fd8ef037.1",
+        "apps/web/src/components/DataQualityCenter.vue#aa2356189420d59b.1"
       ],
-      "condition": "ready；同tab或refreshing时早退",
-      "handler": "switchTab -> page1/清selected；evidence/issues load，runs仅syncUrl",
+      "condition": "ready；读取或写入时禁用，同tab早退",
+      "handler": "switchTab -> page1/清selected；三个tab均同步quality_tab URL",
       "variants": ["evidence", "issues", "runs"],
       "scenes": [
         {
@@ -936,7 +940,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "真实switchTab不清query/selectedRunId；离线稿会清，需审核差异，不当作同语义实现。",
+      "remaining": "Tab、搜索、run与页码状态已进入URL并通过切区保留回归；浏览器前进后退和真实权限仍待生产链验证。",
       "visualStateReferences": {
         "default": {
           "package": "data-controls-direction-c",
@@ -961,20 +965,76 @@
       }
     },
     {
+      "actionId": "Q54-SEARCH",
+      "label": "检索或清除当前质量页",
+      "kind": "local",
+      "routeApplicability": "P54-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/DataQualityCenter.vue#50981bed37222bb6.1",
+        "apps/web/src/components/DataQualityCenter.vue#2310ecf26c0ac332.1"
+      ],
+      "condition": "ready；仅检索当前已加载页，清除按钮在输入为空时禁用",
+      "handler": "query change/clear -> syncUrl；不提交新的质量GET",
+      "variants": ["change", "clear"],
+      "scenes": [
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:default"
+        },
+        {
+          "package": "data-composed-direction-c",
+          "scene": "quality:issues"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-data-quality-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "离线提案检查只提供历史构图参考；当前Vue搜索URL与跨切区保留由m03-06夹具回归验证。"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-composed-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "同页提案场景提供双端参考，不替代真实服务或用户批准。"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "当前页检索与URL恢复已有双端夹具回归；超长输入、输入法组合和完整主题交叉仍待验。"
+    },
+    {
       "actionId": "Q54-EVIDENCE",
       "label": "读取或关闭完整证据溯源",
       "kind": "read",
       "routeApplicability": "P54-local-caller-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#7bd92702b23c9693.1",
-        "apps/web/src/components/DataQualityCenter.vue#57c01717dbdca94f.1",
-        "apps/web/src/components/DataQualityCenter.vue#232fadd70e14fb44.1",
-        "apps/web/src/components/DataQualityCenter.vue#b4391f4667c57834.1",
-        "apps/web/src/components/DataQualityCenter.vue#1052dd42c6994868.1"
+        "apps/web/src/components/DataQualityCenter.vue#c56baf2a56445da0.1",
+        "apps/web/src/components/DataQualityCenter.vue#0703818483f3ea40.1",
+        "apps/web/src/components/DataQualityCenter.vue#1abe71571b4dfe5d.1",
+        "apps/web/src/components/DataQualityCenter.vue#c8ae47474adb97d3.1",
+        "apps/web/src/components/DataQualityCenter.vue#2c714917657e61eb.1",
+        "apps/web/src/components/DataQualityCenter.vue#4b8b7c1b554343b3.1",
+        "apps/web/src/components/DataQualityCenter.vue#8a6a073e931655a9.1",
+        "apps/web/src/components/DataQualityCenter.vue#2fa1de5ac75409c9.1"
       ],
-      "condition": "证据桌面/移动，或问题有raw_evidence_id；detail存在可关闭",
-      "handler": "openEvidence(id) GET详情；移动先close抽屉；关闭detail=null无网络",
-      "variants": ["evidence-desktop", "evidence-mobile", "issue-desktop", "issue-mobile", "close"],
+      "condition": "证据桌面/移动，或问题有raw_evidence_id；详情以原生模态展示，失败可就地重读",
+      "handler": "openEvidence(id)使用详情代次和AbortController；移动先关闭抽屉再开模态；关闭会中止等待读取",
+      "variants": [
+        "evidence-desktop",
+        "evidence-mobile",
+        "issue-desktop",
+        "issue-mobile",
+        "native-dialog",
+        "cancel",
+        "close",
+        "retry"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -1038,7 +1098,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "真实结果落aside无代次；稿改为模态并展示quality_issues，不证明真实迟到详情隔离/授权。",
+      "remaining": "详情代次、中止、原生模态焦点与返焦已有双端夹具回归；真实文件、字段来源完整性和权限仍未验。",
       "visualStateReferences": {
         "default": {
           "package": "data-controls-direction-c",
@@ -1068,8 +1128,8 @@
       "kind": "write",
       "routeApplicability": "P54-local-caller-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#ae9bd960542d86e4.1",
-        "apps/web/src/components/DataQualityCenter.vue#1314e818824ce060.1"
+        "apps/web/src/components/DataQualityCenter.vue#5443375c8e9e7547.1",
+        "apps/web/src/components/DataQualityCenter.vue#203fccdcb63ff0e1.1"
       ],
       "condition": "证据表格/移动详情；原函数无saving或单飞锁",
       "handler": "grantDownload -> POST download-grant {} -> window.location.assign download?grant",
@@ -1202,11 +1262,12 @@
       "routeApplicability": "P54-local-caller-only",
       "sourceCandidateIds": [
         "apps/web/src/components/DataQualityCenter.vue#1c008f867673db60.1",
-        "apps/web/src/components/DataQualityCenter.vue#1c008f867673db60.2"
+        "apps/web/src/components/DataQualityCenter.vue#1c008f867673db60.2",
+        "apps/web/src/components/DataQualityCenter.vue#495e04b542eaa8d6.1"
       ],
       "condition": "证据或问题mobile detail slot内summary",
       "handler": "native details/summary；只读ID与trace",
-      "variants": ["evidence-mobile", "issue-mobile"],
+      "variants": ["evidence-mobile", "issue-mobile", "lineage-dialog"],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -1379,12 +1440,12 @@
       "kind": "write",
       "routeApplicability": "P54-local-caller-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#e1512e639fd3f6dc.1",
-        "apps/web/src/components/DataQualityCenter.vue#80aac8ff27852b4d.1",
-        "apps/web/src/components/DataQualityCenter.vue#d8aabe3a13b05163.1"
+        "apps/web/src/components/DataQualityCenter.vue#c0a8ac3c192bbfe4.1",
+        "apps/web/src/components/DataQualityCenter.vue#d0581b00f2b934eb.1",
+        "apps/web/src/components/DataQualityCenter.vue#05d2e10fd98621ac.1"
       ],
-      "condition": "issues；预检按钮saving或无selected禁用，executeBatch本身无saving早退",
-      "handler": "previewBatch -> ConfirmDialog；executeBatch POST items/action/reason/assignee_membership_id",
+      "condition": "issues；已选open、原因trim>=2，assign需成员；未知结果时锁定预览",
+      "handler": "previewBatch冻结action/items/version/reason/assignee/impact；executeBatch只提交该预览；成功读取后解除未知锁",
       "variants": ["attribute", "assign", "close", "preview", "cancel", "confirm"],
       "scenes": [
         {
@@ -1489,7 +1550,7 @@
         "disabled": "scene-reference-not-acceptance",
         "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "源预检没校验50上限；提交读可变选择/动作/成员/原因，无冻结快照。原ConfirmDialog不接busy；整批SQL/版本/幂等和原型锁定不可混同。",
+      "remaining": "冻结预览、busy、写成功与后续读取失败分离及未知防重已有双端夹具回归；真实事务、成员权限与审计仍未验。",
       "visualStateReferences": {
         "default": {
           "package": "data-controls-direction-c",
@@ -1528,10 +1589,21 @@
       "label": "切换开放问题选择",
       "kind": "local",
       "routeApplicability": "P54-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/DataQualityCenter.vue#72968bdd17422980.1"],
-      "condition": "只在desktop slot；非open禁用",
-      "handler": "toggleIssue(id,checked) -> selectedIssueIds；selectedIssues按loaded open行计算",
-      "variants": ["select", "deselect", "disabled-closed", "hidden-selected"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/DataQualityCenter.vue#91f486fb0dc95d45.1",
+        "apps/web/src/components/DataQualityCenter.vue#89c4ebef359431bf.1",
+        "apps/web/src/components/DataQualityCenter.vue#a59648cf951ee036.1"
+      ],
+      "condition": "桌面和移动开放问题均可选；resolved禁用；选择存在时可清除",
+      "handler": "toggleIssue维护selectedIssueIds；clearSelectedIssues清空当前选择和预览",
+      "variants": [
+        "select-desktop",
+        "select-mobile",
+        "deselect",
+        "clear",
+        "disabled-closed",
+        "hidden-selected"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -1591,7 +1663,7 @@
         "disabled": "scene-reference-not-acceptance",
         "busy": "not-mapped"
       },
-      "remaining": "真实手机无checkbox；原型新增手机选择/清选择。checkbox在源可重复push，同组ID与批量后端去重不是一回事。",
+      "remaining": "移动等价选择、清除与批量冻结已有双端夹具回归；跨页50项边界和真实并发问题仍待验。",
       "visualStateReferences": {
         "default": {
           "package": "data-controls-direction-c",
@@ -1626,16 +1698,28 @@
       "kind": "write",
       "routeApplicability": "P54-local-caller-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#4feb3476c1a70841.1",
-        "apps/web/src/components/DataQualityCenter.vue#eaff8a0f18b4cd6c.1",
-        "apps/web/src/components/DataQualityCenter.vue#87db0311c644aa85.1",
-        "apps/web/src/components/DataQualityCenter.vue#e4b44826587c4dcd.1",
-        "apps/web/src/components/DataQualityCenter.vue#d9a4caa16a647610.1",
-        "apps/web/src/components/DataQualityCenter.vue#a2e5b3b777187bdd.1"
+        "apps/web/src/components/DataQualityCenter.vue#eb0caf70507d0ae7.1",
+        "apps/web/src/components/DataQualityCenter.vue#37daad70b2e75d59.1",
+        "apps/web/src/components/DataQualityCenter.vue#bfa0dacb9030e23d.1",
+        "apps/web/src/components/DataQualityCenter.vue#f662156f502d2ebe.1",
+        "apps/web/src/components/DataQualityCenter.vue#9c1ba8320560a191.1",
+        "apps/web/src/components/DataQualityCenter.vue#2798723322952c96.1",
+        "apps/web/src/components/DataQualityCenter.vue#cb0cfd08fa44e9c8.1",
+        "apps/web/src/components/DataQualityCenter.vue#d3df84c3780de261.1",
+        "apps/web/src/components/DataQualityCenter.vue#5a462ae4421ffff4.1"
       ],
-      "condition": "只对open行提供入口；reason<2或saving预检禁用；close aside不写入",
-      "handler": "beginResolve清reason；confirming；resolveIssue POST reason/expected_version；取消仅清confirming",
-      "variants": ["desktop-open", "mobile-open", "aside-close", "preview", "cancel", "confirm"],
+      "condition": "只对open行提供入口；reason<2或saving预检禁用；未知结果时锁定当前问题",
+      "handler": "beginResolve打开原生原因模态；previewResolve冻结目标与原因；ConfirmDialog busy；resolveIssue POST后分离写入和重读反馈",
+      "variants": [
+        "desktop-open",
+        "mobile-open",
+        "native-dialog",
+        "dialog-cancel",
+        "dialog-close",
+        "preview",
+        "confirm-cancel",
+        "confirm"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -1731,7 +1815,7 @@
         "disabled": "scene-reference-not-acceptance",
         "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "写成功后load吞错再覆盖notice；原confirm短语trim比较，稿用严格全等。取消返回/重复提交/闭窗归属与真实审计仍待验。",
+      "remaining": "原生原因模态、busy、写成功/重读失败双消息和未知防重已实现；真实幂等、审计、权限与生产并发仍未验。",
       "visualStateReferences": {
         "default": {
           "package": "data-controls-direction-c",
@@ -1890,8 +1974,8 @@
       "apps/web/src/components/DataQualityCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/PlatformDataCenter.vue": "10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4",
-      "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+      "apps/web/src/components/PlatformDataCenter.vue": "73f961e34f708defa5ab73cf2e03c349e8b58e8369a399ca80cbb98ad15d8b5f",
+      "apps/web/src/components/DataQualityCenter.vue": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
       "apps/web/src/components/ResponsiveDataView.vue": "52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c",
       "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
       "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
@@ -1919,26 +2003,26 @@
       {
         "file": "apps/web/src/components/DataQualityCenter.vue",
         "binding": "query",
-        "meaning": "质量当前已加载集合本地检索，不trim，不提交GET",
-        "remaining": "原内部切tab不清query；原型会清，存在行为差异。"
+        "meaning": "质量当前已加载集合本地检索，不trim，不提交GET；change同步quality_q",
+        "remaining": "URL恢复和跨切区保留有双端夹具回归；输入法、超长文本和生产历史仍待验。"
       },
       {
         "file": "apps/web/src/components/DataQualityCenter.vue",
         "binding": "batchAction",
         "meaning": "attribute/assign/close；不同动作决定成员字段适用性",
-        "remaining": "预览后改变动作可漂移；源未冻结，三个操作不以一个确认图全验。"
+        "remaining": "预览后动作冻结并有双端负向回归；三种操作的真实权限/事务仍需分别验收。"
       },
       {
         "file": "apps/web/src/components/DataQualityCenter.vue",
         "binding": "batchAssignee",
         "meaning": "仅assign显示，候选来自所选问题组织活动成员",
-        "remaining": "原预览到提交仍可变，不能编造实际组织成员。"
+        "remaining": "预览到提交冻结；fixture不编造为真实组织成员或活动状态证明。"
       },
       {
         "file": "apps/web/src/components/DataQualityCenter.vue",
         "binding": "batchReason",
         "meaning": "批量原因，maxlength500，预检trim>=2",
-        "remaining": "原型模态改版，0/1/2/500/超限和长内容/软键盘仍需完整状态映射。"
+        "remaining": "冻结范围和确认busy已有双端回归；0/1/2/500、长内容与真实软键盘仍需完整交叉。"
       },
       {
         "file": "apps/web/src/components/DataQualityCenter.vue",
@@ -1948,6 +2032,27 @@
       }
     ],
     "containers": [
+      {
+        "file": "apps/web/src/components/PlatformDataCenter.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "近期记录蓝色类型目录只承担范围导航和当前快照说明，不是弹窗。",
+        "remaining": "目录已进入真实Vue；四类型真实数据、所有主题和生产权限仍需独立验证。",
+        "variants": [
+          {
+            "name": "records-entity-rail",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "records:default"
+              }
+            ],
+            "remaining": "当前真实Vue已有双端截图；此历史提案场景只用于源消费者登记。"
+          }
+        ]
+      },
       {
         "file": "apps/web/src/components/PlatformDataCenter.vue",
         "tag": "ResponsiveFilterDrawer",
@@ -2062,6 +2167,27 @@
       },
       {
         "file": "apps/web/src/components/DataQualityCenter.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "证据质量蓝色核对路径仅展示原始证据到质量问题的阅读顺序，不是弹窗。",
+        "remaining": "实际Vue双端默认图已生成；生产数据、权限和完整主题仍待验。",
+        "variants": [
+          {
+            "name": "quality-audit-rail",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "data-composed-direction-c",
+                "scene": "quality:default"
+              }
+            ],
+            "remaining": "静态场景仅登记消费者关系；用户对当前Vue视觉的具体审核仍待完成。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/DataQualityCenter.vue",
         "tag": "ResponsiveDataView",
         "ordinal": 1,
         "shape": "responsive-row-detail",
@@ -2086,7 +2212,7 @@
         "tag": "ResponsiveDataView",
         "ordinal": 2,
         "shape": "responsive-row-detail",
-        "sourceBehavior": "问题ResponsiveDataView提供mobile详情；原始选择checkbox仅desktop，mobile未选择。",
+        "sourceBehavior": "问题ResponsiveDataView提供mobile详情与等价选择；关闭抽屉后返回批量工作区。",
         "remaining": "场景关联不是每入口/六态/全主题/真实Vue验收；以具体变体缺口为准。",
         "variants": [
           {
@@ -2098,49 +2224,7 @@
                 "scene": "quality:issue-detail"
               }
             ],
-            "remaining": "新稿移动选择为新增，原组件及所有已解决/缺证据组合仍待验。"
-          }
-        ]
-      },
-      {
-        "file": "apps/web/src/components/DataQualityCenter.vue",
-        "tag": "aside",
-        "ordinal": 1,
-        "shape": "inline-aside",
-        "sourceBehavior": "detail存在时渲染质量证据aside；不是模态，不调用showModal。",
-        "remaining": "场景关联不是每入口/六态/全主题/真实Vue验收；以具体变体缺口为准。",
-        "variants": [
-          {
-            "name": "evidence-lineage",
-            "evidenceScope": "proposal-shape-differs",
-            "scenes": [
-              {
-                "package": "data-composed-direction-c",
-                "scene": "quality:lineage"
-              }
-            ],
-            "remaining": "提案改为模态且展示关联问题；原aside无代次/初焦点，不能等价接受。"
-          }
-        ]
-      },
-      {
-        "file": "apps/web/src/components/DataQualityCenter.vue",
-        "tag": "aside",
-        "ordinal": 2,
-        "shape": "inline-aside",
-        "sourceBehavior": "resolving存在时渲染原因aside；close清resolving，beginResolve重置reason。",
-        "remaining": "场景关联不是每入口/六态/全主题/真实Vue验收；以具体变体缺口为准。",
-        "variants": [
-          {
-            "name": "single-reason",
-            "evidenceScope": "proposal-shape-differs",
-            "scenes": [
-              {
-                "package": "data-composed-direction-c",
-                "scene": "quality:resolve-valid"
-              }
-            ],
-            "remaining": "提案改为独立原因模态；源aside关闭、原因保留规则与并发需确认。"
+            "remaining": "移动选择已进入当前Vue并有夹具回归；所有已解决/缺证据/权限组合仍待验。"
           }
         ]
       },
@@ -2149,7 +2233,7 @@
         "tag": "ConfirmDialog",
         "ordinal": 1,
         "shape": "confirmation-dialog",
-        "sourceBehavior": "confirming控制ConfirmDialog；confirmation-text确认解决；默认destructive=false，无影响勾选、无busy字段。",
+        "sourceBehavior": "confirming控制ConfirmDialog；confirmation-text确认解决；默认destructive=false，并传入busy和就地状态。",
         "remaining": "场景关联不是每入口/六态/全主题/真实Vue验收；以具体变体缺口为准。",
         "variants": [
           {
@@ -2161,7 +2245,7 @@
                 "scene": "quality:resolve-confirm"
               }
             ],
-            "remaining": "源canConfirm会trim，原型严格等于；原组件取消/重复确认与源POST待验。"
+            "remaining": "当前Vue取消、busy、成功与重读失败已有夹具回归；真实POST幂等和权限待验。"
           }
         ]
       },
@@ -2170,7 +2254,7 @@
         "tag": "ConfirmDialog",
         "ordinal": 2,
         "shape": "confirmation-dialog",
-        "sourceBehavior": "batchConfirming共用一个ConfirmDialog；动态batchImpact，确认处理短语，无destructive/busy。",
+        "sourceBehavior": "batchConfirming共用一个ConfirmDialog；使用冻结batchPreview显示影响，确认处理短语，并传入busy和就地状态。",
         "remaining": "场景关联不是每入口/六态/全主题/真实Vue验收；以具体变体缺口为准。",
         "variants": [
           {
@@ -2212,20 +2296,20 @@
     "sharedRemaining": [
       "共享详情窗新增停用清理，释放旧选中与背景隔离；完整壳层验证来自P38缓存返回链，不代替P54三处调用的所有业务流程。P54模板/源、原图与批准不变。",
       "2026-09-11仅同步既有共享修复的当前依赖指纹：e845daca手机预览焦点隔离、fae70505复制拒绝及旧回执保护。P54页面源、原图和批准不变；共享测试不替代P54三个调用/六种内容变体的真实流程验收。",
-      "PlatformShell及UiStatePanel内部控件、表格列显隐/冻结/密度、TechnicalDetails复制必须按调用方再映射；不在44个局部源位置内。",
+      "PlatformShell及UiStatePanel内部控件、表格列显隐/冻结/密度、TechnicalDetails复制必须按调用方再映射；不在58个局部源位置内。",
       "ConfirmDialog共享typedText适用，acknowledged因本页destructive=false不显示；AuditedReasonDialog内部reason与质量reason分域；TableViewControls密度字段未冒充本页7个v-model。",
       "ResponsiveDataView的三个调用/六种内容变体不能拿一个shared测试全验；同类动态行、空字段与主题密度交叉场景还未穷尽。"
     ]
   },
   "compositionGaps": [
-    "同页常驻组合已交294PNG；实际质量v-if卸载、浏览器history/深链、scope/晚到响应未合并真实Vue。",
+    "同页静态组合已交294PNG；实际质量工作区现由父级保持挂载，并补同路由URL恢复、读取代次与迟到响应隔离。真实浏览器长历史和生产scope仍待验。",
     "40个明确控件变体已有364张双端原生状态图；17组主控件81个槽有selector/scene关联，21个槽仍未映射。主控件证据不是全动态行、全部共享消费者或真实Vue验收。",
-    "三类实体详情已补打开/完整字段/双端长内容证据，全部状态行及逐按钮主题仍未穷尽；Q54源tab保留query/runId与原型清空、短语trim与原型严格全等的差异须具体审核。",
-    "原质量无ready刷新/清搜索/清选择、无手机checkbox；原型额外入口仍是待审行为，不新增现行源合同ID。"
+    "三类实体详情已补打开/完整字段/双端长内容证据，全部状态行及逐按钮主题仍未穷尽；Q54当前URL状态与确认短语行为以真实Vue和回归为准。",
+    "质量ready刷新、清搜索/清选择、手机checkbox、原生详情/原因窗已进入当前Vue；14张当前实现图仍待用户具体审核。"
   ],
   "approval": "pending-user-review",
   "limits": [
-    "44位置/17组为两个局部Vue明示作用域，不替代旧静态104关联候选或全站语义分母。",
+    "58位置/18组为两个局部Vue明示作用域，不替代旧静态关联候选或全站语义分母。",
     "所有source/scene引用是审阅依据，不授予审批，不宣称真实API/SQL/审计/下载/部署完成。"
   ]
 }

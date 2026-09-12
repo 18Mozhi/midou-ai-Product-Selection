@@ -39,9 +39,12 @@ export async function capturePhase2Evidence(
       ? { width: 390, height: 844 }
       : { width: 1440, height: 1000 };
   const filename = `${pageId}-${viewport.width}-${state}`;
+  const qualityP54 = pageId === "P54" && state.startsWith("quality-");
   const outputRelative =
       pageId === "P54"
-        ? "design/data-records-direction-c/vue-implementation"
+        ? qualityP54
+          ? "design/data-quality-direction-c/vue-implementation"
+          : "design/data-records-direction-c/vue-implementation"
         : "runtime/representatives",
     output = path.join(root, outputRelative);
   const hash = (content: string | Buffer) =>
@@ -69,7 +72,7 @@ export async function capturePhase2Evidence(
           right: Math.round(node.getBoundingClientRect().right),
         })),
     }));
-    const dialog = (await page.locator("dialog[open]").count()) > 0;
+    const dialog = (await page.locator('dialog[open], [role="alertdialog"]').count()) > 0;
     const p54MobileViewport = pageId === "P54" && viewport.width === 390;
     if (!dialog) {
       if (p54MobileViewport)
@@ -80,9 +83,15 @@ export async function capturePhase2Evidence(
             const top = target.getBoundingClientRect().top + window.scrollY - offset;
             window.scrollTo(0, Math.max(0, top));
           },
-          state.includes("unknown")
-            ? { selector: ".platform-data-feedback", offset: 110 }
-            : { selector: ".platform-data-hero", offset: 58 },
+          qualityP54
+            ? state.includes("unknown")
+              ? { selector: ".quality-feedback", offset: 110 }
+              : state === "quality-default"
+                ? { selector: ".quality-title", offset: 58 }
+                : { selector: ".quality-task", offset: 58 }
+            : state.includes("unknown")
+              ? { selector: ".platform-data-feedback", offset: 110 }
+              : { selector: ".platform-data-hero", offset: 58 },
         );
       else await page.evaluate(() => window.scrollTo(0, 0));
     }
@@ -113,7 +122,7 @@ export async function capturePhase2Evidence(
               .replace(/\s+/g, " ")
               .slice(0, 180),
             disabled: node.matches(":disabled"),
-            insideDialog: Boolean(node.closest("dialog[open]")),
+            insideDialog: Boolean(node.closest('dialog[open], [role="alertdialog"]')),
           })),
       );
     const baseline = JSON.parse(await readFile(path.join(root, "baseline.json"), "utf8"));
@@ -125,11 +134,21 @@ export async function capturePhase2Evidence(
     }
     const sourceFiles: Record<string, string> = {};
     if (pageId === "P54") {
-      for (const source of [
-        "apps/web/src/components/PlatformDataCenter.vue",
-        "apps/web/src/components/ResponsiveDataView.vue",
-        "apps/web/src/components/AuditedReasonDialog.vue",
-      ]) {
+      const p54Sources = qualityP54
+        ? [
+            "apps/web/src/components/PlatformDataCenter.vue",
+            "apps/web/src/components/DataQualityCenter.vue",
+            "apps/web/src/components/ResponsiveDataView.vue",
+            "apps/web/src/components/ConfirmDialog.vue",
+            "apps/web/src/components/TechnicalDetails.vue",
+            "apps/web/src/use-modal-dialog.ts",
+          ]
+        : [
+            "apps/web/src/components/PlatformDataCenter.vue",
+            "apps/web/src/components/ResponsiveDataView.vue",
+            "apps/web/src/components/AuditedReasonDialog.vue",
+          ];
+      for (const source of p54Sources) {
         sourceFiles[source] = hash(await readFile(source, "utf8"));
       }
     }
