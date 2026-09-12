@@ -37,7 +37,7 @@ onDeactivated(() => {
   releaseBackground();
 });
 
-function show(row: DataRow, event: MouseEvent) {
+function show(row: DataRow, event: Event) {
   trigger = event.currentTarget as HTMLButtonElement;
   trigger.focus({ preventScroll: true });
   selectedKey.value = props.rowKey(row);
@@ -119,7 +119,7 @@ function handleTab(event: KeyboardEvent) {
 <template>
   <div class="responsive-data-view">
     <TableViewControls class="responsive-data-view__desktop"
-      ><slot name="desktop"
+      ><slot name="desktop" :show="show"
     /></TableViewControls>
     <div ref="mobileList" class="responsive-data-view__mobile" :aria-label="title" tabindex="-1">
       <p v-if="!rows.length" class="responsive-data-view__empty">

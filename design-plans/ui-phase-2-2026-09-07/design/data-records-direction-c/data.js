@@ -244,9 +244,9 @@ window.DATA_RECORDS_DATA = {
   ],
   checks: [
     "Actual Vue four entity labels, 13 status labels and local 0/1/20/21/100 row pagination/clamp; original trend/supplier fixture separated from synthetic boundaries.",
-    "Ten first/preserved source read failures, 15-second abort callback and single-flight, retaining entity interpretation; no real request or timer wait.",
-    "Snapshot mismatch blocks export until successful requested scope; initial URL trimming/invalid status/page clamp; ignored-abort late read still updates data reproduced in inert source bridge.",
-    "Actual export scope changes after reason await; filename changes again before response despite supplier request. Inert DOM records download intention only; no file, audit or POST executed.",
+    "Ten first/preserved source read failures and 15-second abort callback retain entity interpretation; generation supersession is covered by mounted Vue E2E, with no real request or timer wait here.",
+    "Snapshot mismatch blocks export until successful requested scope; initial URL trimming/invalid status/page clamp; an ignored-abort late read cannot replace the successful supplier snapshot after unmount.",
+    "Actual export keeps the successful trend snapshot through reason wait and response-time entity changes, including its filename. Inert DOM records download intention only; no file, audit or POST executed.",
     "Actual service accepts 13 entity/status pairs, trims query and rejects invalid entity/status/121 query plus export reason 1/301; accepts 2/300. Inert repository only.",
     "Actual four repository readManagement data branches on synthetic SQL-row adapter: LIMIT100, returned-set summary, supplier search excluding workspace and null/undefined converted to zero; SQL was not executed.",
     "Actual csvCell six cases and data export route BOM/non-idempotency contract checked; no CSV file, audit row, customer material or real download created.",

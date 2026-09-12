@@ -17,7 +17,7 @@ export async function finalizePhase2Evidence(testInfo: TestInfo) {
 export async function capturePhase2Evidence(
   page: Page,
   testInfo: TestInfo,
-  pageId: "P17" | "P31" | "P61",
+  pageId: "P17" | "P31" | "P54" | "P61",
   state: string,
   assertions: string[],
 ) {
@@ -27,6 +27,7 @@ export async function capturePhase2Evidence(
   const expectedPath = {
     P17: "/opportunities/scoring-rules",
     P31: "/org-admin/roles",
+    P54: "/platform-admin/data",
     P61: "/platform-admin/status",
   }[pageId];
   if (url.hostname !== "127.0.0.1" || url.pathname !== expectedPath)
@@ -38,7 +39,11 @@ export async function capturePhase2Evidence(
       ? { width: 390, height: 844 }
       : { width: 1440, height: 1000 };
   const filename = `${pageId}-${viewport.width}-${state}`;
-  const output = path.join(root, "runtime/representatives");
+  const outputRelative =
+      pageId === "P54"
+        ? "design/data-records-direction-c/vue-implementation"
+        : "runtime/representatives",
+    output = path.join(root, outputRelative);
   const hash = (content: string | Buffer) =>
     createHash("sha256")
       .update(typeof content === "string" ? content.replace(/\r\n/g, "\n") : content)
@@ -65,11 +70,27 @@ export async function capturePhase2Evidence(
         })),
     }));
     const dialog = (await page.locator("dialog[open]").count()) > 0;
-    if (!dialog) await page.evaluate(() => window.scrollTo(0, 0));
+    const p54MobileViewport = pageId === "P54" && viewport.width === 390;
+    if (!dialog) {
+      if (p54MobileViewport)
+        await page.evaluate(
+          ({ selector, offset }) => {
+            const target = document.querySelector(selector);
+            if (!target) throw new Error(`Missing capture target: ${selector}`);
+            const top = target.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo(0, Math.max(0, top));
+          },
+          state.includes("unknown")
+            ? { selector: ".platform-data-feedback", offset: 110 }
+            : { selector: ".platform-data-hero", offset: 58 },
+        );
+      else await page.evaluate(() => window.scrollTo(0, 0));
+    }
     await mkdir(output, { recursive: true });
+    const fullPage = !dialog && !p54MobileViewport;
     await page.screenshot({
       path: path.join(output, `${filename}.png`),
-      fullPage: !dialog,
+      fullPage,
       animations: "disabled",
     });
     const controls = await page
@@ -102,6 +123,16 @@ export async function capturePhase2Evidence(
       const source = `apps/web/src/${relative.split(path.sep).join("/")}`;
       stylesheets[source] = hash(await readFile(source, "utf8"));
     }
+    const sourceFiles: Record<string, string> = {};
+    if (pageId === "P54") {
+      for (const source of [
+        "apps/web/src/components/PlatformDataCenter.vue",
+        "apps/web/src/components/ResponsiveDataView.vue",
+        "apps/web/src/components/AuditedReasonDialog.vue",
+      ]) {
+        sourceFiles[source] = hash(await readFile(source, "utf8"));
+      }
+    }
     await writeFile(
       path.join(output, `${filename}.json`),
       JSON.stringify(
@@ -113,8 +144,8 @@ export async function capturePhase2Evidence(
           state,
           concretePath: url.pathname,
           viewport,
-          fullPage: !dialog,
-          file: `runtime/representatives/${filename}.png`,
+          fullPage,
+          file: `${outputRelative}/${filename}.png`,
           sha256: hash(await readFile(path.join(output, `${filename}.png`))),
           sourceFingerprint: baseline.sourceFingerprint,
           sourceRevision: baseline.sourceRevision,
@@ -123,6 +154,7 @@ export async function capturePhase2Evidence(
           captureHelperSha256: hash(
             await readFile("tests/e2e/helpers/ui-phase2-evidence.ts", "utf8"),
           ),
+          sourceFiles,
           stylesheets,
           testTitle: testInfo.title,
           browser: "chromium",

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { responsiveFocusContractHash } from "./lib/ui-phase2-responsive-focus-contract.mjs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { readFile, readdir, writeFile } from "node:fs/promises";
+import { readFile, readdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { chromium } from "playwright";
@@ -36,37 +36,45 @@ assert.equal(contracts.length, 25);
 const contractRebindings = [
   {
     file: "tests/e2e/m06-02-platform-dashboard.spec.ts",
-    old: "dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66",
-    current: "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+    historical: "dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66",
+    atCommit: "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+    current: "ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0",
     commit: "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
-    reason: "Audited reason dialog focus-test additions; historical table retained.",
+    reason: "Audited reason focus tests are preserved; current P54 ownership cases are additive.",
   },
 ];
 for (const [, f, h] of contracts) {
-  const binding = contractRebindings.find((v) => v.file === f);
+  const file = f.trim();
+  const binding = contractRebindings.find((v) => v.file === file);
   if (binding) {
-    assert.equal(h, binding.old);
+    assert.equal(h, binding.current);
     assert.equal(
       hash(
         lf(
-          execFileSync("git", ["show", `${binding.commit}^:${f}`], { cwd: repo, encoding: "utf8" }),
+          execFileSync("git", ["show", `${binding.commit}^:${file}`], {
+            cwd: repo,
+            encoding: "utf8",
+          }),
         ),
       ),
-      binding.old,
+      binding.historical,
     );
     assert.equal(
       hash(
         lf(
-          execFileSync("git", ["show", `${binding.commit}:${f}`], { cwd: repo, encoding: "utf8" }),
+          execFileSync("git", ["show", `${binding.commit}:${file}`], {
+            cwd: repo,
+            encoding: "utf8",
+          }),
         ),
       ),
-      binding.current,
+      binding.atCommit,
     );
   }
   assert.equal(
-    hash(lf(await readFile(path.join(repo, f), "utf8"))),
-    responsiveFocusContractHash(f, binding?.current ?? h),
-    f,
+    hash(lf(await readFile(path.join(repo, file), "utf8"))),
+    responsiveFocusContractHash(file, binding?.current ?? h),
+    file,
   );
 }
 const sourcePaths = [
@@ -388,7 +396,10 @@ try {
     );
   }
   assert.deepEqual(
-    (await readdir(root)).sort(),
+    (await readdir(root, { withFileTypes: true }))
+      .filter((entry) => entry.isFile())
+      .map((entry) => entry.name)
+      .sort(),
     [
       ...expected,
       "index.html",
@@ -403,7 +414,7 @@ try {
   const links = [
     ...(await readFile(path.join(root, "README.md"), "utf8")).matchAll(/\]\(([^)]+)\)/g),
   ];
-  for (const [, link] of links) await readFile(path.resolve(root, link));
+  for (const [, link] of links) await stat(path.resolve(root, link));
   console.log(
     JSON.stringify({
       mode: capture ? "capture" : "verify",

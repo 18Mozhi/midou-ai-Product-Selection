@@ -63,7 +63,7 @@ export async function buildDataRecordsDesignData(repo) {
     reason = strip(await read(reasonPath));
   const names =
     "entityStatuses,statusLabels,entities,entity,query,queryDraft,status,statusDraft,page,tab,state,data,snapshotScope,scopeMismatch,snapshotLabel,current,summary,statusOptions,activeFilterCount,statusName,summaryName,pagination,pagedItems,rangeLabel,message,requestId,exporting,refreshing,exportReasonOpen,submitExportReason,cancelExportReason,exportCsv,load,applyFilters,resetFilters,selectEntity,selectTab,goToPage";
-  const logic = `window.DATA_RECORDS_SOURCE=(bridge)=>{const {ref,computed,onMounted,onBeforeUnmount,useRoute,useRouter,defineProps,createApiClient,createApiResponseClient,ApiClientError,window,AbortController,URLSearchParams,URL,document}=bridge;${compile(reason)}\n${compile(script)}\nreturn {${names}};};\nwindow.DATA_RECORDS_FIXTURE=(entity)=>{${compile(fixtureCode)}};`;
+  const logic = `window.DATA_RECORDS_SOURCE=(bridge)=>{const {ref,computed,onMounted,onBeforeUnmount,onActivated,onDeactivated,watch,useRoute,useRouter,defineProps,createApiClient,createApiResponseClient,ApiClientError,window,AbortController,URLSearchParams,URL,document}=bridge;${compile(reason)}\n${compile(script)}\nreturn {${names}};};\nwindow.DATA_RECORDS_FIXTURE=(entity)=>{${compile(fixtureCode)}};`;
   class ApiClientError extends Error {
     constructor(kind) {
       super(kind);
@@ -91,6 +91,9 @@ export async function buildDataRecordsDesignData(repo) {
       }),
       onMounted: () => {},
       onBeforeUnmount: (fn) => unmount.push(fn),
+      onActivated: () => {},
+      onDeactivated: () => {},
+      watch: () => {},
       useRoute: () => ({ query }),
       useRouter: () => ({ replace: async (v) => routes.push(plain(v)) }),
       defineProps: () => ({ apiBaseUrl: "inert" }),
@@ -158,7 +161,6 @@ export async function buildDataRecordsDesignData(repo) {
       if (preserved) ready(x);
       const p = x.c.load();
       await tick();
-      await x.c.load();
       assert.equal(x.calls.length, 1);
       assert.equal(x.timers[0].ms, 15000);
       if (kind === "timeout") x.timers[0].fn();
@@ -168,7 +170,7 @@ export async function buildDataRecordsDesignData(repo) {
       if (preserved) assert.equal(x.c.current.value.value, "trends");
     }
   checks.push(
-    "Ten first/preserved source read failures, 15-second abort callback and single-flight, retaining entity interpretation; no real request or timer wait.",
+    "Ten first/preserved source read failures and 15-second abort callback retain entity interpretation; generation supersession is covered by mounted Vue E2E, with no real request or timer wait here.",
   );
   {
     const x = mount();
@@ -202,14 +204,14 @@ export async function buildDataRecordsDesignData(repo) {
     assert.equal(x.routes.at(-1).query.page, undefined);
     const p2 = x.c.load();
     await tick();
-    x.unmount[0]();
+    x.unmount.at(-1)();
     assert.equal(x.calls[1].options.signal.aborted, true);
     success(x.calls[1]);
     await p2;
-    assert.equal(x.c.data.value.entity, "trends");
+    assert.equal(x.c.data.value.entity, "suppliers");
   }
   checks.push(
-    "Snapshot mismatch blocks export until successful requested scope; initial URL trimming/invalid status/page clamp; ignored-abort late read still updates data reproduced in inert source bridge.",
+    "Snapshot mismatch blocks export until successful requested scope; initial URL trimming/invalid status/page clamp; an ignored-abort late read cannot replace the successful supplier snapshot after unmount.",
   );
   {
     const x = mount();
@@ -218,13 +220,12 @@ export async function buildDataRecordsDesignData(repo) {
     assert.ok(x.c.exportReasonOpen.value);
     await x.c.exportCsv();
     assert.equal(x.posts.length, 0);
-    x.c.selectEntity("suppliers");
-    await tick();
+    x.c.entity.value = "suppliers";
     x.c.submitExportReason("  运营核对  ");
     await tick();
     assert.equal(x.posts.length, 1);
     assert.deepEqual(plain(x.posts[0].options.body), {
-      entity: "suppliers",
+      entity: "trends",
       query: "",
       status: "",
       reason: "运营核对",
@@ -232,11 +233,11 @@ export async function buildDataRecordsDesignData(repo) {
     x.c.entity.value = "competitors";
     x.posts[0].resolve({ headers: { get: () => "inert-export" }, blob: async () => "inert blob" });
     await p;
-    assert.ok(x.downloads[0].download.startsWith("platform-competitors-"));
+    assert.ok(x.downloads[0].download.startsWith("platform-trends-"));
     assert.deepEqual(x.revoked, ["blob:inert"]);
   }
   checks.push(
-    "Actual export scope changes after reason await; filename changes again before response despite supplier request. Inert DOM records download intention only; no file, audit or POST executed.",
+    "Actual export keeps the successful trend snapshot through reason wait and response-time entity changes, including its filename. Inert DOM records download intention only; no file, audit or POST executed.",
   );
   const servicePath = "apps/api/src/platform-dashboard-service.ts",
     service = run(strip(await read(servicePath)) + ";globalThis.result=PlatformDashboardService;"),

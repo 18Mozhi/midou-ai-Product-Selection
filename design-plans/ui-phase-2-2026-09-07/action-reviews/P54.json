@@ -5,8 +5,12 @@
   "status": "source-reviewed-not-user-approved",
   "contract": "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformDataCenter.vue": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
+    "apps/web/src/components/PlatformDataCenter.vue": "10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4",
     "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c"
+  },
+  "implementationSourceHashes": {
+    "tests/e2e/m06-02-platform-dashboard.spec.ts": "ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0",
+    "tests/e2e/helpers/ui-phase2-evidence.ts": "9a53ef21ce0ffa1d716489da32aaab4a7fbdeef0a8781a335b90bd60343daa67"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -23,11 +27,11 @@
       "kind": "navigation",
       "routeApplicability": "P54-local-caller-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformDataCenter.vue#a30c90fe071a03aa.1",
-        "apps/web/src/components/PlatformDataCenter.vue#d095b93e387de70c.1"
+        "apps/web/src/components/PlatformDataCenter.vue#d8576e9119c47e48.1",
+        "apps/web/src/components/PlatformDataCenter.vue#3d3b85cc3453eef2.1"
       ],
-      "condition": "父页两个固定入口，无刷新锁；quality为v-if子组件",
-      "handler": "selectTab -> router.replace；records无行时load",
+      "condition": "父页两个固定入口；导出原因等待与导出提交期间锁定切换；quality首次访问后保持挂载并以v-show切换",
+      "handler": "selectTab -> router.replace；records无行或上次失败时load；quality工作态跨切区保留",
       "variants": ["records", "quality"],
       "scenes": [
         {
@@ -84,7 +88,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "原质量区卸载；常驻提案改变切区状态策略。初始深链、history、KeepAlive未验证。",
+      "remaining": "同路由history、质量工作态保留与KeepAlive读取中止已有Vue夹具回归；真实权限、真实API和生产生命周期仍未验证。",
       "visualStateReferences": {
         "default": {
           "package": "data-controls-direction-c",
@@ -113,8 +117,8 @@
       "label": "选择四类近期数据",
       "kind": "read",
       "routeApplicability": "P54-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/PlatformDataCenter.vue#c2f291caa419e5a2.1"],
-      "condition": "records且循环entities；selectEntity在refreshing或同类型时早退，源按钮无disabled；提案可见禁用待审",
+      "sourceCandidateIds": ["apps/web/src/components/PlatformDataCenter.vue#318d604dd4996018.1"],
+      "condition": "records且循环entities；读取、原因等待或导出提交时可见禁用，同类型早退",
       "handler": "selectEntity -> 清status/page -> load",
       "variants": ["trends", "opportunities", "competitors", "suppliers"],
       "scenes": [
@@ -223,13 +227,13 @@
       "kind": "read",
       "routeApplicability": "P54-local-caller-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformDataCenter.vue#55e6e39c4bfea115.1",
-        "apps/web/src/components/PlatformDataCenter.vue#b51452b1fe0fa6e5.1",
-        "apps/web/src/components/PlatformDataCenter.vue#4a2d0a520fef9388.1",
-        "apps/web/src/components/PlatformDataCenter.vue#fde295a3afc6fed6.1",
-        "apps/web/src/components/PlatformDataCenter.vue#644ca45b53f7ea6b.1"
+        "apps/web/src/components/PlatformDataCenter.vue#b1ba73fd44155bb1.1",
+        "apps/web/src/components/PlatformDataCenter.vue#0ca9483df3aea355.1",
+        "apps/web/src/components/PlatformDataCenter.vue#791084433fb5ad25.1",
+        "apps/web/src/components/PlatformDataCenter.vue#6bb29ec0529e0e59.1",
+        "apps/web/src/components/PlatformDataCenter.vue#7d45674378db30da.1"
       ],
-      "condition": "records；refreshing锁；源reset禁用为refreshing || (!queryDraft && !statusDraft)，不另检查已应用筛选",
+      "condition": "records；读取、原因等待或导出提交时锁定；reset在无草稿且无已应用筛选时禁用",
       "handler": "ResponsiveFilterDrawer；applyFilters/resetFilters -> load",
       "variants": ["drawer-open", "drawer-close", "form-submit", "enter", "apply", "reset"],
       "scenes": [
@@ -325,13 +329,14 @@
       "kind": "write",
       "routeApplicability": "P54-local-caller-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformDataCenter.vue#7394eb6490013cf3.1",
-        "apps/web/src/components/PlatformDataCenter.vue#470980c1afaf475e.1",
-        "apps/web/src/components/PlatformDataCenter.vue#3e7c31e734a056fa.1",
+        "apps/web/src/components/PlatformDataCenter.vue#7266ebf634d2b8b9.1",
+        "apps/web/src/components/PlatformDataCenter.vue#7939e0d7813a93ae.1",
+        "apps/web/src/components/PlatformDataCenter.vue#29f3caf3dd5ff454.1",
+        "apps/web/src/components/PlatformDataCenter.vue#6d8eee10bf038ef3.1",
         "apps/web/src/components/PlatformDataCenter.vue#f65c3340e428d8ed.1"
       ],
-      "condition": "exporting/exportReasonOpen/refreshing/scopeMismatch阻止入口；原因await后没有重核范围",
-      "handler": "exportCsv -> askExportReason -> POST -> blob/link.download；submit/cancel解promise",
+      "condition": "exporting/exportReasonOpen/refreshing/scopeMismatch/unknown阻止入口；打开原因窗前冻结entity/query/status快照",
+      "handler": "exportCsv -> askExportReason -> frozen snapshot POST -> blob/link.download；无HTTP结果进入未知态并阻止重复提交",
       "variants": ["open", "ask", "submit", "cancel", "download"],
       "scenes": [
         {
@@ -573,10 +578,11 @@
     },
     {
       "actionId": "DG54-TECH",
-      "label": "展开记录技术标识",
+      "label": "查看记录与展开技术标识",
       "kind": "local",
       "routeApplicability": "P54-local-caller-only",
       "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDataCenter.vue#84e7596199967f7e.1",
         "apps/web/src/components/PlatformDataCenter.vue#1c008f867673db60.1",
         "apps/web/src/components/PlatformDataCenter.vue#1c008f867673db60.2"
       ],
@@ -664,8 +670,8 @@
       "kind": "read",
       "routeApplicability": "P54-local-caller-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformDataCenter.vue#053cd828dd3324d8.1",
-        "apps/web/src/components/PlatformDataCenter.vue#b7a08810a69e9930.1"
+        "apps/web/src/components/PlatformDataCenter.vue#55d3fe91022d0dbb.1",
+        "apps/web/src/components/PlatformDataCenter.vue#97d75da3f85810f7.1"
       ],
       "condition": "ready且total_pages>1；刷新或边界禁用",
       "handler": "goToPage -> 切20行本地slice + syncRecordsUrl；不发GET",
@@ -1884,17 +1890,17 @@
       "apps/web/src/components/DataQualityCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/PlatformDataCenter.vue": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
+      "apps/web/src/components/PlatformDataCenter.vue": "10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4",
       "apps/web/src/components/DataQualityCenter.vue": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
-      "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-      "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+      "apps/web/src/components/ResponsiveDataView.vue": "52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c",
+      "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
       "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
       "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
-      "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
-      "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+      "apps/web/src/components/AuditedReasonDialog.vue": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+      "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
-      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+      "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
     },
     "inputs": [

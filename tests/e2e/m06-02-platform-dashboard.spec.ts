@@ -201,6 +201,230 @@ test("UI2-DG54 retained data keeps its entity semantics until the new scope succ
   expect(supplierReads).toBe(2);
 });
 
+test("UI2-P54 restores the applied record scope from same-route history", async ({ page }) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/management?**", (route) => {
+    const url = new URL(route.request().url()),
+      entity = url.searchParams.get("entity") ?? "trends",
+      query = url.searchParams.get("query") ?? "",
+      opportunity = entity === "opportunities",
+      competitor = entity === "competitors",
+      count = opportunity ? 21 : 1,
+      status = opportunity ? "pending" : competitor ? "paused" : "active";
+    return route.fulfill({
+      json: env({
+        domain: "data",
+        entity,
+        summary: { total: count, [status]: count },
+        items: Array.from({ length: count }, (_, index) => ({
+          id: `${entity}-${index + 1}`,
+          title: competitor ? "历史竞品" : `${query || "初始"}机会 ${index + 1}`,
+          organization_name: "测试组织",
+          workspace_name: "测试工作区",
+          category: "家居",
+          market: "US",
+          status,
+          metric_primary: index + 1,
+          metric_secondary: 1,
+          updated_at: "2026-09-08T00:00:00.000Z",
+        })),
+        observed_at: "2026-09-08T00:00:00.000Z",
+      }),
+    });
+  });
+  await page.goto("/platform-admin/data?entity=opportunities&q=first&status=pending&page=2");
+  const mobile = (page.viewportSize()?.width ?? 1000) <= 760;
+  if (mobile) await page.getByRole("button", { name: "筛选近期数据" }).click();
+  await expect(page.getByPlaceholder("搜索名称、组织或工作区")).toHaveValue("first");
+  await expect(page.getByLabel("记录状态")).toHaveValue("pending");
+  if (mobile)
+    await page
+      .getByRole("dialog", { name: "筛选近期数据" })
+      .getByRole("button", { name: "关闭筛选条件" })
+      .click();
+  await expect(page.getByText(/第 2 \/ 2 页/)).toBeVisible();
+
+  await page.evaluate(() => {
+    history.pushState({}, "", "/platform-admin/data?entity=competitors&q=second&status=paused");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+  await expect(
+    page
+      .getByRole("navigation", { name: "数据类型", exact: true })
+      .getByRole("button", { name: "竞品" }),
+  ).toHaveAttribute("aria-current", "page");
+  if (mobile) await page.getByRole("button", { name: "筛选近期数据" }).click();
+  await expect(page.getByPlaceholder("搜索名称、组织或工作区")).toHaveValue("second");
+  await expect(page.getByLabel("记录状态")).toHaveValue("paused");
+  if (mobile)
+    await page
+      .getByRole("dialog", { name: "筛选近期数据" })
+      .getByRole("button", { name: "关闭筛选条件" })
+      .click();
+  if (mobile) await expect(page.getByRole("button", { name: /^历史竞品 · 已暂停/ })).toBeVisible();
+  else await expect(page.getByText("历史竞品", { exact: true })).toBeVisible();
+});
+
+test("UI2-P54 keeps quality work state mounted while switching data workspaces", async ({
+  page,
+}) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/management?**", (route) =>
+    route.fulfill({
+      json: env({
+        domain: "data",
+        entity: "trends",
+        summary: { total: 1, active: 1 },
+        items: [
+          {
+            id: "trend-p54",
+            title: "隔离热点",
+            organization_name: "测试组织",
+            workspace_name: "测试工作区",
+            status: "active",
+            metric_primary: 1,
+            metric_secondary: 1,
+            updated_at: "2026-09-08T00:00:00.000Z",
+          },
+        ],
+        observed_at: "2026-09-08T00:00:00.000Z",
+      }),
+    }),
+  );
+  let qualityReads = 0;
+  await page.route("**/api/v1/platform/data-quality?**", (route) => {
+    qualityReads += 1;
+    return route.fulfill({
+      json: env({
+        evidence: [],
+        issues: [
+          {
+            id: "00000000-0000-4000-8000-000000000954",
+            organization_id: "00000000-0000-4000-8000-000000000601",
+            reconciliation_run_id: null,
+            raw_evidence_id: null,
+            parser_version: "parser-v3",
+            provider_name: "Market Evidence",
+            metric_code: "title_accuracy",
+            field_path: "title",
+            severity: "warning",
+            status: "open",
+            actual_value: 0.97,
+            threshold_value: 0.98,
+            assigned_membership_id: null,
+            assigned_member_label: null,
+            attribution_reason: null,
+            resolution_reason: null,
+            version: 1,
+            updated_at: "2026-09-08T00:00:00.000Z",
+          },
+        ],
+        reconciliationRuns: [],
+        memberOptions: [],
+        totalEvidence: 0,
+        totalIssues: 1,
+        openIssues: 1,
+        criticalIssues: 0,
+        observedAt: "2026-09-08T00:00:00.000Z",
+      }),
+    });
+  });
+  await page.goto("/platform-admin/data");
+  const workspace = page.getByRole("navigation", { name: "平台数据视图" });
+  await workspace.getByRole("button", { name: "证据与质量" }).click();
+  await page.getByRole("button", { name: "质量问题" }).click();
+  await page.getByLabel("搜索证据与质量").fill("标题");
+  const readsBeforeHide = qualityReads;
+  await workspace.getByRole("button", { name: "近期记录" }).click();
+  await workspace.getByRole("button", { name: "证据与质量" }).click();
+  await expect(page.getByLabel("搜索证据与质量")).toHaveValue("标题");
+  await expect(
+    page.getByRole("navigation", { name: "数据质量视图" }).getByRole("button", {
+      name: "质量问题",
+    }),
+  ).toHaveAttribute("aria-current", "page");
+  expect(qualityReads).toBe(readsBeforeHide);
+});
+
+test("UI2-P54 locks record scope during export and blocks repeat after an unknown result", async ({
+  page,
+}, testInfo) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/management?**", (route) =>
+    route.fulfill({
+      json: env({
+        domain: "data",
+        entity: new URL(route.request().url()).searchParams.get("entity") ?? "trends",
+        summary: { total: 1, active: 1 },
+        items: [
+          {
+            id: "trend-p54-export",
+            title: "导出范围热点",
+            organization_name: "测试组织",
+            workspace_name: "测试工作区",
+            status: "active",
+            metric_primary: 1,
+            metric_secondary: 1,
+            updated_at: "2026-09-08T00:00:00.000Z",
+          },
+        ],
+        observed_at: "2026-09-08T00:00:00.000Z",
+      }),
+    }),
+  );
+  let attempts = 0;
+  let releaseExport!: () => void;
+  let exportStarted!: () => void;
+  const exportHeld = new Promise<void>((resolve) => (releaseExport = resolve));
+  const exportEntered = new Promise<void>((resolve) => (exportStarted = resolve));
+  await page.route("**/api/v1/platform/management/data/exports", async (route) => {
+    attempts += 1;
+    expect(route.request().postDataJSON()).toMatchObject({
+      entity: "trends",
+      query: "",
+      status: "",
+    });
+    exportStarted();
+    await exportHeld;
+    return route.abort("failed");
+  });
+  await page.goto("/platform-admin/data");
+  const mobile = (page.viewportSize()?.width ?? 1000) <= 760;
+  if (mobile)
+    await expect(page.getByRole("button", { name: /^导出范围热点 · 展示中/ })).toBeVisible();
+  else await expect(page.getByText("导出范围热点", { exact: true })).toBeVisible();
+  await capturePhase2Evidence(page, testInfo, "P54", "records-default", [
+    "C方向蓝色类型目录与白色记录工作面可见",
+    "当前快照、筛选范围与最近100条说明彼此分开",
+    "真实Vue桌面表格或手机摘要卡已渲染",
+  ]);
+  if (mobile) await page.getByRole("button", { name: "筛选近期数据" }).click();
+  const exportButton = page.getByRole("button", { name: "导出表格文件", exact: true });
+  await exportButton.click();
+  const dialog = page.getByRole("dialog", { name: "填写受控导出原因" });
+  await dialog.getByRole("button", { name: "确认提交" }).click();
+  await exportEntered;
+  const supplierButton = page
+    .getByRole("navigation", { name: "数据类型", exact: true })
+    .getByRole("button", { name: "供应商" });
+  await expect(supplierButton).toBeDisabled();
+  releaseExport();
+  await expect(page.getByRole("status").filter({ hasText: "导出结果未知" })).toBeVisible();
+  await expect(exportButton).toBeDisabled();
+  await expect(supplierButton).toBeEnabled();
+  if (mobile)
+    await page
+      .getByRole("dialog", { name: "筛选近期数据" })
+      .getByRole("button", { name: "关闭筛选条件" })
+      .click();
+  await capturePhase2Evidence(page, testInfo, "P54", "records-export-unknown", [
+    "无HTTP响应时明确说明导出结果未知",
+    "当前快照导出按钮保持禁用以阻止重复提交",
+    "数据类型入口恢复可用，允许读取新范围后解除锁定",
+  ]);
+  expect(attempts).toBe(1);
+});
+
 test("UI2-DG55 retained governance records keep their original workbench and version", async ({
   page,
 }) => {
@@ -870,7 +1094,7 @@ test("platform completion exposes data governance notifications and user-panel s
   });
 
   await page.goto("/platform-admin/data");
-  await expect(page.getByRole("heading", { name: "跨组织业务数据", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "数据中心", level: 2 })).toBeVisible();
   const exportTrigger = page.getByRole("button", { name: "导出表格文件", exact: true });
   const exportFilter = page.getByRole("dialog", { name: "筛选近期数据" });
   if ((page.viewportSize()?.width ?? 1000) <= 760)

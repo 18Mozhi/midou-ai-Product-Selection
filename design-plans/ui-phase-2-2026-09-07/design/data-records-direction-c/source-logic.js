@@ -4,6 +4,9 @@ window.DATA_RECORDS_SOURCE = (bridge) => {
     computed,
     onMounted,
     onBeforeUnmount,
+    onActivated,
+    onDeactivated,
+    watch,
     useRoute,
     useRouter,
     defineProps,
@@ -87,6 +90,7 @@ window.DATA_RECORDS_SOURCE = (bridge) => {
       : "",
     pageSize = 20,
     tab = ref(queryValue("view") === "quality" || hasQualityDeepLink ? "quality" : "records"),
+    qualityVisited = ref(tab.value === "quality"),
     entity = ref(initialEntity),
     query = ref(queryValue("q").trim()),
     queryDraft = ref(query.value),
@@ -99,8 +103,13 @@ window.DATA_RECORDS_SOURCE = (bridge) => {
     message = ref(""),
     requestId = ref(""),
     exporting = ref(false),
+    exportUnknown = ref(false),
     refreshing = ref(false);
   let activeController = null;
+  let readSequence = 0,
+    pageActive = true,
+    resumeRead = false,
+    detachedExport = null;
   const {
     request: exportReasonRequest,
     open: exportReasonOpen,
@@ -121,6 +130,9 @@ window.DATA_RECORDS_SOURCE = (bridge) => {
   ];
   const current = computed(() =>
     entities.find((item) => item.value === (snapshotScope.value?.entity ?? entity.value)),
+  );
+  const operationLocked = computed(
+    () => refreshing.value || exporting.value || exportReasonOpen.value,
   );
   const scopeMismatch = computed(() =>
     Boolean(
@@ -171,45 +183,94 @@ window.DATA_RECORDS_SOURCE = (bridge) => {
         ? "blocked"
         : "error";
   }
-  async function syncRecordsUrl() {
+  function readScope() {
+    return {
+      entity: entity.value,
+      query: query.value,
+      status: status.value,
+      page: page.value,
+    };
+  }
+  function routeScope() {
+    const routeEntity = ["trends", "opportunities", "competitors", "suppliers"].includes(
+        queryValue("entity"),
+      )
+        ? queryValue("entity")
+        : "trends",
+      routeStatus = entityStatuses[routeEntity].includes(queryValue("status"))
+        ? queryValue("status")
+        : "";
+    return {
+      entity: routeEntity,
+      query: queryValue("q").trim(),
+      status: routeStatus,
+      page: /^\d{1,3}$/.test(queryValue("page")) ? Math.max(1, Number(queryValue("page"))) : 1,
+    };
+  }
+  function applyRouteScope() {
+    const next = routeScope(),
+      changed =
+        next.entity !== entity.value ||
+        next.query !== query.value ||
+        next.status !== status.value ||
+        next.page !== page.value;
+    if (!changed) return false;
+    entity.value = next.entity;
+    query.value = next.query;
+    queryDraft.value = next.query;
+    status.value = next.status;
+    statusDraft.value = next.status;
+    page.value = next.page;
+    return true;
+  }
+  async function syncRecordsUrl(scope = readScope()) {
     const next = {};
-    if (entity.value !== "trends") next.entity = entity.value;
-    if (query.value) next.q = query.value;
-    if (status.value) next.status = status.value;
-    if (page.value > 1) next.page = String(page.value);
+    if (scope.entity !== "trends") next.entity = scope.entity;
+    if (scope.query) next.q = scope.query;
+    if (scope.status) next.status = scope.status;
+    if (scope.page > 1) next.page = String(scope.page);
     await router.replace({ query: next });
   }
   async function load(options = {}) {
-    if (refreshing.value) return;
+    if (!pageActive) return;
+    const sequence = ++readSequence;
+    activeController?.abort("superseded");
+    activeController = null;
     const hadData = Boolean(data.value?.items?.length);
-    const scope = { entity: entity.value, query: query.value, status: status.value };
+    const scope = readScope();
     refreshing.value = true;
     if (!hadData) state.value = "loading";
     message.value = "";
-    const params = new URLSearchParams({ domain: "data", entity: entity.value });
-    if (query.value.trim()) params.set("query", query.value.trim());
-    if (status.value) params.set("status", status.value);
+    const params = new URLSearchParams({ domain: "data", entity: scope.entity });
+    if (scope.query) params.set("query", scope.query);
+    if (scope.status) params.set("status", scope.status);
     const controller = new AbortController();
     activeController = controller;
-    const timer = window.setTimeout(() => controller.abort(), 15_000);
+    const timer = window.setTimeout(() => controller.abort("request_timeout"), 15_000);
     try {
-      if (options.updateUrl !== false) await syncRecordsUrl();
+      if (options.updateUrl !== false) await syncRecordsUrl(scope);
+      if (sequence !== readSequence || !pageActive) return;
       const response = await request(`/platform/management?${params}`, {
         signal: controller.signal,
       });
+      if (sequence !== readSequence || !pageActive) return;
       requestId.value = response.request_id;
       data.value = response.data;
-      snapshotScope.value = scope;
+      snapshotScope.value = { entity: scope.entity, query: scope.query, status: scope.status };
+      exportUnknown.value = false;
       const totalPages = Math.max(1, Math.ceil(response.data.items.length / pageSize));
-      if (page.value > totalPages) {
+      if (scope.page > totalPages) {
         page.value = totalPages;
-        if (options.updateUrl !== false) await syncRecordsUrl();
+        if (options.updateUrl !== false) await syncRecordsUrl({ ...scope, page: totalPages });
       }
       state.value = response.data.items.length ? "ready" : "empty";
     } catch (error) {
+      if (sequence !== readSequence || !pageActive) return;
       const failure = error instanceof ApiClientError ? error : null;
       requestId.value = failure?.requestId ?? requestId.value;
-      const hint = controller.signal.aborted
+      const timedOut = controller.signal.aborted && controller.signal.reason === "request_timeout";
+      if (controller.signal.aborted && !timedOut) return;
+      const hint = timedOut
         ? "读取超过 15 秒，已安全取消；上一份结果仍保留。"
         : (failure?.actionHint ?? "网络或服务异常，上一份结果仍保留。");
       message.value = hint;
@@ -217,12 +278,31 @@ window.DATA_RECORDS_SOURCE = (bridge) => {
     } finally {
       window.clearTimeout(timer);
       if (activeController === controller) activeController = null;
-      refreshing.value = false;
+      if (sequence === readSequence) refreshing.value = false;
     }
   }
-  async function exportCsv() {
-    if (exporting.value || exportReasonOpen.value || refreshing.value || scopeMismatch.value)
+  function applyExportSettlement(settlement) {
+    requestId.value = settlement.requestId;
+    if (settlement.kind === "success") {
+      exportUnknown.value = false;
+      message.value = "受控表格文件已生成，导出原因和记录数已写入平台审计。";
       return;
+    }
+    exportUnknown.value = settlement.unknown;
+    message.value = settlement.message;
+  }
+  async function exportCsv() {
+    if (
+      exporting.value ||
+      exportReasonOpen.value ||
+      refreshing.value ||
+      scopeMismatch.value ||
+      exportUnknown.value
+    )
+      return;
+    const exportScope = snapshotScope.value
+      ? { ...snapshotScope.value }
+      : { entity: entity.value, query: query.value, status: status.value };
     const reason = await askExportReason({
       title: "填写受控导出原因",
       description: "导出原因会与筛选范围、操作者和文件审计记录一起保存。",
@@ -234,36 +314,52 @@ window.DATA_RECORDS_SOURCE = (bridge) => {
       return;
     }
     exporting.value = true;
+    let settlement;
     try {
       const response = await requestResponse("/platform/management/data/exports", {
         method: "POST",
         headers: { accept: "text/csv" },
         body: {
-          entity: entity.value,
-          query: query.value.trim(),
-          status: status.value,
+          entity: exportScope.entity,
+          query: exportScope.query,
+          status: exportScope.status,
           reason: reason.trim(),
         },
       });
-      requestId.value = response.headers.get("x-request-id") ?? requestId.value;
+      const responseRequestId = response.headers.get("x-request-id") ?? requestId.value;
       const blob = await response.blob(),
         url = URL.createObjectURL(blob),
         link = document.createElement("a");
       link.href = url;
-      link.download = `platform-${entity.value}-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.download = `platform-${exportScope.entity}-${new Date().toISOString().slice(0, 10)}.csv`;
       link.click();
       URL.revokeObjectURL(url);
-      message.value = "受控表格文件已生成，导出原因和记录数已写入平台审计。";
+      settlement = { kind: "success", requestId: responseRequestId };
     } catch (error) {
       const failure = error instanceof ApiClientError ? error : null;
-      requestId.value = failure?.requestId ?? requestId.value;
-      message.value = failure?.actionHint ?? "受控导出未完成";
+      settlement =
+        failure && failure.status > 0
+          ? {
+              kind: "failure",
+              message: failure.actionHint,
+              requestId: failure.requestId,
+              unknown: false,
+            }
+          : {
+              kind: "failure",
+              message:
+                "导出结果未知。服务器可能已经生成文件或写入审计；请先核对导出记录，不要重复提交。",
+              requestId: failure?.requestId ?? requestId.value,
+              unknown: true,
+            };
     } finally {
       exporting.value = false;
     }
+    if (pageActive) applyExportSettlement(settlement);
+    else detachedExport = settlement;
   }
   function selectEntity(value) {
-    if (refreshing.value || value === entity.value) return;
+    if (operationLocked.value || value === entity.value) return;
     entity.value = value;
     status.value = "";
     statusDraft.value = "";
@@ -271,14 +367,14 @@ window.DATA_RECORDS_SOURCE = (bridge) => {
     void load();
   }
   function applyFilters() {
-    if (refreshing.value) return;
+    if (operationLocked.value) return;
     query.value = queryDraft.value.trim();
     status.value = statusDraft.value;
     page.value = 1;
     void load();
   }
   function resetFilters() {
-    if (refreshing.value) return;
+    if (operationLocked.value) return;
     query.value = "";
     queryDraft.value = "";
     status.value = "";
@@ -288,7 +384,7 @@ window.DATA_RECORDS_SOURCE = (bridge) => {
   }
   function goToPage(nextPage) {
     if (
-      refreshing.value ||
+      operationLocked.value ||
       nextPage < 1 ||
       nextPage > pagination.value.total_pages ||
       nextPage === page.value
@@ -298,18 +394,70 @@ window.DATA_RECORDS_SOURCE = (bridge) => {
     void syncRecordsUrl();
   }
   async function selectTab(value) {
-    if (value === tab.value) return;
+    if (value === tab.value || exporting.value || exportReasonOpen.value) return;
     tab.value = value;
-    if (value === "quality") await router.replace({ query: { view: "quality" } });
-    else {
+    if (value === "quality") {
+      qualityVisited.value = true;
+      await router.replace({ query: { view: "quality" } });
+    } else {
       await syncRecordsUrl();
-      if (!data.value.items.length) void load({ updateUrl: false });
+      if (!snapshotScope.value) void load({ updateUrl: false });
     }
   }
   onMounted(() => {
     if (tab.value === "records") void load();
   });
-  onBeforeUnmount(() => activeController?.abort());
+  watch(
+    () => [
+      route.path,
+      route.query.view,
+      route.query.entity,
+      route.query.q,
+      route.query.status,
+      route.query.page,
+      route.query.evidence,
+      route.query.evidence_id,
+      route.query.issue_id,
+    ],
+    ([path]) => {
+      if (path !== "/platform-admin/data" || !pageActive) return;
+      const nextTab =
+        queryValue("view") === "quality" ||
+        Boolean(queryValue("evidence") || queryValue("evidence_id") || queryValue("issue_id"))
+          ? "quality"
+          : "records";
+      tab.value = nextTab;
+      if (nextTab === "quality") {
+        qualityVisited.value = true;
+        return;
+      }
+      if (applyRouteScope()) void load({ updateUrl: false });
+    },
+  );
+  function suspendRecords(reason) {
+    const interrupted = Boolean(activeController);
+    pageActive = false;
+    readSequence += 1;
+    activeController?.abort(reason);
+    activeController = null;
+    refreshing.value = false;
+    resumeRead ||= reason === "deactivated" && interrupted;
+    if (exportReasonOpen.value) cancelExportReason();
+  }
+  onBeforeUnmount(() => suspendRecords("unmounted"));
+  onDeactivated(() => suspendRecords("deactivated"));
+  onActivated(() => {
+    pageActive = true;
+    if (route.path !== "/platform-admin/data") return;
+    const routeChanged = tab.value === "records" && applyRouteScope();
+    if (detachedExport) {
+      applyExportSettlement(detachedExport);
+      detachedExport = null;
+    }
+    if (tab.value === "records" && (routeChanged || resumeRead || !snapshotScope.value))
+      void load({ updateUrl: false });
+    resumeRead = false;
+  });
 
   return {
     entityStatuses,

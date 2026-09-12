@@ -10,6 +10,7 @@ const props = defineProps<{
   description: string;
   initialValue?: string;
   minimumLength?: number;
+  maximumLength?: number;
   workspaceRestore?: WorkspaceRestoreReasonContext;
 }>();
 const emit = defineEmits<{ submit: [value: string]; cancel: [] }>();
@@ -85,17 +86,24 @@ function handleTab(event: KeyboardEvent) {
       </section>
       <p v-else>{{ description }}</p>
       <label>
-        原因（至少 {{ minimumLength ?? 2 }} 个字）
+        原因（至少 {{ minimumLength ?? 2 }} 个字<span v-if="maximumLength"
+          >，最多 {{ maximumLength }} 个字</span
+        >）
         <textarea
           ref="inputElement"
           v-model="reason"
           required
           :minlength="minimumLength ?? 2"
+          :maxlength="maximumLength"
           rows="4"
           aria-describedby="audited-reason-help"
         ></textarea>
       </label>
-      <small id="audited-reason-help">提交后会与操作者、时间和目标对象一起保留。</small>
+      <small id="audited-reason-help"
+        >提交后会与操作者、时间和目标对象一起保留。<span v-if="maximumLength"
+          >已输入 {{ reason.length }} / {{ maximumLength }} 字。</span
+        ></small
+      >
       <footer>
         <button type="button" @click="$emit('cancel')">取消</button>
         <button type="submit" :disabled="reason.trim().length < (minimumLength ?? 2)">
@@ -136,6 +144,10 @@ header h3,
 form > p,
 small {
   margin: 0;
+}
+small span {
+  display: block;
+  margin-top: 4px;
 }
 header > button {
   min-width: 40px;

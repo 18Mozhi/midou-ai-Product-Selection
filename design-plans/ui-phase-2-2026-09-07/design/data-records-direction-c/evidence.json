@@ -3,40 +3,41 @@
   "contractRebindings": [
     {
       "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
-      "old": "dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66",
-      "current": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+      "historical": "dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66",
+      "atCommit": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+      "current": "ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0",
       "commit": "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
-      "reason": "Audited reason dialog focus-test additions; historical table retained."
+      "reason": "Audited reason focus tests are preserved; current P54 ownership cases are additive."
     }
   ],
   "sourceHashes": {
-    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
-    "apps/web/src/components/PlatformDataCenter.vue": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
-    "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "86e109870bed9731f32a5beae9a5f8a316d31dcb5c5b163681e8523a8b79fde8",
+    "apps/web/src/components/PlatformDataCenter.vue": "10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4",
+    "tests/e2e/m06-02-platform-dashboard.spec.ts": "ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0",
     "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
     "apps/api/src/platform-dashboard-service.ts": "568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e",
     "apps/api/src/mysql-platform-dashboard-repository.ts": "b290af1c03b2767c79bb565f9ec256550250acc4be0cc787de12b81e9b8dcd28",
     "apps/api/src/platform-dashboard-routes.ts": "1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30",
-    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
-    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-    "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+    "apps/web/src/components/AuditedReasonDialog.vue": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+    "apps/web/src/components/ResponsiveDataView.vue": "52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
-    "scripts/lib/ui-phase2-data-records-design-data.mjs": "bd6b951fdc438690d3206314aae3d572ee0954b6db4e47af26e1d0f0e7dc408e",
-    "scripts/verify-ui-phase2-data-records-c.mjs": "53e4d63125bc3f3aa69f18f13bd39a98e77ec496766bd623d0a5039dbd3bfdd9",
+    "scripts/lib/ui-phase2-data-records-design-data.mjs": "baaead84e21d4caaea3fd7b7698bb9560d9c74322d684d188fd861146e0218b1",
+    "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/credentials.css": "408c80845bfb398aecad8be3e9a0006f00208a59066b511cfda5a1efbb75ad68",
     "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/index.html": "c5ccf39bac61f7cf67b281ad5fda93e629f4152ed4df8f0fb34be9a0dc9cc3a3",
     "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/records.css": "4559c4182eeb6e1198b7a4928628e08f40a0ad6c805a14785281fd07513ab330",
-    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/records.js": "68f39dfaad92b89d3511943d409f693b7c6b3e88b08bafcdaa63e33390471d98",
-    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/data.js": "3574af7d7e45cd5f0b89ccb0cb62bef9557ac3e73906031da00a24a81f9acf66",
-    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/source-logic.js": "4c0cf7c3bdcbbfd93fb9e7f1d38b07cb8110cdecc98557971b5e9922b3527f8a"
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/records.js": "b2a49083d5ea0b20397ae3942db207826951a6a78c05ea807abc86d343c1c48d",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/data.js": "a9a8474aa98a95bef46f207bc6d6c3abcc84d404db51c921ae90d63a4bed4856",
+    "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/source-logic.js": "bcbbefcd0883ec88d085fabf379cdd2e484564776ca4ada0a638f974176cd333"
   },
   "sourceChecks": [
     "Actual Vue four entity labels, 13 status labels and local 0/1/20/21/100 row pagination/clamp; original trend/supplier fixture separated from synthetic boundaries.",
-    "Ten first/preserved source read failures, 15-second abort callback and single-flight, retaining entity interpretation; no real request or timer wait.",
-    "Snapshot mismatch blocks export until successful requested scope; initial URL trimming/invalid status/page clamp; ignored-abort late read still updates data reproduced in inert source bridge.",
-    "Actual export scope changes after reason await; filename changes again before response despite supplier request. Inert DOM records download intention only; no file, audit or POST executed.",
+    "Ten first/preserved source read failures and 15-second abort callback retain entity interpretation; generation supersession is covered by mounted Vue E2E, with no real request or timer wait here.",
+    "Snapshot mismatch blocks export until successful requested scope; initial URL trimming/invalid status/page clamp; an ignored-abort late read cannot replace the successful supplier snapshot after unmount.",
+    "Actual export keeps the successful trend snapshot through reason wait and response-time entity changes, including its filename. Inert DOM records download intention only; no file, audit or POST executed.",
     "Actual service accepts 13 entity/status pairs, trims query and rejects invalid entity/status/121 query plus export reason 1/301; accepts 2/300. Inert repository only.",
     "Actual four repository readManagement data branches on synthetic SQL-row adapter: LIMIT100, returned-set summary, supplier search excluding workspace and null/undefined converted to zero; SQL was not executed.",
     "Actual csvCell six cases and data export route BOM/non-idempotency contract checked; no CSV file, audit row, customer material or real download created."

@@ -17,15 +17,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
       ],
-      "sourceContractKeys": [
-        "OG-REFRESH"
-      ],
+      "sourceContractKeys": ["OG-REFRESH"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "loading或refreshing禁用",
       "handler": "load({background:true})读取summary和tokens；真实GET会处理到期状态，不是数据库纯读",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -55,15 +51,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
       ],
-      "sourceContractKeys": [
-        "OG-RETRY"
-      ],
+      "sourceContractKeys": ["OG-RETRY"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "父error/blocked/expired/forbidden/rate_limited/conflict分支",
       "handler": "load()重读，保留原重试策略；不套用P34专有白区",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -94,15 +86,11 @@
         "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1"
       ],
-      "sourceContractKeys": [
-        "OG-RETRY"
-      ],
+      "sourceContractKeys": ["OG-RETRY"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "仅approvals首次500/429",
       "handler": "P36不挂载这两个专有失败组件",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -134,16 +122,11 @@
         "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1"
       ],
-      "sourceContractKeys": [
-        "OG-PROFILE-SAVE",
-        "OG-PROFILE-LOGO浏览器有效性"
-      ],
+      "sourceContractKeys": ["OG-PROFILE-SAVE", "OG-PROFILE-LOGO浏览器有效性"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "仅summary",
       "handler": "保存资料/Logo检查不属本页",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -173,15 +156,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1"
       ],
-      "sourceContractKeys": [
-        "P30全部成员事件父转发，复用M语义"
-      ],
+      "sourceContractKeys": ["P30全部成员事件父转发，复用M语义"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "仅members",
       "handler": "不计成员邀请、角色或成员变更",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -211,15 +190,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1"
       ],
-      "sourceContractKeys": [
-        "P31资源授权父转发，复用已有合同"
-      ],
+      "sourceContractKeys": ["P31资源授权父转发，复用已有合同"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "仅roles",
       "handler": "不计资源授权创建/延期/撤销",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -249,15 +224,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#ab6191688d424055.1"
       ],
-      "sourceContractKeys": [
-        "D-OG-REASON通用成员/邀请/工作区/团队及P31调用"
-      ],
+      "sourceContractKeys": ["D-OG-REASON通用成员/邀请/工作区/团队及P31调用"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "非tokenAction路径",
       "handler": "令牌调用独立ask入口，不复用通用初始原因action值",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -288,16 +259,11 @@
         "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1"
       ],
-      "sourceContractKeys": [
-        "D-OG-REASON提交/取消父转发",
-        "D-OG-REASON组件调用"
-      ],
+      "sourceContractKeys": ["D-OG-REASON提交/取消父转发", "D-OG-REASON组件调用"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "共享窗口挂载",
       "handler": "submit/cancel解析等待的原因请求，取消不发令牌POST",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -319,46 +285,31 @@
         }
       ],
       "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
-      "forwardsTo": [
-        "OG-K-ROTATE",
-        "OG-K-REVOKE"
-      ],
+      "forwardsTo": ["OG-K-ROTATE", "OG-K-REVOKE"],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
           "event": "@submit",
           "handler": "submitAuditedReason",
-          "targets": [
-            "OG-K-ROTATE",
-            "OG-K-REVOKE"
-          ]
+          "targets": ["OG-K-ROTATE", "OG-K-REVOKE"]
         },
         {
           "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
           "event": "@cancel",
           "handler": "cancelAuditedReason",
-          "targets": [
-            "OG-K-ROTATE",
-            "OG-K-REVOKE"
-          ]
+          "targets": ["OG-K-ROTATE", "OG-K-REVOKE"]
         },
         {
           "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1",
           "event": "@submit",
           "handler": "submitAuditedReason",
-          "targets": [
-            "OG-K-ROTATE",
-            "OG-K-REVOKE"
-          ]
+          "targets": ["OG-K-ROTATE", "OG-K-REVOKE"]
         },
         {
           "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1",
           "event": "@cancel",
           "handler": "cancelAuditedReason",
-          "targets": [
-            "OG-K-ROTATE",
-            "OG-K-REVOKE"
-          ]
+          "targets": ["OG-K-ROTATE", "OG-K-REVOKE"]
         }
       ]
     },
@@ -369,15 +320,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1"
       ],
-      "sourceContractKeys": [
-        "D-OG-REASON令牌轮换/撤销调用"
-      ],
+      "sourceContractKeys": ["D-OG-REASON令牌轮换/撤销调用"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "tokenAction调用",
       "handler": "initialValue空，未覆写minimumLength；分别标题/描述后复用原POST",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -399,10 +346,7 @@
         }
       ],
       "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
-      "forwardsTo": [
-        "OG-K-ROTATE",
-        "OG-K-REVOKE"
-      ],
+      "forwardsTo": ["OG-K-ROTATE", "OG-K-REVOKE"],
       "forwardBindings": []
     },
     {
@@ -412,15 +356,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"
       ],
-      "sourceContractKeys": [
-        "OG-K-COPY"
-      ],
+      "sourceContractKeys": ["OG-K-COPY"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "secret非空",
       "handler": "copySecret调用浏览器剪贴板；旧Promise反馈归属问题OG-G05仍待，不从提案推断已修复",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -450,15 +390,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationTokenPanel.vue#b3a4e8d62ca470a9.1"
       ],
-      "sourceContractKeys": [
-        "OG-K-DISMISS"
-      ],
+      "sourceContractKeys": ["OG-K-DISMISS"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "secret非空",
       "handler": "dismissSecret→dismissTokenSecret增加generation并清secret，不是服务器撤销",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -489,15 +425,11 @@
         "apps/web/src/components/OrganizationTokenPanel.vue#ed5969fa99d64044.1",
         "apps/web/src/components/OrganizationTokenPanel.vue#073eb5c8ded40aa0.1"
       ],
-      "sourceContractKeys": [
-        "OG-K-CREATE"
-      ],
+      "sourceContractKeys": ["OG-K-CREATE"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "原生required/范围及scope自校验；submit由busy禁用",
       "handler": "submitCreate调用createToken精确name/scopes/ttl_days/reason；失败留草稿，成功重置90和空scope",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -527,15 +459,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
       ],
-      "sourceContractKeys": [
-        "OG-K-SCOPE四种"
-      ],
+      "sourceContractKeys": ["OG-K-SCOPE四种"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "四固定复选框，等待时仍可编辑",
       "handler": "toggleScope只编辑草稿scope数组，不直接发授权请求",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -565,15 +493,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
       ],
-      "sourceContractKeys": [
-        "OG-K-TTL四快捷"
-      ],
+      "sourceContractKeys": ["OG-K-TTL四快捷"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "30/90/180/365与aria-pressed",
       "handler": "只赋createForm.ttl_days，等待仍可编辑",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -603,15 +527,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationTokenPanel.vue#66725db5db9a8fe8.1"
       ],
-      "sourceContractKeys": [
-        "OG-K-FILTER重置"
-      ],
+      "sourceContractKeys": ["OG-K-FILTER重置"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "本地四条件，等待可用",
       "handler": "resetFilters清四条件；条件变化watch才回第一页，默认条件不强制翻页",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -641,15 +561,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"
       ],
-      "sourceContractKeys": [
-        "OG-TECH"
-      ],
+      "sourceContractKeys": ["OG-TECH"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "可见记录的原生details",
       "handler": "展示记录ID/版本/时间，不请求、复制或打开业务弹窗",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -679,15 +595,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationTokenPanel.vue#00a635020f530ba8.1"
       ],
-      "sourceContractKeys": [
-        "OG-K-ROTATE"
-      ],
+      "sourceContractKeys": ["OG-K-ROTATE"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "active且非busy",
       "handler": "performTokenAction(item,'rotate')→tokenAction；原因确认后POST action/expected_version/reason",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -717,15 +629,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationTokenPanel.vue#5b6c117ef94cbbb0.1"
       ],
-      "sourceContractKeys": [
-        "OG-K-REVOKE"
-      ],
+      "sourceContractKeys": ["OG-K-REVOKE"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "active且非busy",
       "handler": "performTokenAction(item,'revoke')→tokenAction；取消返回false，不发POST",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -756,15 +664,11 @@
         "apps/web/src/components/OrganizationTokenPanel.vue#d27cb4f69e0d30d7.1",
         "apps/web/src/components/OrganizationTokenPanel.vue#169268616bd2a69a.1"
       ],
-      "sourceContractKeys": [
-        "OG-K-PAGE"
-      ],
+      "sourceContractKeys": ["OG-K-PAGE"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "首尾按钮禁用",
       "handler": "本地6条一页，更新原URL，不新增服务端分页",
-      "variants": [
-        "source-current"
-      ],
+      "variants": ["source-current"],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -831,26 +735,19 @@
     {
       "prop": "createToken",
       "parentHandler": "createOrganizationToken",
-      "actions": [
-        "OG-K-CREATE"
-      ],
+      "actions": ["OG-K-CREATE"],
       "effect": "清旧secret后POST /org/admin/tokens，原value和preserveForm:true"
     },
     {
       "prop": "performTokenAction",
       "parentHandler": "tokenAction",
-      "actions": [
-        "OG-K-ROTATE",
-        "OG-K-REVOKE"
-      ],
+      "actions": ["OG-K-ROTATE", "OG-K-REVOKE"],
       "effect": "空初始原因，确认后POST /org/admin/tokens/:id/actions含action/expected_version/reason"
     },
     {
       "prop": "dismissSecret",
       "parentHandler": "dismissTokenSecret",
-      "actions": [
-        "OG-K-DISMISS"
-      ],
+      "actions": ["OG-K-DISMISS"],
       "effect": "generation加一并清明文，不请求服务器"
     }
   ],
@@ -872,16 +769,8 @@
     {
       "id": "catalog-nav",
       "selector": "[data-anchor=\"catalog-title\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": true,
       "sharedReason": false,
       "parentReference": false,
@@ -935,16 +824,8 @@
     {
       "id": "create-nav",
       "selector": "[data-anchor=\"create-name\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": true,
       "sharedReason": false,
       "parentReference": false,
@@ -998,17 +879,8 @@
     {
       "id": "refresh",
       "selector": "#refresh",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed",
-        "busy"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed", "busy"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": true,
@@ -1074,16 +946,8 @@
     {
       "id": "retry",
       "selector": "#retry",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": true,
@@ -1139,16 +1003,8 @@
     {
       "id": "create-jump",
       "selector": "#new-token",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": true,
       "sharedReason": false,
       "parentReference": false,
@@ -1202,16 +1058,8 @@
     {
       "id": "reset",
       "selector": "#reset",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -1267,16 +1115,8 @@
     {
       "id": "clear",
       "selector": "#clear-filter",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": true,
       "sharedReason": false,
       "parentReference": false,
@@ -1330,16 +1170,8 @@
     {
       "id": "technical-closed",
       "selector": ".technical summary",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -1395,16 +1227,8 @@
     {
       "id": "technical-open",
       "selector": ".technical summary",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -1460,16 +1284,8 @@
     {
       "id": "previous",
       "selector": "[data-page=\"-1\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -1525,13 +1341,8 @@
     {
       "id": "previous-disabled",
       "selector": "[data-page=\"-1\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "disabled"
-      ],
+      "widths": [1440, 390],
+      "states": ["disabled"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -1557,16 +1368,8 @@
     {
       "id": "next",
       "selector": "[data-page=\"1\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -1622,13 +1425,8 @@
     {
       "id": "next-disabled",
       "selector": "[data-page=\"1\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "disabled"
-      ],
+      "widths": [1440, 390],
+      "states": ["disabled"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -1654,17 +1452,8 @@
     {
       "id": "create",
       "selector": "#create-submit",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed",
-        "busy"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed", "busy"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -1731,16 +1520,8 @@
     {
       "id": "ttl-30-unselected",
       "selector": "[data-ttl=\"30\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -1796,16 +1577,8 @@
     {
       "id": "ttl-30-selected",
       "selector": "[data-ttl=\"30\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -1861,16 +1634,8 @@
     {
       "id": "ttl-90-unselected",
       "selector": "[data-ttl=\"90\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -1926,16 +1691,8 @@
     {
       "id": "ttl-90-selected",
       "selector": "[data-ttl=\"90\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -1991,16 +1748,8 @@
     {
       "id": "ttl-180-unselected",
       "selector": "[data-ttl=\"180\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2056,16 +1805,8 @@
     {
       "id": "ttl-180-selected",
       "selector": "[data-ttl=\"180\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2121,16 +1862,8 @@
     {
       "id": "ttl-365-unselected",
       "selector": "[data-ttl=\"365\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2186,16 +1919,8 @@
     {
       "id": "ttl-365-selected",
       "selector": "[data-ttl=\"365\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2251,16 +1976,8 @@
     {
       "id": "scope-0-unchecked",
       "selector": "#scope-0",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2316,16 +2033,8 @@
     {
       "id": "scope-0-checked",
       "selector": "#scope-0",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2381,16 +2090,8 @@
     {
       "id": "scope-1-unchecked",
       "selector": "#scope-1",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2446,16 +2147,8 @@
     {
       "id": "scope-1-checked",
       "selector": "#scope-1",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2511,16 +2204,8 @@
     {
       "id": "scope-2-unchecked",
       "selector": "#scope-2",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2576,16 +2261,8 @@
     {
       "id": "scope-2-checked",
       "selector": "#scope-2",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2641,16 +2318,8 @@
     {
       "id": "scope-3-unchecked",
       "selector": "#scope-3",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2706,16 +2375,8 @@
     {
       "id": "scope-3-checked",
       "selector": "#scope-3",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2771,16 +2432,8 @@
     {
       "id": "copy",
       "selector": "#copy",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2836,16 +2489,8 @@
     {
       "id": "copy-copied",
       "selector": "#copy",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2901,16 +2546,8 @@
     {
       "id": "copy-failed",
       "selector": "#copy",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -2966,16 +2603,8 @@
     {
       "id": "dismiss",
       "selector": "#dismiss",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -3031,17 +2660,8 @@
     {
       "id": "rotate",
       "selector": "[data-action=\"rotate\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed",
-        "busy"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed", "busy"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -3107,24 +2727,14 @@
     {
       "id": "rotate-close",
       "selector": "#reason-close",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": true,
       "parentReference": false,
       "actionId": "OG-K-ROTATE",
       "sourceCandidateIds": [],
-      "sharedSourceIds": [
-        "apps/web/src/components/AuditedReasonDialog.vue#f850a4abcc7ccc3a.1"
-      ],
+      "sharedSourceIds": ["apps/web/src/components/AuditedReasonDialog.vue#f850a4abcc7ccc3a.1"],
       "screenshots": [
         {
           "file": "output/playwright/p36-controls-review/rotate-close-default-1440.png",
@@ -3172,24 +2782,14 @@
     {
       "id": "rotate-cancel",
       "selector": "#reason-cancel",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": true,
       "parentReference": false,
       "actionId": "OG-K-ROTATE",
       "sourceCandidateIds": [],
-      "sharedSourceIds": [
-        "apps/web/src/components/AuditedReasonDialog.vue#8724bc1f65aaf63a.1"
-      ],
+      "sharedSourceIds": ["apps/web/src/components/AuditedReasonDialog.vue#8724bc1f65aaf63a.1"],
       "screenshots": [
         {
           "file": "output/playwright/p36-controls-review/rotate-cancel-default-1440.png",
@@ -3237,24 +2837,15 @@
     {
       "id": "rotate-submit",
       "selector": "#reason-submit",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed",
-        "disabled"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed", "disabled"],
       "proposalOnly": false,
       "sharedReason": true,
       "parentReference": false,
       "actionId": "OG-K-ROTATE",
       "sourceCandidateIds": [],
       "sharedSourceIds": [
-        "apps/web/src/components/AuditedReasonDialog.vue#e571bad78d52022e.1",
+        "apps/web/src/components/AuditedReasonDialog.vue#7aa809a5cd2d2124.1",
         "apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1"
       ],
       "screenshots": [
@@ -3314,17 +2905,8 @@
     {
       "id": "revoke",
       "selector": "[data-action=\"revoke\"]",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed",
-        "busy"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed", "busy"],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
@@ -3390,24 +2972,14 @@
     {
       "id": "revoke-close",
       "selector": "#reason-close",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": true,
       "parentReference": false,
       "actionId": "OG-K-REVOKE",
       "sourceCandidateIds": [],
-      "sharedSourceIds": [
-        "apps/web/src/components/AuditedReasonDialog.vue#f850a4abcc7ccc3a.1"
-      ],
+      "sharedSourceIds": ["apps/web/src/components/AuditedReasonDialog.vue#f850a4abcc7ccc3a.1"],
       "screenshots": [
         {
           "file": "output/playwright/p36-controls-review/revoke-close-default-1440.png",
@@ -3455,24 +3027,14 @@
     {
       "id": "revoke-cancel",
       "selector": "#reason-cancel",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": false,
       "sharedReason": true,
       "parentReference": false,
       "actionId": "OG-K-REVOKE",
       "sourceCandidateIds": [],
-      "sharedSourceIds": [
-        "apps/web/src/components/AuditedReasonDialog.vue#8724bc1f65aaf63a.1"
-      ],
+      "sharedSourceIds": ["apps/web/src/components/AuditedReasonDialog.vue#8724bc1f65aaf63a.1"],
       "screenshots": [
         {
           "file": "output/playwright/p36-controls-review/revoke-cancel-default-1440.png",
@@ -3520,24 +3082,15 @@
     {
       "id": "revoke-submit",
       "selector": "#reason-submit",
-      "widths": [
-        1440,
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed",
-        "disabled"
-      ],
+      "widths": [1440, 390],
+      "states": ["default", "hover", "focus", "pressed", "disabled"],
       "proposalOnly": false,
       "sharedReason": true,
       "parentReference": false,
       "actionId": "OG-K-REVOKE",
       "sourceCandidateIds": [],
       "sharedSourceIds": [
-        "apps/web/src/components/AuditedReasonDialog.vue#e571bad78d52022e.1",
+        "apps/web/src/components/AuditedReasonDialog.vue#7aa809a5cd2d2124.1",
         "apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1"
       ],
       "screenshots": [
@@ -3597,15 +3150,8 @@
     {
       "id": "filters-closed",
       "selector": "#filters-toggle",
-      "widths": [
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": true,
       "sharedReason": false,
       "parentReference": false,
@@ -3639,15 +3185,8 @@
     {
       "id": "filters-open",
       "selector": "#filters-toggle",
-      "widths": [
-        390
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus",
-        "pressed"
-      ],
+      "widths": [390],
+      "states": ["default", "hover", "focus", "pressed"],
       "proposalOnly": true,
       "sharedReason": false,
       "parentReference": false,
@@ -4058,7 +3597,7 @@
   ],
   "sharedReasonReview": {
     "sourceHashes": {
-      "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+      "apps/web/src/components/AuditedReasonDialog.vue": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
       "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
       "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f"
     },
@@ -4080,7 +3619,7 @@
         }
       },
       {
-        "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#e571bad78d52022e.1",
+        "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#7aa809a5cd2d2124.1",
         "tag": "form",
         "kind": "form-event",
         "events": {
@@ -4116,7 +3655,7 @@
       "minimum": 2,
       "maxlength": null,
       "initialValue": "",
-      "meaning": "当前Vue没有maxlength；原提案500上限未获业务批准"
+      "meaning": "P36消费者未传maximumLength，仍无maxlength；P54单独传300不改变本页合同"
     },
     "contexts": [
       {
@@ -5166,9 +4705,7 @@
       "共享reason字段和6个源位置单独登记，原提案max500、busy草稿锁与复制归属保护不冒充实际Vue。"
     ]
   },
-  "approvalRecords": [
-    "P36-MOBILE-FILTER-COMPOSITION-APPROVAL.md"
-  ],
+  "approvalRecords": ["P36-MOBILE-FILTER-COMPOSITION-APPROVAL.md"],
   "compositionGaps": [
     "本页仅手机四筛选字段/帮助/底部重置获局部批准并有真实子Vue证据；创建及其他控件问题仍待答。",
     "原662PNG与10实图分别关联，独立schema不强充统一六态slot，72个路由动作槽仍not-mapped。",
