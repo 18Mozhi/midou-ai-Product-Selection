@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-import { responsiveFocusContractHash } from "./lib/ui-phase2-responsive-focus-contract.mjs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { readFile, readdir, writeFile } from "node:fs/promises";
@@ -38,39 +37,76 @@ const contracts = [...contract.matchAll(/^\| ([^|]+?) \| ([a-f0-9]{64}) \|\r?$/g
   ([, f]) => data.sourcePaths.includes(f),
 );
 assert.equal(contracts.length, 16);
-const contractRebindings = [
-  {
-    file: "tests/e2e/m06-02-platform-dashboard.spec.ts",
-    old: "dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66",
-    current: "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-    commit: "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
-    reason: "Audited reason dialog focus-test additions; historical table retained.",
-  },
-];
+const proposalRevision = "05a5152fee9ce562579d5470de019c0fbce4bcb9";
+const implementationHashes = new Map([
+  [
+    "apps/web/src/components/use-platform-content-list.ts",
+    "ff5e74901f493bfcdd9d2022e9f400382038cda38e63f2f75284b9a6d1837535",
+  ],
+  [
+    "apps/web/src/components/use-platform-content-review.ts",
+    "04a83f402bc5b98ede50e7b7ac2d05da0580d47aee638b04915917993d1436e6",
+  ],
+  [
+    "apps/web/src/components/PlatformManagementCenter.vue",
+    "ea3e1f7fa4bbbc4a81076062e8e8e7e62d1aefb3ba1c83a854af7b6611287d33",
+  ],
+  [
+    "apps/web/src/components/PlatformManagementFilter.vue",
+    "57c7c240443c3ac0d269ae7264f8440a37a00618a4991c54d4273223fc380f98",
+  ],
+  [
+    "apps/web/src/components/PlatformManagementRecordList.vue",
+    "46b8b786a5aa6edbd2adc7c835a8e4d9a00257ff363b1888f77b5d4bb45f98ad",
+  ],
+  [
+    "apps/web/src/components/PlatformContentPagination.vue",
+    "2a96546fb88ebc4eacf279b868d620e27c550c990ab6ef129c60803f69c7d244",
+  ],
+  [
+    "apps/web/src/components/ResponsiveDataView.vue",
+    "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
+  ],
+  [
+    "apps/web/src/components/ResponsiveFilterDrawer.vue",
+    "a988f05a2e8a881f78ec39d1c745a8e2e8c9ca4762d1f90fc493556f10468483",
+  ],
+  [
+    "apps/web/src/use-modal-dialog.ts",
+    "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+  ],
+  [
+    "tests/e2e/m06-02-platform-dashboard.spec.ts",
+    "cfddcb4b6223f3b46c31ba90f2e4412dfc6042961565972b4a42059bd494a035",
+  ],
+]);
+const contractRebindings = [...implementationHashes].map(([file, current]) => ({
+  file,
+  proposalRevision,
+  current,
+  reason: "P56 current Vue implementation; historical proposal contract retained.",
+}));
 for (const [, f, h] of contracts) {
-  const binding = contractRebindings.find((v) => v.file === f);
-  if (binding) {
-    assert.equal(h, binding.old);
+  const proposalHash = hash(
+    lf(execFileSync("git", ["show", `${proposalRevision}:${f}`], { cwd: repo, encoding: "utf8" })),
+  );
+  if (f === "tests/e2e/m06-02-platform-dashboard.spec.ts") {
     assert.equal(
       hash(
         lf(
-          execFileSync("git", ["show", `${binding.commit}^:${f}`], { cwd: repo, encoding: "utf8" }),
+          execFileSync("git", ["show", `ff46bfe9c620a422d95cab9689489b07fb6b95ea^:${f}`], {
+            cwd: repo,
+            encoding: "utf8",
+          }),
         ),
       ),
-      binding.old,
+      h,
     );
-    assert.equal(
-      hash(
-        lf(
-          execFileSync("git", ["show", `${binding.commit}:${f}`], { cwd: repo, encoding: "utf8" }),
-        ),
-      ),
-      binding.current,
-    );
-  }
+    assert.equal(proposalHash, "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58");
+  } else assert.equal(proposalHash, h, `${f} proposal`);
   assert.equal(
     hash(lf(await readFile(path.join(repo, f), "utf8"))),
-    responsiveFocusContractHash(f, binding?.current ?? h),
+    implementationHashes.get(f) ?? h,
     f,
   );
 }
@@ -85,9 +121,25 @@ const sourcePaths = [
     (f) => relative + "/" + f,
   ),
 ];
+const historicalProposalSources = new Set([
+  ...data.sourcePaths.slice(0, 11),
+  data.sourcePaths.at(-1),
+]);
 const sourceHashes = Object.fromEntries(
   await Promise.all(
-    sourcePaths.map(async (f) => [f, hash(lf(await readFile(path.join(repo, f), "utf8")))]),
+    sourcePaths.map(async (f) => [
+      f,
+      hash(
+        lf(
+          historicalProposalSources.has(f)
+            ? execFileSync("git", ["show", `${proposalRevision}:${f}`], {
+                cwd: repo,
+                encoding: "utf8",
+              })
+            : await readFile(path.join(repo, f), "utf8"),
+        ),
+      ),
+    ]),
   ),
 );
 if (!capture) {
@@ -403,6 +455,7 @@ try {
       "source-logic.js",
       "README.md",
       "evidence.json",
+      "vue-implementation",
     ].sort(),
   );
   const links = [

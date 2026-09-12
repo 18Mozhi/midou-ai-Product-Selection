@@ -2,14 +2,25 @@
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import type { PlatformManagementDomain as Domain } from "./platform-management-presentation";
 
-defineProps<{ domain: Exclude<Domain, "status">; label: string; activeCount: number }>();
+defineProps<{
+  domain: Exclude<Domain, "status">;
+  label: string;
+  activeCount: number;
+  appearance?: "default" | "content";
+  mode?: "responsive" | "dialog";
+}>();
 defineEmits<{ apply: []; reset: [] }>();
 const query = defineModel<string>("query", { required: true });
 const status = defineModel<string>("status", { required: true });
 </script>
 
 <template>
-  <ResponsiveFilterDrawer :label="`筛选${label}`" :active-count="activeCount">
+  <ResponsiveFilterDrawer
+    :label="`筛选${label}`"
+    :active-count="activeCount"
+    :appearance="appearance"
+    :mode="mode"
+  >
     <form class="platform-management-filter" @submit.prevent="$emit('apply')">
       <input
         v-model="query"

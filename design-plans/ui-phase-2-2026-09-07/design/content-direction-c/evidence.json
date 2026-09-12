@@ -2,15 +2,68 @@
   "proposal": "CONTENT-C-r1",
   "contractRebindings": [
     {
+      "file": "apps/web/src/components/use-platform-content-list.ts",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "ff5e74901f493bfcdd9d2022e9f400382038cda38e63f2f75284b9a6d1837535",
+      "reason": "P56 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/use-platform-content-review.ts",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "04a83f402bc5b98ede50e7b7ac2d05da0580d47aee638b04915917993d1436e6",
+      "reason": "P56 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/PlatformManagementCenter.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "ea3e1f7fa4bbbc4a81076062e8e8e7e62d1aefb3ba1c83a854af7b6611287d33",
+      "reason": "P56 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/PlatformManagementFilter.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "57c7c240443c3ac0d269ae7264f8440a37a00618a4991c54d4273223fc380f98",
+      "reason": "P56 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/PlatformManagementRecordList.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "46b8b786a5aa6edbd2adc7c835a8e4d9a00257ff363b1888f77b5d4bb45f98ad",
+      "reason": "P56 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/PlatformContentPagination.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "2a96546fb88ebc4eacf279b868d620e27c550c990ab6ef129c60803f69c7d244",
+      "reason": "P56 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/ResponsiveDataView.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
+      "reason": "P56 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "a988f05a2e8a881f78ec39d1c745a8e2e8c9ca4762d1f90fc493556f10468483",
+      "reason": "P56 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/use-modal-dialog.ts",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+      "reason": "P56 current Vue implementation; historical proposal contract retained."
+    },
+    {
       "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
-      "old": "dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66",
-      "current": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-      "commit": "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
-      "reason": "Audited reason dialog focus-test additions; historical table retained."
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "cfddcb4b6223f3b46c31ba90f2e4412dfc6042961565972b4a42059bd494a035",
+      "reason": "P56 current Vue implementation; historical proposal contract retained."
     }
   ],
   "sourceHashes": {
-    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "c1095b828706864ee9eb2be430e08e0277522f4e4cf3d1beb084499265fcd457",
     "apps/web/src/components/use-platform-content-list.ts": "48005b5d0b70e22358f7aba27048717b980701ae2fcaaab52b32943a65770ff9",
     "apps/web/src/components/use-platform-content-review.ts": "e700d67e95e44859d7283b7370ad4690fd13cf341cb87a1e556a414ede9dbfe2",
     "apps/web/src/components/platform-management-presentation.ts": "1d5bfec09dfc7efb63cc6d31bdbc924b35eb1d4092fe1e20fa60d779bd259133",
@@ -18,7 +71,7 @@
     "apps/web/src/components/PlatformManagementFilter.vue": "b1e608502ee29df66c4f813c38a6593ffc4c8bc5770183cfdfafbf968db689d9",
     "apps/web/src/components/PlatformManagementRecordList.vue": "3ec74f90ff5740a58f70ea98fdc9c76835da9d223f01dd31d23ffd6a7cf78bfc",
     "apps/web/src/components/PlatformContentPagination.vue": "2c59ac9fa920dd095d36718eb86638a58abaebc6dd99bd8b73e869af5a0e6402",
-    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveDataView.vue": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
     "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
@@ -28,8 +81,8 @@
     "tests/unit/platform-content.test.mjs": "b59646a32e72b3142d04fb2ead2a1e126dd5e5394466929e63bccbe443bd83ad",
     "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
     "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.css": "107e3760b83961d388dfe03a72d77a436b7f8794e10353ef1d9f5e71f2d14b78",
-    "scripts/lib/ui-phase2-content-design-data.mjs": "652aeeb3ce87088dc3c37ae380a81861bee67625592efe619de5802d90e87ac0",
-    "scripts/verify-ui-phase2-content-c.mjs": "e31901d2c97af0741d885f5857c9ea595ed7e91ba4993ad414735a9530f412b3",
+    "scripts/lib/ui-phase2-content-design-data.mjs": "0dc483b8a3e9a9ab26c8fe7125e8ff07bf3c52644b910b80847e3e832ed3585b",
+    "scripts/verify-ui-phase2-content-c.mjs": "de06af621213c8dbf1e4eb1d1d7eb77b40eef5ea882fa49ca3a772d285aafae2",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/index.html": "08ab5dc82c0beeb38a2e8f92d27327d8d71a01fda4be17a282713836c2c43f4f",
     "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/content.css": "dca5f851c8dd7001d3b846b0cc7ec1264b4e49a97e5ddf6324bfc5753880dedd",

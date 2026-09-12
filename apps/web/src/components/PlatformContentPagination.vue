@@ -1,15 +1,18 @@
 <script setup lang="ts">
-defineProps<{
+import { computed } from "vue";
+
+const props = defineProps<{
   pagination: { page: number; total: number; total_pages: number };
   refreshing: boolean;
 }>();
 defineEmits<{ change: [page: number] }>();
+const visiblePage = computed(() => (props.pagination.total_pages ? props.pagination.page : 0));
 </script>
 
 <template>
   <nav class="platform-content-pagination" aria-label="内容分页">
     <span>
-      第 {{ pagination.page }} / {{ pagination.total_pages }} 页，共 {{ pagination.total }} 条
+      第 {{ visiblePage }} / {{ pagination.total_pages }} 页，共 {{ pagination.total }} 条
     </span>
     <div>
       <button

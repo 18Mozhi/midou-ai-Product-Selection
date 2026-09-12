@@ -1,0 +1,434 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P56",
+  "route": "/platform-admin/content",
+  "status": "source-reviewed-not-user-approved",
+  "contract": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/PlatformContentCenter.vue": "577c6f761c9044e1c92e0a0d4f2e5092f94fb647aab8fc29093adc8cb6072ccc",
+    "apps/web/src/components/PlatformContentReviewDialog.vue": "7183474efd2f6fdb6080d3273855b69c742675b5aa36ae026d9cd82f6a6726f4"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "reason": "一处 P56 原生审核窗；筛选窗、手机详情与分页为列出的共享消费者，不把内部控件重复纳入本页专用源码范围。"
+  },
+  "inputs": {
+    "content": ["query", "status"],
+    "review": ["status", "reason"]
+  },
+  "actions": [
+    {
+      "actionId": "CT56-LOAD",
+      "label": "刷新或重新加载内容台账",
+      "kind": "read",
+      "routeApplicability": "P56-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformContentCenter.vue#9f8a46068562150e.1",
+        "apps/web/src/components/PlatformContentCenter.vue#5ac8ba0a1715c083.1"
+      ],
+      "condition": "刷新在读取中禁用；首次读取失败时显示重新加载。",
+      "handler": "转发 refresh，由 usePlatformContentList 发起带代次和 15 秒超时的 GET。",
+      "variants": ["refresh", "retry", "first-error", "reactivation"],
+      "scenes": [
+        {
+          "package": "content-direction-c",
+          "scene": "default"
+        },
+        {
+          "package": "content-direction-c",
+          "scene": "first-error"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-content-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的 CONTENT-C-r1 用于设计推导；当前 Vue 行为由 m06-02 的 UI2-PN56 路由夹具独立验证。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "真实网络、生产权限与长时间缓存恢复仍待验。"
+    },
+    {
+      "actionId": "CT56-FILTER",
+      "label": "应用、重置或清除内容筛选",
+      "kind": "read",
+      "routeApplicability": "P56-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformContentCenter.vue#4a3f771edf9d117c.1",
+        "apps/web/src/components/PlatformContentCenter.vue#2b1baa06888c105d.1"
+      ],
+      "condition": "筛选窗保留草稿；清除按钮只在存在搜索或状态条件时启用。",
+      "handler": "转发 apply/reset，规范化 query/status、回到第一页后 GET；成功才更新快照标签与 URL。",
+      "variants": ["dialog", "apply", "reset", "filtered-empty"],
+      "scenes": [
+        {
+          "package": "content-direction-c",
+          "scene": "filter-draft"
+        },
+        {
+          "package": "content-direction-c",
+          "scene": "filter-empty"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-content-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的 CONTENT-C-r1 用于设计推导；当前 Vue 行为由 m06-02 的 UI2-PN56 路由夹具独立验证。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "真实 MySQL LIKE、中文输入法和浏览器长历史仍待验。"
+    },
+    {
+      "actionId": "CT56-REVIEW",
+      "label": "从内容记录进入展示状态审核",
+      "kind": "local",
+      "routeApplicability": "P56-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformContentCenter.vue#6a03af01ac2673c0.1",
+        "apps/web/src/components/PlatformContentReviewDialog.vue#d419717a1daa53bd.1"
+      ],
+      "condition": "记录存在且目标为 active、irrelevant 或 stale；当前状态的行内直达按钮禁用。",
+      "handler": "固定记录 id、标题、组织、工作区、原状态和版本后打开原生审核 dialog。",
+      "variants": ["desktop-row", "mobile-detail", "active", "irrelevant", "stale", "same-status"],
+      "scenes": [
+        {
+          "package": "content-direction-c",
+          "scene": "review-active"
+        },
+        {
+          "package": "content-direction-c",
+          "scene": "review-irrelevant"
+        },
+        {
+          "package": "content-direction-c",
+          "scene": "review-stale"
+        },
+        {
+          "package": "content-direction-c",
+          "scene": "same-status"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-content-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的 CONTENT-C-r1 用于设计推导；当前 Vue 行为由 m06-02 的 UI2-PN56 路由夹具独立验证。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "真实动态记录、全部主题与辅助技术仍待验。"
+    },
+    {
+      "actionId": "CT56-PAGE",
+      "label": "内容台账服务端分页",
+      "kind": "read",
+      "routeApplicability": "P56-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformContentCenter.vue#d44cbeebe40f60b2.1"
+      ],
+      "condition": "有分页事实时显示；读取中、第一页上一页和末页下一页禁用。",
+      "handler": "转发目标页，由列表组合式校验页界并读取 GET。",
+      "variants": ["previous", "next", "zero", "first", "last"],
+      "scenes": [
+        {
+          "package": "content-direction-c",
+          "scene": "page-first"
+        },
+        {
+          "package": "content-direction-c",
+          "scene": "page-last"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-content-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的 CONTENT-C-r1 用于设计推导；当前 Vue 行为由 m06-02 的 UI2-PN56 路由夹具独立验证。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "真实大表页码收束、性能与历史返回待验。"
+    },
+    {
+      "actionId": "CT56-TRACE",
+      "label": "展开内容读取追踪",
+      "kind": "local",
+      "routeApplicability": "P56-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformContentCenter.vue#71ad1e14ab5adcdd.1"
+      ],
+      "condition": "存在 requestId 时显示。",
+      "handler": "原生 details/summary 展示关联编号，不触发网络或写入。",
+      "variants": ["collapsed", "expanded"],
+      "scenes": [
+        {
+          "package": "content-direction-c",
+          "scene": "technical"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-content-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的 CONTENT-C-r1 用于设计推导；当前 Vue 行为由 m06-02 的 UI2-PN56 路由夹具独立验证。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "真实请求编号、读屏播报和复制策略仍待验；本批不新增复制。"
+    },
+    {
+      "actionId": "CT56-CANCEL",
+      "label": "取消或关闭内容审核",
+      "kind": "local",
+      "routeApplicability": "P56-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformContentReviewDialog.vue#419cf34d6cd8c9bd.1",
+        "apps/web/src/components/PlatformContentReviewDialog.vue#d92091d153d481b8.1",
+        "apps/web/src/components/PlatformContentReviewDialog.vue#7daff9e4a017f8c0.1"
+      ],
+      "condition": "审核窗打开；提交中关闭只关闭窗口，不取消已发出的 PATCH。",
+      "handler": "cancel/Escape 清除当前窗口代次并返焦；已发写请求继续结算。",
+      "variants": ["escape", "top-close", "footer-cancel", "pending-close"],
+      "scenes": [
+        {
+          "package": "content-direction-c",
+          "scene": "cancelled"
+        },
+        {
+          "package": "content-direction-c",
+          "scene": "closed-pending"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-content-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的 CONTENT-C-r1 用于设计推导；当前 Vue 行为由 m06-02 的 UI2-PN56 路由夹具独立验证。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "真实慢网、移动软键盘和跨浏览器返焦仍待验。"
+    },
+    {
+      "actionId": "CT56-CONFIRM",
+      "label": "确认内容状态审核",
+      "kind": "write",
+      "routeApplicability": "P56-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformContentReviewDialog.vue#1fd70ea9da24ddfa.1",
+        "apps/web/src/components/PlatformContentReviewDialog.vue#182a80a4144bf185.1"
+      ],
+      "condition": "原因 trim 后 2–300 字且没有正在提交；同状态按既有合同仍可提交。",
+      "handler": "PATCH 当前固定 id，body 为 status、expected_version、trim 后 reason；单飞且写成功/刷新失败分别反馈。",
+      "variants": ["valid", "invalid", "pending", "success", "error", "unknown", "refresh-failed"],
+      "scenes": [
+        {
+          "package": "content-direction-c",
+          "scene": "reason-min"
+        },
+        {
+          "package": "content-direction-c",
+          "scene": "review-pending"
+        },
+        {
+          "package": "content-direction-c",
+          "scene": "review-error"
+        },
+        {
+          "package": "content-direction-c",
+          "scene": "review-unknown"
+        },
+        {
+          "package": "content-direction-c",
+          "scene": "success-refresh-error"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-content-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "冻结的 CONTENT-C-r1 用于设计推导；当前 Vue 行为由 m06-02 的 UI2-PN56 路由夹具独立验证。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "真实同源、会话、platform:operate、幂等事务、MySQL 审计和未知结果人工核对待验。"
+    }
+  ],
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/PlatformContentCenter.vue",
+      "apps/web/src/components/PlatformContentReviewDialog.vue"
+    ],
+    "includeStructuralContainers": true,
+    "dependencyHashes": {
+      "apps/web/src/components/PlatformContentCenter.vue": "577c6f761c9044e1c92e0a0d4f2e5092f94fb647aab8fc29093adc8cb6072ccc",
+      "apps/web/src/components/PlatformContentReviewDialog.vue": "7183474efd2f6fdb6080d3273855b69c742675b5aa36ae026d9cd82f6a6726f4"
+    },
+    "inputs": [
+      {
+        "file": "apps/web/src/components/PlatformContentCenter.vue",
+        "binding": "query",
+        "meaning": "热点标题、分类或市场的筛选草稿；应用后 trim 并进入 URL/GET。",
+        "remaining": "真实输入法、120字服务校验与长历史待验。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformContentCenter.vue",
+        "binding": "status",
+        "meaning": "active、irrelevant、stale、archived 四种读取状态筛选草稿。",
+        "remaining": "四状态真实数据分布与权限待验。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformContentReviewDialog.vue",
+        "binding": "status",
+        "meaning": "active、irrelevant、stale 三种审核目标；不提供 archived 写入。",
+        "remaining": "真实冲突、同状态审计与权限待验。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformContentReviewDialog.vue",
+        "binding": "reason",
+        "meaning": "审核依据，前端和服务端合同均为 trim 后 2–300 字。",
+        "remaining": "真实输入法、服务错误与审计落库待验。"
+      }
+    ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/PlatformContentCenter.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "深蓝三步内容治理轨，只说明任务顺序，不改变数据范围。",
+        "remaining": "共享 NavigationShell 和真实角色导航待独立重构/验证。",
+        "variants": [
+          {
+            "name": "content-governance-rail",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "content-direction-c",
+                "scene": "default"
+              }
+            ],
+            "remaining": "当前 Vue 图独立待审，静态场景只登记设计关系。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/PlatformContentReviewDialog.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "固定审核对象、状态、版本与原因的原生模态；支持 Escape、返焦和窗口代次。",
+        "remaining": "真实辅助技术、软键盘和所有写失败类型待验。",
+        "variants": [
+          {
+            "name": "content-review",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "content-direction-c",
+                "scene": "review-stale"
+              },
+              {
+                "package": "content-direction-c",
+                "scene": "review-error"
+              }
+            ],
+            "remaining": "当前 Vue 已覆盖代表成功前状态与请求归属，不等于生产写入。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/PlatformContentReviewDialog.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "目标状态与审核依据的单一提交容器。",
+        "remaining": "浏览器自动填充、真实服务字段错误与完整读屏待验。",
+        "variants": [
+          {
+            "name": "content-review-form",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "content-direction-c",
+                "scene": "reason-min"
+              },
+              {
+                "package": "content-direction-c",
+                "scene": "review-pending"
+              }
+            ],
+            "remaining": "只覆盖三目标审核，不扩展正文编辑或归档写入。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "PlatformManagementFilter、PlatformManagementRecordList、PlatformContentPagination、ResponsiveDataView 与 ResponsiveFilterDrawer 只由当前页面调用并保持既有业务合同；共享内部按钮另按消费者验证。",
+      "当前 Vue 路由夹具覆盖桌面和手机代表状态，不等于真实 MySQL、RBAC、审计或生产签收。"
+    ]
+  },
+  "compositionGaps": [
+    "当前 Vue 代表图覆盖默认、手机记录、审核、空结果、权限拒绝和写成功/刷新失败；不是每条动态记录与全部六态穷尽。",
+    "共享 NavigationShell 仍保留旧外壳视觉，需在后续壳层批次统一重构；本页批准不得外推到全站。",
+    "真实 MySQL、platform:operate、幂等、审计、全主题、读屏/软键盘和生产部署仍待验。"
+  ],
+  "approval": "pending-user-review",
+  "limits": [
+    "13个 P56 专用源码位置归并7组；共享组件内部入口不重复计本页专用动作。",
+    "本页只写展示状态，不提供标题、正文、热度、来源或 archived 写入。"
+  ]
+}

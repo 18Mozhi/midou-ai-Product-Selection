@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, onActivated, onDeactivated, onMounted, onUnmounted, ref, watch } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import {
   readRealtimeClientMetrics,
@@ -8,10 +8,10 @@ import {
   type RealtimeClientMetrics,
 } from "../realtime-client-metrics";
 import { useAuditedReason } from "../use-audited-reason";
-import { useModalDialog } from "../use-modal-dialog";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import ApiCoverageDashboard from "./ApiCoverageDashboard.vue";
-import PlatformContentPagination from "./PlatformContentPagination.vue";
+import PlatformContentCenter from "./PlatformContentCenter.vue";
+import PlatformContentReviewDialog from "./PlatformContentReviewDialog.vue";
 import PlatformMessageEditor from "./PlatformMessageEditor.vue";
 import PlatformMessageWorkbench from "./PlatformMessageWorkbench.vue";
 import PlatformManagementRecordList from "./PlatformManagementRecordList.vue";
@@ -152,11 +152,16 @@ async function api<T>(path: string, options: RequestInit = {}) {
     if (error instanceof DOMException && error.name === "AbortError") throw error;
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? requestId.value;
-    throw new Error(failure?.actionHint ?? "请求未完成");
+    throw new Error(failure?.actionHint ?? "请求未完成", { cause: failure ?? error });
   }
 }
 const {
   page: contentPage,
+  appliedQuery: contentAppliedQuery,
+  appliedStatus: contentAppliedStatus,
+  snapshotQuery: contentSnapshotQuery,
+  snapshotStatus: contentSnapshotStatus,
+  lastLoadOutcome: contentLoadOutcome,
   readLocation: readContentLocation,
   load: loadContent,
   applyFilters: applyContentFilters,
@@ -191,13 +196,20 @@ const {
   item: reviewItem,
   status: reviewStatus,
   reason: reviewReason,
+  error: reviewError,
+  submitting: reviewSubmitting,
   begin: beginReview,
+  cancel: cancelReview,
   submit: submitReview,
-} = usePlatformContentReview({ request: api, reload: load, message, busy });
-const { dialogElement: reviewDialogElement, handleCancel: handleReviewCancel } = useModalDialog(
-  () => Boolean(reviewItem.value),
-  () => (reviewItem.value = null),
-);
+} = usePlatformContentReview({
+  request: api,
+  reload: async () => {
+    await load();
+    return contentLoadOutcome.value === "success";
+  },
+  message,
+  busy,
+});
 const { load: loadStatus, stop: stopStatusLoad } = usePlatformStatus({
   domain,
   data,
@@ -352,9 +364,21 @@ watch(domain, () => {
   contentPage.value = 1;
   readContentLocation();
   notificationList.readLocation();
-  reviewItem.value = null;
+  cancelReview();
   messageEditor.value = null;
   load();
+});
+let contentWasDeactivated = false;
+onActivated(() => {
+  if (domain.value !== "content" || !contentWasDeactivated) return;
+  contentWasDeactivated = false;
+  void load();
+});
+onDeactivated(() => {
+  if (domain.value !== "content") return;
+  contentWasDeactivated = true;
+  stopContentLoad();
+  cancelReview();
 });
 onMounted(() => {
   readContentLocation();
@@ -372,8 +396,36 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="platform-management" aria-live="polite" :aria-busy="refreshing">
-    <header class="platform-management-hero">
+  <section
+    class="platform-management"
+    :class="{ 'platform-management--content': domain === 'content' }"
+    aria-live="polite"
+    :aria-busy="refreshing"
+  >
+    <PlatformContentCenter
+      v-if="domain === 'content'"
+      v-model:query="query"
+      v-model:status="status"
+      :state="state"
+      :data="data"
+      :message="message"
+      :request-id="requestId"
+      :refreshing="refreshing"
+      :busy="busy"
+      :active-filter-count="activeFilterCount"
+      :applied-query="contentAppliedQuery"
+      :applied-status="contentAppliedStatus"
+      :snapshot-query="contentSnapshotQuery"
+      :snapshot-status="contentSnapshotStatus"
+      :state-name="stateName"
+      :when="when"
+      @refresh="load"
+      @apply="applyContentFilters"
+      @reset="resetContentFilters"
+      @change-page="changeContentPage"
+      @review="beginReview"
+    />
+    <header v-if="domain !== 'content'" class="platform-management-hero">
       <div>
         <p>平台运营中心</p>
         <h2>{{ titles[domain][0] }}</h2>
@@ -390,7 +442,7 @@ onUnmounted(() => {
       </div>
     </header>
     <PlatformManagementFilter
-      v-if="domain !== 'status'"
+      v-if="domain !== 'status' && domain !== 'content'"
       v-model:query="query"
       v-model:status="status"
       :domain="domain"
@@ -399,8 +451,10 @@ onUnmounted(() => {
       @apply="notificationList.applyFilters"
       @reset="notificationList.resetFilters"
     />
-    <p v-if="message" class="platform-management-message" role="status">{{ message }}</p>
-    <section v-if="state !== 'ready'" class="platform-management-state">
+    <p v-if="message && domain !== 'content'" class="platform-management-message" role="status">
+      {{ message }}
+    </p>
+    <section v-if="state !== 'ready' && domain !== 'content'" class="platform-management-state">
       <h3>
         {{
           state === "loading"
@@ -413,7 +467,7 @@ onUnmounted(() => {
       <p v-if="message">{{ message }}</p>
       <button v-if="state !== 'loading'" @click="load">重新加载</button>
     </section>
-    <template v-else-if="data"
+    <template v-else-if="data && domain !== 'content'"
       ><div v-if="domain !== 'api-coverage'" class="platform-management-kpis">
         <article v-for="[key, value] in summaryEntries" :key="key">
           <small>{{ summaryName(key) }}</small
@@ -428,22 +482,6 @@ onUnmounted(() => {
         :when="when"
         @edit="openMessage"
         @action="messageAction"
-      />
-      <PlatformManagementRecordList
-        v-if="domain === 'content'"
-        domain="content"
-        :items="data.items"
-        :busy="busy"
-        :state-name="stateName"
-        :when="when"
-        @review="beginReview"
-        @email-action="manageEmail"
-      />
-      <PlatformContentPagination
-        v-if="domain === 'content' && data.pagination"
-        :pagination="data.pagination"
-        :refreshing="refreshing"
-        @change="changeContentPage"
       />
       <PlatformNotificationManagement
         v-if="domain === 'notifications'"
@@ -592,32 +630,16 @@ onUnmounted(() => {
         </details>
       </footer></template
     >
-    <dialog ref="reviewDialogElement" aria-label="审核热点内容" @cancel="handleReviewCancel">
-      <form @submit.prevent="submitReview">
-        <h3>审核热点内容</h3>
-        <p>{{ reviewItem?.title }}</p>
-        <label
-          >目标状态<select v-model="reviewStatus">
-            <option value="active">展示中</option>
-            <option value="irrelevant">无关</option>
-            <option value="stale">已过期</option>
-          </select></label
-        ><label
-          >审核原因<textarea
-            v-model="reviewReason"
-            required
-            minlength="2"
-            maxlength="300"
-            rows="4"
-            placeholder="说明判断依据，操作会写入审计记录"
-          ></textarea>
-        </label>
-        <footer>
-          <button type="button" @click="reviewItem = null">取消</button
-          ><button :disabled="reviewReason.trim().length < 2 || Boolean(busy)">确认更新</button>
-        </footer>
-      </form>
-    </dialog>
+    <PlatformContentReviewDialog
+      v-model:status="reviewStatus"
+      v-model:reason="reviewReason"
+      :open="Boolean(reviewItem)"
+      :item="reviewItem"
+      :error="reviewError"
+      :submitting="reviewSubmitting"
+      @cancel="cancelReview"
+      @submit="submitReview"
+    />
     <PlatformMessageEditor
       :open="Boolean(messageEditor)"
       :editor="messageEditor"

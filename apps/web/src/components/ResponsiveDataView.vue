@@ -8,7 +8,7 @@ const props = defineProps<{
   title: string;
   detailTitle: (row: DataRow) => string;
   emptyMessage?: string;
-  appearance?: "default" | "governance";
+  appearance?: "default" | "governance" | "content";
 }>();
 
 const selectedKey = shallowRef<string | null>(null),
@@ -138,7 +138,10 @@ function handleTab(event: KeyboardEvent) {
         v-if="selected"
         ref="overlay"
         class="responsive-data-view__overlay"
-        :class="{ 'responsive-data-view__overlay--governance': appearance === 'governance' }"
+        :class="{
+          'responsive-data-view__overlay--governance': appearance === 'governance',
+          'responsive-data-view__overlay--content': appearance === 'content',
+        }"
         @keydown.esc="close"
         @keydown="handleTab"
       >
@@ -193,6 +196,20 @@ function handleTab(event: KeyboardEvent) {
   --so-border: #cfd9e8;
   --so-primary: #2d63cd;
   --so-primary-strong: #214da8;
+  --so-on-primary: #ffffff;
+  --so-shadow: 0 16px 40px color-mix(in srgb, #17243d 16%, transparent);
+}
+
+.responsive-data-view__overlay--content {
+  --so-bg: #f3f6fb;
+  --so-bg-elevated: #ffffff;
+  --so-panel: #ffffff;
+  --so-panel-soft: #edf2f9;
+  --so-text: #17243d;
+  --so-text-muted: #627089;
+  --so-border: #cfd9e8;
+  --so-primary: #2558bd;
+  --so-primary-strong: #173f91;
   --so-on-primary: #ffffff;
   --so-shadow: 0 16px 40px color-mix(in srgb, #17243d 16%, transparent);
 }

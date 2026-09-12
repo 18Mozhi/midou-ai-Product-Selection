@@ -11,6 +11,8 @@ export const responsiveFocusRevision = Object.freeze({
   after: "52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c",
   governanceBaseline: "6c8ebaa63dc0f1a3ac0e9946dafc019f5ec130b6",
   governanceAfter: "739ac85b109ec7c2557909d1f267d1b67a8384aa385afb80f2fd512502d17f7a",
+  contentBaseline: "388b311d8e470a8f54467da4c38f14c051d350de",
+  contentAfter: "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
 });
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
@@ -21,8 +23,16 @@ export function responsiveFocusContractHash(file, expected) {
   const revision = responsiveFocusRevision;
   if (file !== revision.file) return expected;
   if (expected === revision.governanceAfter) {
-    assert.equal(hash(read(file)), revision.governanceAfter, "unreviewed governance appearance");
-    return revision.governanceAfter;
+    assert.equal(
+      hash(
+        execFileSync("git", ["show", `${revision.contentBaseline}:${file}`], {
+          encoding: "utf8",
+        }).replaceAll("\r\n", "\n"),
+      ),
+      revision.governanceAfter,
+    );
+    assert.equal(hash(read(file)), revision.contentAfter, "unreviewed content appearance");
+    return revision.contentAfter;
   }
   if (expected === revision.after) {
     assert.equal(
@@ -33,8 +43,8 @@ export function responsiveFocusContractHash(file, expected) {
       ),
       revision.after,
     );
-    assert.equal(hash(read(file)), revision.governanceAfter, "unreviewed governance appearance");
-    return revision.governanceAfter;
+    assert.equal(hash(read(file)), revision.contentAfter, "unreviewed content appearance");
+    return revision.contentAfter;
   }
   assert.equal(expected, revision.before, "unknown historical responsive-view contract");
   assert.equal(
@@ -45,7 +55,7 @@ export function responsiveFocusContractHash(file, expected) {
     ),
     revision.before,
   );
-  assert.equal(hash(read(file)), revision.governanceAfter, "unreviewed governance appearance");
+  assert.equal(hash(read(file)), revision.contentAfter, "unreviewed content appearance");
   assert.match(read(file), /<slot name="desktop" :show="show"/);
   const lifecycle = JSON.parse(read("output/playwright/p38-shell-lifecycle/current/evidence.json"));
   assert.equal(lifecycle.mode, "current-regression");
@@ -67,5 +77,5 @@ export function responsiveFocusContractHash(file, expected) {
       shot.sha256,
       shot.file,
     );
-  return revision.after;
+  return revision.contentAfter;
 }

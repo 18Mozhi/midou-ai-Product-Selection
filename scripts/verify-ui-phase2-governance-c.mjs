@@ -55,6 +55,20 @@ const contractRebindings = [
     baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
     reason: "P54 current interaction tests are independent from this frozen proposal.",
   },
+  {
+    file: "apps/web/src/components/ResponsiveFilterDrawer.vue",
+    old: "727009735e3fb767e5f5d84c4a83f2dcc63a8f09e05623c3cb1609103ece9be4",
+    current: "a988f05a2e8a881f78ec39d1c745a8e2e8c9ca4762d1f90fc493556f10468483",
+    baseline: "388b311d8e470a8f54467da4c38f14c051d350de",
+    reason: "P56 adds the isolated content appearance and dialog mode.",
+  },
+  {
+    file: "tests/e2e/m06-02-platform-dashboard.spec.ts",
+    old: "a39d80a78761cd4382bbc2d8684f5334af4f6b3285c0c719932bf83f4da72069",
+    current: "cfddcb4b6223f3b46c31ba90f2e4412dfc6042961565972b4a42059bd494a035",
+    baseline: "388b311d8e470a8f54467da4c38f14c051d350de",
+    reason: "P56 adds content-specific interaction coverage.",
+  },
 ];
 for (const [, rawFile, h] of contracts) {
   const f = rawFile.trim();

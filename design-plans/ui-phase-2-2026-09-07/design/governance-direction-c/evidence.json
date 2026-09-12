@@ -21,10 +21,24 @@
       "current": "88f67bd991684fe5bc3d6c8adbea9df78501d755b9bc173beb2db60ed253635d",
       "baseline": "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
       "reason": "P54 current interaction tests are independent from this frozen proposal."
+    },
+    {
+      "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+      "old": "727009735e3fb767e5f5d84c4a83f2dcc63a8f09e05623c3cb1609103ece9be4",
+      "current": "a988f05a2e8a881f78ec39d1c745a8e2e8c9ca4762d1f90fc493556f10468483",
+      "baseline": "388b311d8e470a8f54467da4c38f14c051d350de",
+      "reason": "P56 adds the isolated content appearance and dialog mode."
+    },
+    {
+      "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+      "old": "a39d80a78761cd4382bbc2d8684f5334af4f6b3285c0c719932bf83f4da72069",
+      "current": "cfddcb4b6223f3b46c31ba90f2e4412dfc6042961565972b4a42059bd494a035",
+      "baseline": "388b311d8e470a8f54467da4c38f14c051d350de",
+      "reason": "P56 adds content-specific interaction coverage."
     }
   ],
   "sourceHashes": {
-    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "342d8b7c7b4ed11359c6050a9fff6b03a69e790ee851689b9190b829242ffbef",
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "c1095b828706864ee9eb2be430e08e0277522f4e4cf3d1beb084499265fcd457",
     "apps/web/src/components/PlatformGovernanceCenter.vue": "76eae80f51225c3af676a17ab9c4ec94369262cc5e8c968be7fd62ef5f2280db",
     "apps/api/src/platform-dashboard-service.ts": "568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e",
     "apps/api/src/platform-dashboard-routes.ts": "1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30",
@@ -32,7 +46,7 @@
     "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
     "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.css": "107e3760b83961d388dfe03a72d77a436b7f8794e10353ef1d9f5e71f2d14b78",
     "scripts/lib/ui-phase2-governance-design-data.mjs": "54803a1b4c4851b8e089619afe28bcf8211900d746f080afa5b0806728ad6192",
-    "scripts/verify-ui-phase2-governance-c.mjs": "20067fb3e93066b9100097a734725c53bdf90bdca6173a41d883a05139b9ebf3",
+    "scripts/verify-ui-phase2-governance-c.mjs": "601087302a527aa19c27decca6752c4f3b6c98ffdfb55a634bba4cd3d9b3a614",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "design-plans/ui-phase-2-2026-09-07/design/governance-direction-c/index.html": "db83dac4cf084522c128d76d41f24a26e55f8c148f34d38cbb6d5b35faf9d93d",
     "design-plans/ui-phase-2-2026-09-07/design/governance-direction-c/governance.css": "3b7c8ad798e07509718c969c8ff3fc45e3f4cb2af2c25ff253c8f90f782f3849",

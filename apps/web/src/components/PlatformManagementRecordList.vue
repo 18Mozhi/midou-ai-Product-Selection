@@ -7,6 +7,7 @@ const props = defineProps<{
   busy: string;
   stateName: (value: unknown) => string;
   when: (value: unknown) => string;
+  appearance?: "default" | "content";
 }>();
 
 const emit = defineEmits<{
@@ -40,6 +41,7 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
     title="热点内容记录"
     :detail-title="(item) => item.title"
     empty-message="没有符合条件的热点内容。"
+    :appearance="appearance"
   >
     <template #desktop>
       <table>
@@ -49,7 +51,7 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
             <th>组织 / 工作区</th>
             <th>市场</th>
             <th>信号 / 来源</th>
-            <th>置信度 / 最近观测</th>
+            <th>热度 / 置信度</th>
             <th>状态</th>
             <th>操作</th>
           </tr>
@@ -58,7 +60,9 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
           <tr v-for="item in items" :key="item.id">
             <td>
               <strong>{{ item.title }}</strong
-              ><small>{{ item.category || "未分类" }} · 热度 {{ item.heat_value }}</small>
+              ><small
+                >{{ item.category || "未分类" }} · 最近观测 {{ when(item.last_seen_at) }}</small
+              >
             </td>
             <td>
               {{ item.organization_name }}<small>{{ item.workspace_name }}</small>
@@ -66,7 +70,7 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
             <td>{{ item.market }} · {{ item.language }}</td>
             <td>{{ item.signal_count }} / {{ item.source_count }}</td>
             <td>
-              {{ stateName(item.confidence_status) }}<small>{{ when(item.last_seen_at) }}</small>
+              {{ item.heat_value }}<small>{{ stateName(item.confidence_status) }}</small>
             </td>
             <td>
               <b :data-state="item.status">{{ stateName(item.status) }}</b>
@@ -97,10 +101,17 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
       </table>
     </template>
     <template #summary="{ row }">
-      <span class="responsive-record-summary"
-        ><strong>{{ row.title }}</strong
-        ><small>{{ stateName(row.status) }} · {{ row.organization_name }}</small></span
-      >
+      <span class="responsive-record-summary responsive-record-summary--content">
+        <b :data-state="row.status">{{ stateName(row.status) }}</b>
+        <strong>{{ row.title }}</strong>
+        <small>{{ row.organization_name }} / {{ row.workspace_name }}</small>
+        <span class="content-mobile-facts">
+          <span><small>信号 / 来源</small>{{ row.signal_count }} / {{ row.source_count }}</span>
+          <span><small>热度</small>{{ row.heat_value }}</span>
+          <span><small>置信度</small>{{ stateName(row.confidence_status) }}</span>
+        </span>
+        <small>{{ row.market }} · {{ row.language }} · {{ when(row.last_seen_at) }}</small>
+      </span>
     </template>
     <template #detail="{ row, close }">
       <dl>
@@ -374,6 +385,29 @@ b[data-state="failed"] {
 .record-actions {
   display: grid;
   gap: 8px;
+}
+.responsive-record-summary--content {
+  display: grid;
+  gap: 6px;
+}
+.responsive-record-summary--content > b {
+  width: fit-content;
+}
+.content-mobile-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.content-mobile-facts > span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  color: var(--so-text);
+  font-weight: 700;
+}
+.content-mobile-facts small {
+  margin: 0;
+  font-weight: 500;
 }
 button:disabled {
   cursor: not-allowed;

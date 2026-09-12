@@ -107,6 +107,36 @@ async function nav(
     }),
   );
 }
+const contentRecord = (overrides: Record<string, unknown> = {}) => ({
+  id: "00000000-0000-4000-8000-000000000756",
+  title: "便携式照明热度上升",
+  category: "家居照明",
+  market: "US",
+  language: "en-US",
+  status: "active",
+  signal_count: 18,
+  source_count: 5,
+  heat_value: 82,
+  confidence_status: "measured",
+  version: 4,
+  last_seen_at: "2026-09-12T08:00:00.000Z",
+  organization_name: "米豆选品",
+  workspace_name: "北美工作区",
+  ...overrides,
+});
+const contentEnvelope = (items: Record<string, unknown>[] = [contentRecord()]) =>
+  env({
+    domain: "content",
+    summary: { total: 135, active: 90, irrelevant: 25, stale: 19, archived: 1 },
+    items,
+    pagination: {
+      page: 1,
+      page_size: 20,
+      total: items.length ? 135 : 0,
+      total_pages: items.length ? 7 : 0,
+    },
+    observed_at: "2026-09-12T08:00:00.000Z",
+  });
 test("UI2-DG54 retained data keeps its entity semantics until the new scope succeeds", async ({
   page,
 }) => {
@@ -766,6 +796,278 @@ test("UI2-DG55 cached governance suspends off-route reads and refreshes on retur
   expect(governanceReads).toBe(2);
 });
 
+test("UI2-PN56 C ledger exposes complete facts and the review contract", async ({
+  page,
+}, testInfo) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/management?**", (route) =>
+    route.fulfill({ json: contentEnvelope() }),
+  );
+
+  await page.goto("/platform-admin/content");
+  await expect(page.getByRole("heading", { name: "内容管理", level: 2 })).toBeVisible();
+  const summary = page.getByRole("region", { name: "当前查询统计" });
+  await expect(summary).toContainText("135");
+  await expect(summary).toContainText("90");
+  await expect(summary).toContainText("25");
+  await expect(summary).toContainText("19");
+  await expect(summary).toContainText("1");
+  await expect(page.getByText("当前快照：全部主题 · 全部状态。", { exact: false })).toBeVisible();
+  const mobile = (page.viewportSize()?.width ?? 1000) <= 760;
+  if (mobile) {
+    const record = page.getByRole("button", { name: /便携式照明热度上升.*查看详情/ });
+    await expect(record).toContainText("18 / 5");
+    await expect(record).toContainText("82");
+  } else {
+    const table = page.getByRole("table");
+    await expect(table.getByText("便携式照明热度上升", { exact: true })).toBeVisible();
+    await expect(table.getByText("家居照明 · 最近观测", { exact: false })).toBeVisible();
+  }
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+    .toBe(true);
+  await capturePhase2Evidence(page, testInfo, "P56", "content-default", [
+    "五项统计包含真实零值并与状态筛选解耦",
+    "桌面七列表格和手机事实卡保留相同业务事实",
+    "内容工作台只提供展示状态审核，不提供正文编辑或归档写入",
+  ]);
+  if (mobile)
+    await capturePhase2Evidence(page, testInfo, "P56", "content-records", [
+      "手机记录卡直接展示状态、信号、来源、热度和置信度",
+      "市场、语言与最近观测时间无需进入详情即可核对",
+      "详情入口为整张事实卡并保持 44px 以上触控目标",
+    ]);
+
+  if (mobile) {
+    await page.getByRole("button", { name: /便携式照明热度上升.*查看详情/ }).click();
+    await page
+      .getByRole("dialog", { name: "便携式照明热度上升" })
+      .getByRole("button", { name: "标记过期" })
+      .click();
+  } else await page.getByTitle("标记为过期").click();
+  const dialog = page.getByRole("dialog", { name: "审核热点内容" });
+  await expect(dialog).toContainText("米豆选品 / 北美工作区 · 当前展示中 · v4");
+  await expect(dialog.getByRole("combobox", { name: "目标状态" })).toHaveValue("stale");
+  await expect(dialog.getByRole("button", { name: "确认审核" })).toBeDisabled();
+  await dialog.getByRole("textbox", { name: "审核依据" }).fill("最近观测信号已过期");
+  await expect(dialog.getByRole("button", { name: "确认审核" })).toBeEnabled();
+  await capturePhase2Evidence(page, testInfo, "P56", "content-review-stale", [
+    "审核窗保留标题、组织、工作区、原状态和提交版本",
+    "原因在去除首尾空白后必须为 2 至 300 字",
+    "审核窗只允许展示中、无关和已过期三种写状态",
+  ]);
+  await dialog.getByRole("button", { name: "取消" }).click();
+});
+
+test("UI2-PN56 draft filters preserve the snapshot and empty results keep query totals", async ({
+  page,
+}, testInfo) => {
+  await nav(page);
+  const requests: string[] = [];
+  await page.route("**/api/v1/platform/management?**", (route) => {
+    const url = new URL(route.request().url());
+    requests.push(url.search);
+    const filtered =
+      url.searchParams.get("query") === "不存在" && url.searchParams.get("status") === "stale";
+    return route.fulfill({ json: contentEnvelope(filtered ? [] : [contentRecord()]) });
+  });
+
+  await page.goto("/platform-admin/content");
+  await page.getByRole("button", { name: "筛选内容管理" }).click();
+  let filters = page.getByRole("dialog", { name: "筛选内容管理" });
+  await filters.getByRole("textbox", { name: "搜索热点内容" }).fill("不存在");
+  await filters.getByRole("combobox", { name: "内容状态" }).selectOption("stale");
+  await filters.getByRole("button", { name: "关闭筛选条件" }).click();
+  await expect(page).toHaveURL(/\/platform-admin\/content$/);
+  await expect(page.getByText("当前快照：全部主题 · 全部状态。", { exact: false })).toBeVisible();
+
+  await page.getByRole("button", { name: /筛选内容管理.*2 项已选/ }).click();
+  filters = page.getByRole("dialog", { name: "筛选内容管理" });
+  await filters.getByRole("button", { name: "筛选", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "当前筛选没有内容记录" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "当前查询统计" })).toContainText("135");
+  await expect(page).toHaveURL(/query=%E4%B8%8D%E5%AD%98%E5%9C%A8/);
+  await expect(page).toHaveURL(/status=stale/);
+  await capturePhase2Evidence(page, testInfo, "P56", "content-filtered-empty", [
+    "关闭筛选窗只保留草稿，不改变快照标签或 URL",
+    "应用后空结果与查询统计同时保留",
+    "URL 只记录已应用的搜索词、状态和页码",
+  ]);
+  expect(requests).toHaveLength(2);
+});
+
+test("UI2-PN56 reports a committed review separately when the list refresh fails", async ({
+  page,
+}, testInfo) => {
+  await nav(page);
+  let reads = 0;
+  let body: Record<string, unknown> | null = null;
+  await page.route("**/api/v1/platform/management/content/**", async (route) => {
+    body = JSON.parse(route.request().postData() ?? "{}");
+    await route.fulfill({ json: env({ id: contentRecord().id, status: "stale", version: 5 }) });
+  });
+  await page.route("**/api/v1/platform/management?**", (route) => {
+    reads += 1;
+    if (reads === 1) return route.fulfill({ json: contentEnvelope() });
+    return route.fulfill({
+      status: 503,
+      json: {
+        error: {
+          code: "service_unavailable",
+          message: "列表读取失败",
+          action_hint: "请重新加载内容台账。",
+        },
+        request_id: "content-refresh-failed-56",
+        trace_id: "content-refresh-failed-56",
+      },
+    });
+  });
+
+  await page.goto("/platform-admin/content");
+  const mobile = (page.viewportSize()?.width ?? 1000) <= 760;
+  if (mobile) {
+    await page.getByRole("button", { name: /便携式照明热度上升.*查看详情/ }).click();
+    await page
+      .getByRole("dialog", { name: "便携式照明热度上升" })
+      .getByRole("button", { name: "标记过期" })
+      .click();
+  } else await page.getByTitle("标记为过期").click();
+  const dialog = page.getByRole("dialog", { name: "审核热点内容" });
+  await dialog.getByRole("textbox", { name: "审核依据" }).fill("超过有效观察周期");
+  await dialog.getByRole("button", { name: "确认审核" }).click();
+  await expect(dialog).not.toBeVisible();
+  await expect(page.getByRole("status")).toContainText(
+    "内容状态已更新，但列表未能刷新。请重新加载后核对最新状态。",
+  );
+  await expect(
+    mobile
+      ? page.getByRole("button", { name: /便携式照明热度上升.*查看详情/ })
+      : page.getByRole("table").getByText("便携式照明热度上升", { exact: true }),
+  ).toBeVisible();
+  expect(body).toEqual({
+    status: "stale",
+    expected_version: 4,
+    reason: "超过有效观察周期",
+  });
+  await capturePhase2Evidence(page, testInfo, "P56", "content-success-refresh-failed", [
+    "PATCH 成功而后续 GET 失败时明确区分写成功与刷新失败",
+    "页面保留旧快照并要求重新读取核对",
+    "提交体保持 status、expected_version 与 trim 后 reason 的既有合同",
+  ]);
+});
+
+test("UI2-PN56 an older write result cannot close a newer review", async ({ page }, testInfo) => {
+  test.skip(
+    testInfo.project.name !== "desktop-chromium",
+    "A desktop case proves request ownership.",
+  );
+  await nav(page);
+  let release!: () => void;
+  let entered!: () => void;
+  const held = new Promise<void>((resolve) => (release = resolve));
+  const started = new Promise<void>((resolve) => (entered = resolve));
+  let patches = 0;
+  await page.route("**/api/v1/platform/management/content/**", async (route) => {
+    patches += 1;
+    entered();
+    await held;
+    await route.fulfill({ json: env({ status: "stale", version: 5 }) });
+  });
+  await page.route("**/api/v1/platform/management?**", (route) =>
+    route.fulfill({
+      json: contentEnvelope([
+        contentRecord(),
+        contentRecord({
+          id: "00000000-0000-4000-8000-000000000757",
+          title: "庭院灯需求回落",
+          status: "irrelevant",
+          version: 2,
+        }),
+      ]),
+    }),
+  );
+
+  await page.goto("/platform-admin/content");
+  await page.getByTitle("标记为过期").first().click();
+  let dialog = page.getByRole("dialog", { name: "审核热点内容" });
+  await dialog.getByRole("textbox", { name: "审核依据" }).fill("超过有效观察周期");
+  await dialog.getByRole("button", { name: "确认审核" }).click();
+  await started;
+  await dialog.getByRole("button", { name: "关闭窗口" }).click();
+  await page.getByTitle("设为展示中").last().click();
+  dialog = page.getByRole("dialog", { name: "审核热点内容" });
+  await expect(dialog).toContainText("庭院灯需求回落");
+  release();
+  await expect(page.getByRole("status")).toContainText("内容状态已更新并写入审计记录");
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText("庭院灯需求回落");
+  expect(patches).toBe(1);
+});
+
+test("UI2-PN56 presents a gentle first-load permission state", async ({ page }, testInfo) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/management?**", (route) =>
+    route.fulfill({
+      status: 403,
+      json: {
+        error: {
+          code: "forbidden",
+          message: "当前权限还不能读取这些内容。权限调整后，可以重新加载。",
+          action_hint: "权限调整后重新加载。",
+        },
+        request_id: "content-forbidden-56",
+        trace_id: "content-forbidden-56",
+      },
+    }),
+  );
+
+  await page.goto("/platform-admin/content");
+  await expect(page.getByRole("heading", { name: "当前无法读取内容台账" })).toBeVisible();
+  await expect(page.getByText(/当前权限还不能读取这些内容/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "重新加载" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "当前查询统计" })).toHaveCount(0);
+  await capturePhase2Evidence(page, testInfo, "P56", "content-forbidden", [
+    "权限拒绝采用温和措辞并提供明确恢复动作",
+    "首次读取失败不展示伪造统计或内容记录",
+    "追踪编号留在请求层，不冒充业务事实",
+  ]);
+});
+
+test("UI2-PN56 cached content stops off-route reads and refreshes on return", async ({ page }) => {
+  await nav(page);
+  let contentReads = 0;
+  await page.route("**/api/v1/platform/dashboard?**", (route) =>
+    route.fulfill({ json: env(dashboard) }),
+  );
+  await page.route("**/api/v1/platform/management?**", (route) => {
+    contentReads += 1;
+    return route.fulfill({
+      json: contentEnvelope([
+        contentRecord({
+          id: `cached-content-${contentReads}`,
+          title: `缓存内容记录 ${contentReads}`,
+          version: contentReads,
+        }),
+      ]),
+    });
+  });
+
+  await page.goto("/platform-admin/content");
+  const mobile = (page.viewportSize()?.width ?? 1000) <= 760;
+  const visibleRecord = (revision: number) =>
+    mobile
+      ? page.getByRole("button", { name: new RegExp(`缓存内容记录 ${revision}.*查看详情`) })
+      : page.getByRole("table").getByText(`缓存内容记录 ${revision}`, { exact: true });
+  await expect(visibleRecord(1)).toBeVisible();
+  expect(contentReads).toBe(1);
+  await page.goto("/platform-admin");
+  await expect(page.getByRole("heading", { name: "平台运行概览", level: 2 })).toBeVisible();
+  expect(contentReads).toBe(1);
+  await page.goto("/platform-admin/content");
+  await expect(visibleRecord(2)).toBeVisible();
+  expect(contentReads).toBe(2);
+});
+
 test("API coverage dashboard exposes the current production truth dimensions on desktop and mobile", async ({
   page,
 }) => {
@@ -1170,14 +1472,12 @@ test("platform completion renders trend and management without overflow or conso
   await page.goto("/platform-admin/content");
   await expect(page.getByRole("heading", { name: "内容管理", level: 2 })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "内容分页" })).toContainText("共 135 条");
-  if ((page.viewportSize()?.width ?? 1000) <= 760)
-    await page.getByRole("button", { name: "筛选内容管理" }).click();
-  await expect(page.getByLabel("内容状态").getByRole("option", { name: "已归档" })).toHaveCount(1);
-  if ((page.viewportSize()?.width ?? 1000) <= 760)
-    await page
-      .getByRole("dialog", { name: "筛选内容管理" })
-      .getByRole("button", { name: "关闭筛选条件" })
-      .click();
+  await page.getByRole("button", { name: "筛选内容管理" }).click();
+  const initialContentFilters = page.getByRole("dialog", { name: "筛选内容管理" });
+  await expect(
+    initialContentFilters.getByLabel("内容状态").getByRole("option", { name: "已归档" }),
+  ).toHaveCount(1);
+  await initialContentFilters.getByRole("button", { name: "关闭筛选条件" }).click();
   if ((page.viewportSize()?.width ?? 1000) <= 760) {
     await page.getByRole("button", { name: /便携式照明热度上升.*查看详情/ }).click();
     await page

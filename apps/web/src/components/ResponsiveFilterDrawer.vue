@@ -5,12 +5,14 @@ const props = withDefaults(
   defineProps<{
     label?: string;
     activeCount?: number;
-    appearance?: "default" | "governance";
+    appearance?: "default" | "governance" | "content";
+    mode?: "responsive" | "dialog";
   }>(),
   {
     label: "筛选条件",
     activeCount: 0,
     appearance: "default",
+    mode: "responsive",
   },
 );
 
@@ -20,7 +22,7 @@ const triggerButton = ref<HTMLButtonElement | null>(null);
 const closeButton = ref<HTMLButtonElement | null>(null);
 const sheet = ref<HTMLElement | null>(null);
 let mediaQuery: MediaQueryList | null = null;
-const overlay = computed(() => mobile.value);
+const overlay = computed(() => mobile.value || props.mode === "dialog");
 
 watch(
   () => props.activeCount,
@@ -116,6 +118,7 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
         :class="{
           'responsive-filter-drawer--overlay': overlay,
           'responsive-filter-drawer--governance': appearance === 'governance',
+          'responsive-filter-drawer--content': appearance === 'content',
         }"
         @keydown="handleKeydown"
       >
@@ -171,6 +174,19 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
   --so-border: #cfd9e8;
   --so-primary: #2d63cd;
   --so-primary-strong: #214da8;
+  --so-on-primary: #ffffff;
+}
+
+.responsive-filter-drawer--content {
+  --so-bg: #f3f6fb;
+  --so-bg-elevated: #ffffff;
+  --so-panel: #ffffff;
+  --so-panel-soft: #edf2f9;
+  --so-text: #17243d;
+  --so-text-muted: #627089;
+  --so-border: #cfd9e8;
+  --so-primary: #2558bd;
+  --so-primary-strong: #173f91;
   --so-on-primary: #ffffff;
 }
 

@@ -186,6 +186,59 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 局部无交互候选；其字段与证据仍按P63逐项审核。
 
+## 5.1 P56 当前 Vue 实现绑定（2026-09-12）
+
+下列13个位置来自当前 P56 专用展示组件。它们替代上文旧父模板中的 P56 呈现位置；上文历史行继续保留用于追溯，不表示当前仍在原位置。读取、审核、原因、版本和三种可写状态合同不变。
+
+### apps/web/src/components/PlatformContentCenter.vue
+
+| 签名.序号 | 行 | 类型 | 语义/范围 |
+| --- | --- | --- | --- |
+| 9f8a46068562150e.1 | 88 | control | CT56-LOAD 刷新当前内容快照 |
+| 5ac8ba0a1715c083.1 | 105 | control | CT56-LOAD 首次读取失败后重新加载 |
+| 4a3f771edf9d117c.1 | 136 | event-binding | CT56-FILTER 转发筛选应用与重置 |
+| 6a03af01ac2673c0.1 | 153 | event-binding | CT56-REVIEW 转发当前记录与目标状态 |
+| 2b1baa06888c105d.1 | 170 | control | CT56-FILTER 空结果清除筛选 |
+| d44cbeebe40f60b2.1 | 175 | event-binding | CT56-PAGE 转发服务端分页目标 |
+| 71ad1e14ab5adcdd.1 | 186 | control | CT56-TRACE 展开本次读取追踪编号 |
+
+### apps/web/src/components/PlatformContentReviewDialog.vue
+
+| 签名.序号 | 行 | 类型 | 语义/范围 |
+| --- | --- | --- | --- |
+| d419717a1daa53bd.1 | 43 | dialog-definition | CT56-REVIEW 审核热点内容原生窗口定义 |
+| 419cf34d6cd8c9bd.1 | 43 | event-binding | CT56-CANCEL Escape取消审核 |
+| 1fd70ea9da24ddfa.1 | 49 | form-event | CT56-CONFIRM 审核表单提交 |
+| d92091d153d481b8.1 | 56 | control | CT56-CANCEL 顶部关闭审核 |
+| 7daff9e4a017f8c0.1 | 117 | control | CT56-CANCEL 底部取消或等待中关闭窗口 |
+| 182a80a4144bf185.1 | 120 | control | CT56-CONFIRM 确认审核；原因不足或提交中禁用 |
+
+当前专用组件指纹：
+
+| 文件 | LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformContentCenter.vue | 577c6f761c9044e1c92e0a0d4f2e5092f94fb647aab8fc29093adc8cb6072ccc |
+| apps/web/src/components/PlatformContentReviewDialog.vue | 7183474efd2f6fdb6080d3273855b69c742675b5aa36ae026d9cd82f6a6726f4 |
+
+### P56 当前父级与共享筛选转发
+
+下列5个位置是本批改动后由父级或共享组件承担的转发边界，不计入上方13个P56专用展示候选，但必须显式绑定，避免把组件调用误当成未审核动作。`domain !== 'content'` 的旧共享筛选分支只服务其他管理域，列出它是为了证明P56已从该分支分离，而不是新增P56动作。
+
+#### apps/web/src/components/PlatformManagementCenter.vue
+
+| 签名.序号 | 行 | 类型 | 语义/范围 |
+| --- | --- | --- | --- |
+| bfe687b5e3775fab.1 | 405 | event-binding | CT56-LOAD/FILTER/PAGE/REVIEW 将P56专用工作台事件转发到当前组合式状态 |
+| 7da8341abecdd3b7.1 | 444 | event-binding | 非P56管理域继续使用旧筛选分支；`domain !== 'content'` 明确隔离 |
+| f5cb087b206b4a60.1 | 633 | event-binding | CT56-CANCEL/CONFIRM 将P56审核窗事件转发到单飞提交状态 |
+| 6ac3264cbd6eac5b.1 | 633 | dialog-component-call | CT56-REVIEW P56专用审核窗组件调用；与同节点事件候选不重复计数 |
+
+#### apps/web/src/components/PlatformManagementFilter.vue
+
+| 签名.序号 | 行 | 类型 | 语义/范围 |
+| --- | --- | --- | --- |
+| da86b1e4e15c0477.1 | 18 | dialog-component-call | CT56-FILTER 共享筛选抽屉以content外观和dialog模式被P56复用 |
+
 ### 输入/转发绑定
 
 | 文件 | 行 | v-model表达式 | 参数 |
