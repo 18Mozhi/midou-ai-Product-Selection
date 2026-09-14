@@ -1,5 +1,7 @@
 # M06-02 宝塔运维与回滚
 
+P62读取键盘（2026-09-15）：保留已有重试按钮经过等待，两个只读按钮aria-disabled结合原load单飞；成功返回记录前只交接仍持有的重试焦点，移焦/离页/隐藏/inert不抢焦点。接口/配置/导出不变，未来前端静态包生效，无Node/Python重启，本轮未部署。原`verify-log-read-feedback.mjs`扩展为270项/68本地GET，`--capture-review rN`当前r4/22图待审，r2/r3为截图范围对照；36合同、默认77及构建/253资源门通过，详情P62-READ-KEYBOARD-BATCH34.md。其他生命周期/权限/真实CSV继续。
+
 P62读取反馈（2026-09-15）：首次15秒超时仅说明客户端停止等待、尚未取得日志；仅已有observedAt时说明保留结果，命名读取区标记busy。接口/安全重试/权限/配置不变，未来前端静态包发布生效，无需Node/Python重启，本轮未部署。`node scripts/verify-log-read-feedback.mjs`无文件验证200项/60本地GET；`--capture-review rN`独占版本目录，当前r1/18图待审。24相关测试、默认77项、前端构建/253资源预算通过；详情见P62-READ-FEEDBACK-BATCH33.md，不能替代真实权限/导出/生命周期验收。
 
 P62实际Vue审核（2026-09-15）：`node scripts/verify-log-page-preview.mjs`默认无输出、双端77项本地拦截检查；`--capture-review rN`只新建独占目录，当前r3/21图。链切换纯显示，原三事件样例、query/source映射、逐链列状态、详情关联入口和导出原因取消不改业务。未真实读取日志/导出CSV，生产组件未替换，无新环境/权限/API/重启要求，未部署。原15秒、原因范围/生命周期等剩余验证见P62-PAGE-COMPOSITION-BATCH32.md；具体图批准不能替代真实验收。

@@ -77,11 +77,12 @@ html body.shell-vue-c:has(.platform-log-center--review) {
         font: inherit;
         box-shadow: none;
       }
-      button:hover:not(:disabled) {
+      button:hover:not(:disabled):not([aria-disabled="true"]) {
         background: #102a63;
         color: white;
       }
-      button:disabled {
+      button:disabled,
+      .platform-log-reload[aria-disabled="true"] {
         background: #e9eef5;
         color: #64748b;
         border-color: #c7d3e4;

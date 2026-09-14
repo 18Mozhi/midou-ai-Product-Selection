@@ -49,6 +49,9 @@ const state = ref<State>("loading"),
   observedAt = ref(""),
   refreshing = ref(false),
   exporting = ref(false);
+const refreshButton = ref<HTMLButtonElement | null>(null),
+  retryButton = ref<HTMLButtonElement | null>(null),
+  keepRetryVisible = ref(false);
 let controller: AbortController | null = null,
   sequence = 0,
   mounted = false;
@@ -121,6 +124,32 @@ const providerLink = (item: OperationalLog) =>
     ? `/platform-admin/providers/sources?provider_id=${encodeURIComponent(item.provider_id)}&from=${encodeURIComponent("/platform-admin/logs")}`
     : "";
 
+function handoffRetryFocus() {
+  const from = retryButton.value,
+    to = refreshButton.value;
+  if (
+    route.path !== "/platform-admin/logs" ||
+    !from?.isConnected ||
+    !to?.isConnected ||
+    from.ownerDocument.activeElement !== from ||
+    from.closest("[inert]") ||
+    to.closest("[inert]") ||
+    !to.getClientRects().length
+  )
+    return;
+  to.focus({ preventScroll: true });
+  if (to.ownerDocument.activeElement !== to) return;
+  const rect = to.getBoundingClientRect();
+  if (
+    rect.top < 0 ||
+    rect.bottom > window.innerHeight ||
+    !to.contains(
+      to.ownerDocument.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2),
+    )
+  )
+    to.scrollIntoView({ block: "center", inline: "nearest" });
+}
+
 async function load() {
   if (controller) return;
   const currentSequence = ++sequence,
@@ -132,6 +161,7 @@ async function load() {
     timedOut = true;
     requestController.abort();
   }, 15000);
+  keepRetryVisible.value = state.value !== "loading";
   if (!hasSnapshot) state.value = "loading";
   refreshing.value = true;
   message.value = "";
@@ -149,6 +179,7 @@ async function load() {
     items.value = response.data.items ?? [];
     summary.value = response.data.summary ?? {};
     observedAt.value = response.data.observed_at ?? "";
+    if (items.value.length) handoffRetryFocus();
     state.value = items.value.length ? "ready" : "empty";
   } catch (error) {
     if (
@@ -167,6 +198,7 @@ async function load() {
     if (currentSequence === sequence) {
       controller = null;
       refreshing.value = false;
+      keepRetryVisible.value = false;
     }
   }
 }
@@ -265,7 +297,14 @@ onBeforeUnmount(() => {
         <button type="button" :disabled="exporting || refreshing" @click="exportCsv">
           {{ exporting ? "正在导出…" : "导出当前筛选" }}
         </button>
-        <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
+        <button
+          ref="refreshButton"
+          class="platform-log-reload"
+          type="button"
+          :aria-disabled="refreshing"
+          :aria-busy="refreshing"
+          @click="load"
+        >
           {{ refreshing ? "正在刷新…" : "刷新日志" }}
         </button>
       </div>
@@ -319,7 +358,17 @@ onBeforeUnmount(() => {
         }}
       </h3>
       <p>{{ message || (state === "empty" ? "调整检索条件或运行面后重试。" : "") }}</p>
-      <button v-if="state !== 'loading'" type="button" @click="load">重新加载</button>
+      <button
+        v-if="state !== 'loading' || keepRetryVisible"
+        ref="retryButton"
+        class="platform-log-reload"
+        type="button"
+        :aria-disabled="refreshing"
+        :aria-busy="refreshing"
+        @click="load"
+      >
+        {{ refreshing ? "正在读取…" : "重新加载" }}
+      </button>
     </section>
 
     <template v-else>
@@ -519,6 +568,13 @@ onBeforeUnmount(() => {
 }
 .platform-log-center button {
   min-height: 40px;
+}
+.platform-log-center .platform-log-reload[aria-disabled="true"] {
+  background: var(--surface-soft);
+  color: var(--muted);
+  border-color: var(--line);
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 .platform-log-header-actions {
   display: flex;

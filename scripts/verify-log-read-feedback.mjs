@@ -72,7 +72,9 @@ try {
           if (!output || motion !== "reduce") return;
           await page.evaluate(() => document.fonts.ready);
           await locator.evaluate((el) => el.scrollIntoView({ block: "center" }));
-          const b = await locator.screenshot({ animations: "disabled" }),
+          const b = ["recovered-focus", "refresh-loading-focus"].includes(name)
+              ? await page.screenshot({ animations: "disabled" })
+              : await locator.screenshot({ animations: "disabled" }),
             file = `${width}-${name}.png`;
           await writeFile(path.join(output, file), b);
           images.push({
@@ -143,7 +145,7 @@ try {
             notice = surface.locator(".platform-log-message"),
             workspace = surface.locator(".p62-workspace"),
             refresh = surface.getByRole("button", { name: "刷新日志", exact: true }),
-            retry = state.getByRole("button", { name: "重新加载", exact: true });
+            retry = state.locator(".platform-log-reload");
           const firstError = () =>
             state
               .getByRole("heading", { name: "链路日志暂不可用", exact: true })
@@ -167,15 +169,32 @@ try {
           await capture("first-failure", state);
           mode = "hold";
           let started = Date.now();
+          const firstRetryElement = await retry.elementHandle();
           await click(retry);
           await state.getByRole("heading", { name: "正在读取链路日志" }).waitFor();
+          check(
+            await firstRetryElement.evaluate(
+              (el) => el.isConnected && el === document.activeElement,
+            ),
+            true,
+            "retry keeps its focused DOM node through loading",
+          );
           check(await state.getAttribute("aria-busy"), "true", "first pending announces busy");
           check(await state.locator("p").innerText(), "", "old failure removed during pending");
-          check(await retry.count(), 0, "original first pending retry is removed");
+          check(await retry.count(), 1, "existing retry stays mounted during loading");
+          check(await retry.getAttribute("aria-disabled"), "true", "retry communicates disabled");
+          check(await retry.getAttribute("aria-busy"), "true", "retry communicates waiting");
+          check(await retry.innerText(), "正在读取…", "retry waiting label");
+          const firstPendingCount = requests.length;
+          await page.keyboard.press("Enter");
+          await page.keyboard.press("Space");
+          check(requests.length, firstPendingCount, "repeated retry keys do not send requests");
           check(
-            await surface.getByRole("button", { name: "正在刷新…", exact: true }).isDisabled(),
-            true,
-            "original header refresh disabled",
+            await surface
+              .getByRole("button", { name: "正在刷新…", exact: true })
+              .evaluate((el) => el.disabled),
+            false,
+            "header refresh remains native focusable",
           );
           check(
             await surface.getByRole("button", { name: "导出当前筛选", exact: true }).isDisabled(),
@@ -183,6 +202,18 @@ try {
             "export disabled while loading",
           );
           await capture("first-loading", state);
+          await page.keyboard.press("Tab");
+          check(
+            await retry.evaluate((el) => el !== document.activeElement),
+            true,
+            "busy retry permits Tab away",
+          );
+          await page.keyboard.press("Shift+Tab");
+          check(
+            await retry.evaluate((el) => el === document.activeElement),
+            true,
+            "busy retry permits Tab back",
+          );
           await firstError();
           check(Date.now() - started >= 14500, true, "first real 15s timer");
           check(
@@ -191,6 +222,11 @@ try {
             "first timeout no false snapshot",
           );
           check(await state.getAttribute("aria-busy"), "false", "first timeout settles busy");
+          check(
+            await retry.evaluate((el) => el === document.activeElement),
+            true,
+            "timeout preserves retry focus without refocusing",
+          );
           await release();
           await retry.focus();
           await page.keyboard.press("Tab");
@@ -207,6 +243,12 @@ try {
           await page.keyboard.press("Enter");
           await workspace.waitFor();
           await settled();
+          check(
+            await refresh.evaluate((el) => el === document.activeElement),
+            true,
+            "success hands off retry focus before removal",
+          );
+          await capture("recovered-focus", surface.locator(":scope > header"));
           check(await state.count(), 0, "successful recovery removes first-error region");
           check(await notice.count(), 0, "successful recovery clears timeout");
           check(
@@ -237,12 +279,36 @@ try {
           await capture("retained-failure", notice);
           mode = "hold";
           started = Date.now();
-          await click(refresh);
+          await refresh.focus();
+          await page.keyboard.press("Enter");
           await surface.getByRole("button", { name: "正在刷新…", exact: true }).waitFor();
+          const busyRefresh = surface.getByRole("button", { name: "正在刷新…", exact: true });
+          check(
+            await busyRefresh.evaluate(
+              (el) => el === document.activeElement && el.matches(":focus-visible"),
+            ),
+            true,
+            "refresh keeps keyboard focus when busy",
+          );
+          check(
+            await busyRefresh.getAttribute("aria-disabled"),
+            "true",
+            "busy refresh disabled semantics",
+          );
+          const retainedCount = requests.length;
+          await page.keyboard.press("Enter");
+          await page.keyboard.press("Space");
+          check(requests.length, retainedCount, "busy refresh keys cannot duplicate reads");
+          await capture("refresh-loading-focus", surface.locator(":scope > header"));
           check(await notice.count(), 0, "retained loading clears previous hint");
           check(await workspace.innerText(), previous, "pending retains same chains");
           await notice.waitFor({ timeout: 20000 });
           await settled();
+          check(
+            await refresh.evaluate((el) => el === document.activeElement),
+            true,
+            "refresh retains focus after timeout",
+          );
           check(Date.now() - started >= 14500, true, "retained real 15s timer");
           check(
             await notice.innerText(),
@@ -306,19 +372,64 @@ try {
           await release();
           await capture("empty-timeout", state);
           mode = "success";
-          await click(retry);
+          await retry.focus();
+          await page.keyboard.press("Enter");
           await workspace.waitFor();
           await settled();
           check(await state.count(), 0, "final recovery restores result region");
           check(await notice.count(), 0, "final recovery clears failure");
           check(await workspace.innerText(), previous, "final recovery original fixture");
-          check(requests.length, 15, "nine reads including original safe retries");
+          check(
+            await refresh.evaluate((el) => el === document.activeElement),
+            true,
+            "empty recovery hands focus to permanent refresh",
+          );
+          mode = "empty";
+          await click(refresh);
+          await state.getByRole("heading", { name: "没有匹配事件" }).waitFor();
+          await settled();
+          mode = "hold";
+          await retry.focus();
+          await page.keyboard.press("Enter");
+          await surface.getByRole("button", { name: "正在刷新…", exact: true }).waitFor();
+          if (width === 390) await click(surface.locator(".responsive-filter-drawer__trigger"));
+          const searchInput = page.getByRole("textbox", { name: "检索条件", exact: true });
+          await searchInput.focus();
+          check(
+            await searchInput.evaluate((el) => el === document.activeElement),
+            true,
+            "user moves to existing search field during pending",
+          );
+          check(held.length, 1, "one deferred recovery");
+          await held.shift().fulfill({ json: logEnvelope(fixture) });
+          await workspace.waitFor({ state: "attached" });
+          await settled();
+          check(
+            await searchInput.evaluate((el) => el === document.activeElement),
+            true,
+            "late success does not steal search or modal focus",
+          );
+          if (width === 390) {
+            await page.keyboard.press("Escape");
+            check(
+              await surface
+                .locator(".responsive-filter-drawer__trigger")
+                .evaluate((el) => el === document.activeElement),
+              true,
+              "filter retains original close focus return",
+            );
+          }
+          check(requests.length, 17, "eleven reads including original safe retries");
           check(
             requests.filter((r) => r.mode === "failure").length,
             9,
             "three 503 groups retry three times each",
           );
-          check(requests.filter((r) => r.mode === "hold").length, 3, "one pending GET per timeout");
+          check(
+            requests.filter((r) => r.mode === "hold").length,
+            4,
+            "three timeouts and one deferred recovery",
+          );
           check(
             requests.every((r) => r.body === null),
             true,
