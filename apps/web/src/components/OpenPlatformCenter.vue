@@ -199,9 +199,11 @@ async function load() {
   } catch (error) {
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? "";
-    notice.value = loadController.signal.aborted
-      ? "读取超过 15 秒，已安全停止；仍保留上次成功结果。"
-      : (failure?.actionHint ?? "读取失败，请检查网络后重试。");
+    const readHint =
+      loadController.signal.aborted && loadController.signal.reason === "timeout"
+        ? "读取超过 15 秒，已停止本次等待。"
+        : (failure?.actionHint ?? "读取失败，请检查网络后重试。");
+    notice.value = hasSnapshot.value ? `${readHint} 当前仍显示上次成功结果。` : readHint;
     if (!hasSnapshot.value)
       state.value =
         failure?.status === 401
@@ -497,35 +499,53 @@ onBeforeUnmount(() => loadController?.abort());
         ><button type="button" @click="secret = null">我已安全保存</button>
       </footer>
     </aside>
-    <p v-if="notice" class="open-notice" aria-live="polite">
+    <div v-if="notice && hasSnapshot" class="open-notice" role="status">
       {{ notice }}
       <details v-if="requestId">
         <summary>技术详情</summary>
         <code>请求 ID：{{ requestId }}</code>
       </details>
-    </p>
+    </div>
 
-    <section v-if="state === 'loading'" class="open-state open-skeleton" aria-busy="true">
-      <strong>正在读取真实开放平台数据</strong><span></span><span></span><span></span>
+    <section
+      v-if="state === 'loading'"
+      class="open-state open-skeleton"
+      aria-busy="true"
+      aria-labelledby="open-read-state-title"
+      data-read-state="loading"
+    >
+      <h3 id="open-read-state-title">正在读取开放平台数据</h3>
+      <p role="status">读取完成后显示账号、回调与投递记录。</p>
+      <span aria-hidden="true"></span><span aria-hidden="true"></span
+      ><span aria-hidden="true"></span>
     </section>
     <section
       v-else-if="
         !hasSnapshot && ['error', 'rate_limited', 'blocked', 'forbidden', 'expired'].includes(state)
       "
       class="open-state"
+      aria-busy="false"
+      aria-labelledby="open-read-state-title"
+      :data-read-state="state"
     >
-      <strong>{{
-        state === "forbidden"
-          ? "无权限查看开放平台"
-          : state === "expired"
-            ? "登录状态已过期"
-            : state === "rate_limited"
-              ? "请求过于频繁"
-              : state === "blocked"
-                ? "开放平台依赖受阻"
-                : "读取失败"
-      }}</strong>
-      <p>{{ notice }}</p>
+      <h3 id="open-read-state-title">
+        {{
+          state === "forbidden"
+            ? "无权限查看开放平台"
+            : state === "expired"
+              ? "登录状态已过期"
+              : state === "rate_limited"
+                ? "请求过于频繁"
+                : state === "blocked"
+                  ? "开放平台依赖受阻"
+                  : "读取失败"
+        }}
+      </h3>
+      <p role="status">{{ notice }}</p>
+      <details v-if="requestId">
+        <summary>技术详情</summary>
+        <code>请求 ID：{{ requestId }}</code>
+      </details>
       <button type="button" @click="load">重试</button>
     </section>
 
@@ -650,7 +670,7 @@ onBeforeUnmount(() => loadController?.abort());
         </button>
       </section>
 
-      <section class="open-workspace">
+      <section class="open-workspace" :aria-busy="refreshing">
         <header>
           <div>
             <h3>{{ currentTitle }}</h3>

@@ -1,5 +1,7 @@
 # P60 C 实际 Vue · r2 待审
 
+批次26来源演进：实际组件修正读取说明和忙碌语义，共享入口新增读取模式。当前166来源中164匹配，差异为 `OpenPlatformCenter.vue` 和 `verify-open-page-preview.mjs`；26图哈希一致。新读取图在 `../p60-read-states-r2/index.html`，本包旧manifest不重绑。下文165匹配是批次25时点，不能代表当前。
+
 批次25来源演进：共享验证脚本新增独立 `--details` / `--capture-details rN` 模式。原页面变换/CSS、166来源中的另165份及26图不变，默认134项回归通过；原manifest保持捕获身份，不重绑为当前脚本。详情新图另见 `../p60-detail-composition-r2/index.html`，不扩大本包批准范围。
 
 入口：[26图审核册](index.html)，[原始来源与验证](manifest.json)，[交付范围](../../../design-plans/ui-phase-2-2026-09-07/P60-PAGE-COMPOSITION-BATCH24.md)。

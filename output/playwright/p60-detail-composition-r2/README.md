@@ -1,5 +1,7 @@
 # P60 三类详情 r2 · 待审
 
+批次26来源演进：读取反馈/语义和共享CLI变化后，当前169来源中166匹配；差异为 `OpenPlatformCenter.vue`、`verify-open-page-preview.mjs` 及上批 `open-detail-verification.mjs` 焦点等待。24图哈希一致，不重写历史manifest。下文168匹配为上一批时点；新读取图另见 `../p60-read-states-r2/index.html`。
+
 [24图审核册](index.html) · [原始来源与结果](manifest.json) · [批次25范围](../../../design-plans/ui-phase-2-2026-09-07/P60-DETAIL-COMPOSITION-BATCH25.md)
 
 实际Vue审核变换，不是离线仿图。三类详情分组、技术展开、状态边界和六张主要行确认；派生E2E样例，不含真实密钥、发送或权限证据。1556项/8组/96次本地GET通过；所有确认取消，不写业务数据。只申请手机账号的两组事实区域审核，整页与按钮不随之批准。

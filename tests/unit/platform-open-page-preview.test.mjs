@@ -24,10 +24,8 @@ test("P60 preserves all three original ResponsiveDataView blocks and actions", (
   assert.equal((transformed.match(/<ConfirmDialog/g) || []).length, 1);
 });
 test("P60 review moves create to separate input step, preserves original handlers", () => {
-  assert.ok(
-    transformed.indexOf('<section class="open-workspace">') <
-      transformed.indexOf("<OpenCreateReview"),
-  );
+  const workspace = transformed.indexOf('<section class="open-workspace"');
+  assert.ok(workspace >= 0 && workspace < transformed.indexOf("<OpenCreateReview"));
   assert.ok(
     transformed.includes("@click=\"activeView === 'clients' ? createClient() : createWebhook()\""),
   );

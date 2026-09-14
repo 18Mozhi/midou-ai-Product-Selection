@@ -1,5 +1,7 @@
 # M06-05 宝塔运维与回滚
 
+P60批次26补充：`node scripts/verify-open-page-preview.mjs --read-states`四组读取/恢复检查；`--capture-read-states rN`独占创建新审核包，当前r2为20图。超时使用原应用15000ms计时器，API重试与权限保持；首次失败不重复提示，有旧快照才说明保留。708项/108次模拟GET，不实际发送或写入。C状态CSS/96px手机底部留白仅审核宿主；实际Vue反馈与语义修正尚未部署。未来批准后仅需宝塔发布前端和浏览器刷新，本批无后端重启、迁移或新配置。写成功后刷新失败覆盖提示等剩余项见 `design-plans/ui-phase-2-2026-09-07/P60-READ-STATES-BATCH26.md`。
+
 P60批次25补充：`node scripts/verify-open-page-preview.mjs --details`运行三类详情12样例、四宽/两动效1556项，无文件输出；`--capture-details rN`独立创建新图包，当前r2有24图。96次本地GET，全部行确认只取消、无管理写入或外部回调。旧无参/创建模式保留。审核CSS、分组和3秒测试焦点绘制等待均非生产配置，无新增环境变量、迁移或重启；完整边界见 `design-plans/ui-phase-2-2026-09-07/P60-DETAIL-COMPOSITION-BATCH25.md`。
 
 ## P60 本地 C 审核验证（2026-09-15，非部署）

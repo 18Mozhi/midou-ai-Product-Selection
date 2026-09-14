@@ -11,21 +11,24 @@ import { openReviewFixtures, openEnvelope, openFixtureFile } from "./lib/open-re
 import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
 import { openDetailPlugin, openDetailCss } from "./lib/open-detail-preview.mjs";
 import { verifyOpenDetails, openDetailCases } from "./lib/open-detail-verification.mjs";
+import { openReadPlugin, openReadCss } from "./lib/open-read-state-preview.mjs";
+import { verifyOpenReadStates } from "./lib/open-read-state-verification.mjs";
 
 const args = process.argv.slice(2);
 assert.ok(
   args.length === 0 ||
-    (args.length === 1 && args[0] === "--details") ||
+    (args.length === 1 && ["--details", "--read-states"].includes(args[0])) ||
     (args.length === 2 &&
-      ["--capture-review", "--capture-details"].includes(args[0]) &&
+      ["--capture-review", "--capture-details", "--capture-read-states"].includes(args[0]) &&
       /^r[1-9]\d*$/.test(args[1])),
-  "Use no arguments, --details, --capture-review rN or --capture-details rN",
+  "Use no arguments, --details, --read-states, --capture-review rN, --capture-details rN or --capture-read-states rN",
 );
 const detailsMode = ["--details", "--capture-details"].includes(args[0]);
+const readStatesMode = ["--read-states", "--capture-read-states"].includes(args[0]);
 const output =
   args.length === 2
     ? path.resolve(
-        `output/playwright/p60-${detailsMode ? "detail" : "page"}-composition-${args[1]}`,
+        `output/playwright/p60-${readStatesMode ? "read-states" : detailsMode ? "detail-composition" : "page-composition"}-${args[1]}`,
       )
     : null;
 if (output) await mkdir(output); // Exclusive review packet: never replace old evidence.
@@ -39,7 +42,7 @@ const server = await createServer({
   configFile: path.resolve("apps/web/vite.config.ts"),
   logLevel: "error",
   define: { "import.meta.env.VITE_API_BASE_URL": JSON.stringify("/api/v1") },
-  plugins: [openPagePlugin(), ...(detailsMode ? [openDetailPlugin()] : [])],
+  plugins: [openPagePlugin(), openReadPlugin(), ...(detailsMode ? [openDetailPlugin()] : [])],
   server: { host: "127.0.0.1", port, strictPort: true, proxy: {}, hmr: false, open: false },
 });
 const sources = new Set([
@@ -49,6 +52,9 @@ const sources = new Set([
   "scripts/lib/open-review-fixtures.mjs",
   "scripts/lib/ui-imported-style-sources.mjs",
   "apps/web/vite.config.ts",
+  openReadCss,
+  "scripts/lib/open-read-state-preview.mjs",
+  "scripts/lib/open-read-state-verification.mjs",
 ]);
 const results = [],
   images = [];
@@ -67,7 +73,10 @@ try {
   browser = await chromium.launch();
   for (const { width, motion } of (detailsMode ? [1440, 768, 390, 320] : [1440, 390]).flatMap(
     (width) =>
-      (detailsMode ? ["reduce", "no-preference"] : ["reduce"]).map((motion) => ({ width, motion })),
+      (detailsMode || readStatesMode ? ["reduce", "no-preference"] : ["reduce"]).map((motion) => ({
+        width,
+        motion,
+      })),
   )) {
     const context = await browser.newContext({
       viewport: { width, height: width === 390 ? 844 : 1000 },
@@ -138,6 +147,14 @@ try {
           }
         return route.fulfill({ json: openEnvelope(data) });
       });
+      if (readStatesMode) {
+        await verifyOpenReadStates({ page, origin, fixture, requests, check, capture });
+        check(errors, [], "no read-state page errors");
+        check(unexpected, [], "no unknown/external requests");
+        results.push({ width, motion, checks, requests });
+        console.log(`P60 read states ${width}/${motion} passed ${checks}`);
+        continue;
+      }
       if (detailsMode) {
         await verifyOpenDetails({
           page,
@@ -410,12 +427,15 @@ try {
         {
           page: "P60",
           detailsMode,
+          readStatesMode,
           revision: args[1],
           capturedAt: new Date().toISOString(),
           sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
-          scope: detailsMode
-            ? "actual App C detail regrouping; original script/fields/actions preserved; E2E-derived synthetic status and long-text samples; confirmations cancelled without writes; no secret/production/permission acceptance"
-            : "actual App with C review-only transform; original business script plus isolated input-modal component; original synthetic E2E data; GET only; no production deployment or approval; row actions and one-time secret lifecycle not covered",
+          scope: readStatesMode
+            ? "actual App C read states; actual 15000ms application timer; synthetic GET errors and recovery only; no write/permission/production acceptance"
+            : detailsMode
+              ? "actual App C detail regrouping; original script/fields/actions preserved; E2E-derived synthetic status and long-text samples; confirmations cancelled without writes; no secret/production/permission acceptance"
+              : "actual App with C review-only transform; original business script plus isolated input-modal component; original synthetic E2E data; GET only; no production deployment or approval; row actions and one-time secret lifecycle not covered",
           sources: sourceHashes,
           images,
           results,
@@ -427,9 +447,11 @@ try {
     await writeFile(
       path.join(output, "index.html"),
       '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P60 C 实际Vue待审</title><style>body{font:16px/1.7 Microsoft YaHei;margin:24px;color:#17253c}img{display:block;max-width:100%;border:1px solid #c7d3e4}article{margin:28px 0}</style><h1>P60 C 实际Vue审核版</h1><p>本地合成样例；' +
-        (detailsMode
-          ? "三类详情、技术信息与取消确认路径。"
-          : "三工作区默认布局、创建填写及取消确认路径。") +
+        (readStatesMode
+          ? "首次/保留数据的读取、失败与恢复；超时使用实际15秒计时。"
+          : detailsMode
+            ? "三类详情、技术信息与取消确认路径。"
+            : "三工作区默认布局、创建填写及取消确认路径。") +
         '不是全部状态、真实权限或发送验收。未部署。</p><a href="manifest.json">来源与验证</a>' +
         images
           .map(
