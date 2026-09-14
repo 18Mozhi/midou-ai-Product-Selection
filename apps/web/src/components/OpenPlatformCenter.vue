@@ -32,6 +32,11 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   state = ref<PageState>("loading"),
   refreshing = ref(false),
   actionBusy = ref(false),
+  actionResult = ref<{
+    message: string;
+    requestId: string;
+    refresh: "unverified" | "pending" | "failed" | "ready";
+  } | null>(null),
   hasSnapshot = ref(false),
   notice = ref(""),
   requestId = ref(""),
@@ -178,6 +183,8 @@ function apiQuery() {
 }
 async function load() {
   if (refreshing.value) return;
+  const readActionResult = actionResult.value;
+  if (readActionResult) readActionResult.refresh = "pending";
   loadController?.abort();
   loadController = new AbortController();
   const timeout = window.setTimeout(() => loadController?.abort("timeout"), 15000);
@@ -196,7 +203,11 @@ async function load() {
     hasSnapshot.value = true;
     state.value = currentRows.value.length ? "ready" : "empty";
     await revealActiveSummary();
+    if (readActionResult && actionResult.value === readActionResult)
+      readActionResult.refresh = "ready";
   } catch (error) {
+    if (readActionResult && actionResult.value === readActionResult)
+      readActionResult.refresh = "failed";
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? "";
     const readHint =
@@ -250,6 +261,7 @@ function goToPage(page: number) {
 async function call(path: string, method: "POST" | "PATCH", body: Record<string, unknown>) {
   if (actionBusy.value) return;
   actionBusy.value = true;
+  actionResult.value = null;
   notice.value = "";
   try {
     const response = await request<any>(path, { method, body });
@@ -258,15 +270,17 @@ async function call(path: string, method: "POST" | "PATCH", body: Record<string,
         response.data?.status === "queued"
           ? "已进入真实投递队列，可在投递记录查看 Worker 结果。"
           : "操作成功并已写入审计。";
-    requestId.value = actionRequestId;
+    actionResult.value = {
+      message: successNotice,
+      requestId: actionRequestId,
+      refresh: "unverified",
+    };
     if (response.data?.secret)
       secret.value = {
         value: response.data.secret,
         kind: path.includes("webhooks") ? "Webhook 签名密钥" : "API Client 密钥",
       };
     await load();
-    requestId.value = actionRequestId;
-    notice.value = successNotice;
   } catch (error) {
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? "";
@@ -499,6 +513,25 @@ onBeforeUnmount(() => loadController?.abort());
         ><button type="button" @click="secret = null">我已安全保存</button>
       </footer>
     </aside>
+    <div v-if="actionResult" class="open-notice open-action-result" role="status">
+      <p>{{ actionResult.message }}</p>
+      <p>
+        {{
+          actionResult.refresh === "pending"
+            ? "列表正在刷新…"
+            : actionResult.refresh === "ready"
+              ? "当前列表已刷新。"
+              : "列表尚未刷新。无需重复提交操作，可重新读取列表。"
+        }}
+      </p>
+      <details v-if="actionResult.requestId">
+        <summary>本次操作追踪</summary>
+        <code>请求 ID：{{ actionResult.requestId }}</code>
+      </details>
+      <button type="button" :disabled="refreshing" @click="load">
+        {{ refreshing ? "读取中…" : "重新读取列表" }}
+      </button>
+    </div>
     <div v-if="notice && hasSnapshot" class="open-notice" role="status">
       {{ notice }}
       <details v-if="requestId">

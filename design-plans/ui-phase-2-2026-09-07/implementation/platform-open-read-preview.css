@@ -78,6 +78,14 @@ html body.shell-vue-c:has(#app) #app .role-shell.role-shell--review .open-platfo
       16px/1.8 "Microsoft YaHei",
       sans-serif;
   }
+  .open-action-result p {
+    margin: 0;
+    color: #17253c;
+  }
+  .open-action-result > button {
+    min-height: 44px;
+    justify-self: start;
+  }
   @media (max-width: 760px) {
     .open-state {
       padding: 24px 18px;

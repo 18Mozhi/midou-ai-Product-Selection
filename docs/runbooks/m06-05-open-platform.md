@@ -1,5 +1,7 @@
 # M06-05 宝塔运维与回滚
 
+P60批次27：`node scripts/verify-open-page-preview.mjs --action-results`验证实际Vue操作/读取双结果；`--capture-action-results rN`独占创建审核目录，当前r2十四图。52GET/12PATCH/4POST均为浏览器本地拦截，无真实保存或投递。成功操作与刷新结果/追踪分开；“重新读取列表”只GET，读取中禁用，恢复后仍保留。15000ms、重试、接口和权限未改，无新配置。未部署，未来批准后由宝塔发布前端并刷新浏览器，不需本批额外后端重启。边界与临时包清理受阻见 `design-plans/ui-phase-2-2026-09-07/P60-ACTION-RESULTS-BATCH27.md`。
+
 P60批次26补充：`node scripts/verify-open-page-preview.mjs --read-states`四组读取/恢复检查；`--capture-read-states rN`独占创建新审核包，当前r2为20图。超时使用原应用15000ms计时器，API重试与权限保持；首次失败不重复提示，有旧快照才说明保留。708项/108次模拟GET，不实际发送或写入。C状态CSS/96px手机底部留白仅审核宿主；实际Vue反馈与语义修正尚未部署。未来批准后仅需宝塔发布前端和浏览器刷新，本批无后端重启、迁移或新配置。写成功后刷新失败覆盖提示等剩余项见 `design-plans/ui-phase-2-2026-09-07/P60-READ-STATES-BATCH26.md`。
 
 P60批次25补充：`node scripts/verify-open-page-preview.mjs --details`运行三类详情12样例、四宽/两动效1556项，无文件输出；`--capture-details rN`独立创建新图包，当前r2有24图。96次本地GET，全部行确认只取消、无管理写入或外部回调。旧无参/创建模式保留。审核CSS、分组和3秒测试焦点绘制等待均非生产配置，无新增环境变量、迁移或重启；完整边界见 `design-plans/ui-phase-2-2026-09-07/P60-DETAIL-COMPOSITION-BATCH25.md`。
