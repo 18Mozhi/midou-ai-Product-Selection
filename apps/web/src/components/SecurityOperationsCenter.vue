@@ -57,6 +57,11 @@ const queryInput = ref("");
 const status = ref("");
 const page = ref(1);
 const tokenPage = ref(1);
+const eventRegion = ref<HTMLElement | null>(null);
+const sessionRegion = ref<HTMLElement | null>(null);
+const credentialRegion = ref<HTMLElement | null>(null);
+const tokenRegion = ref<HTMLElement | null>(null);
+const auditRegion = ref<HTMLElement | null>(null);
 let mounted = false;
 let loadController: AbortController | null = null;
 let loadSequence = 0;
@@ -480,7 +485,12 @@ onBeforeUnmount(() => {
       </p>
 
       <div class="security-grid" :aria-busy="refreshing">
-        <section v-if="activeView === 'events'" aria-labelledby="security-events-heading">
+        <section
+          v-if="activeView === 'events'"
+          ref="eventRegion"
+          tabindex="-1"
+          aria-labelledby="security-events-heading"
+        >
           <div class="security-section-heading">
             <div>
               <p>身份边界</p>
@@ -496,6 +506,7 @@ onBeforeUnmount(() => {
             :rows="data.security_events"
             :row-key="(item) => item.id"
             title="登录与风险事件"
+            :focus-fallback="() => eventRegion"
             :detail-title="(item) => eventText(item.event_type)"
           >
             <template #desktop
@@ -623,7 +634,12 @@ onBeforeUnmount(() => {
           </div>
         </section>
 
-        <section v-if="activeView === 'sessions'" aria-labelledby="security-sessions-heading">
+        <section
+          v-if="activeView === 'sessions'"
+          ref="sessionRegion"
+          tabindex="-1"
+          aria-labelledby="security-sessions-heading"
+        >
           <div class="security-section-heading">
             <div>
               <p>登录生命周期</p>
@@ -639,6 +655,7 @@ onBeforeUnmount(() => {
             :rows="data.sessions"
             :row-key="(item) => item.id"
             title="活动与历史会话"
+            :focus-fallback="() => sessionRegion"
             :detail-title="(item) => item.email"
           >
             <template #desktop
@@ -751,7 +768,11 @@ onBeforeUnmount(() => {
         </section>
 
         <template v-if="activeView === 'credentials'">
-          <section aria-labelledby="security-credentials-heading">
+          <section
+            ref="credentialRegion"
+            tabindex="-1"
+            aria-labelledby="security-credentials-heading"
+          >
             <div class="security-section-heading">
               <div>
                 <p>密钥材料</p>
@@ -767,6 +788,7 @@ onBeforeUnmount(() => {
               :rows="data.credential_assets"
               :row-key="(item) => item.id"
               title="凭证生命周期"
+              :focus-fallback="() => credentialRegion"
               :detail-title="(item) => item.name"
             >
               <template #desktop
@@ -900,7 +922,7 @@ onBeforeUnmount(() => {
             >
           </section>
 
-          <section aria-labelledby="security-tokens-heading">
+          <section ref="tokenRegion" tabindex="-1" aria-labelledby="security-tokens-heading">
             <div class="security-section-heading">
               <div>
                 <p>组织接入</p>
@@ -916,6 +938,7 @@ onBeforeUnmount(() => {
               :rows="data.organization_tokens"
               :row-key="(item) => item.id"
               title="组织访问令牌"
+              :focus-fallback="() => tokenRegion"
               :detail-title="(item) => item.name"
             >
               <template #desktop
@@ -1034,7 +1057,12 @@ onBeforeUnmount(() => {
           </section>
         </template>
 
-        <section v-if="activeView === 'audit'" aria-labelledby="security-audit-heading">
+        <section
+          v-if="activeView === 'audit'"
+          ref="auditRegion"
+          tabindex="-1"
+          aria-labelledby="security-audit-heading"
+        >
           <div class="security-section-heading">
             <div>
               <p>操作追溯</p>
@@ -1050,6 +1078,7 @@ onBeforeUnmount(() => {
             :rows="data.audit_events"
             :row-key="(item) => item.id"
             title="平台审计"
+            :focus-fallback="() => auditRegion"
             :detail-title="(item) => auditActionText(item.action)"
           >
             <template #desktop

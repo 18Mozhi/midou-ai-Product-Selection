@@ -35,6 +35,7 @@ test("P59 detail runner rejects external/baseline capture and unsafe output path
     ["--production"],
     ["--capture-review", "../replace"],
     ["--capture-lifecycle", "../replace"],
+    ["--capture-removal", "../replace"],
     ["--lifecycle", "--capture-review", "r1"],
     ["--baseline", "--capture-review", "r1"],
   ]) {
@@ -46,7 +47,7 @@ test("P59 detail runner rejects external/baseline capture and unsafe output path
     assert.notEqual(result.status, 0);
     assert.ok(
       result.stderr.includes(
-        "Use no arguments, --baseline, --lifecycle, --capture-review rN, or --capture-lifecycle rN",
+        "Use no arguments or one mode: --baseline, --lifecycle, --removal, --capture-review rN, --capture-lifecycle rN, --capture-removal rN",
       ),
     );
     assert.equal(result.stdout, "");

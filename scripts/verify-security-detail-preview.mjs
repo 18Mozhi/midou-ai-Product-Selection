@@ -15,21 +15,23 @@ import {
 } from "./lib/security-review-fixtures.mjs";
 import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
 import { verifySecurityDetailLifecycle } from "./lib/security-detail-lifecycle.mjs";
+import { verifySecurityDetailRemoval } from "./lib/security-detail-removal.mjs";
 
 const args = process.argv.slice(2);
 assert.ok(
   args.length === 0 ||
-    (args.length === 1 && ["--baseline", "--lifecycle"].includes(args[0])) ||
+    (args.length === 1 && ["--baseline", "--lifecycle", "--removal"].includes(args[0])) ||
     (args.length === 2 &&
-      ["--capture-review", "--capture-lifecycle"].includes(args[0]) &&
+      ["--capture-review", "--capture-lifecycle", "--capture-removal"].includes(args[0]) &&
       /^r[1-9]\d*$/.test(args[1])),
-  "Use no arguments, --baseline, --lifecycle, --capture-review rN, or --capture-lifecycle rN",
+  "Use no arguments or one mode: --baseline, --lifecycle, --removal, --capture-review rN, --capture-lifecycle rN, --capture-removal rN",
 );
 const baseline = args[0] === "--baseline";
 const lifecycle = ["--lifecycle", "--capture-lifecycle"].includes(args[0]);
-const output = ["--capture-review", "--capture-lifecycle"].includes(args[0])
+const removal = ["--removal", "--capture-removal"].includes(args[0]);
+const output = ["--capture-review", "--capture-lifecycle", "--capture-removal"].includes(args[0])
   ? path.resolve(
-      `output/playwright/p59-detail-${lifecycle ? "lifecycle" : "composition"}-${args[1]}`,
+      `output/playwright/p59-detail-${removal ? "removal" : lifecycle ? "lifecycle" : "composition"}-${args[1]}`,
     )
   : null;
 if (output) await mkdir(output); // Exclusive review version; never overwrite historical evidence.
@@ -100,6 +102,7 @@ const sources = new Set([
   "scripts/lib/security-review-fixtures.mjs",
   "scripts/lib/ui-imported-style-sources.mjs",
   "scripts/lib/security-detail-lifecycle.mjs",
+  "scripts/lib/security-detail-removal.mjs",
   "apps/web/vite.config.ts",
   ...(!baseline ? [securityDetailCss, "scripts/lib/security-detail-preview.mjs"] : []),
 ]);
@@ -111,7 +114,7 @@ try {
   const origin = `http://127.0.0.1:${port}`;
   console.log(`P59 detail ${baseline ? "baseline" : "C review"} ${origin}`);
   browser = await chromium.launch();
-  for (const width of lifecycle ? [390, 760] : [390, 760, 761, 1440])
+  for (const width of lifecycle || removal ? [390, 760] : [390, 760, 761, 1440])
     for (const motion of ["reduce", "no-preference"]) {
       const context = await browser.newContext({
         viewport: { width, height: width === 390 ? 844 : 1000 },
@@ -140,7 +143,21 @@ try {
           return data;
         };
         releaseReads.push(release);
-        return { arrived, release };
+        return {
+          get arrived() {
+            let timeout;
+            return Promise.race([
+              arrived,
+              new Promise((_, reject) => {
+                timeout = setTimeout(
+                  () => reject(new Error("Expected local security read within 5 seconds")),
+                  5000,
+                );
+              }),
+            ]).finally(() => clearTimeout(timeout));
+          },
+          release,
+        };
       };
       let checks = 0;
       const check = (actual, expected, message) => {
@@ -198,7 +215,7 @@ try {
         await page.goto(origin + "/platform-admin/security");
         const surface = page.locator(".security-ops--review");
         let currentView = "events";
-        for (const scenario of scenarios) {
+        for (const scenario of removal ? [] : scenarios) {
           if (scenario.view !== currentView)
             await surface.getByRole("link", { name: scenario.label, exact: true }).click();
           currentView = scenario.view;
@@ -417,6 +434,17 @@ try {
             "page no horizontal overflow",
           );
         }
+        if (removal)
+          await verifySecurityDetailRemoval({
+            page,
+            surface,
+            check,
+            width,
+            deferRead,
+            snapshot,
+            capture,
+            origin,
+          });
         if (lifecycle)
           await verifySecurityDetailLifecycle({
             page,
@@ -429,7 +457,7 @@ try {
           });
         check(
           requests.length,
-          lifecycle ? 6 : 4,
+          removal ? 12 : lifecycle ? 6 : 4,
           "one read for each actual view, credentials and tokens share read",
         );
         check(
@@ -467,6 +495,7 @@ try {
       page: "P59",
       revision: args[1],
       lifecycle,
+      removal,
       sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
       capturedAt: new Date().toISOString(),
       scope:
@@ -492,6 +521,7 @@ try {
     JSON.stringify({
       baseline,
       lifecycle,
+      removal,
       groups: results.length,
       checks: results.reduce((sum, group) => sum + group.checks, 0),
       sources: sources.size,

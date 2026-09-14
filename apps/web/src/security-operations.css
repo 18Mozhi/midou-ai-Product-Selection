@@ -4,6 +4,11 @@
   min-width: 0;
 }
 
+.security-grid > section:focus-visible {
+  outline: 3px solid var(--so-focus);
+  outline-offset: 3px;
+}
+
 .security-ops .security-hero {
   display: flex;
   align-items: flex-end;

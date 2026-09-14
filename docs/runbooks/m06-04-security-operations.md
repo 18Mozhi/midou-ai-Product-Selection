@@ -1,5 +1,9 @@
 # M06-04 宝塔运维与回滚
 
+## 2026-09-15 UI 记录消失与空结果焦点
+
+P59五个结果区向ResponsiveDataView传内部可选focusFallback；整个列表清空并卸载详情时，仅当前浮层持焦才回到仍可见的所属结果区，其他记录尚在则保留原列表后备。不改安全API、审计或删除逻辑。`node scripts/verify-security-detail-preview.mjs --removal`运行244项本地验证、不写文件；`--capture-removal rN`只创建新版本图包。样例请求到达等待5秒、绘制稳定等待3秒只属于测试，不是生产配置。当前r4待审，完整范围见 `design-plans/ui-phase-2-2026-09-07/P59-DETAIL-REMOVAL-BATCH22.md`。未部署、无需迁移或后端重启；以后随获准Web包通过宝塔发布并刷新浏览器，审核C样式仍未接入生产。
+
 ## 2026-09-15 UI 详情跨宽度焦点修复
 
 公共ResponsiveDataView关闭时跳过隐藏/禁用/inert/断开的原按钮，必要时返回命名记录列表；原Tab顺序、字段与关闭合同不变。`node scripts/verify-security-detail-preview.mjs --lifecycle`运行本地580项跨宽度/后退/同身份刷新验证，不写图；`--capture-lifecycle rN`只创建新版本图包，不覆盖历史。普通模式752项保留。无需新增配置、迁移或后端重启，本批未部署；以后随获准Web包由宝塔发布并刷新浏览器生效，详情见 `design-plans/ui-phase-2-2026-09-07/P59-DETAIL-FOCUS-BATCH21.md`。

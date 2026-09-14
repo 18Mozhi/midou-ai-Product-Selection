@@ -9,6 +9,7 @@ const props = defineProps<{
   detailTitle: (row: DataRow) => string;
   emptyMessage?: string;
   appearance?: "default" | "governance" | "content";
+  focusFallback?: () => HTMLElement | null;
 }>();
 
 const selectedKey = shallowRef<string | null>(null),
@@ -32,6 +33,11 @@ function releaseBackground() {
   for (const [element, inert] of background) element.inert = inert;
   background.clear();
 }
+onBeforeUnmount(() => {
+  const fallback = props.focusFallback?.();
+  // Only the owning caller opts into an unmount handoff; never reclaim unrelated focus.
+  if (fallback && overlay.value?.contains(document.activeElement)) void restoreFocus([fallback]);
+});
 onBeforeUnmount(releaseBackground);
 onDeactivated(() => {
   selectedKey.value = null;
@@ -47,6 +53,23 @@ function show(row: DataRow, event: Event) {
 
 function close() {
   selectedKey.value = null;
+}
+
+async function restoreFocus(candidates: Array<HTMLElement | null>) {
+  await nextTick();
+  // A handoff may already have focused a newer dialog. Never steal that focus.
+  const activeDialog = document.activeElement?.closest(
+    '[role="dialog"], [role="alertdialog"], dialog[open]',
+  );
+  if (activeDialog) return;
+  const target = candidates.find(
+    (element) =>
+      element?.isConnected &&
+      !element.matches(":disabled") &&
+      !element.closest("[inert]") &&
+      element.checkVisibility({ visibilityProperty: true }),
+  );
+  target?.focus({ preventScroll: true });
 }
 
 watch(
@@ -82,21 +105,12 @@ watch(
     releaseBackground();
     if (!wasOpen) return;
     selectedKey.value = null;
-    await nextTick();
-    // A handoff may already have focused a newer dialog. Never steal that focus.
-    const activeDialog = document.activeElement?.closest(
-      '[role="dialog"], [role="alertdialog"], dialog[open]',
-    );
-    if (!activeDialog) {
-      const target = [trigger, mobileList.value, viewRoot.value].find(
-        (element) =>
-          element?.isConnected &&
-          !element.matches(":disabled") &&
-          !element.closest("[inert]") &&
-          element.checkVisibility({ visibilityProperty: true }),
-      );
-      target?.focus({ preventScroll: true });
-    }
+    await restoreFocus([
+      trigger,
+      mobileList.value,
+      viewRoot.value,
+      props.focusFallback?.() ?? null,
+    ]);
   },
 );
 

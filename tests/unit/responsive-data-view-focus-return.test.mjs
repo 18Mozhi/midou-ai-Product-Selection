@@ -10,7 +10,8 @@ const source = readFileSync(filename, "utf8");
 function harness() {
   let callback;
   const doc = { activeElement: null },
-    focus = [];
+    focus = [],
+    unmounts = [];
   const props = { rows: [{ id: "one" }], rowKey: (row) => row.id };
   const box = {
     defineProps: () => props,
@@ -24,7 +25,7 @@ function harness() {
       callback = fn;
     },
     nextTick: () => Promise.resolve(),
-    onBeforeUnmount: () => {},
+    onBeforeUnmount: (fn) => unmounts.push(fn),
     onDeactivated: () => {},
     document: doc,
   };
@@ -39,9 +40,12 @@ function harness() {
     .map((node) => node.getText(ast))
     .join("\n");
   vm.runInNewContext(
-    ts.transpileModule(body + ";globalThis.api={show,viewRoot,mobileList,selectedKey,background}", {
-      compilerOptions: { target: ts.ScriptTarget.ES2022 },
-    }).outputText,
+    ts.transpileModule(
+      body + ";globalThis.api={show,viewRoot,mobileList,selectedKey,background,overlay}",
+      {
+        compilerOptions: { target: ts.ScriptTarget.ES2022 },
+      },
+    ).outputText,
     box,
   );
   const element = (name, options = {}) => ({
@@ -63,7 +67,16 @@ function harness() {
     focus.length = 0;
     doc.activeElement = null;
   };
-  return { open, focus, doc, api: box.api, close: () => callback(false, true), element };
+  return {
+    open,
+    focus,
+    doc,
+    props,
+    api: box.api,
+    close: () => callback(false, true),
+    element,
+    unmount: () => unmounts.forEach((fn) => fn()),
+  };
 }
 
 for (const [name, trigger, mobile, root, expected] of [
@@ -97,7 +110,7 @@ test("drawer close does not steal a newer dialog's focus and restores existing i
   assert.equal(alreadyInert.inert, true);
 });
 
-test("fallback group is named, programmatically focusable and compiles without new props", () => {
+test("fallback group is named, programmatically focusable and compiles with unchanged required props", () => {
   const descriptor = parse(source).descriptor;
   assert.match(
     descriptor.template.content,
@@ -113,6 +126,66 @@ test("fallback group is named, programmatically focusable and compiles without n
       source: descriptor.template.content,
       filename,
       id: "focus-return",
+      compilerOptions: { bindingMetadata: script.bindings },
+    }).errors,
+    [],
+  );
+});
+
+for (const [name, options, owned, newerDialog, enabled, expected] of [
+  ["caller opts in with a surviving region", {}, true, false, true, ["caller-region"]],
+  ["caller region is removed by navigation", { connected: false }, true, false, true, []],
+  ["caller region becomes hidden", { visible: false }, true, false, true, []],
+  ["focus belongs elsewhere", {}, false, false, true, []],
+  ["another dialog acquires focus during unmount", {}, true, true, true, []],
+  ["other consumers have not opted in", {}, true, false, false, []],
+])
+  test(`unmount handoff is explicit and owner-safe: ${name}`, async () => {
+    const h = harness();
+    h.open();
+    const focusNode = h.element("drawer-close"),
+      fallback = h.element("caller-region", options);
+    if (enabled) h.props.focusFallback = () => fallback;
+    h.api.overlay.value = { contains: (node) => owned && node === focusNode };
+    h.doc.activeElement = focusNode;
+    const background = { inert: true };
+    h.api.background.set(background, false);
+    h.unmount();
+    h.doc.activeElement = newerDialog ? h.element("new-dialog", { dialog: true }) : null;
+    await new Promise(setImmediate);
+    assert.deepEqual(h.focus, expected);
+    assert.equal(background.inert, false);
+  });
+
+test("P59 explicitly binds five independent named result-region fallbacks", () => {
+  const file = "apps/web/src/components/SecurityOperationsCenter.vue";
+  const descriptor = parse(readFileSync(file, "utf8")).descriptor;
+  const consumers = [
+    ...descriptor.template.content.matchAll(/<ResponsiveDataView(?:[^">]|"[^"]*")*>/g),
+  ].map((match) => match[0]);
+  const pairs = [
+    ["eventRegion", "events"],
+    ["sessionRegion", "sessions"],
+    ["credentialRegion", "credentials"],
+    ["tokenRegion", "tokens"],
+    ["auditRegion", "audit"],
+  ];
+  assert.equal(consumers.length, pairs.length);
+  for (const [index, [ref, key]] of pairs.entries()) {
+    assert.ok(consumers[index].includes(`:focus-fallback="() => ${ref}"`));
+    assert.match(
+      descriptor.template.content,
+      new RegExp(
+        `<section[^>]*ref="${ref}"[^>]*tabindex="-1"[^>]*aria-labelledby="security-${key}-heading"`,
+      ),
+    );
+  }
+  const script = compileScript(descriptor, { id: "p59-empty-return" });
+  assert.deepEqual(
+    compileTemplate({
+      source: descriptor.template.content,
+      filename: file,
+      id: "p59-empty-return",
       compilerOptions: { bindingMetadata: script.bindings },
     }).errors,
     [],
