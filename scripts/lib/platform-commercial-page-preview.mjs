@@ -58,6 +58,12 @@ ${lookup[0]}      <p v-if="!organizationId" class="p58-unselected">尚未读取�
     "当前列表没有启用方案。请在下方按名称或内部标识搜索",
     "当前列表没有启用方案。请在“方案目录”按名称或内部标识搜索",
   );
+  text = once(text, '<p v-if="notice"', '<p v-if="notice && loadedOnce"');
+  text = once(
+    text,
+    '<span>{{ notice || "当前没有可展示的旧数据。" }}</span\n      ><button',
+    '<span>{{ notice || "当前没有可展示的旧数据。" }}</span>\n      <TechnicalDetails :request-id="requestId" />\n      <button',
+  );
   return text;
 }
 export function previewCommercialShell(source) {

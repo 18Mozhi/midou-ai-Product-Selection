@@ -97,3 +97,19 @@ test("P58 CLI expression parses and host rejects unsupported flags before starti
   assert.notEqual(result.status, 0);
   assert.ok(result.stderr.includes("Only --capture-review is accepted"));
 });
+
+test("P58 initial read feedback owns its trace while retained notice remains separate", async () => {
+  const text = previewCommercialPage(
+    await readFile("apps/web/src/components/CommercialOperationsCenter.vue", "utf8"),
+  );
+  assert.ok(text.includes('v-if="notice && loadedOnce"'));
+  const errorPanel = text.slice(
+    text.indexOf("v-else-if=\"['error', 'rate_limited', 'blocked']"),
+    text.indexOf("    <template v-else>"),
+  );
+  assert.ok(errorPanel.includes('<TechnicalDetails :request-id="requestId" />'));
+  assert.ok(errorPanel.includes('@click="load()"'));
+  new vm.Script(
+    `(${await readFile("scripts/lib/platform-commercial-read-browser-checks.js", "utf8")})`,
+  );
+});

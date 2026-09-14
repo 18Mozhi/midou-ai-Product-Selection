@@ -1,0 +1,105 @@
+{
+  "sources": {
+    "apps/web/src/components/CommercialOperationsCenter.vue": "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed",
+    "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
+    "apps/web/src/components/commercial-operations.css": "d046fd8522d11fb502759783d6d33f65f0a45f22fc08107465451aad0c6ce90b",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "scripts/lib/platform-commercial-page-preview.mjs": "bc75c7dc542e1d0a6275dac0c319799136d68e2f59108d99b39576166ea8edb0",
+    "scripts/lib/platform-commercial-read-browser-checks.js": "90e7a527b905fd3e06f90c23280b3fb72cf262d18918af8cd7b60585c7221dfd",
+    "scripts/preview-platform-commercial-page.mjs": "c4e6c0d52650a58bd4f3e4a5cdebda0de291cf09d96ebd637b8c3f1c81ab53ee",
+    "design-plans/ui-phase-2-2026-09-07/implementation/platform-commercial-page-preview.css": "2b7716733b54bfd87901758b8bda3e1173ef895f125859992ab4ac41e7234b7a",
+    "design-plans/ui-phase-2-2026-09-07/implementation/shell-vue-c-preview.css": "7607f918eef47cd5670be727928f7fa5fcca5129a8a7ce37c6ba1f2ca1e1d4be",
+    "tests/e2e/m06-06-commercial.spec.ts": "4904d7473ce746b65f6233015121f8e3eab730047fbfb9f46b08af61d6a38982",
+    "tests/unit/commercial-read-timeout.test.mjs": "c8d884763b7e0ea328dcd91b1b61b5a10f48f7dfa18a950dba4a05a6b13218a4"
+  },
+  "images": [
+    {
+      "file": "P58-1440-429.png",
+      "sha256": "67a81616d04d992390530b1f3c3cb96c49f5e31f11441d652cbc4651c5955755",
+      "approval": "pending-user-review"
+    },
+    {
+      "file": "P58-1440-503.png",
+      "sha256": "31469afed81b07ee3e73979d6fa3e0baaa9ef856c7021b80c67c0c88c4ba2824",
+      "approval": "pending-user-review"
+    },
+    {
+      "file": "P58-1440-initial-timeout.png",
+      "sha256": "d76c558b8f1237b741e5383e52fac552b78faaaf6aee3a17f530d1e4281ad5b9",
+      "approval": "pending-user-review"
+    },
+    {
+      "file": "P58-1440-loading.png",
+      "sha256": "4f81f27c275bb0c5ea0b92aa2be0b931250331ef336f6826a483b96992b04b81",
+      "approval": "pending-user-review"
+    },
+    {
+      "file": "P58-1440-retained-timeout.png",
+      "sha256": "dbb087601b224836dedb42ce1e79e54e4ae2e450261431cb168ed66923017af6",
+      "approval": "pending-user-review"
+    },
+    {
+      "file": "P58-390-429.png",
+      "sha256": "84c0ef0c6e78897d80825ac34e547a83fba651e89412db3c0026f078856eca76",
+      "approval": "pending-user-review"
+    },
+    {
+      "file": "P58-390-503.png",
+      "sha256": "ef2523fb71aa4a6918469d7e77df926771d82881c0010e05930f11fb6b8b2362",
+      "approval": "pending-user-review"
+    },
+    {
+      "file": "P58-390-initial-timeout.png",
+      "sha256": "1bea07fc743e05ed16b68ca23aa8c6268031657076ecced0974b599e125d6cb7",
+      "approval": "pending-user-review"
+    },
+    {
+      "file": "P58-390-loading.png",
+      "sha256": "eb79a5df23662242c9e8c16e968e5a4ce7353806c4a25223fefc0e4518b772e2",
+      "approval": "pending-user-review"
+    },
+    {
+      "file": "P58-390-retained-timeout.png",
+      "sha256": "df9c10df7ce89b1680668d51ed7f4c167a50bed9493150d5aede4f916154d491",
+      "approval": "pending-user-review"
+    }
+  ],
+  "scope": "P58 review-only C feedback regions; production source changes only timeout truth and generic error title. Selected final-source hashes, not an exhaustive loaded-module manifest or production proof.",
+  "verification": {
+    "widths": [
+      390,
+      1440
+    ],
+    "groups": 6,
+    "states": [
+      "loading",
+      "initial429",
+      "initial503",
+      "initial-timeout",
+      "retry-success",
+      "retained-timeout"
+    ],
+    "browserTimerAdvanceMs": 15001,
+    "originalTimeoutMs": 15000,
+    "requestsObservedInFinalReplay": {
+      "GET": 18,
+      "writes": 0
+    },
+    "pageErrors": [],
+    "checks": [
+      "single initial error region with trace",
+      "UUID input editable during errors",
+      "accurate initial timeout",
+      "blue 3px retry focus",
+      "retry restores usage",
+      "refresh timeout retains usage",
+      "no horizontal page overflow"
+    ],
+    "scopeLimits": [
+      "Local test fixtures only",
+      "No real API, permissions, writes or delivery",
+      "Element crops exclude full-page review;503/429 phone crops can include bottom-nav edge",
+      "No screen-reader or real touch acceptance"
+    ]
+  }
+}

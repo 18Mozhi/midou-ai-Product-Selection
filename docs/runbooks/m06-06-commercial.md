@@ -10,6 +10,12 @@
 
 ## 验证
 
+### P58 读取文案回归（未部署）
+
+首次读取超时显示“尚未取得数据”，已有成功快照时显示“已保留上次成功数据”；通用错误标题为“暂时无法读取配额数据”。原 15 秒超时、读取状态分类和保留规则不变。执行 `node --test tests/unit/commercial-read-timeout.test.mjs` 验证。两处文案未来随 Web 静态包发布，浏览器重新加载生效，无需后端/Worker/Python 重启或数据迁移。本次没有部署；C 反馈布局仍为本地审核提案，详见 `design-plans/ui-phase-2-2026-09-07/P58-READ-FEEDBACK-REVIEW.md`。
+
+### 模块完整验收
+
 先运行 `node --test tests/m06-06/commercial.test.mjs`，再以 MySQL 5.7 环境运行 `node scripts/verify-commercial-live.mjs`，随后运行 Playwright 桌面与 390px 检查和 `npm run verify:module -- M06-06`。验收时确认平台导航、页面标题、确认文案均使用配额语义，页面明确说明当前不包含计费、价格或支付；方案列表的 `assignment_count` 应与活动或暂停的组织分配数一致，启用方案始终排在草稿前，筛选总数和页码一致。为同一组织准备超过 10 条调整时，逐页记录可以分页，但有效配额必须包含全部仍有效调整。组织不存在应返回 404 `organization_not_found`；已有分配使用旧 `expected_version` 应返回 409；非法暂停/恢复/结束状态转换也应返回 409。中断本地测试 MySQL 后读取应返回 503 `commercial_dependency_unavailable`，恢复数据库后原页面刷新成功且旧数据在失败期间保留。影响预览只使用本次读取到的用量和配额事实。若数量不符，先核对 `organization_plan_assignments.status`，若余量不符，再核对当前账期和人工调整有效期。现有 `/api/v1/platform/commercial/*` 路由以及原有 `plans`、`assignments` 字段保持不变；读取响应增加 `summary`、`pagination`、`adjustment_pagination` 和可选 `organization`。生产冒烟只创建可删除的测试组织数据，结束后清理；不要使用真实客户数据做回归。
 
 ## 回滚

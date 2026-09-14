@@ -239,7 +239,9 @@ async function load(options: { preserveNotice?: boolean } = {}) {
     const failure = error instanceof ApiClientError ? error : null;
     setNotice(
       timedOut
-        ? "读取超时，已保留上次成功数据，请稍后重试。"
+        ? loadedOnce.value
+          ? "读取超时，已保留上次成功数据，请稍后重试。"
+          : "读取超时，尚未取得数据，请稍后重试。"
         : `${failure?.actionHint ?? "读取失败"}${loadedOnce.value ? "；已保留上次成功数据。" : ""}`,
       "error",
     );
@@ -619,7 +621,7 @@ onBeforeUnmount(() => {
           ? "请求过于频繁"
           : state === "blocked"
             ? "配额管理依赖受阻"
-            : "请求字段或组织范围无效"
+            : "暂时无法读取配额数据"
       }}</strong
       ><span>{{ notice || "当前没有可展示的旧数据。" }}</span
       ><button :disabled="refreshing" @click="load()">重新读取</button>

@@ -196,6 +196,27 @@ html body.shell-vue-c:has(#app) #app .role-shell.role-shell--review {
   .commercial--review .commercial-plan-table {
     border-color: var(--so-border);
   }
+  .commercial--review > :is(.state, .notice) {
+    padding: 20px;
+    gap: 12px;
+    border: 1px solid var(--so-border);
+    border-radius: 0;
+    background: white;
+    line-height: 1.7;
+  }
+  .commercial--review > .notice {
+    background: #edf2fa;
+    border-left: 3px solid var(--so-primary);
+  }
+  .commercial--review > .state > strong {
+    font-size: 20px;
+  }
+  .commercial--review > .state > button {
+    justify-self: start;
+    padding-inline: 18px;
+    color: white;
+    background: var(--so-primary);
+  }
   @media (max-width: 1100px) {
     .commercial--review .commercial-hero {
       grid-template-columns: minmax(0, 1fr);
