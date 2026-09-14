@@ -159,7 +159,7 @@ async function load() {
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? requestId.value;
     message.value = timedOut
-      ? "读取超过 15 秒，已停止本次请求并保留上次成功日志。"
+      ? `读取超过 15 秒，已停止本次等待。${hasSnapshot ? " 已保留上次成功日志。" : " 尚未取得链路日志。"}`
       : `${failure?.actionHint ?? "链路日志暂不可用。"}${hasSnapshot ? " 已保留上次成功日志。" : ""}`;
     if (!hasSnapshot) state.value = "error";
   } finally {
@@ -303,8 +303,13 @@ onBeforeUnmount(() => {
       {{ message }}
     </p>
 
-    <section v-if="state !== 'ready'" class="platform-log-state">
-      <h3>
+    <section
+      v-if="state !== 'ready'"
+      class="platform-log-state"
+      :aria-busy="refreshing"
+      aria-labelledby="platform-log-read-title"
+    >
+      <h3 id="platform-log-read-title">
         {{
           state === "loading"
             ? "正在读取链路日志"

@@ -47,6 +47,8 @@ export function previewLogPage(source) {
     'class="platform-log-center platform-log-center--review"',
   );
   s = once(s, "<h2>链路日志</h2>", "<h1>链路日志</h1>");
+  s = once(s, '<h3 id="platform-log-read-title">', '<h2 id="platform-log-read-title">');
+  s = once(s, "</h3>\n      <p>{{ message", "</h2>\n      <p>{{ message");
   s = once(s, "<p>系统运维</p>", "<p>P62 / 事件检索</p>");
   s = once(
     s,

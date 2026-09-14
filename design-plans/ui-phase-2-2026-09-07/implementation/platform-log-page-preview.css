@@ -325,7 +325,7 @@ html body.shell-vue-c:has(.platform-log-center--review) {
         border-radius: 0;
         text-align: left;
       }
-      .platform-log-state h3 {
+      .platform-log-state #platform-log-read-title {
         font:
           700 24px/1.5 "Microsoft YaHei",
           sans-serif;
