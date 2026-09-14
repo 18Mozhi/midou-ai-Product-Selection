@@ -553,6 +553,26 @@ dialog p {
     padding: 18px;
   }
 }
+.material-previews,
+.material-differences {
+  margin: 12px 0;
+  overflow-wrap: anywhere;
+}
+.material-previews figure {
+  margin: 16px 0;
+}
+.material-previews img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.material-previews figcaption {
+  margin-top: 8px;
+  color: var(--muted);
+}
+.recent-material > button {
+  margin-top: 12px;
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -2,6 +2,7 @@
 (() => {
   const data = window.SCOUTOPS_PHASE2;
   const current = window.SCOUTOPS_PHASE2_EVIDENCE;
+  const recent = window.SCOUTOPS_PHASE2_RECENT_MATERIALS?.materials ?? [];
   const byId = (id) => document.getElementById(id);
   if (!data) {
     byId("page-detail").textContent = "盘点数据未加载，请先运行生成命令。";
@@ -55,7 +56,10 @@
     [data.counts.routes, "路由条目"],
     [current?.summary.packages ?? "—", "C 图册索引 · 非完整页数"],
     [
-      current?.pages.filter((page) => page.actualVue.length).length ?? "—",
+      new Set([
+        ...(current?.pages.filter((page) => page.actualVue.length).map((page) => page.id) ?? []),
+        ...recent.map((item) => item.page),
+      ]).size,
       "已登记 Vue 对照的页面 · 非验收",
     ],
     [0, "用户验收通过"],
@@ -235,14 +239,83 @@
       element("h4", "02 / 真实 Vue 对照"),
       element(
         "p",
-        "仅展示动作登记表显式关联的证据；本地拦截数据不代表真实后端或生产验收。",
+        "含动作登记与补充审核图。源码状态为索引生成时核对结果，不是实时验收；本地样例不代表真实后端或生产。",
         "meta",
       ),
     );
-    if (!related.actualVue.length)
+    const recentItems = recent
+      .filter((item) => item.page === page.id)
+      .sort(
+        (a, b) =>
+          Number(a.sourceStatus !== "source-matched-at-index-build") -
+          Number(b.sourceStatus !== "source-matched-at-index-build"),
+      );
+    if (!related.actualVue.length && !recentItems.length)
       implementation.append(
         element("p", "本入口尚未登记该页的真实 Vue 对照；不据此断言该页没有实现。", "notice"),
       );
+    for (const item of recentItems) {
+      const card = element("div", undefined, "material-card recent-material");
+      card.dataset.materialId = item.id;
+      const historical = item.sourceStatus !== "source-matched-at-index-build";
+      card.append(
+        element("h5", item.title),
+        element(
+          "p",
+          historical
+            ? `历史对照图 · ${item.sourceDifferences.length} 处来源与当前源码不同，请先读差异`
+            : "登记时源码一致 · 非整页或生产验收",
+          "notice",
+        ),
+        element("p", item.scope),
+        element(
+          "p",
+          `证据版本 ${item.manifestSha256.slice(0, 12)} · 图包共 ${item.packetImages} 张（含对照/其他场景）`,
+          "meta",
+        ),
+      );
+      if (historical) {
+        const differences = element("details", undefined, "material-differences");
+        differences.append(element("summary", "查看来源差异（不自动否定原批准）"));
+        const list = element("ul");
+        for (const difference of item.sourceDifferences)
+          list.append(
+            element(
+              "li",
+              `${difference.file}${difference.actual === null ? " · 当前文件缺失" : " · 当前内容已变化"}`,
+            ),
+          );
+        differences.append(list);
+        card.append(differences);
+      }
+      const previews = element("details", undefined, "material-previews");
+      previews.append(element("summary", `展开 ${item.previews.length} 张指定区域图`));
+      for (const preview of item.previews) {
+        const figure = element("figure");
+        const img = element("img");
+        img.src = preview.file;
+        img.alt = `${page.id} ${item.title} · ${preview.label} · 本地对照图`;
+        img.loading = "lazy";
+        figure.append(
+          img,
+          element("figcaption", preview.label),
+          evidenceLink("打开原尺寸图片", preview.file),
+        );
+        previews.append(figure);
+      }
+      const noteTarget = `${page.id}/${item.id}@${item.manifestSha256}`;
+      const comment = button("记录这组图的意见", () => openNote(noteTarget, comment));
+      card.append(
+        previews,
+        evidenceLink(item.galleryLabel ?? "完整实施图册", item.gallery),
+        evidenceLink("实施范围与剩余项", item.report),
+        evidenceLink("原始证据清单", item.evidence),
+        comment,
+      );
+      for (const note of notes.filter((entry) => entry.target === noteTarget))
+        card.append(element("p", `${note.reviewer}：${note.body}`, "review-note"));
+      implementation.append(card);
+    }
     for (const item of related.actualVue) {
       const card = element("div", undefined, "material-card");
       card.append(

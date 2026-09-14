@@ -1,0 +1,4607 @@
+{
+  "kind": "P47-EMPTY-MOBILE-IMPLEMENTATION-r1",
+  "comparisons": [
+    {
+      "actual": "current-390-catalog-empty.png",
+      "expected": "review-390-catalog-empty.png",
+      "sha256": "52cc8c4c1b6e19dfc79bd9e8b64cb7b22284dd8475a0ae437d430471321a9d22"
+    },
+    {
+      "actual": "current-390-catalog-registration.png",
+      "expected": "baseline-390-catalog-registration.png",
+      "sha256": "8b957b69abbe30f19b3411639378847f042866e935c94484f23c030e31e3a800"
+    },
+    {
+      "actual": "current-390-search-default.png",
+      "expected": "baseline-390-search-default.png",
+      "sha256": "52028e0fb4ef11a79e71b57c2b340a28156b81b13bf055dcac431fa5eac4b96a"
+    },
+    {
+      "actual": "current-390-search-empty.png",
+      "expected": "review-390-search-empty.png",
+      "sha256": "408e4d41b1ea58a3ef51af120115d7a7b37d2e13640868f8555da29da5700e90"
+    },
+    {
+      "actual": "current-390-search-reset.png",
+      "expected": "baseline-390-search-reset.png",
+      "sha256": "9aee8e30fc6645a25601f032cbb20826c9a705df30b5afb412315af06028c1ca"
+    },
+    {
+      "actual": "current-390-combined-default.png",
+      "expected": "baseline-390-combined-default.png",
+      "sha256": "52028e0fb4ef11a79e71b57c2b340a28156b81b13bf055dcac431fa5eac4b96a"
+    },
+    {
+      "actual": "current-390-combined-empty.png",
+      "expected": "review-390-combined-empty.png",
+      "sha256": "fddbd0df19a6dbda668e434ab8301531850daa1f3da19bdd8d5e9989363d5529"
+    },
+    {
+      "actual": "current-390-combined-reset.png",
+      "expected": "baseline-390-combined-reset.png",
+      "sha256": "26d0380d2ea5372850871d7cd1f329a16ea1857bad12f52935a27dadc3f71e1e"
+    },
+    {
+      "actual": "current-760-catalog-empty.png",
+      "expected": "review-760-catalog-empty.png",
+      "sha256": "669456fd8dc18e84c5437dd06f38d945c8394f908ff45ab408b3eac13bd4b416"
+    },
+    {
+      "actual": "current-760-catalog-registration.png",
+      "expected": "baseline-760-catalog-registration.png",
+      "sha256": "a626615523aa984655afc66b6458a7c4178b8ac141acfb701cc7c937c1108c61"
+    },
+    {
+      "actual": "current-760-search-default.png",
+      "expected": "baseline-760-search-default.png",
+      "sha256": "de8bdcece6c22f670bcdd23cf7ff9fa6becadc9ca9ffacb09f8266c4ed625a34"
+    },
+    {
+      "actual": "current-760-search-empty.png",
+      "expected": "review-760-search-empty.png",
+      "sha256": "6aad9c7878ac00b22d9b058688b6f3dbe1111967011d782bd8e490d887ceb86b"
+    },
+    {
+      "actual": "current-760-search-reset.png",
+      "expected": "baseline-760-search-reset.png",
+      "sha256": "77f39606b280654dd524a7cb752614b0149f98f35d102edb8a877dbea07ea359"
+    },
+    {
+      "actual": "current-760-combined-default.png",
+      "expected": "baseline-760-combined-default.png",
+      "sha256": "de8bdcece6c22f670bcdd23cf7ff9fa6becadc9ca9ffacb09f8266c4ed625a34"
+    },
+    {
+      "actual": "current-760-combined-empty.png",
+      "expected": "review-760-combined-empty.png",
+      "sha256": "4e5e74a9bd77f6553c4a593bf64a32ac35dbbb322b1043957b951f3d90a30151"
+    },
+    {
+      "actual": "current-760-combined-reset.png",
+      "expected": "baseline-760-combined-reset.png",
+      "sha256": "570c3775c3198cb38a7d157ea68cd43bbd1f1776e5621ef581e508868dbfc837"
+    },
+    {
+      "actual": "current-761-catalog-empty.png",
+      "expected": "baseline-761-catalog-empty.png",
+      "sha256": "6f4c0267e3a8d2ae5883e55212865ced24e83d0d3cf93c18d0e55b5070b37339"
+    },
+    {
+      "actual": "current-761-catalog-registration.png",
+      "expected": "baseline-761-catalog-registration.png",
+      "sha256": "1906da521c0e51d36711aa8e8d1308299432f09fbc35ffc140d642c7c597bb05"
+    },
+    {
+      "actual": "current-761-search-default.png",
+      "expected": "baseline-761-search-default.png",
+      "sha256": "9c519a96a9c42f1b9dacd4a0a72e7b92fa41625570cc8dab1de879bece9d098c"
+    },
+    {
+      "actual": "current-761-search-empty.png",
+      "expected": "baseline-761-search-empty.png",
+      "sha256": "46b61fd21b5bdc8910ba8d9b4557299e19b363b84c3d528ca7c80dc820e4cd70"
+    },
+    {
+      "actual": "current-761-search-reset.png",
+      "expected": "baseline-761-search-reset.png",
+      "sha256": "8304dba8565e859402c09f46d1bcc77620357d1f03e3a9540f703c4648f66ba4"
+    },
+    {
+      "actual": "current-761-combined-default.png",
+      "expected": "baseline-761-combined-default.png",
+      "sha256": "9c519a96a9c42f1b9dacd4a0a72e7b92fa41625570cc8dab1de879bece9d098c"
+    },
+    {
+      "actual": "current-761-combined-empty.png",
+      "expected": "baseline-761-combined-empty.png",
+      "sha256": "5286888321496a65fc8c1767d08b34dfe0c19edde24d5ed353cda702cb3520ce"
+    },
+    {
+      "actual": "current-761-combined-reset.png",
+      "expected": "baseline-761-combined-reset.png",
+      "sha256": "0a5cd71ec3f1dce9f5c3731a5d0b89bf89d305b29c6ca0ea5e931e5f87ee5e80"
+    },
+    {
+      "actual": "current-1440-catalog-empty.png",
+      "expected": "baseline-1440-catalog-empty.png",
+      "sha256": "b642cbf8332a73680994fd1a000e8916ccce2d2b7a2ed887ac7a83988ecd312d"
+    },
+    {
+      "actual": "current-1440-catalog-registration.png",
+      "expected": "baseline-1440-catalog-registration.png",
+      "sha256": "f00671ea513e59604dcd8bc046848062e425169bc865ad1331b5e9fe1f79c5ca"
+    },
+    {
+      "actual": "current-1440-search-default.png",
+      "expected": "baseline-1440-search-default.png",
+      "sha256": "e5c1ddbc27a4d49c41657d8763b76bcc30c53ffc2975fa6c4dc70cc9f5792fb9"
+    },
+    {
+      "actual": "current-1440-search-empty.png",
+      "expected": "baseline-1440-search-empty.png",
+      "sha256": "7603afd483d7f074046e80dae4301f349fd0e13faf75fb350afcfd48753fecdf"
+    },
+    {
+      "actual": "current-1440-search-reset.png",
+      "expected": "baseline-1440-search-reset.png",
+      "sha256": "a3ac5d99fa6ab87fc1d46965673e89308cf614aa38c11121bbe86612b6c88820"
+    },
+    {
+      "actual": "current-1440-combined-default.png",
+      "expected": "baseline-1440-combined-default.png",
+      "sha256": "e5c1ddbc27a4d49c41657d8763b76bcc30c53ffc2975fa6c4dc70cc9f5792fb9"
+    },
+    {
+      "actual": "current-1440-combined-empty.png",
+      "expected": "baseline-1440-combined-empty.png",
+      "sha256": "70a2bc3601cd2f8a72410f5198be654d35a6a83924557cfc6132e244948f945c"
+    },
+    {
+      "actual": "current-1440-combined-reset.png",
+      "expected": "baseline-1440-combined-reset.png",
+      "sha256": "500aeb6f70f7e478887c443662b7cf7efe4825e81aa5a30c7ed00171a08c7ba6"
+    }
+  ],
+  "productionMobileEmptyImplemented": true,
+  "reviewOnly": false,
+  "processesClosed": true,
+  "ports": [
+    55467,
+    55614,
+    55720
+  ],
+  "runs": [
+    {
+      "mode": "baseline",
+      "width": 390,
+      "scene": "catalog",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "registration uses existing route",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no ineffective clear button",
+          "actual": 0
+        },
+        {
+          "name": "registration link reaches P46",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 390,
+      "scene": "search",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 390,
+      "scene": "combined",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 760,
+      "scene": "catalog",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "registration uses existing route",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no ineffective clear button",
+          "actual": 0
+        },
+        {
+          "name": "registration link reaches P46",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 760,
+      "scene": "search",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 760,
+      "scene": "combined",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 761,
+      "scene": "catalog",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "registration uses existing route",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no ineffective clear button",
+          "actual": 0
+        },
+        {
+          "name": "registration link reaches P46",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 761,
+      "scene": "search",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 761,
+      "scene": "combined",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 1440,
+      "scene": "catalog",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "registration uses existing route",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no ineffective clear button",
+          "actual": 0
+        },
+        {
+          "name": "registration link reaches P46",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 1440,
+      "scene": "search",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 1440,
+      "scene": "combined",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 390,
+      "scene": "catalog",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "registration uses existing route",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no ineffective clear button",
+          "actual": 0
+        },
+        {
+          "name": "registration link reaches P46",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 390,
+      "scene": "search",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 390,
+      "scene": "combined",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 760,
+      "scene": "catalog",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "registration uses existing route",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no ineffective clear button",
+          "actual": 0
+        },
+        {
+          "name": "registration link reaches P46",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 760,
+      "scene": "search",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 760,
+      "scene": "combined",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 761,
+      "scene": "catalog",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "registration uses existing route",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no ineffective clear button",
+          "actual": 0
+        },
+        {
+          "name": "registration link reaches P46",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 761,
+      "scene": "search",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 761,
+      "scene": "combined",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 1440,
+      "scene": "catalog",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "registration uses existing route",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no ineffective clear button",
+          "actual": 0
+        },
+        {
+          "name": "registration link reaches P46",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 1440,
+      "scene": "search",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 1440,
+      "scene": "combined",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 390,
+      "scene": "catalog",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ]
+        },
+        {
+          "name": "visible heading is not duplicated",
+          "actual": "还没有可查看的来源"
+        },
+        {
+          "name": "visible help is not duplicated",
+          "actual": "登记来源技术合同后，可在这里查看适配器的运行状态。"
+        },
+        {
+          "name": "responsive hidden copy stays hidden",
+          "actual": true
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "registration uses existing route",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no ineffective clear button",
+          "actual": 0
+        },
+        {
+          "name": "registration link reaches P46",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 390,
+      "scene": "search",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "visible heading is not duplicated",
+          "actual": "当前筛选下没有匹配来源"
+        },
+        {
+          "name": "visible help is not duplicated",
+          "actual": "试试调整搜索或筛选条件，也可以清除筛选，查看当前来源目录。"
+        },
+        {
+          "name": "responsive hidden copy stays hidden",
+          "actual": true
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 390,
+      "scene": "combined",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "visible heading is not duplicated",
+          "actual": "当前筛选下没有匹配来源"
+        },
+        {
+          "name": "visible help is not duplicated",
+          "actual": "试试调整搜索或筛选条件，也可以清除筛选，查看当前来源目录。"
+        },
+        {
+          "name": "responsive hidden copy stays hidden",
+          "actual": true
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 760,
+      "scene": "catalog",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ]
+        },
+        {
+          "name": "visible heading is not duplicated",
+          "actual": "还没有可查看的来源"
+        },
+        {
+          "name": "visible help is not duplicated",
+          "actual": "登记来源技术合同后，可在这里查看适配器的运行状态。"
+        },
+        {
+          "name": "responsive hidden copy stays hidden",
+          "actual": true
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "registration uses existing route",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no ineffective clear button",
+          "actual": 0
+        },
+        {
+          "name": "registration link reaches P46",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 760,
+      "scene": "search",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "visible heading is not duplicated",
+          "actual": "当前筛选下没有匹配来源"
+        },
+        {
+          "name": "visible help is not duplicated",
+          "actual": "试试调整搜索或筛选条件，也可以清除筛选，查看当前来源目录。"
+        },
+        {
+          "name": "responsive hidden copy stays hidden",
+          "actual": true
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 760,
+      "scene": "combined",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "visible heading is not duplicated",
+          "actual": "当前筛选下没有匹配来源"
+        },
+        {
+          "name": "visible help is not duplicated",
+          "actual": "试试调整搜索或筛选条件，也可以清除筛选，查看当前来源目录。"
+        },
+        {
+          "name": "responsive hidden copy stays hidden",
+          "actual": true
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 761,
+      "scene": "catalog",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ]
+        },
+        {
+          "name": "visible heading is not duplicated",
+          "actual": "还没有来源可绑定适配器"
+        },
+        {
+          "name": "visible help is not duplicated",
+          "actual": "先在来源注册中心登记技术合同；不会创建模拟来源。"
+        },
+        {
+          "name": "responsive hidden copy stays hidden",
+          "actual": true
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "registration uses existing route",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no ineffective clear button",
+          "actual": 0
+        },
+        {
+          "name": "registration link reaches P46",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 761,
+      "scene": "search",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "visible heading is not duplicated",
+          "actual": "没有符合筛选条件的适配器"
+        },
+        {
+          "name": "visible help is not duplicated",
+          "actual": "调整搜索或筛选条件，清除后显示当前来源目录。"
+        },
+        {
+          "name": "responsive hidden copy stays hidden",
+          "actual": true
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 761,
+      "scene": "combined",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "visible heading is not duplicated",
+          "actual": "没有符合筛选条件的适配器"
+        },
+        {
+          "name": "visible help is not duplicated",
+          "actual": "调整搜索或筛选条件，清除后显示当前来源目录。"
+        },
+        {
+          "name": "responsive hidden copy stays hidden",
+          "actual": true
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 1440,
+      "scene": "catalog",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ]
+        },
+        {
+          "name": "visible heading is not duplicated",
+          "actual": "还没有来源可绑定适配器"
+        },
+        {
+          "name": "visible help is not duplicated",
+          "actual": "先在来源注册中心登记技术合同；不会创建模拟来源。"
+        },
+        {
+          "name": "responsive hidden copy stays hidden",
+          "actual": true
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "registration uses existing route",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no ineffective clear button",
+          "actual": 0
+        },
+        {
+          "name": "registration link reaches P46",
+          "actual": "/platform-admin/providers"
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 1440,
+      "scene": "search",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "visible heading is not duplicated",
+          "actual": "没有符合筛选条件的适配器"
+        },
+        {
+          "name": "visible help is not duplicated",
+          "actual": "调整搜索或筛选条件，清除后显示当前来源目录。"
+        },
+        {
+          "name": "responsive hidden copy stays hidden",
+          "actual": true
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 1440,
+      "scene": "combined",
+      "checks": [
+        {
+          "name": "global metrics retain catalog facts",
+          "actual": [
+            "2",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "name": "visible heading is not duplicated",
+          "actual": "没有符合筛选条件的适配器"
+        },
+        {
+          "name": "visible help is not duplicated",
+          "actual": "调整搜索或筛选条件，清除后显示当前来源目录。"
+        },
+        {
+          "name": "responsive hidden copy stays hidden",
+          "actual": true
+        },
+        {
+          "name": "one empty state",
+          "actual": 1
+        },
+        {
+          "name": "44px action",
+          "actual": true
+        },
+        {
+          "name": "no horizontal overflow",
+          "actual": true
+        },
+        {
+          "name": "only one adapter GET before activation",
+          "actual": 1
+        },
+        {
+          "name": "no registration action for filtered results",
+          "actual": 0
+        },
+        {
+          "name": "reset restores search",
+          "actual": ""
+        },
+        {
+          "name": "reset restores five selectors",
+          "actual": [
+            "all",
+            "all",
+            "all",
+            "all",
+            "attention"
+          ]
+        },
+        {
+          "name": "empty panel disappears",
+          "actual": 0
+        },
+        {
+          "name": "reset focus target",
+          "actual": "search"
+        },
+        {
+          "name": "toolbar reset keeps its own focus",
+          "actual": true
+        },
+        {
+          "name": "no extra adapter GET",
+          "actual": 1
+        },
+        {
+          "name": "no write requests",
+          "actual": 0
+        },
+        {
+          "name": "no request bodies",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "baseline-390-catalog-empty.png",
+      "mode": "baseline",
+      "width": 390,
+      "scene": "catalog",
+      "suffix": "empty",
+      "sha256": "b31bbbffb7f0e0cda4cb13f2c16370e096268fd4285ba3c37b1089973f9cd159",
+      "pixelWidth": 358,
+      "pixelHeight": 181
+    },
+    {
+      "file": "baseline-390-catalog-registration.png",
+      "mode": "baseline",
+      "width": 390,
+      "scene": "catalog",
+      "suffix": "registration",
+      "sha256": "8b957b69abbe30f19b3411639378847f042866e935c94484f23c030e31e3a800",
+      "pixelWidth": 358,
+      "pixelHeight": 504
+    },
+    {
+      "file": "baseline-390-search-default.png",
+      "mode": "baseline",
+      "width": 390,
+      "scene": "search",
+      "suffix": "default",
+      "sha256": "52028e0fb4ef11a79e71b57c2b340a28156b81b13bf055dcac431fa5eac4b96a",
+      "pixelWidth": 358,
+      "pixelHeight": 1057
+    },
+    {
+      "file": "baseline-390-search-empty.png",
+      "mode": "baseline",
+      "width": 390,
+      "scene": "search",
+      "suffix": "empty",
+      "sha256": "4650d50c7b6f0c3b8a9e3fd6e311f675a05789b48ff35cc227dc31db700c77a5",
+      "pixelWidth": 358,
+      "pixelHeight": 144
+    },
+    {
+      "file": "baseline-390-search-reset.png",
+      "mode": "baseline",
+      "width": 390,
+      "scene": "search",
+      "suffix": "reset",
+      "sha256": "9aee8e30fc6645a25601f032cbb20826c9a705df30b5afb412315af06028c1ca",
+      "pixelWidth": 358,
+      "pixelHeight": 175
+    },
+    {
+      "file": "baseline-390-combined-default.png",
+      "mode": "baseline",
+      "width": 390,
+      "scene": "combined",
+      "suffix": "default",
+      "sha256": "52028e0fb4ef11a79e71b57c2b340a28156b81b13bf055dcac431fa5eac4b96a",
+      "pixelWidth": 358,
+      "pixelHeight": 1057
+    },
+    {
+      "file": "baseline-390-combined-empty.png",
+      "mode": "baseline",
+      "width": 390,
+      "scene": "combined",
+      "suffix": "empty",
+      "sha256": "8e1fc5808e1bd2be3d20e29cfaf3c7e73a6536863ef10dbaf1b63d287eda037a",
+      "pixelWidth": 358,
+      "pixelHeight": 144
+    },
+    {
+      "file": "baseline-390-combined-reset.png",
+      "mode": "baseline",
+      "width": 390,
+      "scene": "combined",
+      "suffix": "reset",
+      "sha256": "26d0380d2ea5372850871d7cd1f329a16ea1857bad12f52935a27dadc3f71e1e",
+      "pixelWidth": 358,
+      "pixelHeight": 638
+    },
+    {
+      "file": "baseline-760-catalog-empty.png",
+      "mode": "baseline",
+      "width": 760,
+      "scene": "catalog",
+      "suffix": "empty",
+      "sha256": "04fd061cb9fad8fecd8b6f2ff96d8b7a0437b81c08525287761d869d064aa656",
+      "pixelWidth": 728,
+      "pixelHeight": 156
+    },
+    {
+      "file": "baseline-760-catalog-registration.png",
+      "mode": "baseline",
+      "width": 760,
+      "scene": "catalog",
+      "suffix": "registration",
+      "sha256": "a626615523aa984655afc66b6458a7c4178b8ac141acfb701cc7c937c1108c61",
+      "pixelWidth": 728,
+      "pixelHeight": 462
+    },
+    {
+      "file": "baseline-760-search-default.png",
+      "mode": "baseline",
+      "width": 760,
+      "scene": "search",
+      "suffix": "default",
+      "sha256": "de8bdcece6c22f670bcdd23cf7ff9fa6becadc9ca9ffacb09f8266c4ed625a34",
+      "pixelWidth": 728,
+      "pixelHeight": 987
+    },
+    {
+      "file": "baseline-760-search-empty.png",
+      "mode": "baseline",
+      "width": 760,
+      "scene": "search",
+      "suffix": "empty",
+      "sha256": "00f7a9f593475ec4a0b182bccca1026c408c7211ceb593da74143452a3e23478",
+      "pixelWidth": 728,
+      "pixelHeight": 144
+    },
+    {
+      "file": "baseline-760-search-reset.png",
+      "mode": "baseline",
+      "width": 760,
+      "scene": "search",
+      "suffix": "reset",
+      "sha256": "77f39606b280654dd524a7cb752614b0149f98f35d102edb8a877dbea07ea359",
+      "pixelWidth": 728,
+      "pixelHeight": 175
+    },
+    {
+      "file": "baseline-760-combined-default.png",
+      "mode": "baseline",
+      "width": 760,
+      "scene": "combined",
+      "suffix": "default",
+      "sha256": "de8bdcece6c22f670bcdd23cf7ff9fa6becadc9ca9ffacb09f8266c4ed625a34",
+      "pixelWidth": 728,
+      "pixelHeight": 987
+    },
+    {
+      "file": "baseline-760-combined-empty.png",
+      "mode": "baseline",
+      "width": 760,
+      "scene": "combined",
+      "suffix": "empty",
+      "sha256": "1fd4513c7a144e5c92f08e671d319d7ae9cb38f37c32a15d9f5e67f1ad2d4772",
+      "pixelWidth": 728,
+      "pixelHeight": 144
+    },
+    {
+      "file": "baseline-760-combined-reset.png",
+      "mode": "baseline",
+      "width": 760,
+      "scene": "combined",
+      "suffix": "reset",
+      "sha256": "570c3775c3198cb38a7d157ea68cd43bbd1f1776e5621ef581e508868dbfc837",
+      "pixelWidth": 728,
+      "pixelHeight": 638
+    },
+    {
+      "file": "baseline-761-catalog-empty.png",
+      "mode": "baseline",
+      "width": 761,
+      "scene": "catalog",
+      "suffix": "empty",
+      "sha256": "6f4c0267e3a8d2ae5883e55212865ced24e83d0d3cf93c18d0e55b5070b37339",
+      "pixelWidth": 729,
+      "pixelHeight": 164
+    },
+    {
+      "file": "baseline-761-catalog-registration.png",
+      "mode": "baseline",
+      "width": 761,
+      "scene": "catalog",
+      "suffix": "registration",
+      "sha256": "1906da521c0e51d36711aa8e8d1308299432f09fbc35ffc140d642c7c597bb05",
+      "pixelWidth": 729,
+      "pixelHeight": 462
+    },
+    {
+      "file": "baseline-761-search-default.png",
+      "mode": "baseline",
+      "width": 761,
+      "scene": "search",
+      "suffix": "default",
+      "sha256": "9c519a96a9c42f1b9dacd4a0a72e7b92fa41625570cc8dab1de879bece9d098c",
+      "pixelWidth": 729,
+      "pixelHeight": 1179
+    },
+    {
+      "file": "baseline-761-search-empty.png",
+      "mode": "baseline",
+      "width": 761,
+      "scene": "search",
+      "suffix": "empty",
+      "sha256": "46b61fd21b5bdc8910ba8d9b4557299e19b363b84c3d528ca7c80dc820e4cd70",
+      "pixelWidth": 729,
+      "pixelHeight": 152
+    },
+    {
+      "file": "baseline-761-search-reset.png",
+      "mode": "baseline",
+      "width": 761,
+      "scene": "search",
+      "suffix": "reset",
+      "sha256": "8304dba8565e859402c09f46d1bcc77620357d1f03e3a9540f703c4648f66ba4",
+      "pixelWidth": 729,
+      "pixelHeight": 175
+    },
+    {
+      "file": "baseline-761-combined-default.png",
+      "mode": "baseline",
+      "width": 761,
+      "scene": "combined",
+      "suffix": "default",
+      "sha256": "9c519a96a9c42f1b9dacd4a0a72e7b92fa41625570cc8dab1de879bece9d098c",
+      "pixelWidth": 729,
+      "pixelHeight": 1179
+    },
+    {
+      "file": "baseline-761-combined-empty.png",
+      "mode": "baseline",
+      "width": 761,
+      "scene": "combined",
+      "suffix": "empty",
+      "sha256": "5286888321496a65fc8c1767d08b34dfe0c19edde24d5ed353cda702cb3520ce",
+      "pixelWidth": 729,
+      "pixelHeight": 152
+    },
+    {
+      "file": "baseline-761-combined-reset.png",
+      "mode": "baseline",
+      "width": 761,
+      "scene": "combined",
+      "suffix": "reset",
+      "sha256": "0a5cd71ec3f1dce9f5c3731a5d0b89bf89d305b29c6ca0ea5e931e5f87ee5e80",
+      "pixelWidth": 729,
+      "pixelHeight": 452
+    },
+    {
+      "file": "baseline-1440-catalog-empty.png",
+      "mode": "baseline",
+      "width": 1440,
+      "scene": "catalog",
+      "suffix": "empty",
+      "sha256": "b642cbf8332a73680994fd1a000e8916ccce2d2b7a2ed887ac7a83988ecd312d",
+      "pixelWidth": 1136,
+      "pixelHeight": 164
+    },
+    {
+      "file": "baseline-1440-catalog-registration.png",
+      "mode": "baseline",
+      "width": 1440,
+      "scene": "catalog",
+      "suffix": "registration",
+      "sha256": "f00671ea513e59604dcd8bc046848062e425169bc865ad1331b5e9fe1f79c5ca",
+      "pixelWidth": 1136,
+      "pixelHeight": 398
+    },
+    {
+      "file": "baseline-1440-search-default.png",
+      "mode": "baseline",
+      "width": 1440,
+      "scene": "search",
+      "suffix": "default",
+      "sha256": "e5c1ddbc27a4d49c41657d8763b76bcc30c53ffc2975fa6c4dc70cc9f5792fb9",
+      "pixelWidth": 1136,
+      "pixelHeight": 1184
+    },
+    {
+      "file": "baseline-1440-search-empty.png",
+      "mode": "baseline",
+      "width": 1440,
+      "scene": "search",
+      "suffix": "empty",
+      "sha256": "7603afd483d7f074046e80dae4301f349fd0e13faf75fb350afcfd48753fecdf",
+      "pixelWidth": 1136,
+      "pixelHeight": 152
+    },
+    {
+      "file": "baseline-1440-search-reset.png",
+      "mode": "baseline",
+      "width": 1440,
+      "scene": "search",
+      "suffix": "reset",
+      "sha256": "a3ac5d99fa6ab87fc1d46965673e89308cf614aa38c11121bbe86612b6c88820",
+      "pixelWidth": 1136,
+      "pixelHeight": 183
+    },
+    {
+      "file": "baseline-1440-combined-default.png",
+      "mode": "baseline",
+      "width": 1440,
+      "scene": "combined",
+      "suffix": "default",
+      "sha256": "e5c1ddbc27a4d49c41657d8763b76bcc30c53ffc2975fa6c4dc70cc9f5792fb9",
+      "pixelWidth": 1136,
+      "pixelHeight": 1184
+    },
+    {
+      "file": "baseline-1440-combined-empty.png",
+      "mode": "baseline",
+      "width": 1440,
+      "scene": "combined",
+      "suffix": "empty",
+      "sha256": "70a2bc3601cd2f8a72410f5198be654d35a6a83924557cfc6132e244948f945c",
+      "pixelWidth": 1136,
+      "pixelHeight": 152
+    },
+    {
+      "file": "baseline-1440-combined-reset.png",
+      "mode": "baseline",
+      "width": 1440,
+      "scene": "combined",
+      "suffix": "reset",
+      "sha256": "500aeb6f70f7e478887c443662b7cf7efe4825e81aa5a30c7ed00171a08c7ba6",
+      "pixelWidth": 1136,
+      "pixelHeight": 367
+    },
+    {
+      "file": "review-390-catalog-empty.png",
+      "mode": "review",
+      "width": 390,
+      "scene": "catalog",
+      "suffix": "empty",
+      "sha256": "52cc8c4c1b6e19dfc79bd9e8b64cb7b22284dd8475a0ae437d430471321a9d22",
+      "pixelWidth": 358,
+      "pixelHeight": 204
+    },
+    {
+      "file": "review-390-catalog-registration.png",
+      "mode": "review",
+      "width": 390,
+      "scene": "catalog",
+      "suffix": "registration",
+      "sha256": "8b957b69abbe30f19b3411639378847f042866e935c94484f23c030e31e3a800",
+      "pixelWidth": 358,
+      "pixelHeight": 504
+    },
+    {
+      "file": "review-390-search-default.png",
+      "mode": "review",
+      "width": 390,
+      "scene": "search",
+      "suffix": "default",
+      "sha256": "52028e0fb4ef11a79e71b57c2b340a28156b81b13bf055dcac431fa5eac4b96a",
+      "pixelWidth": 358,
+      "pixelHeight": 1057
+    },
+    {
+      "file": "review-390-search-empty.png",
+      "mode": "review",
+      "width": 390,
+      "scene": "search",
+      "suffix": "empty",
+      "sha256": "408e4d41b1ea58a3ef51af120115d7a7b37d2e13640868f8555da29da5700e90",
+      "pixelWidth": 358,
+      "pixelHeight": 204
+    },
+    {
+      "file": "review-390-search-reset.png",
+      "mode": "review",
+      "width": 390,
+      "scene": "search",
+      "suffix": "reset",
+      "sha256": "9aee8e30fc6645a25601f032cbb20826c9a705df30b5afb412315af06028c1ca",
+      "pixelWidth": 358,
+      "pixelHeight": 175
+    },
+    {
+      "file": "review-390-combined-default.png",
+      "mode": "review",
+      "width": 390,
+      "scene": "combined",
+      "suffix": "default",
+      "sha256": "52028e0fb4ef11a79e71b57c2b340a28156b81b13bf055dcac431fa5eac4b96a",
+      "pixelWidth": 358,
+      "pixelHeight": 1057
+    },
+    {
+      "file": "review-390-combined-empty.png",
+      "mode": "review",
+      "width": 390,
+      "scene": "combined",
+      "suffix": "empty",
+      "sha256": "fddbd0df19a6dbda668e434ab8301531850daa1f3da19bdd8d5e9989363d5529",
+      "pixelWidth": 358,
+      "pixelHeight": 204
+    },
+    {
+      "file": "review-390-combined-reset.png",
+      "mode": "review",
+      "width": 390,
+      "scene": "combined",
+      "suffix": "reset",
+      "sha256": "26d0380d2ea5372850871d7cd1f329a16ea1857bad12f52935a27dadc3f71e1e",
+      "pixelWidth": 358,
+      "pixelHeight": 638
+    },
+    {
+      "file": "review-760-catalog-empty.png",
+      "mode": "review",
+      "width": 760,
+      "scene": "catalog",
+      "suffix": "empty",
+      "sha256": "669456fd8dc18e84c5437dd06f38d945c8394f908ff45ab408b3eac13bd4b416",
+      "pixelWidth": 728,
+      "pixelHeight": 179
+    },
+    {
+      "file": "review-760-catalog-registration.png",
+      "mode": "review",
+      "width": 760,
+      "scene": "catalog",
+      "suffix": "registration",
+      "sha256": "a626615523aa984655afc66b6458a7c4178b8ac141acfb701cc7c937c1108c61",
+      "pixelWidth": 728,
+      "pixelHeight": 462
+    },
+    {
+      "file": "review-760-search-default.png",
+      "mode": "review",
+      "width": 760,
+      "scene": "search",
+      "suffix": "default",
+      "sha256": "de8bdcece6c22f670bcdd23cf7ff9fa6becadc9ca9ffacb09f8266c4ed625a34",
+      "pixelWidth": 728,
+      "pixelHeight": 987
+    },
+    {
+      "file": "review-760-search-empty.png",
+      "mode": "review",
+      "width": 760,
+      "scene": "search",
+      "suffix": "empty",
+      "sha256": "6aad9c7878ac00b22d9b058688b6f3dbe1111967011d782bd8e490d887ceb86b",
+      "pixelWidth": 728,
+      "pixelHeight": 179
+    },
+    {
+      "file": "review-760-search-reset.png",
+      "mode": "review",
+      "width": 760,
+      "scene": "search",
+      "suffix": "reset",
+      "sha256": "77f39606b280654dd524a7cb752614b0149f98f35d102edb8a877dbea07ea359",
+      "pixelWidth": 728,
+      "pixelHeight": 175
+    },
+    {
+      "file": "review-760-combined-default.png",
+      "mode": "review",
+      "width": 760,
+      "scene": "combined",
+      "suffix": "default",
+      "sha256": "de8bdcece6c22f670bcdd23cf7ff9fa6becadc9ca9ffacb09f8266c4ed625a34",
+      "pixelWidth": 728,
+      "pixelHeight": 987
+    },
+    {
+      "file": "review-760-combined-empty.png",
+      "mode": "review",
+      "width": 760,
+      "scene": "combined",
+      "suffix": "empty",
+      "sha256": "4e5e74a9bd77f6553c4a593bf64a32ac35dbbb322b1043957b951f3d90a30151",
+      "pixelWidth": 728,
+      "pixelHeight": 179
+    },
+    {
+      "file": "review-760-combined-reset.png",
+      "mode": "review",
+      "width": 760,
+      "scene": "combined",
+      "suffix": "reset",
+      "sha256": "570c3775c3198cb38a7d157ea68cd43bbd1f1776e5621ef581e508868dbfc837",
+      "pixelWidth": 728,
+      "pixelHeight": 638
+    },
+    {
+      "file": "review-761-catalog-empty.png",
+      "mode": "review",
+      "width": 761,
+      "scene": "catalog",
+      "suffix": "empty",
+      "sha256": "55ef3c9c0f74aa73ea1cee21765a4367882aea67958a628d092e0d8f13795479",
+      "pixelWidth": 729,
+      "pixelHeight": 179
+    },
+    {
+      "file": "review-761-catalog-registration.png",
+      "mode": "review",
+      "width": 761,
+      "scene": "catalog",
+      "suffix": "registration",
+      "sha256": "1906da521c0e51d36711aa8e8d1308299432f09fbc35ffc140d642c7c597bb05",
+      "pixelWidth": 729,
+      "pixelHeight": 462
+    },
+    {
+      "file": "review-761-search-default.png",
+      "mode": "review",
+      "width": 761,
+      "scene": "search",
+      "suffix": "default",
+      "sha256": "9c519a96a9c42f1b9dacd4a0a72e7b92fa41625570cc8dab1de879bece9d098c",
+      "pixelWidth": 729,
+      "pixelHeight": 1179
+    },
+    {
+      "file": "review-761-search-empty.png",
+      "mode": "review",
+      "width": 761,
+      "scene": "search",
+      "suffix": "empty",
+      "sha256": "c5c1038aa09a5106abd47e5afe854232b6ed9904dc450b00b76b05e94324b9f3",
+      "pixelWidth": 729,
+      "pixelHeight": 179
+    },
+    {
+      "file": "review-761-search-reset.png",
+      "mode": "review",
+      "width": 761,
+      "scene": "search",
+      "suffix": "reset",
+      "sha256": "8304dba8565e859402c09f46d1bcc77620357d1f03e3a9540f703c4648f66ba4",
+      "pixelWidth": 729,
+      "pixelHeight": 175
+    },
+    {
+      "file": "review-761-combined-default.png",
+      "mode": "review",
+      "width": 761,
+      "scene": "combined",
+      "suffix": "default",
+      "sha256": "9c519a96a9c42f1b9dacd4a0a72e7b92fa41625570cc8dab1de879bece9d098c",
+      "pixelWidth": 729,
+      "pixelHeight": 1179
+    },
+    {
+      "file": "review-761-combined-empty.png",
+      "mode": "review",
+      "width": 761,
+      "scene": "combined",
+      "suffix": "empty",
+      "sha256": "fb6c1300ebd44877d9904a428e2b156eeefc6928c1d5bb9f1d610d1a8db2838f",
+      "pixelWidth": 729,
+      "pixelHeight": 179
+    },
+    {
+      "file": "review-761-combined-reset.png",
+      "mode": "review",
+      "width": 761,
+      "scene": "combined",
+      "suffix": "reset",
+      "sha256": "0a5cd71ec3f1dce9f5c3731a5d0b89bf89d305b29c6ca0ea5e931e5f87ee5e80",
+      "pixelWidth": 729,
+      "pixelHeight": 452
+    },
+    {
+      "file": "review-1440-catalog-empty.png",
+      "mode": "review",
+      "width": 1440,
+      "scene": "catalog",
+      "suffix": "empty",
+      "sha256": "a3a745411a6d801ed8b21482b5708cff5456fb1fa40136d5e926b9f37fd93aa2",
+      "pixelWidth": 1136,
+      "pixelHeight": 179
+    },
+    {
+      "file": "review-1440-catalog-registration.png",
+      "mode": "review",
+      "width": 1440,
+      "scene": "catalog",
+      "suffix": "registration",
+      "sha256": "f00671ea513e59604dcd8bc046848062e425169bc865ad1331b5e9fe1f79c5ca",
+      "pixelWidth": 1136,
+      "pixelHeight": 398
+    },
+    {
+      "file": "review-1440-search-default.png",
+      "mode": "review",
+      "width": 1440,
+      "scene": "search",
+      "suffix": "default",
+      "sha256": "e5c1ddbc27a4d49c41657d8763b76bcc30c53ffc2975fa6c4dc70cc9f5792fb9",
+      "pixelWidth": 1136,
+      "pixelHeight": 1184
+    },
+    {
+      "file": "review-1440-search-empty.png",
+      "mode": "review",
+      "width": 1440,
+      "scene": "search",
+      "suffix": "empty",
+      "sha256": "c7860c7663d487bb8561558e37ae8d0cd00b2d8d1644f705e84b4672c6511c2f",
+      "pixelWidth": 1136,
+      "pixelHeight": 179
+    },
+    {
+      "file": "review-1440-search-reset.png",
+      "mode": "review",
+      "width": 1440,
+      "scene": "search",
+      "suffix": "reset",
+      "sha256": "a3ac5d99fa6ab87fc1d46965673e89308cf614aa38c11121bbe86612b6c88820",
+      "pixelWidth": 1136,
+      "pixelHeight": 183
+    },
+    {
+      "file": "review-1440-combined-default.png",
+      "mode": "review",
+      "width": 1440,
+      "scene": "combined",
+      "suffix": "default",
+      "sha256": "e5c1ddbc27a4d49c41657d8763b76bcc30c53ffc2975fa6c4dc70cc9f5792fb9",
+      "pixelWidth": 1136,
+      "pixelHeight": 1184
+    },
+    {
+      "file": "review-1440-combined-empty.png",
+      "mode": "review",
+      "width": 1440,
+      "scene": "combined",
+      "suffix": "empty",
+      "sha256": "9bf7ef1088486d0ee2b8d9c9e0c711cea4768915d8287cf435d7b60a348af808",
+      "pixelWidth": 1136,
+      "pixelHeight": 179
+    },
+    {
+      "file": "review-1440-combined-reset.png",
+      "mode": "review",
+      "width": 1440,
+      "scene": "combined",
+      "suffix": "reset",
+      "sha256": "500aeb6f70f7e478887c443662b7cf7efe4825e81aa5a30c7ed00171a08c7ba6",
+      "pixelWidth": 1136,
+      "pixelHeight": 367
+    },
+    {
+      "file": "current-390-catalog-empty.png",
+      "mode": "current",
+      "width": 390,
+      "scene": "catalog",
+      "suffix": "empty",
+      "sha256": "52cc8c4c1b6e19dfc79bd9e8b64cb7b22284dd8475a0ae437d430471321a9d22",
+      "pixelWidth": 358,
+      "pixelHeight": 204
+    },
+    {
+      "file": "current-390-catalog-registration.png",
+      "mode": "current",
+      "width": 390,
+      "scene": "catalog",
+      "suffix": "registration",
+      "sha256": "8b957b69abbe30f19b3411639378847f042866e935c94484f23c030e31e3a800",
+      "pixelWidth": 358,
+      "pixelHeight": 504
+    },
+    {
+      "file": "current-390-search-default.png",
+      "mode": "current",
+      "width": 390,
+      "scene": "search",
+      "suffix": "default",
+      "sha256": "52028e0fb4ef11a79e71b57c2b340a28156b81b13bf055dcac431fa5eac4b96a",
+      "pixelWidth": 358,
+      "pixelHeight": 1057
+    },
+    {
+      "file": "current-390-search-empty.png",
+      "mode": "current",
+      "width": 390,
+      "scene": "search",
+      "suffix": "empty",
+      "sha256": "408e4d41b1ea58a3ef51af120115d7a7b37d2e13640868f8555da29da5700e90",
+      "pixelWidth": 358,
+      "pixelHeight": 204
+    },
+    {
+      "file": "current-390-search-reset.png",
+      "mode": "current",
+      "width": 390,
+      "scene": "search",
+      "suffix": "reset",
+      "sha256": "9aee8e30fc6645a25601f032cbb20826c9a705df30b5afb412315af06028c1ca",
+      "pixelWidth": 358,
+      "pixelHeight": 175
+    },
+    {
+      "file": "current-390-combined-default.png",
+      "mode": "current",
+      "width": 390,
+      "scene": "combined",
+      "suffix": "default",
+      "sha256": "52028e0fb4ef11a79e71b57c2b340a28156b81b13bf055dcac431fa5eac4b96a",
+      "pixelWidth": 358,
+      "pixelHeight": 1057
+    },
+    {
+      "file": "current-390-combined-empty.png",
+      "mode": "current",
+      "width": 390,
+      "scene": "combined",
+      "suffix": "empty",
+      "sha256": "fddbd0df19a6dbda668e434ab8301531850daa1f3da19bdd8d5e9989363d5529",
+      "pixelWidth": 358,
+      "pixelHeight": 204
+    },
+    {
+      "file": "current-390-combined-reset.png",
+      "mode": "current",
+      "width": 390,
+      "scene": "combined",
+      "suffix": "reset",
+      "sha256": "26d0380d2ea5372850871d7cd1f329a16ea1857bad12f52935a27dadc3f71e1e",
+      "pixelWidth": 358,
+      "pixelHeight": 638
+    },
+    {
+      "file": "current-760-catalog-empty.png",
+      "mode": "current",
+      "width": 760,
+      "scene": "catalog",
+      "suffix": "empty",
+      "sha256": "669456fd8dc18e84c5437dd06f38d945c8394f908ff45ab408b3eac13bd4b416",
+      "pixelWidth": 728,
+      "pixelHeight": 179
+    },
+    {
+      "file": "current-760-catalog-registration.png",
+      "mode": "current",
+      "width": 760,
+      "scene": "catalog",
+      "suffix": "registration",
+      "sha256": "a626615523aa984655afc66b6458a7c4178b8ac141acfb701cc7c937c1108c61",
+      "pixelWidth": 728,
+      "pixelHeight": 462
+    },
+    {
+      "file": "current-760-search-default.png",
+      "mode": "current",
+      "width": 760,
+      "scene": "search",
+      "suffix": "default",
+      "sha256": "de8bdcece6c22f670bcdd23cf7ff9fa6becadc9ca9ffacb09f8266c4ed625a34",
+      "pixelWidth": 728,
+      "pixelHeight": 987
+    },
+    {
+      "file": "current-760-search-empty.png",
+      "mode": "current",
+      "width": 760,
+      "scene": "search",
+      "suffix": "empty",
+      "sha256": "6aad9c7878ac00b22d9b058688b6f3dbe1111967011d782bd8e490d887ceb86b",
+      "pixelWidth": 728,
+      "pixelHeight": 179
+    },
+    {
+      "file": "current-760-search-reset.png",
+      "mode": "current",
+      "width": 760,
+      "scene": "search",
+      "suffix": "reset",
+      "sha256": "77f39606b280654dd524a7cb752614b0149f98f35d102edb8a877dbea07ea359",
+      "pixelWidth": 728,
+      "pixelHeight": 175
+    },
+    {
+      "file": "current-760-combined-default.png",
+      "mode": "current",
+      "width": 760,
+      "scene": "combined",
+      "suffix": "default",
+      "sha256": "de8bdcece6c22f670bcdd23cf7ff9fa6becadc9ca9ffacb09f8266c4ed625a34",
+      "pixelWidth": 728,
+      "pixelHeight": 987
+    },
+    {
+      "file": "current-760-combined-empty.png",
+      "mode": "current",
+      "width": 760,
+      "scene": "combined",
+      "suffix": "empty",
+      "sha256": "4e5e74a9bd77f6553c4a593bf64a32ac35dbbb322b1043957b951f3d90a30151",
+      "pixelWidth": 728,
+      "pixelHeight": 179
+    },
+    {
+      "file": "current-760-combined-reset.png",
+      "mode": "current",
+      "width": 760,
+      "scene": "combined",
+      "suffix": "reset",
+      "sha256": "570c3775c3198cb38a7d157ea68cd43bbd1f1776e5621ef581e508868dbfc837",
+      "pixelWidth": 728,
+      "pixelHeight": 638
+    },
+    {
+      "file": "current-761-catalog-empty.png",
+      "mode": "current",
+      "width": 761,
+      "scene": "catalog",
+      "suffix": "empty",
+      "sha256": "6f4c0267e3a8d2ae5883e55212865ced24e83d0d3cf93c18d0e55b5070b37339",
+      "pixelWidth": 729,
+      "pixelHeight": 164
+    },
+    {
+      "file": "current-761-catalog-registration.png",
+      "mode": "current",
+      "width": 761,
+      "scene": "catalog",
+      "suffix": "registration",
+      "sha256": "1906da521c0e51d36711aa8e8d1308299432f09fbc35ffc140d642c7c597bb05",
+      "pixelWidth": 729,
+      "pixelHeight": 462
+    },
+    {
+      "file": "current-761-search-default.png",
+      "mode": "current",
+      "width": 761,
+      "scene": "search",
+      "suffix": "default",
+      "sha256": "9c519a96a9c42f1b9dacd4a0a72e7b92fa41625570cc8dab1de879bece9d098c",
+      "pixelWidth": 729,
+      "pixelHeight": 1179
+    },
+    {
+      "file": "current-761-search-empty.png",
+      "mode": "current",
+      "width": 761,
+      "scene": "search",
+      "suffix": "empty",
+      "sha256": "46b61fd21b5bdc8910ba8d9b4557299e19b363b84c3d528ca7c80dc820e4cd70",
+      "pixelWidth": 729,
+      "pixelHeight": 152
+    },
+    {
+      "file": "current-761-search-reset.png",
+      "mode": "current",
+      "width": 761,
+      "scene": "search",
+      "suffix": "reset",
+      "sha256": "8304dba8565e859402c09f46d1bcc77620357d1f03e3a9540f703c4648f66ba4",
+      "pixelWidth": 729,
+      "pixelHeight": 175
+    },
+    {
+      "file": "current-761-combined-default.png",
+      "mode": "current",
+      "width": 761,
+      "scene": "combined",
+      "suffix": "default",
+      "sha256": "9c519a96a9c42f1b9dacd4a0a72e7b92fa41625570cc8dab1de879bece9d098c",
+      "pixelWidth": 729,
+      "pixelHeight": 1179
+    },
+    {
+      "file": "current-761-combined-empty.png",
+      "mode": "current",
+      "width": 761,
+      "scene": "combined",
+      "suffix": "empty",
+      "sha256": "5286888321496a65fc8c1767d08b34dfe0c19edde24d5ed353cda702cb3520ce",
+      "pixelWidth": 729,
+      "pixelHeight": 152
+    },
+    {
+      "file": "current-761-combined-reset.png",
+      "mode": "current",
+      "width": 761,
+      "scene": "combined",
+      "suffix": "reset",
+      "sha256": "0a5cd71ec3f1dce9f5c3731a5d0b89bf89d305b29c6ca0ea5e931e5f87ee5e80",
+      "pixelWidth": 729,
+      "pixelHeight": 452
+    },
+    {
+      "file": "current-1440-catalog-empty.png",
+      "mode": "current",
+      "width": 1440,
+      "scene": "catalog",
+      "suffix": "empty",
+      "sha256": "b642cbf8332a73680994fd1a000e8916ccce2d2b7a2ed887ac7a83988ecd312d",
+      "pixelWidth": 1136,
+      "pixelHeight": 164
+    },
+    {
+      "file": "current-1440-catalog-registration.png",
+      "mode": "current",
+      "width": 1440,
+      "scene": "catalog",
+      "suffix": "registration",
+      "sha256": "f00671ea513e59604dcd8bc046848062e425169bc865ad1331b5e9fe1f79c5ca",
+      "pixelWidth": 1136,
+      "pixelHeight": 398
+    },
+    {
+      "file": "current-1440-search-default.png",
+      "mode": "current",
+      "width": 1440,
+      "scene": "search",
+      "suffix": "default",
+      "sha256": "e5c1ddbc27a4d49c41657d8763b76bcc30c53ffc2975fa6c4dc70cc9f5792fb9",
+      "pixelWidth": 1136,
+      "pixelHeight": 1184
+    },
+    {
+      "file": "current-1440-search-empty.png",
+      "mode": "current",
+      "width": 1440,
+      "scene": "search",
+      "suffix": "empty",
+      "sha256": "7603afd483d7f074046e80dae4301f349fd0e13faf75fb350afcfd48753fecdf",
+      "pixelWidth": 1136,
+      "pixelHeight": 152
+    },
+    {
+      "file": "current-1440-search-reset.png",
+      "mode": "current",
+      "width": 1440,
+      "scene": "search",
+      "suffix": "reset",
+      "sha256": "a3ac5d99fa6ab87fc1d46965673e89308cf614aa38c11121bbe86612b6c88820",
+      "pixelWidth": 1136,
+      "pixelHeight": 183
+    },
+    {
+      "file": "current-1440-combined-default.png",
+      "mode": "current",
+      "width": 1440,
+      "scene": "combined",
+      "suffix": "default",
+      "sha256": "e5c1ddbc27a4d49c41657d8763b76bcc30c53ffc2975fa6c4dc70cc9f5792fb9",
+      "pixelWidth": 1136,
+      "pixelHeight": 1184
+    },
+    {
+      "file": "current-1440-combined-empty.png",
+      "mode": "current",
+      "width": 1440,
+      "scene": "combined",
+      "suffix": "empty",
+      "sha256": "70a2bc3601cd2f8a72410f5198be654d35a6a83924557cfc6132e244948f945c",
+      "pixelWidth": 1136,
+      "pixelHeight": 152
+    },
+    {
+      "file": "current-1440-combined-reset.png",
+      "mode": "current",
+      "width": 1440,
+      "scene": "combined",
+      "suffix": "reset",
+      "sha256": "500aeb6f70f7e478887c443662b7cf7efe4825e81aa5a30c7ed00171a08c7ba6",
+      "pixelWidth": 1136,
+      "pixelHeight": 367
+    }
+  ],
+  "sourceHashes": {
+    "apps/web/index.html": "0376c4bf04227ac5dbb6bb43895e5ed97eef6ca8bde54f08774908d3f07d9d88",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AccountShell.vue": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+    "apps/web/src/components/ApiCoverageDashboard.vue": "dfa6e82e10a8410c3ad761bf8d0f9c56bb018a29c3f9ba935a67014c16d1a126",
+    "apps/web/src/components/ApiFoundation.vue": "8329bdc20aa1d9f905c11ab81bce0ca1281a295b5d5732f16aeb65a0f2ea7b32",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/ApprovalWorkspace.vue": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+    "apps/web/src/components/AuditSecurityCenter.vue": "49e2dfcdc9e12cd7efcc7311b259daffb4fbb703187f2c1a026acabcb5a87a80",
+    "apps/web/src/components/AuditedReasonDialog.vue": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+    "apps/web/src/components/AuthorizationCenter.vue": "accb7cbfe2f0dc35466a81de506d0ca60223db49f13fa32ebd40ba38ee038920",
+    "apps/web/src/components/AutomationRuleCenter.vue": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+    "apps/web/src/components/BackupRecoveryCenter.vue": "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
+    "apps/web/src/components/CapacityBoundaryCenter.vue": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
+    "apps/web/src/components/CollectionOperationsConsole.vue": "7acded3c40ce98f08e87955cd161bba67874aca496d1768b34505bb35b527d7d",
+    "apps/web/src/components/CollectionRuntimeCenter.vue": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
+    "apps/web/src/components/CollectionRuntimeSurface.vue": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
+    "apps/web/src/components/CollectionTaskCenter.vue": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
+    "apps/web/src/components/CommercialOperationsCenter.vue": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
+    "apps/web/src/components/CompetitorMonitor.vue": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+    "apps/web/src/components/ConfigBoundary.vue": "36d9cdf35921c647740965aad0d6ed490ecbc0afdc9c80da6b861befbbc622cb",
+    "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
+    "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+    "apps/web/src/components/CrawlerSchedulerCenter.vue": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
+    "apps/web/src/components/CredentialAssetCenter.vue": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+    "apps/web/src/components/DataQualityCenter.vue": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+    "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
+    "apps/web/src/components/DiscoveryOverlay.vue": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+    "apps/web/src/components/FileAuditFoundation.vue": "430edf42d733087abe6628a89214516d17b5afc8cc921ce148b7003f3392b184",
+    "apps/web/src/components/FileResilienceCenter.vue": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
+    "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4",
+    "apps/web/src/components/HomeDashboard.vue": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+    "apps/web/src/components/LandingRedirect.vue": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7",
+    "apps/web/src/components/LocalIdentity.vue": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
+    "apps/web/src/components/MySqlFoundation.vue": "b7d39ddfda7ddcd69ed1ca77290b074846b80acb933e7cdf1ef4467f0e3e73f3",
+    "apps/web/src/components/MySqlResilienceCenter.vue": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
+    "apps/web/src/components/NavigationShell.vue": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+    "apps/web/src/components/NotFoundPage.vue": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b",
+    "apps/web/src/components/NotificationCenter.vue": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+    "apps/web/src/components/OnboardingGuide.vue": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088",
+    "apps/web/src/components/OpenPlatformCenter.vue": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
+    "apps/web/src/components/OpportunityAiPanel.vue": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
+    "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+    "apps/web/src/components/OpportunityDecisionPanel.vue": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+    "apps/web/src/components/OpportunityDetailInsights.vue": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
+    "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
+    "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
+    "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
+    "apps/web/src/components/OpportunityListPanel.vue": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+    "apps/web/src/components/OpportunityMobileShell.vue": "093aafdd1b27c39b89b8fac76aa90f9ac61337bd062607a51800b82c3938f934",
+    "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+    "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/components/PersonalCenter.vue": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+    "apps/web/src/components/PlatformAccountCenter.vue": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformContentCenter.vue": "577c6f761c9044e1c92e0a0d4f2e5092f94fb647aab8fc29093adc8cb6072ccc",
+    "apps/web/src/components/PlatformContentPagination.vue": "2a96546fb88ebc4eacf279b868d620e27c550c990ab6ef129c60803f69c7d244",
+    "apps/web/src/components/PlatformContentReviewDialog.vue": "7183474efd2f6fdb6080d3273855b69c742675b5aa36ae026d9cd82f6a6726f4",
+    "apps/web/src/components/PlatformDashboard.vue": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+    "apps/web/src/components/PlatformDataCenter.vue": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+    "apps/web/src/components/PlatformGovernanceCenter.vue": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048",
+    "apps/web/src/components/PlatformLogCenter.vue": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+    "apps/web/src/components/PlatformManagementCenter.vue": "c3dba75b134c70ff7bd23a9310395eb9e6f78c73d53a738a061e0071f2c89bf9",
+    "apps/web/src/components/PlatformManagementFilter.vue": "0ac6f1cd0c812b6f3455d3288f91c8b9ab6bf2028b7a1cafd35c823e26da08f6",
+    "apps/web/src/components/PlatformManagementRecordList.vue": "46b8b786a5aa6edbd2adc7c835a8e4d9a00257ff363b1888f77b5d4bb45f98ad",
+    "apps/web/src/components/PlatformMessageEditor.vue": "135ab00609dac3dc7fddf54085972594e80f6d1e6f2a0609973c3d7f7d6eea31",
+    "apps/web/src/components/PlatformMessageWorkbench.vue": "7c46437db21c0874d138bb249c4cead5afceebc19e4d6a3fe62aec2e83e9cc7a",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+    "apps/web/src/components/PlatformRoleComparison.vue": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "51c0ba1f86fa1179fcb0d25b9cb327ef8a38f34b0cef53d5a916f0ef2f92a2ee",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+    "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+    "apps/web/src/components/ProviderRegistry.vue": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+    "apps/web/src/components/ProviderSourceCenter.css": "a31b900bedbf1cafdf756eea8b7bd8742a5ec844fef9bcad0d8ffe643e39bb74",
+    "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+    "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+    "apps/web/src/components/RedisFoundation.vue": "c39e3eecfad2441d0ca0bf157d59c7b507dbeb709051b39de7fded1982da4dea",
+    "apps/web/src/components/RedisResilienceCenter.vue": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
+    "apps/web/src/components/ReleaseRolloutCenter.vue": "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
+    "apps/web/src/components/ReportCenter.vue": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+    "apps/web/src/components/ResourceGrantCenter.vue": "80a3164ccef4a3c2f0e547f01ea0789c7f0c6b50f07858e07a2721ca8e196970",
+    "apps/web/src/components/ResponsiveDataView.vue": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
+    "apps/web/src/components/RuntimeTopologyCenter.vue": "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
+    "apps/web/src/components/ScoreRuleConsole.vue": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+    "apps/web/src/components/SecurityOperationsCenter.vue": "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
+    "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
+    "apps/web/src/components/SourcingComparisonPanel.vue": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+    "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
+    "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+    "apps/web/src/components/SourcingWorkspaceDialogs.vue": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/TaskBatchActions.vue": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d",
+    "apps/web/src/components/TaskDetailPanel.vue": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
+    "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
+    "apps/web/src/components/TaskWorkspace.vue": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+    "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
+    "apps/web/src/components/TenancyChooser.vue": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
+    "apps/web/src/components/ThemeStudio.vue": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+    "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f",
+    "apps/web/src/components/TrendDashboard.vue": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+    "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
+    "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
+    "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
+    "apps/web/src/components/TrendRuleDialog.vue": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/components/UiStateShowcase.vue": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
+    "apps/web/src/components/VerificationFramework.vue": "aab55dcadf05e3427665faadb057f86a5fbe44dde8f022b0a7225f6c1ec6cccf",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/src/credential-assets.css": "f2afdaa53d385b3ff0c7a8e1d79e66103353a3755257834142f887a8ec5e43f0",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/platform-data-tokens.css": "add319c74e7ffd01bcf2ff247168e5717aa08b271ffc4cd65ad1dfb6acc1a039",
+    "apps/web/src/design/platform-overlay-tokens.css": "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
+    "apps/web/src/design/provider-adapter-tokens.css": "ec274e4382f9b741d26d79f5cc8d5dd5b1602967000cb227320fca0e018fe214",
+    "apps/web/src/design/provider-registry-tokens.css": "d9dea3c996e5f5426766ebed1eb2b0a7956585036d09131af5dadb7bb7aa36fc",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/navigation-shell-scoped.css": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+    "apps/web/src/provider-adapters-c-detail.css": "63ebf23cabe128212df42f1480aa83a0e0bcfe846418961700e68fa04e7af5dc",
+    "apps/web/src/provider-adapters-c-feedback.css": "5d2815fc8e3c60b922f0c7d7aa629101495261dba74136ffba30487612354003",
+    "apps/web/src/provider-adapters-c-page.css": "d1da284edaba49456ddafb02940874a5feacd812169f10b8d3790cbfdd6d019a",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters-empty-mobile.css": "2663c89c57f543d5136f4180d8d0d8dc4c44ba9d97acdabcea508a0a1f53667c",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/route-catalog.generated.json": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/signal-ledger-workflows.css": "3a3bcb8ca4aa2c0b7dae11218223aaa9de25db45eb0704a2670ea156bf06229b",
+    "apps/web/src/signal-ledger.css": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/provider-approved-feedback.css": "5e0a2f2d43cc7325395aef61924d60d510f0f1b03b41141b15df6426c98fd1ef",
+    "apps/web/src/styles/provider-approved-structure.css": "44c4c966d56fb60db060afcd67f192795693a422eb796adae61c7eb6d6129849",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+    "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-empty-preview.css": "99e792f817f7b1ff251c1ed588761a3365fee167528617644f84fc27fba9855d",
+    "scripts/lib/ui-imported-style-sources.mjs": "1ac8c9075a445b2cfb3963c1464de63cce567331eec6cfa14f197ce7929d2f84",
+    "scripts/lib/ui-phase2-adapter-current-empty-preview.mjs": "588918999817f52046ae6c21540b3ca82ae0ccdd2106e1e99b5ba449be1c02a0",
+    "scripts/lib/ui-phase2-adapter-empty-mobile-baseline.mjs": "44f86fb29fb297870a1526962ecfbfd0899b205e346c6d875861bf08dc27536d",
+    "scripts/lib/ui-phase2-adapter-empty-preview.mjs": "f934c8b371b1adea7a2093754492034cc4d10f3dc3c5cfc6d76461a257635155",
+    "scripts/lib/ui-phase2-adapter-refresh-focus-baseline.mjs": "b3f7e4bb9bd0f8d8f159babe8e97bee434151c496d58733fa9ccac28c2b6a090",
+    "scripts/verify-provider-adapter-empty-mobile.mjs": "7dce540367c137797d69305c5587c26f909683e34799ae2cf15cbb4037c0a07b",
+    "scripts/verify-ui-phase2-provider-adapter-empty.mjs": "db56f1e99c7d4e49e9eb8fb1bc7e8ee5120d898da36946bd3c48e90dc0e8d353",
+    "tests/e2e/m03-03-provider-adapter.spec.ts": "f5c6bd4e0d265e83dbb3179f732ff4db18409f79e87568248767827230ef1452"
+  },
+  "boundary": "Actual raw current Vue implements only approved mobile empty copy/style at max760px; exact pre-change baseline and original empty review provide independent comparisons. Both existing focus handlers and all runtime contracts unchanged. Current mobile empty regions equal reference; wide empty regions and neighboring default/reset/registration pictures equal baseline. Local fixtures only, no real writes, full-page approval, complete a11y or production deployment."
+}

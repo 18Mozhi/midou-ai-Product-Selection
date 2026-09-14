@@ -11,8 +11,8 @@
     "apps/web/src/components/PlatformAccountCenter.vue": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
     "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
     "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
-    "apps/web/src/components/PlatformAdminComparisonMobile.css": "9b74248f24827e8e1e4800b93090ef1fd680acaebf90754bc238680bebedddde",
-    "apps/web/src/components/PlatformAdminDirectoryMobile.css": "4c66844583a8a9711e29b0aa40d40b87ebd7409f53b64933d441b0c8bf46c82c",
+    "apps/web/src/components/PlatformAdminComparisonMobile.css": "03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae",
+    "apps/web/src/components/PlatformAdminDirectoryMobile.css": "6a9f05f7690a67746b4ea9dc479ea7d78a43ad2b73707bde6d2dad0c2d0050f3",
     "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
     "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
     "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
@@ -21,24 +21,27 @@
     "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
     "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
     "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
-    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-    "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+    "apps/web/src/components/ResponsiveDataView.vue": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/platform-admin-mobile-tokens.css": "3c878a3060007abd8bb51a0bf626833a9e8ac7ab4a62c3fcbcd587e9c52b7e68",
+    "apps/web/src/design/platform-overlay-tokens.css": "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
     "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
     "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
     "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
-    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/signal-ledger.css": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
     "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
     "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
-    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/onboarding-navigation.css": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
     "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
     "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
-    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
     "apps/web/src/use-platform-organization-actions.ts": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
     "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
     "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
     "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
-    "scripts/verify-ui-phase2-admin-mobile-directory-implementation.mjs": "d611212a8afd31b0264b4cade3bf2e065e2d45a6a46446c5ca3d00b2cdba7fbf",
+    "scripts/lib/ui-imported-style-sources.mjs": "1ac8c9075a445b2cfb3963c1464de63cce567331eec6cfa14f197ce7929d2f84",
+    "scripts/verify-ui-phase2-admin-mobile-directory-implementation.mjs": "fc3f4b8272248aef15aba96e7151594c83323495b9d49adc0083e9e1622688e3",
     "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
   },
   "checks": [
@@ -166,7 +169,7 @@
       "width": 390,
       "routeName": "admins",
       "name": "route stays after detail",
-      "actual": "http://127.0.0.1:54432/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:61781/platform-admin/admins?keep=p44"
     },
     {
       "width": 390,
@@ -190,7 +193,7 @@
       "width": 390,
       "routeName": "admins",
       "name": "restored URL",
-      "actual": "http://127.0.0.1:54432/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:61781/platform-admin/admins?keep=p44"
     },
     {
       "width": 390,
@@ -394,7 +397,7 @@
       "width": 760,
       "routeName": "admins",
       "name": "route stays after detail",
-      "actual": "http://127.0.0.1:54432/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:61781/platform-admin/admins?keep=p44"
     },
     {
       "width": 760,
@@ -418,7 +421,7 @@
       "width": 760,
       "routeName": "admins",
       "name": "restored URL",
-      "actual": "http://127.0.0.1:54432/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:61781/platform-admin/admins?keep=p44"
     },
     {
       "width": 760,
@@ -568,7 +571,7 @@
       "width": 761,
       "routeName": "admins",
       "name": "route stays after detail",
-      "actual": "http://127.0.0.1:54432/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:61781/platform-admin/admins?keep=p44"
     },
     {
       "width": 761,
@@ -592,7 +595,7 @@
       "width": 761,
       "routeName": "admins",
       "name": "restored URL",
-      "actual": "http://127.0.0.1:54432/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:61781/platform-admin/admins?keep=p44"
     },
     {
       "width": 761,
@@ -742,7 +745,7 @@
       "width": 1440,
       "routeName": "admins",
       "name": "route stays after detail",
-      "actual": "http://127.0.0.1:54432/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:61781/platform-admin/admins?keep=p44"
     },
     {
       "width": 1440,
@@ -766,7 +769,7 @@
       "width": 1440,
       "routeName": "admins",
       "name": "restored URL",
-      "actual": "http://127.0.0.1:54432/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:61781/platform-admin/admins?keep=p44"
     },
     {
       "width": 1440,
@@ -860,7 +863,7 @@
       "routeName": "admins",
       "state": "focus",
       "file": "390-admins-focus.png",
-      "sha256": "aa43e98a508029db8fd3f85d19210bec14b81cb348cf2ebc5d63f1ff9b225357"
+      "sha256": "c1a8c97eda5808f6aba6cbbf8c18acfabfa3b41b435cf9be1f2d98c806347da6"
     },
     {
       "width": 390,
@@ -986,14 +989,14 @@
       "routeName": "admins",
       "state": "long",
       "file": "761-admins-long.png",
-      "sha256": "878185e6f56623365d24f4904e40e4accecc5bc5c1184b068c70b4fc2a2b3c4d"
+      "sha256": "1ee8958d9e4b51c3e524244bc1c07dc4527d875ae457f61e330e571b7f714d31"
     },
     {
       "width": 761,
       "routeName": "admins",
       "state": "restored",
       "file": "761-admins-restored.png",
-      "sha256": "4e5b33da742a09c75de1290f184f422ee5b75a03081911481756a045226fd817"
+      "sha256": "b83fb2bfde97d76664a33d15b1db754b3c12da7822032339e35bc6b39ca82b4f"
     },
     {
       "width": 761,
@@ -1028,14 +1031,14 @@
       "routeName": "admins",
       "state": "detail",
       "file": "1440-admins-detail.png",
-      "sha256": "65efd8a700de283c117bbae68ee081ce3cff2fbf6faefcb69135032b6eca94ea"
+      "sha256": "46910721d1fb9a59ad6af1159b31c64cf310cbc91c2ed2ef0647791cf2c2572d"
     },
     {
       "width": 1440,
       "routeName": "admins",
       "state": "long",
       "file": "1440-admins-long.png",
-      "sha256": "f7126a1641c6cdf017348569309a8189587aea8aeee134ae74d08885dad45e44"
+      "sha256": "0c0b49a4e150a6899a15a49c7442600fe2c724b4c46b06898b468d3d1464a1f3"
     },
     {
       "width": 1440,

@@ -8,10 +8,11 @@
     "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
     "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
     "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
-    "apps/web/src/components/PlatformAccountCenter.vue": "fd9b68b4f22ce7bb832ff5090c478104cac1c63f8722ed5a7274cb3ceb0480d1",
+    "apps/web/src/components/PlatformAccountCenter.vue": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
     "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
     "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
-    "apps/web/src/components/PlatformAdminComparisonMobile.css": "9b74248f24827e8e1e4800b93090ef1fd680acaebf90754bc238680bebedddde",
+    "apps/web/src/components/PlatformAdminComparisonMobile.css": "03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae",
+    "apps/web/src/components/PlatformAdminDirectoryMobile.css": "6a9f05f7690a67746b4ea9dc479ea7d78a43ad2b73707bde6d2dad0c2d0050f3",
     "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
     "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
     "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
@@ -20,25 +21,27 @@
     "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
     "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
     "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
-    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-    "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+    "apps/web/src/components/ResponsiveDataView.vue": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/platform-admin-mobile-tokens.css": "3c878a3060007abd8bb51a0bf626833a9e8ac7ab4a62c3fcbcd587e9c52b7e68",
+    "apps/web/src/design/platform-overlay-tokens.css": "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
     "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
     "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
     "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
-    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/signal-ledger.css": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
     "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
     "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
-    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/onboarding-navigation.css": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
     "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
     "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
-    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
     "apps/web/src/use-platform-organization-actions.ts": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
     "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
     "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
     "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
-    "scripts/verify-ui-phase2-admin-mobile-controls-implementation.mjs": "851e21864bd418f35af2d9fd27231e2f6dc21f38850ff961745e05f28b5ceb52",
-    "scripts/verify-ui-phase2-admin-mobile-results-implementation.mjs": "5962a1e006d0709c96a7af79d6638f47103ca19fd4af71d6d35629b78a5b7a35",
+    "scripts/lib/ui-imported-style-sources.mjs": "1ac8c9075a445b2cfb3963c1464de63cce567331eec6cfa14f197ce7929d2f84",
+    "scripts/verify-ui-phase2-admin-mobile-results-implementation.mjs": "6204d7d3706bc72635b4ca86ca9eee36c9e589e635def4c0e93b56c5ec46b42d",
     "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
   },
   "checks": [
@@ -609,7 +612,7 @@
       "width": 390,
       "routeName": "admins",
       "name": "admin comparison URL stays",
-      "actual": "http://127.0.0.1:52286/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:62138/platform-admin/admins?keep=p44"
     },
     {
       "width": 390,
@@ -1453,7 +1456,7 @@
       "width": 760,
       "routeName": "admins",
       "name": "admin comparison URL stays",
-      "actual": "http://127.0.0.1:52286/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:62138/platform-admin/admins?keep=p44"
     },
     {
       "width": 760,
@@ -1973,7 +1976,7 @@
       "width": 761,
       "routeName": "admins",
       "name": "admin comparison URL stays",
-      "actual": "http://127.0.0.1:52286/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:62138/platform-admin/admins?keep=p44"
     },
     {
       "width": 761,
@@ -2493,7 +2496,7 @@
       "width": 1440,
       "routeName": "admins",
       "name": "admin comparison URL stays",
-      "actual": "http://127.0.0.1:52286/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:62138/platform-admin/admins?keep=p44"
     },
     {
       "width": 1440,
@@ -2777,21 +2780,21 @@
       "routeName": "admins",
       "state": "role-facts",
       "file": "390-admins-role-facts.png",
-      "sha256": "96c33e3f8cdb5c5747a6a1660e5065a19fc62ee96c8b34c744e748add10ddd4b"
+      "sha256": "2b43774d138922c419c4906661fbe313e77ca46816dd062690b5d73ed546b627"
     },
     {
       "width": 390,
       "routeName": "admins",
       "state": "same-role-all",
       "file": "390-admins-same-role-all.png",
-      "sha256": "754c7713b4db15b7a6ae92ebdca5acff777bc786ab6136bf01b80131764803aa"
+      "sha256": "da18dfd7f49790b44f830eacdd77c801294375623356ca889c02e1e823c265dd"
     },
     {
       "width": 390,
       "routeName": "admins",
       "state": "reset-default",
       "file": "390-admins-reset-default.png",
-      "sha256": "96c33e3f8cdb5c5747a6a1660e5065a19fc62ee96c8b34c744e748add10ddd4b"
+      "sha256": "2b43774d138922c419c4906661fbe313e77ca46816dd062690b5d73ed546b627"
     },
     {
       "width": 390,
@@ -2819,21 +2822,21 @@
       "routeName": "admins",
       "state": "role-facts",
       "file": "760-admins-role-facts.png",
-      "sha256": "dc1cdba13b0c75f327d539cecae30551df1686d20e961ac08b0489e552fadd26"
+      "sha256": "a69f1d284347e0028547536b82a4afdce27ec0a3ce0c9fedceeabc49d8d58e01"
     },
     {
       "width": 760,
       "routeName": "admins",
       "state": "same-role-all",
       "file": "760-admins-same-role-all.png",
-      "sha256": "2bf69f097ffa06d59a21fd1fbcac126204ee7325ad3a5943c56a9507a999a611"
+      "sha256": "22cc6707988ff9ee9595a03e8e87e12be76ae7f7ef8421adcdbbdb69e47a4eed"
     },
     {
       "width": 760,
       "routeName": "admins",
       "state": "reset-default",
       "file": "760-admins-reset-default.png",
-      "sha256": "dc1cdba13b0c75f327d539cecae30551df1686d20e961ac08b0489e552fadd26"
+      "sha256": "a69f1d284347e0028547536b82a4afdce27ec0a3ce0c9fedceeabc49d8d58e01"
     },
     {
       "width": 760,
@@ -2882,7 +2885,7 @@
       "routeName": "permissions",
       "state": "role-facts",
       "file": "761-permissions-role-facts.png",
-      "sha256": "5cf6b1a649bcbdd7201a5bc3d29cb4ab6a30f4a2c43badf98e379f0dacc68924"
+      "sha256": "d84e015d45a28560992140a01be78aaea567d874f3d7baa4d1dd0ec717945856"
     },
     {
       "width": 761,
@@ -2924,7 +2927,7 @@
       "routeName": "permissions",
       "state": "role-facts",
       "file": "1440-permissions-role-facts.png",
-      "sha256": "3679aa7ecf6ab47a490ae8bde4575592e41154912f44974858be1819fd368370"
+      "sha256": "843d45e00c62fe539babdbd65b1859896dd1d6a5c177dc92502e301c463867d3"
     },
     {
       "width": 1440,
@@ -3106,7 +3109,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 948.59375,
+                "y": 948.96875,
                 "width": 324,
                 "height": 85.875
               },
@@ -3161,7 +3164,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 1054.46875,
+                "y": 1054.84375,
                 "width": 324,
                 "height": 85.875
               },
@@ -3279,7 +3282,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 452.59375,
+                "y": 451.96875,
                 "width": 324,
                 "height": 85.875
               },
@@ -3334,7 +3337,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 558.46875,
+                "y": 557.84375,
                 "width": 324,
                 "height": 85.875
               },
@@ -3476,7 +3479,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 948.59375,
+                "y": 948.96875,
                 "width": 324,
                 "height": 85.875
               },
@@ -3531,7 +3534,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 1054.46875,
+                "y": 1054.84375,
                 "width": 324,
                 "height": 85.875
               },
@@ -3649,7 +3652,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 502.59375,
+                "y": 501.96875,
                 "width": 324,
                 "height": 85.875
               },
@@ -3704,7 +3707,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 608.46875,
+                "y": 607.84375,
                 "width": 324,
                 "height": 85.875
               },
@@ -3846,7 +3849,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 220.59375,
+                "y": 220.96875,
                 "width": 324,
                 "height": 85.875
               },
@@ -3901,7 +3904,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 326.46875,
+                "y": 326.84375,
                 "width": 324,
                 "height": 85.875
               },
@@ -4043,7 +4046,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 331.59375,
+                "y": 331.96875,
                 "width": 324,
                 "height": 85.875
               },
@@ -4098,7 +4101,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 437.46875,
+                "y": 437.84375,
                 "width": 324,
                 "height": 85.875
               },
@@ -4240,7 +4243,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 331.59375,
+                "y": 331.96875,
                 "width": 324,
                 "height": 85.875
               },
@@ -4295,7 +4298,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 437.46875,
+                "y": 437.84375,
                 "width": 324,
                 "height": 85.875
               },
@@ -5971,7 +5974,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 1265.796875,
+                "y": 837.984375,
                 "width": 694,
                 "height": 85.875
               },
@@ -6026,7 +6029,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 1371.671875,
+                "y": 943.859375,
                 "width": 694,
                 "height": 85.875
               },
@@ -6144,7 +6147,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 527.796875,
+                "y": 527.984375,
                 "width": 694,
                 "height": 85.875
               },
@@ -6199,7 +6202,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 633.671875,
+                "y": 633.859375,
                 "width": 694,
                 "height": 85.875
               },
@@ -6341,7 +6344,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 527.796875,
+                "y": 527.984375,
                 "width": 694,
                 "height": 85.875
               },
@@ -6396,7 +6399,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 633.671875,
+                "y": 633.859375,
                 "width": 694,
                 "height": 85.875
               },
@@ -6514,7 +6517,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 577.796875,
+                "y": 577.984375,
                 "width": 694,
                 "height": 85.875
               },
@@ -6569,7 +6572,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 683.671875,
+                "y": 683.859375,
                 "width": 694,
                 "height": 85.875
               },
@@ -6711,7 +6714,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 220.796875,
+                "y": 220.984375,
                 "width": 694,
                 "height": 85.875
               },
@@ -6766,7 +6769,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 326.671875,
+                "y": 326.859375,
                 "width": 694,
                 "height": 85.875
               },
@@ -6908,7 +6911,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 559.796875,
+                "y": 559.984375,
                 "width": 694,
                 "height": 85.875
               },
@@ -6963,7 +6966,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 665.671875,
+                "y": 665.859375,
                 "width": 694,
                 "height": 85.875
               },
@@ -7105,7 +7108,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 559.796875,
+                "y": 559.984375,
                 "width": 694,
                 "height": 85.875
               },
@@ -7160,7 +7163,7 @@
               "count": "3 项权限",
               "box": {
                 "x": 33,
-                "y": 665.671875,
+                "y": 665.859375,
                 "width": 694,
                 "height": 85.875
               },

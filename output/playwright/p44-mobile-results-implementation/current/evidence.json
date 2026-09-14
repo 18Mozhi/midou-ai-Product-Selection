@@ -8,10 +8,11 @@
     "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
     "apps/web/src/components/OrganizationCreationWizard.vue": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
     "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
-    "apps/web/src/components/PlatformAccountCenter.vue": "fd9b68b4f22ce7bb832ff5090c478104cac1c63f8722ed5a7274cb3ceb0480d1",
+    "apps/web/src/components/PlatformAccountCenter.vue": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
     "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
     "apps/web/src/components/PlatformAccountDialogs.vue": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
-    "apps/web/src/components/PlatformAdminComparisonMobile.css": "aab8b73f01e26f8da808c60e5cdef04dfb67504d179292e0d4a9f3209670a64d",
+    "apps/web/src/components/PlatformAdminComparisonMobile.css": "03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae",
+    "apps/web/src/components/PlatformAdminDirectoryMobile.css": "6a9f05f7690a67746b4ea9dc479ea7d78a43ad2b73707bde6d2dad0c2d0050f3",
     "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
     "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
     "apps/web/src/components/PlatformOrganizationRecords.vue": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
@@ -20,24 +21,27 @@
     "apps/web/src/components/PlatformUserDetailDialog.vue": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
     "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
     "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
-    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-    "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+    "apps/web/src/components/ResponsiveDataView.vue": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/design/platform-admin-mobile-tokens.css": "3c878a3060007abd8bb51a0bf626833a9e8ac7ab4a62c3fcbcd587e9c52b7e68",
+    "apps/web/src/design/platform-overlay-tokens.css": "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
     "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
     "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
     "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
-    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/signal-ledger.css": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
     "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
     "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
-    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/onboarding-navigation.css": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
     "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
     "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
-    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
     "apps/web/src/use-platform-organization-actions.ts": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
     "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
     "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
     "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
-    "scripts/verify-ui-phase2-admin-mobile-controls-implementation.mjs": "851e21864bd418f35af2d9fd27231e2f6dc21f38850ff961745e05f28b5ceb52",
+    "scripts/lib/ui-imported-style-sources.mjs": "1ac8c9075a445b2cfb3963c1464de63cce567331eec6cfa14f197ce7929d2f84",
+    "scripts/verify-ui-phase2-admin-mobile-results-implementation.mjs": "6204d7d3706bc72635b4ca86ca9eee36c9e589e635def4c0e93b56c5ec46b42d",
     "tests/e2e/m06-01-platform-accounts.spec.ts": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0"
   },
   "checks": [
@@ -285,7 +289,7 @@
       "width": 390,
       "routeName": "admins",
       "name": "admin comparison URL stays",
-      "actual": "http://127.0.0.1:50213/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:62080/platform-admin/admins?keep=p44"
     },
     {
       "width": 390,
@@ -693,7 +697,7 @@
       "width": 760,
       "routeName": "admins",
       "name": "admin comparison URL stays",
-      "actual": "http://127.0.0.1:50213/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:62080/platform-admin/admins?keep=p44"
     },
     {
       "width": 760,
@@ -987,7 +991,7 @@
       "width": 761,
       "routeName": "admins",
       "name": "admin comparison URL stays",
-      "actual": "http://127.0.0.1:50213/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:62080/platform-admin/admins?keep=p44"
     },
     {
       "width": 761,
@@ -1281,7 +1285,7 @@
       "width": 1440,
       "routeName": "admins",
       "name": "admin comparison URL stays",
-      "actual": "http://127.0.0.1:50213/platform-admin/admins?keep=p44"
+      "actual": "http://127.0.0.1:62080/platform-admin/admins?keep=p44"
     },
     {
       "width": 1440,
@@ -1452,42 +1456,42 @@
       "routeName": "admins",
       "state": "same-role-empty",
       "file": "390-admins-same-role-empty.png",
-      "sha256": "d7cacbe45fc7e4dce0c79ae9740df357dddcbbf57a6a9f7a358b5ac162e77500"
+      "sha256": "ea2bc2070392b6d1d297a0b2fe8868c23e49c3e855c86608d6a24064f0e15dd5"
     },
     {
       "width": 390,
       "routeName": "admins",
       "state": "same-role-all",
       "file": "390-admins-same-role-all.png",
-      "sha256": "d46699ab6265efc1d25412015a97e2917354b375b5ccb6bf50810c470b0ddc81"
+      "sha256": "bfb845936e58eb6bfe2ed018515f5c21ecd68edd23b8ece44cb1c88190cea457"
     },
     {
       "width": 390,
       "routeName": "admins",
       "state": "search-empty",
       "file": "390-admins-search-empty.png",
-      "sha256": "1826e639c4896fb464fcc5c58762f37f97bd434282b9f876465d64b602127f0a"
+      "sha256": "881230890c45b342e96a352e8d4e670609d827fa79c321812ac7fb61d9745fa2"
     },
     {
       "width": 390,
       "routeName": "admins",
       "state": "restored-all",
       "file": "390-admins-restored-all.png",
-      "sha256": "7915c4d36b94fa4a46e02f65df2857d4e7d689819ff48d056d46471851e3bba5"
+      "sha256": "7027f73544bf8eab13d059448ed053f81d5c5a158c2c085fef50d125948e9590"
     },
     {
       "width": 390,
       "routeName": "admins",
       "state": "group-filter",
       "file": "390-admins-group-filter.png",
-      "sha256": "068e9ea15df89e0486f28c6df9f5b155cdb2e5d1e40803ce61de34b0e5f578f3"
+      "sha256": "4db0d04e458b3afd6bd4ed786c4e8c1b6fe912552e84f40e704bdcf7c4887afa"
     },
     {
       "width": 390,
       "routeName": "admins",
       "state": "reset-default",
       "file": "390-admins-reset-default.png",
-      "sha256": "7eb8bea3d54a89bb2dd347a6118270ca267572c90acd2c024f6259464c5d6a0d"
+      "sha256": "0a6f331b559c2bab46915fd4e7b75ad9fc7536e3b522ed83636042df5f53e11b"
     },
     {
       "width": 390,
@@ -1522,7 +1526,7 @@
       "routeName": "permissions",
       "state": "group-filter",
       "file": "390-permissions-group-filter.png",
-      "sha256": "d54b42adaf96f9d17a9779f7e7a8b0bb9922e276ce78d289abf3b817a2780991"
+      "sha256": "85a6a7bc25fc6a7ce48aee0b890c7bdc7ca170e32694d9bc0542f6f69c3a34c7"
     },
     {
       "width": 390,
@@ -1536,49 +1540,49 @@
       "routeName": "admins",
       "state": "same-role-empty",
       "file": "760-admins-same-role-empty.png",
-      "sha256": "0b49678a0db92d1e3e67869e0324c1c83d988d878838f4c2550346cf3e5a0836"
+      "sha256": "e114999ad8a0bb6d8d1cf19b21f5a636e09dcf0778c382625e98028324de6bde"
     },
     {
       "width": 760,
       "routeName": "admins",
       "state": "same-role-all",
       "file": "760-admins-same-role-all.png",
-      "sha256": "3c5d89052be923c577e23b09f630c9cc2f736b263a0628b1c2a1d0e2fca6e6e9"
+      "sha256": "bd02f59a863aa60236f7d779cea88f98b617c30b337fa701b03d372c4ef9483b"
     },
     {
       "width": 760,
       "routeName": "admins",
       "state": "search-empty",
       "file": "760-admins-search-empty.png",
-      "sha256": "3270bddd2caf0fda89ba3c163d59759d21b66be14c58df9f6225f999e40cbb9a"
+      "sha256": "51a4e623dcc1ce6d59529740dc99bbd50fd879214236b88fb8a7380e34cff5ea"
     },
     {
       "width": 760,
       "routeName": "admins",
       "state": "restored-all",
       "file": "760-admins-restored-all.png",
-      "sha256": "3c5d89052be923c577e23b09f630c9cc2f736b263a0628b1c2a1d0e2fca6e6e9"
+      "sha256": "bd02f59a863aa60236f7d779cea88f98b617c30b337fa701b03d372c4ef9483b"
     },
     {
       "width": 760,
       "routeName": "admins",
       "state": "group-filter",
       "file": "760-admins-group-filter.png",
-      "sha256": "f198a1f77b0a0b8540d6883204cb3c6829635335a03b06cbbd272df9aa445371"
+      "sha256": "cdf8ab9567f75f4c4a059a21a4b7f5af2bde539b50a602a410970af7029a7b42"
     },
     {
       "width": 760,
       "routeName": "admins",
       "state": "reset-default",
       "file": "760-admins-reset-default.png",
-      "sha256": "54cba89c1cf724a73349d92de263d8b203d6c30f489905358391ab24d9cc6aeb"
+      "sha256": "7c564a95e592a79accc719ccaacc2e6ad05478b6a03b81b4734d2cfbe6ea94ca"
     },
     {
       "width": 760,
       "routeName": "permissions",
       "state": "same-role-empty",
       "file": "760-permissions-same-role-empty.png",
-      "sha256": "fe669b51f960b939c42bd783474bdbdb5a46370a8bdc4588cae9d4d60ee3854e"
+      "sha256": "c6588ccec957ddd7506e50d8a30435b813a4ac42fd762fe171c12c66c4dd946f"
     },
     {
       "width": 760,
@@ -1613,7 +1617,7 @@
       "routeName": "permissions",
       "state": "reset-default",
       "file": "760-permissions-reset-default.png",
-      "sha256": "c66aa51ba70a8d08b08af2b56d38f532c73b5e1e91b3b212c6300b4db596a0b0"
+      "sha256": "7ed9f61f37bdf038ac81dadde2de6da51cf5de1ae75b1bfe11ddc0b7f96db869"
     },
     {
       "width": 761,
@@ -1655,14 +1659,14 @@
       "routeName": "admins",
       "state": "reset-default",
       "file": "761-admins-reset-default.png",
-      "sha256": "52c93f143a22582c80d02ab5becf8a5ee2937894562b39d1617246fc7533a3d7"
+      "sha256": "840d6ff340757700d4e5ba8e5408a59cc82328f5139f0d18b670350af6f44450"
     },
     {
       "width": 761,
       "routeName": "permissions",
       "state": "same-role-empty",
       "file": "761-permissions-same-role-empty.png",
-      "sha256": "be61ff5c7107f793c19ce05883ae94fb2649e094286a1d0a0c4a1d0f8a11d646"
+      "sha256": "3f280e19954e503629c99e26ad037c350d9db7dbb05fcbd6189d8ac8e32dcd81"
     },
     {
       "width": 761,
@@ -1746,7 +1750,7 @@
       "routeName": "permissions",
       "state": "same-role-empty",
       "file": "1440-permissions-same-role-empty.png",
-      "sha256": "9a47dfb5338ea3025c7b386949ee4a8fd43e79ddcfe431a2230f315bc27a837b"
+      "sha256": "acc41a9a837fe6cf0eaee8cad33e37f8f8997ab0d3a12eb56d6b490163943489"
     },
     {
       "width": 1440,
@@ -1774,7 +1778,7 @@
       "routeName": "permissions",
       "state": "group-filter",
       "file": "1440-permissions-group-filter.png",
-      "sha256": "1dc4aa8915948095cd5dacc6a20ce958f0ce5580b9ce26a254ef10f2439dccbc"
+      "sha256": "7511292022b67ce362d23cb7189fbb8f60aecda444b5bcad7e94bdcf0295c8da"
     },
     {
       "width": 1440,
@@ -1819,18 +1823,18 @@
           "minHeight": "20px"
         },
         "summary": {
-          "gridTemplateColumns": "348px",
-          "gap": "10px",
-          "marginTop": "0px",
-          "padding": "0px",
+          "gridTemplateColumns": "324px",
+          "gap": "20px",
+          "marginTop": "-16px",
+          "padding": "20px 16px",
           "borderRadius": "0px",
-          "backgroundColor": "rgba(0, 0, 0, 0)"
+          "backgroundColor": "rgb(255, 255, 255)"
         },
         "summaryItem": {
-          "padding": "14px",
-          "borderRadius": "10px",
-          "backgroundColor": "rgb(229, 224, 210)",
-          "color": "rgb(23, 24, 19)"
+          "padding": "0px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(20, 42, 70)"
         },
         "result": {
           "padding": "0px",
@@ -1905,16 +1909,16 @@
             "dl": null,
             "owned": null,
             "summaries": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "color": "rgb(23, 24, 19)",
-              "padding": "0px",
-              "margin": "0px",
-              "border": "0px none rgb(23, 24, 19)",
+              "backgroundColor": "rgb(255, 255, 255)",
+              "color": "rgb(20, 42, 70)",
+              "padding": "20px 16px",
+              "margin": "-16px -4px",
+              "border": "",
               "borderRadius": "0px",
-              "gridTemplateColumns": "348px",
-              "gap": "10px",
+              "gridTemplateColumns": "324px",
+              "gap": "20px",
               "fontSize": "16px",
-              "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+              "fontFamily": "\"Microsoft YaHei\", sans-serif",
               "lineHeight": "normal"
             }
           }
@@ -1990,16 +1994,16 @@
               "lineHeight": "23.8px"
             },
             "summaries": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "color": "rgb(23, 24, 19)",
-              "padding": "0px",
-              "margin": "0px",
-              "border": "0px none rgb(23, 24, 19)",
+              "backgroundColor": "rgb(255, 255, 255)",
+              "color": "rgb(20, 42, 70)",
+              "padding": "20px 16px",
+              "margin": "-16px -4px",
+              "border": "",
               "borderRadius": "0px",
-              "gridTemplateColumns": "348px",
-              "gap": "10px",
+              "gridTemplateColumns": "324px",
+              "gap": "20px",
               "fontSize": "16px",
-              "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+              "fontFamily": "\"Microsoft YaHei\", sans-serif",
               "lineHeight": "normal"
             }
           }
@@ -2051,16 +2055,16 @@
             "dl": null,
             "owned": null,
             "summaries": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "color": "rgb(23, 24, 19)",
-              "padding": "0px",
-              "margin": "0px",
-              "border": "0px none rgb(23, 24, 19)",
+              "backgroundColor": "rgb(255, 255, 255)",
+              "color": "rgb(20, 42, 70)",
+              "padding": "20px 16px",
+              "margin": "-16px -4px",
+              "border": "",
               "borderRadius": "0px",
-              "gridTemplateColumns": "348px",
-              "gap": "10px",
+              "gridTemplateColumns": "324px",
+              "gap": "20px",
               "fontSize": "16px",
-              "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+              "fontFamily": "\"Microsoft YaHei\", sans-serif",
               "lineHeight": "normal"
             }
           }
@@ -2136,16 +2140,16 @@
               "lineHeight": "23.8px"
             },
             "summaries": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "color": "rgb(23, 24, 19)",
-              "padding": "0px",
-              "margin": "0px",
-              "border": "0px none rgb(23, 24, 19)",
+              "backgroundColor": "rgb(255, 255, 255)",
+              "color": "rgb(20, 42, 70)",
+              "padding": "20px 16px",
+              "margin": "-16px -4px",
+              "border": "",
               "borderRadius": "0px",
-              "gridTemplateColumns": "348px",
-              "gap": "10px",
+              "gridTemplateColumns": "324px",
+              "gap": "20px",
               "fontSize": "16px",
-              "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+              "fontFamily": "\"Microsoft YaHei\", sans-serif",
               "lineHeight": "normal"
             }
           }
@@ -2221,16 +2225,16 @@
               "lineHeight": "normal"
             },
             "summaries": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "color": "rgb(23, 24, 19)",
-              "padding": "0px",
-              "margin": "0px",
-              "border": "0px none rgb(23, 24, 19)",
+              "backgroundColor": "rgb(255, 255, 255)",
+              "color": "rgb(20, 42, 70)",
+              "padding": "20px 16px",
+              "margin": "-16px -4px",
+              "border": "",
               "borderRadius": "0px",
-              "gridTemplateColumns": "348px",
-              "gap": "10px",
+              "gridTemplateColumns": "324px",
+              "gap": "20px",
               "fontSize": "16px",
-              "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+              "fontFamily": "\"Microsoft YaHei\", sans-serif",
               "lineHeight": "normal"
             }
           }
@@ -2306,16 +2310,16 @@
               "lineHeight": "normal"
             },
             "summaries": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "color": "rgb(23, 24, 19)",
-              "padding": "0px",
-              "margin": "0px",
-              "border": "0px none rgb(23, 24, 19)",
+              "backgroundColor": "rgb(255, 255, 255)",
+              "color": "rgb(20, 42, 70)",
+              "padding": "20px 16px",
+              "margin": "-16px -4px",
+              "border": "",
               "borderRadius": "0px",
-              "gridTemplateColumns": "348px",
-              "gap": "10px",
+              "gridTemplateColumns": "324px",
+              "gap": "20px",
               "fontSize": "16px",
-              "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+              "fontFamily": "\"Microsoft YaHei\", sans-serif",
               "lineHeight": "normal"
             }
           }
@@ -2946,18 +2950,18 @@
           "minHeight": "20px"
         },
         "summary": {
-          "gridTemplateColumns": "354px 354px",
-          "gap": "10px",
-          "marginTop": "0px",
-          "padding": "0px",
+          "gridTemplateColumns": "694px",
+          "gap": "20px",
+          "marginTop": "-16px",
+          "padding": "20px 16px",
           "borderRadius": "0px",
-          "backgroundColor": "rgba(0, 0, 0, 0)"
+          "backgroundColor": "rgb(255, 255, 255)"
         },
         "summaryItem": {
-          "padding": "14px",
-          "borderRadius": "10px",
-          "backgroundColor": "rgb(229, 224, 210)",
-          "color": "rgb(23, 24, 19)"
+          "padding": "0px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(20, 42, 70)"
         },
         "result": {
           "padding": "0px",
@@ -3032,16 +3036,16 @@
             "dl": null,
             "owned": null,
             "summaries": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "color": "rgb(23, 24, 19)",
-              "padding": "0px",
-              "margin": "0px",
-              "border": "0px none rgb(23, 24, 19)",
+              "backgroundColor": "rgb(255, 255, 255)",
+              "color": "rgb(20, 42, 70)",
+              "padding": "20px 16px",
+              "margin": "-16px -4px",
+              "border": "",
               "borderRadius": "0px",
-              "gridTemplateColumns": "354px 354px",
-              "gap": "10px",
+              "gridTemplateColumns": "694px",
+              "gap": "20px",
               "fontSize": "16px",
-              "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+              "fontFamily": "\"Microsoft YaHei\", sans-serif",
               "lineHeight": "normal"
             }
           }
@@ -3117,16 +3121,16 @@
               "lineHeight": "23.8px"
             },
             "summaries": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "color": "rgb(23, 24, 19)",
-              "padding": "0px",
-              "margin": "0px",
-              "border": "0px none rgb(23, 24, 19)",
+              "backgroundColor": "rgb(255, 255, 255)",
+              "color": "rgb(20, 42, 70)",
+              "padding": "20px 16px",
+              "margin": "-16px -4px",
+              "border": "",
               "borderRadius": "0px",
-              "gridTemplateColumns": "354px 354px",
-              "gap": "10px",
+              "gridTemplateColumns": "694px",
+              "gap": "20px",
               "fontSize": "16px",
-              "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+              "fontFamily": "\"Microsoft YaHei\", sans-serif",
               "lineHeight": "normal"
             }
           }
@@ -3178,16 +3182,16 @@
             "dl": null,
             "owned": null,
             "summaries": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "color": "rgb(23, 24, 19)",
-              "padding": "0px",
-              "margin": "0px",
-              "border": "0px none rgb(23, 24, 19)",
+              "backgroundColor": "rgb(255, 255, 255)",
+              "color": "rgb(20, 42, 70)",
+              "padding": "20px 16px",
+              "margin": "-16px -4px",
+              "border": "",
               "borderRadius": "0px",
-              "gridTemplateColumns": "354px 354px",
-              "gap": "10px",
+              "gridTemplateColumns": "694px",
+              "gap": "20px",
               "fontSize": "16px",
-              "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+              "fontFamily": "\"Microsoft YaHei\", sans-serif",
               "lineHeight": "normal"
             }
           }
@@ -3263,16 +3267,16 @@
               "lineHeight": "23.8px"
             },
             "summaries": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "color": "rgb(23, 24, 19)",
-              "padding": "0px",
-              "margin": "0px",
-              "border": "0px none rgb(23, 24, 19)",
+              "backgroundColor": "rgb(255, 255, 255)",
+              "color": "rgb(20, 42, 70)",
+              "padding": "20px 16px",
+              "margin": "-16px -4px",
+              "border": "",
               "borderRadius": "0px",
-              "gridTemplateColumns": "354px 354px",
-              "gap": "10px",
+              "gridTemplateColumns": "694px",
+              "gap": "20px",
               "fontSize": "16px",
-              "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+              "fontFamily": "\"Microsoft YaHei\", sans-serif",
               "lineHeight": "normal"
             }
           }
@@ -3348,16 +3352,16 @@
               "lineHeight": "normal"
             },
             "summaries": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "color": "rgb(23, 24, 19)",
-              "padding": "0px",
-              "margin": "0px",
-              "border": "0px none rgb(23, 24, 19)",
+              "backgroundColor": "rgb(255, 255, 255)",
+              "color": "rgb(20, 42, 70)",
+              "padding": "20px 16px",
+              "margin": "-16px -4px",
+              "border": "",
               "borderRadius": "0px",
-              "gridTemplateColumns": "354px 354px",
-              "gap": "10px",
+              "gridTemplateColumns": "694px",
+              "gap": "20px",
               "fontSize": "16px",
-              "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+              "fontFamily": "\"Microsoft YaHei\", sans-serif",
               "lineHeight": "normal"
             }
           }
@@ -3433,16 +3437,16 @@
               "lineHeight": "normal"
             },
             "summaries": {
-              "backgroundColor": "rgba(0, 0, 0, 0)",
-              "color": "rgb(23, 24, 19)",
-              "padding": "0px",
-              "margin": "0px",
-              "border": "0px none rgb(23, 24, 19)",
+              "backgroundColor": "rgb(255, 255, 255)",
+              "color": "rgb(20, 42, 70)",
+              "padding": "20px 16px",
+              "margin": "-16px -4px",
+              "border": "",
               "borderRadius": "0px",
-              "gridTemplateColumns": "354px 354px",
-              "gap": "10px",
+              "gridTemplateColumns": "694px",
+              "gap": "20px",
               "fontSize": "16px",
-              "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+              "fontFamily": "\"Microsoft YaHei\", sans-serif",
               "lineHeight": "normal"
             }
           }

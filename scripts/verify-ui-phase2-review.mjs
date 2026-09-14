@@ -3,21 +3,44 @@ import { createServer } from "node:http";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
+import vm from "node:vm";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { chromium } from "playwright";
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const root = path.join(repo, "design-plans/ui-phase-2-2026-09-07");
 const capture = process.argv.includes("--capture");
-if (process.argv.slice(2).some((argument) => argument !== "--capture"))
-  throw new Error("Only --capture is supported");
+const captureRecent = process.argv.includes("--capture-recent");
+if (
+  process.argv.slice(2).some((argument) => !["--capture", "--capture-recent"].includes(argument)) ||
+  (capture && captureRecent)
+)
+  throw new Error("Use no argument, --capture or --capture-recent, separately");
+const recentBox = { window: {} };
+vm.runInNewContext(
+  await readFile(path.join(root, "review-recent-materials.js"), "utf8"),
+  recentBox,
+);
+const recentMaterials = recentBox.window.SCOUTOPS_PHASE2_RECENT_MATERIALS.materials;
+const recentProof = [];
 const allowed = new Map([
   ["/review.html", ["review.html", "text/html"]],
   ["/review.css", ["review.css", "text/css"]],
   ["/review.js", ["review.js", "text/javascript"]],
   ["/review-data.js", ["review-data.js", "text/javascript"]],
   ["/review-evidence.js", ["review-evidence.js", "text/javascript"]],
+  ["/review-recent-materials.js", ["review-recent-materials.js", "text/javascript"]],
 ]);
+for (const item of recentMaterials)
+  for (const preview of item.previews) {
+    const file = decodeURIComponent(preview.file);
+    const absolute = path.resolve(root, file);
+    assert.ok(absolute.startsWith(repo + path.sep), "Preview must stay in this repository");
+    allowed.set(new URL(preview.file, "http://127.0.0.1/review.html").pathname, [
+      file,
+      "image/png",
+    ]);
+  }
 const server = createServer(async (request, response) => {
   const asset = allowed.get(new URL(request.url, "http://127.0.0.1").pathname);
   if (!asset) {
@@ -43,6 +66,7 @@ try {
     server.listen(0, "127.0.0.1", resolve);
   });
   const base = `http://127.0.0.1:${server.address().port}`;
+  console.log(`review_verification_host ${base}`);
   browser = await chromium.launch({ headless: true });
   for (const viewport of [
     { width: 1440, height: 1000 },
@@ -97,9 +121,7 @@ try {
       1,
     );
     assert.ok(
-      (await page.locator(".vue-materials").innerText()).includes(
-        "本地拦截数据不代表真实后端或生产验收",
-      ),
+      (await page.locator(".vue-materials").innerText()).includes("本地样例不代表真实后端或生产"),
     );
     assert.ok(
       await page.evaluate(() =>
@@ -125,6 +147,106 @@ try {
     } finally {
       await gallery.close();
     }
+    const recentPageIds = [...new Set(recentMaterials.map((item) => item.page))];
+    for (const pageId of recentPageIds) {
+      await page.locator("#page-search").fill(pageId);
+      const items = recentMaterials
+        .filter((item) => item.page === pageId)
+        .sort(
+          (a, b) =>
+            Number(a.sourceStatus !== "source-matched-at-index-build") -
+            Number(b.sourceStatus !== "source-matched-at-index-build"),
+        );
+      assert.equal(await page.locator(".recent-material").count(), items.length);
+      assert.equal(
+        await page.locator(".recent-material").first().getAttribute("data-material-id"),
+        items[0].id,
+      );
+      assert.ok(!(await page.locator(".vue-materials").innerText()).includes("尚未登记该页"));
+      for (const item of items) {
+        const card = page.locator(`[data-material-id="${item.id}"]`);
+        assert.equal(
+          await card
+            .getByRole("link", { name: (item.galleryLabel ?? "完整实施图册") + " ↗", exact: true })
+            .getAttribute("href"),
+          item.gallery,
+        );
+        assert.ok((await card.innerText()).includes(item.manifestSha256.slice(0, 12)));
+        assert.equal(
+          await card.locator(".material-differences").count(),
+          item.sourceDifferences.length ? 1 : 0,
+        );
+        if (item.sourceDifferences.length) {
+          await card.locator(".material-differences summary").click();
+          assert.equal(
+            await card.locator(".material-differences li").count(),
+            item.sourceDifferences.length,
+          );
+          await card.locator(".material-differences summary").click();
+        }
+        const summary = card.locator(".material-previews summary");
+        await summary.focus();
+        await page.keyboard.press("Space");
+        assert.equal(await card.locator(".material-previews").evaluate((el) => el.open), true);
+        for (const img of await card.locator("img").all()) {
+          await img.scrollIntoViewIfNeeded();
+          await img.evaluate((el) => el.decode());
+          assert.ok(await img.evaluate((el) => el.naturalWidth > 0 && Boolean(el.alt)));
+        }
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+        await summary.click();
+      }
+      const first = items[0];
+      const card = page.locator(`[data-material-id="${first.id}"]`);
+      if (captureRecent) {
+        // Capture before adding scratch notes; originals and prior review screenshots stay intact.
+        await card.locator(".material-previews summary").click();
+        for (const img of await card.locator("img").all()) await img.evaluate((el) => el.decode());
+        const directory = path.join(root, "review-proof/recent-materials");
+        await mkdir(directory, { recursive: true });
+        const file = `${viewport.width}-${pageId}.png`;
+        const bytes = await page
+          .locator(".vue-materials")
+          .screenshot({ path: path.join(directory, file), animations: "disabled" });
+        recentProof.push({
+          file,
+          pageId,
+          viewport,
+          sha256: createHash("sha256").update(bytes).digest("hex"),
+          kind: "review-tool-not-new-product-design",
+        });
+      }
+      await card.getByRole("button", { name: "记录这组图的意见", exact: true }).click();
+      assert.equal(
+        await page.locator("#note-target").textContent(),
+        `${pageId}/${first.id}@${first.manifestSha256}`,
+      );
+      await page.keyboard.press("Escape");
+      assert.ok(await card.locator("button").evaluate((el) => el === document.activeElement));
+      await card.locator("button").click();
+      await page.locator("#reviewer").fill("隔离材料审核");
+      await page.locator("#note-body").fill(`${pageId} <img src=x> 图组意见`);
+      await page.getByRole("button", { name: "保存批注", exact: true }).click();
+      assert.equal(await card.locator(".review-note").count(), 1);
+      assert.equal(await card.locator(".review-note img").count(), 0);
+      await page.reload({ waitUntil: "load" });
+      await page.locator("#page-search").fill(pageId);
+      assert.equal(await card.locator(".review-note").count(), 1);
+    }
+    const materialExport = page.waitForEvent("download");
+    await page.locator("#export-notes").click();
+    const materialDownload = await materialExport;
+    const materialDownloadPath = await materialDownload.path();
+    const materialStream = await materialDownload.createReadStream();
+    const materialChunks = [];
+    for await (const chunk of materialStream) materialChunks.push(chunk);
+    const materialNotes = JSON.parse(Buffer.concat(materialChunks).toString("utf8"));
+    assert.equal(materialNotes.schemaVersion, 1);
+    assert.equal(materialNotes.notes.length, recentPageIds.length);
+    for (const note of materialNotes.notes)
+      assert.match(note.target, /^P(?:34|44|46|47|57|58)\/p\d{2}-[\w-]+@[a-f0-9]{64}$/);
+    await materialDownload.delete();
+    console.log(`temporary_review_download_deleted ${materialDownloadPath}`);
     // Preserve old notes even though the design evidence index is newer than the baseline.
     await page.evaluate(() =>
       localStorage.setItem(
@@ -267,6 +389,7 @@ try {
       focus: "passed",
       notesAndExport: "passed",
       currentEvidenceAndHistoricalNotes: "passed",
+      supplementalMaterialsAndVersionedNotes: "passed",
       overflow: "passed",
       errors: errors.length,
     });
@@ -281,6 +404,7 @@ try {
       "review.css",
       "review-data.js",
       "review-evidence.js",
+      "review-recent-materials.js",
     ])
       inputs[file] = createHash("sha256")
         .update(await readFile(path.join(root, file)))
@@ -289,6 +413,34 @@ try {
       path.join(root, "review-proof", "manifest.json"),
       JSON.stringify({ schemaVersion: 1, inputs, proof, results }, null, 2) + "\n",
       "utf8",
+    );
+  }
+  if (captureRecent) {
+    const inputs = {};
+    for (const file of [
+      "review.html",
+      "review.js",
+      "review.css",
+      "review-data.js",
+      "review-evidence.js",
+      "review-recent-materials.js",
+    ])
+      inputs[file] = createHash("sha256")
+        .update(await readFile(path.join(root, file)))
+        .digest("hex");
+    await writeFile(
+      path.join(root, "review-proof/recent-materials/manifest.json"),
+      JSON.stringify(
+        {
+          schemaVersion: 1,
+          scope: "review-tool-only-not-product-approval",
+          inputs,
+          recentProof,
+          results,
+        },
+        null,
+        2,
+      ) + "\n",
     );
   }
 } finally {

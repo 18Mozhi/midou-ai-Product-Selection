@@ -10,10 +10,10 @@
         "waiting": {
           "text": "等待上一项保存…",
           "disabled": true,
-          "width": 358,
-          "height": 44,
-          "x": 16,
-          "y": 762.4375,
+          "width": 110,
+          "height": 60,
+          "x": 247,
+          "y": 811,
           "styles": {
             "color": "rgb(102, 116, 138)",
             "backgroundColor": "rgb(232, 237, 244)",
@@ -57,9 +57,9 @@
           "text": "审核保存已创建，来源定义列表已刷新。",
           "disabled": false,
           "width": 390,
-          "height": 46,
+          "height": 47,
           "x": 0,
-          "y": 293.3125,
+          "y": 52.1875,
           "styles": {
             "color": "rgb(19, 119, 89)",
             "backgroundColor": "rgb(229, 224, 210)",
@@ -69,7 +69,7 @@
             "paddingTop": "12px",
             "paddingRight": "14px",
             "fontSize": "16px",
-            "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+            "fontFamily": "\"Microsoft YaHei\", sans-serif",
             "lineHeight": "normal",
             "display": "flex",
             "opacity": "1"
@@ -92,7 +92,7 @@
           "width": 390,
           "height": 55,
           "x": 0,
-          "y": 142.3125,
+          "y": 0.1875,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -114,7 +114,7 @@
           "width": 390,
           "height": 130,
           "x": 0,
-          "y": 209.3125,
+          "y": 67.1875,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -136,7 +136,7 @@
           "width": 86,
           "height": 44,
           "x": 287,
-          "y": 278.3125,
+          "y": 136.1875,
           "styles": {
             "color": "rgb(41, 76, 175)",
             "backgroundColor": "rgb(255, 255, 255)",
@@ -177,8 +177,8 @@
           "disabled": true,
           "width": 139.390625,
           "height": 44,
-          "x": 604.609375,
-          "y": 711.4375,
+          "x": 587.609375,
+          "y": 827,
           "styles": {
             "color": "rgb(102, 116, 138)",
             "backgroundColor": "rgb(232, 237, 244)",
@@ -222,9 +222,9 @@
           "text": "审核保存已创建，来源定义列表已刷新。",
           "disabled": false,
           "width": 760,
-          "height": 46,
+          "height": 47,
           "x": 0,
-          "y": 433.8125,
+          "y": 230.390625,
           "styles": {
             "color": "rgb(19, 119, 89)",
             "backgroundColor": "rgb(229, 224, 210)",
@@ -234,7 +234,7 @@
             "paddingTop": "12px",
             "paddingRight": "14px",
             "fontSize": "16px",
-            "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+            "fontFamily": "\"Microsoft YaHei\", sans-serif",
             "lineHeight": "normal",
             "display": "flex",
             "opacity": "1"
@@ -257,7 +257,7 @@
           "width": 760,
           "height": 55,
           "x": 0,
-          "y": 303.8125,
+          "y": 101.390625,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -279,7 +279,7 @@
           "width": 760,
           "height": 109,
           "x": 0,
-          "y": 370.8125,
+          "y": 168.390625,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -301,7 +301,7 @@
           "width": 86,
           "height": 44,
           "x": 657,
-          "y": 418.8125,
+          "y": 216.390625,
           "styles": {
             "color": "rgb(41, 76, 175)",
             "backgroundColor": "rgb(255, 255, 255)",
@@ -343,7 +343,7 @@
           "width": 141.015625,
           "height": 44,
           "x": 603.984375,
-          "y": 711.4375,
+          "y": 724.4375,
           "styles": {
             "color": "rgb(255, 253, 245)",
             "backgroundColor": "rgba(0, 0, 0, 0)",
@@ -353,7 +353,7 @@
             "paddingTop": "1px",
             "paddingRight": "6px",
             "fontSize": "16px",
-            "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+            "fontFamily": "\"Microsoft YaHei\", sans-serif",
             "lineHeight": "normal",
             "display": "block",
             "opacity": "0.46"
@@ -386,10 +386,10 @@
         "saved": {
           "text": "审核保存已创建，来源定义列表已刷新。",
           "disabled": false,
-          "width": 762,
-          "height": 46,
+          "width": 761,
+          "height": 47,
           "x": 0,
-          "y": 313.8125,
+          "y": 210.59375,
           "styles": {
             "color": "rgb(19, 119, 89)",
             "backgroundColor": "rgb(229, 224, 210)",
@@ -399,7 +399,7 @@
             "paddingTop": "12px",
             "paddingRight": "14px",
             "fontSize": "16px",
-            "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+            "fontFamily": "\"Microsoft YaHei\", sans-serif",
             "lineHeight": "normal",
             "display": "flex",
             "opacity": "1"
@@ -419,10 +419,10 @@
         "saved": {
           "text": "审核保存已更新；列表未能刷新，请重新读取。",
           "disabled": false,
-          "width": 762,
-          "height": 46,
+          "width": 761,
+          "height": 47,
           "x": 0,
-          "y": 231.8125,
+          "y": 128.59375,
           "styles": {
             "color": "rgb(19, 119, 89)",
             "backgroundColor": "rgb(229, 224, 210)",
@@ -432,7 +432,7 @@
             "paddingTop": "12px",
             "paddingRight": "14px",
             "fontSize": "16px",
-            "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+            "fontFamily": "\"Microsoft YaHei\", sans-serif",
             "lineHeight": "normal",
             "display": "flex",
             "opacity": "1"
@@ -441,10 +441,10 @@
         "warning": {
           "text": "刷新失败：请重新读取来源。 已保留上次成功数据。 再次刷新",
           "disabled": false,
-          "width": 762,
+          "width": 761,
           "height": 70,
           "x": 0,
-          "y": 289.8125,
+          "y": 187.59375,
           "styles": {
             "color": "rgb(154, 91, 0)",
             "backgroundColor": "rgb(229, 224, 210)",
@@ -454,7 +454,7 @@
             "paddingTop": "12px",
             "paddingRight": "14px",
             "fontSize": "16px",
-            "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+            "fontFamily": "\"Microsoft YaHei\", sans-serif",
             "lineHeight": "normal",
             "display": "flex",
             "opacity": "1"
@@ -465,8 +465,8 @@
           "disabled": false,
           "width": 80,
           "height": 44,
-          "x": 667,
-          "y": 302.8125,
+          "x": 666,
+          "y": 200.59375,
           "styles": {
             "color": "rgb(228, 76, 27)",
             "backgroundColor": "rgba(0, 0, 0, 0)",
@@ -476,7 +476,7 @@
             "paddingTop": "1px",
             "paddingRight": "6px",
             "fontSize": "16px",
-            "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+            "fontFamily": "\"Microsoft YaHei\", sans-serif",
             "lineHeight": "normal",
             "display": "block",
             "opacity": "1"
@@ -508,7 +508,7 @@
           "width": 141.015625,
           "height": 44,
           "x": 1274.984375,
-          "y": 555.4375,
+          "y": 565.4375,
           "styles": {
             "color": "rgb(255, 253, 245)",
             "backgroundColor": "rgba(0, 0, 0, 0)",
@@ -518,7 +518,7 @@
             "paddingTop": "1px",
             "paddingRight": "6px",
             "fontSize": "16px",
-            "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+            "fontFamily": "\"Microsoft YaHei\", sans-serif",
             "lineHeight": "normal",
             "display": "block",
             "opacity": "0.46"
@@ -551,10 +551,10 @@
         "saved": {
           "text": "审核保存已创建，来源定义列表已刷新。",
           "disabled": false,
-          "width": 1440,
-          "height": 46,
-          "x": 0,
-          "y": 478.3125,
+          "width": 1192,
+          "height": 47,
+          "x": 248,
+          "y": 303.296875,
           "styles": {
             "color": "rgb(19, 119, 89)",
             "backgroundColor": "rgb(229, 224, 210)",
@@ -564,7 +564,7 @@
             "paddingTop": "12px",
             "paddingRight": "14px",
             "fontSize": "16px",
-            "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+            "fontFamily": "\"Microsoft YaHei\", sans-serif",
             "lineHeight": "normal",
             "display": "flex",
             "opacity": "1"
@@ -584,10 +584,10 @@
         "saved": {
           "text": "审核保存已更新；列表未能刷新，请重新读取。",
           "disabled": false,
-          "width": 1440,
-          "height": 46,
-          "x": 0,
-          "y": 397.3125,
+          "width": 1192,
+          "height": 47,
+          "x": 248,
+          "y": 221.296875,
           "styles": {
             "color": "rgb(19, 119, 89)",
             "backgroundColor": "rgb(229, 224, 210)",
@@ -597,7 +597,7 @@
             "paddingTop": "12px",
             "paddingRight": "14px",
             "fontSize": "16px",
-            "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+            "fontFamily": "\"Microsoft YaHei\", sans-serif",
             "lineHeight": "normal",
             "display": "flex",
             "opacity": "1"
@@ -606,10 +606,10 @@
         "warning": {
           "text": "刷新失败：请重新读取来源。 已保留上次成功数据。 再次刷新",
           "disabled": false,
-          "width": 1440,
+          "width": 1192,
           "height": 70,
-          "x": 0,
-          "y": 455.3125,
+          "x": 248,
+          "y": 280.296875,
           "styles": {
             "color": "rgb(154, 91, 0)",
             "backgroundColor": "rgb(229, 224, 210)",
@@ -619,7 +619,7 @@
             "paddingTop": "12px",
             "paddingRight": "14px",
             "fontSize": "16px",
-            "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+            "fontFamily": "\"Microsoft YaHei\", sans-serif",
             "lineHeight": "normal",
             "display": "flex",
             "opacity": "1"
@@ -631,7 +631,7 @@
           "width": 80,
           "height": 44,
           "x": 1345,
-          "y": 468.3125,
+          "y": 293.296875,
           "styles": {
             "color": "rgb(228, 76, 27)",
             "backgroundColor": "rgba(0, 0, 0, 0)",
@@ -641,7 +641,7 @@
             "paddingTop": "1px",
             "paddingRight": "6px",
             "fontSize": "16px",
-            "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+            "fontFamily": "\"Microsoft YaHei\", sans-serif",
             "lineHeight": "normal",
             "display": "block",
             "opacity": "1"
@@ -716,10 +716,10 @@
         "saved": {
           "text": "审核保存已创建，来源定义列表已刷新。",
           "disabled": false,
-          "width": 358,
+          "width": 390,
           "height": 55,
-          "x": 16,
-          "y": 0.484375,
+          "x": 0,
+          "y": 0.1875,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -749,10 +749,10 @@
         "saved": {
           "text": "审核保存已更新；列表未能刷新，请重新读取。",
           "disabled": false,
-          "width": 358,
-          "height": 76,
-          "x": 16,
-          "y": 0.484375,
+          "width": 390,
+          "height": 55,
+          "x": 0,
+          "y": 0.1875,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -771,10 +771,10 @@
         "warning": {
           "text": "刷新失败：请重新读取来源。 已保留上次成功数据。 再次刷新",
           "disabled": false,
-          "width": 358,
+          "width": 390,
           "height": 130,
-          "x": 16,
-          "y": 88.484375,
+          "x": 0,
+          "y": 67.1875,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -795,8 +795,8 @@
           "disabled": false,
           "width": 86,
           "height": 44,
-          "x": 271,
-          "y": 157.484375,
+          "x": 287,
+          "y": 136.1875,
           "styles": {
             "color": "rgb(41, 76, 175)",
             "backgroundColor": "rgb(255, 255, 255)",
@@ -881,10 +881,10 @@
         "saved": {
           "text": "审核保存已创建，来源定义列表已刷新。",
           "disabled": false,
-          "width": 728,
+          "width": 760,
           "height": 55,
-          "x": 16,
-          "y": 134.390625,
+          "x": 0,
+          "y": 153.390625,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -914,10 +914,10 @@
         "saved": {
           "text": "审核保存已更新；列表未能刷新，请重新读取。",
           "disabled": false,
-          "width": 728,
+          "width": 760,
           "height": 55,
-          "x": 16,
-          "y": 13.390625,
+          "x": 0,
+          "y": 32.390625,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -936,10 +936,10 @@
         "warning": {
           "text": "刷新失败：请重新读取来源。 已保留上次成功数据。 再次刷新",
           "disabled": false,
-          "width": 728,
+          "width": 760,
           "height": 109,
-          "x": 16,
-          "y": 80.390625,
+          "x": 0,
+          "y": 99.390625,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -960,8 +960,8 @@
           "disabled": false,
           "width": 86,
           "height": 44,
-          "x": 641,
-          "y": 128.390625,
+          "x": 657,
+          "y": 147.390625,
           "styles": {
             "color": "rgb(41, 76, 175)",
             "backgroundColor": "rgb(255, 255, 255)",
@@ -1003,7 +1003,7 @@
           "width": 139.390625,
           "height": 44,
           "x": 568.609375,
-          "y": 811.796875,
+          "y": 811.890625,
           "styles": {
             "color": "rgb(102, 116, 138)",
             "backgroundColor": "rgb(232, 237, 244)",
@@ -1046,10 +1046,10 @@
         "saved": {
           "text": "审核保存已创建，来源定义列表已刷新。",
           "disabled": false,
-          "width": 705,
+          "width": 761,
           "height": 55,
-          "x": 28,
-          "y": 164.59375,
+          "x": 0,
+          "y": 192.59375,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -1079,10 +1079,10 @@
         "saved": {
           "text": "审核保存已更新；列表未能刷新，请重新读取。",
           "disabled": false,
-          "width": 705,
+          "width": 761,
           "height": 55,
-          "x": 28,
-          "y": 74.59375,
+          "x": 0,
+          "y": 102.59375,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -1101,10 +1101,10 @@
         "warning": {
           "text": "刷新失败：请重新读取来源。 已保留上次成功数据。 再次刷新",
           "disabled": false,
-          "width": 705,
+          "width": 761,
           "height": 78,
-          "x": 28,
-          "y": 141.59375,
+          "x": 0,
+          "y": 169.59375,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -1125,8 +1125,8 @@
           "disabled": false,
           "width": 86,
           "height": 44,
-          "x": 630,
-          "y": 158.59375,
+          "x": 658,
+          "y": 186.59375,
           "styles": {
             "color": "rgb(41, 76, 175)",
             "backgroundColor": "rgb(255, 255, 255)",
@@ -1168,7 +1168,7 @@
           "width": 139.390625,
           "height": 44,
           "x": 1051.609375,
-          "y": 811.796875,
+          "y": 811.890625,
           "styles": {
             "color": "rgb(102, 116, 138)",
             "backgroundColor": "rgb(232, 237, 244)",
@@ -1211,10 +1211,10 @@
         "saved": {
           "text": "审核保存已创建，来源定义列表已刷新。",
           "disabled": false,
-          "width": 1136,
+          "width": 1192,
           "height": 55,
-          "x": 276,
-          "y": 225.296875,
+          "x": 248,
+          "y": 253.296875,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -1244,10 +1244,10 @@
         "saved": {
           "text": "审核保存已更新；列表未能刷新，请重新读取。",
           "disabled": false,
-          "width": 1136,
+          "width": 1192,
           "height": 55,
-          "x": 276,
-          "y": 135.296875,
+          "x": 248,
+          "y": 163.296875,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -1266,10 +1266,10 @@
         "warning": {
           "text": "刷新失败：请重新读取来源。 已保留上次成功数据。 再次刷新",
           "disabled": false,
-          "width": 1136,
+          "width": 1192,
           "height": 78,
-          "x": 276,
-          "y": 202.296875,
+          "x": 248,
+          "y": 230.296875,
           "styles": {
             "color": "rgb(117, 70, 31)",
             "backgroundColor": "rgb(255, 248, 239)",
@@ -1290,8 +1290,8 @@
           "disabled": false,
           "width": 86,
           "height": 44,
-          "x": 1309,
-          "y": 219.296875,
+          "x": 1337,
+          "y": 247.296875,
           "styles": {
             "color": "rgb(41, 76, 175)",
             "backgroundColor": "rgb(255, 255, 255)",
@@ -1328,45 +1328,55 @@
     "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
     "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
     "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
-    "apps/web/src/components/ConfirmDialog.vue": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
-    "apps/web/src/components/CredentialAssetCenter.vue": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
-    "apps/web/src/components/ProviderAdapterCenter.vue": "0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075",
+    "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
+    "apps/web/src/components/CredentialAssetCenter.vue": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "ea3eaecf5bb8a6ec5e8e701dd8743cac61a35c6806a8a0d35079ba64be3b5e40",
     "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
     "apps/web/src/components/ProviderParserSampleDialog.vue": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
     "apps/web/src/components/ProviderParserSampleReview.vue": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
-    "apps/web/src/components/ProviderRegistry.vue": "ec671e2cf8c1d55f88d97df05d7a14849235961b4e4f66f838ca0cf6fb76971f",
+    "apps/web/src/components/ProviderRegistry.vue": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
     "apps/web/src/components/ProviderRuntimeSurface.vue": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
     "apps/web/src/components/ProviderSourceCenter.css": "a31b900bedbf1cafdf756eea8b7bd8742a5ec844fef9bcad0d8ffe643e39bb74",
     "apps/web/src/components/ProviderSourceCenter.vue": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
     "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
-    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveDataView.vue": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
-    "apps/web/src/credential-assets.css": "c00ad83a8a81fc4829209c8bbf5ffe3d5998d5f2856ebbd10f24daea94704069",
+    "apps/web/src/credential-assets.css": "f2afdaa53d385b3ff0c7a8e1d79e66103353a3755257834142f887a8ec5e43f0",
     "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/design/platform-overlay-tokens.css": "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
+    "apps/web/src/design/provider-adapter-tokens.css": "c6ff4f890f97866b8e8faca8bee234532534ecb014e2acf5ba61567da24600a6",
+    "apps/web/src/design/provider-registry-tokens.css": "d9dea3c996e5f5426766ebed1eb2b0a7956585036d09131af5dadb7bb7aa36fc",
     "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
     "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
     "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+    "apps/web/src/provider-adapters-c-detail.css": "63ebf23cabe128212df42f1480aa83a0e0bcfe846418961700e68fa04e7af5dc",
+    "apps/web/src/provider-adapters-c-feedback.css": "5d2815fc8e3c60b922f0c7d7aa629101495261dba74136ffba30487612354003",
+    "apps/web/src/provider-adapters-c-page.css": "d1da284edaba49456ddafb02940874a5feacd812169f10b8d3790cbfdd6d019a",
     "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
     "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
     "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
     "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
-    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/signal-ledger.css": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
     "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
     "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
-    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
+    "apps/web/src/styles/onboarding-navigation.css": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
     "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
     "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
-    "apps/web/src/styles/provider-approved-feedback.css": "6b21f3adefccd50f52268076f3dc6134eb66db02c8c62a8404a19fa2e2c45a9e",
+    "apps/web/src/styles/provider-approved-feedback.css": "5e0a2f2d43cc7325395aef61924d60d510f0f1b03b41141b15df6426c98fd1ef",
+    "apps/web/src/styles/provider-approved-structure.css": "44c4c966d56fb60db060afcd67f192795693a422eb796adae61c7eb6d6129849",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+    "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
     "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
     "design-plans/ui-phase-2-2026-09-07/implementation/provider-detail-preview.css": "6f1bece39def0bba8c1e9cf69b1fafe0993d9564898716ea7bb6ea6545c6a99a",
     "design-plans/ui-phase-2-2026-09-07/implementation/provider-editor-preview.css": "f7ae7af9a96fe79d8f9c498bfa7cd6025536c9250b0fe9be06ed4b794dce1f6a",
     "design-plans/ui-phase-2-2026-09-07/implementation/provider-page-preview.css": "791e840c6e32430e10b7fcfd1f56d11cc572679ba0e6e4a62d1f08b06636e7bd",
+    "scripts/lib/ui-imported-style-sources.mjs": "1ac8c9075a445b2cfb3963c1464de63cce567331eec6cfa14f197ce7929d2f84",
     "scripts/lib/ui-phase2-provider-async-baseline.mjs": "0e8faf253d25e298f0ae23bbf9f64b79d719ded0a5008960f40416e50a014b49",
-    "scripts/lib/ui-phase2-provider-feedback-baseline.mjs": "1b45a7ebe301630a29fa6c867e4f0bfddf08575b727a787cb6c2544f868c64ef",
+    "scripts/lib/ui-phase2-provider-feedback-baseline.mjs": "6ad5331a615e2c8b0f4773f10856ba63437e9304d79e78737d09c8316002cec6",
     "scripts/verify-ui-phase2-provider-async.mjs": "c8e55ee26aa57a200be0ef4173c35331069602148cd311ab16a9c91fcfa097fd",
-    "scripts/verify-ui-phase2-provider-feedback.mjs": "7d8e830653bfadf53d2df8321410e1e483cbd76dfbd067d80304b40edc11655f",
+    "scripts/verify-ui-phase2-provider-feedback.mjs": "85d197d2381bb4418f8c2bf155ce3d0098e9ca19320f74f2dcc405b5226ee665",
     "tests/e2e/m03-01-provider-registry.spec.ts": "caaa0e2af2081675ab743e18d43e2526758604c84bd72aa925ae701454cf226f"
   },
   "checks": [
@@ -3086,7 +3096,7 @@
       "scenario": "late-success-create",
       "state": "pending-new",
       "file": "production-390-late-success-create-pending-new.png",
-      "sha256": "6545447c54034ade65df53f946a80dc0625bb76689547424c94ceee81d9d0e2a"
+      "sha256": "6f7dd31c95883e7a37347df42c6b371ab91512c8aa222cb8c642bbf07544698f"
     },
     {
       "surface": "production",
@@ -3094,7 +3104,7 @@
       "scenario": "late-success-create",
       "state": "settled",
       "file": "production-390-late-success-create-settled.png",
-      "sha256": "cf662f25ede96e3773d1c44c6d6278b764fde9f7008dddf7d5dee9baf2ab061e"
+      "sha256": "29fea2712f3d3aca9b6d27ec65cf6902413081eba240be4632a61edaea8a4f8c"
     },
     {
       "surface": "production",
@@ -3102,7 +3112,7 @@
       "scenario": "refresh-success-create",
       "state": "settled",
       "file": "production-390-refresh-success-create-settled.png",
-      "sha256": "a2cfbcd8a781456be826934be635e6fac97bee59e39735d9d01939c0c161bede"
+      "sha256": "e76a710e1b49dd73532b1b5b231a2ebda80a8959f565dab8333e0525c69f7210"
     },
     {
       "surface": "production",
@@ -3110,7 +3120,7 @@
       "scenario": "refresh-failure-edit",
       "state": "settled",
       "file": "production-390-refresh-failure-edit-settled.png",
-      "sha256": "1741319890db852047ad7775d1d5f7897ea9283d1912c5ea03a32942a6a18738"
+      "sha256": "c82848886f73913ac6267bfde1fe8df3e61377864d9513eec48c1b3d1d0c6b4e"
     },
     {
       "surface": "production",
@@ -3118,7 +3128,7 @@
       "scenario": "refresh-failure-edit",
       "state": "retried",
       "file": "production-390-refresh-failure-edit-retried.png",
-      "sha256": "0ee11fb2d84330bfd4c5991aa39354b90b0d6ef8e54c96a58700683ddd598af2"
+      "sha256": "43d00e9d91b19d0d9996b6a594cf2f406b439b018f2332ea773761edeb92d981"
     },
     {
       "surface": "production",
@@ -3126,7 +3136,7 @@
       "scenario": "late-success-create",
       "state": "pending-new",
       "file": "production-760-late-success-create-pending-new.png",
-      "sha256": "1a987b7d833f60e4aabdc2f67c68711dad997325b2b66163d39ec3e617bd4b08"
+      "sha256": "cc1b4bd23a2ce990e433ce93365a85fb7c1ffb9664b7b47ec5d13f112ffa4ceb"
     },
     {
       "surface": "production",
@@ -3134,7 +3144,7 @@
       "scenario": "late-success-create",
       "state": "settled",
       "file": "production-760-late-success-create-settled.png",
-      "sha256": "fa638859243cd1c985944857ac0db175ace59a77eab5278eb23e0f2ba6042ecc"
+      "sha256": "28ea45b5aae6ad6883a3488a141afa7bb49992f31f7c1610d8f5b65784b6b5b1"
     },
     {
       "surface": "production",
@@ -3142,7 +3152,7 @@
       "scenario": "refresh-success-create",
       "state": "settled",
       "file": "production-760-refresh-success-create-settled.png",
-      "sha256": "069a15dfb694b90ee98768239b78cae89346bd0eb8dab607ef27aa2916bd3f2a"
+      "sha256": "f545ea892c88eda9ad509589d45f29b08527364aa33ac733ecabf5d5af96aba2"
     },
     {
       "surface": "production",
@@ -3150,7 +3160,7 @@
       "scenario": "refresh-failure-edit",
       "state": "settled",
       "file": "production-760-refresh-failure-edit-settled.png",
-      "sha256": "fbb3fad69a41b792ebf367a5af5182bfd2e8dcd282b44ab8d7bd8c02ab34c400"
+      "sha256": "225b280293ad25887c9fa96c59e1e1d87bc4822026b6baa39a8b32e5e237f4db"
     },
     {
       "surface": "production",
@@ -3158,7 +3168,7 @@
       "scenario": "refresh-failure-edit",
       "state": "retried",
       "file": "production-760-refresh-failure-edit-retried.png",
-      "sha256": "eaa5b17683afd94bef7250c1d8346048cb069dce851aadcafee623987787def6"
+      "sha256": "f5908cae9e5c672ed86a7752f64293bf289611b746491884622030dbd0b2936b"
     },
     {
       "surface": "production",
@@ -3166,7 +3176,7 @@
       "scenario": "late-success-create",
       "state": "pending-new",
       "file": "production-761-late-success-create-pending-new.png",
-      "sha256": "bd9a70cc3ef283781185ccc8fb475ce734c5bf565b6eb90073a8147e3d2a04dc"
+      "sha256": "584b02a28784c33560dd71f8d70a11ae26a3ee6c670a2235fd0619a1bdfc0755"
     },
     {
       "surface": "production",
@@ -3174,7 +3184,7 @@
       "scenario": "late-success-create",
       "state": "settled",
       "file": "production-761-late-success-create-settled.png",
-      "sha256": "998b4d222f63e25050e39ddef0b7995a706cf3a34940402f64a7c124101b9a09"
+      "sha256": "f732b8ee5955641aa6a3c9339fb3e9e7f06c7ca53704876d8d572413241cf735"
     },
     {
       "surface": "production",
@@ -3182,7 +3192,7 @@
       "scenario": "refresh-success-create",
       "state": "settled",
       "file": "production-761-refresh-success-create-settled.png",
-      "sha256": "2b68ea403ca28863afbc8bdbaf89c09a4cd47e26ebea5425a3f4bfa584e0b489"
+      "sha256": "7712ec3c1499d7cffc3daa6fcb60612d43d4dd31eaa718be351ed4fc77817c4a"
     },
     {
       "surface": "production",
@@ -3190,7 +3200,7 @@
       "scenario": "refresh-failure-edit",
       "state": "settled",
       "file": "production-761-refresh-failure-edit-settled.png",
-      "sha256": "3200229e34c13b302ac9bf3b78fe6f89fee79140b3d5ad530a575d121a4588e2"
+      "sha256": "e8bdf4c327989e5fbac9010da0b552d6bd422fa72ac44bf858f9048439df044f"
     },
     {
       "surface": "production",
@@ -3198,7 +3208,7 @@
       "scenario": "refresh-failure-edit",
       "state": "retried",
       "file": "production-761-refresh-failure-edit-retried.png",
-      "sha256": "d51922221f2e9dc2387dc8188950df51eaf9f3834aefa9c6e1177ae0955be935"
+      "sha256": "444d6b958573fa8df5d144a539b06d69da7adec25cd3ba146f1e42f24b07cca2"
     },
     {
       "surface": "production",
@@ -3206,7 +3216,7 @@
       "scenario": "late-success-create",
       "state": "pending-new",
       "file": "production-1440-late-success-create-pending-new.png",
-      "sha256": "8797ad31502515525bf837f37ce71a298a033c203b30fb6c095c7816e14a7d58"
+      "sha256": "0339f23b30c435795f33512215c2fd93062d0fb406463c50d60bec89cf1adefa"
     },
     {
       "surface": "production",
@@ -3214,7 +3224,7 @@
       "scenario": "late-success-create",
       "state": "settled",
       "file": "production-1440-late-success-create-settled.png",
-      "sha256": "64426aa1089963dc9958ef7ee91816c0d2e5ccf245aebcc258bf12e27fe37352"
+      "sha256": "0659ee9d799f2778f08a3ac66ca8420486db03c6e1fb04f11ed6f1a111b7af39"
     },
     {
       "surface": "production",
@@ -3222,7 +3232,7 @@
       "scenario": "refresh-success-create",
       "state": "settled",
       "file": "production-1440-refresh-success-create-settled.png",
-      "sha256": "9b94089c1c6c5c1a14297d1e3e9f1435daacff9e0d6002d4c9271ae68b785759"
+      "sha256": "1df329e3227ffc49a679c443a21f68d60e6dc2031b867965b0b0c34bf7dc1a2a"
     },
     {
       "surface": "production",
@@ -3230,7 +3240,7 @@
       "scenario": "refresh-failure-edit",
       "state": "settled",
       "file": "production-1440-refresh-failure-edit-settled.png",
-      "sha256": "efb603c147f9799b9fdc2c4899ea46ead8734147c68be223516eeb68fabaca2c"
+      "sha256": "c626dea32b1a8af837de495875f3d1470b7a2b768ac93cf277564db47af9aa13"
     },
     {
       "surface": "production",
@@ -3238,7 +3248,7 @@
       "scenario": "refresh-failure-edit",
       "state": "retried",
       "file": "production-1440-refresh-failure-edit-retried.png",
-      "sha256": "9a013381ed7c00aa5fe7fd031f121326060741c89763baa1483915568c8331cc"
+      "sha256": "c349d8b446b71eac2194d85e60ac5b42f99297b49d0491d2c2f7406823d4b6ed"
     },
     {
       "surface": "review",
@@ -3246,7 +3256,7 @@
       "scenario": "late-success-create",
       "state": "pending-new",
       "file": "review-390-late-success-create-pending-new.png",
-      "sha256": "5d30dcef0f4343c5c1c01547a95c52546e97510c4bc58043e0bcd7b08f7e6714"
+      "sha256": "61f3724a99c02b758bc8c6a96245485cd0b50fd3cb2c6a5c74f4191833d11404"
     },
     {
       "surface": "review",
@@ -3254,7 +3264,7 @@
       "scenario": "late-success-create",
       "state": "settled",
       "file": "review-390-late-success-create-settled.png",
-      "sha256": "37959bcb9bc7fec780ce25fce35da99ca1f6170561cbc01d0b186c1aa63c1b50"
+      "sha256": "1b0935d607aed862e526e8944dfb05256547ce44f518654fbb98c5a232b1f307"
     },
     {
       "surface": "review",
@@ -3262,7 +3272,7 @@
       "scenario": "refresh-success-create",
       "state": "settled",
       "file": "review-390-refresh-success-create-settled.png",
-      "sha256": "bf711ba3c8064aa05c4a0b879b9f3436713ab6c153932190c85b75827dfbd887"
+      "sha256": "ebc331bce3de5d075b7668127a0ebdeb8fd4488c2632a22fa9889d402be00598"
     },
     {
       "surface": "review",
@@ -3270,7 +3280,7 @@
       "scenario": "refresh-failure-edit",
       "state": "settled",
       "file": "review-390-refresh-failure-edit-settled.png",
-      "sha256": "cab04c64dac78e4574bc8035c0edfdfcf2edd264e1ad051177db839219362773"
+      "sha256": "63bd1ba76a6be1401edba5d7556271694cad9facb24ab195df4dbfb4a0badf8d"
     },
     {
       "surface": "review",
@@ -3278,7 +3288,7 @@
       "scenario": "refresh-failure-edit",
       "state": "retried",
       "file": "review-390-refresh-failure-edit-retried.png",
-      "sha256": "ef01eec0393bfeb11fc9322aae5c6b0338db2851ddc1ac6aecc011f5e64cd639"
+      "sha256": "7a4421831df166a50a71b97c82b05bb230b3d83c34be906fe47b05327e6316d8"
     },
     {
       "surface": "review",
@@ -3286,7 +3296,7 @@
       "scenario": "late-success-create",
       "state": "pending-new",
       "file": "review-760-late-success-create-pending-new.png",
-      "sha256": "30ac968377be535a32347c71e03e5ea7c86acac313a21b54d153197c77a2f296"
+      "sha256": "adcceb77576266b72c9c48ce7f6a6747d09005011adad1b2753f7b36c30baf8a"
     },
     {
       "surface": "review",
@@ -3294,7 +3304,7 @@
       "scenario": "late-success-create",
       "state": "settled",
       "file": "review-760-late-success-create-settled.png",
-      "sha256": "4298634cb76b21229e508799ad1a52dc0c6b10c75c365b4fc399b5b02c5f1fab"
+      "sha256": "d047b33c78131d3cc62af2036c3a0cfc4d513e84c302991aef81f59a0790adde"
     },
     {
       "surface": "review",
@@ -3302,7 +3312,7 @@
       "scenario": "refresh-success-create",
       "state": "settled",
       "file": "review-760-refresh-success-create-settled.png",
-      "sha256": "ad5aee9f332a771107280aaa26831d381a33233704c5218b6dd36f7e15b2634f"
+      "sha256": "b785d52d139d86a3d346ef9534a71f7d8e9dc786b672fda6b3fba25abc5a6972"
     },
     {
       "surface": "review",
@@ -3310,7 +3320,7 @@
       "scenario": "refresh-failure-edit",
       "state": "settled",
       "file": "review-760-refresh-failure-edit-settled.png",
-      "sha256": "41b4a9716a624bd5c7afcdfeae949a7dd390521a4303d75b1df67eb621c7807e"
+      "sha256": "926e4fcc66ff019a41eea709a5c0b0df1a1d18fc1e2401bc007fa8caeebf3bf6"
     },
     {
       "surface": "review",
@@ -3318,7 +3328,7 @@
       "scenario": "refresh-failure-edit",
       "state": "retried",
       "file": "review-760-refresh-failure-edit-retried.png",
-      "sha256": "05efbb55cb329fc3aedb5b0748d7da31761f43bbbe159e4a6c057cdf74dd87a0"
+      "sha256": "dc007b0f201404292feabbccb200acec69449c16156310d67cd41ae081d4aa19"
     },
     {
       "surface": "review",
@@ -3326,7 +3336,7 @@
       "scenario": "late-success-create",
       "state": "pending-new",
       "file": "review-761-late-success-create-pending-new.png",
-      "sha256": "a5184bbf232c52d15458de50572b0b18e0b2ddc69b969d195c6ee21886bbe3d0"
+      "sha256": "97603631c0fe0bab8bcccdaf9474455dfcd6b6547bc1ab315adffaf10c2c82c7"
     },
     {
       "surface": "review",
@@ -3334,7 +3344,7 @@
       "scenario": "late-success-create",
       "state": "settled",
       "file": "review-761-late-success-create-settled.png",
-      "sha256": "792feac586c7590883543f85a7bdc414f4ea606f3737b55db9999c4db2f90bad"
+      "sha256": "44fdcd3d8b570cc09cd3ece369cf2d210719bd4dd0e97fa7d07321c0624c3b45"
     },
     {
       "surface": "review",
@@ -3342,7 +3352,7 @@
       "scenario": "refresh-success-create",
       "state": "settled",
       "file": "review-761-refresh-success-create-settled.png",
-      "sha256": "79cd9d9d296d18d56ff6b96b0635dd926325806eec8c856589e5e2553567deb7"
+      "sha256": "650834fae36199a8eae1df25666c8da555c79f45abfcf07d1ef680fde2f92f2d"
     },
     {
       "surface": "review",
@@ -3350,7 +3360,7 @@
       "scenario": "refresh-failure-edit",
       "state": "settled",
       "file": "review-761-refresh-failure-edit-settled.png",
-      "sha256": "7fc48de194af9f78b71cf2646cdbd8cd66057a01944f1096dc9fb72fc8da7bb5"
+      "sha256": "57f75e93c30e7b4936811b356c51587fecd7dfe1ef0c1afdd1e8f8d0626855b6"
     },
     {
       "surface": "review",
@@ -3358,7 +3368,7 @@
       "scenario": "refresh-failure-edit",
       "state": "retried",
       "file": "review-761-refresh-failure-edit-retried.png",
-      "sha256": "6395adcaad66dcedc2a42afc2de737ff7b5cdee56021e2673c45415f7566b685"
+      "sha256": "9625d0f062782450321e2f95f84b7fb162712b10a6f2b0340aec348e1c7747e3"
     },
     {
       "surface": "review",
@@ -3366,7 +3376,7 @@
       "scenario": "late-success-create",
       "state": "pending-new",
       "file": "review-1440-late-success-create-pending-new.png",
-      "sha256": "d47b7ecd056adf020e1c100b622b574f4da643ce1dd98ee9e6cda8d8c0cd411b"
+      "sha256": "1c906032fbf3ac0e46bd8b990da41c1f2efe0c547432619ebe3b340d994bfaa3"
     },
     {
       "surface": "review",
@@ -3374,7 +3384,7 @@
       "scenario": "late-success-create",
       "state": "settled",
       "file": "review-1440-late-success-create-settled.png",
-      "sha256": "66dfe75a1b5193436ca27cdc2a20e1930ef4ae4b9ad6bdf6f305c98475782963"
+      "sha256": "9177dea05cf063c59b817495f1f593a87a3a04e9f12fd578260e5a69fbe108fd"
     },
     {
       "surface": "review",
@@ -3382,7 +3392,7 @@
       "scenario": "refresh-success-create",
       "state": "settled",
       "file": "review-1440-refresh-success-create-settled.png",
-      "sha256": "859d22af51c59ff44f1df2b8df714d928fd2847403bbc1c1a171f4975f00d8ee"
+      "sha256": "96b4fb80063e62add139a65b31ec42c30994cb6aabf67a7d44793dd8a3c7da3a"
     },
     {
       "surface": "review",
@@ -3390,7 +3400,7 @@
       "scenario": "refresh-failure-edit",
       "state": "settled",
       "file": "review-1440-refresh-failure-edit-settled.png",
-      "sha256": "aad297811ce92cacce5cf62426e9be6a2ebafbc33519bba23994e2634cf32821"
+      "sha256": "66ed7536fdad479291067bb05c8baa6d428b12b0ce5f21eabe87127e8206cdb2"
     },
     {
       "surface": "review",
@@ -3398,7 +3408,7 @@
       "scenario": "refresh-failure-edit",
       "state": "retried",
       "file": "review-1440-refresh-failure-edit-retried.png",
-      "sha256": "0d1100295dcb115698f04703467ea1899ebd9430dcf0dc17f778182c4e1ab2b6"
+      "sha256": "0a9dd0cbeb65cafa4a0affbd3b6f0a32cc84d2bfc5fdad69460d1f22b13ee882"
     }
   ],
   "observations": [
