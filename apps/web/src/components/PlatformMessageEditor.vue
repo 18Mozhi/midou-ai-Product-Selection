@@ -1,6 +1,11 @@
 <script setup lang="ts">
-import { nextTick, ref, watch } from "vue";
+import { ref } from "vue";
 import { useModalDialog } from "../use-modal-dialog";
+import {
+  trapNotificationDialogTab,
+  useNotificationInitialFocus,
+  useNotificationFields,
+} from "./platform-notification-dialog";
 import type {
   PlatformNotificationForm,
   PlatformNotificationMessage,
@@ -20,34 +25,15 @@ const props = withDefaults(
 );
 const emit = defineEmits<{ close: []; save: [] }>();
 const titleElement = ref<HTMLInputElement | null>(null);
+const { fieldId, fieldAttributes } = useNotificationFields(() => props.saving);
 const { dialogElement, handleCancel } = useModalDialog(
   () => props.open,
   () => emit("close"),
 );
-watch(
+useNotificationInitialFocus(
   () => props.open,
-  async (open) => {
-    if (!open) return;
-    await nextTick();
-    titleElement.value?.focus();
-  },
+  () => titleElement.value,
 );
-function handleTab(event: KeyboardEvent) {
-  if (event.key !== "Tab" || !dialogElement.value) return;
-  const controls = [
-    ...dialogElement.value.querySelectorAll<HTMLElement>("button,input,select,textarea"),
-  ].filter((element) => !element.matches(":disabled") && element.getClientRects().length);
-  const first = controls[0],
-    last = controls.at(-1);
-  if (!first || !last) return;
-  if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault();
-    last.focus();
-  } else if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault();
-    first.focus();
-  }
-}
 </script>
 
 <template>
@@ -55,10 +41,11 @@ function handleTab(event: KeyboardEvent) {
     ref="dialogElement"
     class="message-dialog"
     :aria-label="editor?.id ? '编辑平台消息草稿' : '新建平台消息草稿'"
+    :aria-describedby="error ? `${fieldId}-error` : undefined"
     @cancel="handleCancel"
-    @keydown="handleTab"
+    @keydown="trapNotificationDialogTab($event, dialogElement)"
   >
-    <form @submit.prevent="$emit('save')">
+    <form :aria-busy="saving" @submit.prevent="$emit('save')">
       <header>
         <div>
           <small>{{ editor?.id ? "EDIT DRAFT" : "NEW DRAFT" }}</small>
@@ -80,27 +67,33 @@ function handleTab(event: KeyboardEvent) {
       </ol>
       <section class="message-dialog__fields">
         <label
-          >标题<input
+          ><span :id="`${fieldId}-title-label`">标题</span
+          ><input
             ref="titleElement"
             v-model="form.title"
+            v-bind="fieldAttributes('title')"
             required
             minlength="2"
             maxlength="200"
-            :disabled="saving"
             placeholder="接收人看到的标题"
-          /><small>已输入 {{ form.title.length }} / 200 字；至少 2 个字。</small></label
+          /><small :id="`${fieldId}-title-help`"
+            >已输入 {{ form.title.length }} / 200 字；至少 2 个字。</small
+          ></label
         >
         <label
-          >正文<textarea
+          ><span :id="`${fieldId}-body-label`">正文</span
+          ><textarea
             v-model="form.body"
+            v-bind="fieldAttributes('body')"
             required
             minlength="2"
             maxlength="2000"
             rows="7"
-            :disabled="saving"
             placeholder="写清楚事项、影响和需要采取的行动"
           ></textarea
-          ><small>纯文本并保留换行；已输入 {{ form.body.length }} / 2000 字。</small></label
+          ><small :id="`${fieldId}-body-help`"
+            >纯文本并保留换行；已输入 {{ form.body.length }} / 2000 字。</small
+          ></label
         >
         <div class="message-form-grid">
           <label
@@ -120,14 +113,22 @@ function handleTab(event: KeyboardEvent) {
           >
         </div>
         <label
-          >接收范围<select v-model="form.audience_type" :disabled="saving">
+          ><span :id="`${fieldId}-audience-label`">接收范围</span
+          ><select v-model="form.audience_type" v-bind="fieldAttributes('audience')">
             <option value="all_users">全部活动用户</option>
             <option value="organization">指定组织</option>
             <option value="user">指定用户</option></select
-          ><small>候选列表不是实时受众预检，实际人数以发布结果为准。</small></label
+          ><small :id="`${fieldId}-audience-help`"
+            >候选列表不是实时受众预检，实际人数以发布结果为准。</small
+          ></label
         >
         <label v-if="form.audience_type === 'organization'"
-          >选择组织<select v-model="form.organization_id" required :disabled="saving">
+          ><span :id="`${fieldId}-org-label`">选择组织</span
+          ><select
+            v-model="form.organization_id"
+            required
+            v-bind="fieldAttributes('org', !audienceOptions?.organizations?.length)"
+          >
             <option value="">请选择</option>
             <option
               v-for="item in audienceOptions?.organizations || []"
@@ -136,17 +137,24 @@ function handleTab(event: KeyboardEvent) {
             >
               {{ item.name }}
             </option></select
-          ><small v-if="!audienceOptions?.organizations?.length"
+          ><small v-if="!audienceOptions?.organizations?.length" :id="`${fieldId}-org-help`"
             >当前读取结果没有可选组织。</small
           ></label
         >
         <label v-if="form.audience_type === 'user'"
-          >选择用户<select v-model="form.user_id" required :disabled="saving">
+          ><span :id="`${fieldId}-user-label`">选择用户</span
+          ><select
+            v-model="form.user_id"
+            required
+            v-bind="fieldAttributes('user', !audienceOptions?.users?.length)"
+          >
             <option value="">请选择</option>
             <option v-for="item in audienceOptions?.users || []" :key="item.id" :value="item.id">
               {{ item.email }}
             </option></select
-          ><small v-if="!audienceOptions?.users?.length">当前读取结果没有可选用户。</small></label
+          ><small v-if="!audienceOptions?.users?.length" :id="`${fieldId}-user-help`"
+            >当前读取结果没有可选用户。</small
+          ></label
         >
         <fieldset :disabled="saving">
           <legend>发送方式</legend>
@@ -160,20 +168,23 @@ function handleTab(event: KeyboardEvent) {
           >
         </fieldset>
         <label v-if="editor?.id"
-          >修改原因<textarea
+          ><span :id="`${fieldId}-reason-label`">修改原因</span
+          ><textarea
             v-model="form.reason"
+            v-bind="fieldAttributes('reason')"
             required
             minlength="2"
             maxlength="300"
             rows="3"
-            :disabled="saving"
           ></textarea
-          ><small
+          ><small :id="`${fieldId}-reason-help`"
             >已输入 {{ form.reason.length }} / 300 字；会与版本和操作者一起记录。</small
           ></label
         >
         <p class="dialog-help">邮件服务尚未接入，当前只能发布站内通知；历史邮件事实仍保留。</p>
-        <p v-if="error" class="message-dialog__error" role="alert">{{ error }}</p>
+        <p v-if="error" :id="`${fieldId}-error`" class="message-dialog__error" role="alert">
+          {{ error }}
+        </p>
       </section>
       <footer>
         <button type="button" @click="$emit('close')">关闭</button

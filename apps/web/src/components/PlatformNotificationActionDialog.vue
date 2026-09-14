@@ -1,6 +1,11 @@
 <script setup lang="ts">
-import { nextTick, ref, watch } from "vue";
+import { ref, useId } from "vue";
 import { useModalDialog } from "../use-modal-dialog";
+import {
+  trapNotificationDialogTab,
+  useNotificationActionReturnFocus,
+  useNotificationInitialFocus,
+} from "./platform-notification-dialog";
 
 const props = defineProps<{
   open: boolean;
@@ -12,34 +17,16 @@ const props = defineProps<{
 const reason = defineModel<string>("reason", { required: true });
 const emit = defineEmits<{ close: []; submit: [] }>();
 const reasonElement = ref<HTMLTextAreaElement | null>(null);
+const fieldId = useId();
 const { dialogElement, handleCancel } = useModalDialog(
   () => props.open,
   () => emit("close"),
 );
-watch(
+useNotificationActionReturnFocus(() => props.open);
+useNotificationInitialFocus(
   () => props.open,
-  async (open) => {
-    if (!open) return;
-    await nextTick();
-    reasonElement.value?.focus();
-  },
+  () => reasonElement.value,
 );
-function handleTab(event: KeyboardEvent) {
-  if (event.key !== "Tab" || !dialogElement.value) return;
-  const controls = [...dialogElement.value.querySelectorAll<HTMLElement>("button,textarea")].filter(
-    (element) => !element.matches(":disabled") && element.getClientRects().length,
-  );
-  const first = controls[0],
-    last = controls.at(-1);
-  if (!first || !last) return;
-  if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault();
-    last.focus();
-  } else if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault();
-    first.focus();
-  }
-}
 </script>
 
 <template>
@@ -47,10 +34,11 @@ function handleTab(event: KeyboardEvent) {
     ref="dialogElement"
     class="notification-action-dialog"
     :aria-label="action === 'publish' ? '填写发布原因' : '填写取消草稿原因'"
+    :aria-describedby="error ? `${fieldId}-error` : undefined"
     @cancel="handleCancel"
-    @keydown="handleTab"
+    @keydown="trapNotificationDialogTab($event, dialogElement)"
   >
-    <form @submit.prevent="$emit('submit')">
+    <form :aria-busy="submitting" @submit.prevent="$emit('submit')">
       <header>
         <div>
           <small>{{ action === "publish" ? "PUBLISH DRAFT" : "CANCEL DRAFT" }}</small>
@@ -79,13 +67,20 @@ function handleTab(event: KeyboardEvent) {
           maxlength="300"
           rows="5"
           :disabled="submitting"
-          aria-describedby="notification-action-reason-help"
+          :aria-describedby="`${fieldId}-reason-help`"
         ></textarea>
       </label>
-      <small id="notification-action-reason-help"
+      <small :id="`${fieldId}-reason-help`"
         >已输入 {{ reason.length }} / 300 字；至少 2 个字。</small
       >
-      <p v-if="error" class="notification-action-dialog__error" role="alert">{{ error }}</p>
+      <p
+        v-if="error"
+        :id="`${fieldId}-error`"
+        class="notification-action-dialog__error"
+        role="alert"
+      >
+        {{ error }}
+      </p>
       <footer>
         <button type="button" @click="$emit('close')">取消</button>
         <button

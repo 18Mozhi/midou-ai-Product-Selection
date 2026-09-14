@@ -1,5 +1,9 @@
 # 第二阶段完整实施计划 · 当前领取与审核入口
 
+批次06已提交`1a969fd5`；批次07修复P57阅读窗生命周期/键盘边界、动作返回焦点及字段关联。
+32组弹窗、18组父页面和28项单测通过；r2手机取消失败提示区获用户局部通过，完整弹窗与其他状态未扩大批准。
+修复前后8张局部图与剩余范围见[分批记录](UI-TAKEOVER-BATCHES.md)和[弹窗审核r2](design/platform-notifications-direction-c/dialog-review-r2/README.md)。
+
 批次05已提交`18cd046f`；批次06修复P57快照/失败读取追踪归属，实际父组件和统一客户端18组验证通过。
 当前4张追踪图已交付，仅两张手机底部区域获批；其他状态、完整无障碍、真实发送与73页验收继续。
 详情见[分批记录](UI-TAKEOVER-BATCHES.md)和[当前追踪审核](design/platform-notifications-direction-c/trace-review-r1/README.md)。

@@ -1,0 +1,269 @@
+{
+  "scope": "Actual P57 dialog regions, synthetic responses, not full App/real delivery/permissions/whole-page approval",
+  "images": [
+    {
+      "file": "P57-390-editor-saving.png",
+      "width": 390,
+      "state": "editor-saving",
+      "sha256": "d9b7cef9e5344fbb1ff7c24bc22484f9ab4a07ed24ec8ab550a4c4299c9fd63e",
+      "fixture": true,
+      "approval": "pending-user-review"
+    },
+    {
+      "file": "P57-390-cancel-error.png",
+      "width": 390,
+      "state": "cancel-error",
+      "sha256": "961244ff1e611a94e05ae686197b89b01ccdd4f97aad0395811be7e8b6ce3ecf",
+      "fixture": true,
+      "approval": "pending-user-review"
+    },
+    {
+      "file": "P57-1440-editor-saving.png",
+      "width": 1440,
+      "state": "editor-saving",
+      "sha256": "eba4df3b8d373534251f1ba668ab38859dc164a301fa096ee4f3ac977061003c",
+      "fixture": true,
+      "approval": "pending-user-review"
+    },
+    {
+      "file": "P57-1440-cancel-error.png",
+      "width": 1440,
+      "state": "cancel-error",
+      "sha256": "da9766e693fb466ba3a0494753d1581d301f6be6a8e5ad87d9af9021b5cf7439",
+      "fixture": true,
+      "approval": "pending-user-review"
+    }
+  ],
+  "sources": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/PlatformManagementFilter.vue": "0ac6f1cd0c812b6f3455d3288f91c8b9ab6bf2028b7a1cafd35c823e26da08f6",
+    "apps/web/src/components/PlatformMessageEditor.vue": "299031770711240b20ded18c86d6eb2dae9081fb44a732e06efa3317b540041a",
+    "apps/web/src/components/PlatformMessageWorkbench.vue": "689531d215e8878405c53ae55a4b157066cde2e9a1455242da7262079e27b2a5",
+    "apps/web/src/components/PlatformNotificationActionDialog.vue": "98d6bfab3dae6b9b091371a241d9096420c4f8e84f1c2b4da969ae9f8c3f9eb6",
+    "apps/web/src/components/PlatformNotificationCenter.vue": "a78a889436083b55609001c75cb72269a161588e4efd685a1aa1c719a12182bd",
+    "apps/web/src/components/PlatformNotificationFacts.vue": "35db0f9393a0d21154ddd3a0b3d6da4077fe1c47d3408c878cdd1d53ff7ebd6e",
+    "apps/web/src/components/PlatformNotificationManagement.vue": "7cced021643a3af6a23a07f8afca71d943cabcd13cf963d97ac3b698a3dfe2e8",
+    "apps/web/src/components/PlatformNotificationOperations.vue": "73bfa7089471ce53ea44f747727211684cb840df62a22a86b70dbaa4c9ba5e07",
+    "apps/web/src/components/PlatformNotificationPagination.vue": "56968271bcfcf600901782eea6601eaae49a5a84bc5d3ab7bc0a9618596f0849",
+    "apps/web/src/components/ResponsiveDataView.vue": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
+    "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+    "apps/web/src/components/platform-management-presentation.ts": "1d5bfec09dfc7efb63cc6d31bdbc924b35eb1d4092fe1e20fa60d779bd259133",
+    "apps/web/src/components/platform-message-editor.css": "26a3fa8b8bf8a729200bb2b54c336ebd899d3153ae85709b6e57aaaf91c9e547",
+    "apps/web/src/components/platform-notification-dialog.ts": "cc3b7a7be9c9c8a81de2405e351539dcdf90eeb3b2cc181e05269b8d6955c973",
+    "apps/web/src/components/platform-notification-request.ts": "236aa17226cb5f070003febf1bd633d15fb441d85ef8bde55f1bc3bb91aeefa8",
+    "apps/web/src/components/use-platform-message-editor.ts": "cf8bb791830a84005646bdf436663c794d577e792c994a7445d8558934112e6d",
+    "apps/web/src/components/use-platform-notification-action.ts": "8614102b7246d53adf36d8c9f136ee92e14838a2345b24306444cc68b44d81dc",
+    "apps/web/src/components/use-platform-notification-list.ts": "bf58bd0ad7921c3930610bc3e685dff95c79ad93a8a7cd20489633322606e6d6",
+    "apps/web/src/components/use-platform-notification-reader.ts": "94151baba8ea01d57786c52add6b84c8338f792c07bd9f8fbe013c846e9c06af",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/platform-notification-operations.css": "cd07b3fbda246ed6aa9d511e098092717be2cba633fa13aa99ec21f40608d9ee",
+    "apps/web/src/platform-notifications.css": "e2034e3220912aec675501071cc9d24268e99762d3d286d14eb9fc11e2a64049",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "package-lock.json": "b916391ffc5df7de7a7fd720ad4f5ef62c0ad8bd1c820c7737a190938025c111",
+    "scripts/verify-platform-notification-dialogs.mjs": "fe4d2b883fdf1897801c172a04e9488f5f3659187a969bdd1bf4a6fb256f0eb2"
+  },
+  "results": [
+    {
+      "width": 390,
+      "motion": "reduce",
+      "scenario": "editor",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "reduce",
+      "scenario": "editor-edit",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "reduce",
+      "scenario": "editor-empty",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "reduce",
+      "scenario": "action",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "reduce",
+      "scenario": "action-cancel",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "reduce",
+      "scenario": "reader-tab",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "reduce",
+      "scenario": "reader-published",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "reduce",
+      "scenario": "reader-cancelled",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "reduce",
+      "scenario": "reader-handoff",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "reduce",
+      "scenario": "reader-exit",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "reduce",
+      "scenario": "reader-resize",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "no-preference",
+      "scenario": "editor",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "no-preference",
+      "scenario": "editor-edit",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "no-preference",
+      "scenario": "editor-empty",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "no-preference",
+      "scenario": "action",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "no-preference",
+      "scenario": "action-cancel",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "no-preference",
+      "scenario": "reader-tab",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "no-preference",
+      "scenario": "reader-published",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "no-preference",
+      "scenario": "reader-cancelled",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "no-preference",
+      "scenario": "reader-handoff",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "no-preference",
+      "scenario": "reader-exit",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "motion": "no-preference",
+      "scenario": "reader-resize",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "motion": "reduce",
+      "scenario": "editor",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "motion": "reduce",
+      "scenario": "editor-edit",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "motion": "reduce",
+      "scenario": "editor-empty",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "motion": "reduce",
+      "scenario": "action",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "motion": "reduce",
+      "scenario": "action-cancel",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "motion": "no-preference",
+      "scenario": "editor",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "motion": "no-preference",
+      "scenario": "editor-edit",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "motion": "no-preference",
+      "scenario": "editor-empty",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "motion": "no-preference",
+      "scenario": "action",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "motion": "no-preference",
+      "scenario": "action-cancel",
+      "passed": true
+    }
+  ]
+}

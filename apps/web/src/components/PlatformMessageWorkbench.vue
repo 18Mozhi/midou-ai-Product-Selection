@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, shallowRef, watch } from "vue";
-import { useModalDialog } from "../use-modal-dialog";
+import { usePlatformNotificationReader } from "./use-platform-notification-reader";
+import { trapNotificationDialogTab } from "./platform-notification-dialog";
 import type { PlatformNotificationMessage } from "./platform-notification-types";
 
 const props = withDefaults(
@@ -17,8 +18,8 @@ const emit = defineEmits<{
   edit: [item: PlatformNotificationMessage];
   action: [item: PlatformNotificationMessage, action: "publish" | "cancel"];
 }>();
-const selectedId = shallowRef(""),
-  mobileReaderOpen = shallowRef(false);
+const selectedId = shallowRef("");
+const { mobileReaderOpen, dialogElement, handleCancel } = usePlatformNotificationReader();
 const selected = computed(
   () => props.messages.find((item) => item.id === selectedId.value) ?? props.messages[0] ?? null,
 );
@@ -29,10 +30,6 @@ watch(
       selectedId.value = messages[0]?.id ?? "";
   },
   { immediate: true },
-);
-const { dialogElement, handleCancel } = useModalDialog(
-  () => mobileReaderOpen.value,
-  () => (mobileReaderOpen.value = false),
 );
 
 function audience(item: PlatformNotificationMessage) {
@@ -157,6 +154,7 @@ function select(item: PlatformNotificationMessage) {
       class="message-reader-dialog"
       :aria-label="selected?.title || '完整消息阅读'"
       @cancel="handleCancel"
+      @keydown="trapNotificationDialogTab($event, dialogElement)"
     >
       <article v-if="selected" class="message-reader" :data-status="selected.status">
         <header>

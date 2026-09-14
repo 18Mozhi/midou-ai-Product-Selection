@@ -950,6 +950,14 @@
     flex: 1;
     min-height: 48px;
   }
+
+  .notification-action-dialog .notification-action-dialog__error {
+    align-self: start;
+  }
+
+  .notification-action-dialog footer {
+    grid-row: 7;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
