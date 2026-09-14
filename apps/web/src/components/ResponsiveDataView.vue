@@ -176,6 +176,8 @@ function handleTab(event: KeyboardEvent) {
 </template>
 
 <style scoped>
+@import "../design/platform-overlay-tokens.css";
+
 .responsive-data-view__mobile {
   display: none;
 }
@@ -187,31 +189,31 @@ function handleTab(event: KeyboardEvent) {
 }
 
 .responsive-data-view__overlay--governance {
-  --so-bg: #f3f6fb;
-  --so-bg-elevated: #ffffff;
-  --so-panel: #ffffff;
-  --so-panel-soft: #edf2f9;
-  --so-text: #17243d;
-  --so-text-muted: #627089;
-  --so-border: #cfd9e8;
-  --so-primary: #2d63cd;
-  --so-primary-strong: #214da8;
-  --so-on-primary: #ffffff;
-  --so-shadow: 0 16px 40px color-mix(in srgb, #17243d 16%, transparent);
+  --so-bg: var(--so-workspace-overlay-canvas);
+  --so-bg-elevated: var(--so-workspace-overlay-surface);
+  --so-panel: var(--so-workspace-overlay-surface);
+  --so-panel-soft: var(--so-workspace-overlay-surface-soft);
+  --so-text: var(--so-workspace-overlay-text);
+  --so-text-muted: var(--so-workspace-overlay-text-muted);
+  --so-border: var(--so-workspace-overlay-border);
+  --so-primary: var(--so-workspace-overlay-governance-primary);
+  --so-primary-strong: var(--so-workspace-overlay-governance-primary-strong);
+  --so-on-primary: var(--so-workspace-overlay-surface);
+  --so-shadow: 0 16px 40px color-mix(in srgb, var(--so-workspace-overlay-text) 16%, transparent);
 }
 
 .responsive-data-view__overlay--content {
-  --so-bg: #f3f6fb;
-  --so-bg-elevated: #ffffff;
-  --so-panel: #ffffff;
-  --so-panel-soft: #edf2f9;
-  --so-text: #17243d;
-  --so-text-muted: #627089;
-  --so-border: #cfd9e8;
-  --so-primary: #2558bd;
-  --so-primary-strong: #173f91;
-  --so-on-primary: #ffffff;
-  --so-shadow: 0 16px 40px color-mix(in srgb, #17243d 16%, transparent);
+  --so-bg: var(--so-workspace-overlay-canvas);
+  --so-bg-elevated: var(--so-workspace-overlay-surface);
+  --so-panel: var(--so-workspace-overlay-surface);
+  --so-panel-soft: var(--so-workspace-overlay-surface-soft);
+  --so-text: var(--so-workspace-overlay-text);
+  --so-text-muted: var(--so-workspace-overlay-text-muted);
+  --so-border: var(--so-workspace-overlay-border);
+  --so-primary: var(--so-workspace-overlay-content-primary);
+  --so-primary-strong: var(--so-workspace-overlay-content-primary-strong);
+  --so-on-primary: var(--so-workspace-overlay-surface);
+  --so-shadow: 0 16px 40px color-mix(in srgb, var(--so-workspace-overlay-text) 16%, transparent);
 }
 
 .responsive-data-view__overlay--suspended {

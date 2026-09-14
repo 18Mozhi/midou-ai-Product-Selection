@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
@@ -17,14 +17,19 @@ const baseline = (file) =>
   execFileSync("git", ["show", `ea005452:${file}`], { encoding: "utf8" }).replaceAll("\r\n", "\n");
 const p50Base = (file) =>
   execFileSync("git", ["show", `7398aa8a:${file}`], { encoding: "utf8" }).replaceAll("\r\n", "\n");
+const captured = (file) =>
+  execFileSync("git", ["show", `${responsiveFocusRevision.focusCapture}:${file}`], {
+    encoding: "utf8",
+  }).replaceAll("\r\n", "\n");
 
-test("shared detail focus evidence binds actual Vue, existing dialog primitives and all four images", () => {
+test("archived shared focus packet binds its exact P50 capture sources and all four images", () => {
   const evidence = JSON.parse(read(`${output}/evidence.json`));
+  assert.deepEqual(evidence, JSON.parse(captured(`${output}/evidence.json`)));
   assert.equal(evidence.approval, "pending");
   assert.match(evidence.scope, /no business API, permission or production acceptance/);
   assert.equal(evidence.processesClosed, true);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assert.equal(hash(captured(file)), expected, file);
   assert.equal(evidence.screenshots.length, 4);
   for (const shot of evidence.screenshots)
     assert.equal(hash(readFileSync(`${output}/${shot.file}`)), shot.sha256, shot.file);
@@ -49,53 +54,77 @@ test("shared detail focus evidence binds actual Vue, existing dialog primitives 
 });
 
 test("historical contract rebind permits only the tested exact revision and preserves unrelated hashes", () => {
-  const { file, before, after } = responsiveFocusRevision;
-  assert.equal(responsiveFocusContractHash(file, before), after);
+  const { file, before, after, governanceAfter, contentAfter, paletteAfter } =
+    responsiveFocusRevision;
+  for (const expected of [before, after, governanceAfter, contentAfter])
+    assert.equal(responsiveFocusContractHash(file, expected), paletteAfter);
   assert.throws(() => responsiveFocusContractHash(file, "unknown"), /unknown historical/);
   assert.equal(responsiveFocusContractHash("unrelated-file", "unchanged"), "unchanged");
 });
 
-test("unrelated consumers and modal helpers are unchanged while P50 revisions stay evidence-bound", () => {
+test("P50 captured consumer scope and modal revisions remain exact without freezing later redesigns", () => {
   const root = "apps/web/src/components";
-  const consumers = readdirSync(root).filter(
-    (file) =>
-      file.endsWith(".vue") && read(`${root}/${file}`).includes("import ResponsiveDataView"),
-  );
+  const prefix = `${responsiveFocusRevision.focusCapture}:`;
+  const consumers = execFileSync(
+    "git",
+    [
+      "grep",
+      "-l",
+      "-F",
+      "import ResponsiveDataView",
+      responsiveFocusRevision.focusCapture,
+      "--",
+      root,
+    ],
+    { encoding: "utf8" },
+  )
+    .trim()
+    .split(/\r?\n/)
+    .map((entry) => {
+      assert.ok(entry.startsWith(`${prefix}${root}/`));
+      return entry.slice(prefix.length);
+    });
   assert.equal(consumers.length, 20);
   for (const file of [
-    ...consumers
-      .filter((file) => file !== "CredentialAssetCenter.vue")
-      .map((file) => `${root}/${file}`),
+    ...consumers.filter((file) => file !== `${root}/CredentialAssetCenter.vue`),
     `${root}/AuditedReasonDialog.vue`,
     "apps/web/src/main.ts",
   ])
-    assert.equal(read(file), p50Base(file), file);
+    assert.equal(captured(file), p50Base(file), file);
   const p50Evidence = JSON.parse(
     read("output/playwright/p50-credential-write-ownership-review/evidence.json"),
   );
+  assert.deepEqual(
+    p50Evidence,
+    JSON.parse(captured("output/playwright/p50-credential-write-ownership-review/evidence.json")),
+  );
   for (const file of [`${root}/CredentialAssetCenter.vue`, `${root}/ConfirmDialog.vue`])
-    assert.equal(hash(read(file)), p50Evidence.sourceHashes[file], file);
-  assert.match(read(`${root}/ConfirmDialog.vue`), /busy\?: boolean/);
-  assert.match(read(`${root}/ConfirmDialog.vue`), /if \(props\.busy\) return/);
+    assert.equal(hash(captured(file)), p50Evidence.sourceHashes[file], file);
+  assert.match(captured(`${root}/ConfirmDialog.vue`), /busy\?: boolean/);
+  assert.match(captured(`${root}/ConfirmDialog.vue`), /if \(props\.busy\) return/);
   const editorFocusEvidence = JSON.parse(
     read("output/playwright/p50-credential-editor-focus-review/evidence.json"),
   );
+  assert.deepEqual(
+    editorFocusEvidence,
+    JSON.parse(captured("output/playwright/p50-credential-editor-focus-review/evidence.json")),
+  );
   assert.equal(
-    hash(read("apps/web/src/use-modal-dialog.ts")),
+    hash(captured("apps/web/src/use-modal-dialog.ts")),
     editorFocusEvidence.sourceHashes["apps/web/src/use-modal-dialog.ts"],
   );
-  assert.match(read("apps/web/src/use-modal-dialog.ts"), /discardReturnFocus/);
+  assert.match(captured("apps/web/src/use-modal-dialog.ts"), /discardReturnFocus/);
   const file = responsiveFocusRevision.file;
   const added = "\n.responsive-data-view__overlay--suspended {\n  z-index: 99;\n}\n";
-  const current = read(file).split("<style scoped>")[1];
+  const current = captured(file).split("<style scoped>")[1];
   assert.ok(current.includes(added));
   assert.equal(current.replace(added, ""), baseline(file).split("<style scoped>")[1]);
   assert.match(
-    read(file),
+    captured(file),
     /confirmationObserver\.observe\(document\.body, \{ childList: true \}\)/,
   );
-  assert.match(read(file), /confirmationObserver\?\.disconnect/);
-  assert.match(read(file), /:scope > \.confirm-backdrop/);
+  assert.match(captured(file), /confirmationObserver\?\.disconnect/);
+  assert.match(captured(file), /:scope > \.confirm-backdrop/);
 });
 
 test("recaptured proposals allow only exact recorded edge-pixel differences, not new visual drift", () => {

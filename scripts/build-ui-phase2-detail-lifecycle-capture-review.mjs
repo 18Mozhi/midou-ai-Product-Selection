@@ -4,6 +4,7 @@ import { execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
 import { createHash } from "node:crypto";
 import path from "node:path";
+import { detailLifecycleStageImage } from "./lib/ui-detail-lifecycle-image-stage.mjs";
 const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const baselineCommit = "3023a030";
@@ -39,9 +40,16 @@ for (const manifest of manifests) {
   for (const shot of previous.screenshots) {
     images++;
     const file = path.posix.dirname(manifest) + "/" + shot.file,
-      bytes = readFileSync(file),
+      currentBytes = readFileSync(file);
+    // First bind actual disk bytes to their actual manifest. Only then reconstruct
+    // the one explicitly registered earlier stage for its unchanged historical table.
+    assert.equal(
+      current.screenshots.find((s) => s.file === shot.file).sha256,
+      hash(currentBytes),
+      file,
+    );
+    const bytes = detailLifecycleStageImage(file, currentBytes),
       next = hash(bytes);
-    assert.equal(current.screenshots.find((s) => s.file === shot.file).sha256, next, file);
     if (next === shot.sha256) continue;
     const oldBytes = old(file);
     assert.equal(hash(oldBytes), shot.sha256, file);
