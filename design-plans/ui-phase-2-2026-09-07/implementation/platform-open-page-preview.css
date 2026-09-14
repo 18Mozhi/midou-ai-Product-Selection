@@ -1,0 +1,397 @@
+/* C direction: task navigation, white connection workspace, a separate creation step. Review host only. */
+html body.shell-vue-c:has(#app):has(.open-platform--review) {
+  --text: #17253c;
+  --text-muted: #536985;
+  --surface: #fff;
+  --bg: #f3f6fa;
+  --border: #c7d3e4;
+  --primary: #1748b5;
+  --danger: #b42336;
+  --warning: #9a5800;
+  #app .role-shell.role-shell--review {
+    .role-context-drawer > summary {
+      border-left-color: #1748b5;
+    }
+    .open-platform--review {
+      --so-primary: #1748b5;
+      --so-text: #17253c;
+      --so-text-muted: #536985;
+      --so-panel: #fff;
+      --so-bg-elevated: #fff;
+      --so-panel-soft: #f3f6fa;
+      --so-border: #c7d3e4;
+      --so-border-strong: #94a8c4;
+      --so-font-display: "Microsoft YaHei", sans-serif;
+      --so-font-ui: "Microsoft YaHei", sans-serif;
+      font:
+        16px/1.7 "Microsoft YaHei",
+        sans-serif;
+      gap: 24px;
+      min-width: 0;
+      .open-hero {
+        display: block;
+        padding: 0;
+        border: 0;
+        background: none;
+      }
+      .open-hero p {
+        font: inherit;
+        color: #1748b5;
+        letter-spacing: 0;
+      }
+      .open-hero h1 {
+        margin: 8px 0 12px;
+        font:
+          700 30px/1.4 "Microsoft YaHei",
+          sans-serif;
+      }
+      .open-hero span {
+        color: var(--text-muted);
+      }
+      .p60-fixture-note {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 13px;
+      }
+      .open-org-filter {
+        display: grid;
+        padding: 20px;
+        border: 1px solid var(--border);
+        background: white;
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+      .open-org-filter input {
+        width: 100%;
+      }
+      .open-org-filter label {
+        display: grid;
+        gap: 6px;
+      }
+      .open-summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        padding: 16px;
+        background: #102a63;
+        border-radius: 0;
+        overflow: visible;
+      }
+      .open-summary button {
+        min-height: 126px;
+        padding: 16px;
+        border: 1px solid #5979ae;
+        border-radius: 4px;
+        color: white;
+        background: transparent;
+        box-shadow: none;
+      }
+      .open-summary button :is(span, small, strong) {
+        color: inherit;
+      }
+      .open-summary button strong {
+        font-family: Bahnschrift, "Microsoft YaHei", sans-serif;
+      }
+      .open-summary button.active {
+        color: #102a63;
+        background: white;
+        border-color: white;
+        box-shadow: none;
+      }
+      .open-workspace {
+        padding: 24px;
+        min-width: 0;
+        border: 1px solid var(--border);
+        border-radius: 0;
+        background: white;
+      }
+      .open-workspace h2 {
+        margin: 0;
+        font:
+          700 22px/1.5 "Microsoft YaHei",
+          sans-serif;
+      }
+      .open-workspace > header span {
+        color: var(--text-muted);
+      }
+      .p60-create-launch {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 16px;
+        margin: 20px 0;
+        background: #edf3ff;
+        border-left: 3px solid #1748b5;
+      }
+      .p60-create-launch p {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 400;
+        color: #17253c;
+      }
+      .p60-create-launch > button {
+        flex-shrink: 0;
+      }
+      .open-toolbar {
+        display: grid;
+        margin: 24px 0;
+        grid-template-columns: minmax(180px, 2fr) repeat(3, minmax(100px, 1fr));
+        gap: 12px;
+      }
+      .open-toolbar > button {
+        grid-row: 2;
+      }
+      .open-toolbar input {
+        width: 100%;
+      }
+      :is(button, input, select, summary) {
+        min-height: 44px;
+        box-sizing: border-box;
+        font:
+          16px/1.5 "Microsoft YaHei",
+          sans-serif;
+      }
+      :is(button, input, select) {
+        border-radius: 4px;
+        min-width: 0;
+      }
+      :is(input, select) {
+        color: var(--text);
+        background: white;
+        border: 1px solid #94a8c4;
+        padding: 10px 12px;
+      }
+      button {
+        color: white;
+        background: #1748b5;
+        border: 1px solid #1748b5;
+        box-shadow: none;
+      }
+      button:not(:disabled):hover {
+        background: #102a63;
+        color: white;
+      }
+      button:disabled {
+        color: #64748b;
+        background: #e9eef5;
+        border-color: var(--border);
+        opacity: 1;
+      }
+      :is(button, input, select, summary, a):focus-visible {
+        outline: 3px solid #2f6ee5;
+        outline-offset: 3px;
+      }
+      .responsive-data-view__mobile article {
+        background: white;
+        border-radius: 4px;
+        border-color: var(--border);
+      }
+      .responsive-data-view__mobile article > button {
+        background: white;
+        color: var(--text);
+        padding: 18px 16px;
+        text-align: left;
+        border: 0;
+      }
+      .responsive-data-view__mobile
+        article
+        > button:hover
+        :is(small, .responsive-data-view__action) {
+        color: white;
+      }
+      :is(.responsive-record-summary small, .responsive-data-view__action) {
+        color: var(--text-muted);
+      }
+      :is(th, td) {
+        font-size: 14px;
+        padding: 14px 12px;
+        border-color: var(--border);
+      }
+      th {
+        background: #f3f6fa;
+        color: var(--text-muted);
+      }
+      td.table-view-controls__frozen {
+        background: white;
+      }
+      th.table-view-controls__frozen {
+        background: #f3f6fa;
+      }
+      .open-pagination {
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .open-inline-empty {
+        padding: 24px;
+        background: #f3f6fa;
+        border-radius: 4px;
+        text-align: left;
+      }
+      .p60-create-dialog {
+        padding: 0;
+        width: min(720px, calc(100vw - 32px));
+        max-height: calc(100dvh - 32px);
+        border: 1px solid #c7d3e4;
+        border-radius: 6px;
+        background: white;
+        color: var(--text);
+      }
+      .p60-create-dialog::backdrop {
+        background: rgb(8 22 48 / 60%);
+      }
+      .p60-create-heading {
+        padding: 24px;
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 16px;
+        color: white;
+        background: #102a63;
+      }
+      .p60-create-heading :is(h2, p) {
+        margin: 0;
+        font-family: "Microsoft YaHei", sans-serif;
+        color: white;
+      }
+      .p60-create-heading h2 {
+        font-size: 24px;
+        margin: 10px 0;
+      }
+      .p60-create-heading :is(p, span) {
+        font-size: 13px;
+        color: white;
+        font-weight: 400;
+      }
+      .p60-create-heading > button {
+        flex-shrink: 0;
+        background: white;
+        color: #102a63;
+        border-color: white;
+      }
+      .open-create {
+        padding: 24px;
+        border: 0;
+        border-radius: 0;
+        background: white;
+      }
+      .open-create > header {
+        display: none;
+      }
+      .open-create > button {
+        margin-top: 24px;
+        width: 100%;
+      }
+      .open-form-grid {
+        gap: 20px 16px;
+      }
+      .open-form-grid label {
+        font-size: 14px;
+      }
+      .open-form-grid :is(input, fieldset) {
+        width: 100%;
+      }
+      .open-form-grid input[type="checkbox"] {
+        width: 20px;
+        min-height: 20px;
+        accent-color: #1748b5;
+      }
+      .open-form-grid small {
+        font-size: 13px;
+        color: var(--text-muted);
+        font-weight: 400;
+      }
+      .open-form-grid .field-error {
+        color: #b42336;
+      }
+      @media (max-width: 1100px) {
+        .open-toolbar {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .open-toolbar > button {
+          grid-row: auto;
+        }
+      }
+      @media (max-width: 760px) {
+        gap: 20px;
+        .open-hero h1 {
+          font-size: 28px;
+        }
+        .open-org-filter {
+          padding: 18px;
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .open-summary {
+          gap: 8px;
+          padding: 12px;
+        }
+        .open-summary button {
+          min-height: 148px;
+          padding: 10px 6px;
+          min-width: 0;
+        }
+        .open-summary button span {
+          font-size: 13px;
+        }
+        .open-summary button small {
+          font-size: 12px;
+          line-height: 1.6;
+        }
+        .open-summary button strong {
+          font-size: 26px;
+        }
+        .open-workspace {
+          padding: 18px;
+        }
+        .open-workspace > header {
+          align-items: stretch;
+        }
+        .p60-create-launch {
+          display: grid;
+          padding: 14px;
+          gap: 12px;
+        }
+        .open-toolbar {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .p60-create-heading {
+          padding: 20px 16px;
+        }
+        .p60-create-heading h2 {
+          font-size: 21px;
+        }
+        .open-create {
+          padding: 20px 16px;
+        }
+        .open-form-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    }
+  }
+  .confirm-dialog {
+    border-radius: 6px;
+    background: white;
+    color: #17253c;
+    font-family: "Microsoft YaHei", sans-serif;
+  }
+  .confirm-dialog h2 {
+    font-family: inherit;
+    color: #102a63;
+  }
+  .confirm-dialog aside {
+    background: #edf3ff;
+    border-color: #c7d3e4;
+  }
+  .confirm-dialog button {
+    min-height: 44px;
+    border-radius: 4px;
+  }
+  .confirm-dialog .confirm-submit {
+    background: #1748b5;
+    color: white;
+  }
+  .confirm-dialog button:focus-visible {
+    outline: 3px solid #2f6ee5;
+    outline-offset: 3px;
+  }
+}

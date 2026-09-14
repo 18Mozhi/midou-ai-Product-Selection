@@ -1,5 +1,11 @@
 # M06-05 宝塔运维与回滚
 
+## P60 本地 C 审核验证（2026-09-15，非部署）
+
+`node scripts/verify-open-page-preview.mjs` 启动临时回环审核宿主，双端134项验证后关闭，无文件输出。`--capture-review rN` 首次创建 `output/playwright/p60-page-composition-rN` 并拒绝覆盖；当前r2有26张实际Vue图。原E2E合成数据，6次模拟GET，创建只核对确认并取消，阻断未知/写入/外部请求。生产入口不导入审核组件/CSS，不改环境、接口、权限、密钥或Worker配置；无部署、迁移和重启要求。范围见 `design-plans/ui-phase-2-2026-09-07/P60-PAGE-COMPOSITION-BATCH24.md`，不能替代下列真实运维验收。
+
+## 生产运维
+
 1. 在宝塔备份 MySQL 后执行 `0023_open_platform_m06_05.up.sql`。
 2. 在宝塔 Node API 与 Node Worker 项目设置 `OPEN_API_*`、`WEBHOOK_DELIVERY_*`；两者必须使用同一 `CREDENTIALS_MASTER_KEY` 和 `CREDENTIALS_MASTER_KEY_VERSION`。保存后重启 API 与 Worker，配置不是动态读取。
 3. Web 站点反向代理需同时放行 `/api/v1` 与 `/open/v1` 到同一 Node API；不得新增面板外服务。
