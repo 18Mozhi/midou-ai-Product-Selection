@@ -488,7 +488,7 @@ onUnmounted(() => {
               任务报告 {{ journey.available_result_count }} 条；本页返回
               {{ candidates.length }} 条。这里不是历史记录总数。
             </p>
-            <div class="selection-candidate-grid">
+            <div class="selection-candidate-grid" role="radiogroup" aria-label="候选结果">
               <label
                 v-for="(candidate, index) in candidates"
                 :key="candidate.raw_evidence_id"
@@ -589,7 +589,7 @@ onUnmounted(() => {
               </p>
               <small>五门通过仍需满足当前采纳条件，保存时由服务端再次核对。</small>
             </section>
-            <div class="selection-actions">
+            <div class="selection-actions" role="radiogroup" aria-label="决策方式">
               <label
                 v-for="item in [
                   { value: 'adopt', label: '采纳合格机会' },
