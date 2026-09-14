@@ -1,5 +1,7 @@
 # P60 C 实际 Vue · r2 待审
 
+批次25来源演进：共享验证脚本新增独立 `--details` / `--capture-details rN` 模式。原页面变换/CSS、166来源中的另165份及26图不变，默认134项回归通过；原manifest保持捕获身份，不重绑为当前脚本。详情新图另见 `../p60-detail-composition-r2/index.html`，不扩大本包批准范围。
+
 入口：[26图审核册](index.html)，[原始来源与验证](manifest.json)，[交付范围](../../../design-plans/ui-phase-2-2026-09-07/P60-PAGE-COMPOSITION-BATCH24.md)。
 
 1440/390 双端，三任务默认页、两类填写/校验/确认，以及手机顶部/记录实际视口和填写底部。134项检查、6次本地模拟GET、0写入/外部请求。实际App/Vue，业务script仅增加审核组件导入；样例沿用E2E，不是生产统计、真实密钥或回调发送。

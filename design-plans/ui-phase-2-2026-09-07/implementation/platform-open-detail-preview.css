@@ -1,0 +1,219 @@
+/* Review-only: P60's teleported record drawer, never other pages or the creation dialog. */
+html body.shell-vue-c:has(#app .open-platform--review) > .responsive-data-view__overlay {
+  --so-text: #17253c;
+  --so-text-muted: #536985;
+  --so-border: #c7d3e4;
+  --so-primary: #1748b5;
+  --so-primary-strong: #1748b5;
+  --so-on-primary: #fff;
+  --so-bg-elevated: #fff;
+  --so-panel-soft: #f3f6fa;
+  --so-focus: #2f6ee5;
+  font:
+    16px/1.7 "Microsoft YaHei",
+    sans-serif;
+  .responsive-data-view__scrim {
+    background: rgb(16 42 99 / 32%);
+    border-radius: 0;
+  }
+  .responsive-data-view__drawer {
+    box-sizing: border-box;
+    width: min(520px, calc(100% - 20px));
+    height: 100dvh;
+    max-height: 100dvh;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    color: #17253c;
+    background: white;
+    overscroll-behavior: contain;
+  }
+  .responsive-data-view__drawer > header {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    margin: 0;
+    padding: 22px 20px;
+    align-items: start;
+    gap: 16px;
+    background: #102a63;
+    color: white;
+  }
+  .responsive-data-view__drawer > header div {
+    min-width: 0;
+    gap: 6px;
+  }
+  .responsive-data-view__drawer > header small {
+    color: #dce7fa;
+    font:
+      13px/1.6 "Microsoft YaHei",
+      sans-serif;
+  }
+  .responsive-data-view__drawer > header strong {
+    color: white;
+    font:
+      700 21px/1.5 "Microsoft YaHei",
+      sans-serif;
+    overflow-wrap: anywhere;
+  }
+  .responsive-data-view__drawer > header button {
+    flex-shrink: 0;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    color: #102a63;
+    background: white;
+    border: 1px solid white;
+    border-radius: 4px;
+    font:
+      24px/1 "Microsoft YaHei",
+      sans-serif;
+  }
+  .responsive-data-view__drawer > header button:hover {
+    background: #edf3ff;
+  }
+  .responsive-data-view__details {
+    padding: 22px 20px 28px;
+    gap: 24px;
+    min-width: 0;
+  }
+  .p60-detail-section h3 {
+    margin: 0 0 16px;
+    padding-left: 10px;
+    border-left: 3px solid #1748b5;
+    color: #102a63;
+    font:
+      700 17px/1.5 "Microsoft YaHei",
+      sans-serif;
+  }
+  .responsive-data-view__details dl {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+  }
+  .responsive-data-view__details dl > div {
+    min-width: 0;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #c7d3e4;
+  }
+  .responsive-data-view__details dt {
+    color: #536985;
+    font:
+      14px/1.6 "Microsoft YaHei",
+      sans-serif;
+  }
+  .responsive-data-view__details dd {
+    margin: 4px 0 0;
+    color: #17253c;
+    font:
+      16px/1.7 "Microsoft YaHei",
+      sans-serif;
+    overflow-wrap: anywhere;
+  }
+  .responsive-data-view__details details {
+    padding: 0;
+    background: #f3f6fa;
+    border: 1px solid #c7d3e4;
+    border-radius: 4px;
+  }
+  .responsive-data-view__details summary {
+    box-sizing: border-box;
+    display: list-item;
+    min-height: 44px;
+    padding: 10px 14px;
+    color: #1748b5;
+    font:
+      700 15px/1.6 "Microsoft YaHei",
+      sans-serif;
+    cursor: pointer;
+  }
+  .responsive-data-view__details details[open] > dl {
+    padding: 8px 14px 14px;
+  }
+  .responsive-data-view__details details[open] > dl > div:last-child {
+    border: 0;
+    padding: 0;
+  }
+  .p60-detail-actions {
+    display: grid;
+    gap: 12px;
+  }
+  .p60-detail-actions:empty {
+    display: none;
+  }
+  .p60-detail-actions button {
+    min-height: 44px;
+    padding: 12px 16px;
+    border: 1px solid #1748b5;
+    border-radius: 4px;
+    color: white;
+    background: #1748b5;
+    font:
+      16px/1.5 "Microsoft YaHei",
+      sans-serif;
+  }
+  .p60-detail-actions button:hover {
+    background: #102a63;
+    border-color: #102a63;
+  }
+  .p60-detail-actions button.danger {
+    color: #b42336;
+    border-color: #b42336;
+    background: white;
+  }
+  .p60-detail-actions button.danger:hover {
+    color: white;
+    background: #b42336;
+  }
+  .p60-detail-actions button:disabled {
+    color: #64748b;
+    background: #e9eef5;
+    border-color: #c7d3e4;
+  }
+  :is(button, summary):focus-visible {
+    outline: 3px solid #2f6ee5;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px white;
+  }
+  @media (max-width: 360px) {
+    .responsive-data-view__drawer > header {
+      padding: 18px 16px;
+    }
+    .responsive-data-view__details {
+      padding: 20px 16px;
+    }
+  }
+}
+
+/* The desktop keeps the original inline technical disclosure, not an invented detail trigger. */
+html body.shell-vue-c:has(#app) #app .role-shell.role-shell--review .open-platform--review {
+  .responsive-data-view__desktop tbody details {
+    padding: 0;
+    border: 1px solid #c7d3e4;
+    border-radius: 4px;
+    background: #f3f6fa;
+  }
+  .responsive-data-view__desktop tbody summary {
+    display: list-item;
+    min-height: 44px;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    color: #1748b5;
+    font:
+      14px/1.7 "Microsoft YaHei",
+      sans-serif;
+  }
+  .responsive-data-view__desktop tbody details code {
+    display: block;
+    padding: 4px 12px 14px;
+    color: #17253c;
+    font:
+      13px/1.7 Consolas,
+      monospace;
+    overflow-wrap: anywhere;
+  }
+  .responsive-data-view__desktop tbody summary:focus-visible {
+    outline: 3px solid #2f6ee5;
+    outline-offset: 2px;
+  }
+}

@@ -1,5 +1,7 @@
 # M06-05 宝塔运维与回滚
 
+P60批次25补充：`node scripts/verify-open-page-preview.mjs --details`运行三类详情12样例、四宽/两动效1556项，无文件输出；`--capture-details rN`独立创建新图包，当前r2有24图。96次本地GET，全部行确认只取消、无管理写入或外部回调。旧无参/创建模式保留。审核CSS、分组和3秒测试焦点绘制等待均非生产配置，无新增环境变量、迁移或重启；完整边界见 `design-plans/ui-phase-2-2026-09-07/P60-DETAIL-COMPOSITION-BATCH25.md`。
+
 ## P60 本地 C 审核验证（2026-09-15，非部署）
 
 `node scripts/verify-open-page-preview.mjs` 启动临时回环审核宿主，双端134项验证后关闭，无文件输出。`--capture-review rN` 首次创建 `output/playwright/p60-page-composition-rN` 并拒绝覆盖；当前r2有26张实际Vue图。原E2E合成数据，6次模拟GET，创建只核对确认并取消，阻断未知/写入/外部请求。生产入口不导入审核组件/CSS，不改环境、接口、权限、密钥或Worker配置；无部署、迁移和重启要求。范围见 `design-plans/ui-phase-2-2026-09-07/P60-PAGE-COMPOSITION-BATCH24.md`，不能替代下列真实运维验收。

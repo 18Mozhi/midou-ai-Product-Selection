@@ -9,16 +9,25 @@ import { chromium } from "playwright";
 import { openPagePlugin, openPageSources } from "./lib/platform-open-page-preview.mjs";
 import { openReviewFixtures, openEnvelope, openFixtureFile } from "./lib/open-review-fixtures.mjs";
 import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
+import { openDetailPlugin, openDetailCss } from "./lib/open-detail-preview.mjs";
+import { verifyOpenDetails, openDetailCases } from "./lib/open-detail-verification.mjs";
 
 const args = process.argv.slice(2);
 assert.ok(
   args.length === 0 ||
-    (args.length === 2 && args[0] === "--capture-review" && /^r[1-9]\d*$/.test(args[1])),
-  "Use no arguments or --capture-review rN",
+    (args.length === 1 && args[0] === "--details") ||
+    (args.length === 2 &&
+      ["--capture-review", "--capture-details"].includes(args[0]) &&
+      /^r[1-9]\d*$/.test(args[1])),
+  "Use no arguments, --details, --capture-review rN or --capture-details rN",
 );
-const output = args.length
-  ? path.resolve(`output/playwright/p60-page-composition-${args[1]}`)
-  : null;
+const detailsMode = ["--details", "--capture-details"].includes(args[0]);
+const output =
+  args.length === 2
+    ? path.resolve(
+        `output/playwright/p60-${detailsMode ? "detail" : "page"}-composition-${args[1]}`,
+      )
+    : null;
 if (output) await mkdir(output); // Exclusive review packet: never replace old evidence.
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const { fixture, nav, orgId } = await openReviewFixtures();
@@ -30,7 +39,7 @@ const server = await createServer({
   configFile: path.resolve("apps/web/vite.config.ts"),
   logLevel: "error",
   define: { "import.meta.env.VITE_API_BASE_URL": JSON.stringify("/api/v1") },
-  plugins: [openPagePlugin()],
+  plugins: [openPagePlugin(), ...(detailsMode ? [openDetailPlugin()] : [])],
   server: { host: "127.0.0.1", port, strictPort: true, proxy: {}, hmr: false, open: false },
 });
 const sources = new Set([
@@ -43,29 +52,40 @@ const sources = new Set([
 ]);
 const results = [],
   images = [];
+if (detailsMode)
+  for (const file of [
+    openDetailCss,
+    "scripts/lib/open-detail-preview.mjs",
+    "scripts/lib/open-detail-verification.mjs",
+  ])
+    sources.add(file);
 let browser;
 try {
   await server.listen();
   const origin = `http://127.0.0.1:${port}`;
   console.log(`P60 local actual Vue review ${origin}`);
   browser = await chromium.launch();
-  for (const width of [1440, 390]) {
+  for (const { width, motion } of (detailsMode ? [1440, 768, 390, 320] : [1440, 390]).flatMap(
+    (width) =>
+      (detailsMode ? ["reduce", "no-preference"] : ["reduce"]).map((motion) => ({ width, motion })),
+  )) {
     const context = await browser.newContext({
       viewport: { width, height: width === 390 ? 844 : 1000 },
       locale: "zh-CN",
-      reducedMotion: "reduce",
+      reducedMotion: motion,
     });
     const page = await context.newPage(),
       requests = [],
       errors = [],
       unexpected = [];
     let checks = 0;
+    let detailFixture = fixture;
     const check = (actual, expected, message) => {
       assert.deepEqual(actual, expected, `${width}: ${message}`);
       checks++;
     };
     const capture = async (view, locator, viewport = false) => {
-      if (!output) return;
+      if (!output || motion !== "reduce") return;
       await page.evaluate(() => document.fonts.ready);
       const bytes = locator
         ? await locator.screenshot({ animations: "disabled" })
@@ -106,7 +126,7 @@ try {
           return route.abort();
         }
         requests.push({ key, search: url.search, body: request.postData() });
-        const data = structuredClone(fixture);
+        const data = structuredClone(detailsMode ? detailFixture : fixture);
         for (const [view, prefix] of [
           ["clients", "client"],
           ["webhooks", "webhook"],
@@ -118,6 +138,34 @@ try {
           }
         return route.fulfill({ json: openEnvelope(data) });
       });
+      if (detailsMode) {
+        await verifyOpenDetails({
+          page,
+          origin,
+          width,
+          fixture,
+          setFixture: (value) => {
+            detailFixture = value;
+          },
+          check,
+          capture,
+        });
+        check(
+          requests.length,
+          openDetailCases.length,
+          "one GET per detail scenario, zero action writes",
+        );
+        check(
+          requests.every((request) => request.body === null),
+          true,
+          "detail GET only",
+        );
+        check(errors, [], "no detail page errors");
+        check(unexpected, [], "no unknown/external requests");
+        results.push({ width, motion, checks, requests });
+        console.log(`P60 details ${width}/${motion} passed ${checks}`);
+        continue;
+      }
       await page.goto(origin + "/platform-admin/open-platform");
       const surface = page.locator(".open-platform--review");
       await surface.locator(".open-workspace").waitFor();
@@ -361,11 +409,13 @@ try {
       JSON.stringify(
         {
           page: "P60",
+          detailsMode,
           revision: args[1],
           capturedAt: new Date().toISOString(),
           sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
-          scope:
-            "actual App with C review-only transform; original business script plus isolated input-modal component; original synthetic E2E data; GET only; no production deployment or approval; row actions and one-time secret lifecycle not covered",
+          scope: detailsMode
+            ? "actual App C detail regrouping; original script/fields/actions preserved; E2E-derived synthetic status and long-text samples; confirmations cancelled without writes; no secret/production/permission acceptance"
+            : "actual App with C review-only transform; original business script plus isolated input-modal component; original synthetic E2E data; GET only; no production deployment or approval; row actions and one-time secret lifecycle not covered",
           sources: sourceHashes,
           images,
           results,
@@ -376,7 +426,11 @@ try {
     );
     await writeFile(
       path.join(output, "index.html"),
-      '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P60 C 实际Vue待审</title><style>body{font:16px/1.7 Microsoft YaHei;margin:24px;color:#17253c}img{display:block;max-width:100%;border:1px solid #c7d3e4}article{margin:28px 0}</style><h1>P60 C 实际Vue审核版</h1><p>本地合成样例；三工作区默认布局、创建填写及取消确认路径。不是全部状态、真实权限或发送验收。未部署。</p><a href="manifest.json">来源与验证</a>' +
+      '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P60 C 实际Vue待审</title><style>body{font:16px/1.7 Microsoft YaHei;margin:24px;color:#17253c}img{display:block;max-width:100%;border:1px solid #c7d3e4}article{margin:28px 0}</style><h1>P60 C 实际Vue审核版</h1><p>本地合成样例；' +
+        (detailsMode
+          ? "三类详情、技术信息与取消确认路径。"
+          : "三工作区默认布局、创建填写及取消确认路径。") +
+        '不是全部状态、真实权限或发送验收。未部署。</p><a href="manifest.json">来源与验证</a>' +
         images
           .map(
             (image) =>
