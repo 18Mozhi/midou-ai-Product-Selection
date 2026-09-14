@@ -1,0 +1,28 @@
+/* Current C palette, scoped to its page and detached overlays. */
+.platform-notifications,
+.message-dialog,
+.message-reader-dialog,
+.notification-action-dialog {
+  --so-platform-notification-canvas: #eef3f9;
+  --so-platform-notification-surface: #ffffff;
+  --so-platform-notification-surface-soft: #e7eef8;
+  --so-platform-notification-text: #101f38;
+  --so-platform-notification-text-muted: #5c6d86;
+  --so-platform-notification-border: #c7d3e4;
+  --so-platform-notification-field-border: #94a8c4;
+  --so-platform-notification-primary: #1f55bd;
+  --so-platform-notification-primary-strong: #143b88;
+  --so-platform-notification-success: #187052;
+  --so-platform-notification-success-soft: #e6f3ed;
+  --so-platform-notification-warning: #8f5a00;
+  --so-platform-notification-warning-soft: #fff2d2;
+  --so-platform-notification-danger: #ad3935;
+  --so-platform-notification-danger-soft: #f9e9e8;
+  --so-platform-notification-overlay: #0c1830;
+  --so-platform-notification-rail: #112f69;
+  --so-platform-notification-focus: #2f6ee5;
+  --so-platform-notification-field-bg: #f7f9fc;
+  --so-platform-notification-warning-border: #d7b36a;
+  --so-platform-notification-success-border: #7fb59d;
+  --so-platform-notification-danger-border: #ccaaa8;
+}

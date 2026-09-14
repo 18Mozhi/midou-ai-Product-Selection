@@ -16,7 +16,8 @@ import PlatformMessageEditor from "./PlatformMessageEditor.vue";
 import PlatformMessageWorkbench from "./PlatformMessageWorkbench.vue";
 import PlatformManagementRecordList from "./PlatformManagementRecordList.vue";
 import PlatformManagementFilter from "./PlatformManagementFilter.vue";
-import PlatformNotificationManagement from "./PlatformNotificationManagement.vue";
+import PlatformNotificationCenter from "./PlatformNotificationCenter.vue";
+import type { PlatformNotificationForm } from "./platform-notification-types";
 import {
   formatPlatformManagementTime as when,
   platformManagementStateName as stateName,
@@ -32,7 +33,6 @@ import {
 } from "./platform-status-topology";
 import { usePlatformContentList } from "./use-platform-content-list";
 import { usePlatformContentReview } from "./use-platform-content-review";
-import { usePlatformNotificationList } from "./use-platform-notification-list";
 import { usePlatformStatus } from "./use-platform-status";
 
 const props = defineProps<{ apiBaseUrl: string; domain: string }>();
@@ -61,7 +61,7 @@ const {
 } = useAuditedReason();
 const messageEditor = ref<any>(null),
   messageSaving = ref(false),
-  messageForm = ref({
+  messageForm = ref<PlatformNotificationForm>({
     kind: "notification" as "notification" | "email",
     title: "",
     body: "",
@@ -179,19 +179,6 @@ const {
   request: api,
   reload: () => void load(),
 });
-const notificationList = usePlatformNotificationList({
-  domain,
-  query,
-  status,
-  data,
-  state,
-  message,
-  refreshing,
-  request: api,
-  reload: () => void load(),
-  fallbackApply: applyContentFilters,
-  fallbackReset: resetContentFilters,
-});
 const {
   item: reviewItem,
   status: reviewStatus,
@@ -219,7 +206,7 @@ const { load: loadStatus, stop: stopStatusLoad } = usePlatformStatus({
   request: api,
 });
 async function load() {
-  if (await notificationList.load()) return;
+  if (domain.value === "notifications") return;
   if (await loadContent()) return;
   if (await loadStatus()) return;
   state.value = "loading";
@@ -315,7 +302,6 @@ async function saveMessage() {
       method: editing ? "PATCH" : "POST",
       body: JSON.stringify(messageForm.value),
     });
-    if (!editing) notificationList.showNewestMessages();
     messageEditor.value = null;
     await load();
     message.value = editing ? "草稿已更新。" : "草稿已创建，可继续编辑或发布。";
@@ -324,6 +310,11 @@ async function saveMessage() {
   } finally {
     messageSaving.value = false;
   }
+}
+function resetGenericFilters() {
+  query.value = "";
+  status.value = "";
+  void load();
 }
 async function messageAction(item: any, action: "publish" | "cancel") {
   const actionName = action === "publish" ? (item.kind === "email" ? "发送" : "发布") : "取消";
@@ -363,7 +354,6 @@ watch(domain, () => {
   status.value = "";
   contentPage.value = 1;
   readContentLocation();
-  notificationList.readLocation();
   cancelReview();
   messageEditor.value = null;
   load();
@@ -382,7 +372,6 @@ onDeactivated(() => {
 });
 onMounted(() => {
   readContentLocation();
-  notificationList.readLocation();
   syncRealtimeMetrics();
   window.addEventListener(realtimeMetricsEvent, syncRealtimeMetrics);
   void load();
@@ -390,7 +379,6 @@ onMounted(() => {
 onUnmounted(() => {
   stopStatusLoad();
   stopContentLoad();
-  notificationList.stop();
   window.removeEventListener(realtimeMetricsEvent, syncRealtimeMetrics);
 });
 </script>
@@ -398,7 +386,10 @@ onUnmounted(() => {
 <template>
   <section
     class="platform-management"
-    :class="{ 'platform-management--content': domain === 'content' }"
+    :class="{
+      'platform-management--content': domain === 'content',
+      'platform-management--notifications': domain === 'notifications',
+    }"
     aria-live="polite"
     :aria-busy="refreshing"
   >
@@ -425,16 +416,21 @@ onUnmounted(() => {
       @change-page="changeContentPage"
       @review="beginReview"
     />
-    <header v-if="domain !== 'content'" class="platform-management-hero">
+    <PlatformNotificationCenter
+      v-else-if="domain === 'notifications'"
+      :request="api"
+      :request-id="requestId"
+    />
+    <header
+      v-if="domain !== 'content' && domain !== 'notifications'"
+      class="platform-management-hero"
+    >
       <div>
         <p>平台运营中心</p>
         <h2>{{ titles[domain][0] }}</h2>
         <span>{{ titles[domain][1] }}</span>
       </div>
       <div class="hero-actions">
-        <button v-if="domain === 'notifications'" type="button" @click="openMessage()">
-          发布通知
-        </button>
         <button v-if="domain === 'email'" type="button" @click="openMessage()">发送邮件</button>
         <button type="button" :disabled="refreshing" @click="load">
           {{ refreshing ? "刷新中…" : "刷新数据" }}
@@ -442,19 +438,26 @@ onUnmounted(() => {
       </div>
     </header>
     <PlatformManagementFilter
-      v-if="domain !== 'status' && domain !== 'content'"
+      v-if="domain !== 'status' && domain !== 'content' && domain !== 'notifications'"
       v-model:query="query"
       v-model:status="status"
       :domain="domain"
       :label="titles[domain][0]"
       :active-count="activeFilterCount"
-      @apply="notificationList.applyFilters"
-      @reset="notificationList.resetFilters"
+      @apply="load"
+      @reset="resetGenericFilters"
     />
-    <p v-if="message && domain !== 'content'" class="platform-management-message" role="status">
+    <p
+      v-if="message && domain !== 'content' && domain !== 'notifications'"
+      class="platform-management-message"
+      role="status"
+    >
       {{ message }}
     </p>
-    <section v-if="state !== 'ready' && domain !== 'content'" class="platform-management-state">
+    <section
+      v-if="state !== 'ready' && domain !== 'content' && domain !== 'notifications'"
+      class="platform-management-state"
+    >
       <h3>
         {{
           state === "loading"
@@ -467,7 +470,7 @@ onUnmounted(() => {
       <p v-if="message">{{ message }}</p>
       <button v-if="state !== 'loading'" @click="load">重新加载</button>
     </section>
-    <template v-else-if="data && domain !== 'content'"
+    <template v-else-if="data && domain !== 'content' && domain !== 'notifications'"
       ><div v-if="domain !== 'api-coverage'" class="platform-management-kpis">
         <article v-for="[key, value] in summaryEntries" :key="key">
           <small>{{ summaryName(key) }}</small
@@ -482,17 +485,6 @@ onUnmounted(() => {
         :when="when"
         @edit="openMessage"
         @action="messageAction"
-      />
-      <PlatformNotificationManagement
-        v-if="domain === 'notifications'"
-        :data="data"
-        :refreshing="refreshing"
-        :state-name="stateName"
-        :when="when"
-        @edit="openMessage"
-        @action="messageAction"
-        @message-page="notificationList.changeMessagePage"
-        @notification-page="notificationList.changePage"
       />
       <PlatformManagementRecordList
         v-if="domain === 'email'"
@@ -641,6 +633,7 @@ onUnmounted(() => {
       @submit="submitReview"
     />
     <PlatformMessageEditor
+      v-if="domain === 'email'"
       :open="Boolean(messageEditor)"
       :editor="messageEditor"
       :form="messageForm"

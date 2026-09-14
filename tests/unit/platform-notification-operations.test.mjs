@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
 import {
   PlatformDashboardError,
   PlatformDashboardService,
@@ -11,13 +12,17 @@ test("platform notification operations expose templates channels subscriptions d
     [
       [
         "apps/web/src/components/PlatformManagementCenter.vue",
-        "apps/web/src/components/PlatformManagementRecordList.vue",
         "apps/web/src/components/PlatformMessageWorkbench.vue",
         "apps/web/src/components/PlatformMessageEditor.vue",
         "apps/web/src/components/PlatformNotificationOperations.vue",
         "apps/web/src/components/PlatformNotificationManagement.vue",
+        "apps/web/src/components/PlatformNotificationCenter.vue",
+        "apps/web/src/components/PlatformNotificationFacts.vue",
+        "apps/web/src/components/PlatformNotificationActionDialog.vue",
         "apps/web/src/components/PlatformNotificationPagination.vue",
         "apps/web/src/components/use-platform-notification-list.ts",
+        "apps/web/src/components/use-platform-message-editor.ts",
+        "apps/web/src/components/use-platform-notification-action.ts",
       ],
       "apps/web/src/styles/platform-operations.css",
       "apps/api/src/mysql-platform-dashboard-repository.ts",
@@ -36,14 +41,14 @@ test("platform notification operations expose templates channels subscriptions d
     "用户订阅",
     "告警路由",
     "通知与投递记录",
-    "在平台规则总览配置",
+    "前往规则总览",
   ])
     assert.match(web, new RegExp(label));
   assert.match(web, /message_page_size/);
-  assert.match(web, /读取超时，已保留上次成功数据/);
+  assert.match(web, /读取超时，当前仍显示上次成功快照/);
   assert.match(web, /label="通知与投递记录"/);
   assert.match(web, /:aria-label="`\$\{label\}分页`"/);
-  assert.match(web, /邮件服务未接入，管理入口已关闭/);
+  assert.match(web, /邮件服务未接入，管理入口保持关闭/);
   assert.doesNotMatch(web, /href="\/platform-admin\/email"/);
   assert.doesNotMatch(web, /to="\/automations"/);
   assert.match(styles, /\.role-shell\s+dialog\[open\]\s*\{\s*z-index:\s*40/);
@@ -81,7 +86,7 @@ test("platform notification drafts remain available while mail drafts fail close
         : readFile(path, "utf8"),
     ),
   );
-  for (const label of ["发布通知", "编辑草稿", "取消草稿"]) assert.match(web, new RegExp(label));
+  for (const label of ["新建草稿", "编辑草稿", "取消草稿"]) assert.match(web, new RegExp(label));
   for (const operation of ["createMessage", "updateMessage", "messageAction"])
     assert.match(service, new RegExp(operation));
   assert.match(routes, /management\/messages\/:messageId\/actions/);
@@ -161,18 +166,53 @@ test("notification repository counts before paging and keeps stable ordering", a
   assert.doesNotMatch(repository, /n\.created_at DESC LIMIT 100/);
 });
 
+test("platform notification styles keep operational metadata readable", async () => {
+  const paths = [
+    "apps/web/src/platform-notifications.css",
+    "apps/web/src/platform-notification-operations.css",
+    "apps/web/src/components/platform-message-editor.css",
+    "apps/web/src/components/PlatformNotificationPagination.vue",
+  ];
+  for (const path of paths) {
+    const source = await readFile(path, "utf8"),
+      undersized = [...source.matchAll(/font-size:\s*(\d+(?:\.\d+)?)px/gu)].filter(
+        (match) => Number(match[1]) < 13,
+      );
+    assert.deepEqual(undersized, [], `${path} must not use text below 13px`);
+  }
+});
+
 test("platform management keeps orchestration and message views in bounded components", async () => {
+  const baseline = "699ac3f3d8832a78232030f07859122978dcfa4b";
+  const prior = (file) =>
+    execFileSync("git", ["show", `${baseline}:${file}`], { encoding: "utf8" }).replaceAll(
+      "\r\n",
+      "\n",
+    );
+  const parent = "apps/web/src/components/PlatformManagementCenter.vue";
+  // The inherited 1050-line cap already failed at the 1068-line takeover baseline.
+  // P57 extraction must reduce that parent, not silently raise the old cap to 1100.
+  assert.equal(prior(parent).split("\n").length, 1068);
+  assert.ok((await readFile(parent, "utf8")).split(/\r?\n/).length < 1068);
+  const unrelatedList = "apps/web/src/components/PlatformManagementRecordList.vue";
+  assert.equal(
+    (await readFile(unrelatedList, "utf8")).replaceAll("\r\n", "\n"),
+    prior(unrelatedList),
+  );
   const limits = new Map([
-    ["apps/web/src/components/PlatformManagementCenter.vue", 1_050],
     ["apps/web/src/components/PlatformManagementFilter.vue", 100],
     ["apps/web/src/components/platform-management-presentation.ts", 100],
-    ["apps/web/src/components/PlatformMessageWorkbench.vue", 200],
+    ["apps/web/src/components/PlatformNotificationCenter.vue", 260],
+    ["apps/web/src/components/PlatformNotificationManagement.vue", 120],
+    ["apps/web/src/components/PlatformNotificationFacts.vue", 140],
+    ["apps/web/src/components/PlatformNotificationActionDialog.vue", 140],
+    ["apps/web/src/components/PlatformMessageWorkbench.vue", 260],
     ["apps/web/src/components/PlatformMessageEditor.vue", 200],
-    ["apps/web/src/components/PlatformManagementRecordList.vue", 400],
-    ["apps/web/src/components/PlatformNotificationOperations.vue", 320],
-    ["apps/web/src/components/PlatformNotificationManagement.vue", 100],
+    ["apps/web/src/components/PlatformNotificationOperations.vue", 160],
     ["apps/web/src/components/PlatformNotificationPagination.vue", 100],
-    ["apps/web/src/components/use-platform-notification-list.ts", 200],
+    ["apps/web/src/components/use-platform-notification-list.ts", 240],
+    ["apps/web/src/components/use-platform-message-editor.ts", 140],
+    ["apps/web/src/components/use-platform-notification-action.ts", 150],
   ]);
   for (const [path, limit] of limits) {
     const source = await readFile(path, "utf8");

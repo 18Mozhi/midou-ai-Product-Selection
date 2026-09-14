@@ -1,107 +1,80 @@
 .notification-ops {
+  min-width: 0;
+  padding: 20px;
   display: grid;
   gap: 14px;
-}
-.notification-ops-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-.notification-ops-grid article,
-.notification-ops .platform-management-table {
-  padding: 16px;
   border: 1px solid var(--so-border);
-  border-radius: 13px;
   background: var(--so-panel);
 }
-.notification-ops-grid header,
+
 .notification-ops .notification-delivery-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
+  margin: 0;
 }
-.notification-ops-grid h3,
+
 .notification-ops .notification-delivery-head h3 {
   margin: 0;
 }
-.notification-ops-grid header span,
+
 .notification-ops .notification-delivery-head span {
   color: var(--so-text-muted);
   font-size: 13px;
 }
-.notification-ops-grid a,
+
 .notification-ops .notification-delivery-head a {
   color: var(--so-primary);
   font-size: 13px;
 }
-.notification-ops-grid ul {
-  margin: 12px 0 0;
-  padding: 0;
-  list-style: none;
-}
-.notification-ops-grid li {
-  padding: 9px 0;
+
+.notification-ops .responsive-data-view {
   border-top: 1px solid var(--so-border);
 }
-.notification-ops-grid li strong,
-.notification-ops-grid li small {
-  display: block;
-}
-.notification-ops-grid li small {
-  margin-top: 4px;
-  color: var(--so-text-muted);
-}
-.notification-ops-grid dl {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-.notification-ops-grid dl div {
-  padding: 9px;
-  border-radius: 8px;
-  background: var(--so-panel);
-}
-.notification-ops-grid dd {
-  margin: 4px 0 0;
-  font-weight: 800;
-}
-.notification-ops .notification-delivery-head {
-  margin-bottom: 12px;
-}
-.notification-ops .platform-management-table {
-  overflow: auto;
-  padding: 17px;
-  border-radius: 14px;
-}
+
 .notification-ops table {
   width: 100%;
   border-collapse: collapse;
 }
+
 .notification-ops th,
 .notification-ops td {
-  padding: 12px 9px;
+  padding: 13px 10px;
   border-bottom: 1px solid var(--so-border);
   text-align: left;
   font-size: 13px;
+  vertical-align: top;
 }
+
+.notification-ops th {
+  color: var(--so-text-muted);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
+
 .notification-ops td strong,
 .notification-ops td small {
   display: block;
 }
+
 .notification-ops td small {
   margin-top: 4px;
   color: var(--so-text-muted);
 }
+
+.notification-ops td i {
+  font-style: normal;
+}
+
+.notification-ops td i[data-read="unread"] {
+  color: var(--so-primary);
+  font-weight: 720;
+}
+
 @media (max-width: 700px) {
-  .notification-ops-grid {
-    grid-template-columns: 1fr;
+  .notification-ops {
+    padding: 16px;
   }
-  .notification-ops .platform-management-table {
-    padding: 14px;
-    overflow: visible;
-  }
+
   .notification-ops .notification-delivery-head {
+    align-items: stretch;
     flex-direction: column;
   }
 }

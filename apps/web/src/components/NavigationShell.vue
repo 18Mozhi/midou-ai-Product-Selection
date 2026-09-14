@@ -46,6 +46,13 @@ const componentModules = import.meta.glob<{ default: object }>([
   "!./UiStatePanel.vue",
   "!./UiStateShowcase.vue",
   "!./VerificationFramework.vue",
+  // P57 internals are imported by their owning page, not addressed by the shell dispatcher.
+  "!./PlatformNotificationFacts.vue",
+  "!./PlatformNotificationActionDialog.vue",
+  "!./PlatformNotificationCenter.vue",
+  "!./PlatformNotificationManagement.vue",
+  "!./PlatformNotificationOperations.vue",
+  "!./PlatformNotificationPagination.vue",
 ]);
 const lazy = (name: string) => {
   const loader = componentModules[`./${name}.vue`];

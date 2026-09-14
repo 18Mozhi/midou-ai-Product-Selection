@@ -140,6 +140,31 @@ test("default member/collection filters retain responsive mode", async () => {
   assert.doesNotMatch(opportunities, /always-drawer/);
 });
 
+test("platform filter callers explicitly forward dialog mode", async () => {
+  for (const file of ["PlatformNotificationManagement.vue", "PlatformContentCenter.vue"])
+    assert.deepEqual(
+      callerModes(
+        await readFile(`apps/web/src/components/${file}`, "utf8"),
+        "PlatformManagementFilter",
+      ),
+      ["dialog"],
+    );
+  const wrapper = await readFile("apps/web/src/components/PlatformManagementFilter.vue", "utf8");
+  assert.match(wrapper, /import ResponsiveFilterDrawer from "\.\/ResponsiveFilterDrawer.vue"/);
+  const forwards = [];
+  function visit(node) {
+    if (node.type === 1 && node.tag === "ResponsiveFilterDrawer")
+      forwards.push(
+        node.props
+          .filter((prop) => prop.type === 7 && prop.name === "bind" && prop.arg?.content === "mode")
+          .map((prop) => prop.exp?.content),
+      );
+    for (const child of node.children ?? []) visit(child);
+  }
+  visit(baseParse(parse(wrapper).descriptor.template.content));
+  assert.deepEqual(forwards, [["mode"]]);
+});
+
 for (const mode of [undefined, "responsive", "dialog"]) {
   test(`drawer ${mode ?? "default"} mode uses actual reactive viewport/prop rules`, () => {
     const h = harness({ mode });

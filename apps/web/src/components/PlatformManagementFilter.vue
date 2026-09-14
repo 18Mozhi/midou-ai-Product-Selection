@@ -6,7 +6,7 @@ defineProps<{
   domain: Exclude<Domain, "status">;
   label: string;
   activeCount: number;
-  appearance?: "default" | "content";
+  appearance?: "default" | "content" | "notifications";
   mode?: "responsive" | "dialog";
 }>();
 defineEmits<{ apply: []; reset: [] }>();

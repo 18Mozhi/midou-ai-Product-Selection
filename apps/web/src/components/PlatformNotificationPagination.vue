@@ -3,6 +3,7 @@ defineProps<{
   pagination: { page: number; total: number; total_pages: number };
   refreshing: boolean;
   label: string;
+  pageSizeLabel?: string;
 }>();
 defineEmits<{ change: [page: number] }>();
 </script>
@@ -10,8 +11,8 @@ defineEmits<{ change: [page: number] }>();
 <template>
   <nav class="platform-notification-pagination" :aria-label="`${label}分页`">
     <span
-      >第 {{ pagination.page }} / {{ pagination.total_pages }} 页，共
-      {{ pagination.total }} 条</span
+      ><b>{{ label }}</b> · 第 {{ pagination.page }} / {{ pagination.total_pages }} 页，共
+      {{ pagination.total }} 条<small v-if="pageSizeLabel">{{ pageSizeLabel }}</small></span
     >
     <div>
       <button
@@ -44,6 +45,16 @@ defineEmits<{ change: [page: number] }>();
 .platform-notification-pagination > div {
   display: flex;
   gap: 8px;
+}
+.platform-notification-pagination > span {
+  display: grid;
+  gap: 3px;
+}
+.platform-notification-pagination b {
+  color: var(--so-text);
+}
+.platform-notification-pagination small {
+  font-size: 13px;
 }
 .platform-notification-pagination button {
   min-height: var(--so-touch-target);

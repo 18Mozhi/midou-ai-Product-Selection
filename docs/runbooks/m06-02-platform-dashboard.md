@@ -1,5 +1,9 @@
 # M06-02 宝塔运维与回滚
 
+2026-09-14 P57 C实现接管补充：通知管理当前主入口为“新建草稿”，不是立即发布；人工消息、投递观测、系统事实分区。手机完整正文使用独立阅读窗，桌面保留details展开；发布/取消为专用原因窗，2–300字与原版本提交。以下旧“发布通知”入口及双端details描述以本段为准，接收范围、20/10分页、邮件关闭和后端事务均不变。
+
+离开或卸载P57时，停止读取并使编辑/动作回调失效；旧成功/失败不得触发新读取、改写离开后页面URL或覆盖新访问提示。返回后重新读取，不取消或重发已送出的事务。只关闭弹窗且仍在该页时，原成功反馈与刷新继续。两类分页读取失败后仍显示旧成功页，再按原“下一页”必须能重试；不得因内部目标页已设置而静默忽略。可执行`node --test tests/unit/platform-notification-lifecycle.test.mjs`与`node scripts/verify-platform-notification-lifecycle.mjs`进行本地合成请求验证；实际发布/权限/审计仍需独立验收。本批没有新配置或迁移，不部署、不重启；未来Web运行包更新后浏览器刷新生效。
+
 1. 在宝塔备份数据库。固定目录部署脚本会在切换代码前校验并幂等执行 `0040_platform_messages.up.sql`；已执行环境只校验迁移文件校验值。迁移兼容 MySQL 5.7 与 utf8mb4，不创建常驻服务。
 2. 在 Node API 受限环境设置 `PLATFORM_DASHBOARD_DEFAULT_WINDOW=24h`、`PLATFORM_DASHBOARD_QUEUE_WARNING=1000`、`PLATFORM_DASHBOARD_ERROR_LIMIT=20`，并令 `SCOUTOPS_ACCEPTANCE_API_REPORT_FILE=/www/wwwroot/ai选品/runtime/verification/production-api-coverage.json`。调整后必须由宝塔重启 Node API；不需要重启 Worker/Crawler。
 3. 分别以平台超级管理员和平台运营管理员访问 `/platform-admin`，确认“平台事实”来自当前 MySQL：两者都能看到活动组织/用户聚合、启用来源、任务成功率和窗内文件增长；只有超级管理员能看到组织、用户明细入口和顶部“新建组织”。切换 15 分钟、24 小时、7 天和 30 天后，URL 必须写入对应 `window`，刷新后保持；快速双击刷新只能产生一次仪表盘请求和一次关联审计。停止测试数据库时，已有快照必须继续显示并提示刷新失败；恢复数据库并重新刷新后提示消失。超过 12 秒的请求必须进入有恢复动作的超时状态。确认折线图同时展示成功/失败总数和趋势；再检查内容、通知、系统状态、账号与组织、人员与权限等导航。系统状态页应按访问入口、共享依赖、异步执行展示六类既有运行观测；制造一个测试环境的 warning 或 stale 观测后，“当前需核查的传播范围”必须只列异常节点，保留对应专属运维入口，并以“如异常持续”表达待核查范围，不能把关联服务直接判为已故障。邮件 Provider 为 `pending_provider_selection` 时不得出现“邮箱管理”菜单，直接访问 `/platform-admin/email` 应显示页面不存在，通知偏好和平台通知草稿的邮件选项应禁用；直接 API 提交 `email_enabled=true` 或邮件草稿必须返回 `mail_provider_pending`。历史邮件事实仍保留，不执行删除。所有允许的修改必须填写原因，并用关联编号在 `platform_audit_events` 定位记录。

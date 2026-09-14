@@ -1,196 +1,229 @@
 <script setup lang="ts">
-defineProps<{
-  domain: string;
-  messages: any[];
-  stateName: (value: unknown) => string;
-  when: (value: unknown) => string;
-}>();
+import { computed, shallowRef, watch } from "vue";
+import { useModalDialog } from "../use-modal-dialog";
+import type { PlatformNotificationMessage } from "./platform-notification-types";
 
-defineEmits<{
-  edit: [item: any];
-  action: [item: any, action: "publish" | "cancel"];
+const props = withDefaults(
+  defineProps<{
+    domain: string;
+    messages: PlatformNotificationMessage[];
+    busyId?: string;
+    stateName: (value: unknown) => string;
+    when: (value: unknown) => string;
+  }>(),
+  { busyId: "" },
+);
+const emit = defineEmits<{
+  edit: [item: PlatformNotificationMessage];
+  action: [item: PlatformNotificationMessage, action: "publish" | "cancel"];
 }>();
+const selectedId = shallowRef(""),
+  mobileReaderOpen = shallowRef(false);
+const selected = computed(
+  () => props.messages.find((item) => item.id === selectedId.value) ?? props.messages[0] ?? null,
+);
+watch(
+  () => props.messages,
+  (messages) => {
+    if (!messages.some((item) => item.id === selectedId.value))
+      selectedId.value = messages[0]?.id ?? "";
+  },
+  { immediate: true },
+);
+const { dialogElement, handleCancel } = useModalDialog(
+  () => mobileReaderOpen.value,
+  () => (mobileReaderOpen.value = false),
+);
+
+function audience(item: PlatformNotificationMessage) {
+  return item.audience_type === "all_users"
+    ? "全部活动用户"
+    : item.audience_type === "organization"
+      ? item.organization_name || "未返回组织名称"
+      : item.user_email || "未返回用户邮箱";
+}
+function channel(item: PlatformNotificationMessage) {
+  return (
+    [item.in_app_enabled ? "站内通知" : "", item.email_enabled ? "邮件" : ""]
+      .filter(Boolean)
+      .join("、") || "未启用渠道"
+  );
+}
+function select(item: PlatformNotificationMessage) {
+  selectedId.value = item.id;
+  if (window.matchMedia("(max-width: 760px)").matches) mobileReaderOpen.value = true;
+}
 </script>
 
 <template>
-  <section class="message-workbench">
+  <section class="message-workbench" aria-labelledby="message-workbench-title">
     <header>
       <div>
-        <h3>{{ domain === "email" ? "邮件草稿与发送记录" : "通知草稿与发布记录" }}</h3>
-        <span>先保存草稿，确认接收范围和发送方式后再发布；已发布内容不可直接篡改。</span>
+        <p>MESSAGE DESK</p>
+        <h3 id="message-workbench-title">人工消息</h3>
+        <span>草稿和发布记录不受投递搜索或类型筛选影响。</span>
       </div>
+      <b>{{ messages.length }} 条 / 当前页</b>
     </header>
-    <div class="message-list">
-      <article v-for="item in messages" :key="item.id" :data-status="item.status">
+
+    <div v-if="messages.length" class="message-workbench__body">
+      <nav class="message-directory" aria-label="人工消息目录">
+        <button
+          v-for="item in messages"
+          :key="item.id"
+          type="button"
+          :class="{ 'is-selected': item.id === selected?.id }"
+          :aria-current="item.id === selected?.id ? 'true' : undefined"
+          @click="select(item)"
+        >
+          <span
+            ><i :data-status="item.status">{{ stateName(item.status) }}</i
+            ><small>{{ stateName(item.category) }}</small></span
+          >
+          <strong>{{ item.title }}</strong>
+          <small>{{ audience(item) }} · {{ when(item.updated_at) }}</small>
+          <em>查看正文与操作</em>
+        </button>
+      </nav>
+
+      <article v-if="selected" class="message-reader" :data-status="selected.status">
         <header>
           <div>
-            <small
-              >{{ stateName(item.kind) }} · {{ stateName(item.category) }} ·
-              {{ stateName(item.severity) }}</small
-            >
-            <h4>{{ item.title }}</h4>
+            <small>{{ stateName(selected.category) }} / {{ stateName(selected.severity) }}</small>
+            <h4>{{ selected.title }}</h4>
           </div>
-          <b>{{ stateName(item.status) }}</b>
+          <i :data-status="selected.status">{{ stateName(selected.status) }}</i>
         </header>
-        <p>{{ item.body }}</p>
+        <p class="message-reader__preview">{{ selected.body }}</p>
         <details class="message-body">
           <summary>完整正文</summary>
-          <p>{{ item.body }}</p>
+          <p>{{ selected.body }}</p>
         </details>
         <dl>
           <div>
             <dt>接收范围</dt>
-            <dd>
-              {{
-                item.audience_type === "all_users"
-                  ? "全部活动用户"
-                  : item.audience_type === "organization"
-                    ? item.organization_name
-                    : item.user_email
-              }}
-            </dd>
+            <dd>{{ audience(selected) }}</dd>
           </div>
           <div>
             <dt>发送方式</dt>
-            <dd>
-              {{
-                [item.in_app_enabled ? "站内通知" : "", item.email_enabled ? "邮件" : ""]
-                  .filter(Boolean)
-                  .join("、")
-              }}
-            </dd>
+            <dd>{{ channel(selected) }}</dd>
           </div>
           <div>
             <dt>更新时间</dt>
-            <dd>{{ when(item.updated_at) }}</dd>
+            <dd>{{ when(selected.updated_at) }}</dd>
+          </div>
+          <div>
+            <dt>版本</dt>
+            <dd>v{{ selected.version }}</dd>
           </div>
         </dl>
-        <footer v-if="item.status === 'draft'">
-          <button @click="$emit('edit', item)">编辑</button>
-          <button @click="$emit('action', item, 'publish')">
-            {{ item.kind === "email" ? "发送" : "发布" }}
+        <p class="message-reader__boundary">
+          实际接收人数以发布接口返回为准，不由候选列表或订阅统计估算。
+        </p>
+        <footer v-if="selected.status === 'draft'">
+          <button type="button" :disabled="busyId === selected.id" @click="emit('edit', selected)">
+            编辑草稿
           </button>
-          <button @click="$emit('action', item, 'cancel')">取消草稿</button>
+          <button
+            type="button"
+            class="is-primary"
+            :disabled="busyId === selected.id"
+            @click="emit('action', selected, 'publish')"
+          >
+            {{ busyId === selected.id ? "处理中…" : "发布草稿" }}
+          </button>
+          <button
+            type="button"
+            class="is-danger"
+            :disabled="busyId === selected.id"
+            @click="emit('action', selected, 'cancel')"
+          >
+            取消草稿
+          </button>
         </footer>
       </article>
-      <p v-if="!messages.length" class="message-empty">
-        还没有草稿，可使用页面顶部的主要操作创建。
-      </p>
     </div>
+
+    <section v-else class="message-workbench__empty">
+      <span aria-hidden="true">0</span>
+      <div>
+        <h4>还没有人工消息</h4>
+        <p>可以从页面顶部新建草稿；保存后不会自动发布。</p>
+      </div>
+    </section>
+
+    <dialog
+      ref="dialogElement"
+      class="message-reader-dialog"
+      :aria-label="selected?.title || '完整消息阅读'"
+      @cancel="handleCancel"
+    >
+      <article v-if="selected" class="message-reader" :data-status="selected.status">
+        <header>
+          <div>
+            <small>{{ stateName(selected.category) }} / {{ stateName(selected.severity) }}</small>
+            <h4>{{ selected.title }}</h4>
+          </div>
+          <button type="button" aria-label="关闭完整消息" @click="mobileReaderOpen = false">
+            ×
+          </button>
+        </header>
+        <i :data-status="selected.status">{{ stateName(selected.status) }}</i>
+        <p class="message-reader__full-body">{{ selected.body }}</p>
+        <dl>
+          <div>
+            <dt>接收范围</dt>
+            <dd>{{ audience(selected) }}</dd>
+          </div>
+          <div>
+            <dt>发送方式</dt>
+            <dd>{{ channel(selected) }}</dd>
+          </div>
+          <div>
+            <dt>更新时间</dt>
+            <dd>{{ when(selected.updated_at) }}</dd>
+          </div>
+          <div>
+            <dt>版本</dt>
+            <dd>v{{ selected.version }}</dd>
+          </div>
+        </dl>
+        <p class="message-reader__boundary">完整正文只读；发布人数以接口返回为准。</p>
+        <footer v-if="selected.status === 'draft'">
+          <button
+            type="button"
+            :disabled="busyId === selected.id"
+            @click="
+              emit('edit', selected);
+              mobileReaderOpen = false;
+            "
+          >
+            编辑草稿
+          </button>
+          <button
+            type="button"
+            class="is-primary"
+            :disabled="busyId === selected.id"
+            @click="
+              emit('action', selected, 'publish');
+              mobileReaderOpen = false;
+            "
+          >
+            发布草稿
+          </button>
+          <button
+            type="button"
+            class="is-danger"
+            :disabled="busyId === selected.id"
+            @click="
+              emit('action', selected, 'cancel');
+              mobileReaderOpen = false;
+            "
+          >
+            取消草稿
+          </button>
+        </footer>
+      </article>
+    </dialog>
   </section>
 </template>
-
-<style scoped>
-.message-workbench {
-  padding: 18px;
-  display: grid;
-  gap: 14px;
-  border: 1px solid var(--so-border);
-  border-radius: 14px;
-  background: var(--so-panel);
-}
-.message-workbench > header,
-.message-list article > header,
-.message-list article > footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-}
-.message-workbench h3,
-.message-list h4 {
-  margin: 0 0 5px;
-}
-.message-workbench header span,
-.message-list small,
-.message-list dt {
-  color: var(--so-text-muted);
-}
-.message-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-.message-list article {
-  min-width: 0;
-  padding: 15px;
-  border: 1px solid var(--so-border);
-  border-left: 4px solid var(--so-text-muted);
-  border-radius: 11px;
-  background: var(--so-panel-soft);
-}
-.message-list article[data-status="draft"] {
-  border-left-color: var(--so-warning);
-}
-.message-list article[data-status="published"] {
-  border-left-color: var(--so-success);
-}
-.message-list article > header > div {
-  min-width: 0;
-}
-.message-list h4 {
-  overflow-wrap: anywhere;
-}
-.message-list article p {
-  min-height: 42px;
-  color: var(--so-text);
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
-}
-.message-list article > p {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-}
-.message-body summary {
-  min-height: var(--so-touch-target);
-  padding: 10px 0;
-  color: var(--so-primary);
-  cursor: pointer;
-}
-.message-list dl {
-  margin: 12px 0;
-  display: grid;
-  gap: 7px;
-}
-.message-list dl div {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-.message-list dd {
-  min-width: 0;
-  margin: 0;
-  overflow-wrap: anywhere;
-  text-align: right;
-}
-.message-empty {
-  grid-column: 1/-1;
-  padding: 22px;
-  color: var(--so-text-muted);
-  text-align: center;
-}
-button {
-  box-sizing: border-box;
-  min-height: var(--so-touch-target);
-  padding: 9px 12px;
-  border: 1px solid var(--so-border-strong);
-  border-radius: 9px;
-  color: var(--so-text);
-  background: var(--so-panel);
-  cursor: pointer;
-  font: inherit;
-}
-@media (max-width: 700px) {
-  .message-workbench > header,
-  .message-list article > header,
-  .message-list article > footer {
-    align-items: stretch;
-    flex-direction: column;
-  }
-  .message-list {
-    grid-template-columns: 1fr;
-  }
-}
-</style>

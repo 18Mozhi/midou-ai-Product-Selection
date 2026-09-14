@@ -17,7 +17,7 @@ export async function finalizePhase2Evidence(testInfo: TestInfo) {
 export async function capturePhase2Evidence(
   page: Page,
   testInfo: TestInfo,
-  pageId: "P17" | "P31" | "P54" | "P55" | "P56" | "P61",
+  pageId: "P17" | "P31" | "P54" | "P55" | "P56" | "P57" | "P61",
   state: string,
   assertions: string[],
 ) {
@@ -30,6 +30,7 @@ export async function capturePhase2Evidence(
     P54: "/platform-admin/data",
     P55: "/platform-admin/governance",
     P56: "/platform-admin/content",
+    P57: "/platform-admin/notifications",
     P61: "/platform-admin/status",
   }[pageId];
   if (url.hostname !== "127.0.0.1" || url.pathname !== expectedPath)
@@ -43,8 +44,8 @@ export async function capturePhase2Evidence(
   const filename = `${pageId}-${viewport.width}-${state}`;
   const qualityP54 = pageId === "P54" && state.startsWith("quality-");
   const outputRelative =
-      pageId === "P55" || pageId === "P56"
-        ? `design/${pageId === "P55" ? "governance" : "content"}-direction-c/vue-implementation`
+      pageId === "P55" || pageId === "P56" || pageId === "P57"
+        ? `design/${pageId === "P55" ? "governance" : pageId === "P56" ? "content" : "platform-notifications"}-direction-c/vue-implementation`
         : pageId === "P54"
           ? qualityP54
             ? "design/data-quality-direction-c/vue-implementation"
@@ -77,8 +78,24 @@ export async function capturePhase2Evidence(
         })),
     }));
     const dialog = (await page.locator('dialog[open], [role="alertdialog"]').count()) > 0;
+    if (dialog && pageId === "P57") {
+      const activeDialog = page.locator('dialog[open], [role="alertdialog"]').last();
+      const target = state.startsWith("editor-")
+        ? state === "editor-edit-all"
+          ? activeDialog.getByRole("textbox", { name: "修改原因" })
+          : state.includes("organization")
+            ? activeDialog.getByRole("combobox", { name: "选择组织" })
+            : state.includes("user")
+              ? activeDialog.getByRole("combobox", { name: "选择用户" })
+              : activeDialog.getByRole("textbox", { name: "标题" })
+        : state.endsWith("conflict")
+          ? activeDialog.getByRole("alert")
+          : null;
+      if (target && (await target.count())) await target.scrollIntoViewIfNeeded();
+    }
     const focusedMobileViewport =
-      (pageId === "P54" || pageId === "P55" || pageId === "P56") && viewport.width === 390;
+      (pageId === "P54" || pageId === "P55" || pageId === "P56" || pageId === "P57") &&
+      viewport.width === 390;
     if (!dialog) {
       if (focusedMobileViewport)
         await page.evaluate(
@@ -88,33 +105,39 @@ export async function capturePhase2Evidence(
             const top = target.getBoundingClientRect().top + window.scrollY - offset;
             window.scrollTo(0, Math.max(0, top));
           },
-          pageId === "P56"
-            ? state === "content-default"
-              ? { selector: ".platform-content__hero", offset: 58 }
-              : state === "content-records"
-                ? { selector: ".responsive-data-view__mobile", offset: 138 }
-                : state === "content-filtered-empty"
-                  ? { selector: ".platform-content__ledger", offset: 58 }
-                  : state === "content-forbidden"
-                    ? { selector: ".platform-content__first-state", offset: 58 }
-                    : { selector: ".platform-content__surface", offset: 58 }
-            : pageId === "P55"
-              ? state === "governance-directory"
-                ? { selector: ".governance-directory", offset: 58 }
-                : state === "governance-default"
-                  ? { selector: ".governance-hero", offset: 58 }
-                  : state === "governance-forbidden"
-                    ? { selector: ".governance-state", offset: 58 }
-                    : { selector: ".governance-context", offset: 58 }
-              : qualityP54
-                ? state.includes("unknown")
-                  ? { selector: ".quality-feedback", offset: 110 }
-                  : state === "quality-default"
-                    ? { selector: ".quality-title", offset: 58 }
-                    : { selector: ".quality-task", offset: 58 }
-                : state.includes("unknown")
-                  ? { selector: ".platform-data-feedback", offset: 110 }
-                  : { selector: ".platform-data-hero", offset: 58 },
+          pageId === "P57"
+            ? state.startsWith("message-")
+              ? { selector: ".message-reader-dialog", offset: 0 }
+              : state === "publish-success"
+                ? { selector: ".platform-notifications__message", offset: 70 }
+                : { selector: ".platform-notifications__hero", offset: 58 }
+            : pageId === "P56"
+              ? state === "content-default"
+                ? { selector: ".platform-content__hero", offset: 58 }
+                : state === "content-records"
+                  ? { selector: ".responsive-data-view__mobile", offset: 138 }
+                  : state === "content-filtered-empty"
+                    ? { selector: ".platform-content__ledger", offset: 58 }
+                    : state === "content-forbidden"
+                      ? { selector: ".platform-content__first-state", offset: 58 }
+                      : { selector: ".platform-content__surface", offset: 58 }
+              : pageId === "P55"
+                ? state === "governance-directory"
+                  ? { selector: ".governance-directory", offset: 58 }
+                  : state === "governance-default"
+                    ? { selector: ".governance-hero", offset: 58 }
+                    : state === "governance-forbidden"
+                      ? { selector: ".governance-state", offset: 58 }
+                      : { selector: ".governance-context", offset: 58 }
+                : qualityP54
+                  ? state.includes("unknown")
+                    ? { selector: ".quality-feedback", offset: 110 }
+                    : state === "quality-default"
+                      ? { selector: ".quality-title", offset: 58 }
+                      : { selector: ".quality-task", offset: 58 }
+                  : state.includes("unknown")
+                    ? { selector: ".platform-data-feedback", offset: 110 }
+                    : { selector: ".platform-data-hero", offset: 58 },
         );
       else await page.evaluate(() => window.scrollTo(0, 0));
     }
@@ -199,6 +222,24 @@ export async function capturePhase2Evidence(
         "apps/web/src/components/use-platform-content-review.ts",
         "apps/web/src/use-modal-dialog.ts",
         "apps/web/src/platform-content.css",
+      ]) {
+        sourceFiles[source] = hash(await readFile(source, "utf8"));
+      }
+    }
+    if (pageId === "P57") {
+      for (const source of [
+        "apps/web/src/components/PlatformNotificationCenter.vue",
+        "apps/web/src/components/PlatformNotificationManagement.vue",
+        "apps/web/src/components/PlatformMessageWorkbench.vue",
+        "apps/web/src/components/PlatformMessageEditor.vue",
+        "apps/web/src/components/PlatformNotificationActionDialog.vue",
+        "apps/web/src/components/PlatformNotificationOperations.vue",
+        "apps/web/src/components/PlatformNotificationFacts.vue",
+        "apps/web/src/components/use-platform-notification-list.ts",
+        "apps/web/src/components/use-platform-message-editor.ts",
+        "apps/web/src/components/use-platform-notification-action.ts",
+        "apps/web/src/use-modal-dialog.ts",
+        "apps/web/src/platform-notifications.css",
       ]) {
         sourceFiles[source] = hash(await readFile(source, "utf8"));
       }
