@@ -13,15 +13,24 @@ import {
   securityFixtureFile,
 } from "./lib/security-review-fixtures.mjs";
 import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
+import { verifySecurityReadStates } from "./lib/security-read-state-preview.mjs";
 
 const args = process.argv.slice(2);
 assert.ok(
   args.length === 0 ||
-    (args.length === 2 && args[0] === "--capture-review" && /^r[1-9]\d*$/.test(args[1])),
-  "Use no arguments or --capture-review rN",
+    (args.length === 1 && args[0] === "--read-states") ||
+    (args.length === 2 &&
+      ["--capture-review", "--capture-read-states"].includes(args[0]) &&
+      /^r[1-9]\d*$/.test(args[1])),
+  "Use no arguments or --capture-review rN, --read-states, --capture-read-states rN",
 );
-const capture = args.length > 0;
-const output = capture ? path.resolve(`output/playwright/p59-page-composition-${args[1]}`) : null;
+const readStates = ["--read-states", "--capture-read-states"].includes(args[0]);
+const capture = args.length === 2;
+const output = capture
+  ? path.resolve(
+      `output/playwright/p59-${readStates ? "read-states" : "page-composition"}-${args[1]}`,
+    )
+  : null;
 if (capture) await mkdir(output); // Exclusive version directory: never overwrite a previous review.
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const { fixture, nav, snapshot } = await securityReviewFixtures();
@@ -42,6 +51,7 @@ const sources = new Set([
   "scripts/verify-security-page-preview.mjs",
   "scripts/lib/security-review-fixtures.mjs",
   "scripts/lib/ui-imported-style-sources.mjs",
+  "scripts/lib/security-read-state-preview.mjs",
   "apps/web/vite.config.ts",
 ]);
 const results = [],
@@ -52,11 +62,13 @@ try {
   const origin = `http://127.0.0.1:${port}`;
   console.log(`P59 C Vue review ${origin}`);
   browser = await chromium.launch();
-  for (const width of [1440, 390]) {
+  for (const { width, motion } of [1440, 390].flatMap((width) =>
+    (readStates ? ["reduce", "no-preference"] : ["reduce"]).map((motion) => ({ width, motion })),
+  )) {
     const context = await browser.newContext({
       viewport: { width, height: width === 390 ? 844 : 1000 },
       locale: "zh-CN",
-      reducedMotion: "reduce",
+      reducedMotion: motion,
     });
     const page = await context.newPage(),
       requests = [],
@@ -101,174 +113,210 @@ try {
         }
         return route.fulfill({ json: securityEnvelope(data) });
       });
-      await page.goto(origin + "/platform-admin/security");
-      const surface = page.locator(".security-ops--review");
-      const ready = () =>
-        page.waitForFunction(
-          () => !!document.querySelector('.p59-investigation .security-grid[aria-busy="false"]'),
-        );
-      for (const [view, label, count] of [
-        ["events", "事件", 1],
-        ["sessions", "会话", 1],
-        ["credentials", "访问与凭证", 2],
-        ["audit", "平台审计", 1],
-      ]) {
-        if (view !== "events")
-          await surface.getByRole("link", { name: label, exact: true }).click();
-        await ready();
-        await page.evaluate(() => document.fonts.ready);
-        await page.waitForFunction(
-          () =>
-            getComputedStyle(document.querySelector(".security-view-nav")).backgroundColor ===
-            "rgb(16, 42, 99)",
-        );
-        check(
-          await surface.locator(".security-grid > section").count(),
-          count,
-          `${view} original collection count`,
-        );
-        check(
-          await surface.locator('.security-view-nav a[aria-current="page"]').innerText(),
-          label,
-          "current view",
-        );
-        check(await page.locator(".role-page-title").count(), 0, "no duplicate outer title");
-        check(await surface.locator("h1").count(), 1, "one page title");
-        check(
-          await surface.locator(".security-kpis strong").allTextContents(),
-          Object.values(fixture.summary).map(String),
-          "global summary unchanged",
-        );
-        check(
-          await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
-          true,
-          "no horizontal overflow",
-        );
-        const layout = await surface.evaluate((node) => {
-          const selectors = [".security-view-nav", ".p59-background", ".p59-investigation"];
-          return selectors.map((selector) => {
-            const element = node.querySelector(selector),
-              box = element.getBoundingClientRect();
-            return {
-              top: box.top,
-              bottom: box.bottom,
-              width: box.width,
-              background: getComputedStyle(element).backgroundColor,
-            };
-          });
-        });
-        check(
-          layout[0].bottom <= layout[1].top && layout[1].bottom <= layout[2].top,
-          true,
-          "source and visual order",
-        );
-        check(
-          layout
-            .slice(1)
-            .every((item) => item.background === "rgb(255, 255, 255)" && item.width >= 300),
-          true,
-          "white readable work regions",
-        );
-        check(
-          await surface
-            .locator("h1")
-            .evaluate(
-              (node) =>
-                getComputedStyle(node).fontFamily.includes("Microsoft YaHei") &&
-                getComputedStyle(node).fontWeight === "700",
-            ),
-          true,
-          "C heading typography",
-        );
-        if (width === 1440)
-          check(
-            await surface
-              .locator("td.table-view-controls__frozen")
-              .first()
-              .evaluate((node) => getComputedStyle(node).backgroundColor),
-            "rgb(255, 255, 255)",
-            "no legacy ivory frozen cell",
-          );
-        if (capture) {
-          const frames =
-            width === 390
-              ? [
-                  ["top", null],
-                  ["summary", ".p59-background"],
-                  ["results", ".p59-investigation"],
-                  ...(view === "credentials"
-                    ? [["tokens", ".security-grid > section:last-child"]]
-                    : []),
-                ]
-              : [["page", null]];
-          for (const [frame, selector] of frames) {
-            if (selector)
-              await surface
-                .locator(selector)
-                .evaluate((node) => scrollTo(0, node.getBoundingClientRect().top + scrollY - 16));
-            else await page.evaluate(() => scrollTo(0, 0));
-            const name = `${width}-${view}-${frame}.png`,
-              bytes = await page.screenshot({ fullPage: width !== 390, animations: "disabled" });
-            await writeFile(path.join(output, name), bytes);
+      if (readStates) {
+        await verifySecurityReadStates({
+          page,
+          origin,
+          snapshot,
+          check,
+          requests,
+          capture: async (state, region) => {
+            if (!capture || motion !== "reduce") return;
+            await region.evaluate((node) => node.scrollIntoView({ block: "center" }));
+            await page.evaluate(
+              () =>
+                new Promise((resolve) =>
+                  requestAnimationFrame(() => requestAnimationFrame(resolve)),
+                ),
+            );
+            const bytes = await page.screenshot({ animations: "disabled" });
+            const file = `${width}-${state}.png`;
+            await writeFile(path.join(output, file), bytes);
             images.push({
-              file: name,
+              file,
               sha256: hash(bytes),
               width,
               pixelWidth: bytes.readUInt32BE(16),
               pixelHeight: bytes.readUInt32BE(20),
-              view,
-              frame,
-              scope: "page structure only; local E2E fixtures; pending review",
+              view: state,
+              scope: "read-state region only; local fixtures; pending review",
             });
+          },
+        });
+        check(errors, [], "read states no page errors");
+        check(unexpected, [], "read states no unexpected requests");
+        results.push({ width, motion, checks, requests });
+        console.log(`P59 read states ${width}/${motion} passed ${checks}`);
+      } else {
+        await page.goto(origin + "/platform-admin/security");
+        const surface = page.locator(".security-ops--review");
+        const ready = () =>
+          page.waitForFunction(
+            () => !!document.querySelector('.p59-investigation .security-grid[aria-busy="false"]'),
+          );
+        for (const [view, label, count] of [
+          ["events", "事件", 1],
+          ["sessions", "会话", 1],
+          ["credentials", "访问与凭证", 2],
+          ["audit", "平台审计", 1],
+        ]) {
+          if (view !== "events")
+            await surface.getByRole("link", { name: label, exact: true }).click();
+          await ready();
+          await page.evaluate(() => document.fonts.ready);
+          await page.waitForFunction(
+            () =>
+              getComputedStyle(document.querySelector(".security-view-nav")).backgroundColor ===
+              "rgb(16, 42, 99)",
+          );
+          check(
+            await surface.locator(".security-grid > section").count(),
+            count,
+            `${view} original collection count`,
+          );
+          check(
+            await surface.locator('.security-view-nav a[aria-current="page"]').innerText(),
+            label,
+            "current view",
+          );
+          check(await page.locator(".role-page-title").count(), 0, "no duplicate outer title");
+          check(await surface.locator("h1").count(), 1, "one page title");
+          check(
+            await surface.locator(".security-kpis strong").allTextContents(),
+            Object.values(fixture.summary).map(String),
+            "global summary unchanged",
+          );
+          check(
+            await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
+            true,
+            "no horizontal overflow",
+          );
+          const layout = await surface.evaluate((node) => {
+            const selectors = [".security-view-nav", ".p59-background", ".p59-investigation"];
+            return selectors.map((selector) => {
+              const element = node.querySelector(selector),
+                box = element.getBoundingClientRect();
+              return {
+                top: box.top,
+                bottom: box.bottom,
+                width: box.width,
+                background: getComputedStyle(element).backgroundColor,
+              };
+            });
+          });
+          check(
+            layout[0].bottom <= layout[1].top && layout[1].bottom <= layout[2].top,
+            true,
+            "source and visual order",
+          );
+          check(
+            layout
+              .slice(1)
+              .every((item) => item.background === "rgb(255, 255, 255)" && item.width >= 300),
+            true,
+            "white readable work regions",
+          );
+          check(
+            await surface
+              .locator("h1")
+              .evaluate(
+                (node) =>
+                  getComputedStyle(node).fontFamily.includes("Microsoft YaHei") &&
+                  getComputedStyle(node).fontWeight === "700",
+              ),
+            true,
+            "C heading typography",
+          );
+          if (width === 1440)
+            check(
+              await surface
+                .locator("td.table-view-controls__frozen")
+                .first()
+                .evaluate((node) => getComputedStyle(node).backgroundColor),
+              "rgb(255, 255, 255)",
+              "no legacy ivory frozen cell",
+            );
+          if (capture) {
+            const frames =
+              width === 390
+                ? [
+                    ["top", null],
+                    ["summary", ".p59-background"],
+                    ["results", ".p59-investigation"],
+                    ...(view === "credentials"
+                      ? [["tokens", ".security-grid > section:last-child"]]
+                      : []),
+                  ]
+                : [["page", null]];
+            for (const [frame, selector] of frames) {
+              if (selector)
+                await surface
+                  .locator(selector)
+                  .evaluate((node) => scrollTo(0, node.getBoundingClientRect().top + scrollY - 16));
+              else await page.evaluate(() => scrollTo(0, 0));
+              const name = `${width}-${view}-${frame}.png`,
+                bytes = await page.screenshot({ fullPage: width !== 390, animations: "disabled" });
+              await writeFile(path.join(output, name), bytes);
+              images.push({
+                file: name,
+                sha256: hash(bytes),
+                width,
+                pixelWidth: bytes.readUInt32BE(16),
+                pixelHeight: bytes.readUInt32BE(20),
+                view,
+                frame,
+                scope: "page structure only; local E2E fixtures; pending review",
+              });
+            }
           }
         }
+        const search = surface.getByRole("searchbox");
+        await search.fill("no-match");
+        await surface.getByRole("button", { name: "查询", exact: true }).click();
+        await ready();
+        check(await surface.locator(".security-inline-empty").count(), 1, "audit empty result");
+        check(await surface.locator(".security-view-nav a").count(), 4, "empty retains navigation");
+        check(
+          await surface.locator(".security-kpis strong").allTextContents(),
+          Object.values(fixture.summary).map(String),
+          "query does not relabel global summary",
+        );
+        await surface.getByRole("button", { name: "重置", exact: true }).click();
+        await ready();
+        check(await search.inputValue(), "", "query reset");
+        check(await surface.locator(".security-inline-empty").count(), 0, "records return");
+        await search.focus();
+        await page.keyboard.press("Tab");
+        await page.waitForFunction(
+          () =>
+            document.activeElement?.matches(":focus-visible") &&
+            getComputedStyle(document.activeElement).outlineColor === "rgb(47, 110, 229)",
+          undefined,
+          { timeout: 3000 },
+        );
+        check(
+          await surface
+            .getByRole("combobox", { name: "状态", exact: true })
+            .evaluate((node) => node === document.activeElement),
+          true,
+          "query keyboard order",
+        );
+        check(
+          await page.evaluate(() => getComputedStyle(document.activeElement).outlineColor),
+          "rgb(47, 110, 229)",
+          "blue keyboard focus",
+        );
+        check(
+          requests.every((request) => request.body === null),
+          true,
+          "GET only",
+        );
+        check(requests.length, 6, "one read per view/query/reset");
+        check(errors, [], "no page errors");
+        check(unexpected, [], "no unexpected requests");
+        results.push({ width, checks, requests });
+        console.log(`P59 C ${width} passed ${checks}`);
       }
-      const search = surface.getByRole("searchbox");
-      await search.fill("no-match");
-      await surface.getByRole("button", { name: "查询", exact: true }).click();
-      await ready();
-      check(await surface.locator(".security-inline-empty").count(), 1, "audit empty result");
-      check(await surface.locator(".security-view-nav a").count(), 4, "empty retains navigation");
-      check(
-        await surface.locator(".security-kpis strong").allTextContents(),
-        Object.values(fixture.summary).map(String),
-        "query does not relabel global summary",
-      );
-      await surface.getByRole("button", { name: "重置", exact: true }).click();
-      await ready();
-      check(await search.inputValue(), "", "query reset");
-      check(await surface.locator(".security-inline-empty").count(), 0, "records return");
-      await search.focus();
-      await page.keyboard.press("Tab");
-      await page.waitForFunction(
-        () =>
-          document.activeElement?.matches(":focus-visible") &&
-          getComputedStyle(document.activeElement).outlineColor === "rgb(47, 110, 229)",
-        undefined,
-        { timeout: 3000 },
-      );
-      check(
-        await surface
-          .getByRole("combobox", { name: "状态", exact: true })
-          .evaluate((node) => node === document.activeElement),
-        true,
-        "query keyboard order",
-      );
-      check(
-        await page.evaluate(() => getComputedStyle(document.activeElement).outlineColor),
-        "rgb(47, 110, 229)",
-        "blue keyboard focus",
-      );
-      check(
-        requests.every((request) => request.body === null),
-        true,
-        "GET only",
-      );
-      check(requests.length, 6, "one read per view/query/reset");
-      check(errors, [], "no page errors");
-      check(unexpected, [], "no unexpected requests");
-      results.push({ width, checks, requests });
-      console.log(`P59 C ${width} passed ${checks}`);
     } finally {
       await context.close();
     }
@@ -296,6 +344,7 @@ try {
         {
           page: "P59",
           revision: args[1],
+          readStates,
           sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
           capturedAt: new Date().toISOString(),
           scope:
@@ -323,6 +372,7 @@ try {
   console.log(
     JSON.stringify({
       groups: results.length,
+      readStates,
       checks: results.reduce((sum, result) => sum + result.checks, 0),
       images: images.length,
       sources: sources.size,

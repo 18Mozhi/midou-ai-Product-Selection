@@ -21,6 +21,11 @@ export function previewSecurityPage(source) {
     '<h1 id="security-operations-title">安全中心</h1>',
   );
   result = once(result, "<p>平台安全运营中心</p>", "<p>P59 / 调查工作区</p>");
+  result = once(
+    result,
+    '<h3 id="security-read-state-title">{{ stateTitle }}</h3>',
+    '<h2 id="security-read-state-title">{{ stateTitle }}</h2>',
+  );
   const summary = result.match(/      <section class="security-kpis"[\s\S]*?      <\/section>/);
   const nav = result.match(/      <nav class="security-view-nav"[\s\S]*?      <\/nav>/);
   assert.ok(summary && nav);
@@ -47,8 +52,8 @@ ${summary[0]}
   );
   result = once(
     result,
-    "    <section v-if=\"state !== 'ready'\"",
-    '    <p class="p59-fixture-note">本地实际 Vue 审核预览 · 原 E2E 合成样例 · 摘要与记录数量不代表生产统计 · 尚未部署</p>\n    <section v-if="state !== \'ready\'"',
+    "    <section\n      v-if=\"state !== 'ready'\"",
+    '    <p class="p59-fixture-note">本地实际 Vue 审核预览 · 原 E2E 合成样例 · 摘要与记录数量不代表生产统计 · 尚未部署</p>\n    <section\n      v-if="state !== \'ready\'"',
   );
   return result;
 }

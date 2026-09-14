@@ -1,5 +1,7 @@
 # P59 实际 Vue C 整合 r2 · 待审
 
+批次23修改非ready区的加载语义与审核状态布局，原本包图片/manifest不更新，源码与驱动指纹已有演进。新增[读取状态r2](../p59-read-states-r2/README.md)仅对相应区域申请审核，不扩大本包整页批准。
+
 后续批次21修改公共详情组件的后备焦点和审核CSS；本包原图/manifest不覆盖，来源已演进，不能作为当前全部交互证明。[修复与新焦点图](../../../design-plans/ui-phase-2-2026-09-07/P59-DETAIL-FOCUS-BATCH21.md)保持本包布局待审范围。
 
 [打开17图图册](index.html) · [实施与验证范围](../../../design-plans/ui-phase-2-2026-09-07/P59-PAGE-COMPOSITION-BATCH19.md)

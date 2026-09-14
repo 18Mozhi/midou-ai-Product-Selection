@@ -400,9 +400,21 @@ onBeforeUnmount(() => {
       </div>
     </header>
 
-    <section v-if="state !== 'ready'" class="platform-dashboard-state" :data-kind="state">
-      <h3>{{ stateTitle }}</h3>
-      <p>{{ notice || "切换时间窗，或由运维在宝塔检查 API 与 MySQL 后重试。" }}</p>
+    <section
+      v-if="state !== 'ready'"
+      class="platform-dashboard-state"
+      :data-kind="state"
+      :aria-busy="state === 'loading'"
+      aria-labelledby="security-read-state-title"
+    >
+      <h3 id="security-read-state-title">{{ stateTitle }}</h3>
+      <p role="status">
+        {{
+          state === "loading"
+            ? "正在读取安全运营数据，请稍候。"
+            : notice || "切换时间窗，或由运维在宝塔检查 API 与 MySQL 后重试。"
+        }}
+      </p>
       <details v-if="requestId">
         <summary>技术详情</summary>
         <code>请求 ID：{{ requestId }}</code>

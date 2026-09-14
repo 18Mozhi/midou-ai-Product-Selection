@@ -1,5 +1,9 @@
 # M06-04 宝塔运维与回滚
 
+## 2026-09-15 UI 初次读取状态
+
+P59加载中仅显示“正在读取安全运营数据，请稍候。”，状态区busy与真实loading关联，失败保留原说明和按钮条件。`node scripts/verify-security-page-preview.mjs --read-states`运行本地八状态/双宽/双动效428项，无文件输出；`--capture-read-states rN`首次创建新图包，不覆盖历史。原429/503三次GET重试、15秒超时、500ms去抖、权限与审计不改。无新增环境变量、迁移或后端重启；未部署，未来获准Web包由宝塔发布、刷新浏览器生效，审核C状态CSS仍未接入生产。范围与来源差异见 `design-plans/ui-phase-2-2026-09-07/P59-READ-STATES-BATCH23.md`。
+
 ## 2026-09-15 UI 记录消失与空结果焦点
 
 P59五个结果区向ResponsiveDataView传内部可选focusFallback；整个列表清空并卸载详情时，仅当前浮层持焦才回到仍可见的所属结果区，其他记录尚在则保留原列表后备。不改安全API、审计或删除逻辑。`node scripts/verify-security-detail-preview.mjs --removal`运行244项本地验证、不写文件；`--capture-removal rN`只创建新版本图包。样例请求到达等待5秒、绘制稳定等待3秒只属于测试，不是生产配置。当前r4待审，完整范围见 `design-plans/ui-phase-2-2026-09-07/P59-DETAIL-REMOVAL-BATCH22.md`。未部署、无需迁移或后端重启；以后随获准Web包通过宝塔发布并刷新浏览器，审核C样式仍未接入生产。
