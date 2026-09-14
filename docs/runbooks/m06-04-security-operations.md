@@ -1,5 +1,13 @@
 # M06-04 宝塔运维与回滚
 
+## 2026-09-15 UI 读取生命周期修复
+
+P59 刷新中切换调查视图会取消并废弃旧读取，新视图独立读取；离页/卸载后的晚到响应不再回填。新范围清掉旧追踪，首次超时不声称存在成功快照。原15秒时限、500ms手动去抖、分页/API/服务端读取审计均不变，无新增配置或迁移。本轮未部署、无需现在重启生产；后续随获准的本地Web构建包通过既有宝塔流程发布，不执行下方模块退役的down.sql。
+
+回归：`node --test tests/unit/security-read-lifecycle.test.mjs tests/m06-04/security-operations.test.mjs`；`node scripts/verify-security-read-lifecycle.mjs`。后者在本地隔离端口运行实际App及合成HTTP样例，默认不写图片，拒绝外部/未知请求并在finally关闭服务；不能替代真实权限或读取审计验收。完整范围见 `design-plans/ui-phase-2-2026-09-07/P59-READ-LIFECYCLE-BATCH18.md`。
+
+## 首次模块安装与退役（非本次 UI 修复操作）
+
 1. 备份后执行 `0022_security_operations_m06_04.up.sql`，由宝塔发布 Web/API。
 2. 设置 `SECURITY_OPERATIONS_DEFAULT_WINDOW=24h` 与 `SECURITY_OPERATIONS_RECENT_LIMIT=50`，重启 Node API。
 3. 用平台安全管理员访问 `/platform-admin/security`；逐一验证事件、会话、访问与凭证、平台审计四个 URL 视图，确认时间窗、搜索、状态、重置、刷新、分页、浏览器返回和刷新后状态恢复。桌面使用表格，390 像素窄屏使用每页最多 20 条摘要卡片和详情抽屉，页面不得横向遮挡。

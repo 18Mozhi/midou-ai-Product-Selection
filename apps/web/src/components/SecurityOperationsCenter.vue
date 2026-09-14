@@ -9,6 +9,7 @@ import "../security-operations.css";
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
 const route = useRoute();
+const ownerPath = route.path;
 const router = useRouter();
 const securityViews = ["events", "sessions", "credentials", "audit"] as const;
 type SecurityView = (typeof securityViews)[number];
@@ -172,8 +173,10 @@ function setNotice(message: string, kind: "info" | "error" = "info") {
   noticeKind.value = kind;
 }
 async function load() {
-  if (refreshing.value) return;
+  if (!mounted || route.path !== ownerPath || refreshing.value) return;
   const sequence = ++loadSequence;
+  const requestedPath = route.fullPath;
+  const ownsRead = () => mounted && sequence === loadSequence && route.fullPath === requestedPath;
   loadController?.abort();
   const controller = new AbortController();
   loadController = controller;
@@ -199,7 +202,7 @@ async function load() {
     const response = await request<any>(`/platform/security/operations?${parameters}`, {
       signal: controller.signal,
     });
-    if (sequence !== loadSequence) return;
+    if (!ownsRead()) return;
     requestId.value = response.request_id;
     data.value = normalizeData(response.data);
     page.value = mainPagination.value.page;
@@ -209,16 +212,15 @@ async function load() {
     // Keep the workspace available; each collection owns its own empty state.
     state.value = "ready";
   } catch (error) {
-    if (
-      sequence !== loadSequence ||
-      (error instanceof DOMException && error.name === "AbortError" && !timedOut)
-    )
+    if (!ownsRead() || (error instanceof DOMException && error.name === "AbortError" && !timedOut))
       return;
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? requestId.value;
     setNotice(
       timedOut
-        ? "读取超过 15 秒，已停止本次请求并保留上次成功数据。"
+        ? loadedOnce.value
+          ? "读取超过 15 秒，已停止本次请求并保留上次成功数据。"
+          : "读取超过 15 秒，已停止本次请求，尚未取得安全运营数据。"
         : `${failure?.actionHint ?? "安全运营事实读取失败。"}${loadedOnce.value ? " 已保留上次成功数据。" : ""}`,
       "error",
     );
@@ -349,13 +351,20 @@ watch(
   () => route.fullPath,
   async () => {
     if (!mounted) return;
+    // A changed query owns a new read; manual same-query refresh remains single-flight.
+    loadSequence += 1;
+    loadController?.abort();
+    refreshing.value = false;
+    if (route.path !== ownerPath) return;
     loadedOnce.value = false;
+    requestId.value = "";
     readLocation();
     await load();
   },
 );
 onBeforeUnmount(() => {
   mounted = false;
+  loadSequence += 1;
   loadController?.abort();
 });
 </script>
