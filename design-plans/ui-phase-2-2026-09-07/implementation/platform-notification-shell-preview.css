@@ -1,0 +1,90 @@
+/* Review-only full C composition; no production import. */
+html body.shell-vue-c:has(#app) #app .role-shell.role-shell--review {
+  .platform-notifications {
+    --so-font-ui: "Microsoft YaHei", sans-serif;
+    --so-font-display: "Microsoft YaHei", sans-serif;
+    grid-template-columns: minmax(0, 1fr);
+    border: 0;
+    background: transparent;
+    font-family: "Microsoft YaHei", sans-serif;
+  }
+  .role-context-drawer > summary {
+    border-left-color: var(--shell-blue);
+  }
+  .platform-notifications__surface {
+    padding: 0;
+    gap: 18px;
+  }
+  .platform-notifications__hero {
+    padding-top: 0;
+    border-top: 0;
+  }
+  .platform-notifications__hero h1 {
+    margin: 6px 0;
+    font:
+      700 30px/1.4 "Microsoft YaHei",
+      sans-serif;
+    letter-spacing: 0;
+  }
+  .platform-notifications__rail {
+    display: block;
+    padding: 0;
+    background: transparent;
+    color: var(--so-platform-notification-text);
+  }
+  .platform-notifications__identity {
+    display: none;
+  }
+  .platform-notifications__rail nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .platform-notifications__rail nav button {
+    min-height: 64px;
+    border-color: var(--so-platform-notification-border);
+    background: white;
+    color: var(--so-platform-notification-text);
+  }
+  .platform-notifications__rail nav button[aria-current="page"] {
+    border-color: var(--so-platform-notification-primary);
+    background: var(--so-platform-notification-primary);
+    color: white;
+  }
+  .platform-notifications__rail nav button:not([aria-current="page"]):hover {
+    border-color: var(--so-platform-notification-primary);
+    color: var(--so-platform-notification-primary);
+  }
+  .platform-notifications__rail > p {
+    margin: 10px 0 0;
+    padding: 0;
+    border: 0;
+    color: var(--so-platform-notification-text-muted);
+  }
+  .platform-notifications :is(button, a, input, select, textarea, summary):focus-visible {
+    outline-color: var(--so-platform-notification-focus);
+  }
+  @media (max-width: 840px) {
+    .platform-notifications__hero {
+      flex-direction: column;
+      gap: 14px;
+    }
+    .platform-notifications__hero h1 {
+      font-size: 27px;
+    }
+    .platform-notifications__rail nav button {
+      display: block;
+      min-width: 0;
+      min-height: 44px;
+      padding: 10px 6px;
+      text-align: center;
+    }
+    .platform-notifications__rail nav button > b,
+    .platform-notifications__rail nav button small {
+      display: none;
+    }
+    .platform-notifications__rail nav button strong {
+      font-size: 14px;
+    }
+  }
+}

@@ -1,0 +1,457 @@
+/* Review-only C composition. Explicitly supersedes page-local legacy shell overrides. */
+html body.shell-vue-c:has(#app) #app .role-shell.role-shell--review {
+  --shell-blue: #244bb0;
+  --shell-ink: #172d4c;
+  --shell-muted: #536985;
+  --shell-border: #d8e2ef;
+  --shell-canvas: #f3f6fb;
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-rows: 76px minmax(0, 1fr);
+  min-height: 100dvh;
+  padding: 0;
+  background: var(--shell-canvas);
+  color: var(--shell-ink);
+  font-family: "Microsoft YaHei", sans-serif;
+
+  .role-topbar {
+    grid-column: 1 / -1;
+    position: relative;
+    inset: auto;
+    height: 76px;
+    min-height: 0;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    border: 0;
+    border-bottom: 1px solid var(--shell-border);
+    background: white;
+  }
+  .role-brand {
+    gap: 12px;
+    color: var(--shell-ink);
+  }
+  .role-brand > span {
+    border: 0;
+    border-radius: 8px;
+    background: var(--shell-blue);
+    color: white;
+  }
+  .role-brand > b {
+    font-family: inherit;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+  }
+  .role-brand > em {
+    font-size: 13px;
+    letter-spacing: 0;
+    color: var(--shell-muted);
+  }
+  .role-top-actions {
+    gap: 8px;
+  }
+  .role-top-actions :is(a, button),
+  .role-menu-toggle {
+    min-height: 44px;
+    min-width: 44px;
+    border: 1px solid var(--shell-border);
+    border-radius: 7px;
+    background: white;
+    color: var(--shell-ink);
+  }
+  .role-top-actions .role-quick-action {
+    background: var(--shell-blue);
+    color: white;
+  }
+  .role-menu-toggle {
+    display: none;
+  }
+  .role-navigation-frame {
+    grid-column: 1;
+    grid-row: 2;
+    position: sticky;
+    inset: auto;
+    top: 0;
+    align-self: start;
+    box-sizing: border-box;
+    width: 240px;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 22px 16px;
+    overflow-y: auto;
+    border: 0;
+    border-radius: 0;
+    background: var(--shell-blue);
+    color: white;
+  }
+  .role-navigation-frame[open] {
+    display: block;
+  }
+  .role-sidebar {
+    position: static;
+    inset: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    height: auto;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    transform: none;
+    transition: none;
+  }
+  .role-sidebar-head {
+    display: flex;
+    width: auto;
+    padding: 0 8px 20px;
+    gap: 7px;
+    border: 0;
+  }
+  .role-sidebar-head strong {
+    font:
+      700 18px/1.5 "Microsoft YaHei",
+      sans-serif;
+  }
+  .role-sidebar-head small {
+    white-space: normal;
+    color: #e2ebff;
+    font:
+      13px/1.7 "Microsoft YaHei",
+      sans-serif;
+  }
+  .role-menu-search {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    margin-bottom: 16px;
+    padding: 0 10px;
+    border: 1px solid #91afea;
+    border-radius: 7px;
+    background: white;
+    color: var(--shell-ink);
+  }
+  .role-menu-search input {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 0 4px;
+    border: 0;
+    background: white;
+    color: var(--shell-ink);
+    font:
+      16px/1.5 "Microsoft YaHei",
+      sans-serif;
+  }
+  .role-menu-search input::placeholder {
+    color: var(--shell-muted);
+  }
+  .role-nav-groups {
+    display: grid;
+    gap: 8px;
+    flex: none;
+    overflow: visible;
+  }
+  .role-nav-groups details {
+    border: 0;
+  }
+  .role-nav-groups details > summary {
+    justify-content: space-between;
+    height: auto;
+    min-height: 44px;
+    padding: 8px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: white;
+    font-size: 14px;
+    letter-spacing: 0;
+  }
+  .role-nav-groups summary:hover {
+    background: #365fc6;
+  }
+  .role-nav-menu {
+    position: static;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .role-nav-menu a {
+    min-width: 0;
+    min-height: 44px;
+    margin: 3px 0;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #eef3ff;
+    font-size: 14px;
+  }
+  .role-nav-menu a:hover {
+    background: #365fc6;
+  }
+  .role-nav-menu a[aria-current="page"] {
+    color: var(--shell-blue);
+    background: white;
+    font-weight: 700;
+  }
+  .role-sidebar-utility {
+    margin: 24px 0 0;
+    display: grid;
+    border: 0;
+  }
+  .role-sidebar-utility a {
+    width: auto;
+    min-height: 44px;
+    padding: 10px 8px;
+    border: 0;
+    border-top: 1px solid #7595db;
+    border-radius: 0;
+    color: white;
+    background: transparent;
+    white-space: normal;
+    font-size: 14px;
+    transition: none;
+  }
+  .role-menu-empty {
+    min-width: 0;
+    padding: 12px 8px;
+    color: white;
+    line-height: 1.8;
+  }
+  .role-content {
+    grid-column: 2;
+    grid-row: 2;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+    padding: 24px 32px 48px;
+  }
+  .role-page-breadcrumb {
+    margin: 0 0 12px;
+    color: var(--shell-muted);
+    font:
+      13px/1.6 "Microsoft YaHei",
+      sans-serif;
+  }
+  .role-page-title {
+    display: block;
+    min-height: 0;
+    padding: 0;
+    margin: 0 0 18px;
+    border: 0;
+  }
+  .role-page-title p {
+    display: none;
+  }
+  .role-page-title h1 {
+    color: var(--shell-ink);
+    font:
+      700 28px/1.4 "Microsoft YaHei",
+      sans-serif;
+    letter-spacing: 0;
+  }
+  .role-context-rail {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin: 0 0 24px;
+    padding: 12px 0;
+    border: 0;
+    border-top: 1px solid var(--shell-border);
+    border-bottom: 1px solid var(--shell-border);
+    border-radius: 0;
+    background: transparent;
+  }
+  .role-context-rail > div {
+    padding: 0;
+    border: 0;
+  }
+  .role-context-rail small {
+    font:
+      13px/1.5 "Microsoft YaHei",
+      sans-serif;
+    color: var(--shell-muted);
+  }
+  .role-context-rail strong {
+    margin-top: 3px;
+    font-size: 14px;
+    color: var(--shell-ink);
+  }
+  .role-context-drawer {
+    display: none;
+  }
+  .role-mobile-nav {
+    display: none;
+  }
+  .role-gate-state {
+    min-height: 400px;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .role-gate-state h1 {
+    font-size: 28px;
+  }
+  .role-state-mark {
+    display: none;
+  }
+  .role-gate-state :is(a, button) {
+    border: 0;
+    border-radius: 6px;
+    background: var(--shell-blue);
+  }
+  .provider-runtime-surface {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .provider-runtime-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 0 16px;
+    border-bottom: 1px solid var(--shell-border);
+    border-radius: 0;
+    background: transparent;
+  }
+  .provider-runtime-tabs a {
+    flex: 0 1 auto;
+    min-height: 44px;
+    padding: 10px 14px;
+    color: var(--shell-muted);
+    background: transparent;
+  }
+  .provider-runtime-tabs a[aria-current="page"] {
+    background: var(--shell-blue);
+    color: white;
+  }
+  :is(.role-topbar, .role-content, .role-mobile-nav) :is(a, button, input, summary):focus-visible {
+    outline: 3px solid #4878e9;
+    outline-offset: 3px;
+  }
+  .role-navigation-frame :is(a, button, input, summary):focus-visible {
+    outline: 3px solid #b9d0ff;
+    outline-offset: 3px;
+  }
+  .role-navigation-frame input:focus-visible {
+    outline-color: var(--shell-blue);
+    outline-offset: -3px;
+  }
+
+  @media (max-width: 1100px) and (min-width: 841px) {
+    grid-template-columns: 220px minmax(0, 1fr);
+    .role-navigation-frame {
+      width: 220px;
+      padding-inline: 12px;
+    }
+    .role-content {
+      padding-inline: 20px;
+    }
+  }
+  @media (max-width: 840px) {
+    display: block;
+    padding: 0 0 calc(80px + env(safe-area-inset-bottom));
+    .role-topbar {
+      height: 64px;
+      padding: 0 12px;
+      gap: 8px;
+    }
+    .role-brand {
+      margin-right: auto;
+      gap: 0;
+    }
+    .role-brand > b,
+    .role-brand > em {
+      display: none;
+    }
+    .role-menu-toggle {
+      display: inline-flex;
+    }
+    .role-top-actions {
+      gap: 6px;
+    }
+    .role-top-actions :is(a, button) {
+      padding-inline: 10px;
+    }
+    .role-content {
+      padding: 18px 16px 32px;
+    }
+    .role-page-title h1 {
+      font-size: 25px;
+    }
+    .role-context-rail {
+      display: none;
+    }
+    .role-context-drawer {
+      display: block;
+      margin-bottom: 20px;
+      border: 1px solid var(--shell-border);
+      border-radius: 7px;
+      background: white;
+    }
+    .role-context-drawer > div {
+      grid-template-columns: 1fr 1fr;
+    }
+    .role-navigation-frame {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: min(340px, calc(100vw - 32px));
+      height: 100dvh;
+      max-height: 100dvh;
+      padding: 16px;
+    }
+    .role-navigation-frame:not([open]) {
+      display: none;
+    }
+    .role-navigation-frame::backdrop {
+      background: rgb(12 29 54 / 55%);
+    }
+    .role-navigation-close {
+      display: block;
+      min-height: 44px;
+      margin: 0 0 20px auto;
+      padding: 0 14px;
+      border: 1px solid #afc7f7;
+      border-radius: 6px;
+      color: white;
+      background: transparent;
+      font-size: 16px;
+    }
+    .role-mobile-nav {
+      position: fixed;
+      inset: auto 0 0;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      min-height: 72px;
+      border: 0;
+      border-top: 1px solid var(--shell-border);
+      background: white;
+    }
+    .role-mobile-nav :is(a, button, i) {
+      color: var(--shell-muted);
+    }
+    .role-mobile-nav [aria-current="page"] {
+      color: var(--shell-blue);
+      background: #e8efff;
+    }
+    .provider-runtime-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 0 16px;
+    }
+    .provider-runtime-tabs a {
+      flex: 1 1 135px;
+      text-align: center;
+      justify-content: center;
+    }
+  }
+}

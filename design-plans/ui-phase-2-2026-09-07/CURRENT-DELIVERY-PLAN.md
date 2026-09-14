@@ -1,5 +1,9 @@
 # 第二阶段完整实施计划 · 当前领取与审核入口
 
+批次10已提交`19cf0f02`；批次11产出P57实际Vue与C导航组合，单一标题、页内横向分区。
+双端双动效72项、原App56项及8项定向单测通过；16张r2图的双端首屏结构待审。
+[整合审核r2](../../output/playwright/p57-shell-composition-r2/README.md)仍为审核宿主，生产导航尚未替换；全73页与完整验收继续。
+
 批次09已提交`f7d061d1`；批次10修复P57实际App焦点、阅读危险hover和Teleport筛选组合。
 双端/双动效56项与相关单测32项通过，r3手机筛选区域待审；r1/r2仅保留诊断，不扩大旧按钮批准。
 下一步必须整合旧外层导航与重复标题；[实际App图包](design/platform-notifications-direction-c/app-review-r3/README.md)不等于全73页或真实验收完成。

@@ -7,11 +7,22 @@ import ts from "typescript";
 import { createServer } from "vite";
 import { chromium, expect } from "@playwright/test";
 import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
+import {
+  notificationShellPlugin,
+  notificationShellSources,
+} from "./lib/platform-notification-shell-preview.mjs";
 
-const capture = process.argv[2] === "--capture-review";
-assert.ok(process.argv.length === 2 || (capture && process.argv.length === 3));
+const args = process.argv.slice(2);
+assert.ok(
+  args.every((arg) => ["--capture-review", "--shell-preview"].includes(arg)) &&
+    new Set(args).size === args.length,
+);
+const capture = args.includes("--capture-review");
+const shellPreview = args.includes("--shell-preview");
 const output = path.resolve(
-  "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/app-review-r3",
+  shellPreview
+    ? "output/playwright/p57-shell-composition-r2"
+    : "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/app-review-r3",
 );
 if (capture) await mkdir(output);
 const fixtureFile = "tests/e2e/platform-message-management.spec.ts";
@@ -65,6 +76,7 @@ const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const server = await createServer({
   configFile: path.resolve("apps/web/vite.config.ts"),
   logLevel: "error",
+  plugins: shellPreview ? [notificationShellPlugin()] : [],
   define: { "import.meta.env.VITE_API_BASE_URL": JSON.stringify("/api/v1") },
   server: { host: "127.0.0.1", port: 0, open: false, proxy: {}, hmr: false },
 });
@@ -76,6 +88,16 @@ try {
   await server.listen();
   const port = server.httpServer.address().port,
     origin = `http://127.0.0.1:${port}`;
+  const expectedMenu = shellPreview
+    ? (await server.ssrLoadModule(path.resolve("apps/web/src/navigation-shell-permissions.ts")))
+        .authorizedNavigation(
+          "platform_admin",
+          fixture.navigation.platform_capabilities,
+          fixture.navigation.roles,
+        )
+        .map((item) => ({ label: item.label, href: item.path }))
+        .sort((a, b) => a.href.localeCompare(b.href))
+    : [];
   console.log(`p57_actual_app=${origin} pid=${process.pid}`);
   browser = await chromium.launch();
   for (const width of [390, 1440])
@@ -169,6 +191,69 @@ try {
           workspace.getByRole("heading", { name: "通知管理", exact: true }),
         ).toBeVisible();
         await expect(page.locator(".role-shell")).toBeVisible();
+        if (shellPreview) {
+          await expect(page.getByRole("heading", { name: "通知管理", exact: true })).toHaveCount(1);
+          await expect(workspace.getByRole("heading", { level: 1 })).toHaveText("通知管理");
+          await page.evaluate(() => scrollTo(0, 0));
+          const placement = await workspace.boundingBox();
+          assert.ok(placement.y < 400 && placement.x >= (width > 840 ? 220 : 0));
+          await shot("composition-first-viewport", true);
+          checks.push({ name: "single-heading-and-first-viewport", placement });
+          const displayFont = await workspace
+            .locator("h3")
+            .first()
+            .evaluate((el) => getComputedStyle(el).fontFamily);
+          assert.ok(displayFont.includes("Microsoft YaHei") && !displayFont.includes("Noto Serif"));
+          if (width <= 840)
+            await expect(page.locator(".role-context-drawer > summary")).toHaveCSS(
+              "border-left-color",
+              "rgb(36, 75, 176)",
+            );
+          checks.push({ name: "C-heading-font-and-mobile-context-accent", displayFont });
+          const menu = await page.locator(".role-nav-menu a").evaluateAll((nodes) =>
+            nodes
+              .map((node) => ({
+                label: node.textContent.trim(),
+                href: node.getAttribute("href"),
+              }))
+              .sort((a, b) => a.href.localeCompare(b.href)),
+          );
+          assert.deepEqual(menu, expectedMenu);
+          checks.push({ name: "authorized-menu-targets", menu });
+          if (width <= 840) {
+            const trigger = page.getByRole("button", { name: "打开导航菜单", exact: true });
+            await trigger.click();
+            const panel = page.getByRole("dialog", { name: "工作台导航", exact: true });
+            assert.ok(await panel.evaluate((el) => el.matches(":modal")));
+            const close = panel.getByRole("button", { name: "关闭导航菜单", exact: true });
+            await expect(close).toBeFocused();
+            await close.press("Shift+Tab");
+            assert.ok(await panel.evaluate((el) => el.contains(document.activeElement)));
+            await page.keyboard.press("Tab");
+            await expect(close).toBeFocused();
+            await shot("navigation-menu", true);
+            const menuSearch = panel.getByRole("searchbox", { name: "搜索导航菜单" });
+            if (expectedMenu.length >= 8) {
+              await menuSearch.fill("不存在的导航测试");
+              await expect(panel.getByText("没有匹配的菜单或分组。")).toBeVisible();
+              await shot("navigation-empty", true);
+              await menuSearch.fill("");
+            } else await expect(menuSearch).toHaveCount(0);
+            await page.keyboard.press("Escape");
+            await expect(panel).not.toBeVisible();
+            await expect(trigger).toBeFocused();
+            checks.push({
+              name: "navigation-modal-boundary-conditional-search-return",
+              menuCount: expectedMenu.length,
+            });
+          } else {
+            assert.equal(
+              await page.locator(".role-navigation-frame").evaluate((el) => el.matches(":modal")),
+              false,
+            );
+            checks.push({ name: "desktop-navigation-nonmodal" });
+          }
+        }
         const navigation = workspace.getByRole("navigation", { name: "通知管理页面分区" });
         await focus(navigation.getByRole("button").first(), "message-section");
         await focus(workspace.getByRole("button", { name: "新建草稿", exact: true }), "new-draft");
@@ -311,6 +396,7 @@ try {
       "apps/web/index.html",
       "apps/web/vite.config.ts",
       "package-lock.json",
+      ...(shellPreview ? notificationShellSources : []),
     ]);
     for (const mod of server.moduleGraph.idToModuleMap.values())
       if (
@@ -326,8 +412,9 @@ try {
       path.join(output, "manifest.json"),
       JSON.stringify(
         {
-          scope:
-            "Unmodified App,Router,NavigationShell and P57. Existing E2E fixtures; no real API/roles/writes/production acceptance. Not all App routes,states or accessibility checks.",
+          scope: shellPreview
+            ? "Review-only C shell transformation and P57 rail relocation/h1 plus CSS;original business scripts and fixture contracts retained. No production edits or full approval."
+            : "Unmodified App,Router,NavigationShell and P57. Existing E2E fixtures; no real API/roles/writes/production acceptance. Not all App routes,states or accessibility checks.",
           images,
           sources,
           runs,
