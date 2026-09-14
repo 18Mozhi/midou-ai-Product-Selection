@@ -222,7 +222,7 @@ test("M06-02 platform overview gives administrators clear next actions", async (
     assert.match(web, new RegExp(path.replaceAll("/", "\\/")));
   assert.match(web, /route\.query\.window/);
   assert.match(web, /router\.replace\([\s\S]*window:\s*windowCode\.value/);
-  assert.match(web, /if \(pending\.value\) return/);
+  assert.match(web, /if \(pending\.value \|\| disposed \|\| !isDashboardRoute\(\)\) return/);
   assert.match(web, /刷新超过 12 秒，继续显示上一份观测结果/);
   assert.match(styles, /\.platform-facts[\s\S]*grid-template-columns:\s*repeat\(5/);
   assert.match(styles, /\.platform-refresh-feedback/);

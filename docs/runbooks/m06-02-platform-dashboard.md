@@ -1,5 +1,11 @@
 # M06-02 宝塔运维与回滚
 
+P61分批收口（2026-09-15）：既有首页测试已按实际pending/disposed/路由保护修正，补直接重复调用与离页调用验证；M06-02合同、首页窗口与P61测试共35项通过，解除29/30自动提交阻碍。首页生产代码不变，不新增配置/接口或重启。旧段落中的失败状态保留为历史，以本段为当前状态；P61图册仍待审、未部署，完整范围不缩减。
+
+P61读取反馈（2026-09-15）：首次超过15秒仅说停止客户端等待且尚未取得数据，有status快照才说保留；首次错误不重复展示。`node scripts/verify-status-read-feedback.mjs`运行双端双动效128项、默认无文件；`--capture-review rN`只建独占新目录，当前r2十图。所有请求本地拦截，真实等待原15秒，不变更超时/重试/权限/API。新状态CSS仍只在审核版；未部署、无新配置/后端重启，未来正式Web包发布后刷新生效。15项定向合同与构建通过，既有首页断言失败使自动提交继续暂停；其他完整状态/生命周期/生产验收未完成。
+
+P61 C审核组合（2026-09-15）：`node scripts/verify-status-page-preview.mjs`运行双端98项本地拦截检查且不输出文件；加`--capture-review rN`独占新目录，当前r3/24图。它通过审核插件装配实际Vue模板四分区，生产组件与GET、15秒超时、重试和会话指标不变。浏览器/Vite自动关闭；不新增配置或重启要求，未部署。7项定向合同通过，但扩大M06-02回归有1项既有管理首页正则断言失败，本轮不自动提交。r1诊断目录清理被策略拒绝保留4图，r2保留为已替代设计对照；详见P61-PAGE-COMPOSITION-BATCH29.md。完整状态/权限/生产接入仍待执行。
+
 P57响应式提案（2026-09-15）：`node scripts/verify-platform-notification-app.mjs --shell-preview --responsive`运行840/841双动效112项，含菜单/编辑跨宽焦点与三处键盘命中，默认无文件；--responsive必须搭配--shell-preview，重复/未知标志拒绝。可选--capture-review仅首次创建output/playwright/p57-shell-responsive-r3，存在失败。仅审核CSS中非手机消息容器≤640px上下排列，原760阅读与840导航业务边界不变；阈值在implementation/platform-notification-shell-preview.css中调整，变更后另版出图。无生产改动/配置/迁移/部署或重启需求，真实写入及全局验收未完成。
 
 P57 C导航组合提案（2026-09-15）：`node scripts/verify-platform-notification-app.mjs --shell-preview`仅运行本地审核宿主，不改生产导航；双端/双动效72项。无参数保留原App56项验证。加`--capture-review`仅首次创建固定output/playwright/p57-shell-composition-r2，目录存在即拒绝覆盖；默认不写文件，浏览器/服务自动关闭。实际权限入口与样例保留，主题/全角色/断点/真实写入未验收；此提案不需生产配置或重启，也未部署。组合结构获审后再继续生产实现，不能把旧app-review-r3指纹或当前截图当作新发布证明。

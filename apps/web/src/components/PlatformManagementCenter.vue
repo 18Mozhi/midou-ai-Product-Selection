@@ -444,7 +444,12 @@ onUnmounted(() => {
       @reset="resetGenericFilters"
     />
     <p
-      v-if="message && domain !== 'content' && domain !== 'notifications'"
+      v-if="
+        message &&
+        domain !== 'content' &&
+        domain !== 'notifications' &&
+        (domain !== 'status' || state === 'ready')
+      "
       class="platform-management-message"
       role="status"
     >
@@ -453,8 +458,13 @@ onUnmounted(() => {
     <section
       v-if="state !== 'ready' && domain !== 'content' && domain !== 'notifications'"
       class="platform-management-state"
+      :aria-busy="domain === 'status' ? refreshing : undefined"
+      :aria-labelledby="domain === 'status' ? 'platform-status-read-title' : undefined"
     >
-      <h3>
+      <h2 v-if="domain === 'status'" id="platform-status-read-title">
+        {{ state === "loading" ? "正在读取系统状态" : "系统状态暂不可用" }}
+      </h2>
+      <h3 v-else>
         {{
           state === "loading"
             ? "正在读取管理数据"

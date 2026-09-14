@@ -126,6 +126,40 @@ test("P38 existing select change issues one GET, not both watcher and handler", 
   }
 });
 
+test("P38 direct repeated load remains single-flight before any route change", async () => {
+  const t = harness();
+  try {
+    const initial = t.h.load();
+    await t.h.load();
+    await t.h.load();
+    assert.equal(t.calls.length, 1);
+    assert.equal(t.timers.size, 1);
+    assert.equal(t.h.pending.value, true);
+    t.calls[0].resolve(facts("24h"));
+    await initial;
+    assert.equal(t.h.data.value.window, "24h");
+    assert.equal(t.h.pending.value, false);
+    assert.equal(t.timers.size, 0);
+  } finally {
+    t.destroy();
+  }
+});
+
+test("P38 direct load on a hidden route creates neither request nor timer", async () => {
+  const t = harness();
+  try {
+    await t.nav("24h", "/platform-admin/status");
+    await t.h.load();
+    assert.equal(t.calls.length, 0);
+    assert.equal(t.timers.size, 0);
+    assert.equal(t.h.pending.value, false);
+    assert.equal(t.h.data.value, null);
+    assert.equal(t.h.requestId.value, "");
+  } finally {
+    t.destroy();
+  }
+});
+
 for (const outcome of ["success", "failure"])
   test(`P38 queued history changes coalesce and ignore old ${outcome}`, async () => {
     const t = harness();
