@@ -416,11 +416,7 @@ onUnmounted(() => {
       @change-page="changeContentPage"
       @review="beginReview"
     />
-    <PlatformNotificationCenter
-      v-else-if="domain === 'notifications'"
-      :request="api"
-      :request-id="requestId"
-    />
+    <PlatformNotificationCenter v-else-if="domain === 'notifications'" :request="request" />
     <header
       v-if="domain !== 'content' && domain !== 'notifications'"
       class="platform-management-hero"

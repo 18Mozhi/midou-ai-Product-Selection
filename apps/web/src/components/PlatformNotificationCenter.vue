@@ -5,7 +5,7 @@ import PlatformNotificationActionDialog from "./PlatformNotificationActionDialog
 import PlatformNotificationManagement from "./PlatformNotificationManagement.vue";
 import type {
   NotificationSection,
-  PlatformNotificationRequest,
+  PlatformNotificationEnvelopeRequest,
 } from "./platform-notification-types";
 import {
   platformManagementStateName as stateName,
@@ -14,11 +14,11 @@ import {
 import { usePlatformMessageEditor } from "./use-platform-message-editor";
 import { usePlatformNotificationAction } from "./use-platform-notification-action";
 import { usePlatformNotificationList } from "./use-platform-notification-list";
+import { notificationWriteRequest } from "./platform-notification-request";
 import "../platform-notifications.css";
 
 const props = defineProps<{
-  request: PlatformNotificationRequest;
-  requestId: string;
+  request: PlatformNotificationEnvelopeRequest;
 }>();
 const domain = shallowRef("notifications"),
   state = shallowRef<"loading" | "ready" | "empty" | "error">("loading"),
@@ -47,12 +47,16 @@ notificationList = usePlatformNotificationList({
   reload: () => void reload(),
 });
 const editor = usePlatformMessageEditor({
-  request: props.request,
+  request: notificationWriteRequest(props.request),
   reload,
   showNewestMessages: notificationList.showNewestMessages,
   message,
 });
-const messageAction = usePlatformNotificationAction({ request: props.request, reload, message });
+const messageAction = usePlatformNotificationAction({
+  request: notificationWriteRequest(props.request),
+  reload,
+  message,
+});
 
 const hasSnapshot = computed(() => data.value?.domain === "notifications"),
   activeFilterCount = computed(
@@ -191,12 +195,18 @@ onUnmounted(stop);
         />
         <footer class="platform-notifications__footer">
           <span>读取时间：{{ when(data.observed_at) }}</span>
-          <details v-if="requestId">
-            <summary>本次读取追踪</summary>
-            <span>关联编号 {{ requestId }}</span>
+          <details v-if="notificationList.snapshotRequestId.value">
+            <summary>快照读取追踪</summary>
+            <span>关联编号 {{ notificationList.snapshotRequestId.value }}</span>
           </details>
         </footer>
       </template>
+      <div v-if="notificationList.failureRequestId.value" class="platform-notifications__footer">
+        <details>
+          <summary>本次失败读取追踪</summary>
+          <span>关联编号 {{ notificationList.failureRequestId.value }}</span>
+        </details>
+      </div>
     </div>
 
     <PlatformMessageEditor

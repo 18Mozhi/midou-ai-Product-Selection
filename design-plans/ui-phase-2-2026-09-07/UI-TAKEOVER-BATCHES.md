@@ -64,6 +64,16 @@ Web构建（含类型检查）、252资源预算、文档门、运行说明门�
 
 永久回归新增`tests/unit/platform-notification-lifecycle.test.mjs`与`scripts/verify-platform-notification-lifecycle.mjs`。E2E关闭SCOUTOPS_UI_PHASE2_CAPTURE，仅在OS临时目录生成测试运行状态；正常构建产物保留。对`C:\Users\23136\AppData\Local\Temp\scoutops-p57-e2e-06b1716f58dd44679808953f41833ab9`的受限路径校验清理调用被工具策略拒绝，未绕过或重试；该目录留待人工删除，不进入Git或发布包。只读检查确认其仅含`.last-run.json`，测试浏览器和服务已结束，4101/5173没有监听；原P34临时目录受阻记录不重试处理。全73页与P57剩余验收继续。
 
+## 批次06：P57追踪归属与当前局部图
+
+批次05提交`18cd046f`。实查父包装器的共享requestId会被任意读/写响应先行更新，不能代表P57当前显示的快照。P57改为接收原统一客户端的完整响应信封，列表只在已通过世代检查的成功读取中同时接受data/request_id；失败读取编号独立记录，重试先清空失败编号，缺少元数据时不沿用其他编号。写入使用局部拆信封适配器，保持原错误提示/cause/AbortError和payload，不再修改父包装器的读取编号。其他域的api包装器完全不改。
+
+新增8项追踪用例，连同原13项生命周期/分页及7项通知合同共28项通过。真实父组件、统一API客户端和Vue/Router/KeepAlive的18组双端验证通过；默认不生成文件。独立App双端25通过/原1跳过，构建含类型检查及252资源预算通过。未访问业务后端、未真实发布。
+
+固定审核参数`node scripts/verify-platform-notification-lifecycle.mjs --capture-review`仅生成新包且拒绝覆盖现有目录；默认复验无文件写入。本次保留[trace-review-r1](design/platform-notifications-direction-c/trace-review-r1/README.md)4PNG+manifest作为永久交付，核对175份来源和4张图片原始哈希均一致。用户只通过两张手机图底部的追踪标签、展开编号与蓝色焦点；桌面图、整页、完整无障碍/主题/角色、真实权限与投递仍开放。原40张P57图保留历史身份，不替换或自动扩大批准。
+
+本批没有API/OpenAPI、环境变量、配置、数据库、权限或外部依赖变化；内部函数信封类型与父子消费者同步。未部署、不重启，正式前端发布后刷新生效。浏览器与测试服务已结束，4101/5173无监听；E2E新临时目录`C:\Users\23136\AppData\Local\Temp\scoutops-p57-trace-e2e-5c85f9bd75b728`仅含`.last-run.json`，路径校验后的删除仍被工具策略拒绝，未重试或绕过，待人工清理且不进入Git。其他原清理受阻目录保持原记录。全73页目标不收缩。
+
 ## 继续整理
 
 后续共享导航、平台各入口与审核材料按实际引用和测试依赖分别核对，未提交部分不计完成。产品变更与审核预览分开；只有相应必要验证通过才能提交。全73页的设计意见、完整交互、真实后端、质量门和生产签收尚未完成。

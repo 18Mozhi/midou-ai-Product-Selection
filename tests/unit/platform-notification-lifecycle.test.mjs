@@ -6,13 +6,17 @@ import ts from "typescript";
 import { computed, ref, shallowRef } from "vue";
 
 function load(name) {
-  const source = readFileSync(`apps/web/src/components/${name}.ts`, "utf8");
+  const source = readFileSync(
+    `apps/web/src/${name === "api-client" ? name : `components/${name}`}.ts`,
+    "utf8",
+  );
   const code = ts.transpileModule(source, {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText;
   const box = {
     exports: {},
     require: (name) => {
+      if (name === "../api-client") return apiClient;
       assert.equal(name, "vue");
       return { computed, ref, shallowRef };
     },
@@ -30,9 +34,11 @@ function load(name) {
   vm.runInNewContext(code, box);
   return box.exports;
 }
+const apiClient = load("api-client");
 const { usePlatformMessageEditor } = load("use-platform-message-editor");
 const { usePlatformNotificationAction } = load("use-platform-notification-action");
 const { usePlatformNotificationList } = load("use-platform-notification-list");
+const { notificationWriteRequest } = load("platform-notification-request");
 const deferred = () => {
   let resolve, reject;
   const promise = new Promise((yes, no) => {
@@ -215,11 +221,15 @@ for (const kind of ["delivery", "message"]) {
         if (fail) throw new Error("读取失败");
         const p = new URLSearchParams(url.split("?")[1]);
         return {
-          domain: "notifications",
-          items: [{}],
-          messages: [{}],
-          pagination: { page: Number(p.get("page")), total_pages: 3 },
-          message_pagination: { page: Number(p.get("message_page")), total_pages: 3 },
+          data: {
+            domain: "notifications",
+            items: [{}],
+            messages: [{}],
+            pagination: { page: Number(p.get("page")), total_pages: 3 },
+            message_pagination: { page: Number(p.get("message_page")), total_pages: 3 },
+          },
+          request_id: "read-fixture",
+          trace_id: "read-fixture",
         };
       },
       reload: () => reads.push(ui.load()),
@@ -240,3 +250,125 @@ for (const kind of ["delivery", "message"]) {
     assert.equal(data.value[kind === "delivery" ? "message_pagination" : "pagination"].page, 1);
   });
 }
+
+function traceList() {
+  const pending = [];
+  const options = {
+    domain: ref("notifications"),
+    query: ref(""),
+    status: ref(""),
+    data: ref(null),
+    state: ref("loading"),
+    message: ref(""),
+    refreshing: ref(false),
+    request: () => {
+      const task = deferred();
+      pending.push(task);
+      return task.promise;
+    },
+    reload() {},
+  };
+  return { ui: usePlatformNotificationList(options), pending, options };
+}
+const traceResponse = (id) => ({
+  data: { domain: "notifications", items: [], messages: [], observed_at: id },
+  request_id: id,
+  trace_id: `trace-${id}`,
+});
+const traceFailure = (id) =>
+  new apiClient.ApiClientError(
+    403,
+    "denied",
+    "forbidden",
+    "拒绝",
+    "请核对权限。",
+    id,
+    `trace-${id}`,
+  );
+
+test("snapshot and failed-read diagnostics belong to separate accepted read outcomes", async () => {
+  const { ui, pending, options } = traceList();
+  const initial = ui.load();
+  pending[0].resolve(traceResponse("read-1"));
+  await initial;
+  assert.equal(ui.snapshotRequestId.value, "read-1");
+  const failed = ui.load();
+  pending[1].reject(traceFailure("failed-2"));
+  await failed;
+  assert.equal(ui.snapshotRequestId.value, "read-1");
+  assert.equal(ui.failureRequestId.value, "failed-2");
+  assert.equal(options.data.value.observed_at, "read-1");
+  assert.match(options.message.value, /当前权限还不能/);
+  const retry = ui.load();
+  assert.equal(ui.failureRequestId.value, "");
+  assert.equal(ui.snapshotRequestId.value, "read-1");
+  pending[2].resolve(traceResponse("read-3"));
+  await retry;
+  assert.equal(ui.snapshotRequestId.value, "read-3");
+});
+
+test("first failure exposes its own ID without inventing a successful snapshot ID", async () => {
+  const { ui, pending, options } = traceList();
+  const run = ui.load();
+  pending[0].reject(traceFailure("first-denied"));
+  await run;
+  assert.equal(ui.snapshotRequestId.value, "");
+  assert.equal(ui.failureRequestId.value, "first-denied");
+  assert.equal(options.data.value, null);
+});
+
+for (const outcome of ["success", "failure"]) {
+  for (const boundary of ["superseded", "exit-return"]) {
+    test(`late ${outcome} after ${boundary} cannot replace accepted data or either trace ID`, async () => {
+      const { ui, pending, options } = traceList();
+      const old = ui.load();
+      if (boundary === "exit-return") ui.stop();
+      const current = ui.load();
+      pending[1].resolve(traceResponse("current"));
+      await current;
+      if (outcome === "success") pending[0].resolve(traceResponse("old"));
+      else pending[0].reject(traceFailure("old"));
+      await old;
+      assert.equal(ui.snapshotRequestId.value, "current");
+      assert.equal(ui.failureRequestId.value, "");
+      assert.equal(options.data.value.observed_at, "current");
+    });
+  }
+}
+
+test("a failure without server/request metadata never reuses the previous failure ID", async () => {
+  const { ui, pending } = traceList();
+  const first = ui.load();
+  pending[0].reject(traceFailure("known"));
+  await first;
+  const next = ui.load();
+  pending[1].reject(new Error("本地读取失败"));
+  await next;
+  assert.equal(ui.failureRequestId.value, "");
+});
+
+test("write adapter preserves data, original payload, action hint and cause without publishing read metadata", async () => {
+  const options = { method: "POST", body: '{"action":"publish"}' },
+    calls = [];
+  const response = traceResponse("write-only");
+  const write = notificationWriteRequest(async (...args) => {
+    calls.push(args);
+    return response;
+  });
+  assert.equal(await write("/platform/management/messages/id/actions", options), response.data);
+  assert.equal(calls[0][1], options);
+  const failure = traceFailure("write-failed");
+  await assert.rejects(
+    notificationWriteRequest(async () => {
+      throw failure;
+    })("/write"),
+    (error) => error.message === failure.actionHint && error.cause === failure,
+  );
+  const abort = new DOMException("cancelled", "AbortError");
+  await assert.rejects(
+    notificationWriteRequest(async () => {
+      throw abort;
+    })("/write"),
+    (error) => error === abort,
+  );
+});

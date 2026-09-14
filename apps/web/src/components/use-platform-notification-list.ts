@@ -1,4 +1,6 @@
 import { shallowRef, type Ref } from "vue";
+import { ApiClientError } from "../api-client";
+import type { PlatformNotificationEnvelopeRequest } from "./platform-notification-types";
 
 type PageState = "loading" | "ready" | "empty" | "error";
 type LoadOutcome = "idle" | "success" | "failure";
@@ -11,7 +13,7 @@ export function usePlatformNotificationList(options: {
   state: Ref<PageState>;
   message: Ref<string>;
   refreshing: Ref<boolean>;
-  request: <T>(path: string, options?: RequestInit) => Promise<T>;
+  request: PlatformNotificationEnvelopeRequest;
   reload: () => void;
   fallbackApply?: () => void;
   fallbackReset?: () => void;
@@ -24,7 +26,9 @@ export function usePlatformNotificationList(options: {
     snapshotStatus = shallowRef(""),
     snapshotPage = shallowRef(1),
     snapshotMessagePage = shallowRef(1),
-    lastLoadOutcome = shallowRef<LoadOutcome>("idle");
+    lastLoadOutcome = shallowRef<LoadOutcome>("idle"),
+    snapshotRequestId = shallowRef(""),
+    failureRequestId = shallowRef("");
   let controller: AbortController | null = null,
     sequence = 0;
 
@@ -84,6 +88,7 @@ export function usePlatformNotificationList(options: {
       requestedMessagePage = messagePage.value;
     if (!hasSnapshot) options.state.value = "loading";
     lastLoadOutcome.value = "idle";
+    failureRequestId.value = "";
     options.refreshing.value = true;
     options.message.value = "";
     const params = new URLSearchParams({
@@ -96,11 +101,13 @@ export function usePlatformNotificationList(options: {
     if (requestedQuery) params.set("query", requestedQuery);
     if (requestedStatus) params.set("status", requestedStatus);
     try {
-      const nextData = await options.request<any>(`/platform/management?${params}`, {
+      const response = await options.request<any>(`/platform/management?${params}`, {
         signal: requestController.signal,
       });
       if (currentSequence !== sequence) return true;
+      const nextData = response.data;
       options.data.value = nextData;
+      snapshotRequestId.value = response.request_id;
       page.value = nextData?.pagination?.page ?? requestedPage;
       messagePage.value = nextData?.message_pagination?.page ?? requestedMessagePage;
       snapshotQuery.value = requestedQuery;
@@ -117,22 +124,19 @@ export function usePlatformNotificationList(options: {
         (error instanceof DOMException && error.name === "AbortError" && !timedOut)
       )
         return true;
-      const cause = error instanceof Error ? error.cause : null,
-        kind =
-          typeof cause === "object" && cause !== null && "kind" in cause
-            ? String(cause.kind)
-            : "error";
+      const failure = error instanceof ApiClientError ? error : null,
+        failureMessage =
+          failure?.actionHint ?? (error instanceof Error ? error.message : "通知数据暂不可用");
+      failureRequestId.value = failure?.requestId ?? "";
       options.message.value = timedOut
         ? hasSnapshot
           ? "读取超时，当前仍显示上次成功快照。"
           : "读取超时，请稍后重新加载通知工作台。"
-        : kind === "forbidden"
+        : failure?.kind === "forbidden"
           ? "当前权限还不能读取通知运营内容。权限调整后，可以重新加载。"
           : hasSnapshot
-            ? `${error instanceof Error ? error.message : "通知数据暂不可用"} 当前仍显示上次成功快照。`
-            : error instanceof Error
-              ? error.message
-              : "通知数据暂不可用";
+            ? `${failureMessage} 当前仍显示上次成功快照。`
+            : failureMessage;
       if (!hasSnapshot) options.state.value = "error";
       lastLoadOutcome.value = "failure";
     } finally {
@@ -207,6 +211,8 @@ export function usePlatformNotificationList(options: {
     snapshotPage,
     snapshotMessagePage,
     lastLoadOutcome,
+    snapshotRequestId,
+    failureRequestId,
     readLocation,
     load,
     applyFilters,

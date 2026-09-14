@@ -1,3 +1,5 @@
+import type { ApiEnvelope } from "../api-client";
+
 export type NotificationCategory = "system" | "task" | "approval" | "competitor";
 export type NotificationSeverity = "info" | "warning" | "critical";
 export type NotificationAudience = "all_users" | "organization" | "user";
@@ -46,3 +48,8 @@ export interface NotificationPaginationData {
 }
 
 export type PlatformNotificationRequest = <T>(path: string, options?: RequestInit) => Promise<T>;
+
+export type PlatformNotificationEnvelopeRequest = <T>(
+  path: string,
+  options?: RequestInit,
+) => Promise<ApiEnvelope<T>>;
