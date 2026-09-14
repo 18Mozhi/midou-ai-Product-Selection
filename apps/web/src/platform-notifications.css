@@ -673,6 +673,7 @@
 }
 
 .notification-action-dialog {
+  --so-focus: var(--so-platform-notification-focus);
   width: min(520px, calc(100vw - 24px));
   max-height: calc(100dvh - 24px);
   padding: 0;
@@ -767,6 +768,10 @@
   .notification-action-dialog button:not(:disabled):hover {
     border-color: var(--so-primary);
     color: var(--so-primary);
+  }
+  .notification-action-dialog button.is-danger:not(:disabled):hover {
+    border-color: var(--so-danger);
+    color: var(--so-danger);
   }
   .platform-notifications button.is-primary:not(:disabled):hover {
     color: var(--so-on-primary);

@@ -1,5 +1,7 @@
 # M06-02 宝塔运维与回滚
 
+P57取消按钮（2026-09-14）：原因窗确认取消保持红色危险语义，键盘显示蓝色焦点；原因不足及提交中仍按原规则禁用。用`node scripts/verify-platform-notification-button-states.mjs`复验144项本地组合，默认无产物；可选`--capture-review`仅用于首次创建固定button-review-r1审核目录，存在即拒绝覆盖。全部服务自动关闭，模拟指针不替代真机验收；不调整配置、不重启后端，未来正式前端包发布后刷新浏览器生效。
+
 P57弹窗（2026-09-14）：手机正文阅读窗离页/卸载关闭，跨现有760px断点关闭且返回手机不自动重开。Tab/Shift+Tab在可见可用控件首尾循环；动作仍在提交时关闭窗口，原按钮禁用则焦点回同一消息目录，不取消已发事务。字段帮助与所属错误区可通过读屏关联，手机错误提示按内容高度展示。运行`node scripts/verify-platform-notification-dialogs.mjs`进行32组本地合成验证；默认不写文件，可选`--capture-review`只创建固定dialog-review-r2审核目录，存在即拒绝覆盖。后端、环境、配置和重启要求均不变；未部署，未来仅随正式前端包发布生效。
 
 P57追踪归属（2026-09-14）：当前快照的request_id只与成功接受的数据一起更新，失败读取使用独立编号；写响应与过期读取不得覆盖这两类编号。展开“快照读取追踪”核对显示中数据，展开“本次失败读取追踪”核对本次失败；首次失败没有成功快照编号，重试期间清空旧失败编号。仍使用原统一API客户端，不增加接口、环境配置、后台服务或重启要求。默认`node scripts/verify-platform-notification-lifecycle.mjs`运行18组本地样例；可选`--capture-review`只用于生成新的固定审核目录，已存在时失败关闭，日常复验不要带此参数。本次手机局部批准见`design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/trace-review-r1/README.md`；不等于真实发送/权限或生产验收。
