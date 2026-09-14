@@ -17,6 +17,7 @@ const selectedKey = shallowRef<string | null>(null),
       ? null
       : (props.rows.find((row) => props.rowKey(row) === selectedKey.value) ?? null),
   ),
+  viewRoot = shallowRef<HTMLDivElement | null>(null),
   mobileList = shallowRef<HTMLDivElement | null>(null),
   overlay = shallowRef<HTMLDivElement | null>(null),
   drawer = shallowRef<HTMLElement | null>(null),
@@ -86,8 +87,16 @@ watch(
     const activeDialog = document.activeElement?.closest(
       '[role="dialog"], [role="alertdialog"], dialog[open]',
     );
-    if (!activeDialog)
-      (trigger?.isConnected ? trigger : mobileList.value)?.focus({ preventScroll: true });
+    if (!activeDialog) {
+      const target = [trigger, mobileList.value, viewRoot.value].find(
+        (element) =>
+          element?.isConnected &&
+          !element.matches(":disabled") &&
+          !element.closest("[inert]") &&
+          element.checkVisibility({ visibilityProperty: true }),
+      );
+      target?.focus({ preventScroll: true });
+    }
   },
 );
 
@@ -118,7 +127,14 @@ function handleTab(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="responsive-data-view" :data-appearance="appearance || 'default'">
+  <div
+    ref="viewRoot"
+    class="responsive-data-view"
+    :data-appearance="appearance || 'default'"
+    role="group"
+    :aria-label="title"
+    tabindex="-1"
+  >
     <TableViewControls class="responsive-data-view__desktop"
       ><slot name="desktop" :show="show"
     /></TableViewControls>
@@ -177,6 +193,11 @@ function handleTab(event: KeyboardEvent) {
 
 <style scoped>
 @import "../design/platform-overlay-tokens.css";
+
+.responsive-data-view:focus-visible {
+  outline: 3px solid var(--so-focus);
+  outline-offset: 3px;
+}
 
 .responsive-data-view__mobile {
   display: none;

@@ -14,19 +14,24 @@ import {
   securityFixtureFile,
 } from "./lib/security-review-fixtures.mjs";
 import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
+import { verifySecurityDetailLifecycle } from "./lib/security-detail-lifecycle.mjs";
 
 const args = process.argv.slice(2);
 assert.ok(
   args.length === 0 ||
-    (args.length === 1 && args[0] === "--baseline") ||
-    (args.length === 2 && args[0] === "--capture-review" && /^r[1-9]\d*$/.test(args[1])),
-  "Use no arguments, --baseline, or --capture-review rN",
+    (args.length === 1 && ["--baseline", "--lifecycle"].includes(args[0])) ||
+    (args.length === 2 &&
+      ["--capture-review", "--capture-lifecycle"].includes(args[0]) &&
+      /^r[1-9]\d*$/.test(args[1])),
+  "Use no arguments, --baseline, --lifecycle, --capture-review rN, or --capture-lifecycle rN",
 );
 const baseline = args[0] === "--baseline";
-const output =
-  args[0] === "--capture-review"
-    ? path.resolve(`output/playwright/p59-detail-composition-${args[1]}`)
-    : null;
+const lifecycle = ["--lifecycle", "--capture-lifecycle"].includes(args[0]);
+const output = ["--capture-review", "--capture-lifecycle"].includes(args[0])
+  ? path.resolve(
+      `output/playwright/p59-detail-${lifecycle ? "lifecycle" : "composition"}-${args[1]}`,
+    )
+  : null;
 if (output) await mkdir(output); // Exclusive review version; never overwrite historical evidence.
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const { nav, snapshot } = await securityReviewFixtures();
@@ -94,6 +99,7 @@ const sources = new Set([
   "scripts/verify-security-detail-preview.mjs",
   "scripts/lib/security-review-fixtures.mjs",
   "scripts/lib/ui-imported-style-sources.mjs",
+  "scripts/lib/security-detail-lifecycle.mjs",
   "apps/web/vite.config.ts",
   ...(!baseline ? [securityDetailCss, "scripts/lib/security-detail-preview.mjs"] : []),
 ]);
@@ -105,7 +111,7 @@ try {
   const origin = `http://127.0.0.1:${port}`;
   console.log(`P59 detail ${baseline ? "baseline" : "C review"} ${origin}`);
   browser = await chromium.launch();
-  for (const width of [390, 760, 761, 1440])
+  for (const width of lifecycle ? [390, 760] : [390, 760, 761, 1440])
     for (const motion of ["reduce", "no-preference"]) {
       const context = await browser.newContext({
         viewport: { width, height: width === 390 ? 844 : 1000 },
@@ -117,20 +123,41 @@ try {
         errors = [],
         unexpected = [],
         appearance = [];
+      let nextRead = null;
+      const releaseReads = [];
+      const deferRead = (data) => {
+        assert.equal(nextRead, null);
+        let release, arrive;
+        const gate = new Promise((resolve) => {
+          release = resolve;
+        });
+        const arrived = new Promise((resolve) => {
+          arrive = resolve;
+        });
+        nextRead = async () => {
+          arrive();
+          await gate;
+          return data;
+        };
+        releaseReads.push(release);
+        return { arrived, release };
+      };
       let checks = 0;
       const check = (actual, expected, message) => {
         assert.deepEqual(actual, expected, `${width}/${motion}: ${message}`);
         checks++;
       };
       const capture = async (key, frame, target = page) => {
-        if (!output || motion !== "reduce" || ![390, 1440].includes(width)) return;
+        if (!output || motion !== "reduce" || (!lifecycle && ![390, 1440].includes(width))) return;
+        if (lifecycle && frame !== "desktop-focus-return") return;
+        const actualWidth = page.viewportSize().width;
         const bytes = await target.screenshot({ animations: "disabled" });
-        const file = `${width}-${key}-${frame}.png`;
+        const file = `${actualWidth}-${key}-${frame}.png`;
         await writeFile(path.join(output, file), bytes);
         images.push({
           file,
           sha256: hash(bytes),
-          width,
+          width: actualWidth,
           pixelWidth: bytes.readUInt32BE(16),
           pixelHeight: bytes.readUInt32BE(20),
           key,
@@ -163,7 +190,10 @@ try {
             return route.abort();
           }
           requests.push({ key, search: url.search, body: request.postData() });
-          return route.fulfill({ json: securityEnvelope(snapshot(url.searchParams.get("view"))) });
+          const pending = nextRead;
+          nextRead = null;
+          const data = pending ? await pending() : snapshot(url.searchParams.get("view"));
+          return route.fulfill({ json: securityEnvelope(data) });
         });
         await page.goto(origin + "/platform-admin/security");
         const surface = page.locator(".security-ops--review");
@@ -387,9 +417,19 @@ try {
             "page no horizontal overflow",
           );
         }
+        if (lifecycle)
+          await verifySecurityDetailLifecycle({
+            page,
+            surface,
+            check,
+            width,
+            deferRead,
+            snapshot,
+            capture,
+          });
         check(
           requests.length,
-          4,
+          lifecycle ? 6 : 4,
           "one read for each actual view, credentials and tokens share read",
         );
         check(
@@ -402,6 +442,7 @@ try {
         results.push({ width, motion, checks, requests, appearance });
         console.log(`P59 details ${width}/${motion}: ${checks} passed`);
       } finally {
+        for (const release of releaseReads) release();
         await context.close();
       }
     }
@@ -425,10 +466,11 @@ try {
     const manifest = {
       page: "P59",
       revision: args[1],
+      lifecycle,
       sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
       capturedAt: new Date().toISOString(),
       scope:
-        "actual App C review; unchanged production drawer and fields; local E2E samples; pending regional review; no deployment",
+        "actual App C review; current production drawer with visible focus fallback; original fields unchanged; local E2E samples; pending regional review; no deployment",
       sources: sourceHashes,
       images,
       results,
@@ -449,6 +491,7 @@ try {
   console.log(
     JSON.stringify({
       baseline,
+      lifecycle,
       groups: results.length,
       checks: results.reduce((sum, group) => sum + group.checks, 0),
       sources: sources.size,

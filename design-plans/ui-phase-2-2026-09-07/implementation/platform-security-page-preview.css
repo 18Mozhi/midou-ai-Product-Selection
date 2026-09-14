@@ -74,7 +74,7 @@ html body.shell-vue-c:has(#app) #app .role-shell.role-shell--review {
       background: #102a63;
       color: white;
     }
-    :is(button, input, select, a, summary):focus-visible {
+    :is(button, input, select, a, summary, .responsive-data-view):focus-visible {
       outline: 3px solid #2f6ee5;
       outline-offset: 3px;
     }

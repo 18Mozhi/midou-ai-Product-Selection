@@ -34,6 +34,8 @@ test("P59 detail runner rejects external/baseline capture and unsafe output path
   for (const args of [
     ["--production"],
     ["--capture-review", "../replace"],
+    ["--capture-lifecycle", "../replace"],
+    ["--lifecycle", "--capture-review", "r1"],
     ["--baseline", "--capture-review", "r1"],
   ]) {
     const result = spawnSync(
@@ -42,7 +44,11 @@ test("P59 detail runner rejects external/baseline capture and unsafe output path
       { encoding: "utf8" },
     );
     assert.notEqual(result.status, 0);
-    assert.ok(result.stderr.includes("Use no arguments, --baseline, or --capture-review rN"));
+    assert.ok(
+      result.stderr.includes(
+        "Use no arguments, --baseline, --lifecycle, --capture-review rN, or --capture-lifecycle rN",
+      ),
+    );
     assert.equal(result.stdout, "");
   }
 });
