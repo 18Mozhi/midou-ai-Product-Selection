@@ -64,6 +64,22 @@ html body.shell-vue-c:has(#app) #app .role-shell.role-shell--review {
   .platform-notifications :is(button, a, input, select, textarea, summary):focus-visible {
     outline-color: var(--so-platform-notification-focus);
   }
+  @media (min-width: 761px) {
+    .message-workbench {
+      container: p57-messages / inline-size;
+    }
+    @container p57-messages (max-width: 640px) {
+      .message-workbench__body {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .message-directory {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border-right: 0;
+        border-bottom: 1px solid var(--so-platform-notification-border);
+      }
+    }
+  }
   @media (max-width: 840px) {
     .platform-notifications__hero {
       flex-direction: column;

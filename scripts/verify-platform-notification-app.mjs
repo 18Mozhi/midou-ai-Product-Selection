@@ -7,6 +7,7 @@ import ts from "typescript";
 import { createServer } from "vite";
 import { chromium, expect } from "@playwright/test";
 import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
+import { checkNotificationResponsive } from "./lib/platform-notification-responsive-checks.mjs";
 import {
   notificationShellPlugin,
   notificationShellSources,
@@ -14,15 +15,19 @@ import {
 
 const args = process.argv.slice(2);
 assert.ok(
-  args.every((arg) => ["--capture-review", "--shell-preview"].includes(arg)) &&
+  args.every((arg) => ["--capture-review", "--shell-preview", "--responsive"].includes(arg)) &&
     new Set(args).size === args.length,
 );
 const capture = args.includes("--capture-review");
 const shellPreview = args.includes("--shell-preview");
+const responsive = args.includes("--responsive");
+assert.ok(!responsive || shellPreview, "--responsive requires --shell-preview");
 const output = path.resolve(
-  shellPreview
-    ? "output/playwright/p57-shell-composition-r2"
-    : "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/app-review-r3",
+  responsive
+    ? "output/playwright/p57-shell-responsive-r3"
+    : shellPreview
+      ? "output/playwright/p57-shell-composition-r2"
+      : "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/app-review-r3",
 );
 if (capture) await mkdir(output);
 const fixtureFile = "tests/e2e/platform-message-management.spec.ts";
@@ -100,7 +105,7 @@ try {
     : [];
   console.log(`p57_actual_app=${origin} pid=${process.pid}`);
   browser = await chromium.launch();
-  for (const width of [390, 1440])
+  for (const width of responsive ? [840, 841] : [390, 1440])
     for (const motion of ["reduce", "no-preference"]) {
       const context = await browser.newContext({
         viewport: { width, height: 1000 },
@@ -147,6 +152,7 @@ try {
         });
         const shot = async (name, dialog = false) => {
           if (!capture || motion !== "reduce") return;
+          if (responsive && !name.startsWith("responsive-")) return;
           await page.evaluate(() => document.fonts.ready);
           const file = `P57-${width}-${name}.png`,
             bytes = await page.screenshot({
@@ -255,6 +261,7 @@ try {
           }
         }
         const navigation = workspace.getByRole("navigation", { name: "通知管理页面分区" });
+        if (responsive) await checkNotificationResponsive({ page, width, checks, shot });
         await focus(navigation.getByRole("button").first(), "message-section");
         await focus(workspace.getByRole("button", { name: "新建草稿", exact: true }), "new-draft");
         const directory = workspace.locator(".message-directory button");
@@ -391,6 +398,7 @@ try {
     const files = new Set([
       fixtureFile,
       "scripts/verify-platform-notification-app.mjs",
+      "scripts/lib/platform-notification-responsive-checks.mjs",
       "scripts/lib/ui-imported-style-sources.mjs",
       "apps/web/src/main.ts",
       "apps/web/index.html",
