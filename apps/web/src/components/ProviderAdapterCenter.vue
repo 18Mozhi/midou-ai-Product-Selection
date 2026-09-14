@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -8,6 +8,7 @@ import "../provider-adapters-contrast.css";
 import "../provider-adapters-c-page.css";
 import "../provider-adapters-c-detail.css";
 import "../provider-adapters-c-feedback.css";
+import "../provider-adapters-empty-mobile.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface AdapterSummary {
   id: string;
@@ -253,11 +254,48 @@ async function probe(item: AdapterSummary, event?: MouseEvent) {
     probing.value = null;
   }
 }
+function turnPage(direction: -1 | 1, event: MouseEvent) {
+  const trigger = event.currentTarget;
+  const reachesBoundary = direction === -1 ? page.value === 2 : page.value === totalPages.value - 1;
+  if (
+    reachesBoundary &&
+    trigger instanceof HTMLButtonElement &&
+    document.activeElement === trigger
+  ) {
+    const status = trigger.closest(".adapter-pagination")?.querySelector<HTMLElement>("span");
+    if (status?.isConnected && !status.closest("[inert]")) status.focus({ preventScroll: true });
+  }
+  page.value += direction;
+}
+function refreshFromButton(event: MouseEvent) {
+  const trigger = event.currentTarget;
+  if (trigger instanceof HTMLElement && document.activeElement === trigger) {
+    const heading = trigger.closest<HTMLElement>(".adapter-heading");
+    if (heading?.isConnected && !heading.closest("[inert]")) heading.focus({ preventScroll: true });
+  }
+  void load();
+}
+async function resetEmptyFilters(event: MouseEvent) {
+  const input = (event.currentTarget as HTMLElement)
+    .closest(".adapter-center")
+    ?.querySelector<HTMLInputElement>(".adapter-search input");
+  resetFilters();
+  await nextTick();
+  if (
+    input?.isConnected &&
+    !input.disabled &&
+    !input.closest("[inert]") &&
+    document.activeElement === document.body
+  ) {
+    input.focus();
+  }
+}
+
 onMounted(load);
 </script>
 <template>
   <section class="adapter-center adapter-center--c">
-    <header class="adapter-heading">
+    <header class="adapter-heading" tabindex="-1">
       <div>
         <p>来源适配器运行状态</p>
         <h2>采集诊断目录</h2>
@@ -265,7 +303,7 @@ onMounted(load);
       </div>
       <div class="adapter-heading-actions">
         <small v-if="lastUpdatedAt">最近刷新 {{ lastUpdatedAt.slice(11, 19) }}</small>
-        <button type="button" :disabled="refreshing" @click="load">
+        <button type="button" :disabled="refreshing" @click="refreshFromButton">
           {{ refreshing ? "刷新中…" : "刷新状态" }}
         </button>
         <RouterLink to="/platform-admin/providers">返回来源定义</RouterLink>
@@ -360,15 +398,32 @@ onMounted(load);
         </details>
         <span>{{ filtered.length }} 个结果</span>
       </div>
-      <section v-if="state === 'empty'" class="adapter-empty">
-        <h3>还没有来源可绑定适配器</h3>
-        <p>先在来源注册中心登记技术合同；不会创建模拟来源。</p>
+      <section v-if="state === 'empty'" class="adapter-empty adapter-empty--approved-mobile">
+        <h3>
+          <span class="adapter-empty-copy-wide">还没有来源可绑定适配器</span
+          ><span class="adapter-empty-copy-mobile">还没有可查看的来源</span>
+        </h3>
+        <p>
+          <span class="adapter-empty-copy-wide"
+            >先在来源注册中心登记技术合同；不会创建模拟来源。</span
+          ><span class="adapter-empty-copy-mobile"
+            >登记来源技术合同后，可在这里查看适配器的运行状态。</span
+          >
+        </p>
         <RouterLink to="/platform-admin/providers">登记来源</RouterLink>
       </section>
-      <section v-else-if="!filtered.length" class="adapter-empty">
-        <h3>没有符合筛选条件的适配器</h3>
-        <p>调整搜索或筛选条件，清除后显示当前来源目录。</p>
-        <button type="button" @click="resetFilters">清除筛选</button>
+      <section v-else-if="!filtered.length" class="adapter-empty adapter-empty--approved-mobile">
+        <h3>
+          <span class="adapter-empty-copy-wide">没有符合筛选条件的适配器</span
+          ><span class="adapter-empty-copy-mobile">当前筛选下没有匹配来源</span>
+        </h3>
+        <p>
+          <span class="adapter-empty-copy-wide">调整搜索或筛选条件，清除后显示当前来源目录。</span
+          ><span class="adapter-empty-copy-mobile"
+            >试试调整搜索或筛选条件，也可以清除筛选，查看当前来源目录。</span
+          >
+        </p>
+        <button type="button" @click="resetEmptyFilters">清除筛选</button>
       </section>
       <ResponsiveDataView
         v-else
@@ -629,9 +684,13 @@ onMounted(load);
         </template>
       </ResponsiveDataView>
       <nav v-if="filtered.length" class="adapter-pagination" aria-label="来源适配器分页">
-        <button type="button" :disabled="page === 1" @click="page--">上一页</button>
-        <span>第 {{ page }} / {{ totalPages }} 页 · 每页 {{ pageSize }} 条</span>
-        <button type="button" :disabled="page === totalPages" @click="page++">下一页</button>
+        <button type="button" :disabled="page === 1" @click="turnPage(-1, $event)">上一页</button>
+        <span tabindex="-1" role="status" aria-live="polite" aria-atomic="true"
+          >第 {{ page }} / {{ totalPages }} 页 · 每页 {{ pageSize }} 条</span
+        >
+        <button type="button" :disabled="page === totalPages" @click="turnPage(1, $event)">
+          下一页
+        </button>
       </nav>
       <div v-if="message" class="adapter-message" role="status">
         <span>{{ message }}</span>

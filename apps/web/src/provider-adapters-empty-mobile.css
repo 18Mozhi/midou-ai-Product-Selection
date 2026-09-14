@@ -1,0 +1,83 @@
+@import "./design/provider-adapter-tokens.css";
+
+/* Only the approved P47 mobile empty regions; wide-screen copy remains unchanged. */
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-empty--approved-mobile
+  .adapter-empty-copy-mobile {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  html
+    body:has(#app .adapter-center--c)
+    #app
+    .adapter-empty--approved-mobile
+    .adapter-empty-copy-wide {
+    display: none;
+  }
+  html
+    body:has(#app .adapter-center--c)
+    #app
+    .adapter-empty--approved-mobile
+    .adapter-empty-copy-mobile {
+    display: inline;
+  }
+  html
+    body:has(#app .adapter-center--c)
+    #app
+    .adapter-center--c
+    .adapter-empty.adapter-empty--approved-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 24px;
+    background: var(--p47-empty-canvas);
+    border: 1px solid var(--p47-empty-border);
+    border-radius: 8px;
+    text-align: left;
+  }
+  html body:has(#app .adapter-center--c) #app .adapter-empty.adapter-empty--approved-mobile h3 {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--p47-empty-ink);
+  }
+  html body:has(#app .adapter-center--c) #app .adapter-empty.adapter-empty--approved-mobile p {
+    margin: 0;
+    max-width: 56ch;
+    color: var(--p47-empty-muted);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  html
+    body:has(#app .adapter-center--c)
+    #app
+    .adapter-empty.adapter-empty--approved-mobile
+    :is(a, button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+    margin-top: 8px;
+    padding: 10px 16px;
+    border: 1px solid var(--p47-empty-accent);
+    border-radius: 6px;
+    color: var(--p47-panel);
+    background: var(--p47-empty-accent);
+    font-size: 14px;
+    line-height: 1.5;
+    text-decoration: none;
+  }
+  html
+    body:has(#app .adapter-center--c)
+    #app
+    .adapter-empty.adapter-empty--approved-mobile
+    :is(a, button):focus-visible {
+    outline: 3px solid var(--p47-empty-accent);
+    outline-offset: 3px;
+  }
+}

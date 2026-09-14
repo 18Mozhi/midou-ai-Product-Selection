@@ -1,24 +1,7 @@
+@import "./design/provider-adapter-tokens.css";
+
 /* P47 C composition, active only while its component is mounted. */
 /* Local C identity tokens; existing theme IDs/preferences and non-P47 palettes remain unchanged. */
-html:has(body #app .adapter-center--c) {
-  --p47-ink: #142a46;
-  --p47-canvas: #eef2f7;
-  --p47-panel: #fff;
-  --p47-accent: #294caf;
-  --p47-muted: #536b86;
-  --p47-border-strong: #9db1cc;
-  --p47-border: #d8e1ed;
-  --p47-divider: #c9d6e8;
-  --p47-on-accent-muted: #edf3ff;
-  --p47-on-accent-border: #97ade1;
-  --p47-error: #a33332;
-  --p47-disabled-ink: #66748a;
-  --p47-disabled-panel: #e8edf4;
-  --p47-focus: #4276df;
-  --p47-secondary-ink: #294466;
-  --p47-accent-soft: #e5edf9;
-  --p47-scrim: rgba(15, 31, 53, 0.55);
-}
 /* Approved P47 frame and source directory, scoped to the active adapter page. */
 html body:has(#app .adapter-center--c) #app .role-menu-search input {
   background: var(--p47-canvas);
@@ -805,16 +788,16 @@ html
     [data-circuit="closed"],
     [data-runtime-category="healthy"]
   ) {
-  background: #e7f2ed;
-  color: #21644c;
+  background: var(--p47-success-soft);
+  color: var(--p47-success-ink);
 }
 html
   body:has(#app .adapter-center--c)
   #app
   .adapter-table-wrap
   b:is([data-health="blocked"], [data-registered="false"], [data-circuit="open"]) {
-  background: #faebe6;
-  color: #963e29;
+  background: var(--p47-failure-soft);
+  color: var(--p47-failure-ink);
 }
 html
   body:has(#app .adapter-center--c)
@@ -827,8 +810,8 @@ html
     [data-runtime-category="login"],
     [data-runtime-category="other"]
   ) {
-  background: #fff2d7;
-  color: #785318;
+  background: var(--p47-warning-soft);
+  color: var(--p47-warning-ink);
 }
 html body:has(#app .adapter-center--c) #app .adapter-check-facts {
   display: block;

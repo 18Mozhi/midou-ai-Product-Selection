@@ -1,0 +1,45 @@
+/* Existing P47 C palette; only active while its page is mounted. */
+html:has(body #app .adapter-center--c) {
+  --p47-ink: #142a46;
+  --p47-canvas: #eef2f7;
+  --p47-panel: #fff;
+  --p47-accent: #294caf;
+  --p47-muted: #536b86;
+  --p47-border-strong: #9db1cc;
+  --p47-border: #d8e1ed;
+  --p47-divider: #c9d6e8;
+  --p47-on-accent-muted: #edf3ff;
+  --p47-on-accent-border: #97ade1;
+  --p47-error: #a33332;
+  --p47-disabled-ink: #66748a;
+  --p47-disabled-panel: #e8edf4;
+  --p47-focus: #4276df;
+  --p47-secondary-ink: #294466;
+  --p47-accent-soft: #e5edf9;
+  --p47-scrim: rgba(15, 31, 53, 0.55);
+  --p47-success-soft: #e7f2ed;
+  --p47-success-ink: #21644c;
+  --p47-failure-soft: #faebe6;
+  --p47-failure-ink: #963e29;
+  --p47-warning-soft: #fff2d7;
+  --p47-warning-ink: #785318;
+  --p47-detail-border: #c4cfdf;
+  --p47-detail-ink: #17263e;
+  --p47-detail-header-border: #203e91;
+  --p47-detail-header-muted: #e0e8ff;
+  --p47-detail-close-border: #b6c8ff;
+  --p47-detail-context-soft: #e3ebfc;
+  --p47-detail-context-ink: #294268;
+  --p47-detail-action-ink: #213f94;
+  --p47-detail-muted: #50617c;
+  --p47-detail-disabled-ink: #56647a;
+  --p47-detail-disabled-panel: #e5eaf1;
+  --p47-detail-link-border: #a8bae2;
+  --p47-detail-link-soft: #f0f4ff;
+  --p47-feedback-soft: #edf2ff;
+  --p47-empty-canvas: #f6f8fb;
+  --p47-empty-border: #d9e1ec;
+  --p47-empty-ink: #152b49;
+  --p47-empty-muted: #53657c;
+  --p47-empty-accent: #185adb;
+}

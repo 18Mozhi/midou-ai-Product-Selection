@@ -1,8 +1,10 @@
+@import "./design/provider-adapter-tokens.css";
+
 /* P47 C composition, active only while its component is mounted. */
 /* Approved probe feedback composition inside the P47 detail only. */
 html body:has(#app .adapter-center--c) .p47-diagnostic-detail .adapter-detail-feedback {
   margin-top: 12px;
-  color: #17263e;
+  color: var(--p47-detail-ink);
 }
 
 html
@@ -11,9 +13,9 @@ html
   .adapter-detail-feedback
   p:not(:empty) {
   padding: 12px;
-  border-left: 3px solid #294caf;
-  background: #edf2ff;
-  color: #17263e;
+  border-left: 3px solid var(--p47-accent);
+  background: var(--p47-feedback-soft);
+  color: var(--p47-detail-ink);
   font:
     16px/1.6 "Microsoft YaHei UI",
     "Microsoft YaHei",
@@ -22,21 +24,21 @@ html
 
 html body:has(#app .adapter-center--c) .p47-diagnostic-detail .adapter-detail-feedback details {
   margin-top: 8px;
-  border-top: 1px solid #c4cfdf;
-  background: #fff;
+  border-top: 1px solid var(--p47-detail-border);
+  background: var(--p47-panel);
 }
 
 html body:has(#app .adapter-center--c) .p47-diagnostic-detail .adapter-detail-feedback summary {
   min-height: 44px;
   padding: 8px 0;
-  color: #213f94;
+  color: var(--p47-detail-action-ink);
   font-size: 16px;
 }
 
 html body:has(#app .adapter-center--c) .p47-diagnostic-detail .adapter-detail-feedback code {
   display: block;
   padding: 4px 0;
-  color: #50617c;
+  color: var(--p47-detail-muted);
   font:
     13px/1.6 Consolas,
     monospace;
@@ -48,6 +50,6 @@ html
   .p47-diagnostic-detail
   .adapter-detail-feedback
   :is(summary, p):focus-visible {
-  outline: 3px solid #294caf;
+  outline: 3px solid var(--p47-accent);
   outline-offset: 3px;
 }
