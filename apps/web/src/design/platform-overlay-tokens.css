@@ -1,0 +1,17 @@
+/* Existing local C palette; no global theme aliases or layout declarations. */
+.responsive-data-view__overlay--governance,
+.responsive-data-view__overlay--content,
+.responsive-filter-drawer--governance,
+.responsive-filter-drawer--content,
+.responsive-filter-drawer--notifications {
+  --so-workspace-overlay-canvas: #f3f6fb;
+  --so-workspace-overlay-surface: #ffffff;
+  --so-workspace-overlay-surface-soft: #edf2f9;
+  --so-workspace-overlay-text: #17243d;
+  --so-workspace-overlay-text-muted: #627089;
+  --so-workspace-overlay-border: #cfd9e8;
+  --so-workspace-overlay-governance-primary: #2d63cd;
+  --so-workspace-overlay-governance-primary-strong: #214da8;
+  --so-workspace-overlay-content-primary: #2558bd;
+  --so-workspace-overlay-content-primary-strong: #173f91;
+}

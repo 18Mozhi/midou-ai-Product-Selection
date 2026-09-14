@@ -1,6 +1,4 @@
-import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
-import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -12,8 +10,10 @@ import {
   filterResetRevision,
   historicalFilterResetSource,
 } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
-const read = (f) =>
-  historicalAdminResultsSource(f, readFileSync(f, "utf8").replaceAll("\r\n", "\n"));
+const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const capturedRevision = "01af02620bdbb751cc846e6a02081d4a0b735784";
+const captured = (f, revision = capturedRevision) =>
+  execFileSync("git", ["show", `${revision}:${f}`], { encoding: "utf8" }).replaceAll("\r\n", "\n");
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const source = read(filterResetRevision.file);
 const old = execFileSync(
@@ -21,19 +21,22 @@ const old = execFileSync(
   ["show", `${filterResetRevision.baseline}:${filterResetRevision.file}`],
   { encoding: "utf8" },
 ).replaceAll("\r\n", "\n");
-const ast = ts.createSourceFile(
-  "source.ts",
-  parse(source).descriptor.scriptSetup.content,
-  ts.ScriptTarget.Latest,
-  true,
-);
-const watchers = ast.statements.filter(
-  (n) =>
-    ts.isExpressionStatement(n) &&
-    ts.isCallExpression(n.expression) &&
-    n.expression.expression.getText(ast) === "watch",
-);
-assert.equal(watchers.length, 1);
+function watchCode(vueSource) {
+  const ast = ts.createSourceFile(
+    "source.ts",
+    parse(vueSource).descriptor.scriptSetup.content,
+    ts.ScriptTarget.Latest,
+    true,
+  );
+  const watchers = ast.statements.filter(
+    (n) =>
+      ts.isExpressionStatement(n) &&
+      ts.isCallExpression(n.expression) &&
+      n.expression.expression.getText(ast) === "watch",
+  );
+  assert.equal(watchers.length, 1);
+  return watchers[0].getText(ast);
+}
 function fixture(options = {}) {
   class Button {
     disabled = false;
@@ -54,25 +57,29 @@ function fixture(options = {}) {
   let callback, release;
   const pending = new Promise((r) => (release = r));
   vm.runInNewContext(
-    ts.transpileModule(watchers[0].getText(ast), {
+    ts.transpileModule(watchCode(options.source ?? source), {
       compilerOptions: { target: ts.ScriptTarget.ES2022 },
     }).outputText,
     { ...state, watch: (getter, fn) => (callback = fn), nextTick: () => pending },
   );
   return { focused, body, other, closed, state, release, callback, ...options };
 }
-test("reset focus repair preserves original template/styles and exact revision", () => {
+test("archived reset repair preserves its original template/styles and exact captured revision", () => {
+  const repaired = captured(filterResetRevision.file);
   assert.equal(hash(old), filterResetRevision.before);
-  assert.equal(hash(source), filterResetRevision.after);
-  assert.equal(parse(source).descriptor.template.content, parse(old).descriptor.template.content);
+  assert.equal(hash(repaired), filterResetRevision.after);
+  assert.equal(parse(repaired).descriptor.template.content, parse(old).descriptor.template.content);
   assert.deepEqual(
-    parse(source).descriptor.styles.map((s) => s.content),
+    parse(repaired).descriptor.styles.map((s) => s.content),
     parse(old).descriptor.styles.map((s) => s.content),
   );
-  assert.equal(historicalFilterResetSource(filterResetRevision.file, source), old);
+  assert.equal(historicalFilterResetSource(filterResetRevision.file, repaired), old);
   assert.throws(() =>
-    historicalFilterResetSource(filterResetRevision.file, source + "\n// unknown"),
+    historicalFilterResetSource(filterResetRevision.file, repaired + "\n// unknown"),
   );
+  // This historical adapter must not silently bless the later appearance/ARIA revision.
+  assert.notEqual(hash(source), filterResetRevision.after);
+  assert.throws(() => historicalFilterResetSource(filterResetRevision.file, source));
 });
 for (const active of ["body", "same"]) {
   test(`cleared reset disabled with ${active} focus returns to close`, async () => {
@@ -84,6 +91,22 @@ for (const active of ["body", "same"]) {
     await task;
     assert.deepEqual(f.closed, ["close"]);
   });
+}
+async function assertNoFocusSteal(kind, currentSource = source) {
+  const f = fixture({ source: currentSource });
+  if (kind === "desktop") f.state.overlay.value = false;
+  if (kind === "closed") f.state.open.value = false;
+  if (kind === "text-field") f.state.document.activeElement = {};
+  if (kind === "outside") f.state.sheet.value.contains = () => false;
+  const task = f.callback(kind === "nonzero" ? 1 : 0);
+  f.focused.disabled = kind !== "still-enabled";
+  if (kind === "new-focus") f.state.document.activeElement = f.other;
+  if (kind === "closed-before-tick") f.state.open.value = false;
+  if (kind === "desktop-before-tick") f.state.overlay.value = false;
+  if (kind === "unmounted") f.state.closeButton.value = null;
+  f.release();
+  await task;
+  assert.deepEqual(f.closed, []);
 }
 for (const kind of [
   "nonzero",
@@ -98,26 +121,29 @@ for (const kind of [
   "unmounted",
 ]) {
   test(`does not steal focus: ${kind}`, async () => {
-    const f = fixture();
-    if (kind === "desktop") f.state.overlay.value = false;
-    if (kind === "closed") f.state.open.value = false;
-    if (kind === "text-field") f.state.document.activeElement = {};
-    if (kind === "outside") f.state.sheet.value.contains = () => false;
-    const task = f.callback(kind === "nonzero" ? 1 : 0);
-    f.focused.disabled = kind !== "still-enabled";
-    if (kind === "new-focus") f.state.document.activeElement = f.other;
-    if (kind === "closed-before-tick") f.state.open.value = false;
-    if (kind === "desktop-before-tick") f.state.overlay.value = false;
-    if (kind === "unmounted") f.state.closeButton.value = null;
-    f.release();
-    await task;
-    assert.deepEqual(f.closed, []);
+    await assertNoFocusSteal(kind);
   });
 }
-test("old diagnosis and current four-width browser evidence remain distinct", () => {
+test("current watcher tests reject missing disabled and post-tick lifecycle/focus guards", async () => {
+  for (const [kind, before, after] of [
+    ["still-enabled", "      focused.disabled &&\n", ""],
+    ["closed-before-tick", "      open.value &&\n", ""],
+    ["desktop-before-tick", "      overlay.value &&\n", ""],
+    [
+      "new-focus",
+      "(document.activeElement === focused || document.activeElement === document.body)",
+      "true",
+    ],
+  ]) {
+    assert.equal(source.split(before).length, 2);
+    await assert.rejects(() => assertNoFocusSteal(kind, source.replace(before, after)));
+  }
+});
+test("archived baseline and repaired four-width packets bind their exact sources without claiming current capture", () => {
   for (const mode of ["baseline", "current"]) {
     const folder = `output/playwright/filter-reset-focus/${mode}`,
       e = JSON.parse(read(`${folder}/evidence.json`));
+    assert.deepEqual(e, JSON.parse(captured(`${folder}/evidence.json`)));
     assert.equal(e.mode, mode === "baseline" ? "baseline-diagnosis" : "current-regression");
     assert.equal(
       e.sourceHashes[filterResetRevision.file],
@@ -129,9 +155,11 @@ test("old diagnosis and current four-width browser evidence remain distinct", ()
     for (const [file, sha] of Object.entries(e.sourceHashes))
       assert.equal(
         hash(
-          historicalUserCreationSource(
+          captured(
             file,
-            mode === "baseline" ? historicalFilterResetSource(file, read(file)) : read(file),
+            mode === "baseline" && file === filterResetRevision.file
+              ? filterResetRevision.baseline
+              : capturedRevision,
           ),
         ),
         sha,

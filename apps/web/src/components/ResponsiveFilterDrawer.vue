@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
 
 const props = withDefaults(
   defineProps<{
     label?: string;
     activeCount?: number;
-    appearance?: "default" | "governance" | "content";
+    appearance?: "default" | "governance" | "content" | "notifications";
     mode?: "responsive" | "dialog";
   }>(),
   {
@@ -16,6 +16,7 @@ const props = withDefaults(
   },
 );
 
+const panelId = `filter-panel-${useId()}`;
 const open = ref(false);
 const mobile = ref(false);
 const triggerButton = ref<HTMLButtonElement | null>(null);
@@ -106,6 +107,7 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
       class="responsive-filter-drawer__trigger"
       aria-haspopup="dialog"
       :aria-expanded="open"
+      :aria-controls="panelId"
       @click="show"
     >
       <span>{{ label }}</span>
@@ -119,6 +121,7 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
           'responsive-filter-drawer--overlay': overlay,
           'responsive-filter-drawer--governance': appearance === 'governance',
           'responsive-filter-drawer--content': appearance === 'content',
+          'responsive-filter-drawer--notifications': appearance === 'notifications',
         }"
         @keydown="handleKeydown"
       >
@@ -135,6 +138,7 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
           ></button>
           <section
             ref="sheet"
+            :id="panelId"
             class="responsive-filter-drawer__sheet"
             :role="overlay ? 'dialog' : 'group'"
             :aria-modal="overlay && open ? 'true' : undefined"
@@ -160,34 +164,37 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
 </template>
 
 <style scoped>
+@import "../design/platform-overlay-tokens.css";
+
 .responsive-filter-drawer__portal {
   display: contents;
 }
 
 .responsive-filter-drawer--governance {
-  --so-bg: #f3f6fb;
-  --so-bg-elevated: #ffffff;
-  --so-panel: #ffffff;
-  --so-panel-soft: #edf2f9;
-  --so-text: #17243d;
-  --so-text-muted: #627089;
-  --so-border: #cfd9e8;
-  --so-primary: #2d63cd;
-  --so-primary-strong: #214da8;
-  --so-on-primary: #ffffff;
+  --so-bg: var(--so-workspace-overlay-canvas);
+  --so-bg-elevated: var(--so-workspace-overlay-surface);
+  --so-panel: var(--so-workspace-overlay-surface);
+  --so-panel-soft: var(--so-workspace-overlay-surface-soft);
+  --so-text: var(--so-workspace-overlay-text);
+  --so-text-muted: var(--so-workspace-overlay-text-muted);
+  --so-border: var(--so-workspace-overlay-border);
+  --so-primary: var(--so-workspace-overlay-governance-primary);
+  --so-primary-strong: var(--so-workspace-overlay-governance-primary-strong);
+  --so-on-primary: var(--so-workspace-overlay-surface);
 }
 
-.responsive-filter-drawer--content {
-  --so-bg: #f3f6fb;
-  --so-bg-elevated: #ffffff;
-  --so-panel: #ffffff;
-  --so-panel-soft: #edf2f9;
-  --so-text: #17243d;
-  --so-text-muted: #627089;
-  --so-border: #cfd9e8;
-  --so-primary: #2558bd;
-  --so-primary-strong: #173f91;
-  --so-on-primary: #ffffff;
+.responsive-filter-drawer--content,
+.responsive-filter-drawer--notifications {
+  --so-bg: var(--so-workspace-overlay-canvas);
+  --so-bg-elevated: var(--so-workspace-overlay-surface);
+  --so-panel: var(--so-workspace-overlay-surface);
+  --so-panel-soft: var(--so-workspace-overlay-surface-soft);
+  --so-text: var(--so-workspace-overlay-text);
+  --so-text-muted: var(--so-workspace-overlay-text-muted);
+  --so-border: var(--so-workspace-overlay-border);
+  --so-primary: var(--so-workspace-overlay-content-primary);
+  --so-primary-strong: var(--so-workspace-overlay-content-primary-strong);
+  --so-on-primary: var(--so-workspace-overlay-surface);
 }
 
 .responsive-filter-drawer__trigger,
@@ -308,6 +315,8 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .responsive-filter-drawer__surface,
+  .responsive-filter-drawer__surface :deep(*),
   .responsive-filter-drawer__scrim,
   .responsive-filter-drawer__sheet {
     transition: none;
