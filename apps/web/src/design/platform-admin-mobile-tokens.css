@@ -1,0 +1,18 @@
+/* Existing local C palette; no global theme aliases or layout declarations. */
+@media (max-width: 760px) {
+  html[data-design="signal-ledger"]
+    #app
+    .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"]) {
+    --so-admin-mobile-primary: #294caf;
+    --so-admin-mobile-surface: #fff;
+    --so-admin-mobile-primary-border: #91a8de;
+    --so-admin-mobile-text: #142a46;
+    --so-admin-mobile-text-muted: #536b86;
+    --so-admin-mobile-field-border: #9db1cc;
+    --so-admin-mobile-focus: #4276df;
+    --so-admin-mobile-border: #d8e1ed;
+    --so-admin-mobile-disabled-text: #66748a;
+    --so-admin-mobile-disabled-surface: #e8edf4;
+    --so-admin-mobile-surface-soft: #f4f7fc;
+  }
+}

@@ -1,3 +1,5 @@
+@import "../design/platform-admin-mobile-tokens.css";
+
 /* P44 approved mobile controls, role facts and unfiltered same-role results. */
 @media (max-width: 760px) {
   html[data-design="signal-ledger"]
@@ -15,10 +17,10 @@
       margin: -20px -20px -16px;
       padding: 20px 16px;
       border-radius: 12px 12px 0 0;
-      background: #294caf;
-      color: #fff;
+      background: var(--so-admin-mobile-primary);
+      color: var(--so-admin-mobile-surface);
       :is(p, h3, span) {
-        color: #fff;
+        color: var(--so-admin-mobile-surface);
       }
       h3 {
         font-family: "Microsoft YaHei", sans-serif;
@@ -39,9 +41,9 @@
       justify-self: start;
       min-height: 44px;
       padding: 8px 12px;
-      border: 1px solid #91a8de;
+      border: 1px solid var(--so-admin-mobile-primary-border);
       border-radius: 6px;
-      color: #fff;
+      color: var(--so-admin-mobile-surface);
       input {
         width: 20px;
         height: 20px;
@@ -49,10 +51,10 @@
         min-height: 20px;
         padding: 0;
         margin: 0;
-        accent-color: #294caf;
+        accent-color: var(--so-admin-mobile-primary);
       }
       input:focus-visible {
-        outline: 3px solid #fff;
+        outline: 3px solid var(--so-admin-mobile-surface);
         outline-offset: 4px;
       }
     }
@@ -62,10 +64,10 @@
       gap: 16px;
       margin-left: -4px;
       margin-right: -4px;
-      color: #142a46;
-      background: #fff;
+      color: var(--so-admin-mobile-text);
+      background: var(--so-admin-mobile-surface);
       label {
-        color: #536b86;
+        color: var(--so-admin-mobile-text-muted);
       }
       :is(select, input) {
         box-sizing: border-box;
@@ -74,13 +76,13 @@
         width: 100%;
         padding: 9px 11px;
         font-size: 16px;
-        border: 1px solid #9db1cc;
+        border: 1px solid var(--so-admin-mobile-field-border);
         border-radius: 6px;
-        color: #142a46;
-        background: #fff;
+        color: var(--so-admin-mobile-text);
+        background: var(--so-admin-mobile-surface);
       }
       :is(select, input, button):focus-visible {
-        outline: 3px solid #4276df;
+        outline: 3px solid var(--so-admin-mobile-focus);
         outline-offset: 3px;
       }
     }
@@ -90,20 +92,20 @@
     }
     .role-comparison__filters {
       padding: 0 0 20px;
-      border-bottom: 1px solid #d8e1ed;
+      border-bottom: 1px solid var(--so-admin-mobile-border);
       button {
         justify-self: start;
         min-height: 44px;
         border-radius: 6px;
-        border-color: #9db1cc;
-        color: #294caf;
-        background: #fff;
+        border-color: var(--so-admin-mobile-field-border);
+        color: var(--so-admin-mobile-primary);
+        background: var(--so-admin-mobile-surface);
       }
       button:disabled {
         opacity: 1;
-        color: #66748a;
-        border-color: #d8e1ed;
-        background: #e8edf4;
+        color: var(--so-admin-mobile-disabled-text);
+        border-color: var(--so-admin-mobile-border);
+        background: var(--so-admin-mobile-disabled-surface);
       }
     }
   }
@@ -116,8 +118,8 @@
     margin-right: -20px;
     padding: 16px;
     font-size: 14px;
-    color: #536b86;
-    background: #f4f7fc;
+    color: var(--so-admin-mobile-text-muted);
+    background: var(--so-admin-mobile-surface-soft);
   }
   html[data-design="signal-ledger"]
     #app
@@ -127,8 +129,8 @@
     margin-left: -4px;
     margin-right: -4px;
     gap: 0;
-    color: #142a46;
-    background: #fff;
+    color: var(--so-admin-mobile-text);
+    background: var(--so-admin-mobile-surface);
   }
   html[data-design="signal-ledger"]
     #app
@@ -139,10 +141,10 @@
     grid-template-columns: minmax(0, 1fr);
     padding: 18px 0;
     border: 0;
-    border-bottom: 1px solid #d8e1ed;
+    border-bottom: 1px solid var(--so-admin-mobile-border);
     border-radius: 0;
-    color: #142a46;
-    background: #fff;
+    color: var(--so-admin-mobile-text);
+    background: var(--so-admin-mobile-surface);
   }
   html[data-design="signal-ledger"]
     #app
@@ -171,7 +173,7 @@
     dt {
     font-size: 13px;
     line-height: 1.6;
-    color: #536b86;
+    color: var(--so-admin-mobile-text-muted);
   }
   html[data-design="signal-ledger"]
     #app
@@ -188,7 +190,7 @@
     .role-comparison.role-comparison--same-role-result
     .role-comparison__matrix
     dd[data-enabled="true"] {
-    color: #294caf;
+    color: var(--so-admin-mobile-primary);
   }
   html[data-design="signal-ledger"]
     #app
@@ -198,9 +200,9 @@
     > p {
     margin-top: 20px;
     text-align: left;
-    color: #536b86;
-    background: #f4f7fc;
-    border-left: 3px solid #9db1cc;
+    color: var(--so-admin-mobile-text-muted);
+    background: var(--so-admin-mobile-surface-soft);
+    border-left: 3px solid var(--so-admin-mobile-field-border);
   }
 }
 
@@ -214,11 +216,11 @@
     gap: 20px;
     margin: -16px -4px;
     padding: 20px 16px;
-    border-bottom: 1px solid #d8e1ed;
+    border-bottom: 1px solid var(--so-admin-mobile-border);
     font-family: "Microsoft YaHei", sans-serif;
     font-size: 16px;
-    color: #142a46;
-    background: #fff;
+    color: var(--so-admin-mobile-text);
+    background: var(--so-admin-mobile-surface);
     article {
       padding: 0;
       border: 0;
@@ -229,11 +231,11 @@
     strong {
       font-size: 16px;
       font-weight: 700;
-      color: #142a46;
+      color: var(--so-admin-mobile-text);
     }
     span,
     small {
-      color: #536b86;
+      color: var(--so-admin-mobile-text-muted);
     }
     small {
       font-size: 13px;
