@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useId } from "vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import type { PlatformManagementDomain as Domain } from "./platform-management-presentation";
 
@@ -12,6 +13,7 @@ defineProps<{
 defineEmits<{ apply: []; reset: [] }>();
 const query = defineModel<string>("query", { required: true });
 const status = defineModel<string>("status", { required: true });
+const fieldId = useId();
 </script>
 
 <template>
@@ -22,7 +24,9 @@ const status = defineModel<string>("status", { required: true });
     :mode="mode"
   >
     <form class="platform-management-filter" @submit.prevent="$emit('apply')">
+      <label v-if="domain === 'notifications'" :for="`${fieldId}-query`">搜索投递记录</label>
       <input
+        :id="domain === 'notifications' ? `${fieldId}-query` : undefined"
         v-model="query"
         :aria-label="domain === 'content' ? '搜索热点内容' : `搜索${label}`"
         :placeholder="
@@ -34,7 +38,10 @@ const status = defineModel<string>("status", { required: true });
                 ? '搜索通知标题、接收人邮箱或组织'
                 : '搜索标题、邮箱或组织'
         "
-      /><select
+      />
+      <label v-if="domain === 'notifications'" :for="`${fieldId}-status`">通知类型</label>
+      <select
+        :id="domain === 'notifications' ? `${fieldId}-status` : undefined"
         v-model="status"
         :aria-label="
           domain === 'content'

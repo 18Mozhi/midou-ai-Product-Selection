@@ -2,7 +2,8 @@
 .platform-notifications,
 .message-dialog,
 .message-reader-dialog,
-.notification-action-dialog {
+.notification-action-dialog,
+.responsive-filter-drawer--notifications {
   --so-platform-notification-canvas: #eef3f9;
   --so-platform-notification-surface: #ffffff;
   --so-platform-notification-surface-soft: #e7eef8;

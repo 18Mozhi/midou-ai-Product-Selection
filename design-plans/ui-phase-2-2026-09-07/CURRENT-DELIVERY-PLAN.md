@@ -1,5 +1,9 @@
 # 第二阶段完整实施计划 · 当前领取与审核入口
 
+批次09已提交`f7d061d1`；批次10修复P57实际App焦点、阅读危险hover和Teleport筛选组合。
+双端/双动效56项与相关单测32项通过，r3手机筛选区域待审；r1/r2仅保留诊断，不扩大旧按钮批准。
+下一步必须整合旧外层导航与重复标题；[实际App图包](design/platform-notifications-direction-c/app-review-r3/README.md)不等于全73页或真实验收完成。
+
 批次08已提交`7aad0879`；批次09修复P57保存按钮悬停文字不可读及编辑窗焦点覆盖。
 新增主按钮432项状态验证，取消144项、弹窗32组和合同7项通过，16张底部图待审。
 范围与截图见[主按钮审核](design/platform-notifications-direction-c/primary-button-review-r1/README.md)，全73页和真实验收继续。

@@ -1,4 +1,10 @@
 @import "./design/platform-notification-tokens.css";
+@import "./platform-notification-filter.css";
+
+.platform-notifications,
+.responsive-filter-drawer--notifications {
+  --so-focus: var(--so-platform-notification-focus);
+}
 
 .platform-notifications {
   --so-bg: var(--so-platform-notification-canvas);
@@ -769,6 +775,7 @@
     border-color: var(--so-primary);
     color: var(--so-primary);
   }
+  .platform-notifications button.is-danger:not(:disabled):hover,
   .notification-action-dialog button.is-danger:not(:disabled):hover {
     border-color: var(--so-danger);
     color: var(--so-danger);

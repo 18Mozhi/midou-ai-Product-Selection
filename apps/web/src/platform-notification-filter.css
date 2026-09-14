@@ -1,0 +1,57 @@
+.responsive-filter-drawer--notifications .responsive-filter-drawer__sheet {
+  font-family: var(--so-font-ui);
+}
+
+.responsive-filter-drawer--notifications .platform-management-filter {
+  align-self: start;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 640px;
+}
+
+.responsive-filter-drawer--notifications .platform-management-filter label {
+  color: var(--so-platform-notification-text);
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.responsive-filter-drawer--notifications .platform-management-filter :is(input, select, button) {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--so-platform-notification-field-border);
+  border-radius: 5px;
+  font: inherit;
+  color: var(--so-platform-notification-text);
+  background: var(--so-platform-notification-surface);
+}
+
+.responsive-filter-drawer--notifications .platform-management-filter button {
+  cursor: pointer;
+}
+
+.responsive-filter-drawer--notifications .platform-management-filter button:not(.secondary) {
+  margin-top: 8px;
+  border-color: var(--so-platform-notification-primary);
+  color: var(--so-platform-notification-surface);
+  background: var(--so-platform-notification-primary);
+}
+
+.responsive-filter-drawer--notifications :is(button, input, select):focus-visible {
+  outline: 3px solid var(--so-platform-notification-focus);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .responsive-filter-drawer--notifications
+    .platform-management-filter
+    button:not(.secondary):hover {
+    border-color: var(--so-platform-notification-primary-strong);
+    color: var(--so-platform-notification-surface);
+    background: var(--so-platform-notification-primary-strong);
+  }
+}

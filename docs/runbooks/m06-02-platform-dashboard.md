@@ -1,5 +1,7 @@
 # M06-02 宝塔运维与回滚
 
+P57实际App（2026-09-15）：运行`node scripts/verify-platform-notification-app.mjs`，使用现有本地E2E样例验证双端/双动效56项，无后台访问或写请求；默认不写文件且关闭测试服务/浏览器。可选`--capture-review`只首次创建固定app-review-r3目录，已存在即拒绝覆盖。投递筛选打开后单列输入、可见字段标签和蓝色筛选按钮；应用后按原逻辑关闭并返回触发按钮，两类分页仍独立。没有新增环境变量/接口/权限/依赖，不需后端重启；未部署，未来正式前端包发布后刷新生效。r1/r2是失效/已替代诊断，不代表当前视觉通过；外层旧导航、重复标题及完整真实验收继续。
+
 P57主按钮（2026-09-14）：保存 hover 使用原有深蓝底白字，草稿窗键盘焦点为原有蓝色。运行`node scripts/verify-platform-notification-button-states.mjs --primary`验证新建/编辑/发布432项状态；无参继续验证取消144项。无capture不写文件；`--primary --capture-review`仅首次创建固定primary-button-review-r1目录，已存在时拒绝覆盖。草稿字段不合格走原生校验，发布原因不足禁用，不改变API或提交规则。本次无新配置/后端重启，未部署；未来正式前端更新后刷新即可。
 
 P57取消按钮（2026-09-14）：原因窗确认取消保持红色危险语义，键盘显示蓝色焦点；原因不足及提交中仍按原规则禁用。用`node scripts/verify-platform-notification-button-states.mjs`复验144项本地组合，默认无产物；可选`--capture-review`仅用于首次创建固定button-review-r1审核目录，存在即拒绝覆盖。全部服务自动关闭，模拟指针不替代真机验收；不调整配置、不重启后端，未来正式前端包发布后刷新浏览器生效。
