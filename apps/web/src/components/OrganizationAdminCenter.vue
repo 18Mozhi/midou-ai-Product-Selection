@@ -1251,6 +1251,7 @@ onMounted(() => void load());
       />
       <OrganizationApprovalPanel
         v-else-if="view === 'approvals'"
+        :owner-path="props.routePath"
         :templates="data?.templates ?? []"
         :approvals="rows"
         :summary="data?.summary ?? {}"

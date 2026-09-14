@@ -26,11 +26,12 @@ async function flush() {
   await nextTick();
   await nextTick();
 }
-function harness(query = {}) {
-  const route = reactive({ path: "/org-admin/approvals", query });
+function harness(query = {}, options = {}) {
+  const route = reactive({ path: options.path ?? "/org-admin/approvals", query });
   const calls = [],
     pending = [];
   const props = reactive({
+    ownerPath: options.ownerPath,
     templates: Array.from({ length: 14 }, (_, i) => ({
       id: `t${i}`,
       name: `模板${i}`,
@@ -229,6 +230,44 @@ test("P34 unrelated route cannot hydrate or receive stale panel query writes", a
   } finally {
     t.stop();
   }
+});
+test("P34 first created while cached restores its owning route without writing into the destination", async () => {
+  const t = harness(
+    { keep: "destination" },
+    {
+      path: "/org-admin",
+      ownerPath: "/org-admin/approvals",
+    },
+  );
+  try {
+    t.h.templateQuery.value = "缓存期间";
+    await flush();
+    assert.equal(t.calls.length, 0);
+    t.route.path = "/org-admin/approvals";
+    t.route.query = {
+      approval_view: "templates",
+      approval_template_query: "采购",
+      keep: "external",
+    };
+    await flush();
+    assert.equal(t.h.section.value, "templates");
+    assert.equal(t.h.templateQuery.value, "采购");
+    assert.equal(t.calls.length, 0);
+    t.h.templateQuery.value = "新筛选";
+    await flush();
+    assert.equal(t.calls.length, 1);
+    assert.equal(t.calls[0].query.keep, "external");
+    assert.equal(t.calls[0].query.approval_template_query, "新筛选");
+  } finally {
+    t.stop();
+  }
+});
+test("P34 parent supplies its owned path to a potentially late-created panel", () => {
+  const parent = readFileSync("apps/web/src/components/OrganizationAdminCenter.vue", "utf8");
+  assert.match(
+    parent,
+    /<OrganizationApprovalPanel\s+v-else-if="view === 'approvals'"\s+:owner-path="props.routePath"/,
+  );
 });
 test("P34 rapid external query changes keep latest route and cleanup after scope disposal", async () => {
   const t = harness();

@@ -1,0 +1,636 @@
+/* Actual P34 C review composition. Approved mobile filter/empty rules remain in their SFC. */
+html body.approvals-vue-c #app .org-admin-center:has(.org-approval-c-workbench) {
+  background: #f3f6fb;
+  padding: 0;
+  .org-admin-hero {
+    min-height: 0;
+    padding: 0 0 24px;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    color: #202c3d;
+  }
+  .org-admin-hero h2 {
+    display: none;
+  }
+  .org-admin-hero p {
+    color: #254a9c;
+  }
+  .org-admin-refresh button {
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid #254a9c;
+    border-radius: 4px;
+    background: #254a9c;
+    color: #fff;
+  }
+  .org-admin-refresh button:disabled {
+    background: #e8edf4;
+    color: #58677b;
+    border-color: #dbe1e9;
+    opacity: 1;
+  }
+}
+html body.approvals-vue-c #app .org-admin-center .org-approval-governance.org-approval-c-workbench {
+  display: grid;
+  grid-template-columns: 184px minmax(0, 1fr);
+  grid-template-areas: "index overview" "index metrics" "index surface" "index links";
+  gap: 24px;
+  margin: 0;
+  background: #f3f6fb;
+
+  .org-approval-section-tabs {
+    grid-area: index;
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 20px 16px;
+    border: 0;
+    border-radius: 0;
+    background: #254a9c;
+    color: #fff;
+  }
+  .org-approval-c-index-title {
+    display: grid;
+    gap: 8px;
+    padding-bottom: 24px;
+  }
+  .org-approval-c-index-title strong {
+    font-size: 24px;
+  }
+  .org-approval-c-index-title span {
+    padding: 0;
+    background: transparent;
+    color: #fff;
+  }
+  :is(
+    .org-approval-request-list,
+    .org-approval-template-directory,
+    .org-approval-template-detail,
+    .org-approval-links
+  ) {
+    font-family: "Microsoft YaHei", sans-serif;
+  }
+  .org-approval-section-tabs button {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 56px;
+    padding: 12px 8px;
+    border: 0;
+    border-top: 1px solid #6683bd;
+    border-radius: 0;
+    background: transparent;
+    color: #fff;
+    font:
+      16px/1.5 "Microsoft YaHei",
+      sans-serif;
+  }
+  .org-approval-section-tabs button span {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+  }
+  .org-approval-section-tabs button[aria-pressed="true"] {
+    background: #fff;
+    color: #254a9c;
+    box-shadow: none;
+  }
+  .org-approval-overview {
+    grid-area: overview;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 0.65fr);
+    gap: 24px;
+    padding: 0 0 24px;
+    border: 0;
+    border-bottom: 1px solid #dbe1e9;
+    border-radius: 0;
+    background: transparent;
+    color: #202c3d;
+    box-shadow: none;
+  }
+  .org-approval-overview::after {
+    display: none;
+  }
+  .org-approval-overview h3 {
+    font:
+      700 28px/1.4 "Microsoft YaHei",
+      sans-serif;
+    color: #202c3d;
+  }
+  .org-approval-overview p {
+    margin: 0 0 8px;
+    background: transparent;
+    color: #254a9c;
+    font-size: 14px;
+  }
+  .org-approval-overview > div > span {
+    color: #58677b;
+  }
+  .org-approval-overview aside {
+    padding: 16px;
+    border: 0;
+    border-left: 3px solid #254a9c;
+    background: #e9effa;
+  }
+  .org-approval-overview aside b {
+    color: #254a9c;
+  }
+  .org-approval-overview aside span {
+    color: #58677b;
+    font-size: 14px;
+  }
+  .org-approval-metrics {
+    grid-area: metrics;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    border: 0;
+    background: transparent;
+  }
+  .org-approval-metrics article {
+    padding: 16px 20px 16px 0;
+    border: 0;
+    border-bottom: 1px solid #dbe1e9;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .org-approval-metrics article::before {
+    display: none;
+  }
+  .org-approval-metrics b {
+    color: #202c3d;
+    font:
+      700 30px/1.3 "Microsoft YaHei",
+      sans-serif;
+  }
+  .org-approval-metrics :is(span, small) {
+    color: #58677b;
+  }
+  .org-approval-section {
+    grid-area: surface;
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid #dbe1e9;
+    border-radius: 0;
+    background: #fff;
+  }
+  .org-approval-section-heading {
+    display: block;
+    padding: 0 0 20px;
+    border: 0;
+    color: #202c3d;
+  }
+  .org-approval-section-heading p {
+    color: #254a9c;
+    background: transparent;
+  }
+  .org-approval-section-heading h4 {
+    font:
+      700 22px/1.5 "Microsoft YaHei",
+      sans-serif;
+    color: #202c3d;
+  }
+  .org-approval-section-heading > span {
+    display: block;
+    margin-top: 10px;
+    color: #58677b;
+    font-size: 14px;
+  }
+  .org-approval-c-requests .org-approval-toolbar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding: 18px;
+    border: 0;
+    background: #f3f6fb;
+  }
+  .org-approval-c-requests .org-approval-search {
+    grid-column: 1/-1;
+  }
+  .org-approval-c-requests .org-approval-toolbar label > span {
+    color: #202c3d;
+  }
+  .org-approval-c-requests .org-approval-toolbar :is(input, select, button) {
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid #6680a2;
+    border-radius: 4px;
+    background: #fff;
+    color: #202c3d;
+    font:
+      16px/1.5 "Microsoft YaHei",
+      sans-serif;
+  }
+  .org-approval-request-list {
+    display: grid;
+    gap: 0;
+    column-gap: 24px;
+    margin-top: 20px;
+  }
+  .org-approval-request-list > article {
+    padding: 24px 0;
+    border: 0;
+    border-bottom: 1px solid #dbe1e9;
+    border-radius: 0;
+    background: #fff;
+    box-shadow: none;
+  }
+  .org-approval-request-list > article h5 {
+    font:
+      700 20px/1.5 "Microsoft YaHei",
+      sans-serif;
+    color: #202c3d;
+  }
+  .org-approval-request-list > article > header span {
+    color: #254a9c;
+    white-space: normal;
+    overflow: visible;
+    overflow-wrap: anywhere;
+  }
+  .org-approval-request-list dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .org-approval-request-list dl > div {
+    padding: 12px 0;
+    border: 0;
+    background: transparent;
+  }
+  .org-approval-request-list dd {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  :is(.org-approval-request-list, .org-approval-template-detail) dt {
+    color: #58677b;
+    font-size: 14px;
+  }
+  :is(.org-approval-request-list, .org-approval-template-detail) dd {
+    margin: 6px 0 0;
+    color: #202c3d;
+    overflow-wrap: anywhere;
+  }
+  :is(.org-approval-request-list, .org-approval-template-detail, .org-approval-template-directory)
+    i {
+    padding: 5px 9px;
+    border: 0;
+    border-radius: 3px;
+    background: #edf2fa;
+    color: #254a9c;
+    font-style: normal;
+    font-size: 14px;
+  }
+  .org-approval-template-summary {
+    display: flex;
+    gap: 24px;
+    padding: 0 0 18px;
+    color: #58677b;
+  }
+  .org-approval-template-summary span {
+    border: 0;
+    background: transparent;
+  }
+  .org-approval-template-summary b {
+    color: #202c3d;
+  }
+  .org-approval-template-browser {
+    display: grid;
+    grid-template-columns: minmax(200px, 0.7fr) minmax(0, 1.3fr);
+    gap: 24px;
+    margin-top: 24px;
+  }
+  .org-approval-template-directory {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: #fff;
+  }
+  .org-approval-template-directory > button {
+    display: grid;
+    gap: 8px;
+    padding: 16px;
+    border: 1px solid #dbe1e9;
+    border-radius: 4px;
+    background: #fff;
+    color: #202c3d;
+    text-align: left;
+    overflow-wrap: anywhere;
+    box-shadow: none;
+  }
+  .org-approval-template-directory > button.is-selected {
+    border: 2px solid #254a9c;
+    padding: 15px;
+    background: #edf2fa;
+  }
+  .org-approval-template-directory > button b {
+    font-size: 18px;
+  }
+  .org-approval-template-directory > button :is(span, small) {
+    color: #58677b;
+  }
+  .org-approval-template-detail {
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: #fff;
+  }
+  .org-approval-template-detail > header {
+    padding: 18px;
+    background: #254a9c;
+    color: #fff;
+  }
+  .org-approval-template-detail > header :is(span, h5, small) {
+    color: #fff;
+    font-family: "Microsoft YaHei", sans-serif;
+  }
+  .org-approval-template-detail > header h5 {
+    font-size: 22px;
+  }
+  .org-approval-template-detail > dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid #dbe1e9;
+  }
+  .org-approval-template-detail > dl > div {
+    padding: 12px 0;
+    border: 0;
+    background: transparent;
+  }
+  .org-approval-c-selection-note {
+    padding: 12px 16px;
+    background: #edf2fa;
+    color: #254a9c;
+    font-size: 14px;
+  }
+  .org-approval-version-diff {
+    padding: 0;
+    border: 0;
+    background: #fff;
+  }
+  .org-approval-version-diff > header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 18px 0;
+    padding: 0;
+    color: #202c3d;
+  }
+  .org-approval-version-diff h6 {
+    font:
+      700 18px/1.5 "Microsoft YaHei",
+      sans-serif;
+  }
+  .org-approval-version-diff > header span {
+    color: #254a9c;
+  }
+  .org-approval-version-diff > article {
+    margin-top: 16px;
+    padding: 16px;
+    border: 1px solid #dbe1e9;
+    border-left: 3px solid #254a9c;
+    border-radius: 0;
+    background: #f5f7fb;
+  }
+  .org-approval-version-diff > article header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+    color: #202c3d;
+  }
+  .org-approval-version-diff > article header b {
+    font-family: "Microsoft YaHei", sans-serif;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .org-approval-version-diff > article dl {
+    display: grid;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .org-approval-version-diff > article dl > div {
+    display: block;
+  }
+  .org-approval-version-diff > article dd {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .org-approval-version-diff :is(del, ins) {
+    display: block;
+    padding: 10px 12px;
+    text-decoration: none;
+    background: #fff;
+    color: #202c3d;
+    overflow-wrap: anywhere;
+  }
+  .org-approval-version-diff :is(del, ins) small {
+    display: block;
+    color: #58677b;
+    font-size: 13px;
+  }
+  .org-approval-version-diff dd > span {
+    display: none;
+  }
+  .org-approval-diff-empty {
+    padding: 24px 18px;
+    border: 0;
+    background: #f5f7fb;
+    color: #58677b;
+  }
+  .org-approval-technical {
+    margin-top: 16px;
+    padding: 12px 0;
+    border: 0;
+    border-top: 1px solid #dbe1e9;
+    background: transparent;
+    color: #58677b;
+  }
+  .org-approval-technical summary {
+    min-height: 44px;
+    padding: 10px 0;
+    color: #254a9c;
+    cursor: pointer;
+  }
+  .org-approval-technical code {
+    display: block;
+    overflow-wrap: anywhere;
+    font-size: 13px;
+  }
+  .org-approval-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 20px 0 0;
+    border: 0;
+    color: #58677b;
+    background: transparent;
+  }
+  .org-approval-pagination button {
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 1px solid #6680a2;
+    border-radius: 4px;
+    background: #fff;
+    color: #254a9c;
+  }
+  .org-approval-pagination button:disabled {
+    background: #e8edf4;
+    color: #58677b;
+    border-color: #dbe1e9;
+    opacity: 1;
+  }
+  .org-approval-links {
+    grid-area: links;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 24px;
+    border: 0;
+    border-top: 1px solid #dbe1e9;
+    border-radius: 0;
+    background: transparent;
+    color: #58677b;
+  }
+  .org-approval-links div {
+    flex: 1 1 100%;
+  }
+  .org-approval-links b {
+    color: #202c3d;
+  }
+  .org-approval-links span {
+    color: #254a9c;
+  }
+  .org-approval-links a {
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid #6680a2;
+    border-radius: 4px;
+    background: #fff;
+    color: #254a9c;
+  }
+  :is(
+      .org-approval-section-tabs,
+      .org-approval-c-requests,
+      .org-approval-template-directory,
+      .org-approval-template-detail,
+      .org-approval-links
+    )
+    :is(button, input, select, summary, a):focus-visible {
+    outline: 3px solid #4d79ff;
+    outline-offset: 3px;
+  }
+  .org-approval-section-tabs button:focus-visible {
+    outline-color: #fff;
+    outline-offset: -4px;
+  }
+  .org-approval-pagination > span:focus-visible {
+    outline: 3px solid #4d79ff;
+    outline-offset: 3px;
+  }
+}
+@media (min-width: 761px) {
+  html
+    body.approvals-vue-c
+    #app
+    .org-admin-center
+    .org-approval-c-workbench
+    .org-approval-template-filters-c {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding: 18px;
+    background: #f3f6fb;
+    border: 0;
+    label {
+      min-width: 0;
+    }
+    .org-approval-search {
+      grid-column: 1/-1;
+    }
+    :is(input, select, button) {
+      min-height: 44px;
+      padding: 9px 12px;
+      border: 1px solid #6680a2;
+      border-radius: 4px;
+      background: #fff;
+      color: #202c3d;
+      font:
+        16px/1.5 "Microsoft YaHei",
+        sans-serif;
+    }
+    .org-template-filter-help {
+      display: block;
+      font-size: 13px;
+      color: #58677b;
+    }
+  }
+}
+@media (max-width: 1100px) {
+  html
+    body.approvals-vue-c
+    #app
+    .org-admin-center
+    .org-approval-governance.org-approval-c-workbench {
+    .org-approval-template-browser {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .org-approval-overview {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}
+@media (max-width: 840px) {
+  html
+    body.approvals-vue-c
+    #app
+    .org-admin-center
+    .org-approval-governance.org-approval-c-workbench {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "index" "overview" "metrics" "surface" "links";
+    gap: 20px;
+    .org-approval-section-tabs {
+      flex-direction: row;
+      padding: 0;
+    }
+    .org-approval-c-index-title {
+      display: none;
+    }
+    .org-approval-section-tabs button {
+      flex: 1;
+      border: 0;
+      padding: 14px;
+    }
+    .org-approval-metrics {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .org-approval-section {
+      padding: 16px;
+    }
+    .org-approval-overview h3 {
+      font-size: 24px;
+    }
+    .org-approval-c-requests .org-approval-toolbar {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .org-approval-request-list dl {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .org-approval-links {
+      padding: 20px 0;
+    }
+  }
+}

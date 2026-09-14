@@ -3,6 +3,7 @@ import { computed, nextTick, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const props = defineProps<{
+  ownerPath?: string;
   templates: any[];
   approvals: any[];
   summary: Record<string, number>;
@@ -58,7 +59,7 @@ const route = useRoute(),
   templatePage = ref(queryPage("approval_template_page")),
   selectedTemplateId = ref("");
 
-const queryOwnerPath = route.path,
+const queryOwnerPath = props.ownerPath ?? route.path,
   pendingQueryWrites = new Map<string, number>();
 let restoringQuery = false,
   queryRestoreGeneration = 0,
@@ -346,6 +347,42 @@ function resetTemplates() {
   templateResource.value = "all";
   templateSort.value = "name_asc";
 }
+function turnPage(view: Section, direction: -1 | 1, event: MouseEvent) {
+  const current = view === "requests" ? requestPage : templatePage;
+  const count = view === "requests" ? requestPageCount : templatePageCount;
+  const trigger = event.currentTarget;
+  const reachesBoundary =
+    direction === -1 ? current.value === 2 : current.value === count.value - 1;
+  let focusedStatus: HTMLElement | undefined;
+  if (
+    reachesBoundary &&
+    trigger instanceof HTMLButtonElement &&
+    document.activeElement === trigger
+  ) {
+    const status = trigger.closest(".org-approval-pagination")?.querySelector<HTMLElement>("span");
+    if (status?.isConnected && !status.closest("[inert]")) {
+      status.focus({ preventScroll: true });
+      focusedStatus = status;
+    }
+  }
+  current.value += direction;
+  if (focusedStatus)
+    void nextTick(() => {
+      const status = focusedStatus;
+      if (!status?.isConnected || status.closest("[inert]") || document.activeElement !== status)
+        return;
+      const rect = status.getBoundingClientRect();
+      const hit = document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2);
+      if (
+        rect.top < 0 ||
+        rect.bottom > window.innerHeight ||
+        rect.left < 0 ||
+        rect.right > window.innerWidth ||
+        !status.contains(hit)
+      )
+        status.scrollIntoView({ block: "center", inline: "nearest", behavior: "instant" });
+    });
+}
 </script>
 
 <template>
@@ -502,13 +539,20 @@ function resetTemplates() {
         </div>
       </div>
       <footer v-if="filteredRequests.length" class="org-approval-pagination">
-        <span
+        <span tabindex="-1" role="status" aria-live="polite" aria-atomic="true"
           >共 {{ filteredRequests.length }} 条，当前第 {{ requestPage }} /
           {{ requestPageCount }} 页</span
         >
         <div>
-          <button :disabled="requestPage <= 1" @click="requestPage--">上一页</button>
-          <button :disabled="requestPage >= requestPageCount" @click="requestPage++">下一页</button>
+          <button :disabled="requestPage <= 1" @click="turnPage('requests', -1, $event)">
+            上一页
+          </button>
+          <button
+            :disabled="requestPage >= requestPageCount"
+            @click="turnPage('requests', 1, $event)"
+          >
+            下一页
+          </button>
         </div>
       </footer>
     </section>
@@ -637,10 +681,17 @@ function resetTemplates() {
             <i :data-status="template.status">{{ templateLabel(template.status) }}</i>
           </button>
           <footer class="org-approval-pagination">
-            <span>第 {{ templatePage }} / {{ templatePageCount }} 页</span>
+            <span tabindex="-1" role="status" aria-live="polite" aria-atomic="true"
+              >第 {{ templatePage }} / {{ templatePageCount }} 页</span
+            >
             <div>
-              <button :disabled="templatePage <= 1" @click="templatePage--">上一页</button>
-              <button :disabled="templatePage >= templatePageCount" @click="templatePage++">
+              <button :disabled="templatePage <= 1" @click="turnPage('templates', -1, $event)">
+                上一页
+              </button>
+              <button
+                :disabled="templatePage >= templatePageCount"
+                @click="turnPage('templates', 1, $event)"
+              >
                 下一页
               </button>
             </div>
@@ -781,6 +832,11 @@ function resetTemplates() {
 <style src="../design/approval-filter-tokens.css"></style>
 
 <style scoped>
+.org-approval-pagination > span:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--so-primary) 72%, var(--so-text));
+  outline-offset: 2px;
+}
+
 .org-template-filter-help {
   display: none;
 }
