@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, createApiResponseClient } from "../api-client";
 import { statusLabel, technicalStatus } from "../ui/status-labels";
@@ -54,7 +54,51 @@ const refreshButton = ref<HTMLButtonElement | null>(null),
   keepRetryVisible = ref(false);
 let controller: AbortController | null = null,
   sequence = 0,
-  mounted = false;
+  mounted = false,
+  active = true,
+  disposed = false,
+  resumeRead = false,
+  lastReadKey: string | null = null,
+  readTimeout: number | undefined;
+const readKey = () => JSON.stringify([routeText("query", 120), routeSource()]);
+const ownsRead = (currentSequence: number, key: string) =>
+  currentSequence === sequence &&
+  !disposed &&
+  active &&
+  route.path === "/platform-admin/logs" &&
+  readKey() === key;
+
+function stopRead(preserveRetry = false) {
+  sequence += 1;
+  controller?.abort();
+  controller = null;
+  window.clearTimeout(readTimeout);
+  readTimeout = undefined;
+  refreshing.value = false;
+  if (!preserveRetry) keepRetryVisible.value = false;
+}
+
+function syncReadRoute() {
+  if (!mounted || disposed) return;
+  if (route.path !== "/platform-admin/logs") {
+    resumeRead ||= Boolean(controller);
+    stopRead();
+    return;
+  }
+  const changed = lastReadKey !== readKey();
+  if (changed) {
+    query.value = routeText("query", 120);
+    source.value = routeSource();
+  }
+  if (!active) {
+    resumeRead ||= changed;
+    return;
+  }
+  if (!changed && !resumeRead) return;
+  stopRead(true);
+  resumeRead = false;
+  void load();
+}
 const {
   request: exportReasonRequest,
   open: exportReasonOpen,
@@ -152,16 +196,21 @@ function handoffRetryFocus() {
 
 async function load() {
   if (controller) return;
+  if (disposed || !active || route.path !== "/platform-admin/logs") return;
   const currentSequence = ++sequence,
     requestController = new AbortController(),
+    key = readKey(),
     hasSnapshot = Boolean(observedAt.value);
   controller = requestController;
+  lastReadKey = key;
+  resumeRead = false;
   let timedOut = false;
   const timeout = window.setTimeout(() => {
     timedOut = true;
     requestController.abort();
   }, 15000);
-  keepRetryVisible.value = state.value !== "loading";
+  readTimeout = timeout;
+  keepRetryVisible.value ||= state.value !== "loading";
   if (!hasSnapshot) state.value = "loading";
   refreshing.value = true;
   message.value = "";
@@ -174,7 +223,7 @@ async function load() {
     const response = await request<any>(`/platform/management?${params}`, {
       signal: requestController.signal,
     });
-    if (currentSequence !== sequence) return;
+    if (!ownsRead(currentSequence, key)) return;
     requestId.value = response.request_id;
     items.value = response.data.items ?? [];
     summary.value = response.data.summary ?? {};
@@ -183,7 +232,7 @@ async function load() {
     state.value = items.value.length ? "ready" : "empty";
   } catch (error) {
     if (
-      currentSequence !== sequence ||
+      !ownsRead(currentSequence, key) ||
       (error instanceof DOMException && error.name === "AbortError" && !timedOut)
     )
       return;
@@ -197,6 +246,7 @@ async function load() {
     window.clearTimeout(timeout);
     if (currentSequence === sequence) {
       controller = null;
+      readTimeout = undefined;
       refreshing.value = false;
       keepRetryVisible.value = false;
     }
@@ -258,14 +308,17 @@ async function exportCsv() {
   }
 }
 
-watch(
-  () => [route.query.query, route.query.source],
-  () => {
-    query.value = routeText("query", 120);
-    source.value = routeSource();
-    if (mounted) void load();
-  },
-);
+watch(() => [route.path, route.query.query, route.query.source], syncReadRoute);
+onActivated(() => {
+  if (disposed) return;
+  active = true;
+  syncReadRoute();
+});
+onDeactivated(() => {
+  active = false;
+  resumeRead ||= Boolean(controller);
+  stopRead();
+});
 onMounted(async () => {
   mounted = true;
   const rawSource = routeText("source", 40);
@@ -279,9 +332,10 @@ onMounted(async () => {
 });
 onBeforeUnmount(() => {
   mounted = false;
-  sequence += 1;
-  controller?.abort();
-  controller = null;
+  disposed = true;
+  active = false;
+  resumeRead = false;
+  stopRead();
 });
 </script>
 

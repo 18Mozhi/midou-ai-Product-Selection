@@ -1,5 +1,7 @@
 # M06-02 宝塔运维与回滚
 
+P62读取归属（2026-09-15）：规范化条件变化取消旧读并替换；离页清理读取/计时器且不监听外页查询；返回保留完成缓存，仅续中断或条件已变读取。原API/15秒/安全重试/导出/权限不变，无配置项。`node scripts/verify-log-read-lifecycle.mjs`无参数/无文件，四组140项/40日志本地GET；45合同、270读取键盘及77默认回归，详见P62-READ-LIFECYCLE-BATCH35.md。仅未来前端静态包更新，无Node/Python重启，本轮未部署；真实权限/CSV/审计仍未验收。
+
 P62读取键盘（2026-09-15）：保留已有重试按钮经过等待，两个只读按钮aria-disabled结合原load单飞；成功返回记录前只交接仍持有的重试焦点，移焦/离页/隐藏/inert不抢焦点。接口/配置/导出不变，未来前端静态包生效，无Node/Python重启，本轮未部署。原`verify-log-read-feedback.mjs`扩展为270项/68本地GET，`--capture-review rN`当前r4/22图待审，r2/r3为截图范围对照；36合同、默认77及构建/253资源门通过，详情P62-READ-KEYBOARD-BATCH34.md。其他生命周期/权限/真实CSV继续。
 
 P62读取反馈（2026-09-15）：首次15秒超时仅说明客户端停止等待、尚未取得日志；仅已有observedAt时说明保留结果，命名读取区标记busy。接口/安全重试/权限/配置不变，未来前端静态包发布生效，无需Node/Python重启，本轮未部署。`node scripts/verify-log-read-feedback.mjs`无文件验证200项/60本地GET；`--capture-review rN`独占版本目录，当前r1/18图待审。24相关测试、默认77项、前端构建/253资源预算通过；详情见P62-READ-FEEDBACK-BATCH33.md，不能替代真实权限/导出/生命周期验收。

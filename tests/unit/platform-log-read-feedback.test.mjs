@@ -48,6 +48,8 @@ function harness() {
       useAuditedReason: () => ({}),
       watch() {},
       onMounted() {},
+      onActivated() {},
+      onDeactivated() {},
       onBeforeUnmount: (fn) => unmount.push(fn),
       window: {
         innerHeight: 844,
