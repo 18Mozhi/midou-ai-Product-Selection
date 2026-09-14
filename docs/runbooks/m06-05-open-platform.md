@@ -1,5 +1,7 @@
 # M06-05 宝塔运维与回滚
 
+P60批次28：`node scripts/verify-open-page-preview.mjs --action-keyboard`四宽/双动效8组验证；`--capture-action-keyboard rN`独占审核目录，当前r1六十图。重新读取按钮使用aria-disabled保持键盘焦点，忙碌时仍由现有load单飞阻止重复GET；生产与C审核保留灰色忙碌外观。无业务script/接口/环境变化，3秒绘制等待仅测试参数。未部署，未来批准后宝塔发布前端、浏览器刷新即可，无本批额外后端重启。范围见 `design-plans/ui-phase-2-2026-09-07/P60-ACTION-KEYBOARD-BATCH28.md`。
+
 P60批次27：`node scripts/verify-open-page-preview.mjs --action-results`验证实际Vue操作/读取双结果；`--capture-action-results rN`独占创建审核目录，当前r2十四图。52GET/12PATCH/4POST均为浏览器本地拦截，无真实保存或投递。成功操作与刷新结果/追踪分开；“重新读取列表”只GET，读取中禁用，恢复后仍保留。15000ms、重试、接口和权限未改，无新配置。未部署，未来批准后由宝塔发布前端并刷新浏览器，不需本批额外后端重启。边界与临时包清理受阻见 `design-plans/ui-phase-2-2026-09-07/P60-ACTION-RESULTS-BATCH27.md`。
 
 P60批次26补充：`node scripts/verify-open-page-preview.mjs --read-states`四组读取/恢复检查；`--capture-read-states rN`独占创建新审核包，当前r2为20图。超时使用原应用15000ms计时器，API重试与权限保持；首次失败不重复提示，有旧快照才说明保留。708项/108次模拟GET，不实际发送或写入。C状态CSS/96px手机底部留白仅审核宿主；实际Vue反馈与语义修正尚未部署。未来批准后仅需宝塔发布前端和浏览器刷新，本批无后端重启、迁移或新配置。写成功后刷新失败覆盖提示等剩余项见 `design-plans/ui-phase-2-2026-09-07/P60-READ-STATES-BATCH26.md`。

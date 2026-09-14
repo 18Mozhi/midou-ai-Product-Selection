@@ -9,6 +9,7 @@ export async function verifyOpenActionResults({
   requests,
   check,
   capture: captureImage,
+  keyboard = false,
 }) {
   const capture = async (view, region) => {
     await region.evaluate((node) => node.scrollIntoView({ block: "center", behavior: "instant" }));
@@ -30,6 +31,7 @@ export async function verifyOpenActionResults({
     "queued-read-failed",
     "saved-read-ready",
     "write-failed",
+    ...(keyboard ? ["long-read-failed"] : []),
   ]) {
     let written = false,
       failedRead = scene.endsWith("failed"),
@@ -38,6 +40,12 @@ export async function verifyOpenActionResults({
     const reads = [],
       writes = [];
     const queued = scene.startsWith("queued");
+    const failureHint =
+      "本次列表暂时无法读取，请稍后重试。" +
+      (scene === "long-read-failed"
+        ? "连接恢复后可重新读取列表，无需重复执行已成功的操作。".repeat(4)
+        : "");
+    const readId = keyboard ? "00000000-0000-4000-8000-000000000628" : "local-read-failed";
     const expectedPath = "/api/v1/platform/open/webhooks/w1" + (queued ? "/test" : "");
     const updated = structuredClone(fixture);
     if (!queued) {
@@ -48,8 +56,8 @@ export async function verifyOpenActionResults({
     const failure = () => ({
       status: 503,
       json: {
-        error: { code: "local_read_blocked", action_hint: "本次列表暂时无法读取，请稍后重试。" },
-        request_id: "local-read-failed",
+        error: { code: "local_read_blocked", action_hint: failureHint },
+        request_id: readId,
       },
     });
     const handler = async (route) => {
@@ -172,14 +180,79 @@ export async function verifyOpenActionResults({
           await page.keyboard.press("Enter");
           check(
             await readNotice.locator("code").innerText(),
-            "请求 ID：local-read-failed",
+            "请求 ID：" + readId,
             "read failure ID is not overwritten",
           );
           await capture(scene + "-operation", result);
           await capture(scene + "-read", readNotice);
           failedRead = false;
-          await result.getByRole("button", { name: "重新读取列表", exact: true }).click();
+          const retry = result.getByRole("button");
+          if (keyboard) {
+            check(
+              (await readNotice.innerText()).includes(failureHint),
+              true,
+              "complete long failure hint retained",
+            );
+            check(
+              await readNotice.evaluate((n) => n.scrollWidth <= n.clientWidth + 1),
+              true,
+              "failure region does not overflow",
+            );
+            hold = true;
+            await result.locator("summary").focus();
+            await page.keyboard.press("Tab");
+            check(
+              await retry.evaluate((n) => n === document.activeElement),
+              true,
+              "Tab reaches recovery button",
+            );
+            await page.keyboard.press("Enter");
+            await result.getByText("列表正在刷新…", { exact: true }).waitFor();
+            check(
+              await retry.evaluate((n) => n === document.activeElement),
+              true,
+              "busy recovery keeps keyboard focus",
+            );
+            await page.waitForFunction(
+              () => {
+                const button = document.querySelector(".open-action-reread");
+                const style = button && getComputedStyle(button);
+                return (
+                  button?.matches(":focus-visible") &&
+                  style.backgroundColor === "rgb(233, 238, 245)" &&
+                  style.outlineColor === "rgb(47, 110, 229)"
+                );
+              },
+              null,
+              { timeout: 3000 },
+            );
+            check(
+              await retry.evaluate((n) => ({
+                nativeDisabled: n.disabled,
+                ariaDisabled: n.getAttribute("aria-disabled"),
+                color: getComputedStyle(n).color,
+              })),
+              { nativeDisabled: false, ariaDisabled: "true", color: "rgb(100, 116, 139)" },
+              "busy gray appearance and focusable disabled semantics",
+            );
+            await page.keyboard.press("Enter");
+            await page.keyboard.press("Space");
+            check(reads.length, 5, "busy keyboard activation does not duplicate GET");
+            check(writes.length, 1, "busy keyboard activation does not duplicate mutation");
+            await capture(scene + "-keyboard-busy", result);
+            assert.ok(pending);
+            await pending.fulfill({ json: openEnvelope(updated) });
+            pending = null;
+          } else await retry.click();
           await result.getByText("当前列表已刷新。", { exact: true }).waitFor();
+          if (keyboard) {
+            check(
+              await retry.evaluate((n) => n === document.activeElement),
+              true,
+              "settled recovery keeps keyboard focus",
+            );
+            await capture(scene + "-keyboard-ready", result);
+          }
           check(reads.length, 5, "one recovery GET");
           check(await readNotice.count(), 0, "read failure cleared after recovery");
         } else {

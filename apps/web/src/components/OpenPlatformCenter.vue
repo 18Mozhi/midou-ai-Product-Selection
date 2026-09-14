@@ -528,7 +528,7 @@ onBeforeUnmount(() => loadController?.abort());
         <summary>本次操作追踪</summary>
         <code>请求 ID：{{ actionResult.requestId }}</code>
       </details>
-      <button type="button" :disabled="refreshing" @click="load">
+      <button class="open-action-reread" type="button" :aria-disabled="refreshing" @click="load">
         {{ refreshing ? "读取中…" : "重新读取列表" }}
       </button>
     </div>

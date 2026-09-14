@@ -1,5 +1,7 @@
 # P60 读取状态 r2 · 待审
 
+批次28来源演进：当前164/169来源匹配、20图一致。差异为组件、生产CSS、两份审核CSS和共享入口；读取业务script未变，本轮未重跑此包708项。新焦点图另见 `../p60-action-keyboard-r1/index.html`，不重绑本包。
+
 批次27来源演进：实际组件增加操作/读取双结果，审核CSS和共享入口变化。当前169来源中166匹配，这三份来源哈希不同；20PNG仍一致，原manifest不重绑。当前读取708项回归通过，操作新图另见 `../p60-action-results-r2/index.html`。
 
 [20图审核册](index.html) · [来源与验证](manifest.json) · [批次26范围](../../../design-plans/ui-phase-2-2026-09-07/P60-READ-STATES-BATCH26.md)

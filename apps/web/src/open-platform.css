@@ -19,12 +19,13 @@
   cursor: pointer;
 }
 
-.open-platform button:hover:not(:disabled) {
+.open-platform button:hover:not(:disabled):not([aria-disabled="true"]) {
   border-color: color-mix(in srgb, var(--so-primary) 55%, var(--border));
   color: var(--so-primary);
 }
 
-.open-platform button:disabled {
+.open-platform button:disabled,
+.open-platform .open-action-reread[aria-disabled="true"] {
   cursor: not-allowed;
   opacity: 0.58;
 }

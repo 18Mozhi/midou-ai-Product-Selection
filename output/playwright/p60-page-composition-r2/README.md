@@ -1,5 +1,7 @@
 # P60 C 实际 Vue · r2 待审
 
+批次28来源演进：当前162/166来源匹配、26图一致，差异为组件、生产CSS、页面审核CSS和入口。默认134项回归通过；新焦点图另见 `../p60-action-keyboard-r1/index.html`，本包不重绑。
+
 批次27补记：组件双结果与共享入口再次演进，仍为164/166来源匹配、26图一致；本包不重绑。当前默认134项回归通过，操作反馈另见 `../p60-action-results-r2/index.html`。
 
 批次26来源演进：实际组件修正读取说明和忙碌语义，共享入口新增读取模式。当前166来源中164匹配，差异为 `OpenPlatformCenter.vue` 和 `verify-open-page-preview.mjs`；26图哈希一致。新读取图在 `../p60-read-states-r2/index.html`，本包旧manifest不重绑。下文165匹配是批次25时点，不能代表当前。

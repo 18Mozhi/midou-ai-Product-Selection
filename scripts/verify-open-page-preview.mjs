@@ -18,24 +18,27 @@ import { verifyOpenActionResults } from "./lib/open-action-result-verification.m
 const args = process.argv.slice(2);
 assert.ok(
   args.length === 0 ||
-    (args.length === 1 && ["--details", "--read-states", "--action-results"].includes(args[0])) ||
+    (args.length === 1 &&
+      ["--details", "--read-states", "--action-results", "--action-keyboard"].includes(args[0])) ||
     (args.length === 2 &&
       [
         "--capture-review",
         "--capture-details",
         "--capture-read-states",
         "--capture-action-results",
+        "--capture-action-keyboard",
       ].includes(args[0]) &&
       /^r[1-9]\d*$/.test(args[1])),
-  "Use no arguments, --details, --read-states, --action-results, or one --capture-review/--capture-details/--capture-read-states/--capture-action-results rN",
+  "Use no arguments, --details, --read-states, --action-results, --action-keyboard, or one --capture-review/--capture-details/--capture-read-states/--capture-action-results/--capture-action-keyboard rN",
 );
 const detailsMode = ["--details", "--capture-details"].includes(args[0]);
 const readStatesMode = ["--read-states", "--capture-read-states"].includes(args[0]);
 const actionResultsMode = ["--action-results", "--capture-action-results"].includes(args[0]);
+const actionKeyboardMode = ["--action-keyboard", "--capture-action-keyboard"].includes(args[0]);
 const output =
   args.length === 2
     ? path.resolve(
-        `output/playwright/p60-${actionResultsMode ? "action-results" : readStatesMode ? "read-states" : detailsMode ? "detail-composition" : "page-composition"}-${args[1]}`,
+        `output/playwright/p60-${actionKeyboardMode ? "action-keyboard" : actionResultsMode ? "action-results" : readStatesMode ? "read-states" : detailsMode ? "detail-composition" : "page-composition"}-${args[1]}`,
       )
     : null;
 if (output) await mkdir(output); // Exclusive review packet: never replace old evidence.
@@ -65,7 +68,8 @@ const sources = new Set([
 ]);
 const results = [],
   images = [];
-if (actionResultsMode) sources.add("scripts/lib/open-action-result-verification.mjs");
+if (actionResultsMode || actionKeyboardMode)
+  sources.add("scripts/lib/open-action-result-verification.mjs");
 if (detailsMode)
   for (const file of [
     openDetailCss,
@@ -79,15 +83,17 @@ try {
   const origin = `http://127.0.0.1:${port}`;
   console.log(`P60 local actual Vue review ${origin}`);
   browser = await chromium.launch();
-  for (const { width, motion } of (detailsMode ? [1440, 768, 390, 320] : [1440, 390]).flatMap(
-    (width) =>
-      (detailsMode || readStatesMode || actionResultsMode
-        ? ["reduce", "no-preference"]
-        : ["reduce"]
-      ).map((motion) => ({
-        width,
-        motion,
-      })),
+  for (const { width, motion } of (detailsMode || actionKeyboardMode
+    ? [1440, 768, 390, 320]
+    : [1440, 390]
+  ).flatMap((width) =>
+    (detailsMode || readStatesMode || actionResultsMode || actionKeyboardMode
+      ? ["reduce", "no-preference"]
+      : ["reduce"]
+    ).map((motion) => ({
+      width,
+      motion,
+    })),
   )) {
     const context = await browser.newContext({
       viewport: { width, height: width === 390 ? 844 : 1000 },
@@ -158,8 +164,17 @@ try {
           }
         return route.fulfill({ json: openEnvelope(data) });
       });
-      if (actionResultsMode) {
-        await verifyOpenActionResults({ page, origin, width, fixture, requests, check, capture });
+      if (actionResultsMode || actionKeyboardMode) {
+        await verifyOpenActionResults({
+          page,
+          origin,
+          width,
+          fixture,
+          requests,
+          check,
+          capture,
+          keyboard: actionKeyboardMode,
+        });
         check(errors, [], "no action-result page errors");
         check(unexpected, [], "no unknown/external requests");
         results.push({ width, motion, checks, requests });
@@ -448,16 +463,18 @@ try {
           detailsMode,
           readStatesMode,
           actionResultsMode,
+          actionKeyboardMode,
           revision: args[1],
           capturedAt: new Date().toISOString(),
           sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
-          scope: actionResultsMode
-            ? "actual Vue operation and refresh feedback; local intercepted synthetic PATCH/POST and GET only; no real mutations, secret generation, delivery or production acceptance"
-            : readStatesMode
-              ? "actual App C read states; actual 15000ms application timer; synthetic GET errors and recovery only; no write/permission/production acceptance"
-              : detailsMode
-                ? "actual App C detail regrouping; original script/fields/actions preserved; E2E-derived synthetic status and long-text samples; confirmations cancelled without writes; no secret/production/permission acceptance"
-                : "actual App with C review-only transform; original business script plus isolated input-modal component; original synthetic E2E data; GET only; no production deployment or approval; row actions and one-time secret lifecycle not covered",
+          scope:
+            actionResultsMode || actionKeyboardMode
+              ? "actual Vue operation and refresh feedback; local intercepted synthetic PATCH/POST and GET only; no real mutations, secret generation, delivery or production acceptance"
+              : readStatesMode
+                ? "actual App C read states; actual 15000ms application timer; synthetic GET errors and recovery only; no write/permission/production acceptance"
+                : detailsMode
+                  ? "actual App C detail regrouping; original script/fields/actions preserved; E2E-derived synthetic status and long-text samples; confirmations cancelled without writes; no secret/production/permission acceptance"
+                  : "actual App with C review-only transform; original business script plus isolated input-modal component; original synthetic E2E data; GET only; no production deployment or approval; row actions and one-time secret lifecycle not covered",
           sources: sourceHashes,
           images,
           results,
@@ -469,7 +486,7 @@ try {
     await writeFile(
       path.join(output, "index.html"),
       '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P60 C 实际Vue待审</title><style>body{font:16px/1.7 Microsoft YaHei;margin:24px;color:#17253c}img{display:block;max-width:100%;border:1px solid #c7d3e4}article{margin:28px 0}</style><h1>P60 C 实际Vue审核版</h1><p>本地合成样例；' +
-        (actionResultsMode
+        (actionResultsMode || actionKeyboardMode
           ? "操作与列表读取结果分开；PATCH/POST全部本地拦截，未发送真实请求。"
           : readStatesMode
             ? "首次/保留数据的读取、失败与恢复；超时使用实际15秒计时。"

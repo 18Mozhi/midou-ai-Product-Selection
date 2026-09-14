@@ -1,5 +1,7 @@
 # P60 三类详情 r2 · 待审
 
+批次28来源演进：当前164/169来源匹配、24图一致，组件/生产CSS/页面审核CSS/入口变化及旧详情helper差异仍保留；本轮未重跑1556项。新焦点图另见 `../p60-action-keyboard-r1/index.html`，原manifest不重绑。
+
 批次27补记：组件双结果与共享入口再次变化，仍为166/169来源匹配、24图一致；本包不重绑。本轮只复核详情字段/编译测试，旧1556项不冒充新运行，操作反馈另见 `../p60-action-results-r2/index.html`。
 
 批次26来源演进：读取反馈/语义和共享CLI变化后，当前169来源中166匹配；差异为 `OpenPlatformCenter.vue`、`verify-open-page-preview.mjs` 及上批 `open-detail-verification.mjs` 焦点等待。24图哈希一致，不重写历史manifest。下文168匹配为上一批时点；新读取图另见 `../p60-read-states-r2/index.html`。

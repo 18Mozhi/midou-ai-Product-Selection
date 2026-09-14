@@ -167,11 +167,12 @@ html body.shell-vue-c:has(#app):has(.open-platform--review) {
         border: 1px solid #1748b5;
         box-shadow: none;
       }
-      button:not(:disabled):hover {
+      button:not(:disabled):not([aria-disabled="true"]):hover {
         background: #102a63;
         color: white;
       }
-      button:disabled {
+      button:disabled,
+      .open-action-reread[aria-disabled="true"] {
         color: #64748b;
         background: #e9eef5;
         border-color: var(--border);
