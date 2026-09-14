@@ -1,5 +1,9 @@
 # 第二阶段完整实施计划 · 当前领取与审核入口
 
+批次08已提交`7aad0879`；批次09修复P57保存按钮悬停文字不可读及编辑窗焦点覆盖。
+新增主按钮432项状态验证，取消144项、弹窗32组和合同7项通过，16张底部图待审。
+范围与截图见[主按钮审核](design/platform-notifications-direction-c/primary-button-review-r1/README.md)，全73页和真实验收继续。
+
 批次07已提交`846ee29e`；批次08修复P57取消原因窗危险悬停和键盘焦点颜色覆盖。
 144项按钮状态、32组弹窗和7项合同通过；手机四种底部按钮组合获局部批准，不代表桌面、完整弹窗或真实取消验收。
 新8张底部图见[按钮审核](design/platform-notifications-direction-c/button-review-r1/README.md)，全73页和真实验收继续。

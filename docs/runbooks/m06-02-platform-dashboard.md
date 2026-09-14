@@ -1,5 +1,7 @@
 # M06-02 宝塔运维与回滚
 
+P57主按钮（2026-09-14）：保存 hover 使用原有深蓝底白字，草稿窗键盘焦点为原有蓝色。运行`node scripts/verify-platform-notification-button-states.mjs --primary`验证新建/编辑/发布432项状态；无参继续验证取消144项。无capture不写文件；`--primary --capture-review`仅首次创建固定primary-button-review-r1目录，已存在时拒绝覆盖。草稿字段不合格走原生校验，发布原因不足禁用，不改变API或提交规则。本次无新配置/后端重启，未部署；未来正式前端更新后刷新即可。
+
 P57取消按钮（2026-09-14）：原因窗确认取消保持红色危险语义，键盘显示蓝色焦点；原因不足及提交中仍按原规则禁用。用`node scripts/verify-platform-notification-button-states.mjs`复验144项本地组合，默认无产物；可选`--capture-review`仅用于首次创建固定button-review-r1审核目录，存在即拒绝覆盖。全部服务自动关闭，模拟指针不替代真机验收；不调整配置、不重启后端，未来正式前端包发布后刷新浏览器生效。
 
 P57弹窗（2026-09-14）：手机正文阅读窗离页/卸载关闭，跨现有760px断点关闭且返回手机不自动重开。Tab/Shift+Tab在可见可用控件首尾循环；动作仍在提交时关闭窗口，原按钮禁用则焦点回同一消息目录，不取消已发事务。字段帮助与所属错误区可通过读屏关联，手机错误提示按内容高度展示。运行`node scripts/verify-platform-notification-dialogs.mjs`进行32组本地合成验证；默认不写文件，可选`--capture-review`只创建固定dialog-review-r2审核目录，存在即拒绝覆盖。后端、环境、配置和重启要求均不变；未部署，未来仅随正式前端包发布生效。

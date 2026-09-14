@@ -1,6 +1,7 @@
 @import "../design/platform-notification-tokens.css";
 
 .message-dialog {
+  --so-focus: var(--so-platform-notification-focus);
   width: min(760px, calc(100vw - 28px));
   max-height: calc(100dvh - 28px);
   padding: 0;

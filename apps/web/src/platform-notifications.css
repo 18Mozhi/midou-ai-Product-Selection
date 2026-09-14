@@ -773,6 +773,11 @@
     border-color: var(--so-danger);
     color: var(--so-danger);
   }
+  .message-dialog footer button[type="submit"]:not(:disabled):hover {
+    border-color: var(--so-primary-strong);
+    color: var(--so-on-primary);
+    background: var(--so-primary-strong);
+  }
   .platform-notifications button.is-primary:not(:disabled):hover {
     color: var(--so-on-primary);
     background: var(--so-primary-strong);
