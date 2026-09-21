@@ -63,7 +63,11 @@ const scopeChanged = computed(
 </script>
 
 <template>
-  <section class="platform-content" aria-live="polite" :aria-busy="refreshing">
+  <section
+    class="platform-content platform-content--review"
+    aria-live="polite"
+    :aria-busy="refreshing"
+  >
     <aside class="platform-content__rail" aria-label="内容治理说明">
       <div>
         <small>CONTENT OPERATIONS</small>
@@ -82,7 +86,7 @@ const scopeChanged = computed(
       <header class="platform-content__hero">
         <div>
           <p>P56 / CONTENT OPERATIONS</p>
-          <h2>内容管理</h2>
+          <h1>内容管理</h1>
           <span>核对热点事实，再决定如何展示。</span>
         </div>
         <button type="button" :disabled="refreshing" @click="emit('refresh')">

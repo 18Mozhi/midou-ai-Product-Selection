@@ -30,6 +30,106 @@
   font-family: var(--so-font-ui);
 }
 
+/* P56 C composition is now the production surface. Keep the review marker
+ * scoped so the shared management shell and other domains retain their own
+ * visual contracts while this page uses the approved blue/white ledger. */
+.platform-content--review {
+  max-width: 1160px;
+  margin: 0 auto;
+  border-color: #dce4ee;
+  background: #f3f6fb;
+  color: #182d4a;
+}
+
+.platform-content--review .platform-content__rail {
+  border: 0;
+  background: #1748a0;
+  color: #fff;
+}
+
+.platform-content--review .platform-content__rail :is(small, strong, span, p, li) {
+  color: #fff;
+}
+
+.platform-content--review .platform-content__surface {
+  padding: 0 36px 32px;
+  background: #f3f6fb;
+}
+
+.platform-content--review .platform-content__hero {
+  margin: 0 -36px;
+  padding: 31px 36px;
+  border: 0;
+  background: #1748a0;
+}
+
+.platform-content--review .platform-content__hero :is(p, h1, span) {
+  color: #fff;
+}
+
+.platform-content--review .platform-content__hero h1 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.platform-content--review .platform-content__hero button {
+  border-color: #fff;
+  border-radius: 0;
+  color: #1748a0;
+  background: #fff;
+  font-weight: 800;
+}
+
+.platform-content--review .platform-content__summary {
+  margin: 24px 0;
+  border-color: #dce4ee;
+  background: #fff;
+}
+
+.platform-content--review .platform-content__summary article {
+  border-color: #dce4ee;
+  background: #fff;
+}
+
+.platform-content--review .platform-content__summary strong,
+.platform-content--review .platform-content__ledger h3 {
+  color: #1748a0;
+}
+
+.platform-content--review .platform-content__scope-note,
+.platform-content--review .platform-content__review-note {
+  padding: 11px 13px;
+  border-left: 5px solid #1748a0;
+  background: #edf4ff;
+}
+
+.platform-content--review .platform-content__ledger {
+  border-color: #dce4ee;
+  border-top: 5px solid #1748a0;
+  background: #fff;
+}
+
+.platform-content--review .platform-content__ledger > header {
+  padding-bottom: 16px;
+  border-bottom-color: #dce4ee;
+}
+
+.platform-content--review :is(table th, table td) {
+  border-color: #dce4ee;
+}
+
+.platform-content--review table th {
+  color: #fff;
+  background: #1748a0;
+}
+
+.platform-content--review :is(button, input, select, textarea, summary):focus-visible {
+  outline-color: #2465d7;
+  outline-offset: 3px;
+}
+
 .platform-content *,
 .platform-content *::before,
 .platform-content *::after,
@@ -44,13 +144,13 @@
   font: inherit;
 }
 
-.platform-content :is(h2, h3, h4),
+.platform-content :is(h1, h2, h3, h4),
 .platform-content-review :is(h3) {
   font-family: var(--so-font-ui);
   text-wrap: balance;
 }
 
-html[data-design="signal-ledger"] body .platform-content :is(h2, h3, h4),
+html[data-design="signal-ledger"] body .platform-content :is(h1, h2, h3, h4),
 html[data-design="signal-ledger"] body .platform-content-review h3 {
   font-family: var(--so-font-ui);
 }
@@ -740,6 +840,15 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
   .platform-content__surface {
     padding: 20px 16px 28px;
     gap: 15px;
+  }
+
+  .platform-content--review .platform-content__surface {
+    padding: 0 16px 28px;
+  }
+
+  .platform-content--review .platform-content__hero {
+    margin: 0 -16px;
+    padding: 25px 19px;
   }
 
   .platform-content__hero {
