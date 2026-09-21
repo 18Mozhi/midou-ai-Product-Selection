@@ -3846,6 +3846,252 @@
   }
 }
 
+/* P31 C composition: role identity, capability matrix and resource grants. */
+.org-admin-center--role-review {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-bottom: 28px;
+  color: #182d4a;
+  background: #f3f6fb;
+}
+
+.org-admin-center--role-review .org-admin-hero {
+  padding: 31px 36px;
+  border: 0;
+  border-radius: 0;
+  background: #1748a0;
+}
+
+.org-admin-center--role-review .org-admin-hero :is(p, h1, h2, span) {
+  color: #fff;
+}
+
+.org-admin-center--role-review .org-admin-hero h1 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.org-admin-center--role-review .org-role-summary {
+  gap: 0;
+  border: 1px solid #d6e0ec;
+}
+
+.org-admin-center--role-review .org-role-summary article {
+  border: 0;
+  border-right: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--role-review .org-role-summary article:last-child {
+  border-right: 0;
+}
+
+.org-admin-center--role-review .org-role-summary b {
+  color: #1748a0;
+}
+
+.org-admin-center--role-review .org-role-tabs {
+  gap: 0;
+  padding: 0;
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+}
+
+.org-admin-center--role-review .org-role-tabs button {
+  flex: 1;
+  border: 0;
+  border-right: 1px solid #d6e0ec;
+  border-radius: 0;
+  color: #61738b;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--role-review .org-role-tabs button:last-child {
+  border-right: 0;
+}
+
+.org-admin-center--role-review .org-role-tabs button[aria-pressed="true"] {
+  color: #1748a0;
+  background: #edf4ff;
+}
+
+.org-admin-center--role-review :is(.org-role-toolbar, .org-grant-toolbar) {
+  padding: 14px 16px;
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center--role-review :is(.org-role-browser, .org-grant-browser) {
+  grid-template-columns: minmax(290px, 0.78fr) minmax(0, 1.6fr);
+  gap: 16px;
+}
+
+.org-admin-center--role-review :is(.org-role-list, .org-grant-list) {
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+}
+
+.org-admin-center--role-review :is(.org-role-list, .org-grant-list) > button {
+  width: 100%;
+  min-height: 82px;
+  border: 0;
+  border-bottom: 1px solid #d6e0ec;
+  border-radius: 0;
+  color: #182d4a;
+  background: #fff;
+  text-align: left;
+  box-shadow: none;
+}
+
+.org-admin-center--role-review :is(.org-role-list, .org-grant-list) > button:last-of-type {
+  border-bottom: 0;
+}
+
+.org-admin-center--role-review :is(.org-role-list, .org-grant-list) > button.selected {
+  border-left: 5px solid #1748a0;
+  color: #182d4a;
+  background: #edf4ff;
+}
+
+.org-admin-center--role-review :is(.org-admin-card, .org-admin-role-matrix) {
+  border-color: #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--role-review :is(.org-role-detail, .org-grant-detail) {
+  border-top: 5px solid #1748a0;
+}
+
+.org-admin-center--role-review .org-admin-card :is(input, select, textarea) {
+  min-height: 42px;
+  border-color: #c7d4e4;
+  border-radius: 0;
+  color: #182d4a;
+  background: #fff;
+}
+
+.org-admin-center--role-review .org-admin-card :is(input, select, textarea):focus-visible,
+.org-admin-center--role-review :is(button, a, summary):focus-visible {
+  border-color: #1748a0;
+  outline: 3px solid #a9c5f5;
+  outline-offset: 2px;
+}
+
+.org-admin-center--role-review .org-admin-chips span {
+  border-radius: 999px;
+  color: #1748a0;
+  background: #edf4ff;
+}
+
+.org-admin-center--role-review .org-role-matrix-filters {
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center--role-review .org-role-matrix-scroll {
+  border-color: #d6e0ec;
+}
+
+.org-admin-center--role-review .org-role-matrix-scroll [role="row"] {
+  border-color: #d6e0ec;
+}
+
+.org-admin-center--role-review .org-role-matrix-scroll [role="row"]:nth-child(2n) {
+  background: #f7faff;
+}
+
+.org-admin-center--role-review .org-admin-matrix-head {
+  color: #fff;
+  background: #1748a0;
+}
+
+.org-admin-center--role-review .org-grant-intro {
+  border-left: 5px solid #1748a0;
+  border-radius: 0;
+}
+
+.org-admin-center--role-review .org-grant-toolbar button[aria-pressed="true"] {
+  color: #1748a0;
+  background: #edf4ff;
+}
+
+.org-admin-center--role-review .org-grant-detail dl > div {
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center--role-review .org-admin-center button:disabled,
+.org-admin-center--role-review button:disabled {
+  border-color: #c7d0dc;
+  color: #7a8999;
+  background: #e8edf3;
+}
+
+.org-admin-center--role-review .org-admin-actions button.danger {
+  border-color: #b42318;
+  color: #fff;
+  background: #b42318;
+}
+
+@media (max-width: 760px) {
+  .org-admin-center--role-review {
+    margin: 12px -8px 70px;
+    padding-bottom: 16px;
+  }
+
+  .org-admin-center--role-review .org-admin-hero {
+    padding: 25px 19px;
+  }
+
+  .org-admin-center--role-review .org-role-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .org-admin-center--role-review .org-role-summary article:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .org-admin-center--role-review .org-role-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .org-admin-center--role-review .org-role-tabs button {
+    border-right: 0;
+    border-bottom: 1px solid #d6e0ec;
+    text-align: left;
+  }
+
+  .org-admin-center--role-review .org-role-tabs button:last-child {
+    border-bottom: 0;
+  }
+
+  .org-admin-center--role-review :is(.org-role-browser, .org-grant-browser) {
+    grid-template-columns: 1fr;
+  }
+
+  .org-admin-center--role-review .org-admin-card {
+    padding: 18px;
+  }
+
+  .org-admin-center--role-review .org-role-matrix-filters {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* P30 C composition: member identity, invitations and directory share one boundary. */
 .org-admin-center--member-review {
   max-width: 1160px;
