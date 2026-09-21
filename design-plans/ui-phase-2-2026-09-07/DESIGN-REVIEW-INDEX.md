@@ -257,8 +257,8 @@ r1/r3原证据保留诊断，r2部分图已清理；完整页面/调用方/真�
 ## 核对结果
 
 - 真实路由与规格：73/73。
-- 有明确整页或分段稿关联：72条；这不是72页全部完成。
-- 未关联对应整页稿：1条（P69）。共享主题浮层不抵扣业务整页。
+- 有明确整页或分段稿关联：73条；这不是73页全部完成。
+- 未关联对应整页稿：0条（无）。共享主题浮层不抵扣业务整页。
 - C稿包102个：含1个方向研究包、3个共享表面包；正式清单内PNG共15069张。
 - 2004条来源绑定 / 974个唯一文件，漂移0；PNG指纹漂移0，未列入清单PNG 0；图册内10151个本地链接已核对。
 - 其中236条为精确历史修订关联，旧图不等于当前源码验收；机器报告保留原hash和当前hash。
@@ -266,7 +266,7 @@ r1/r3原证据保留诊断，r2部分图已清理；完整页面/调用方/真�
 
 ## 本轮证据结论与下一步
 
-1. **仍缺 1 个路由的整页稿关联**：P69；按缺页清单继续补稿。
+1. **73 路由均已有整页或分段 C 稿关联，但不等于整页通过**。P22 费用版本已补关联；下一逐页核对动作/弹窗语义分母、各态映射与 P11/P18/P54 组合，并收集具体图稿审核意见。
 2. **有图不等于每个按钮/弹窗六态已覆盖**：PAGES要求逐actionId/dialogId关联验证；现有总coverage仍为未冻结/0已验。各包局部场景、截图及源隔离检查不能证明全站语义分母。后续逐页补动作与变体的状态映射、适用/不适用理由和实际测试，不先把总门改绿。
 3. **审核入口已关联当前材料，批准与实现仍待办**：[C方向逐页审核台](review.html)按路由展示关联图册，并将显式登记的真实Vue证据分栏；历史候选和意见保留原身份。P11/P18/P54等多段稿仍需核对组合，不按包数或PNG数累计成完整页。具体图批准后才能进入相应Vue闭环；此处不修改用户意见或任何生产事实。
 
@@ -329,7 +329,7 @@ r1/r3原证据保留诊断，r2部分图已清理；完整页面/调用方/真�
 | P51 | 采集任务 · `/platform-admin/collection` | [规格](page-specs/P51.md) | [collection-tasks](design/collection-tasks-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P52 | 采集总览 · `/platform-admin/collection/overview` | [规格](page-specs/P52.md) | [collection-overview](design/collection-overview-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P53 | 网页登录采集 · `/platform-admin/collection/browser-runtime` | [规格](page-specs/P53.md) | [browser-runtime](design/browser-runtime-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
-| P54 | 数据中心 · `/platform-admin/data` | [规格](page-specs/P54.md) | [data-controls](design/data-controls-direction-c/README.md) · [data-record-detail](design/data-record-detail-direction-c/README.md) · [data-composed](design/data-composed-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
+| P54 | 数据中心 · `/platform-admin/data` | [规格](page-specs/P54.md) | [data-records](design/data-records-direction-c/README.md) · [data-quality](design/data-quality-direction-c/README.md) · [data-controls](design/data-controls-direction-c/README.md) · [data-record-detail](design/data-record-detail-direction-c/README.md) · [data-composed](design/data-composed-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P55 | 质量与规则 · `/platform-admin/governance` | [规格](page-specs/P55.md) | [governance](design/governance-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P56 | 内容管理 · `/platform-admin/content` | [规格](page-specs/P56.md) | [content](design/content-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P57 | 通知管理 · `/platform-admin/notifications` | [规格](page-specs/P57.md) | [platform-notifications](design/platform-notifications-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
@@ -344,7 +344,7 @@ r1/r3原证据保留诊断，r2部分图已清理；完整页面/调用方/真�
 | P66 | 服务拓扑 · `/platform-admin/topology` | [规格](page-specs/P66.md) | [topology](design/topology-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P67 | Redis 运行 · `/platform-admin/redis` | [规格](page-specs/P67.md) | [redis](design/redis-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P68 | MySQL 运行 · `/platform-admin/mysql` | [规格](page-specs/P68.md) | [mysql](design/mysql-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
-| P69 | 文件存储 · `/platform-admin/files` | [规格](page-specs/P69.md) | 待补整页稿 | 无对应整页稿关联 |
+| P69 | 文件存储 · `/platform-admin/files` | [规格](page-specs/P69.md) | [files](design/files-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P70 | 采集调度 · `/platform-admin/crawler-scheduler` | [规格](page-specs/P70.md) | [scheduler](design/scheduler-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P71 | 容量边界 · `/platform-admin/capacity` | [规格](page-specs/P71.md) | [capacity](design/capacity-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P72 | 界面状态 · `/ui-states` | [规格](page-specs/P72.md) | [recovery](design/recovery-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |

@@ -73,7 +73,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md": "ecec9d33500f647e7dcc2afa75040bcc37b5bb893b899f4fbbc94846c1c099ce",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md": "3fe9b8bad57238f6dc57dc3e52cf2fd5ed2dd3c8f9b65f27b4db17476e9f4a98",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md": "851ac8e629b2fa91262a505db4961808b93d027983ca551c12cbffde025ff49a",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "20e0635b354bc387679c355f2786c7f5f85facef78e2599cd8cfb4030cae83ce",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "24b8d4ba8be61d5d261d8f7aadec1a1561eea3646d933e27a5ace8d08c66fe76",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P55.md": "19ee3ba99d45f9ce2afb57d00992f69d1bf1e1e2d4bb2c69c2a344072d6cbf98",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P56.md": "84ada3a02ab3cd43744184116e22f0fc6bebada40b02cf723fdcfc11ad533d5d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "1ff3ce60914aeb2a63015b86a77c51d4f19f4285758213083e626f6f45df45de",
@@ -88,7 +88,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "016e30d8770c26e75d0ea132196e62d42ffe8ebfc7af46a7e9b9340bf4e8f284",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "f4fa542e7577ecf6cfe82c0a79f15f18a77d469bbcbfed584052f2d5b3b032cb",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "6f8fe3d18f65378381dc5fd304ba7d3ac2be6f7a3f019e898dad2a0b85edc33c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "0ff7e2fb0d593043fae263dc0cef3a3c47ab6264bbe0577d0937a1e24c9d0767",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "94746ed37d24a264589ae157bbd3cc7aac1cd6b33a129a5865c0ec001f47a382",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "3ebf9ddfc3f3f904fd1b49292af6f5fd1d5acf5c8714202051275f02e6fd0640",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "b5eaf2a2c801252cbb0fbeed4c7b359b8c5e53398a9ba7faf519220c378314a9",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "db69bd311015caeae05d648c1b455d2c57886b7fcc86d955bea3e0e69b64836a",
@@ -97,11 +97,9 @@
   "summary": {
     "routes": 73,
     "specifications": 73,
-    "relatedProposalRoutes": 72,
-    "noLinkedPageProposalRoutes": 1,
-    "missingPageIds": [
-      "P69"
-    ],
+    "relatedProposalRoutes": 73,
+    "noLinkedPageProposalRoutes": 0,
+    "missingPageIds": [],
     "packages": 102,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
@@ -112,11 +110,7 @@
     "pngDrift": 0,
     "unmanifestedPng": 0,
     "readmeLinksChecked": 10151,
-    "unlinkedPagePackages": [
-      "data-quality-direction-c",
-      "data-records-direction-c",
-      "files-direction-c"
-    ],
+    "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
     "verifiedDialogVariants": 0,
@@ -1379,11 +1373,15 @@
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md",
       "references": [
+        "data-records-direction-c",
+        "data-quality-direction-c",
         "data-controls-direction-c",
         "data-record-detail-direction-c",
         "data-composed-direction-c"
       ],
       "proposalPackages": [
+        "data-records-direction-c",
+        "data-quality-direction-c",
         "data-controls-direction-c",
         "data-record-detail-direction-c",
         "data-composed-direction-c"
@@ -1712,9 +1710,13 @@
       "batch": "W08",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md",
-      "references": [],
-      "proposalPackages": [],
-      "artifactAssociation": "no-page-proposal-linked",
+      "references": [
+        "files-direction-c"
+      ],
+      "proposalPackages": [
+        "files-direction-c"
+      ],
+      "artifactAssociation": "related-proposal-not-complete-proof",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
