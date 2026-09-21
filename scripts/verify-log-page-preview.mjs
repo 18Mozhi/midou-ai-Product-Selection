@@ -60,6 +60,7 @@ try {
       unexpected = [],
       errors = [];
     let empty = false,
+      failure = false,
       checks = 0;
     const check = (a, b, label) => {
       assert.deepEqual(a, b, width + ": " + label);
@@ -112,6 +113,18 @@ try {
           return route.abort();
         }
         requests.push({ key, search: url.search, body: req.postData() });
+        if (failure)
+          return route.fulfill({
+            status: 400,
+            json: {
+              error: {
+                code: "local_scope_read_failed",
+                message: "本地读取失败",
+                action_hint: "本地测试尚未取得新条件的日志。",
+              },
+              request_id: "p62-local-scope-failure",
+            },
+          });
         const source = url.searchParams.get("status"),
           query = url.searchParams.get("query");
         const items = empty
@@ -138,6 +151,30 @@ try {
         active = () => surface.locator(".p62-events:visible"),
         choose = (id) => surface.locator(`[data-log-chain="${id}"]`);
       await workspace.waitFor();
+      const scope = surface.getByRole("region", { name: "查询与日志范围", exact: true }),
+        applied = scope.locator('[data-log-scope="applied"]'),
+        displayed = scope.locator('[data-log-scope="displayed"]');
+      check(
+        await applied.innerText(),
+        "已应用条件\n运行面：全部运行面\n检索条件：未设置",
+        "default applied scope",
+      );
+      check(
+        await displayed.innerText(),
+        "已显示日志对应条件\n运行面：全部运行面\n检索条件：未设置",
+        "default displayed scope",
+      );
+      check(
+        await scope.getByRole("status", { name: "条件变化提示" }).count(),
+        0,
+        "default scope matches",
+      );
+      check(
+        (await scope.innerText()).includes("不等同于屏幕上的固定快照"),
+        true,
+        "export snapshot boundary explicit",
+      );
+      await capture("scope-default", scope);
       check(await surface.locator("h1").count(), 1, "one main title");
       check(await page.locator(".role-page-title").count(), 0, "no duplicate shell title");
       check(
@@ -304,6 +341,16 @@ try {
       await query.fill("trace-shared");
       await source.selectOption("crawler");
       check(requests.length, 1, "draft does not query");
+      check(
+        (await applied.innerText()).includes("检索条件：未设置"),
+        true,
+        "draft cannot change applied scope",
+      );
+      check(
+        (await displayed.innerText()).includes("全部运行面"),
+        true,
+        "draft cannot relabel displayed logs",
+      );
       check(await query.getAttribute("maxlength"), "120", "query original maximum");
       await capture("filter", filter);
       await click(filter.getByRole("button", { name: "检索", exact: true }));
@@ -322,6 +369,17 @@ try {
         1,
         "filtered sample one crawler",
       );
+      check(
+        await applied.innerText(),
+        "已应用条件\n运行面：爬虫\n检索条件：trace-shared",
+        "filtered applied scope",
+      );
+      check(
+        await displayed.innerText(),
+        "已显示日志对应条件\n运行面：爬虫\n检索条件：trace-shared",
+        "filtered success scope",
+      );
+      await capture("scope-filtered", scope);
       const exportButton = surface.getByRole("button", { name: "导出当前筛选", exact: true });
       await click(exportButton);
       const reason = page.getByRole("dialog", { name: "填写日志导出原因", exact: true });
@@ -346,6 +404,69 @@ try {
       check(await workspace.count(), 0, "empty removes chain workspace");
       await capture("empty", surface.locator(".platform-log-state"));
       check(requests.length, 3, "three management GETs total");
+      failure = true;
+      if (width === 390)
+        await click(surface.getByRole("button", { name: "筛选链路日志 2 项已选", exact: true }));
+      await query.fill("trace-worker");
+      await source.selectOption("worker");
+      check(
+        (await applied.innerText()).includes("trace-shared"),
+        true,
+        "second draft leaves applied scope unchanged",
+      );
+      await click(filter.getByRole("button", { name: "检索", exact: true }));
+      await scope.getByRole("status", { name: "条件变化提示", exact: true }).waitFor();
+      await surface.getByRole("button", { name: "刷新日志", exact: true }).waitFor();
+      check(
+        await applied.innerText(),
+        "已应用条件\n运行面：Worker\n检索条件：trace-worker",
+        "failed request shows newly applied scope",
+      );
+      check(
+        await displayed.innerText(),
+        "已显示日志对应条件\n运行面：爬虫\n检索条件：trace-shared",
+        "failed request preserves empty snapshot scope",
+      );
+      check(requests.length, 4, "one failed new-scope GET");
+      await capture("scope-failed-filter", scope);
+      failure = false;
+      await click(surface.getByRole("button", { name: "刷新日志", exact: true }));
+      await scope
+        .getByRole("status", { name: "条件变化提示", exact: true })
+        .waitFor({ state: "detached" });
+      check(
+        await displayed.innerText(),
+        "已显示日志对应条件\n运行面：Worker\n检索条件：trace-worker",
+        "empty recovery updates successful scope",
+      );
+      await capture("scope-recovered-empty", scope);
+      if (width === 390)
+        await click(surface.getByRole("button", { name: "筛选链路日志 2 项已选", exact: true }));
+      await query.fill("长".repeat(150));
+      check((await query.inputValue()).length, 120, "original query input maximum unchanged");
+      await click(filter.getByRole("button", { name: "检索", exact: true }));
+      await page.waitForFunction(
+        (value) =>
+          document.querySelector('[data-log-scope="displayed"]')?.textContent?.includes(value),
+        "长".repeat(120),
+      );
+      check(
+        (await applied.innerText()).includes("长".repeat(120)),
+        true,
+        "applied long query not truncated in scope display",
+      );
+      check(
+        (await displayed.innerText()).includes("长".repeat(120)),
+        true,
+        "displayed long query complete",
+      );
+      check(
+        await scope.evaluate((el) => el.scrollWidth <= el.clientWidth + 1),
+        true,
+        "long scope has no horizontal overflow",
+      );
+      check(requests.length, 6, "six explicit management GETs");
+      await capture("scope-long-query", scope);
       check(unexpected, [], "no writes or external requests");
       check(errors, [], "no browser errors");
       results.push({ width, checks, requests });

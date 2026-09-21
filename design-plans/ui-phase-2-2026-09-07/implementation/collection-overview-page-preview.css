@@ -1,0 +1,181 @@
+/* P52 isolated review skin; production collection operations remain unchanged. */
+html body.p52-review {
+  background: #f3f6fb !important;
+}
+.p52-review * {
+  box-sizing: border-box;
+}
+.p52-review :is(button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid #2465d7 !important;
+  outline-offset: 3px;
+}
+.p52-review .role-shell {
+  --so-bg: #f3f6fb;
+  --so-panel: #fff;
+  --so-panel-soft: #edf4ff;
+  --so-text: #182d4a;
+  --so-text-muted: #52647b;
+  --so-border: #dce4ee;
+  --so-primary: #1748a0;
+  background: #f3f6fb !important;
+}
+.p52-review :is(.role-topbar, .role-sidebar, .role-mobile-nav) {
+  background: #fff !important;
+  border-color: #dce4ee !important;
+}
+.p52-review .role-content {
+  max-width: none;
+  padding: 24px clamp(20px, 3vw, 42px) 52px;
+}
+.p52-review
+  :is(
+    .role-page-breadcrumb,
+    .role-page-title,
+    .role-context-rail,
+    .role-context-drawer,
+    .provider-runtime-tabs
+  ) {
+  display: none !important;
+}
+.p52-review .collection-ops {
+  max-width: 1160px;
+  margin: auto;
+  color: #182d4a;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+.p52-review .collection-ops-heading {
+  align-items: start;
+  padding: 31px 36px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+}
+.p52-review .collection-ops-heading :is(p, h2, span) {
+  color: #fff !important;
+}
+.p52-review .collection-ops-heading h2 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+}
+.p52-review .collection-ops-heading button,
+.p52-review .collection-filter-actions button,
+.p52-review .collection-source-disclosure,
+.p52-review .collection-pagination button {
+  min-height: 42px;
+  padding: 8px 14px;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #1748a0 !important;
+  font: inherit;
+  font-weight: 800;
+}
+.p52-review .collection-ops > header > :not(.collection-ops-heading) {
+  margin: 0 !important;
+  border: 1px solid #dce4ee !important;
+  border-top: 0 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+}
+.p52-review .collection-ops-links {
+  gap: 0 !important;
+  margin: 24px 0 !important;
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+}
+.p52-review .collection-ops-links a {
+  padding: 11px 14px;
+  border-right: 1px solid #dce4ee;
+  color: #1748a0 !important;
+  font-weight: 800;
+}
+.p52-review .collection-ops-grid {
+  gap: 0 !important;
+  border: 1px solid #dce4ee !important;
+  border-top: 5px solid #1748a0 !important;
+  background: #fff !important;
+}
+.p52-review .collection-ops-grid > section {
+  padding: 24px !important;
+  border: 0 !important;
+  border-right: 1px solid #dce4ee !important;
+  border-bottom: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p52-review .collection-ops-grid > section:nth-child(3n) {
+  border-right: 0 !important;
+}
+.p52-review .collection-section-header {
+  border-bottom: 1px solid #dce4ee !important;
+}
+.p52-review .collection-ops h3,
+.p52-review .collection-ops h4 {
+  color: #1748a0 !important;
+}
+.p52-review .collection-ops :is(table th, table td) {
+  border-color: #dce4ee !important;
+}
+.p52-review .collection-ops table th {
+  background: #1748a0 !important;
+  color: #fff !important;
+}
+.p52-review .collection-state-chips span,
+.p52-review .collection-root-list article,
+.p52-review .collection-ops details,
+.p52-review .collection-ops-grid > section > ul > li {
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f7faff !important;
+}
+.p52-review .collection-root-list article[data-selected="true"] {
+  border-left: 5px solid #1748a0 !important;
+  background: #edf4ff !important;
+}
+.p52-review .collection-root-list article button,
+.p52-review .collection-ops details button {
+  border-radius: 0 !important;
+}
+.p52-review .collection-ops code {
+  color: #1748a0 !important;
+}
+@media (max-width: 760px) {
+  .p52-review :is(.role-mobile-nav, .role-sidebar, .role-topbar) {
+    display: none !important;
+  }
+  .p52-review .role-shell {
+    display: block;
+    padding-top: 0;
+  }
+  .p52-review .role-content {
+    padding: 0 0 24px;
+  }
+  .p52-review .collection-ops-heading {
+    display: grid;
+    gap: 16px;
+    padding: 25px 19px !important;
+  }
+  .p52-review .collection-ops-heading button {
+    width: 100%;
+  }
+  .p52-review .collection-ops-links {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    margin: 0 !important;
+  }
+  .p52-review .collection-ops-links a:nth-child(2n) {
+    border-right: 0;
+  }
+  .p52-review .collection-ops-grid {
+    display: block !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+  .p52-review .collection-ops-grid > section {
+    border-right: 0 !important;
+  }
+}

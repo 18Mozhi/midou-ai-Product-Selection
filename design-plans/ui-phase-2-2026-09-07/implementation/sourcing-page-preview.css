@@ -1,0 +1,432 @@
+html body.p21-review {
+  background: #f3f6fb !important;
+}
+.p21-review * {
+  box-sizing: border-box;
+}
+.p21-review :is(h1, h2, h3, h4, p, ol, ul, dl, dd) {
+  margin: 0;
+}
+.p21-review :is(button, input, select, textarea, a, summary):focus-visible {
+  outline: 3px solid #2465d7 !important;
+  outline-offset: 3px;
+}
+.p21-review .role-shell {
+  --so-bg: #f3f6fb;
+  --so-bg-elevated: #fff;
+  --so-panel: #fff;
+  --so-panel-soft: #f3f6fb;
+  --so-text: #182d4a;
+  --so-text-muted: #52647b;
+  --so-border: #dce4ee;
+  --so-primary: #1748a0;
+  --so-primary-strong: #1748a0;
+  --so-focus: #2465d7;
+  background: #f3f6fb !important;
+}
+.p21-review :is(.role-topbar, .role-sidebar) {
+  border-color: #dce4ee !important;
+  background: #fff !important;
+}
+.p21-review .role-brand {
+  color: #1748a0 !important;
+}
+.p21-review .role-brand span,
+.p21-review .role-top-actions .role-quick-action {
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+}
+.p21-review .role-brand em,
+.p21-review :is(.role-page-breadcrumb, .role-page-title, .role-context-rail, .role-context-drawer) {
+  display: none !important;
+}
+.p21-review .role-nav-groups details[open] > summary,
+.p21-review .role-nav-groups details:has([aria-current="page"]) > summary {
+  color: #1748a0 !important;
+  background: #edf4ff !important;
+}
+.p21-review .role-nav-menu {
+  border-top-color: #1748a0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p21-review .role-nav-menu > a {
+  background: #fff !important;
+}
+.p21-review .role-nav-menu > a[aria-current="page"] {
+  background: #1748a0 !important;
+}
+.p21-review .role-content {
+  max-width: none;
+  padding: 24px clamp(20px, 3vw, 38px) 58px;
+}
+.p21-review .role-mobile-nav {
+  border-top: 1px solid #dce4ee !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p21-review .role-mobile-nav a[aria-current="page"] {
+  color: #1748a0 !important;
+  background: #edf4ff !important;
+}
+.p21-review .sourcing-workspace {
+  display: grid;
+  gap: 14px;
+  color: #182d4a;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+.p21-review .member-module-guide {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.75fr);
+  gap: 24px;
+  margin: 0 !important;
+  padding: 28px 30px;
+  border: 1px solid #1748a0;
+  border-radius: 0;
+  background: #1748a0;
+  box-shadow: none;
+}
+.p21-review .member-module-guide :is(h1, h2, h3, p, span, li) {
+  color: #fff !important;
+}
+.p21-review .member-module-guide h3 {
+  margin: 7px 0 !important;
+  font-size: 29px;
+  line-height: 1.28;
+}
+.p21-review .member-module-guide ol {
+  display: grid;
+  gap: 6px;
+  padding-left: 20px;
+}
+.p21-review .sourcing-tabs {
+  gap: 0;
+  margin: 0;
+  border: 1px solid #dce4ee;
+  background: #fff;
+}
+.p21-review .sourcing-tabs a {
+  min-height: 44px;
+  padding: 10px 16px;
+  border-right: 1px solid #dce4ee;
+  color: #1748a0;
+  font-weight: 800;
+}
+.p21-review .sourcing-tabs a[aria-current="page"] {
+  border-bottom: 3px solid #1748a0;
+  background: #edf4ff;
+}
+.p21-review .sourcing-journey {
+  gap: 0;
+  border: 1px solid #dce4ee;
+  background: #fff;
+}
+.p21-review .sourcing-journey li {
+  border: 0;
+  border-right: 1px solid #dce4ee;
+  border-radius: 0;
+  background: #fff;
+}
+.p21-review .sourcing-journey li[aria-current="step"] {
+  border-color: #dce4ee;
+  background: #edf4ff;
+  color: #1748a0;
+  box-shadow: inset 0 4px #1748a0;
+}
+.p21-review .sourcing-head {
+  margin: 0;
+  padding: 24px 28px;
+  border: 1px solid #dce4ee;
+  background: #fff;
+}
+.p21-review .sourcing-head p,
+.p21-review .sourcing-detail > header p {
+  color: #1748a0;
+}
+.p21-review .sourcing-head h2 {
+  font-size: 31px;
+}
+.p21-review .sourcing-head span {
+  color: #52647b;
+}
+.p21-review .sourcing-workspace button,
+.p21-review .sourcing-cost-link {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+  color: #fff !important;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+}
+.p21-review .sourcing-workspace button.ghost,
+.p21-review .sourcing-workspace button.danger,
+.p21-review .sourcing-cost-link {
+  background: #fff !important;
+  color: #1748a0 !important;
+}
+.p21-review .sourcing-workspace button.danger {
+  border-color: #b42318 !important;
+  color: #b42318 !important;
+}
+.p21-review .sourcing-summary {
+  gap: 0;
+  border: 1px solid #dce4ee;
+  background: #fff;
+}
+.p21-review .sourcing-summary article {
+  padding: 15px 18px;
+  border: 0;
+  border-right: 1px solid #dce4ee;
+  border-radius: 0;
+  background: #f3f6fb;
+  box-shadow: none;
+}
+.p21-review .sourcing-summary article:last-child {
+  border-right: 0;
+}
+.p21-review .sourcing-summary b {
+  color: #1748a0;
+}
+.p21-review .sourcing-toolbar {
+  padding: 14px 18px;
+  border: 1px solid #dce4ee;
+  border-radius: 0;
+  background: #fff;
+}
+.p21-review .sourcing-toolbar input,
+.p21-review .sourcing-modal :is(input, select, textarea) {
+  min-height: 44px;
+  border: 1px solid #b9c9dc;
+  border-radius: 0;
+  background: #fff;
+  color: #182d4a;
+}
+.p21-review .sourcing-layout {
+  grid-template-columns: minmax(270px, 0.75fr) minmax(0, 2fr);
+  gap: 0;
+  border: 1px solid #dce4ee;
+  background: #fff;
+}
+.p21-review .sourcing-layout > aside {
+  gap: 0;
+  border-right: 1px solid #dce4ee;
+  background: #f3f6fb;
+}
+.p21-review .sourcing-layout > aside button {
+  min-height: 120px;
+  border: 0 !important;
+  border-bottom: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f3f6fb !important;
+  color: #182d4a !important;
+}
+.p21-review .sourcing-layout > aside button.selected {
+  border-left: 5px solid #1748a0 !important;
+  background: #edf4ff !important;
+  box-shadow: none;
+}
+.p21-review .sourcing-layout > aside strong {
+  color: #1748a0;
+}
+.p21-review .sourcing-detail {
+  padding: 28px;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+}
+.p21-review .sourcing-detail > header {
+  padding-bottom: 18px;
+  border-bottom: 1px solid #dce4ee;
+}
+.p21-review .sourcing-detail h3 {
+  font-size: 28px;
+}
+.p21-review .missing,
+.p21-review .sourcing-progress,
+.p21-review .sourcing-erp-reference,
+.p21-review .sourcing-pending {
+  border: 1px solid #dce4ee;
+  border-radius: 0;
+  background: #edf4ff;
+}
+.p21-review .sourcing-progress {
+  padding: 16px;
+}
+.p21-review .sourcing-progress progress {
+  accent-color: #1748a0;
+}
+.p21-review .sourcing-progress dl {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 12px;
+  border: 1px solid #dce4ee;
+}
+.p21-review .sourcing-progress dl div {
+  padding: 10px;
+  border-right: 1px solid #dce4ee;
+  background: #f3f6fb;
+}
+.p21-review .supplier-cards article,
+.p21-review .sourcing-comparisons article {
+  padding: 18px;
+  border: 1px solid #dce4ee;
+  border-radius: 0;
+  background: #fff;
+}
+.p21-review .supplier-cards article[data-ready="true"] {
+  border-left: 4px solid #1748a0;
+}
+.p21-review .supplier-cards dl {
+  gap: 0;
+  border: 1px solid #dce4ee;
+}
+.p21-review .supplier-cards dl div,
+.p21-review .supplier-cards dl div[data-priority="primary"] {
+  border: 0;
+  border-right: 1px solid #dce4ee;
+  border-bottom: 1px solid #dce4ee;
+  background: #f3f6fb;
+}
+.p21-review .supplier-cards dl div[data-priority="primary"] {
+  border-top: 3px solid #1748a0;
+}
+.p21-review .supplier-missing-actions {
+  border-radius: 0;
+  background: #fff;
+}
+.p21-review .sourcing-comparisons {
+  margin-top: 25px;
+  padding-top: 18px;
+  border-top: 3px solid #1748a0;
+}
+.p21-review .sourcing-comparisons > header {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #dce4ee;
+}
+.p21-review .sourcing-specification-hint {
+  border-radius: 0;
+  background: #f3f6fb;
+}
+.p21-review .sourcing-compare-tray {
+  border: 1px solid #1748a0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(24, 45, 74, 0.18);
+}
+.p21-review .sourcing-modal {
+  background: rgba(24, 45, 74, 0.5);
+}
+.p21-review .sourcing-modal form {
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+@media (max-width: 760px) {
+  .p21-review .role-content {
+    padding: 12px 12px 92px;
+  }
+  .p21-review .member-module-guide {
+    grid-template-columns: 1fr;
+    padding: 22px 18px;
+  }
+  .p21-review .member-module-guide h3 {
+    font-size: 26px;
+  }
+  .p21-review .sourcing-tabs,
+  .p21-review .sourcing-journey {
+    overflow-x: auto;
+  }
+  .p21-review .sourcing-tabs a,
+  .p21-review .sourcing-journey li {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+  .p21-review .sourcing-head {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 22px 18px;
+  }
+  .p21-review .sourcing-head button {
+    width: 100%;
+  }
+  .p21-review .sourcing-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .p21-review .sourcing-summary article:nth-child(2) {
+    border-right: 0;
+  }
+  .p21-review .sourcing-summary article:nth-child(-n + 2) {
+    border-bottom: 1px solid #dce4ee;
+  }
+  .p21-review .sourcing-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .p21-review .sourcing-layout {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    border: 0;
+    background: transparent;
+  }
+  .p21-review .sourcing-layout > aside {
+    border: 1px solid #dce4ee;
+  }
+  .p21-review .sourcing-detail {
+    border: 1px solid #dce4ee;
+    padding: 22px 18px;
+  }
+  .p21-review .sourcing-detail > header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .p21-review .sourcing-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .p21-review .sourcing-actions :is(button, a) {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+  .p21-review .sourcing-progress dl {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .p21-review .sourcing-progress dl div:nth-child(2) {
+    border-right: 0;
+  }
+  .p21-review .supplier-cards dl {
+    grid-template-columns: 1fr;
+  }
+  .p21-review .supplier-cards dl div {
+    border-right: 0;
+  }
+  .p21-review .supplier-cards article > footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .p21-review .supplier-cards article > footer button {
+    width: 100%;
+  }
+  .p21-review .sourcing-compare-tray {
+    right: 12px;
+    bottom: 78px;
+    left: 12px;
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .p21-review .sourcing-compare-tray button {
+    width: 100%;
+  }
+  .p21-review .sourcing-modal {
+    padding: 12px;
+  }
+  .p21-review .sourcing-modal form {
+    padding: 20px 16px;
+  }
+}

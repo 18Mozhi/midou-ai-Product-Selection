@@ -1,0 +1,41 @@
+/* Review only: keep the P34 frame when first load/failure removes its child.
+   Deliberately exclude all child-present states and all notice/card content. */
+html
+  body.approvals-vue-c
+  #app
+  .org-admin-center[data-approval-c-view="true"]:not(:has(.org-approval-c-workbench)) {
+  background: #f3f6fb;
+  padding: 0;
+  .org-admin-hero {
+    min-height: 0;
+    padding: 0 0 24px;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    color: #202c3d;
+  }
+  .org-admin-hero h2 {
+    display: none;
+  }
+  .org-admin-hero p {
+    color: #254a9c;
+  }
+  .org-admin-refresh button {
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid #254a9c;
+    border-radius: 4px;
+    background: #254a9c;
+    color: #fff;
+  }
+  .org-admin-refresh button:disabled {
+    background: #e8edf4;
+    color: #58677b;
+    border-color: #dbe1e9;
+    opacity: 1;
+  }
+  .org-admin-refresh button:focus-visible {
+    outline: 3px solid #4d79ff;
+    outline-offset: 3px;
+  }
+}

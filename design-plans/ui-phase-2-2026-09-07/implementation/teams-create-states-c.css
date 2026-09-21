@@ -1,0 +1,42 @@
+html body.teams-vue-c #app .org-admin-center:has(.org-team-panel) .teams-create-progress {
+  margin: 0 0 16px;
+  padding: 16px 20px;
+  border-left: 3px solid #254a9c;
+  background: #e8effb;
+  color: #17366f;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+html body.teams-vue-c #app .org-admin-center:has(.org-team-panel) .org-admin-notice {
+  display: block;
+  padding: 16px 20px;
+  border: 1px solid #dbe4f0;
+  border-left: 3px solid #254a9c;
+  border-radius: 0;
+  background: #fff;
+  color: #17366f;
+  font-size: 14px;
+  line-height: 1.6;
+  box-shadow: none;
+
+  &[data-kind="error"] {
+    border-left-color: #b42318;
+  }
+
+  &[data-kind="success"] {
+    background: #e8effb;
+  }
+
+  code {
+    display: block;
+    margin-top: 8px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #52627c;
+    font-size: 12px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}

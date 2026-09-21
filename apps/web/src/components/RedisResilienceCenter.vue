@@ -23,11 +23,41 @@ const request = createApiClient(props.apiBaseUrl);
 const state = ref<ViewState>("loading"),
   data = ref<RedisResilienceDto | null>(null),
   requestId = ref(""),
+  readFailureId = ref(""),
   actionHint = ref(""),
   refreshing = ref(false),
   refreshFailure = ref<RefreshFailure | null>(null);
 let controller: AbortController | null = null;
 let sequence = 0;
+const refreshButton = ref<HTMLButtonElement | null>(null),
+  retryButton = ref<HTMLButtonElement | null>(null),
+  noticeRetryButton = ref<HTMLButtonElement | null>(null);
+function handoffReadFocus() {
+  const from = [retryButton.value, noticeRetryButton.value].find(
+      (button) => button && button.ownerDocument.activeElement === button,
+    ),
+    to = refreshButton.value;
+  if (
+    !from?.isConnected ||
+    !to?.isConnected ||
+    from.closest("[inert]") ||
+    to.closest("[inert]") ||
+    !from.checkVisibility() ||
+    !to.checkVisibility()
+  )
+    return;
+  to.focus({ preventScroll: true });
+  if (to.ownerDocument.activeElement !== to) return;
+  const rect = to.getBoundingClientRect();
+  if (
+    rect.top < 0 ||
+    rect.bottom > window.innerHeight ||
+    !to.contains(
+      to.ownerDocument.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2),
+    )
+  )
+    to.scrollIntoView({ block: "center", inline: "nearest" });
+}
 const verdict = computed(
   () =>
     (
@@ -109,6 +139,7 @@ const evictionRisk = computed(() => {
 
 async function load() {
   if (controller) return;
+  handoffReadFocus();
   const currentSequence = ++sequence;
   const requestController = new AbortController();
   const hasSnapshot = Boolean(data.value);
@@ -116,7 +147,11 @@ async function load() {
   controller = requestController;
   refreshing.value = true;
   refreshFailure.value = null;
-  if (!hasSnapshot) state.value = "loading";
+  readFailureId.value = "";
+  if (!hasSnapshot) {
+    state.value = "loading";
+    requestId.value = "";
+  }
   actionHint.value = "";
   let timedOut = false;
   const timeout = window.setTimeout(() => {
@@ -145,13 +180,13 @@ async function load() {
     )
       return;
     if (timedOut) {
-      requestId.value = correlationId;
+      readFailureId.value = correlationId;
       if (hasSnapshot) refreshFailure.value = "timeout";
       else state.value = "timeout";
       return;
     }
     const failure = error instanceof ApiClientError ? error : null;
-    requestId.value = failure?.requestId ?? "";
+    readFailureId.value = failure?.requestId ?? "";
     actionHint.value = failure?.actionHint ?? "";
     const failureState =
       failure?.kind === "expired" ||
@@ -163,6 +198,7 @@ async function load() {
       refreshFailure.value = failureState as RefreshFailure;
     else {
       data.value = null;
+      requestId.value = "";
       state.value = failureState;
     }
   } finally {
@@ -182,38 +218,54 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="redis-resilience" :data-state="state">
+  <section class="redis-resilience redis-resilience--review" :data-state="state">
     <header class="redis-resilience__hero">
       <div>
-        <p>单实例缓存服务</p>
-        <h2>缓存服务单实例韧性</h2>
+        <p>P67 / 运行证据</p>
+        <h1>Redis 运行核验</h1>
         <span>当前惠州单机只运行一个宝塔 Redis；不启用 Sentinel、集群、副本或备用服务器。</span>
       </div>
-      <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
+      <button
+        ref="refreshButton"
+        class="redis-read-action"
+        type="button"
+        :aria-disabled="refreshing"
+        :aria-busy="refreshing"
+        @click="load"
+      >
         {{ refreshing ? "正在刷新…" : "刷新运行事实" }}
       </button>
     </header>
+    <p class="p67-review-note">实际 Vue C 审核版 · 本地样例 · 未连接 Redis 或执行恢复 · 尚未部署</p>
+    <aside class="p67-boundary-strip" aria-label="运行边界"><b>惠州单主机 / 宝塔管理</b><span>Redis 仅协调缓存、队列、限流与实时消息；MySQL 仍是业务事实源。</span></aside>
     <section
       v-if="data && refreshFailure"
       class="redis-resilience__refresh-notice"
       :data-kind="refreshFailure"
       aria-live="polite"
+      aria-labelledby="redis-refresh-title"
+      :aria-busy="refreshing"
     >
       <div>
-        <b>{{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}</b>
+        <h3 id="redis-refresh-title">
+          {{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}
+        </h3>
         <p>{{ refreshNotice }}</p>
-        <TechnicalDetails :request-id="requestId" />
+        <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
       </div>
-      <button type="button" :disabled="refreshing" @click="load">重新核验</button>
+      <button ref="noticeRetryButton" type="button" :disabled="refreshing" @click="load">
+        重新核验
+      </button>
     </section>
     <section
       v-if="state === 'loading' || state === 'recovering'"
       class="redis-resilience__state"
       aria-live="polite"
+      aria-labelledby="redis-read-title"
+      :aria-busy="refreshing"
     >
-      <i aria-hidden="true"></i>
       <div>
-        <b>{{ verdict[0] }}</b>
+        <h3 id="redis-read-title">{{ verdict[0] }}</h3>
         <p>{{ verdict[1] }}</p>
       </div>
     </section>
@@ -223,188 +275,100 @@ onBeforeUnmount(() => {
       "
       class="redis-resilience__state redis-resilience__state--danger"
       aria-live="polite"
+      aria-labelledby="redis-read-title"
+      :aria-busy="refreshing"
     >
-      <strong aria-hidden="true">!</strong>
       <div>
-        <b>{{ verdict[0] }}</b>
+        <h3 id="redis-read-title">{{ verdict[0] }}</h3>
         <p>{{ verdict[1] }}</p>
-        <TechnicalDetails :request-id="requestId" />
+        <TechnicalDetails v-if="state === 'empty'" :request-id="requestId" summary="本次读取追踪" />
+        <TechnicalDetails v-else :request-id="readFailureId" summary="本次失败读取追踪" />
       </div>
       <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
-      ><button v-else type="button" :disabled="refreshing" @click="load">重新核验</button>
+      ><button v-else ref="retryButton" type="button" :disabled="refreshing" @click="load">
+        重新核验
+      </button>
     </section>
     <template v-else-if="data">
-      <section class="redis-resilience__verdict" :data-verdict="state">
-        <div>
-          <small>S0 · {{ state.toUpperCase() }}</small
-          ><strong>{{ verdict[0] }}</strong>
-        </div>
-        <p>{{ verdict[1] }}</p>
-        <em>单实例 · 运行状态已核对</em>
+      <section class="p67-conclusion" :data-verdict="state" aria-labelledby="p67-conclusion-title">
+        <div><small>S0 / {{ state }}</small><h2 id="p67-conclusion-title">{{ state === 'ready' ? '当前韧性门满足' : state === 'warning' ? '运行观测存在预警' : '当前韧性门阻断' }}</h2>
+        <p>服务返回 {{ data.findings.length }} 项发现；不等于恢复演练、所有任务或高可用已验证。</p></div>
+        <div><b>观测时间</b><time :datetime="data.observed_at">{{ time(data.observed_at) }}</time><small>单实例 · 容量能力未验证</small></div>
       </section>
-      <section class="redis-resilience__metrics" aria-label="Redis 资源指标">
-        <article>
-          <span>内存使用</span><strong>{{ percent(data.memory.usage_basis_points) }}</strong
-          ><small>{{ bytes(data.memory.used_bytes) }} / {{ bytes(data.memory.max_bytes) }}</small>
-        </article>
-        <article>
-          <span>连接使用</span><strong>{{ percent(data.connections.usage_basis_points) }}</strong
-          ><small>{{ data.connections.connected }} / {{ data.connections.maximum }}</small>
-        </article>
-        <article>
-          <span>拒绝连接</span><strong>{{ data.connections.rejected }}</strong
-          ><small>任何非零均阻断</small>
-        </article>
-        <article>
-          <span>淘汰键</span><strong>{{ data.evicted_keys }}</strong
-          ><small>不静默丢弃数据</small>
-        </article>
-      </section>
-      <div class="redis-resilience__layout">
-        <section class="redis-resilience__panel redis-resilience__persistence">
-          <header>
-            <div>
-              <p>持久化</p>
-              <h3>双持久化状态</h3>
-            </div>
-            <span>宝塔管理</span>
-          </header>
-          <div class="redis-resilience__persistence-grid">
-            <article
-              :data-ok="
-                data.persistence.aof_enabled && data.persistence.aof_last_write_status === 'ok'
-              "
-            >
-              <i>追加日志</i><b>{{ data.persistence.aof_enabled ? "已启用" : "未启用" }}</b
-              ><small>everysec · {{ data.persistence.aof_last_write_status }}</small>
-            </article>
-            <article
-              :data-ok="
-                data.persistence.rdb_enabled && data.persistence.rdb_last_save_status === 'ok'
-              "
-            >
-              <i>快照</i><b>{{ data.persistence.rdb_enabled ? "已启用" : "未启用" }}</b
-              ><small>定时快照 · {{ data.persistence.rdb_last_save_status }}</small>
-            </article>
-          </div>
-          <p>缓存服务只保存缓存、队列、限流与实时消息协调；数据库仍是事实源。</p>
+      <div class="p67-workspace">
+        <section class="p67-findings p67-section" aria-labelledby="p67-findings-title">
+          <h2 id="p67-findings-title">告警与阻断项 <small>{{ data.findings.length }} 项</small></h2>
+          <div v-if="data.findings.length" class="p67-finding-list"><article v-for="item in data.findings" :key="item.code" :data-severity="item.severity">
+            <b>{{ item.severity === 'blocked' ? '阻断' : '预警' }}</b><code>{{ item.code }}</code><p>{{ item.action_hint }}</p>
+          </article></div>
+          <p v-else>当前返回未列出告警或阻断。不据此推定所有缓存、队列或实时消息功能均已实测可用。</p>
         </section>
-        <aside class="redis-resilience__panel">
-          <header>
-            <div>
-              <p>运行状态</p>
-              <h3>运行方式</h3>
-            </div>
-          </header>
-          <dl>
-            <div>
-              <dt>运行模式</dt>
-              <dd>单实例</dd>
-            </div>
-            <div>
-              <dt>哨兵模式</dt>
-              <dd>{{ data.sentinel_enabled ? "已启用" : "未启用" }}</dd>
-            </div>
-            <div>
-              <dt>缓存服务集群</dt>
-              <dd>{{ data.cluster_enabled ? "已启用" : "未启用" }}</dd>
-            </div>
-            <div>
-              <dt>事实来源</dt>
-              <dd>宝塔受管实例</dd>
-            </div>
-          </dl>
+        <section class="p67-resources p67-section" aria-labelledby="p67-resources-title">
+          <h2 id="p67-resources-title">资源与累计计数</h2><p>用量、上限、累计错误分别阅读。</p>
+          <div v-if="data.findings.some(item => item.code === 'redis_unavailable')" class="p67-unmeasured"><h3>未取得资源观测</h3><p>本次探针失败。返回的零计数与 100% 比例是占位值，不代表实测用量、满额或运行时长。</p></div>
+          <template v-else><div class="p67-resource-grid">
+            <article class="p67-resource" data-resource="memory"
+      :data-severity="data.findings.some(item => item.code === 'redis_memory_stop') ? 'blocked' : data.findings.some(item => item.code === 'redis_memory_warning') ? 'warning' : 'ready'">
+      <h3>内存使用</h3><strong>{{ data.memory.max_bytes > 0 ? percent(data.memory.usage_basis_points) : '未设置上限' }}</strong>
+      <p>{{ compactBytes(data.memory.used_bytes) }} / {{ compactBytes(data.memory.max_bytes) }}</p>
+      <div v-if="data.memory.max_bytes > 0" class="p67-bar" aria-hidden="true"><span :style="{ width: percent(data.memory.usage_basis_points) }"></span></div>
+      <small v-if="data.memory.max_bytes <= 0">比例是服务占位值，不作为实际使用率。</small>
+      <small v-else-if="data.memory.used_bytes > data.memory.max_bytes">用量超过上限；服务比例已封顶为 100%。</small>
+      <small v-else>比例来自服务计算，不是容量承诺。</small>
+    </article>
+            <article class="p67-resource" data-resource="connections"
+      :data-severity="data.findings.some(item => item.code === 'redis_connections_stop') ? 'blocked' : data.findings.some(item => item.code === 'redis_connections_warning') ? 'warning' : 'ready'">
+      <h3>连接使用</h3><strong>{{ data.connections.maximum > 0 ? percent(data.connections.usage_basis_points) : '未设置上限' }}</strong>
+      <p>{{ data.connections.connected }} / {{ data.connections.maximum }}</p>
+      <div v-if="data.connections.maximum > 0" class="p67-bar" aria-hidden="true"><span :style="{ width: percent(data.connections.usage_basis_points) }"></span></div>
+      <small v-if="data.connections.maximum <= 0">比例是服务占位值，不作为实际使用率。</small>
+      <small v-else-if="data.connections.connected > data.connections.maximum">用量超过上限；服务比例已封顶为 100%。</small>
+      <small v-else>比例来自服务计算，不是容量承诺。</small>
+    </article>
+          </div>
+          <dl class="p67-counts"><div><dt>累计拒绝连接</dt><dd>{{ data.connections.rejected }}</dd></div><div><dt>累计淘汰键</dt><dd>{{ data.evicted_keys }}</dd></div><div><dt>实例运行秒数</dt><dd>{{ data.uptime_seconds }}</dd></div></dl>
+          <p>实例运行 {{ data.uptime_seconds }} 秒；按天向下取整为 {{ Math.floor(data.uptime_seconds / 86400) }} 天。拒绝与淘汰不是本次新增量。</p>
+          <aside class="p67-note" :data-severity="evictionRisk.level"><b>界面键淘汰风险提示</b><p>{{ evictionRisk.text }}</p><small>此提示的内存阈值为 80%；总体判门使用运行 policy，实际阈值未随本次返回，不能混用。</small></aside>
+          </template>
+        </section>
+        <section class="p67-persistence p67-section" aria-labelledby="p67-persistence-title">
+          <h2 id="p67-persistence-title">持久化观测</h2><p>是否启用与最近写入／保存结果分别核对。</p>
+          <p v-if="data.findings.some(item => item.code === 'redis_unavailable')" class="p67-unmeasured">本次未取得持久化观测；不能把失败占位解释为已关闭 AOF 或 RDB。</p>
+          <dl v-else class="p67-persistence-rows"><div><dt>AOF</dt><dd>{{ data.persistence.aof_enabled ? '已启用' : '未启用' }}<small>CONFIG GET 观测</small></dd><dd>{{ data.persistence.aof_last_write_status }}<small>写入状态，可能回退为最近重写结果</small></dd></div>
+          <div><dt>RDB</dt><dd>{{ data.persistence.rdb_enabled ? '已启用' : '未启用' }}<small>CONFIG GET 观测</small></dd><dd>{{ data.persistence.rdb_last_save_status }}<small>最近保存状态</small></dd></div></dl>
+          <p class="p67-note">AOF everysec 是既有部署目标；当前探针没有读取 appendfsync，不能标记为本次实测通过。此接口也不提供恢复演练证据。</p>
+        </section>
+        <aside class="p67-policy p67-section" aria-labelledby="p67-policy-title"><h2 id="p67-policy-title">边界与未覆盖项</h2><p>这些是部署合同与接口边界，不是一轮新的在线验证。</p>
+          <dl><div><dt>淘汰策略 / 实际返回</dt><dd>{{ data.findings.some(item => item.code === 'redis_unavailable') ? '未取得观测' : data.max_memory_policy }}</dd></div>
+          <div><dt>持久化目标</dt><dd>AOF everysec + RDB 规则</dd></div>
+          <div><dt>固定拓扑边界</dt><dd>single_instance<br>Sentinel={{ data.sentinel_enabled }}<br>Cluster={{ data.cluster_enabled }}</dd></div>
+          <div><dt>能力声明</dt><dd>不宣称副本、备用服务器或容量承诺</dd></div>
+          <div><dt>当前 GET 未覆盖</dt><dd>appendfsync、bind、protected-mode、真实恢复演练</dd></div></dl>
+          <p>重启、配置、恢复只能由宝塔管理。本页没有运维执行入口。</p>
         </aside>
-      </div>
-      <section class="redis-resilience__panel redis-resilience__risk">
-        <header>
-          <div>
-            <p>内存风险</p>
-            <h3>键淘汰风险</h3>
+        <section class="p67-sampling p67-section" aria-labelledby="p67-sampling-title"><header><div><h2 id="p67-sampling-title">有界键空间采样</h2><p>只比较成功测得的字节，不是总 Redis 内存占比或访问频率。</p></div><b>{{ sampleStatusLabel[data.keyspace_sample.status] }}</b></header>
+          <dl class="p67-counts"><div><dt>已扫描去重键</dt><dd>{{ data.keyspace_sample.scanned_keys }}</dd></div><div><dt>成功测量</dt><dd>{{ data.keyspace_sample.measured_keys }}</dd></div><div><dt>忽略 / 测量失败</dt><dd>{{ data.keyspace_sample.ignored_keys }} / {{ data.keyspace_sample.failed_measurements }}</dd></div><div><dt>成功测得字节</dt><dd>{{ compactBytes(data.keyspace_sample.total_sampled_bytes) }}</dd></div></dl>
+          <p>采样上限 {{ data.keyspace_sample.sample_limit }} 个键；{{ data.keyspace_sample.truncated ? '已达到有界采样范围' : '本次未标记截断' }}。SCAN COUNT 32 为提示，最多 32 轮；测量每批最多 16。</p>
+          <div v-if="data.keyspace_sample.hotspots.length" class="p67-sample-list"><article v-for="item in data.keyspace_sample.hotspots" :key="item.purpose + ':' + item.resource">
+            <div><h3>{{ purposeLabel[item.purpose] }} / {{ resourceLabel[item.resource] }}</h3><small>{{ item.sampled_keys }} 个成功测量键</small></div>
+            <div><b>{{ compactBytes(item.sampled_bytes) }}</b><small>采样字节</small></div>
+            <div><b>{{ data.keyspace_sample.total_sampled_bytes > 0 ? percent(item.sampled_share_basis_points) : '无比例分母' }}</b><small>成功测得字节的占比</small></div>
+            <div v-if="data.keyspace_sample.total_sampled_bytes > 0" class="p67-bar" aria-hidden="true"><span :style="{ width: percent(item.sampled_share_basis_points) }"></span></div>
+          </article></div>
+          <div v-else class="p67-sample-empty"><h3>{{ sampleStatusLabel[data.keyspace_sample.status] }}</h3>
+            <p v-if="data.keyspace_sample.status === 'partial'">已扫描到受限键，但本次未完成有效内存测量；不能据此判断没有业务键。</p>
+            <p v-else-if="data.keyspace_sample.unavailable_reason === 'command_unsupported'">当前客户端不支持受限 SCAN 与 MEMORY USAGE。</p>
+            <p v-else-if="data.keyspace_sample.unavailable_reason === 'scan_failed'">本次采样失败；总体韧性结论仍由独立运行事实决定。</p>
+            <p v-else>本次有界采样没有可归类的结果，不代表整个 Redis 没有业务键。</p>
           </div>
-          <span>{{ data.max_memory_policy }}</span>
-        </header>
-        <article :data-severity="evictionRisk.level">
-          <strong>{{ percent(data.memory.usage_basis_points) }} 内存水位</strong>
-          <p>{{ evictionRisk.text }}</p>
-          <small>累计值覆盖当前实例 {{ Math.floor(data.uptime_seconds / 86400) }} 天运行期。</small>
-        </article>
-        <section class="redis-resilience__hotspots" aria-labelledby="redis-hotspot-heading">
-          <header>
-            <div>
-              <small>脱敏有界采样</small>
-              <h4 id="redis-hotspot-heading">键空间占用热点</h4>
-            </div>
-            <span>{{ sampleStatusLabel[data.keyspace_sample.status] }}</span>
-          </header>
-          <div v-if="data.keyspace_sample.hotspots.length" class="redis-resilience__hotspot-list">
-            <article
-              v-for="item in data.keyspace_sample.hotspots"
-              :key="`${item.purpose}:${item.resource}`"
-            >
-              <div>
-                <strong>{{ resourceLabel[item.resource] }}</strong>
-                <small>{{ purposeLabel[item.purpose] }} · {{ item.sampled_keys }} 个采样键</small>
-              </div>
-              <div class="redis-resilience__hotspot-value">
-                <b>{{ percent(item.sampled_share_basis_points) }}</b>
-                <small>{{ compactBytes(item.sampled_bytes) }}</small>
-              </div>
-              <i aria-hidden="true"
-                ><span :style="{ width: `${item.sampled_share_basis_points / 100}%` }"></span
-              ></i>
-            </article>
-          </div>
-          <div v-else class="redis-resilience__hotspot-empty">
-            <b>{{ sampleStatusLabel[data.keyspace_sample.status] }}</b>
-            <span v-if="data.keyspace_sample.unavailable_reason === 'command_unsupported'"
-              >当前客户端不支持受限 SCAN 与 MEMORY USAGE。</span
-            >
-            <span v-else-if="data.keyspace_sample.unavailable_reason === 'scan_failed'"
-              >本次采样失败；Redis 总体韧性结论仍由独立运行事实决定。</span
-            >
-            <span v-else>当前采样范围内没有可归类的 ScoutOps 业务键。</span>
-          </div>
-          <footer>
-            <span
-              >已测 {{ data.keyspace_sample.measured_keys }} / 已扫描
-              {{ data.keyspace_sample.scanned_keys }}，上限
-              {{ data.keyspace_sample.sample_limit }}</span
-            >
-            <span v-if="data.keyspace_sample.truncated">已达到有界采样范围</span>
-          </footer>
+          <p class="p67-note">只显示用途与资源类别，不返回键名、组织、工作区、载荷或连接信息。采样是否成功，不直接改变总体韧性判门。</p>
         </section>
-        <p class="redis-resilience__truth-note">
-          这里只显示受限键的采样内存占比，不返回键名、组织、工作区或载荷，也不把内存占比冒充访问频率；
-          noeviction 模式不提供可信 LFU 热度。
-        </p>
-      </section>
-      <section class="redis-resilience__panel redis-resilience__findings">
-        <header>
-          <div>
-            <p>失败时拒绝放行</p>
-            <h3>告警与阻断项</h3>
-          </div>
-          <span>{{ data.findings.length }} 项</span>
-        </header>
-        <div v-if="data.findings.length">
-          <article
-            v-for="(item, index) in data.findings"
-            :key="item.code"
-            :data-severity="item.severity"
-          >
-            <span>{{ String(index + 1).padStart(2, "0") }}</span
-            ><code>{{ item.code }}</code>
-            <p>{{ item.action_hint }}</p>
-          </article>
-        </div>
-        <div v-else class="redis-resilience__clear">
-          <b>当前无缓存服务韧性阻断</b><span>持久化、连接、队列与限流功能均处于可用状态。</span>
-        </div>
-      </section>
+      </div>
       <footer class="redis-resilience__footer">
         <span>观测 {{ time(data.observed_at) }}</span
-        ><TechnicalDetails :request-id="requestId" /><strong>重启、配置与恢复只允许通过宝塔</strong>
+        ><TechnicalDetails :request-id="requestId" summary="快照读取追踪" /><strong
+          >重启、配置与恢复只允许通过宝塔</strong
+        >
       </footer>
     </template>
   </section>

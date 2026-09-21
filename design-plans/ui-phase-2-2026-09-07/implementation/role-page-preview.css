@@ -1,0 +1,235 @@
+/* P31 isolated review skin; production organization administration remains unchanged. */
+html body.p31-review {
+  background: #f3f6fb !important;
+}
+.p31-review * {
+  box-sizing: border-box;
+}
+.p31-review :is(button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid #2465d7 !important;
+  outline-offset: 3px;
+}
+.p31-review .role-shell {
+  --so-bg: #f3f6fb;
+  --so-panel: #fff;
+  --so-panel-soft: #edf4ff;
+  --so-text: #182d4a;
+  --so-text-muted: #52647b;
+  --so-border: #dce4ee;
+  --so-primary: #1748a0;
+  background: #f3f6fb !important;
+}
+.p31-review :is(.role-topbar, .role-sidebar, .role-mobile-nav) {
+  background: #fff !important;
+  border-color: #dce4ee !important;
+}
+.p31-review .role-content {
+  max-width: none;
+  padding: 24px clamp(20px, 3vw, 42px) 52px;
+}
+.p31-review :is(.role-page-breadcrumb, .role-page-title, .role-context-rail, .role-context-drawer) {
+  display: none !important;
+}
+.p31-review .org-admin-center {
+  max-width: 1160px;
+  margin: auto;
+  color: #182d4a;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+.p31-review .org-admin-hero {
+  padding: 31px 36px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+}
+.p31-review .org-admin-hero :is(p, h2, span) {
+  color: #fff !important;
+}
+.p31-review .org-admin-hero h2 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+}
+.p31-review .org-admin-center button {
+  min-height: 42px;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+  color: #fff !important;
+  font: inherit;
+  font-weight: 800;
+}
+.p31-review .org-admin-center button:disabled {
+  border-color: #c7d0dc !important;
+  background: #e8edf3 !important;
+  color: #7a8999 !important;
+}
+.p31-review .org-admin-center button.danger {
+  border-color: #b42318 !important;
+  background: #b42318 !important;
+}
+.p31-review .org-admin-metrics,
+.p31-review .org-role-summary {
+  gap: 0 !important;
+  border: 1px solid #dce4ee !important;
+}
+.p31-review .org-admin-metrics article,
+.p31-review .org-role-summary article {
+  border: 0 !important;
+  border-right: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p31-review .org-role-summary article:last-child,
+.p31-review .org-admin-metrics article:last-child {
+  border-right: 0 !important;
+}
+.p31-review :is(.org-admin-metrics b, .org-role-summary b) {
+  color: #1748a0 !important;
+}
+.p31-review .org-role-tabs {
+  gap: 0 !important;
+  padding: 0 !important;
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+}
+.p31-review .org-role-tabs button {
+  flex: 1;
+  border: 0 !important;
+  border-right: 1px solid #dce4ee !important;
+  background: #fff !important;
+  color: #52647b !important;
+}
+.p31-review .org-role-tabs button[aria-pressed="true"] {
+  background: #edf4ff !important;
+  color: #1748a0 !important;
+}
+.p31-review :is(.org-role-toolbar, .org-grant-toolbar) {
+  padding: 14px 16px !important;
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f7faff !important;
+}
+.p31-review .org-role-browser,
+.p31-review .org-grant-browser {
+  grid-template-columns: minmax(290px, 0.78fr) minmax(0, 1.6fr) !important;
+  gap: 16px !important;
+}
+.p31-review :is(.org-role-list, .org-grant-list) {
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+}
+.p31-review :is(.org-role-list, .org-grant-list) > button {
+  width: 100%;
+  min-height: 82px;
+  border: 0 !important;
+  border-bottom: 1px solid #dce4ee !important;
+  background: #fff !important;
+  color: #182d4a !important;
+  text-align: left;
+}
+.p31-review :is(.org-role-list, .org-grant-list) > button.selected {
+  border-left: 5px solid #1748a0 !important;
+  background: #edf4ff !important;
+}
+.p31-review .org-admin-card,
+.p31-review .org-admin-role-matrix {
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p31-review :is(.org-role-detail, .org-grant-detail) {
+  border-top: 5px solid #1748a0 !important;
+}
+.p31-review .org-admin-card :is(input, select, textarea) {
+  min-height: 42px;
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #182d4a !important;
+}
+.p31-review .org-admin-chips span {
+  border-radius: 99px !important;
+  background: #edf4ff !important;
+  color: #1748a0 !important;
+}
+.p31-review .org-role-matrix-filters {
+  gap: 12px !important;
+  padding: 14px !important;
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f7faff !important;
+}
+.p31-review .org-role-matrix-scroll {
+  border-color: #dce4ee !important;
+}
+.p31-review .org-role-matrix-scroll [role="row"] {
+  border-color: #dce4ee !important;
+}
+.p31-review .org-role-matrix-scroll [role="row"]:nth-child(2n) {
+  background: #f7faff !important;
+}
+.p31-review .org-admin-matrix-head {
+  background: #1748a0 !important;
+  color: #fff !important;
+}
+.p31-review .org-grant-intro {
+  border-left: 5px solid #1748a0 !important;
+}
+.p31-review .org-grant-toolbar button[aria-pressed="true"] {
+  background: #edf4ff !important;
+  color: #1748a0 !important;
+}
+.p31-review .org-grant-detail dl > div {
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f7faff !important;
+}
+@media (max-width: 760px) {
+  .p31-review .role-mobile-nav {
+    display: none !important;
+  }
+  .p31-review .role-topbar {
+    display: none !important;
+  }
+  .p31-review .role-sidebar {
+    display: none !important;
+  }
+  .p31-review .role-shell {
+    display: block;
+    padding-top: 0;
+  }
+  .p31-review .role-content {
+    padding: 0 0 24px;
+  }
+  .p31-review .org-admin-hero {
+    padding: 25px 19px !important;
+  }
+  .p31-review :is(.org-admin-metrics, .org-role-summary) {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .p31-review .org-role-summary article:nth-child(2n) {
+    border-right: 0 !important;
+  }
+  .p31-review .org-role-tabs {
+    grid-template-columns: 1fr !important;
+  }
+  .p31-review .org-role-tabs button {
+    border-right: 0 !important;
+    border-bottom: 1px solid #dce4ee !important;
+  }
+  .p31-review :is(.org-role-browser, .org-grant-browser) {
+    grid-template-columns: 1fr !important;
+  }
+  .p31-review .org-admin-card {
+    padding: 18px !important;
+  }
+  .p31-review .org-role-matrix-filters {
+    grid-template-columns: 1fr !important;
+  }
+}

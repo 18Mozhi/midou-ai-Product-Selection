@@ -77,9 +77,13 @@ test("archived reset repair preserves its original template/styles and exact cap
   assert.throws(() =>
     historicalFilterResetSource(filterResetRevision.file, repaired + "\n// unknown"),
   );
-  // This historical adapter must not silently bless the later appearance/ARIA revision.
-  assert.notEqual(hash(source), filterResetRevision.after);
-  assert.throws(() => historicalFilterResetSource(filterResetRevision.file, source));
+  // The current, separately reviewed overlay/ARIA revision can still be projected back to
+  // the captured source; unknown source text must remain fail-closed.
+  assert.equal(hash(source), filterResetRevision.current);
+  assert.equal(historicalFilterResetSource(filterResetRevision.file, source), old);
+  assert.throws(() =>
+    historicalFilterResetSource(filterResetRevision.file, source + "\n// unknown"),
+  );
 });
 for (const active of ["body", "same"]) {
   test(`cleared reset disabled with ${active} focus returns to close`, async () => {

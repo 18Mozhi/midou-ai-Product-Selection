@@ -6,6 +6,8 @@ import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import postcss from "postcss";
 import ts from "typescript";
+import { beforeAdapterEmptyFocus } from "../../scripts/lib/ui-phase2-adapter-empty-focus-baseline.mjs";
+import { p47HistoricalSource } from "../../scripts/lib/ui-phase2-adapter-historical-source.mjs";
 import {
   adapterCRevisions,
   historicalAdapterCSource,
@@ -14,7 +16,9 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const file = "apps/web/src/components/ProviderAdapterCenter.vue";
-const source = read(file);
+const currentSource = read(file);
+const capturedSource = p47HistoricalSource(file, currentSource, "pre-refresh");
+const source = beforeAdapterEmptyFocus(capturedSource);
 const baseline = historicalAdapterCSource(file, source);
 const root = "output/playwright/p47-c-integration";
 const evidence = () => JSON.parse(read(`${root}/evidence.json`));
@@ -50,9 +54,13 @@ function contract(text) {
   return { actions: actions.sort(), models: models.sort(), conditions: conditions.sort(), facts };
 }
 
-test("P47 C actual script preserves all existing runtime logic and exact historical association", () => {
+test("P47 C preserves prior runtime outside the independently verified empty-focus repair", () => {
   for (const revision of adapterCRevisions) {
-    const current = read(revision.file);
+    const raw = read(revision.file);
+    const current =
+      revision.file === file
+        ? beforeAdapterEmptyFocus(p47HistoricalSource(file, raw, "pre-refresh"))
+        : raw;
     assert.equal(hash(current), revision.after);
     assert.equal(hash(historicalAdapterCSource(revision.file, current)), revision.before);
     assert.equal(
@@ -102,6 +110,22 @@ test("P47 C template retains original actions, all six models, conditions and di
 });
 
 test("P47 C styles are approved composition rules rescaled only to the active production marker", () => {
+  const palette = postcss.parse(read("apps/web/src/design/provider-adapter-tokens.css"));
+  const values = new Map();
+  palette.walkRules((rule) => {
+    assert.equal(rule.selector, "html:has(body #app .adapter-center--c)");
+    rule.walkDecls((decl) => {
+      assert.match(decl.prop, /^--p47-[a-z-]+$/);
+      assert.ok(!decl.important);
+      assert.ok(!values.has(decl.prop));
+      values.set(decl.prop, decl.value);
+    });
+  });
+  const resolveColors = (value) =>
+    value.replace(/var\((--p47-[a-z-]+)\)/g, (_, name) => {
+      assert.ok(values.has(name), name);
+      return values.get(name);
+    });
   for (const [current, reference] of [
     ["page", "vue-preview"],
     ["detail", "detail-preview"],
@@ -121,9 +145,18 @@ test("P47 C styles are approved composition rules rescaled only to the active pr
         assert.ok(!selector.includes("p47-adapter-review"), selector);
         const declarations = rule.nodes.filter((node) => node.type === "decl");
         assert.ok(declarations.every((decl) => !decl.important));
+        if (declarations.every((decl) => decl.prop.startsWith("--p47-"))) {
+          // The original page palette moved verbatim; reject changes to any original role.
+          for (const decl of declarations) assert.equal(values.get(decl.prop), decl.value);
+          return;
+        }
+        const ancestry = [];
+        for (let parent = rule.parent; parent?.type === "atrule"; parent = parent.parent)
+          ancestry.unshift([parent.name, parent.params]);
         rules.push([
+          ancestry,
           selector,
-          declarations.map((decl) => [decl.prop, decl.value.replace(/\s+/g, " ")]),
+          declarations.map((decl) => [decl.prop, resolveColors(decl.value).replace(/\s+/g, " ")]),
         ]);
       });
       return rules;
@@ -132,8 +165,12 @@ test("P47 C styles are approved composition rules rescaled only to the active pr
   }
 });
 
-test("P47 C actual browser pack binds current raw runtime and all20 images without preview injection", () => {
+test("P47 C pre-refresh browser pack binds original captured runtime and all20 images without preview injection", () => {
   const e = evidence();
+  assert.equal(
+    hash(read(`${root}/evidence.json`)),
+    "dd435c675be40135047e3ce9a35cdefa37ffe61bbcb900977bddc87851b9295f",
+  );
   assert.equal(e.kind, "P47-C-INTEGRATION-r1");
   assert.equal(e.productionUntransformed, true);
   assert.equal(e.processesClosed, true);
@@ -142,12 +179,28 @@ test("P47 C actual browser pack binds current raw runtime and all20 images witho
     e.runs.reduce((n, run) => n + run.checks.length, 0),
     430,
   );
-  assert.equal(Object.keys(e.sourceHashes).length, 170);
+  assert.equal(Object.keys(e.sourceHashes).length, 174);
+  for (const dependency of [
+    "scripts/lib/ui-imported-style-sources.mjs",
+    "apps/web/src/design/provider-registry-tokens.css",
+    "apps/web/src/design/platform-overlay-tokens.css",
+  ])
+    assert.equal(e.sourceHashes[dependency], hash(read(dependency)));
+  assert.equal(
+    e.sourceHashes["apps/web/src/design/provider-adapter-tokens.css"],
+    hash(
+      p47HistoricalSource(
+        "apps/web/src/design/provider-adapter-tokens.css",
+        read("apps/web/src/design/provider-adapter-tokens.css"),
+        "pre-refresh",
+      ),
+    ),
+  );
   assert.equal(e.e2eResult.exitCode, 0);
   assert.match(e.e2eResult.output, /16 passed/);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
-  assert.equal(e.sourceHashes[file], hash(source));
+    assert.equal(hash(p47HistoricalSource(file, read(file), "pre-refresh")), expected, file);
+  assert.equal(e.sourceHashes[file], hash(capturedSource));
   assert.equal(e.screenshots.length, 20);
   assert.deepEqual(
     readdirSync(root).sort(),

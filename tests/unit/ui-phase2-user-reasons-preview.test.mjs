@@ -1,14 +1,12 @@
-import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
-import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
+import { userSecurityReviewHistoricalCapture } from "../../scripts/lib/ui-phase2-user-security-review-historical-capture.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { userReasonCases } from "../../scripts/lib/ui-phase2-user-reason-cases.mjs";
 import { userPasswordPreview } from "../../scripts/lib/ui-phase2-user-password-preview.mjs";
 import { userPagePreview } from "../../scripts/lib/ui-phase2-user-page-preview.mjs";
-const read = (f) =>
-  historicalAdminResultsSource(f, readFileSync(f, "utf8").replaceAll("\r\n", "\n"));
+const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const folder = "output/playwright/p43-reasons-vue-preview";
 const evidence = () => JSON.parse(read(folder + "/evidence.json"));
@@ -34,6 +32,7 @@ test("P43 ten non-password reason variants have exact original semantic titles",
   assert.deepEqual(evidence().cases, userReasonCases);
 });
 test("P43 reason evidence binds captured sources, shared transformations and280 exact PNGs", () => {
+  const capture = userSecurityReviewHistoricalCapture("reasons");
   const e = evidence();
   assert.equal(e.kind, "P43-REASONS-VUE-r1");
   assert.equal(e.approval, "pending-user-review");
@@ -42,17 +41,14 @@ test("P43 reason evidence binds captured sources, shared transformations and280 
   assert.equal(e.screenshots.length, 280);
   assert.equal(Object.keys(e.sourceHashes).length, 42);
   for (const [f, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(historicalUserCreationSource(f, read(f))), sha, f);
+    assert.equal(hash(capture.source(f)), sha, f);
   for (const [file, surface] of [
     ["apps/web/src/components/PlatformAccountCenter.vue", "parent"],
     ["apps/web/src/components/PlatformUserDetailDialog.vue", "detail"],
   ])
-    assert.equal(
-      e.transformedHashes[file],
-      hash(userPagePreview(historicalUserCreationSource(file, read(file)), surface)),
-    );
+    assert.equal(e.transformedHashes[file], hash(userPagePreview(capture.source(file), surface)));
   const child = "apps/web/src/components/PlatformAccountDialogs.vue";
-  assert.equal(e.transformedHashes[child], hash(userPasswordPreview(read(child))));
+  assert.equal(e.transformedHashes[child], hash(userPasswordPreview(capture.source(child))));
   assert.deepEqual(
     readdirSync(folder).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),

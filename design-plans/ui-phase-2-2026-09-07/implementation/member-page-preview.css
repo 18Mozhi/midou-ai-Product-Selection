@@ -1,0 +1,208 @@
+/* P30 isolated review skin; production organization administration remains unchanged. */
+html body.p30-review {
+  background: #f3f6fb !important;
+}
+.p30-review * {
+  box-sizing: border-box;
+}
+.p30-review :is(button, input, select, textarea):focus-visible {
+  outline: 3px solid #2465d7 !important;
+  outline-offset: 3px;
+}
+.p30-review .role-shell {
+  --so-bg: #f3f6fb;
+  --so-panel: #fff;
+  --so-panel-soft: #edf4ff;
+  --so-text: #182d4a;
+  --so-text-muted: #52647b;
+  --so-border: #dce4ee;
+  --so-primary: #1748a0;
+  background: #f3f6fb !important;
+}
+.p30-review :is(.role-topbar, .role-sidebar, .role-mobile-nav) {
+  background: #fff !important;
+  border-color: #dce4ee !important;
+}
+.p30-review .role-content {
+  max-width: none;
+  padding: 24px clamp(20px, 3vw, 42px) 52px;
+}
+.p30-review :is(.role-page-breadcrumb, .role-page-title, .role-context-rail, .role-context-drawer) {
+  display: none !important;
+}
+.p30-review .org-admin-center {
+  max-width: 1160px;
+  margin: auto;
+  color: #182d4a;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+.p30-review .org-admin-hero {
+  padding: 31px 36px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+}
+.p30-review .org-admin-hero :is(p, h2, span) {
+  color: #fff !important;
+}
+.p30-review .org-admin-hero h2 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+}
+.p30-review .org-admin-center button {
+  min-height: 44px;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+  color: #fff !important;
+  font: inherit;
+  font-weight: 800;
+}
+.p30-review .org-admin-center button.org-admin-secondary,
+.p30-review .org-admin-center .org-admin-secondary {
+  background: #fff !important;
+  color: #1748a0 !important;
+}
+.p30-review .org-admin-metrics {
+  grid-template-columns: repeat(6, 1fr) !important;
+  gap: 0 !important;
+  border: 1px solid #dce4ee !important;
+}
+.p30-review .org-admin-metrics article {
+  border: 0 !important;
+  border-right: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p30-review .org-admin-metrics article:last-child {
+  border-right: 0 !important;
+}
+.p30-review .org-admin-metrics b {
+  color: #1748a0 !important;
+}
+.p30-review .org-admin-grid {
+  grid-template-columns: minmax(310px, 0.8fr) minmax(520px, 1.45fr) !important;
+  gap: 16px !important;
+}
+.p30-review .org-admin-card {
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p30-review .org-admin-invite-form {
+  border-top: 5px solid #1748a0 !important;
+}
+.p30-review .org-admin-card :is(input, select, textarea) {
+  min-height: 44px;
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #182d4a !important;
+}
+.p30-review .org-admin-card textarea {
+  min-height: 104px;
+}
+.p30-review .org-admin-section-header {
+  border-bottom: 1px solid #dce4ee !important;
+}
+.p30-review .org-admin-section-header nav button {
+  min-height: 36px;
+  padding: 5px 10px;
+  border-color: #dce4ee !important;
+  background: #fff !important;
+  color: #1748a0 !important;
+}
+.p30-review .org-admin-section-header nav button[aria-pressed="true"] {
+  border-color: #1748a0 !important;
+  background: #edf4ff !important;
+}
+.p30-review .org-admin-line {
+  gap: 16px !important;
+  padding: 17px 0 !important;
+  border-color: #dce4ee !important;
+}
+.p30-review .org-admin-line > div:first-child > b {
+  color: #182d4a !important;
+}
+.p30-review .org-admin-line small {
+  color: #52647b !important;
+}
+.p30-review .org-admin-actions {
+  align-items: center;
+}
+.p30-review .org-admin-actions i {
+  border-radius: 99px !important;
+  background: #edf4ff !important;
+  color: #1748a0 !important;
+}
+.p30-review .org-admin-filters {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) auto !important;
+  gap: 12px !important;
+  padding: 15px !important;
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f7faff !important;
+}
+.p30-review .org-admin-filters label {
+  color: #52647b !important;
+  font-weight: 700;
+}
+.p30-review .org-admin-invite-results {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none;
+}
+.p30-review .org-admin-invite-results li {
+  display: grid;
+  gap: 2px;
+  padding: 11px 12px;
+  border-left: 4px solid #1748a0;
+  background: #edf4ff;
+}
+@media (max-width: 760px) {
+  .p30-review .role-mobile-nav {
+    display: none !important;
+  }
+  .p30-review .role-shell {
+    display: block;
+    padding-top: 58px;
+  }
+  .p30-review .role-topbar {
+    position: fixed;
+    inset: 0 0 auto;
+    height: 58px;
+    z-index: 30;
+  }
+  .p30-review .role-content {
+    padding: 0 0 24px;
+  }
+  .p30-review .role-sidebar {
+    top: 58px;
+  }
+  .p30-review .org-admin-hero {
+    padding: 25px 19px !important;
+  }
+  .p30-review .org-admin-metrics {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .p30-review .org-admin-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .p30-review .org-admin-card {
+    padding: 18px !important;
+  }
+  .p30-review .org-admin-filters {
+    grid-template-columns: 1fr !important;
+  }
+  .p30-review .org-admin-line,
+  .p30-review .org-admin-actions {
+    align-items: stretch !important;
+  }
+  .p30-review .org-admin-line {
+    grid-template-columns: 1fr !important;
+  }
+}

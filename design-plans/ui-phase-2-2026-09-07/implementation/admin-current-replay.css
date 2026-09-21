@@ -1,0 +1,24 @@
+/* Current review hosts only: reconcile approved mobile insets with the older zero-padding composition. */
+@media (max-width: 760px) {
+  html[data-design="signal-ledger"]
+    body.p44-role-review
+    #app
+    .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"])
+    .role-comparison {
+    > header,
+    .role-comparison__selectors,
+    .role-comparison__filters,
+    .role-comparison__summaries,
+    .role-comparison__result,
+    .role-comparison__matrix {
+      margin: 0;
+    }
+    .role-comparison__selectors,
+    .role-comparison__summaries {
+      padding: 20px 16px;
+    }
+    .role-comparison__filters {
+      padding: 0 16px 20px;
+    }
+  }
+}

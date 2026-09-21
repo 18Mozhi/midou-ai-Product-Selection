@@ -1,0 +1,86 @@
+@import "./commercial-create-write-preview.css";
+
+body.p58-draft-review .p58-draft-result {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  margin: 20px 0;
+  border: 1px solid #ced9e8;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  color: #17253c;
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+}
+body.p58-draft-review .p58-draft-result :is(.p58-draft-written, .p58-draft-reread) {
+  min-width: 0;
+  padding: 24px;
+}
+body.p58-draft-review .p58-draft-result .p58-draft-written {
+  background: #102a63;
+  color: #fff;
+}
+body.p58-draft-review .p58-draft-result :is(h3, p) {
+  margin: 0 0 12px;
+  color: inherit;
+  font-family: inherit;
+  overflow-wrap: anywhere;
+}
+body.p58-draft-review .p58-draft-result h3 {
+  font-size: 22px;
+  line-height: 1.4;
+}
+body.p58-draft-review .p58-draft-result .p58-draft-result-eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+body.p58-draft-review .p58-draft-result .technical-details {
+  color: inherit;
+  font-size: 13px;
+}
+body.p58-draft-review .p58-draft-result summary {
+  display: list-item;
+  min-height: 44px;
+  padding: 10px 0;
+}
+body.p58-draft-review .p58-draft-result button {
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid #bccce2;
+  border-radius: 4px;
+  background: #fff;
+  color: #1748b5;
+  font-size: 16px;
+}
+body.p58-draft-review .p58-draft-result .p58-draft-reread-button {
+  margin-top: 16px;
+  border-color: #1748b5;
+  background: #1748b5;
+  color: #fff;
+}
+body.p58-draft-review .p58-draft-result button:disabled {
+  border-color: #ced9e8;
+  background: #e8edf4;
+  color: #68778d;
+  opacity: 1;
+  cursor: not-allowed;
+}
+body.p58-draft-review .p58-draft-result :is(button, summary, h3):focus-visible {
+  outline: 2px solid #1748b5;
+  outline-offset: 3px;
+}
+body.p58-draft-review .p58-draft-result .p58-draft-written :is(button, summary):focus-visible {
+  outline-color: #fff;
+}
+@media (max-width: 760px) {
+  body.p58-draft-review .p58-draft-result {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body.p58-draft-review .p58-draft-result :is(.p58-draft-written, .p58-draft-reread) {
+    padding: 20px;
+  }
+  body.p58-draft-review .p58-draft-result .p58-draft-reread-button {
+    width: 100%;
+  }
+}

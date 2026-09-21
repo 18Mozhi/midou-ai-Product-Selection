@@ -168,6 +168,25 @@ test("M03-06.A07/A08/A15 evidence quality dashboard is responsive and visual", a
     "批次可以下钻异常字段、样本和解析版本",
     "批次视图不与质量处置表单混排",
   ]);
+  const navigationButton = page.locator(".quality-task-nav button").first();
+  expect(
+    await navigationButton.evaluate((element) =>
+      getComputedStyle(element)
+        .transitionDuration.split(",")
+        .some((value) => parseFloat(value) > 0.001),
+    ),
+  ).toBe(true);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect
+    .poll(() =>
+      navigationButton.evaluate((element) =>
+        getComputedStyle(element)
+          .transitionDuration.split(",")
+          .every((value) => parseFloat(value) <= 0.00001),
+      ),
+    )
+    .toBe(true);
+  await expect(navigationButton).toHaveCSS("scroll-behavior", "auto");
 });
 test("data quality run drills into affected fields, samples and parser version", async ({
   page,
@@ -288,6 +307,19 @@ test("M03-06.A08/A09/A15 evidence lineage and confirmed issue resolution preserv
     "完整溯源保留请求和追踪标识",
     "关闭后键盘焦点返回触发入口",
   ]);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const lineageClose = page.getByRole("button", { name: "关闭证据详情" });
+  await expect
+    .poll(() =>
+      lineageClose.evaluate((element) =>
+        getComputedStyle(element)
+          .transitionDuration.split(",")
+          .every((value) => parseFloat(value) <= 0.00001),
+      ),
+    )
+    .toBe(true);
+  await expect(lineageClose).toHaveCSS("scroll-behavior", "auto");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.getByRole("button", { name: "关闭证据详情" }).click();
   await page.getByRole("button", { name: "质量问题" }).click();
   if ((page.viewportSize()?.width ?? 1000) <= 760) {

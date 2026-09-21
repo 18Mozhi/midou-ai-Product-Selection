@@ -1,0 +1,239 @@
+{
+  "schemaVersion": 1,
+  "kind": "P47-empty-mobile-current-replay",
+  "productionUntransformed": true,
+  "processesClosed": true,
+  "runs": 12,
+  "currentOnly": true,
+  "currentSha": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
+  "outcomes": [
+    {
+      "mode": "current",
+      "width": 390,
+      "scene": "catalog",
+      "checks": 16,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 390,
+      "scene": "search",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 390,
+      "scene": "combined",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 760,
+      "scene": "catalog",
+      "checks": 16,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 760,
+      "scene": "search",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 760,
+      "scene": "combined",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 761,
+      "scene": "catalog",
+      "checks": 16,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 761,
+      "scene": "search",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 761,
+      "scene": "combined",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 1440,
+      "scene": "catalog",
+      "checks": 16,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/providers",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 1440,
+      "scene": "search",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 1440,
+      "scene": "combined",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    }
+  ],
+  "checks": 216,
+  "screenshots": 0,
+  "sources": 182,
+  "ports": [
+    56695
+  ],
+  "driverHashes": {
+    "scripts/verify-provider-adapter-empty-mobile.mjs": "7dce540367c137797d69305c5587c26f909683e34799ae2cf15cbb4037c0a07b",
+    "scripts/verify-ui-phase2-provider-adapter-empty.mjs": "db56f1e99c7d4e49e9eb8fb1bc7e8ee5120d898da36946bd3c48e90dc0e8d353",
+    "scripts/verify-provider-adapter-empty-mobile-current.mjs": "59cdf869acb22c8a1fb1a9e9024157361c15576769984523e256f8e44511583e",
+    "scripts/lib/ui-adapter-empty-mobile-current-runner.mjs": "42f2b49741b430fef28c07fcef2c52e0bf2100f57ee03f775e4143d5e032bf48",
+    "scripts/lib/ui-phase2-adapter-pagination-focus-baseline.mjs": "6021cce9bb8be7b7990ab908d4ab0d6b8d1b36fc77c9cfe81e18b8834d6ac347"
+  },
+  "sourceCountOnly": true,
+  "relatedTests": {
+    "tests": 47,
+    "pass": 47,
+    "fail": 0
+  },
+  "boundary": "Raw current App only at four widths and three original fixture scenes. No screenshots or historical overwrite. The 182 loaded-source count is not a complete emitted source-hash manifest. Original 96-image mobile and20-image C captures remain historical and separately pinned; no approval expansion, real API/write/permission or production deployment."
+}

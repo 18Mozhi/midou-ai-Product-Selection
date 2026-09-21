@@ -761,23 +761,25 @@ onActivated(() => {
 </template>
 
 <style scoped>
+@import "../design/platform-data-tokens.css";
+
 .platform-data {
-  --so-primary: #254a9c;
-  --so-primary-strong: #254a9c;
-  --so-primary-soft: #dfe8f8;
-  --so-on-primary: #ffffff;
-  --so-bg: #edf1f6;
-  --so-bg-elevated: #ffffff;
-  --so-panel: #ffffff;
-  --so-panel-soft: #f4f7fb;
-  --so-text: #202c3d;
-  --so-text-muted: #58677b;
-  --so-border: #cbd5e1;
-  --so-border-strong: #b7c3d4;
-  --so-info-soft: #e7eefb;
-  --so-info-border: #9fb5df;
-  --so-shadow-color: rgb(24 45 84 / 14%);
-  --so-focus: #1f5bd8;
+  --so-primary: var(--so-data-primary);
+  --so-primary-strong: var(--so-data-primary);
+  --so-primary-soft: var(--so-data-primary-soft);
+  --so-on-primary: var(--so-data-surface);
+  --so-bg: var(--so-data-canvas);
+  --so-bg-elevated: var(--so-data-surface);
+  --so-panel: var(--so-data-surface);
+  --so-panel-soft: var(--so-data-surface-soft);
+  --so-text: var(--so-data-text);
+  --so-text-muted: var(--so-data-text-muted);
+  --so-border: var(--so-data-border);
+  --so-border-strong: var(--so-data-field-border);
+  --so-info-soft: var(--so-data-info-soft);
+  --so-info-border: var(--so-data-info-border);
+  --so-shadow-color: var(--so-data-shadow);
+  --so-focus: var(--so-data-focus);
   display: grid;
   gap: 18px;
   min-width: 0;
@@ -834,7 +836,7 @@ onActivated(() => {
   opacity: 0.52;
 }
 .platform-data :is(button, input, select, summary):focus-visible {
-  outline: 3px solid var(--so-focus, #2f6fed);
+  outline: 3px solid var(--so-focus, var(--so-data-focus-fallback));
   outline-offset: 2px;
 }
 .platform-data-hero button[aria-current="page"],
@@ -859,13 +861,13 @@ onActivated(() => {
   min-height: 690px;
   flex-direction: column;
   padding: 26px 22px;
-  color: #fff;
-  background: #254a9c;
+  color: var(--so-data-on-rail);
+  background: var(--so-data-primary);
 }
 .platform-data-rail > p {
   margin: 0 0 14px;
   padding-bottom: 10px;
-  border-bottom: 1px solid rgb(255 255 255 / 38%);
+  border-bottom: 1px solid var(--so-data-rail-divider);
   font-size: 13px;
   font-weight: 700;
 }
@@ -878,20 +880,20 @@ onActivated(() => {
   justify-content: flex-start;
   border-color: transparent;
   background: transparent;
-  color: #fff;
+  color: var(--so-data-on-rail);
   text-align: left;
   font-weight: 700;
 }
 .platform-data-entities button[aria-current="page"] {
-  border-color: #fff;
-  background: #fff;
-  color: #173d88;
+  border-color: var(--so-data-on-rail);
+  background: var(--so-data-on-rail);
+  color: var(--so-data-rail-selected-text);
 }
 .platform-data-rail > span {
   margin-top: auto;
   padding-top: 20px;
-  border-top: 1px solid rgb(255 255 255 / 30%);
-  color: rgb(255 255 255 / 86%);
+  border-top: 1px solid var(--so-data-rail-footer-border);
+  color: var(--so-data-rail-muted);
   font-size: 13px;
   line-height: 1.7;
 }
@@ -989,8 +991,8 @@ onActivated(() => {
   font-size: 22px;
 }
 .platform-data-summary {
-  border: 1px solid #cdd9f1;
-  background: #dfe8f8;
+  border: 1px solid var(--so-data-feedback-border);
+  background: var(--so-data-primary-soft);
 }
 .platform-data-summary > header {
   display: flex;
@@ -998,11 +1000,11 @@ onActivated(() => {
   justify-content: space-between;
   gap: 12px;
   padding: 14px 18px 0;
-  color: #1f3764;
+  color: var(--so-data-feedback-title);
   font-size: 13px;
 }
 .platform-data-summary > header span {
-  color: #52698d;
+  color: var(--so-data-feedback-text);
 }
 .platform-data-summary > div {
   display: grid;
@@ -1020,11 +1022,11 @@ onActivated(() => {
 }
 .platform-data-summary small,
 .platform-data-table td small {
-  color: #52698d;
+  color: var(--so-data-feedback-text);
 }
 .platform-data-summary strong {
   margin-top: 4px;
-  color: #13294f;
+  color: var(--so-data-feedback-strong);
   font-size: 26px;
 }
 .platform-data-table {
@@ -1119,24 +1121,24 @@ onActivated(() => {
   background: var(--so-bg);
 }
 :global([data-theme="deep-ocean"] .platform-data-quality-pane) {
-  --so-panel: #ffffff;
+  --so-panel: var(--so-data-surface);
 }
 :global([data-theme="aurora-purple"] .platform-data-quality-pane) {
-  --so-panel: #f8f6ff;
+  --so-panel: var(--so-data-quality-aurora-panel);
 }
 :global([data-theme="cloud-white"] .platform-data-quality-pane) {
-  --so-panel: #f7fbff;
+  --so-panel: var(--so-data-quality-cloud-panel);
 }
 @media (hover: hover) {
   .platform-data button:not(:disabled):hover {
     border-color: var(--so-primary);
   }
   .platform-data-entities button:not(:disabled):hover {
-    border-color: rgb(255 255 255 / 48%);
-    background: rgb(255 255 255 / 10%);
+    border-color: var(--so-data-rail-hover-border);
+    background: var(--so-data-rail-hover-surface);
   }
   .platform-data-entities button[aria-current="page"]:hover {
-    background: #fff;
+    background: var(--so-data-on-rail);
   }
 }
 @media (max-width: 760px) {

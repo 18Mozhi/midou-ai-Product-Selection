@@ -1,0 +1,49 @@
+/* New whole-App proposal only; no production import. Shared shell + P43/P44 composition. */
+html body.account-pair-review #app .role-content {
+  min-width: 0;
+}
+html body.account-pair-review #app .account-center {
+  min-width: 0;
+  padding: 0;
+}
+html body.account-pair-review #app .p43-workspace {
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 24px;
+}
+html body.account-pair-review #app .p43-directory-heading {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+html body.account-pair-review #app .role-comparison {
+  min-width: 0;
+}
+html body.account-pair-review #app .account-hero {
+  flex-wrap: wrap;
+}
+html body.account-pair-review #app .account-filter {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+}
+html body.account-pair-review #app .p43-filter-actions {
+  padding-top: 0;
+  grid-column: 1 / -1;
+}
+@media (max-width: 1200px) {
+  html body.account-pair-review #app .p43-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  html body.account-pair-review #app .account-filter {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html body.account-pair-review #app .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  html body.account-pair-review #app .hero-actions button {
+    flex: 1 1 auto;
+  }
+}

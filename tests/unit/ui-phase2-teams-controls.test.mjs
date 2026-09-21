@@ -5,6 +5,10 @@ import { createHash } from "node:crypto";
 import vm from "node:vm";
 import { scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";
 import { buildTeamsDesignData } from "../../scripts/lib/ui-phase2-teams-design-data.mjs";
+import {
+  teamsHistoricalCapture,
+  assertTeamsCurrentSources,
+} from "../../scripts/lib/ui-phase2-teams-historical-capture.mjs";
 
 const root = "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c";
 const e = JSON.parse(readFileSync(`${root}/evidence.json`, "utf8"));
@@ -72,8 +76,10 @@ test("P33 absent-member and archived-team states do not invent disabled rules or
   }
 });
 test("P33 evidence rejects drift in source dependencies and all permanent screenshots", () => {
+  const capture = teamsHistoricalCapture("teams-controls-direction-c");
+  assertTeamsCurrentSources("teams-controls-direction-c");
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+    assert.equal(hash(capture.source(file)), sha, file);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${root}/${s.file}`)), s.sha256, s.file);
 });

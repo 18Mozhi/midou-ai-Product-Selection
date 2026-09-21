@@ -1,7 +1,7 @@
+import { accountHistoricalCapture } from "../../scripts/lib/ui-phase2-account-historical-capture.mjs";
 import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
-import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -12,6 +12,7 @@ import { accountFilterPreview } from "../../scripts/lib/ui-phase2-account-filter
 
 const component = "apps/web/src/components/PlatformAccountCenter.vue";
 const output = "output/playwright/p39-filter-preview";
+const capture = accountHistoricalCapture("filter");
 // Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
 const read = (file) =>
   historicalAdminResultsSource(
@@ -69,7 +70,7 @@ test("P39 evidence has captured source revisions, exact images and explicit fixt
   assert.equal(e.templateTransform.originalHash, hash(preview.original));
   assert.equal(e.templateTransform.reviewHash, hash(preview.form));
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(historicalFilterResetSource(file, read(file))), sha, file);
+    assert.equal(hash(capture.source(file)), sha, file);
   assert.equal(e.screenshots.length, 18);
   assert.equal(e.checks.length, 82);
   assert.deepEqual(

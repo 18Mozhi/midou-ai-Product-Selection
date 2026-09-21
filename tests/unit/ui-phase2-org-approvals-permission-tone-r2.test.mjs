@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertP34LegacySourceHash } from "../../scripts/lib/ui-phase2-org-approvals-shared-history.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -11,7 +12,7 @@ test("P34 permission r2 changes only four copy slots and retains both r1 review 
   assert.equal(e.checks.length, 38);
   assert.equal(e.screenshots.length, 12);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+    assertP34LegacySourceHash(file, readFileSync(file, "utf8"), sha);
   for (const [file, sha] of Object.entries(e.retainedImages))
     assert.equal(hash(readFileSync(`${base}/${file}`)), sha, file);
   for (const s of e.screenshots)

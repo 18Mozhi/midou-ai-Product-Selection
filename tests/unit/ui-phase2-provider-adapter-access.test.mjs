@@ -6,16 +6,13 @@ import vm from "node:vm";
 import ts from "typescript";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
-import {
-  previewAdapterAccess,
-  accessCopy,
-  accessHandler,
-} from "../../scripts/lib/ui-phase2-adapter-access-preview.mjs";
+import { accessCopy, accessHandler } from "../../scripts/lib/ui-phase2-adapter-access-preview.mjs";
+import { previewCurrentAdapterAccess as previewAdapterAccess } from "../../scripts/lib/ui-phase2-adapter-current-state-preview.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   component = "apps/web/src/components/ProviderAdapterCenter.vue",
-  root = "output/playwright/p47-access-review";
+  root = "output/playwright/p47-access-current-review";
 
 test("P47 access proposal compiles and changes only local presentation/action plumbing", () => {
   const original = read(component),
@@ -118,8 +115,24 @@ test("P47 access visual rules cannot target other pages or ordinary error state"
 test("P47 access evidence binds current sources, all pictures and unchanged 500 state", () => {
   const e = JSON.parse(read(`${root}/evidence.json`));
   assert.equal(e.reviewOnly, true);
+  assert.equal(e.kind, "P47-ACCESS-CURRENT-REVIEW-r1");
+  assert.equal(e.productionEmptyFocusPreserved, true);
+  assert.equal(e.historicalPackage, "output/playwright/p47-access-review");
   assert.equal(e.processesClosed, true);
   assert.equal(e.runs.length, 30);
+  assert.equal(
+    e.runs.reduce((total, run) => total + run.checks.length, 0),
+    411,
+  );
+  assert.equal(Object.keys(e.sourceHashes).length, 178);
+  for (const dependency of [
+    "scripts/verify-ui-phase2-provider-adapter-current-states.mjs",
+    "scripts/lib/ui-phase2-adapter-current-state-preview.mjs",
+    "scripts/lib/ui-phase2-adapter-empty-focus-baseline.mjs",
+    "scripts/lib/ui-imported-style-sources.mjs",
+    "apps/web/src/design/provider-adapter-tokens.css",
+  ])
+    assert.equal(e.sourceHashes[dependency], hash(read(dependency)), dependency);
   assert.equal(e.screenshots.length, 60);
   assert.equal(e.comparisons.length, 6);
   for (const comparison of e.comparisons) {

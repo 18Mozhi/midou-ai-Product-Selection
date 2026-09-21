@@ -1,0 +1,195 @@
+body.p58-draft-review dialog.p58-draft-c {
+  --p58-ink: #17253c;
+  --p58-muted: #52637c;
+  --p58-navy: #102a63;
+  --p58-action: #1748b5;
+  --p58-line: #d3ddea;
+  --p58-paper: #ffffff;
+  --p58-soft: #f3f6fa;
+  box-sizing: border-box;
+  width: min(920px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--p58-line);
+  border-radius: 8px;
+  background: var(--p58-paper);
+  color: var(--p58-ink);
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+body.p58-draft-review .p58-draft-c .commercial-dialog-form {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 0;
+  padding: 0;
+}
+body.p58-draft-review .p58-draft-c header {
+  grid-column: 1 / -1;
+  padding: 24px 28px;
+  background: var(--p58-navy);
+  color: var(--p58-paper);
+}
+body.p58-draft-review .p58-draft-c header p {
+  margin: 0 0 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: inherit;
+}
+body.p58-draft-review .p58-draft-c h3 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.4;
+  color: var(--p58-paper);
+  font-family: inherit;
+}
+body.p58-draft-review .p58-draft-c header .p58-intro {
+  margin: 12px 0 0;
+  font-size: 16px;
+}
+body.p58-draft-review .p58-draft-c .p58-draft-guide {
+  grid-column: 1;
+  grid-row: 2 / 6;
+  padding: 28px 22px;
+  background: var(--p58-soft);
+  color: var(--p58-ink);
+  border-right: 1px solid var(--p58-line);
+  font-size: 16px;
+  line-height: 1.7;
+}
+body.p58-draft-review .p58-draft-c .p58-draft-guide ol {
+  margin: 20px 0;
+  padding-left: 24px;
+}
+body.p58-draft-review .p58-draft-c .p58-draft-guide li {
+  padding: 8px 0;
+}
+body.p58-draft-review .p58-draft-c .p58-draft-guide p {
+  font-size: 13px;
+  color: var(--p58-muted);
+}
+body.p58-draft-review .p58-draft-c :is(.p58-draft-identity, .p58-draft-reason, fieldset) {
+  grid-column: 2;
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 24px 28px;
+  border: 0;
+  border-bottom: 1px solid var(--p58-line);
+  border-radius: 0;
+  min-width: 0;
+  background: var(--p58-paper);
+  color: var(--p58-ink);
+}
+body.p58-draft-review .p58-draft-c h4 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--p58-ink);
+}
+body.p58-draft-review .p58-draft-c header button {
+  min-width: 56px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+body.p58-draft-review .p58-draft-c .p58-draft-guide :is(strong, li, ol) {
+  color: var(--p58-ink);
+}
+body.p58-draft-review .p58-draft-c fieldset {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding-top: 14px;
+}
+body.p58-draft-review .p58-draft-c legend {
+  padding: 18px 0 0;
+  font-size: 18px;
+  color: var(--p58-ink);
+}
+body.p58-draft-review .p58-draft-c label {
+  color: var(--p58-ink);
+  font-size: 16px;
+  gap: 8px;
+}
+body.p58-draft-review .p58-draft-c small {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--p58-muted);
+}
+body.p58-draft-review .p58-draft-c :is(input, textarea, button) {
+  box-sizing: border-box;
+  min-height: 44px;
+  min-width: 0;
+  border: 1px solid var(--p58-line);
+  border-radius: 5px;
+  padding: 10px 12px;
+  background: var(--p58-paper);
+  color: var(--p58-ink);
+  font: inherit;
+  font-size: 16px;
+}
+body.p58-draft-review .p58-draft-c textarea {
+  min-height: 96px;
+}
+body.p58-draft-review .p58-draft-c :is(input, textarea) {
+  width: 100%;
+}
+body.p58-draft-review .p58-draft-c button.primary {
+  background: var(--p58-action);
+  color: var(--p58-paper);
+  border-color: var(--p58-action);
+}
+body.p58-draft-review .p58-draft-c :is(input, textarea, button):focus-visible {
+  outline: 3px solid var(--p58-action);
+  outline-offset: 2px;
+}
+body.p58-draft-review .p58-draft-c header button:focus-visible {
+  outline-color: var(--p58-paper);
+}
+body.p58-draft-review .p58-draft-c footer {
+  grid-column: 2;
+  margin: 0;
+  padding: 18px 28px;
+  background: var(--p58-paper);
+}
+@media (max-width: 760px) {
+  body.p58-draft-review dialog.p58-draft-c {
+    width: calc(100% - 16px);
+    max-height: calc(100dvh - 16px);
+  }
+  body.p58-draft-review .p58-draft-c .commercial-dialog-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body.p58-draft-review .p58-draft-c header {
+    padding: 20px 18px;
+  }
+  body.p58-draft-review .p58-draft-c h3 {
+    font-size: 22px;
+  }
+  body.p58-draft-review .p58-draft-c .p58-draft-guide {
+    grid-column: 1;
+    grid-row: auto;
+    padding: 16px 18px;
+    border-right: 0;
+    border-bottom: 1px solid var(--p58-line);
+  }
+  body.p58-draft-review .p58-draft-c .p58-draft-guide ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin: 8px 0;
+    padding-left: 20px;
+    font-size: 13px;
+  }
+  body.p58-draft-review .p58-draft-c .p58-draft-guide li {
+    padding: 0;
+  }
+  body.p58-draft-review .p58-draft-c .p58-draft-guide p {
+    margin: 8px 0 0;
+  }
+  body.p58-draft-review .p58-draft-c :is(.p58-draft-identity, .p58-draft-reason, fieldset, footer) {
+    grid-column: 1;
+    padding: 20px 18px;
+  }
+  body.p58-draft-review .p58-draft-c fieldset {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body.p58-draft-review .p58-draft-c footer button {
+    flex: 1;
+  }
+}

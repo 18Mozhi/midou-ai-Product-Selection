@@ -19,6 +19,8 @@ import {
   buildOrgApprovalsReview,
   validateOrgApprovalsBindings,
   readOrgApprovalsReviewInputs,
+  proposalSourceCommit,
+  currentRouteEvidence,
 } from "../../scripts/build-ui-phase2-org-approvals-review.mjs";
 
 const { sources, packages } = readOrgApprovalsReviewInputs();
@@ -157,10 +159,15 @@ test("P34 implementation evidence and narrow approval records resolve without pr
   for (const ref of r.implementationEvidence) {
     assert.ok(existsSync(`${base}/${ref.review}`));
     const e = JSON.parse(readFileSync(ref.evidence, "utf8"));
-    if (ref.asOfCommit) {
-      assert.equal(ref.evidence, "output/playwright/p34-first-failure-vue/evidence.json");
-      assert.equal(ref.asOfCommit, "d2d566c2fceeef6ab1754f409475e2cf7582b8ef");
-    }
+    const legacy = {
+      "output/playwright/p34-first-failure-vue/evidence.json":
+        "d2d566c2fceeef6ab1754f409475e2cf7582b8ef",
+      "output/playwright/p34-mobile-template-filters/evidence.json": proposalSourceCommit,
+      "output/playwright/p34-rate-limit-vue/evidence.json": proposalSourceCommit,
+      "output/playwright/p34-parent-read-states/evidence.json": proposalSourceCommit,
+    };
+    assert.equal(ref.asOfCommit, legacy[ref.evidence]);
+    if (!ref.asOfCommit) assert.equal(ref.evidence, currentRouteEvidence);
     for (const [f, h] of Object.entries(e.sourceHashes)) {
       const source = ref.asOfCommit
         ? execFileSync("git", ["show", `${ref.asOfCommit}:${f}`], { encoding: "utf8" })
@@ -172,4 +179,29 @@ test("P34 implementation evidence and narrow approval records resolve without pr
   assert.equal(packages.get(packageNames[3]).approval, "pending-concrete-parent-section-review");
   assert.ok(r.proposalOnlyControls.some((c) => c.id === "template-clear-empty"));
   assert.deepEqual(r.implementedBindings[0].widths, [390]);
+});
+
+test("P34 maps current bindings separately from immutable proposal snapshots", () => {
+  const r = build();
+  assert.equal(r.propBindings[0].props["owner-path"], "props.routePath");
+  assert.ok(
+    r.implementationEvidence.some(
+      (ref) => ref.evidence === currentRouteEvidence && !ref.asOfCommit,
+    ),
+  );
+  assert.ok(r.approvalRecords.includes("P34-PERMISSION-VUE-C-APPROVAL.md"));
+  assert.ok(r.limits.some((text) => text.includes(proposalSourceCommit)));
+  assert.equal(r.approval, "pending-user-review");
+  for (const file of dependencies)
+    assert.throws(
+      () =>
+        buildOrgApprovalsReview(
+          { ...sources, [file]: sources[file] + "\n<!-- changed -->" },
+          packages,
+        ),
+      /stale current P34 evidence/,
+    );
+  const changed = new Map([...packages].map(([key, value]) => [key, copy(value)]));
+  changed.get(packageNames[0]).sourceHashes[childFile] = r.sourceHashes[childFile];
+  assert.throws(() => buildOrgApprovalsReview(sources, changed), /stale historical P34 proposal/);
 });

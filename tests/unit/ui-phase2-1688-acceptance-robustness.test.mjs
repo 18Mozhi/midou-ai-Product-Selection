@@ -1,4 +1,5 @@
 import test from "node:test";
+import { acceptanceHistoricalCapture } from "../../scripts/lib/ui-phase2-acceptance-historical-capture.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
@@ -66,8 +67,10 @@ test("P49 robustness CSS is token-based, isolated, responsive, and focus-safe", 
   assert.equal(text.includes("outline: none"), false);
 });
 
-test("P49 robustness evidence binds every matrix run, token, and image", () => {
-  const evidence = JSON.parse(read(`${root}/evidence.json`));
+test("P49 historical robustness evidence binds every matrix run, token, and image", () => {
+  const historical = acceptanceHistoricalCapture("robustness");
+  assert.equal(read(`${root}/evidence.json`), historical.manifest);
+  const evidence = JSON.parse(historical.manifest);
   assert.equal(evidence.kind, "P49-ACCEPTANCE-ROBUSTNESS-REVIEW-r1");
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.productionChanged, false);
@@ -85,7 +88,7 @@ test("P49 robustness evidence binds every matrix run, token, and image", () => {
   assert.equal(new Set(Object.values(evidence.themeColors).map((value) => value.panel)).size, 3);
   assert.ok(Object.keys(evidence.sourceHashes).length >= 45);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assert.equal(hash(historical.source(file)), expected, file);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

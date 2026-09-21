@@ -4,6 +4,10 @@
 
 ## 当前状态
 
+第二阶段全新C方向UI仍在实施与逐区审核；最新为[P69 文件存储实际 Vue 页面组合（批66）](design-plans/ui-phase-2-2026-09-07/P69-PAGE-COMPOSITION-BATCH66.md)。该批仅在隔离预览中将现有只读事实重排为 C 方向，待默认页审核后再逐项审看失败、权限、焦点与追踪状态。本地验证与图稿不代表该重设计已部署或全站通过。
+
+[P66保活读取诊断（批60）](design-plans/ui-phase-2-2026-09-07/P66-READ-LIFECYCLE-BATCH60.md)已确认离页继续读取、返页复用缓存；是否改为离页停止等待和返页重新核验仍待选择，未更改现有策略。
+
 这是面向选品团队的完整业务系统，覆盖账号与组织权限、来源采集、趋势机会、竞品、供应链与利润、任务审批、通知报表以及平台运维。项目已按“单一宝塔后端、真实业务首页、稳定启动、P00–P08 全功能”标准完成软件验收；容量、磁盘、PVE、多节点和其他服务器设备不属于软件完成条件。
 
 ## 已锁定运行基线
@@ -29,6 +33,8 @@ npm run test:e2e
 ```
 
 `npm run format:write` 格式化全部生产源码及当前改动的脚本和测试，`npm run verify:code-style` 同时检查全量生产源码 Prettier、空 `catch`、`prompt` 与 `@ts-nocheck`，并对本次新增行执行 640 字符上限，用于阻断压缩式单行处理器而不强拆 SQL 字符串。`npm run verify:static-analysis` 检查无名称按钮以及会产生未观测 Promise 的异步回调。CI 或发布任务应先设置 `$env:CODE_STYLE_BASE_REF = "origin/main"`，让门禁覆盖该基线以来的全部代码改动；不设置时，本地有改动就检查工作树，工作树干净则复核最近提交。
+
+格式工具按保守的 24,000 UTF-16 命令长度估算分批执行，避免 Windows 大工作区出现 `ENAMETOOLONG`。文件清单、顺序和规则不变，所有批次都检查；任何批次失败仍阻断，工具启动失败会明确报告。无需新增环境变量或修改日常命令。
 
 生产根目录固定为 `/www/wwwroot/ai选品`：前端、Node 后端、Python 采集器分别部署到 `frontend`、`backend`、`python`，受限配置、运行数据和本机备份分别保存在 `config`、`runtime`、`backups`。Node 启动命令为 `node --env-file=/www/wwwroot/ai选品/config/product_scout.env --env-file=/www/wwwroot/ai选品/config/release.env apps/backend/dist/server.js`；不得创建 `current`、`releases`、独立 API、Worker 或 Canary 常驻项目。完整部署与回滚见 `infra/baota/README.md`。
 

@@ -20,11 +20,41 @@ type RefreshFailure = "rate_limited" | "timeout" | "unavailable";
 const state = ref<ViewState>("loading");
 const data = ref<any>(null),
   requestId = ref(""),
+  readFailureId = ref(""),
   hint = ref(""),
   refreshing = ref(false),
   refreshFailure = ref<RefreshFailure | null>(null);
 let controller: AbortController | null = null;
 let sequence = 0;
+const refreshButton = ref<HTMLButtonElement | null>(null),
+  retryButton = ref<HTMLButtonElement | null>(null),
+  noticeRetryButton = ref<HTMLButtonElement | null>(null);
+function handoffReadFocus() {
+  const from = [retryButton.value, noticeRetryButton.value].find(
+      (button) => button && button.ownerDocument.activeElement === button,
+    ),
+    to = refreshButton.value;
+  if (
+    !from?.isConnected ||
+    !to?.isConnected ||
+    from.closest("[inert]") ||
+    to.closest("[inert]") ||
+    !from.checkVisibility() ||
+    !to.checkVisibility()
+  )
+    return;
+  to.focus({ preventScroll: true });
+  if (to.ownerDocument.activeElement !== to) return;
+  const rect = to.getBoundingClientRect();
+  if (
+    rect.top < 0 ||
+    rect.bottom > window.innerHeight ||
+    !to.contains(
+      to.ownerDocument.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2),
+    )
+  )
+    to.scrollIntoView({ block: "center", inline: "nearest" });
+}
 const refreshNotice = computed(() => {
   if (refreshFailure.value === "timeout")
     return "读取超过 15 秒，已停止本次请求并保留上次成功的备份恢复事实。";
@@ -72,6 +102,7 @@ const assetText = (value: string) =>
     )[value] ?? "恢复条件未满足";
 async function load() {
   if (controller) return;
+  handoffReadFocus();
   const currentSequence = ++sequence;
   const requestController = new AbortController();
   const hasSnapshot = Boolean(data.value);
@@ -79,6 +110,7 @@ async function load() {
   controller = requestController;
   refreshing.value = true;
   refreshFailure.value = null;
+  readFailureId.value = "";
   if (!hasSnapshot) state.value = "loading";
   hint.value = "";
   let timedOut = false;
@@ -103,13 +135,13 @@ async function load() {
     )
       return;
     if (timedOut) {
-      requestId.value = correlationId;
+      readFailureId.value = correlationId;
       if (hasSnapshot) refreshFailure.value = "timeout";
       else state.value = "timeout";
       return;
     }
     const failure = error instanceof ApiClientError ? error : null;
-    requestId.value = failure?.requestId ?? "";
+    readFailureId.value = failure?.requestId ?? "";
     hint.value = failure?.actionHint ?? "";
     const failureState =
       failure?.kind === "expired" ||
@@ -121,6 +153,7 @@ async function load() {
       refreshFailure.value = failureState;
     else {
       data.value = null;
+      requestId.value = "";
       state.value = failureState;
     }
   } finally {
@@ -147,7 +180,14 @@ onBeforeUnmount(() => {
         <h2>备份与恢复控制台</h2>
         <span>惠州当前主机内的加密副本与隔离恢复；不代表整机或异地灾备。</span>
       </div>
-      <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
+      <button
+        ref="refreshButton"
+        class="backup-read-action"
+        type="button"
+        :aria-disabled="refreshing"
+        :aria-busy="refreshing"
+        @click="load"
+      >
         {{ refreshing ? "正在刷新…" : "刷新事实" }}
       </button>
     </header>
@@ -156,27 +196,50 @@ onBeforeUnmount(() => {
       class="refresh-notice"
       :data-kind="refreshFailure"
       aria-live="polite"
+      aria-labelledby="backup-refresh-title"
+      :aria-busy="refreshing"
     >
       <div>
-        <b>{{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}</b>
+        <h3 id="backup-refresh-title">
+          {{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}
+        </h3>
         <span>{{ refreshNotice }}</span>
-        <TechnicalDetails :request-id="requestId" />
+        <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
       </div>
-      <button type="button" :disabled="refreshing" @click="load">重新核验</button>
+      <button ref="noticeRetryButton" type="button" :disabled="refreshing" @click="load">
+        重新核验
+      </button>
     </section>
-    <section v-if="state === 'loading'" class="state-card" data-kind="loading" aria-live="polite">
-      <b>正在读取备份事实</b><span>校验数据库记录、恢复副本和最近演练。</span>
+    <section
+      v-if="state === 'loading'"
+      class="state-card"
+      data-kind="loading"
+      aria-live="polite"
+      aria-labelledby="backup-read-title"
+      :aria-busy="refreshing"
+    >
+      <h3 id="backup-read-title">正在读取备份事实</h3>
+      <span>校验数据库记录、恢复副本和最近演练。</span>
     </section>
     <section
       v-else-if="['forbidden', 'expired', 'rate_limited', 'timeout', 'unavailable'].includes(state)"
       class="state-card"
       :data-kind="state"
       aria-live="polite"
+      aria-labelledby="backup-read-title"
+      :aria-busy="refreshing"
     >
-      <b>{{ failureTitle }}</b>
+      <h3 id="backup-read-title">{{ failureTitle }}</h3>
       <span>{{ hint || "请重新登录、稍后重试或联系平台管理员。" }}</span>
+      <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
       <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink>
-      <button v-else-if="state !== 'forbidden'" type="button" :disabled="refreshing" @click="load">
+      <button
+        v-else-if="state !== 'forbidden'"
+        ref="retryButton"
+        type="button"
+        :disabled="refreshing"
+        @click="load"
+      >
         重新核验
       </button>
     </section>
@@ -402,7 +465,7 @@ onBeforeUnmount(() => {
       </section>
       <footer>
         观测时间 {{ when(data.observed_at) }} · 恢复动作仅由宝塔受控任务执行
-        <TechnicalDetails :request-id="requestId" />
+        <TechnicalDetails :request-id="requestId" summary="快照读取追踪" />
       </footer>
     </template>
   </section>
@@ -461,7 +524,8 @@ button {
   cursor: pointer;
   padding: 10px 16px;
 }
-button:disabled {
+button:disabled,
+.backup-read-action[aria-disabled="true"] {
   cursor: wait;
   opacity: 0.7;
 }
@@ -530,6 +594,11 @@ button:disabled {
   background: linear-gradient(160deg, var(--so-panel-soft), var(--so-panel-soft));
   border: 1px solid var(--line);
   border-radius: 13px;
+}
+.state-card h3,
+.refresh-notice h3 {
+  margin: 0;
+  font-size: 18px;
 }
 .policy-grid article {
   padding: 17px;

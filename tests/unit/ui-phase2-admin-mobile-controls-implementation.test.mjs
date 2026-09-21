@@ -1,4 +1,4 @@
-import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
+import { adminHistoricalCapture } from "../../scripts/lib/ui-phase2-admin-historical-capture.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -8,18 +8,21 @@ import {
   historicalAdminControlsSource,
 } from "../../scripts/lib/ui-phase2-admin-controls-baseline.mjs";
 
-const read = (file) =>
-  historicalAdminResultsSource(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n"));
+const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const root = "output/playwright/p44-mobile-controls-implementation/";
 const evidence = (mode) => JSON.parse(read(root + mode + "/evidence.json"));
-const before = evidence("baseline"),
-  after = evidence("current");
+const baseline = adminHistoricalCapture("controls-baseline");
+const implemented = adminHistoricalCapture("controls-implemented");
+const before = baseline.evidence,
+  after = implemented.evidence;
 const css = "apps/web/src/components/PlatformAdminComparisonMobile.css";
 
-for (const mode of ["baseline", "current"]) {
-  test(`P44 production controls ${mode}: exact captured sources, images and read-only fixtures`, () => {
-    const e = evidence(mode),
+for (const mode of ["baseline", "historical-implemented", "current"]) {
+  test(`P44 controls ${mode}: exact stage sources, images and read-only fixtures`, () => {
+    const capture =
+      mode === "baseline" ? baseline : mode === "historical-implemented" ? implemented : null;
+    const e = capture ? capture.evidence : evidence(mode),
       folder = root + mode;
     assert.equal(e.kind, "P44-MOBILE-CONTROLS-IMPLEMENTATION");
     assert.equal(e.baseline, mode === "baseline");
@@ -28,9 +31,12 @@ for (const mode of ["baseline", "current"]) {
     assert.match(e.scope, /No full App\/real permissions\/deployment acceptance/);
     assert.equal(e.checks.length, mode === "baseline" ? 92 : 110);
     assert.equal(e.screenshots.length, 16);
-    assert.equal(Object.keys(e.sourceHashes).length, mode === "baseline" ? 35 : 36);
+    assert.equal(
+      Object.keys(e.sourceHashes).length,
+      mode === "baseline" ? 35 : mode === "current" ? 40 : 36,
+    );
     for (const [file, sha] of Object.entries(e.sourceHashes)) {
-      const source = read(file);
+      const source = capture ? capture.source(file) : read(file);
       assert.equal(
         hash(mode === "baseline" ? historicalAdminControlsSource(file, source) : source),
         sha,
@@ -39,11 +45,31 @@ for (const mode of ["baseline", "current"]) {
       assert.ok(!file.includes("-preview.css"), file);
     }
     assert.deepEqual(
-      readdirSync(folder).sort(),
+      (capture ? capture.files() : readdirSync(folder)).sort(),
       ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),
     );
     for (const shot of e.screenshots)
-      assert.equal(hash(readFileSync(folder + "/" + shot.file)), shot.sha256);
+      assert.equal(
+        hash(capture ? capture.image(shot.file) : readFileSync(folder + "/" + shot.file)),
+        shot.sha256,
+      );
+    if (mode === "baseline") assert.equal(read(root + "baseline/evidence.json"), capture.manifest);
+    if (mode === "current") {
+      assert.deepEqual(
+        Object.keys(e.sourceHashes)
+          .filter((file) => !Object.hasOwn(after.sourceHashes, file))
+          .sort(),
+        [
+          "apps/web/src/components/PlatformAdminDirectoryMobile.css",
+          "apps/web/src/design/platform-admin-mobile-tokens.css",
+          "apps/web/src/design/platform-overlay-tokens.css",
+          "scripts/lib/ui-imported-style-sources.mjs",
+        ],
+      );
+      assert.ok(
+        Object.keys(after.sourceHashes).every((file) => Object.hasOwn(e.sourceHashes, file)),
+      );
+    }
     assert.equal(e.observations.length, 8);
     for (const width of [390, 760, 761, 1440])
       for (const routeName of ["admins", "permissions"]) {
@@ -67,7 +93,7 @@ for (const mode of ["baseline", "current"]) {
   });
 }
 
-test("P44 changes only mobile controls; excluded styles, focus geometry and default pixels stay exact", () => {
+test("historical P44 controls-only stage: excluded styles, focus geometry and default pixels stay exact", () => {
   for (const current of after.observations) {
     const old = before.observations.find(
       (o) => o.width === current.width && o.routeName === current.routeName,
@@ -97,15 +123,15 @@ test("P44 changes only mobile controls; excluded styles, focus geometry and defa
   }
 });
 
-test("P44 production parent only appends local stylesheet; script/template and other styles unchanged", () => {
-  const current = read(adminControlsRevision.file);
+test("historical P44 controls-only parent appends stylesheet; script/template and other styles unchanged", () => {
+  const current = implemented.source(adminControlsRevision.file);
   const old = historicalAdminControlsSource(adminControlsRevision.file, current);
   assert.equal(hash(current), adminControlsRevision.after);
   assert.equal(hash(old), adminControlsRevision.before);
   assert.equal(current, old + '<style src="./PlatformAdminComparisonMobile.css"></style>\n');
   assert.equal(before.sourceHashes[css], undefined);
-  assert.equal(after.sourceHashes[css], hash(read(css)));
-  const style = read(css);
+  assert.equal(after.sourceHashes[css], hash(implemented.source(css)));
+  const style = implemented.source(css);
   assert.match(style, /@media \(max-width: 760px\)/);
   assert.match(style, /html\[data-design="signal-ledger"\]/);
   assert.match(

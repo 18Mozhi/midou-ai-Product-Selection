@@ -22,11 +22,41 @@ type RefreshFailure = "rate_limited" | "timeout" | "unavailable";
 const state = ref<ViewState>("loading");
 const data = ref<any>(null),
   requestId = ref(""),
+  readFailureId = ref(""),
   hint = ref(""),
   refreshing = ref(false),
   refreshFailure = ref<RefreshFailure | null>(null);
 let controller: AbortController | null = null;
 let sequence = 0;
+const refreshButton = ref<HTMLButtonElement | null>(null),
+  retryButton = ref<HTMLButtonElement | null>(null),
+  noticeRetryButton = ref<HTMLButtonElement | null>(null);
+function handoffReadFocus() {
+  const from = [retryButton.value, noticeRetryButton.value].find(
+      (button) => button && button.ownerDocument.activeElement === button,
+    ),
+    to = refreshButton.value;
+  if (
+    !from?.isConnected ||
+    !to?.isConnected ||
+    from.closest("[inert]") ||
+    to.closest("[inert]") ||
+    !from.checkVisibility() ||
+    !to.checkVisibility()
+  )
+    return;
+  to.focus({ preventScroll: true });
+  if (to.ownerDocument.activeElement !== to) return;
+  const rect = to.getBoundingClientRect();
+  if (
+    rect.top < 0 ||
+    rect.bottom > window.innerHeight ||
+    !to.contains(
+      to.ownerDocument.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2),
+    )
+  )
+    to.scrollIntoView({ block: "center", inline: "nearest" });
+}
 const refreshNotice = computed(() => {
   if (refreshFailure.value === "timeout")
     return "读取超过 15 秒，已停止本次请求并保留上次成功的发布事实。";
@@ -52,6 +82,8 @@ const duration = (value?: number | null) => {
   const milliseconds = Number(value);
   return milliseconds < 1000 ? `${milliseconds} ms` : `${(milliseconds / 1000).toFixed(1)} 秒`;
 };
+const metric = (value: number | null | undefined, unit: string) =>
+  value == null || !Number.isFinite(value) ? "尚无记录" : `${value}${unit}`;
 const sha = (value?: string) => (value ? value.slice(0, 10) : "—");
 const statusText = (value?: string | null) =>
     (
@@ -76,6 +108,7 @@ const statusText = (value?: string | null) =>
     )[value] ?? "发布条件未满足";
 async function load() {
   if (controller) return;
+  handoffReadFocus();
   const currentSequence = ++sequence;
   const requestController = new AbortController();
   const hasSnapshot = Boolean(data.value);
@@ -83,6 +116,7 @@ async function load() {
   controller = requestController;
   refreshing.value = true;
   refreshFailure.value = null;
+  readFailureId.value = "";
   if (!hasSnapshot) state.value = "loading";
   hint.value = "";
   let timedOut = false;
@@ -107,13 +141,13 @@ async function load() {
     )
       return;
     if (timedOut) {
-      requestId.value = correlationId;
+      readFailureId.value = correlationId;
       if (hasSnapshot) refreshFailure.value = "timeout";
       else state.value = "timeout";
       return;
     }
     const failure = error instanceof ApiClientError ? error : null;
-    requestId.value = failure?.requestId ?? "";
+    readFailureId.value = failure?.requestId ?? "";
     hint.value = failure?.actionHint ?? "";
     const failureState =
       failure?.kind === "expired" ||
@@ -125,6 +159,7 @@ async function load() {
       refreshFailure.value = failureState;
     else {
       data.value = null;
+      requestId.value = "";
       state.value = failureState;
     }
   } finally {
@@ -151,7 +186,14 @@ onBeforeUnmount(() => {
         <h2>发布与回滚控制台</h2>
         <span>只展示宝塔发布任务写入的版本、观察门、自动停止与回滚事实。</span>
       </div>
-      <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
+      <button
+        ref="refreshButton"
+        class="release-read-action"
+        type="button"
+        :aria-disabled="refreshing"
+        :aria-busy="refreshing"
+        @click="load"
+      >
         {{ refreshing ? "正在刷新…" : "刷新发布事实" }}
       </button>
       <RouterLink
@@ -166,26 +208,55 @@ onBeforeUnmount(() => {
       class="refresh-notice"
       :data-kind="refreshFailure"
       aria-live="polite"
+      aria-labelledby="release-refresh-title"
+      :aria-busy="refreshing"
     >
       <div>
-        <b>{{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}</b>
+        <h3 id="release-refresh-title">
+          {{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}
+        </h3>
         <span>{{ refreshNotice }}</span>
-        <TechnicalDetails :request-id="requestId" />
+        <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
       </div>
-      <button type="button" :disabled="refreshing" @click="load">重新核验</button>
+      <button ref="noticeRetryButton" type="button" :disabled="refreshing" @click="load">
+        重新核验
+      </button>
     </section>
-    <section v-if="state === 'loading'" class="state" aria-live="polite">
-      <b>正在核验当前发布</b><span>读取构建身份、迁移、备份前置和 5% / 25% / 100% 观察门。</span>
+    <section
+      v-if="state === 'loading'"
+      class="state"
+      :data-kind="state"
+      aria-live="polite"
+      aria-labelledby="release-read-title"
+      :aria-busy="refreshing"
+    >
+      <h3 id="release-read-title">正在核验当前发布</h3>
+      <span>读取构建身份、迁移、备份前置和 5% / 25% / 100% 观察门。</span>
     </section>
     <section
       v-else-if="['forbidden', 'expired', 'rate_limited', 'timeout', 'unavailable'].includes(state)"
       class="state danger"
+      :data-kind="state"
       aria-live="polite"
+      aria-labelledby="release-read-title"
+      :aria-busy="refreshing"
     >
-      <b>{{ failureTitle }}</b>
-      <span>{{ hint || "请重新登录、稍后重试或联系平台管理员。" }}</span>
+      <h3 id="release-read-title">{{ failureTitle }}</h3>
+      <span>{{
+        hint ||
+        (state === "timeout"
+          ? "读取超过 15 秒，已停止本次等待。请重新核验。"
+          : "请重新登录、稍后重试或联系平台管理员。")
+      }}</span>
+      <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
       <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink>
-      <button v-else-if="state !== 'forbidden'" type="button" :disabled="refreshing" @click="load">
+      <button
+        v-else-if="state !== 'forbidden'"
+        ref="retryButton"
+        type="button"
+        :disabled="refreshing"
+        @click="load"
+      >
         重新核验
       </button>
     </section>
@@ -325,10 +396,10 @@ onBeforeUnmount(() => {
                     :key="gate.id"
                   >
                     <td>{{ gate.traffic_percent }}%</td>
-                    <td>{{ gate.error_rate_percent }}%</td>
-                    <td>{{ gate.read_p95_ms }} ms</td>
-                    <td>{{ gate.write_p95_ms }} ms</td>
-                    <td>{{ gate.async_lag_seconds }} s</td>
+                    <td>{{ metric(gate.error_rate_percent, "%") }}</td>
+                    <td>{{ metric(gate.read_p95_ms, " ms") }}</td>
+                    <td>{{ metric(gate.write_p95_ms, " ms") }}</td>
+                    <td>{{ metric(gate.async_lag_seconds, " s") }}</td>
                     <td>
                       <details>
                         <summary>技术详情</summary>
@@ -356,7 +427,8 @@ onBeforeUnmount(() => {
               ><span class="responsive-record-summary"
                 ><strong>{{ row.traffic_percent }}% · {{ statusText(row.status) }}</strong
                 ><small
-                  >错误 {{ row.error_rate_percent }}% · 读取 {{ row.read_p95_ms }} ms</small
+                  >错误 {{ metric(row.error_rate_percent, "%") }} · 读取
+                  {{ metric(row.read_p95_ms, " ms") }}</small
                 ></span
               ></template
             >
@@ -372,19 +444,19 @@ onBeforeUnmount(() => {
                 </div>
                 <div>
                   <dt>服务错误率</dt>
-                  <dd>{{ row.error_rate_percent }}%</dd>
+                  <dd>{{ metric(row.error_rate_percent, "%") }}</dd>
                 </div>
                 <div>
                   <dt>95% 读取耗时</dt>
-                  <dd>{{ row.read_p95_ms }} ms</dd>
+                  <dd>{{ metric(row.read_p95_ms, " ms") }}</dd>
                 </div>
                 <div>
                   <dt>95% 写入耗时</dt>
-                  <dd>{{ row.write_p95_ms }} ms</dd>
+                  <dd>{{ metric(row.write_p95_ms, " ms") }}</dd>
                 </div>
                 <div>
                   <dt>异步延迟</dt>
-                  <dd>{{ row.async_lag_seconds }} 秒</dd>
+                  <dd>{{ metric(row.async_lag_seconds, " 秒") }}</dd>
                 </div>
               </dl>
               <details>
@@ -445,7 +517,7 @@ onBeforeUnmount(() => {
       </section>
       <footer>
         观测 {{ time(data.observed_at) }} · 发布和回滚只能由宝塔任务执行
-        <TechnicalDetails :request-id="requestId" />
+        <TechnicalDetails :request-id="requestId" summary="快照读取追踪" />
       </footer>
     </template>
   </section>
@@ -503,6 +575,15 @@ button {
 button:disabled {
   cursor: wait;
   opacity: 0.7;
+}
+.release-read-action[aria-disabled="true"] {
+  cursor: wait;
+  opacity: 0.7;
+}
+.state h3,
+.refresh-notice h3 {
+  margin: 0;
+  font-size: 18px;
 }
 .refresh-notice {
   align-items: center;

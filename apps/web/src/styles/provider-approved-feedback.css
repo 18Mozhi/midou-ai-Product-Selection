@@ -1,3 +1,5 @@
+@import "../design/provider-registry-tokens.css";
+
 /* P46: only the two approved mobile feedback regions; no page/editor layout import. */
 @media (max-width: 760px) {
   html[data-design="signal-ledger"]
@@ -8,10 +10,10 @@
     button[data-waiting-previous="true"]:disabled {
     min-height: 44px;
     padding: 10px 14px;
-    border: 1px solid #d8e1ed;
+    border: 1px solid var(--p46-border);
     border-radius: 6px;
-    color: #66748a;
-    background: #e8edf4;
+    color: var(--p46-disabled-ink);
+    background: var(--p46-disabled-panel);
     font-family: "Microsoft YaHei", sans-serif;
     font-size: 14px;
     opacity: 1;
@@ -31,9 +33,9 @@
     + .provider-feedback[data-tone="warning"] {
     display: grid;
     padding: 16px;
-    color: #75461f;
-    background: #fff8ef;
-    border: 1px solid #e5bca4;
+    color: var(--p46-saved-warning-ink);
+    background: var(--p46-saved-warning-panel);
+    border: 1px solid var(--p46-saved-warning-border);
     border-radius: 8px;
     font-family: "Microsoft YaHei", sans-serif;
   }
@@ -47,10 +49,10 @@
     > button {
     min-height: 44px;
     padding: 10px 14px;
-    border: 1px solid #9db1cc;
+    border: 1px solid var(--p46-border-strong);
     border-radius: 6px;
-    background: #fff;
-    color: #294caf;
+    background: var(--p46-panel);
+    color: var(--p46-accent);
     font-size: 14px;
   }
 }

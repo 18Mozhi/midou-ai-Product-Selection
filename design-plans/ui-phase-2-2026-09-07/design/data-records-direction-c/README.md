@@ -2,7 +2,7 @@
 
 状态：C 风格首轮具体稿已进入真实 Vue，双端默认态与导出未知态待审核。**这是 P54 的近期业务记录段，不是 P54 整页完成**；证据/问题/对账/下载/解决/批处理仍是下一交付段，不能用本实现抵扣。当前方向选择不等于本页具体稿批准，尚未部署。
 
-[交互审核稿](index.html) · [验证证据](evidence.json) · [真实 Vue 实现说明](../../P54-RECORDS-INTERACTION-IMPLEMENTATION.md) · [真实 Vue 审核图](vue-implementation/)
+[交互审核稿](index.html) · [验证证据](evidence.json) · [真实 Vue 实现说明](../../P54-RECORDS-INTERACTION-IMPLEMENTATION.md) · [真实 Vue 审核图（桌面默认）](vue-implementation/P54-1440-records-default.png)
 
 ## 布局与事实层级
 
@@ -54,65 +54,67 @@ AST提取UI2-DG54的原始单热点/单供应商夹具，两者无category/marke
 ## 双端图册
 
 <!-- GALLERY:START -->
+
 正式PNG：115张；57场景。
 
-| 场景 | 桌面1440 | 手机390 |
-| --- | --- | --- |
-| 原始热点记录 (default) | [主图](1440-default.png) | [主图](390-default.png) |
-| 原始供应商记录 (original-supplier) | [主图](1440-original-supplier.png) | [主图](390-original-supplier.png) |
-| 补充热点状态 (trends) | [主图](1440-trends.png) | [主图](390-trends.png) |
-| 补充机会状态 (opportunities) | [主图](1440-opportunities.png) | [主图](390-opportunities.png) |
-| 补充竞品状态 (competitors) | [主图](1440-competitors.png) | [主图](390-competitors.png) |
-| 补充供应商状态 (suppliers) | [主图](1440-suppliers.png) | [主图](390-suppliers.png) |
-| 查询无记录 (empty) | [主图](1440-empty.png) | [主图](390-empty.png) |
-| 首次读取中 (loading) | [主图](1440-loading.png) | [主图](390-loading.png) |
-| 登录已过期 (expired) | [主图](1440-expired.png) | [主图](390-expired.png) |
-| 无权限 (forbidden) | [主图](1440-forbidden.png) | [主图](390-forbidden.png) |
-| 依赖受阻 (blocked) | [主图](1440-blocked.png) | [主图](390-blocked.png) |
-| 首次读取失败 (error) | [主图](1440-error.png) | [主图](390-error.png) |
-| 保留快照刷新中 (refreshing) | [主图](1440-refreshing.png) | [主图](390-refreshing.png) |
-| 刷新失败保留范围 (refresh-error) | [主图](1440-refresh-error.png) | [主图](390-refresh-error.png) |
-| 读取超时 (refresh-timeout) | [主图](1440-refresh-timeout.png) | [主图](390-refresh-timeout.png) |
-| 类型切换等待 (scope-pending) | [主图](1440-scope-pending.png) | [主图](390-scope-pending.png) |
-| 类型切换失败 (scope-error) | [主图](1440-scope-error.png) | [主图](390-scope-error.png) |
-| 尚未提交草稿 (query-draft) | [主图](1440-query-draft.png) | [主图](390-query-draft.png) |
-| 120字符查询 (query-max) | [主图](1440-query-max.png) | [主图](390-query-max.png) |
-| 查询成功 (filtered) | [主图](1440-filtered.png) | [主图](390-filtered.png) |
-| 21条第一页 (page-21) | [主图](1440-page-21.png) | [主图](390-page-21.png) |
-| 21条第二页 (page-two) | [主图](1440-page-two.png) | [主图](390-page-two.png) |
-| 最近100条上限 (limit-100) | [主图](1440-limit-100.png) | [主图](390-limit-100.png) |
-| 第二页导出完整筛选范围 (export-page-two) | [主图](1440-export-page-two.png) | [主图](390-export-page-two.png) |
-| 筛选抽屉 (filter) | [主图](1440-filter.png) | [主图](390-filter.png) |
-| 只读记录详情 (detail) | [主图](1440-detail.png) | [主图](390-detail.png) |
-| 长记录详情 (long-detail) | [主图](1440-long-detail.png) | [主图](390-long-detail.png) · [局部1](390-long-detail-part1.png) |
-| 导出原因 (export) | [主图](1440-export.png) | [主图](390-export.png) |
-| 空原因 (export-empty) | [主图](1440-export-empty.png) | [主图](390-export-empty.png) |
-| 原因不足 (export-short) | [主图](1440-export-short.png) | [主图](390-export-short.png) |
-| 300字原因 (export-max) | [主图](1440-export-max.png) | [主图](390-export-max.png) |
-| 超过300字原因 (export-over) | [主图](1440-export-over.png) | [主图](390-export-over.png) |
-| 导出处理中 (export-running) | [主图](1440-export-running.png) | [主图](390-export-running.png) |
-| 导出模拟成功 (export-success) | [主图](1440-export-success.png) | [主图](390-export-success.png) |
-| 导出明确失败 (export-error) | [主图](1440-export-error.png) | [主图](390-export-error.png) |
-| 导出结果未知 (export-unknown) | [主图](1440-export-unknown.png) | [主图](390-export-unknown.png) |
-| 列显隐 (columns) | [主图](1440-columns.png) | [主图](390-columns.png) |
-| 紧凑密度 (compact) | [主图](1440-compact.png) | [主图](390-compact.png) |
-| 请求编号 (technical) | [主图](1440-technical.png) | [主图](390-technical.png) |
-| 模拟复制被拒绝 (copy-failed) | [主图](1440-copy-failed.png) | [主图](390-copy-failed.png) |
-| 证据质量下一段（审核说明） (quality-handoff) | [主图](1440-quality-handoff.png) | [主图](390-quality-handoff.png) |
-| 悬停 (hover) | [主图](1440-hover.png) | [主图](390-hover.png) |
-| 按下 (pressed) | [主图](1440-pressed.png) | [主图](390-pressed.png) |
-| 键盘焦点 (focus) | [主图](1440-focus.png) | [主图](390-focus.png) |
-| 热点 / 展示中 (trends-active) | [主图](1440-trends-active.png) | [主图](390-trends-active.png) |
-| 热点 / 无关 (trends-irrelevant) | [主图](1440-trends-irrelevant.png) | [主图](390-trends-irrelevant.png) |
-| 热点 / 已过期 (trends-stale) | [主图](1440-trends-stale.png) | [主图](390-trends-stale.png) |
-| 热点 / 已归档 (trends-archived) | [主图](1440-trends-archived.png) | [主图](390-trends-archived.png) |
-| 机会 / 待决策 (opportunities-pending) | [主图](1440-opportunities-pending.png) | [主图](390-opportunities-pending.png) |
-| 机会 / 已采纳 (opportunities-adopted) | [主图](1440-opportunities-adopted.png) | [主图](390-opportunities-adopted.png) |
-| 机会 / 观察中 (opportunities-observing) | [主图](1440-opportunities-observing.png) | [主图](390-opportunities-observing.png) |
-| 机会 / 已拒绝 (opportunities-rejected) | [主图](1440-opportunities-rejected.png) | [主图](390-opportunities-rejected.png) |
-| 竞品 / 监控中 (competitors-active) | [主图](1440-competitors-active.png) | [主图](390-competitors-active.png) |
-| 竞品 / 已暂停 (competitors-paused) | [主图](1440-competitors-paused.png) | [主图](390-competitors-paused.png) |
-| 供应商 / 信息不完整 (suppliers-incomplete) | [主图](1440-suppliers-incomplete.png) | [主图](390-suppliers-incomplete.png) |
-| 供应商 / 可评估 (suppliers-ready) | [主图](1440-suppliers-ready.png) | [主图](390-suppliers-ready.png) |
-| 供应商 / 已隔离 (suppliers-quarantined) | [主图](1440-suppliers-quarantined.png) | [主图](390-suppliers-quarantined.png) |
+| 场景                                         | 桌面1440                                 | 手机390                                                          |
+| -------------------------------------------- | ---------------------------------------- | ---------------------------------------------------------------- |
+| 原始热点记录 (default)                       | [主图](1440-default.png)                 | [主图](390-default.png)                                          |
+| 原始供应商记录 (original-supplier)           | [主图](1440-original-supplier.png)       | [主图](390-original-supplier.png)                                |
+| 补充热点状态 (trends)                        | [主图](1440-trends.png)                  | [主图](390-trends.png)                                           |
+| 补充机会状态 (opportunities)                 | [主图](1440-opportunities.png)           | [主图](390-opportunities.png)                                    |
+| 补充竞品状态 (competitors)                   | [主图](1440-competitors.png)             | [主图](390-competitors.png)                                      |
+| 补充供应商状态 (suppliers)                   | [主图](1440-suppliers.png)               | [主图](390-suppliers.png)                                        |
+| 查询无记录 (empty)                           | [主图](1440-empty.png)                   | [主图](390-empty.png)                                            |
+| 首次读取中 (loading)                         | [主图](1440-loading.png)                 | [主图](390-loading.png)                                          |
+| 登录已过期 (expired)                         | [主图](1440-expired.png)                 | [主图](390-expired.png)                                          |
+| 无权限 (forbidden)                           | [主图](1440-forbidden.png)               | [主图](390-forbidden.png)                                        |
+| 依赖受阻 (blocked)                           | [主图](1440-blocked.png)                 | [主图](390-blocked.png)                                          |
+| 首次读取失败 (error)                         | [主图](1440-error.png)                   | [主图](390-error.png)                                            |
+| 保留快照刷新中 (refreshing)                  | [主图](1440-refreshing.png)              | [主图](390-refreshing.png)                                       |
+| 刷新失败保留范围 (refresh-error)             | [主图](1440-refresh-error.png)           | [主图](390-refresh-error.png)                                    |
+| 读取超时 (refresh-timeout)                   | [主图](1440-refresh-timeout.png)         | [主图](390-refresh-timeout.png)                                  |
+| 类型切换等待 (scope-pending)                 | [主图](1440-scope-pending.png)           | [主图](390-scope-pending.png)                                    |
+| 类型切换失败 (scope-error)                   | [主图](1440-scope-error.png)             | [主图](390-scope-error.png)                                      |
+| 尚未提交草稿 (query-draft)                   | [主图](1440-query-draft.png)             | [主图](390-query-draft.png)                                      |
+| 120字符查询 (query-max)                      | [主图](1440-query-max.png)               | [主图](390-query-max.png)                                        |
+| 查询成功 (filtered)                          | [主图](1440-filtered.png)                | [主图](390-filtered.png)                                         |
+| 21条第一页 (page-21)                         | [主图](1440-page-21.png)                 | [主图](390-page-21.png)                                          |
+| 21条第二页 (page-two)                        | [主图](1440-page-two.png)                | [主图](390-page-two.png)                                         |
+| 最近100条上限 (limit-100)                    | [主图](1440-limit-100.png)               | [主图](390-limit-100.png)                                        |
+| 第二页导出完整筛选范围 (export-page-two)     | [主图](1440-export-page-two.png)         | [主图](390-export-page-two.png)                                  |
+| 筛选抽屉 (filter)                            | [主图](1440-filter.png)                  | [主图](390-filter.png)                                           |
+| 只读记录详情 (detail)                        | [主图](1440-detail.png)                  | [主图](390-detail.png)                                           |
+| 长记录详情 (long-detail)                     | [主图](1440-long-detail.png)             | [主图](390-long-detail.png) · [局部1](390-long-detail-part1.png) |
+| 导出原因 (export)                            | [主图](1440-export.png)                  | [主图](390-export.png)                                           |
+| 空原因 (export-empty)                        | [主图](1440-export-empty.png)            | [主图](390-export-empty.png)                                     |
+| 原因不足 (export-short)                      | [主图](1440-export-short.png)            | [主图](390-export-short.png)                                     |
+| 300字原因 (export-max)                       | [主图](1440-export-max.png)              | [主图](390-export-max.png)                                       |
+| 超过300字原因 (export-over)                  | [主图](1440-export-over.png)             | [主图](390-export-over.png)                                      |
+| 导出处理中 (export-running)                  | [主图](1440-export-running.png)          | [主图](390-export-running.png)                                   |
+| 导出模拟成功 (export-success)                | [主图](1440-export-success.png)          | [主图](390-export-success.png)                                   |
+| 导出明确失败 (export-error)                  | [主图](1440-export-error.png)            | [主图](390-export-error.png)                                     |
+| 导出结果未知 (export-unknown)                | [主图](1440-export-unknown.png)          | [主图](390-export-unknown.png)                                   |
+| 列显隐 (columns)                             | [主图](1440-columns.png)                 | [主图](390-columns.png)                                          |
+| 紧凑密度 (compact)                           | [主图](1440-compact.png)                 | [主图](390-compact.png)                                          |
+| 请求编号 (technical)                         | [主图](1440-technical.png)               | [主图](390-technical.png)                                        |
+| 模拟复制被拒绝 (copy-failed)                 | [主图](1440-copy-failed.png)             | [主图](390-copy-failed.png)                                      |
+| 证据质量下一段（审核说明） (quality-handoff) | [主图](1440-quality-handoff.png)         | [主图](390-quality-handoff.png)                                  |
+| 悬停 (hover)                                 | [主图](1440-hover.png)                   | [主图](390-hover.png)                                            |
+| 按下 (pressed)                               | [主图](1440-pressed.png)                 | [主图](390-pressed.png)                                          |
+| 键盘焦点 (focus)                             | [主图](1440-focus.png)                   | [主图](390-focus.png)                                            |
+| 热点 / 展示中 (trends-active)                | [主图](1440-trends-active.png)           | [主图](390-trends-active.png)                                    |
+| 热点 / 无关 (trends-irrelevant)              | [主图](1440-trends-irrelevant.png)       | [主图](390-trends-irrelevant.png)                                |
+| 热点 / 已过期 (trends-stale)                 | [主图](1440-trends-stale.png)            | [主图](390-trends-stale.png)                                     |
+| 热点 / 已归档 (trends-archived)              | [主图](1440-trends-archived.png)         | [主图](390-trends-archived.png)                                  |
+| 机会 / 待决策 (opportunities-pending)        | [主图](1440-opportunities-pending.png)   | [主图](390-opportunities-pending.png)                            |
+| 机会 / 已采纳 (opportunities-adopted)        | [主图](1440-opportunities-adopted.png)   | [主图](390-opportunities-adopted.png)                            |
+| 机会 / 观察中 (opportunities-observing)      | [主图](1440-opportunities-observing.png) | [主图](390-opportunities-observing.png)                          |
+| 机会 / 已拒绝 (opportunities-rejected)       | [主图](1440-opportunities-rejected.png)  | [主图](390-opportunities-rejected.png)                           |
+| 竞品 / 监控中 (competitors-active)           | [主图](1440-competitors-active.png)      | [主图](390-competitors-active.png)                               |
+| 竞品 / 已暂停 (competitors-paused)           | [主图](1440-competitors-paused.png)      | [主图](390-competitors-paused.png)                               |
+| 供应商 / 信息不完整 (suppliers-incomplete)   | [主图](1440-suppliers-incomplete.png)    | [主图](390-suppliers-incomplete.png)                             |
+| 供应商 / 可评估 (suppliers-ready)            | [主图](1440-suppliers-ready.png)         | [主图](390-suppliers-ready.png)                                  |
+| 供应商 / 已隔离 (suppliers-quarantined)      | [主图](1440-suppliers-quarantined.png)   | [主图](390-suppliers-quarantined.png)                            |
+
 <!-- GALLERY:END -->

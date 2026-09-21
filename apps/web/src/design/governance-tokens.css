@@ -1,0 +1,16 @@
+/* Current C palette, scoped to its page and detached overlays. */
+.platform-governance {
+  --so-governance-canvas: #f3f6fb;
+  --so-governance-surface: #ffffff;
+  --so-governance-surface-soft: #edf2f9;
+  --so-governance-text: #17243d;
+  --so-governance-text-muted: #627089;
+  --so-governance-border: #cfd9e8;
+  --so-governance-field-border: #a8b7cd;
+  --so-governance-primary: #2d63cd;
+  --so-governance-primary-strong: #214da8;
+  --so-governance-success: #147a55;
+  --so-governance-warning: #996000;
+  --so-governance-danger: #b53229;
+  --so-governance-rail: #15346d;
+}

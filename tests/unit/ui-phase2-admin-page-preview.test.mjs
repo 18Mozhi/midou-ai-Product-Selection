@@ -1,6 +1,5 @@
-import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
+import { adminReviewHistoricalCapture } from "../../scripts/lib/ui-phase2-admin-review-historical-capture.mjs";
 import test from "node:test";
-import { historicalAdminControlsSource } from "../../scripts/lib/ui-phase2-admin-controls-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -8,8 +7,7 @@ import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import { adminPagePreview } from "../../scripts/lib/ui-phase2-admin-page-preview.mjs";
 
-const read = (file) =>
-  historicalAdminResultsSource(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n"));
+const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const parent = "apps/web/src/components/PlatformAccountCenter.vue";
 const detail = "apps/web/src/components/PlatformUserDetailDialog.vue";
@@ -70,7 +68,8 @@ test("P44 transformation fails closed on mismatched source and unknown surface",
   assert.throws(() => adminPagePreview(read(parent), "unknown"));
 });
 
-test("P44 review pins actual source and exact image inventories", () => {
+test("P44 review pins historical source and exact image inventories", () => {
+  const historical = adminReviewHistoricalCapture("page");
   const folder = "output/playwright/p44-page-vue-preview",
     e = JSON.parse(read(folder + "/evidence.json"));
   assert.equal(e.kind, "P44-PAGE-VUE-PREVIEW-r1");
@@ -80,13 +79,13 @@ test("P44 review pins actual source and exact image inventories", () => {
   assert.equal(e.screenshots.length, 68);
   assert.equal(Object.keys(e.sourceHashes).length, 39);
   for (const [file, value] of Object.entries(e.sourceHashes))
-    assert.equal(hash(historicalAdminControlsSource(file, read(file))), value, file);
+    assert.equal(hash(historical.source(file)), value, file);
   for (const [file, surface] of [
     [parent, "parent"],
     [detail, "detail"],
   ])
     assert.equal(
-      hash(adminPagePreview(historicalAdminControlsSource(file, read(file)), surface)),
+      hash(adminPagePreview(historical.source(file), surface)),
       e.transformedHashes[file],
     );
   assert.deepEqual(

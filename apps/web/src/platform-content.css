@@ -1,23 +1,25 @@
+@import "./design/content-tokens.css";
+
 .platform-content {
-  --so-bg: #f3f6fb;
-  --so-bg-elevated: #ffffff;
-  --so-panel: #ffffff;
-  --so-panel-soft: #edf2f9;
-  --so-text: #14223b;
-  --so-text-muted: #60708a;
-  --so-border: #ccd8e8;
-  --so-border-strong: #9fb0c8;
-  --so-primary: #2558bd;
-  --so-primary-strong: #173f91;
-  --so-on-primary: #ffffff;
-  --so-success: #157452;
-  --so-success-soft: #e6f5ee;
-  --so-warning: #986000;
-  --so-warning-soft: #fff3d6;
-  --so-danger: #b33a34;
-  --so-danger-soft: #fbeceb;
-  --so-shadow: 0 16px 40px color-mix(in srgb, #14223b 16%, transparent);
-  --content-rail: #15346d;
+  --so-bg: var(--so-content-canvas);
+  --so-bg-elevated: var(--so-content-surface);
+  --so-panel: var(--so-content-surface);
+  --so-panel-soft: var(--so-content-surface-soft);
+  --so-text: var(--so-content-text);
+  --so-text-muted: var(--so-content-text-muted);
+  --so-border: var(--so-content-border);
+  --so-border-strong: var(--so-content-field-border);
+  --so-primary: var(--so-content-primary);
+  --so-primary-strong: var(--so-content-primary-strong);
+  --so-on-primary: var(--so-content-surface);
+  --so-success: var(--so-content-success);
+  --so-success-soft: var(--so-content-success-soft);
+  --so-warning: var(--so-content-warning);
+  --so-warning-soft: var(--so-content-warning-soft);
+  --so-danger: var(--so-content-danger);
+  --so-danger-soft: var(--so-content-danger-soft);
+  --so-shadow: 0 16px 40px color-mix(in srgb, var(--so-content-text) 16%, transparent);
+  --content-rail: var(--so-content-rail);
   --content-blue-soft: color-mix(in srgb, var(--so-primary) 8%, var(--so-panel));
   min-width: 0;
   display: grid;
@@ -78,7 +80,7 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
 .platform-content-review header small {
   margin: 0;
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 750;
   letter-spacing: 0.13em;
 }
@@ -126,7 +128,7 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
 
 .platform-content__rail li b {
   font-variant-numeric: tabular-nums;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .platform-content__rail > p {
@@ -310,7 +312,7 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
   border-bottom: 1px solid var(--so-border);
   color: var(--so-text-muted);
   background: var(--so-panel-soft);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 650;
 }
 
@@ -436,7 +438,7 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
 
 .responsive-filter-drawer--content.responsive-filter-drawer--overlay
   .responsive-filter-drawer__scrim {
-  background: color-mix(in srgb, #14223b 48%, transparent);
+  background: color-mix(in srgb, var(--so-content-text) 48%, transparent);
 }
 
 .responsive-filter-drawer--content.responsive-filter-drawer--overlay
@@ -444,7 +446,7 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
   inset: 0 0 0 auto;
   width: min(440px, 100%);
   padding: 22px;
-  box-shadow: 0 16px 40px color-mix(in srgb, #14223b 18%, transparent);
+  box-shadow: 0 16px 40px color-mix(in srgb, var(--so-content-text) 18%, transparent);
 }
 
 .responsive-filter-drawer--content .platform-management-filter {
@@ -480,7 +482,7 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
 }
 
 .responsive-data-view__overlay--content .responsive-data-view__scrim {
-  background: color-mix(in srgb, #14223b 48%, transparent);
+  background: color-mix(in srgb, var(--so-content-text) 48%, transparent);
 }
 
 .responsive-data-view__overlay--content .responsive-data-view__drawer {
@@ -513,23 +515,23 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
 }
 
 .platform-content-review {
-  --so-primary: #2558bd;
-  --so-primary-strong: #173f91;
+  --so-primary: var(--so-content-primary);
+  --so-primary-strong: var(--so-content-primary-strong);
   width: min(600px, calc(100% - 32px));
   max-height: min(760px, calc(100dvh - 32px));
   margin: auto;
   padding: 0;
   overflow: hidden;
-  border: 1px solid #aebdd1;
+  border: 1px solid var(--so-content-dialog-border);
   border-radius: 14px;
-  color: #14223b;
-  background: #ffffff;
-  box-shadow: 0 22px 70px color-mix(in srgb, #14223b 30%, transparent);
+  color: var(--so-content-text);
+  background: var(--so-content-surface);
+  box-shadow: 0 22px 70px color-mix(in srgb, var(--so-content-text) 30%, transparent);
   font-family: var(--so-font-ui);
 }
 
 .platform-content-review::backdrop {
-  background: color-mix(in srgb, #14223b 52%, transparent);
+  background: color-mix(in srgb, var(--so-content-text) 52%, transparent);
 }
 
 .platform-content-review form {
@@ -546,7 +548,7 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
   align-items: flex-start;
   justify-content: space-between;
   gap: 18px;
-  border-bottom: 4px solid #2558bd;
+  border-bottom: 4px solid var(--so-content-primary);
 }
 
 .platform-content-review header > div {
@@ -561,7 +563,7 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
 
 .platform-content-review header p {
   margin: 0;
-  color: #60708a;
+  color: var(--so-content-text-muted);
   line-height: 1.55;
 }
 
@@ -569,10 +571,10 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
 .platform-content-review footer button {
   min-height: 42px;
   padding: 9px 14px;
-  border: 1px solid #ccd8e8;
+  border: 1px solid var(--so-content-border);
   border-radius: 6px;
-  color: #173f91;
-  background: #ffffff;
+  color: var(--so-content-primary-strong);
+  background: var(--so-content-surface);
   cursor: pointer;
 }
 
@@ -580,12 +582,12 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
   padding: 14px;
   display: grid;
   gap: 5px;
-  border-left: 3px solid #2558bd;
-  background: #edf2f9;
+  border-left: 3px solid var(--so-content-primary);
+  background: var(--so-content-surface-soft);
 }
 
 .platform-content-review__subject span {
-  color: #60708a;
+  color: var(--so-content-text-muted);
   font-size: 13px;
   overflow-wrap: anywhere;
 }
@@ -600,10 +602,10 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
   width: 100%;
   min-height: 44px;
   padding: 10px 12px;
-  border: 1px solid #9fb0c8;
+  border: 1px solid var(--so-content-field-border);
   border-radius: 6px;
-  color: #14223b;
-  background: #f8faff;
+  color: var(--so-content-text);
+  background: var(--so-content-field-bg);
   font-weight: 400;
 }
 
@@ -615,7 +617,7 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
 
 .platform-content-review__same-status,
 .platform-content-review__field-meta {
-  color: #60708a;
+  color: var(--so-content-text-muted);
   font-weight: 400;
 }
 
@@ -627,7 +629,7 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
 
 .platform-content-review__error,
 .platform-content-review__request-error {
-  color: #b33a34;
+  color: var(--so-content-danger);
   font-weight: 600;
 }
 
@@ -635,15 +637,15 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
 .platform-content-review__pending {
   margin: 0;
   padding: 11px 13px;
-  border-left: 3px solid #b33a34;
-  background: #fbeceb;
+  border-left: 3px solid var(--so-content-danger);
+  background: var(--so-content-danger-soft);
   line-height: 1.55;
 }
 
 .platform-content-review__pending {
-  border-left-color: #2558bd;
-  color: #173f91;
-  background: #edf2f9;
+  border-left-color: var(--so-content-primary);
+  color: var(--so-content-primary-strong);
+  background: var(--so-content-surface-soft);
 }
 
 .platform-content-review footer {
@@ -651,13 +653,13 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
   display: grid;
   grid-template-columns: 1fr 1.4fr;
   gap: 10px;
-  border-top: 1px solid #ccd8e8;
+  border-top: 1px solid var(--so-content-border);
 }
 
 .platform-content-review footer button:last-child {
-  border-color: #2558bd;
-  color: #ffffff;
-  background: #2558bd;
+  border-color: var(--so-content-primary);
+  color: var(--so-content-surface);
+  background: var(--so-content-primary);
   font-weight: 740;
 }
 
@@ -732,7 +734,7 @@ html[data-design="signal-ledger"] body .platform-content-review h3 {
   }
 
   .platform-content__rail li span {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .platform-content__surface {

@@ -126,6 +126,12 @@ replace(
 replace("<title>P46异步归属</title>", "<title>P46已批准反馈接入</title>");
 replace("<h1>P46异步归属 · ", "<h1>P46已批准反馈接入 · ");
 // Data modules resolve package/local imports explicitly; no scratch scripts or new dependency.
+replace(
+  "  const sourceHashes = Object.fromEntries(",
+  '  sources.add("scripts/lib/ui-imported-style-sources.mjs");\n  await includeImportedStyleSources(sources, async (f) => transformed[f] ?? (await read(f)));\n  const sourceHashes = Object.fromEntries(',
+);
+runner =
+  'import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";\n' + runner;
 runner = runner.replace(
   /from "([^"\n]+)"/g,
   (full, specifier) => "from " + JSON.stringify(import.meta.resolve(specifier)),

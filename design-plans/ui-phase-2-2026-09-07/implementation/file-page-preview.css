@@ -1,0 +1,309 @@
+html body.shell-vue-c:has(#app) #app .file-resilience--review {
+  --p69-blue: #1748a0;
+  --p69-ink: #182d4a;
+  --p69-line: #dce4ee;
+  --p69-muted: #52647b;
+  color: var(--p69-ink);
+  display: grid;
+  gap: 20px;
+  font:
+    16px/1.65 "Microsoft YaHei",
+    sans-serif;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review * {
+  box-sizing: border-box;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review :is(h1, h2, h3, p, dl, dd) {
+  margin: 0;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review h1 {
+  font-size: 30px;
+  line-height: 1.35;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review h2 {
+  font-size: 21px;
+  line-height: 1.45;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review h3 {
+  font-size: 17px;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review :is(button, summary, a) {
+  min-height: 44px;
+  font: inherit;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review button {
+  padding: 9px 16px;
+  color: #fff;
+  background: var(--p69-blue);
+  border: 1px solid var(--p69-blue);
+  border-radius: 4px;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review :is(button, summary):focus-visible {
+  outline: 3px solid #2465d7;
+  outline-offset: 3px;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review .file-resilience__hero {
+  padding: 24px 28px;
+  color: #fff;
+  background: var(--p69-blue);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review .file-resilience__hero p {
+  color: #d9e6ff;
+  letter-spacing: 0;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review .file-resilience__hero span {
+  color: #e2ebff;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review .file-resilience__hero button {
+  color: var(--p69-blue);
+  background: #fff;
+  border-color: #fff;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review .p69-review-note {
+  color: var(--p69-muted);
+  font-size: 13px;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review .p69-boundary {
+  display: flex;
+  gap: 14px;
+  padding: 12px 16px;
+  border-left: 3px solid var(--p69-blue);
+  background: #edf4ff;
+}
+html body.shell-vue-c:has(#app) #app .file-resilience--review .p69-boundary span {
+  color: var(--p69-muted);
+}
+.file-resilience--review .p69-paper {
+  background: #fff;
+  border: 1px solid var(--p69-line);
+}
+.file-resilience--review .p69-conclusion {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--p69-line);
+  background: #f6f9ff;
+}
+.file-resilience--review .p69-conclusion h2 {
+  margin-top: 5px;
+  font-size: 26px;
+}
+.file-resilience--review :is(.p69-conclusion p, small, dt) {
+  color: var(--p69-muted);
+  font-size: 13px;
+}
+.file-resilience--review .p69-conclusion > div:last-child {
+  text-align: right;
+}
+.file-resilience--review time {
+  display: block;
+  margin-top: 6px;
+}
+.file-resilience--review :is(.p69-findings, .p69-directories, .p69-integrity, .p69-recovery) {
+  padding: 22px 28px;
+}
+.file-resilience--review .p69-findings {
+  border-bottom: 1px solid var(--p69-line);
+}
+.file-resilience--review .p69-findings article {
+  margin: 12px 0;
+  padding: 14px 16px;
+  border-left: 3px solid #b02d3c;
+  background: #fff5f5;
+}
+.file-resilience--review .p69-findings article[data-severity="warning"] {
+  border-color: #875300;
+  background: #fffbf1;
+}
+.file-resilience--review .p69-findings code {
+  display: block;
+  color: var(--p69-muted);
+}
+.file-resilience--review .p69-findings p {
+  margin-top: 6px;
+}
+.file-resilience--review .p69-directories > header p,
+.file-resilience--review .p69-evidence header p {
+  margin-top: 5px;
+  color: var(--p69-muted);
+  font-size: 14px;
+}
+.file-resilience--review .p69-directory {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 2px solid #b7c9e2;
+}
+.file-resilience--review .p69-directory > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.file-resilience--review .p69-directory > header p {
+  margin-top: 4px;
+  color: var(--p69-muted);
+  font-size: 14px;
+}
+.file-resilience--review .p69-root-evidence {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 24px;
+  margin-top: 16px;
+}
+.file-resilience--review .p69-root-evidence strong {
+  display: block;
+  margin: 8px 0 4px;
+  font:
+    700 30px/1.4 Consolas,
+    monospace;
+}
+.file-resilience--review .p69-root-evidence p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+.file-resilience--review progress {
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  margin: 10px 0;
+  border: 0;
+  background: #e5ecf6;
+}
+.file-resilience--review progress::-webkit-progress-bar {
+  background: #e5ecf6;
+}
+.file-resilience--review progress::-webkit-progress-value {
+  background: var(--p69-blue);
+}
+.file-resilience--review .p69-index {
+  padding-left: 20px;
+  border-left: 1px solid var(--p69-line);
+}
+.file-resilience--review .p69-index b {
+  display: block;
+  margin: 8px 0 4px;
+  font-size: 20px;
+}
+.file-resilience--review .p69-note {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-left: 3px solid #8aa0bc;
+  background: #f1f5fa;
+  color: var(--p69-muted);
+  font-size: 14px;
+}
+.file-resilience--review .p69-evidence {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  border-top: 1px solid var(--p69-line);
+}
+.file-resilience--review .p69-integrity {
+  border-right: 1px solid var(--p69-line);
+}
+.file-resilience--review .p69-sample-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 20px 0;
+  padding: 16px 0;
+  border-block: 1px solid var(--p69-line);
+}
+.file-resilience--review .p69-sample-total b {
+  font:
+    700 32px/1.3 Consolas,
+    monospace;
+}
+.file-resilience--review .p69-integrity dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.file-resilience--review .p69-integrity dl > div,
+.file-resilience--review .p69-recovery dl > div {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--p69-line);
+  border-radius: 0;
+  background: transparent;
+}
+.file-resilience--review dd {
+  margin-top: 4px;
+  font-size: 21px;
+  font-weight: 700;
+}
+.file-resilience--review .p69-recovery {
+  background: #f9fbfe;
+}
+.file-resilience--review .p69-recovery-state {
+  display: block;
+  margin: 18px 0;
+  font-size: 22px;
+}
+.file-resilience--review .p69-recovery dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.file-resilience--review .p69-recovery dd {
+  text-align: right;
+}
+.file-resilience--review .p69-recovery dd small {
+  display: block;
+}
+.file-resilience--review .file-resilience__footer {
+  justify-content: flex-start;
+  text-align: left;
+  color: var(--p69-muted);
+  font-size: 13px;
+}
+.file-resilience--review .file-resilience__footer strong {
+  color: var(--p69-muted);
+}
+@media (max-width: 900px) {
+  .file-resilience--review .p69-evidence {
+    grid-template-columns: 1fr;
+  }
+  .file-resilience--review .p69-integrity {
+    border-right: 0;
+    border-bottom: 1px solid var(--p69-line);
+  }
+}
+@media (max-width: 760px) {
+  .file-resilience--review .file-resilience__hero,
+  .file-resilience--review .p69-conclusion,
+  .file-resilience--review .p69-boundary,
+  .file-resilience--review .p69-directory > header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .file-resilience--review .p69-conclusion {
+    display: flex;
+    padding: 20px 18px;
+  }
+  .file-resilience--review .p69-conclusion > div:last-child {
+    padding-top: 14px;
+    border-top: 1px solid #b8c9e6;
+    text-align: left;
+  }
+  .file-resilience--review :is(.p69-findings, .p69-directories, .p69-integrity, .p69-recovery) {
+    padding: 22px 18px;
+  }
+  .file-resilience--review .p69-root-evidence {
+    grid-template-columns: 1fr;
+  }
+  .file-resilience--review .p69-index {
+    padding: 16px 0 0;
+    border-top: 1px solid var(--p69-line);
+    border-left: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .file-resilience--review * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

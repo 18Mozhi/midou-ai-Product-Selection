@@ -1,0 +1,183 @@
+/* P51 isolated review skin; production collection operations remain unchanged. */
+html body.p51-review {
+  background: #f3f6fb !important;
+}
+.p51-review * {
+  box-sizing: border-box;
+}
+.p51-review :is(button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid #2465d7 !important;
+  outline-offset: 3px;
+}
+.p51-review .role-shell {
+  --so-bg: #f3f6fb;
+  --so-panel: #fff;
+  --so-panel-soft: #edf4ff;
+  --so-text: #182d4a;
+  --so-text-muted: #52647b;
+  --so-border: #dce4ee;
+  --so-primary: #1748a0;
+  background: #f3f6fb !important;
+}
+.p51-review :is(.role-topbar, .role-sidebar, .role-mobile-nav) {
+  background: #fff !important;
+  border-color: #dce4ee !important;
+}
+.p51-review .role-content {
+  max-width: none;
+  padding: 24px clamp(20px, 3vw, 42px) 52px;
+}
+.p51-review :is(.role-page-breadcrumb, .role-page-title, .role-context-rail, .role-context-drawer) {
+  display: none !important;
+}
+.p51-review .provider-runtime-tabs {
+  display: none !important;
+}
+.p51-review .collection-task-center {
+  max-width: 1160px;
+  margin: auto;
+  color: #182d4a;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+.p51-review .collection-task-title {
+  align-items: start;
+  padding: 31px 36px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+}
+.p51-review .collection-task-title :is(p, h2, span) {
+  color: #fff !important;
+}
+.p51-review .collection-task-title h2 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+}
+.p51-review .collection-task-title-actions :is(button, a) {
+  min-height: 42px;
+  padding: 8px 14px;
+  border: 1px solid #fff !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #1748a0 !important;
+  font: inherit;
+  font-weight: 800;
+}
+.p51-review .collection-task-metrics {
+  gap: 0 !important;
+  margin: 24px 0 !important;
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+}
+.p51-review .collection-task-metrics article {
+  border: 0 !important;
+  border-right: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p51-review .collection-task-metrics article:last-child {
+  border-right: 0 !important;
+}
+.p51-review .collection-task-metrics strong {
+  color: #1748a0 !important;
+}
+.p51-review .collection-task-table-card {
+  overflow: hidden;
+  border: 1px solid #dce4ee !important;
+  border-top: 5px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p51-review .collection-task-table-card > header {
+  gap: 18px;
+  padding: 23px 26px !important;
+  border-bottom: 1px solid #dce4ee !important;
+  background: #fff !important;
+}
+.p51-review .collection-task-filters :is(input, select) {
+  min-height: 42px;
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f7faff !important;
+  color: #182d4a !important;
+  font: inherit;
+}
+.p51-review .collection-task-table-card table th {
+  background: #1748a0 !important;
+  color: #fff !important;
+}
+.p51-review .collection-task-table-card table :is(th, td) {
+  border-color: #dce4ee !important;
+}
+.p51-review .collection-task-table-card table tbody tr:nth-child(even) {
+  background: #f7faff !important;
+}
+.p51-review .collection-task-table-card button,
+.p51-review .collection-task-detail button {
+  min-height: 40px;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+  color: #fff !important;
+  font: inherit;
+  font-weight: 800;
+}
+.p51-review .collection-task-detail {
+  border-radius: 0 !important;
+  box-shadow: 0 18px 48px rgb(24 45 74 / 24%) !important;
+}
+.p51-review .collection-task-detail :is(header, section, aside) {
+  border-color: #dce4ee !important;
+}
+.p51-review .collection-task-detail h3,
+.p51-review .collection-task-detail h4 {
+  color: #1748a0 !important;
+}
+.p51-review .collection-task-detail [role="region"] {
+  border-left: 5px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #edf4ff !important;
+}
+@media (max-width: 760px) {
+  .p51-review :is(.role-mobile-nav, .role-sidebar, .role-topbar) {
+    display: none !important;
+  }
+  .p51-review .role-shell {
+    display: block;
+    padding-top: 0;
+  }
+  .p51-review .role-content {
+    padding: 0 0 24px;
+  }
+  .p51-review .collection-task-title {
+    display: grid;
+    gap: 16px;
+    padding: 25px 19px !important;
+  }
+  .p51-review .collection-task-title-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .p51-review .collection-task-metrics {
+    grid-template-columns: repeat(2, 1fr) !important;
+    margin: 0 !important;
+  }
+  .p51-review .collection-task-metrics article:nth-child(2n) {
+    border-right: 0 !important;
+  }
+  .p51-review .collection-task-table-card {
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+  .p51-review .collection-task-table-card > header {
+    padding: 18px !important;
+  }
+  .p51-review .collection-task-filters {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+}

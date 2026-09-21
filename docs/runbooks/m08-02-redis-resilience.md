@@ -1,5 +1,23 @@
 # M08-02 Redis 单实例韧性 Runbook
 
+## P67 读取状态语义（批64）
+
+首次读取/错误区和保留快照后的刷新失败区均以关联标题命名，并在读取中标明`aria-busy`；这只改善辅助技术语义，不改变GET、15秒、单飞、权限、编号或快照规则。复验`node --test tests/unit/redis-read-regions.test.mjs tests/unit/redis-read-focus.test.mjs tests/unit/redis-trace-ownership.test.mjs tests/unit/redis-page-preview.test.mjs tests/unit/ui-phase2-technical-copy.test.mjs`、`node scripts/verify-redis-read-focus.mjs`、`node scripts/verify-redis-trace-ownership.mjs --capture-review r3`与默认页面验证器。r3审核图为`output/playwright/p67-trace-ownership-r3/index.html`，仅本地替身，不证明真实读屏、权限、Redis或审计。无需重启或环境调整。
+
+## P67 读取追踪修正（批62）
+
+快照读取ID与本次失败读取ID分开；401/403清事实时清旧快照ID，null成功响应显示“本次读取追踪”。每处复制使用自己披露的编号，不重算/生成观测。复验`node --test tests/unit/redis-trace-ownership.test.mjs tests/unit/redis-page-preview.test.mjs tests/unit/ui-phase2-technical-copy.test.mjs`、`node scripts/verify-redis-trace-ownership.mjs`与默认页面验证器。r2审核图在`output/playwright/p67-trace-ownership-r2/index.html`，本地替身不证明真实剪贴板或审计。本轮未部署，不需要重启；未来正式更新静态构建后浏览器重新加载即可，无Redis/后端/env改动。完整保活和真实权限仍待验。
+
+## P67 重试焦点修正（批63）
+
+重试按钮因读取开始而移除时，仅把该按钮本身的键盘焦点转交顶部刷新按钮；用户已移焦、隐藏、断开或inert节点不转交。顶部等待按钮使用`aria-disabled`和`aria-busy`，仍可聚焦；既有单飞守卫拒绝重复请求。`node scripts/verify-redis-read-focus.mjs`使用本地读取替身验证，不证明真实权限或审计。r1审核图在`output/playwright/p67-read-focus-r1/index.html`。无服务重启或环境调整。
+
+## P67 C 审核边界（批61）
+
+最新 r3：`output/playwright/p67-page-composition-r3/index.html`，30图/173来源；仅修截图避让固定导航与超长区域整页取景，没有改运行合同。手机持久化 r2 区域已批准，两个采样异常区域仍待审，原 r1/r2 留作对照。
+
+实际 Vue 审核仅由 `scripts/lib/redis-page-preview.mjs` 插件加载，不进入生产构建。`node scripts/verify-redis-page-preview.mjs` 使用37组本地惰性样例，不访问真实Redis/MySQL；新增26图在 `output/playwright/p67-page-composition-r2/index.html`，r1保留修订对照。首次失败、完整交互/保活、真实权限/恢复及生产仍待验。复验不需配置或重启；`--capture-review rN` 只能新建审核目录。扩展验证存在旧风格文件名与历史外壳指纹断言失败，未提交部署。详见 `design-plans/ui-phase-2-2026-09-07/P67-PAGE-COMPOSITION-BATCH61.md`。
+
 ## 配置与门禁
 
 应用侧水位来自 `REDIS_MEMORY_WARNING_PERCENT`、`REDIS_MEMORY_STOP_PERCENT`、`REDIS_CONNECTION_WARNING_PERCENT`、`REDIS_CONNECTION_STOP_PERCENT`；warning 必须小于 stop。生产证据文件由 `REDIS_RESILIENCE_PRODUCTION_EVIDENCE_FILE` 指向忽略目录，最长有效期由 `REDIS_RESILIENCE_EVIDENCE_MAX_AGE_MINUTES` 控制。修改后在宝塔重启 Node API；真实密码只在宝塔受限环境。

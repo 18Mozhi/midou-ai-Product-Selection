@@ -1,0 +1,71 @@
+html
+  body.approvals-vue-c
+  #app
+  .org-admin-center[data-approval-c-view="true"]
+  .org-approval-loading-c {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 32px;
+  align-items: center;
+  min-height: 0;
+  padding: 32px;
+  border: 1px solid #dbe1e9;
+  border-radius: 4px;
+  background: #fff;
+  color: #202c3d;
+  text-align: left;
+  font:
+    16px/1.65 "Microsoft YaHei",
+    sans-serif;
+  .org-approval-loading-copy {
+    display: grid;
+    gap: 16px;
+  }
+  p,
+  h3 {
+    margin: 0;
+  }
+  .org-approval-loading-kicker {
+    color: #254a9c;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  h3 {
+    font:
+      700 26px/1.45 "Microsoft YaHei",
+      sans-serif;
+  }
+  .org-approval-loading-placeholder {
+    display: grid;
+    gap: 16px;
+    padding: 24px;
+    background: #f3f6fb;
+  }
+  .org-approval-loading-placeholder i {
+    display: block;
+    height: 12px;
+    background: #dbe3ef;
+    animation: none;
+    transition: none;
+  }
+  .org-approval-loading-placeholder i:first-child {
+    width: 78%;
+  }
+  .org-approval-loading-placeholder i:last-child {
+    width: 62%;
+  }
+}
+@media (max-width: 760px) {
+  html
+    body.approvals-vue-c
+    #app
+    .org-admin-center[data-approval-c-view="true"]
+    .org-approval-loading-c {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 24px 20px;
+    gap: 24px;
+    h3 {
+      font-size: 24px;
+    }
+  }
+}

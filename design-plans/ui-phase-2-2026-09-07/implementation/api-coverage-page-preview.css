@@ -1,0 +1,278 @@
+html body.shell-vue-c:has(#app) #app .api-coverage--review {
+  --p63-blue: #1748a0;
+  --p63-ink: #182d4a;
+  --p63-line: #dce4ee;
+  --p63-muted: #52647b;
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+  max-width: 100%;
+  color: var(--p63-ink);
+  font:
+    16px/1.65 "Microsoft YaHei",
+    sans-serif;
+}
+/* Keep the surrounding, real parent controls in the same C language. */
+html body.shell-vue-c:has(#app .api-coverage--review) #app .platform-management {
+  gap: 16px;
+}
+html body.shell-vue-c:has(#app .api-coverage--review) #app .platform-management-hero {
+  min-width: 0;
+  padding: 18px 20px;
+  border: 1px solid #dce4ee;
+  border-left: 4px solid #1748a0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+html body.shell-vue-c:has(#app .api-coverage--review) #app .platform-management-hero p {
+  color: #1748a0;
+  font: 700 12px/1.5 "Microsoft YaHei", sans-serif;
+  letter-spacing: 0.04em;
+}
+html body.shell-vue-c:has(#app .api-coverage--review) #app .platform-management-hero h2 {
+  margin: 4px 0;
+  color: #182d4a;
+  font: 700 22px/1.4 "Microsoft YaHei", sans-serif;
+}
+html body.shell-vue-c:has(#app .api-coverage--review) #app .platform-management-hero span {
+  color: #52647b;
+}
+html body.shell-vue-c:has(#app .api-coverage--review) #app .platform-management-hero button {
+  min-height: 44px;
+  border: 1px solid #1748a0;
+  border-radius: 0;
+  background: #1748a0;
+  color: #fff;
+  box-shadow: none;
+}
+html body.shell-vue-c:has(#app .api-coverage--review)
+  .responsive-filter-drawer--overlay
+  .responsive-filter-drawer__trigger {
+  border-color: #dce4ee;
+  border-radius: 0;
+  color: #182d4a;
+  background: #fff;
+  box-shadow: none;
+}
+html body.shell-vue-c:has(#app .api-coverage--review)
+  .responsive-filter-drawer--overlay
+  .responsive-filter-drawer__trigger i {
+  border-radius: 0;
+  color: #1748a0;
+  background: #edf4ff;
+}
+.api-coverage--review * {
+  box-sizing: border-box;
+}
+.api-coverage--review :is(h1, h2, p, ul, dl, dd) {
+  margin: 0;
+}
+.api-coverage--review h1 {
+  font-size: 30px;
+}
+.api-coverage--review h2 {
+  font-size: 21px;
+}
+.api-coverage--review summary {
+  min-height: 44px;
+  padding: 9px 0;
+}
+.api-coverage--review summary:focus-visible {
+  outline: 3px solid #2465d7;
+  outline-offset: 3px;
+}
+.api-coverage--review .p63-hero {
+  padding: 24px 28px;
+  background: var(--p63-blue);
+  color: #fff;
+}
+.api-coverage--review .p63-hero p {
+  color: #d9e6ff;
+}
+.api-coverage--review .p63-hero span {
+  color: #e2ebff;
+}
+.api-coverage--review .p63-review-note {
+  color: var(--p63-muted);
+  font-size: 13px;
+}
+.api-coverage--review .p63-boundary {
+  display: flex;
+  gap: 14px;
+  padding: 12px 16px;
+  border-left: 3px solid var(--p63-blue);
+  background: #edf4ff;
+}
+.api-coverage--review .p63-boundary span {
+  color: var(--p63-muted);
+}
+.api-coverage--review .p63-paper {
+  min-width: 0;
+  border: 1px solid var(--p63-line);
+  background: #fff;
+}
+.api-coverage--review .p63-truth {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 28px;
+  background: #f6f9ff;
+  border-bottom: 1px solid var(--p63-line);
+}
+.api-coverage--review .p63-truth h2 {
+  margin-top: 5px;
+}
+.api-coverage--review .p63-truth p,
+.api-coverage--review small {
+  color: var(--p63-muted);
+  font-size: 13px;
+}
+.api-coverage--review .p63-truth code {
+  overflow-wrap: anywhere;
+}
+.api-coverage--review .p63-summary {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--p63-line);
+  border-bottom: 1px solid var(--p63-line);
+}
+.api-coverage--review .p63-summary article {
+  padding: 15px;
+  background: #fff;
+}
+.api-coverage--review .p63-summary b {
+  display: block;
+  font-size: 22px;
+}
+.api-coverage--review .p63-breakdowns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid var(--p63-line);
+}
+.api-coverage--review .p63-breakdowns section {
+  padding: 22px 28px;
+}
+.api-coverage--review .p63-breakdowns section + section {
+  border-left: 1px solid var(--p63-line);
+  background: #f9fbfe;
+}
+.api-coverage--review ul {
+  padding: 0;
+  list-style: none;
+}
+.api-coverage--review .p63-breakdowns li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--p63-line);
+}
+.api-coverage--review .p63-breakdowns li small {
+  grid-column: 1/-1;
+}
+.api-coverage--review .p63-operations {
+  min-width: 0;
+  padding: 22px 28px;
+}
+.api-coverage--review .p63-operations article {
+  min-width: 0;
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid var(--p63-line);
+}
+.api-coverage--review .p63-operations article > header {
+  display: flex;
+  min-width: 0;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.api-coverage--review .p63-operations code {
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.api-coverage--review .p63-operations small {
+  display: block;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.api-coverage--review .p63-operations dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.api-coverage--review .p63-operations dl div {
+  min-width: 0;
+  padding: 10px;
+  background: #f9fbfe;
+}
+.api-coverage--review dd {
+  min-width: 0;
+  margin-top: 3px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.api-coverage--review details ul {
+  padding: 8px 0;
+}
+.api-coverage--review details li {
+  min-width: 0;
+  padding: 7px 0;
+  border-top: 1px solid var(--p63-line);
+}
+.api-coverage--review details span {
+  display: block;
+  min-width: 0;
+  color: var(--p63-muted);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.api-coverage--review .p63-empty {
+  padding: 14px;
+  background: #f1f5fa;
+  color: var(--p63-muted);
+}
+@media (max-width: 760px) {
+  /* The production drawer remains mounted while closed. In the review shell,
+     remove that aria-hidden, off-canvas sheet from layout so it cannot widen
+     the 390px audit viewport; the open state restores the native overlay. */
+  body.shell-vue-c
+    .responsive-filter-drawer--overlay
+    .responsive-filter-drawer__surface:not(.is-open) {
+    display: none;
+  }
+  .api-coverage--review .p63-hero,
+  .api-coverage--review .p63-boundary,
+  .api-coverage--review .p63-truth {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px 18px;
+  }
+  .api-coverage--review .p63-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .api-coverage--review .p63-breakdowns {
+    grid-template-columns: 1fr;
+  }
+  .api-coverage--review .p63-breakdowns section {
+    padding: 22px 18px;
+  }
+  .api-coverage--review .p63-breakdowns section + section {
+    border-top: 1px solid var(--p63-line);
+    border-left: 0;
+  }
+  .api-coverage--review .p63-operations {
+    padding: 22px 18px;
+  }
+  .api-coverage--review .p63-operations dl {
+    grid-template-columns: 1fr;
+  }
+}

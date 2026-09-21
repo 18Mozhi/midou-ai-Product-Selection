@@ -1,0 +1,61 @@
+/* Review host only. No production import; original form and permission behavior remains. */
+body.org-save-feedback-c .org-admin-center > .org-profile-receipt {
+  background: #edf4ff;
+  border: 1px solid #b9d1f4;
+  border-left: 4px solid #2462bf;
+  padding: 24px 28px;
+  color: #18385e;
+  min-width: 0;
+}
+body.org-save-feedback-c .org-profile-receipt h3 {
+  font:
+    600 22px/1.4 "Microsoft YaHei",
+    sans-serif;
+  margin: 6px 0 12px;
+}
+body.org-save-feedback-c .org-profile-receipt p {
+  margin: 0;
+  line-height: 1.7;
+}
+body.org-save-feedback-c .org-profile-receipt .org-profile-receipt-kicker {
+  font-size: 13px;
+  color: #315b8d;
+}
+body.org-save-feedback-c .org-profile-receipt details {
+  margin-top: 16px;
+  border-top: 1px solid #c5d8f2;
+}
+body.org-save-feedback-c .org-profile-receipt summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding: 10px 0;
+  box-sizing: border-box;
+}
+body.org-save-feedback-c .org-profile-receipt summary:focus-visible {
+  outline: 2px solid #2462bf;
+  outline-offset: 3px;
+}
+body.org-save-feedback-c .org-profile-receipt dl {
+  margin: 8px 0 0;
+  display: grid;
+  gap: 16px;
+}
+body.org-save-feedback-c .org-profile-receipt dt {
+  font-size: 13px;
+  color: #315b8d;
+}
+body.org-save-feedback-c .org-profile-receipt dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+body.org-save-feedback-c .org-profile-receipt code {
+  font-size: 13px;
+}
+@media (max-width: 840px) {
+  body.org-save-feedback-c .org-admin-center > .org-profile-receipt {
+    padding: 20px;
+  }
+  body.org-save-feedback-c .org-profile-receipt h3 {
+    font-size: 20px;
+  }
+}

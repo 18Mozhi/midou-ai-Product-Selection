@@ -152,7 +152,11 @@ test("production acceptance preflight is read-only and reports the current machi
     encoding: "utf8",
     timeout: 10_000,
   });
-  assert.equal(result.status, 0, result.stderr);
+  assert.equal(
+    result.status,
+    0,
+    JSON.stringify({ stderr: result.stderr, errorCode: result.error?.code, signal: result.signal }),
+  );
   const report = JSON.parse(result.stdout);
   assert.deepEqual(
     {

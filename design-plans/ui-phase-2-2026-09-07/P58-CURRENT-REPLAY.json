@@ -1,0 +1,1006 @@
+{
+  "kind": "P58-CURRENT-REPLAY-2026-09-12",
+  "approvalChanged": false,
+  "productionChanged": false,
+  "comparison": "Original PNG bytes held only in memory, exact dimensions required, raw current hashes verified. Run comparison maps only nonempty request idempotencyKey identities and the named explicit retry keeps key check; relationships preserved, all other fields exact. Measurements are not an acceptance tolerance.",
+  "packs": [
+    {
+      "name": "p58-create-current-review",
+      "runs": 6,
+      "checks": 114,
+      "images": 24,
+      "sourceCount": 162,
+      "sourceChanges": [
+        "apps/web/src/components/ResponsiveFilterDrawer.vue"
+      ],
+      "differences": [
+        {
+          "file": "review-760-filled-part1.png",
+          "before": "04692702c48e31bfa9b1c341ee05307642e3b7e1db8905a0b5b7415fdce0c89b",
+          "after": "5ba4119879c7f175aafed7bbe44d822ae6325652b43ece1157c1fbfe14a95154",
+          "dimensions": [
+            722,
+            884
+          ],
+          "pixels": 6,
+          "delta": 2,
+          "bounds": [
+            20,
+            649,
+            23,
+            650
+          ]
+        },
+        {
+          "file": "review-760-filled-part2.png",
+          "before": "e5d11ffc12f4e713e1599c75838f3fb2403c0b3fe7f59630f1c61aeb3707120c",
+          "after": "0f436c8330ac750e194738685a97edb7a97bf6bc5581339e8bc3af106756a4fb",
+          "dimensions": [
+            722,
+            884
+          ],
+          "pixels": 6,
+          "delta": 2,
+          "bounds": [
+            20,
+            297,
+            23,
+            298
+          ]
+        },
+        {
+          "file": "review-760-submit-focus.png",
+          "before": "10f00a61cdbfaa9ba2c18d9bf626f9d83695e2f96641c706b1dfd851a06875a3",
+          "after": "f0cfa2ce1d1a5faf7457a0f3b966fa30c87bbbe3bce6be3adafb9cfe88e849a9",
+          "dimensions": [
+            722,
+            884
+          ],
+          "pixels": 6,
+          "delta": 2,
+          "bounds": [
+            20,
+            297,
+            23,
+            298
+          ]
+        }
+      ],
+      "runDiffs": [],
+      "ports": [
+        5173,
+        5173
+      ],
+      "processesClosed": true
+    },
+    {
+      "name": "p58-create-write-review",
+      "runs": 12,
+      "checks": 216,
+      "images": 42,
+      "sourceCount": 165,
+      "sourceChanges": [
+        "apps/web/src/components/ResponsiveFilterDrawer.vue"
+      ],
+      "differences": [
+        {
+          "file": "baseline-390-conflict-pending-part1.png",
+          "before": "639261c816d73aaeeda0fc3b1dbc16429a7c4b07b1ecb279bef682416c1c651b",
+          "after": "f7c6d3a51af8c01ae8e92ec605ea24e3b377f7246cc0b26309d62e7abe1f2726",
+          "dimensions": [
+            352,
+            768
+          ],
+          "pixels": 76,
+          "delta": 1,
+          "bounds": [
+            20,
+            511,
+            331,
+            683
+          ]
+        },
+        {
+          "file": "review-390-conflict-pending-part1.png",
+          "before": "30db079c75290d6881e61048a920904a50851106315dc5903009f5643de4e24f",
+          "after": "3f0f7d76524a6ea23a2f797c334b13b473faf7dc4bbbce0e9285e3625484eb22",
+          "dimensions": [
+            352,
+            884
+          ],
+          "pixels": 42,
+          "delta": 2,
+          "bounds": [
+            19,
+            462,
+            23,
+            786
+          ]
+        },
+        {
+          "file": "review-390-conflict-pending-part2.png",
+          "before": "7781e94ea2c5f9c1d78a8233d152898eca1adc375f7a3525e7e54410faea1cf4",
+          "after": "6c3798805b0e2062d9de9dc035dee08bc1b4cc679fb1763308d8f8d14dd90a3e",
+          "dimensions": [
+            352,
+            884
+          ],
+          "pixels": 54,
+          "delta": 2,
+          "bounds": [
+            19,
+            11,
+            23,
+            502
+          ]
+        },
+        {
+          "file": "review-390-forbidden-pending-part2.png",
+          "before": "6ce380d0517c07bc9c9afa1d05d825e4d7ee5be0c4c2c0374edbe6dc59ce9f2b",
+          "after": "7781e94ea2c5f9c1d78a8233d152898eca1adc375f7a3525e7e54410faea1cf4",
+          "dimensions": [
+            352,
+            884
+          ],
+          "pixels": 43,
+          "delta": 2,
+          "bounds": [
+            328,
+            537,
+            332,
+            742
+          ]
+        },
+        {
+          "file": "review-1440-conflict-error-part1.png",
+          "before": "d55625633fa698e267e19c2af498d3b02b1640341a6ff66b1c63dcf79ee1253a",
+          "after": "356fea185d2f09bf6ecf12627183b765394bd0d974f4d6f757314365c2c6403c",
+          "dimensions": [
+            920,
+            868
+          ],
+          "pixels": 11,
+          "delta": 1,
+          "bounds": [
+            834,
+            25,
+            889,
+            26
+          ]
+        }
+      ],
+      "runDiffs": [],
+      "ports": [
+        5173,
+        5173
+      ],
+      "processesClosed": true
+    },
+    {
+      "name": "p58-create-outcome-review",
+      "runs": 24,
+      "checks": 444,
+      "images": 66,
+      "sourceCount": 167,
+      "sourceChanges": [
+        "apps/web/src/components/ResponsiveFilterDrawer.vue"
+      ],
+      "differences": [
+        {
+          "file": "review-1440-blocked-retry-ready.png",
+          "before": "5ee5eece1625367cb743429fe98a99d65118916ec019641294441f73cc331710",
+          "after": "c7e8b3e932fb3633221854a373ab89ed0d82b2933036c8b9b9509e16c6565456",
+          "dimensions": [
+            1348,
+            307
+          ],
+          "pixels": 7,
+          "delta": 1,
+          "bounds": [
+            0,
+            299,
+            1347,
+            301
+          ]
+        }
+      ],
+      "runDiffs": [],
+      "ports": [
+        5173,
+        5173
+      ],
+      "processesClosed": true
+    },
+    {
+      "name": "p58-create-focus-review",
+      "runs": 6,
+      "checks": 597,
+      "images": 30,
+      "sourceCount": 168,
+      "sourceChanges": [
+        "apps/web/src/components/ResponsiveFilterDrawer.vue"
+      ],
+      "differences": [
+        {
+          "file": "baseline-390-error-collapsed.png",
+          "before": "cc62574700578cdc43ada113c592ac5fc5a8a07c460cac21205abf11f64ecefb",
+          "after": "4ec01d77bd0800e118393f63bf9a83f6f4ef7f4af758694235fd819b5a5637a6",
+          "dimensions": [
+            352,
+            884
+          ],
+          "pixels": 7,
+          "delta": 1,
+          "bounds": [
+            19,
+            824,
+            20,
+            827
+          ]
+        },
+        {
+          "file": "review-390-error-collapsed.png",
+          "before": "4f3d0c88f66937b242b60cc55870631fca091c227527601017ccd4269af98310",
+          "after": "89da35701f2b1366ca571e2ed408130922aadb81cc3147175440f3232463dd44",
+          "dimensions": [
+            352,
+            884
+          ],
+          "pixels": 14,
+          "delta": 1,
+          "bounds": [
+            19,
+            503,
+            21,
+            827
+          ]
+        },
+        {
+          "file": "review-390-error-expanded.png",
+          "before": "114518cfd3aa32809075a3c604d4cb1b1949644224b5e29f3ed5eb54794db4f9",
+          "after": "c7abd699a02234a7bb8e184d3f52b315ea3061955e14bfe70bdb4c9cba7f1db0",
+          "dimensions": [
+            352,
+            884
+          ],
+          "pixels": 49,
+          "delta": 2,
+          "bounds": [
+            19,
+            560,
+            331,
+            882
+          ]
+        },
+        {
+          "file": "review-760-default-boundary.png",
+          "before": "d390f05db14b72e704a5337b60ce0d3ce1d3359628d04b900621e7dc70e0bbde",
+          "after": "7ab8b2f7b4cd5ec7f0992b34b73516727634423ede18faf1c7d0e817225d0478",
+          "dimensions": [
+            722,
+            884
+          ],
+          "pixels": 23,
+          "delta": 2,
+          "bounds": [
+            700,
+            347,
+            702,
+            508
+          ]
+        },
+        {
+          "file": "review-760-busy-heading.png",
+          "before": "fecaade8fe18af129b9120f3778037cf8e833863de20b713303196c51ae7bfb6",
+          "after": "ef7ef37a8e416bf32ea2db076ef3485375ccd7b07ac2bb26b51cf90e8e5e313a",
+          "dimensions": [
+            722,
+            884
+          ],
+          "pixels": 64,
+          "delta": 2,
+          "bounds": [
+            19,
+            410,
+            23,
+            868
+          ]
+        },
+        {
+          "file": "review-760-error-expanded.png",
+          "before": "99fbb610b4cce3b69af4c375e19fab60b6191a9c363717b1569e640e90f9ab30",
+          "after": "ce9cc9c3eddcb99f4af52eb873d2cb746ee82127ef9983d434776ff6624549b5",
+          "dimensions": [
+            722,
+            884
+          ],
+          "pixels": 7,
+          "delta": 1,
+          "bounds": [
+            19,
+            835,
+            20,
+            838
+          ]
+        },
+        {
+          "file": "review-1440-default-boundary.png",
+          "before": "9e20f004ef9b3b5567cd03cbc77916e66a939cad086cf681db70712f6f4de0c8",
+          "after": "50adc5fadc5e3833a3ce0e1fe79efc457c593039e5c20f363054fb7be8b77733",
+          "dimensions": [
+            920,
+            868
+          ],
+          "pixels": 73,
+          "delta": 2,
+          "bounds": [
+            249,
+            282,
+            890,
+            832
+          ]
+        },
+        {
+          "file": "review-1440-error-collapsed.png",
+          "before": "780f7d7ba95103acf53091f1ad9b77666df3fac16a0d68ab5f80b8572ea6f71b",
+          "after": "68008f6be5c17da084bee917ec513ef301b2d3ec1c7ce405d876427af0c6b8a3",
+          "dimensions": [
+            920,
+            868
+          ],
+          "pixels": 103,
+          "delta": 2,
+          "bounds": [
+            249,
+            373,
+            890,
+            841
+          ]
+        },
+        {
+          "file": "review-1440-error-expanded.png",
+          "before": "59fc62356bfe175f0829eff6821bc69dfec506906902ba759c0dd8f9b5321859",
+          "after": "b1358f500e440af85d9c1a103483c33b042ee4bb616748001ead7a02883d3947",
+          "dimensions": [
+            920,
+            868
+          ],
+          "pixels": 1,
+          "delta": 8,
+          "bounds": [
+            828,
+            29,
+            828,
+            29
+          ]
+        }
+      ],
+      "runDiffs": [],
+      "ports": [
+        5173,
+        5173
+      ],
+      "processesClosed": true
+    },
+    {
+      "name": "p58-edit-current-review",
+      "runs": 6,
+      "checks": 168,
+      "images": 33,
+      "sourceCount": 163,
+      "sourceChanges": [
+        "apps/web/src/components/ResponsiveFilterDrawer.vue"
+      ],
+      "differences": [
+        {
+          "file": "baseline-390-reason-invalid-part1.png",
+          "before": "f63c70134b73299380a4dbdea864cf80a7ef5b09365b55ea27027659e1caf423",
+          "after": "c365694299f4dd3b670ceaefd928b4dfd8b384f6316c168f37d3726e6d417195",
+          "dimensions": [
+            352,
+            714
+          ],
+          "pixels": 12781,
+          "delta": 33,
+          "bounds": [
+            82,
+            631,
+            276,
+            713
+          ]
+        },
+        {
+          "file": "baseline-390-filled-part1.png",
+          "before": "4cca16930ae2479263aa8adadedc003407ea716c9fc45391a55ff0b94cdbcb32",
+          "after": "f338e88d45bd682504a87f4bb4621e34e12f1cf2ffbb076eaf7c5f4d0245e272",
+          "dimensions": [
+            352,
+            714
+          ],
+          "pixels": 86,
+          "delta": 2,
+          "bounds": [
+            21,
+            285,
+            330,
+            402
+          ]
+        },
+        {
+          "file": "baseline-760-reason-invalid-part1.png",
+          "before": "a6d3f3ec59ef1b15ab307564be805e44a77f65321ddfa0527286799268ea1060",
+          "after": "c0996ba7b7bbbc43f8f4a62fa66919ca7da700df9ebff1345477fcabb884c2e8",
+          "dimensions": [
+            620,
+            714
+          ],
+          "pixels": 25531,
+          "delta": 184,
+          "bounds": [
+            21,
+            513,
+            598,
+            706
+          ]
+        },
+        {
+          "file": "baseline-760-filled-part1.png",
+          "before": "a640c2d82bee4e877cc3d72153886e6a59bddb64d67c1b27043dde00c26a1adc",
+          "after": "320489c034df72338c3bd24efcf0fabdb170bf6650af25bc93fc6fb8ad529b8f",
+          "dimensions": [
+            620,
+            714
+          ],
+          "pixels": 207,
+          "delta": 2,
+          "bounds": [
+            21,
+            285,
+            598,
+            478
+          ]
+        },
+        {
+          "file": "baseline-1440-initial-part1.png",
+          "before": "2e98e274b072b5f4fa764992a6d2a83dd0e938db4aecca2684b4b3cf8d4b1d64",
+          "after": "092b9efe201985054477a50615c6c82c71702fe21202b4cb0a447aaf4b3037b1",
+          "dimensions": [
+            620,
+            714
+          ],
+          "pixels": 5,
+          "delta": 2,
+          "bounds": [
+            26,
+            629,
+            28,
+            630
+          ]
+        },
+        {
+          "file": "baseline-1440-reason-invalid-part1.png",
+          "before": "c5c8d5978d60ab587cdfb45bb1340e4deb1e34773419551f46b6aca4ba9859b9",
+          "after": "c2665632e86da99237a140d497a7f70c1471b62eaa48e8ee19f0fcc8b19a497a",
+          "dimensions": [
+            620,
+            714
+          ],
+          "pixels": 30093,
+          "delta": 151,
+          "bounds": [
+            6,
+            631,
+            619,
+            688
+          ]
+        },
+        {
+          "file": "review-760-filled-part2.png",
+          "before": "dd95c2ac370ffad0f86eaeecc0d0af9184b4f4f6b7bce6b75d75ff81d1519845",
+          "after": "39e9077c01c653682f999bb6e4fcdde60248284db192f40b070656dd9aa7c14d",
+          "dimensions": [
+            722,
+            884
+          ],
+          "pixels": 12,
+          "delta": 2,
+          "bounds": [
+            19,
+            76,
+            23,
+            80
+          ]
+        },
+        {
+          "file": "review-1440-filled-part1.png",
+          "before": "4109240a92391d172f394745b204668a628f883eb901c21f29bc08627ed9a6d6",
+          "after": "29eef0f8480d63170bca3e64a37dc16ef7d61dffb8cc6c1757e0d6fdd6f9f58b",
+          "dimensions": [
+            940,
+            868
+          ],
+          "pixels": 7,
+          "delta": 1,
+          "bounds": [
+            906,
+            293,
+            909,
+            294
+          ]
+        },
+        {
+          "file": "review-1440-filled-part2.png",
+          "before": "3175ea39cdb13933775c4defc2535719eab087e24eb43854a6a2f842ff6ef7f1",
+          "after": "8163ddf02c5e93592c43a569619dfbf13a87662a29d4cec3c641e6da8dda231b",
+          "dimensions": [
+            940,
+            868
+          ],
+          "pixels": 46,
+          "delta": 2,
+          "bounds": [
+            240,
+            8,
+            910,
+            846
+          ]
+        }
+      ],
+      "runDiffs": [],
+      "ports": [
+        5173,
+        5173
+      ],
+      "processesClosed": true
+    },
+    {
+      "name": "p58-confirm-current-review",
+      "runs": 60,
+      "checks": 894,
+      "images": 76,
+      "sourceCount": 163,
+      "sourceChanges": [
+        "apps/web/src/components/ResponsiveFilterDrawer.vue"
+      ],
+      "differences": [],
+      "runDiffs": [],
+      "ports": [
+        5173,
+        5173
+      ],
+      "processesClosed": true
+    },
+    {
+      "name": "p58-confirm-write-review",
+      "runs": 60,
+      "checks": 2240,
+      "images": 210,
+      "sourceCount": 170,
+      "sourceChanges": [
+        "apps/web/src/components/ResponsiveFilterDrawer.vue"
+      ],
+      "differences": [
+        {
+          "file": "baseline-390-resume-409-rejected-background-only.png",
+          "before": "540da9b7943bc3bc1765a47acf50f4b9576d87d4493b474aeded40a72f93e389",
+          "after": "91cee61b99347dca3314c1de2f61f95a8cc283ded160a7e015ac3c6368e16688",
+          "dimensions": [
+            352,
+            768
+          ],
+          "pixels": 48,
+          "delta": 2,
+          "bounds": [
+            18,
+            700,
+            333,
+            746
+          ]
+        },
+        {
+          "file": "baseline-390-resume-403-rejected-background-only.png",
+          "before": "540da9b7943bc3bc1765a47acf50f4b9576d87d4493b474aeded40a72f93e389",
+          "after": "91cee61b99347dca3314c1de2f61f95a8cc283ded160a7e015ac3c6368e16688",
+          "dimensions": [
+            352,
+            768
+          ],
+          "pixels": 48,
+          "delta": 2,
+          "bounds": [
+            18,
+            700,
+            333,
+            746
+          ]
+        },
+        {
+          "file": "baseline-760-resume-403-rejected-background-only.png",
+          "before": "133c0c72f2c1c7c23a5b9d308f0cf36812a72fa61d53f48226aecca9caeebdb1",
+          "after": "a2efc24239434d0dbb53574899b00a090a5f8b75ff35da19bc75b167b3b6a99a",
+          "dimensions": [
+            722,
+            718
+          ],
+          "pixels": 45,
+          "delta": 2,
+          "bounds": [
+            350,
+            651,
+            371,
+            696
+          ]
+        },
+        {
+          "file": "review-390-adjust-409-rejected-expanded.png",
+          "before": "c414bfd5f0846c4c5c961246d2e15115c3fd5b2917abf244a421d92b395081fb",
+          "after": "2b5060c711c99c95a23003960efe66df6d11a413cd82bc96cad400061a4dcbc2",
+          "dimensions": [
+            350,
+            279
+          ],
+          "pixels": 15,
+          "delta": 2,
+          "bounds": [
+            129,
+            212,
+            131,
+            255
+          ]
+        },
+        {
+          "file": "review-760-edit-403-rejected-expanded.png",
+          "before": "446d10daf122d4e9f2cf082cb47098a1b81b103390b299a7e3eeb610aed3afc5",
+          "after": "59e4bbb438eabd291c9aec4d95ea8e8f0ff5da19d13989c70b76bd2d55b77843",
+          "dimensions": [
+            720,
+            278
+          ],
+          "pixels": 28,
+          "delta": 2,
+          "bounds": [
+            23,
+            212,
+            131,
+            256
+          ]
+        },
+        {
+          "file": "review-760-renew-409-rejected-expanded.png",
+          "before": "97426824076911ad205717c58fe1c5ba9d8c91569b971fc2d187f7336b969fb7",
+          "after": "398bb1f1a14f301c852d778deb9067d21afac4686bd87d1ada6c7b66c7ea1099",
+          "dimensions": [
+            720,
+            278
+          ],
+          "pixels": 28,
+          "delta": 2,
+          "bounds": [
+            23,
+            212,
+            131,
+            256
+          ]
+        },
+        {
+          "file": "review-760-resume-403-rejected-expanded.png",
+          "before": "dc107dcfb2aaa62f3a8f6fe06c71fb42736063467e6cb1ae1d060303e626a8f8",
+          "after": "999fe2dfae9652f7c26ba1c7433943244c7ab95ff748dea4a76c55e1b372c2c3",
+          "dimensions": [
+            720,
+            278
+          ],
+          "pixels": 28,
+          "delta": 2,
+          "bounds": [
+            23,
+            212,
+            131,
+            256
+          ]
+        },
+        {
+          "file": "review-760-adjust-409-rejected-expanded.png",
+          "before": "5643d93b8e7911f8539e31bb96d20c337c2301af114a33e5dad979ee697ce3e3",
+          "after": "7c6cc31f7a47d5d55d257595ac0ea1f2d06bca81c4dcceeaea3bd225e7ffd8f8",
+          "dimensions": [
+            720,
+            278
+          ],
+          "pixels": 28,
+          "delta": 2,
+          "bounds": [
+            23,
+            212,
+            131,
+            256
+          ]
+        },
+        {
+          "file": "review-760-adjust-403-rejected-expanded.png",
+          "before": "e521653c13683bcf88e25a4fe3c71ac1b223bd6025202b773d1d7dbf3968378a",
+          "after": "45a29926ebb9b29576121378f344cbfe07e59cee23415b5e4ba399d2c714d993",
+          "dimensions": [
+            720,
+            278
+          ],
+          "pixels": 28,
+          "delta": 2,
+          "bounds": [
+            23,
+            212,
+            131,
+            256
+          ]
+        },
+        {
+          "file": "review-760-revoke-409-rejected-expanded.png",
+          "before": "68e0ee3adf293f88e17178cf5e1833652ab58de11a1ab62505418cd0bdd2fc8e",
+          "after": "0e6f6ad13b9c0d157a5132ee50c80143ed3027e9d0981266b6e6ee7c04095ae5",
+          "dimensions": [
+            720,
+            278
+          ],
+          "pixels": 28,
+          "delta": 2,
+          "bounds": [
+            23,
+            212,
+            131,
+            256
+          ]
+        },
+        {
+          "file": "review-760-revoke-403-rejected-expanded.png",
+          "before": "47eee8bf06d1a254b7438b753f962f57005e6481a0bc313817b5e24f01b07ac3",
+          "after": "422d0370a728e346dba5bb9cb4b0758dc7790c57c4cca04b7e401ae9725505a0",
+          "dimensions": [
+            720,
+            278
+          ],
+          "pixels": 28,
+          "delta": 2,
+          "bounds": [
+            23,
+            212,
+            131,
+            256
+          ]
+        },
+        {
+          "file": "review-1440-edit-409-rejected-expanded.png",
+          "before": "e67e7937b3385498f9d49dc50080bba001ac5deb2511c3de71d5e55794adae5a",
+          "after": "9fbb2a92f8629353339faabd12cfbb52ae2cab5e6137a711b5ec3278414dfb6f",
+          "dimensions": [
+            858,
+            216
+          ],
+          "pixels": 40,
+          "delta": 2,
+          "bounds": [
+            720,
+            144,
+            829,
+            188
+          ]
+        },
+        {
+          "file": "review-1440-renew-409-rejected-expanded.png",
+          "before": "f80c3a21a9dc48bc7850e0df752e5146c578d79abdab9caf6ffd6bb8ad5c3388",
+          "after": "027c2ce2f7243282fc0ca3d3febcc1359adc9473c8726cf6fe74dd1e9a232a85",
+          "dimensions": [
+            858,
+            216
+          ],
+          "pixels": 40,
+          "delta": 2,
+          "bounds": [
+            720,
+            144,
+            829,
+            188
+          ]
+        },
+        {
+          "file": "review-1440-renew-403-rejected-expanded.png",
+          "before": "709f7c9a95d457a94ecade80d6cbae16ab8da5a65259b533cb47f535351607c5",
+          "after": "37972dc3add8fa71dc7f49fd2e7f1208f37f32918b2b9ec74e3d85496f537e96",
+          "dimensions": [
+            858,
+            216
+          ],
+          "pixels": 40,
+          "delta": 2,
+          "bounds": [
+            720,
+            144,
+            829,
+            188
+          ]
+        },
+        {
+          "file": "review-1440-adjust-409-rejected-expanded.png",
+          "before": "c82769886ccca44a3ae03e09d5a1134a07532ec93f2bd64ed149e8ac91fbd915",
+          "after": "3aa7ec682616823a054523925e264e2e50b4b8ca9e1969d393a233067ecf4112",
+          "dimensions": [
+            858,
+            216
+          ],
+          "pixels": 40,
+          "delta": 2,
+          "bounds": [
+            720,
+            144,
+            829,
+            188
+          ]
+        },
+        {
+          "file": "review-1440-revoke-409-rejected-expanded.png",
+          "before": "512055fdba5c18faebc427dacdb136b28d3839b7b253adb863378e92cdd5135b",
+          "after": "80558f5f455622c688d078c8c3d5ba906a7d1e943695143b51c39fa60580d9a9",
+          "dimensions": [
+            858,
+            216
+          ],
+          "pixels": 40,
+          "delta": 2,
+          "bounds": [
+            720,
+            144,
+            829,
+            188
+          ]
+        },
+        {
+          "file": "review-1440-revoke-403-rejected-expanded.png",
+          "before": "8a872321939197731d1e9e56184550052400ffb1a5f0764ab6b373484a482fac",
+          "after": "e778c92412a91fa1a8cff1156f56085d2623dcd7600e03b1f97dbe1e905922fb",
+          "dimensions": [
+            858,
+            216
+          ],
+          "pixels": 40,
+          "delta": 2,
+          "bounds": [
+            720,
+            144,
+            829,
+            188
+          ]
+        }
+      ],
+      "runDiffs": [],
+      "ports": [
+        5173,
+        5173
+      ],
+      "processesClosed": true
+    }
+  ],
+  "nativeValidationTiming": {
+    "scope": "In-memory derivative of unchanged edit runner; baseline only, no capture flag, no files. Three frames per width with requested additional delays [0,120,500] ms; screenshot overhead not excluded. Same field value, tooShort, validationMessage, focus and field rectangle asserted. Native browser popup timing can change pixels without DOM/input drift; not proof of unique cause for all historical image differences.",
+    "runs": 3,
+    "existingChecks": 78,
+    "filesWritten": 0,
+    "firstAttempt": "Stopped before browser launch due to CommonJS export resolution; corrected only the in-memory resolver using installed package import export.",
+    "results": [
+      {
+        "width": 390,
+        "differences": [
+          {
+            "frame": 1,
+            "pixels": 15145,
+            "delta": 252,
+            "bounds": [
+              80,
+              631,
+              280,
+              713
+            ]
+          },
+          {
+            "frame": 2,
+            "pixels": 15301,
+            "delta": 255,
+            "bounds": [
+              79,
+              631,
+              281,
+              713
+            ]
+          }
+        ]
+      },
+      {
+        "width": 760,
+        "differences": [
+          {
+            "frame": 1,
+            "pixels": 26743,
+            "delta": 255,
+            "bounds": [
+              121,
+              631,
+              507,
+              707
+            ]
+          },
+          {
+            "frame": 2,
+            "pixels": 26839,
+            "delta": 255,
+            "bounds": [
+              120,
+              631,
+              507,
+              707
+            ]
+          }
+        ]
+      },
+      {
+        "width": 1440,
+        "state": {
+          "value": "审",
+          "tooShort": true,
+          "message": "Please lengthen this text to 2 characters or more (you are currently using 1 character).",
+          "focused": true,
+          "rect": {
+            "x": 431,
+            "y": 682,
+            "width": 578,
+            "height": 42,
+            "top": 682,
+            "right": 1009,
+            "bottom": 724,
+            "left": 431
+          }
+        },
+        "frameHashes": [
+          "d25eebedab3e3e1b274959c70377a0d98fbe981fa00383c57dc2c946ca13c403",
+          "ef05828d3845c75b1b35e42584b4fa1a64f0444eb32938337d9233cc7e5e489c",
+          "296e0f601f7433ddb39f03bbea91f2d6b2548d1ba90d0027d4a7f785e241787a"
+        ],
+        "differences": [
+          {
+            "frame": 1,
+            "pixels": 31622,
+            "delta": 255,
+            "bounds": [
+              1,
+              631,
+              619,
+              689
+            ]
+          },
+          {
+            "frame": 2,
+            "pixels": 31685,
+            "delta": 255,
+            "bounds": [
+              0,
+              631,
+              619,
+              689
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "tests": {
+    "relatedUnitsPassed": 29,
+    "diagnosticUnknownOutcomeReused": true,
+    "fullSuiteRerun": false
+  },
+  "cleanup": {
+    "newTemporaryFiles": 0,
+    "ownPort": 5173,
+    "closed": true,
+    "olderPolicyBlockedPaths": [
+      "D:/项目工程文件/vue/curson/工具/智能选品/output/playwright/p47-c-e2e-temp",
+      "C:/Users/23136/AppData/Local/Temp/scoutops-p44-p46-replay-37f4e02d2ecd4dc5bf27ef9bffe270dd"
+    ]
+  }
+}

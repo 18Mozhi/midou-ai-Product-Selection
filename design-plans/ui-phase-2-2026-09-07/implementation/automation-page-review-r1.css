@@ -1,0 +1,51 @@
+/* Loaded after the isolated P27 skin: resolves the actual rule-row hierarchy. */
+@media (min-width: 901px) {
+  .p27-review .automation-grid article {
+    position: relative;
+    min-height: 218px;
+    grid-template-columns: minmax(330px, 1.15fr) minmax(320px, 1.45fr) minmax(220px, 0.85fr) 100px !important;
+  }
+  .p27-review .automation-grid article > div:first-child {
+    position: absolute;
+    top: 22px;
+    left: 24px;
+  }
+  .p27-review .automation-grid article > h3 {
+    position: absolute;
+    top: 57px;
+    left: 24px;
+    right: 26px;
+    margin: 0 !important;
+  }
+  .p27-review .automation-grid article > p {
+    position: absolute;
+    right: 26px;
+    bottom: 20px;
+    left: 24px;
+    margin: 0 !important;
+  }
+  .p27-review .automation-grid article > .automation-flow {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .p27-review .automation-grid article > dl {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .p27-review .automation-grid article > .automation-last-run {
+    grid-column: 3;
+    grid-row: 2;
+  }
+  .p27-review .automation-grid article > footer {
+    grid-column: 4;
+    grid-row: 1 / span 2;
+  }
+}
+@media (max-width: 900px) {
+  .p27-review .automation-grid article > div:first-child,
+  .p27-review .automation-grid article > h3,
+  .p27-review .automation-grid article > p {
+    position: static;
+    inset: auto;
+  }
+}

@@ -373,7 +373,8 @@ export async function buildRedisDesignData(repo) {
       };
     vm.createContext(ctx);
     vm.runInContext(
-      compile(strip(script)) + "\nglobalThis.ui={load,data,state,refreshFailure,requestId};",
+      compile(strip(script)) +
+        "\nglobalThis.ui={load,data,state,refreshFailure,requestId,readFailureId};",
       ctx,
     );
     return { ...ctx.ui, calls, timers, hooks };
@@ -402,7 +403,10 @@ export async function buildRedisDesignData(repo) {
         keep ? m.refreshFailure.value : m.state.value,
         kind === "generic" ? "unavailable" : kind,
       );
-      if (kind === "generic") assert.equal(m.requestId.value, "");
+      assert.equal(m.requestId.value, keep ? "synthetic-success" : "");
+      if (kind === "generic") assert.equal(m.readFailureId.value, "");
+      else if (kind !== "timeout") assert.equal(m.readFailureId.value, "synthetic-failure");
+      else assert.equal(m.readFailureId.value, m.calls.at(-1).options.requestId);
     }
   const empty = mount(),
     ep = empty.load();
@@ -415,7 +419,7 @@ export async function buildRedisDesignData(repo) {
   await up;
   assert.equal(unmount.data.value, null);
   sourceChecks.push(
-    "Actual Vue script: exact GET/IDs, single-flight, 15s browser abort, null->empty, auth clearing versus transient retention, generic errors clear request ID, unmount abort. Local eviction predicate extracted unchanged for browser. Recovering is a UI-only enum, no source recovery execution; mounted Vue/preserve lifecycle not tested.",
+    "Actual Vue script: exact GET/IDs, single-flight, 15s browser abort, null->empty, auth clears snapshot facts and identity versus transient retention; generic failure ID empty, failed-read provenance separate from accepted snapshot, unmount abort. Local eviction predicate unchanged. Recovering is a UI-only enum; preserve lifecycle not tested here.",
   );
   const rb = { randomUUID, Date };
   vm.createContext(rb);

@@ -2,9 +2,6 @@ import { randomUUID } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { chmod, mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
-import { createArgon2PasswordHasher } from "../packages/auth/dist/index.js";
-import { loadRuntimeConfig } from "../packages/config/dist/index.js";
-import { createDatabasePool } from "../packages/database/dist/index.js";
 import {
   readProtectedRouteCatalog,
   readRouteCatalogManifest,
@@ -58,6 +55,10 @@ if (!production) {
 const password = process.env.SCOUTOPS_ACCEPTANCE_PASSWORD ?? "";
 if (password.length < 12 || password.length > 128)
   throw new Error("SCOUTOPS_ACCEPTANCE_PASSWORD must contain 12-128 characters");
+// The read-only preflight needs only manifests, not native hashing or database drivers.
+const { createArgon2PasswordHasher } = await import("../packages/auth/dist/index.js");
+const { loadRuntimeConfig } = await import("../packages/config/dist/index.js");
+const { createDatabasePool } = await import("../packages/database/dist/index.js");
 const reportFile = resolve(
   process.env.SCOUTOPS_ACCEPTANCE_REPORT_FILE ??
     ".artifacts/verification/production-acceptance.json",

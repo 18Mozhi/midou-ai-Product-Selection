@@ -1,6 +1,5 @@
-import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
+import { userReviewHistoricalCapture } from "../../scripts/lib/ui-phase2-user-review-historical-capture.mjs";
 import test from "node:test";
-import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -9,8 +8,7 @@ import { baseParse } from "@vue/compiler-dom";
 import { userCreatePreview } from "../../scripts/lib/ui-phase2-user-create-preview.mjs";
 import { userPagePreview } from "../../scripts/lib/ui-phase2-user-page-preview.mjs";
 
-const read = (f) =>
-  historicalAdminResultsSource(f, readFileSync(f, "utf8").replaceAll("\r\n", "\n"));
+const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const child = "apps/web/src/components/PlatformAccountDialogs.vue";
 const parent = "apps/web/src/components/PlatformAccountCenter.vue";
@@ -60,17 +58,18 @@ test("P43 create composition preserves full script, conditions, bindings, native
   );
 });
 test("P43 creation evidence pins captured production plus review-only composition and every PNG", () => {
+  const historical = userReviewHistoricalCapture("create");
   const e = JSON.parse(read(`${folder}/evidence.json`));
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
   assert.equal(e.checks.length, 293);
   assert.equal(e.screenshots.length, 86);
   for (const [f, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(historicalUserCreationSource(f, read(f))), sha, f);
-  assert.equal(e.transformedHashes[child], hash(userCreatePreview(read(child))));
+    assert.equal(hash(historical.source(f)), sha, f);
+  assert.equal(e.transformedHashes[child], hash(userCreatePreview(historical.source(child))));
   assert.equal(
     e.transformedHashes[parent],
-    hash(userPagePreview(historicalUserCreationSource(parent, read(parent)), "parent")),
+    hash(userPagePreview(historical.source(parent), "parent")),
   );
   assert.deepEqual(
     readdirSync(folder).sort(),

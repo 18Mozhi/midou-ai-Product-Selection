@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -15,6 +16,16 @@ export const packageNames = [
   "org-approvals-fields-direction-c",
   "org-approvals-parent-direction-c",
 ];
+// The old visual packages keep their own immutable source identity. Current
+// action/prop bindings below are checked independently against actual sources.
+export const proposalSourceCommit = "7398aa8a6c38d498f888c64451c4345d4c726706";
+export const currentRouteEvidence = "output/playwright/p34-route-lifecycle-vue-c-r1/evidence.json";
+const proposalSources = Object.fromEntries(
+  dependencies.map((file) => [
+    file,
+    execFileSync("git", ["show", `${proposalSourceCommit}:${file}`], { encoding: "utf8" }),
+  ]),
+);
 const hash = (s) => createHash("sha256").update(s.replaceAll("\r\n", "\n")).digest("hex");
 const ids = (file, values) => values.map((v) => `${file}#${v}`);
 const C = (...v) => ids(parentFile, v),
@@ -191,10 +202,24 @@ export function buildOrgApprovalsReview(sources, packages) {
     fields = packages.get(packageNames[2]),
     parent = packages.get(packageNames[3]);
   const dependencyHashes = Object.fromEntries(dependencies.map((f) => [f, hash(sources[f])]));
+  const currentEvidence = JSON.parse(readFileSync(currentRouteEvidence, "utf8"));
+  assert.equal(currentEvidence.kind, "P34-ROUTE-LIFECYCLE-VUE-C-r1");
+  assert.equal(currentEvidence.reviewOnly, true);
+  assert.equal(currentEvidence.processesClosed, true);
+  for (const file of dependencies)
+    assert.equal(
+      currentEvidence.sourceHashes[file],
+      dependencyHashes[file],
+      `stale current P34 evidence: ${file}`,
+    );
   for (const evidence of packages.values())
     for (const file of dependencies)
       if (evidence.sourceHashes[file])
-        assert.equal(evidence.sourceHashes[file], dependencyHashes[file], `stale ${file}`);
+        assert.equal(
+          evidence.sourceHashes[file],
+          hash(proposalSources[file]),
+          `stale historical P34 proposal: ${file}`,
+        );
   const actions = structuredClone(definitions).map(
     ([
       actionId,
@@ -325,6 +350,7 @@ export function buildOrgApprovalsReview(sources, packages) {
         component: "OrganizationApprovalPanel",
         condition: "view===approvals",
         props: {
+          "owner-path": "props.routePath",
           templates: "data?.templates ?? []",
           approvals: "rows",
           summary: "data?.summary ?? {}",
@@ -333,7 +359,8 @@ export function buildOrgApprovalsReview(sources, packages) {
           "format-time": "fmt",
         },
         events: [],
-        meaning: "被动读取，无新增函数prop业务动作，也无busy传入；普通后台失败时筛选继续可用",
+        meaning:
+          "owner-path固定查询归属；无新增函数prop业务动作或busy传入，普通后台失败时筛选继续可用",
       },
     ],
     proposalOnlyControls: controls.controls
@@ -426,24 +453,33 @@ export function buildOrgApprovalsReview(sources, packages) {
       {
         review: "P34-MOBILE-EMPTY-VUE-REVIEW.md",
         evidence: "output/playwright/p34-mobile-template-filters/evidence.json",
-        scope: "已批准手机筛选与空结果；以该报告列出的实际证据路径为准，不代表全页",
+        asOfCommit: proposalSourceCommit,
+        scope: "历史已批准手机筛选与空结果；固定源码快照，不代表当前全页或查询修复后的全断点验证",
       },
       {
         review: "P34-FIRST-FAILURE-VUE-REVIEW.md",
         evidence: "output/playwright/p34-first-failure-vue/evidence.json",
         asOfCommit: "d2d566c2fceeef6ab1754f409475e2cf7582b8ef",
         scope:
-          "历史首次500实施证据，固定在限流接入前提交；156检查52基线像素对比。当前500未变由新限流基线比较证明，不重标旧图为当前全状态验证",
+          "历史首次500实施证据，固定在限流接入前提交；156检查52基线像素对比，不重标旧图为当前全状态验证",
       },
       {
         review: "P34-RATE-LIMIT-VUE-REVIEW.md",
         evidence: "output/playwright/p34-rate-limit-vue/evidence.json",
-        scope: "仅首次无data/HTTP429/<=760；176检查52基线对比，保留旧500及其他状态；未生产验收",
+        asOfCommit: proposalSourceCommit,
+        scope: "历史首次无data/HTTP429/<=760；176检查52基线对比，固定原源码，不代表当前生产验收",
       },
       {
         review: "P34-PARENT-READ-STATES-REVIEW.md",
         evidence: "output/playwright/p34-parent-read-states/evidence.json",
-        scope: "实际App隔离HTTP56场景712检查；不是后端SQL/权限/真实网络或整页C批准",
+        asOfCommit: proposalSourceCommit,
+        scope: "历史App隔离HTTP56场景712检查；固定原源码，不是当前后端SQL/权限或整页C批准",
+      },
+      {
+        review: "P34-ROUTE-LIFECYCLE-VUE-C-REVIEW.md",
+        evidence: currentRouteEvidence,
+        scope:
+          "当前源码App/C预览隔离HTTP：56错误组、24返回顺序、24路由组，双端2996检查；不含真实权限、全断点或生产验收",
       },
     ],
     approvalRecords: [
@@ -452,14 +488,19 @@ export function buildOrgApprovalsReview(sources, packages) {
       "P34-MOBILE-FIRST-FAILURE-COMPOSITION-APPROVAL.md",
       "P34-PERMISSION-TONE-R2-APPROVAL.md",
       "P34-MOBILE-RATE-LIMIT-COMPOSITION-APPROVAL.md",
+      "P34-PERMISSION-VUE-C-APPROVAL.md",
     ],
     compositionGaps: [
-      "顶部刷新仍待审；权限r2仅措辞批准未实施；限流手机白区组合已局部接入Vue，未部署。",
-      "新失败F的其他按钮态、17父状态适用性及手机返回目录/筛选折叠尚未完整实施批准。",
+      "当前C整合、加载、登录/网络反馈仍有待审区域；实际Vue手机权限白区已单独局部批准，不代表顶部或整页。",
+      "其他按钮态、完整父状态适用性、手机返回目录/筛选折叠与生产整合仍未全部实施批准。",
       "同名工作区、最长内容、200%缩放、主题密度、全角色、组织切换/卸载/多实例时序及真实SQL/RBAC仍待验。",
-      "source-reviewed不是整页完成；此前网络白色区域问题仍待用户答复。",
+      "source-reviewed不是整页完成；待审组合不因当前路由验证通过而自动批准。",
     ],
-    limits: [remaining, "不修改API/OpenAPI/环境/依赖/数据库或部署；不以图册数量代替完整状态分母。"],
+    limits: [
+      remaining,
+      `四份旧视觉提案的源基线固定为${proposalSourceCommit}；当前sourceHashes与路由证据单独核对，不把历史图重标为当前实现。`,
+      "不修改API/OpenAPI/环境/依赖/数据库或部署；不以图册数量代替完整状态分母。",
+    ],
   };
 }
 

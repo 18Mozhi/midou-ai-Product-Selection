@@ -8,6 +8,7 @@ import vm from "node:vm";
 import ts from "typescript";
 import { createServer } from "vite";
 import { chromium, expect } from "@playwright/test";
+import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
 
 // Observe the actual C composition and preserve-cache route. No production transforms or lifecycle stubs.
 assert.ok(process.argv.slice(2).every((arg) => ["--capture", "--e2e"].includes(arg)));
@@ -44,6 +45,8 @@ const sources = new Set([
   "config/route-catalog.json",
   "apps/web/index.html",
   "apps/web/vite.config.ts",
+  // PostCSS folds imported palettes into their owners, outside Vite's module graph.
+  "apps/web/src/design/provider-adapter-tokens.css",
 ]);
 const runs = [],
   screenshots = [];
@@ -92,6 +95,8 @@ try {
               checks.push({ name, actual });
             };
             await page.clock.install({ time: new Date("2026-09-11T05:00:00Z") });
+            // Freeze fixture Date readings while keeping timeout/retry timers operational.
+            await page.clock.setFixedTime(new Date("2026-09-11T05:00:00Z"));
             page.on("pageerror", (error) => errors.push(error.message));
             await page.route("**/*", async (route) => {
               const req = route.request(),
@@ -428,6 +433,8 @@ try {
     )
       sources.add(file);
   }
+  sources.add("scripts/lib/ui-imported-style-sources.mjs");
+  await includeImportedStyleSources(sources, read);
   if (process.argv.includes("--e2e")) {
     sources.add("tests/e2e/provider-adapters-c.config.ts");
     e2eResult = await new Promise((resolve, reject) => {

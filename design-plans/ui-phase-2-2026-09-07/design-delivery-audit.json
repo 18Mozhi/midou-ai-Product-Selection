@@ -8,50 +8,53 @@
     "design-plans/ui-phase-2-2026-09-07/coverage.json": "deb03542feef014f93eef82679eacc848bb187ada9bbbe03d7a3d029b2b46ea9",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "design-plans/ui-phase-2-2026-09-07/PAGES.md": "ca41a447eb5be9317f20642bd87acc71ae31f9fe00147f1a7a63b7c48d39320d",
-    "scripts/audit-ui-phase2-design-delivery.mjs": "2807f9d61c44a901ffaf2743278fb3a534b68bbb3e80c8747f4cfebc35192a58",
+    "scripts/audit-ui-phase2-design-delivery.mjs": "f6d7d0808e0728150f7c104f3086fecd02cde084f8bad78cbe2128e4e11ef2e1",
     "scripts/lib/ui-phase2-organization-action-baseline.mjs": "120bf0d7417c51e38c31b8dc38f009a32feb5553bcae49e6064c680fd178ba47",
     "scripts/lib/ui-phase2-token-copy-baseline.mjs": "bb93e58271aba9065cf4c5eeb31d2af806e6653119e3aca54e90e967722171bf",
-    "scripts/lib/ui-phase2-filter-reset-baseline.mjs": "940a916680e584cc5ee3dd90c04906243ce57caf962987ebd5c10048d4e6654a",
+    "scripts/lib/ui-phase2-filter-reset-baseline.mjs": "b16cce55c4f07892ecf8758578003dd75198092fa60421b388b6e1ca57580a27",
+    "scripts/lib/ui-phase2-redis-review-baseline.mjs": "058c8ee6183703486d7bc95862132a1a1d199292c34b4017b46af47a910140ee",
+    "scripts/lib/ui-phase2-modal-dialog-baseline.mjs": "86ccba2cedc2054ecbbfca2f6e0a4e9845d4f877566c07750b972294b4ebdab7",
+    "scripts/lib/ui-phase2-shared-review-baseline.mjs": "22c0a24e42b37e874dddcea22b9be38bfe5e3642d811f3f4a29672e382dd364f",
     "scripts/lib/ui-phase2-user-creation-baseline.mjs": "0de1f363d021bb5a7601cd8f12b17f1bb7f6406db179ef10cfe1fb6b98ec236e",
     "scripts/lib/ui-phase2-password-baseline.mjs": "44bbd10895a491ba672294d97e5eb06cd639c8d4e611a9443ec7aabeacdd6714",
     "scripts/lib/ui-phase2-admin-controls-baseline.mjs": "82eaf9d3aa54b88230e34758610a9ba0b538c7b66e331d49e7cf797edbdc8e37",
     "scripts/lib/ui-phase2-admin-results-baseline.mjs": "3209f2459829767a5d6a84d5ae0b490b2be1db6115e1129fc81bafd9cb93b4b9",
     "scripts/lib/ui-phase2-admin-directory-baseline.mjs": "c2b6a90174caa8e5a9b1344bc7026f6103c918677993b5dc2443c71c04146761",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "7e5cb0b62a259d6e436738a757cef13816ab6705d914469555a699755dff22aa",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "56880356f7da1b3f3195d51f2c2c3dc6c880c73e5c1893315a0b9e1f3b39b2b4",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "775a1ecbc546756cd56312fa9f730b316bc8b49499777431832a7371238331d9",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P04.md": "2a3cdd9a6bc14ffc3cc5dcfae9bb56ee4c9ece73464718bb6f68a0b53fc2c395",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P05.md": "5fea576fcc05052263487f331bf1b74db1d8af5f497d5763de957be2d4edecaf",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P06.md": "e0eadc973063e83f7c773cd38443a058149508a5df99fa0078296559ddb00f15",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P07.md": "1066eed49f1885c187e7c100e7c1efd0977eb5d92011c6506aa48e51be7a8ee1",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P08.md": "59bf8610cc623a2fccfd91e47307a1aeb4bfebfa12682e562dd4dadd542bbb14",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P09.md": "c7f620d9df0f48e7bf8e31434884559abb78efd6017215a090e56d223503af94",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P10.md": "20d7c35c5047ffb70db9950a47a16665e3dae977859a2c464c096fd59cf9330e",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "28c5fcb131ace956979a774af03de2e61ada72d993fd15d802adac225fec7e2d",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "bfeaa27c4b97948ac0697be486a6a3b1fa360617bde87372e70f1fe5185573d7",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "4cacc49d6308d1ad19ab4d034c69fb625bf7534cb78b6e4b804707d69ddf0a06",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "98d47be158ab5585230b81ce52df2757d4d7c357ecb9b72edc086a282257dc18",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "c4aaec40cdb4abec3364d92898ca22b3f239323d4e0ccc7392d793c18bc08994",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "2b1c084ff6603c1c597637dc42c9fe6f93e8bea1d3405a059986bb30e304e114",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "e860efd36cc01da95d035a0b62edf2483adadfe27ab757564d164a8c861e8ae3",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "86f0f02a1d7a00712a7698f993226c36808198951dcd9c397ecdfe512d1603a7",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "e012300f64510ffb02432530a74ef4d708b3b4345974cc69d240cdec9e34120e",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "a112c1004d6f73abb82e09a95a75c8879956e4ba891dbccaf5c2bcd172a9f109",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "f67cf8705375df9ceb52487b0cb2d22565088d0bbecf4021f6eae9992f1ab2d3",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "4578ea4aa5f0cf6d22488b0554f93fc4d617b220b0fd4df52407be95ba763f7f",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "358cfe6df07413897bc1dfca66c0ad5c1950a7f191ea094fae6a38b4af2f96d5",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "0b277cd2bdd62208be739abdf8b40ab64b5459396e160bb598dc4df57369332e",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "d93c743efbdf2bf78c739ce9ccd338cec0a9e0800907ab146be6f8c1d61b386b",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "273c67843540265c6205717e4e14b340a29c730cfc8f4cb063e6976dc9aabd28",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "d99d66fec022fe8eabceaccaa52683e8de640190857b28da49b0940edade1549",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "24d40460e447eb5ed672eafd17f1cb1cf47133e41aa3d4d89931279bf57e3f6a",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "a118eb7a0301a847ec9a48f7232f83e3b13b2fc3fb1ea528f471aa72f286021c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "3e1736e0e74f9b7dc4aafad8f750eafcc3ff48628060a4c36119ac010f7b0911",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P31.md": "947dbf0bc440200cc64474ae2f51716f29111a21072715a91a6c60be814515e1",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P32.md": "716d2faab84015c8a9f999d7888b74571a738a58a062448780bfb6ec1fcbe4ea",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P33.md": "99dbe7bd37443547b5e536c9139f7a2e3c6c2b2278dea690810a5f62194685cb",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P34.md": "2211090b9f933d74522fb692d2c89ed3fd4b33e79b8a57de42a3523a245a4bfd",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P35.md": "96a65f23a3083af74558463bfdf09999a9f3ef502f46349adf99fe73c79d4841",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "69ad9e30b5429b03ac9be5b85c5bde659ad74ae6c65c6e4eeb846fc282ae5d81",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "6895931d60263e0375cc92c821140be7e55bc9c5de86fae3863e0fe685a8449c",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "435afff9ab504ef90f77444813b7ee37e0fad2aa1e7fc9ffbeb718b342e77d0e",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P04.md": "dc46a63f8f4472203d41ce937e4d46a69c154c3635ed9ba6e44d099fd1cc5880",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P05.md": "83199522866028ae4015e7c5a6b37172389718d0bed1ddc763969637e4740844",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P06.md": "e2cc65b5d826d0df1620a089a43abc4c3f52302c56656d431bf98ab9cdc8a3cc",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P07.md": "2dfba875d918508b9f1679b33a66c1363f52b822f19c03c0853d8c54461c2c85",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P08.md": "e2ba1a126ba241ad2a7e98cc3db2661bf02b0175e1f17c0fbd8316b5ffe9adaf",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P09.md": "aeba6c9886eecb62eaeba12e1ff30c706b214a9eb1b34b92d1ec0e04b0109c1d",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P10.md": "f0321ef7ea5380b40172823a7ce2043b2b3d2275ea33766d2b2a1f695b4f2a72",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "257c3d921344b12f1f77d2cbddab8b2488a5aa8d2ff3d884b9f21bd19d946be1",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "3d7cb49609c8d86a5e1ffd2570cca3e96f171a2f742f6b3c24bd32463549bcc9",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "1ba521c8d8cfeeff0e4d6e2386e4b2ba04756bc88337036632892739bf8bf752",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "e439b04641fceed35085dfa81e36cfc5ce84215ee0e55fe8e2349cc12b919b50",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "1477d73750991d2c8834f3648215871ce1348a3704e65a38120966d5e6f48fa0",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "b4d5fab5992f1fe9473a23b0b955051492a0da7a1e7ede4d8330777b99902526",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "3883e11aba472a573a05f1518208579fb691e080ef6700a69404121f74884605",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "e723e793c7b5107dbab1adf023f3b2ce65fb81d0b84a410fbe7c85869c08ec09",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "8e2822c8da24c4ea676cbb9b79e6ab1fb73d709d9f482ee27efd863b2f54d623",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "3054941f06b46e2c2278f71dd027fb3b9f86e401df813fa174720ca40a02a765",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "cf7274836ef2ded4b059478198182c594d59d73ecc58488d9329751724ad82ee",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "43b1a9ee01ad1de633e82feb852718bdce4e0b5edafc53d9b5310387e85fae18",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "ab1a3ea181bcc99710c57b86dbf703c4bee5963ee8c959a91e536912c3983d14",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "e3d7ac984106976b4afa21d110fab7ad2597cc9d67dea397847e2b693322f8e2",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "1636ba8b1e8ee5cac64b9097d54838c330591ad64d33bc841a8ffcf731deab74",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "053ca2f35ff0e6c09c964671af9c76203f03b10b1dff2e870e0e7d9b94a78533",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "ac47eb96ac3c40ffc3be4671167ac1243110ec37e4dcdead1c1e5aa597c844c8",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "f20c35839e97d775cd5dbc2ecb284ad7a1383c720e07ccf1909084be25577838",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "c0364bb11b10dc41efca32ebc9b8dec8d3131a096b426d9820f647b444bff92b",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "d666be471a8ebd8c838d61e2d8facf969c867d6fa44e827b40bbeb4175ca0038",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P31.md": "c753bbcfe3f65f6d605707389ca4fd1a7529a63aae717ab5161a9e5185de10df",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P32.md": "d5882142c9596d8bb9ddd6da7d4a458786297f208304032b30b78b295f422a08",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P33.md": "aa63a97f01b69ca08f98130adddcae959fb2b49ecdd3c6d35332d5e700f8f473",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P34.md": "8d30763335b38874389bcb5bf3b9705c3cdcea3628392eb0f00fb25b83a6b4e3",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P35.md": "5e139e443624b79f9f3d23ab36b2ff5f605ad456d7e1a17b62af63c2e205d576",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P36.md": "e143a6287617cc2053dba041b080b1e2bc6841d45ee5fc941993b49c48615ada",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P37.md": "25461f58ea42a945a3c2c62a3f46b1886ea7490e51118caf326d9f9af7b6565e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P38.md": "a94063447c9da3fbcfd0fad7c362ce558ed958e42820c4e261e70c4c6ce67f3d",
@@ -59,44 +62,46 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P40.md": "d83dfc9714d790070ac6ad9f9841ac9dffa400e93685d17949289ea2dd36be02",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P41.md": "a49cd4953dd9d3e48e4d9f26c0edac5c397718a1cab15920d966eee06c1b1257",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P42.md": "83b575cf49c568829e3f46b0af51d89c9bce488089a0a269aa80137727d2672a",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P43.md": "5364f1662602ac40128f347b69aa6410c27432f295e79c4bc1f5ce2b1f4c99aa",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P44.md": "2aa42b595d26b09b9761b7beaa5e04780723e428e7c8e3efb4014b00f233c122",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P45.md": "94bfebb53e5a96e8f8a5770833c237a5a072f6f7207eb43e4fdfc8b7cfbcdfe6",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P46.md": "b7414bd39468dbb72608c59868a1db59b403975072d31fdbc60cb40bb6f52f41",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P47.md": "50587152105d13bf52d59f9081aeac664b040cf61aaf5c471dfd9da690cc071a",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P48.md": "406d9b467664cef3ea2d1f2eafb5e1f0330a5c3f3e2051d890e30c9ae81814a4",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P49.md": "05b54ca430d820e0dcbb7125b304c45ec4abbf2efd78fe10138f004b85b1534c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P50.md": "a7b24765cf5efe0ee64bdbe9c5b0cf6587d863a2a3d0dcbca04b6bb0ce94bcc0",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md": "bcfa6bd4dd8c5d831769fa14fd991b00c9e3f7a08daec274631ec154328895bf",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md": "e98b7eb614a5532f3ac79699ad26778dfb7ea508a6b66203d4bf8b6dc49f68bf",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md": "20e7fe16fa7c42c34649a66c02ec978177a28985a365e96c5e5b3f38c96a5932",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "158e15d5722906ee92f4d156eadc7b4b6c6242267cc39912139d97df3fa6bf8e",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P55.md": "800b95f470b6952af3216f865ab21aa98a28cb1f9b3e9622eeafdda05072065c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P56.md": "1cc811fdf1816743e04201ef863e020d02fa9e353cc892ab171c237fdc6c280c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "39a00a2556456cabad8cfad9ca70709c6340925523417b387fec792da25e029c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P58.md": "1434d6f11b5cd8d2c85a13c6a98afd0c0947c708a240e4f934e5978f59f36328",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P59.md": "3b5fb66ab92612f1bf18e84af7a4277c9fa1abe6f756cc858f6343e380a78dfb",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "b6454eb7c073a8407aeecbd0ace51f7c5dc08cc43e323bd46b3696d21a9e1209",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "1843fc1685ff054c81059bcfe3a6a328b498b4cd3602860124072fea5d16183d",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "301997a54613d36ad89d80fd5c6e7d1abb39ecadaa672faeed827cd3bad6ca9a",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "f7fc3ba35642fc3390f5ba417e1e4a4d7332c0e88008bdcbb96de9f694cf8d7f",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "7e9e9ca3d21ba4e98a03c06631e2929cfa28ac2d05f693b7111e05ee49b15227",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P65.md": "489063519cc578bd9de48caa233e581e6b70951612a81988e726967251324796",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "589867283ee84efc6272dbc7fc3b189b56a02b9cbc10d7d803f3dbdf4033e0d3",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "858e47712c5d38fd4a084aea69c3303ebc597a9fe09004583bf81c13be7c9844",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "cdf9dd5f6f6dbc293a97f145652465482e17381aa295046b5177634083b5051e",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "2a27783d368d2bffdbb53a007f3d655af7986a3f900cf8de74953e0d29e3ac05",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "9513bc143e54328859aa1d632549c16121f6f72dd0edec5295ab7b8d9d0408ea",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "521bb40c9e3166139972537a100486243e73bba1639ac1c2cca8a03fc970a9af",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "9d5945eea5629968885c098c8e477bd7e0bda5b25cbd2ada860304f7a1721e69",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "73d491925cd4090181fd04df614eea603c40885573777c7250057f67c6f5245b"
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P43.md": "8266f393cd17ac6d1be339d6f657152e2e37adcadaddd26558fb541e3654d182",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P44.md": "2ede4acf8d40faa102438a32461abd7783e3d251e48c4df2be851618a3b3c011",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P45.md": "a16a5566b9566e94f59e56be39f552f096a5c6e4f6013b7a673b07e76ba79cdb",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P46.md": "c66884f1b9cc3353ca1225449611593884d2dbc47eaf99ec9c248975c9842382",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P47.md": "67222ad1e96c37b29166ed25d3d0ecbb8e687135b047ee558c72d3cf473a1044",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P48.md": "f436a890e2c8295d0462e4d65558419d12b8244c7478f86097de3069e5603e2b",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P49.md": "122c4c394641c0028d6baf085b34b82793c006b7abda6590201ad3f765ae0827",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P50.md": "aa84f72eef49a552e52f5f324c558b9458fdedc448e9410d60771b3eefb960e7",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md": "ecec9d33500f647e7dcc2afa75040bcc37b5bb893b899f4fbbc94846c1c099ce",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md": "3fe9b8bad57238f6dc57dc3e52cf2fd5ed2dd3c8f9b65f27b4db17476e9f4a98",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md": "851ac8e629b2fa91262a505db4961808b93d027983ca551c12cbffde025ff49a",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "20e0635b354bc387679c355f2786c7f5f85facef78e2599cd8cfb4030cae83ce",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P55.md": "19ee3ba99d45f9ce2afb57d00992f69d1bf1e1e2d4bb2c69c2a344072d6cbf98",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P56.md": "84ada3a02ab3cd43744184116e22f0fc6bebada40b02cf723fdcfc11ad533d5d",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "1ff3ce60914aeb2a63015b86a77c51d4f19f4285758213083e626f6f45df45de",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P58.md": "2862ac5c9e052661269e25301b23f3a343105d67b6d2939cc9e81ad36bcd5447",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P59.md": "f50dd5cdff3177e284032763b0895207acd0d5ea9d3b3c24bb8bd7813ac700f2",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "8bc72df438daea55ab7572e20416c180e2b1ede2abbe47b8b509eb793078cf17",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "6311053ef6d6d2d0b8a2b205638203eb313861098f5defc8eb12593c244ba7cf",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "480006a580cc066c9eeb84935d511551deba23d42f170149056a44076940adf8",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "f905a7f61249da224ba49863de44e695f4c085b632c7a299ce6f41b22023f240",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "e6bb9a28720ac4091a5467cfeec29a6e58ad834a73b95f78e6175526f8d15a4d",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P65.md": "65b44de90a0dfb850a5511f7cbfa75c14a2ef0fce5a3279aefeada46560ba2e8",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "016e30d8770c26e75d0ea132196e62d42ffe8ebfc7af46a7e9b9340bf4e8f284",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "f4fa542e7577ecf6cfe82c0a79f15f18a77d469bbcbfed584052f2d5b3b032cb",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "6f8fe3d18f65378381dc5fd304ba7d3ac2be6f7a3f019e898dad2a0b85edc33c",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "0ff7e2fb0d593043fae263dc0cef3a3c47ab6264bbe0577d0937a1e24c9d0767",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "3ebf9ddfc3f3f904fd1b49292af6f5fd1d5acf5c8714202051275f02e6fd0640",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "b5eaf2a2c801252cbb0fbeed4c7b359b8c5e53398a9ba7faf519220c378314a9",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "db69bd311015caeae05d648c1b455d2c57886b7fcc86d955bea3e0e69b64836a",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "5d2647db685bf56ec6621c5d6730fe71f45d57afdd34a9c0fa33cd8c34f9d7f1"
   },
   "summary": {
     "routes": 73,
     "specifications": 73,
-    "relatedProposalRoutes": 73,
-    "noLinkedPageProposalRoutes": 0,
-    "missingPageIds": [],
+    "relatedProposalRoutes": 72,
+    "noLinkedPageProposalRoutes": 1,
+    "missingPageIds": [
+      "P69"
+    ],
     "packages": 102,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
@@ -106,8 +111,12 @@
     "pngs": 15069,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 10103,
-    "unlinkedPagePackages": [],
+    "readmeLinksChecked": 10151,
+    "unlinkedPagePackages": [
+      "data-quality-direction-c",
+      "data-records-direction-c",
+      "files-direction-c"
+    ],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
     "verifiedDialogVariants": 0,
@@ -1372,16 +1381,12 @@
       "references": [
         "data-controls-direction-c",
         "data-record-detail-direction-c",
-        "data-composed-direction-c",
-        "data-records-direction-c",
-        "data-quality-direction-c"
+        "data-composed-direction-c"
       ],
       "proposalPackages": [
         "data-controls-direction-c",
         "data-record-detail-direction-c",
-        "data-composed-direction-c",
-        "data-records-direction-c",
-        "data-quality-direction-c"
+        "data-composed-direction-c"
       ],
       "artifactAssociation": "related-proposal-not-complete-proof",
       "fullPageCoverage": "unproven",
@@ -1707,13 +1712,9 @@
       "batch": "W08",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md",
-      "references": [
-        "files-direction-c"
-      ],
-      "proposalPackages": [
-        "files-direction-c"
-      ],
-      "artifactAssociation": "related-proposal-not-complete-proof",
+      "references": [],
+      "proposalPackages": [],
+      "artifactAssociation": "no-page-proposal-linked",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -1940,9 +1941,21 @@
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
           "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
           "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
-          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "actual": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -1994,9 +2007,45 @@
       ],
       "historicalSourceAssociations": [
         {
+          "file": "apps/web/src/components/PlatformManagementCenter.vue",
+          "expected": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
+          "actual": "471e940d9f254ade77f69cbe47ad3f80d6a3b722189f7dca8c252094013aa6f1",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformManagementFilter.vue",
+          "expected": "b1e608502ee29df66c4f813c38a6593ffc4c8bc5770183cfdfafbf968db689d9",
+          "actual": "58ed6c796cffa780c81b565b8081b40e3cf006feb238ed15758b4c3cf9ed7f2f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
           "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
           "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
-          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "actual": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/use-platform-content-list.ts",
+          "expected": "48005b5d0b70e22358f7aba27048717b980701ae2fcaaab52b32943a65770ff9",
+          "actual": "ff5e74901f493bfcdd9d2022e9f400382038cda38e63f2f75284b9a6d1837535",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/use-platform-notification-list.ts",
+          "expected": "2e697d3a5f53cdfded5335bc693fcd9f7ed1a7d9f8b2dc0a543708269bfdc61b",
+          "actual": "bf58bd0ad7921c3930610bc3e685dff95c79ad93a8a7cd20489633322606e6d6",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+          "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-api-coverage-design-data.mjs",
+          "expected": "34ad1d77eeb70a6297aadc2a6322a377aa8b7025765d6c07aa29a2193e3a272d",
+          "actual": "977bfcdb2a53cad8828ee9bb7e1ccc4eaee268ff53bf83dc8ec6cd5833ca8073",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -2348,7 +2397,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/automation-controls-direction-c/controls.css",
         "scripts/verify-ui-phase2-automation-controls-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -2385,7 +2441,14 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-automation-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -2428,7 +2491,14 @@
         "scripts/verify-ui-phase2-automation-forms-c.mjs",
         "scripts/lib/ui-phase2-automation-form-review.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -2470,7 +2540,32 @@
         "design-plans/ui-phase-2-2026-09-07/design/backup-recovery-direction-c/backup.js",
         "design-plans/ui-phase-2-2026-09-07/design/backup-recovery-direction-c/data.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/BackupRecoveryCenter.vue",
+          "expected": "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
+          "actual": "969cd10fc0a99f35243278bbbc3b5896b10ea4627722f295911fc9ffb0d45100",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m07-04-backup-recovery.spec.ts",
+          "expected": "f9c712921c576a00c0ef4f9f4c24721f06a38d609514ee924557316259f17f53",
+          "actual": "f66b07ceb740f84724badbb74e4e5da2c7f351273bdfdcafaa849171641ba1b6",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -2480,8 +2575,8 @@
       "folder": "browser-runtime-direction-c",
       "readme": "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/evidence.json",
-      "manifestHash": "7638571fe77282435001dadfa753607756e4d820fd91cbe362bd6589a0d1b75b",
-      "readmeHash": "b8f6df51448c808717d69eed1a791c0a7472ba1b65dba3a0a49c4d040fa2f068",
+      "manifestHash": "a5b6616ff6b04e16a38c2a2830b1d4d12ccaaffc11e0e43075658f8f9be280e7",
+      "readmeHash": "32c89e49e71eba92ad7a822b0514d0b32aa720601df2f8c0abe020a6c1593436",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
@@ -2490,7 +2585,7 @@
       "screenshotCount": 108,
       "screenshotDrift": [],
       "unmanifestedPng": [],
-      "readmeLinksChecked": 110,
+      "readmeLinksChecked": 111,
       "checkedSourceFiles": [
         "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
         "tests/e2e/m03-04-playwright-crawler.spec.ts",
@@ -2513,7 +2608,20 @@
         "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -2554,7 +2662,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/capacity-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/capacity-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ConfirmDialog.vue",
+          "expected": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+          "actual": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -2564,8 +2679,8 @@
       "folder": "collection-overview-direction-c",
       "readme": "design-plans/ui-phase-2-2026-09-07/design/collection-overview-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/collection-overview-direction-c/evidence.json",
-      "manifestHash": "ca19d17306931dcc6cf04172da239fe140d6256f2e09895cae1048a724ba5369",
-      "readmeHash": "83d5bf0d1eb5b5aca1c94e47fe29b5246e592fcc5da0385313e71a8c43bc28f4",
+      "manifestHash": "33dea5cbfb506c2654358ba22969806f715e54e1b8c9b10440d45e17faa1e16f",
+      "readmeHash": "375c51884340dd96476b0a1fb2fc5f7723076261ad43d9d7a95db8f9090f051d",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
@@ -2598,9 +2713,21 @@
       ],
       "historicalSourceAssociations": [
         {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
           "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
-          "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
-          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "expected": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "actual": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -2647,7 +2774,38 @@
         "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/CollectionTaskCenter.vue",
+          "expected": "1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed",
+          "actual": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ConfirmDialog.vue",
+          "expected": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+          "actual": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m03-05-collection-tasks.spec.ts",
+          "expected": "9218c2552339e5c25f2920f9fc340d9b546e89621c0978f4208179ae66151afd",
+          "actual": "66bcb37988f1c064cff418506013a45b0b44c2d7eed6fa2d38e6a1420964fe96",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -2688,7 +2846,20 @@
         "design-plans/ui-phase-2-2026-09-07/design/commercial-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/commercial-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+          "expected": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
+          "actual": "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -2743,8 +2914,8 @@
       "folder": "content-direction-c",
       "readme": "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/content-direction-c/evidence.json",
-      "manifestHash": "e3ac5f3948d79074a302d19fa31583972c7044278c3b695979ae632e80c2756b",
-      "readmeHash": "2aee530b45aad2fc8e55aa091b7c723e87f531adda6829c8fc429b85c8c1e2c9",
+      "manifestHash": "79abff3cdfb41959650b705c3987a59119ee9d0393ebc1c1d8601d1fbf5802ae",
+      "readmeHash": "f2289ab561353498bb2627e88e95761edba853004b6b146712503eb63e822bc6",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
@@ -2753,7 +2924,7 @@
       "screenshotCount": 120,
       "screenshotDrift": [],
       "unmanifestedPng": [],
-      "readmeLinksChecked": 121,
+      "readmeLinksChecked": 123,
       "checkedSourceFiles": [
         "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
         "apps/web/src/components/use-platform-content-list.ts",
@@ -2784,9 +2955,69 @@
       ],
       "historicalSourceAssociations": [
         {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "c1095b828706864ee9eb2be430e08e0277522f4e4cf3d1beb084499265fcd457",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/use-platform-content-list.ts",
+          "expected": "48005b5d0b70e22358f7aba27048717b980701ae2fcaaab52b32943a65770ff9",
+          "actual": "ff5e74901f493bfcdd9d2022e9f400382038cda38e63f2f75284b9a6d1837535",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/use-platform-content-review.ts",
+          "expected": "e700d67e95e44859d7283b7370ad4690fd13cf341cb87a1e556a414ede9dbfe2",
+          "actual": "04a83f402bc5b98ede50e7b7ac2d05da0580d47aee638b04915917993d1436e6",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformManagementCenter.vue",
+          "expected": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
+          "actual": "471e940d9f254ade77f69cbe47ad3f80d6a3b722189f7dca8c252094013aa6f1",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformManagementFilter.vue",
+          "expected": "b1e608502ee29df66c4f813c38a6593ffc4c8bc5770183cfdfafbf968db689d9",
+          "actual": "58ed6c796cffa780c81b565b8081b40e3cf006feb238ed15758b4c3cf9ed7f2f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformManagementRecordList.vue",
+          "expected": "3ec74f90ff5740a58f70ea98fdc9c76835da9d223f01dd31d23ffd6a7cf78bfc",
+          "actual": "46b8b786a5aa6edbd2adc7c835a8e4d9a00257ff363b1888f77b5d4bb45f98ad",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformContentPagination.vue",
+          "expected": "2c59ac9fa920dd095d36718eb86638a58abaebc6dd99bd8b73e869af5a0e6402",
+          "actual": "2a96546fb88ebc4eacf279b868d620e27c550c990ab6ef129c60803f69c7d244",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
           "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
           "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
-          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "actual": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+          "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -2826,7 +3057,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/cost-rules.js",
         "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/cost-rules.css"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390,
@@ -2867,7 +3105,32 @@
         "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/credentials.js",
         "design-plans/ui-phase-2-2026-09-07/design/credential-assets-direction-c/data.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/CredentialAssetCenter.vue",
+          "expected": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+          "actual": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ConfirmDialog.vue",
+          "expected": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+          "actual": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m03-02-credential-assets.spec.ts",
+          "expected": "0b735d56167c0c9e86b4bc7a3f3f8e8c3b6bc04106c0286bb9b1d05353c16929",
+          "actual": "98b997aa88f7678f38fa28f7385e0e718341bd3f9c7b4f87417df5250f472c88",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -2939,9 +3202,111 @@
       ],
       "historicalSourceAssociations": [
         {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDataCenter.vue",
+          "expected": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
+          "actual": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+          "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
           "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
           "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
-          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "actual": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-data-records-design-data.mjs",
+          "expected": "bd6b951fdc438690d3206314aae3d572ee0954b6db4e47af26e1d0f0e7dc408e",
+          "actual": "baaead84e21d4caaea3fd7b7698bb9560d9c74322d684d188fd861146e0218b1",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-records-c.mjs",
+          "expected": "53e4d63125bc3f3aa69f18f13bd39a98e77ec496766bd623d0a5039dbd3bfdd9",
+          "actual": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/records.js",
+          "expected": "68f39dfaad92b89d3511943d409f693b7c6b3e88b08bafcdaa63e33390471d98",
+          "actual": "b2a49083d5ea0b20397ae3942db207826951a6a78c05ea807abc86d343c1c48d",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/data.js",
+          "expected": "3574af7d7e45cd5f0b89ccb0cb62bef9557ac3e73906031da00a24a81f9acf66",
+          "actual": "a9a8474aa98a95bef46f207bc6d6c3abcc84d404db51c921ae90d63a4bed4856",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/source-logic.js",
+          "expected": "4c0cf7c3bdcbbfd93fb9e7f1d38b07cb8110cdecc98557971b5e9922b3527f8a",
+          "actual": "bcbbefcd0883ec88d085fabf379cdd2e484564776ca4ada0a638f974176cd333",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/evidence.json",
+          "expected": "aaa70e82a4f6d32ad36f0f9b8566d0335c5d0dc7eba2658b0454e672d27c7dd3",
+          "actual": "8b62d3a808f5b303561f666ad45d8fc5a42a3ae5811a44d01e2ef70e486dd8ac",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/DataQualityCenter.vue",
+          "expected": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+          "actual": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ConfirmDialog.vue",
+          "expected": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+          "actual": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m03-06-evidence-data-quality.spec.ts",
+          "expected": "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
+          "actual": "e5b9b8ea389ca406d6a9e18f0794d243b6ba1843b41570197a19d4e7a0c13ece",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-data-quality-design-data.mjs",
+          "expected": "91fdcbbadc6f12c20f8d6ebea9f72b7dee390ccca618324d0e0c4b709157462a",
+          "actual": "cc334c54de7a2ea1cba48898bd572b5385add437e09f90cbb644f9bf8ebdfc1f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-quality-c.mjs",
+          "expected": "5ecc5635ec030d6e1000145b0f2e5e99283fb9d7e4a0a87444eea3caad24ed66",
+          "actual": "a5022038047c8914578a74310af96cbe4063229dbf72a81f0f3d82a6056fb8ae",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/evidence.json",
+          "expected": "94b41cb5ff8f45a3a3eb2acf454f8a6b922852b323a9918bf76db010546dd9d4",
+          "actual": "495d1e383baa6664c4debc54a40a0152fe005cf8aec5361309af0a503ec1878b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -3021,9 +3386,111 @@
       ],
       "historicalSourceAssociations": [
         {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDataCenter.vue",
+          "expected": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
+          "actual": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+          "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
           "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
           "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
-          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "actual": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-data-records-design-data.mjs",
+          "expected": "bd6b951fdc438690d3206314aae3d572ee0954b6db4e47af26e1d0f0e7dc408e",
+          "actual": "baaead84e21d4caaea3fd7b7698bb9560d9c74322d684d188fd861146e0218b1",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-records-c.mjs",
+          "expected": "53e4d63125bc3f3aa69f18f13bd39a98e77ec496766bd623d0a5039dbd3bfdd9",
+          "actual": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/records.js",
+          "expected": "68f39dfaad92b89d3511943d409f693b7c6b3e88b08bafcdaa63e33390471d98",
+          "actual": "b2a49083d5ea0b20397ae3942db207826951a6a78c05ea807abc86d343c1c48d",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/data.js",
+          "expected": "3574af7d7e45cd5f0b89ccb0cb62bef9557ac3e73906031da00a24a81f9acf66",
+          "actual": "a9a8474aa98a95bef46f207bc6d6c3abcc84d404db51c921ae90d63a4bed4856",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/source-logic.js",
+          "expected": "4c0cf7c3bdcbbfd93fb9e7f1d38b07cb8110cdecc98557971b5e9922b3527f8a",
+          "actual": "bcbbefcd0883ec88d085fabf379cdd2e484564776ca4ada0a638f974176cd333",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/evidence.json",
+          "expected": "aaa70e82a4f6d32ad36f0f9b8566d0335c5d0dc7eba2658b0454e672d27c7dd3",
+          "actual": "8b62d3a808f5b303561f666ad45d8fc5a42a3ae5811a44d01e2ef70e486dd8ac",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/DataQualityCenter.vue",
+          "expected": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+          "actual": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ConfirmDialog.vue",
+          "expected": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+          "actual": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m03-06-evidence-data-quality.spec.ts",
+          "expected": "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
+          "actual": "e5b9b8ea389ca406d6a9e18f0794d243b6ba1843b41570197a19d4e7a0c13ece",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-data-quality-design-data.mjs",
+          "expected": "91fdcbbadc6f12c20f8d6ebea9f72b7dee390ccca618324d0e0c4b709157462a",
+          "actual": "cc334c54de7a2ea1cba48898bd572b5385add437e09f90cbb644f9bf8ebdfc1f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-quality-c.mjs",
+          "expected": "5ecc5635ec030d6e1000145b0f2e5e99283fb9d7e4a0a87444eea3caad24ed66",
+          "actual": "a5022038047c8914578a74310af96cbe4063229dbf72a81f0f3d82a6056fb8ae",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/evidence.json",
+          "expected": "94b41cb5ff8f45a3a3eb2acf454f8a6b922852b323a9918bf76db010546dd9d4",
+          "actual": "495d1e383baa6664c4debc54a40a0152fe005cf8aec5361309af0a503ec1878b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -3036,7 +3503,7 @@
       "folder": "data-quality-direction-c",
       "readme": "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/evidence.json",
-      "manifestHash": "94b41cb5ff8f45a3a3eb2acf454f8a6b922852b323a9918bf76db010546dd9d4",
+      "manifestHash": "495d1e383baa6664c4debc54a40a0152fe005cf8aec5361309af0a503ec1878b",
       "readmeHash": "244733817b4f4a337374ac54b64520c9f2b2703dcb1bc1a245c2d4358123ce12",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
@@ -3064,7 +3531,26 @@
         "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "86e109870bed9731f32a5beae9a5f8a316d31dcb5c5b163681e8523a8b79fde8",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/DataQualityCenter.vue",
+          "expected": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+          "actual": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m03-06-evidence-data-quality.spec.ts",
+          "expected": "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
+          "actual": "e5b9b8ea389ca406d6a9e18f0794d243b6ba1843b41570197a19d4e7a0c13ece",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -3141,9 +3627,111 @@
       ],
       "historicalSourceAssociations": [
         {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDataCenter.vue",
+          "expected": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
+          "actual": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+          "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
           "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
           "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
-          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "actual": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-data-records-design-data.mjs",
+          "expected": "bd6b951fdc438690d3206314aae3d572ee0954b6db4e47af26e1d0f0e7dc408e",
+          "actual": "baaead84e21d4caaea3fd7b7698bb9560d9c74322d684d188fd861146e0218b1",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-records-c.mjs",
+          "expected": "53e4d63125bc3f3aa69f18f13bd39a98e77ec496766bd623d0a5039dbd3bfdd9",
+          "actual": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/records.js",
+          "expected": "68f39dfaad92b89d3511943d409f693b7c6b3e88b08bafcdaa63e33390471d98",
+          "actual": "b2a49083d5ea0b20397ae3942db207826951a6a78c05ea807abc86d343c1c48d",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/data.js",
+          "expected": "3574af7d7e45cd5f0b89ccb0cb62bef9557ac3e73906031da00a24a81f9acf66",
+          "actual": "a9a8474aa98a95bef46f207bc6d6c3abcc84d404db51c921ae90d63a4bed4856",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/source-logic.js",
+          "expected": "4c0cf7c3bdcbbfd93fb9e7f1d38b07cb8110cdecc98557971b5e9922b3527f8a",
+          "actual": "bcbbefcd0883ec88d085fabf379cdd2e484564776ca4ada0a638f974176cd333",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/evidence.json",
+          "expected": "aaa70e82a4f6d32ad36f0f9b8566d0335c5d0dc7eba2658b0454e672d27c7dd3",
+          "actual": "8b62d3a808f5b303561f666ad45d8fc5a42a3ae5811a44d01e2ef70e486dd8ac",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/DataQualityCenter.vue",
+          "expected": "92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c",
+          "actual": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ConfirmDialog.vue",
+          "expected": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+          "actual": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m03-06-evidence-data-quality.spec.ts",
+          "expected": "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
+          "actual": "e5b9b8ea389ca406d6a9e18f0794d243b6ba1843b41570197a19d4e7a0c13ece",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-data-quality-design-data.mjs",
+          "expected": "91fdcbbadc6f12c20f8d6ebea9f72b7dee390ccca618324d0e0c4b709157462a",
+          "actual": "cc334c54de7a2ea1cba48898bd572b5385add437e09f90cbb644f9bf8ebdfc1f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-data-quality-c.mjs",
+          "expected": "5ecc5635ec030d6e1000145b0f2e5e99283fb9d7e4a0a87444eea3caad24ed66",
+          "actual": "a5022038047c8914578a74310af96cbe4063229dbf72a81f0f3d82a6056fb8ae",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/evidence.json",
+          "expected": "94b41cb5ff8f45a3a3eb2acf454f8a6b922852b323a9918bf76db010546dd9d4",
+          "actual": "495d1e383baa6664c4debc54a40a0152fe005cf8aec5361309af0a503ec1878b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -3156,8 +3744,8 @@
       "folder": "data-records-direction-c",
       "readme": "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/data-records-direction-c/evidence.json",
-      "manifestHash": "aaa70e82a4f6d32ad36f0f9b8566d0335c5d0dc7eba2658b0454e672d27c7dd3",
-      "readmeHash": "77c1660aba1f908ee9e4d4aedf66efb6709681d30b6efc41d59a23cc933d4c81",
+      "manifestHash": "8b62d3a808f5b303561f666ad45d8fc5a42a3ae5811a44d01e2ef70e486dd8ac",
+      "readmeHash": "a3518e624ed3abd6efa4cea161196c881e4b149eb472566e8ffaff6a4996772c",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
@@ -3166,7 +3754,7 @@
       "screenshotCount": 115,
       "screenshotDrift": [],
       "unmanifestedPng": [],
-      "readmeLinksChecked": 117,
+      "readmeLinksChecked": 119,
       "checkedSourceFiles": [
         "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
         "apps/web/src/components/PlatformDataCenter.vue",
@@ -3192,9 +3780,33 @@
       ],
       "historicalSourceAssociations": [
         {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "86e109870bed9731f32a5beae9a5f8a316d31dcb5c5b163681e8523a8b79fde8",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDataCenter.vue",
+          "expected": "10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4",
+          "actual": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+          "expected": "ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0",
+          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
           "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
-          "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
-          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "expected": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "actual": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -3253,7 +3865,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/detail-adaptive-direction-c/adaptive.js",
         "scripts/verify-ui-phase2-detail-adaptive-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -3304,7 +3923,14 @@
         "scripts/lib/ui-phase2-detail-assembly-data.mjs",
         "scripts/verify-ui-phase2-detail-assembly-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -3392,7 +4018,14 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-discovery-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -3444,8 +4077,8 @@
       "folder": "governance-direction-c",
       "readme": "design-plans/ui-phase-2-2026-09-07/design/governance-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/governance-direction-c/evidence.json",
-      "manifestHash": "9dd99715c0de77c45606e0d028c4126358ba510173507350f364ceaea3df45e1",
-      "readmeHash": "4b979c7b2d6120b44d8b8fdf85d9c8116ad47c4f6cb62bb36d912b9584588c7f",
+      "manifestHash": "f8f4ece431a0828a1c996adee569f6e1825ec353ec9d072f4b2a095ecad1b09b",
+      "readmeHash": "5faf23b1397d793cbacd7ba7a529471406da792bac1b0185e621456f62e1b58c",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
@@ -3454,7 +4087,7 @@
       "screenshotCount": 179,
       "screenshotDrift": [],
       "unmanifestedPng": [],
-      "readmeLinksChecked": 180,
+      "readmeLinksChecked": 182,
       "checkedSourceFiles": [
         "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
         "apps/web/src/components/PlatformGovernanceCenter.vue",
@@ -3472,7 +4105,26 @@
         "design-plans/ui-phase-2-2026-09-07/design/governance-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/governance-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "c1095b828706864ee9eb2be430e08e0277522f4e4cf3d1beb084499265fcd457",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+          "expected": "76eae80f51225c3af676a17ab9c4ec94369262cc5e8c968be7fd62ef5f2280db",
+          "actual": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+          "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -3633,7 +4285,14 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-journey-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/SelectionJourney.vue",
+          "expected": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
+          "actual": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -3681,9 +4340,45 @@
       ],
       "historicalSourceAssociations": [
         {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformLogCenter.vue",
+          "expected": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+          "actual": "caaf302bb0218ee1dc90117a77f558999d5765b9c7044408431b4a673231945a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
           "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
           "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
-          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "actual": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+          "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -3729,7 +4424,32 @@
         "design-plans/ui-phase-2-2026-09-07/design/members-controls-direction-c/controls.js",
         "scripts/verify-ui-phase2-members-controls-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-members-design-data.mjs",
+          "expected": "9a7089274376dabacb9854d71234ab2e989ee49ab7f26b2387ee8ae70e697e8e",
+          "actual": "fe4bd67e00f1b293fabcc8adb116e20e692a8763bf7e3b61e7387083b58a2c2e",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -3768,7 +4488,32 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-members-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-members-design-data.mjs",
+          "expected": "9a7089274376dabacb9854d71234ab2e989ee49ab7f26b2387ee8ae70e697e8e",
+          "actual": "fe4bd67e00f1b293fabcc8adb116e20e692a8763bf7e3b61e7387083b58a2c2e",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -3812,7 +4557,32 @@
         "scripts/verify-ui-phase2-members-fields-c.mjs",
         "design-plans/ui-phase-2-2026-09-07/design/members-controls-direction-c/controls.css"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-members-design-data.mjs",
+          "expected": "9a7089274376dabacb9854d71234ab2e989ee49ab7f26b2387ee8ae70e697e8e",
+          "actual": "fe4bd67e00f1b293fabcc8adb116e20e692a8763bf7e3b61e7387083b58a2c2e",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -3894,7 +4664,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/controls.css",
         "scripts/verify-ui-phase2-notification-controls-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -3931,7 +4708,14 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-notification-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -3975,7 +4759,14 @@
         "scripts/lib/ui-phase2-notification-forms-data.mjs",
         "apps/web/src/api-client.ts"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4016,7 +4807,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/notification-navigation-direction-c/navigation.css",
         "scripts/verify-ui-phase2-notification-navigation-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4061,7 +4859,32 @@
         "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/OpenPlatformCenter.vue",
+          "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
+          "actual": "81dad2d4a82e49b089d97dba8ed28a1eee23b5597446d3e460febea341f3b97b",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ConfirmDialog.vue",
+          "expected": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+          "actual": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4155,7 +4978,7 @@
         {
           "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
           "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
-          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "actual": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -4200,7 +5023,20 @@
         "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
         "scripts/lib/ui-phase2-inventory.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+          "expected": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+          "actual": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4237,7 +5073,20 @@
         "apps/api/src/mysql-organization-admin-repository.ts",
         "tests/e2e/m06-01-organization-admin.spec.ts"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+          "expected": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+          "actual": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4284,7 +5133,20 @@
         "scripts/verify-ui-phase2-org-approvals-fields-c.mjs",
         "scripts/lib/ui-phase2-org-approvals-fields-data.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+          "expected": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+          "actual": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4335,7 +5197,32 @@
         "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/fields.css",
         "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/fields.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/NavigationShell.vue",
+          "expected": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+          "actual": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
+          "expected": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
+          "actual": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/signal-ledger.css",
+          "expected": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+          "actual": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4371,7 +5258,14 @@
         "packages/audit/src/index.ts",
         "tests/e2e/m06-01-organization-admin.spec.ts"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4407,7 +5301,14 @@
         "apps/api/src/mysql-organization-admin-repository.ts",
         "tests/e2e/m06-01-organization-admin.spec.ts"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4457,6 +5358,18 @@
           "expected": "81ba6a86c80bdcdb1cfea7832b3c13b0d85a5a9bf8dd6922583a5ada5d0e326d",
           "actual": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
       "checkedViewportWidths": [
@@ -4497,7 +5410,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/controls.css",
         "scripts/verify-ui-phase2-organization-profile-controls-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4532,7 +5452,14 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-organization-profile-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4571,7 +5498,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/organization-profile-fields-direction-c/fields.css",
         "scripts/verify-ui-phase2-organization-profile-fields-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4761,8 +5695,8 @@
       "folder": "platform-notifications-direction-c",
       "readme": "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/evidence.json",
-      "manifestHash": "12caf9cf44a2ba6973e894df46e5631e7c3ea353078eb106049a60c4c3a09012",
-      "readmeHash": "68355059ede768e56f9cd50059f56269382c5d12f48d7925985b1a259a26fff1",
+      "manifestHash": "9fcb5d116299aac2878c6f9acd07e58aa8c39a185994b8f10fdf129c9404f147",
+      "readmeHash": "0184be412207544cf25c552a78e1e872964767605cc1474d9db934af53ce9c15",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
@@ -4771,7 +5705,7 @@
       "screenshotCount": 230,
       "screenshotDrift": [],
       "unmanifestedPng": [],
-      "readmeLinksChecked": 231,
+      "readmeLinksChecked": 271,
       "checkedSourceFiles": [
         "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
         "apps/web/src/components/use-platform-notification-list.ts",
@@ -4807,9 +5741,87 @@
       ],
       "historicalSourceAssociations": [
         {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "c1095b828706864ee9eb2be430e08e0277522f4e4cf3d1beb084499265fcd457",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/use-platform-notification-list.ts",
+          "expected": "2e697d3a5f53cdfded5335bc693fcd9f7ed1a7d9f8b2dc0a543708269bfdc61b",
+          "actual": "bf58bd0ad7921c3930610bc3e685dff95c79ad93a8a7cd20489633322606e6d6",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformManagementCenter.vue",
+          "expected": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
+          "actual": "471e940d9f254ade77f69cbe47ad3f80d6a3b722189f7dca8c252094013aa6f1",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformMessageEditor.vue",
+          "expected": "8bafb3374f744389257c36a27580dbf768a9b4a0991fa0ce748889bb2c093cea",
+          "actual": "299031770711240b20ded18c86d6eb2dae9081fb44a732e06efa3317b540041a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformMessageWorkbench.vue",
+          "expected": "7863a19cace6a921628b2e33e66434a5662868d8a33351abc1ef3d129a7382c2",
+          "actual": "689531d215e8878405c53ae55a4b157066cde2e9a1455242da7262079e27b2a5",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformNotificationOperations.vue",
+          "expected": "18c8b856cc26ed7aa7bf45f7375645ea23a5914b50425d84ee03efc17268cc6c",
+          "actual": "73bfa7089471ce53ea44f747727211684cb840df62a22a86b70dbaa4c9ba5e07",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformNotificationManagement.vue",
+          "expected": "a91ffa14ffdbd1f17b01f0877b745288d96c4ea8574449721edbc61883f1cb18",
+          "actual": "7cced021643a3af6a23a07f8afca71d943cabcd13cf963d97ac3b698a3dfe2e8",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformNotificationPagination.vue",
+          "expected": "6116c32da6df91e40433fd5f4e4f9cc82c59d20b5726df52ebfdafcaf08b1606",
+          "actual": "56968271bcfcf600901782eea6601eaae49a5a84bc5d3ab7bc0a9618596f0849",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/PlatformManagementFilter.vue",
+          "expected": "b1e608502ee29df66c4f813c38a6593ffc4c8bc5770183cfdfafbf968db689d9",
+          "actual": "58ed6c796cffa780c81b565b8081b40e3cf006feb238ed15758b4c3cf9ed7f2f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
           "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
           "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
-          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "actual": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/unit/platform-notification-operations.test.mjs",
+          "expected": "366dc7309b7def6692fb8edd0861d37e3da3a82b3a713a9b0aa7004e2e3d2f75",
+          "actual": "ae983ba8987ee41a41e03887caab254b9d0315b8ea9d0ced98ed23ca6bd97370",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/platform-message-management.spec.ts",
+          "expected": "ed45f8df2572d35492fe289a6de397b861dacee8d552fd9b77bc6bf0934c2dad",
+          "actual": "7111e8e7831a20b9a05030018384daa5000d632c9e488330d3cac1ff54d5d239",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+          "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -4904,7 +5916,20 @@
         "apps/api/src/mysql-platform-dashboard-storage-metrics.ts",
         "tests/e2e/m06-02-platform-dashboard.spec.ts"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+          "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -4987,7 +6012,26 @@
         "design-plans/ui-phase-2-2026-09-07/design/provider-adapters-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/provider-adapters-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ProviderAdapterCenter.vue",
+          "expected": "0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075",
+          "actual": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m03-03-provider-adapter.spec.ts",
+          "expected": "f189c28a32f3d25bd0686379f9cfa978bd260df6085ea3650b0f1f5bedf28e74",
+          "actual": "f5c6bd4e0d265e83dbb3179f732ff4db18409f79e87568248767827230ef1452",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5029,7 +6073,20 @@
         "design-plans/ui-phase-2-2026-09-07/design/provider-registry-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/provider-registry-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ProviderRegistry.vue",
+          "expected": "e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e",
+          "actual": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5071,7 +6128,14 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-recovery-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ConfirmDialog.vue",
+          "expected": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+          "actual": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5082,7 +6146,7 @@
       "readme": "design-plans/ui-phase-2-2026-09-07/design/redis-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/redis-direction-c/evidence.json",
       "manifestHash": "d8ac484509e685cb9a4b2a23d7a22c668ca8e55014e943eddf0daa514ff0d64e",
-      "readmeHash": "a3f49571a392395b16932969bf2a33636c81c4f6b149dede856b268e2550d41d",
+      "readmeHash": "172544b38cefdc93e594c0d7ba06a5b846788088d055093133802f85493db54c",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
@@ -5091,7 +6155,7 @@
       "screenshotCount": 126,
       "screenshotDrift": [],
       "unmanifestedPng": [],
-      "readmeLinksChecked": 128,
+      "readmeLinksChecked": 129,
       "checkedSourceFiles": [
         "packages/redis/src/index.ts",
         "apps/api/src/redis-resilience-service.ts",
@@ -5112,7 +6176,20 @@
         "design-plans/ui-phase-2-2026-09-07/design/redis-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/redis-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/RedisResilienceCenter.vue",
+          "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
+          "actual": "382da30fb57316898357dadc58a8fa387ca6f83ac38f8bc023fbd6aba2964221",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-redis-design-data.mjs",
+          "expected": "85b85655f6f21a50e0f008e942b14d94e71fcb38fc9d2d1e8587ce22a9ec6e6c",
+          "actual": "23d522a8dde893652b5b5c89c85a4d5057a66082200adaff91ae554f7c281770",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5157,7 +6234,26 @@
         "design-plans/ui-phase-2-2026-09-07/design/release-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/release-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
+          "expected": "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
+          "actual": "b5344202cf358e7a5f61d8b0d73f4086c59157e395d12eda5f719a532bf79e63",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5197,7 +6293,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/report-controls-direction-c/controls.css",
         "scripts/verify-ui-phase2-report-controls-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5233,7 +6336,14 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-report-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5283,7 +6393,14 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-review-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5322,7 +6439,20 @@
         "design-plans/ui-phase-2-2026-09-07/design/roles-controls-direction-c/controls.js",
         "scripts/verify-ui-phase2-roles-controls-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5357,7 +6487,20 @@
         "scripts/verify-ui-phase2-roles-c.mjs",
         "scripts/lib/ui-phase2-prototype-metrics.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5400,7 +6543,20 @@
         "design-plans/ui-phase-2-2026-09-07/design/roles-fields-direction-c/fields.js",
         "scripts/verify-ui-phase2-roles-fields-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5443,7 +6599,14 @@
         "design-plans/ui-phase-2-2026-09-07/design/scheduler-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/scheduler-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/ConfirmDialog.vue",
+          "expected": "6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b",
+          "actual": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5520,7 +6683,26 @@
         "design-plans/ui-phase-2-2026-09-07/design/security-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/security-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+          "expected": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+          "actual": "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/SecurityOperationsCenter.vue",
+          "expected": "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
+          "actual": "a583e75d6491fedc7ae94e449c5a31f421055587168101c81bf4922ffd4c2ba3",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5561,7 +6743,14 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-shell-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/NavigationShell.vue",
+          "expected": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+          "actual": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5602,7 +6791,20 @@
         "scripts/lib/ui-phase2-journey-design-data.mjs",
         "scripts/verify-ui-phase2-shell-journey-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/SelectionJourney.vue",
+          "expected": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
+          "actual": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/NavigationShell.vue",
+          "expected": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+          "actual": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5728,7 +6930,26 @@
         "scripts/verify-ui-phase2-status-c.mjs",
         "scripts/lib/ui-phase2-prototype-metrics.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/PlatformManagementCenter.vue",
+          "expected": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
+          "actual": "471e940d9f254ade77f69cbe47ad3f80d6a3b722189f7dca8c252094013aa6f1",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/use-platform-status.ts",
+          "expected": "735f0c250153e075fdf39ca40c5c47b63b7aa30dfe85e1c9f9381bc7e56d068a",
+          "actual": "3866ef2b8c4d1031386356f870e413870184e5c087599da0946c391a704ec855",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+          "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5840,7 +7061,20 @@
         "scripts/verify-ui-phase2-teams-controls-c.mjs",
         "scripts/lib/ui-phase2-inventory.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5878,7 +7112,20 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-teams-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5921,7 +7168,20 @@
         "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c/controls.css",
         "scripts/verify-ui-phase2-teams-fields-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -5957,7 +7217,14 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-theme-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/NavigationShell.vue",
+          "expected": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+          "actual": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -6000,7 +7267,20 @@
         "design-plans/ui-phase-2-2026-09-07/design/topology-direction-c/data.js",
         "design-plans/ui-phase-2-2026-09-07/design/topology-direction-c/source-logic.js"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/RuntimeTopologyCenter.vue",
+          "expected": "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
+          "actual": "aedf6a1e9a83b11ba8376aad116fe6e048261b79c6bbe92063e185d76cd3a7a3",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/runtime-topology.css",
+          "expected": "951a21caa2251c3fb136a3197a432d28ed13cc0f586b5cf5ce7574494fedfbb8",
+          "actual": "1f1bb535e78927aa2991e745478d9fe0271234231cfee55b2d83b93842055eb4",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -6051,7 +7331,7 @@
         {
           "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
           "expected": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
-          "actual": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
+          "actual": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -6109,6 +7389,12 @@
           "file": "apps/web/src/components/PlatformRoleComparison.vue",
           "expected": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
           "actual": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+          "actual": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -6190,7 +7476,20 @@
         "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/controls.css",
         "scripts/verify-ui-phase2-workspaces-controls-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -6228,7 +7527,20 @@
         "scripts/lib/ui-phase2-prototype-metrics.mjs",
         "scripts/verify-ui-phase2-workspaces-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -6271,7 +7583,20 @@
         "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/controls.css",
         "scripts/verify-ui-phase2-workspaces-fields-c.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390
@@ -6317,7 +7642,20 @@
         "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json",
         "scripts/verify-ui-phase2-workspaces-restore-states.mjs"
       ],
-      "historicalSourceAssociations": [],
+      "historicalSourceAssociations": [
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+          "actual": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "encoding": "historical-LF-exact-revision-not-current-acceptance"
+        }
+      ],
       "checkedViewportWidths": [
         1440,
         390

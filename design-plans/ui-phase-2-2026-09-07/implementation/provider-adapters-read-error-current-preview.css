@@ -1,0 +1,11 @@
+@import "./provider-adapters-read-error-preview.css";
+
+/* Current review only: retain the original proposal and meet the 13px metadata floor. */
+html
+  body.p47-read-error-review:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .ui-state-panel[data-kind="error"]
+  dt {
+  font-size: 13px;
+}

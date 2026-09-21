@@ -1,0 +1,377 @@
+{
+  "schemaVersion": 1,
+  "approvedByUser": false,
+  "scope": "Measured replay differences after shared drawer association change; not a general pixel tolerance or new approval. Before bytes and both manifests verified during this run. Cleanup of the temporary before copies was blocked by tool policy; directory remains as explicitly reported. Only three named local URL check port fields normalized for comparison; original capture checks retained.",
+  "temporaryComparisonDirectory": {
+    "path": "C:/Users/23136/AppData/Local/Temp/scoutops-p44-p46-replay-37f4e02d2ecd4dc5bf27ef9bffe270dd",
+    "files": 260,
+    "cleanup": "blocked_by_tool_policy"
+  },
+  "packets": [
+    {
+      "name": "p44-mobile-directory-implementation",
+      "checks": 134,
+      "images": 30,
+      "sourceCount": 40,
+      "sourceChanges": ["apps/web/src/components/ResponsiveFilterDrawer.vue"],
+      "differences": [
+        {
+          "file": "390-admins-focus.png",
+          "before": "a5307cbe6c515e6fe109999ab775dfff033ac684db4b92b2520dbc3f9a61f362",
+          "after": "c1a8c97eda5808f6aba6cbbf8c18acfabfa3b41b435cf9be1f2d98c806347da6",
+          "dimensions": [390, 900],
+          "pixels": 18,
+          "delta": 2,
+          "bounds": [17, 230, 372, 237]
+        },
+        {
+          "file": "760-admins-restored.png",
+          "before": "21f0f8e992090a6784f406be76ee3aec7d69dc19355d07487ff4952ffaadc358",
+          "after": "74129aae409b17ba80936ea90a8e4ce5b9f94ff38097b0d7145442cfb9546722",
+          "dimensions": [760, 900],
+          "pixels": 6,
+          "delta": 1,
+          "bounds": [758, 397, 759, 401]
+        },
+        {
+          "file": "761-admins-long.png",
+          "before": "878185e6f56623365d24f4904e40e4accecc5bc5c1184b068c70b4fc2a2b3c4d",
+          "after": "1ee8958d9e4b51c3e524244bc1c07dc4527d875ae457f61e330e571b7f714d31",
+          "dimensions": [761, 900],
+          "pixels": 26,
+          "delta": 1,
+          "bounds": [759, 33, 760, 252]
+        },
+        {
+          "file": "1440-admins-detail.png",
+          "before": "65efd8a700de283c117bbae68ee081ce3cff2fbf6faefcb69135032b6eca94ea",
+          "after": "46910721d1fb9a59ad6af1159b31c64cf310cbc91c2ed2ef0647791cf2c2572d",
+          "dimensions": [1440, 900],
+          "pixels": 9,
+          "delta": 1,
+          "bounds": [1431, 22, 1439, 249]
+        },
+        {
+          "file": "1440-admins-long.png",
+          "before": "f7126a1641c6cdf017348569309a8189587aea8aeee134ae74d08885dad45e44",
+          "after": "0c0b49a4e150a6899a15a49c7442600fe2c724b4c46b06898b468d3d1464a1f3",
+          "dimensions": [1440, 900],
+          "pixels": 25,
+          "delta": 1,
+          "bounds": [1438, 32, 1439, 233]
+        }
+      ],
+      "observationDiffs": []
+    },
+    {
+      "name": "p44-mobile-controls-implementation",
+      "checks": 110,
+      "images": 16,
+      "sourceCount": 40,
+      "sourceChanges": ["apps/web/src/components/ResponsiveFilterDrawer.vue"],
+      "differences": [
+        {
+          "file": "761-permissions-keyboard-focus.png",
+          "before": "9d863149018080e2393215c526e6687ffb98d7eef43c8710b7f7b0e1807e43e1",
+          "after": "d4bad915397e3c153df8f052a9c3525b51c980489f8599b0a89ccb2412892e97",
+          "dimensions": [761, 900],
+          "pixels": 9,
+          "delta": 1,
+          "bounds": [759, 33, 760, 37]
+        }
+      ],
+      "observationDiffs": []
+    },
+    {
+      "name": "p44-mobile-results-implementation",
+      "checks": 234,
+      "images": 48,
+      "sourceCount": 40,
+      "sourceChanges": ["apps/web/src/components/ResponsiveFilterDrawer.vue"],
+      "differences": [
+        {
+          "file": "390-admins-search-empty.png",
+          "before": "fb5e1145c9cf90b59120ca18f26245631888c3c1000d29e47a8a891e964a9f6e",
+          "after": "881230890c45b342e96a352e8d4e670609d827fa79c321812ac7fb61d9745fa2",
+          "dimensions": [390, 900],
+          "pixels": 10,
+          "delta": 1,
+          "bounds": [388, 810, 389, 815]
+        },
+        {
+          "file": "390-admins-group-filter.png",
+          "before": "b67565224d918f89aa4170653f3207616534a8d5bfd1f93a298cd27dd1eed4ed",
+          "after": "4db0d04e458b3afd6bd4ed786c4e8c1b6fe912552e84f40e704bdcf7c4887afa",
+          "dimensions": [390, 900],
+          "pixels": 10,
+          "delta": 1,
+          "bounds": [388, 810, 389, 815]
+        },
+        {
+          "file": "390-permissions-group-filter.png",
+          "before": "d54b42adaf96f9d17a9779f7e7a8b0bb9922e276ce78d289abf3b817a2780991",
+          "after": "85a6a7bc25fc6a7ce48aee0b890c7bdc7ca170e32694d9bc0542f6f69c3a34c7",
+          "dimensions": [390, 900],
+          "pixels": 10,
+          "delta": 2,
+          "bounds": [26, 244, 363, 245]
+        },
+        {
+          "file": "760-admins-search-empty.png",
+          "before": "caec741ec684787ae92ad34f91a9218cb0742e93a67b554443a9c1e8f1263268",
+          "after": "51a4e623dcc1ce6d59529740dc99bbd50fd879214236b88fb8a7380e34cff5ea",
+          "dimensions": [760, 900],
+          "pixels": 16,
+          "delta": 2,
+          "bounds": [19, 474, 740, 476]
+        },
+        {
+          "file": "760-permissions-same-role-empty.png",
+          "before": "1ca3014694b409faa8e876d7409ecc9ab2172680fcfa0182fe8f9e37a62dd83b",
+          "after": "c6588ccec957ddd7506e50d8a30435b813a4ac42fd762fe171c12c66c4dd946f",
+          "dimensions": [760, 900],
+          "pixels": 10,
+          "delta": 1,
+          "bounds": [758, 882, 759, 887]
+        },
+        {
+          "file": "760-permissions-search-empty.png",
+          "before": "5e2b2ecbcb936a93e80d3c565d0cb0b3b1c1088a05db595a88d13d30a679ca1a",
+          "after": "a0bcff23457cf904414b126b80702dfa6366d7217fbadfba632e33b21c6e05a8",
+          "dimensions": [760, 900],
+          "pixels": 9,
+          "delta": 1,
+          "bounds": [758, 219, 759, 223]
+        },
+        {
+          "file": "760-permissions-group-filter.png",
+          "before": "116297a8665871da26b6110ef8aba62e74c1f8a847b876c4f34db28a212387c9",
+          "after": "dd8a50e6f6a7d39f4080b9ff5536b2ea0807c32413f291b45dda4c77529993b6",
+          "dimensions": [760, 900],
+          "pixels": 9,
+          "delta": 1,
+          "bounds": [758, 204, 759, 208]
+        },
+        {
+          "file": "760-permissions-reset-default.png",
+          "before": "c66aa51ba70a8d08b08af2b56d38f532c73b5e1e91b3b212c6300b4db596a0b0",
+          "after": "7ed9f61f37bdf038ac81dadde2de6da51cf5de1ae75b1bfe11ddc0b7f96db869",
+          "dimensions": [760, 900],
+          "pixels": 18,
+          "delta": 1,
+          "bounds": [21, 123, 28, 246]
+        },
+        {
+          "file": "761-permissions-same-role-empty.png",
+          "before": "1bc0568e780b07babc68085eff060c84996c8b3c7b5341e1aeea353f84eda65e",
+          "after": "3f280e19954e503629c99e26ad037c350d9db7dbb05fcbd6189d8ac8e32dcd81",
+          "dimensions": [761, 900],
+          "pixels": 9,
+          "delta": 1,
+          "bounds": [759, 219, 760, 223]
+        },
+        {
+          "file": "761-permissions-group-filter.png",
+          "before": "6e226e7e49afba979daca7f89090222a85136c607ca32ed7db9b6451acbfcc6d",
+          "after": "27e7e03bb6fc7bc913321e7bb858609d3b62d758c084fc4d53f5baf61ed7d091",
+          "dimensions": [761, 900],
+          "pixels": 9,
+          "delta": 1,
+          "bounds": [759, 204, 760, 208]
+        },
+        {
+          "file": "761-permissions-reset-default.png",
+          "before": "b8f38eba09214cfce305d6c4e97b84761dc76ec75fe4fbb6609f0e07fde76c86",
+          "after": "8e1f7795044fcd96533780cb5a86abfadb4b10504947135450f7353285b4189c",
+          "dimensions": [761, 900],
+          "pixels": 11,
+          "delta": 1,
+          "bounds": [21, 209, 28, 246]
+        },
+        {
+          "file": "1440-permissions-same-role-empty.png",
+          "before": "9a47dfb5338ea3025c7b386949ee4a8fd43e79ddcfe431a2230f315bc27a837b",
+          "after": "acc41a9a837fe6cf0eaee8cad33e37f8f8997ab0d3a12eb56d6b490163943489",
+          "dimensions": [1440, 900],
+          "pixels": 10,
+          "delta": 1,
+          "bounds": [1438, 862, 1439, 867]
+        },
+        {
+          "file": "1440-permissions-search-empty.png",
+          "before": "ab0dcd931a14bfa3962b178cbd3f0fe47c762122c0551a453e907fb1c51a1bdc",
+          "after": "8d4e7926503d6b0670814bccbc35c0fcaa11ab24230abb7c548aa422efe43116",
+          "dimensions": [1440, 900],
+          "pixels": 9,
+          "delta": 1,
+          "bounds": [1438, 199, 1439, 203]
+        },
+        {
+          "file": "1440-permissions-restored-all.png",
+          "before": "95fbd28621ada52954a56f5ddece415622602632a041fa4f74db1c35834534fb",
+          "after": "8cbb65ee9ef8a9156a26c2d993ba0c8e81563c9e19da9439c1c6f1f28cafa419",
+          "dimensions": [1440, 900],
+          "pixels": 9,
+          "delta": 1,
+          "bounds": [1438, 47, 1439, 51]
+        }
+      ],
+      "observationDiffs": []
+    },
+    {
+      "name": "p44-mobile-role-facts-implementation",
+      "checks": 352,
+      "images": 24,
+      "sourceCount": 40,
+      "sourceChanges": ["apps/web/src/components/ResponsiveFilterDrawer.vue"],
+      "differences": [
+        {
+          "file": "760-permissions-role-facts.png",
+          "before": "2d075dde8948bccf9a4129e75fb2eda681e90af0b32a45889e5053fe21be4526",
+          "after": "cd26976d10bb3546f30a0295c0a765f0746395e186be1470498a8e529df59712",
+          "dimensions": [760, 900],
+          "pixels": 1,
+          "delta": 6,
+          "bounds": [16, 125, 16, 125]
+        },
+        {
+          "file": "761-admins-reset-default.png",
+          "before": "840d6ff340757700d4e5ba8e5408a59cc82328f5139f0d18b670350af6f44450",
+          "after": "52c93f143a22582c80d02ab5becf8a5ee2937894562b39d1617246fc7533a3d7",
+          "dimensions": [761, 900],
+          "pixels": 11,
+          "delta": 1,
+          "bounds": [21, 209, 28, 246]
+        },
+        {
+          "file": "1440-admins-reset-default.png",
+          "before": "2294e2f0bd5f2d96cf06eb40f5a1d9d46b381bf04599b8d7934956f313582d86",
+          "after": "271bce1391fc02c256718c06ab0eff0fef7f4a3be235392170a7166167dc9f84",
+          "dimensions": [1440, 900],
+          "pixels": 11,
+          "delta": 1,
+          "bounds": [21, 209, 28, 246]
+        }
+      ],
+      "observationDiffs": []
+    },
+    {
+      "name": "p46-approved-structure-implementation",
+      "checks": 452,
+      "images": 132,
+      "sourceCount": 173,
+      "sourceChanges": ["apps/web/src/components/ResponsiveFilterDrawer.vue"],
+      "differences": [
+        {
+          "file": "390-create-step2.png",
+          "before": "851ae19a3fa26c6d425b905b2d11cf5fc74421332d65d4ea775f0266cfaa910d",
+          "after": "879f156c17817299c50c7305727a5749385484734d0a4bb37f5e730d3ca17f64",
+          "dimensions": [390, 1000],
+          "pixels": 12,
+          "delta": 1,
+          "bounds": [366, 976, 377, 987]
+        },
+        {
+          "file": "390-create-step3.png",
+          "before": "953626f83ec3f4002823c5aa8a630892ccde61d4c9c0920cf876d087b2ed5804",
+          "after": "d2332add5edee9bb99416aa26032ca0e983589fc4eb61173342f4e6b71f10dba",
+          "dimensions": [390, 1000],
+          "pixels": 12,
+          "delta": 1,
+          "bounds": [366, 976, 377, 987]
+        },
+        {
+          "file": "390-create-step4.png",
+          "before": "5de3c6122b4cdb4d074c17fa0508531c789d7c9e1db261608d6c34b941b35184",
+          "after": "448a7382e74ceb19fc730184b928660f128e69df0be0211c41ffcba459ebf550",
+          "dimensions": [390, 1000],
+          "pixels": 12,
+          "delta": 1,
+          "bounds": [366, 976, 377, 987]
+        },
+        {
+          "file": "390-edit-conflict.png",
+          "before": "0f8a42b396389ccfd3d61494fb44c92051f18525ee26c7fab3dcf2fe9b837d7c",
+          "after": "a2c6ed0b718e634b5c989e22bf626929fe881897bfe83c21ac436bb944aa4f12",
+          "dimensions": [390, 1000],
+          "pixels": 65,
+          "delta": 2,
+          "bounds": [247, 12, 377, 970]
+        },
+        {
+          "file": "390-theme-deep-ocean.png",
+          "before": "0ef1da8d30869ebc91e825120aa45144c87020437b4b6ab0fbaa0e188146c578",
+          "after": "433684fed913e85ec48b728bc65483b48a4c909d32b3cd88d9b83670fe9d8991",
+          "dimensions": [390, 1000],
+          "pixels": 4,
+          "delta": 1,
+          "bounds": [16, 175, 17, 177]
+        },
+        {
+          "file": "760-edit-conflict.png",
+          "before": "0e41827d250790728da5c34925440370f7fb6a039697692288566dc28d6d8087",
+          "after": "3de87486668b53d4bcfd616fb1d427ebd246b53f04fed1464aead57c09b545cd",
+          "dimensions": [760, 1000],
+          "pixels": 65,
+          "delta": 2,
+          "bounds": [627, 12, 747, 970]
+        },
+        {
+          "file": "760-theme-deep-ocean.png",
+          "before": "7785f31b94342f3f0b932d7bd3c8e27c47e8277859635003096488d3b34e9dd1",
+          "after": "79ad271aa57060a3d161039d675972b269c09d53da938c535e32eeae79bf1785",
+          "dimensions": [760, 1000],
+          "pixels": 4,
+          "delta": 1,
+          "bounds": [16, 175, 17, 177]
+        },
+        {
+          "file": "840-refresh-recovered.png",
+          "before": "8745ea22b7c91c06d5ad94aa53e215f95cd0679ff6477eb04fc20c1f55593156",
+          "after": "89b5715dfc62415e12ede187ccce4ccc7b53729329cfa8e0a1aec1c01fbd6fcf",
+          "dimensions": [840, 1000],
+          "pixels": 21,
+          "delta": 1,
+          "bounds": [41, 165, 43, 257]
+        },
+        {
+          "file": "840-direct-recovered.png",
+          "before": "ea20a0b256e78f813e45120768ac27c86dcb81cda9a1fcebfe17bb37f1b43f6b",
+          "after": "596b6dd1dfb0c7687ae72cb8b3b45d0bf00fede27bc959947219b038aeb6e294",
+          "dimensions": [840, 1000],
+          "pixels": 71,
+          "delta": 2,
+          "bounds": [622, 10, 719, 53]
+        },
+        {
+          "file": "840-theme-cloud-white.png",
+          "before": "4ea940b399cc1aa4d1043380310081135fc45f1ae5121f52b1ddd74c63f9aff6",
+          "after": "b64ccfe3eeb653223da64b1ff9235058c350009f1fcc720c9dd522ca1c0accfc",
+          "dimensions": [840, 1000],
+          "pixels": 71,
+          "delta": 2,
+          "bounds": [622, 10, 719, 53]
+        },
+        {
+          "file": "1440-theme-aurora-purple.png",
+          "before": "42d562cceb2a4d559b844b05cdb01c6f227fd75bda834743561285fc72e3ca83",
+          "after": "c89a06395d4b97ef186a59dde44d451644e554550dcc881d1c6c2c878daaae74",
+          "dimensions": [1440, 1000],
+          "pixels": 4,
+          "delta": 1,
+          "bounds": [28, 304, 247, 343]
+        },
+        {
+          "file": "1440-theme-cloud-white.png",
+          "before": "0946ed1cad3c12935bb8f96d0a69bc1c6f1153d85623efc87a6cc7c9d570917d",
+          "after": "93afbb2db9a147a2c0580c5eb00ff97a3e8b2f7a4e7e3ddb194a10bc78b22805",
+          "dimensions": [1440, 1000],
+          "pixels": 34,
+          "delta": 2,
+          "bounds": [1193, 16, 1236, 57]
+        }
+      ],
+      "observationDiffs": []
+    }
+  ]
+}

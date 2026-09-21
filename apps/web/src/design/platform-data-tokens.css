@@ -1,0 +1,30 @@
+/* Existing local C palette; no global theme aliases or layout declarations. */
+.platform-data {
+  --so-data-primary: #254a9c;
+  --so-data-primary-soft: #dfe8f8;
+  --so-data-surface: #ffffff;
+  --so-data-canvas: #edf1f6;
+  --so-data-surface-soft: #f4f7fb;
+  --so-data-text: #202c3d;
+  --so-data-text-muted: #58677b;
+  --so-data-border: #cbd5e1;
+  --so-data-field-border: #b7c3d4;
+  --so-data-info-soft: #e7eefb;
+  --so-data-info-border: #9fb5df;
+  --so-data-shadow: rgb(24 45 84 / 14%);
+  --so-data-focus: #1f5bd8;
+  --so-data-focus-fallback: #2f6fed;
+  --so-data-on-rail: #fff;
+  --so-data-rail-divider: rgb(255 255 255 / 38%);
+  --so-data-rail-selected-text: #173d88;
+  --so-data-rail-footer-border: rgb(255 255 255 / 30%);
+  --so-data-rail-muted: rgb(255 255 255 / 86%);
+  --so-data-feedback-border: #cdd9f1;
+  --so-data-feedback-title: #1f3764;
+  --so-data-feedback-text: #52698d;
+  --so-data-feedback-strong: #13294f;
+  --so-data-quality-aurora-panel: #f8f6ff;
+  --so-data-quality-cloud-panel: #f7fbff;
+  --so-data-rail-hover-border: rgb(255 255 255 / 48%);
+  --so-data-rail-hover-surface: rgb(255 255 255 / 10%);
+}

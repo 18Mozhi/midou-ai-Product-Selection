@@ -1,4 +1,5 @@
 import test from "node:test";
+import { acceptanceHistoricalCapture } from "../../scripts/lib/ui-phase2-acceptance-historical-capture.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
@@ -79,8 +80,10 @@ test("P49 acceptance CSS is isolated, responsive, and keyboard visible", () => {
   assert.ok(text.includes("@media (forced-colors: active)"));
 });
 
-test("P49 acceptance evidence binds states, read-only requests, and images", () => {
-  const evidence = JSON.parse(read(`${root}/evidence.json`));
+test("P49 historical acceptance evidence binds states, read-only requests, and images", () => {
+  const historical = acceptanceHistoricalCapture("page");
+  assert.equal(read(`${root}/evidence.json`), historical.manifest);
+  const evidence = JSON.parse(historical.manifest);
   assert.equal(evidence.kind, "P49-ACCEPTANCE-PAGE-REVIEW-r1");
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.productionChanged, false);
@@ -92,7 +95,7 @@ test("P49 acceptance evidence binds states, read-only requests, and images", () 
   assert.equal(evidence.screenshots.length, 16);
   assert.ok(Object.keys(evidence.sourceHashes).length >= 45);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assert.equal(hash(historical.source(file)), expected, file);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

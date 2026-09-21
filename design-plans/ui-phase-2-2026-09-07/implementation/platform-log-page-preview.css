@@ -81,8 +81,17 @@ html body.shell-vue-c:has(.platform-log-center--review) {
         background: #102a63;
         color: white;
       }
+      .audited-reason-dialog button[type="button"] {
+        background: white;
+        color: #1748b5;
+      }
+      .audited-reason-dialog button[type="button"]:hover:not(:disabled) {
+        background: #edf3ff;
+        color: #1748b5;
+      }
       button:disabled,
-      .platform-log-reload[aria-disabled="true"] {
+      .platform-log-reload[aria-disabled="true"],
+      .platform-log-export[aria-disabled="true"] {
         background: #e9eef5;
         color: #64748b;
         border-color: #c7d3e4;

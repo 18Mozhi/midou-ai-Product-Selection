@@ -5,6 +5,7 @@ import { createHash } from "node:crypto";
 import vm from "node:vm";
 import ts from "typescript";
 import { parse } from "@vue/compiler-sfc";
+import { assertOrganizationReasonContract } from "../../scripts/lib/ui-phase2-organization-reason-contract.mjs";
 import {
   base,
   parentFile,
@@ -118,7 +119,7 @@ function actualFunction(file, name, bindings) {
   );
   return box.exports[name];
 }
-test("P30 actual shared Vue submit permits 501 characters but rejects trimmed length below two", () => {
+test("P30 actual shared Vue submit permits 501 characters but rejects trimmed length below two", async () => {
   for (const value of ["", " ", "短", "核验", "因".repeat(501)]) {
     const calls = [];
     actualFunction(dependencies[2], "submit", {
@@ -128,7 +129,7 @@ test("P30 actual shared Vue submit permits 501 characters but rejects trimmed le
     })();
     assert.deepEqual(calls, value.trim().length < 2 ? [] : [["submit", value.trim()]]);
   }
-  assert.doesNotMatch(sources[dependencies[2]], /maxlength=/);
+  await assertOrganizationReasonContract(sources[dependencies[2]], sources[parentFile]);
   assert.match(sources[dependencies[1]], /v-model="form.reason" required maxlength="500"/);
 });
 function invitationHarness(formValue, transport = async () => ({ request_id: "offline" })) {

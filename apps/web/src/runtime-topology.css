@@ -55,6 +55,7 @@
   text-decoration: none;
 }
 .topology-hero button:disabled,
+.topology-hero .topology-read-action[aria-disabled="true"],
 .topology-state button:disabled,
 .topology-refresh-notice button:disabled {
   cursor: progress;
@@ -102,9 +103,12 @@
 .topology-state div {
   flex: 1;
 }
-.topology-state b {
+.topology-state b,
+.topology-state h3,
+.topology-refresh-notice h3 {
   display: block;
   font-size: 18px;
+  margin: 0;
 }
 .topology-state p {
   color: var(--topology-muted);

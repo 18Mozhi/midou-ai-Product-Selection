@@ -1,7 +1,6 @@
-import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
+import { userReviewHistoricalCapture } from "../../scripts/lib/ui-phase2-user-review-historical-capture.mjs";
+import { userPagePreview as currentUserPagePreview } from "../../scripts/lib/ui-phase2-user-page-current-preview.mjs";
 import test from "node:test";
-import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
-import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -9,8 +8,7 @@ import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import { userPagePreview } from "../../scripts/lib/ui-phase2-user-page-preview.mjs";
 
-const read = (file) =>
-  historicalAdminResultsSource(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n"));
+const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const parent = "apps/web/src/components/PlatformAccountCenter.vue";
 const detail = "apps/web/src/components/PlatformUserDetailDialog.vue";
@@ -49,7 +47,7 @@ for (const [file, surface] of [
 ]) {
   test(`P43 ${surface} composition preserves full script, every directive/expression and native control`, () => {
     const original = read(file),
-      transformed = userPagePreview(original, surface);
+      transformed = currentUserPagePreview(original, surface);
     assert.equal(
       parse(transformed).descriptor.scriptSetup.content,
       parse(original).descriptor.scriptSetup.content,
@@ -60,18 +58,22 @@ for (const [file, surface] of [
 }
 test("P43 transformation fails closed on mismatched source and unknown surface", () => {
   assert.throws(() =>
-    userPagePreview(
+    currentUserPagePreview(
       read(parent).replace('class="account-metrics"', 'class="unexpected"'),
       "parent",
     ),
   );
   assert.throws(() =>
-    userPagePreview(read(detail).replace("<h4>组织与角色</h4>", "<h4>Changed</h4>"), "detail"),
+    currentUserPagePreview(
+      read(detail).replace("<h4>组织与角色</h4>", "<h4>Changed</h4>"),
+      "detail",
+    ),
   );
-  assert.throws(() => userPagePreview(read(parent), "unknown"));
+  assert.throws(() => currentUserPagePreview(read(parent), "unknown"));
 });
 
 test("P43 actual Vue review evidence pins captured source revisions and exact image set", () => {
+  const historical = userReviewHistoricalCapture("page");
   const folder = "output/playwright/p43-page-vue-preview";
   const evidence = JSON.parse(read(`${folder}/evidence.json`));
   assert.equal(evidence.kind, "P43-PAGE-VUE-PREVIEW-r1");
@@ -81,17 +83,13 @@ test("P43 actual Vue review evidence pins captured source revisions and exact im
   assert.equal(evidence.screenshots.length, 68);
   assert.equal(Object.keys(evidence.sourceHashes).length, 36);
   for (const [file, value] of Object.entries(evidence.sourceHashes))
-    assert.equal(
-      hash(historicalUserCreationSource(file, historicalFilterResetSource(file, read(file)))),
-      value,
-      file,
-    );
+    assert.equal(hash(historical.source(file)), value, file);
   for (const [file, surface] of [
     [parent, "parent"],
     [detail, "detail"],
   ])
     assert.equal(
-      hash(userPagePreview(historicalUserCreationSource(file, read(file)), surface)),
+      hash(userPagePreview(historical.source(file), surface)),
       evidence.transformedHashes[file],
     );
   assert.deepEqual(

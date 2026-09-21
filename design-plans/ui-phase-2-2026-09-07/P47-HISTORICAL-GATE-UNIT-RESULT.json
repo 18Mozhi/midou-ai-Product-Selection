@@ -1,0 +1,1836 @@
+{
+  "schemaVersion": 1,
+  "kind": "full-unit-before-after-snapshot",
+  "stage": "P47-exact-historical-evidence-closure",
+  "boundary": "Full local unit suite only; failure names and locations complete, multiline error bodies not retained. No production acceptance or visual approval.",
+  "before": {
+    "files": 249,
+    "counts": [
+      "# tests 1440",
+      "# pass 1261",
+      "# fail 179",
+      "# cancelled 0",
+      "# skipped 0",
+      "# duration_ms 314601.7142"
+    ],
+    "failures": [
+      {
+        "name": "376 - p46-approved-structure-implementation/current current evidence binds its imported palette, sources and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-current-palette-evidence.test.mjs:51:3'",
+        "error": "|-"
+      },
+      {
+        "name": "377 - p46-provider-feedback-implementation/current current evidence binds its imported palette, sources and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-current-palette-evidence.test.mjs:51:3'",
+        "error": "|-"
+      },
+      {
+        "name": "387 - P49 action evidence binds scope, POST, feedback, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-1688-acceptance-actions.test.mjs:83:1'",
+        "error": "|-"
+      },
+      {
+        "name": "391 - P49 lifecycle evidence binds baseline, proposed return, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-1688-acceptance-lifecycle.test.mjs:76:1'",
+        "error": "|-"
+      },
+      {
+        "name": "395 - P49 acceptance evidence binds states, read-only requests, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-1688-acceptance-page.test.mjs:82:1'",
+        "error": "|-"
+      },
+      {
+        "name": "399 - P49 read-state evidence binds retries, recovery, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-1688-acceptance-read-states.test.mjs:79:1'",
+        "error": "|-"
+      },
+      {
+        "name": "402 - P49 robustness evidence binds every matrix run, token, and image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-1688-acceptance-robustness.test.mjs:69:1'",
+        "error": "|-"
+      },
+      {
+        "name": "403 - Historical P39 creation preview preserves its original production source or native validation contract",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-account-create-preview.test.mjs:17:1'",
+        "error": "|-"
+      },
+      {
+        "name": "404 - P39 creation exact42 PNG and121 browser checks retain captured source revisions",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-account-create-preview.test.mjs:43:1'",
+        "error": "|-"
+      },
+      {
+        "name": "409 - P39 evidence has captured source revisions, exact images and explicit fixture boundaries",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-account-filter-preview.test.mjs:64:1'",
+        "error": "|-"
+      },
+      {
+        "name": "412 - P39 whole-page captures have six normal breakpoints, exact files and captured source revisions",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-account-page-preview.test.mjs:57:1'",
+        "error": "|-"
+      },
+      {
+        "name": "511 - P44 comparison evidence uses current actual sources and exact formal images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-comparison-preview.test.mjs:12:1'",
+        "error": "|-"
+      },
+      {
+        "name": "514 - P44 creation evidence pins captured production plus review-only composition and every PNG",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-create-preview.test.mjs:59:1'",
+        "error": "|-"
+      },
+      {
+        "name": "518 - P44 administrator detail evidence pins current sources, transforms and exact image inventory",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-detail-preview.test.mjs:63:1'",
+        "error": "|-"
+      },
+      {
+        "name": "521 - P44 production controls baseline: exact captured sources, images and read-only fixtures",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-controls-implementation.test.mjs:21:3'",
+        "error": "|-"
+      },
+      {
+        "name": "522 - P44 production controls current: exact captured sources, images and read-only fixtures",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-controls-implementation.test.mjs:21:3'",
+        "error": "|-"
+      },
+      {
+        "name": "523 - P44 changes only mobile controls; excluded styles, focus geometry and default pixels stay exact",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-controls-implementation.test.mjs:70:1'",
+        "error": "|-"
+      },
+      {
+        "name": "524 - P44 production parent only appends local stylesheet; script/template and other styles unchanged",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-controls-implementation.test.mjs:100:1'",
+        "error": "|-"
+      },
+      {
+        "name": "526 - directory baseline: exact actual sources, 30 PNGs and scoped read-only replay",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-directory-implementation.test.mjs:20:3'",
+        "error": "|-"
+      },
+      {
+        "name": "527 - directory current: exact actual sources, 30 PNGs and scoped read-only replay",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-directory-implementation.test.mjs:20:3'",
+        "error": "|-"
+      },
+      {
+        "name": "529 - parent changes only static directory heading and stylesheet import; existing contracts stay exact",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-directory-implementation.test.mjs:104:1'",
+        "error": "|-"
+      },
+      {
+        "name": "530 - same-role baseline evidence has exact sources and all 48 formal images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-results-implementation.test.mjs:33:3'",
+        "error": "|-"
+      },
+      {
+        "name": "531 - same-role current evidence has exact sources and all 48 formal images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-results-implementation.test.mjs:33:3'",
+        "error": "|-"
+      },
+      {
+        "name": "532 - original controls, summaries, P45, desktop and filtered results keep their computed styles",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-results-implementation.test.mjs:82:1'",
+        "error": "|-"
+      },
+      {
+        "name": "533 - production template adds only a presentation class; original script and content stay exact",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-results-implementation.test.mjs:112:1'",
+        "error": "|-"
+      },
+      {
+        "name": "534 - unknown source revisions fail closed; approved result PNGs remain immutable",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-results-implementation.test.mjs:158:1'",
+        "error": "|-"
+      },
+      {
+        "name": "535 - role facts baseline binds actual sources and 24 formal images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-role-facts-implementation.test.mjs:29:3'",
+        "error": "|-"
+      },
+      {
+        "name": "536 - role facts current binds actual sources and 24 formal images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-role-facts-implementation.test.mjs:29:3'",
+        "error": "|-"
+      },
+      {
+        "name": "538 - only scoped role-facts CSS is appended; original controls/results and Vue stay exact",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-role-facts-implementation.test.mjs:125:1'",
+        "error": "|-"
+      },
+      {
+        "name": "542 - P44 review pins actual source and exact image inventories",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-page-assembly-preview.test.mjs:77:1'",
+        "error": "|-"
+      },
+      {
+        "name": "544 - P44 boundary baseline pins current source, transformations, images and read-only replay",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-page-boundary-preview.test.mjs:24:3'",
+        "error": "|-"
+      },
+      {
+        "name": "545 - P44 boundary preview pins current source, transformations, images and read-only replay",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-page-boundary-preview.test.mjs:24:3'",
+        "error": "|-"
+      },
+      {
+        "name": "550 - P44 review pins actual source and exact image inventories",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-page-preview.test.mjs:73:1'",
+        "error": "|-"
+      },
+      {
+        "name": "553 - P37 mounted page evidence pins39 current sources and76 exact four-width images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-audit-page-preview.test.mjs:52:1'",
+        "error": "|-"
+      },
+      {
+        "name": "615 - P58 confirmation packet binds sixty current-source runs and every continuous image without write execution",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-commercial-confirm-review.test.mjs:126:1'",
+        "error": "|-"
+      },
+      {
+        "name": "620 - P58 five-path rejection packet binds raw sources, retained requests and every region image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-commercial-confirm-write-review.test.mjs:190:1'",
+        "error": "|-"
+      },
+      {
+        "name": "624 - P58 focus evidence binds unchanged visual pairs, current sources, every control traversal and local network",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-commercial-create-focus-review.test.mjs:207:1'",
+        "error": "|-"
+      },
+      {
+        "name": "629 - outcome evidence binds current raw files, complete images, original retry policy and no POST on recovery",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-commercial-create-outcome-review.test.mjs:276:1'",
+        "error": "|-"
+      },
+      {
+        "name": "639 - P58 actual Vue creation evidence binds raw sources and complete continuous dialog images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-commercial-create-review.test.mjs:90:1'",
+        "error": "|-"
+      },
+      {
+        "name": "643 - P58 rejected-write evidence binds current raw sources, every screenshot and explicit local requests",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-commercial-create-write-review.test.mjs:125:1'",
+        "error": "|-"
+      },
+      {
+        "name": "646 - P58 edit browser packet binds current raw sources, untouched background, continuous images and no writes",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-commercial-edit-review.test.mjs:91:1'",
+        "error": "|-"
+      },
+      {
+        "name": "665 - shared shell role and state contract binds every current source site without collapsing business variants",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-contract-audit.test.mjs:340:1'",
+        "error": "|-"
+      },
+      {
+        "name": "666 - audited reason source bindings retain every current site and all consumer hash claims",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-contract-audit.test.mjs:408:1'",
+        "error": "|-"
+      },
+      {
+        "name": "670 - P50 actual Vue evidence binds the safe default page and login editor",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-assets-page.test.mjs:64:1'",
+        "error": "|-"
+      },
+      {
+        "name": "671 - P50 credential editor focus evidence binds every state and viewport",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-editor-focus.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "672 - P50 boundary evidence binds file limits, helper recovery and source identity",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-login-boundary.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "673 - P50 cache evidence binds actual KeepAlive deactivation to fresh login material",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-login-cache.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "674 - P50 detached login evidence binds one owned chain and authoritative reconciliation",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-login-detached.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "675 - P50 lifecycle evidence binds material ownership, write locks and unknown outcomes",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-login-lifecycle.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "678 - P50 material evidence binds six safe states at four widths",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-login-material.test.mjs:63:1'",
+        "error": "|-"
+      },
+      {
+        "name": "679 - P50 generic write evidence binds pending locks and detached settlement ownership",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-write-ownership.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "681 - P35 current mounted Vue proof binds140 exact pixel comparisons at four boundary widths",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-export-detail-tokens.test.mjs:39:1'",
+        "error": "|-"
+      },
+      {
+        "name": "718 - P30 controls retain exact source and PNG hashes with 432 state and 12 context images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-controls.test.mjs:25:1'",
+        "error": "|-"
+      },
+      {
+        "name": "719 - P30 distinguishes 19 primary controls, 22 variants and ten proposal-only controls",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-controls.test.mjs:35:1'",
+        "error": "|-"
+      },
+      {
+        "name": "723 - P30 builder rejects omitted/extra primary actions and stale controls source",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-controls.test.mjs:103:1'",
+        "error": "|-"
+      },
+      {
+        "name": "724 - P30 fields bind current source hashes and all 164 unique field/form PNGs",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-fields.test.mjs:24:1'",
+        "error": "|-"
+      },
+      {
+        "name": "725 - P30 field registry covers three models, six controlled values and shared reason without claiming approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-fields.test.mjs:45:1'",
+        "error": "|-"
+      },
+      {
+        "name": "731 - P30 registers all 28 local sites without duplicating parent event forwards",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-review.test.mjs:60:1'",
+        "error": "|-"
+      },
+      {
+        "name": "734 - P30 distinguishes nine local models from six controlled values and shared reason input",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-review.test.mjs:103:1'",
+        "error": "|-"
+      },
+      {
+        "name": "736 - P30 refuses invented completion, missing source identities and stale dependencies",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-review.test.mjs:142:1'",
+        "error": "|-"
+      },
+      {
+        "name": "784 - P34 mounted mobile filter evidence covers four widths and preserves adjacent views",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-approvals-mobile-filters.test.mjs:31:1'",
+        "error": "|-"
+      },
+      {
+        "name": "789 - P34 C parent 74 images bind unchanged actual behavior and inherited child sources",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-approvals-parent-c.test.mjs:59:1'",
+        "error": "|-"
+      },
+      {
+        "name": "790 - P34 actual parent evidence pins source and all 64 state images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-approvals-parent.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "792 - P34 permission r2 changes only four copy slots and retains both r1 review objects",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-approvals-permission-tone-r2.test.mjs:6:1'",
+        "error": "|-"
+      },
+      {
+        "name": "802 - P34 live429 proof binds176 checks,52 unchanged images and8 new screenshots",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-approvals-rate-limit-vue.test.mjs:57:1'",
+        "error": "|-"
+      },
+      {
+        "name": "808 - P34 implementation evidence and narrow approval records resolve without promoting design packages",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-approvals-review.test.mjs:154:1'",
+        "error": "|-"
+      },
+      {
+        "name": "814 - P37 actual current parent/child/browser evidence binds62 checks and exact16 PNG",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-audit-copy-evidence.test.mjs:51:1'",
+        "error": "|-"
+      },
+      {
+        "name": "828 - P37 current parent r2 proves192 checks and40 images without promoting the two history findings",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-audit-pagination-evidence.test.mjs:38:1'",
+        "error": "|-"
+      },
+      {
+        "name": "835 - P37 historical parent/child/API client evidence is pinned to its baseline source",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-audit-parent-read.test.mjs:13:1'",
+        "error": "|-"
+      },
+      {
+        "name": "852 - P35 actual child proof covers mobile layout, null versus zero and desktop exclusion",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-data-export-detail.test.mjs:93:1'",
+        "error": "|-"
+      },
+      {
+        "name": "858 - P35 parent C proposal pins its actual-parent basis and every deliverable without approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-data-parent-c.test.mjs:11:1'",
+        "error": "|-"
+      },
+      {
+        "name": "860 - P35 App/parent/child capture and128 images retain exact sources before equivalent token extraction",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-data-parent.test.mjs:11:1'",
+        "error": "|-"
+      },
+      {
+        "name": "865 - P35 all independent control, field and real Vue images are pinned without promoting global slots",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-data-review.test.mjs:110:1'",
+        "error": "|-"
+      },
+      {
+        "name": "869 - P36 capture-time sources and354 images are pinned while original112 images remain unchanged",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-token-controls.test.mjs:128:1'",
+        "error": "|-"
+      },
+      {
+        "name": "873 - P36 historical source and image fingerprints retain exact captures",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-token-fields.test.mjs:110:1'",
+        "error": "|-"
+      },
+      {
+        "name": "878 - P36 capture-time source and image hashes retain only permanent delivery files",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-token-mobile-filters.test.mjs:80:1'",
+        "error": "|-"
+      },
+      {
+        "name": "879 - P36 proposal source association never rewrites original662 images or approvals",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-token-mobile-filters.test.mjs:90:1'",
+        "error": "|-"
+      },
+      {
+        "name": "880 - P36 parent read captures source-backed parent, child, client and imported styles",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-token-parent-read.test.mjs:12:1'",
+        "error": "|-"
+      },
+      {
+        "name": "899 - P36 exact25 current sites become12 route actions,2 wirings and5 exclusions",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-token-review.test.mjs:30:1'",
+        "error": "|-"
+      },
+      {
+        "name": "903 - P36 every control/field/composition/implementation image is bound without promotion",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-token-review.test.mjs:109:1'",
+        "error": "|-"
+      },
+      {
+        "name": "906 - P41 evidence binds captured source revisions, exact images and six step breakpoints",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-create-preview.test.mjs:65:1'",
+        "error": "|-"
+      },
+      {
+        "name": "908 - Historical P41 preserves its original source and earlier P40 artifacts",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-create-preview.test.mjs:129:1'",
+        "error": "|-"
+      },
+      {
+        "name": "910 - P42 evidence binds exact source, images and six breakpoints",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-detail-preview.test.mjs:83:1'",
+        "error": "|-"
+      },
+      {
+        "name": "912 - Historical P42 evidence retains its production source and earlier P40/P41 artifacts",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-detail-preview.test.mjs:162:1'",
+        "error": "|-"
+      },
+      {
+        "name": "915 - P40 screenshots bind captured source revisions, exact files and all six normal widths",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-list-preview.test.mjs:85:1'",
+        "error": "|-"
+      },
+      {
+        "name": "944 - P42 historical full app capture binds original loaded sources and exact screenshot inventory",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-shell-lifecycle.test.mjs:16:1'",
+        "error": "|-"
+      },
+      {
+        "name": "947 - P42 lifecycle is diagnostic, bound to captured source revisions and exact images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-write-lifecycle.test.mjs:17:1'",
+        "error": "|-"
+      },
+      {
+        "name": "951 - current and baseline Vue runs retain exact source and PNG fingerprints without relabeling old defects",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-write-ownership.test.mjs:31:1'",
+        "error": "|-"
+      },
+      {
+        "name": "955 - P45 evidence pins current source, transformed template and exact formal image inventory",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-permission-page-preview.test.mjs:56:1'",
+        "error": "|-"
+      },
+      {
+        "name": "988 - P38 exact30 sites map to19 interactions and one dialog definition without approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-platform-overview-review.test.mjs:31:1'",
+        "error": "|-"
+      },
+      {
+        "name": "992 - P38 source wiring rejects wrong dispatcher, capabilities, component props or route surface",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-platform-overview-review.test.mjs:124:1'",
+        "error": "|-"
+      },
+      {
+        "name": "993 - P38 eight actual entry compositions bind exact pixels and52 fixture router clicks, not RBAC",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-platform-overview-review.test.mjs:159:1'",
+        "error": "|-"
+      },
+      {
+        "name": "995 - P38 actual Vue preview binds current source and every permanent review image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-platform-overview-vue-preview.test.mjs:17:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1000 - P38 detail proposal binds current sources and preserves original91 PNG and baseline manifest",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-platform-provider-detail.test.mjs:15:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1004 - P38 toolbar binds actual Vue and fixture sources with 18 distinct state images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-platform-toolbar.test.mjs:17:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1020 - P47 access evidence binds current sources, all pictures and unchanged 500 state",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-access.test.mjs:115:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1024 - P47 historical empty proposal stays exactly reversible against its pre-focus source",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-empty.test.mjs:26:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1027 - P47 pre-refresh archive empty evidence binds focus, exact sources and all pictures",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-empty.test.mjs:137:3'",
+        "error": "|-"
+      },
+      {
+        "name": "1028 - P47 current empty evidence binds focus, exact sources and all pictures",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-empty.test.mjs:137:3'",
+        "error": "|-"
+      },
+      {
+        "name": "1029 - P47 empty focus stage remains exact before the verified refresh-only repair",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-empty.test.mjs:198:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1030 - P47 current empty preview changes only six presentation slots and preserves both actual focus handlers",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-empty.test.mjs:210:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1046 - P47 actual45-row filter/page evidence binds current source and all images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-filter-pagination.test.mjs:110:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1047 - P47 lifecycle evidence uses current actual App sources and unchanged preserve route",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-lifecycle.test.mjs:13:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1057 - P47 read-error actual Vue review binds raw sources, all pictures and unchanged neighboring states",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-read-error.test.mjs:64:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1074 - P47 refresh failure proposal compiles and preserves original request/filter contracts",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-refresh-failure.test.mjs:25:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1078 - P47 refresh focus patch changes only the wrapper, native handler and persistent tabindex",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-refresh-focus.test.mjs:18:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1085 - P47 current refresh focus packet binds raw sources, imported styles and eight review images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-refresh-focus.test.mjs:81:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1088 - P47 table-tools evidence binds current sources, images, and interaction boundaries",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-table-tools.test.mjs:54:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1092 - P47 C preserves prior runtime outside the independently verified empty-focus repair",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapters-c.test.mjs:55:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1095 - P47 C actual browser pack binds current raw runtime and all20 images without preview injection",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapters-c.test.mjs:163:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1097 - P47 detail actual Vue review preserves all script, event/model/condition contracts and original displayed facts",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapters-detail-vue.test.mjs:73:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1099 - P47 detail continuous screenshots bind current sources and explicit fixture boundaries",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapters-detail-vue.test.mjs:116:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1101 - P47 actual Vue review preserves all script, event/model/condition contracts and original displayed facts",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapters-vue.test.mjs:72:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1103 - P47 actual route, original/synthetic fixtures and exact72 PNG inventory bind current raw files",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapters-vue.test.mjs:108:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1107 - P46 historical async Vue120 formal pictures and source hashes match exact captured files",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-async-implementation.test.mjs:85:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1118 - P48 compatibility evidence binds all read states, modal behavior, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-compatibility.test.mjs:90:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1120 - P46 actual route evidence binds current raw source, all fields and every formal image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-desktop-editor.test.mjs:43:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1123 - P46 detail historical source and exact68 image inventory are pinned",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-detail-preview.test.mjs:42:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1127 - P46 actual App captures bind raw sources, mock network and all 80 formal PNGs",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-editor-isolation.test.mjs:39:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1132 - P46 editor historical source and134 image inventory remain pinned",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-editor-preview.test.mjs:40:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1138 - P46 feedback80 actual Vue pictures bind current raw source, baseline, network and closed processes",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-feedback-implementation.test.mjs:116:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1139 - P46 mobile feedback appearances match review reference; desktop and other states keep computed styling",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-feedback-implementation.test.mjs:151:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1140 - P46 unaffected screenshots stay pixel-identical apart from three measured raster-edge deltas",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-feedback-implementation.test.mjs:193:1'",
+        "error": "'production-390-late-success-create-settled.png unexpected raster difference'"
+      },
+      {
+        "name": "1143 - P46 field evidence binds raw current source and every retained image; old source only in baseline renderer",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-field-semantics.test.mjs:162:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1148 - P46 historical focus evidence pins its original sources, comparisons and restoration",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-focus-implementation.test.mjs:218:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1150 - P46 exact historical adapter rejects unknown drift and preserves approved evidence",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-keyboard-implementation.test.mjs:58:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1151 - P46 current keyboard capture binds raw sources and separate 104-image manifest",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-keyboard-implementation.test.mjs:78:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1154 - P46 historical page source and formal image manifest keep exact associations",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-page-preview.test.mjs:43:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1160 - P48 parser-sample evidence binds all read states, modal behavior, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-parser-samples.test.mjs:117:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1161 - P46 approved full-route evidence binds exact pre-keyboard entry and sources",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-route-assembly.test.mjs:20:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1168 - P48 configuration-return evidence binds acknowledgement, reread, recovery, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-source-configuration-return.test.mjs:84:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1172 - P48 configuration-state evidence binds every state, write order, and image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-source-configuration-states.test.mjs:95:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1176 - P48 configuration evidence binds fields, modal behavior, network, and every image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-source-configuration.test.mjs:83:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1180 - P48 version-action evidence binds write, reread, recovery, and every image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-source-version-actions.test.mjs:96:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1184 - P48 source versions evidence binds all states, modal behavior, network, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-source-versions.test.mjs:79:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1187 - P48 mobile evidence binds all states, images, sources, and zero desktop drift",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-sources-mobile.test.mjs:71:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1190 - P48 actual Vue evidence binds 146 rows, all controls, and every image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-sources-page.test.mjs:54:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1194 - P48 refresh evidence binds preserved data, retries, focus, and every image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-sources-refresh.test.mjs:72:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1198 - P48 source-state evidence binds seven states, recovery, and every image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-sources-states.test.mjs:85:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1199 - P46 structure adds only one stylesheet; template, script and contracts remain byte-identical",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-structure-implementation.test.mjs:24:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1201 - P46 before and current production entry captures bind raw sources and separate PNG inventory",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-structure-implementation.test.mjs:74:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1203 - P46 loaded stylesheet stops matching P47; original palette, layout and screenshots restore",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-structure-implementation.test.mjs:148:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1205 - P46 current raw App captures bind all104 images and prove summary changes without successful writes",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-validation-summary.test.mjs:148:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1300 - P31 mounted controls and extension evidence bind twenty-two Vue screenshots without approving the page",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-roles-review.test.mjs:33:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1301 - P31 covers 30 sites with 20 actions, six exact forwards and no implied approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-roles-review.test.mjs:93:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1303 - P31 registers 20 models, one controlled type and shared reason separately",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-roles-review.test.mjs:122:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1304 - P31 rejects omitted identities, changed wiring, fields, stale sources and invented approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-roles-review.test.mjs:149:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1307 - P31 control evidence binds exact selector, states and both viewports with no stale source bypass",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-roles-review.test.mjs:233:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1310 - P31 field source and screenshot fingerprints fail on stale evidence or omitted mobile combinations",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-roles-review.test.mjs:325:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1326 - all outside-route source candidates retain exact IDs and partial runtime status",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-source-scope.test.mjs:55:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1336 - P33 evidence rejects drift in source dependencies and all permanent screenshots",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-teams-controls.test.mjs:74:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1340 - P33 field evidence rejects source and image drift without modifying approved P32 image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-teams-fields.test.mjs:80:1'",
+        "error": "|-"
+      },
+      {
+        "name": "228 - tests\\\\unit\\\\ui-phase2-teams-review.test.mjs",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-teams-review.test.mjs:1:1'",
+        "error": "'test failed'"
+      },
+      {
+        "name": "1343 - shared copy change leaves all 15 direct consumer source files untouched",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-technical-copy-evidence.test.mjs:14:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1345 - shared clipboard evidence binds actual source, historical normal parity and all 8 images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-technical-copy-evidence.test.mjs:126:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1354 - P36 current mounted copy proof binds raw current sources, not historical substitution",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-copy-ownership.test.mjs:15:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1359 - P36 existing preview binds capture-time originals and transformed template without relabeling approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-create-preview.test.mjs:47:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1363 - P36 list capture pins raw current source, transformed template and60 exact screenshots",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-list-preview.test.mjs:59:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1367 - P36 page capture binds current source and44 exact four-width rendered states",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-page-preview.test.mjs:69:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1370 - P36 reason review pins current untransformed sources and complete80 image manifest",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-reason-preview.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1372 - P36 reason preview is CSS-only and leaves production and approved filter evidence untouched",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-reason-preview.test.mjs:96:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1374 - P36 secret evidence binds current originals and review template, without relabeling approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-secret-preview.test.mjs:50:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1377 - P36 write diagnostic pins current production sources and all76 evidence images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-write-lifecycle.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1380 - creation regression retains distinct exact baseline/current Vue sources and 64 images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-user-create-lifecycle.test.mjs:15:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1384 - P43 creation evidence pins captured production plus review-only composition and every PNG",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-user-create-preview.test.mjs:62:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1390 - P43 actual Vue review evidence pins captured source revisions and exact image set",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-user-page-preview.test.mjs:74:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1392 - password ownership preserves exact before/after Vue sources and 80 diagnostic/regression images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-user-password-lifecycle.test.mjs:16:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1396 - P43 password captures have exact historical source revisions, transformed code and88 images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-user-password-preview.test.mjs:62:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1400 - P43 reason evidence binds captured sources, shared transformations and280 exact PNGs",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-user-reasons-preview.test.mjs:36:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1405 - P32 field evidence is source-bound and every permanent PNG matches",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-fields.test.mjs:68:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1408 - P32 renderer, visual adapter and verifier are fingerprint-bound",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-restore-states.test.mjs:46:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1410 - P32 control evidence has exact dual-viewport bindings and current image/source fingerprints",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-review.test.mjs:48:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1413 - P32 source and review preserve explicit inherited proposal differences",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-review.test.mjs:130:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1414 - P32 explicitly covers 28 source sites and 18 actions without granting approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-review.test.mjs:138:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1415 - P32 rejects omitted source, invented approval and a missing mobile scene",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-review.test.mjs:151:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1416 - P32 binds eleven local models and three caller containers, not three dialogs",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-review.test.mjs:172:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1417 - P32 rejects stale source or a forged source-to-scene claim",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-review.test.mjs:186:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1418 - P32 registers function props separately from emitted-event candidates",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-review.test.mjs:225:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1426 - P32 actual Vue evidence binds current production sources and adjacent caller checks",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-vue-restore.test.mjs:68:1'",
+        "error": "|-"
+      }
+    ],
+    "fixtures": ["scoutops-code-style-tMz1nd"],
+    "exit": 1,
+    "parent": 55452,
+    "child": 26564
+  },
+  "after": {
+    "files": 250,
+    "counts": [
+      "# tests 1444",
+      "# pass 1274",
+      "# fail 170",
+      "# cancelled 0",
+      "# skipped 0",
+      "# duration_ms 312560.8697"
+    ],
+    "failures": [
+      {
+        "name": "387 - P49 action evidence binds scope, POST, feedback, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-1688-acceptance-actions.test.mjs:83:1'",
+        "error": "|-"
+      },
+      {
+        "name": "391 - P49 lifecycle evidence binds baseline, proposed return, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-1688-acceptance-lifecycle.test.mjs:76:1'",
+        "error": "|-"
+      },
+      {
+        "name": "395 - P49 acceptance evidence binds states, read-only requests, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-1688-acceptance-page.test.mjs:82:1'",
+        "error": "|-"
+      },
+      {
+        "name": "399 - P49 read-state evidence binds retries, recovery, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-1688-acceptance-read-states.test.mjs:79:1'",
+        "error": "|-"
+      },
+      {
+        "name": "402 - P49 robustness evidence binds every matrix run, token, and image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-1688-acceptance-robustness.test.mjs:69:1'",
+        "error": "|-"
+      },
+      {
+        "name": "403 - Historical P39 creation preview preserves its original production source or native validation contract",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-account-create-preview.test.mjs:17:1'",
+        "error": "|-"
+      },
+      {
+        "name": "404 - P39 creation exact42 PNG and121 browser checks retain captured source revisions",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-account-create-preview.test.mjs:43:1'",
+        "error": "|-"
+      },
+      {
+        "name": "409 - P39 evidence has captured source revisions, exact images and explicit fixture boundaries",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-account-filter-preview.test.mjs:64:1'",
+        "error": "|-"
+      },
+      {
+        "name": "412 - P39 whole-page captures have six normal breakpoints, exact files and captured source revisions",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-account-page-preview.test.mjs:57:1'",
+        "error": "|-"
+      },
+      {
+        "name": "515 - P44 comparison evidence uses current actual sources and exact formal images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-comparison-preview.test.mjs:12:1'",
+        "error": "|-"
+      },
+      {
+        "name": "518 - P44 creation evidence pins captured production plus review-only composition and every PNG",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-create-preview.test.mjs:59:1'",
+        "error": "|-"
+      },
+      {
+        "name": "522 - P44 administrator detail evidence pins current sources, transforms and exact image inventory",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-detail-preview.test.mjs:63:1'",
+        "error": "|-"
+      },
+      {
+        "name": "525 - P44 production controls baseline: exact captured sources, images and read-only fixtures",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-controls-implementation.test.mjs:21:3'",
+        "error": "|-"
+      },
+      {
+        "name": "526 - P44 production controls current: exact captured sources, images and read-only fixtures",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-controls-implementation.test.mjs:21:3'",
+        "error": "|-"
+      },
+      {
+        "name": "527 - P44 changes only mobile controls; excluded styles, focus geometry and default pixels stay exact",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-controls-implementation.test.mjs:70:1'",
+        "error": "|-"
+      },
+      {
+        "name": "528 - P44 production parent only appends local stylesheet; script/template and other styles unchanged",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-controls-implementation.test.mjs:100:1'",
+        "error": "|-"
+      },
+      {
+        "name": "530 - directory baseline: exact actual sources, 30 PNGs and scoped read-only replay",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-directory-implementation.test.mjs:20:3'",
+        "error": "|-"
+      },
+      {
+        "name": "531 - directory current: exact actual sources, 30 PNGs and scoped read-only replay",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-directory-implementation.test.mjs:20:3'",
+        "error": "|-"
+      },
+      {
+        "name": "533 - parent changes only static directory heading and stylesheet import; existing contracts stay exact",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-directory-implementation.test.mjs:104:1'",
+        "error": "|-"
+      },
+      {
+        "name": "534 - same-role baseline evidence has exact sources and all 48 formal images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-results-implementation.test.mjs:33:3'",
+        "error": "|-"
+      },
+      {
+        "name": "535 - same-role current evidence has exact sources and all 48 formal images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-results-implementation.test.mjs:33:3'",
+        "error": "|-"
+      },
+      {
+        "name": "536 - original controls, summaries, P45, desktop and filtered results keep their computed styles",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-results-implementation.test.mjs:82:1'",
+        "error": "|-"
+      },
+      {
+        "name": "537 - production template adds only a presentation class; original script and content stay exact",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-results-implementation.test.mjs:112:1'",
+        "error": "|-"
+      },
+      {
+        "name": "538 - unknown source revisions fail closed; approved result PNGs remain immutable",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-results-implementation.test.mjs:158:1'",
+        "error": "|-"
+      },
+      {
+        "name": "539 - role facts baseline binds actual sources and 24 formal images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-role-facts-implementation.test.mjs:29:3'",
+        "error": "|-"
+      },
+      {
+        "name": "540 - role facts current binds actual sources and 24 formal images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-role-facts-implementation.test.mjs:29:3'",
+        "error": "|-"
+      },
+      {
+        "name": "542 - only scoped role-facts CSS is appended; original controls/results and Vue stay exact",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-mobile-role-facts-implementation.test.mjs:125:1'",
+        "error": "|-"
+      },
+      {
+        "name": "546 - P44 review pins actual source and exact image inventories",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-page-assembly-preview.test.mjs:77:1'",
+        "error": "|-"
+      },
+      {
+        "name": "548 - P44 boundary baseline pins current source, transformations, images and read-only replay",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-page-boundary-preview.test.mjs:24:3'",
+        "error": "|-"
+      },
+      {
+        "name": "549 - P44 boundary preview pins current source, transformations, images and read-only replay",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-page-boundary-preview.test.mjs:24:3'",
+        "error": "|-"
+      },
+      {
+        "name": "554 - P44 review pins actual source and exact image inventories",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-admin-page-preview.test.mjs:73:1'",
+        "error": "|-"
+      },
+      {
+        "name": "557 - P37 mounted page evidence pins39 current sources and76 exact four-width images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-audit-page-preview.test.mjs:52:1'",
+        "error": "|-"
+      },
+      {
+        "name": "619 - P58 confirmation packet binds sixty current-source runs and every continuous image without write execution",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-commercial-confirm-review.test.mjs:126:1'",
+        "error": "|-"
+      },
+      {
+        "name": "624 - P58 five-path rejection packet binds raw sources, retained requests and every region image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-commercial-confirm-write-review.test.mjs:190:1'",
+        "error": "|-"
+      },
+      {
+        "name": "628 - P58 focus evidence binds unchanged visual pairs, current sources, every control traversal and local network",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-commercial-create-focus-review.test.mjs:207:1'",
+        "error": "|-"
+      },
+      {
+        "name": "633 - outcome evidence binds current raw files, complete images, original retry policy and no POST on recovery",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-commercial-create-outcome-review.test.mjs:276:1'",
+        "error": "|-"
+      },
+      {
+        "name": "643 - P58 actual Vue creation evidence binds raw sources and complete continuous dialog images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-commercial-create-review.test.mjs:90:1'",
+        "error": "|-"
+      },
+      {
+        "name": "647 - P58 rejected-write evidence binds current raw sources, every screenshot and explicit local requests",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-commercial-create-write-review.test.mjs:125:1'",
+        "error": "|-"
+      },
+      {
+        "name": "650 - P58 edit browser packet binds current raw sources, untouched background, continuous images and no writes",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-commercial-edit-review.test.mjs:91:1'",
+        "error": "|-"
+      },
+      {
+        "name": "669 - shared shell role and state contract binds every current source site without collapsing business variants",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-contract-audit.test.mjs:340:1'",
+        "error": "|-"
+      },
+      {
+        "name": "670 - audited reason source bindings retain every current site and all consumer hash claims",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-contract-audit.test.mjs:408:1'",
+        "error": "|-"
+      },
+      {
+        "name": "674 - P50 actual Vue evidence binds the safe default page and login editor",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-assets-page.test.mjs:64:1'",
+        "error": "|-"
+      },
+      {
+        "name": "675 - P50 credential editor focus evidence binds every state and viewport",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-editor-focus.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "676 - P50 boundary evidence binds file limits, helper recovery and source identity",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-login-boundary.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "677 - P50 cache evidence binds actual KeepAlive deactivation to fresh login material",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-login-cache.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "678 - P50 detached login evidence binds one owned chain and authoritative reconciliation",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-login-detached.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "679 - P50 lifecycle evidence binds material ownership, write locks and unknown outcomes",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-login-lifecycle.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "682 - P50 material evidence binds six safe states at four widths",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-login-material.test.mjs:63:1'",
+        "error": "|-"
+      },
+      {
+        "name": "683 - P50 generic write evidence binds pending locks and detached settlement ownership",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-credential-write-ownership.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "685 - P35 current mounted Vue proof binds140 exact pixel comparisons at four boundary widths",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-export-detail-tokens.test.mjs:39:1'",
+        "error": "|-"
+      },
+      {
+        "name": "722 - P30 controls retain exact source and PNG hashes with 432 state and 12 context images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-controls.test.mjs:25:1'",
+        "error": "|-"
+      },
+      {
+        "name": "723 - P30 distinguishes 19 primary controls, 22 variants and ten proposal-only controls",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-controls.test.mjs:35:1'",
+        "error": "|-"
+      },
+      {
+        "name": "727 - P30 builder rejects omitted/extra primary actions and stale controls source",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-controls.test.mjs:103:1'",
+        "error": "|-"
+      },
+      {
+        "name": "728 - P30 fields bind current source hashes and all 164 unique field/form PNGs",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-fields.test.mjs:24:1'",
+        "error": "|-"
+      },
+      {
+        "name": "729 - P30 field registry covers three models, six controlled values and shared reason without claiming approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-fields.test.mjs:45:1'",
+        "error": "|-"
+      },
+      {
+        "name": "735 - P30 registers all 28 local sites without duplicating parent event forwards",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-review.test.mjs:60:1'",
+        "error": "|-"
+      },
+      {
+        "name": "738 - P30 distinguishes nine local models from six controlled values and shared reason input",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-review.test.mjs:103:1'",
+        "error": "|-"
+      },
+      {
+        "name": "740 - P30 refuses invented completion, missing source identities and stale dependencies",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-members-review.test.mjs:142:1'",
+        "error": "|-"
+      },
+      {
+        "name": "788 - P34 mounted mobile filter evidence covers four widths and preserves adjacent views",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-approvals-mobile-filters.test.mjs:31:1'",
+        "error": "|-"
+      },
+      {
+        "name": "793 - P34 C parent 74 images bind unchanged actual behavior and inherited child sources",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-approvals-parent-c.test.mjs:59:1'",
+        "error": "|-"
+      },
+      {
+        "name": "794 - P34 actual parent evidence pins source and all 64 state images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-approvals-parent.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "796 - P34 permission r2 changes only four copy slots and retains both r1 review objects",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-approvals-permission-tone-r2.test.mjs:6:1'",
+        "error": "|-"
+      },
+      {
+        "name": "806 - P34 live429 proof binds176 checks,52 unchanged images and8 new screenshots",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-approvals-rate-limit-vue.test.mjs:57:1'",
+        "error": "|-"
+      },
+      {
+        "name": "812 - P34 implementation evidence and narrow approval records resolve without promoting design packages",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-approvals-review.test.mjs:154:1'",
+        "error": "|-"
+      },
+      {
+        "name": "818 - P37 actual current parent/child/browser evidence binds62 checks and exact16 PNG",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-audit-copy-evidence.test.mjs:51:1'",
+        "error": "|-"
+      },
+      {
+        "name": "832 - P37 current parent r2 proves192 checks and40 images without promoting the two history findings",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-audit-pagination-evidence.test.mjs:38:1'",
+        "error": "|-"
+      },
+      {
+        "name": "839 - P37 historical parent/child/API client evidence is pinned to its baseline source",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-audit-parent-read.test.mjs:13:1'",
+        "error": "|-"
+      },
+      {
+        "name": "856 - P35 actual child proof covers mobile layout, null versus zero and desktop exclusion",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-data-export-detail.test.mjs:93:1'",
+        "error": "|-"
+      },
+      {
+        "name": "862 - P35 parent C proposal pins its actual-parent basis and every deliverable without approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-data-parent-c.test.mjs:11:1'",
+        "error": "|-"
+      },
+      {
+        "name": "864 - P35 App/parent/child capture and128 images retain exact sources before equivalent token extraction",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-data-parent.test.mjs:11:1'",
+        "error": "|-"
+      },
+      {
+        "name": "869 - P35 all independent control, field and real Vue images are pinned without promoting global slots",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-data-review.test.mjs:110:1'",
+        "error": "|-"
+      },
+      {
+        "name": "873 - P36 capture-time sources and354 images are pinned while original112 images remain unchanged",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-token-controls.test.mjs:128:1'",
+        "error": "|-"
+      },
+      {
+        "name": "877 - P36 historical source and image fingerprints retain exact captures",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-token-fields.test.mjs:110:1'",
+        "error": "|-"
+      },
+      {
+        "name": "882 - P36 capture-time source and image hashes retain only permanent delivery files",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-token-mobile-filters.test.mjs:80:1'",
+        "error": "|-"
+      },
+      {
+        "name": "883 - P36 proposal source association never rewrites original662 images or approvals",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-token-mobile-filters.test.mjs:90:1'",
+        "error": "|-"
+      },
+      {
+        "name": "884 - P36 parent read captures source-backed parent, child, client and imported styles",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-token-parent-read.test.mjs:12:1'",
+        "error": "|-"
+      },
+      {
+        "name": "903 - P36 exact25 current sites become12 route actions,2 wirings and5 exclusions",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-token-review.test.mjs:30:1'",
+        "error": "|-"
+      },
+      {
+        "name": "907 - P36 every control/field/composition/implementation image is bound without promotion",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-org-token-review.test.mjs:109:1'",
+        "error": "|-"
+      },
+      {
+        "name": "910 - P41 evidence binds captured source revisions, exact images and six step breakpoints",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-create-preview.test.mjs:65:1'",
+        "error": "|-"
+      },
+      {
+        "name": "912 - Historical P41 preserves its original source and earlier P40 artifacts",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-create-preview.test.mjs:129:1'",
+        "error": "|-"
+      },
+      {
+        "name": "914 - P42 evidence binds exact source, images and six breakpoints",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-detail-preview.test.mjs:83:1'",
+        "error": "|-"
+      },
+      {
+        "name": "916 - Historical P42 evidence retains its production source and earlier P40/P41 artifacts",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-detail-preview.test.mjs:162:1'",
+        "error": "|-"
+      },
+      {
+        "name": "919 - P40 screenshots bind captured source revisions, exact files and all six normal widths",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-list-preview.test.mjs:85:1'",
+        "error": "|-"
+      },
+      {
+        "name": "948 - P42 historical full app capture binds original loaded sources and exact screenshot inventory",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-shell-lifecycle.test.mjs:16:1'",
+        "error": "|-"
+      },
+      {
+        "name": "951 - P42 lifecycle is diagnostic, bound to captured source revisions and exact images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-write-lifecycle.test.mjs:17:1'",
+        "error": "|-"
+      },
+      {
+        "name": "955 - current and baseline Vue runs retain exact source and PNG fingerprints without relabeling old defects",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-organization-write-ownership.test.mjs:31:1'",
+        "error": "|-"
+      },
+      {
+        "name": "959 - P45 evidence pins current source, transformed template and exact formal image inventory",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-permission-page-preview.test.mjs:56:1'",
+        "error": "|-"
+      },
+      {
+        "name": "992 - P38 exact30 sites map to19 interactions and one dialog definition without approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-platform-overview-review.test.mjs:31:1'",
+        "error": "|-"
+      },
+      {
+        "name": "996 - P38 source wiring rejects wrong dispatcher, capabilities, component props or route surface",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-platform-overview-review.test.mjs:124:1'",
+        "error": "|-"
+      },
+      {
+        "name": "997 - P38 eight actual entry compositions bind exact pixels and52 fixture router clicks, not RBAC",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-platform-overview-review.test.mjs:159:1'",
+        "error": "|-"
+      },
+      {
+        "name": "999 - P38 actual Vue preview binds current source and every permanent review image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-platform-overview-vue-preview.test.mjs:17:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1004 - P38 detail proposal binds current sources and preserves original91 PNG and baseline manifest",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-platform-provider-detail.test.mjs:15:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1008 - P38 toolbar binds actual Vue and fixture sources with 18 distinct state images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-platform-toolbar.test.mjs:17:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1024 - P47 access evidence binds current sources, all pictures and unchanged 500 state",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-access.test.mjs:115:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1050 - P47 actual45-row filter/page evidence binds current source and all images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-filter-pagination.test.mjs:110:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1051 - P47 lifecycle evidence uses current actual App sources and unchanged preserve route",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-lifecycle.test.mjs:13:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1061 - P47 read-error actual Vue review binds raw sources, all pictures and unchanged neighboring states",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-read-error.test.mjs:64:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1078 - P47 refresh failure proposal compiles and preserves original request/filter contracts",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-refresh-failure.test.mjs:25:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1092 - P47 table-tools evidence binds current sources, images, and interaction boundaries",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-table-tools.test.mjs:54:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1096 - P47 C preserves prior runtime outside the independently verified empty-focus repair",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapters-c.test.mjs:55:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1099 - P47 C actual browser pack binds current raw runtime and all20 images without preview injection",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapters-c.test.mjs:163:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1101 - P47 detail actual Vue review preserves all script, event/model/condition contracts and original displayed facts",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapters-detail-vue.test.mjs:73:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1103 - P47 detail continuous screenshots bind current sources and explicit fixture boundaries",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapters-detail-vue.test.mjs:116:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1105 - P47 actual Vue review preserves all script, event/model/condition contracts and original displayed facts",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapters-vue.test.mjs:72:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1107 - P47 actual route, original/synthetic fixtures and exact72 PNG inventory bind current raw files",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapters-vue.test.mjs:108:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1111 - P46 historical async Vue120 formal pictures and source hashes match exact captured files",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-async-implementation.test.mjs:85:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1122 - P48 compatibility evidence binds all read states, modal behavior, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-compatibility.test.mjs:90:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1124 - P46 actual route evidence binds current raw source, all fields and every formal image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-desktop-editor.test.mjs:43:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1127 - P46 detail historical source and exact68 image inventory are pinned",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-detail-preview.test.mjs:42:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1131 - P46 actual App captures bind raw sources, mock network and all 80 formal PNGs",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-editor-isolation.test.mjs:39:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1136 - P46 editor historical source and134 image inventory remain pinned",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-editor-preview.test.mjs:40:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1142 - P46 feedback80 actual Vue pictures bind current raw source, baseline, network and closed processes",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-feedback-implementation.test.mjs:116:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1143 - P46 mobile feedback appearances match review reference; desktop and other states keep computed styling",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-feedback-implementation.test.mjs:151:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1144 - P46 unaffected screenshots stay pixel-identical apart from three measured raster-edge deltas",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-feedback-implementation.test.mjs:193:1'",
+        "error": "'production-390-late-success-create-settled.png unexpected raster difference'"
+      },
+      {
+        "name": "1147 - P46 field evidence binds raw current source and every retained image; old source only in baseline renderer",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-field-semantics.test.mjs:162:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1152 - P46 historical focus evidence pins its original sources, comparisons and restoration",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-focus-implementation.test.mjs:218:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1154 - P46 exact historical adapter rejects unknown drift and preserves approved evidence",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-keyboard-implementation.test.mjs:58:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1155 - P46 current keyboard capture binds raw sources and separate 104-image manifest",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-keyboard-implementation.test.mjs:78:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1158 - P46 historical page source and formal image manifest keep exact associations",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-page-preview.test.mjs:43:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1164 - P48 parser-sample evidence binds all read states, modal behavior, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-parser-samples.test.mjs:117:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1165 - P46 approved full-route evidence binds exact pre-keyboard entry and sources",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-route-assembly.test.mjs:20:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1172 - P48 configuration-return evidence binds acknowledgement, reread, recovery, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-source-configuration-return.test.mjs:84:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1176 - P48 configuration-state evidence binds every state, write order, and image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-source-configuration-states.test.mjs:95:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1180 - P48 configuration evidence binds fields, modal behavior, network, and every image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-source-configuration.test.mjs:83:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1184 - P48 version-action evidence binds write, reread, recovery, and every image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-source-version-actions.test.mjs:96:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1188 - P48 source versions evidence binds all states, modal behavior, network, and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-source-versions.test.mjs:79:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1191 - P48 mobile evidence binds all states, images, sources, and zero desktop drift",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-sources-mobile.test.mjs:71:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1194 - P48 actual Vue evidence binds 146 rows, all controls, and every image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-sources-page.test.mjs:54:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1198 - P48 refresh evidence binds preserved data, retries, focus, and every image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-sources-refresh.test.mjs:72:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1202 - P48 source-state evidence binds seven states, recovery, and every image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-sources-states.test.mjs:85:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1203 - P46 structure adds only one stylesheet; template, script and contracts remain byte-identical",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-structure-implementation.test.mjs:24:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1205 - P46 before and current production entry captures bind raw sources and separate PNG inventory",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-structure-implementation.test.mjs:74:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1207 - P46 loaded stylesheet stops matching P47; original palette, layout and screenshots restore",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-structure-implementation.test.mjs:148:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1209 - P46 current raw App captures bind all104 images and prove summary changes without successful writes",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-validation-summary.test.mjs:148:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1304 - P31 mounted controls and extension evidence bind twenty-two Vue screenshots without approving the page",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-roles-review.test.mjs:33:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1305 - P31 covers 30 sites with 20 actions, six exact forwards and no implied approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-roles-review.test.mjs:93:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1307 - P31 registers 20 models, one controlled type and shared reason separately",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-roles-review.test.mjs:122:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1308 - P31 rejects omitted identities, changed wiring, fields, stale sources and invented approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-roles-review.test.mjs:149:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1311 - P31 control evidence binds exact selector, states and both viewports with no stale source bypass",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-roles-review.test.mjs:233:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1314 - P31 field source and screenshot fingerprints fail on stale evidence or omitted mobile combinations",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-roles-review.test.mjs:325:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1330 - all outside-route source candidates retain exact IDs and partial runtime status",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-source-scope.test.mjs:55:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1340 - P33 evidence rejects drift in source dependencies and all permanent screenshots",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-teams-controls.test.mjs:74:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1344 - P33 field evidence rejects source and image drift without modifying approved P32 image",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-teams-fields.test.mjs:80:1'",
+        "error": "|-"
+      },
+      {
+        "name": "229 - tests\\\\unit\\\\ui-phase2-teams-review.test.mjs",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-teams-review.test.mjs:1:1'",
+        "error": "'test failed'"
+      },
+      {
+        "name": "1347 - shared copy change leaves all 15 direct consumer source files untouched",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-technical-copy-evidence.test.mjs:14:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1349 - shared clipboard evidence binds actual source, historical normal parity and all 8 images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-technical-copy-evidence.test.mjs:126:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1358 - P36 current mounted copy proof binds raw current sources, not historical substitution",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-copy-ownership.test.mjs:15:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1363 - P36 existing preview binds capture-time originals and transformed template without relabeling approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-create-preview.test.mjs:47:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1367 - P36 list capture pins raw current source, transformed template and60 exact screenshots",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-list-preview.test.mjs:59:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1371 - P36 page capture binds current source and44 exact four-width rendered states",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-page-preview.test.mjs:69:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1374 - P36 reason review pins current untransformed sources and complete80 image manifest",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-reason-preview.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1376 - P36 reason preview is CSS-only and leaves production and approved filter evidence untouched",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-reason-preview.test.mjs:96:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1378 - P36 secret evidence binds current originals and review template, without relabeling approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-secret-preview.test.mjs:50:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1381 - P36 write diagnostic pins current production sources and all76 evidence images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-token-write-lifecycle.test.mjs:10:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1384 - creation regression retains distinct exact baseline/current Vue sources and 64 images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-user-create-lifecycle.test.mjs:15:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1388 - P43 creation evidence pins captured production plus review-only composition and every PNG",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-user-create-preview.test.mjs:62:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1394 - P43 actual Vue review evidence pins captured source revisions and exact image set",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-user-page-preview.test.mjs:74:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1396 - password ownership preserves exact before/after Vue sources and 80 diagnostic/regression images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-user-password-lifecycle.test.mjs:16:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1400 - P43 password captures have exact historical source revisions, transformed code and88 images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-user-password-preview.test.mjs:62:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1404 - P43 reason evidence binds captured sources, shared transformations and280 exact PNGs",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-user-reasons-preview.test.mjs:36:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1409 - P32 field evidence is source-bound and every permanent PNG matches",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-fields.test.mjs:68:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1412 - P32 renderer, visual adapter and verifier are fingerprint-bound",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-restore-states.test.mjs:46:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1414 - P32 control evidence has exact dual-viewport bindings and current image/source fingerprints",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-review.test.mjs:48:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1417 - P32 source and review preserve explicit inherited proposal differences",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-review.test.mjs:130:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1418 - P32 explicitly covers 28 source sites and 18 actions without granting approval",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-review.test.mjs:138:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1419 - P32 rejects omitted source, invented approval and a missing mobile scene",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-review.test.mjs:151:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1420 - P32 binds eleven local models and three caller containers, not three dialogs",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-review.test.mjs:172:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1421 - P32 rejects stale source or a forged source-to-scene claim",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-review.test.mjs:186:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1422 - P32 registers function props separately from emitted-event candidates",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-review.test.mjs:225:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1430 - P32 actual Vue evidence binds current production sources and adjacent caller checks",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-workspaces-vue-restore.test.mjs:68:1'",
+        "error": "|-"
+      }
+    ],
+    "fixtures": ["scoutops-code-style-p5BCbT"],
+    "exit": 1,
+    "parent": 28012,
+    "child": 45620
+  },
+  "comparison": {
+    "removedFailures": [
+      {
+        "name": "376 - p46-approved-structure-implementation/current current evidence binds its imported palette, sources and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-current-palette-evidence.test.mjs:51:3'",
+        "error": "|-"
+      },
+      {
+        "name": "377 - p46-provider-feedback-implementation/current current evidence binds its imported palette, sources and images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-current-palette-evidence.test.mjs:51:3'",
+        "error": "|-"
+      },
+      {
+        "name": "1024 - P47 historical empty proposal stays exactly reversible against its pre-focus source",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-empty.test.mjs:26:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1027 - P47 pre-refresh archive empty evidence binds focus, exact sources and all pictures",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-empty.test.mjs:137:3'",
+        "error": "|-"
+      },
+      {
+        "name": "1028 - P47 current empty evidence binds focus, exact sources and all pictures",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-empty.test.mjs:137:3'",
+        "error": "|-"
+      },
+      {
+        "name": "1029 - P47 empty focus stage remains exact before the verified refresh-only repair",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-empty.test.mjs:198:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1030 - P47 current empty preview changes only six presentation slots and preserves both actual focus handlers",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-empty.test.mjs:210:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1078 - P47 refresh focus patch changes only the wrapper, native handler and persistent tabindex",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-refresh-focus.test.mjs:18:1'",
+        "error": "|-"
+      },
+      {
+        "name": "1085 - P47 current refresh focus packet binds raw sources, imported styles and eight review images",
+        "location": "'D:\\\\项目工程文件\\\\vue\\\\curson\\\\工具\\\\智能选品\\\\tests\\\\unit\\\\ui-phase2-provider-adapter-refresh-focus.test.mjs:81:1'",
+        "error": "|-"
+      }
+    ],
+    "addedFailures": [],
+    "note": "Matched by failure title without ordinal plus location; all failure records are retained. Not a claim that remaining failures are only historical."
+  }
+}

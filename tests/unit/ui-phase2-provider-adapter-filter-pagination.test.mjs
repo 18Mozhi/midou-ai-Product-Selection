@@ -6,15 +6,14 @@ import vm from "node:vm";
 import ts from "typescript";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
-import {
-  previewAdapterFilterPagination,
-  pageTurnHandler,
-} from "../../scripts/lib/ui-phase2-adapter-filter-pagination-preview.mjs";
+import { pageTurnHandler } from "../../scripts/lib/ui-phase2-adapter-filter-pagination-preview.mjs";
+import { paginationFocusHandler } from "../../scripts/lib/ui-phase2-adapter-pagination-focus-baseline.mjs";
+import { previewCurrentAdapterFilterPagination as previewAdapterFilterPagination } from "../../scripts/lib/ui-phase2-adapter-current-state-preview.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   component = "apps/web/src/components/ProviderAdapterCenter.vue",
-  root = "output/playwright/p47-filter-pagination-review";
+  root = "output/playwright/p47-filter-pagination-current-review";
 
 test("P47 filter/page proposal compiles and preserves original six-model and request script", () => {
   const original = read(component),
@@ -32,11 +31,11 @@ test("P47 filter/page proposal compiles and preserves original six-model and req
     [],
   );
   assert.equal(
-    parsed.descriptor.scriptSetup.content
-      .replace("computed, nextTick,", "computed,")
-      .replace(pageTurnHandler, ""),
-    before.descriptor.scriptSetup.content,
+    parsed.descriptor.scriptSetup.content.replace(paginationFocusHandler, ""),
+    before.descriptor.scriptSetup.content.replace(paginationFocusHandler, ""),
   );
+  assert.equal(parsed.descriptor.scriptSetup.content.split(paginationFocusHandler).length, 2);
+  assert.equal(before.descriptor.scriptSetup.content.split(paginationFocusHandler).length, 2);
   for (const preserved of [
     'query = ref("")',
     'mode = ref("all")',
@@ -50,7 +49,9 @@ test("P47 filter/page proposal compiles and preserves original six-model and req
   ])
     assert.equal(review.split(preserved).length, original.split(preserved).length, preserved);
   assert.throws(() =>
-    previewAdapterFilterPagination(original.replace('@click="page--"', '@click="other"')),
+    previewAdapterFilterPagination(
+      original.replace('@click="turnPage(-1, $event)"', '@click="other"'),
+    ),
   );
   assert.throws(() =>
     previewAdapterFilterPagination(
@@ -59,7 +60,7 @@ test("P47 filter/page proposal compiles and preserves original six-model and req
   );
 });
 
-test("P47 page turn focuses status only when its trigger becomes disabled at a boundary", async () => {
+test("P47 historical page-turn proposal focuses status when its trigger becomes disabled", async () => {
   for (const scene of ["enabled", "disabled", "missing"]) {
     let focusCount = 0,
       options;
@@ -114,8 +115,24 @@ test("P47 filter/page CSS remains isolated to review P47 controls", () => {
 test("P47 actual45-row filter/page evidence binds current source and all images", () => {
   const e = JSON.parse(read(`${root}/evidence.json`));
   assert.equal(e.reviewOnly, true);
+  assert.equal(e.kind, "P47-FILTER-PAGINATION-CURRENT-REVIEW-r1");
+  assert.equal(e.productionEmptyFocusPreserved, true);
+  assert.equal(e.historicalPackage, "output/playwright/p47-filter-pagination-review");
   assert.equal(e.processesClosed, true);
   assert.equal(e.runs.length, 6);
+  assert.equal(
+    e.runs.reduce((total, run) => total + run.checks.length, 0),
+    162,
+  );
+  assert.equal(Object.keys(e.sourceHashes).length, 178);
+  for (const dependency of [
+    "scripts/verify-ui-phase2-provider-adapter-current-states.mjs",
+    "scripts/lib/ui-phase2-adapter-current-state-preview.mjs",
+    "scripts/lib/ui-phase2-adapter-empty-focus-baseline.mjs",
+    "scripts/lib/ui-imported-style-sources.mjs",
+    "apps/web/src/design/provider-adapter-tokens.css",
+  ])
+    assert.equal(e.sourceHashes[dependency], hash(read(dependency)), dependency);
   assert.equal(e.screenshots.length, 36);
   for (const [file, expected] of Object.entries(e.sourceHashes))
     assert.equal(hash(read(file)), expected, file);
@@ -153,6 +170,7 @@ test("P47 actual45-row filter/page evidence binds current source and all images"
     ]);
     assert.equal(value("clear restores page one"), "第 1 / 3 页 · 每页 20 条");
     assert.equal(value("filters and pages add no GET"), 1);
+    assert.equal(value("existing empty reset focus preserved"), true);
     assert.equal(value("no write requests"), 0);
     assert.deepEqual(value("no unexpected network"), []);
     assert.deepEqual(value("no runtime errors"), []);

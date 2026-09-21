@@ -1,4 +1,5 @@
 import test from "node:test";
+import { adminReviewHistoricalCapture } from "../../scripts/lib/ui-phase2-admin-review-historical-capture.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -74,7 +75,8 @@ test("P44 transformation fails closed on mismatched source and unknown surface",
   assert.throws(() => adminPageAssemblyPreview(read(parent), "unknown"));
 });
 
-test("P44 review pins actual source and exact image inventories", () => {
+test("P44 review pins historical source and exact image inventories", () => {
+  const historical = adminReviewHistoricalCapture("assembly");
   const folder = "output/playwright/p44-page-assembly-vue-preview",
     e = JSON.parse(read(folder + "/evidence.json"));
   assert.equal(e.kind, "P44-PAGE-ASSEMBLY-VUE-PREVIEW-r2");
@@ -84,12 +86,15 @@ test("P44 review pins actual source and exact image inventories", () => {
   assert.equal(e.screenshots.length, 72);
   assert.equal(Object.keys(e.sourceHashes).length, 44);
   for (const [file, value] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), value, file);
+    assert.equal(hash(historical.source(file)), value, file);
   for (const [file, surface] of [
     [parent, "parent"],
     [detail, "detail"],
   ])
-    assert.equal(hash(adminPageAssemblyPreview(read(file), surface)), e.transformedHashes[file]);
+    assert.equal(
+      hash(adminPageAssemblyPreview(historical.source(file), surface)),
+      e.transformedHashes[file],
+    );
   assert.deepEqual(
     readdirSync(folder).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),

@@ -28,10 +28,10 @@ export function accountPagePreview(original) {
       <div v-if="data" class="account-metrics">`,
   );
   replace(
-    "      </nav>\n      <ResponsiveFilterDrawer",
+    "      </nav>\n",
     `      </nav></aside>
       <section class="p39-results" aria-label="组织结果区域"><header class="p39-results-head"><div><h3>组织记录</h3><p>组织名称、成员、工作区与状态</p></div>${refresh}</header>
-      <ResponsiveFilterDrawer`,
+`,
   );
   replace(
     "    </template>\n    <OrganizationCreationWizard",

@@ -86,6 +86,70 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
     sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));
 
   for (const [index, source] of sources.entries()) {
+    if (paths[index] === "apps/web/src/design/provider-registry-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        new RegExp(
+          "^html:has\\(#app\\s*\\.provider-registry\\)\\s*\\{(?:\\s*--p46-[a-z-]+:\\s*(?:#[0-9a-f]{3,6}|rgba\\(15, 31, 53, 0\\.55\\));)+\\s*\\}$",
+        ),
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/platform-admin-mobile-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        new RegExp(
+          '^@media\\s*\\(max-width:\\s*760px\\)\\s*\\{\\s*html\\[data-design="signal-ledger"\\]\\s*#app\\s*\\.account-center:has\\(\\.account-tabs\\s*a\\[href="/platform-admin/admins"\\]\\[aria-current="page"\\]\\)\\s*\\{(?:\\s*--so-admin-mobile-[a-z-]+:\\s*#[0-9a-f]{3,6};)+\\s*\\}\\s*\\}$',
+        ),
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/platform-data-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        new RegExp(
+          "^\\.platform-data\\s*\\{(?:\\s*--so-data-[a-z-]+:\\s*(?:#[0-9a-f]{3,6}|rgb\\((?:24 45 84 / 14%|255 255 255 / (?:10|30|38|48|86)%)\\));)+\\s*\\}$",
+        ),
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/platform-overlay-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        new RegExp(
+          "^\\.responsive-data-view__overlay--governance,\\s*\\.responsive-data-view__overlay--content,\\s*\\.responsive-filter-drawer--governance,\\s*\\.responsive-filter-drawer--content\\s*\\{(?:\\s*--so-workspace-overlay-[a-z-]+:\\s*#[0-9a-f]{3,6};)+\\s*\\}$",
+        ),
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/provider-adapter-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.adapter-center--c\)\s*\{(?:\s*--p47-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgba\(15, 31, 53, 0\.55\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/platform-notification-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.platform-notifications,\s*\.message-dialog,\s*\.message-reader-dialog,\s*\.notification-action-dialog\s*\{(?:\s*--so-platform-notification-[a-z-]+:\s*#[0-9a-f]{6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/content-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.platform-content,\s*\.platform-content-review,\s*\.responsive-filter-drawer--content,\s*\.responsive-data-view__overlay--content\s*\{(?:\s*--so-content-[a-z-]+:\s*#[0-9a-f]{6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/governance-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.platform-governance\s*\{(?:\s*--so-governance-[a-z-]+:\s*#[0-9a-f]{6};)+\s*\}$/,
+      );
+      continue;
+    }
     if (paths[index] === "apps/web/src/design/export-detail-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),

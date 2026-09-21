@@ -1,0 +1,418 @@
+{
+  "schemaVersion": 1,
+  "testStatus": "passed",
+  "kind": "vue-existing-e2e-fixture-baseline-not-production",
+  "pageId": "P57",
+  "state": "editor-edit-organization",
+  "concretePath": "/platform-admin/notifications",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "fullPage": false,
+  "file": "design/platform-notifications-direction-c/vue-implementation/P57-390-editor-edit-organization.png",
+  "sha256": "1725e4a6e6630c84b4b5041f0dcf14dfc3d099b34bf89eb275002d23d2551b88",
+  "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
+  "sourceRevision": "4b835881c081af808713c76af323d866993f44c9",
+  "testFile": "tests/e2e/platform-message-management.spec.ts",
+  "testFileSha256": "7111e8e7831a20b9a05030018384daa5000d632c9e488330d3cac1ff54d5d239",
+  "captureHelperSha256": "96b1ad52c819feb4942b7795fb62a09efbc4a2a99f958f9c464199ba4e6a3c1c",
+  "sourceFiles": {
+    "apps/web/src/components/PlatformNotificationCenter.vue": "521454853881907833da447ee11b317088167c23a526fbccaf4ea3ab020fe93a",
+    "apps/web/src/components/PlatformNotificationManagement.vue": "7cced021643a3af6a23a07f8afca71d943cabcd13cf963d97ac3b698a3dfe2e8",
+    "apps/web/src/components/PlatformMessageWorkbench.vue": "7c46437db21c0874d138bb249c4cead5afceebc19e4d6a3fe62aec2e83e9cc7a",
+    "apps/web/src/components/PlatformMessageEditor.vue": "135ab00609dac3dc7fddf54085972594e80f6d1e6f2a0609973c3d7f7d6eea31",
+    "apps/web/src/components/PlatformNotificationActionDialog.vue": "ced293b6c8867cc0ba1d574ee411ee230687b208a8a02d3d327347bfaa885630",
+    "apps/web/src/components/PlatformNotificationOperations.vue": "73bfa7089471ce53ea44f747727211684cb840df62a22a86b70dbaa4c9ba5e07",
+    "apps/web/src/components/PlatformNotificationFacts.vue": "35db0f9393a0d21154ddd3a0b3d6da4077fe1c47d3408c878cdd1d53ff7ebd6e",
+    "apps/web/src/components/use-platform-notification-list.ts": "43b46c51afce786c288cb9ce3f1382f2ef3b926360b9d892ee6652e1a0d7a9e7",
+    "apps/web/src/components/use-platform-message-editor.ts": "919ea6c10129e7a37deb6c2cc95591b1591fcc30a14a1628b3b581c1f0ed2967",
+    "apps/web/src/components/use-platform-notification-action.ts": "f2e82fb13de7d8f1d264df73949db0b906cdc5a0062c22d721537afd1047b665",
+    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+    "apps/web/src/platform-notifications.css": "d0fc930346ba6bcb3ba77de52df33b7d8f4cc66ad01807e5152dd40114b3fbb2"
+  },
+  "stylesheets": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/approval-read-failure.css": "6295ffead416eae4dfdf0fa88dde57a3b7ec6fa60241b44e4405e3f1755aaa6a",
+    "apps/web/src/approval-workspace.css": "3baa1bd6bd42b620024d8b0930e018e985929df2dce6b4a904333417c5ac2053",
+    "apps/web/src/automatic-selection.css": "16ad760b25e5833dfa67d69e8a6df3fe9ac9188ef05f63f5ed2c2688663e305b",
+    "apps/web/src/automation-rules.css": "c006390dfdc5cc15371067d6f713ff18a2503c86693aa37e0e2a320cf5dd31f2",
+    "apps/web/src/capacity-boundary.css": "ebacd274b70ae5f2ec5cc83b7331137e2e45dfd125b3058ac8ddb27d9b3a3203",
+    "apps/web/src/collection-task-detail.css": "cdeb6209781acc6ff747fb4728f9675d69479c53fd3a97dfdb9e0b5c17130544",
+    "apps/web/src/collection-tasks.css": "4c5a0775200b22badcfc3c56ee193cd91c12901f603021eac5d43e8a291a15d4",
+    "apps/web/src/competitor.css": "3bdb58afd80a0de843d991bcdf2478d63cc94d0236ee4a3b404839ee1c57c332",
+    "apps/web/src/components/PlatformAccountCenter.css": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+    "apps/web/src/components/PlatformAccountDialogs.css": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+    "apps/web/src/components/PlatformAdminComparisonMobile.css": "03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae",
+    "apps/web/src/components/PlatformAdminDirectoryMobile.css": "6a9f05f7690a67746b4ea9dc479ea7d78a43ad2b73707bde6d2dad0c2d0050f3",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/ProviderSourceCenter.css": "a31b900bedbf1cafdf756eea8b7bd8742a5ec844fef9bcad0d8ffe643e39bb74",
+    "apps/web/src/components/commercial-operations.css": "d046fd8522d11fb502759783d6d33f65f0a45f22fc08107465451aad0c6ce90b",
+    "apps/web/src/components/platform-message-editor.css": "26a3fa8b8bf8a729200bb2b54c336ebd899d3153ae85709b6e57aaaf91c9e547",
+    "apps/web/src/crawler-runtime.css": "544a5f1f6b2e9d851a98385377db29f909e867a720fbdd78b20e28bee1bcfcad",
+    "apps/web/src/crawler-scheduler.css": "4158c6bfee6e9588c8c3c9ec001f6010437d603abc4c819ab4d74269758a686b",
+    "apps/web/src/credential-assets.css": "f2afdaa53d385b3ff0c7a8e1d79e66103353a3755257834142f887a8ec5e43f0",
+    "apps/web/src/credential-login.css": "34e84659732528c117145455842cf8dbbce91e48948ce9bbec290ed913a914bd",
+    "apps/web/src/data-quality.css": "2419a5de4d3c7a421f4514c2458541fbd5420b0f5d34fa979eb6f10d1c3155bb",
+    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
+    "apps/web/src/design/approval-read-failure-tokens.css": "bd13bd68c498bd64b2bb29cba882d09fb324b0fbacf5cab1812fd52abbdb6692",
+    "apps/web/src/design/content-tokens.css": "62c0047948126ac81c509f82dca53e38a0f00f69f2da8d29e9b0e9f2ebf62798",
+    "apps/web/src/design/export-detail-tokens.css": "d0dc62dff48590e983d06a8960bd74bbadc7d7f78daa31237df45214b7ee513a",
+    "apps/web/src/design/governance-tokens.css": "b31bdacefcca67db529baa5320321aa76fde49b578c19a4d549577e6f02a8d62",
+    "apps/web/src/design/platform-admin-mobile-tokens.css": "3c878a3060007abd8bb51a0bf626833a9e8ac7ab4a62c3fcbcd587e9c52b7e68",
+    "apps/web/src/design/platform-data-tokens.css": "add319c74e7ffd01bcf2ff247168e5717aa08b271ffc4cd65ad1dfb6acc1a039",
+    "apps/web/src/design/platform-notification-tokens.css": "4957db9d2ee95f7c22f18b6cf28e7e2f89dc0722d03eebadbf9ee79b160edb85",
+    "apps/web/src/design/platform-overlay-tokens.css": "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
+    "apps/web/src/design/provider-adapter-tokens.css": "c6ff4f890f97866b8e8faca8bee234532534ecb014e2acf5ba61567da24600a6",
+    "apps/web/src/design/provider-registry-tokens.css": "d9dea3c996e5f5426766ebed1eb2b0a7956585036d09131af5dadb7bb7aa36fc",
+    "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
+    "apps/web/src/design/selection-tokens.css": "e3b001839a45970bb0c39ae89a0d7f32ac104e4c9c5c43443f83f38f80a78c74",
+    "apps/web/src/design/token-filter-tokens.css": "6a2b9871858d0c1a5d7ee2a052b5b1d5043331f414685525d561d8ae6d366710",
+    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
+    "apps/web/src/file-resilience.css": "eb74acc0ec6ecc57eb87783fed530d22c93096f078da6d5d32cc6f426b567874",
+    "apps/web/src/home-dashboard-priority.css": "b70ff7ea536bf0ed76fcb04a40f97620d3caba53a2027e966ae98d664c3a3ef1",
+    "apps/web/src/home-dashboard.css": "34ac28b4d9e357ececfc6cd39cbf758ed8f83f6f5e7d937c1c4459a83e390623",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/mysql-resilience.css": "a9bad3e12fdcbb70e131f20aa6d7d83c5e74fc8b0a489614b3e05d814e1df2fb",
+    "apps/web/src/navigation-shell-scoped.css": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+    "apps/web/src/notification-center.css": "0381f7198723ec05684721313d30869b91ab5e59028c02134076086a1562bd1f",
+    "apps/web/src/open-platform.css": "8dfa019837c69697ec32c53fe570b667fbb71e24077a27ee46b2c56ea2b8859b",
+    "apps/web/src/opportunities.css": "c660e6c976f625c299b2f39c71cb289cccb4db7d4da42e28a6d08c5d6579e1b7",
+    "apps/web/src/opportunity-ai.css": "04a645d0fc115f4376764359fbac24593ce569832e6e737ad40b49ed9956965f",
+    "apps/web/src/opportunity-profit.css": "1b6d499d244af25a2f95fab9eda5253f4a2cda35d6db6bc24d7d6413836a14df",
+    "apps/web/src/opportunity-selection-entry.css": "2cbf277471e73c9e8ace5e8303ced732743580d2969f202f576ed2c3d487ba46",
+    "apps/web/src/org-data-export-detail.css": "55b7a84508f5ff64d02061bc832991bceec6674e66313623ed6ade22aba2de04",
+    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+    "apps/web/src/organization-audit.css": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+    "apps/web/src/platform-content.css": "a92ef2925855909d73c456bd60307ec690ec749a9d96e44641b1f9437d71a9e9",
+    "apps/web/src/platform-governance.css": "2f42223281d6344ad94bade084054aca48f80252b183d1cd6df6af0c150d5c48",
+    "apps/web/src/platform-notification-operations.css": "cd07b3fbda246ed6aa9d511e098092717be2cba633fa13aa99ec21f40608d9ee",
+    "apps/web/src/platform-notifications.css": "d0fc930346ba6bcb3ba77de52df33b7d8f4cc66ad01807e5152dd40114b3fbb2",
+    "apps/web/src/platform-polish.css": "a6cc1683ca67985187842734003f627f7fc8431f2b42980540165b753a8433b9",
+    "apps/web/src/profit.css": "b52a279a1c1e1512a796b728fb52c3a4ab92a9a3279e2f249854fbbf8e547364",
+    "apps/web/src/provider-adapters-c-detail.css": "63ebf23cabe128212df42f1480aa83a0e0bcfe846418961700e68fa04e7af5dc",
+    "apps/web/src/provider-adapters-c-feedback.css": "5d2815fc8e3c60b922f0c7d7aa629101495261dba74136ffba30487612354003",
+    "apps/web/src/provider-adapters-c-page.css": "d1da284edaba49456ddafb02940874a5feacd812169f10b8d3790cbfdd6d019a",
+    "apps/web/src/provider-adapters-contrast.css": "71b88c78a5b23c3052997b7dd62ce4f61a982a08ef904569955b3c903edd1540",
+    "apps/web/src/provider-adapters.css": "b0b9ff8686727a101453385a3167eba4bfa4fb73c7b21762799c941fca3d11dd",
+    "apps/web/src/provider-registry.css": "29e5f97d6c728f747e87189cef654aa65cae901b45eafd2e1ca7491da6e41d1d",
+    "apps/web/src/provider-sources.css": "3a6b85383cfca82940d45927b7e6a927615b4d4ac8bf3805e56165e219d1b060",
+    "apps/web/src/redis-resilience.css": "57524b779d2994fcc084efb67cdd550004b2fccbb35114139797198321de8bf4",
+    "apps/web/src/report-center.css": "5c6b36025fbfed41a243557ac4d73b463fc1dd71d8b895c14f91c7506b49b8c1",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/runtime-topology.css": "951a21caa2251c3fb136a3197a432d28ed13cc0f586b5cf5ce7574494fedfbb8",
+    "apps/web/src/scoring.css": "9aeccbb66382e2a052080a7eb70fa2cd94b0b34e54cd1f84b2522197f77f483c",
+    "apps/web/src/security-operations.css": "7ce8308c1cdcb13abc6b256c66f152717703fb4aa3c5c7f2f0592fd649aae22e",
+    "apps/web/src/selection-journey-enhancements.css": "aa7d07bfb8bac3c56470062b076d7f5afa95b54db920315eb4c26f5493492740",
+    "apps/web/src/selection-journey.css": "b07eaf04d8dffe9cc987d9ea16ec0e701a082ba2fabd8f42aab84c8530a0b62d",
+    "apps/web/src/signal-ledger-workflows.css": "3a3bcb8ca4aa2c0b7dae11218223aaa9de25db45eb0704a2670ea156bf06229b",
+    "apps/web/src/signal-ledger.css": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+    "apps/web/src/sourcing.css": "f6a4f5275aec7d139f19854e70cd9eb0a905fb90f9693ead93a8f214baeb0f20",
+    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
+    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/provider-approved-feedback.css": "5e0a2f2d43cc7325395aef61924d60d510f0f1b03b41141b15df6426c98fd1ef",
+    "apps/web/src/styles/provider-approved-structure.css": "44c4c966d56fb60db060afcd67f192795693a422eb796adae61c7eb6d6129849",
+    "apps/web/src/task-workspace-enhancements.css": "a80867802134816efd26582662b14aec9f6ff84d0171d9184f022fea009e7ea6",
+    "apps/web/src/task-workspace.css": "7166859838759021634098e43f5692f50afaa203fc1e2b72b70f7147bdc9583b",
+    "apps/web/src/trends-quality.css": "c6b37c674ecaa123a2ab72b027ee5a8aca90b9d7d5916bbfe52fba0705cbeac9",
+    "apps/web/src/trends.css": "9dbec248cab8a4f50e7d43b4b11958f30f59575230d058891e49649c6b931b25"
+  },
+  "testTitle": "UI2-PN57 editor exposes all audience combinations without writing",
+  "browser": "chromium",
+  "os": "win32",
+  "capturedAt": "2026-09-12T05:54:27.221Z",
+  "assertions": [
+    "编辑指定组织保留版本、原因和完整字段",
+    "组织候选来自当前读取快照",
+    "表单忙碌时所有业务字段可统一冻结"
+  ],
+  "controls": [
+    {
+      "tag": "a",
+      "name": "SCOUTOPS 智能选品",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "打开导航菜单",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "切换界面主题",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "个人中心",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "input",
+      "name": "搜索导航菜单",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "summary",
+      "name": "业务运营",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "平台概览",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "内容运营",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "通知运营",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "配额管理",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "summary",
+      "name": "采集与数据",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "summary",
+      "name": "治理与安全",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "summary",
+      "name": "高级运维",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "选择组织与工作区后进入用户工作台",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "平台后台",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "运营中心",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "summary",
+      "name": "当前范围平台全局",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "01人工消息草稿与发布记录",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "02投递观测接收与送达事实",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "03系统事实模板、渠道与路由",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "新建草稿",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "刷新快照",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "草稿系统供应商风险处置提醒全部活动用户 · 2026/9/12 10:30:00查看正文与操作",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "已发布竞品竞品价格变动日报全部活动用户 · 2026/9/12 10:30:00查看正文与操作",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "已取消系统已结束的维护草稿全部活动用户 · 2026/9/12 10:30:00查看正文与操作",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "上一页",
+      "disabled": true,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "下一页",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "summary",
+      "name": "本次读取追踪",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "关闭草稿编辑",
+      "disabled": false,
+      "insideDialog": true
+    },
+    {
+      "tag": "input",
+      "name": "接收人看到的标题",
+      "disabled": false,
+      "insideDialog": true
+    },
+    {
+      "tag": "textarea",
+      "name": "写清楚事项、影响和需要采取的行动",
+      "disabled": false,
+      "insideDialog": true
+    },
+    {
+      "tag": "select",
+      "name": "系统通知任务通知审批通知竞品通知",
+      "disabled": false,
+      "insideDialog": true
+    },
+    {
+      "tag": "select",
+      "name": "普通重要严重",
+      "disabled": false,
+      "insideDialog": true
+    },
+    {
+      "tag": "select",
+      "name": "全部活动用户指定组织指定用户",
+      "disabled": false,
+      "insideDialog": true
+    },
+    {
+      "tag": "select",
+      "name": "请选择米豆选品",
+      "disabled": false,
+      "insideDialog": true
+    },
+    {
+      "tag": "input",
+      "name": "",
+      "disabled": false,
+      "insideDialog": true
+    },
+    {
+      "tag": "input",
+      "name": "",
+      "disabled": true,
+      "insideDialog": true
+    },
+    {
+      "tag": "textarea",
+      "name": "",
+      "disabled": false,
+      "insideDialog": true
+    },
+    {
+      "tag": "button",
+      "name": "关闭",
+      "disabled": false,
+      "insideDialog": true
+    },
+    {
+      "tag": "button",
+      "name": "保存草稿",
+      "disabled": false,
+      "insideDialog": true
+    },
+    {
+      "tag": "a",
+      "name": "平台概览",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "来源设置",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "热点来源",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "a",
+      "name": "采集管理",
+      "disabled": false,
+      "insideDialog": false
+    },
+    {
+      "tag": "button",
+      "name": "更多",
+      "disabled": false,
+      "insideDialog": false
+    }
+  ],
+  "pageOverflow": false,
+  "layout": {
+    "viewportWidth": 390,
+    "documentWidth": 390,
+    "overflowingElements": []
+  },
+  "visualAcceptance": "not-evaluated-baseline-only",
+  "userReview": "pending",
+  "limitations": [
+    "Route fixtures simulate backend responses; no real DB or RBAC is proven.",
+    "Assertions describe this case only, not every action/variant/role on the page.",
+    "These are current Vue baselines, not approved redesign images."
+  ]
+}

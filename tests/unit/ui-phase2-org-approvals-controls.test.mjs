@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertP34HistoricalSourceHash } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -106,9 +107,9 @@ test("P34 selected, pressed and archived template entries do not invent permissi
   assert.equal(e.approval, "pending-user-review");
   assert.match(e.boundary, /blocked\/conflict/);
 });
-test("P34 controls depend on unchanged base renderer and refuse source or image hash drift", () => {
+test("P34 historical controls retain source lineage and unchanged image bytes", () => {
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+    assertP34HistoricalSourceHash(file, readFileSync(file, "utf8"), sha);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${root}/${s.file}`)), s.sha256, s.file);
   const html = readFileSync(`${root}/index.html`, "utf8");

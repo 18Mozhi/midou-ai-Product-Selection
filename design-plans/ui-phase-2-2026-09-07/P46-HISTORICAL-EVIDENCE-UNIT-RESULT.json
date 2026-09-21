@@ -1,0 +1,1347 @@
+{
+  "schemaVersion": 1,
+  "kind": "P46-historical-evidence-full-unit-closure",
+  "files": 259,
+  "counts": {
+    "tests": 1499,
+    "pass": 1352,
+    "fail": 147,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 371537.4086
+  },
+  "exit": 1,
+  "processesClosed": true,
+  "fixtureRemoved": true,
+  "fullRunFailureListTruncated": true,
+  "fullRunFailuresCaptured": 128,
+  "supplementalReplay": {
+    "files": 24,
+    "tests": 150,
+    "pass": 131,
+    "fail": 19,
+    "duration_ms": 29141.2672,
+    "exit": 1,
+    "reason": "Only the tool-truncated alphabetical range was rerun; no product/test/assertion changes between runs."
+  },
+  "reconciledFailureCount": 147,
+  "comparisonWithPrior": {
+    "priorTests": 1478,
+    "priorFail": 169,
+    "removed": [
+      "p46-approved-structure-implementation/current pre-refresh captured evidence binds its imported palette, sources and images",
+      "p46-provider-feedback-implementation/current pre-refresh captured evidence binds its imported palette, sources and images",
+      "P49 current review binds all 143 images, raw sources and explicit pending boundaries",
+      "P47 current access composition preserves the actual empty-focus function and rejects unverified source changes",
+      "P47 current filter-pagination composition preserves the actual empty-focus function and rejects unverified source changes",
+      "P47 archive resolver recovers only the two complete verified capture revisions",
+      "P47 archive resolver cannot substitute unrelated source files or mutate current reads",
+      "P47 access proposal compiles and changes only local presentation/action plumbing",
+      "P47 historical empty proposal stays exactly reversible against its pre-focus source",
+      "P47 pre-refresh archive empty evidence binds focus, exact sources and all pictures",
+      "P47 pre-mobile archive empty evidence binds focus, exact sources and all pictures",
+      "P47 empty focus stage remains exact before the verified refresh-only repair",
+      "P47 pre-mobile empty preview changes only six presentation slots and preserves both focus handlers",
+      "P47 filter/page proposal compiles and preserves original six-model and request script",
+      "P47 historical refresh focus patch changes only the wrapper, native handler and persistent tabindex",
+      "P47 pre-mobile refresh focus packet binds exact captured sources, imported styles and eight review images",
+      "P46 feedback80 actual Vue pictures bind current raw source, baseline, network and closed processes",
+      "P46 mobile feedback appearances match review reference; desktop and other states keep computed styling",
+      "P46 unaffected screenshots stay pixel-identical apart from three measured raster-edge deltas",
+      "P46 structure adds only one stylesheet; template, script and contracts remain byte-identical",
+      "P46 before and current production entry captures bind raw sources and separate PNG inventory",
+      "P46 loaded stylesheet stops matching P47; original palette, layout and screenshots restore"
+    ],
+    "added": [],
+    "boundary": "Includes intervening prior batches, not all reductions are attributed to this turn. Comparison is reconciled from full run plus bounded replay, not an untruncated single-run inventory."
+  },
+  "failures": [
+    {
+      "event": "fail",
+      "name": "current refresh-focus runner validates actual mobile lineage without modifying render source",
+      "file": "tests/unit/ui-adapter-refresh-focus-current-runner.test.mjs",
+      "line": 45,
+      "message": "Got unwanted exception.\nActual message: \"Unknown production change outside approved mobile empty regions\n+ actual - expected\n\n+ '24f21af268da9438cf08a1532910924343cd73ab52bcbaf2658fa097ca576b9b'\n- '2f71a84bc29b416ce9de84",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "Historical P39 creation preview preserves its original production source or native validation contract",
+      "file": "tests/unit/ui-phase2-account-create-preview.test.mjs",
+      "line": 17,
+      "message": "apps/web/src/use-modal-dialog.ts\n+ actual - expected\n... Skipped lines\n\n  'import { nextTick, onUnmounted, ref, watch } from \"vue\";\\n' +\n    '\\n' +\n    'export function useModalDialog(isOpen: () => boolean, requestClose:",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P39 creation exact42 PNG and121 browser checks retain captured source revisions",
+      "file": "tests/unit/ui-phase2-account-create-preview.test.mjs",
+      "line": 43,
+      "message": "apps/web/src/components/ResponsiveDataView.vue\n+ actual - expected\n\n+ '8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf'\n- 'b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P39 evidence has captured source revisions, exact images and explicit fixture boundaries",
+      "file": "tests/unit/ui-phase2-account-filter-preview.test.mjs",
+      "line": 64,
+      "message": "apps/web/src/components/ResponsiveDataView.vue\n+ actual - expected\n\n+ '8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf'\n- 'b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P39 whole-page captures have six normal breakpoints, exact files and captured source revisions",
+      "file": "tests/unit/ui-phase2-account-page-preview.test.mjs",
+      "line": 57,
+      "message": "apps/web/src/components/ResponsiveDataView.vue\n+ actual - expected\n\n+ '8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf'\n- 'b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P44 comparison evidence uses current actual sources and exact formal images",
+      "file": "tests/unit/ui-phase2-admin-comparison-preview.test.mjs",
+      "line": 12,
+      "message": "apps/web/src/components/ResponsiveDataView.vue\n+ actual - expected\n\n+ '8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf'\n- 'b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P44 creation evidence pins captured production plus review-only composition and every PNG",
+      "file": "tests/unit/ui-phase2-admin-create-preview.test.mjs",
+      "line": 59,
+      "message": "apps/web/src/components/PlatformAdminComparisonMobile.css\n+ actual - expected\n\n+ '03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae'\n- '9b74248f24827e8e1e4800b93090ef1fd680acaebf90754bc238680bebedddde'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P44 review pins actual source and exact image inventories",
+      "file": "tests/unit/ui-phase2-admin-page-assembly-preview.test.mjs",
+      "line": 77,
+      "message": "apps/web/src/components/PlatformAdminComparisonMobile.css\n+ actual - expected\n\n+ '03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae'\n- '9b74248f24827e8e1e4800b93090ef1fd680acaebf90754bc238680bebedddde'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P44 boundary baseline pins current source, transformations, images and read-only replay",
+      "file": "tests/unit/ui-phase2-admin-page-boundary-preview.test.mjs",
+      "line": 24,
+      "message": "apps/web/src/components/PlatformAdminComparisonMobile.css\n+ actual - expected\n\n+ '03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae'\n- '9b74248f24827e8e1e4800b93090ef1fd680acaebf90754bc238680bebedddde'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P44 boundary preview pins current source, transformations, images and read-only replay",
+      "file": "tests/unit/ui-phase2-admin-page-boundary-preview.test.mjs",
+      "line": 24,
+      "message": "apps/web/src/components/PlatformAdminComparisonMobile.css\n+ actual - expected\n\n+ '03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae'\n- '9b74248f24827e8e1e4800b93090ef1fd680acaebf90754bc238680bebedddde'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P44 review pins actual source and exact image inventories",
+      "file": "tests/unit/ui-phase2-admin-page-preview.test.mjs",
+      "line": 73,
+      "message": "apps/web/src/components/ResponsiveDataView.vue\n+ actual - expected\n\n+ '8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf'\n- 'b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P37 mounted page evidence pins39 current sources and76 exact four-width images",
+      "file": "tests/unit/ui-phase2-audit-page-preview.test.mjs",
+      "line": 52,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P58 confirmation packet binds sixty current-source runs and every continuous image without write execution",
+      "file": "tests/unit/ui-phase2-commercial-confirm-review.test.mjs",
+      "line": 126,
+      "message": "apps/web/src/components/ProviderAdapterCenter.vue\n+ actual - expected\n\n+ '24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2'\n- 'ea3eaecf5bb8a6ec5e8e701dd8743cac61a35c6806a8a0d35079ba64be3b5e40'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P58 five-path rejection packet binds raw sources, retained requests and every region image",
+      "file": "tests/unit/ui-phase2-commercial-confirm-write-review.test.mjs",
+      "line": 190,
+      "message": "apps/web/src/components/ProviderAdapterCenter.vue\n+ actual - expected\n\n+ '24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2'\n- 'ea3eaecf5bb8a6ec5e8e701dd8743cac61a35c6806a8a0d35079ba64be3b5e40'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P58 focus evidence binds unchanged visual pairs, current sources, every control traversal and local network",
+      "file": "tests/unit/ui-phase2-commercial-create-focus-review.test.mjs",
+      "line": 207,
+      "message": "apps/web/src/components/ProviderAdapterCenter.vue\n+ actual - expected\n\n+ '24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2'\n- 'ea3eaecf5bb8a6ec5e8e701dd8743cac61a35c6806a8a0d35079ba64be3b5e40'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "outcome evidence binds current raw files, complete images, original retry policy and no POST on recovery",
+      "file": "tests/unit/ui-phase2-commercial-create-outcome-review.test.mjs",
+      "line": 276,
+      "message": "apps/web/src/components/ProviderAdapterCenter.vue\n+ actual - expected\n\n+ '24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2'\n- 'ea3eaecf5bb8a6ec5e8e701dd8743cac61a35c6806a8a0d35079ba64be3b5e40'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P58 actual Vue creation evidence binds raw sources and complete continuous dialog images",
+      "file": "tests/unit/ui-phase2-commercial-create-review.test.mjs",
+      "line": 90,
+      "message": "apps/web/src/components/ProviderAdapterCenter.vue\n+ actual - expected\n\n+ '24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2'\n- 'ea3eaecf5bb8a6ec5e8e701dd8743cac61a35c6806a8a0d35079ba64be3b5e40'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P58 rejected-write evidence binds current raw sources, every screenshot and explicit local requests",
+      "file": "tests/unit/ui-phase2-commercial-create-write-review.test.mjs",
+      "line": 125,
+      "message": "apps/web/src/components/ProviderAdapterCenter.vue\n+ actual - expected\n\n+ '24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2'\n- 'ea3eaecf5bb8a6ec5e8e701dd8743cac61a35c6806a8a0d35079ba64be3b5e40'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P58 edit browser packet binds current raw sources, untouched background, continuous images and no writes",
+      "file": "tests/unit/ui-phase2-commercial-edit-review.test.mjs",
+      "line": 91,
+      "message": "apps/web/src/components/ProviderAdapterCenter.vue\n+ actual - expected\n\n+ '24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2'\n- 'ea3eaecf5bb8a6ec5e8e701dd8743cac61a35c6806a8a0d35079ba64be3b5e40'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "shared shell role and state contract binds every current source site without collapsing business variants",
+      "file": "tests/unit/ui-phase2-contract-audit.test.mjs",
+      "line": 340,
+      "message": "apps/web/src/components/NavigationShell.vue#d597913db5935f66.1\n+ actual - expected\n\n+ 'line-moved'\n- 'identity-current'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "audited reason source bindings retain every current site and all consumer hash claims",
+      "file": "tests/unit/ui-phase2-contract-audit.test.mjs",
+      "line": 408,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue#0a9c82c5c5fb1fd7.1\n+ actual - expected\n\n+ 'line-moved'\n- 'identity-current'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P50 actual Vue evidence binds the safe default page and login editor",
+      "file": "tests/unit/ui-phase2-credential-assets-page.test.mjs",
+      "line": 64,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P50 credential editor focus evidence binds every state and viewport",
+      "file": "tests/unit/ui-phase2-credential-editor-focus.test.mjs",
+      "line": 10,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P50 boundary evidence binds file limits, helper recovery and source identity",
+      "file": "tests/unit/ui-phase2-credential-login-boundary.test.mjs",
+      "line": 10,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P50 cache evidence binds actual KeepAlive deactivation to fresh login material",
+      "file": "tests/unit/ui-phase2-credential-login-cache.test.mjs",
+      "line": 10,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P50 detached login evidence binds one owned chain and authoritative reconciliation",
+      "file": "tests/unit/ui-phase2-credential-login-detached.test.mjs",
+      "line": 10,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P50 lifecycle evidence binds material ownership, write locks and unknown outcomes",
+      "file": "tests/unit/ui-phase2-credential-login-lifecycle.test.mjs",
+      "line": 10,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P50 material evidence binds six safe states at four widths",
+      "file": "tests/unit/ui-phase2-credential-login-material.test.mjs",
+      "line": 63,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P50 generic write evidence binds pending locks and detached settlement ownership",
+      "file": "tests/unit/ui-phase2-credential-write-ownership.test.mjs",
+      "line": 10,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P35 current mounted Vue proof binds140 exact pixel comparisons at four boundary widths",
+      "file": "tests/unit/ui-phase2-export-detail-tokens.test.mjs",
+      "line": 39,
+      "message": "apps/web/src/styles/onboarding-navigation.css\n+ actual - expected\n\n+ '0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114'\n- '0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P30 controls retain exact source and PNG hashes with 432 state and 12 context images",
+      "file": "tests/unit/ui-phase2-members-controls.test.mjs",
+      "line": 25,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P30 distinguishes 19 primary controls, 22 variants and ten proposal-only controls",
+      "file": "tests/unit/ui-phase2-members-controls.test.mjs",
+      "line": 35,
+      "message": "verify current members proposal\n+ actual - expected\n\n+ 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n- '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P30 builder rejects omitted/extra primary actions and stale controls source",
+      "file": "tests/unit/ui-phase2-members-controls.test.mjs",
+      "line": 103,
+      "message": "The input did not match the regular expression /exact reachable|verify current members controls/. Input:\n\n'AssertionError [ERR_ASSERTION]: verify current members proposal\\n' +\n  '+ actual - expected\\n' +\n  '\\n' +\n  \"+ 'b",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P30 fields bind current source hashes and all 164 unique field/form PNGs",
+      "file": "tests/unit/ui-phase2-members-fields.test.mjs",
+      "line": 24,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P30 field registry covers three models, six controlled values and shared reason without claiming approval",
+      "file": "tests/unit/ui-phase2-members-fields.test.mjs",
+      "line": 45,
+      "message": "verify current members proposal\n+ actual - expected\n\n+ 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n- '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P30 registers all 28 local sites without duplicating parent event forwards",
+      "file": "tests/unit/ui-phase2-members-review.test.mjs",
+      "line": 60,
+      "message": "verify current members proposal\n+ actual - expected\n\n+ 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n- '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P30 distinguishes nine local models from six controlled values and shared reason input",
+      "file": "tests/unit/ui-phase2-members-review.test.mjs",
+      "line": 103,
+      "message": "surface dependency drift\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P30 refuses invented completion, missing source identities and stale dependencies",
+      "file": "tests/unit/ui-phase2-members-review.test.mjs",
+      "line": 142,
+      "message": "The input did not match the regular expression /input omissions/. Input:\n\n'AssertionError [ERR_ASSERTION]: surface dependency drift\\n' +\n  '+ actual - expected\\n' +\n  '\\n' +\n  \"+ '3191e4ba14aa0919d5083e048f89a6ef99497d01",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P34 mounted mobile filter evidence covers four widths and preserves adjacent views",
+      "file": "tests/unit/ui-phase2-org-approvals-mobile-filters.test.mjs",
+      "line": 31,
+      "message": "apps/web/src/signal-ledger.css\n+ actual - expected\n\n+ '09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1'\n- 'b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P34 C parent 74 images bind unchanged actual behavior and inherited child sources",
+      "file": "tests/unit/ui-phase2-org-approvals-parent-c.test.mjs",
+      "line": 59,
+      "message": "apps/web/src/components/NavigationShell.vue\n+ actual - expected\n\n+ '0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb'\n- '4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P34 actual parent evidence pins source and all 64 state images",
+      "file": "tests/unit/ui-phase2-org-approvals-parent.test.mjs",
+      "line": 10,
+      "message": "apps/web/src/components/NavigationShell.vue\n+ actual - expected\n\n+ '0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb'\n- '4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P34 permission r2 changes only four copy slots and retains both r1 review objects",
+      "file": "tests/unit/ui-phase2-org-approvals-permission-tone-r2.test.mjs",
+      "line": 6,
+      "message": "apps/web/src/components/NavigationShell.vue\n+ actual - expected\n\n+ '0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb'\n- '4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P34 live429 proof binds176 checks,52 unchanged images and8 new screenshots",
+      "file": "tests/unit/ui-phase2-org-approvals-rate-limit-vue.test.mjs",
+      "line": 57,
+      "message": "apps/web/src/components/NavigationShell.vue\n+ actual - expected\n\n+ '0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb'\n- '4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P34 implementation evidence and narrow approval records resolve without promoting design packages",
+      "file": "tests/unit/ui-phase2-org-approvals-review.test.mjs",
+      "line": 154,
+      "message": "apps/web/src/signal-ledger.css\n+ actual - expected\n\n+ '09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1'\n- 'b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P37 actual current parent/child/browser evidence binds62 checks and exact16 PNG",
+      "file": "tests/unit/ui-phase2-org-audit-copy-evidence.test.mjs",
+      "line": 51,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P37 current parent r2 proves192 checks and40 images without promoting the two history findings",
+      "file": "tests/unit/ui-phase2-org-audit-pagination-evidence.test.mjs",
+      "line": 38,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P37 historical parent/child/API client evidence is pinned to its baseline source",
+      "file": "tests/unit/ui-phase2-org-audit-parent-read.test.mjs",
+      "line": 13,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P35 actual child proof covers mobile layout, null versus zero and desktop exclusion",
+      "file": "tests/unit/ui-phase2-org-data-export-detail.test.mjs",
+      "line": 93,
+      "message": "apps/web/src/styles/onboarding-navigation.css\n+ actual - expected\n\n+ '0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114'\n- '0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P35 parent C proposal pins its actual-parent basis and every deliverable without approval",
+      "file": "tests/unit/ui-phase2-org-data-parent-c.test.mjs",
+      "line": 11,
+      "message": "apps/web/src/styles/onboarding-navigation.css\n+ actual - expected\n\n+ '0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114'\n- '0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P35 App/parent/child capture and128 images retain exact sources before equivalent token extraction",
+      "file": "tests/unit/ui-phase2-org-data-parent.test.mjs",
+      "line": 11,
+      "message": "apps/web/src/styles/onboarding-navigation.css\n+ actual - expected\n\n+ '0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114'\n- '0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P35 all independent control, field and real Vue images are pinned without promoting global slots",
+      "file": "tests/unit/ui-phase2-org-data-review.test.mjs",
+      "line": 110,
+      "message": "implementation stale capture source apps/web/src/styles/onboarding-navigation.css\n+ actual - expected\n\n+ '0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114'\n- '0fab24d84606e8ea564062ae912150a9ada2dd2fbf853",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 capture-time sources and354 images are pinned while original112 images remain unchanged",
+      "file": "tests/unit/ui-phase2-org-token-controls.test.mjs",
+      "line": 128,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 historical source and image fingerprints retain exact captures",
+      "file": "tests/unit/ui-phase2-org-token-fields.test.mjs",
+      "line": 110,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 capture-time source and image hashes retain only permanent delivery files",
+      "file": "tests/unit/ui-phase2-org-token-mobile-filters.test.mjs",
+      "line": 80,
+      "message": "apps/web/src/signal-ledger.css\n+ actual - expected\n\n+ '09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1'\n- 'b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 proposal source association never rewrites original662 images or approvals",
+      "file": "tests/unit/ui-phase2-org-token-mobile-filters.test.mjs",
+      "line": 90,
+      "message": "Command failed: D:\\path\\nodejs\\node.exe scripts/refresh-ui-phase2-token-filter-bindings.mjs\nnode:internal/modules/run_main:122\r\n    triggerUncaughtException(\r\n    ^\r\n\r\nAssertionError [ERR_ASSERTION]: apps/web/src/signal-",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 parent read captures source-backed parent, child, client and imported styles",
+      "file": "tests/unit/ui-phase2-org-token-parent-read.test.mjs",
+      "line": 12,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 exact25 current sites become12 route actions,2 wirings and5 exclusions",
+      "file": "tests/unit/ui-phase2-org-token-review.test.mjs",
+      "line": 30,
+      "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    actions: [\n      {\n        actionId: 'OG-REFRESH',\n        condition: 'loading或refreshing禁用',\n...\n        sharedSourceIds: [\n+    ",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 every control/field/composition/implementation image is bound without promotion",
+      "file": "tests/unit/ui-phase2-org-token-review.test.mjs",
+      "line": 109,
+      "message": "controls: apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P41 evidence binds captured source revisions, exact images and six step breakpoints",
+      "file": "tests/unit/ui-phase2-organization-create-preview.test.mjs",
+      "line": 65,
+      "message": "apps/web/src/components/ResponsiveDataView.vue\n+ actual - expected\n\n+ '8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf'\n- 'b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "Historical P41 preserves its original source and earlier P40 artifacts",
+      "file": "tests/unit/ui-phase2-organization-create-preview.test.mjs",
+      "line": 129,
+      "message": "Expected values to be strictly equal:\n+ actual - expected\n... Skipped lines\n\n  'import { nextTick, onUnmounted, ref, watch } from \"vue\";\\n' +\n    '\\n' +\n    'export function useModalDialog(isOpen: () => boolean, requestC",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P42 evidence binds exact source, images and six breakpoints",
+      "file": "tests/unit/ui-phase2-organization-detail-preview.test.mjs",
+      "line": 83,
+      "message": "apps/web/src/components/ResponsiveDataView.vue\n+ actual - expected\n\n+ '8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf'\n- 'b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "Historical P42 evidence retains its production source and earlier P40/P41 artifacts",
+      "file": "tests/unit/ui-phase2-organization-detail-preview.test.mjs",
+      "line": 162,
+      "message": "Expected values to be strictly equal:\n+ actual - expected\n... Skipped lines\n\n  'import { nextTick, onUnmounted, ref, watch } from \"vue\";\\n' +\n    '\\n' +\n    'export function useModalDialog(isOpen: () => boolean, requestC",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P40 screenshots bind captured source revisions, exact files and all six normal widths",
+      "file": "tests/unit/ui-phase2-organization-list-preview.test.mjs",
+      "line": 85,
+      "message": "apps/web/src/components/ResponsiveDataView.vue\n+ actual - expected\n\n+ '8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf'\n- 'b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P42 historical full app capture binds original loaded sources and exact screenshot inventory",
+      "file": "tests/unit/ui-phase2-organization-shell-lifecycle.test.mjs",
+      "line": 16,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P47 detail actual Vue review preserves all script, event/model/condition contracts and original displayed facts",
+      "file": "tests/unit/ui-phase2-provider-adapters-detail-vue.test.mjs",
+      "line": 73,
+      "message": "Expected values to be strictly equal:\n+ actual - expected\n... Skipped lines\n\n  '\\n' +\n+   'import { computed, nextTick, onMounted, ref, watch } from \"vue\";\\n' +\n-   'import { computed, onMounted, ref, watch } from \"vue\";",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P47 detail continuous screenshots bind current sources and explicit fixture boundaries",
+      "file": "tests/unit/ui-phase2-provider-adapters-detail-vue.test.mjs",
+      "line": 116,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P47 actual Vue review preserves all script, event/model/condition contracts and original displayed facts",
+      "file": "tests/unit/ui-phase2-provider-adapters-vue.test.mjs",
+      "line": 72,
+      "message": "Expected values to be strictly equal:\n+ actual - expected\n... Skipped lines\n\n  '\\n' +\n+   'import { computed, nextTick, onMounted, ref, watch } from \"vue\";\\n' +\n-   'import { computed, onMounted, ref, watch } from \"vue\";",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P47 actual route, original/synthetic fixtures and exact72 PNG inventory bind current raw files",
+      "file": "tests/unit/ui-phase2-provider-adapters-vue.test.mjs",
+      "line": 108,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P46 historical async Vue120 formal pictures and source hashes match exact captured files",
+      "file": "tests/unit/ui-phase2-provider-async-implementation.test.mjs",
+      "line": 85,
+      "message": "baseline:apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P48 compatibility evidence binds all read states, modal behavior, and images",
+      "file": "tests/unit/ui-phase2-provider-compatibility.test.mjs",
+      "line": 90,
+      "message": "apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P46 actual route evidence binds current raw source, all fields and every formal image",
+      "file": "tests/unit/ui-phase2-provider-desktop-editor.test.mjs",
+      "line": 43,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P46 detail historical source and exact68 image inventory are pinned",
+      "file": "tests/unit/ui-phase2-provider-detail-preview.test.mjs",
+      "line": 42,
+      "message": "apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P46 actual App captures bind raw sources, mock network and all 80 formal PNGs",
+      "file": "tests/unit/ui-phase2-provider-editor-isolation.test.mjs",
+      "line": 39,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P46 editor historical source and134 image inventory remain pinned",
+      "file": "tests/unit/ui-phase2-provider-editor-preview.test.mjs",
+      "line": 40,
+      "message": "apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P46 field evidence binds raw current source and every retained image; old source only in baseline renderer",
+      "file": "tests/unit/ui-phase2-provider-field-semantics.test.mjs",
+      "line": 162,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P46 historical focus evidence pins its original sources, comparisons and restoration",
+      "file": "tests/unit/ui-phase2-provider-focus-implementation.test.mjs",
+      "line": 218,
+      "message": "baseline:apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P46 exact historical adapter rejects unknown drift and preserves approved evidence",
+      "file": "tests/unit/ui-phase2-provider-keyboard-implementation.test.mjs",
+      "line": 58,
+      "message": "Expected values to be strictly equal:\n+ actual - expected\n\n+ '277da69fb914edb2d051191fc64d7b61ea7a26302fc4cdae866b6cf4e6c7ba3f'\n- 'ff6ece0be359d3a447ce2246a3bf62105afa22ac1a33b7e1af0393ffa9a537c5'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P46 current keyboard capture binds raw sources and separate 104-image manifest",
+      "file": "tests/unit/ui-phase2-provider-keyboard-implementation.test.mjs",
+      "line": 78,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P46 historical page source and formal image manifest keep exact associations",
+      "file": "tests/unit/ui-phase2-provider-page-preview.test.mjs",
+      "line": 43,
+      "message": "apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P48 parser-sample evidence binds all read states, modal behavior, and images",
+      "file": "tests/unit/ui-phase2-provider-parser-samples.test.mjs",
+      "line": 117,
+      "message": "apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P46 approved full-route evidence binds exact pre-keyboard entry and sources",
+      "file": "tests/unit/ui-phase2-provider-route-assembly.test.mjs",
+      "line": 20,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P48 configuration-return evidence binds acknowledgement, reread, recovery, and images",
+      "file": "tests/unit/ui-phase2-provider-source-configuration-return.test.mjs",
+      "line": 84,
+      "message": "apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P48 configuration-state evidence binds every state, write order, and image",
+      "file": "tests/unit/ui-phase2-provider-source-configuration-states.test.mjs",
+      "line": 95,
+      "message": "apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P48 configuration evidence binds fields, modal behavior, network, and every image",
+      "file": "tests/unit/ui-phase2-provider-source-configuration.test.mjs",
+      "line": 83,
+      "message": "apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P48 version-action evidence binds write, reread, recovery, and every image",
+      "file": "tests/unit/ui-phase2-provider-source-version-actions.test.mjs",
+      "line": 96,
+      "message": "apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P48 source versions evidence binds all states, modal behavior, network, and images",
+      "file": "tests/unit/ui-phase2-provider-source-versions.test.mjs",
+      "line": 79,
+      "message": "apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P48 mobile evidence binds all states, images, sources, and zero desktop drift",
+      "file": "tests/unit/ui-phase2-provider-sources-mobile.test.mjs",
+      "line": 71,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P48 actual Vue evidence binds 146 rows, all controls, and every image",
+      "file": "tests/unit/ui-phase2-provider-sources-page.test.mjs",
+      "line": 54,
+      "message": "apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P48 refresh evidence binds preserved data, retries, focus, and every image",
+      "file": "tests/unit/ui-phase2-provider-sources-refresh.test.mjs",
+      "line": 72,
+      "message": "apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P48 source-state evidence binds seven states, recovery, and every image",
+      "file": "tests/unit/ui-phase2-provider-sources-states.test.mjs",
+      "line": 85,
+      "message": "apps/web/src/components/ConfirmDialog.vue\n+ actual - expected\n\n+ '3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424'\n- '6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P46 current raw App captures bind all104 images and prove summary changes without successful writes",
+      "file": "tests/unit/ui-phase2-provider-validation-summary.test.mjs",
+      "line": 148,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "all eight real packets retain all 406 original images and deterministic generated links",
+      "file": "tests/unit/ui-phase2-recent-review-materials.test.mjs",
+      "line": 94,
+      "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    materials: [\n      {\n        approval: 'not-full-page-acceptance',\n        evidence: '../../output/playwright/p44-mobile-directory",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P31 mounted controls and extension evidence bind twenty-two Vue screenshots without approving the page",
+      "file": "tests/unit/ui-phase2-roles-review.test.mjs",
+      "line": 33,
+      "message": "verify current roles proposal\n+ actual - expected\n\n+ 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n- '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P31 covers 30 sites with 20 actions, six exact forwards and no implied approval",
+      "file": "tests/unit/ui-phase2-roles-review.test.mjs",
+      "line": 93,
+      "message": "verify current roles proposal\n+ actual - expected\n\n+ 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n- '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P31 registers 20 models, one controlled type and shared reason separately",
+      "file": "tests/unit/ui-phase2-roles-review.test.mjs",
+      "line": 122,
+      "message": "surface dependency drift\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P31 rejects omitted identities, changed wiring, fields, stale sources and invented approval",
+      "file": "tests/unit/ui-phase2-roles-review.test.mjs",
+      "line": 149,
+      "message": "The input did not match the regular expression /input omissions/. Input:\n\n'AssertionError [ERR_ASSERTION]: surface dependency drift\\n' +\n  '+ actual - expected\\n' +\n  '\\n' +\n  \"+ '3191e4ba14aa0919d5083e048f89a6ef99497d01",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P31 control evidence binds exact selector, states and both viewports with no stale source bypass",
+      "file": "tests/unit/ui-phase2-roles-review.test.mjs",
+      "line": 233,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P31 field source and screenshot fingerprints fail on stale evidence or omitted mobile combinations",
+      "file": "tests/unit/ui-phase2-roles-review.test.mjs",
+      "line": 325,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "all outside-route source candidates retain exact IDs and partial runtime status",
+      "file": "tests/unit/ui-phase2-source-scope.test.mjs",
+      "line": 55,
+      "message": "stale source review\n+ actual - expected\n... Skipped lines\n\n  {\n    'apps/web/src/App.vue': 'e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531',\n    'apps/web/src/components/ApiFoundation.vue': '8329bdc20aa",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P33 evidence rejects drift in source dependencies and all permanent screenshots",
+      "file": "tests/unit/ui-phase2-teams-controls.test.mjs",
+      "line": 74,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P33 field evidence rejects source and image drift without modifying approved P32 image",
+      "file": "tests/unit/ui-phase2-teams-fields.test.mjs",
+      "line": 80,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "tests\\unit\\ui-phase2-teams-review.test.mjs",
+      "file": "tests/unit/ui-phase2-teams-review.test.mjs",
+      "line": 1,
+      "message": "test failed",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "shared copy change leaves all 15 direct consumer source files untouched",
+      "file": "tests/unit/ui-phase2-technical-copy-evidence.test.mjs",
+      "line": 14,
+      "message": "apps/web/src/components/CollectionOperationsConsole.vue\n+ actual - expected\n... Skipped lines\n\n  '<script setup lang=\"ts\">\\n' +\n+   'import {\\n' +\n+   '  computed,\\n' +\n+   '  nextTick,\\n' +\n+   '  onActivated,\\n' +\n+   ",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "shared clipboard evidence binds actual source, historical normal parity and all 8 images",
+      "file": "tests/unit/ui-phase2-technical-copy-evidence.test.mjs",
+      "line": 126,
+      "message": "apps/web/src/styles/onboarding-navigation.css\n+ actual - expected\n\n+ '0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114'\n- '0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 current mounted copy proof binds raw current sources, not historical substitution",
+      "file": "tests/unit/ui-phase2-token-copy-ownership.test.mjs",
+      "line": 15,
+      "message": "apps/web/src/signal-ledger.css\n+ actual - expected\n\n+ '09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1'\n- 'b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 existing preview binds capture-time originals and transformed template without relabeling approval",
+      "file": "tests/unit/ui-phase2-token-create-preview.test.mjs",
+      "line": 47,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 list capture pins raw current source, transformed template and60 exact screenshots",
+      "file": "tests/unit/ui-phase2-token-list-preview.test.mjs",
+      "line": 59,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 page capture binds current source and44 exact four-width rendered states",
+      "file": "tests/unit/ui-phase2-token-page-preview.test.mjs",
+      "line": 69,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 reason review pins current untransformed sources and complete80 image manifest",
+      "file": "tests/unit/ui-phase2-token-reason-preview.test.mjs",
+      "line": 10,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 reason preview is CSS-only and leaves production and approved filter evidence untouched",
+      "file": "tests/unit/ui-phase2-token-reason-preview.test.mjs",
+      "line": 96,
+      "message": "Expected values to be strictly equal:\n\ntrue !== false\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 secret evidence binds current originals and review template, without relabeling approval",
+      "file": "tests/unit/ui-phase2-token-secret-preview.test.mjs",
+      "line": 50,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P36 write diagnostic pins current production sources and all76 evidence images",
+      "file": "tests/unit/ui-phase2-token-write-lifecycle.test.mjs",
+      "line": 10,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "creation regression retains distinct exact baseline/current Vue sources and 64 images",
+      "file": "tests/unit/ui-phase2-user-create-lifecycle.test.mjs",
+      "line": 15,
+      "message": "apps/web/src/components/ResponsiveDataView.vue\n+ actual - expected\n\n+ '8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf'\n- 'b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P43 creation evidence pins captured production plus review-only composition and every PNG",
+      "file": "tests/unit/ui-phase2-user-create-preview.test.mjs",
+      "line": 62,
+      "message": "apps/web/src/components/ResponsiveDataView.vue\n+ actual - expected\n\n+ '8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf'\n- 'b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P43 actual Vue review evidence pins captured source revisions and exact image set",
+      "file": "tests/unit/ui-phase2-user-page-preview.test.mjs",
+      "line": 74,
+      "message": "apps/web/src/components/ResponsiveDataView.vue\n+ actual - expected\n\n+ '8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf'\n- 'b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "password ownership preserves exact before/after Vue sources and 80 diagnostic/regression images",
+      "file": "tests/unit/ui-phase2-user-password-lifecycle.test.mjs",
+      "line": 16,
+      "message": "apps/web/src/components/ResponsiveDataView.vue\n+ actual - expected\n\n+ '8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf'\n- 'b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P43 password captures have exact historical source revisions, transformed code and88 images",
+      "file": "tests/unit/ui-phase2-user-password-preview.test.mjs",
+      "line": 62,
+      "message": "apps/web/src/components/ResponsiveDataView.vue\n+ actual - expected\n\n+ '8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf'\n- 'b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P43 reason evidence binds captured sources, shared transformations and280 exact PNGs",
+      "file": "tests/unit/ui-phase2-user-reasons-preview.test.mjs",
+      "line": 36,
+      "message": "apps/web/src/components/ResponsiveDataView.vue\n+ actual - expected\n\n+ '8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf'\n- 'b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P32 field evidence is source-bound and every permanent PNG matches",
+      "file": "tests/unit/ui-phase2-workspaces-fields.test.mjs",
+      "line": 68,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P32 renderer, visual adapter and verifier are fingerprint-bound",
+      "file": "tests/unit/ui-phase2-workspaces-restore-states.test.mjs",
+      "line": 46,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P32 control evidence has exact dual-viewport bindings and current image/source fingerprints",
+      "file": "tests/unit/ui-phase2-workspaces-review.test.mjs",
+      "line": 48,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P32 source and review preserve explicit inherited proposal differences",
+      "file": "tests/unit/ui-phase2-workspaces-review.test.mjs",
+      "line": 130,
+      "message": "The input was expected to not match the regular expression /maxlength=/. Input:\n\n'<script setup lang=\"ts\">\\n' +\n  'import { nextTick, ref, watch } from \"vue\";\\n' +\n  'import { useModalDialog } from \"../use-modal-dialog\";",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P32 explicitly covers 28 source sites and 18 actions without granting approval",
+      "file": "tests/unit/ui-phase2-workspaces-review.test.mjs",
+      "line": 138,
+      "message": "stale workspace source apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n- '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P32 rejects omitted source, invented approval and a missing mobile scene",
+      "file": "tests/unit/ui-phase2-workspaces-review.test.mjs",
+      "line": 151,
+      "message": "stale workspace source apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n- '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P32 binds eleven local models and three caller containers, not three dialogs",
+      "file": "tests/unit/ui-phase2-workspaces-review.test.mjs",
+      "line": 172,
+      "message": "stale workspace source apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n- '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P32 rejects stale source or a forged source-to-scene claim",
+      "file": "tests/unit/ui-phase2-workspaces-review.test.mjs",
+      "line": 186,
+      "message": "stale workspace source apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n- '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P32 registers function props separately from emitted-event candidates",
+      "file": "tests/unit/ui-phase2-workspaces-review.test.mjs",
+      "line": 225,
+      "message": "stale workspace source apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n- '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P32 actual Vue evidence binds current production sources and adjacent caller checks",
+      "file": "tests/unit/ui-phase2-workspaces-vue-restore.test.mjs",
+      "line": 68,
+      "message": "apps/web/src/components/AuditedReasonDialog.vue\n+ actual - expected\n\n+ '3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a'\n- 'b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb'\n",
+      "code": "ERR_TEST_FAILURE",
+      "provenance": "full-run"
+    },
+    {
+      "event": "fail",
+      "name": "P42 lifecycle is diagnostic, bound to captured source revisions and exact images",
+      "file": "tests/unit/ui-phase2-organization-write-lifecycle.test.mjs",
+      "line": 17,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "current and baseline Vue runs retain exact source and PNG fingerprints without relabeling old defects",
+      "file": "tests/unit/ui-phase2-organization-write-ownership.test.mjs",
+      "line": 31,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P45 evidence pins current source, transformed template and exact formal image inventory",
+      "file": "tests/unit/ui-phase2-permission-page-preview.test.mjs",
+      "line": 56,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P38 exact30 sites map to19 interactions and one dialog definition without approval",
+      "file": "tests/unit/ui-phase2-platform-overview-review.test.mjs",
+      "line": 31,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P38 source wiring rejects wrong dispatcher, capabilities, component props or route surface",
+      "file": "tests/unit/ui-phase2-platform-overview-review.test.mjs",
+      "line": 124,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P38 eight actual entry compositions bind exact pixels and52 fixture router clicks, not RBAC",
+      "file": "tests/unit/ui-phase2-platform-overview-review.test.mjs",
+      "line": 159,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P38 actual Vue preview binds current source and every permanent review image",
+      "file": "tests/unit/ui-phase2-platform-overview-vue-preview.test.mjs",
+      "line": 17,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P38 detail proposal binds current sources and preserves original91 PNG and baseline manifest",
+      "file": "tests/unit/ui-phase2-platform-provider-detail.test.mjs",
+      "line": 15,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P38 toolbar binds actual Vue and fixture sources with 18 distinct state images",
+      "file": "tests/unit/ui-phase2-platform-toolbar.test.mjs",
+      "line": 17,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P47 access evidence binds current sources, all pictures and unchanged 500 state",
+      "file": "tests/unit/ui-phase2-provider-adapter-access.test.mjs",
+      "line": 115,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P47 approved mobile empty implementation preserves the complete prior runtime and desktop copy",
+      "file": "tests/unit/ui-phase2-provider-adapter-empty-mobile.test.mjs",
+      "line": 14,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P47 actual mobile empty evidence binds raw sources and strict mobile/wide/neighbor comparisons",
+      "file": "tests/unit/ui-phase2-provider-adapter-empty-mobile.test.mjs",
+      "line": 53,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P47 actual45-row filter/page evidence binds current source and all images",
+      "file": "tests/unit/ui-phase2-provider-adapter-filter-pagination.test.mjs",
+      "line": 115,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P47 lifecycle evidence uses current actual App sources and unchanged preserve route",
+      "file": "tests/unit/ui-phase2-provider-adapter-lifecycle.test.mjs",
+      "line": 13,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P47 read-error actual Vue review binds raw sources, all pictures and unchanged neighboring states",
+      "file": "tests/unit/ui-phase2-provider-adapter-read-error.test.mjs",
+      "line": 64,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P47 refresh failure proposal compiles and preserves original request/filter contracts",
+      "file": "tests/unit/ui-phase2-provider-adapter-refresh-failure.test.mjs",
+      "line": 25,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P47 table-tools evidence binds current sources, images, and interaction boundaries",
+      "file": "tests/unit/ui-phase2-provider-adapter-table-tools.test.mjs",
+      "line": 54,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P47 C preserves prior runtime outside the independently verified empty-focus repair",
+      "file": "tests/unit/ui-phase2-provider-adapters-c.test.mjs",
+      "line": 55,
+      "provenance": "unchanged-source-24-file-replay"
+    },
+    {
+      "event": "fail",
+      "name": "P47 C actual browser pack binds current raw runtime and all20 images without preview injection",
+      "file": "tests/unit/ui-phase2-provider-adapters-c.test.mjs",
+      "line": 163,
+      "provenance": "unchanged-source-24-file-replay"
+    }
+  ],
+  "boundary": "Original historical pixel/behavior gates preserved. Full goal and production release gates remain open. Invalid programmatic 259-file-only probe excluded."
+}

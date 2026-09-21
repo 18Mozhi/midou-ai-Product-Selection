@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import { parse } from "@vue/compiler-sfc";
 import postcss from "postcss";
+import { adminHistoricalCapture } from "../../scripts/lib/ui-phase2-admin-historical-capture.mjs";
 import {
   adminDirectoryRevision,
   historicalAdminDirectorySource,
@@ -15,9 +16,10 @@ const folder = "output/playwright/p44-mobile-directory-implementation/";
 const evidence = (mode) => JSON.parse(read(folder + mode + "/evidence.json"));
 const before = evidence("baseline"),
   after = evidence("current");
+const historical = adminHistoricalCapture("directory-baseline");
 
 for (const mode of ["baseline", "current"])
-  test(`directory ${mode}: exact actual sources, 30 PNGs and scoped read-only replay`, () => {
+  test(`directory ${mode === "baseline" ? "historical baseline" : "current"}: exact stage sources, 30 PNGs and scoped read-only replay`, () => {
     const e = evidence(mode),
       dir = folder + mode;
     assert.equal(e.kind, "P44-MOBILE-DIRECTORY-IMPLEMENTATION");
@@ -26,9 +28,26 @@ for (const mode of ["baseline", "current"])
     assert.equal(e.checks.length, mode === "baseline" ? 116 : 134);
     assert.equal(e.screenshots.length, 30);
     assert.equal(e.observations.length, 12);
-    assert.equal(Object.keys(e.sourceHashes).length, mode === "baseline" ? 36 : 37);
+    assert.equal(Object.keys(e.sourceHashes).length, mode === "baseline" ? 36 : 40);
+    if (mode === "baseline") assert.equal(read(dir + "/evidence.json"), historical.manifest);
+    else {
+      assert.deepEqual(
+        Object.keys(e.sourceHashes)
+          .filter((file) => !Object.hasOwn(before.sourceHashes, file))
+          .sort(),
+        [
+          "apps/web/src/components/PlatformAdminDirectoryMobile.css",
+          "apps/web/src/design/platform-admin-mobile-tokens.css",
+          "apps/web/src/design/platform-overlay-tokens.css",
+          "scripts/lib/ui-imported-style-sources.mjs",
+        ],
+      );
+      assert.ok(
+        Object.keys(before.sourceHashes).every((file) => Object.hasOwn(e.sourceHashes, file)),
+      );
+    }
     for (const [file, sha] of Object.entries(e.sourceHashes)) {
-      const source = read(file);
+      const source = mode === "baseline" ? historical.source(file) : read(file);
       assert.equal(
         hash(mode === "baseline" ? historicalAdminDirectorySource(file, source) : source),
         sha,
@@ -121,7 +140,12 @@ test("parent changes only static directory heading and stylesheet import; existi
     parse(old).descriptor.scriptSetup.content,
   );
   const css = postcss.parse(read("apps/web/src/components/PlatformAdminDirectoryMobile.css"));
-  const media = css.nodes.find((n) => n.type === "atrule");
+  const imports = css.nodes.filter((n) => n.type === "atrule" && n.name === "import");
+  assert.equal(imports.length, 1);
+  assert.equal(imports[0].params, '"../design/platform-admin-mobile-tokens.css"');
+  const medias = css.nodes.filter((n) => n.type === "atrule" && n.name === "media");
+  assert.equal(medias.length, 1);
+  const media = medias[0];
   assert.equal(media.params, "(max-width: 760px)");
   assert.match(
     media.nodes[0].selector,

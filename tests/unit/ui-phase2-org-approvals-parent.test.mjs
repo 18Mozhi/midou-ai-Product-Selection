@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertP34LegacySourceHash } from "../../scripts/lib/ui-phase2-org-approvals-shared-history.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -12,7 +13,7 @@ test("P34 actual parent evidence pins source and all 64 state images", () => {
   assert.equal(e.screenshots.length, 64);
   assert.equal(new Set(e.screenshots.map((s) => s.file)).size, 64);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+    assertP34LegacySourceHash(file, readFileSync(file, "utf8"), sha);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   for (const file of [

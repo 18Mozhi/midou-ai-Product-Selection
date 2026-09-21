@@ -1,5 +1,6 @@
 import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
+import { userLifecycleReviewHistoricalCapture } from "../../scripts/lib/ui-phase2-user-lifecycle-review-historical-capture.mjs";
 import { historicalAdminControlsSource } from "../../scripts/lib/ui-phase2-admin-controls-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -25,10 +26,7 @@ test("password ownership preserves exact before/after Vue sources and 80 diagnos
     assert.equal(e.checks.length, 220);
     assert.equal(e.screenshots.length, 40);
     assert(!text.includes("PasswordLifecycleFixture-123"));
-    const captured = (f) =>
-      mode === "baseline"
-        ? historicalPasswordSource(f, read(f))
-        : historicalAdminControlsSource(f, read(f));
+    const captured = userLifecycleReviewHistoricalCapture(`password-${mode}`).source;
     for (const [file, sha] of Object.entries(e.sourceHashes))
       assert.equal(hash(captured(file)), sha, file);
     for (const [file, surface] of [

@@ -7,6 +7,7 @@ import { createServer } from "vite";
 import { chromium } from "playwright";
 import { buildJourneyDesignData } from "./lib/ui-phase2-journey-design-data.mjs";
 import { journeyControlCapture } from "./lib/ui-phase2-journey-vue-controls.mjs";
+import { verifyJourneyControlsHistory } from "./lib/ui-phase2-journey-controls-history.mjs";
 
 // Real route and Vue, isolated HTTP fixtures. Never connects to production or a database.
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -42,6 +43,7 @@ const sources = [
   "scripts/lib/ui-phase2-journey-design-data.mjs",
   "scripts/lib/ui-phase2-journey-vue-controls.mjs",
   "scripts/verify-ui-phase2-journey-vue.mjs",
+  "scripts/lib/ui-phase2-journey-controls-history.mjs",
 ];
 const sourceHashes = Object.fromEntries(
   await Promise.all(
@@ -51,10 +53,11 @@ const sourceHashes = Object.fromEntries(
     ]),
   ),
 );
+let previous;
 if (capture) await mkdir(root, { recursive: true });
 else {
-  const previous = JSON.parse(await readFile(path.join(root, "evidence.json"), "utf8"));
-  assert.deepEqual(previous.sourceHashes, sourceHashes, "mounted Vue evidence source drift");
+  // Historical evidence is version-bound; the browser below still loads current source.
+  previous = await verifyJourneyControlsHistory(repo);
   assert.equal(previous.screenshots.length, 114);
   assert.equal(previous.controlStates.length, 90);
   for (const shot of previous.screenshots) {
@@ -571,7 +574,6 @@ try {
     .sort();
   assert.deepEqual(cases(controlStates), expectedCases, "missing/duplicate control state");
   if (!capture) {
-    const previous = JSON.parse(await readFile(path.join(root, "evidence.json"), "utf8"));
     assert.deepEqual(
       cases(previous.controlStates),
       expectedCases,

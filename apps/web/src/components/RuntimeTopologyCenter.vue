@@ -142,12 +142,42 @@ const request = createApiClient(props.apiBaseUrl);
 const state = ref<ViewState>("loading");
 const data = ref<TopologyData | null>(null);
 const requestId = ref("");
+const readFailureId = ref("");
 const actionHint = ref("");
 const refreshing = ref(false);
 const refreshFailure = ref<RefreshFailure | null>(null);
 const showAllQueues = ref(false);
 let controller: AbortController | null = null;
 let sequence = 0;
+const refreshButton = ref<HTMLButtonElement | null>(null),
+  retryButton = ref<HTMLButtonElement | null>(null),
+  noticeRetryButton = ref<HTMLButtonElement | null>(null);
+function handoffReadFocus() {
+  const from = [retryButton.value, noticeRetryButton.value].find(
+      (button) => button && button.ownerDocument.activeElement === button,
+    ),
+    to = refreshButton.value;
+  if (
+    !from?.isConnected ||
+    !to?.isConnected ||
+    from.closest("[inert]") ||
+    to.closest("[inert]") ||
+    !from.checkVisibility() ||
+    !to.checkVisibility()
+  )
+    return;
+  to.focus({ preventScroll: true });
+  if (to.ownerDocument.activeElement !== to) return;
+  const rect = to.getBoundingClientRect();
+  if (
+    rect.top < 0 ||
+    rect.bottom > window.innerHeight ||
+    !to.contains(
+      to.ownerDocument.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2),
+    )
+  )
+    to.scrollIntoView({ block: "center", inline: "nearest" });
+}
 const verdict = computed(
   () =>
     (
@@ -156,7 +186,10 @@ const verdict = computed(
         ready: ["单机运行门已满足", "当前 API 心跳和主机身份有效；这不是高可用或容量承诺。"],
         empty: ["尚无当前 API 心跳", "先由宝塔管理的 Node API 写入运行心跳。"],
         blocked: ["单机运行条件未满足", "主机身份或 API 状态不一致，系统保持失败关闭。"],
-        stale: ["运行心跳已过期", "通过宝塔检查并恢复当前 Node API 后重新核验。"],
+        stale: [
+          "运行观测需重新核验",
+          "节点或 Worker 观测需要核对；请查看下方阻断与告警后重新核验。",
+        ],
         forbidden: ["没有平台运维权限", actionHint.value || "需要 platform:operate 能力。"],
         expired: ["登录已失效", "重新登录后再核验单机运行状态。"],
         rate_limited: ["刷新过于频繁", "稍后重试；现有结论不会因此升级。"],
@@ -167,6 +200,11 @@ const verdict = computed(
 );
 const short = (value?: string) => (value ? value.slice(0, 10) : "—");
 const blockerLabels: Record<string, string> = {
+  runtime_nodes_empty: "尚无 API 节点记录",
+  api_node_missing: "预期 API 节点未找到",
+  api_unavailable: "API 尚未就绪",
+  api_host_identity_mismatch: "API 主机身份不一致",
+  api_heartbeat_stale: "API 心跳已过期",
   backend_supervisor_degraded: "后端进程异常",
   runtime_node_missing: "运行节点缺失",
   runtime_node_stale: "运行心跳过期",
@@ -174,7 +212,7 @@ const blockerLabels: Record<string, string> = {
   runtime_host_mismatch: "运行主机不一致",
 };
 const alertLabels: Record<string, string> = {
-  worker_scheduler_heartbeat_stale: "任务调度心跳过期",
+  worker_scheduler_heartbeat_stale: "任务调度观测需核对",
   worker_scheduler_backpressure: "任务调度发生背压",
   worker_scheduler_recent_failures: "最近一分钟存在失败",
   worker_scheduler_suspected_stuck: "存在疑似卡死任务",
@@ -202,6 +240,7 @@ const queueLabels: Record<string, string> = {
   core_collection_projection: "采集事实投影",
   automatic_rule_sources: "规则采集",
   automatic_full_sources: "全量采集",
+  automatic_selection_evaluation: "自动质量评估",
 };
 const healthEndpointLabels = {
   live: "进程存活",
@@ -291,6 +330,7 @@ const time = (value?: string) =>
 
 async function load() {
   if (controller) return;
+  handoffReadFocus();
   const currentSequence = ++sequence;
   const requestController = new AbortController();
   const hasSnapshot = Boolean(data.value);
@@ -298,6 +338,7 @@ async function load() {
   controller = requestController;
   refreshing.value = true;
   refreshFailure.value = null;
+  readFailureId.value = "";
   if (!hasSnapshot) state.value = "loading";
   actionHint.value = "";
   let timedOut = false;
@@ -322,13 +363,13 @@ async function load() {
     )
       return;
     if (timedOut) {
-      requestId.value = correlationId;
+      readFailureId.value = correlationId;
       if (hasSnapshot) refreshFailure.value = "timeout";
       else state.value = "timeout";
       return;
     }
     if (error instanceof ApiClientError) {
-      requestId.value = error.requestId;
+      readFailureId.value = error.requestId;
       actionHint.value = error.actionHint;
       const failureState =
         error.kind === "expired"
@@ -342,6 +383,7 @@ async function load() {
         refreshFailure.value = failureState as RefreshFailure;
       else {
         data.value = null;
+        requestId.value = "";
         state.value = failureState;
       }
     } else if (hasSnapshot) refreshFailure.value = "unavailable";
@@ -370,7 +412,14 @@ onBeforeUnmount(() => {
         <h2>单机运行控制台</h2>
         <span>长期固定为一台惠州宝塔服务器，不启用负载均衡、备用服务器或多节点模式。</span>
       </div>
-      <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
+      <button
+        ref="refreshButton"
+        class="topology-read-action"
+        type="button"
+        :aria-disabled="refreshing"
+        :aria-busy="refreshing"
+        @click="load"
+      >
         {{ refreshing ? "正在刷新…" : "刷新运行事实" }}
       </button>
     </header>
@@ -380,19 +429,31 @@ onBeforeUnmount(() => {
       class="topology-refresh-notice"
       :data-kind="refreshFailure"
       aria-live="polite"
+      aria-labelledby="topology-refresh-title"
+      :aria-busy="refreshing"
     >
       <div>
-        <b>{{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}</b>
+        <h3 id="topology-refresh-title">
+          {{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}
+        </h3>
         <p>{{ refreshNotice }}</p>
-        <TechnicalDetails :request-id="requestId" />
+        <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
       </div>
-      <button type="button" :disabled="refreshing" @click="load">重新核验</button>
+      <button ref="noticeRetryButton" type="button" :disabled="refreshing" @click="load">
+        重新核验
+      </button>
     </section>
 
-    <section v-if="state === 'loading'" class="topology-state" aria-live="polite">
+    <section
+      v-if="state === 'loading'"
+      class="topology-state"
+      aria-live="polite"
+      aria-labelledby="topology-read-title"
+      :aria-busy="refreshing"
+    >
       <span class="topology-pulse" aria-hidden="true"></span>
       <div>
-        <b>{{ verdict[0] }}</b>
+        <h3 id="topology-read-title">{{ verdict[0] }}</h3>
         <p>{{ verdict[1] }}</p>
       </div>
     </section>
@@ -400,15 +461,19 @@ onBeforeUnmount(() => {
       v-else-if="['forbidden', 'expired', 'rate_limited', 'timeout', 'unavailable'].includes(state)"
       class="topology-state topology-state--danger"
       aria-live="polite"
+      aria-labelledby="topology-read-title"
+      :aria-busy="refreshing"
     >
       <strong aria-hidden="true">!</strong>
       <div>
-        <b>{{ verdict[0] }}</b>
+        <h3 id="topology-read-title">{{ verdict[0] }}</h3>
         <p>{{ verdict[1] }}</p>
-        <TechnicalDetails :request-id="requestId" />
+        <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
       </div>
       <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
-      ><button v-else type="button" :disabled="refreshing" @click="load">重新核验</button>
+      ><button v-else ref="retryButton" type="button" :disabled="refreshing" @click="load">
+        重新核验
+      </button>
     </section>
 
     <template v-else-if="data">
@@ -845,7 +910,7 @@ onBeforeUnmount(() => {
       </section>
       <footer class="topology-footer">
         <span>观测 {{ time(data.observed_at) }}</span
-        ><TechnicalDetails :request-id="requestId" /><strong
+        ><TechnicalDetails :request-id="requestId" summary="快照读取追踪" /><strong
           >重启、恢复与回滚只允许通过宝塔执行</strong
         >
       </footer>

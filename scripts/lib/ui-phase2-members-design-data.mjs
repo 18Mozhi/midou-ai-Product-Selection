@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import vm from "node:vm";
 import ts from "typescript";
+import { assertOrganizationReasonContract } from "./ui-phase2-organization-reason-contract.mjs";
 const plain = (v) => JSON.parse(JSON.stringify(v));
 export async function buildMembersDesignData(repo) {
   const read = (f) => readFile(path.join(repo, f), "utf8");
@@ -252,7 +253,7 @@ export async function buildMembersDesignData(repo) {
   }
   const dialog = await read("apps/web/src/components/AuditedReasonDialog.vue");
   assert.match(dialog, /minimumLength \?\? 2/);
-  assert.doesNotMatch(dialog, /maxlength=/);
+  await assertOrganizationReasonContract(dialog, source);
   return {
     provenance: "Original M06-01 E2E members/invitations; synthetic variants labeled separately",
     now: "2026-09-08T00:00:00Z",

@@ -1,5 +1,8 @@
 # P47 · 会话、权限与依赖访问状态 r1
 
+2026-09-12 当前源码重拍见 [当前状态复核](P47-CURRENT-STATE-REVIEW.md)。本文件及原图册
+保留历史审核时点；当前证据单独存放，不覆盖原图、不扩大批准。复验请使用新入口。
+
 ## 设计与真实路径
 
 起点 `main/7691b467`，实际 App / ProviderAdapterCenter / 共享 UiStatePanel。使用 frontend-design 保持已批准 C 方向的冷灰白工作区与蓝色主动作；fixing-accessibility 核对状态公告、原生按钮、44px、键盘与异步焦点。独立 Vite transform 只作用审核 host，**生产组件、共享状态组件、API、权限和部署均未改**。

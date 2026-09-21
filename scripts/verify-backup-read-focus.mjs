@@ -1,0 +1,312 @@
+import assert from "node:assert/strict";
+import path from "node:path";
+import { createServer as reservePort } from "node:net";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
+import { createServer } from "vite";
+import { chromium } from "playwright";
+import { backupPagePlugin, backupPageSources } from "./lib/backup-page-preview.mjs";
+import { backupReviewFixtures, backupFixtureFile } from "./lib/backup-review-fixtures.mjs";
+import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
+const args = process.argv.slice(2);
+assert.ok(
+  args.length === 0 ||
+    (args.length === 2 && args[0] === "--capture-review" && /^r[1-9]\d*$/.test(args[1])),
+);
+const output = args.length ? path.resolve(`output/playwright/p64-read-focus-${args[1]}`) : null;
+if (output) await mkdir(output);
+const { fixture, nav: navigationFixture } = await backupReviewFixtures(),
+  probe = reservePort();
+const envelope = (data) => ({
+  data,
+  request_id: "p64-focus-fixture",
+  trace_id: "p64-focus-fixture",
+});
+await new Promise((r) => probe.listen(0, "127.0.0.1", r));
+const port = probe.address().port;
+await new Promise((r) => probe.close(r));
+const server = await createServer({
+  configFile: path.resolve("apps/web/vite.config.ts"),
+  logLevel: "error",
+  define: { "import.meta.env.VITE_API_BASE_URL": JSON.stringify("/api/v1") },
+  plugins: [backupPagePlugin()],
+  server: { host: "127.0.0.1", port, strictPort: true, proxy: {}, hmr: false, open: false },
+});
+const sources = new Set([
+    ...backupPageSources,
+    backupFixtureFile,
+    "scripts/lib/backup-review-fixtures.mjs",
+    "scripts/lib/status-review-fixtures.mjs",
+    "tests/e2e/m06-02-platform-dashboard.spec.ts",
+    "scripts/verify-backup-read-focus.mjs",
+    "scripts/lib/ui-imported-style-sources.mjs",
+    "apps/web/vite.config.ts",
+  ]),
+  images = [],
+  results = [];
+const hash = (b) => createHash("sha256").update(b).digest("hex");
+let browser;
+try {
+  await server.listen();
+  browser = await chromium.launch();
+  const origin = `http://127.0.0.1:${port}`;
+  console.log(`P64 read focus ${origin}`);
+  const outcomes = await Promise.allSettled(
+    [1440, 390].flatMap((width) =>
+      ["reduce", "no-preference"].map(async (motion) => {
+        const context = await browser.newContext({
+            viewport: { width, height: width === 390 ? 844 : 1000 },
+            locale: "zh-CN",
+            reducedMotion: motion,
+          }),
+          page = await context.newPage(),
+          requests = [],
+          unexpected = [],
+          errors = [];
+        let mode = "failure",
+          held,
+          checks = 0;
+        const check = (a, b, label) => {
+          assert.deepEqual(a, b, `${width}/${motion}: ${label}`);
+          checks++;
+        };
+        const failure = {
+          status: 400,
+          json: {
+            error: {
+              code: "local_focus_read_failed",
+              message: "本地读取失败",
+              action_hint: "本地样例：重新核验读取。",
+            },
+            request_id: "p64-focus-failed",
+          },
+        };
+        const release = async (fail = false) => {
+          assert.ok(held);
+          const route = held;
+          held = null;
+          await route.fulfill(fail ? failure : { json: envelope(fixture) });
+        };
+        const capture = async (name, locator) => {
+          if (!output || motion !== "reduce") return;
+          await locator.evaluate((el) => el.scrollIntoView({ block: "center" }));
+          const box = await locator.boundingBox(),
+            viewport = page.viewportSize();
+          assert.ok(box && viewport);
+          const x = Math.max(0, box.x - 6),
+            y = Math.max(0, box.y - 6);
+          const clip = {
+            x,
+            y,
+            width: Math.min(viewport.width, box.x + box.width + 6) - x,
+            height: Math.min(viewport.height, box.y + box.height + 6) - y,
+          };
+          assert.equal(
+            await locator.evaluate((el) =>
+              Array.from(el.querySelectorAll("button"))
+                .filter((button) => button.checkVisibility())
+                .every((button) => {
+                  const rect = button.getBoundingClientRect();
+                  return button.contains(
+                    document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2),
+                  );
+                }),
+            ),
+            true,
+            "captured buttons are not obscured",
+          );
+          const b = await page.screenshot({ animations: "disabled", clip }),
+            file = `${width}-${name}.png`;
+          await writeFile(path.join(output, file), b);
+          images.push({
+            file,
+            sha256: hash(b),
+            pixelWidth: b.readUInt32BE(16),
+            pixelHeight: b.readUInt32BE(20),
+          });
+        };
+        try {
+          page.on("pageerror", (e) => errors.push(e.message));
+          await page.route("**/*", async (route) => {
+            const req = route.request(),
+              url = new URL(req.url()),
+              key = req.method() + " " + url.pathname;
+            if (url.origin !== origin) {
+              unexpected.push("external");
+              return route.abort();
+            }
+            if (!url.pathname.startsWith("/api/")) return route.continue();
+            if (key === "GET /api/v1/me/navigation")
+              return route.fulfill({ json: envelope(navigationFixture) });
+            if (key === "GET /api/v1/auth/session-status")
+              return route.fulfill({ json: envelope({ authenticated: true }) });
+            if (key === "GET /api/v1/me/ui-preferences")
+              return route.fulfill({ status: 503, json: { error: { code: "local_preferences" } } });
+            if (key !== "GET /api/v1/platform/operations/backup-recovery" || url.search) {
+              unexpected.push(key);
+              return route.abort();
+            }
+            requests.push({ mode, body: req.postData() });
+            if (mode === "hold") {
+              held = route;
+              return;
+            }
+            return route.fulfill(mode === "failure" ? failure : { json: envelope(fixture) });
+          });
+          await page.goto(origin + "/platform-admin/operations");
+          const surface = page.locator(".backup-center--review"),
+            header = surface.locator(".backup-hero"),
+            refresh = header.getByRole("button"),
+            state = surface.locator(".state-card"),
+            notice = surface.locator(".refresh-notice");
+          const focused = (locator) => locator.evaluate((el) => el === document.activeElement);
+          const activate = async (locator) => {
+            await locator.focus();
+            await page.keyboard.press("Enter");
+          };
+          await state
+            .getByRole("heading", { name: "备份与恢复事实暂不可用", exact: true })
+            .waitFor();
+          await state.getByRole("button", { name: "重新核验", exact: true }).focus();
+          await capture("initial-retry-focus", state);
+          mode = "hold";
+          await page.keyboard.press("Enter");
+          await header.getByRole("button", { name: "正在刷新…", exact: true }).waitFor();
+          check(
+            await focused(refresh),
+            true,
+            "removed first retry hands focus to permanent read action",
+          );
+          check(
+            await refresh.evaluate((el) => el.disabled),
+            false,
+            "pending read remains natively focusable",
+          );
+          check(
+            await refresh.getAttribute("aria-disabled"),
+            "true",
+            "pending read exposes unavailable action",
+          );
+          check(await refresh.getAttribute("aria-busy"), "true", "pending read exposes busy");
+          check(requests.length, 2, "one explicit retry");
+          await page.keyboard.press("Enter");
+          await page.keyboard.press("Space");
+          await refresh.evaluate((el) => el.click());
+          check(requests.length, 2, "busy click/Enter/Space do not duplicate read");
+          await capture("initial-retry-pending", header);
+          await release();
+          await surface.locator(".truth-banner").waitFor();
+          check(await focused(refresh), true, "successful response preserves read focus");
+          check(await refresh.getAttribute("aria-disabled"), "false", "success re-enables action");
+          check(await state.count(), 0, "success removes first error region");
+          await capture("initial-retry-complete", header);
+          mode = "failure";
+          await activate(refresh);
+          await notice.waitFor();
+          check(await focused(refresh), true, "header failure retains focus");
+          await notice.getByRole("button", { name: "重新核验", exact: true }).focus();
+          await capture("retained-retry-focus", notice);
+          mode = "hold";
+          await page.keyboard.press("Enter");
+          await header.getByRole("button", { name: "正在刷新…", exact: true }).waitFor();
+          check(await focused(refresh), true, "removed retained retry hands focus to header");
+          check(await notice.count(), 0, "original stale failure clears while reading");
+          await capture("retained-retry-pending", header);
+          await release(true);
+          await notice.waitFor();
+          check(await focused(refresh), true, "failed response does not lose header focus");
+          const nav = surface.getByRole("link", { name: "02 / 恢复证据", exact: true });
+          mode = "hold";
+          await activate(refresh);
+          await header.getByRole("button", { name: "正在刷新…", exact: true }).waitFor();
+          await nav.focus();
+          await release();
+          await header.getByRole("button", { name: "刷新事实", exact: true }).waitFor();
+          check(await focused(nav), true, "success does not steal intentionally moved focus");
+          mode = "hold";
+          await activate(refresh);
+          await header.getByRole("button", { name: "正在刷新…", exact: true }).waitFor();
+          await nav.focus();
+          await release(true);
+          await notice.waitFor();
+          check(await focused(nav), true, "failure does not steal intentionally moved focus");
+          const noticeRetry = notice.getByRole("button", { name: "重新核验", exact: true });
+          mode = "hold";
+          await noticeRetry.evaluate((el) => el.click());
+          await header.getByRole("button", { name: "正在刷新…", exact: true }).waitFor();
+          check(await focused(nav), true, "unfocused programmatic retry does not steal focus");
+          await release();
+          await header.getByRole("button", { name: "刷新事实", exact: true }).waitFor();
+          check(await focused(nav), true, "programmatic retry completion does not steal focus");
+          check(requests.length, 7, "seven reads with no duplicate dispatch");
+          check(unexpected, [], "no write or external request");
+          check(errors, [], "no browser error");
+          results.push({ width, motion, checks, requests });
+          console.log(JSON.stringify({ width, motion, checks, reads: requests.length }));
+        } finally {
+          if (held) await held.abort().catch(() => {});
+          await context.close();
+        }
+      }),
+    ),
+  );
+  const failures = outcomes.filter((o) => o.status === "rejected");
+  if (failures.length)
+    throw new AggregateError(
+      failures.map((o) => o.reason),
+      "P64 focus checks failed",
+    );
+  for (const mod of server.moduleGraph.idToModuleMap.values()) {
+    const f = mod.file && path.relative(process.cwd(), mod.file).replaceAll("\\", "/");
+    if (f && !f.startsWith("..") && !f.includes("node_modules") && /\.(vue|ts|css|json)$/.test(f))
+      sources.add(f);
+  }
+  await includeImportedStyleSources(sources, (file) => readFile(file, "utf8"));
+  images.sort((a, b) => a.file.localeCompare(b.file));
+  if (output) {
+    const sourceHashes = Object.fromEntries(
+      await Promise.all([...sources].sort().map(async (f) => [f, hash(await readFile(f))])),
+    );
+    await writeFile(
+      path.join(output, "manifest.json"),
+      JSON.stringify(
+        {
+          page: "P64",
+          revision: args[1],
+          capturedAt: new Date().toISOString(),
+          sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
+          scope: "actual Vue local focus checks; no real backup/restore or permission acceptance",
+          sources: sourceHashes,
+          images,
+          results,
+        },
+        null,
+        2,
+      ) + "\n",
+    );
+    await writeFile(
+      path.join(output, "index.html"),
+      '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P64读取焦点审核</title><style>body{font:16px/1.7 Microsoft YaHei;margin:24px}img{max-width:100%;display:block;border:1px solid #c7d3e4}article{margin:28px 0}</style><h1>P64读取焦点局部待审</h1><p>本地样例；不代表真实权限、恢复或全页验收。</p>' +
+        images
+          .map(
+            (i) =>
+              `<article><h2>${i.file}</h2><img src="${i.file}" alt="${i.file} 待审"></article>`,
+          )
+          .join("\n") +
+        "</html>",
+    );
+  }
+  console.log(
+    JSON.stringify({
+      groups: results.length,
+      checks: results.reduce((sum, r) => sum + r.checks, 0),
+      images: images.length,
+      sources: sources.size,
+      port,
+    }),
+  );
+} finally {
+  await browser?.close();
+  await server.close();
+}

@@ -1,9 +1,9 @@
-import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import { historicalAdapterReadSource } from "../../scripts/lib/ui-phase2-adapter-read-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import vm from "node:vm";
 import ts from "typescript";
 import { parse } from "@vue/compiler-sfc";
@@ -11,8 +11,17 @@ import { ref, computed } from "vue";
 import { adapterReadRevision } from "../../scripts/lib/ui-phase2-adapter-read-baseline.mjs";
 
 const file = adapterReadRevision.file;
-const source = historicalAdapterCSource(file, readFileSync(file, "utf8")).replaceAll("\r\n", "\n");
+const currentSource = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const captureRevision = "f2e8721892a226346d0e6f33ea3a36636f0f4152";
+const captured = (path) =>
+  execFileSync("git", ["show", `${captureRevision}:${path}`], { encoding: "utf8" }).replaceAll(
+    "\r\n",
+    "\n",
+  );
+// Immutable fix/counterexample pair; current behavior always executes the raw worktree source.
+const source = captured(file);
 const hash = (s) => createHash("sha256").update(s).digest("hex");
+assert.equal(hash(source), adapterReadRevision.after);
 const old = historicalAdapterReadSource(file, source);
 const row = { id: "source-a", name: "来源A", health_status: "ready" };
 class ApiClientError extends Error {
@@ -22,7 +31,7 @@ class ApiClientError extends Error {
     this.requestId = id;
   }
 }
-function harness(text = source) {
+function harness(text = currentSource) {
   const script = parse(text).descriptor.scriptSetup.content;
   const ast = ts.createSourceFile(file, script, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
   const body = ast.statements
@@ -58,7 +67,7 @@ function harness(text = source) {
   return { ...sandbox.api, requests };
 }
 
-test("P47 read guards preserve complete template/styles and accept only exact historical revision", () => {
+test("P47 frozen read-guard revision preserves template/styles and rejects unknown historical edits", () => {
   assert.equal(hash(source), adapterReadRevision.after);
   assert.equal(hash(old), adapterReadRevision.before);
   assert.equal(historicalAdapterReadSource(file, source + "\n// drift"), source + "\n// drift");
@@ -126,8 +135,12 @@ for (const outcome of ["success", "failure"]) {
   test(
     "P47 pre-probe GET " + outcome + " does not overwrite settled probe data/message/trace",
     async () => {
-      for (const mode of ["baseline", "current"]) {
-        const h = harness(mode === "baseline" ? old : source);
+      for (const [mode, input] of [
+        ["baseline", old],
+        ["historical-fixed", source],
+        ["current-raw", currentSource],
+      ]) {
+        const h = harness(input);
         h.items.value = [{ ...row, version: 1 }];
         const read = h.load(),
           write = h.probe(row);
@@ -207,7 +220,7 @@ test("P47 current read failure and12000ms timer cleanup remain unchanged", async
   assert.equal(h.message.value, "当前读取失败");
   assert.equal(h.refreshing.value, false);
   assert.match(
-    parse(source).descriptor.scriptSetup.content,
+    parse(currentSource).descriptor.scriptSetup.content,
     /setTimeout\(\(\) => controller.abort\(\), 12_000\)/,
   );
   assert.ok(h.requests[0].options.signal instanceof AbortSignal);
@@ -216,19 +229,13 @@ test("P47 current read failure and12000ms timer cleanup remain unchanged", async
 
 const evidenceRoot = "output/playwright/p47-read-order";
 const evidence = JSON.parse(readFileSync(`${evidenceRoot}/evidence.json`, "utf8"));
-test("P47 read-order actual browser evidence binds current raw files and exact48 images", () => {
+test("P47 frozen read-order capture retains exact48 images and revision-specific component claims", () => {
   assert.equal(evidence.kind, "P47-READ-ORDER-IMPLEMENTATION-r1");
   assert.equal(evidence.checks.length, 152);
   assert.equal(evidence.screenshots.length, 48);
   assert.equal(evidence.runs.length, 6);
   assert.equal(Object.keys(evidence.sourceHashes).length, 166);
   assert.equal(evidence.processesClosed, true);
-  for (const [f, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(
-      hash(historicalAdapterCSource(f, readFileSync(f, "utf8")).replaceAll("\r\n", "\n")),
-      sha,
-      f,
-    );
   assert.deepEqual(
     readdirSync(evidenceRoot).sort(),
     [...evidence.screenshots.map((s) => s.file), "evidence.json", "index.html"].sort(),
@@ -247,7 +254,15 @@ test("P47 read-order actual browser evidence binds current raw files and exact48
   assert.match(evidence.fixtureBoundary, /Explicit synthetic/);
   assert.match(evidence.remaining, /no route\/unmount/);
 });
-test("P47 current browser prevents visible version rollback and obsolete empty-list detail dismissal", () => {
+
+test("P47 archived read-order packet binds its complete original manifest and166 captured dependencies", () => {
+  assert.deepEqual(evidence, JSON.parse(captured(`${evidenceRoot}/evidence.json`)));
+  for (const [f, sha] of Object.entries(evidence.sourceHashes))
+    assert.equal(hash(captured(f)), sha, f);
+  // Current behavior is executed above from raw Vue, never substituted by this archive.
+  assert.notEqual(hash(currentSource), evidence.sourceHashes[file]);
+});
+test("P47 captured browser observations retain version rollback and detail-dismissal counterexamples", () => {
   for (const mode of ["baseline", "current"])
     for (const width of [390, 760, 1440])
       for (const scenario of ["pre-success", "pre-error", "during-early", "during-late"]) {

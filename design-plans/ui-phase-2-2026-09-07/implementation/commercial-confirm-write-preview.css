@@ -1,0 +1,55 @@
+@import "./commercial-confirm-preview.css";
+
+body.p58-impact-review .p58-impact-c .p58-impact-wait {
+  margin: 0;
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--p58-line);
+  background: #eef3fc;
+  color: var(--p58-ink);
+  font:
+    16px/1.65 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+}
+body.p58-impact-review .p58-impact-c .p58-impact-feedback {
+  gap: 12px;
+  border-left: 4px solid #a43730;
+  background: #fff8f7;
+}
+body.p58-impact-review .p58-impact-c .p58-impact-feedback h4 {
+  color: #842f29;
+}
+body.p58-impact-review .p58-impact-c .p58-impact-feedback p {
+  margin: 0;
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+body.p58-impact-review .p58-impact-c .p58-impact-feedback summary {
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 10px 12px;
+  color: var(--p58-ink);
+  font:
+    16px/1.5 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+}
+body.p58-impact-review .p58-impact-c h3:focus {
+  outline: 2px solid var(--p58-paper);
+  outline-offset: 4px;
+}
+body.p58-impact-review .p58-impact-c summary:focus-visible {
+  outline: 3px solid var(--p58-action);
+  outline-offset: 2px;
+}
+@media (max-width: 760px) {
+  body.p58-impact-review .p58-impact-c .p58-impact-wait {
+    padding: 18px;
+  }
+  body.p58-impact-review .p58-impact-c .p58-impact-feedback .technical-details dl > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  body.p58-impact-review .p58-impact-c .p58-impact-feedback .technical-details button {
+    justify-self: start;
+  }
+}

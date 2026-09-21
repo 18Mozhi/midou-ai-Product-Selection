@@ -1,0 +1,8 @@
+html
+  body.approvals-vue-c
+  #app
+  .org-admin-center[data-approval-c-view="true"]
+  .org-approval-expired-c
+  button {
+  scroll-margin-block: 100px;
+}

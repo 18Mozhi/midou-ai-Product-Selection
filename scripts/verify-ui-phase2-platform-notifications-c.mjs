@@ -38,48 +38,143 @@ const contracts = [...contract.matchAll(/^\| ([^|]+?) \| ([a-f0-9]{64}) \|\r?$/g
   ([, f]) => data.sourcePaths.includes(f),
 );
 assert.equal(contracts.length, 21);
+const proposalRevision = "05a5152fee9ce562579d5470de019c0fbce4bcb9";
+const implementationHashes = new Map([
+  [
+    "apps/web/src/components/use-platform-notification-list.ts",
+    "43b46c51afce786c288cb9ce3f1382f2ef3b926360b9d892ee6652e1a0d7a9e7",
+  ],
+  [
+    "apps/web/src/components/PlatformManagementCenter.vue",
+    "c3dba75b134c70ff7bd23a9310395eb9e6f78c73d53a738a061e0071f2c89bf9",
+  ],
+  [
+    "apps/web/src/components/PlatformMessageEditor.vue",
+    "135ab00609dac3dc7fddf54085972594e80f6d1e6f2a0609973c3d7f7d6eea31",
+  ],
+  [
+    "apps/web/src/components/PlatformMessageWorkbench.vue",
+    "7c46437db21c0874d138bb249c4cead5afceebc19e4d6a3fe62aec2e83e9cc7a",
+  ],
+  [
+    "apps/web/src/components/PlatformNotificationOperations.vue",
+    "73bfa7089471ce53ea44f747727211684cb840df62a22a86b70dbaa4c9ba5e07",
+  ],
+  [
+    "apps/web/src/components/PlatformNotificationManagement.vue",
+    "7cced021643a3af6a23a07f8afca71d943cabcd13cf963d97ac3b698a3dfe2e8",
+  ],
+  [
+    "apps/web/src/components/PlatformNotificationPagination.vue",
+    "56968271bcfcf600901782eea6601eaae49a5a84bc5d3ab7bc0a9618596f0849",
+  ],
+  [
+    "apps/web/src/components/PlatformManagementFilter.vue",
+    "0ac6f1cd0c812b6f3455d3288f91c8b9ab6bf2028b7a1cafd35c823e26da08f6",
+  ],
+  [
+    "apps/web/src/components/ResponsiveFilterDrawer.vue",
+    "5f9d10aa91421ee10f5187e2051d90bcadf7479d54456c60e91dfb3d2eb0c8a0",
+  ],
+  [
+    "tests/unit/platform-notification-operations.test.mjs",
+    "635a55afd06851ee69db325c9d0553afd3cf43707be87192464291c7b11efaae",
+  ],
+  [
+    "tests/e2e/platform-message-management.spec.ts",
+    "868bbb4d3245ee960d579d207ed412ba161e4d83d7ef4fbdd8876f1319f6cdc5",
+  ],
+  [
+    "tests/e2e/m06-02-platform-dashboard.spec.ts",
+    "d164a18d6808823272c34b6f612446370d4802cb34aca1722b94b2cec3865f66",
+  ],
+]);
+const carriedCurrentHashes = new Map([
+  [
+    "apps/web/src/use-audited-reason.ts",
+    "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+  ],
+  [
+    "apps/web/src/components/AuditedReasonDialog.vue",
+    "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+  ],
+  [
+    "apps/web/src/components/ResponsiveDataView.vue",
+    "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
+  ],
+  [
+    "apps/web/src/use-modal-dialog.ts",
+    "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+  ],
+]);
 const contractRebindings = [
-  {
-    file: "tests/e2e/platform-message-management.spec.ts",
-    old: "e73f8e2ce373e2f4ac2a4fc6207c3772c84cb3159855e219b447be5ecfaf5f72",
-    current: "ed45f8df2572d35492fe289a6de397b861dacee8d552fd9b77bc6bf0934c2dad",
-    commit: "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
-    reason: "Existing actual publish reason focus-test addition, historical table retained.",
-  },
-  {
-    file: "tests/e2e/m06-02-platform-dashboard.spec.ts",
-    old: "dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66",
-    current: "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-    commit: "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
-    reason: "Audited reason dialog focus-test additions; historical table retained.",
-  },
+  ...[...implementationHashes].map(([file, current]) => ({
+    file,
+    proposalRevision,
+    current,
+    reason: "P57 current Vue implementation; historical proposal contract retained.",
+  })),
+  ...[...carriedCurrentHashes].map(([file, current]) => ({
+    file,
+    proposalRevision,
+    current,
+    reason: "Previously reviewed shared audited-reason revision; historical proposal retained.",
+  })),
 ];
 for (const [, f, h] of contracts) {
-  const binding = contractRebindings.find((v) => v.file === f);
-  if (binding) {
-    assert.equal(h, binding.old);
-    assert.equal(
-      hash(
-        lf(
-          execFileSync("git", ["show", `${binding.commit}^:${f}`], { cwd: repo, encoding: "utf8" }),
-        ),
-      ),
-      binding.old,
-    );
-    assert.equal(
-      hash(
-        lf(
-          execFileSync("git", ["show", `${binding.commit}:${f}`], { cwd: repo, encoding: "utf8" }),
-        ),
-      ),
-      binding.current,
-    );
-  }
-  assert.equal(
-    hash(lf(await readFile(path.join(repo, f), "utf8"))),
-    responsiveFocusContractHash(f, binding?.current ?? h),
-    f,
+  const proposalHash = hash(
+    lf(execFileSync("git", ["show", `${proposalRevision}:${f}`], { cwd: repo, encoding: "utf8" })),
   );
+  const historicalFocusBinding =
+    f === "tests/e2e/platform-message-management.spec.ts"
+      ? {
+          old: "e73f8e2ce373e2f4ac2a4fc6207c3772c84cb3159855e219b447be5ecfaf5f72",
+          proposal: "ed45f8df2572d35492fe289a6de397b861dacee8d552fd9b77bc6bf0934c2dad",
+        }
+      : f === "tests/e2e/m06-02-platform-dashboard.spec.ts"
+        ? {
+            old: "dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66",
+            proposal: "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
+          }
+        : null;
+  const historicalSharedRevision =
+    f === "apps/web/src/use-audited-reason.ts" ||
+    f === "apps/web/src/components/AuditedReasonDialog.vue"
+      ? "4a6368ef1178908688cd6519c5cafafb25c1afcb"
+      : f === "apps/web/src/components/ResponsiveDataView.vue"
+        ? "d99f047c95a15508066cdd191275344d3086f46a"
+        : null;
+  if (historicalFocusBinding) {
+    assert.equal(h, historicalFocusBinding.old);
+    assert.equal(
+      hash(
+        lf(
+          execFileSync("git", ["show", `ff46bfe9c620a422d95cab9689489b07fb6b95ea^:${f}`], {
+            cwd: repo,
+            encoding: "utf8",
+          }),
+        ),
+      ),
+      historicalFocusBinding.old,
+    );
+    assert.equal(proposalHash, historicalFocusBinding.proposal);
+  } else if (historicalSharedRevision) {
+    assert.equal(
+      hash(
+        lf(
+          execFileSync("git", ["show", `${historicalSharedRevision}:${f}`], {
+            cwd: repo,
+            encoding: "utf8",
+          }),
+        ),
+      ),
+      h,
+      `${f} historical contract`,
+    );
+  } else assert.equal(proposalHash, h, `${f} proposal`);
+  let currentExpected = implementationHashes.get(f) ?? carriedCurrentHashes.get(f);
+  if (!currentExpected) currentExpected = responsiveFocusContractHash(f, h);
+  assert.equal(hash(lf(await readFile(path.join(repo, f), "utf8"))), currentExpected, f);
 }
 const sourcePaths = [
   "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
@@ -92,9 +187,22 @@ const sourcePaths = [
     (f) => relative + "/" + f,
   ),
 ];
+const historicalProposalSources = new Set(implementationHashes.keys());
 const sourceHashes = Object.fromEntries(
   await Promise.all(
-    sourcePaths.map(async (f) => [f, hash(lf(await readFile(path.join(repo, f), "utf8")))]),
+    sourcePaths.map(async (f) => [
+      f,
+      hash(
+        lf(
+          historicalProposalSources.has(f)
+            ? execFileSync("git", ["show", `${proposalRevision}:${f}`], {
+                cwd: repo,
+                encoding: "utf8",
+              })
+            : await readFile(path.join(repo, f), "utf8"),
+        ),
+      ),
+    ]),
   ),
 );
 if (!capture) {
@@ -449,6 +557,7 @@ try {
       "source-logic.js",
       "README.md",
       "evidence.json",
+      "vue-implementation",
     ].sort(),
   );
   const links = [

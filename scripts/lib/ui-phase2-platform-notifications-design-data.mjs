@@ -1,10 +1,12 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import vm from "node:vm";
 import ts from "typescript";
 
 export async function buildPlatformNotificationsDesignData(repo) {
+  const proposalRevision = "05a5152fee9ce562579d5470de019c0fbce4bcb9";
   const sourcePaths = [
     "apps/web/src/components/use-platform-notification-list.ts",
     "apps/web/src/components/PlatformManagementCenter.vue",
@@ -28,7 +30,18 @@ export async function buildPlatformNotificationsDesignData(repo) {
     "tests/e2e/platform-message-management.spec.ts",
     "tests/e2e/m06-02-platform-dashboard.spec.ts",
   ];
-  const read = (p) => readFile(path.join(repo, p), "utf8");
+  const historicalSources = new Set(
+    [0, 1, 2, 3, 4, 5, 6, 7, 10, 18, 19, 20].map((index) => sourcePaths[index]),
+  );
+  const read = (p) =>
+    historicalSources.has(p)
+      ? Promise.resolve(
+          execFileSync("git", ["show", `${proposalRevision}:${p}`], {
+            cwd: repo,
+            encoding: "utf8",
+          }),
+        )
+      : readFile(path.join(repo, p), "utf8");
   const parse = (s) => ts.createSourceFile("input.ts", s, ts.ScriptTarget.Latest, true);
   const compile = (s) =>
     ts.transpileModule(s, {

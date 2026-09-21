@@ -11,6 +11,7 @@ import { validateActionReview } from "../../scripts/lib/ui-phase2-action-coverag
 import { validateReviewSurfaces } from "../../scripts/lib/ui-phase2-review-surfaces.mjs";
 import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 import { buildMembersDesignData } from "../../scripts/lib/ui-phase2-members-design-data.mjs";
+import { assertOrganizationReasonContract } from "../../scripts/lib/ui-phase2-organization-reason-contract.mjs";
 import {
   base,
   parentFile,
@@ -99,7 +100,7 @@ test("P30 multiline event handlers render as thirteen intact Markdown rows witho
   }
   assert.match(wire.forwardBindings.find((e) => e.event === "@update-member-query").handler, /\n/);
 });
-test("P30 distinguishes nine local models from six controlled values and shared reason input", () => {
+test("P30 distinguishes nine local models from six controlled values and shared reason input", async () => {
   const r = review();
   const result = validateReviewSurfaces(r.surfaceReview, { sources, packages });
   assert.equal(result.localModelBindings, 9); // Six summary-only models plus three visible invite models.
@@ -124,7 +125,7 @@ test("P30 distinguishes nine local models from six controlled values and shared 
   assert.equal(r.sharedReasonInput.binding, "reason");
   assert.equal(r.sharedReasonInput.maximumLength, null);
   assert.match(sources[childFile], /v-model="form.reason" required maxlength="500"/);
-  assert.doesNotMatch(sources[dependencies[2]], /maxlength=/);
+  await assertOrganizationReasonContract(sources[dependencies[2]], sources[parentFile]);
 });
 test("P30 four shared reason variants do not imply a dialog for invitation creation or other routes", () => {
   const r = review(),

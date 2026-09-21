@@ -2,30 +2,42 @@
 
 2026-09-11。修正独立验证工具把历史快照误作当前源码的缺口。旧 [平台账号合同](platform-account-contract-review.md) 与 [用户设计合同](platform-user-design-contract.md) 原表、图片、批准范围均保留；本文件不是新视觉批准或生产验收。
 
-## 五处明确源码修订
+## 七处明确源码修订
 
-历史列必须与原表逐项相等；当前列必须与真实文件的 LF SHA-256 逐项相等。只接续这五个文件，其余原表27个文件仍逐项严格核对；不采用“任意旧哈希也可通过”的宽松回退。
+历史列必须与原表逐项相等；当前列必须与真实文件的 LF SHA-256 逐项相等。只接续这七个文件，其余原表25个文件仍逐项严格核对；不采用“任意旧哈希也可通过”的宽松回退。
 
 | 文件 | 历史 LF SHA-256 | 当前 LF SHA-256 | 已有依据 |
 | --- | --- | --- | --- |
 | apps/web/src/components/PlatformRoleComparison.vue | d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba | 53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809 | 同角色结果局部C展示class；完整脚本/原模板内容与控件保持 |
 | apps/web/src/components/PlatformDashboard.vue | 7935e4cdeca4991615f554ff0c66cf5e623454269fa0771ff06b861f15ca5a95 | b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498 | ea005452 历史时间窗/在途读取修复；[当前语义合同](platform-overview-semantic-contract-review.md) |
 | apps/web/src/components/PlatformAccountCenter.vue | 2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474 | b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00 | 组织/创建/改密修复后追加P44手机目录标题与独立样式导入；3ac56e41/ec3f2b65/a1ba7d5a保留为历史图依据 |
-| apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa | b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99 | [焦点与缓存停用增量](responsive-detail-focus-contract-review.md) |
-| apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 | a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011 | [重置禁用焦点修复](FILTER-RESET-FOCUS-REVIEW.md) |
+| apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa | 8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf | 焦点/缓存增量后，388b311d/af239b08 增加 governance/content 外观，再作 [原色变量提取](COLOR-ROLES-CLOSURE-REVIEW.md)；展开后严格等于 6d3088d1 中间版 |
+| apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 | 5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f | 重置焦点后接续 P55/P56 浮层、通知外观与原色变量；[面板关联及减少动态效果首焦点](FILTER-DRAWER-ASSOCIATION-REVIEW.md) |
+| apps/web/src/use-modal-dialog.ts | 08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f | 5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc | 635e5538 增加并返回 discardReturnFocus，仅清空返焦目标；CredentialAssetCenter 已使用，原开关及 cancel 路径不变 |
+| apps/web/src/components/NavigationShell.vue | 4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc | 0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb | import.meta.glob 排除 P57 的六个内部组件；仍由父页面导入，不改菜单/路由目录、网络或缓存语义 |
 
 ## 候选身份与新增源码
 
-只替换 S（ResponsiveDataView）这一个明确别名的五个候选，读取已有 [当前动作归属表](responsive-detail-focus-contract-review.md)，不重复维护一套新签名。原表五个历史身份仍严格核对；其中三个新位置接续、两个身份不变。其余123个候选和全部24个 v-model 与真实Vue逐项相等。候选身份不能替代交互语义、运行时动作分母、动态弹窗或所有消费组件验收。
+S（ResponsiveDataView）的五个候选读取已有 [动作归属表](responsive-detail-focus-contract-review.md)，不重复维护签名。原表五个历史身份仍严格核对；其中三个新位置接续、两个不变。补充表 b9e635a3 时点之后先增加 P55/P56 外观，再提取颜色。补充表原指纹固定保留；当前原始文件先核对当前哈希，再展开调色板变量，完整文本必须等于中间版 `6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac`，该版为 af239b08 的实际源码。不把中间版误称 b9e635a3，不以逆向文本充当当前文件。
 
-PlatformAccountCenter 已抽出组织操作组合函数、增加创建反馈归属并接入P44手机比较控件样式，因此当前检查增加四个真实依赖（含P44手机目录样式），不把原32源文件误称完整当前调用链。原32源历史表保留，当前36源是本工具的明确静态核对范围，不代表全项目源码分母。
+2026-09-12 增加 Q 的唯一候选接续；Q 原表六项完整保留并固定核对，下面只替换打开按钮，另五项身份不变。当前扫描器实测方向是 **beb5 → 7e0f**；先前 FILTER-DRAWER-ASSOCIATION-REVIEW.md 末段将 actual/expected 的方向误读，此处纠正，不覆盖原历史记录。
+
+| 历史候选 | 当前候选 | 精确增量与语义 |
+| --- | --- | --- |
+| Q#beb5f8d5846aa028.1 | Q#7e0fa28eaeb1cc09.1 | 同一 triggerButton 的 @click=show，仅增加 :aria-controls=panelId；移除这一属性后必须扫描回历史身份 |
+
+验证器不接受其他 Q 候选替换、重复/缺失登记、无关联的旧身份或任意新签名。其余122个候选和全部24个 v-model 继续与实际 Vue 逐项核对。候选数量不是业务动作分母，也不替代运行时唯一面板/首焦点/全部消费者验收；本次静态登记不提升页面审核。
+
+PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新增依赖保留；本次把实际导入的共享浮层及 P44 手机调色板两文件加入原始来源检查。P44 两个样式文件的旧指纹分别为 9b74248f/4c668445，本轮接续已有颜色角色提取；布局与已登记区域边界由 [当前图包重放](P44-P46-CURRENT-REPLAY.md) 核对。原32源历史表不改，当前38源是本工具的明确静态范围，不代表全项目源码分母。
 
 | 新增核对文件 | 当前 LF SHA-256 |
 | --- | --- |
 | apps/web/src/use-platform-organization-actions.ts | 3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb |
 | apps/web/src/use-user-creation-owner.ts | cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e |
-| apps/web/src/components/PlatformAdminComparisonMobile.css | 9b74248f24827e8e1e4800b93090ef1fd680acaebf90754bc238680bebedddde |
-| apps/web/src/components/PlatformAdminDirectoryMobile.css | 4c66844583a8a9711e29b0aa40d40b87ebd7409f53b64933d441b0c8bf46c82c |
+| apps/web/src/components/PlatformAdminComparisonMobile.css | 03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae |
+| apps/web/src/components/PlatformAdminDirectoryMobile.css | 6a9f05f7690a67746b4ea9dc479ea7d78a43ad2b73707bde6d2dad0c2d0050f3 |
+| apps/web/src/design/platform-overlay-tokens.css | 92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b |
+| apps/web/src/design/platform-admin-mobile-tokens.css | 3c878a3060007abd8bb51a0bf626833a9e8ac7ab4a62c3fcbcd587e9c52b7e68 |
 
 ## 运行与失败边界
 

@@ -1,13 +1,14 @@
+import { accountHistoricalCapture } from "../../scripts/lib/ui-phase2-account-historical-capture.mjs";
 import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
-import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 
 const output = "output/playwright/p39-create-user-preview";
+const capture = accountHistoricalCapture("create");
 // Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
 const read = (f) =>
   historicalAdminResultsSource(f, historicalOrganizationActionSource(f, readFileSync(f, "utf8")));
@@ -23,7 +24,7 @@ test("Historical P39 creation preview preserves its original production source o
     .map((f) => "apps/web/src/components/" + f)
     .concat(["apps/web/src/use-modal-dialog.ts", "apps/web/src/api-client.ts"])) {
     assert.equal(
-      read(file),
+      capture.source(file),
       execFileSync("git", ["show", `797e8af3:${file}`], { encoding: "utf8" }).replaceAll(
         "\r\n",
         "\n",
@@ -52,7 +53,7 @@ test("P39 creation exact42 PNG and121 browser checks retain captured source revi
     [390, 760, 761, 1440],
   );
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(historicalFilterResetSource(file, read(file))), sha, file);
+    assert.equal(hash(capture.source(file)), sha, file);
   assert.deepEqual(
     readdirSync(output)
       .filter((f) => f.endsWith(".png"))

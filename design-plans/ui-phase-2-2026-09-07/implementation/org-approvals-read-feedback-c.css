@@ -1,0 +1,14 @@
+html
+  body.approvals-vue-c
+  #app
+  .org-admin-center[data-approval-c-view="true"]
+  .org-approval-read-feedback-c
+  button,
+html
+  body.approvals-vue-c
+  #app
+  .org-admin-center[data-approval-c-view="true"]:has(.org-approval-read-feedback-c)
+  .org-admin-refresh
+  button {
+  scroll-margin-block: 100px;
+}

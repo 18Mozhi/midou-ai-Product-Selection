@@ -1,0 +1,238 @@
+{
+  "kind": "P47-REFRESH-FOCUS-CURRENT-NO-CAPTURE",
+  "runs": 8,
+  "currentOnly": true,
+  "currentSha": "51c0ba1f86fa1179fcb0d25b9cb327ef8a38f34b0cef53d5a916f0ef2f92a2ee",
+  "sources": 177,
+  "outcomes": [
+    {
+      "mode": "current",
+      "width": 390,
+      "outcome": "success",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 390,
+      "outcome": "failure",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 760,
+      "outcome": "success",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 760,
+      "outcome": "failure",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 761,
+      "outcome": "success",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 761,
+      "outcome": "failure",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 1440,
+      "outcome": "success",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    },
+    {
+      "mode": "current",
+      "width": 1440,
+      "outcome": "failure",
+      "checks": 19,
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/provider-adapters",
+          "body": null
+        }
+      ]
+    }
+  ],
+  "checks": 152,
+  "pictures": 0,
+  "ports": [59020],
+  "processesClosed": true,
+  "boundary": "Actual untransformed current App; original driver assertions preserved. Local GET fixtures only; no real API, permission, probe, production or visual acceptance. Historical images untouched."
+}

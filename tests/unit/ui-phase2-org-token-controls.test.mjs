@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertOrganizationReasonContract } from "../../scripts/lib/ui-phase2-organization-reason-contract.mjs";
 import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -91,7 +92,7 @@ test("P36 every applicable control/state/width has one image and native check", 
       assert.ok(e.screenshots.some((s) => s.composition === action && s.width === width));
 });
 
-test("P36 selection, pressing, busy and approval remain distinct without OS credential access", () => {
+test("P36 selection, pressing, busy and approval remain distinct without OS credential access", async () => {
   assert.equal(e.approval, "pending-user-review");
   assert.match(e.scope, /no mounted Vue\/API\/SQL\/OS clipboard or production proof/);
   assert.equal(e.externalRequests, 0);
@@ -111,7 +112,10 @@ test("P36 selection, pressing, busy and approval remain distinct without OS cred
     );
   }
   const source = readFileSync("apps/web/src/components/AuditedReasonDialog.vue", "utf8");
-  assert.doesNotMatch(source, /maxlength=/);
+  await assertOrganizationReasonContract(
+    source,
+    readFileSync("apps/web/src/components/OrganizationAdminCenter.vue", "utf8"),
+  );
   assert.match(
     readFileSync(
       "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/tokens.js",

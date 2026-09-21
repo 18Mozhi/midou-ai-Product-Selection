@@ -1,4 +1,5 @@
 import test from "node:test";
+import { acceptanceHistoricalCapture } from "../../scripts/lib/ui-phase2-acceptance-historical-capture.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
@@ -80,8 +81,10 @@ test("P49 action CSS is isolated, responsive, and does not suppress focus", () =
   assert.equal(text.includes("outline: none"), false);
 });
 
-test("P49 action evidence binds scope, POST, feedback, and images", () => {
-  const evidence = JSON.parse(read(`${root}/evidence.json`));
+test("P49 historical action evidence binds scope, POST, feedback, and images", () => {
+  const historical = acceptanceHistoricalCapture("actions");
+  assert.equal(read(`${root}/evidence.json`), historical.manifest);
+  const evidence = JSON.parse(historical.manifest);
   assert.equal(evidence.kind, "P49-ACCEPTANCE-ACTIONS-REVIEW-r1");
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.productionChanged, false);
@@ -92,7 +95,7 @@ test("P49 action evidence binds scope, POST, feedback, and images", () => {
   assert.equal(evidence.screenshots.length, 54);
   assert.ok(Object.keys(evidence.sourceHashes).length >= 45);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assert.equal(hash(historical.source(file)), expected, file);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

@@ -13,7 +13,8 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const component = "apps/web/src/components/ProviderAdapterCenter.vue";
-const root = "output/playwright/p47-read-error-review";
+const root = "output/playwright/p47-read-error-current-review";
+const historicalRoot = "output/playwright/p47-read-error-review";
 const evidence = () => JSON.parse(read(`${root}/evidence.json`));
 
 test("P47 read-error proposal only supplies two error-specific presentation props", () => {
@@ -62,10 +63,22 @@ test("P47 read-error visual rules cannot target other state panels or production
 
 test("P47 read-error actual Vue review binds raw sources, all pictures and unchanged neighboring states", () => {
   const e = evidence();
+  assert.equal(e.kind, "P47-READ-ERROR-CURRENT-REVIEW-r1");
+  assert.equal(e.userReview, "pending");
+  assert.equal(e.historicalPackage, historicalRoot);
   assert.equal(e.reviewOnly, true);
   assert.equal(e.processesClosed, true);
   assert.equal(e.runs.length, 30);
   assert.equal(e.screenshots.length, 30);
+  for (const file of [
+    "scripts/verify-ui-phase2-provider-adapter-read-error-current.mjs",
+    "scripts/lib/ui-imported-style-sources.mjs",
+    "apps/web/src/design/provider-adapter-tokens.css",
+    "apps/web/src/design/provider-registry-tokens.css",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-read-error-current-preview.css",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-read-error-preview.css",
+  ])
+    assert.ok(e.sourceHashes[file], file);
   for (const [file, expected] of Object.entries(e.sourceHashes))
     assert.equal(hash(read(file)), expected, file);
   assert.deepEqual(
@@ -94,5 +107,50 @@ test("P47 read-error actual Vue review binds raw sources, all pictures and uncha
     assert.equal(value("no page or panel horizontal overflow"), true);
     assert.deepEqual(value("no unexpected network"), []);
     assert.deepEqual(value("no runtime errors"), []);
+    if (run.mode === "review" && !run.scene.endsWith("unchanged"))
+      assert.equal(value("trace labels preserve 13px floor"), true);
   }
+});
+
+test("P47 original read-error driver and review images remain immutable beside the current replay", () => {
+  assert.equal(
+    hash(read("scripts/verify-ui-phase2-provider-adapter-read-error.mjs")),
+    "1799619b1e5fa42b8646971ca53310b49c2dbb675130e7999c5a454c1b4cfea1",
+  );
+  assert.equal(
+    hash(read(`${historicalRoot}/evidence.json`)),
+    "9ae95e9db43d145b995a74beb26940d6a2ec8555aaedf6e7e0111ecb1869492f",
+  );
+  const old = JSON.parse(read(`${historicalRoot}/evidence.json`));
+  assert.equal(old.kind, "P47-READ-ERROR-REVIEW-r1");
+  assert.equal(old.screenshots.length, 30);
+  for (const shot of old.screenshots)
+    assert.equal(hash(readFileSync(`${historicalRoot}/${shot.file}`)), shot.sha256, shot.file);
+  for (const file of [
+    "scripts/lib/ui-phase2-adapter-read-error-preview.mjs",
+    "design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-read-error-preview.css",
+  ])
+    assert.equal(hash(read(file)), old.sourceHashes[file], file);
+});
+
+test("P47 current error preview only raises its trace label to the existing 13px floor", () => {
+  const css = postcss.parse(
+    read(
+      "design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-read-error-current-preview.css",
+    ),
+  );
+  const imports = [],
+    rules = [];
+  css.walkAtRules((rule) => imports.push([rule.name, rule.params]));
+  assert.deepEqual(imports, [["import", '"./provider-adapters-read-error-preview.css"']]);
+  css.walkRules((rule) => rules.push(rule));
+  assert.equal(rules.length, 1);
+  assert.equal(
+    rules[0].selector.replace(/\s+/g, " "),
+    'html body.p47-read-error-review:has(#app .adapter-center--c) #app .adapter-center--c .ui-state-panel[data-kind="error"] dt',
+  );
+  assert.deepEqual(
+    rules[0].nodes.map((node) => [node.type, node.prop, node.value, Boolean(node.important)]),
+    [["decl", "font-size", "13px", false]],
+  );
 });

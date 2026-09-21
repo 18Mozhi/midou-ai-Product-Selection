@@ -1,0 +1,132 @@
+/* Only the actual-App review host. Ready-page r2 remains unchanged. */
+html
+  body.org-read-state-c:has(#app)
+  #app
+  .role-shell.role-shell--review
+  .org-admin-center:not(:has(> .org-admin-metrics)) {
+  margin: 0;
+  font-family: "Microsoft YaHei", sans-serif;
+  color: #172d4c;
+  :is(h2, h3, p, span, small, button, summary) {
+    font-family: inherit;
+  }
+  .org-admin-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    min-height: 148px;
+    margin: 0;
+    padding: 28px;
+    border: 0;
+    border-radius: 0;
+    background: #244bb0;
+    box-shadow: none;
+    color: white;
+  }
+  .org-admin-hero :is(p, h2, span, small) {
+    color: white;
+  }
+  .org-admin-hero h2 {
+    margin: 0;
+    font-size: 30px;
+  }
+  .org-admin-hero span {
+    line-height: 1.7;
+  }
+  .org-admin-hero h2:focus-visible {
+    outline: 3px solid white;
+    outline-offset: 5px;
+  }
+  button {
+    min-height: 44px;
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 4px;
+    background: #244bb0;
+    color: white;
+    font-size: 16px;
+  }
+  .org-admin-hero button {
+    background: white;
+    color: #244bb0;
+  }
+  button:disabled {
+    background: #e4e9f0;
+    color: #536985;
+    opacity: 1;
+  }
+  .org-admin-state {
+    display: block;
+    margin: 24px 0 0;
+    padding: 28px;
+    min-height: 240px;
+    border: 1px solid #d8e2ef;
+    border-radius: 0;
+    background: white;
+    box-shadow: none;
+    text-align: left;
+  }
+  .org-admin-state h3 {
+    margin: 0 0 12px;
+    font-size: 24px;
+    color: #172d4c;
+  }
+  .org-admin-state p {
+    margin: 0;
+    line-height: 1.8;
+    color: #536985;
+  }
+  .org-admin-state details {
+    margin: 20px 0;
+    border-top: 1px solid #d8e2ef;
+  }
+  .org-admin-state summary {
+    min-height: 44px;
+    box-sizing: border-box;
+    padding: 12px 0;
+    color: #244bb0;
+    cursor: pointer;
+  }
+  .org-admin-state code {
+    display: block;
+    padding: 12px;
+    background: #f3f6fb;
+    color: #536985;
+    overflow-wrap: anywhere;
+    font: 13px/1.8 monospace;
+  }
+  :is(button, summary):focus-visible {
+    outline: 3px solid #244bb0;
+    outline-offset: 3px;
+  }
+  .org-admin-hero button:focus-visible {
+    outline-color: white;
+  }
+  @media (max-width: 620px) {
+    .org-admin-hero {
+      padding: 24px 20px;
+      align-items: stretch;
+      flex-direction: column;
+    }
+    .org-admin-refresh {
+      width: 100%;
+      justify-items: stretch;
+    }
+    .org-admin-state {
+      padding: 24px 20px;
+      margin-top: 20px;
+    }
+    .org-admin-state button {
+      width: 100%;
+    }
+  }
+}
+html body.org-read-state-c:has(#app) #app .role-shell.role-shell--review {
+  .role-context-drawer > summary {
+    border-left: 0;
+  }
+  .role-mobile-nav > :is(a, button) {
+    border: 0;
+  }
+}

@@ -244,20 +244,43 @@ test("platform navigation exposes complete management domains and role switching
 });
 
 test("platform management and dashboard expose operational details instead of placeholder cards", async () => {
-  const management = (
-    await Promise.all(
-      ["PlatformManagementCenter.vue", "PlatformManagementRecordList.vue"].map((file) =>
-        readFile(new URL(`../../apps/web/src/components/${file}`, import.meta.url), "utf8"),
-      ),
-    )
-  ).join("\n");
+  const [management, records, review, notifications] = await Promise.all(
+    [
+      "PlatformManagementCenter.vue",
+      "PlatformManagementRecordList.vue",
+      "PlatformContentReviewDialog.vue",
+      "PlatformNotificationCenter.vue",
+    ].map((file) =>
+      readFile(new URL(`../../apps/web/src/components/${file}`, import.meta.url), "utf8"),
+    ),
+  );
   const dashboard = await readFile(
     new URL("../../apps/web/src/components/PlatformDashboard.vue", import.meta.url),
     "utf8",
   );
   const main = await readFile(new URL("../../apps/web/src/main.ts", import.meta.url), "utf8");
-  for (const label of ["审核热点内容", "投递", "接收邮箱", "采集任务状态"])
-    assert.match(management, new RegExp(label));
+  // Require the actual mounted owner, not a label found in an unrelated source file.
+  assert.match(
+    management,
+    /import PlatformContentReviewDialog from "\.\/PlatformContentReviewDialog\.vue"/,
+  );
+  assert.match(
+    management,
+    /<PlatformContentCenter\s+v-if="domain === 'content'"[^>]*@review="beginReview"/,
+  );
+  assert.match(
+    management,
+    /<PlatformContentReviewDialog\s[^>]*:open="Boolean\(reviewItem\)"[^>]*@submit="submitReview"/,
+  );
+  assert.match(review, /审核热点内容/);
+  assert.match(
+    management,
+    /import PlatformNotificationCenter from "\.\/PlatformNotificationCenter\.vue"/,
+  );
+  assert.match(management, /<PlatformNotificationCenter\s+v-else-if="domain === 'notifications'"/);
+  assert.match(notifications, /投递/);
+  assert.match(records, /接收邮箱/);
+  assert.match(management, /采集任务状态/);
   assert.match(dashboard, /采集任务成功和失败趋势折线图/);
   assert.match(main, /button\[aria-label\],a\[aria-label\]/);
   assert.match(main, /element\.title = label/);

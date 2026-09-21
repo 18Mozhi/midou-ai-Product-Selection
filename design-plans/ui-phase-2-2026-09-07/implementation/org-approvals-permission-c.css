@@ -1,0 +1,104 @@
+/* Review-only P34 permission branch. Do not target other failure cards or pages. */
+html
+  body.approvals-vue-c
+  #app
+  .org-admin-center[data-approval-c-view="true"]
+  .org-admin-notice:has(.org-approval-permission-c) {
+  padding: 0;
+  border: 1px solid #dbe1e9;
+  border-radius: 4px;
+  background: #fff;
+  color: #202c3d;
+  box-shadow: none;
+  .org-approval-permission-c {
+    display: grid;
+    gap: 20px;
+    padding: 32px;
+    max-width: 960px;
+    font:
+      16px/1.65 "Microsoft YaHei",
+      sans-serif;
+  }
+  :is(p, h3) {
+    margin: 0;
+  }
+  .org-approval-permission-kicker {
+    color: #254a9c;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  h3 {
+    color: #202c3d;
+    font:
+      700 28px/1.4 "Microsoft YaHei",
+      sans-serif;
+  }
+  .org-approval-permission-boundary {
+    padding: 16px;
+    border-left: 3px solid #254a9c;
+    background: #edf2fa;
+    color: #425570;
+    font-size: 14px;
+  }
+  details {
+    border-top: 1px solid #dbe1e9;
+    border-bottom: 1px solid #dbe1e9;
+    padding: 8px 0;
+  }
+  summary {
+    min-height: 44px;
+    padding: 10px 4px;
+    color: #254a9c;
+    cursor: pointer;
+  }
+  details :is(p, code) {
+    display: block;
+    padding: 8px 4px;
+    color: #58677b;
+    overflow-wrap: anywhere;
+    font-size: 14px;
+  }
+  button {
+    justify-self: start;
+    min-height: 44px;
+    padding: 10px 24px;
+    border: 1px solid #254a9c;
+    border-radius: 4px;
+    background: #254a9c;
+    color: #fff;
+    font:
+      700 16px/1.5 "Microsoft YaHei",
+      sans-serif;
+  }
+  :is(button, summary):focus-visible {
+    outline: 3px solid #4d79ff;
+    outline-offset: 3px;
+  }
+}
+html
+  body.approvals-vue-c
+  #app
+  .org-admin-center[data-approval-c-view="true"]
+  .org-admin-notice:has(.org-approval-permission-c)
+  + .org-admin-state {
+  display: none;
+}
+@media (max-width: 760px) {
+  html
+    body.approvals-vue-c
+    #app
+    .org-admin-center[data-approval-c-view="true"]
+    .org-admin-notice:has(.org-approval-permission-c) {
+    .org-approval-permission-c {
+      padding: 24px 20px;
+      gap: 18px;
+    }
+    h3 {
+      font-size: 24px;
+    }
+    button {
+      justify-self: stretch;
+      width: 100%;
+    }
+  }
+}

@@ -1,5 +1,44 @@
 # 平台账号管理运维与回滚
 
+## P43 创建与改密回执归属当前核验
+
+运行`node scripts/verify-ui-phase2-user-lifecycle-review-current-replay.mjs`验证当前36个
+局部Vue场景，不截图或访问生产；`--smoke`仅创建。当前72图入口是
+`output/playwright/p43-lifecycle-current-replay-r1/index.html`，完整包拒绝capture/resume
+覆盖。来源检查运行`node --test tests/unit/ui-phase2-user-lifecycle-review-capture-boundary.test.mjs`。
+首轮全库入口`node scripts/verify-ui-phase2-user-lifecycle-unit-gate.mjs`已保留失败报告，
+已有报告时拒绝再次运行。格式门ENAMETOOLONG修复后使用独立
+`node scripts/verify-ui-phase2-user-lifecycle-unit-gate-r2.mjs`，同样不覆盖已有r2报告。
+详见`design-plans/ui-phase-2-2026-09-07/P43-LIFECYCLE-CURRENT-REVIEW.md`。
+无生产代码、配置或重启变化；不得据此操作真实账号或把局部回放当作宝塔验收。
+
+## P43 改密与原因当前审核
+
+`node scripts/verify-ui-phase2-user-security-review-current-replay.mjs`无参数只运行当前Vue
+审核组合，不截图、不访问生产；`--smoke`仅改密。368张图位于
+`output/playwright/p43-security-current-replay-r1/index.html`。完整包拒绝`--capture`/
+`--resume`覆盖，当前来源核验运行`node --test tests/unit/ui-phase2-user-security-review-capture-boundary.test.mjs`。
+没有真实改密/角色或会话写入，不需调参、重启或迁移；不得据审核脚本操作生产账号。
+详见`design-plans/ui-phase-2-2026-09-07/P43-SECURITY-CURRENT-REVIEW.md`。
+
+## P43 当前用户目录、详情和创建审核
+
+`node scripts/verify-ui-phase2-user-review-current-replay.mjs`不带参数只回放当前Vue审核
+组合，不截图或访问生产。当前154图见`output/playwright/p43-current-replay-r1/index.html`；
+完整包存在时`--capture`/`--resume`拒绝覆盖。来源校验运行
+`node --test tests/unit/ui-phase2-user-review-capture-boundary.test.mjs`。仅审核辅助变化，
+无运行配置、API或重启要求。详见`design-plans/ui-phase-2-2026-09-07/P43-PAGE-CREATE-CURRENT-REVIEW.md`；
+不据此执行下方历史迁移，改密/原因/真实账号权限与生产发布仍另行验证。
+
+## P44 当前审核状态与历史图证
+
+当前独立审核入口见`output/playwright/p44-current-replay-r3/index.html`，322张当前Vue审核
+组合图、1653检查，旧图不覆盖。来源核验运行`node --test tests/unit/ui-phase2-admin-review-capture-boundary.test.mjs`。
+图包创建入口`node scripts/verify-ui-phase2-admin-review-current-replay.mjs --capture`仅用于
+首次捕获；完整包存在后拒绝重拍/续拍。当前仅审核宿主的标题和手机内边距整合，运行页面
+及权限不变，不需生产重启。全库、清理遗留及审核边界见
+`design-plans/ui-phase-2-2026-09-07/P44-CAPTURE-BOUNDARY-REPAIR.md`，不得据此执行下面历史迁移。
+
 ## 第二阶段账号详情读取与写入反馈归属修复
 
 此修复仅更新Web静态运行包，没有新增SQL、API、配置或调节项，也不新增后端重启要求。以下早期0036迁移说明不是此次UI更新或回退的通用操作：正式发布以AGENTS及当前`python scripts/deploy-baota.py`为准，核对线上迁移记录、既有白名单、宝塔停启窗口及恢复材料；不得为回退此次前端修复执行Down SQL。当前部署器会停止Node并检查迁移，不能承诺零停机。

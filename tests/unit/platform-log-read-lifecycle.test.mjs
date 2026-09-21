@@ -31,7 +31,7 @@ function harness(query = {}) {
   class ApiClientError extends Error {}
   const subject = scope.run(() =>
     vm.runInNewContext(
-      `(function(){${code}; return {load,state,items,query,source,message,requestId,observedAt,refreshing,keepRetryVisible};})()`,
+      `(function(){${code}; return {load,state,items,query,source,message,requestId,observedAt,refreshing,keepRetryVisible,displayedScope,appliedScope,scopeMismatch};})()`,
       {
         computed,
         ref,
@@ -233,4 +233,76 @@ test("P62 unmount clears the timer and forbids later manual or activation reads"
   h.resolve(0, "late");
   await flush();
   assert.equal(h.subject.requestId.value, "");
+});
+const scopeValue = (value) => JSON.parse(JSON.stringify(value));
+test("P62 scope is unknown before success and captures the normalized successful request", async () => {
+  const h = harness({ query: "  trace-shared  ", source: "crawler" });
+  await h.start();
+  assert.equal(h.subject.displayedScope.value, null);
+  h.resolve(0);
+  await flush();
+  assert.deepEqual(scopeValue(h.subject.displayedScope.value), {
+    query: "trace-shared",
+    source: "crawler",
+  });
+  assert.equal(h.subject.scopeMismatch.value, false);
+});
+test("P62 editing drafts cannot relabel applied or displayed scope", async () => {
+  const h = harness();
+  await h.start();
+  h.resolve(0);
+  await flush();
+  h.subject.query.value = "unsubmitted draft";
+  h.subject.source.value = "worker";
+  await flush();
+  assert.deepEqual(scopeValue(h.subject.appliedScope.value), { query: "", source: "" });
+  assert.deepEqual(scopeValue(h.subject.displayedScope.value), { query: "", source: "" });
+  assert.equal(h.subject.scopeMismatch.value, false);
+  assert.equal(h.calls.length, 1);
+});
+for (const empty of [false, true])
+  test(`P62 failed changed filter keeps ${empty ? "empty" : "populated"} snapshot scope until successful retry`, async () => {
+    const h = harness();
+    await h.start();
+    h.calls[0].resolve({
+      request_id: "initial",
+      data: { items: empty ? [] : [{ id: "initial" }], observed_at: "2026-08-18T12:00:03Z" },
+    });
+    await flush();
+    h.route.query = { query: "trace-shared", source: "crawler" };
+    await flush();
+    assert.deepEqual(scopeValue(h.subject.appliedScope.value), {
+      query: "trace-shared",
+      source: "crawler",
+    });
+    assert.deepEqual(scopeValue(h.subject.displayedScope.value), { query: "", source: "" });
+    assert.equal(h.subject.scopeMismatch.value, true);
+    h.calls[1].reject(new Error("local read failure"));
+    await flush();
+    assert.deepEqual(scopeValue(h.subject.displayedScope.value), { query: "", source: "" });
+    const pending = h.subject.load();
+    h.calls[2].resolve({
+      request_id: "new-empty",
+      data: { items: [], observed_at: "2026-08-18T12:00:04Z" },
+    });
+    await pending;
+    await flush();
+    assert.deepEqual(scopeValue(h.subject.displayedScope.value), {
+      query: "trace-shared",
+      source: "crawler",
+    });
+    assert.equal(h.subject.scopeMismatch.value, false);
+    assert.equal(h.subject.state.value, "empty");
+  });
+test("P62 rejected late success cannot overwrite current snapshot scope", async () => {
+  const h = harness({ query: "old" });
+  await h.start();
+  h.route.query = { query: "new", source: "api" };
+  await flush();
+  h.resolve(1, "new-response");
+  await flush();
+  h.resolve(0, "old-response");
+  await flush();
+  assert.deepEqual(scopeValue(h.subject.displayedScope.value), { query: "new", source: "api" });
+  assert.equal(h.subject.scopeMismatch.value, false);
 });

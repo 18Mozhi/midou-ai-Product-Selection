@@ -1,0 +1,234 @@
+/* P33 C review only. Other audited dialogs do not acquire this class. */
+html body.teams-vue-c #app .audited-reason-dialog.teams-member-reason-c {
+  width: min(820px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid #cfd9ea;
+  border-radius: 4px;
+  background: #fff;
+  color: #17366f;
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+html
+  body.teams-vue-c
+  #app
+  .org-admin-center
+  .audited-reason-dialog.teams-member-reason-c::backdrop {
+  background: rgb(12 27 55 / 48%);
+}
+html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c form {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  grid-template-areas: "header header" "target input" "target help" "footer footer";
+  gap: 24px;
+  padding: 0 24px 24px;
+  background: #fff;
+}
+html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c header {
+  grid-area: header;
+  align-items: flex-start;
+  margin: 0 -24px;
+  padding: 24px;
+  background: #254a9c;
+  color: #fff;
+  border: 0;
+}
+html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c header p {
+  padding: 0;
+  background: transparent;
+  color: #e4ecff;
+  font-size: 14px;
+}
+html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c h3 {
+  margin-top: 6px;
+  font:
+    700 24px/1.4 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+  color: #fff;
+}
+html
+  body.teams-vue-c
+  #app
+  .org-admin-center
+  .audited-reason-dialog.teams-member-reason-c
+  #teams-member-reason-target {
+  grid-area: target;
+  padding: 18px;
+  background: #edf2fa;
+  overflow-wrap: anywhere;
+}
+html
+  body.teams-vue-c
+  #app
+  .org-admin-center
+  .audited-reason-dialog.teams-member-reason-c
+  #teams-member-reason-target
+  p {
+  margin: 18px 0 0;
+  padding: 0;
+  background: transparent;
+  color: #42618c;
+  font-size: 14px;
+}
+html
+  body.teams-vue-c
+  #app
+  .teams-member-reason-c
+  #teams-member-reason-target
+  .teams-member-target-label {
+  margin: 0 0 16px;
+  color: #17366f;
+  font-size: 16px;
+  font-weight: 700;
+}
+html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c dl {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+}
+html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c dt {
+  margin-bottom: 4px;
+  color: #42618c;
+  font-size: 14px;
+}
+html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c dd {
+  margin: 0;
+  font-weight: 700;
+}
+html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c label {
+  grid-area: input;
+  align-content: start;
+  gap: 8px;
+  color: #17366f;
+}
+html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c textarea {
+  box-sizing: border-box;
+  min-height: 156px;
+  padding: 12px;
+  border: 1px solid #8193b0;
+  border-radius: 4px;
+  background: #fff;
+  color: #17366f;
+  font: inherit;
+  box-shadow: none;
+}
+html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c small {
+  grid-area: help;
+  align-self: start;
+  color: #42618c;
+  font-size: 14px;
+}
+html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c footer {
+  grid-area: footer;
+  padding-top: 20px;
+  border-top: 1px solid #d8e0ee;
+  gap: 12px;
+}
+html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 9px 18px;
+  border: 1px solid #8193b0;
+  border-radius: 4px;
+  background: #fff;
+  color: #254a9c;
+  font: inherit;
+  box-shadow: none;
+}
+html
+  body.teams-vue-c
+  #app
+  .org-admin-center
+  .audited-reason-dialog.teams-member-reason-c
+  header
+  button {
+  border-color: #cfdaef;
+  background: transparent;
+  color: #fff;
+}
+html
+  body.teams-vue-c
+  #app
+  .org-admin-center
+  .audited-reason-dialog.teams-member-reason-c
+  button[type="submit"] {
+  border-color: #254a9c;
+  background: #254a9c;
+  color: #fff;
+}
+html
+  body.teams-vue-c
+  #app
+  .org-admin-center
+  .audited-reason-dialog.teams-member-reason-c[data-team-action="remove"]
+  button[type="submit"] {
+  border-color: #b42335;
+  background: #b42335;
+}
+html
+  body.teams-vue-c
+  #app
+  .org-admin-center
+  .audited-reason-dialog.teams-member-reason-c
+  button:disabled {
+  border-color: #cbd5e1;
+  background: #e8edf4;
+  color: #53647e;
+  opacity: 1;
+  cursor: not-allowed;
+}
+html
+  body.teams-vue-c
+  #app
+  .org-admin-center
+  .audited-reason-dialog.teams-member-reason-c[data-team-action="remove"]
+  button:disabled {
+  border-color: #cbd5e1;
+  background: #e8edf4;
+  color: #53647e;
+}
+html
+  body.teams-vue-c
+  #app
+  .org-admin-center
+  .audited-reason-dialog.teams-member-reason-c
+  :is(button, textarea):focus-visible {
+  outline: 3px solid #4d79ff;
+  outline-offset: 3px;
+}
+html
+  body.teams-vue-c
+  #app
+  .org-admin-center
+  .audited-reason-dialog.teams-member-reason-c
+  header
+  button:focus-visible {
+  outline-color: #fff;
+}
+@media (max-width: 840px) {
+  html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c form {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "header" "target" "input" "help" "footer";
+    gap: 18px;
+    padding: 0 18px 18px;
+  }
+  html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c header {
+    margin: 0 -18px;
+    padding: 20px 18px;
+  }
+  html body.teams-vue-c #app .org-admin-center .audited-reason-dialog.teams-member-reason-c h3 {
+    font-size: 22px;
+  }
+  html
+    body.teams-vue-c
+    #app
+    .org-admin-center
+    .audited-reason-dialog.teams-member-reason-c
+    footer
+    button {
+    flex: 1;
+  }
+}

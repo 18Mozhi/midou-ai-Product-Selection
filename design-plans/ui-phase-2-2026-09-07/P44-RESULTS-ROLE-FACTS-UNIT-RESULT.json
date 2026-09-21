@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "kind": "full-unit-count-snapshot-with-truncated-failure-list",
+  "stage": "P44-results-role-facts-historical-current-separation",
+  "directedBefore": { "tests": 9, "pass": 1, "fail": 8, "durationMs": 843.7207, "exit": 1 },
+  "directedAfter": { "tests": 15, "pass": 15, "fail": 0, "durationMs": 25519.4158, "exit": 0 },
+  "previousFullResult": "P44-HISTORICAL-GATE-UNIT-RESULT.json",
+  "full": {
+    "files": 251,
+    "tests": 1451,
+    "pass": 1296,
+    "fail": 155,
+    "cancelled": 0,
+    "skipped": 0,
+    "durationMs": 306013.5634,
+    "exit": 1,
+    "parent": 70812,
+    "child": 32916,
+    "fixtures": ["scoutops-code-style-hGN7op"],
+    "processesClosed": true,
+    "fixtureAbsent": true,
+    "failureListComplete": false,
+    "boundary": "Terminal output was truncated. Counts and exit are visible, but the full 155 failure names and locations were not retained. Do not claim an exact removed/added failure comparison."
+  }
+}

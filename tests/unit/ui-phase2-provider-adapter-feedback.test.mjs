@@ -1,9 +1,8 @@
-import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
-import { historicalAdapterReadSource } from "../../scripts/lib/ui-phase2-adapter-read-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import vm from "node:vm";
 import ts from "typescript";
 import { parse } from "@vue/compiler-sfc";
@@ -14,11 +13,17 @@ import {
 } from "../../scripts/lib/ui-phase2-adapter-feedback-baseline.mjs";
 
 const file = adapterFeedbackRevision.file;
-const source = historicalAdapterReadSource(
-  file,
-  historicalAdapterCSource(file, readFileSync(file, "utf8")),
-);
+const currentSource = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const captureRevision = "004c3e0e5d9835488036a5052b31ed93a505f145";
+const captured = (path) =>
+  execFileSync("git", ["show", `${captureRevision}:${path}`], { encoding: "utf8" }).replaceAll(
+    "\r\n",
+    "\n",
+  );
+// The original feedback revision predates read ownership; never infer history from equality.
+const source = captured(file);
 const hash = (s) => createHash("sha256").update(s).digest("hex");
+assert.equal(hash(source), adapterFeedbackRevision.after);
 const old = historicalAdapterFeedbackSource(file, source);
 const row = { id: "source-a", name: "来源A", health_status: "ready" };
 class ApiClientError extends Error {
@@ -28,7 +33,7 @@ class ApiClientError extends Error {
     this.requestId = id;
   }
 }
-function harness(text = source) {
+function harness(text = currentSource) {
   const script = parse(text).descriptor.scriptSetup.content;
   const ast = ts.createSourceFile(file, script, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
   const body = ast.statements
@@ -53,10 +58,7 @@ function harness(text = source) {
   };
   vm.runInNewContext(
     ts.transpileModule(
-      body +
-        "\nglobalThis.api={probe,load,items,message,requestId,probing," +
-        (text === old ? "" : "probeFeedback,") +
-        "};",
+      body + "\nglobalThis.api={probe,load,items,message,requestId,probing,probeFeedback};",
       { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.None } },
     ).outputText,
     sandbox,
@@ -64,7 +66,7 @@ function harness(text = source) {
   return { ...sandbox.api, requests };
 }
 
-test("P47 exact historic association rejects drift and original load/probe business code stays intact", () => {
+test("P47 frozen feedback revision rejects drift and preserves its original load/probe contract", () => {
   assert.equal(hash(source), adapterFeedbackRevision.after);
   assert.equal(hash(old), adapterFeedbackRevision.before);
   assert.equal(historicalAdapterFeedbackSource(file, source + "\n// drift"), source + "\n// drift");
@@ -83,78 +85,90 @@ test("P47 exact historic association rejects drift and original load/probe busin
   assert.match(b.template.content, /probeFeedback\?\.providerId === row.id/);
 });
 
-test("P47 pending uses existing global lock, successful result binds source and probe trace", async () => {
-  const h = harness();
-  h.items.value = [row];
-  const pending = h.probe(row);
-  assert.equal(h.probing.value, row.id);
-  assert.equal(h.probeFeedback.value, null);
-  await h.probe({ id: "source-b", name: "来源B" });
-  assert.equal(h.requests.length, 1);
-  assert.equal(h.requests[0].path, "/platform/provider-adapters/source-a/health-check");
-  assert.deepEqual(Object.keys(h.requests[0].options), ["method"]);
-  assert.equal(h.requests[0].options.method, "POST");
-  h.requests[0].resolve({ data: { ...row, version: 2 }, request_id: "probe-a" });
-  await pending;
-  assert.deepEqual(JSON.parse(JSON.stringify(h.probeFeedback.value)), {
-    providerId: "source-a",
-    message: "来源A 健康检查通过",
-    requestId: "probe-a",
+for (const [revision, input] of [
+  ["historical-feedback", source],
+  ["current-raw", currentSource],
+]) {
+  test(`P47 ${revision} pending uses existing global lock, successful result binds source and probe trace`, async () => {
+    const h = harness(input);
+    h.items.value = [row];
+    const pending = h.probe(row);
+    assert.equal(h.probing.value, row.id);
+    assert.equal(h.probeFeedback.value, null);
+    await h.probe({ id: "source-b", name: "来源B" });
+    assert.equal(h.requests.length, 1);
+    assert.equal(h.requests[0].path, "/platform/provider-adapters/source-a/health-check");
+    assert.deepEqual(Object.keys(h.requests[0].options), ["method"]);
+    assert.equal(h.requests[0].options.method, "POST");
+    h.requests[0].resolve({ data: { ...row, version: 2 }, request_id: "probe-a" });
+    await pending;
+    assert.deepEqual(JSON.parse(JSON.stringify(h.probeFeedback.value)), {
+      providerId: "source-a",
+      message: "来源A 健康检查通过",
+      requestId: "probe-a",
+    });
+    assert.equal(h.probing.value, null);
+    assert.equal(h.items.value[0].version, 2);
   });
-  assert.equal(h.probing.value, null);
-  assert.equal(h.items.value[0].version, 2);
-});
 
-test("P47 later list refresh does not relabel the completed probe or replace its trace", async () => {
-  const h = harness();
-  h.items.value = [row];
-  const read = h.load(),
-    pending = h.probe(row);
-  h.requests[1].reject(new ApiClientError("检查拒绝", "probe-rejected"));
-  await pending;
-  h.requests[0].resolve({ data: [row], request_id: "later-list" });
-  await read;
-  assert.equal(h.message.value, "已刷新 1 个来源适配器状态");
-  assert.equal(h.requestId.value, "later-list");
-  assert.equal(h.probeFeedback.value.message, "检查拒绝");
-  assert.equal(h.probeFeedback.value.requestId, "probe-rejected");
-  assert.equal(h.probeFeedback.value.providerId, "source-a");
-});
+  test(`P47 ${revision} late pre-probe read preserves the revision-specific ownership contract`, async () => {
+    const h = harness(input);
+    h.items.value = [row];
+    const read = h.load(),
+      pending = h.probe(row);
+    h.requests[1].reject(new ApiClientError("检查拒绝", "probe-rejected"));
+    await pending;
+    h.requests[0].resolve({ data: [row], request_id: "later-list" });
+    await read;
+    assert.equal(
+      h.message.value,
+      revision === "historical-feedback" ? "已刷新 1 个来源适配器状态" : "检查拒绝",
+    );
+    assert.equal(
+      h.requestId.value,
+      revision === "historical-feedback" ? "later-list" : "probe-rejected",
+    );
+    assert.equal(h.probeFeedback.value.message, "检查拒绝");
+    assert.equal(h.probeFeedback.value.requestId, "probe-rejected");
+    assert.equal(h.probeFeedback.value.providerId, "source-a");
+  });
 
-test("P47 list finishing before probe cannot contaminate result; next source clears old feedback", async () => {
-  const h = harness();
-  h.items.value = [row];
-  const read = h.load(),
-    pending = h.probe(row);
-  h.requests[0].resolve({ data: [row], request_id: "first-list" });
-  await read;
-  h.requests[1].reject(new ApiClientError("稍后检查", "probe-last"));
-  await pending;
-  assert.equal(h.probeFeedback.value.requestId, "probe-last");
-  const second = h.probe({ id: "source-b", name: "来源B" });
-  assert.equal(h.probeFeedback.value, null);
-  h.requests[2].reject(new Error("transport"));
-  await second;
-  assert.equal(h.probeFeedback.value.providerId, "source-b");
-  assert.equal(h.probeFeedback.value.message, "依赖不可用，未伪造健康结果");
-  assert.equal(h.probeFeedback.value.requestId, "");
+  test(`P47 ${revision} list finishing before probe cannot contaminate result; next source clears old feedback`, async () => {
+    const h = harness(input);
+    h.items.value = [row];
+    const read = h.load(),
+      pending = h.probe(row);
+    h.requests[0].resolve({ data: [row], request_id: "first-list" });
+    await read;
+    h.requests[1].reject(new ApiClientError("稍后检查", "probe-last"));
+    await pending;
+    assert.equal(h.probeFeedback.value.requestId, "probe-last");
+    const second = h.probe({ id: "source-b", name: "来源B" });
+    assert.equal(h.probeFeedback.value, null);
+    h.requests[2].reject(new Error("transport"));
+    await second;
+    assert.equal(h.probeFeedback.value.providerId, "source-b");
+    assert.equal(h.probeFeedback.value.message, "依赖不可用，未伪造健康结果");
+    assert.equal(h.probeFeedback.value.requestId, "");
+  });
+}
+
+test("P47 current harness requires the real feedback binding instead of omitting a missing field", () => {
+  assert.equal(harness().probeFeedback.value, null);
+  const missingBinding = currentSource.replace("probeFeedback = ref", "removedFeedback = ref");
+  assert.notEqual(missingBinding, currentSource);
+  assert.throws(() => harness(missingBinding), /probeFeedback is not defined/);
 });
 
 const evidenceRoot = "output/playwright/p47-probe-feedback";
 const evidence = JSON.parse(readFileSync(`${evidenceRoot}/evidence.json`, "utf8"));
-test("P47 current feedback evidence binds raw production, historic negative and C composition separately", () => {
+test("P47 frozen feedback capture retains exact images and revision-specific component claims", () => {
   assert.equal(evidence.kind, "P47-PROBE-FEEDBACK-IMPLEMENTATION-r1");
   assert.equal(evidence.checks.length, 122);
   assert.equal(evidence.screenshots.length, 44);
   assert.equal(evidence.runs.length, 8);
   assert.equal(Object.keys(evidence.sourceHashes).length, 170);
   assert.equal(evidence.processesClosed, true);
-  for (const [f, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(
-      hash(historicalAdapterReadSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")))),
-      sha,
-      f,
-    );
   assert.deepEqual(
     readdirSync(evidenceRoot).sort(),
     [...evidence.screenshots.map((s) => s.file), "evidence.json", "index.html"].sort(),
@@ -177,7 +191,15 @@ test("P47 current feedback evidence binds raw production, historic negative and 
   assert.match(evidence.remaining, /stale GET/);
 });
 
-test("P47 actual browser covers owned in-dialog result, pending focus and no focus theft after completion", () => {
+test("P47 archived feedback packet binds its complete original manifest and170 captured dependencies", () => {
+  assert.deepEqual(evidence, JSON.parse(captured(`${evidenceRoot}/evidence.json`)));
+  for (const [f, sha] of Object.entries(evidence.sourceHashes))
+    assert.equal(hash(captured(f)), sha, f);
+  // Current behavior above and the current browser runner use raw Vue, not archive substitution.
+  assert.notEqual(hash(currentSource), evidence.sourceHashes[file]);
+});
+
+test("P47 captured browser observations retain owned feedback, pending focus and completion boundaries", () => {
   for (const mode of ["baseline", "current", "review"]) {
     for (const width of [390, 760]) {
       const value = (name) =>

@@ -1,4 +1,5 @@
 import test from "node:test";
+import { adminReviewHistoricalCapture } from "../../scripts/lib/ui-phase2-admin-review-historical-capture.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -21,7 +22,8 @@ const states = [
 const names = ["create", "navigation", "email", "differences", "left-role", "reset"];
 
 for (const variant of ["baseline", "preview"]) {
-  test(`P44 boundary ${variant} pins current source, transformations, images and read-only replay`, () => {
+  test(`P44 boundary ${variant} pins historical source, transformations, images and read-only replay`, () => {
+    const historical = adminReviewHistoricalCapture(`boundary-${variant}`);
     const e = evidence(variant),
       folder = root + variant;
     assert.equal(e.kind, "P44-PAGE-BOUNDARY-VUE-PREVIEW-r1");
@@ -31,12 +33,15 @@ for (const variant of ["baseline", "preview"]) {
     assert.equal(e.checks.length, variant === "baseline" ? 238 : 274);
     assert.equal(Object.keys(e.sourceHashes).length, variant === "baseline" ? 44 : 45);
     for (const [file, sha] of Object.entries(e.sourceHashes))
-      assert.equal(hash(read(file)), sha, file);
+      assert.equal(hash(historical.source(file)), sha, file);
     for (const [file, surface] of [
       ["apps/web/src/components/PlatformAccountCenter.vue", "parent"],
       ["apps/web/src/components/PlatformUserDetailDialog.vue", "detail"],
     ])
-      assert.equal(hash(adminPageAssemblyPreview(read(file), surface)), e.transformedHashes[file]);
+      assert.equal(
+        hash(adminPageAssemblyPreview(historical.source(file), surface)),
+        e.transformedHashes[file],
+      );
     assert.equal(e.screenshots.length, 16);
     assert.deepEqual(
       readdirSync(folder).sort(),

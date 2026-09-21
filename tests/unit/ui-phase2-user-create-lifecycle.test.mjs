@@ -1,5 +1,9 @@
 import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
+import { userLifecycleReviewHistoricalCapture } from "../../scripts/lib/ui-phase2-user-lifecycle-review-historical-capture.mjs";
+import { userPagePreview } from "../../scripts/lib/ui-phase2-user-page-preview.mjs";
+import { userPasswordPreview } from "../../scripts/lib/ui-phase2-user-password-preview.mjs";
+import { userCreatePreview } from "../../scripts/lib/ui-phase2-user-create-preview.mjs";
 import { historicalPasswordSource } from "../../scripts/lib/ui-phase2-password-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -14,6 +18,7 @@ const hash = (value) => createHash("sha256").update(value).digest("hex");
 
 test("creation regression retains distinct exact baseline/current Vue sources and 64 images", () => {
   for (const mode of ["baseline", "current"]) {
+    const captured = userLifecycleReviewHistoricalCapture(`create-${mode}`);
     const folder = `output/playwright/p43-create-lifecycle/${mode}`;
     const text = read(`${folder}/evidence.json`),
       e = JSON.parse(text);
@@ -26,15 +31,20 @@ test("creation regression retains distinct exact baseline/current Vue sources an
     assert(!text.includes("CreationFixtureOnly-123"));
     assert(!text.includes("NewDraftFixtureOnly-456"));
     for (const [file, sha] of Object.entries(e.sourceHashes))
+      assert.equal(hash(captured.source(file)), sha, file);
+    for (const [file, surface] of [
+      ["apps/web/src/components/PlatformAccountCenter.vue", "parent"],
+      ["apps/web/src/components/PlatformUserDetailDialog.vue", "detail"],
+    ])
       assert.equal(
-        hash(
-          mode === "baseline"
-            ? historicalUserCreationSource(file, read(file))
-            : historicalPasswordSource(file, read(file)),
-        ),
-        sha,
-        file,
+        hash(userPagePreview(captured.source(file), surface)),
+        e.transformedHashes[file],
       );
+    const child = "apps/web/src/components/PlatformAccountDialogs.vue";
+    assert.equal(
+      hash(userCreatePreview(userPasswordPreview(captured.source(child)))),
+      e.transformedHashes[child],
+    );
     assert.deepEqual(
       readdirSync(folder).sort(),
       ["index.html", "evidence.json", ...e.screenshots.map((s) => s.file)].sort(),

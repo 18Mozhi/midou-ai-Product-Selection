@@ -8,6 +8,7 @@ import ts from "typescript";
 import { createServer } from "vite";
 import { chromium, expect } from "@playwright/test";
 import { providerPagePreview } from "./lib/ui-phase2-provider-page-preview.mjs";
+import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
 
 const capture = process.argv.includes("--capture");
 const structure = process.argv.includes("--structure");
@@ -693,6 +694,8 @@ try {
     )
       sources.add(file);
   }
+  sources.add("scripts/lib/ui-imported-style-sources.mjs");
+  await includeImportedStyleSources(sources, read);
   const sourceHashes = Object.fromEntries(
     await Promise.all([...sources].sort().map(async (f) => [f, hash(await read(f))])),
   );

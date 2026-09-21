@@ -1,5 +1,8 @@
 # P47 · 高级筛选与分页 r1
 
+2026-09-12 当前源码重拍见 [当前状态复核](P47-CURRENT-STATE-REVIEW.md)。本文件及原图册
+保留历史审核时点；当前证据单独存放，并验证既有空态焦点修复未被预览撤回。分页提案仍未实施。
+
 ## 设计范围
 
 起点 `main/a3d0752f`，实际 App / ProviderAdapterCenter 与权威 M03-03 E2E `catalog` 45 条 fixture。frontend-design 用于收紧 C 方向筛选层级和页码操作条；fixing-accessibility 用于原生 details、结果播报、44px、禁用边界和焦点。本批为独立审核预览，**生产组件、六筛选模型、排序、20 条页长、watch、GET/API/权限均未改，未部署**。

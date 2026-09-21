@@ -6,18 +6,20 @@ import vm from "node:vm";
 import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import postcss from "postcss";
+import { adminHistoricalCapture } from "../../scripts/lib/ui-phase2-admin-historical-capture.mjs";
 import {
   adminResultsRevisions,
   historicalAdminResultsSource,
-  historicalAdminRoleFactsSource,
 } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 
-const read = (file) => historicalAdminRoleFactsSource(file, readFileSync(file, "utf8"));
+const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p44-mobile-results-implementation/";
 const evidence = (mode) => JSON.parse(read(folder + mode + "/evidence.json"));
-const before = evidence("baseline"),
-  after = evidence("current");
+const baseline = adminHistoricalCapture("results-baseline");
+const implemented = adminHistoricalCapture("results-implemented");
+const before = baseline.evidence,
+  after = implemented.evidence;
 const component = "apps/web/src/components/PlatformRoleComparison.vue";
 const stylesheet = "apps/web/src/components/PlatformAdminComparisonMobile.css";
 const states = [
@@ -29,18 +31,40 @@ const states = [
   "reset-default",
 ];
 
-for (const mode of ["baseline", "current"]) {
-  test(`same-role ${mode} evidence has exact sources and all 48 formal images`, () => {
-    const e = evidence(mode),
+for (const mode of ["baseline", "historical-implemented", "current"]) {
+  test(`same-role ${mode} evidence has exact stage sources and all 48 formal images`, () => {
+    const capture =
+      mode === "baseline" ? baseline : mode === "historical-implemented" ? implemented : null;
+    const e = capture ? capture.evidence : evidence(mode),
       dir = folder + mode;
     assert.equal(e.kind, "P44-MOBILE-RESULTS-IMPLEMENTATION");
     assert.equal(e.baseline, mode === "baseline");
     assert.equal(e.processesClosed, true);
     assert.equal(e.checks.length, mode === "baseline" ? 148 : 234);
     assert.equal(e.screenshots.length, 48);
-    assert.equal(Object.keys(e.sourceHashes).length, 36);
+    assert.equal(Object.keys(e.sourceHashes).length, mode === "current" ? 40 : 36);
+    if (mode === "baseline")
+      assert.equal(read(folder + "baseline/evidence.json"), capture.manifest);
+    if (mode === "current") {
+      assert.deepEqual(
+        Object.keys(e.sourceHashes)
+          .filter((file) => !Object.hasOwn(after.sourceHashes, file))
+          .sort(),
+        [
+          "apps/web/src/components/PlatformAdminDirectoryMobile.css",
+          "apps/web/src/design/platform-admin-mobile-tokens.css",
+          "apps/web/src/design/platform-overlay-tokens.css",
+          "scripts/lib/ui-imported-style-sources.mjs",
+          "scripts/verify-ui-phase2-admin-mobile-results-implementation.mjs",
+        ],
+      );
+      assert.deepEqual(
+        Object.keys(after.sourceHashes).filter((file) => !Object.hasOwn(e.sourceHashes, file)),
+        ["scripts/verify-ui-phase2-admin-mobile-controls-implementation.mjs"],
+      );
+    }
     for (const [file, sha] of Object.entries(e.sourceHashes)) {
-      const source = read(file);
+      const source = capture ? capture.source(file) : read(file);
       assert.equal(
         hash(mode === "baseline" ? historicalAdminResultsSource(file, source) : source),
         sha,
@@ -49,11 +73,15 @@ for (const mode of ["baseline", "current"]) {
       assert.ok(!file.includes("-preview.css"));
     }
     assert.deepEqual(
-      readdirSync(dir).sort(),
+      (capture ? capture.files() : readdirSync(dir)).sort(),
       ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),
     );
     for (const shot of e.screenshots)
-      assert.equal(hash(readFileSync(dir + "/" + shot.file)), shot.sha256, shot.file);
+      assert.equal(
+        hash(capture ? capture.image(shot.file) : readFileSync(dir + "/" + shot.file)),
+        shot.sha256,
+        shot.file,
+      );
     assert.equal(e.observations.length, 8);
     for (const width of [390, 760, 761, 1440])
       for (const routeName of ["admins", "permissions"]) {
@@ -79,7 +107,7 @@ for (const mode of ["baseline", "current"]) {
   });
 }
 
-test("original controls, summaries, P45, desktop and filtered results keep their computed styles", () => {
+test("historical result-only stage preserves original controls, summaries, P45, desktop and filtered styles", () => {
   for (const current of after.observations) {
     const old = before.observations.find(
       (o) => o.width === current.width && o.routeName === current.routeName,
@@ -105,6 +133,30 @@ test("original controls, summaries, P45, desktop and filtered results keep their
         }
         if (actual.empty) assert.equal(actual.empty.backgroundColor, "rgb(244, 247, 252)");
       }
+    }
+  }
+});
+
+test("current cumulative results preserve result-only appearance and focus outside approved role facts", () => {
+  const outsideFacts = ({ summary, summaryItem, ...others }) => others;
+  const outsideSummary = ({ summaries, ...others }) => others;
+  for (const current of evidence("current").observations) {
+    const old = after.observations.find(
+      (o) => o.width === current.width && o.routeName === current.routeName,
+    );
+    const active = current.width <= 760 && current.routeName === "admins";
+    assert.deepEqual(current.focus, old.focus);
+    assert.deepEqual(current.requests, old.requests);
+    assert.deepEqual(
+      active ? outsideFacts(current.styles) : current.styles,
+      active ? outsideFacts(old.styles) : old.styles,
+    );
+    for (const item of current.states) {
+      const previous = old.states.find((s) => s.name === item.name).appearance;
+      assert.deepEqual(
+        active ? outsideSummary(item.appearance) : item.appearance,
+        active ? outsideSummary(previous) : previous,
+      );
     }
   }
 });
@@ -136,8 +188,10 @@ test("production template adds only a presentation class; original script and co
             !persistSelection && bothPresent && same && activeFilterCount === 0,
           );
         }
-  const a = postcss.parse(read(stylesheet)),
-    b = postcss.parse(historicalAdminResultsSource(stylesheet, read(stylesheet)));
+  // This exact append contract belongs to the original result-only implementation.
+  const historicalStyle = implemented.source(stylesheet);
+  const a = postcss.parse(historicalStyle),
+    b = postcss.parse(historicalAdminResultsSource(stylesheet, historicalStyle));
   const newMedia = a.nodes.find((n) => n.type === "atrule"),
     oldMedia = b.nodes.find((n) => n.type === "atrule");
   assert.equal(newMedia.params, "(max-width: 760px)");
@@ -155,11 +209,12 @@ test("production template adds only a presentation class; original script and co
   }
 });
 
-test("unknown source revisions fail closed; approved result PNGs remain immutable", () => {
+test("unknown historical result revisions fail closed; approved result PNGs remain immutable", () => {
   for (const file of Object.keys(adminResultsRevisions)) {
-    assert.equal(hash(read(file)), adminResultsRevisions[file].after);
+    const source = implemented.source(file);
+    assert.equal(hash(source), adminResultsRevisions[file].after);
     assert.throws(
-      () => historicalAdminResultsSource(file, read(file) + "\n/* unknown */"),
+      () => historicalAdminResultsSource(file, source + "\n/* unknown */"),
       /Unreviewed admin results source/,
     );
   }

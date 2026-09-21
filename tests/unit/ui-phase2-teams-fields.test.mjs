@@ -5,6 +5,10 @@ import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import { buildTeamsDesignData } from "../../scripts/lib/ui-phase2-teams-design-data.mjs";
+import {
+  teamsHistoricalCapture,
+  assertTeamsCurrentSources,
+} from "../../scripts/lib/ui-phase2-teams-historical-capture.mjs";
 
 const root = "design-plans/ui-phase-2-2026-09-07/design/teams-fields-direction-c";
 const e = JSON.parse(readFileSync(`${root}/evidence.json`, "utf8"));
@@ -78,8 +82,10 @@ test("P33 49 field states and nine combinations bind exactly 116 dual viewport i
   }
 });
 test("P33 field evidence rejects source and image drift without modifying approved P32 image", () => {
+  const capture = teamsHistoricalCapture("teams-fields-direction-c");
+  assertTeamsCurrentSources("teams-fields-direction-c");
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+    assert.equal(hash(capture.source(file)), sha, file);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${root}/${s.file}`)), s.sha256, s.file);
   assert.equal(

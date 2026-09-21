@@ -9,6 +9,10 @@ import { validateReviewSurfaces } from "../../scripts/lib/ui-phase2-review-surfa
 import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 import { buildTeamsDesignData } from "../../scripts/lib/ui-phase2-teams-design-data.mjs";
 import {
+  teamsHistoricalCapture,
+  assertTeamsCurrentSources,
+} from "../../scripts/lib/ui-phase2-teams-historical-capture.mjs";
+import {
   base,
   parentFile,
   childFile,
@@ -18,7 +22,10 @@ import {
   validateTeamsEvidenceBindings,
 } from "../../scripts/build-ui-phase2-teams-review.mjs";
 
-const sources = Object.fromEntries(dependencies.map((f) => [f, readFileSync(f, "utf8")]));
+for (const name of packageNames) assertTeamsCurrentSources(name);
+const sources = Object.fromEntries(
+  dependencies.map((f) => [f, teamsHistoricalCapture(packageNames[0]).source(f)]),
+);
 const packages = new Map(
   packageNames.map((p) => [
     p,

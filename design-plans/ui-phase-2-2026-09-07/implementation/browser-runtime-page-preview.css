@@ -1,0 +1,194 @@
+/* P53 isolated review skin; production browser runtime operations remain unchanged. */
+html body.p53-review {
+  background: #f3f6fb !important;
+}
+.p53-review * {
+  box-sizing: border-box;
+}
+.p53-review :is(button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid #2465d7 !important;
+  outline-offset: 3px;
+}
+.p53-review .role-shell {
+  --so-bg: #f3f6fb;
+  --so-panel: #fff;
+  --so-panel-soft: #edf4ff;
+  --so-text: #182d4a;
+  --so-text-muted: #52647b;
+  --so-border: #dce4ee;
+  --so-primary: #1748a0;
+  background: #f3f6fb !important;
+}
+.p53-review :is(.role-topbar, .role-sidebar, .role-mobile-nav) {
+  background: #fff !important;
+  border-color: #dce4ee !important;
+}
+.p53-review .role-content {
+  max-width: none;
+  padding: 24px clamp(20px, 3vw, 42px) 52px;
+}
+.p53-review
+  :is(
+    .role-page-breadcrumb,
+    .role-page-title,
+    .role-context-rail,
+    .role-context-drawer,
+    .provider-runtime-tabs
+  ) {
+  display: none !important;
+}
+.p53-review .crawler-center {
+  max-width: 1160px;
+  margin: auto;
+  color: #182d4a;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+.p53-review .crawler-title {
+  align-items: start;
+  padding: 31px 36px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+}
+.p53-review .crawler-title :is(p, h2, span, small) {
+  color: #fff !important;
+}
+.p53-review .crawler-title h2 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+}
+.p53-review .crawler-title-actions :is(button, a) {
+  min-height: 42px;
+  padding: 8px 14px;
+  border: 1px solid #fff !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #1748a0 !important;
+  font: inherit;
+  font-weight: 800;
+}
+.p53-review .crawler-metrics {
+  gap: 0 !important;
+  margin: 24px 0 !important;
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+}
+.p53-review .crawler-metrics article {
+  border: 0 !important;
+  border-right: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p53-review .crawler-metrics article:last-child {
+  border-right: 0 !important;
+}
+.p53-review .crawler-metrics strong {
+  color: #1748a0 !important;
+}
+.p53-review :is(.crawler-leases, .crawler-runs) {
+  overflow: hidden;
+  border: 1px solid #dce4ee !important;
+  border-top: 5px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p53-review :is(.crawler-leases > header, .crawler-runs > header) {
+  padding: 22px 26px !important;
+  border-bottom: 1px solid #dce4ee !important;
+}
+.p53-review .crawler-center h3 {
+  color: #1748a0 !important;
+}
+.p53-review .crawler-profile-grid {
+  gap: 0 !important;
+}
+.p53-review .crawler-profile-grid article {
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f7faff !important;
+  box-shadow: none !important;
+}
+.p53-review .crawler-profile-grid article[data-leased="true"] {
+  border-left: 5px solid #1748a0 !important;
+  background: #edf4ff !important;
+}
+.p53-review .crawler-lease-warning {
+  border-left: 4px solid #a65f00 !important;
+  background: #fff5df !important;
+}
+.p53-review .crawler-run-filters :is(input, select) {
+  min-height: 42px;
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f7faff !important;
+  color: #182d4a !important;
+  font: inherit;
+}
+.p53-review .crawler-run-filters button,
+.p53-review .crawler-pagination button {
+  min-height: 42px;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+  color: #fff !important;
+  font: inherit;
+  font-weight: 800;
+}
+.p53-review .crawler-center :is(table th, table td) {
+  border-color: #dce4ee !important;
+}
+.p53-review .crawler-center table th {
+  background: #1748a0 !important;
+  color: #fff !important;
+}
+.p53-review .crawler-center details {
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+}
+@media (max-width: 760px) {
+  .p53-review :is(.role-mobile-nav, .role-sidebar, .role-topbar) {
+    display: none !important;
+  }
+  .p53-review .role-shell {
+    display: block;
+    padding-top: 0;
+  }
+  .p53-review .role-content {
+    padding: 0 0 24px;
+  }
+  .p53-review .crawler-title {
+    display: grid;
+    gap: 16px;
+    padding: 25px 19px !important;
+  }
+  .p53-review .crawler-title-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .p53-review .crawler-metrics {
+    grid-template-columns: repeat(2, 1fr) !important;
+    margin: 0 !important;
+  }
+  .p53-review .crawler-metrics article:nth-child(2n) {
+    border-right: 0 !important;
+  }
+  .p53-review :is(.crawler-leases, .crawler-runs) {
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+  .p53-review :is(.crawler-leases > header, .crawler-runs > header) {
+    padding: 18px !important;
+  }
+  .p53-review .crawler-profile-grid {
+    grid-template-columns: 1fr !important;
+    padding: 18px !important;
+  }
+  .p53-review .crawler-run-filters {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+}

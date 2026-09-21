@@ -1,8 +1,21 @@
 import { test, expect } from "@playwright/test";
-import type { Page, Route } from "@playwright/test";
+import type { Locator, Page, Route } from "@playwright/test";
 import { verifyAuditedReasonFocus } from "./helpers/audited-reason-focus";
 import { capturePhase2Evidence, finalizePhase2Evidence } from "./helpers/ui-phase2-evidence";
 test.afterEach(async ({}, testInfo) => finalizePhase2Evidence(testInfo));
+
+async function expectGovernancePrimary(locator: Locator) {
+  const expected = await locator.evaluate((element) => {
+    const hex = getComputedStyle(element).getPropertyValue("--so-primary-strong").trim();
+    if (!/^#[0-9a-f]{6}$/i.test(hex)) throw new Error(`Unexpected primary token: ${hex}`);
+    return `rgb(${[1, 3, 5].map((offset) => parseInt(hex.slice(offset, offset + 2), 16)).join(", ")})`;
+  });
+  await expect(locator).toHaveCSS("background-color", expected);
+  await expect(locator).toHaveCSS("border-top-color", expected);
+  await locator.hover();
+  await expect(locator).toHaveCSS("background-color", expected);
+  await expect(locator).toHaveCSS("border-top-color", expected);
+}
 const env = (data: any) => ({ data, request_id: "m06-02-e2e", trace_id: "m06-02-e2e" }),
   dashboard = {
     window: "24h",
@@ -628,6 +641,22 @@ test("UI2-DG55 C directory exposes factual counts and complete automation detail
     "来源配置历史作为相关事实而非第六类规则",
   ]);
 
+  const governanceFont = await page
+    .locator(".platform-governance")
+    .evaluate((element) => getComputedStyle(element).fontFamily);
+  await expect(page.getByRole("heading", { name: "规则、工作流与自动化", level: 2 })).toHaveCSS(
+    "font-family",
+    governanceFont,
+  );
+  await expectGovernancePrimary(page.locator(".governance-primary-action"));
+  if (mobile) await page.getByRole("button", { name: "筛选治理记录", exact: true }).click();
+  await expectGovernancePrimary(page.getByRole("button", { name: "应用筛选", exact: true }));
+  if (mobile)
+    await page
+      .getByRole("dialog", { name: "筛选治理记录" })
+      .getByRole("button", { name: "关闭筛选条件", exact: true })
+      .click();
+
   await page
     .getByRole("navigation", { name: "治理数据类型" })
     .getByRole("button", { name: /自动化规则/ })
@@ -652,6 +681,7 @@ test("UI2-DG55 C directory exposes factual counts and complete automation detail
     "0 次频控按原始事实显示而不隐藏",
     "编辑入口绑定当前自动化规则 ID",
   ]);
+  await expectGovernancePrimary(detail.getByRole("link", { name: "进入规则编辑" }));
 });
 
 test("UI2-DG55 C directory distinguishes a filtered empty result from global counts", async ({
@@ -1718,25 +1748,29 @@ test("platform completion exposes data governance notifications and user-panel s
 
   await page.goto("/platform-admin/notifications");
   await expect(page.getByRole("heading", { name: "通知管理", level: 2 })).toBeVisible();
+  await page.getByRole("button", { name: /系统事实/ }).click();
   await expect(page.getByText("任务状态通知")).toBeVisible();
+  await page.getByRole("button", { name: /投递观测/ }).click();
   if ((page.viewportSize()?.width ?? 1000) <= 760)
     await expect(page.getByRole("button", { name: /采集任务完成.*查看详情/ })).toBeVisible();
   else await expect(page.getByRole("table").getByText("member@example.test")).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByRole("heading", { name: "通知管理", level: 2 })).toBeVisible();
+  await page.getByRole("button", { name: /系统事实/ }).click();
   await expect(page.getByText("站内通知 · 启用", { exact: true })).toBeVisible();
   await expect(page.getByText("启用站内通知", { exact: true })).toBeVisible();
   await expect(page.getByText("启用邮件", { exact: true })).toBeVisible();
   await expect(page.getByText("停用全部通知", { exact: true })).toBeVisible();
   await expect(page.getByText("in_app", { exact: true })).toHaveCount(0);
-  await page.getByRole("button", { name: "筛选通知管理" }).click();
-  const notificationFilters = page.getByRole("dialog", { name: "筛选通知管理" });
-  await notificationFilters.getByLabel("搜索通知管理").fill("采集");
+  await page.getByRole("button", { name: /投递观测/ }).click();
+  await page.getByRole("button", { name: "筛选投递记录" }).click();
+  const notificationFilters = page.getByRole("dialog", { name: "筛选投递记录" });
+  await notificationFilters.getByLabel("搜索投递记录").fill("采集");
   await notificationFilters.getByLabel("通知类型").selectOption("task");
   await notificationFilters.getByRole("button", { name: "关闭筛选条件" }).click();
-  await page.getByRole("button", { name: /筛选通知管理.*2 项已选/ }).click();
-  await expect(notificationFilters.getByLabel("搜索通知管理")).toHaveValue("采集");
+  await page.getByRole("button", { name: /筛选投递记录.*2 项已选/ }).click();
+  await expect(notificationFilters.getByLabel("搜索投递记录")).toHaveValue("采集");
   await expect(notificationFilters.getByLabel("通知类型")).toHaveValue("task");
   await notificationFilters.getByRole("button", { name: "关闭筛选条件" }).click();
   await page.getByRole("button", { name: /采集任务完成.*查看详情/ }).click();

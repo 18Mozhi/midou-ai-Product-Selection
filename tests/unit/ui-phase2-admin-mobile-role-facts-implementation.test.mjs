@@ -1,5 +1,5 @@
 import test from "node:test";
-import { historicalAdminDirectorySource } from "../../scripts/lib/ui-phase2-admin-directory-baseline.mjs";
+import { adminHistoricalCapture } from "../../scripts/lib/ui-phase2-admin-historical-capture.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
@@ -9,12 +9,14 @@ import {
   historicalAdminRoleFactsSource,
 } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 
-const read = (file) => historicalAdminDirectorySource(file, readFileSync(file, "utf8"));
+const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const folder = "output/playwright/p44-mobile-role-facts-implementation/";
 const evidence = (mode) => JSON.parse(read(folder + mode + "/evidence.json"));
 const before = evidence("baseline"),
   after = evidence("current");
+const baseline = adminHistoricalCapture("role-facts-baseline");
+const implemented = adminHistoricalCapture("role-facts-implemented");
 const states = [
   "role-facts",
   "same-role-empty",
@@ -25,9 +27,11 @@ const states = [
   "reset-default",
 ];
 
-for (const mode of ["baseline", "current"]) {
-  test(`role facts ${mode} binds actual sources and 24 formal images`, () => {
-    const e = evidence(mode),
+for (const mode of ["baseline", "historical-implemented", "current"]) {
+  test(`role facts ${mode} binds exact stage sources and 24 formal images`, () => {
+    const capture =
+      mode === "baseline" ? baseline : mode === "historical-implemented" ? implemented : null;
+    const e = capture ? capture.evidence : evidence(mode),
       dir = folder + mode;
     assert.equal(e.kind, "P44-MOBILE-ROLE-FACTS-IMPLEMENTATION");
     assert.equal(e.baseline, mode === "baseline");
@@ -35,9 +39,29 @@ for (const mode of ["baseline", "current"]) {
     assert.equal(e.screenshots.length, 24);
     assert.equal(e.observations.length, 8);
     assert.equal(e.processesClosed, true);
-    assert.equal(Object.keys(e.sourceHashes).length, 37);
+    assert.equal(Object.keys(e.sourceHashes).length, mode === "current" ? 40 : 37);
+    if (mode === "baseline")
+      assert.equal(read(folder + "baseline/evidence.json"), capture.manifest);
+    if (mode === "current") {
+      const oldSources = implemented.evidence.sourceHashes;
+      assert.deepEqual(
+        Object.keys(e.sourceHashes)
+          .filter((file) => !Object.hasOwn(oldSources, file))
+          .sort(),
+        [
+          "apps/web/src/components/PlatformAdminDirectoryMobile.css",
+          "apps/web/src/design/platform-admin-mobile-tokens.css",
+          "apps/web/src/design/platform-overlay-tokens.css",
+          "scripts/lib/ui-imported-style-sources.mjs",
+        ],
+      );
+      assert.deepEqual(
+        Object.keys(oldSources).filter((file) => !Object.hasOwn(e.sourceHashes, file)),
+        ["scripts/verify-ui-phase2-admin-mobile-controls-implementation.mjs"],
+      );
+    }
     for (const [file, sha] of Object.entries(e.sourceHashes)) {
-      const source = read(file);
+      const source = capture ? capture.source(file) : read(file);
       assert.equal(
         hash(mode === "baseline" ? historicalAdminRoleFactsSource(file, source) : source),
         sha,
@@ -46,11 +70,14 @@ for (const mode of ["baseline", "current"]) {
       assert.ok(!file.includes("-preview.css"));
     }
     assert.deepEqual(
-      readdirSync(dir).sort(),
+      (capture ? capture.files() : readdirSync(dir)).sort(),
       ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),
     );
     for (const shot of e.screenshots)
-      assert.equal(hash(readFileSync(dir + "/" + shot.file)), shot.sha256);
+      assert.equal(
+        hash(capture ? capture.image(shot.file) : readFileSync(dir + "/" + shot.file)),
+        shot.sha256,
+      );
     for (const width of [390, 760, 761, 1440])
       for (const routeName of ["admins", "permissions"]) {
         const o = e.observations.find((o) => o.width === width && o.routeName === routeName);
@@ -122,9 +149,9 @@ test("role facts change only P44 mobile presentation; every state preserves cont
   }
 });
 
-test("only scoped role-facts CSS is appended; original controls/results and Vue stay exact", () => {
+test("historical role-facts stage appends only scoped CSS; original controls/results and Vue stay exact", () => {
   const file = adminRoleFactsRevision.file,
-    current = read(file);
+    current = implemented.source(file);
   assert.equal(hash(current), adminRoleFactsRevision.after);
   const old = historicalAdminRoleFactsSource(file, current);
   assert.equal(hash(old), adminRoleFactsRevision.before);
@@ -151,4 +178,27 @@ test("only scoped role-facts CSS is appended; original controls/results and Vue 
     hash(readFileSync(approved)),
     "46e862abba5da101e17ed9d1dad80e53665f2a6ae8286f9a484657a5472efb51",
   );
+});
+
+test("current P44 comparison CSS expands exactly to the complete role-facts implementation", () => {
+  const palette = postcss.parse(read("apps/web/src/design/platform-admin-mobile-tokens.css"));
+  const values = new Map();
+  palette.walkDecls((decl) => {
+    assert.match(decl.prop, /^--so-admin-mobile-/);
+    assert.ok(!values.has(decl.prop), "no duplicate color role");
+    values.set(decl.prop, decl.value);
+  });
+  assert.equal(values.size, 11);
+  const source = read(adminRoleFactsRevision.file);
+  const prefix = '@import "../design/platform-admin-mobile-tokens.css";\n\n';
+  assert.ok(source.startsWith(prefix));
+  const expanded = source
+    .slice(prefix.length)
+    .replace(/var\((--so-admin-mobile-[a-z-]+)\)/g, (_, name) => {
+      assert.ok(values.has(name), `undefined color role: ${name}`);
+      return values.get(name);
+    });
+  assert.doesNotMatch(expanded, /var\(--so-admin-mobile-/);
+  assert.equal(hash(expanded), adminRoleFactsRevision.after);
+  assert.equal(expanded, implemented.source(adminRoleFactsRevision.file));
 });

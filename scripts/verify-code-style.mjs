@@ -1,6 +1,7 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { extname, resolve } from "node:path";
+import { runCommandFileBatches } from "./lib/code-style-command-batches.mjs";
 
 const root = process.cwd();
 const write = process.argv.includes("--write");
@@ -114,18 +115,26 @@ if (formatFiles.length) {
     console.error("code_style_prettier_missing: run npm install");
     process.exit(1);
   }
-  const prettierResult = spawnSync(
+  const prettierExit = runCommandFileBatches(
     process.execPath,
-    [prettier, write ? "--write" : "--check", ...formatFiles],
-    {
-      cwd: root,
-      encoding: "utf8",
-      maxBuffer: 16 * 1024 * 1024,
+    [prettier, write ? "--write" : "--check"],
+    formatFiles,
+    (command, args) =>
+      spawnSync(command, args, {
+        cwd: root,
+        encoding: "utf8",
+        maxBuffer: 16 * 1024 * 1024,
+      }),
+    (result) => {
+      if (result.stdout) process.stdout.write(result.stdout);
+      if (result.stderr) process.stderr.write(result.stderr);
+      if (result.error)
+        console.error(
+          `code_style_prettier_spawn_failed: ${result.error.code ?? result.error.message}`,
+        );
     },
   );
-  if (prettierResult.stdout) process.stdout.write(prettierResult.stdout);
-  if (prettierResult.stderr) process.stderr.write(prettierResult.stderr);
-  if (prettierResult.status !== 0) process.exit(prettierResult.status ?? 1);
+  if (prettierExit !== 0) process.exit(prettierExit);
 }
 
 const violations = [];

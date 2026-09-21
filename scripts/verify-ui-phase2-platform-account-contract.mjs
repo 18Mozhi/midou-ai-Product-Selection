@@ -14,11 +14,15 @@ const userContractPath = `${folder}platform-user-design-contract.md`;
 const currentContractPath = `${folder}platform-account-current-contract.md`;
 const responsiveContractPath = `${folder}responsive-detail-focus-contract-review.md`;
 const responsiveFile = "apps/web/src/components/ResponsiveDataView.vue";
+const filterFile = "apps/web/src/components/ResponsiveFilterDrawer.vue";
+const overlayPalette = "apps/web/src/design/platform-overlay-tokens.css";
 const addedSources = [
   "apps/web/src/use-platform-organization-actions.ts",
   "apps/web/src/use-user-creation-owner.ts",
   "apps/web/src/components/PlatformAdminComparisonMobile.css",
   "apps/web/src/components/PlatformAdminDirectoryMobile.css",
+  overlayPalette,
+  "apps/web/src/design/platform-admin-mobile-tokens.css",
 ];
 const files = {
   D: "PlatformDashboard",
@@ -87,7 +91,7 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
     ...`${contract}\n${userContract}`.matchAll(/^\|\s*([A-Z])\s*\|\s*([0-9a-f]{16}\.\d+)\s*\|/gm),
   ].map((match) => `${match[1]}#${match[2]}`);
   // The old table is evidence, not the current template. Supersede only the
-  // explicitly documented shared component; all other candidate identities remain exact.
+  // explicitly documented shared components; all other identities remain exact.
   sameUnique(
     historicalCandidates.filter((key) => key.startsWith("S#")),
     [
@@ -105,8 +109,49 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
     ),
   ].map((match) => `S#${match[1]}`);
   assert.equal(responsiveCandidates.length, 5, "current responsive candidates required");
+  sameUnique(
+    historicalCandidates.filter((key) => key.startsWith("Q#")),
+    [
+      "Q#28fb788b88500472.1",
+      "Q#beb5f8d5846aa028.1",
+      "Q#e03968eb8d9e92a8.1",
+      "Q#483082db5a776bf3.1",
+      "Q#df1390feb7424a07.1",
+      "Q#cd956325fcd081da.1",
+    ],
+    "historical filter candidates",
+  );
+  const filterRevisions = [
+    ...currentContract.matchAll(/^\|\s*(Q#[0-9a-f]{16}\.\d+)\s*\|\s*(Q#[0-9a-f]{16}\.\d+)\s*\|/gm),
+  ];
+  assert.equal(filterRevisions.length, 1, "one explicit filter candidate revision required");
+  const [, oldFilter, newFilter] = filterRevisions[0];
+  assert.equal(oldFilter, "Q#beb5f8d5846aa028.1", "historical filter open identity");
+  assert.notEqual(newFilter, oldFilter, "filter revision must not reuse historical identity");
+  const filterSource = source(filterFile);
+  const trigger = scanSource(filterSource, filterFile).candidates.find(
+    (item) => item.attributes.ref === "triggerButton",
+  );
+  assert.equal(trigger?.attributes[":aria-controls"], "panelId", "filter association binding");
+  assert.equal(
+    filterSource.split('      :aria-controls="panelId"\n').length,
+    2,
+    "one filter association binding",
+  );
+  // Reconstruct only the old control signature, never a current source fingerprint.
+  const oldTrigger = scanSource(
+    filterSource.replace('      :aria-controls="panelId"\n', ""),
+    filterFile,
+  ).candidates.find((item) => item.attributes.ref === "triggerButton");
+  assert.equal(
+    `Q#${oldTrigger?.candidateId.split("#")[1]}`,
+    oldFilter,
+    "filter open changes beyond association",
+  );
   const candidates = [
-    ...historicalCandidates.filter((key) => !key.startsWith("S#")),
+    ...historicalCandidates
+      .filter((key) => !key.startsWith("S#"))
+      .map((key) => (key === oldFilter ? newFilter : key)),
     ...responsiveCandidates,
   ];
   const bindings = [...contract.matchAll(/^\|\s*([A-Z])\s*\|\s*([\w.]+)\s*\|/gm)]
@@ -145,7 +190,10 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
       "PlatformRoleComparison",
       "ResponsiveDataView",
       "ResponsiveFilterDrawer",
-    ].map((name) => `apps/web/src/components/${name}.vue`),
+      "NavigationShell",
+    ]
+      .map((name) => `apps/web/src/components/${name}.vue`)
+      .concat("apps/web/src/use-modal-dialog.ts"),
     "explicit source revisions",
   );
   const revisionByFile = new Map(revisions.map((item) => [item.file, item]));
@@ -172,10 +220,31 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
     [responsiveFile],
     "responsive supplement hash files",
   );
+  const paletteValues = new Map(
+    [...source(overlayPalette).matchAll(/(--so-workspace-overlay-[\w-]+):\s*(#[0-9a-f]{6});/g)].map(
+      (match) => [match[1], match[2]],
+    ),
+  );
+  const responsiveSource = source(responsiveFile);
+  const paletteImport = '@import "../design/platform-overlay-tokens.css";\n\n';
+  assert.equal(responsiveSource.split(paletteImport).length, 2, "one overlay palette import");
+  const beforePalette = responsiveSource
+    .replace(paletteImport, "")
+    .replace(/var\((--so-workspace-overlay-[\w-]+)\)/g, (_, name) => {
+      assert(paletteValues.has(name), `missing overlay palette role: ${name}`);
+      return paletteValues.get(name);
+    });
+  // Keep the earlier focus evidence immutable. Expand only the palette delta from
+  // the appearance-enabled intermediate revision; current raw hashes stay mandatory.
   assert.equal(
     responsiveHashes[0][2],
-    revisionByFile.get(responsiveFile).after,
+    "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
     "responsive supplement hash drift",
+  );
+  assert.equal(
+    createHash("sha256").update(beforePalette).digest("hex"),
+    "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
+    "responsive palette delta drift",
   );
   // Extraction added a runtime dependency. Keep the original 32-source snapshot,
   // but do not omit the new producer from the current verification surface.

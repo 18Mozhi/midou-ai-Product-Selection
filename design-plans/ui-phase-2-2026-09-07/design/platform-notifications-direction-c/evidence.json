@@ -2,22 +2,104 @@
   "proposal": "PLATFORM-NOTIFICATIONS-C-r1",
   "contractRebindings": [
     {
+      "file": "apps/web/src/components/use-platform-notification-list.ts",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "43b46c51afce786c288cb9ce3f1382f2ef3b926360b9d892ee6652e1a0d7a9e7",
+      "reason": "P57 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/PlatformManagementCenter.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "c3dba75b134c70ff7bd23a9310395eb9e6f78c73d53a738a061e0071f2c89bf9",
+      "reason": "P57 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/PlatformMessageEditor.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "135ab00609dac3dc7fddf54085972594e80f6d1e6f2a0609973c3d7f7d6eea31",
+      "reason": "P57 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/PlatformMessageWorkbench.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "7c46437db21c0874d138bb249c4cead5afceebc19e4d6a3fe62aec2e83e9cc7a",
+      "reason": "P57 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/PlatformNotificationOperations.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "73bfa7089471ce53ea44f747727211684cb840df62a22a86b70dbaa4c9ba5e07",
+      "reason": "P57 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/PlatformNotificationManagement.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "7cced021643a3af6a23a07f8afca71d943cabcd13cf963d97ac3b698a3dfe2e8",
+      "reason": "P57 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/PlatformNotificationPagination.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "56968271bcfcf600901782eea6601eaae49a5a84bc5d3ab7bc0a9618596f0849",
+      "reason": "P57 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/PlatformManagementFilter.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "0ac6f1cd0c812b6f3455d3288f91c8b9ab6bf2028b7a1cafd35c823e26da08f6",
+      "reason": "P57 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "5f9d10aa91421ee10f5187e2051d90bcadf7479d54456c60e91dfb3d2eb0c8a0",
+      "reason": "P57 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "tests/unit/platform-notification-operations.test.mjs",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "635a55afd06851ee69db325c9d0553afd3cf43707be87192464291c7b11efaae",
+      "reason": "P57 current Vue implementation; historical proposal contract retained."
+    },
+    {
       "file": "tests/e2e/platform-message-management.spec.ts",
-      "old": "e73f8e2ce373e2f4ac2a4fc6207c3772c84cb3159855e219b447be5ecfaf5f72",
-      "current": "ed45f8df2572d35492fe289a6de397b861dacee8d552fd9b77bc6bf0934c2dad",
-      "commit": "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
-      "reason": "Existing actual publish reason focus-test addition, historical table retained."
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "868bbb4d3245ee960d579d207ed412ba161e4d83d7ef4fbdd8876f1319f6cdc5",
+      "reason": "P57 current Vue implementation; historical proposal contract retained."
     },
     {
       "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
-      "old": "dc949ced1becd59f1e0c7bf98b9fe0ab126e5b59744cb197d70c65ec861bbc66",
-      "current": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-      "commit": "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
-      "reason": "Audited reason dialog focus-test additions; historical table retained."
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "d164a18d6808823272c34b6f612446370d4802cb34aca1722b94b2cec3865f66",
+      "reason": "P57 current Vue implementation; historical proposal contract retained."
+    },
+    {
+      "file": "apps/web/src/use-audited-reason.ts",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+      "reason": "Previously reviewed shared audited-reason revision; historical proposal retained."
+    },
+    {
+      "file": "apps/web/src/components/AuditedReasonDialog.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+      "reason": "Previously reviewed shared audited-reason revision; historical proposal retained."
+    },
+    {
+      "file": "apps/web/src/components/ResponsiveDataView.vue",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
+      "reason": "Previously reviewed shared audited-reason revision; historical proposal retained."
+    },
+    {
+      "file": "apps/web/src/use-modal-dialog.ts",
+      "proposalRevision": "05a5152fee9ce562579d5470de019c0fbce4bcb9",
+      "current": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+      "reason": "Previously reviewed shared audited-reason revision; historical proposal retained."
     }
   ],
   "sourceHashes": {
-    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
+    "scripts/lib/ui-phase2-responsive-focus-contract.mjs": "c1095b828706864ee9eb2be430e08e0277522f4e4cf3d1beb084499265fcd457",
     "apps/web/src/components/use-platform-notification-list.ts": "2e697d3a5f53cdfded5335bc693fcd9f7ed1a7d9f8b2dc0a543708269bfdc61b",
     "apps/web/src/components/PlatformManagementCenter.vue": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
     "apps/web/src/components/PlatformMessageEditor.vue": "8bafb3374f744389257c36a27580dbf768a9b4a0991fa0ce748889bb2c093cea",
@@ -27,12 +109,12 @@
     "apps/web/src/components/PlatformNotificationPagination.vue": "6116c32da6df91e40433fd5f4e4f9cc82c59d20b5726df52ebfdafcaf08b1606",
     "apps/web/src/components/PlatformManagementFilter.vue": "b1e608502ee29df66c4f813c38a6593ffc4c8bc5770183cfdfafbf968db689d9",
     "apps/web/src/components/platform-management-presentation.ts": "1d5bfec09dfc7efb63cc6d31bdbc924b35eb1d4092fe1e20fa60d779bd259133",
-    "apps/web/src/components/ResponsiveDataView.vue": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
+    "apps/web/src/components/ResponsiveDataView.vue": "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
     "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
-    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
     "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
-    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
+    "apps/web/src/components/AuditedReasonDialog.vue": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
     "apps/api/src/platform-dashboard-service.ts": "568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e",
     "apps/api/src/mysql-platform-dashboard-repository.ts": "b290af1c03b2767c79bb565f9ec256550250acc4be0cc787de12b81e9b8dcd28",
     "apps/api/src/platform-dashboard-routes.ts": "1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30",
@@ -40,8 +122,8 @@
     "tests/e2e/platform-message-management.spec.ts": "ed45f8df2572d35492fe289a6de397b861dacee8d552fd9b77bc6bf0934c2dad",
     "tests/e2e/m06-02-platform-dashboard.spec.ts": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
     "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.css": "107e3760b83961d388dfe03a72d77a436b7f8794e10353ef1d9f5e71f2d14b78",
-    "scripts/lib/ui-phase2-platform-notifications-design-data.mjs": "107502b2286521a38b06a32469d4879b439eee5780ea925ee719b74160b0539f",
-    "scripts/verify-ui-phase2-platform-notifications-c.mjs": "53303a4d22403f7ac8b0018c66f21a7543edf731b93762258d077c4bd78901ec",
+    "scripts/lib/ui-phase2-platform-notifications-design-data.mjs": "17b1b2bac22f5765de91bd9199c639130dbf04f5e8e14286076942ab03e9a4e8",
+    "scripts/verify-ui-phase2-platform-notifications-c.mjs": "5e9933da2a4e4a0feedb61f0ecaaedba04c31d1d8878bb11069c042682895a4b",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/index.html": "fda3b417a8f63ce584740ded0892efb11f094e61e75defd7388cfa3dee9d9c5e",
     "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/notifications.css": "ab78d0924615fb04491747910ee1c4fe97f993c5893a7b6207d47bd9d2ab123d",

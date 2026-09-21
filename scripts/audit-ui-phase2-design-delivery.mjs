@@ -20,6 +20,20 @@ import {
   historicalFilterResetSource,
   filterResetRevision,
 } from "./lib/ui-phase2-filter-reset-baseline.mjs";
+import {
+  historicalRedisReviewSource,
+  redisReviewRevisions,
+} from "./lib/ui-phase2-redis-review-baseline.mjs";
+import {
+  historicalModalDialogSource,
+  modalDialogRevision,
+} from "./lib/ui-phase2-modal-dialog-baseline.mjs";
+import {
+  historicalSharedReviewSource,
+  historicalSharedReviewVariantSource,
+  sharedReviewRevisions,
+  sharedReviewVariants,
+} from "./lib/ui-phase2-shared-review-baseline.mjs";
 import { createHash } from "node:crypto";
 import { readFile, readdir, writeFile, stat } from "node:fs/promises";
 import path from "node:path";
@@ -74,6 +88,9 @@ for (const file of [
   "scripts/lib/ui-phase2-organization-action-baseline.mjs",
   "scripts/lib/ui-phase2-token-copy-baseline.mjs",
   "scripts/lib/ui-phase2-filter-reset-baseline.mjs",
+  "scripts/lib/ui-phase2-redis-review-baseline.mjs",
+  "scripts/lib/ui-phase2-modal-dialog-baseline.mjs",
+  "scripts/lib/ui-phase2-shared-review-baseline.mjs",
   "scripts/lib/ui-phase2-user-creation-baseline.mjs",
   "scripts/lib/ui-phase2-password-baseline.mjs",
   "scripts/lib/ui-phase2-admin-controls-baseline.mjs",
@@ -113,7 +130,16 @@ for (const dir of (await readdir(path.join(root, "design"), { withFileTypes: tru
         hash(historicalUserCreationSource(file, await text(file))) === expected) ||
       (file === filterResetRevision.file &&
         expected === filterResetRevision.before &&
-        hash(historicalFilterResetSource(file, await text(file))) === expected);
+        hash(historicalFilterResetSource(file, await text(file))) === expected) ||
+      (redisReviewRevisions[file]?.captured === expected &&
+        hash(historicalRedisReviewSource(file, await text(file))) === expected) ||
+      (file === modalDialogRevision.file &&
+        expected === modalDialogRevision.captured &&
+        hash(historicalModalDialogSource(file, await text(file))) === expected) ||
+      (sharedReviewRevisions[file]?.captured === expected &&
+        hash(historicalSharedReviewSource(file, await text(file))) === expected) ||
+      (sharedReviewVariants[file + "#" + expected] &&
+        hash(historicalSharedReviewVariantSource(file, expected, await text(file))) === expected);
     sources.push({
       file,
       expected,
@@ -290,7 +316,11 @@ const audit = {
   ],
 };
 const rel = (file) => path.posix.relative(relative, file);
-let report = `# C方向逐页审核索引与交付缺口
+const machineAuditStart = "<!-- UI2-MACHINE-AUDIT:START -->";
+const machineAuditEnd = "<!-- UI2-MACHINE-AUDIT:END -->";
+const reviewIndex = path.join(root, "DESIGN-REVIEW-INDEX.md");
+
+let machineReport = `# C方向逐页审核索引与交付缺口
 
 本轮起始基线：c79a0626；报告核对本轮交付后的路由、页面规格、C稿包及磁盘指纹，不替用户批准，也不是全站技术验收。
 
@@ -321,12 +351,30 @@ for (const p of pages) {
   const links = p.proposalPackages
     .map((f) => `[${f.replace("-direction-c", "")}](design/${f}/README.md)`)
     .join(" · ");
-  report += `| ${p.id} | ${p.title} · \`${p.path}\` | [规格](${rel(p.spec)}) | ${links || "待补整页稿"} | ${links ? "相关稿待审；整页/全动作未证明" : "无对应整页稿关联"} |\n`;
+  machineReport += `| ${p.id} | ${p.title} · \`${p.path}\` | [规格](${rel(p.spec)}) | ${links || "待补整页稿"} | ${links ? "相关稿待审；整页/全动作未证明" : "无对应整页稿关联"} |\n`;
 }
-report += `\n## 共享面与历史研究（不抵扣业务整页）\n\n`;
+machineReport += `\n## 共享面与历史研究（不抵扣业务整页）\n\n`;
 for (const p of packages.filter((p) => p.role !== "page-or-section-proposal"))
-  report += `- [${p.folder}](${rel(p.readme)})：${p.role === "shared-surface-only" ? "共享面提案" : "方向选择研究"}。\n`;
-report += `\n## 复验与限制\n\n- 只读复验：\`node scripts/audit-ui-phase2-design-delivery.mjs\`。\n- 有意更新本审计报告：\`node scripts/audit-ui-phase2-design-delivery.mjs --write\`；只更新本索引和[机器报告](design-delivery-audit.json)，不刷新旧图、旧证据或批准状态。\n- 指纹匹配只是来源/图片未漂移；本轮没有重跑${packages.length}个包的浏览器测试，也没有重新人工审核${summary.pngs}张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。\n- 原始规格和源盘点见[PAGES](PAGES.md)、[计划](PLAN.md)、[旧覆盖表](coverage.json)；它们的目标与静态候选不作为完成证明。\n- 无生产代码、API、环境、依赖、数据库、部署或重启变更；没有创建临时图片、浏览器或服务。审计脚本、JSON与本索引是永久交付物。\n`;
+  machineReport += `- [${p.folder}](${rel(p.readme)})：${p.role === "shared-surface-only" ? "共享面提案" : "方向选择研究"}。\n`;
+machineReport += `\n## 复验与限制\n\n- 只读复验：\`node scripts/audit-ui-phase2-design-delivery.mjs\`。\n- 有意更新本审计报告：\`node scripts/audit-ui-phase2-design-delivery.mjs --write\`；只更新本索引的机器核对区和[机器报告](design-delivery-audit.json)，不刷新人工审核日志、旧图、旧证据或批准状态。\n- 指纹匹配只是来源/图片未漂移；本轮没有重跑${packages.length}个包的浏览器测试，也没有重新人工审核${summary.pngs}张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。\n- 原始规格和源盘点见[PAGES](PAGES.md)、[计划](PLAN.md)、[旧覆盖表](coverage.json)；它们的目标与静态候选不作为完成证明。\n- 无生产代码、API、环境、依赖、数据库、部署或重启变更；没有创建临时图片、浏览器或服务。审计脚本、JSON与本索引是永久交付物。\n`;
+
+const existingIndex = await readFile(reviewIndex, "utf8");
+function assembledReviewIndex(existing) {
+  const markedStart = existing.indexOf(machineAuditStart);
+  const markedEnd = existing.indexOf(machineAuditEnd);
+  let journal;
+  if (markedStart >= 0 || markedEnd >= 0) {
+    assert.ok(markedStart >= 0 && markedEnd > markedStart, "Incomplete machine audit markers");
+    journal = existing.slice(0, markedStart).trimEnd();
+  } else {
+    const legacyStart = existing.indexOf("\n本轮起始基线：");
+    assert.ok(legacyStart >= 0, "Missing managed machine audit section");
+    journal = existing.slice(0, legacyStart).trimEnd();
+  }
+  return `${journal}\n\n${machineAuditStart}\n\n${machineReport}\n${machineAuditEnd}\n`;
+}
+
+const report = assembledReviewIndex(existingIndex);
 const outputs = [
   ["design-delivery-audit.json", JSON.stringify(audit, null, 2) + "\n"],
   ["DESIGN-REVIEW-INDEX.md", report],

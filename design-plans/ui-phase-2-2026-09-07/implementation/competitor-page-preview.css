@@ -1,0 +1,342 @@
+html body.p19-review {
+  background: #f3f6fb !important;
+}
+.p19-review * {
+  box-sizing: border-box;
+}
+.p19-review :is(h1, h2, h3, h4, p, ol, ul) {
+  margin: 0;
+}
+.p19-review :is(button, input, select, textarea, a, summary):focus-visible {
+  outline: 3px solid #2465d7 !important;
+  outline-offset: 3px;
+}
+.p19-review .role-shell {
+  --so-bg: #f3f6fb;
+  --so-bg-elevated: #fff;
+  --so-panel: #fff;
+  --so-panel-soft: #f3f6fb;
+  --so-text: #182d4a;
+  --so-text-muted: #52647b;
+  --so-border: #dce4ee;
+  --so-primary: #1748a0;
+  --so-focus: #2465d7;
+  background: #f3f6fb !important;
+}
+.p19-review :is(.role-topbar, .role-sidebar) {
+  border-color: #dce4ee !important;
+  background: #fff !important;
+}
+.p19-review .role-brand {
+  color: #1748a0 !important;
+}
+.p19-review .role-brand span,
+.p19-review .role-top-actions .role-quick-action {
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+}
+.p19-review .role-brand em,
+.p19-review :is(.role-page-breadcrumb, .role-page-title, .role-context-rail, .role-context-drawer) {
+  display: none !important;
+}
+.p19-review .role-nav-groups details[open] > summary,
+.p19-review .role-nav-groups details:has([aria-current="page"]) > summary {
+  color: #1748a0 !important;
+  background: #edf4ff !important;
+}
+.p19-review .role-nav-menu {
+  border-top-color: #1748a0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p19-review .role-nav-menu > a {
+  background: #fff !important;
+}
+.p19-review .role-nav-menu > a[aria-current="page"] {
+  background: #1748a0 !important;
+}
+.p19-review .role-content {
+  max-width: none;
+  padding: 24px clamp(20px, 3vw, 38px) 48px;
+}
+.p19-review .role-mobile-nav {
+  border-top: 1px solid #dce4ee !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p19-review .role-mobile-nav a[aria-current="page"] {
+  color: #1748a0 !important;
+  background: #edf4ff !important;
+}
+.p19-review .competitor-monitor {
+  --ink: #182d4a;
+  --blue: #1748a0;
+  display: grid;
+  gap: 14px;
+  color: var(--ink);
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+.p19-review .monitoring-readiness-strip {
+  margin: 0 !important;
+  padding: 28px 30px !important;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+  box-shadow: none !important;
+}
+.p19-review .monitoring-readiness-strip :is(h1, h2, h3, p, span, small, strong, b) {
+  color: #fff !important;
+}
+.p19-review .monitoring-readiness-strip :is(button, a) {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid #fff !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #1748a0 !important;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+}
+.p19-review .monitoring-readiness-strip .primary {
+  background: #edf4ff !important;
+}
+.p19-review .competitor-toolbar {
+  margin: 0 !important;
+  padding: 14px 18px;
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+}
+.p19-review .competitor-toolbar input,
+.p19-review .competitor-modal :is(input, select, textarea) {
+  min-height: 44px;
+  border: 1px solid #b9c9dc !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #182d4a !important;
+}
+.p19-review .competitor-grid {
+  grid-template-columns: minmax(280px, 0.8fr) minmax(0, 2fr);
+  gap: 0;
+  min-height: 580px;
+  border: 1px solid #dce4ee;
+  background: #fff;
+}
+.p19-review .competitor-list {
+  gap: 0;
+  border-right: 1px solid #dce4ee;
+  background: #f3f6fb;
+}
+.p19-review .competitor-list button {
+  min-height: 126px;
+  border: 0 !important;
+  border-bottom: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f3f6fb !important;
+  box-shadow: none !important;
+}
+.p19-review .competitor-list button.selected {
+  border-left: 5px solid #1748a0 !important;
+  background: #edf4ff !important;
+  box-shadow: none !important;
+}
+.p19-review .competitor-list .competitor-detail-entry {
+  color: #1748a0 !important;
+}
+.p19-review .competitor-detail {
+  min-width: 0;
+  padding: 28px 30px;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p19-review .competitor-detail > header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #dce4ee;
+}
+.p19-review .competitor-detail h3 {
+  font-size: 30px;
+  line-height: 1.25;
+}
+.p19-review .competitor-detail header p,
+.p19-review .competitor-history h4 {
+  color: #1748a0 !important;
+}
+.p19-review .competitor-detail a {
+  color: #1748a0 !important;
+  font-weight: 800;
+}
+.p19-review .competitor-actions button,
+.p19-review .competitor-guide summary,
+.p19-review .competitor-modal button {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #1748a0 !important;
+  font: inherit;
+  font-weight: 800;
+}
+.p19-review .competitor-actions button:first-child,
+.p19-review .competitor-modal button[type="submit"] {
+  background: #1748a0 !important;
+  color: #fff !important;
+}
+.p19-review .competitor-actions .danger,
+.p19-review .competitor-modal .danger {
+  border-color: #b42318 !important;
+  color: #b42318 !important;
+}
+.p19-review .competitor-metrics,
+.p19-review .competitor-comparison {
+  gap: 0;
+  margin: 20px 0;
+  border: 1px solid #dce4ee;
+}
+.p19-review :is(.competitor-metrics, .competitor-comparison) article {
+  min-height: 124px;
+  padding: 16px;
+  border: 0 !important;
+  border-right: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f3f6fb !important;
+}
+.p19-review :is(.competitor-metrics, .competitor-comparison) article:last-child {
+  border-right: 0 !important;
+}
+.p19-review .competitor-source,
+.p19-review .competitor-collection-state,
+.p19-review .competitor-baseline-pending {
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #edf4ff !important;
+}
+.p19-review .competitor-history {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 3px solid #1748a0;
+}
+.p19-review .competitor-history > header {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #dce4ee;
+}
+.p19-review .competitor-history > article {
+  grid-template-columns: 130px 1fr auto;
+  border-bottom-color: #dce4ee;
+}
+.p19-review :is(.snapshot-history, .competitor-activity-timeline) > article::before {
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+  box-shadow: none !important;
+}
+.p19-review .competitor-timeline-status span {
+  border-radius: 0 !important;
+  background: #f3f6fb !important;
+}
+.p19-review .competitor-guide {
+  padding: 16px 18px;
+  border: 1px solid #dce4ee;
+  border-radius: 0;
+  background: #fff;
+}
+.p19-review .competitor-guide[open] summary {
+  margin-bottom: 14px;
+}
+.p19-review .competitor-modal {
+  background: rgba(24, 45, 74, 0.5) !important;
+}
+.p19-review .competitor-modal form {
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p19-review .competitor-create-steps li {
+  border-radius: 0 !important;
+}
+@media (max-width: 760px) {
+  .p19-review .role-content {
+    padding: 12px 12px 92px;
+  }
+  .p19-review .monitoring-readiness-strip {
+    padding: 22px 18px !important;
+  }
+  .p19-review .monitoring-readiness-strip :is(button, a) {
+    width: 100%;
+    text-align: center;
+  }
+  .p19-review .competitor-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .p19-review .competitor-grid {
+    grid-template-columns: 1fr;
+    border: 0;
+    gap: 12px;
+    background: transparent;
+  }
+  .p19-review .competitor-list {
+    border: 1px solid #dce4ee;
+    border-right: 1px solid #dce4ee;
+  }
+  .p19-review .competitor-list button {
+    min-height: 112px;
+  }
+  .p19-review .competitor-detail {
+    padding: 22px 18px;
+    border: 1px solid #dce4ee !important;
+  }
+  .p19-review .competitor-detail > header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .p19-review .competitor-detail h3 {
+    font-size: 26px;
+  }
+  .p19-review .competitor-actions,
+  .p19-review .competitor-desktop-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .p19-review .competitor-actions button {
+    width: 100%;
+  }
+  .p19-review .competitor-metrics,
+  .p19-review .competitor-comparison {
+    grid-template-columns: 1fr;
+  }
+  .p19-review :is(.competitor-metrics, .competitor-comparison) article {
+    min-height: 0;
+    border-right: 0 !important;
+    border-bottom: 1px solid #dce4ee !important;
+  }
+  .p19-review :is(.competitor-metrics, .competitor-comparison) article:last-child {
+    border-bottom: 0 !important;
+  }
+  .p19-review .competitor-source,
+  .p19-review .competitor-collection-state {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .p19-review .competitor-history > article {
+    grid-template-columns: 1fr;
+    gap: 5px;
+    padding-left: 22px;
+  }
+  .p19-review .competitor-history article p,
+  .p19-review .competitor-timeline-status {
+    grid-column: auto;
+  }
+  .p19-review .competitor-modal {
+    padding: 12px;
+  }
+  .p19-review .competitor-modal form {
+    padding: 20px 16px;
+  }
+}

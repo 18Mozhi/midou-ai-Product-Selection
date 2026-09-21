@@ -1,5 +1,17 @@
 # M06-02 宝塔运维与回滚
 
+P62导出离页诊断（2026-09-15）：`node scripts/diagnose-log-export-lifecycle.mjs`在本地实际App两种宽度观察原因保留、提交时范围与迟到响应；只使用本地响应，抑制blob下载，无文件，服务自动关闭。正常结束不是产品验收通过；当前离页仍可发起下载意图，关闭原因/停止前端等待政策待确认，不承诺取消服务器请求。产品/配置未改，无重启要求、未部署，详见P62-EXPORT-LIFECYCLE-DIAGNOSIS-BATCH41.md。
+
+P62条件对照（2026-09-15）：查看蓝底“已应用条件”和白底“已显示日志对应条件”；失败保留旧结果时显示差异提示，导出仍按提交时条件重新查询最多200条。`node scripts/verify-log-page-preview.mjs`113项，`--capture-review rN`最新r4/31图；68相关测试及140/270/272/192回归、类型/构建/253预算通过。无API/配置/导出规则变化，无调节项，未来前端静态包生效，无Node/Python重启；未部署/未提交，既有API覆盖失败待决定，详见P62-SCOPE-COMPARISON-BATCH40.md。
+
+P62独立反馈（2026-09-15）：分别查看“日志读取反馈”和“最近导出反馈”；只有实际开始新导出才清除旧导出反馈，读取不覆盖它。`node scripts/verify-log-trace-ownership.mjs`192项，`--capture-review rN`最新r2/18图；63相关测试及272/77/270/140回归、类型/构建/253预算通过。无接口/配置/CSV/权限变化，无新调节项，未来前端静态包生效，无Node/Python重启，本轮未部署。既有API覆盖失败待决定，未提交，完整导出/权限仍待验收，详见P62-INDEPENDENT-FEEDBACK-BATCH39.md。
+
+P62导出可访问性（2026-09-15）：原原因入口最多300字并显示计数；提交等待灰色按钮保留焦点，重复激活由handler拦截，失败不强抢焦点。`node scripts/verify-log-export-reason.mjs`更新至272项，`--capture-review rN`最新r4/14图；57相关测试、144/77/270/140回归、类型/构建/253预算通过。无接口/环境/CSV/幂等变化，无调节项，未来静态前端发布生效，无Node/Python重启，本轮未部署；真实导出与离页归属仍待验收。既有API覆盖失败待决定，未提交，详见P62-EXPORT-ACCESSIBILITY-BATCH38.md。
+
+P62导出原因审核（2026-09-15）：`node scripts/verify-log-export-reason.mjs`默认无文件，四组216项；`--capture-review rN`独占图册目录，r2双端12图最新，r1为修正前对照。仅审核CSS修正取消/关闭白底层级；产品代码不变、没有生产配置/重启要求、未部署。301字上限与提交后BODY焦点仍是诊断缺口，不是通过项；POST全部本地拦截400，无实际CSV或审计。API覆盖既有失败未获处理决定，仍未提交，详见P62-EXPORT-REASON-BATCH37.md。
+
+P62追踪归属（2026-09-15）：底部按“快照读取追踪”“最近失败读取追踪”“最近导出追踪”分别展开，不拿无关旧编号补位。`node scripts/verify-log-trace-ownership.mjs`无文件144项/四组；`--capture-review rN`独占目录，r1双端8图待审。54相关测试、140/270/77原回归、类型/构建/253预算通过，但扩展API覆盖测试有HEAD既有223/225计数失败，按规则未提交。详见P62-TRACE-OWNERSHIP-BATCH36.md；API/权限/导出/环境不改，无调节项，未来前端静态包生效，无Node/Python重启，本轮未部署。
+
 P62读取归属（2026-09-15）：规范化条件变化取消旧读并替换；离页清理读取/计时器且不监听外页查询；返回保留完成缓存，仅续中断或条件已变读取。原API/15秒/安全重试/导出/权限不变，无配置项。`node scripts/verify-log-read-lifecycle.mjs`无参数/无文件，四组140项/40日志本地GET；45合同、270读取键盘及77默认回归，详见P62-READ-LIFECYCLE-BATCH35.md。仅未来前端静态包更新，无Node/Python重启，本轮未部署；真实权限/CSV/审计仍未验收。
 
 P62读取键盘（2026-09-15）：保留已有重试按钮经过等待，两个只读按钮aria-disabled结合原load单飞；成功返回记录前只交接仍持有的重试焦点，移焦/离页/隐藏/inert不抢焦点。接口/配置/导出不变，未来前端静态包生效，无Node/Python重启，本轮未部署。原`verify-log-read-feedback.mjs`扩展为270项/68本地GET，`--capture-review rN`当前r4/22图待审，r2/r3为截图范围对照；36合同、默认77及构建/253资源门通过，详情P62-READ-KEYBOARD-BATCH34.md。其他生命周期/权限/真实CSV继续。

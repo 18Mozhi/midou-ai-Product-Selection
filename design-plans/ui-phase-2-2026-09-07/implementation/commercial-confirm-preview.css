@@ -1,0 +1,220 @@
+body.p58-impact-review dialog.p58-impact-c {
+  --p58-ink: #17253c;
+  --p58-muted: #52637c;
+  --p58-navy: #102a63;
+  --p58-action: #1748b5;
+  --p58-line: #d3ddea;
+  --p58-paper: #ffffff;
+  box-sizing: border-box;
+  width: min(860px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--p58-line);
+  border-radius: 8px;
+  background: var(--p58-paper);
+  color: var(--p58-ink);
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+body.p58-impact-review .p58-impact-c .commercial-dialog-form {
+  display: grid;
+  gap: 0;
+  padding: 0;
+}
+body.p58-impact-review .p58-impact-c header {
+  display: block;
+  padding: 24px 28px;
+  background: var(--p58-navy);
+  color: var(--p58-paper);
+}
+body.p58-impact-review .p58-impact-c header p {
+  margin: 12px 0 0;
+  color: inherit;
+  font:
+    15px/1.7 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+  letter-spacing: normal;
+  text-transform: none;
+}
+body.p58-impact-review .p58-impact-c header .p58-impact-eyebrow {
+  margin: 0 0 8px;
+  font-size: 13px;
+}
+body.p58-impact-review .p58-impact-c h3 {
+  margin: 0;
+  color: inherit;
+  font:
+    700 26px/1.4 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+  overflow-wrap: anywhere;
+}
+body.p58-impact-review .p58-impact-c section {
+  display: grid;
+  min-width: 0;
+  gap: 18px;
+  margin: 0;
+  padding: 24px 28px;
+  border: 0;
+  border-bottom: 1px solid var(--p58-line);
+  border-radius: 0;
+  background: var(--p58-paper);
+  color: var(--p58-ink);
+}
+body.p58-impact-review .p58-impact-c h4 {
+  margin: 0;
+  color: var(--p58-ink);
+  font-size: 18px;
+}
+body.p58-impact-review .p58-impact-c :is(section p, dl) {
+  margin: 0;
+  font:
+    16px/1.7 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+  color: var(--p58-ink);
+  overflow-wrap: anywhere;
+}
+body.p58-impact-review .p58-impact-c .p58-impact-scope {
+  padding: 14px 16px;
+  border-left: 3px solid var(--p58-action);
+  background: #eef3fc;
+}
+body.p58-impact-review .p58-impact-c .commercial-impact-preview dl {
+  display: grid;
+  gap: 0;
+}
+body.p58-impact-review .p58-impact-c .commercial-impact-preview dl > div {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--p58-line);
+}
+body.p58-impact-review .p58-impact-c .commercial-impact-preview dt {
+  color: var(--p58-ink);
+  font-weight: 700;
+}
+body.p58-impact-review .p58-impact-c .commercial-impact-preview dd {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20px minmax(0, 1fr);
+  gap: 12px;
+  margin: 0;
+}
+body.p58-impact-review .p58-impact-c .commercial-impact-preview dd :is(span, strong) {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+  color: var(--p58-ink);
+}
+body.p58-impact-review .p58-impact-c .commercial-impact-preview dd strong {
+  color: #143d85;
+}
+body.p58-impact-review .p58-impact-c .commercial-impact-preview dd small {
+  color: var(--p58-muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+body.p58-impact-review .p58-impact-c .commercial-impact-preview em {
+  padding-top: 28px;
+  color: var(--p58-muted);
+  font-style: normal;
+}
+body.p58-impact-review .p58-impact-c :is(.p58-impact-note, .p58-impact-no-rows) {
+  padding: 14px 16px;
+  background: #f3f6fa;
+  color: var(--p58-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+body.p58-impact-review .p58-impact-c .p58-impact-facts dl {
+  display: grid;
+  gap: 14px;
+}
+body.p58-impact-review .p58-impact-c .p58-impact-facts dl > div {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 16px;
+}
+body.p58-impact-review .p58-impact-c .p58-impact-facts dt {
+  color: var(--p58-muted);
+}
+body.p58-impact-review .p58-impact-c .p58-impact-facts dd {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+body.p58-impact-review
+  .p58-impact-c
+  :is(.commercial-impact-preview, .p58-impact-facts)
+  :is(dt, dd, dd span, dd strong, dd small) {
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+body.p58-impact-review .p58-impact-c footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin: 0;
+  padding: 18px 28px;
+  background: var(--p58-paper);
+}
+body.p58-impact-review .p58-impact-c button {
+  box-sizing: border-box;
+  min-width: 110px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--p58-line);
+  border-radius: 5px;
+  background: var(--p58-paper);
+  color: var(--p58-ink);
+  font:
+    16px/1.5 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+}
+body.p58-impact-review .p58-impact-c button.primary {
+  border-color: var(--p58-action);
+  background: var(--p58-action);
+  color: var(--p58-paper);
+}
+body.p58-impact-review .p58-impact-c button:focus-visible {
+  outline: 3px solid var(--p58-action);
+  outline-offset: 2px;
+}
+body.p58-impact-review .p58-impact-c button:disabled {
+  background: #eef0f3;
+  color: #697484;
+  border-color: var(--p58-line);
+}
+@media (max-width: 760px) {
+  body.p58-impact-review dialog.p58-impact-c {
+    width: calc(100% - 16px);
+    max-height: calc(100dvh - 16px);
+  }
+  body.p58-impact-review .p58-impact-c :is(header, section, footer) {
+    padding: 20px 18px;
+  }
+  body.p58-impact-review .p58-impact-c h3 {
+    font-size: 22px;
+  }
+  body.p58-impact-review .p58-impact-c .commercial-impact-preview dl > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  body.p58-impact-review .p58-impact-c .commercial-impact-preview dd {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  body.p58-impact-review .p58-impact-c .commercial-impact-preview dd em {
+    display: none;
+  }
+  body.p58-impact-review .p58-impact-c .p58-impact-facts dl > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  body.p58-impact-review .p58-impact-c footer button {
+    min-width: 0;
+    flex: 1;
+  }
+}

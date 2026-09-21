@@ -1,0 +1,506 @@
+.backup-center.backup-center--review {
+  --so-text: #182739;
+  --so-text-muted: #526278;
+  --so-border: #c7d3e4;
+  --so-primary: #1249b8;
+  --so-primary-strong: #1249b8;
+  --so-on-primary: #fff;
+  --so-bg-elevated: #fff;
+  --so-panel: #fff;
+  --so-bg: #f3f6fa;
+  font:
+    16px/1.65 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+  gap: 20px;
+  min-width: 0;
+}
+/* Scope above the existing theme selectors; do not change shared production styles. */
+html body.shell-vue-c:has(.backup-center--review) {
+  --so-font-ui: "Microsoft YaHei", "PingFang SC", sans-serif;
+  --so-font-display: "Microsoft YaHei", "PingFang SC", sans-serif;
+  #app .role-shell.role-shell--review {
+    .platform-secondary-nav {
+      background: #fff;
+      border: 1px solid #c7d3e4;
+      gap: 0;
+    }
+    .platform-secondary-nav a {
+      min-height: 44px;
+      background: #fff;
+      color: #526278;
+      border: 0;
+      border-bottom: 3px solid transparent;
+      box-shadow: none;
+    }
+    .platform-secondary-nav a[aria-current="page"] {
+      background: #edf3ff;
+      color: #1249b8;
+      border-bottom-color: #1249b8;
+    }
+    .backup-center--review {
+      h1,
+      h2,
+      h3 {
+        font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+        font-weight: 700;
+      }
+      .p64-comparisons dd {
+        font-size: 21px;
+      }
+      .backup-read-action[aria-disabled="true"] {
+        background: #edf0f5;
+        color: #66758a;
+        border-color: #c7d3e4;
+        opacity: 0.65;
+        cursor: wait;
+      }
+      .table-view-controls :is(button, summary, select) {
+        background: #fff;
+        color: #1249b8;
+        border: 1px solid #c7d3e4;
+        font: inherit;
+        min-height: 44px;
+        border-radius: 4px;
+        box-shadow: none;
+      }
+      .technical-details button {
+        color: #1249b8;
+        background: #fff;
+        border: 1px solid #c7d3e4;
+      }
+      .technical-details summary {
+        min-height: 44px;
+        padding: 10px 0;
+        color: #1249b8;
+      }
+      footer {
+        text-align: left;
+      }
+      .table-view-controls__toolbar fieldset {
+        background: #fff;
+        max-height: min(440px, 70vh);
+        border: 1px solid #c7d3e4;
+        border-radius: 0;
+        box-shadow: none;
+        gap: 4px;
+      }
+      .table-view-controls__toolbar fieldset > div {
+        position: relative;
+        min-height: 44px;
+      }
+      .table-view-controls__toolbar fieldset input {
+        position: absolute;
+        left: 10px;
+        width: 20px;
+        height: 20px;
+        min-width: 20px;
+        min-height: 20px;
+        padding: 0;
+        margin: 0;
+        accent-color: #1249b8;
+      }
+      .table-view-controls__toolbar fieldset label {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+        width: 100%;
+        padding: 8px 10px 8px 40px;
+        cursor: pointer;
+      }
+      .table-view-controls__toolbar fieldset input:disabled + label {
+        color: #66758a;
+        cursor: default;
+      }
+      table {
+        border: 0;
+        box-shadow: none;
+      }
+      th {
+        background: #f3f6fa;
+        color: #526278;
+        border: 0;
+        border-bottom: 1px solid #c7d3e4;
+      }
+      td {
+        background: #fff;
+        border: 0;
+        border-bottom: 1px solid #c7d3e4;
+      }
+    }
+  }
+  .responsive-data-view__drawer {
+    border: 1px solid #c7d3e4;
+    border-radius: 0;
+    background: #fff;
+    box-shadow: none;
+    font:
+      16px/1.65 "Microsoft YaHei",
+      "PingFang SC",
+      sans-serif;
+  }
+  .responsive-data-view__drawer > header {
+    margin: -18px -18px 20px;
+    background: #1249b8;
+    color: #fff;
+  }
+  .responsive-data-view__drawer > header small {
+    color: #e1eaff;
+  }
+  .responsive-data-view__drawer button {
+    min-width: 44px;
+    min-height: 44px;
+    background: #fff;
+    color: #1249b8;
+    border: 1px solid #c7d3e4;
+    border-radius: 4px;
+    box-shadow: none;
+  }
+  .responsive-data-view__drawer summary {
+    color: #1249b8;
+    min-height: 44px;
+  }
+  .responsive-data-view__drawer :is(button, summary):focus-visible {
+    outline: 3px solid #1249b8;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 2px #fff;
+  }
+}
+.backup-center--review *,
+.backup-center--review *::before,
+.backup-center--review *::after {
+  box-sizing: border-box;
+}
+.backup-center.backup-center--review .backup-hero {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  min-height: 0;
+  align-items: center;
+  gap: 24px;
+}
+.backup-center--review h1 {
+  font:
+    700 32px/1.3 "Microsoft YaHei",
+    sans-serif;
+  margin: 4px 0 10px;
+}
+.backup-center--review h2 {
+  font:
+    700 23px/1.4 "Microsoft YaHei",
+    sans-serif;
+  margin: 0 0 16px;
+}
+.backup-center--review .eyebrow {
+  letter-spacing: 0.08em;
+}
+.backup-center--review .p64-review-note {
+  margin: 0;
+  color: #526278;
+  font-size: 13px;
+}
+.backup-center--review .p64-layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+.backup-center--review .p64-directory {
+  background: #1249b8;
+  color: #fff;
+  padding: 24px;
+}
+.backup-center--review .p64-directory h2 {
+  color: inherit;
+}
+.backup-center--review .p64-directory p {
+  margin: 0 0 24px;
+  color: inherit;
+}
+.backup-center--review .p64-directory p:last-child {
+  font-size: 14px;
+  margin: 28px 0 0;
+}
+.backup-center--review .p64-directory nav {
+  display: grid;
+  gap: 8px;
+}
+.backup-center--review .p64-directory a {
+  color: #fff;
+  padding: 12px 0;
+  border-bottom: 1px solid #7196e2;
+  text-decoration: none;
+  min-height: 44px;
+}
+.backup-center--review .p64-directory a:hover {
+  text-decoration: underline;
+}
+.backup-center--review .p64-content {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+}
+.backup-center.backup-center--review
+  :is(.truth-banner, .panel, .p64-objectives, .blockers, .state-card, .refresh-notice) {
+  border-radius: 0;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #c7d3e4;
+  min-width: 0;
+}
+.backup-center.backup-center--review .truth-banner {
+  display: block;
+  border-left: 4px solid #1249b8;
+}
+.backup-center--review .truth-banner strong {
+  display: block;
+  font-size: 23px;
+  color: #182739;
+}
+.backup-center--review .truth-banner p {
+  margin: 12px 0 0;
+  max-width: none;
+}
+.backup-center--review .p64-regions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 0 0 20px;
+}
+.backup-center--review .p64-comparisons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.backup-center--review .p64-comparisons section {
+  background: #f3f6fa;
+  padding: 16px;
+  min-width: 0;
+}
+.backup-center--review .p64-comparisons h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+.backup-center--review .p64-comparisons dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 0;
+}
+.backup-center--review .p64-comparisons dd {
+  font-variant-numeric: tabular-nums;
+  font-size: 21px;
+  color: #182739;
+}
+.backup-center--review dt {
+  color: #526278;
+  font-size: 14px;
+}
+.backup-center--review dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+.backup-center.backup-center--review .panel-title {
+  padding: 0;
+  margin-bottom: 16px;
+  align-items: baseline;
+}
+.backup-center--review .panel-title h2 {
+  margin: 0;
+}
+.backup-center.backup-center--review .p64-evidence > dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+  margin: 0;
+}
+.backup-center.backup-center--review .p64-evidence > dl > div {
+  display: block;
+  padding: 14px 0;
+  border-bottom: 1px solid #c7d3e4;
+  min-width: 0;
+}
+.backup-center.backup-center--review .p64-evidence dd {
+  text-align: left;
+}
+.backup-center.backup-center--review .drill-expiry {
+  background: #f3f6fa;
+}
+.backup-center.backup-center--review .blockers article {
+  border-radius: 0;
+  padding: 16px 0;
+  border: 0;
+  border-top: 1px solid #c7d3e4;
+  background: none;
+}
+.backup-center--review .blockers p {
+  overflow-wrap: anywhere;
+}
+.backup-center.backup-center--review table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+}
+.backup-center.backup-center--review th,
+.backup-center.backup-center--review td {
+  padding: 12px 10px;
+  font-size: 14px;
+  border-bottom: 1px solid #c7d3e4;
+  text-align: left;
+  vertical-align: top;
+}
+.backup-center--review .responsive-data-view {
+  min-width: 0;
+}
+.backup-center.backup-center--review .p64-assets {
+  overflow: visible;
+}
+.backup-center--review .responsive-data-view__desktop {
+  overflow: visible;
+}
+.backup-center--review .table-view-controls__toolbar fieldset {
+  left: 0;
+  right: auto;
+}
+.backup-center.backup-center--review :is(button, .table-view-controls summary) {
+  min-width: 44px;
+  min-height: 44px;
+  font: inherit;
+  border-radius: 4px;
+  box-shadow: none;
+}
+.backup-center--review :is(button, a, summary):focus-visible {
+  outline: 3px solid #1249b8;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 2px #fff;
+}
+.backup-center--review .p64-directory a:focus-visible {
+  outline-color: #fff;
+  box-shadow: none;
+}
+.backup-center--review [tabindex="-1"] {
+  scroll-margin-top: 90px;
+}
+.backup-center--review [tabindex="-1"]:focus-visible {
+  outline: 3px solid #1249b8;
+  outline-offset: 3px;
+}
+.backup-center.backup-center--review button:disabled {
+  background: #edf0f5;
+  color: #66758a;
+  border-color: #c7d3e4;
+  opacity: 0.65;
+}
+.backup-center--review .responsive-record-summary {
+  display: grid;
+  gap: 6px;
+}
+.backup-center.backup-center--review .responsive-data-view__mobile article {
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+.backup-center.backup-center--review .responsive-data-view__mobile button {
+  color: #1249b8;
+  background: #fff;
+  border-color: #c7d3e4;
+}
+.backup-center--review code {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+body:has(.backup-center--review) .responsive-data-view__drawer {
+  border-radius: 0;
+  background: #fff;
+  color: #182739;
+}
+body:has(.backup-center--review) .responsive-data-view__drawer > header {
+  background: #1249b8;
+  color: #fff;
+  padding: 20px;
+}
+body:has(.backup-center--review) .responsive-data-view__drawer h3 {
+  color: inherit;
+}
+body:has(.backup-center--review) .responsive-data-view__drawer dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+body:has(.backup-center--review) .responsive-data-view__drawer dt {
+  font-size: 14px;
+}
+body:has(.backup-center--review) .responsive-data-view__overlay {
+  --so-text: #182739;
+  --so-text-muted: #526278;
+  --so-bg-elevated: #fff;
+  --so-border: #c7d3e4;
+  font:
+    16px/1.65 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+}
+body:has(.backup-center--review) .responsive-data-view__drawer dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+body:has(.backup-center--review) .responsive-data-view__drawer button {
+  min-width: 44px;
+  min-height: 44px;
+  background: #fff;
+  color: #1249b8;
+  border: 1px solid #c7d3e4;
+  border-radius: 4px;
+  font: inherit;
+}
+body:has(.backup-center--review) .responsive-data-view__drawer :is(button, summary):focus-visible {
+  outline: 3px solid #1249b8;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 2px #fff;
+}
+@media (max-width: 1000px) {
+  .backup-center--review .p64-layout {
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 20px;
+  }
+  .backup-center--review .p64-comparisons {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 760px) {
+  .backup-center--review h1 {
+    font-size: 27px;
+  }
+  .backup-center--review .p64-layout {
+    grid-template-columns: 1fr;
+  }
+  .backup-center--review .p64-directory {
+    padding: 20px;
+  }
+  .backup-center--review .p64-directory nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .backup-center--review .p64-directory a {
+    font-size: 14px;
+  }
+  .backup-center.backup-center--review .backup-hero {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .backup-center.backup-center--review
+    :is(.truth-banner, .panel, .p64-objectives, .blockers, .state-card, .refresh-notice) {
+    padding: 20px;
+  }
+  .backup-center--review .p64-regions,
+  .backup-center.backup-center--review .p64-evidence > dl,
+  body:has(.backup-center--review) .responsive-data-view__drawer dl {
+    grid-template-columns: 1fr;
+  }
+  .backup-center--review .panel-title {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}

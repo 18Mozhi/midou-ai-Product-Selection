@@ -1,0 +1,24 @@
+/* Current C palette, scoped to its page and detached overlays. */
+.platform-content,
+.platform-content-review,
+.responsive-filter-drawer--content,
+.responsive-data-view__overlay--content {
+  --so-content-canvas: #f3f6fb;
+  --so-content-surface: #ffffff;
+  --so-content-surface-soft: #edf2f9;
+  --so-content-text: #14223b;
+  --so-content-text-muted: #60708a;
+  --so-content-border: #ccd8e8;
+  --so-content-field-border: #9fb0c8;
+  --so-content-primary: #2558bd;
+  --so-content-primary-strong: #173f91;
+  --so-content-success: #157452;
+  --so-content-success-soft: #e6f5ee;
+  --so-content-warning: #986000;
+  --so-content-warning-soft: #fff3d6;
+  --so-content-danger: #b33a34;
+  --so-content-danger-soft: #fbeceb;
+  --so-content-rail: #15346d;
+  --so-content-dialog-border: #aebdd1;
+  --so-content-field-bg: #f8faff;
+}

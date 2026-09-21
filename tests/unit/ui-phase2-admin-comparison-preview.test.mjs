@@ -1,15 +1,14 @@
-import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
+import { adminReviewHistoricalCapture } from "../../scripts/lib/ui-phase2-admin-review-historical-capture.mjs";
 import test from "node:test";
-import { historicalAdminControlsSource } from "../../scripts/lib/ui-phase2-admin-controls-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 
-const read = (f) =>
-  historicalAdminResultsSource(f, readFileSync(f, "utf8").replaceAll("\r\n", "\n"));
+const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p44-comparison-vue-preview";
-test("P44 comparison evidence uses current actual sources and exact formal images", () => {
+test("P44 comparison evidence pins historical sources and exact formal images", () => {
+  const historical = adminReviewHistoricalCapture("comparison");
   const e = JSON.parse(read(folder + "/evidence.json"));
   assert.equal(e.kind, "P44-COMPARISON-VUE-r1");
   assert.equal(e.approval, "pending-user-review");
@@ -18,7 +17,7 @@ test("P44 comparison evidence uses current actual sources and exact formal image
   assert.equal(e.screenshots.length, 44);
   assert.equal(Object.keys(e.sourceHashes).length, 40);
   for (const [f, h] of Object.entries(e.sourceHashes))
-    assert.equal(hash(historicalAdminControlsSource(f, read(f))), h, f);
+    assert.equal(hash(historical.source(f)), h, f);
   assert.deepEqual(
     readdirSync(folder).sort(),
     ["index.html", "evidence.json", ...e.screenshots.map((s) => s.file)].sort(),

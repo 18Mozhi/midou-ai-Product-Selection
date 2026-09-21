@@ -381,10 +381,13 @@ export async function buildApiCoverageDesignData(repo) {
       /query\?\.domain === "api_coverage" \? "platform:superadmin"/,
     );
     const content = await read(sourcePaths[5]);
-    assert.match(content, /function applyFilters\(\) \{\s*page.value = 1;\s*options.reload\(\)/);
+    assert.match(
+      content,
+      /function applyFilters\(\) \{\s*appliedQuery.value = options.query.value.trim\(\);\s*appliedStatus.value = options.status.value;\s*page.value = 1;\s*options.reload\(\)/,
+    );
     assert.match(
       await read(sourcePaths[6]),
-      /domain.value !== "notifications"\) return options.fallbackApply\(\)/,
+      /domain.value !== "notifications"\) return options.fallbackApply\?\.\(\)/,
     );
     checks.push(
       "Actual service management method: trimmed query/status 120/40 limits, status not allowlisted for this domain; static route has superadmin/no navigation, UI omits unauthenticated filter, shared apply/reset delegate without P63 URL persistence or pagination.",

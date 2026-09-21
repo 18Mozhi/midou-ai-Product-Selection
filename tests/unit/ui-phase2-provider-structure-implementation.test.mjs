@@ -1,7 +1,8 @@
 import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
+import { providerHistoricalCapture } from "../../scripts/lib/ui-phase2-provider-historical-capture.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import postcss from "postcss";
 import { historicalProviderFieldSource } from "../../scripts/lib/ui-phase2-provider-field-baseline.mjs";
@@ -15,17 +16,19 @@ const read = (f) =>
   historicalProviderFieldSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = "apps/web/src/components/ProviderRegistry.vue";
-const current = read(file);
+const original = providerHistoricalCapture("structure-current");
+const current = original.source(file);
 const styleImport = '<style src="../styles/provider-approved-structure.css"></style>\n';
 const style = "apps/web/src/styles/provider-approved-structure.css";
 const folder = "output/playwright/p46-approved-structure-implementation";
-const evidence = (mode) => JSON.parse(read(folder + "/" + mode + "/evidence.json"));
+const captured = (mode) => providerHistoricalCapture(`structure-${mode}`);
+const evidence = (mode) => captured(mode).evidence;
 
 test("P46 structure adds only one stylesheet; template, script and contracts remain byte-identical", () => {
   assert.equal(current.split(styleImport).length, 2);
   assert.equal(current.replace(styleImport, ""), historicalProviderStructureSource(file, current));
   for (const r of providerStructureRevisions) {
-    const source = read(r.file);
+    const source = original.source(r.file);
     assert.equal(hash(source), r.after);
     assert.equal(hash(historicalProviderStructureSource(r.file, source)), r.before);
     assert.equal(
@@ -36,7 +39,9 @@ test("P46 structure adds only one stylesheet; template, script and contracts rem
 });
 
 test("P46 structural CSS is gated by mounted Registry; mobile editor only, no preview/error/detail imports", () => {
-  const css = read(style),
+  const importedPalette = '@import "../design/provider-registry-tokens.css";\n\n';
+  assert.ok(read(style).startsWith(importedPalette));
+  const css = read(style).replace(importedPalette, ""),
     root = postcss.parse(css);
   assert.doesNotMatch(
     css,
@@ -59,7 +64,9 @@ test("P46 structural CSS is gated by mounted Registry; mobile editor only, no pr
       assert.equal(mobile, true, r.selector);
     }
   });
-  assert.match(css, /--p46-accent: #294caf/);
+  const palette = read("apps/web/src/design/provider-registry-tokens.css");
+  assert.match(palette, /html:has\(#app \.provider-registry\)/);
+  assert.match(palette, /--p46-accent: #294caf/);
   assert.match(css, /strong:not\(\.role-signal-status\)/);
   assert.match(css, /grid-template-columns: 220px minmax\(0, 1fr\)/);
   assert.match(css, /max-width: 1100px/);
@@ -67,7 +74,7 @@ test("P46 structural CSS is gated by mounted Registry; mobile editor only, no pr
   assert.doesNotMatch(css, /--so-(?:primary|bg|panel|text|success|warning|danger):/);
 });
 
-test("P46 before and current production entry captures bind raw sources and separate PNG inventory", () => {
+test("P46 original before and implemented entry captures bind historical raw sources and PNG inventory", () => {
   for (const mode of ["baseline", "current"]) {
     const e = evidence(mode),
       dir = folder + "/" + mode;
@@ -77,18 +84,19 @@ test("P46 before and current production entry captures bind raw sources and sepa
     assert.equal(e.screenshots.length, 132);
     assert.equal(e.checks.length, mode === "baseline" ? 320 : 452);
     assert.equal(Object.keys(e.sourceHashes).length, mode === "baseline" ? 164 : 165);
-    for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+    for (const [f, sha] of Object.entries(e.sourceHashes))
+      assert.equal(hash(captured(mode).source(f)), sha, f);
     assert.equal(
       e.transformedRegistryHash,
       hash(mode === "baseline" ? current.replace(styleImport, "") : current),
     );
     assert.equal(Boolean(e.sourceHashes[style]), mode === "current");
     assert.deepEqual(
-      readdirSync(dir).sort(),
+      captured(mode).files().sort(),
       [...e.screenshots.map((s) => s.file), "index.html", "evidence.json"].sort(),
     );
     for (const s of e.screenshots) {
-      const bytes = readFileSync(dir + "/" + s.file);
+      const bytes = captured(mode).image(s.file);
       assert.equal(hash(bytes), s.sha256, s.file);
       const observedWidth =
         mode === "baseline" && s.fullPage

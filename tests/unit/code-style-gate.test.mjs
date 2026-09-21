@@ -1,9 +1,22 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { readFile, unlink, writeFile } from "node:fs/promises";
+import {
+  copyFile,
+  lstat,
+  mkdir,
+  mkdtemp,
+  readFile,
+  realpath,
+  rm,
+  symlink,
+  unlink,
+  writeFile,
+} from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { basename, dirname, join, resolve } from "node:path";
 import test from "node:test";
 
-test("code style gate formats changed code and enforces the maximum line length", async () => {
+test("code style gate formats changed code and enforces the maximum line length", async (t) => {
   const [packageJson, verifier, functionalGate, blueprint, readme, featureMap] = await Promise.all([
     readFile("package.json", "utf8"),
     readFile("scripts/verify-code-style.mjs", "utf8"),
@@ -31,9 +44,63 @@ test("code style gate formats changed code and enforces the maximum line length"
   assert.match(readme, /npm run verify:code-style/);
   assert.match(featureMap, /"codeStyleCommand": "npm run verify:code-style"/);
 
-  const fixture = `tests/code-style-gate-${process.pid}.fixture.ts`;
-  const repositoryFixture = `apps/api/src/code-style-gate-${process.pid}-repository.ts`;
+  // --write must never target the user's worktree while other tests inspect those sources.
+  const temporaryParent = await realpath(tmpdir());
+  const fixtureRoot = await mkdtemp(join(temporaryParent, "scoutops-code-style-"));
+  const dependencyLink = join(fixtureRoot, "node_modules");
+  const fixture = join(fixtureRoot, "tests/invalid.fixture.ts");
+  const repositoryFixture = join(fixtureRoot, "apps/api/src/invalid-repository.ts");
+  const verifierPath = resolve("scripts/verify-code-style.mjs");
+  const env = { ...process.env };
+  for (const key of Object.keys(env))
+    if (key.startsWith("GIT_") || key === "CODE_STYLE_BASE_REF") delete env[key];
+  const run = (command, args) =>
+    spawnSync(command, args, {
+      cwd: fixtureRoot,
+      env,
+      encoding: "utf8",
+      windowsHide: true,
+      maxBuffer: 16 * 1024 * 1024,
+    });
+  const git = (...args) => {
+    const result = run("git", ["-c", "core.hooksPath=.disabled-hooks", ...args]);
+    assert.equal(result.status, 0, result.stderr);
+    return result.stdout.trim();
+  };
+  const runGate = (mode = "--check") => run(process.execPath, [verifierPath, mode]);
+  t.diagnostic(`isolated_format_fixture=${fixtureRoot}`);
   try {
+    await mkdir(join(fixtureRoot, "tests"), { recursive: true });
+    await mkdir(join(fixtureRoot, "apps/api/src"), { recursive: true });
+    await mkdir(join(fixtureRoot, ".empty-git-template"));
+    await symlink(
+      resolve("node_modules"),
+      dependencyLink,
+      process.platform === "win32" ? "junction" : "dir",
+    );
+    await copyFile(".prettierrc.json", join(fixtureRoot, ".prettierrc.json"));
+    await writeFile(join(fixtureRoot, ".gitignore"), "node_modules/\n", "utf8");
+    await writeFile(
+      join(fixtureRoot, "apps/api/src/example-repository.ts"),
+      "export const value = 1;\n",
+      "utf8",
+    );
+    git("init", "--quiet", "--template=.empty-git-template");
+    git("add", "--", ".gitignore", ".prettierrc.json", "apps/api/src/example-repository.ts");
+    git(
+      "-c",
+      "user.name=ScoutOps Test",
+      "-c",
+      "user.email=test@example.invalid",
+      "commit",
+      "--quiet",
+      "--no-verify",
+      "--no-gpg-sign",
+      "-m",
+      "test fixture",
+    );
+    assert.equal(await realpath(git("rev-parse", "--show-toplevel")), await realpath(fixtureRoot));
+
     await writeFile(fixture, "export   const value=1;\n", "utf8");
     const unformatted = runGate();
     assert.notEqual(unformatted.status, 0);
@@ -56,19 +123,40 @@ test("code style gate formats changed code and enforces the maximum line length"
       `${repositorySql.stdout}\n${repositorySql.stderr}`,
       /repository_sql_max_line_length_failed/,
     );
+    await unlink(repositoryFixture);
+    const passing = runGate();
+    assert.equal(passing.status, 0, `${passing.stdout}\n${passing.stderr}`);
+    assert.match(passing.stdout, /production=1 repositories=1/);
+    assert.equal(
+      git("status", "--short"),
+      "",
+      "fixture cleanup must leave only its tracked baseline",
+    );
   } finally {
-    await unlink(fixture).catch(() => undefined);
-    await unlink(repositoryFixture).catch(() => undefined);
+    // Remove the dependency junction itself before recursively deleting the owned temp repo.
+    const link = await lstat(dependencyLink).catch((error) => {
+      if (error.code !== "ENOENT") throw error;
+      return null;
+    });
+    if (link) {
+      assert.ok(link.isSymbolicLink(), "dependency path must still be our link");
+      await unlink(dependencyLink);
+    }
+    assert.equal(dirname(fixtureRoot), temporaryParent);
+    assert.ok(basename(fixtureRoot).startsWith("scoutops-code-style-"));
+    assert.equal(await realpath(fixtureRoot), fixtureRoot);
+    await rm(fixtureRoot, { recursive: true });
+    t.diagnostic(`isolated_format_fixture_removed=${fixtureRoot}`);
   }
-
-  const passing = runGate();
-  assert.equal(passing.status, 0, `${passing.stdout}\n${passing.stderr}`);
 });
 
-function runGate(mode = "--check") {
-  return spawnSync(process.execPath, ["scripts/verify-code-style.mjs", mode], {
+test("real worktree code style is still verified without rewriting source files", () => {
+  const result = spawnSync(process.execPath, ["scripts/verify-code-style.mjs", "--check"], {
     cwd: process.cwd(),
     encoding: "utf8",
+    windowsHide: true,
     maxBuffer: 16 * 1024 * 1024,
   });
-}
+  assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+  assert.match(result.stdout, /code_style_gate_passed/);
+});

@@ -1,0 +1,229 @@
+/* P28 isolated review skin. Production ReportCenter styles and contracts remain unchanged. */
+html body.p28-review {
+  background: #f3f6fb !important;
+}
+.p28-review * {
+  box-sizing: border-box;
+}
+.p28-review :is(button, a, summary):focus-visible {
+  outline: 3px solid #2465d7 !important;
+  outline-offset: 3px;
+}
+.p28-review .role-shell {
+  --so-bg: #f3f6fb;
+  --so-bg-elevated: #fff;
+  --so-panel: #fff;
+  --so-panel-soft: #edf4ff;
+  --so-text: #182d4a;
+  --so-text-muted: #52647b;
+  --so-border: #dce4ee;
+  --so-primary: #1748a0;
+  background: #f3f6fb !important;
+}
+.p28-review .role-topbar,
+.p28-review .role-sidebar,
+.p28-review .role-mobile-nav {
+  background: #fff !important;
+  border-color: #dce4ee !important;
+}
+.p28-review .role-brand {
+  color: #1748a0 !important;
+}
+.p28-review .role-content {
+  max-width: none;
+  padding: 24px clamp(20px, 3vw, 42px) 52px;
+}
+.p28-review .role-page-breadcrumb,
+.p28-review .role-page-title,
+.p28-review .role-context-rail,
+.p28-review .role-context-drawer {
+  display: none !important;
+}
+.p28-review .report-center {
+  max-width: 1160px;
+  margin: auto;
+  gap: 16px;
+  color: #182d4a;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+.p28-review .report-center > header {
+  padding: 31px 36px;
+  border: 0;
+  border-radius: 0;
+  background: #1748a0;
+}
+.p28-review .report-center > header :is(p, h2, span) {
+  color: #fff !important;
+}
+.p28-review .report-center > header h2 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+}
+.p28-review .report-center button {
+  min-height: 44px;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+  color: #fff !important;
+  font: inherit;
+  font-weight: 800;
+}
+.p28-review .report-center button.secondary {
+  background: #fff !important;
+  color: #1748a0 !important;
+}
+.p28-review .report-center button:disabled {
+  border-color: #c7d0dc !important;
+  background: #e6ebf1 !important;
+  color: #6f7f93 !important;
+}
+.p28-review .report-center > nav {
+  gap: 0;
+  border: 1px solid #dce4ee;
+  background: #fff;
+}
+.p28-review .report-center > nav button {
+  flex: 1;
+  border: 0 !important;
+  border-right: 1px solid #dce4ee !important;
+  border-bottom: 4px solid transparent !important;
+  background: #fff !important;
+  color: #52647b !important;
+}
+.p28-review .report-center > nav button:last-child {
+  border-right: 0 !important;
+}
+.p28-review .report-center > nav button[aria-pressed="true"] {
+  border-bottom-color: #1748a0 !important;
+  color: #1748a0 !important;
+}
+.p28-review .report-conclusion {
+  border-left-color: #1748a0;
+  border-radius: 0;
+  background: #edf4ff;
+}
+.p28-review .report-scope,
+.p28-review .report-metrics article,
+.p28-review .report-chart,
+.p28-review .report-exports,
+.p28-review .report-notice,
+.p28-review .report-state {
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p28-review .report-scope > div {
+  background: #fff;
+}
+.p28-review .report-metrics {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0;
+  border: 1px solid #dce4ee;
+}
+.p28-review .report-metrics article {
+  border: 0 !important;
+  border-right: 1px solid #dce4ee !important;
+}
+.p28-review .report-metrics article:last-child {
+  border-right: 0 !important;
+}
+.p28-review .report-metrics b {
+  color: #1748a0;
+}
+.p28-review .report-chart {
+  padding: 24px;
+}
+.p28-review .report-bars {
+  height: 240px;
+  background: linear-gradient(
+    to bottom,
+    transparent 24%,
+    #dce4ee 25%,
+    transparent 26%,
+    transparent 49%,
+    #dce4ee 50%,
+    transparent 51%,
+    transparent 74%,
+    #dce4ee 75%,
+    transparent 76%
+  );
+}
+.p28-review .report-bars span {
+  border-radius: 0;
+  background: #1748a0;
+}
+.p28-review .report-exports {
+  padding: 24px;
+}
+.p28-review .report-export-list article {
+  grid-template-columns: 110px minmax(0, 1fr) auto auto;
+}
+.p28-review .report-export-list i {
+  color: #1748a0;
+  font-weight: 800;
+}
+.p28-review .report-export-list i[data-status="expired"],
+.p28-review .report-export-list i[data-status="dead_letter"] {
+  color: #a52b2b;
+}
+.p28-review .report-detail[open] {
+  border-left: 5px solid #1748a0;
+  background: #fff;
+  color: #182d4a;
+  box-shadow: -16px 0 40px rgb(24 45 74 / 0.24);
+}
+.p28-review .report-detail dl > div {
+  border-color: #dce4ee;
+}
+@media (max-width: 760px) {
+  .p28-review .role-shell {
+    display: block;
+    padding-top: 58px;
+  }
+  .p28-review .role-topbar {
+    position: fixed;
+    inset: 0 0 auto;
+    height: 58px;
+    z-index: 30;
+  }
+  .p28-review .role-content {
+    padding: 0 0 78px;
+  }
+  .p28-review .role-sidebar {
+    top: 58px;
+  }
+  .p28-review .report-center > header {
+    padding: 25px 19px;
+  }
+  .p28-review .report-center > header button {
+    width: 100%;
+  }
+  .p28-review .report-center > nav {
+    overflow: visible;
+  }
+  .p28-review .report-center > nav button {
+    padding: 10px 4px;
+    font-size: 14px;
+  }
+  .p28-review .report-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .p28-review .report-metrics article:nth-child(2n) {
+    border-right: 0 !important;
+  }
+  .p28-review .report-export-list article {
+    grid-template-columns: 1fr auto;
+  }
+  .p28-review .report-detail[open] {
+    width: calc(100vw - 24px);
+    height: calc(100dvh - 24px);
+    inset: 12px;
+    margin: 0;
+    padding: 22px;
+    border: 1px solid #dce4ee;
+    border-top: 5px solid #1748a0;
+  }
+}

@@ -1,0 +1,207 @@
+body.p58-revise-review dialog.p58-revise-c {
+  --p58-ink: #17253c;
+  --p58-muted: #52637c;
+  --p58-navy: #102a63;
+  --p58-action: #1748b5;
+  --p58-line: #d3ddea;
+  --p58-paper: #ffffff;
+  box-sizing: border-box;
+  width: min(940px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--p58-line);
+  border-radius: 8px;
+  background: var(--p58-paper);
+  color: var(--p58-ink);
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+body.p58-revise-review .p58-revise-c .commercial-dialog-form {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: 0;
+  padding: 0;
+}
+body.p58-revise-review .p58-revise-c header {
+  display: block;
+  grid-column: 1 / -1;
+  padding: 24px 28px;
+  color: var(--p58-paper);
+  background: var(--p58-navy);
+}
+body.p58-revise-review .p58-revise-c h3 {
+  margin: 8px 0 14px;
+  color: inherit;
+  font:
+    700 26px/1.4 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+}
+body.p58-revise-review .p58-revise-c header p {
+  margin: 8px 0 0;
+  color: inherit;
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.7;
+  letter-spacing: normal;
+  text-transform: none;
+}
+body.p58-revise-review .p58-revise-c header .p58-revise-eyebrow {
+  margin: 0;
+  font-size: 13px;
+}
+body.p58-revise-review .p58-revise-c .p58-revise-version {
+  display: inline-block;
+  margin: 0;
+  padding: 4px 10px;
+  border: 1px solid #7892c1;
+  border-radius: 3px;
+  font-weight: 700;
+}
+body.p58-revise-review .p58-revise-c .p58-revise-guide {
+  grid-column: 1;
+  grid-row: 2 / 6;
+  padding: 28px 22px;
+  border-right: 1px solid var(--p58-line);
+  background: #f3f6fa;
+  font-size: 16px;
+  line-height: 1.75;
+}
+body.p58-revise-review .p58-revise-c .p58-revise-guide :is(strong, ol, li) {
+  color: var(--p58-ink);
+}
+body.p58-revise-review .p58-revise-c .p58-revise-guide ol {
+  padding-left: 24px;
+  margin: 18px 0;
+}
+body.p58-revise-review .p58-revise-c .p58-revise-guide li {
+  padding: 6px 0;
+}
+body.p58-revise-review .p58-revise-c .p58-revise-guide p {
+  font-size: 13px;
+  color: var(--p58-muted);
+}
+body.p58-revise-review .p58-revise-c :is(section, footer) {
+  grid-column: 2;
+  min-width: 0;
+  margin: 0;
+  padding: 24px 28px;
+  border: 0;
+  border-bottom: 1px solid var(--p58-line);
+  border-radius: 0;
+  background: var(--p58-paper);
+  color: var(--p58-ink);
+}
+body.p58-revise-review .p58-revise-c section {
+  display: grid;
+  gap: 18px;
+}
+body.p58-revise-review .p58-revise-c h4 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--p58-ink);
+}
+body.p58-revise-review .p58-revise-c :is(small, section p) {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--p58-muted);
+}
+body.p58-revise-review .p58-revise-c .p58-revise-quota-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+body.p58-revise-review .p58-revise-c label {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+  color: var(--p58-ink);
+  font-size: 16px;
+}
+body.p58-revise-review .p58-revise-c .p58-revise-field {
+  display: grid;
+  gap: 8px;
+}
+body.p58-revise-review .p58-revise-c :is(input, textarea, select, button) {
+  box-sizing: border-box;
+  min-height: 44px;
+  min-width: 0;
+  border: 1px solid var(--p58-line);
+  border-radius: 5px;
+  padding: 10px 12px;
+  background: var(--p58-paper);
+  color: var(--p58-ink);
+  font:
+    16px/1.5 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+}
+body.p58-revise-review .p58-revise-c :is(input, textarea, select) {
+  width: 100%;
+}
+body.p58-revise-review .p58-revise-c textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+body.p58-revise-review .p58-revise-c button.primary {
+  border-color: var(--p58-action);
+  background: var(--p58-action);
+  color: var(--p58-paper);
+}
+body.p58-revise-review .p58-revise-c :is(input, textarea, select, button):focus-visible {
+  outline: 3px solid var(--p58-action);
+  outline-offset: 2px;
+}
+body.p58-revise-review .p58-revise-c button:disabled {
+  background: #eef0f3;
+  color: #697484;
+  border-color: var(--p58-line);
+}
+body.p58-revise-review .p58-revise-c footer {
+  display: flex;
+  gap: 12px;
+  padding: 18px 28px;
+}
+@media (max-width: 760px) {
+  body.p58-revise-review dialog.p58-revise-c {
+    width: calc(100% - 16px);
+    max-height: calc(100dvh - 16px);
+  }
+  body.p58-revise-review .p58-revise-c .commercial-dialog-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body.p58-revise-review .p58-revise-c :is(header, section, footer) {
+    grid-column: 1;
+    padding: 20px 18px;
+  }
+  body.p58-revise-review .p58-revise-c h3 {
+    font-size: 22px;
+  }
+  body.p58-revise-review .p58-revise-c .p58-revise-guide {
+    grid-row: auto;
+    padding: 16px 18px;
+    border-right: 0;
+    border-bottom: 1px solid var(--p58-line);
+  }
+  body.p58-revise-review .p58-revise-c .p58-revise-guide ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    padding-left: 20px;
+    margin: 8px 0;
+    font-size: 13px;
+  }
+  body.p58-revise-review .p58-revise-c .p58-revise-guide li {
+    padding: 0;
+  }
+  body.p58-revise-review .p58-revise-c .p58-revise-guide p {
+    margin: 8px 0 0;
+  }
+  body.p58-revise-review .p58-revise-c .p58-revise-quota-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body.p58-revise-review .p58-revise-c footer button {
+    flex: 1;
+  }
+}

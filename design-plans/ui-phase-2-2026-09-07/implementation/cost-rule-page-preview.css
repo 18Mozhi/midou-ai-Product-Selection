@@ -1,0 +1,312 @@
+html body.p22-review {
+  background: #f3f6fb !important;
+}
+.p22-review * {
+  box-sizing: border-box;
+}
+.p22-review :is(h1, h2, h3, h4, p, dl, dd) {
+  margin: 0;
+}
+.p22-review :is(button, input, select, textarea, a, summary):focus-visible {
+  outline: 3px solid #2465d7 !important;
+  outline-offset: 3px;
+}
+.p22-review .role-shell {
+  --so-bg: #f3f6fb;
+  --so-bg-elevated: #fff;
+  --so-panel: #fff;
+  --so-panel-soft: #f3f6fb;
+  --so-text: #182d4a;
+  --so-text-muted: #52647b;
+  --so-border: #dce4ee;
+  --so-primary: #1748a0;
+  --so-primary-strong: #1748a0;
+  --so-focus: #2465d7;
+  background: #f3f6fb !important;
+}
+.p22-review :is(.role-topbar, .role-sidebar) {
+  border-color: #dce4ee !important;
+  background: #fff !important;
+}
+.p22-review .role-brand {
+  color: #1748a0 !important;
+}
+.p22-review .role-brand span,
+.p22-review .role-top-actions .role-quick-action {
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+}
+.p22-review .role-brand em,
+.p22-review :is(.role-page-breadcrumb, .role-page-title, .role-context-rail, .role-context-drawer) {
+  display: none !important;
+}
+.p22-review .role-nav-groups details[open] > summary,
+.p22-review .role-nav-groups details:has([aria-current="page"]) > summary {
+  color: #1748a0 !important;
+  background: #edf4ff !important;
+}
+.p22-review .role-nav-menu {
+  border-top-color: #1748a0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p22-review .role-nav-menu > a {
+  background: #fff !important;
+}
+.p22-review .role-nav-menu > a[aria-current="page"] {
+  background: #1748a0 !important;
+}
+.p22-review .role-content {
+  max-width: none;
+  padding: 24px clamp(20px, 3vw, 38px) 56px;
+}
+.p22-review .role-mobile-nav {
+  border-top: 1px solid #dce4ee !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p22-review .cost-console {
+  display: grid;
+  gap: 14px;
+  color: #182d4a;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+.p22-review .cost-console > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 28px 30px;
+  border: 1px solid #1748a0;
+  background: #1748a0;
+}
+.p22-review .cost-console > header :is(p, h2, span) {
+  color: #fff !important;
+}
+.p22-review .cost-console > header h2 {
+  margin: 7px 0;
+  font-size: 31px;
+}
+.p22-review :is(.cost-head-actions, .cost-rule-actions) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: start;
+}
+.p22-review .cost-console :is(button, .cost-head-actions a, .quality-gate-setup-summary a) {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+  color: #fff !important;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+}
+.p22-review .cost-head-actions :is(button, a) {
+  border-color: #fff !important;
+  background: #fff !important;
+  color: #1748a0 !important;
+}
+.p22-review .cost-notice {
+  margin: 0;
+  padding: 14px 18px;
+  border-left: 4px solid #1748a0;
+  background: #edf4ff;
+}
+.p22-review .quality-gate-setup-summary {
+  margin: 0 !important;
+  padding: 24px 28px;
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p22-review .quality-gate-setup-summary h3 {
+  color: #1748a0;
+}
+.p22-review .quality-gate-setup-summary li {
+  border-radius: 0 !important;
+  background: #f3f6fb !important;
+}
+.p22-review .cost-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.85fr) minmax(0, 2fr);
+  gap: 0;
+  border: 1px solid #dce4ee;
+  background: #fff;
+}
+.p22-review .cost-rule-browser {
+  padding: 0;
+  border-right: 1px solid #dce4ee;
+  background: #f3f6fb;
+}
+.p22-review .cost-rule-filters {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border-bottom: 1px solid #dce4ee;
+  background: #fff;
+}
+.p22-review .cost-rule-filters :is(input, select) {
+  min-height: 44px;
+  border: 1px solid #b9c9dc;
+  border-radius: 0;
+  background: #fff;
+}
+.p22-review .cost-rule-filters button {
+  width: max-content;
+  background: #fff !important;
+  color: #1748a0 !important;
+}
+.p22-review .cost-rule-list > button {
+  min-height: 120px;
+  border: 0 !important;
+  border-bottom: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f3f6fb !important;
+  color: #182d4a !important;
+}
+.p22-review .cost-rule-list > button.selected {
+  border-left: 5px solid #1748a0 !important;
+  background: #edf4ff !important;
+  box-shadow: none !important;
+}
+.p22-review .cost-rule-list i {
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+}
+.p22-review .cost-rule-list b,
+.p22-review .cost-rule-detail > header > b {
+  border-radius: 0 !important;
+}
+.p22-review .cost-rule-detail {
+  padding: 28px;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+}
+.p22-review .cost-rule-detail > header {
+  padding-bottom: 18px;
+  border-bottom: 1px solid #dce4ee;
+}
+.p22-review .cost-rule-detail h3 {
+  font-size: 29px;
+}
+.p22-review .cost-rule-detail > header > b {
+  padding: 7px 10px;
+  border: 1px solid #1748a0;
+  background: #edf4ff;
+  color: #1748a0;
+}
+.p22-review .cost-fees {
+  gap: 0;
+  border: 1px solid #dce4ee;
+}
+.p22-review .cost-fees article {
+  border: 0 !important;
+  border-right: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f3f6fb !important;
+}
+.p22-review .cost-fees article:last-child {
+  border-right: 0 !important;
+}
+.p22-review .cost-rule-detail section {
+  border-color: #dce4ee;
+  background: #fff;
+}
+.p22-review .cost-rule-detail section p {
+  border-radius: 0;
+  background: #f3f6fb;
+}
+.p22-review .cost-rule-actions {
+  padding-top: 18px;
+  border-top: 3px solid #1748a0;
+}
+.p22-review .cost-rule-actions .danger {
+  border-color: #b42318 !important;
+  background: #fff !important;
+  color: #b42318 !important;
+}
+.p22-review .cost-modal {
+  border: 0;
+  background: transparent;
+}
+.p22-review .cost-modal::backdrop {
+  background: rgba(24, 45, 74, 0.5);
+}
+.p22-review .cost-modal form {
+  border: 1px solid #dce4ee;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+.p22-review .cost-modal :is(input, select, textarea) {
+  min-height: 44px;
+  border: 1px solid #b9c9dc;
+  border-radius: 0;
+  background: #fff;
+}
+@media (max-width: 760px) {
+  .p22-review .role-content {
+    padding: 12px 12px 92px;
+  }
+  .p22-review .cost-console > header {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 22px 18px;
+  }
+  .p22-review .cost-console > header h2 {
+    font-size: 27px;
+  }
+  .p22-review .cost-head-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .p22-review .cost-head-actions :is(a, button) {
+    width: 100%;
+    text-align: center;
+  }
+  .p22-review .quality-gate-setup-summary {
+    padding: 20px 18px;
+  }
+  .p22-review .cost-layout {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    border: 0;
+    background: transparent;
+  }
+  .p22-review .cost-rule-browser,
+  .p22-review .cost-rule-detail {
+    border: 1px solid #dce4ee;
+  }
+  .p22-review .cost-rule-browser {
+    border-right: 1px solid #dce4ee;
+  }
+  .p22-review .cost-rule-detail {
+    padding: 22px 18px;
+  }
+  .p22-review .cost-fees {
+    grid-template-columns: 1fr;
+  }
+  .p22-review .cost-fees article {
+    border-right: 0 !important;
+    border-bottom: 1px solid #dce4ee !important;
+  }
+  .p22-review .cost-rule-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .p22-review .cost-rule-actions button {
+    width: 100%;
+  }
+  .p22-review .cost-modal {
+    width: calc(100vw - 24px);
+  }
+  .p22-review .cost-modal form {
+    padding: 20px 16px;
+  }
+}

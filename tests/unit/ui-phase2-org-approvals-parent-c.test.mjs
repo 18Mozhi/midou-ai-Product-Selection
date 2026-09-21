@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertP34LegacySourceHash } from "../../scripts/lib/ui-phase2-org-approvals-shared-history.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -60,7 +61,7 @@ test("P34 C parent 74 images bind unchanged actual behavior and inherited child 
   assert.equal(evidence.screenshots.length, 74);
   assert.equal(new Set(evidence.screenshots.map((s) => s.file)).size, 74);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+    assertP34LegacySourceHash(file, readFileSync(file, "utf8"), sha);
   for (const s of evidence.screenshots)
     assert.equal(hash(readFileSync(`${folder}/${s.file}`)), s.sha256, s.file);
   for (const name of [

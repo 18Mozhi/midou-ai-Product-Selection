@@ -1,0 +1,11 @@
+@import url("./task-page-preview.css");
+
+.p23-review .p13-hero {
+  border-left: 6px solid #0f3f8c;
+}
+.p23-review .p13-focus {
+  border-left-color: #1748a0;
+}
+.p23-review .p13-queue > header > div > p {
+  color: #1748a0;
+}

@@ -8,6 +8,7 @@ import ts from "typescript";
 import { createServer } from "vite";
 import { chromium } from "playwright";
 import { execFileSync } from "node:child_process";
+import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
 
 const capture = process.argv.includes("--capture");
 const baseline = process.argv.includes("--baseline");
@@ -455,6 +456,8 @@ try {
     if (f && !f.startsWith("..") && !f.includes("node_modules") && /\.(vue|ts|css)$/.test(f))
       sources.add(f);
   }
+  sources.add("scripts/lib/ui-imported-style-sources.mjs");
+  await includeImportedStyleSources(sources, async (f) => transformed[f] ?? (await read(f)));
   const sourceHashes = Object.fromEntries(
     await Promise.all(
       [...sources].sort().map(async (f) => [f, hash(transformed[f] ?? (await read(f)))]),

@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertOrganizationReasonContract } from "../../scripts/lib/ui-phase2-organization-reason-contract.mjs";
 import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -25,7 +26,7 @@ test("P36 mobile filter approval pins only the shown fields, help and bottom res
   assert.equal(e.approval, "pending-field-review");
 });
 
-test("P36 seven actual v-models, one scope group and two shared reason contexts stay distinct", () => {
+test("P36 seven actual v-models, one scope group and two shared reason contexts stay distinct", async () => {
   const child = readFileSync("apps/web/src/components/OrganizationTokenPanel.vue", "utf8");
   const models = [...child.matchAll(/v-model(?:\.number)?="([^"]+)"/g)].map((m) => m[1]).sort();
   assert.equal(models.length, 7);
@@ -54,7 +55,10 @@ test("P36 seven actual v-models, one scope group and two shared reason contexts 
   assert.equal(ttl.attrs.max, "365");
   assert.ok(Object.hasOwn(ttl.attrs, "required"));
   const shared = readFileSync("apps/web/src/components/AuditedReasonDialog.vue", "utf8");
-  assert.doesNotMatch(shared, /maxlength=/);
+  await assertOrganizationReasonContract(
+    shared,
+    readFileSync("apps/web/src/components/OrganizationAdminCenter.vue", "utf8"),
+  );
   assert.ok(e.fields.filter((f) => f.kind === "reason").every((f) => f.proposalMax === 500));
 });
 

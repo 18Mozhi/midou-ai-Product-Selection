@@ -1,0 +1,194 @@
+/* P55 isolated review skin; production governance surface remains unchanged. */
+html body.p55-review {
+  background: #f3f6fb !important;
+}
+.p55-review * {
+  box-sizing: border-box;
+}
+.p55-review :is(button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid #2465d7 !important;
+  outline-offset: 3px;
+}
+.p55-review a:focus {
+  outline: 3px solid #2465d7 !important;
+  outline-offset: 3px;
+}
+.p55-review .role-shell {
+  --so-bg: #f3f6fb;
+  --so-panel: #fff;
+  --so-panel-soft: #edf4ff;
+  --so-text: #182d4a;
+  --so-text-muted: #52647b;
+  --so-border: #dce4ee;
+  --so-primary: #1748a0;
+  background: #f3f6fb !important;
+}
+.p55-review :is(.role-topbar, .role-sidebar, .role-mobile-nav) {
+  background: #fff !important;
+  border-color: #dce4ee !important;
+}
+.p55-review .role-content {
+  max-width: none;
+  padding: 24px clamp(20px, 3vw, 42px) 52px;
+}
+.p55-review :is(.role-page-breadcrumb, .role-page-title, .role-context-rail, .role-context-drawer) {
+  display: none !important;
+}
+.p55-review .platform-governance {
+  max-width: 1160px;
+  margin: auto;
+  color: #182d4a;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+  background: #f3f6fb !important;
+}
+.p55-review .governance-directory {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+  color: #fff !important;
+}
+.p55-review .governance-directory :is(p, h2, h3, span, small, strong, a) {
+  color: #fff !important;
+}
+.p55-review .governance-directory nav {
+  gap: 0 !important;
+}
+.p55-review .governance-directory nav button {
+  min-height: 54px;
+  border: 0 !important;
+  border-top: 1px solid rgb(255 255 255 / 24%) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #fff !important;
+  font: inherit;
+}
+.p55-review .governance-directory nav button[aria-current="page"] {
+  background: #fff !important;
+  color: #1748a0 !important;
+}
+.p55-review .governance-directory nav button[aria-current="page"] :is(span, b) {
+  color: #1748a0 !important;
+}
+.p55-review .governance-provider {
+  border-top-color: rgb(255 255 255 / 30%) !important;
+}
+.p55-review .governance-main {
+  min-width: 0;
+}
+.p55-review .governance-hero {
+  align-items: start;
+  padding: 31px 36px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+}
+.p55-review .governance-hero :is(p, h2, span) {
+  color: #fff !important;
+}
+.p55-review .governance-hero h2 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+}
+.p55-review .governance-header-actions :is(button, a) {
+  min-height: 42px;
+  padding: 8px 14px;
+  border: 1px solid #fff !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #1748a0 !important;
+  font: inherit;
+  font-weight: 800;
+}
+.p55-review
+  .governance-main
+  > :is(
+    .responsive-filter-drawer,
+    .governance-context,
+    .governance-table,
+    .governance-provider--mobile,
+    .governance-footnote
+  ) {
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+}
+.p55-review .governance-context {
+  border-left: 5px solid #1748a0 !important;
+}
+.p55-review .governance-context dl > div {
+  border-left-color: #dce4ee !important;
+}
+.p55-review .governance-table {
+  border-top: 5px solid #1748a0 !important;
+  box-shadow: none !important;
+}
+.p55-review .governance-table :is(table th, table td) {
+  border-color: #dce4ee !important;
+}
+.p55-review .governance-table table th {
+  background: #1748a0 !important;
+  color: #fff !important;
+}
+.p55-review .governance-row-actions :is(button, a),
+.p55-review .governance-detail-action {
+  min-height: 40px;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+  color: #fff !important;
+  font: inherit;
+  font-weight: 800;
+}
+.p55-review .governance-status {
+  border-radius: 0 !important;
+}
+.p55-review .governance-detail {
+  border-radius: 0 !important;
+  box-shadow: 0 18px 48px rgb(24 45 74 / 24%) !important;
+}
+@media (max-width: 760px) {
+  .p55-review :is(.role-mobile-nav, .role-sidebar, .role-topbar) {
+    display: none !important;
+  }
+  .p55-review .role-shell {
+    display: block;
+    padding-top: 0;
+  }
+  .p55-review .role-content {
+    padding: 0 0 24px;
+  }
+  .p55-review .platform-governance {
+    display: block !important;
+  }
+  .p55-review .governance-directory {
+    padding: 24px 19px !important;
+  }
+  .p55-review .governance-directory nav {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+  }
+  .p55-review .governance-directory__note,
+  .p55-review .governance-provider--desktop {
+    display: none !important;
+  }
+  .p55-review .governance-hero {
+    display: grid;
+    gap: 16px;
+    padding: 25px 19px !important;
+  }
+  .p55-review .governance-header-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .p55-review .governance-context {
+    margin: 0 !important;
+    border-left: 0 !important;
+    border-top: 5px solid #1748a0 !important;
+  }
+  .p55-review .governance-table {
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+}

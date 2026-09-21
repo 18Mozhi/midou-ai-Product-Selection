@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { assertOrganizationReasonContract } from "../../scripts/lib/ui-phase2-organization-reason-contract.mjs";
 import {
   base,
   dependencies,
@@ -59,7 +60,7 @@ test("P30 maps each exact selector/state to both viewports, not merely full-page
         });
       }
 });
-test("P30 retains native select and shared-reason lifecycle limits instead of inventing busy states", () => {
+test("P30 retains native select and shared-reason lifecycle limits instead of inventing busy states", async () => {
   for (const id of ["filter-role", "filter-status", "filter-team", "filter-sort", "row-role"])
     assert.deepEqual(Object.keys(evidence.controlReferences[id].states), [
       "default",
@@ -86,7 +87,7 @@ test("P30 retains native select and shared-reason lifecycle limits instead of in
     evidence.controlReferences.invite_interrupted.scope,
     "proposal-only-not-source-action",
   );
-  assert.doesNotMatch(sources[dependencies[2]], /maxlength=/);
+  await assertOrganizationReasonContract(sources[dependencies[2]], sources[dependencies[0]]);
 });
 test("P30 browser evidence includes 432 geometry/focus checks and 100 offline interactions", () => {
   assert.equal(evidence.checks.length, 432);

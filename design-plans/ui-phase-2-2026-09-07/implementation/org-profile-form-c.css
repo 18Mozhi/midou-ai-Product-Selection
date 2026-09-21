@@ -1,0 +1,25 @@
+/* Local actual-Vue review only; no constraint or request changes. */
+html
+  body.org-profile-form-c:has(#app)
+  #app
+  .role-shell.role-shell--review
+  .org-admin-center:has(> .org-admin-metrics) {
+  form.org-admin-card .org-profile-error {
+    color: #a42435;
+    line-height: 1.6;
+    margin: 0;
+  }
+  form.org-admin-card :is(input, select, textarea)[aria-invalid="true"] {
+    border: 2px solid #a42435;
+    background: #fff8f8;
+  }
+  form.org-admin-card h3:focus-visible {
+    outline: 3px solid #244bb0;
+    outline-offset: 5px;
+  }
+  form.org-admin-card > button:disabled {
+    background: #e4e9f0;
+    color: #536985;
+    opacity: 1;
+  }
+}

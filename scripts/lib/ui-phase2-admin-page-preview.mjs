@@ -6,7 +6,14 @@ import { userPagePreview } from "./ui-phase2-user-page-preview.mjs";
 export function adminPagePreview(original, surface) {
   if (surface === "detail") return userPagePreview(original, "detail");
   assert.equal(surface, "parent");
-  let source = userPagePreview(original, "parent");
+  const heading = `      <header v-if="tab === 'admins'" class="admin-directory-heading">
+        <h3>可授权账号</h3>
+        <p>包含尚未授予平台角色的账号。进入详情后核对身份与当前授权。</p>
+      </header>
+`;
+  const hasHeading = original.includes('class="admin-directory-heading"');
+  if (hasHeading) assert.equal(original.split(heading).length, 2, "Current P44 heading drift");
+  let source = userPagePreview(hasHeading ? original.replace(heading, "") : original, "parent");
   const replace = (before, after) => {
     assert.equal(source.split(before).length, 2, `P44 source drift: ${before}`);
     source = source.replace(before, after);
@@ -23,6 +30,11 @@ export function adminPagePreview(original, surface) {
     '<PlatformRoleComparison\n          v-if="tab === \'admins\' && platformRoles.length"\n          :roles="platformRoles"\n        />',
     '<section class="p44-comparison"><PlatformRoleComparison\n          v-if="tab === \'admins\' && platformRoles.length"\n          :roles="platformRoles"\n        /></section>',
   );
+  if (hasHeading)
+    replace(
+      '      <header class="p43-directory-heading"><h3>可授权账号</h3><p>包含尚未授予平台角色的账号。进入详情后核对身份与当前授权。</p></header>\n',
+      heading.replace('class="admin-directory-heading"', 'class="p43-directory-heading"'),
+    );
   assert.equal(
     parse(source).descriptor.scriptSetup.content,
     parse(original).descriptor.scriptSetup.content,

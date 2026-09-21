@@ -1,0 +1,249 @@
+{
+  "kind": "P47-CURRENT-REPLAY-2026-09-12",
+  "comparison": "Verified original PNG bytes held only in Node memory; current drivers unchanged and actually executed; exact runs compared without normalization. Measurements are not a new acceptance tolerance.",
+  "userApprovalChanged": false,
+  "packs": [
+    {
+      "name": "p47-access-current-review",
+      "runs": 30,
+      "checks": 411,
+      "images": 60,
+      "sourceCount": 178,
+      "sourceChanges": [
+        "apps/web/src/components/ResponsiveFilterDrawer.vue"
+      ],
+      "differences": [
+        {
+          "file": "baseline-390-dependency-state.png",
+          "before": "61e80c4dd1ca3ba7f2b44d630f161f663228c401524fc6fb0112ff32e40218fc",
+          "after": "7447f5d387ac8e0d099cf429147f27cccccb5b71d66b405d3757ef112b85204f",
+          "dimensions": [
+            358,
+            480
+          ],
+          "pixels": 4,
+          "delta": 1,
+          "bounds": [
+            0,
+            471,
+            1,
+            473
+          ]
+        },
+        {
+          "file": "baseline-390-dependency-action.png",
+          "before": "601cbef3747e980831f043788f9fec7452f6d6df9bca5d70d347cf09cd5f66b4",
+          "after": "9b24d88eb9a66c688555e07c1c8d0a231edba6dcfa1060eb22fe832fb5d1f05c",
+          "dimensions": [
+            358,
+            135
+          ],
+          "pixels": 27,
+          "delta": 2,
+          "bounds": [
+            0,
+            72,
+            88,
+            113
+          ]
+        },
+        {
+          "file": "baseline-390-error-unchanged-action.png",
+          "before": "601cbef3747e980831f043788f9fec7452f6d6df9bca5d70d347cf09cd5f66b4",
+          "after": "9b24d88eb9a66c688555e07c1c8d0a231edba6dcfa1060eb22fe832fb5d1f05c",
+          "dimensions": [
+            358,
+            135
+          ],
+          "pixels": 27,
+          "delta": 2,
+          "bounds": [
+            0,
+            72,
+            88,
+            113
+          ]
+        },
+        {
+          "file": "baseline-760-forbidden-action.png",
+          "before": "7d62e240ac1bbd4a3f0ea6762550392eceb47b34c73a97137ae1c2619b8e5d35",
+          "after": "314c15c4a99509f2862de7efc669772dc3fcdf5621667229871f897086bdb326",
+          "dimensions": [
+            728,
+            116
+          ],
+          "pixels": 15,
+          "delta": 2,
+          "bounds": [
+            0,
+            53,
+            2,
+            92
+          ]
+        },
+        {
+          "file": "baseline-760-rate-action.png",
+          "before": "7d62e240ac1bbd4a3f0ea6762550392eceb47b34c73a97137ae1c2619b8e5d35",
+          "after": "314c15c4a99509f2862de7efc669772dc3fcdf5621667229871f897086bdb326",
+          "dimensions": [
+            728,
+            116
+          ],
+          "pixels": 15,
+          "delta": 2,
+          "bounds": [
+            0,
+            53,
+            2,
+            92
+          ]
+        },
+        {
+          "file": "baseline-760-dependency-action.png",
+          "before": "7d62e240ac1bbd4a3f0ea6762550392eceb47b34c73a97137ae1c2619b8e5d35",
+          "after": "314c15c4a99509f2862de7efc669772dc3fcdf5621667229871f897086bdb326",
+          "dimensions": [
+            728,
+            116
+          ],
+          "pixels": 15,
+          "delta": 2,
+          "bounds": [
+            0,
+            53,
+            2,
+            92
+          ]
+        },
+        {
+          "file": "baseline-1440-error-unchanged-action.png",
+          "before": "20d9d7dc9d3ea8e64746d07e775212abc52cb722840e1eea11fd4919f78aec98",
+          "after": "11ef0c0df4aa26d341a7fc73c5b0e97df901dfd4da0bb5c8689fd7449c3b0e11",
+          "dimensions": [
+            1136,
+            110
+          ],
+          "pixels": 13,
+          "delta": 2,
+          "bounds": [
+            911,
+            22,
+            914,
+            66
+          ]
+        }
+      ],
+      "runDiffs": [],
+      "ports": [
+        64125,
+        64270
+      ],
+      "processesClosed": true
+    },
+    {
+      "name": "p47-filter-pagination-current-review",
+      "runs": 6,
+      "checks": 162,
+      "images": 36,
+      "sourceCount": 178,
+      "sourceChanges": [
+        "apps/web/src/components/ResponsiveFilterDrawer.vue"
+      ],
+      "differences": [],
+      "runDiffs": [],
+      "ports": [
+        64441,
+        64472
+      ],
+      "processesClosed": true
+    },
+    {
+      "name": "p47-read-error-current-review",
+      "runs": 30,
+      "checks": 357,
+      "images": 30,
+      "sourceCount": 176,
+      "sourceChanges": [
+        "apps/web/src/components/ResponsiveFilterDrawer.vue"
+      ],
+      "differences": [
+        {
+          "file": "review-1440-blocked-unchanged.png",
+          "before": "7cc56608f5e5c82ec56bc3ba28175e383e861e5f751aa8bcb13d475e31ac54bf",
+          "after": "2d3091095e8d870a600d548c91bd35a4ccdd848eaa902e662a903eb2df7005ac",
+          "dimensions": [
+            570,
+            485
+          ],
+          "pixels": 4,
+          "delta": 1,
+          "bounds": [
+            0,
+            476,
+            1,
+            478
+          ]
+        }
+      ],
+      "runDiffs": [],
+      "ports": [],
+      "processesClosed": true,
+      "portsObservedInDriverOutput": [
+        64518,
+        64663
+      ]
+    },
+    {
+      "name": "p47-c-integration",
+      "runs": 36,
+      "checks": 430,
+      "images": 20,
+      "sourceCount": 174,
+      "sourceChanges": [
+        "apps/web/src/components/ResponsiveFilterDrawer.vue"
+      ],
+      "differences": [
+        {
+          "file": "390-probe-success-returned-returned.png",
+          "before": "4afcb319ebb377b8f0057bf1d3f003c195c8d5248ce254ff22298b62dd4be2fc",
+          "after": "01f027edc0b594ed1c11a3595fc43fcb8ab2f546859791b742d0218e033fa425",
+          "dimensions": [
+            390,
+            1000
+          ],
+          "pixels": 2,
+          "delta": 1,
+          "bounds": [
+            373,
+            790,
+            373,
+            791
+          ]
+        },
+        {
+          "file": "390-probe-failure-returned-returned.png",
+          "before": "4afcb319ebb377b8f0057bf1d3f003c195c8d5248ce254ff22298b62dd4be2fc",
+          "after": "01f027edc0b594ed1c11a3595fc43fcb8ab2f546859791b742d0218e033fa425",
+          "dimensions": [
+            390,
+            1000
+          ],
+          "pixels": 2,
+          "delta": 1,
+          "bounds": [
+            373,
+            790,
+            373,
+            791
+          ]
+        }
+      ],
+      "runDiffs": [],
+      "ports": [
+        64812
+      ],
+      "processesClosed": true,
+      "e2eExit": 0
+    }
+  ]
+}

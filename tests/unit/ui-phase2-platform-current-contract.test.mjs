@@ -36,7 +36,7 @@ function rejectsChange(file, mutate, pattern) {
   assert(used, `missing negative read: ${file}`);
 }
 
-test("platform current contract strictly reconciles history and all 36 current sources", () => {
+test("platform current contract strictly reconciles history and all 38 current sources", () => {
   const result = verifyPlatformAccountContract(read);
   assert.deepEqual(
     { ...result, links: undefined },
@@ -44,9 +44,9 @@ test("platform current contract strictly reconciles history and all 36 current s
       pages: 8,
       candidates: 128,
       bindings: 24,
-      sources: 36,
+      sources: 38,
       historicalSources: 32,
-      revisedSources: 5,
+      revisedSources: 7,
       links: undefined,
     },
   );
@@ -60,6 +60,7 @@ for (const name of [
   "ResponsiveDataView",
   "ResponsiveFilterDrawer",
   "PlatformAccountDialogs",
+  "NavigationShell",
 ]) {
   test(`rejects current source drift, including script-only: ${name}`, () => {
     rejectsChange(component(name), (s) => s + "\n<!-- unregistered revision -->\n", /hash drift/);
@@ -71,6 +72,9 @@ for (const file of [
   "apps/web/src/use-user-creation-owner.ts",
   "apps/web/src/components/PlatformAdminComparisonMobile.css",
   "apps/web/src/components/PlatformAdminDirectoryMobile.css",
+  "apps/web/src/use-modal-dialog.ts",
+  "apps/web/src/design/platform-overlay-tokens.css",
+  "apps/web/src/design/platform-admin-mobile-tokens.css",
 ]) {
   test(`rejects producer/dependency drift: ${file}`, () => {
     rejectsChange(file, (s) => s + "\n// unregistered revision\n", /hash drift/);
@@ -157,6 +161,77 @@ test("retains page sections and link gates", () => {
 test("normalizes Windows CRLF without treating it as a new source revision", () => {
   assert.equal(
     verifyPlatformAccountContract((file) => read(file).replaceAll("\n", "\r\n")).sources,
-    36,
+    38,
+  );
+});
+
+test("retains all historical filter identities instead of overwriting the open button", () => {
+  rejectsChange(
+    historical,
+    (s) => replaced(s, "beb5f8d5846aa028.1", "7e0fa28eaeb1cc09.1"),
+    /historical filter candidates: source\/contract drift/,
+  );
+});
+
+test("requires exactly one explicit filter replacement and its original identity", () => {
+  rejectsChange(current, (s) => s.replace(/^\| Q#.*\n/m, ""), /one explicit filter candidate/);
+  rejectsChange(
+    current,
+    (s) => s.replace(/^(\| Q#.*)$/m, "$1\n$1"),
+    /one explicit filter candidate/,
+  );
+  rejectsChange(
+    current,
+    (s) => replaced(s, "Q#beb5f8d5846aa028.1", "Q#483082db5a776bf3.1"),
+    /historical filter open identity/,
+  );
+  rejectsChange(
+    current,
+    (s) => replaced(s, "Q#7e0fa28eaeb1cc09.1", "Q#beb5f8d5846aa028.1"),
+    /must not reuse historical identity/,
+  );
+  rejectsChange(
+    current,
+    (s) => replaced(s, "Q#7e0fa28eaeb1cc09.1", "Q#0000000000000000.1"),
+    /candidates: source\/contract drift/,
+  );
+});
+
+test("rejects missing association and non-association changes to the same trigger", () => {
+  rejectsChange(
+    component("ResponsiveFilterDrawer"),
+    (s) => replaced(s, ':aria-controls="panelId"', ':aria-controls="otherId"'),
+    /filter association binding/,
+  );
+  rejectsChange(
+    component("ResponsiveFilterDrawer"),
+    (s) => replaced(s, '@click="show"', '@click="close"'),
+    /filter open changes beyond association/,
+  );
+});
+
+test("does not supersede the other five filter candidates", () => {
+  rejectsChange(
+    component("ResponsiveFilterDrawer"),
+    (s) => replaced(s, '@submit.capture="close"', '@submit.capture="show"'),
+    /candidates: source\/contract drift/,
+  );
+});
+
+test("requires the imported palette and proves the exact pre-extraction source", () => {
+  rejectsChange(
+    current,
+    (s) => s.replace(/^\| apps\/web\/src\/design\/platform-overlay-tokens.css.*\n/m, ""),
+    /additional source files: source\/contract drift/,
+  );
+  rejectsChange(
+    "apps/web/src/design/platform-overlay-tokens.css",
+    (s) => replaced(s, "#f3f6fb", "#f4f6fb"),
+    /responsive palette delta drift/,
+  );
+  rejectsChange(
+    "apps/web/src/design/platform-overlay-tokens.css",
+    (s) => replaced(s, "--so-workspace-overlay-canvas:", "--so-workspace-overlay-other:"),
+    /missing overlay palette role/,
   );
 });

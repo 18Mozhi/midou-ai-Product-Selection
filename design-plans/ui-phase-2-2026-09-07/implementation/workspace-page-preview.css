@@ -1,0 +1,174 @@
+/* P32 isolated review skin; production organization administration remains unchanged. */
+html body.p32-review {
+  background: #f3f6fb !important;
+}
+.p32-review * {
+  box-sizing: border-box;
+}
+.p32-review :is(button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid #2465d7 !important;
+  outline-offset: 3px;
+}
+.p32-review .role-shell {
+  --so-bg: #f3f6fb;
+  --so-panel: #fff;
+  --so-panel-soft: #edf4ff;
+  --so-text: #182d4a;
+  --so-text-muted: #52647b;
+  --so-border: #dce4ee;
+  --so-primary: #1748a0;
+  background: #f3f6fb !important;
+}
+.p32-review :is(.role-topbar, .role-sidebar, .role-mobile-nav) {
+  background: #fff !important;
+  border-color: #dce4ee !important;
+}
+.p32-review .role-content {
+  max-width: none;
+  padding: 24px clamp(20px, 3vw, 42px) 52px;
+}
+.p32-review :is(.role-page-breadcrumb, .role-page-title, .role-context-rail, .role-context-drawer) {
+  display: none !important;
+}
+.p32-review .org-admin-center {
+  max-width: 1160px;
+  margin: auto;
+  color: #182d4a;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+.p32-review .org-admin-hero {
+  padding: 31px 36px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+}
+.p32-review .org-admin-hero :is(p, h2, span) {
+  color: #fff !important;
+}
+.p32-review .org-admin-hero h2 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+}
+.p32-review .org-admin-center button {
+  min-height: 42px;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+  color: #fff !important;
+  font: inherit;
+  font-weight: 800;
+}
+.p32-review .org-admin-center button.org-admin-secondary,
+.p32-review .org-admin-center .org-admin-secondary {
+  background: #fff !important;
+  color: #1748a0 !important;
+}
+.p32-review .org-admin-metrics,
+.p32-review .org-workspace-metrics {
+  gap: 0 !important;
+  border: 1px solid #dce4ee !important;
+}
+.p32-review .org-admin-metrics article,
+.p32-review .org-workspace-metrics article {
+  border: 0 !important;
+  border-right: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p32-review .org-workspace-metrics article:last-child,
+.p32-review .org-admin-metrics article:last-child {
+  border-right: 0 !important;
+}
+.p32-review :is(.org-admin-metrics b, .org-workspace-metrics b) {
+  color: #1748a0 !important;
+}
+.p32-review .org-workspace-overview {
+  padding: 24px 28px !important;
+  border-left: 5px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+}
+.p32-review :is(.org-admin-card, .org-workspace-create) {
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p32-review .org-workspace-create {
+  border-top: 5px solid #1748a0 !important;
+}
+.p32-review :is(.org-workspace-toolbar, .org-workspace-status-tabs) {
+  padding: 14px !important;
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f7faff !important;
+}
+.p32-review .org-workspace-status-tabs button {
+  background: #fff !important;
+  color: #1748a0 !important;
+}
+.p32-review .org-workspace-status-tabs button[aria-pressed="true"] {
+  background: #edf4ff !important;
+}
+.p32-review :is(.org-workspace-directory, .org-workspace-detail) {
+  border-top: 5px solid #1748a0 !important;
+}
+.p32-review .org-workspace-list button {
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #182d4a !important;
+}
+.p32-review .org-workspace-list button.is-selected {
+  border-left: 5px solid #1748a0 !important;
+  background: #edf4ff !important;
+}
+.p32-review .org-workspace-detail dl > div {
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f7faff !important;
+}
+.p32-review :is(.org-workspace-create, .org-admin-card) :is(input, select, textarea) {
+  min-height: 42px;
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #182d4a !important;
+}
+.p32-review .org-workspace-impact {
+  border-left: 4px solid #1748a0 !important;
+  background: #edf4ff !important;
+}
+@media (max-width: 760px) {
+  .p32-review :is(.role-mobile-nav, .role-sidebar, .role-topbar) {
+    display: none !important;
+  }
+  .p32-review .role-shell {
+    display: block;
+    padding-top: 0;
+  }
+  .p32-review .role-content {
+    padding: 0 0 24px;
+  }
+  .p32-review .org-admin-hero {
+    padding: 25px 19px !important;
+  }
+  .p32-review :is(.org-admin-metrics, .org-workspace-metrics) {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .p32-review .org-workspace-metrics article:nth-child(2n) {
+    border-right: 0 !important;
+  }
+  .p32-review .org-workspace-browser {
+    grid-template-columns: 1fr !important;
+  }
+  .p32-review :is(.org-admin-card, .org-workspace-create, .org-workspace-overview) {
+    padding: 18px !important;
+  }
+  .p32-review :is(.org-workspace-toolbar, .org-workspace-create-grid) {
+    grid-template-columns: 1fr !important;
+  }
+}

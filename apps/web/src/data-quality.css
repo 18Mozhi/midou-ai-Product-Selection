@@ -22,7 +22,7 @@
 .quality-rail p {
   margin: 0 0 7px;
   color: var(--so-primary);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.13em;
   text-transform: uppercase;
@@ -115,7 +115,7 @@
 
 .quality-rail li span {
   color: color-mix(in srgb, var(--so-on-primary) 60%, transparent);
-  font-size: 11px;
+  font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -159,7 +159,7 @@
   display: block;
   overflow-wrap: anywhere;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .quality-metrics strong {
@@ -353,7 +353,7 @@
   border-block: 1px solid var(--so-border-strong);
   background: var(--so-panel-soft);
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   text-align: left;
 }
@@ -390,7 +390,7 @@
   border: 1px solid var(--so-border);
   border-radius: 5px;
   background: var(--so-panel-soft);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .quality-card td b[data-severity="critical"],
@@ -438,7 +438,7 @@
 
 .quality-batch-toolbar span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .quality-batch-toolbar .wide {
@@ -628,7 +628,7 @@
   display: block;
   max-width: 620px;
   overflow-wrap: anywhere;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .quality-modal > header > button {
@@ -704,7 +704,7 @@
 .quality-technical dt,
 .quality-resolution-context span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .quality-lineage-section dd,
@@ -865,7 +865,7 @@
     padding: 6px;
     border: 0;
     border-left: 1px solid color-mix(in srgb, var(--so-on-primary) 28%, transparent);
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .quality-rail > p:last-child {
@@ -1006,8 +1006,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .quality-center *,
-  .quality-modal * {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
+  .quality-modal *,
+  html #app :is(.quality-center, .quality-modal) * {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
   }
 }

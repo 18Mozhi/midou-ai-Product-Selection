@@ -1,6 +1,6 @@
 # P57 通知管理 · PLATFORM-NOTIFICATIONS-C-r1
 
-状态：C 方向首轮具体稿，待用户审核。全站Vue实施、真实发布与部署签收未完成。
+状态：C 方向静态提案保留；P57 当前 Vue 专用工作台已实现并生成双端证据，待用户审核。真实发布、生产部署与全站签收未完成。
 
 [打开交互图稿](index.html)
 
@@ -14,13 +14,40 @@
 
 原 UI2-PN57 三状态全文响应和旧投递夹具分别展示，绝不拼成同一实测快照。旧投递夹具缺双分页、模板active与当前system_fixed、偏好字段差异明确保留。默认完整快照与边界分页是通过实际仓储无网络适配器生成的合成数据，不执行SQL；原始与合成行均无客户信息。
 
-源函数验证复现单飞丢第二请求/URL归属漂移、stop晚响应、首错声称保留、重复保存、旧保存关闭新窗、原因等待期间版本漂移及写成功掩盖刷新失败。图稿独立草稿/快照、实例归属、单飞、表单冻结、窗内错误、未知不重试、双结果与空时配置可读均是待审提案，未改生产。发布受众按活动用户/成员/组织/默认工作区与最早有效成员去重，人工发布不读订阅，不通过Worker；惰性SQL谓词检查不能证明真实收件人去重。
+历史源函数验证复现过单飞丢第二请求/URL归属漂移、stop晚响应、首错声称保留、重复保存、旧保存关闭新窗、原因等待期间版本漂移及写成功掩盖刷新失败。当前 Vue 已把投递筛选的草稿/应用/成功快照、读取世代、KeepAlive 停止、编辑与动作单飞、窗口实例归属、表单冻结、窗内错误、写成功后读取失败双反馈及空时配置可读落到 P57 专用组件。发布受众按活动用户/成员/组织/默认工作区与最早有效成员去重，人工发布不读订阅，不通过Worker；本次未改后端，惰性SQL谓词检查仍不能证明真实收件人去重。
 
 ## 验证与使用
 
-生成：`node scripts/verify-ui-phase2-platform-notifications-c.mjs --capture`；复验：`node scripts/verify-ui-phase2-platform-notifications-c.mjs`。页面底部场景选择及模拟响应按钮仅供审核。所有配置只在内存，关闭页面即清除，不需要重启或部署。
+静态提案生成：`node scripts/verify-ui-phase2-platform-notifications-c.mjs --capture`；复验：`node scripts/verify-ui-phase2-platform-notifications-c.mjs`。当前 Vue 证据由 `SCOUTOPS_UI_PHASE2_CAPTURE=1` 下的 `tests/e2e/platform-message-management.spec.ts` 生成。所有响应均为 E2E 夹具，不需要后端重启，也不代表已部署。
 
-后续须审核具体图并实施Vue，再验证会话/同源/权限/幂等、真实MySQL5.7/成员去重/审计、KeepAlive/返回、软键盘、六角色与全部主题密度生命周期。历史合同指纹保留，相关源码单独绑定，两份既有E2E焦点修改精确追溯，不宣称33项联合合同全部未变。
+后续须审核当前 Vue 图，再验证会话/同源/权限/幂等、真实MySQL5.7/成员去重/审计、软键盘、六角色与全部主题密度生命周期。历史合同指纹保留，相关源码单独绑定，不宣称33项联合合同全部未变。
+
+## 当前 Vue 实现证据（P57-C-vue-r1）
+
+共 20 个状态、桌面 1440 与手机 390 各一张，合计 40 PNG；每张均有同名 JSON，记录测试状态、源文件指纹、控件清单和横向溢出结果。它们是当前 Vue 的夹具基线，`userReview` 仍为 `pending`，不是生产截图。
+
+| 状态 | 桌面1440 | 手机390 |
+| --- | --- | --- |
+| 人工消息默认页 | [查看](vue-implementation/P57-1440-notifications-default.png) | [查看](vue-implementation/P57-390-notifications-default.png) |
+| 投递观测 | [查看](vue-implementation/P57-1440-deliveries.png) | [查看](vue-implementation/P57-390-deliveries.png) |
+| 系统事实 | [查看](vue-implementation/P57-1440-configuration.png) | [查看](vue-implementation/P57-390-configuration.png) |
+| 草稿正文 | [查看](vue-implementation/P57-1440-message-draft.png) | [查看](vue-implementation/P57-390-message-draft.png) |
+| 已发布正文 | [查看](vue-implementation/P57-1440-message-published.png) | [查看](vue-implementation/P57-390-message-published.png) |
+| 已取消正文 | [查看](vue-implementation/P57-1440-message-cancelled.png) | [查看](vue-implementation/P57-390-message-cancelled.png) |
+| 新建草稿·全部用户 | [查看](vue-implementation/P57-1440-editor-new-all.png) | [查看](vue-implementation/P57-390-editor-new-all.png) |
+| 新建草稿·组织 | [查看](vue-implementation/P57-1440-editor-new-organization.png) | [查看](vue-implementation/P57-390-editor-new-organization.png) |
+| 新建草稿·用户 | [查看](vue-implementation/P57-1440-editor-new-user.png) | [查看](vue-implementation/P57-390-editor-new-user.png) |
+| 编辑草稿·全部用户 | [查看](vue-implementation/P57-1440-editor-edit-all.png) | [查看](vue-implementation/P57-390-editor-edit-all.png) |
+| 编辑草稿·组织 | [查看](vue-implementation/P57-1440-editor-edit-organization.png) | [查看](vue-implementation/P57-390-editor-edit-organization.png) |
+| 编辑草稿·用户 | [查看](vue-implementation/P57-1440-editor-edit-user.png) | [查看](vue-implementation/P57-390-editor-edit-user.png) |
+| 发布确认 | [查看](vue-implementation/P57-1440-publish-confirm.png) | [查看](vue-implementation/P57-390-publish-confirm.png) |
+| 发布成功 | [查看](vue-implementation/P57-1440-publish-success.png) | [查看](vue-implementation/P57-390-publish-success.png) |
+| 取消确认 | [查看](vue-implementation/P57-1440-cancel-confirm.png) | [查看](vue-implementation/P57-390-cancel-confirm.png) |
+| 取消版本冲突 | [查看](vue-implementation/P57-1440-cancel-conflict.png) | [查看](vue-implementation/P57-390-cancel-conflict.png) |
+| 双分页独立 | [查看](vue-implementation/P57-1440-independent-pagination.png) | [查看](vue-implementation/P57-390-independent-pagination.png) |
+| 消息与投递均空但配置可读 | [查看](vue-implementation/P57-1440-all-empty.png) | [查看](vue-implementation/P57-390-all-empty.png) |
+| 温和权限拒绝 | [查看](vue-implementation/P57-1440-forbidden.png) | [查看](vue-implementation/P57-390-forbidden.png) |
+| 保留成功快照后的读取失败 | [查看](vue-implementation/P57-1440-retained-error.png) | [查看](vue-implementation/P57-390-retained-error.png) |
 
 ## 正式图册
 

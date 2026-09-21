@@ -14,8 +14,15 @@ export const retryWrapper = `function retryRefresh(event: MouseEvent) {
 `;
 
 export function previewAdapterRefreshFailure(source) {
+  const oldHeading = '<header class="adapter-heading">';
+  const focusHeading = '<header class="adapter-heading" tabindex="-1">';
+  assert.equal(
+    source.split(oldHeading).length + source.split(focusHeading).length - 2,
+    1,
+    "Exactly one known persistent heading is required",
+  );
   const changes = [
-    ['<header class="adapter-heading">', '<header class="adapter-heading" tabindex="-1">'],
+    [source.includes(oldHeading) ? oldHeading : focusHeading, focusHeading],
     [
       '  message = ref(""),\n  probeFeedback = ref<{ providerId: string; message: string; requestId: string } | null>(null);',
       '  message = ref(""),\n  refreshNotice = ref<"none" | "success" | "failure">("none"),\n  probeFeedback = ref<{ providerId: string; message: string; requestId: string } | null>(null);',

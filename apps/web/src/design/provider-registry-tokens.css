@@ -1,0 +1,23 @@
+/* Existing local C palette; no global theme aliases or layout declarations. */
+html:has(#app .provider-registry) {
+  --p46-ink: #142a46;
+  --p46-canvas: #eef2f7;
+  --p46-panel: #fff;
+  --p46-accent: #294caf;
+  --p46-muted: #536b86;
+  --p46-border-strong: #9db1cc;
+  --p46-border: #d8e1ed;
+  --p46-divider: #c9d6e8;
+  --p46-on-accent-muted: #edf3ff;
+  --p46-on-accent-border: #97ade1;
+  --p46-error: #a33332;
+  --p46-disabled-ink: #66748a;
+  --p46-disabled-panel: #e8edf4;
+  --p46-focus: #4276df;
+  --p46-secondary-ink: #294466;
+  --p46-accent-soft: #e5edf9;
+  --p46-scrim: rgba(15, 31, 53, 0.55);
+  --p46-saved-warning-ink: #75461f;
+  --p46-saved-warning-panel: #fff8ef;
+  --p46-saved-warning-border: #e5bca4;
+}

@@ -1,0 +1,236 @@
+/* P29 isolated review skin; production organization administration remains unchanged. */
+html body.p29-review {
+  background: #f3f6fb !important;
+}
+.p29-review * {
+  box-sizing: border-box;
+}
+.p29-review :is(button, input, select, textarea):focus-visible {
+  outline: 3px solid #2465d7 !important;
+  outline-offset: 3px;
+}
+.p29-review .role-shell {
+  --so-bg: #f3f6fb;
+  --so-panel: #fff;
+  --so-panel-soft: #edf4ff;
+  --so-text: #182d4a;
+  --so-text-muted: #52647b;
+  --so-border: #dce4ee;
+  --so-primary: #1748a0;
+  background: #f3f6fb !important;
+}
+.p29-review .role-topbar,
+.p29-review .role-sidebar,
+.p29-review .role-mobile-nav {
+  background: #fff !important;
+  border-color: #dce4ee !important;
+}
+.p29-review .role-content {
+  max-width: none;
+  padding: 24px clamp(20px, 3vw, 42px) 52px;
+}
+.p29-review .role-page-breadcrumb,
+.p29-review .role-page-title,
+.p29-review .role-context-rail,
+.p29-review .role-context-drawer {
+  display: none !important;
+}
+.p29-review .org-admin {
+  max-width: 1160px;
+  margin: auto;
+  color: #182d4a;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+.p29-review .org-admin > header {
+  padding: 31px 36px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+}
+.p29-review .org-admin > header :is(p, h2, span) {
+  color: #fff !important;
+}
+.p29-review .org-admin button {
+  min-height: 44px;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+  color: #fff !important;
+  font: inherit;
+  font-weight: 800;
+}
+.p29-review .org-admin button.secondary {
+  background: #fff !important;
+  color: #1748a0 !important;
+}
+.p29-review .org-admin-metrics {
+  grid-template-columns: repeat(6, 1fr) !important;
+  gap: 0 !important;
+  border: 1px solid #dce4ee !important;
+}
+.p29-review .org-admin-metrics article {
+  border: 0 !important;
+  border-right: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p29-review .org-admin-metrics article:last-child {
+  border-right: 0 !important;
+}
+.p29-review .org-admin-metrics b {
+  color: #1748a0 !important;
+}
+.p29-review .org-admin-grid {
+  grid-template-columns: minmax(300px, 0.8fr) minmax(520px, 1.5fr) !important;
+  gap: 16px !important;
+}
+.p29-review .org-admin-card {
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p29-review .org-admin-profile {
+  border-top: 5px solid #1748a0 !important;
+}
+.p29-review .org-admin-profile i {
+  border-radius: 99px !important;
+  background: #edf4ff !important;
+  color: #1748a0 !important;
+}
+.p29-review .org-admin-card form,
+.p29-review form.org-admin-card {
+  gap: 15px !important;
+}
+.p29-review .org-admin-card input,
+.p29-review .org-admin-card select,
+.p29-review .org-admin-card textarea {
+  min-height: 44px;
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #182d4a !important;
+}
+.p29-review .org-admin-profile dl > div {
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f7faff !important;
+}
+.p29-review .org-admin-notice,
+.p29-review .org-admin-state {
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+}
+.p29-review .org-admin-notice {
+  border-left: 4px solid #1748a0 !important;
+}
+@media (max-width: 760px) {
+  .p29-review .role-shell {
+    display: block;
+    padding-top: 58px;
+  }
+  .p29-review .role-topbar {
+    position: fixed;
+    inset: 0 0 auto;
+    height: 58px;
+    z-index: 30;
+  }
+  .p29-review .role-content {
+    padding: 0 0 78px;
+  }
+  .p29-review .role-sidebar {
+    top: 58px;
+  }
+  .p29-review .org-admin > header {
+    padding: 25px 19px !important;
+  }
+  .p29-review .org-admin-metrics {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .p29-review .org-admin-metrics article:nth-child(2n) {
+    border-right: 0 !important;
+  }
+  .p29-review .org-admin-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .p29-review .org-admin-card {
+    padding: 18px !important;
+  }
+}
+/* Actual component root uses org-admin-center; keep this refinement above legacy review aliases. */
+.p29-review .org-admin-center {
+  max-width: 1160px;
+  margin: auto;
+  color: #182d4a;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+.p29-review .org-admin-hero {
+  padding: 31px 36px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+}
+.p29-review .org-admin-hero :is(p, h2, span) {
+  color: #fff !important;
+}
+.p29-review .org-admin-hero h2 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+}
+.p29-review .org-admin-center button {
+  min-height: 44px;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #1748a0 !important;
+  color: #fff !important;
+  font: inherit;
+  font-weight: 800;
+}
+.p29-review .org-admin-metrics {
+  grid-template-columns: repeat(6, 1fr) !important;
+  gap: 0 !important;
+  border: 1px solid #dce4ee !important;
+}
+.p29-review .org-admin-metrics article {
+  border: 0 !important;
+  border-right: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p29-review .org-admin-grid {
+  grid-template-columns: minmax(300px, 0.8fr) minmax(520px, 1.5fr) !important;
+  gap: 16px !important;
+}
+.p29-review .org-admin-card {
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.p29-review .org-admin-card input,
+.p29-review .org-admin-card select,
+.p29-review .org-admin-card textarea {
+  min-height: 44px;
+  border-color: #dce4ee !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #182d4a !important;
+}
+@media (max-width: 760px) {
+  .p29-review .org-admin-hero {
+    padding: 25px 19px !important;
+  }
+  .p29-review .org-admin-metrics {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .p29-review .org-admin-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

@@ -1,0 +1,51 @@
+/* Review host only; supplement organization r2 without changing its immutable packet. */
+html
+  body.org-refresh-c:has(#app)
+  #app
+  .role-shell.role-shell--review
+  .org-admin-center:has(> .org-admin-metrics) {
+  .org-admin-notice {
+    margin: 16px 0 0;
+    padding: 20px;
+    border: 1px solid #d8e2ef;
+    border-left: 4px solid #244bb0;
+    border-radius: 0;
+    background: #edf3ff;
+    color: #172d4c;
+    font-size: 16px;
+  }
+  .org-admin-notice p {
+    margin: 0;
+    line-height: 1.8;
+  }
+  .org-admin-notice details {
+    margin-top: 12px;
+    border-top: 1px solid #c5d5ed;
+  }
+  .org-admin-notice summary {
+    display: list-item;
+    min-height: 44px;
+    box-sizing: border-box;
+    padding: 12px 0 8px;
+    color: #244bb0;
+    cursor: pointer;
+  }
+  .org-admin-notice code {
+    display: block;
+    float: none;
+    padding: 12px;
+    margin: 8px 0 0;
+    background: white;
+    color: #536985;
+    overflow-wrap: anywhere;
+    font: 13px/1.8 monospace;
+  }
+  .org-admin-hero h2:focus-visible {
+    outline: 3px solid white;
+    outline-offset: 5px;
+  }
+  .org-admin-notice summary:focus-visible {
+    outline: 3px solid #244bb0;
+    outline-offset: 3px;
+  }
+}

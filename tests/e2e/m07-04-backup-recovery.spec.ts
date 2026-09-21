@@ -159,7 +159,15 @@ test("backup refresh is single-flight and preserves the last verified snapshot o
   await expect(page.getByText("同机恢复链路已验证")).toBeVisible();
   const refresh = page.getByRole("button", { name: "刷新事实" });
   await refresh.click();
-  await expect(page.getByRole("button", { name: "正在刷新…" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "正在刷新…" })).toHaveAttribute(
+    "aria-disabled",
+    "true",
+  );
+  expect(
+    await page
+      .getByRole("button", { name: "正在刷新…" })
+      .evaluate((button: HTMLButtonElement) => button.disabled),
+  ).toBe(false);
   await page.getByRole("button", { name: "正在刷新…" }).evaluate((button: HTMLButtonElement) => {
     button.click();
     button.click();

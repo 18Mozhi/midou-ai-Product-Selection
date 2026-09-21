@@ -1,4 +1,6 @@
 import test from "node:test";
+import { beforeP34OwnerPath } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
+import { assertP34LegacySourceHash } from "../../scripts/lib/ui-phase2-org-approvals-shared-history.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -17,13 +19,15 @@ const before = Object.fromEntries([rateLimitParent, rateLimitCard].map((f) => [f
 const after = Object.fromEntries(
   [rateLimitParent, rateLimitCard].map((f) => [
     f,
-    f === rateLimitParent ? undoAuditPageDelta(readFileSync(f, "utf8")) : readFileSync(f, "utf8"),
+    f === rateLimitParent
+      ? undoAuditPageDelta(beforeP34OwnerPath(f, readFileSync(f, "utf8")))
+      : readFileSync(f, "utf8"),
   ]),
 );
 const output = "output/playwright/p34-rate-limit-vue";
 const e = JSON.parse(readFileSync(`${output}/evidence.json`, "utf8"));
 const hash = (data) => createHash("sha256").update(data).digest("hex");
-test("P34 rate-limit only adds one scoped presentation branch and optional heading", () => {
+test("P34 historical rate-limit delta excludes subsequent audit and owner-path fixes", () => {
   assert.doesNotThrow(() => assertRateLimitPresentationDelta(before, after));
   for (const mutation of [
     (s) => s.replaceAll("lastReadFailureStatus === 429", "lastReadFailureStatus === 403"),
@@ -61,7 +65,7 @@ test("P34 live429 proof binds176 checks,52 unchanged images and8 new screenshots
   assert.equal(e.screenshots.length, 8);
   assert.deepEqual([...new Set(e.checks.map((c) => c.width))], [390, 760, 761, 1440]);
   for (const [f, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(readFileSync(f, "utf8").replaceAll("\r\n", "\n")), sha, f);
+    assertP34LegacySourceHash(f, readFileSync(f, "utf8"), sha);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   for (const width of [390, 760, 761, 1440]) {

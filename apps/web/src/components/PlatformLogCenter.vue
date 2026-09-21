@@ -45,7 +45,10 @@ const state = ref<State>("loading"),
   items = ref<OperationalLog[]>([]),
   summary = ref<Record<string, number>>({}),
   message = ref(""),
+  exportMessage = ref(""),
   requestId = ref(""),
+  readFailureId = ref(""),
+  exportRequestId = ref(""),
   observedAt = ref(""),
   refreshing = ref(false),
   exporting = ref(false);
@@ -61,6 +64,14 @@ let controller: AbortController | null = null,
   lastReadKey: string | null = null,
   readTimeout: number | undefined;
 const readKey = () => JSON.stringify([routeText("query", 120), routeSource()]);
+const displayedScope = ref<{ query: string; source: string } | null>(null),
+  appliedScope = computed(() => ({ query: routeText("query", 120), source: routeSource() })),
+  scopeMismatch = computed(
+    () =>
+      displayedScope.value !== null &&
+      (displayedScope.value.query !== appliedScope.value.query ||
+        displayedScope.value.source !== appliedScope.value.source),
+  );
 const ownsRead = (currentSequence: number, key: string) =>
   currentSequence === sequence &&
   !disposed &&
@@ -214,6 +225,7 @@ async function load() {
   if (!hasSnapshot) state.value = "loading";
   refreshing.value = true;
   message.value = "";
+  readFailureId.value = "";
   const params = new URLSearchParams({ domain: "logs" });
   const appliedQuery = routeText("query", 120),
     appliedSource = routeSource();
@@ -228,6 +240,7 @@ async function load() {
     items.value = response.data.items ?? [];
     summary.value = response.data.summary ?? {};
     observedAt.value = response.data.observed_at ?? "";
+    displayedScope.value = { query: appliedQuery, source: appliedSource };
     if (items.value.length) handoffRetryFocus();
     state.value = items.value.length ? "ready" : "empty";
   } catch (error) {
@@ -237,7 +250,7 @@ async function load() {
     )
       return;
     const failure = error instanceof ApiClientError ? error : null;
-    requestId.value = failure?.requestId ?? requestId.value;
+    readFailureId.value = failure?.requestId ?? "";
     message.value = timedOut
       ? `读取超过 15 秒，已停止本次等待。${hasSnapshot ? " 已保留上次成功日志。" : " 尚未取得链路日志。"}`
       : `${failure?.actionHint ?? "链路日志暂不可用。"}${hasSnapshot ? " 已保留上次成功日志。" : ""}`;
@@ -272,14 +285,16 @@ async function resetFilters() {
 }
 
 async function exportCsv() {
+  if (exporting.value || refreshing.value) return;
   const reason = await askExportReason({
     title: "填写日志导出原因",
     description: "当前检索条件、运行面、记录数和导出原因会写入平台审计。",
     initialValue: "导出当前链路日志用于故障排查",
   });
-  if (reason === null) return;
+  if (reason === null || exporting.value) return;
   exporting.value = true;
-  message.value = "";
+  exportMessage.value = "";
+  exportRequestId.value = "";
   try {
     const response = await requestResponse("/platform/management/logs/exports", {
       method: "POST",
@@ -290,7 +305,7 @@ async function exportCsv() {
         reason,
       },
     });
-    requestId.value = response.headers.get("x-request-id") ?? requestId.value;
+    exportRequestId.value = response.headers.get("x-request-id") ?? "";
     const blob = await response.blob(),
       url = URL.createObjectURL(blob),
       link = document.createElement("a");
@@ -298,11 +313,11 @@ async function exportCsv() {
     link.download = `platform-logs-${new Date().toISOString().slice(0, 10)}.csv`;
     link.click();
     URL.revokeObjectURL(url);
-    message.value = "当前筛选日志已导出，检索范围、原因和记录数已写入平台审计。";
+    exportMessage.value = "当前筛选日志已导出，检索范围、原因和记录数已写入平台审计。";
   } catch (error) {
     const failure = error instanceof ApiClientError ? error : null;
-    requestId.value = failure?.requestId ?? requestId.value;
-    message.value = failure?.actionHint ?? "链路日志导出未完成";
+    exportRequestId.value = failure?.requestId ?? exportRequestId.value;
+    exportMessage.value = failure?.actionHint ?? "链路日志导出未完成";
   } finally {
     exporting.value = false;
   }
@@ -348,7 +363,14 @@ onBeforeUnmount(() => {
         <span>按请求编号、链路编号、任务、事件或错误码检索 API、Worker 与爬虫事件。</span>
       </div>
       <div class="platform-log-header-actions">
-        <button type="button" :disabled="exporting || refreshing" @click="exportCsv">
+        <button
+          class="platform-log-export"
+          type="button"
+          :disabled="refreshing && !exporting"
+          :aria-disabled="exporting || refreshing"
+          :aria-busy="exporting"
+          @click="exportCsv"
+        >
           {{ exporting ? "正在导出…" : "导出当前筛选" }}
         </button>
         <button
@@ -392,9 +414,63 @@ onBeforeUnmount(() => {
       </form>
     </ResponsiveFilterDrawer>
 
-    <p v-if="message && state === 'ready'" class="platform-log-message" role="status">
-      {{ message }}
-    </p>
+    <section class="platform-log-scope" aria-label="查询与日志范围">
+      <dl>
+        <div class="platform-log-scope__applied" data-log-scope="applied">
+          <dt>已应用条件</dt>
+          <dd>
+            <span
+              >运行面：{{
+                appliedScope.source ? sourceName(appliedScope.source) : "全部运行面"
+              }}</span
+            >
+            <span>检索条件：{{ appliedScope.query || "未设置" }}</span>
+          </dd>
+        </div>
+        <div data-log-scope="displayed">
+          <dt>已显示日志对应条件</dt>
+          <dd v-if="displayedScope">
+            <span
+              >运行面：{{
+                displayedScope.source ? sourceName(displayedScope.source) : "全部运行面"
+              }}</span
+            >
+            <span>检索条件：{{ displayedScope.query || "未设置" }}</span>
+          </dd>
+          <dd v-else>尚未取得日志。</dd>
+        </div>
+      </dl>
+      <p
+        v-if="scopeMismatch"
+        class="platform-log-scope__mismatch"
+        role="status"
+        aria-label="条件变化提示"
+      >
+        当前条件与上次成功读取的条件不同，下方仍保留上次读取结果。
+      </p>
+      <p>导出会按提交时已应用的条件重新查询，最多 200 条，不等同于屏幕上的固定快照。</p>
+    </section>
+
+    <div v-if="exportMessage || (message && state === 'ready')" class="platform-log-feedbacks">
+      <p
+        v-if="message && state === 'ready'"
+        class="platform-log-message"
+        role="status"
+        aria-label="日志读取反馈"
+      >
+        <strong>日志读取反馈</strong>
+        <span>{{ message }}</span>
+      </p>
+      <p
+        v-if="exportMessage"
+        class="platform-log-message platform-log-export-message"
+        role="status"
+        aria-label="最近导出反馈"
+      >
+        <strong>最近导出反馈</strong>
+        <span>{{ exportMessage }}</span>
+      </p>
+    </div>
 
     <section
       v-if="state !== 'ready'"
@@ -578,19 +654,28 @@ onBeforeUnmount(() => {
           </template>
         </ResponsiveDataView>
       </section>
-      <footer>
-        <span>数据更新时间 {{ observedAt ? when(observedAt) : "—" }}</span>
-        <details v-if="requestId">
-          <summary>本次查询</summary>
-          <code>{{ requestId }}</code>
-        </details>
-      </footer>
     </template>
+    <footer v-if="requestId || readFailureId || exportRequestId" class="platform-log-traces">
+      <span v-if="requestId">数据更新时间 {{ observedAt ? when(observedAt) : "—" }}</span>
+      <details v-if="requestId" data-log-trace="snapshot">
+        <summary>快照读取追踪</summary>
+        <code>{{ requestId }}</code>
+      </details>
+      <details v-if="readFailureId" data-log-trace="read-failure">
+        <summary>最近失败读取追踪</summary>
+        <code>{{ readFailureId }}</code>
+      </details>
+      <details v-if="exportRequestId" data-log-trace="export">
+        <summary>最近导出追踪</summary>
+        <code>{{ exportRequestId }}</code>
+      </details>
+    </footer>
     <AuditedReasonDialog
       :open="exportReasonOpen"
       :title="exportReasonRequest?.title || '填写日志导出原因'"
       :description="exportReasonRequest?.description || ''"
       :initial-value="exportReasonRequest?.initialValue"
+      :maximum-length="300"
       @submit="submitExportReason"
       @cancel="cancelExportReason"
     />
@@ -605,6 +690,68 @@ onBeforeUnmount(() => {
 .platform-log-message {
   margin: 0;
   color: var(--so-success);
+}
+.platform-log-feedbacks {
+  display: grid;
+  gap: 12px;
+}
+.platform-log-scope {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  min-width: 0;
+}
+.platform-log-scope dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+}
+.platform-log-scope dl > div {
+  min-width: 0;
+  padding: 16px 20px;
+  overflow-wrap: anywhere;
+}
+.platform-log-scope dt {
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: inherit;
+}
+.platform-log-scope dd {
+  margin: 0;
+  color: inherit;
+}
+.platform-log-scope dd span {
+  display: block;
+}
+.platform-log-scope .platform-log-scope__applied {
+  background: var(--so-primary);
+  color: var(--so-on-primary);
+}
+.platform-log-scope > p {
+  margin: 0;
+  padding: 12px 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.platform-log-scope > .platform-log-scope__mismatch {
+  border-top: 1px solid var(--line);
+  background: var(--surface-soft);
+  color: var(--text);
+}
+@media (max-width: 760px) {
+  .platform-log-scope dl {
+    grid-template-columns: 1fr;
+  }
+}
+.platform-log-message > strong {
+  display: block;
+  margin-bottom: 4px;
+}
+.platform-log-center :deep(.audited-reason-dialog label) {
+  display: block;
+}
+.platform-log-center :deep(.audited-reason-dialog textarea) {
+  display: block;
+  margin-top: 8px;
 }
 .platform-log-center > header {
   display: flex;
@@ -623,7 +770,8 @@ onBeforeUnmount(() => {
 .platform-log-center button {
   min-height: 40px;
 }
-.platform-log-center .platform-log-reload[aria-disabled="true"] {
+.platform-log-center .platform-log-reload[aria-disabled="true"],
+.platform-log-center .platform-log-export[aria-disabled="true"] {
   background: var(--surface-soft);
   color: var(--muted);
   border-color: var(--line);
@@ -752,9 +900,19 @@ onBeforeUnmount(() => {
 }
 .platform-log-center > footer {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 16px;
   color: var(--muted);
+}
+.platform-log-traces details {
+  min-width: 0;
+  max-width: 100%;
+}
+.platform-log-traces code {
+  display: block;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 @media (max-width: 768px) {
   .platform-log-center > header {

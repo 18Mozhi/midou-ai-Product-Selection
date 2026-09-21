@@ -1,21 +1,23 @@
+@import "./design/governance-tokens.css";
+
 .platform-governance {
-  --so-bg: #f3f6fb;
-  --so-bg-elevated: #ffffff;
-  --so-panel: #ffffff;
-  --so-panel-soft: #edf2f9;
-  --so-text: #17243d;
-  --so-text-muted: #627089;
-  --so-border: #cfd9e8;
-  --so-border-strong: #a8b7cd;
-  --so-primary: #2d63cd;
-  --so-primary-strong: #214da8;
-  --so-on-primary: #ffffff;
-  --so-focus: #2d63cd;
-  --so-success: #147a55;
-  --so-warning: #996000;
-  --so-danger: #b53229;
-  --so-shadow: 0 16px 40px color-mix(in srgb, #17243d 16%, transparent);
-  --governance-rail: #15346d;
+  --so-bg: var(--so-governance-canvas);
+  --so-bg-elevated: var(--so-governance-surface);
+  --so-panel: var(--so-governance-surface);
+  --so-panel-soft: var(--so-governance-surface-soft);
+  --so-text: var(--so-governance-text);
+  --so-text-muted: var(--so-governance-text-muted);
+  --so-border: var(--so-governance-border);
+  --so-border-strong: var(--so-governance-field-border);
+  --so-primary: var(--so-governance-primary);
+  --so-primary-strong: var(--so-governance-primary-strong);
+  --so-on-primary: var(--so-governance-surface);
+  --so-focus: var(--so-governance-primary);
+  --so-success: var(--so-governance-success);
+  --so-warning: var(--so-governance-warning);
+  --so-danger: var(--so-governance-danger);
+  --so-shadow: 0 16px 40px color-mix(in srgb, var(--so-governance-text) 16%, transparent);
+  --governance-rail: var(--so-governance-rail);
   --governance-rail-line: color-mix(in srgb, var(--so-on-primary) 25%, transparent);
   --governance-rail-muted: color-mix(in srgb, var(--so-on-primary) 76%, transparent);
   --governance-blue-soft: color-mix(in srgb, var(--so-primary) 9%, var(--so-panel));
@@ -38,8 +40,9 @@
   font: inherit;
 }
 
-.platform-governance :is(h2, h3) {
-  font-family: var(--so-font-ui) !important;
+.platform-governance :is(h2, h3),
+html[data-design="signal-ledger"] body .platform-governance :is(h2, h3) {
+  font-family: var(--so-font-ui);
 }
 
 .platform-governance :is(button, a) {
@@ -84,7 +87,7 @@
 
 .governance-directory__intro p {
   color: var(--governance-rail-muted);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 750;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -103,7 +106,7 @@
   display: block;
   margin-top: 9px;
   color: var(--governance-rail-muted);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.55;
 }
 
@@ -155,7 +158,7 @@
 .governance-directory__note {
   margin-top: 16px;
   color: var(--governance-rail-muted);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.6;
   text-wrap: pretty;
 }
@@ -195,7 +198,7 @@
   display: block;
   margin-top: 4px;
   overflow-wrap: anywhere;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.5;
 }
 
@@ -239,7 +242,7 @@
 
 .governance-hero p {
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.14em;
 }
@@ -308,12 +311,15 @@
   background: var(--governance-blue-soft);
 }
 
-.governance-primary-action,
+.governance-header-actions a.governance-primary-action,
 .governance-filter-actions button[type="submit"],
-.governance-detail-action {
-  border-color: var(--so-primary-strong) !important;
-  color: var(--so-on-primary) !important;
-  background: var(--so-primary-strong) !important;
+.governance-filter-actions button[type="submit"]:hover:not(:disabled),
+.governance-detail-action,
+.governance-row-actions a.governance-detail-action,
+.governance-detail a.governance-detail-action {
+  border-color: var(--so-primary-strong);
+  color: var(--so-on-primary);
+  background: var(--so-primary-strong);
 }
 
 .governance-filter {
@@ -402,7 +408,7 @@
 .governance-detail header small,
 .governance-detail-lead > small {
   color: var(--so-primary);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 750;
   letter-spacing: 0.1em;
 }
@@ -460,7 +466,7 @@
 
 .governance-context dt {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .governance-context dd {
@@ -468,7 +474,7 @@
   margin: 0;
   overflow: hidden;
   color: var(--so-text);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 650;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -501,7 +507,7 @@
 
 .governance-table__heading span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .governance-table table {
@@ -522,7 +528,7 @@
 .governance-table th {
   color: var(--so-text-muted);
   background: color-mix(in srgb, var(--so-bg) 72%, var(--so-panel));
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 650;
   letter-spacing: 0.04em;
 }
@@ -568,7 +574,7 @@
   border-left: 3px solid var(--so-primary);
   color: var(--so-primary);
   background: var(--governance-blue-soft);
-  font-size: 12px;
+  font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -579,7 +585,7 @@
   border-radius: 999px;
   color: var(--so-text-muted);
   background: color-mix(in srgb, var(--so-text-muted) 10%, transparent);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -638,7 +644,7 @@
   justify-content: space-between;
   gap: 12px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .governance-pagination nav {
@@ -657,7 +663,7 @@
   padding-top: 14px;
   border-top: 1px solid var(--so-border);
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.6;
 }
 

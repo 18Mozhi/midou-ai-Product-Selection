@@ -1,0 +1,67 @@
+/* P16 actual-App composition proposal; no production import. Mirrors the earlier horizontal-stage concept. */
+html body.shell-journey-vue-c:has(#app) #app .role-shell.role-shell--review {
+  .selection-journey {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .selection-stage-rail {
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: 0 24px;
+    align-items: center;
+  }
+  .selection-stage-rail > p {
+    margin: 0;
+  }
+  .selection-stage-rail h2 {
+    margin: 0;
+    grid-column: 1;
+  }
+  .selection-stage-rail ol {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .selection-stage-rail li {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+  .selection-stage-rail li > span {
+    width: 34px;
+    min-width: 34px;
+  }
+  .selection-stage-rail > small {
+    grid-column: 1 / -1;
+    margin: 16px 0 0;
+    padding-top: 12px;
+  }
+  @container (min-width: 1000px) {
+    .selection-review-grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 840px) {
+    .role-context-drawer > summary {
+      border-left: 0;
+    }
+    .role-mobile-nav :is(a, button) {
+      border-right: 0;
+    }
+    .role-mobile-nav {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 520px) {
+    .selection-stage-rail {
+      display: block;
+      padding: 20px;
+    }
+    .selection-stage-rail h2 {
+      margin: 4px 0 20px;
+    }
+  }
+}

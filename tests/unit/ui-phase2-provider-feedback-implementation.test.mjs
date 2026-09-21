@@ -1,7 +1,8 @@
 import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
+import { providerHistoricalCapture } from "../../scripts/lib/ui-phase2-provider-historical-capture.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { createRequire } from "node:module";
 import path from "node:path";
@@ -25,7 +26,8 @@ const current = read(file),
   old = historicalProviderFeedbackSource(file, current);
 const style = "apps/web/src/styles/provider-approved-feedback.css";
 const folder = "output/playwright/p46-provider-feedback-implementation";
-const evidence = (mode) => JSON.parse(read(folder + "/" + mode + "/evidence.json"));
+const captured = (mode) => providerHistoricalCapture(`feedback-${mode}`);
+const evidence = (mode) => captured(mode).evidence;
 
 test("P46 approved feedback changes no script, event, model, text or business rule", () => {
   const a = parse(current).descriptor,
@@ -59,7 +61,21 @@ test("P46 approved feedback changes no script, event, model, text or business ru
 });
 
 test("P46 CSS is limited to approved mobile attributes, no preview layout or focus override", () => {
-  const css = read(style);
+  const importedPalette = '@import "../design/provider-registry-tokens.css";\n\n';
+  assert.ok(read(style).startsWith(importedPalette));
+  const values = new Map(
+    [
+      ...read("apps/web/src/design/provider-registry-tokens.css").matchAll(
+        /(--p46-[a-z-]+):\s*([^;]+);/g,
+      ),
+    ].map((match) => [match[1], match[2]]),
+  );
+  const css = read(style)
+    .replace(importedPalette, "")
+    .replace(/var\((--p46-[a-z-]+)\)/g, (_, name) => {
+      assert.ok(values.has(name), name);
+      return values.get(name);
+    });
   assert.match(css, /@media \(max-width: 760px\)/);
   assert.equal((css.match(/@media/g) ?? []).length, 1);
   assert.equal((css.match(/\{/g) ?? []).length, 4);
@@ -99,7 +115,7 @@ test("P46 feedback history and two user-approved PNGs remain exact, unknown drif
     );
 });
 
-test("P46 feedback80 actual Vue pictures bind current raw source, baseline, network and closed processes", () => {
+test("P46 original feedback80 Vue pictures bind captured sources, baseline, network and closed processes", () => {
   for (const mode of ["baseline", "current"]) {
     const e = evidence(mode),
       dir = folder + "/" + mode;
@@ -112,15 +128,18 @@ test("P46 feedback80 actual Vue pictures bind current raw source, baseline, netw
     assert.equal(Object.keys(e.sourceHashes).length, mode === "current" ? 43 : 42);
     for (const [f, sha] of Object.entries(e.sourceHashes)) {
       // Only Registry is loaded from the old commit in this baseline host.
-      const s = mode === "baseline" && f === file ? old : read(f);
+      const s =
+        mode === "baseline" && f === file
+          ? historicalProviderFeedbackSource(f, captured(mode).source(f))
+          : captured(mode).source(f);
       assert.equal(hash(s), sha, mode + ":" + f);
     }
     assert.deepEqual(
-      readdirSync(dir).sort(),
+      captured(mode).files().sort(),
       ["index.html", "evidence.json", ...e.screenshots.map((s) => s.file)].sort(),
     );
     for (const s of e.screenshots) {
-      const bytes = readFileSync(dir + "/" + s.file);
+      const bytes = captured(mode).image(s.file);
       assert.equal(hash(bytes), s.sha256);
       assert.equal(bytes.readUInt32BE(16), s.width);
       assert.equal(bytes.readUInt32BE(20), 900);
@@ -204,8 +223,8 @@ test("P46 unaffected screenshots stay pixel-identical apart from three measured 
     }
     assert.ok(exactEdges[s.file], s.file + " unexpected raster difference");
     seen.push(s.file);
-    const a = PNG.sync.read(readFileSync(folder + "/baseline/" + s.file));
-    const z = PNG.sync.read(readFileSync(folder + "/current/" + s.file));
+    const a = PNG.sync.read(captured("baseline").image(s.file));
+    const z = PNG.sync.read(captured("current").image(s.file));
     let pixels = 0,
       maximum = 0,
       minX = a.width,

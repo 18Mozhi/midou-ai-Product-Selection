@@ -6,6 +6,7 @@ import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import { adminDetailPreview } from "../../scripts/lib/ui-phase2-admin-detail-preview.mjs";
 import { adminPageAssemblyPreview } from "../../scripts/lib/ui-phase2-admin-page-assembly-preview.mjs";
+import { adminHistoricalCapture } from "../../scripts/lib/ui-phase2-admin-historical-capture.mjs";
 
 const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
 const hash = (v) => createHash("sha256").update(v).digest("hex");
@@ -60,8 +61,10 @@ test("P44 detail adds only exact restore presentation; script, actions and contr
   );
 });
 
-test("P44 administrator detail evidence pins current sources, transforms and exact image inventory", () => {
+test("P44 historical administrator detail evidence pins original sources, transforms and exact image inventory", () => {
+  const historical = adminHistoricalCapture("detail-preview");
   const e = evidence();
+  assert.equal(read(folder + "/evidence.json"), historical.manifest);
   assert.equal(e.kind, "P44-ADMIN-DETAIL-VUE-PREVIEW-r1");
   assert.equal(e.approval, "pending-user-review");
   assert.equal(e.processesClosed, true);
@@ -69,9 +72,20 @@ test("P44 administrator detail evidence pins current sources, transforms and exa
   assert.equal(e.screenshots.length, 94);
   assert.equal(Object.keys(e.sourceHashes).length, 46);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
-  assert.equal(e.transformedHashes[parent], hash(adminPageAssemblyPreview(read(parent), "parent")));
-  assert.equal(e.transformedHashes[detail], hash(adminDetailPreview(read(detail))));
+    assert.equal(hash(historical.source(file)), sha, file);
+  // Other helpers remain byte-pinned. P44 page helper now also accepts the current directory heading;
+  // its historical input must still produce the exact captured transformed hash below.
+  for (const file of [
+    "scripts/lib/ui-phase2-admin-detail-preview.mjs",
+    "scripts/lib/ui-phase2-admin-page-assembly-preview.mjs",
+    "scripts/lib/ui-phase2-user-page-preview.mjs",
+  ])
+    assert.equal(read(file), historical.source(file));
+  assert.equal(
+    e.transformedHashes[parent],
+    hash(adminPageAssemblyPreview(historical.source(parent), "parent")),
+  );
+  assert.equal(e.transformedHashes[detail], hash(adminDetailPreview(historical.source(detail))));
   assert.deepEqual(
     readdirSync(folder).sort(),
     ["index.html", "evidence.json", ...e.screenshots.map((s) => s.file)].sort(),

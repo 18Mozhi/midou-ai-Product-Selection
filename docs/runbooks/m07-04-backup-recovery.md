@@ -1,5 +1,9 @@
 # M07-04 宝塔备份与隔离恢复 Runbook
 
+P64读取状态（2026-09-15）：沿用原刷新/重新核验，命名标题及busy辅助识别状态，无新设置。`node scripts/verify-backup-read-states.mjs`四组256项/84本地GET，原真实15秒及安全重试不变；`--capture-review rN`当前r2/28图。16相关测试、97默认回归、类型/构建/253预算通过；仅前端语义变更，未来静态包生效，无Node/Python重启，本轮未部署/未提交。真实权限/恢复/保活待验，见P64-READ-STATES-BATCH43.md。
+
+P64本地UI审核（2026-09-15）：`node scripts/verify-backup-page-preview.mjs`实际Vue审核宿主97项/双端，默认无文件；`--capture-review rN`独占新目录，当前r3/31图/165来源。全部请求本地拦截，只读展示，不执行备份/恢复；15相关合同通过，不代表真实演练验收。业务script与生产文件/配置未改，无重启要求、未部署/未提交；详情见P64-PAGE-COMPOSITION-BATCH42.md。下文旧备份目录不能覆盖当前AGENTS固定根边界，本次不执行或迁移这些路径。
+
 ## 配置
 
 在宝塔受限环境配置 `BACKUP_ENCRYPTION_KEY`（至少 32 字符）、`BACKUP_PRIMARY_REGION=惠州`、`BACKUP_RECOVERY_REGION=惠州`、`BACKUP_PRIMARY_ROOT`、`BACKUP_LOCAL_COPY_ROOT` 和 `BACKUP_DRILL_ROOT`。密钥不得复制到命令行历史、日志或仓库。三个根目录都在当前主机、生产必须位于 `/www/backup/product-scout/` 下，且不得互相重叠或与在线证据/导出目录重叠。`BACKUP_MYSQL_CLIENT`、`BACKUP_MYSQLDUMP_CLIENT`、`BACKUP_MYSQLBINLOG_CLIENT`、`BACKUP_MYSQL_SOCKET` 和 `BACKUP_MYSQL_ADMIN_PASSWORD_FILE` 指向宝塔管理的 MySQL 工具、本机 Unix socket 与受限管理员密码文件；启动检查要求 socket 是存在的绝对路径。API 运行和恢复元数据只使用 `product_scout@127.0.0.1` 业务账号；为了让 MySQL 5.7 全量备份嵌入精确 binlog 坐标并验证 PITR，有限备份任务仅通过 Unix socket 从宝塔受限文件读取 `root@localhost` 凭据。该凭据不得进入进程参数、日志、数据库或备份包，禁止新增 `root@127.0.0.1`，也不能授予业务账号全局管理员权限。
@@ -30,6 +34,12 @@
 ## 故障与回滚
 
 ### UI 第二阶段 B3a 展示修正
+
+2026-09-15 批次46：页面“快照读取追踪”只归属成功事实，“本次失败读取追踪”只归属当前失败；初次失败也可展开复制编号，401/403移除旧事实及其编号。超时仍使用原本次发送的请求编号，接口和服务契约未改。定向 `node --test tests/unit/backup-trace-ownership.test.mjs` 与 `node scripts/verify-backup-trace-ownership.mjs`，后者使用本地响应与clipboard桩，不写真实剪贴板，不执行恢复。仅Web交付，无新配置/Node重启需求，本轮未部署；范围见 `design-plans/ui-phase-2-2026-09-07/P64-TRACE-OWNERSHIP-BATCH46.md`。
+
+2026-09-15 批次45新增本地状态审核：`node scripts/verify-backup-state-matrix.mjs` 将当前服务函数的合成仓储返回挂入实际Vue，验证九种结论/有效期/缺记录/0/长内容。默认不出文件，`--capture-review rN`产生正式新版本图册。无真实数据库读写、备份、恢复或权限验收，无产品改动/新配置/重启要求；图册与覆盖边界见 `design-plans/ui-phase-2-2026-09-07/P64-STATE-MATRIX-BATCH45.md`。
+
+2026-09-15 批次44：Web 读取重试的提示区消失前，仅把仍在该重试入口的焦点移至顶部刷新按钮。顶部等待使用 aria-disabled/aria-busy 保持可聚焦，原请求单飞 guard 防止重复发送；用户主动移焦不抢回。无新配置或 API，未来只需发布前端静态包，无需因此重启 Node/Python/数据库，本轮未部署。定向命令 `node --test tests/unit/backup-read-focus.test.mjs` 与 `node scripts/verify-backup-read-focus.mjs`；后者本地模拟读取，不执行备份恢复，默认不出文件。详见 `design-plans/ui-phase-2-2026-09-07/P64-READ-FOCUS-BATCH44.md`，完整读屏/保活/真实权限和恢复尚未验收。
 
 2026-09-08：恢复证据标题改为读取接口的 `policy.maximum_drill_age_days`，不再写死90天；到期时间、剩余天数和状态计算保持原样。`UI2-OP64` 用隔离响应验证30天读取、刷新为120天及无演练提示。测试值不是生产策略建议，更不改变蓝图中发布前恢复演练不得超过90天的要求。
 

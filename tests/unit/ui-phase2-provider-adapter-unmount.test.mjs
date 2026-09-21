@@ -2,12 +2,17 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import vm from "node:vm";
 import ts from "typescript";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const root = "output/playwright/p47-unmount-review";
+const captured = (file) =>
+  execFileSync("git", ["show", `89a72609f914b58f3de71ef2b36d74a81e536889:${file}`], {
+    encoding: "utf8",
+  }).replaceAll("\r\n", "\n");
 const evidence = () => JSON.parse(read(`${root}/evidence.json`));
 function loadTs(file, dependencies = {}) {
   const exports = {};
@@ -127,14 +132,15 @@ test("P47 current service and registry permit distinct-key checks before either 
   assert.deepEqual(recorded, ["first-instance", "new-instance"]);
 });
 
-test("P47 unmount evidence binds unchanged production sources and all retained images", () => {
+test("P47 archived unmount evidence binds its complete captured manifest, sources and images", () => {
   const e = evidence();
+  assert.deepEqual(e, JSON.parse(captured(`${root}/evidence.json`)));
   assert.equal(e.productionUntransformed, true);
   assert.equal(e.processesClosed, true);
   assert.equal(e.runs.length, 24);
   assert.equal(e.screenshots.length, 8);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assert.equal(hash(captured(file)), expected, file);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["index.html", "evidence.json", ...e.screenshots.map((s) => s.file)].sort(),
@@ -147,7 +153,7 @@ test("P47 unmount evidence binds unchanged production sources and all retained i
   }
 });
 
-test("P47 real max12 eviction and shell unmount isolate late results but expose pending reset", () => {
+test("P47 archived real max12 eviction and shell unmount retain late-result isolation and pending reset observations", () => {
   for (const run of evidence().runs) {
     const value = (name) => run.checks.find((check) => check.name === name)?.actual;
     assert.equal(value("actual original instance unmounted"), true);

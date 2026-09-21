@@ -6,14 +6,13 @@ import { fileURLToPath } from "node:url";
 import { createServer } from "vite";
 import { chromium } from "playwright";
 import { buildJourneyDesignData } from "./lib/ui-phase2-journey-design-data.mjs";
+import { journeyFieldsMode } from "./lib/ui-phase2-journey-fields-mode.mjs";
+import { verifyJourneyFieldsHistory } from "./lib/ui-phase2-journey-fields-history.mjs";
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const relative = "output/playwright/p16-c-r2-fields-review",
   root = path.join(repo, relative);
-assert.ok(process.argv.slice(2).every((v) => ["--smoke", "--capture"].includes(v)));
-const smoke = process.argv.includes("--smoke"),
-  capture = process.argv.includes("--capture");
-assert.ok(!(smoke && capture));
+const { smoke, capture, current } = journeyFieldsMode(process.argv.slice(2));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const parent = JSON.parse(
   await readFile(path.join(repo, "output/playwright/p16-c-r2-review/evidence.json"), "utf8"),
@@ -24,6 +23,8 @@ const files = [
     "apps/web/src/design/theme.ts",
     "apps/web/src/use-navigation-shell-theme.ts",
     "scripts/verify-ui-phase2-journey-fields.mjs",
+    "scripts/lib/ui-phase2-journey-fields-mode.mjs",
+    "scripts/lib/ui-phase2-journey-fields-history.mjs",
   ]),
 ];
 const sourceHashes = Object.fromEntries(
@@ -35,15 +36,13 @@ const sourceHashes = Object.fromEntries(
   ),
 );
 let previous;
-if (!smoke && !capture) {
-  previous = JSON.parse(await readFile(path.join(root, "evidence.json"), "utf8"));
-  assert.deepEqual(previous.sourceHashes, sourceHashes);
-  assert.equal(previous.screenshots.length, 24);
-  for (const shot of previous.screenshots)
-    assert.equal(hash(await readFile(path.join(root, shot.file))), shot.sha256);
+if (!smoke && !capture && !current) {
+  // Validate immutable capture provenance separately; the browser below uses current files.
+  previous = await verifyJourneyFieldsHistory(repo);
 }
 const data = await buildJourneyDesignData(repo),
   checks = [],
+  groupChecks = [],
   screenshots = [];
 const fixture = structuredClone(data.sample);
 fixture.results[1] = structuredClone(data.qualified);
@@ -117,6 +116,29 @@ try {
                   requestAnimationFrame(() => requestAnimationFrame(resolve)),
                 ),
             );
+          const verifyGroup = async (name, radioName, count) => {
+            if (!current) return;
+            const group = page.getByRole("radiogroup", { name, exact: true });
+            assert.equal(await group.count(), 1, `unique radio group: ${name}`);
+            const radios = group.getByRole("radio");
+            assert.equal(await radios.count(), count, `radio count: ${name}`);
+            assert.equal(
+              await radios.evaluateAll(
+                (nodes, expectedName) =>
+                  nodes.every(
+                    (node) =>
+                      node.tagName === "INPUT" &&
+                      node.getAttribute("type") === "radio" &&
+                      node.getAttribute("name") === expectedName &&
+                      !node.hasAttribute("tabindex"),
+                  ),
+                radioName,
+              ),
+              true,
+              `native keyboard semantics: ${name}`,
+            );
+            groupChecks.push({ width, theme, density, name, radioName, count });
+          };
           const metrics = async (selector, { radio = false, focus = false } = {}) => {
             const target = page.locator(selector).first();
             await target.scrollIntoViewIfNeeded();
@@ -218,6 +240,7 @@ try {
             gap: parseFloat(getComputedStyle(el).gap),
           }));
           await metrics(".selection-input input");
+          await verifyGroup("输入类型", "input-kind", 3);
           const keyword = page.getByRole("radio", { name: "关键词", exact: true });
           await keyword.focus();
           await page.keyboard.press("Tab");
@@ -253,6 +276,8 @@ try {
           await page.locator(".selection-decision").waitFor();
           await applyDensity();
           await settle();
+          await verifyGroup("候选结果", "selection-candidate", fixture.results.length);
+          await verifyGroup("决策方式", "decision", 3);
           await page.getByText("隔离候选 2", { exact: true }).click();
           const candidate = page.locator(".selection-candidate-grid input").nth(1);
           await candidate.focus();
@@ -343,13 +368,26 @@ try {
         "</main>\n",
       ].join(""),
     );
-  } else if (!smoke) assert.deepEqual(previous.checks, checks);
+  } else if (!smoke && !current) assert.deepEqual(previous.checks, checks);
+  if (current) {
+    assert.equal(checks.length, 96);
+    assert.equal(groupChecks.length, 36);
+    assert.equal(screenshots.length, 0);
+  }
   console.log(
     JSON.stringify({
-      mode: smoke ? "smoke" : capture ? "capture" : "verify",
+      mode: smoke ? "smoke" : capture ? "capture" : current ? "current" : "verify",
       checks: checks.length,
       screenshots: capture ? screenshots.length : (previous?.screenshots.length ?? 0),
       businessWrites: 0,
+      ...(current
+        ? {
+            groupChecks: groupChecks.length,
+            runs: groupChecks.length / 3,
+            sourceFingerprint: hash(JSON.stringify(sourceHashes)),
+            historicalPacketValidated: false,
+          }
+        : {}),
     }),
   );
 } finally {

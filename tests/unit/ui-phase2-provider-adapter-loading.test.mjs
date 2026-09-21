@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { parse, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
 import {
@@ -13,6 +14,10 @@ const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const component = "apps/web/src/components/ProviderAdapterCenter.vue";
 const root = "output/playwright/p47-loading-review";
+const captured = (file) =>
+  execFileSync("git", ["show", `255f03f949ebbb27b7714818ee1ce0c458513877:${file}`], {
+    encoding: "utf8",
+  }).replaceAll("\r\n", "\n");
 
 test("P47 loading proposal adds only two loading-specific props without changing runtime", () => {
   const original = read(component),
@@ -54,14 +59,15 @@ test("P47 loading rules remain scoped to review body, active P47 and loading onl
   });
 });
 
-test("P47 loading evidence binds unchanged actual source and pending/settled image inventory", () => {
+test("P47 archived loading evidence binds its complete captured manifest, sources and images", () => {
   const e = JSON.parse(read(`${root}/evidence.json`));
+  assert.deepEqual(e, JSON.parse(captured(`${root}/evidence.json`)));
   assert.equal(e.reviewOnly, true);
   assert.equal(e.processesClosed, true);
   assert.equal(e.runs.length, 24);
   assert.equal(e.screenshots.length, 48);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assert.equal(hash(captured(file)), expected, file);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),

@@ -10,6 +10,20 @@
 
 ## 观测与故障处理
 
+- P34审核映射用`node scripts/build-ui-phase2-org-approvals-review.mjs --check`核对：历史
+  提案固定Git提交，当前组件匹配路由证据。若报stale，应重新核对真实来源与覆盖，
+  不覆盖旧图片或把新哈希回填旧manifest。共享历史测试仅用于旧快照，不进入运行时。
+
+- P34历史图验证可运行`node --test tests/unit/ui-phase2-org-approvals-owner-path-history.test.mjs`：
+  只对旧来源精确还原查询归属修复，原manifest和1577张图固定字节不改；不能用于生产
+  生成器或取代当前路由/权限验证。旧壳、样式与动作审核映射失配另验，不因此允许发布。
+
+- P34在途读取离页/返回：父页向审批子页传入原所属路径，避免缓存期间迟创建子页误将
+  组织概览当作查询归属。执行`node scripts/verify-ui-phase2-org-approvals-route-lifecycle-vue.mjs --smoke`
+  可验证手机12组本地场景；无参数为双端完整矩阵。修复不改API、查询键、权限或配置，
+  不需Node/Python重启；本轮未部署。正式前端发布仍走固定宝塔流程，再用浏览器复验
+  带模板筛选URL、读取中离页、返回及原GET恢复。真实权限/组织切换/缓存淘汰另验。
+
 - 用 `request_id` / `trace_id` 在 Node API 日志、`audit_logs` 和 `outbox_events` 关联写入。日志不得包含 Token 明文或哈希。
 - 409 版本冲突先刷新页面；`last_admin_forbidden` 先分配另一位组织管理员；`default_workspace_archive_forbidden` 先更新默认工作区。
 - 审批模板差异异常时，先核对 `approval_templates.current_version`、对应的最近上一条 `approval_template_versions` 和两版 `approval_template_nodes.ordinal`；组织后台只读比较，不发布、回滚或改写模板。节点插入导致后续序号变化时会按真实流程位置逐项显示，不以名称猜测节点身份。

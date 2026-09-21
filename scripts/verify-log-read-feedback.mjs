@@ -267,10 +267,14 @@ try {
           await click(refresh);
           await notice.waitFor();
           await settled();
-          check(await notice.innerText(), hint + " 已保留上次成功日志。", "retained failure hint");
+          check(
+            await notice.locator("span").innerText(),
+            hint + " 已保留上次成功日志。",
+            "retained failure hint",
+          );
           check(await workspace.innerText(), previous, "retained chain identity unchanged");
           check(await state.count(), 0, "retained failure not initial error");
-          // Existing footer request ID changes on failure; only observed timestamp is a snapshot fact.
+          // The timestamp remains tied to the retained successful snapshot.
           check(
             await surface.locator(":scope > footer > span").innerText(),
             observed,
@@ -311,7 +315,7 @@ try {
           );
           check(Date.now() - started >= 14500, true, "retained real 15s timer");
           check(
-            await notice.innerText(),
+            await notice.locator("span").innerText(),
             "读取超过 15 秒，已停止本次等待。 已保留上次成功日志。",
             "retained timeout accurately described",
           );

@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import vm from "node:vm";
 import ts from "typescript";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
@@ -16,6 +17,10 @@ const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const component = "apps/web/src/components/ProviderAdapterCenter.vue";
 const root = "output/playwright/p47-refresh-failure-review";
+const captured = (file) =>
+  execFileSync("git", ["show", `7691b4679bfe75e06c30f0999991c5ce8f83c734:${file}`], {
+    encoding: "utf8",
+  }).replaceAll("\r\n", "\n");
 
 test("P47 refresh failure proposal compiles and preserves original request/filter contracts", () => {
   const original = read(component),
@@ -106,14 +111,15 @@ test("P47 refresh failure CSS cannot leak beyond review P47", () => {
   });
 });
 
-test("P47 refresh failure evidence preserves negative focus and binds current sources and images", () => {
+test("P47 archived refresh failure preserves negative focus and binds its complete original packet", () => {
   const e = JSON.parse(read(`${root}/evidence.json`));
+  assert.deepEqual(e, JSON.parse(captured(`${root}/evidence.json`)));
   assert.equal(e.reviewOnly, true);
   assert.equal(e.processesClosed, true);
   assert.equal(e.runs.length, 18);
   assert.equal(e.screenshots.length, 54);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assert.equal(hash(captured(file)), expected, file);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),

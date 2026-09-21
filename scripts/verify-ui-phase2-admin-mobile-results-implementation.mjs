@@ -8,6 +8,7 @@ import ts from "typescript";
 import { createServer } from "vite";
 import { chromium } from "playwright";
 import { execFileSync } from "node:child_process";
+import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
 
 const capture = process.argv.includes("--capture");
 const baseline = process.argv.includes("--baseline");
@@ -85,7 +86,7 @@ const sources = new Set([
   ...cssFiles,
   "apps/web/src/main.ts",
   "apps/web/vite.config.ts",
-  "scripts/verify-ui-phase2-admin-mobile-controls-implementation.mjs",
+  "scripts/verify-ui-phase2-admin-mobile-results-implementation.mjs",
 ]);
 const entry = "/__p44_review.js";
 const host = `import {createApp,h} from 'vue';import {createRouter,createWebHistory} from 'vue-router';import Parent from '/src/components/PlatformAccountCenter.vue';
@@ -567,7 +568,7 @@ try {
     "apps/web/src/main.ts",
     "apps/web/vite.config.ts",
     fixtureFile,
-    "scripts/verify-ui-phase2-admin-mobile-controls-implementation.mjs",
+    "scripts/verify-ui-phase2-admin-mobile-results-implementation.mjs",
     ...cssFiles,
   ]);
   for (const mod of server.moduleGraph.idToModuleMap.values()) {
@@ -575,7 +576,8 @@ try {
     if (f && !f.startsWith("..") && !f.includes("node_modules") && /\.(vue|ts|css)$/.test(f))
       sources.add(f);
   }
-  if (roleFacts) sources.add("scripts/verify-ui-phase2-admin-mobile-results-implementation.mjs");
+  sources.add("scripts/lib/ui-imported-style-sources.mjs");
+  await includeImportedStyleSources(sources, async (f) => transformed[f] ?? (await read(f)));
   const sourceHashes = Object.fromEntries(
     await Promise.all(
       [...sources].sort().map(async (f) => [f, hash(transformed[f] ?? (await read(f)))]),
