@@ -12,9 +12,9 @@
     "scripts/lib/ui-phase2-organization-action-baseline.mjs": "120bf0d7417c51e38c31b8dc38f009a32feb5553bcae49e6064c680fd178ba47",
     "scripts/lib/ui-phase2-token-copy-baseline.mjs": "bb93e58271aba9065cf4c5eeb31d2af806e6653119e3aca54e90e967722171bf",
     "scripts/lib/ui-phase2-filter-reset-baseline.mjs": "b16cce55c4f07892ecf8758578003dd75198092fa60421b388b6e1ca57580a27",
-    "scripts/lib/ui-phase2-redis-review-baseline.mjs": "058c8ee6183703486d7bc95862132a1a1d199292c34b4017b46af47a910140ee",
+    "scripts/lib/ui-phase2-redis-review-baseline.mjs": "a465cb59ff95e8283264d5a53eec1df7cc6e3d457c9251bb88cf21dcef727079",
     "scripts/lib/ui-phase2-modal-dialog-baseline.mjs": "86ccba2cedc2054ecbbfca2f6e0a4e9845d4f877566c07750b972294b4ebdab7",
-    "scripts/lib/ui-phase2-shared-review-baseline.mjs": "22c0a24e42b37e874dddcea22b9be38bfe5e3642d811f3f4a29672e382dd364f",
+    "scripts/lib/ui-phase2-shared-review-baseline.mjs": "4e69817a6036c3e634c938c80cc8c6baec656a600459404c66ac27b06646080e",
     "scripts/lib/ui-phase2-user-creation-baseline.mjs": "0de1f363d021bb5a7601cd8f12b17f1bb7f6406db179ef10cfe1fb6b98ec236e",
     "scripts/lib/ui-phase2-password-baseline.mjs": "44bbd10895a491ba672294d97e5eb06cd639c8d4e611a9443ec7aabeacdd6714",
     "scripts/lib/ui-phase2-admin-controls-baseline.mjs": "82eaf9d3aa54b88230e34758610a9ba0b538c7b66e331d49e7cf797edbdc8e37",
@@ -6180,7 +6180,7 @@
         {
           "file": "apps/web/src/components/RedisResilienceCenter.vue",
           "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
-          "actual": "382da30fb57316898357dadc58a8fa387ca6f83ac38f8bc023fbd6aba2964221",
+          "actual": "35614a7bdafc08e2b5c0079a5eefb423c4df71703b358daacd3c40d50217f344",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
