@@ -30,6 +30,130 @@
   font-family: var(--so-font-ui);
 }
 
+/* P55 C composition is now the production governance surface. The marker
+ * keeps this approved skin local to governance while shared shell contracts
+ * and workbench navigation remain unchanged. */
+.platform-governance--review {
+  max-width: 1160px;
+  margin: 0 auto;
+  border-color: #dce4ee;
+  color: #182d4a;
+  background: #f3f6fb;
+}
+
+.platform-governance--review .governance-directory {
+  border: 0;
+  background: #1748a0;
+  color: #fff;
+}
+
+.platform-governance--review .governance-directory :is(p, h2, h3, span, small, strong, a) {
+  color: #fff;
+}
+
+.platform-governance--review .governance-directory > nav {
+  gap: 0;
+}
+
+.platform-governance--review .governance-directory > nav button {
+  min-height: 54px;
+  border: 0;
+  border-top: 1px solid rgb(255 255 255 / 24%);
+  border-radius: 0;
+}
+
+.platform-governance--review .governance-directory > nav button[aria-current="page"] {
+  border-left: 0;
+  background: #fff;
+  color: #1748a0;
+}
+
+.platform-governance--review .governance-directory > nav button[aria-current="page"] :is(span, b) {
+  color: #1748a0;
+}
+
+.platform-governance--review .governance-main {
+  padding: 0 36px 32px;
+  background: #f3f6fb;
+}
+
+.platform-governance--review .governance-hero {
+  margin: 0 -36px 20px;
+  padding: 31px 36px;
+  background: #1748a0;
+}
+
+.platform-governance--review .governance-hero :is(p, h1, span) {
+  color: #fff;
+}
+
+.platform-governance--review .governance-hero h1 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.platform-governance--review .governance-header-actions :is(button, a) {
+  min-height: 42px;
+  border-color: #fff;
+  border-radius: 0;
+  color: #1748a0;
+  background: #fff;
+  font-weight: 800;
+}
+
+.platform-governance--review
+  .governance-main
+  > :is(
+    .responsive-filter-drawer,
+    .governance-context,
+    .governance-table,
+    .governance-provider--mobile,
+    .governance-footnote
+  ) {
+  border-color: #dce4ee;
+  border-radius: 0;
+  background: #fff;
+}
+
+.platform-governance--review .governance-context {
+  border-left: 5px solid #1748a0;
+}
+
+.platform-governance--review .governance-table {
+  border-top: 5px solid #1748a0;
+  box-shadow: none;
+}
+
+.platform-governance--review .governance-table :is(table th, table td) {
+  border-color: #dce4ee;
+}
+
+.platform-governance--review .governance-table table th {
+  color: #fff;
+  background: #1748a0;
+}
+
+.platform-governance--review .governance-row-actions :is(button, a),
+.platform-governance--review .governance-detail-action {
+  min-height: 40px;
+  border-color: #1748a0;
+  border-radius: 0;
+  color: #fff;
+  background: #1748a0;
+  font-weight: 800;
+}
+
+.platform-governance--review .governance-status {
+  border-radius: 0;
+}
+
+.platform-governance--review :is(button, a, input, select, summary):focus-visible {
+  outline-color: #2465d7;
+  outline-offset: 3px;
+}
+
 .platform-governance *,
 .platform-governance *::before,
 .platform-governance *::after {
@@ -40,8 +164,8 @@
   font: inherit;
 }
 
-.platform-governance :is(h2, h3),
-html[data-design="signal-ledger"] body .platform-governance :is(h2, h3) {
+.platform-governance :is(h1, h2, h3),
+html[data-design="signal-ledger"] body .platform-governance :is(h1, h2, h3) {
   font-family: var(--so-font-ui);
 }
 
@@ -841,6 +965,30 @@ html[data-design="signal-ledger"] body .platform-governance :is(h2, h3) {
   .governance-main {
     padding: 20px 0 28px;
     gap: 16px;
+  }
+
+  .platform-governance--review .governance-main {
+    padding: 0 16px 28px;
+  }
+
+  .platform-governance--review .governance-hero {
+    margin: 0 -16px 16px;
+    padding: 25px 19px;
+  }
+
+  .platform-governance--review .governance-header-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .platform-governance--review .governance-context {
+    border-top: 5px solid #1748a0;
+    border-left: 0;
+  }
+
+  .platform-governance--review .governance-table {
+    border-right: 0;
+    border-left: 0;
   }
 
   .governance-main > :not(.responsive-filter-drawer) {

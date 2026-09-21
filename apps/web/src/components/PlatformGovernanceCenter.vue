@@ -363,7 +363,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="platform-governance" :aria-busy="refreshing">
+  <section class="platform-governance platform-governance--review" :aria-busy="refreshing">
     <aside class="governance-directory">
       <div class="governance-directory__intro">
         <p>平台治理</p>
@@ -408,7 +408,7 @@ onBeforeUnmount(() => {
       <header class="governance-hero">
         <div>
           <p>版本清楚，操作有归属</p>
-          <h2>规则、工作流与自动化</h2>
+          <h1>规则、工作流与自动化</h1>
           <span>在这里核对治理事实，在所属工作台处理。</span>
         </div>
         <div class="governance-header-actions">
