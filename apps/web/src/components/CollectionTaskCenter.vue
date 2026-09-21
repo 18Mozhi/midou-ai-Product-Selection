@@ -583,11 +583,14 @@ onActivated(() => {
 </script>
 
 <template>
-  <section class="collection-task-center" aria-labelledby="collection-task-title">
+  <section
+    class="collection-task-center collection-task-center--review"
+    aria-labelledby="collection-task-title"
+  >
     <header class="collection-task-title">
       <div>
         <p>平台采集任务中心</p>
-        <h2 id="collection-task-title">采集任务监控</h2>
+        <h1 id="collection-task-title">采集任务监控</h1>
         <span>集中查看任务进度、来源覆盖、失败原因和重试记录；每个任务都可以展开详情。</span>
       </div>
       <div class="collection-task-title-actions">
