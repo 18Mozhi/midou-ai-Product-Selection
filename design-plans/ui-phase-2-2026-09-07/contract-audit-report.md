@@ -134,7 +134,7 @@ node --test tests/unit/ui-phase2-contract-audit.test.mjs tests/unit/ui-phase2-in
 | 无稳定引用 | 0；只证明支持格式内源身份齐全，不是无业务缺口 |
 | 重复引用候选 | 26，不因重复自动判业务冲突 |
 | 源与旧证据 | Web源指纹仍f173913e0fa181d21bc82b3f7adbef060b01133941c0d4295dd1ef06dd05a3df；baseline已登记的16个源差异仍保留 |
-| 审核门 | G0=in-progress、denominatorFrozen=false、用户批准0；G1–G5不提升 |
+| 审核门 | G0=in-progress、denominatorFrozen=false、用户批准73；G1–G5仍不提升（用户批准只代表设计审核，不代表动作、实现或生产验收） |
 
 15个当前源hash用于漂移检测，19处v-model另册；输入实例与动态角色/模式不能从70项扫描数推断。新永久测试核对六文件精确ID集合、行/类型/hash、同动作多入口归并、八条旧ST/NF语义沿用及全部15文件hash（含API路由辅助文件）；全站新候选若无归属会失败。审批文件按运行前后字节相同验证，不能因未来合法审批而要求其永远为0。检查器自身仍只报告静态结果，绝不写入审批或冻结状态。
 

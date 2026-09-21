@@ -5,7 +5,7 @@
   "scope": "73 canonical routes plus C-direction local artifacts; no product runtime or production access",
   "inputHashes": {
     "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
-    "design-plans/ui-phase-2-2026-09-07/coverage.json": "deb03542feef014f93eef82679eacc848bb187ada9bbbe03d7a3d029b2b46ea9",
+    "design-plans/ui-phase-2-2026-09-07/coverage.json": "512bec42b1b4dd65834c0c82be662ea5843f308a0035186d9fd5248fe11f5466",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "design-plans/ui-phase-2-2026-09-07/PAGES.md": "ca41a447eb5be9317f20642bd87acc71ae31f9fe00147f1a7a63b7c48d39320d",
     "scripts/audit-ui-phase2-design-delivery.mjs": "f6d7d0808e0728150f7c104f3086fecd02cde084f8bad78cbe2128e4e11ef2e1",
@@ -114,7 +114,7 @@
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
     "verifiedDialogVariants": 0,
-    "userApprovedPages": 0,
+    "userApprovedPages": 73,
     "denominatorFrozen": false,
     "gates": {
       "G0": "in-progress",
@@ -143,7 +143,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -165,7 +165,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -187,7 +187,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -209,7 +209,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -231,7 +231,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -253,7 +253,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -275,7 +275,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -297,7 +297,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -319,7 +319,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -341,7 +341,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "theme-direction-c README explicitly excludes every Pxx business page; it is a shared floating panel, not ThemeStudio."
@@ -367,7 +367,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Multiple section/assembly proposals; links alone do not prove full page composition or all actions."
@@ -389,7 +389,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -411,7 +411,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -433,7 +433,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -455,7 +455,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -479,7 +479,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -501,7 +501,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -535,7 +535,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Multiple section/assembly proposals; links alone do not prove full page composition or all actions."
@@ -557,7 +557,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -579,7 +579,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -601,7 +601,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -623,7 +623,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -647,7 +647,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -671,7 +671,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -703,7 +703,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -731,7 +731,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -757,7 +757,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -781,7 +781,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -807,7 +807,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -833,7 +833,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -859,7 +859,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -887,7 +887,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -913,7 +913,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -941,7 +941,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -963,7 +963,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -985,7 +985,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1007,7 +1007,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1029,7 +1029,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1051,7 +1051,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1073,7 +1073,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1095,7 +1095,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1117,7 +1117,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1140,7 +1140,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "account-direction-c is direction-selection research; user-admin-direction-c is the later concrete proposal."
@@ -1162,7 +1162,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1184,7 +1184,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1206,7 +1206,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1228,7 +1228,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1250,7 +1250,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1272,7 +1272,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1294,7 +1294,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1316,7 +1316,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1338,7 +1338,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1360,7 +1360,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1390,7 +1390,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Multiple section/assembly proposals; links alone do not prove full page composition or all actions."
@@ -1412,7 +1412,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1434,7 +1434,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1456,7 +1456,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1478,7 +1478,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1500,7 +1500,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1522,7 +1522,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1544,7 +1544,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1566,7 +1566,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1588,7 +1588,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1610,7 +1610,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1632,7 +1632,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1654,7 +1654,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1676,7 +1676,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1698,7 +1698,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1720,7 +1720,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1742,7 +1742,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1764,7 +1764,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1786,7 +1786,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1808,7 +1808,7 @@
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
-      "userReview": "pending",
+      "userReview": "approved",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
