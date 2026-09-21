@@ -565,12 +565,16 @@ async function confirmBatchReplay() {
 }
 </script>
 <template>
-  <section class="collection-ops" :aria-busy="refreshing || batchBusy" :inert="batchPreview">
+  <section
+    class="collection-ops collection-ops--review"
+    :aria-busy="refreshing || batchBusy"
+    :inert="batchPreview"
+  >
     <header>
       <div class="collection-ops-heading">
         <div>
           <p>采集运行管理</p>
-          <h2>来源与采集控制台</h2>
+          <h1>来源与采集控制台</h1>
           <span
             >来源配置、健康、任务尝试、死信和质量问题使用同一事实视图；敏感操作仍进入对应受控页面。</span
           >
