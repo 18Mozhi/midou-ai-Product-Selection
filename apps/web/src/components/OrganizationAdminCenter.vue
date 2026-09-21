@@ -961,7 +961,9 @@ onMounted(() => void load());
     <header class="org-admin-hero">
       <div>
         <p>组织后台</p>
-        <component :is="view === 'data' || view === 'workspaces' ? 'h1' : 'h2'">{{ title }}</component>
+        <component :is="view === 'data' || view === 'workspaces' ? 'h1' : 'h2'">{{
+          title
+        }}</component>
         <span>{{ subtitle }}</span>
       </div>
       <div class="org-admin-refresh">
