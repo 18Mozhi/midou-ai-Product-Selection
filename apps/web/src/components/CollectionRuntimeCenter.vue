@@ -402,7 +402,7 @@ onActivated(() => {
 </script>
 <template>
   <section
-    class="crawler-center"
+    class="crawler-center crawler-center--review"
     aria-labelledby="crawler-title"
     :aria-busy="refreshing || saving"
     :inert="confirming"
@@ -410,7 +410,7 @@ onActivated(() => {
     <header class="crawler-title">
       <div>
         <p>网页采集运行中心</p>
-        <h2 id="crawler-title">采集运行监控</h2>
+        <h1 id="crawler-title">采集运行监控</h1>
         <span>查看哪些网页登录档案正在使用、哪些运行失败，以及失败发生的时间和原因。</span>
       </div>
       <div class="crawler-title-actions">
