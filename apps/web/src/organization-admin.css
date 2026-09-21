@@ -3846,6 +3846,306 @@
   }
 }
 
+/* P32 C composition: workspace governance is a flat blue-and-white boundary. */
+.org-admin-center--workspace-review {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-bottom: 28px;
+  color: #182d4a;
+  background: #f3f6fb;
+}
+
+.org-admin-center--workspace-review .org-admin-hero {
+  padding: 31px 36px;
+  border: 0;
+  border-radius: 0;
+  background: #1748a0;
+}
+
+.org-admin-center--workspace-review .org-admin-hero :is(p, h1, h2, span) {
+  color: #fff;
+}
+
+.org-admin-center--workspace-review .org-admin-hero h1 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.org-admin-center--workspace-review .org-workspace-panel {
+  margin-top: 0;
+  gap: 16px;
+}
+
+.org-admin-center--workspace-review .org-workspace-overview {
+  min-height: 144px;
+  padding: 27px 30px;
+  border: 0;
+  border-left: 5px solid #1748a0;
+  border-radius: 0;
+  color: #182d4a;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--workspace-review .org-workspace-overview::after {
+  display: none;
+}
+
+.org-admin-center--workspace-review .org-workspace-overview :is(p, h3, span) {
+  color: #182d4a;
+}
+
+.org-admin-center--workspace-review .org-workspace-overview p,
+.org-admin-center--workspace-review .org-workspace-create header p,
+.org-admin-center--workspace-review .org-workspace-section-heading p,
+.org-admin-center--workspace-review .org-workspace-detail header p {
+  letter-spacing: 0.12em;
+}
+
+.org-admin-center--workspace-review .org-workspace-overview > button {
+  border: 1px solid #1748a0;
+  border-radius: 0;
+  color: #fff;
+  background: #1748a0;
+  box-shadow: none;
+}
+
+.org-admin-center--workspace-review .org-workspace-overview > button:hover {
+  color: #1748a0;
+  background: #eaf1ff;
+}
+
+.org-admin-center--workspace-review .org-workspace-metrics {
+  gap: 0;
+  border: 1px solid #d6e0ec;
+  background: #fff;
+}
+
+.org-admin-center--workspace-review .org-workspace-metrics article {
+  min-height: 112px;
+  padding: 18px;
+  border: 0;
+  border-right: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+}
+
+.org-admin-center--workspace-review .org-workspace-metrics article:last-child {
+  border-right: 0;
+  background: #fff;
+}
+
+.org-admin-center--workspace-review .org-workspace-metrics span,
+.org-admin-center--workspace-review .org-workspace-metrics small {
+  color: #61738b;
+}
+
+.org-admin-center--workspace-review .org-workspace-metrics b {
+  margin: 9px 0 5px;
+  color: #1748a0;
+  font-size: 27px;
+}
+
+.org-admin-center--workspace-review .org-workspace-create,
+.org-admin-center--workspace-review .org-workspace-directory,
+.org-admin-center--workspace-review .org-workspace-detail {
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--workspace-review .org-workspace-create,
+.org-admin-center--workspace-review .org-workspace-directory,
+.org-admin-center--workspace-review .org-workspace-detail {
+  border-top: 5px solid #1748a0;
+}
+
+.org-admin-center--workspace-review .org-workspace-create {
+  padding: 24px 26px;
+}
+
+.org-admin-center--workspace-review .org-workspace-create::after {
+  display: none;
+}
+
+.org-admin-center--workspace-review .org-workspace-create header span,
+.org-admin-center--workspace-review .org-workspace-create > footer span,
+.org-admin-center--workspace-review .org-workspace-detail dt,
+.org-admin-center--workspace-review .org-workspace-detail .org-admin-technical,
+.org-admin-center--workspace-review .org-workspace-detail .org-admin-technical code {
+  color: #61738b;
+}
+
+.org-admin-center--workspace-review .org-workspace-create input,
+.org-admin-center--workspace-review .org-workspace-create textarea,
+.org-admin-center--workspace-review .org-workspace-toolbar input,
+.org-admin-center--workspace-review .org-workspace-toolbar select {
+  border-color: #c7d4e4;
+  border-radius: 0;
+  color: #182d4a;
+  background: #fff;
+}
+
+.org-admin-center--workspace-review .org-workspace-create :is(input, textarea):focus-visible,
+.org-admin-center--workspace-review .org-workspace-toolbar :is(input, select):focus-visible,
+.org-admin-center--workspace-review :is(button, a, summary):focus-visible {
+  border-color: #1748a0;
+  outline: 3px solid #a9c5f5;
+  outline-offset: 2px;
+}
+
+.org-admin-center--workspace-review .org-workspace-create > footer {
+  border-color: #d6e0ec;
+}
+
+.org-admin-center--workspace-review .org-workspace-create > footer button,
+.org-admin-center--workspace-review .org-workspace-actions button:not(.org-admin-secondary) {
+  border-radius: 0;
+  color: #fff;
+  background: #1748a0;
+  box-shadow: none;
+}
+
+.org-admin-center--workspace-review .org-workspace-browser {
+  gap: 16px;
+}
+
+.org-admin-center--workspace-review .org-workspace-section-heading {
+  padding-bottom: 15px;
+  border-bottom: 1px solid #d6e0ec;
+}
+
+.org-admin-center--workspace-review .org-workspace-section-heading > span {
+  border-radius: 0;
+  color: #1748a0;
+  background: #eaf1ff;
+}
+
+.org-admin-center--workspace-review .org-workspace-status-tabs {
+  margin: 15px 0 11px;
+  padding: 14px;
+  border: 1px solid #d6e0ec;
+  background: #f7faff;
+}
+
+.org-admin-center--workspace-review .org-workspace-status-tabs button {
+  border: 0;
+  border-radius: 0;
+  color: #61738b;
+  background: #fff;
+}
+
+.org-admin-center--workspace-review .org-workspace-status-tabs button[aria-pressed="true"] {
+  color: #1748a0;
+  background: #edf4ff;
+}
+
+.org-admin-center--workspace-review .org-workspace-toolbar {
+  padding: 13px;
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center--workspace-review .org-workspace-toolbar > button,
+.org-admin-center--workspace-review .org-workspace-actions :is(button, a) {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.org-admin-center--workspace-review .org-workspace-list > button {
+  min-height: 78px;
+  padding: 13px;
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+}
+
+.org-admin-center--workspace-review .org-workspace-list > button:hover,
+.org-admin-center--workspace-review .org-workspace-list > button.is-selected {
+  border-color: #83a9e7;
+  background: #eef4ff;
+}
+
+.org-admin-center--workspace-review .org-workspace-list > button.is-selected {
+  box-shadow: inset 4px 0 #1748a0;
+}
+
+.org-admin-center--workspace-review .org-workspace-mark {
+  border-radius: 0;
+  color: #1748a0;
+  background: #eaf1ff;
+}
+
+.org-admin-center--workspace-review .org-workspace-list em,
+.org-admin-center--workspace-review .org-workspace-list i,
+.org-admin-center--workspace-review .org-workspace-detail i {
+  border-radius: 0;
+}
+
+.org-admin-center--workspace-review .org-workspace-detail {
+  top: 16px;
+}
+
+.org-admin-center--workspace-review .org-workspace-default-note,
+.org-admin-center--workspace-review .org-workspace-impact {
+  border-radius: 0;
+  border-left-width: 4px;
+  background: #edf4ff;
+}
+
+.org-admin-center--workspace-review .org-workspace-detail dl div {
+  border-color: #d6e0ec;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center--workspace-review .org-workspace-actions a {
+  border-radius: 0;
+  color: #1748a0;
+  background: #f7faff;
+}
+
+@media (max-width: 620px) {
+  .org-admin-center--workspace-review {
+    margin: 12px -8px 70px;
+    padding-bottom: 16px;
+  }
+
+  .org-admin-center--workspace-review .org-admin-hero {
+    padding: 22px 20px;
+  }
+
+  .org-admin-center--workspace-review .org-workspace-overview {
+    padding: 22px 20px;
+  }
+
+  .org-admin-center--workspace-review .org-workspace-metrics article {
+    min-height: 100px;
+    padding: 14px;
+  }
+
+  .org-admin-center--workspace-review .org-workspace-create,
+  .org-admin-center--workspace-review .org-workspace-directory,
+  .org-admin-center--workspace-review .org-workspace-detail {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .org-admin-center--workspace-review .org-workspace-directory,
+  .org-admin-center--workspace-review .org-workspace-detail {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  .org-admin-center--workspace-review .org-workspace-detail {
+    top: auto;
+  }
+}
+
 @media (max-width: 760px) {
   .org-token-overview,
   .org-token-secret header,

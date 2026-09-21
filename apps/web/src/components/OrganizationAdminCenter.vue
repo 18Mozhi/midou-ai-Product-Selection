@@ -945,7 +945,10 @@ onMounted(() => void load());
 <template>
   <section
     class="org-admin-center"
-    :class="{ 'org-admin-center--review': view === 'data' }"
+    :class="{
+      'org-admin-center--review': view === 'data',
+      'org-admin-center--workspace-review': view === 'workspaces',
+    }"
     :data-state="state"
     :data-approval-first-failure="
       view === 'approvals' &&
@@ -958,7 +961,7 @@ onMounted(() => void load());
     <header class="org-admin-hero">
       <div>
         <p>组织后台</p>
-        <component :is="view === 'data' ? 'h1' : 'h2'">{{ title }}</component>
+        <component :is="view === 'data' || view === 'workspaces' ? 'h1' : 'h2'">{{ title }}</component>
         <span>{{ subtitle }}</span>
       </div>
       <div class="org-admin-refresh">
