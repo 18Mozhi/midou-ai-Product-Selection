@@ -257,7 +257,11 @@ function resetExports() {
 </script>
 
 <template>
-  <section class="org-data-panel" aria-labelledby="org-data-title" data-export-detail-c>
+  <section
+    class="org-data-panel org-data-panel--review"
+    aria-labelledby="org-data-title"
+    data-export-detail-c
+  >
     <header class="org-data-overview">
       <div>
         <p>DATA LEDGER · 实时只读</p>

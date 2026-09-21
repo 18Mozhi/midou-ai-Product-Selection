@@ -5,6 +5,153 @@
   color: var(--so-text);
 }
 
+/* P35 C composition is now the production organization-data surface. */
+.org-admin-center--review {
+  max-width: 1160px;
+  margin: 0 auto;
+  color: #182d4a;
+  background: #f3f6fb;
+}
+
+.org-admin-center--review .org-admin-hero {
+  padding: 31px 36px;
+  border: 0;
+  border-radius: 0;
+  background: #1748a0;
+}
+
+.org-admin-center--review .org-admin-hero :is(p, h1, h2, span) {
+  color: #fff;
+}
+
+.org-admin-center--review .org-admin-hero h1 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.org-admin-center--review :is(button, a) {
+  border-radius: 0;
+}
+
+.org-admin-center--review .org-data-overview {
+  padding: 25px 28px;
+  border-left: 5px solid #1748a0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--review .org-data-overview aside {
+  border-color: #dce4ee;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center--review .org-data-metrics {
+  gap: 0;
+  border: 1px solid #dce4ee;
+}
+
+.org-admin-center--review .org-data-metrics article {
+  border: 0;
+  border-right: 1px solid #dce4ee;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--review .org-data-metrics article:last-child {
+  border-right: 0;
+}
+
+.org-admin-center--review .org-data-metrics b {
+  color: #1748a0;
+}
+
+.org-admin-center--review .org-data-truth {
+  border-left: 5px solid #1748a0;
+  border-radius: 0;
+  background: #edf4ff;
+}
+
+.org-admin-center--review .org-data-tabs {
+  gap: 0;
+  padding: 0;
+  border-color: #dce4ee;
+  border-radius: 0;
+  background: #fff;
+}
+
+.org-admin-center--review .org-data-tabs button {
+  border: 0;
+  border-right: 1px solid #dce4ee;
+  border-radius: 0;
+  background: #fff;
+}
+
+.org-admin-center--review .org-data-tabs button[aria-pressed="true"] {
+  background: #edf4ff;
+  color: #1748a0;
+}
+
+.org-admin-center--review .org-data-section {
+  border-top: 5px solid #1748a0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--review .org-data-toolbar {
+  padding: 14px;
+  border-color: #dce4ee;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center--review .org-data-toolbar :is(input, select) {
+  border-color: #dce4ee;
+  border-radius: 0;
+  background: #fff;
+}
+
+.org-admin-center--review .org-data-table-scroll,
+.org-admin-center--review .org-data-table [role="row"] {
+  border-color: #dce4ee;
+}
+
+.org-admin-center--review .org-data-table-head {
+  color: #fff;
+  background: #1748a0;
+}
+
+.org-admin-center--review .org-data-table [role="row"]:nth-child(2n) {
+  background: #f7faff;
+}
+
+.org-admin-center--review .org-data-export-list article {
+  border-color: #dce4ee;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--review .org-data-export-list article header {
+  border-bottom-color: #dce4ee;
+}
+
+.org-admin-center--review .org-data-export-list dl > div {
+  border-color: #dce4ee;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center--review :is(button, input, select, a, summary):focus-visible {
+  outline: 3px solid #2465d7;
+  outline-offset: 3px;
+}
+
 .org-admin-hero {
   min-height: 146px;
   padding: 25px 28px;
@@ -3768,5 +3915,32 @@
   .org-token-list article > footer button,
   .org-token-pagination button {
     width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  .org-admin-center--review .org-admin-hero {
+    padding: 25px 19px;
+  }
+
+  .org-admin-center--review .org-data-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .org-admin-center--review .org-data-metrics article:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .org-admin-center--review .org-data-overview {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .org-admin-center--review .org-data-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .org-admin-center--review .org-data-section {
+    padding: 18px;
   }
 }
