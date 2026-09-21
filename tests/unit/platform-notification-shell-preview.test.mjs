@@ -49,17 +49,25 @@ for (const [name, transform] of [
       }).errors,
       [],
     );
-    assert.throws(() => transform(result));
+    if (name === "PlatformNotificationCenter") assert.equal(transform(result), result);
+    else assert.throws(() => transform(result));
     assert.ok(!original.includes("shell-review-navigation"));
   });
 }
 
 test("P57 proposal preserves section handlers and moves rail after the only page heading", async () => {
-  const original = await readFile("apps/web/src/components/PlatformNotificationCenter.vue", "utf8");
+  const production = await readFile(
+    "apps/web/src/components/PlatformNotificationCenter.vue",
+    "utf8",
+  );
+  const original = production
+    .replace("platform-notifications platform-notifications--review", "platform-notifications")
+    .replace("<h1>通知管理</h1>", "<h2>通知管理</h2>");
   const result = notificationPagePreview(original);
   assert.equal((result.match(/<h1>通知管理<\/h1>/g) || []).length, 1);
   assert.ok(result.indexOf("platform-notifications__rail") > result.indexOf("<h1>通知管理</h1>"));
   assert.ok(result.includes('@click="section = item.key"'));
+  assert.equal(notificationPagePreview(result), result);
   assert.throws(() =>
     notificationPagePreview(original.replace("platform-notifications__rail", "changed")),
   );

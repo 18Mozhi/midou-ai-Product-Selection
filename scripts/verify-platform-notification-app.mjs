@@ -29,7 +29,7 @@ const output = path.resolve(
       ? "output/playwright/p57-shell-composition-r2"
       : "design-plans/ui-phase-2-2026-09-07/design/platform-notifications-direction-c/app-review-r3",
 );
-if (capture) await mkdir(output);
+if (capture) await mkdir(output, { recursive: true });
 const fixtureFile = "tests/e2e/platform-message-management.spec.ts";
 const ast = ts.createSourceFile(
   fixtureFile,

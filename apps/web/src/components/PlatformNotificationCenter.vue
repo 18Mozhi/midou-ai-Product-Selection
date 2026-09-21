@@ -109,36 +109,16 @@ onUnmounted(stop);
 </script>
 
 <template>
-  <section class="platform-notifications" aria-live="polite" :aria-busy="refreshing">
-    <aside class="platform-notifications__rail" aria-label="通知运营分区">
-      <div class="platform-notifications__identity">
-        <small>NOTIFICATION DESK</small>
-        <strong>通知编排台</strong>
-        <span>先准备消息，再核对发布与送达。</span>
-      </div>
-      <nav aria-label="通知管理页面分区">
-        <button
-          v-for="item in sections"
-          :key="item.key"
-          type="button"
-          :aria-current="section === item.key ? 'page' : undefined"
-          @click="section = item.key"
-        >
-          <b>{{ item.index }}</b
-          ><span
-            ><strong>{{ item.label }}</strong
-            ><small>{{ item.hint }}</small></span
-          >
-        </button>
-      </nav>
-      <p>邮件服务尚未接入；本页不提供开启入口，也不把草稿数量当成投递数量。</p>
-    </aside>
-
+  <section
+    class="platform-notifications platform-notifications--review"
+    aria-live="polite"
+    :aria-busy="refreshing"
+  >
     <div class="platform-notifications__surface">
       <header class="platform-notifications__hero">
         <div>
           <p>P57 / NOTIFICATION OPERATIONS</p>
-          <h2>通知管理</h2>
+          <h1>通知管理</h1>
           <span>编排人工消息，核对接收范围与真实送达记录。</span>
         </div>
         <div>
@@ -148,6 +128,30 @@ onUnmounted(stop);
           </button>
         </div>
       </header>
+
+      <aside class="platform-notifications__rail" aria-label="通知运营分区">
+        <div class="platform-notifications__identity">
+          <small>NOTIFICATION DESK</small>
+          <strong>通知编排台</strong>
+          <span>先准备消息，再核对发布与送达。</span>
+        </div>
+        <nav aria-label="通知管理页面分区">
+          <button
+            v-for="item in sections"
+            :key="item.key"
+            type="button"
+            :aria-current="section === item.key ? 'page' : undefined"
+            @click="section = item.key"
+          >
+            <b>{{ item.index }}</b
+            ><span
+              ><strong>{{ item.label }}</strong
+              ><small>{{ item.hint }}</small></span
+            >
+          </button>
+        </nav>
+        <p>邮件服务尚未接入；本页不提供开启入口，也不把草稿数量当成投递数量。</p>
+      </aside>
 
       <section v-if="!hasSnapshot" class="platform-notifications__first-state">
         <span aria-hidden="true">{{ state === "loading" ? "···" : "!" }}</span>

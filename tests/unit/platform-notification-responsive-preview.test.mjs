@@ -45,6 +45,7 @@ test("narrow reading layout is limited to the review shell and non-phone workben
   const production = await readFile("apps/web/src/platform-notifications.css", "utf8");
   assert.ok(
     !production.includes("platform-notification-shell-preview") &&
-      !production.includes("p57-messages"),
+      production.includes("platform-notifications--review") &&
+      production.includes("p57-messages"),
   );
 });

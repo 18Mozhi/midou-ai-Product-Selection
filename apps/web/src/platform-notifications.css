@@ -984,3 +984,125 @@
     scroll-behavior: auto;
   }
 }
+
+/* P57 C direction is the production composition, not a review-only shell. */
+.platform-notifications--review {
+  display: block;
+  border: 0;
+  background: transparent;
+  font-family: "Microsoft YaHei", sans-serif;
+}
+
+.platform-notifications--review .platform-notifications__surface {
+  padding: 0;
+  gap: 18px;
+}
+
+.platform-notifications--review .platform-notifications__hero {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.platform-notifications--review .platform-notifications__hero h1 {
+  margin: 6px 0;
+  font:
+    700 30px/1.4 "Microsoft YaHei",
+    sans-serif;
+  letter-spacing: 0;
+}
+
+.platform-notifications--review .platform-notifications__rail {
+  display: block;
+  padding: 0;
+  color: var(--so-text);
+  background: transparent;
+}
+
+.platform-notifications--review .platform-notifications__identity {
+  display: none;
+}
+
+.platform-notifications--review .platform-notifications__rail nav {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.platform-notifications--review .platform-notifications__rail nav button {
+  min-height: 64px;
+  border-color: var(--so-border);
+  color: var(--so-text);
+  background: var(--so-panel);
+}
+
+.platform-notifications--review .platform-notifications__rail nav button[aria-current="page"] {
+  border-color: var(--so-primary);
+  color: var(--so-on-primary);
+  background: var(--so-primary);
+}
+
+.platform-notifications--review
+  .platform-notifications__rail
+  nav
+  button:not([aria-current="page"]):hover {
+  border-color: var(--so-primary);
+  color: var(--so-primary);
+}
+
+.platform-notifications--review .platform-notifications__rail > p {
+  margin: 10px 0 0;
+  padding: 0;
+  border: 0;
+  color: var(--so-text-muted);
+}
+
+.platform-notifications--review :is(button, a, input, select, textarea, summary):focus-visible {
+  outline-color: var(--so-platform-notification-focus);
+}
+
+@media (min-width: 761px) {
+  .platform-notifications--review .message-workbench {
+    container: p57-messages / inline-size;
+  }
+
+  @container p57-messages (max-width: 640px) {
+    .platform-notifications--review .message-workbench__body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .platform-notifications--review .message-directory {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-right: 0;
+      border-bottom: 1px solid var(--so-border);
+    }
+  }
+}
+
+@media (max-width: 840px) {
+  .platform-notifications--review .platform-notifications__hero {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .platform-notifications--review .platform-notifications__hero h1 {
+    font-size: 27px;
+  }
+
+  .platform-notifications--review .platform-notifications__rail nav button {
+    display: block;
+    min-width: 0;
+    min-height: 44px;
+    padding: 10px 6px;
+    text-align: center;
+  }
+
+  .platform-notifications--review .platform-notifications__rail nav button > b,
+  .platform-notifications--review .platform-notifications__rail nav button small {
+    display: none;
+  }
+
+  .platform-notifications--review .platform-notifications__rail nav button strong {
+    font-size: 14px;
+  }
+}

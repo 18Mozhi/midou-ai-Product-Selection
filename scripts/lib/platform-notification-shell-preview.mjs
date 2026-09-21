@@ -30,11 +30,15 @@ export function notificationShellPreview(source) {
 
 export function notificationPagePreview(source) {
   let text = source.replaceAll("\r\n", "\n");
+  if (text.includes("platform-notifications--review")) return text;
   const rail = text.match(/    <aside class="platform-notifications__rail"[\s\S]*?    <\/aside>\n/);
   assert.ok(rail);
   text = once(text, rail[0], "");
   text = once(text, "      </header>\n", "      </header>\n" + rail[0]);
-  return once(text, "<h2>通知管理</h2>", "<h1>通知管理</h1>");
+  text = once(text, "<h2>通知管理</h2>", "<h1>通知管理</h1>");
+  const marker = 'class="platform-notifications"';
+  assert.equal(text.split(marker).length, 2, "Unique P57 production marker");
+  return text.replace(marker, 'class="platform-notifications platform-notifications--review"');
 }
 
 export function notificationShellPlugin() {
