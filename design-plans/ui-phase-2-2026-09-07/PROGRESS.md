@@ -1,5 +1,9 @@
 # 第二阶段实施记录
 
+## 2026-09-22 · P28报表与导出C方向迁移到生产Vue
+
+[P28生产实施](P28-PAGE-COMPOSITION-IMPLEMENTATION.md)：将蓝白报表类型导航、统计口径、结论、事实分布、导出生命周期与详情抽屉迁移到实际 `ReportCenter.vue`；保留三类报表读取、CSV 创建、详情、下载与重建合同。1440/390、reduced/no-preference 四组共36项本地核验，每组一次精确 CSV 创建拦截，相关单测通过；类型检查、格式检查、构建与宝塔部署将在本批提交前完成。真实 RBAC、下载字节、Worker 和正式 M07-03 证据仍待。
+
 ## 2026-09-22 · P29组织资料C方向迁移到生产Vue
 
 [P29生产实施](P29-PAGE-COMPOSITION-IMPLEMENTATION.md)：将蓝白组织身份、事实摘要、资料阅读与版本化内联编辑迁移到实际 `OrganizationAdminCenter.vue` 概览路由；保留摘要、资料、工作区读取及 `PATCH /org/admin/profile`、六字段、变更原因和 `expected_version` 合同。1440/390 双端各5项本地核验、每组一次精确保存拦截及相关单测通过；类型检查、格式检查、构建与宝塔部署将在本批提交前完成。真实 RBAC、冲突/失败、背景刷新和正式 M07-03 证据仍待。

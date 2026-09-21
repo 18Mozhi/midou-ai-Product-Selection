@@ -323,3 +323,219 @@
     padding: 22px;
   }
 }
+
+/* P28 C composition: report scope, facts, distribution and export lifecycle. */
+.report-center--review {
+  max-width: 1160px;
+  margin: 0 auto;
+  gap: 16px;
+  color: #182d4a;
+  background: #f3f6fb;
+}
+
+.report-center--review > header {
+  padding: 31px 36px;
+  border: 0;
+  border-radius: 0;
+  background: #1748a0;
+}
+
+.report-center--review > header :is(p, h1, h2, span) {
+  color: #fff;
+}
+
+.report-center--review > header h1 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.report-center--review button {
+  min-height: 44px;
+  border: 1px solid #1748a0;
+  border-radius: 0;
+  color: #fff;
+  background: #1748a0;
+  font: inherit;
+  font-weight: 800;
+  box-shadow: none;
+}
+
+.report-center--review button.secondary {
+  color: #1748a0;
+  background: #fff;
+}
+
+.report-center--review button:disabled {
+  border-color: #c7d0dc;
+  color: #6f7f93;
+  background: #e6ebf1;
+}
+
+.report-center--review :is(button, a, summary):focus-visible {
+  border-color: #1748a0;
+  outline: 3px solid #a9c5f5;
+  outline-offset: 2px;
+}
+
+.report-center--review > nav {
+  gap: 0;
+  border: 1px solid #d6e0ec;
+  background: #fff;
+}
+
+.report-center--review > nav button {
+  flex: 1;
+  border: 0;
+  border-right: 1px solid #d6e0ec;
+  border-bottom: 4px solid transparent;
+  color: #61738b;
+  background: #fff;
+}
+
+.report-center--review > nav button:last-child {
+  border-right: 0;
+}
+
+.report-center--review > nav button[aria-pressed="true"] {
+  border-bottom-color: #1748a0;
+  color: #1748a0;
+}
+
+.report-center--review .report-conclusion {
+  border-left-color: #1748a0;
+  border-radius: 0;
+  background: #edf4ff;
+}
+
+.report-center--review
+  :is(
+    .report-scope,
+    .report-metrics article,
+    .report-chart,
+    .report-exports,
+    .report-notice,
+    .report-state
+  ) {
+  border-color: #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.report-center--review .report-scope > div {
+  background: #fff;
+}
+
+.report-center--review .report-metrics {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0;
+  border: 1px solid #d6e0ec;
+}
+
+.report-center--review .report-metrics article {
+  border: 0;
+  border-right: 1px solid #d6e0ec;
+}
+
+.report-center--review .report-metrics article:last-child {
+  border-right: 0;
+}
+
+.report-center--review .report-metrics b {
+  color: #1748a0;
+}
+
+.report-center--review .report-chart,
+.report-center--review .report-exports {
+  padding: 24px;
+}
+
+.report-center--review .report-bars {
+  height: 240px;
+  background: linear-gradient(
+    to bottom,
+    transparent 24%,
+    #d6e0ec 25%,
+    transparent 26%,
+    transparent 49%,
+    #d6e0ec 50%,
+    transparent 51%,
+    transparent 74%,
+    #d6e0ec 75%,
+    transparent 76%
+  );
+}
+
+.report-center--review .report-bars span {
+  border-radius: 0;
+  background: #1748a0;
+}
+
+.report-center--review .report-export-list article {
+  grid-template-columns: 110px minmax(0, 1fr) auto auto;
+}
+
+.report-center--review .report-export-list i {
+  color: #1748a0;
+  font-weight: 800;
+}
+
+.report-center--review .report-export-list i[data-status="expired"],
+.report-center--review .report-export-list i[data-status="dead_letter"] {
+  color: #a52b2b;
+}
+
+.report-center--review .report-detail[open] {
+  border-left: 5px solid #1748a0;
+  border-radius: 0;
+  color: #182d4a;
+  background: #fff;
+  box-shadow: -16px 0 40px rgb(24 45 74 / 0.24);
+}
+
+.report-center--review .report-detail dl > div {
+  border-color: #d6e0ec;
+}
+
+@media (max-width: 760px) {
+  .report-center--review {
+    margin: 12px -8px 70px;
+  }
+
+  .report-center--review > header {
+    padding: 25px 19px;
+  }
+
+  .report-center--review > header button {
+    width: 100%;
+  }
+
+  .report-center--review > nav button {
+    padding: 10px 4px;
+    font-size: 14px;
+  }
+
+  .report-center--review .report-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .report-center--review .report-metrics article:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .report-center--review .report-export-list article {
+    grid-template-columns: 1fr auto;
+  }
+
+  .report-center--review .report-detail[open] {
+    width: calc(100vw - 24px);
+    height: calc(100dvh - 24px);
+    inset: 12px;
+    margin: 0;
+    padding: 22px;
+    border: 1px solid #d6e0ec;
+    border-top: 5px solid #1748a0;
+  }
+}

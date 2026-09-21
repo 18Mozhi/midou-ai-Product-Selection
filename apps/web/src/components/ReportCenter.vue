@@ -369,11 +369,11 @@ watch(
 );
 </script>
 <template>
-  <section class="report-center">
+  <section class="report-center report-center--review">
     <header>
       <div>
         <p>分析与导出</p>
-        <h2>报表与导出</h2>
+        <h1>报表与导出</h1>
         <span>所有指标都来自当前组织和工作区已落库事实；缺失值保持“数据不足”。</span>
       </div>
       <button :disabled="busy" @click="createExport">导出当前报表 CSV</button>
