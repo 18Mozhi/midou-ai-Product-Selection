@@ -948,6 +948,7 @@ onMounted(() => void load());
     :class="{
       'org-admin-center--review': view === 'data',
       'org-admin-center--workspace-review': view === 'workspaces',
+      'org-admin-center--member-review': view === 'members',
     }"
     :data-state="state"
     :data-approval-first-failure="
@@ -961,7 +962,7 @@ onMounted(() => void load());
     <header class="org-admin-hero">
       <div>
         <p>组织后台</p>
-        <component :is="view === 'data' || view === 'workspaces' ? 'h1' : 'h2'">{{
+        <component :is="['data', 'workspaces', 'members'].includes(view) ? 'h1' : 'h2'">{{
           title
         }}</component>
         <span>{{ subtitle }}</span>

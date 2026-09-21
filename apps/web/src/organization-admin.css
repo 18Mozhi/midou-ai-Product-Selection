@@ -3846,6 +3846,200 @@
   }
 }
 
+/* P30 C composition: member identity, invitations and directory share one boundary. */
+.org-admin-center--member-review {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-bottom: 28px;
+  color: #182d4a;
+  background: #f3f6fb;
+}
+
+.org-admin-center--member-review .org-admin-hero {
+  padding: 31px 36px;
+  border: 0;
+  border-radius: 0;
+  background: #1748a0;
+}
+
+.org-admin-center--member-review .org-admin-hero :is(p, h1, h2, span) {
+  color: #fff;
+}
+
+.org-admin-center--member-review .org-admin-hero h1 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.org-admin-center--member-review .org-admin-metrics {
+  gap: 0;
+  border: 1px solid #d6e0ec;
+}
+
+.org-admin-center--member-review .org-admin-metrics article {
+  border: 0;
+  border-right: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--member-review .org-admin-metrics article:last-child {
+  border-right: 0;
+}
+
+.org-admin-center--member-review .org-admin-metrics b {
+  color: #1748a0;
+}
+
+.org-admin-center--member-review .org-admin-grid {
+  grid-template-columns: minmax(310px, 0.8fr) minmax(520px, 1.45fr);
+  gap: 16px;
+}
+
+.org-admin-center--member-review .org-admin-card {
+  border-color: #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--member-review .org-admin-invite-form {
+  border-top: 5px solid #1748a0;
+}
+
+.org-admin-center--member-review .org-admin-card :is(input, select, textarea) {
+  min-height: 44px;
+  border-color: #c7d4e4;
+  border-radius: 0;
+  color: #182d4a;
+  background: #fff;
+}
+
+.org-admin-center--member-review .org-admin-card textarea {
+  min-height: 104px;
+}
+
+.org-admin-center--member-review .org-admin-card :is(input, select, textarea):focus-visible,
+.org-admin-center--member-review :is(button, a, summary):focus-visible {
+  border-color: #1748a0;
+  outline: 3px solid #a9c5f5;
+  outline-offset: 2px;
+}
+
+.org-admin-center--member-review .org-admin-section-header {
+  border-bottom: 1px solid #d6e0ec;
+}
+
+.org-admin-center--member-review .org-admin-section-header nav button {
+  min-height: 36px;
+  padding: 5px 10px;
+  border-color: #d6e0ec;
+  border-radius: 0;
+  color: #1748a0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--member-review .org-admin-section-header nav button[aria-pressed="true"] {
+  border-color: #1748a0;
+  background: #edf4ff;
+}
+
+.org-admin-center--member-review .org-admin-line {
+  gap: 16px;
+  padding: 17px 0;
+  border-color: #d6e0ec;
+}
+
+.org-admin-center--member-review .org-admin-line > div:first-child > b {
+  color: #182d4a;
+}
+
+.org-admin-center--member-review .org-admin-line small {
+  color: #61738b;
+}
+
+.org-admin-center--member-review .org-admin-actions {
+  align-items: center;
+}
+
+.org-admin-center--member-review .org-admin-actions i {
+  border-radius: 999px;
+  color: #1748a0;
+  background: #edf4ff;
+}
+
+.org-admin-center--member-review .org-admin-filters {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) auto;
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center--member-review .org-admin-filters label {
+  color: #61738b;
+  font-weight: 700;
+}
+
+.org-admin-center--member-review .org-admin-invite-results {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.org-admin-center--member-review .org-admin-invite-results li {
+  display: grid;
+  gap: 2px;
+  padding: 11px 12px;
+  border-left: 4px solid #1748a0;
+  background: #edf4ff;
+}
+
+@media (max-width: 760px) {
+  .org-admin-center--member-review {
+    margin: 12px -8px 70px;
+    padding-bottom: 16px;
+  }
+
+  .org-admin-center--member-review .org-admin-hero {
+    padding: 25px 19px;
+  }
+
+  .org-admin-center--member-review .org-admin-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .org-admin-center--member-review .org-admin-metrics article:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .org-admin-center--member-review .org-admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .org-admin-center--member-review .org-admin-card {
+    padding: 18px;
+  }
+
+  .org-admin-center--member-review .org-admin-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .org-admin-center--member-review .org-admin-line,
+  .org-admin-center--member-review .org-admin-actions {
+    align-items: stretch;
+  }
+
+  .org-admin-center--member-review .org-admin-line {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* P32 C composition: workspace governance is a flat blue-and-white boundary. */
 .org-admin-center--workspace-review {
   max-width: 1160px;
