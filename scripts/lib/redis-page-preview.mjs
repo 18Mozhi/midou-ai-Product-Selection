@@ -26,7 +26,10 @@ export function previewRedisPage(input) {
   // Once the approved C direction is in the production SFC, keep the review
   // harness idempotent so its Vite path validates the real template instead
   // of trying to re-transform already migrated markup.
-  if (source.includes('class="redis-resilience redis-resilience--review"') && source.includes('class="p67-workspace"'))
+  if (
+    source.includes('class="redis-resilience redis-resilience--review"') &&
+    source.includes('class="p67-workspace"')
+  )
     return source;
   const template = source.slice(
     source.indexOf("<template>") + 10,

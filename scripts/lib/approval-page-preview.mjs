@@ -9,7 +9,10 @@ export function approvalPagePlugin() {
     transformIndexHtml(html) {
       return html
         .replace("<body>", '<body class="p25-review">')
-        .replace("</head>", `<link rel="stylesheet" href="/@fs/${path.resolve(approvalReviewCss).replaceAll("\\", "/")}"></head>`);
+        .replace(
+          "</head>",
+          `<link rel="stylesheet" href="/@fs/${path.resolve(approvalReviewCss).replaceAll("\\", "/")}"></head>`,
+        );
     },
   };
 }

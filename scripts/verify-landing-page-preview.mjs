@@ -25,8 +25,14 @@ const motions = process.env.P01_MOTION
   : smoke
     ? ["reduce"]
     : ["reduce", "no-preference"];
-assert.deepEqual(widths.every((value) => [390, 1440].includes(value)), true);
-assert.deepEqual(motions.every((value) => ["reduce", "no-preference"].includes(value)), true);
+assert.deepEqual(
+  widths.every((value) => [390, 1440].includes(value)),
+  true,
+);
+assert.deepEqual(
+  motions.every((value) => ["reduce", "no-preference"].includes(value)),
+  true,
+);
 
 const output = args.length
   ? path.resolve(`output/playwright/p01-page-composition-${args[1]}`)
@@ -154,7 +160,11 @@ try {
           1,
           "one retry action",
         );
-        check(await root.locator(".ui-state-panel footer button:visible").count(), 1, "failure keeps one action");
+        check(
+          await root.locator(".ui-state-panel footer button:visible").count(),
+          1,
+          "failure keeps one action",
+        );
         check(
           (await root.getByText("p01-review-request", { exact: true }).count()) > 0,
           true,
@@ -199,7 +209,9 @@ try {
   }
 
   const allImages = [...(previous?.images ?? []), ...images]
-    .filter((item, index, values) => values.findLastIndex((value) => value.file === item.file) === index)
+    .filter(
+      (item, index, values) => values.findLastIndex((value) => value.file === item.file) === index,
+    )
     .sort((a, b) => a.file.localeCompare(b.file));
   const allResults = [...(previous?.results ?? []), ...results]
     .filter(

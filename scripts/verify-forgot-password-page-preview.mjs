@@ -1,3 +1,198 @@
-import assert from "node:assert/strict";import {createHash}from "node:crypto";import {mkdir,readFile,writeFile}from "node:fs/promises";import {createServer as reservePort}from "node:net";import path from "node:path";import {chromium}from "playwright";import {createServer}from "vite";import {forgotPasswordPagePlugin,forgotPasswordPageSources}from "./lib/forgot-password-page-preview.mjs";
-const args=process.argv.slice(2),smoke=process.env.P04_SMOKE==="1";assert.ok(args.length===0||(args.length===2&&args[0]==="--capture-review"&&/^r[1-9]\d*$/.test(args[1])));const widths=process.env.P04_VIEWPORT?[Number.parseInt(process.env.P04_VIEWPORT,10)]:smoke?[390]:[1440,390],motions=process.env.P04_MOTION?[process.env.P04_MOTION]:smoke?["reduce"]:["reduce","no-preference"],output=args.length?path.resolve(`output/playwright/p04-page-composition-${args[1]}`):null;if(output)await mkdir(output,{recursive:true});const previous=output?await readFile(path.join(output,"manifest.json"),"utf8").then(JSON.parse).catch(()=>null):null;const probe=reservePort();await new Promise(r=>probe.listen(0,"127.0.0.1",r));const port=probe.address().port;await new Promise(r=>probe.close(r));const server=await createServer({configFile:path.resolve("apps/web/vite.config.ts"),logLevel:"error",define:{"import.meta.env.VITE_API_BASE_URL":JSON.stringify("/api/v1")},plugins:[forgotPasswordPagePlugin()],server:{host:"127.0.0.1",port,strictPort:true,proxy:{},hmr:false,open:false}}),hash=v=>createHash("sha256").update(v).digest("hex"),images=[],results=[];let browser;
-try{await server.listen();browser=await chromium.launch();const origin=`http://127.0.0.1:${port}`;console.log(`P04 actual Vue review ${origin}`);for(const width of widths)for(const motion of motions){const context=await browser.newContext({viewport:{width,height:width===390?844:1000},locale:"zh-CN",reducedMotion:motion}),errors=[],unexpected=[],writes=[];let checks=0;const check=(a,e,l)=>{assert.deepEqual(a,e,`${width}/${motion}: ${l}`);checks++},capture=async(page,name)=>{await page.evaluate(()=>new Promise(r=>{scrollTo(0,0);requestAnimationFrame(()=>{scrollTo(0,0);r()})}));const bytes=await page.screenshot({animations:"disabled"}),file=`${width}-${name}.png`;await writeFile(path.join(output,file),bytes);images.push({file,sha256:hash(bytes),pixelWidth:bytes.readUInt32BE(16),pixelHeight:bytes.readUInt32BE(20)})};try{context.on("page",p=>p.on("pageerror",e=>errors.push(e.message)));await context.route("**/*",async route=>{const req=route.request(),url=new URL(req.url());if(url.origin!==origin)return route.abort();if(!url.pathname.startsWith("/api/"))return route.continue();if(req.method()!=="POST"||url.pathname!=="/api/v1/auth/password-reset/request"){unexpected.push(`${req.method()} ${url.pathname}`);return route.abort()}writes.push(req.postDataJSON());return route.fulfill({status:202,json:{data:{accepted:true},request_id:"p04-review",trace_id:"p04-review"}})});const page=await context.newPage();await page.goto(origin+"/forgot-password",{waitUntil:"domcontentloaded"});const root=page.locator(".identity-page--review");await root.waitFor();check(await root.locator("h1").count(),1,"single h1");check(await page.getByLabel("邮箱").count(),1,"email field");check(await root.getByText("不论账号是否存在，反馈都保持一致",{exact:true}).count(),1,"generic feedback boundary");check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,"no overflow");if(output&&motion==="reduce")await capture(page,"forgot");const button=page.getByRole("button",{name:"发送重置说明",exact:true});await button.focus();check(await button.evaluate(n=>getComputedStyle(n).outlineWidth),"3px","focus visible");await page.getByLabel("邮箱").fill("unknown@example.test");await button.click();await root.getByText("如账号存在，重置邮件会进入受控投递队列。",{exact:true}).waitFor();check(await root.getAttribute("data-state"),"success","generic accepted state");check(writes,[{email:"unknown@example.test"}],"request only carries email");check(await page.getByRole("button",{name:"返回登录",exact:true}).count(),1,"return action remains");if(output&&motion==="reduce")await capture(page,"accepted");check(unexpected,[],"no unexpected api");check(errors,[],"no page errors");results.push({width,motion,checks,writes:writes.length});console.log(JSON.stringify({width,motion,checks,writes:writes.length}))}finally{await context.close()}}const sources=new Set(forgotPasswordPageSources);for(const m of server.moduleGraph.idToModuleMap.values()){const f=m.file&&path.relative(process.cwd(),m.file).replaceAll("\\","/");if(f&&!f.startsWith("..")&&!f.includes("node_modules")&&/\.(vue|ts|css|json)$/.test(f))sources.add(f)}const allImages=[...(previous?.images??[]),...images].filter((x,i,a)=>a.findLastIndex(y=>y.file===x.file)===i).sort((a,b)=>a.file.localeCompare(b.file)),allResults=[...(previous?.results??[]),...results].filter((x,i,a)=>a.findLastIndex(y=>y.width===x.width&&y.motion===x.motion)===i).sort((a,b)=>a.width-b.width||a.motion.localeCompare(b.motion));if(output)await writeFile(path.join(output,"manifest.json"),JSON.stringify({page:"P04",revision:args[1],capturedAt:new Date().toISOString(),scope:"local actual Vue C review; password-reset request is locally intercepted as generic acceptance",sources:Object.fromEntries(await Promise.all([...sources].sort().map(async f=>[f,hash(await readFile(f))]))),images:allImages,results:allResults},null,2)+"\n");console.log(JSON.stringify({groups:allResults.length,checks:allResults.reduce((s,x)=>s+x.checks,0),writes:allResults.reduce((s,x)=>s+x.writes,0),images:allImages.length,sources:sources.size,port}))}finally{await browser?.close();await server.close()}
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { createServer as reservePort } from "node:net";
+import path from "node:path";
+import { chromium } from "playwright";
+import { createServer } from "vite";
+import {
+  forgotPasswordPagePlugin,
+  forgotPasswordPageSources,
+} from "./lib/forgot-password-page-preview.mjs";
+const args = process.argv.slice(2),
+  smoke = process.env.P04_SMOKE === "1";
+assert.ok(
+  args.length === 0 ||
+    (args.length === 2 && args[0] === "--capture-review" && /^r[1-9]\d*$/.test(args[1])),
+);
+const widths = process.env.P04_VIEWPORT
+    ? [Number.parseInt(process.env.P04_VIEWPORT, 10)]
+    : smoke
+      ? [390]
+      : [1440, 390],
+  motions = process.env.P04_MOTION
+    ? [process.env.P04_MOTION]
+    : smoke
+      ? ["reduce"]
+      : ["reduce", "no-preference"],
+  output = args.length ? path.resolve(`output/playwright/p04-page-composition-${args[1]}`) : null;
+if (output) await mkdir(output, { recursive: true });
+const previous = output
+  ? await readFile(path.join(output, "manifest.json"), "utf8")
+      .then(JSON.parse)
+      .catch(() => null)
+  : null;
+const probe = reservePort();
+await new Promise((r) => probe.listen(0, "127.0.0.1", r));
+const port = probe.address().port;
+await new Promise((r) => probe.close(r));
+const server = await createServer({
+    configFile: path.resolve("apps/web/vite.config.ts"),
+    logLevel: "error",
+    define: { "import.meta.env.VITE_API_BASE_URL": JSON.stringify("/api/v1") },
+    plugins: [forgotPasswordPagePlugin()],
+    server: { host: "127.0.0.1", port, strictPort: true, proxy: {}, hmr: false, open: false },
+  }),
+  hash = (v) => createHash("sha256").update(v).digest("hex"),
+  images = [],
+  results = [];
+let browser;
+try {
+  await server.listen();
+  browser = await chromium.launch();
+  const origin = `http://127.0.0.1:${port}`;
+  console.log(`P04 actual Vue review ${origin}`);
+  for (const width of widths)
+    for (const motion of motions) {
+      const context = await browser.newContext({
+          viewport: { width, height: width === 390 ? 844 : 1000 },
+          locale: "zh-CN",
+          reducedMotion: motion,
+        }),
+        errors = [],
+        unexpected = [],
+        writes = [];
+      let checks = 0;
+      const check = (a, e, l) => {
+          assert.deepEqual(a, e, `${width}/${motion}: ${l}`);
+          checks++;
+        },
+        capture = async (page, name) => {
+          await page.evaluate(
+            () =>
+              new Promise((r) => {
+                scrollTo(0, 0);
+                requestAnimationFrame(() => {
+                  scrollTo(0, 0);
+                  r();
+                });
+              }),
+          );
+          const bytes = await page.screenshot({ animations: "disabled" }),
+            file = `${width}-${name}.png`;
+          await writeFile(path.join(output, file), bytes);
+          images.push({
+            file,
+            sha256: hash(bytes),
+            pixelWidth: bytes.readUInt32BE(16),
+            pixelHeight: bytes.readUInt32BE(20),
+          });
+        };
+      try {
+        context.on("page", (p) => p.on("pageerror", (e) => errors.push(e.message)));
+        await context.route("**/*", async (route) => {
+          const req = route.request(),
+            url = new URL(req.url());
+          if (url.origin !== origin) return route.abort();
+          if (!url.pathname.startsWith("/api/")) return route.continue();
+          if (req.method() !== "POST" || url.pathname !== "/api/v1/auth/password-reset/request") {
+            unexpected.push(`${req.method()} ${url.pathname}`);
+            return route.abort();
+          }
+          writes.push(req.postDataJSON());
+          return route.fulfill({
+            status: 202,
+            json: { data: { accepted: true }, request_id: "p04-review", trace_id: "p04-review" },
+          });
+        });
+        const page = await context.newPage();
+        await page.goto(origin + "/forgot-password", { waitUntil: "domcontentloaded" });
+        const root = page.locator(".identity-page--review");
+        await root.waitFor();
+        check(await root.locator("h1").count(), 1, "single h1");
+        check(await page.getByLabel("邮箱").count(), 1, "email field");
+        check(
+          await root.getByText("不论账号是否存在，反馈都保持一致", { exact: true }).count(),
+          1,
+          "generic feedback boundary",
+        );
+        check(
+          await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
+          true,
+          "no overflow",
+        );
+        if (output && motion === "reduce") await capture(page, "forgot");
+        const button = page.getByRole("button", { name: "发送重置说明", exact: true });
+        await button.focus();
+        check(
+          await button.evaluate((n) => getComputedStyle(n).outlineWidth),
+          "3px",
+          "focus visible",
+        );
+        await page.getByLabel("邮箱").fill("unknown@example.test");
+        await button.click();
+        await root.getByText("如账号存在，重置邮件会进入受控投递队列。", { exact: true }).waitFor();
+        check(await root.getAttribute("data-state"), "success", "generic accepted state");
+        check(writes, [{ email: "unknown@example.test" }], "request only carries email");
+        check(
+          await page.getByRole("button", { name: "返回登录", exact: true }).count(),
+          1,
+          "return action remains",
+        );
+        if (output && motion === "reduce") await capture(page, "accepted");
+        check(unexpected, [], "no unexpected api");
+        check(errors, [], "no page errors");
+        results.push({ width, motion, checks, writes: writes.length });
+        console.log(JSON.stringify({ width, motion, checks, writes: writes.length }));
+      } finally {
+        await context.close();
+      }
+    }
+  const sources = new Set(forgotPasswordPageSources);
+  for (const m of server.moduleGraph.idToModuleMap.values()) {
+    const f = m.file && path.relative(process.cwd(), m.file).replaceAll("\\", "/");
+    if (f && !f.startsWith("..") && !f.includes("node_modules") && /\.(vue|ts|css|json)$/.test(f))
+      sources.add(f);
+  }
+  const allImages = [...(previous?.images ?? []), ...images]
+      .filter((x, i, a) => a.findLastIndex((y) => y.file === x.file) === i)
+      .sort((a, b) => a.file.localeCompare(b.file)),
+    allResults = [...(previous?.results ?? []), ...results]
+      .filter(
+        (x, i, a) => a.findLastIndex((y) => y.width === x.width && y.motion === x.motion) === i,
+      )
+      .sort((a, b) => a.width - b.width || a.motion.localeCompare(b.motion));
+  if (output)
+    await writeFile(
+      path.join(output, "manifest.json"),
+      JSON.stringify(
+        {
+          page: "P04",
+          revision: args[1],
+          capturedAt: new Date().toISOString(),
+          scope:
+            "local actual Vue C review; password-reset request is locally intercepted as generic acceptance",
+          sources: Object.fromEntries(
+            await Promise.all([...sources].sort().map(async (f) => [f, hash(await readFile(f))])),
+          ),
+          images: allImages,
+          results: allResults,
+        },
+        null,
+        2,
+      ) + "\n",
+    );
+  console.log(
+    JSON.stringify({
+      groups: allResults.length,
+      checks: allResults.reduce((s, x) => s + x.checks, 0),
+      writes: allResults.reduce((s, x) => s + x.writes, 0),
+      images: allImages.length,
+      sources: sources.size,
+      port,
+    }),
+  );
+} finally {
+  await browser?.close();
+  await server.close();
+}

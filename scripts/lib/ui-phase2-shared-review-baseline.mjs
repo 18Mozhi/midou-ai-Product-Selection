@@ -169,181 +169,216 @@ export const sharedReviewVariants = Object.freeze({
       captured: "53e4d63125bc3f3aa69f18f13bd39a98e77ec496766bd623d0a5039dbd3bfdd9",
       current: "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     },
-  "apps/web/src/components/BackupRecoveryCenter.vue#6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02": {
-    baseline: "dd31af05629215a4863f7a6a14bf973f43f6f10a",
-    captured: "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
-    current: "969cd10fc0a99f35243278bbbc3b5896b10ea4627722f295911fc9ffb0d45100",
-  },
-  "apps/web/src/components/CollectionTaskCenter.vue#1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed": {
-    baseline: "5ad7b7b9c08697873b3f66d52fe53ebe6f133184",
-    captured: "1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed",
-    current: "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
-  },
-  "apps/web/src/components/CommercialOperationsCenter.vue#4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33": {
-    baseline: "66bea9b6dfa514c19df8607daa173efddd26de74",
-    captured: "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
-    current: "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed",
-  },
-  "apps/web/src/components/CredentialAssetCenter.vue#4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be": {
-    baseline: "a728f810feefe11706579903b86f0e6e1b165dda",
-    captured: "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
-    current: "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
-  },
-  "apps/web/src/components/OpenPlatformCenter.vue#5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5": {
-    baseline: "66bea9b6dfa514c19df8607daa173efddd26de74",
-    captured: "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
-    current: "81dad2d4a82e49b089d97dba8ed28a1eee23b5597446d3e460febea341f3b97b",
-  },
-  "apps/web/src/components/PlatformContentPagination.vue#2c59ac9fa920dd095d36718eb86638a58abaebc6dd99bd8b73e869af5a0e6402": {
-    baseline: "dcc76b172b88541cd11de3d3fca2885fe55df053",
-    captured: "2c59ac9fa920dd095d36718eb86638a58abaebc6dd99bd8b73e869af5a0e6402",
-    current: "2a96546fb88ebc4eacf279b868d620e27c550c990ab6ef129c60803f69c7d244",
-  },
-  "apps/web/src/components/PlatformDataCenter.vue#10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4": {
-    baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
-    captured: "10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4",
-    current: "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
-  },
-  "apps/web/src/components/PlatformGovernanceCenter.vue#76eae80f51225c3af676a17ab9c4ec94369262cc5e8c968be7fd62ef5f2280db": {
-    baseline: "b4bdcf11059aa414419d4002303e973b7e126eb8",
-    captured: "76eae80f51225c3af676a17ab9c4ec94369262cc5e8c968be7fd62ef5f2280db",
-    current: "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048",
-  },
-  "apps/web/src/components/PlatformLogCenter.vue#4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d": {
-    baseline: "9c1f755acc559cd17446dcabd775a3eb39646de0",
-    captured: "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
-    current: "caaf302bb0218ee1dc90117a77f558999d5765b9c7044408431b4a673231945a",
-  },
-  "apps/web/src/components/PlatformManagementRecordList.vue#3ec74f90ff5740a58f70ea98fdc9c76835da9d223f01dd31d23ffd6a7cf78bfc": {
-    baseline: "dcc76b172b88541cd11de3d3fca2885fe55df053",
-    captured: "3ec74f90ff5740a58f70ea98fdc9c76835da9d223f01dd31d23ffd6a7cf78bfc",
-    current: "46b8b786a5aa6edbd2adc7c835a8e4d9a00257ff363b1888f77b5d4bb45f98ad",
-  },
-  "apps/web/src/components/PlatformMessageEditor.vue#8bafb3374f744389257c36a27580dbf768a9b4a0991fa0ce748889bb2c093cea": {
-    baseline: "3a0c866b47c1ec0bdc951ab8d23488fd654cefbe",
-    captured: "8bafb3374f744389257c36a27580dbf768a9b4a0991fa0ce748889bb2c093cea",
-    current: "299031770711240b20ded18c86d6eb2dae9081fb44a732e06efa3317b540041a",
-  },
-  "apps/web/src/components/PlatformMessageWorkbench.vue#7863a19cace6a921628b2e33e66434a5662868d8a33351abc1ef3d129a7382c2": {
-    baseline: "965ce9f95f620d7c3c2d140e5ba9ca25cab4146b",
-    captured: "7863a19cace6a921628b2e33e66434a5662868d8a33351abc1ef3d129a7382c2",
-    current: "689531d215e8878405c53ae55a4b157066cde2e9a1455242da7262079e27b2a5",
-  },
-  "apps/web/src/components/PlatformNotificationManagement.vue#a91ffa14ffdbd1f17b01f0877b745288d96c4ea8574449721edbc61883f1cb18": {
-    baseline: "6fe2178855964865e12f324e0a411d63ed7d3a5e",
-    captured: "a91ffa14ffdbd1f17b01f0877b745288d96c4ea8574449721edbc61883f1cb18",
-    current: "7cced021643a3af6a23a07f8afca71d943cabcd13cf963d97ac3b698a3dfe2e8",
-  },
-  "apps/web/src/components/PlatformNotificationOperations.vue#18c8b856cc26ed7aa7bf45f7375645ea23a5914b50425d84ee03efc17268cc6c": {
-    baseline: "462c6eae01e9c7f2582d1338b7275dd80459fb6d",
-    captured: "18c8b856cc26ed7aa7bf45f7375645ea23a5914b50425d84ee03efc17268cc6c",
-    current: "73bfa7089471ce53ea44f747727211684cb840df62a22a86b70dbaa4c9ba5e07",
-  },
-  "apps/web/src/components/PlatformNotificationPagination.vue#6116c32da6df91e40433fd5f4e4f9cc82c59d20b5726df52ebfdafcaf08b1606": {
-    baseline: "6fe2178855964865e12f324e0a411d63ed7d3a5e",
-    captured: "6116c32da6df91e40433fd5f4e4f9cc82c59d20b5726df52ebfdafcaf08b1606",
-    current: "56968271bcfcf600901782eea6601eaae49a5a84bc5d3ab7bc0a9618596f0849",
-  },
-  "apps/web/src/components/ProviderAdapterCenter.vue#0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075": {
-    baseline: "ed4e8edfd358e4d7ab36e71007bff15a859f5854",
-    captured: "0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075",
-    current: "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
-  },
-  "apps/web/src/components/ProviderRegistry.vue#e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e": {
-    baseline: "7b86e25d7ed1f3a75400887b4ab6efa7f0585031",
-    captured: "e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e",
-    current: "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-  },
-  "apps/web/src/components/ReleaseRolloutCenter.vue#0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1": {
-    baseline: "66bea9b6dfa514c19df8607daa173efddd26de74",
-    captured: "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
-    current: "b5344202cf358e7a5f61d8b0d73f4086c59157e395d12eda5f719a532bf79e63",
-  },
-  "apps/web/src/components/ResponsiveDataView.vue#28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa": {
-    baseline: "d99f047c95a15508066cdd191275344d3086f46a",
-    captured: "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
-    current: "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
-  },
-  "apps/web/src/components/ResponsiveDataView.vue#52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c": {
-    baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
-    captured: "52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c",
-    current: "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
-  },
-  "apps/web/src/components/ResponsiveDataView.vue#6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac": {
-    baseline: "af239b08b69f7d97cd0372f9840a70009eeef0c7",
-    captured: "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
-    current: "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
-  },
-  "apps/web/src/components/RuntimeTopologyCenter.vue#457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79": {
-    baseline: "c8318852f498fc72ca863dbbdae8244a5879a686",
-    captured: "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
-    current: "aedf6a1e9a83b11ba8376aad116fe6e048261b79c6bbe92063e185d76cd3a7a3",
-  },
-  "apps/web/src/components/SecurityOperationsCenter.vue#1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3": {
-    baseline: "5695ae753d1d8e821dff9871d7a4dc00865bbb3f",
-    captured: "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
-    current: "a583e75d6491fedc7ae94e449c5a31f421055587168101c81bf4922ffd4c2ba3",
-  },
-  "apps/web/src/components/use-platform-content-review.ts#e700d67e95e44859d7283b7370ad4690fd13cf341cb87a1e556a414ede9dbfe2": {
-    baseline: "66bea9b6dfa514c19df8607daa173efddd26de74",
-    captured: "e700d67e95e44859d7283b7370ad4690fd13cf341cb87a1e556a414ede9dbfe2",
-    current: "04a83f402bc5b98ede50e7b7ac2d05da0580d47aee638b04915917993d1436e6",
-  },
-  "apps/web/src/components/use-platform-status.ts#735f0c250153e075fdf39ca40c5c47b63b7aa30dfe85e1c9f9381bc7e56d068a": {
-    baseline: "ca1cbc697d8f3dc6d1a2440c20803270fc7ea215",
-    captured: "735f0c250153e075fdf39ca40c5c47b63b7aa30dfe85e1c9f9381bc7e56d068a",
-    current: "3866ef2b8c4d1031386356f870e413870184e5c087599da0946c391a704ec855",
-  },
-  "apps/web/src/runtime-topology.css#951a21caa2251c3fb136a3197a432d28ed13cc0f586b5cf5ce7574494fedfbb8": {
-    baseline: "d022499143cbd6c35400922a77c4191f3be0bda9",
-    captured: "951a21caa2251c3fb136a3197a432d28ed13cc0f586b5cf5ce7574494fedfbb8",
-    current: "1f1bb535e78927aa2991e745478d9fe0271234231cfee55b2d83b93842055eb4",
-  },
-  "apps/web/src/signal-ledger.css#b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b": {
-    baseline: "0c5c48ee4959d24238af106ae6d2610a48aa9b9c",
-    captured: "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
-    current: "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
-  },
-  "scripts/lib/ui-phase2-api-coverage-design-data.mjs#34ad1d77eeb70a6297aadc2a6322a377aa8b7025765d6c07aa29a2193e3a272d": {
-    baseline: "b5c39aab2f46fabf59ac3a78f135a99febdc0a28",
-    captured: "34ad1d77eeb70a6297aadc2a6322a377aa8b7025765d6c07aa29a2193e3a272d",
-    current: "977bfcdb2a53cad8828ee9bb7e1ccc4eaee268ff53bf83dc8ec6cd5833ca8073",
-  },
-  "tests/e2e/m07-04-backup-recovery.spec.ts#f9c712921c576a00c0ef4f9f4c24721f06a38d609514ee924557316259f17f53": {
-    baseline: "dd31af05629215a4863f7a6a14bf973f43f6f10a",
-    captured: "f9c712921c576a00c0ef4f9f4c24721f06a38d609514ee924557316259f17f53",
-    current: "f66b07ceb740f84724badbb74e4e5da2c7f351273bdfdcafaa849171641ba1b6",
-  },
-  "tests/e2e/m03-05-collection-tasks.spec.ts#9218c2552339e5c25f2920f9fc340d9b546e89621c0978f4208179ae66151afd": {
-    baseline: "5ad7b7b9c08697873b3f66d52fe53ebe6f133184",
-    captured: "9218c2552339e5c25f2920f9fc340d9b546e89621c0978f4208179ae66151afd",
-    current: "66bcb37988f1c064cff418506013a45b0b44c2d7eed6fa2d38e6a1420964fe96",
-  },
-  "tests/e2e/m03-02-credential-assets.spec.ts#0b735d56167c0c9e86b4bc7a3f3f8e8c3b6bc04106c0286bb9b1d05353c16929": {
-    baseline: "a728f810feefe11706579903b86f0e6e1b165dda",
-    captured: "0b735d56167c0c9e86b4bc7a3f3f8e8c3b6bc04106c0286bb9b1d05353c16929",
-    current: "98b997aa88f7678f38fa28f7385e0e718341bd3f9c7b4f87417df5250f472c88",
-  },
-  "tests/e2e/m06-02-platform-dashboard.spec.ts#ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0": {
-    baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
-    captured: "ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0",
-    current: "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
-  },
-  "tests/unit/platform-notification-operations.test.mjs#366dc7309b7def6692fb8edd0861d37e3da3a82b3a713a9b0aa7004e2e3d2f75": {
-    baseline: "6fe2178855964865e12f324e0a411d63ed7d3a5e",
-    captured: "366dc7309b7def6692fb8edd0861d37e3da3a82b3a713a9b0aa7004e2e3d2f75",
-    current: "ae983ba8987ee41a41e03887caab254b9d0315b8ea9d0ced98ed23ca6bd97370",
-  },
-  "tests/e2e/platform-message-management.spec.ts#ed45f8df2572d35492fe289a6de397b861dacee8d552fd9b77bc6bf0934c2dad": {
-    baseline: "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
-    captured: "ed45f8df2572d35492fe289a6de397b861dacee8d552fd9b77bc6bf0934c2dad",
-    current: "7111e8e7831a20b9a05030018384daa5000d632c9e488330d3cac1ff54d5d239",
-  },
-  "tests/e2e/m03-03-provider-adapter.spec.ts#f189c28a32f3d25bd0686379f9cfa978bd260df6085ea3650b0f1f5bedf28e74": {
-    baseline: "ed4e8edfd358e4d7ab36e71007bff15a859f5854",
-    captured: "f189c28a32f3d25bd0686379f9cfa978bd260df6085ea3650b0f1f5bedf28e74",
-    current: "f5c6bd4e0d265e83dbb3179f732ff4db18409f79e87568248767827230ef1452",
-  },
+  "apps/web/src/components/BackupRecoveryCenter.vue#6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02":
+    {
+      baseline: "dd31af05629215a4863f7a6a14bf973f43f6f10a",
+      captured: "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
+      current: "969cd10fc0a99f35243278bbbc3b5896b10ea4627722f295911fc9ffb0d45100",
+    },
+  "apps/web/src/components/CollectionTaskCenter.vue#1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed":
+    {
+      baseline: "5ad7b7b9c08697873b3f66d52fe53ebe6f133184",
+      captured: "1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed",
+      current: "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
+    },
+  "apps/web/src/components/CommercialOperationsCenter.vue#4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33":
+    {
+      baseline: "66bea9b6dfa514c19df8607daa173efddd26de74",
+      captured: "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
+      current: "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed",
+    },
+  "apps/web/src/components/CredentialAssetCenter.vue#4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be":
+    {
+      baseline: "a728f810feefe11706579903b86f0e6e1b165dda",
+      captured: "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
+      current: "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+    },
+  "apps/web/src/components/OpenPlatformCenter.vue#5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5":
+    {
+      baseline: "66bea9b6dfa514c19df8607daa173efddd26de74",
+      captured: "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
+      current: "81dad2d4a82e49b089d97dba8ed28a1eee23b5597446d3e460febea341f3b97b",
+    },
+  "apps/web/src/components/PlatformContentPagination.vue#2c59ac9fa920dd095d36718eb86638a58abaebc6dd99bd8b73e869af5a0e6402":
+    {
+      baseline: "dcc76b172b88541cd11de3d3fca2885fe55df053",
+      captured: "2c59ac9fa920dd095d36718eb86638a58abaebc6dd99bd8b73e869af5a0e6402",
+      current: "2a96546fb88ebc4eacf279b868d620e27c550c990ab6ef129c60803f69c7d244",
+    },
+  "apps/web/src/components/PlatformDataCenter.vue#10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4":
+    {
+      baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
+      captured: "10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4",
+      current: "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+    },
+  "apps/web/src/components/PlatformGovernanceCenter.vue#76eae80f51225c3af676a17ab9c4ec94369262cc5e8c968be7fd62ef5f2280db":
+    {
+      baseline: "b4bdcf11059aa414419d4002303e973b7e126eb8",
+      captured: "76eae80f51225c3af676a17ab9c4ec94369262cc5e8c968be7fd62ef5f2280db",
+      current: "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048",
+    },
+  "apps/web/src/components/PlatformLogCenter.vue#4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d":
+    {
+      baseline: "9c1f755acc559cd17446dcabd775a3eb39646de0",
+      captured: "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+      current: "caaf302bb0218ee1dc90117a77f558999d5765b9c7044408431b4a673231945a",
+    },
+  "apps/web/src/components/PlatformManagementRecordList.vue#3ec74f90ff5740a58f70ea98fdc9c76835da9d223f01dd31d23ffd6a7cf78bfc":
+    {
+      baseline: "dcc76b172b88541cd11de3d3fca2885fe55df053",
+      captured: "3ec74f90ff5740a58f70ea98fdc9c76835da9d223f01dd31d23ffd6a7cf78bfc",
+      current: "46b8b786a5aa6edbd2adc7c835a8e4d9a00257ff363b1888f77b5d4bb45f98ad",
+    },
+  "apps/web/src/components/PlatformMessageEditor.vue#8bafb3374f744389257c36a27580dbf768a9b4a0991fa0ce748889bb2c093cea":
+    {
+      baseline: "3a0c866b47c1ec0bdc951ab8d23488fd654cefbe",
+      captured: "8bafb3374f744389257c36a27580dbf768a9b4a0991fa0ce748889bb2c093cea",
+      current: "299031770711240b20ded18c86d6eb2dae9081fb44a732e06efa3317b540041a",
+    },
+  "apps/web/src/components/PlatformMessageWorkbench.vue#7863a19cace6a921628b2e33e66434a5662868d8a33351abc1ef3d129a7382c2":
+    {
+      baseline: "965ce9f95f620d7c3c2d140e5ba9ca25cab4146b",
+      captured: "7863a19cace6a921628b2e33e66434a5662868d8a33351abc1ef3d129a7382c2",
+      current: "689531d215e8878405c53ae55a4b157066cde2e9a1455242da7262079e27b2a5",
+    },
+  "apps/web/src/components/PlatformNotificationManagement.vue#a91ffa14ffdbd1f17b01f0877b745288d96c4ea8574449721edbc61883f1cb18":
+    {
+      baseline: "6fe2178855964865e12f324e0a411d63ed7d3a5e",
+      captured: "a91ffa14ffdbd1f17b01f0877b745288d96c4ea8574449721edbc61883f1cb18",
+      current: "7cced021643a3af6a23a07f8afca71d943cabcd13cf963d97ac3b698a3dfe2e8",
+    },
+  "apps/web/src/components/PlatformNotificationOperations.vue#18c8b856cc26ed7aa7bf45f7375645ea23a5914b50425d84ee03efc17268cc6c":
+    {
+      baseline: "462c6eae01e9c7f2582d1338b7275dd80459fb6d",
+      captured: "18c8b856cc26ed7aa7bf45f7375645ea23a5914b50425d84ee03efc17268cc6c",
+      current: "73bfa7089471ce53ea44f747727211684cb840df62a22a86b70dbaa4c9ba5e07",
+    },
+  "apps/web/src/components/PlatformNotificationPagination.vue#6116c32da6df91e40433fd5f4e4f9cc82c59d20b5726df52ebfdafcaf08b1606":
+    {
+      baseline: "6fe2178855964865e12f324e0a411d63ed7d3a5e",
+      captured: "6116c32da6df91e40433fd5f4e4f9cc82c59d20b5726df52ebfdafcaf08b1606",
+      current: "56968271bcfcf600901782eea6601eaae49a5a84bc5d3ab7bc0a9618596f0849",
+    },
+  "apps/web/src/components/ProviderAdapterCenter.vue#0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075":
+    {
+      baseline: "ed4e8edfd358e4d7ab36e71007bff15a859f5854",
+      captured: "0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075",
+      current: "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
+    },
+  "apps/web/src/components/ProviderRegistry.vue#e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e":
+    {
+      baseline: "7b86e25d7ed1f3a75400887b4ab6efa7f0585031",
+      captured: "e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e",
+      current: "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+    },
+  "apps/web/src/components/ReleaseRolloutCenter.vue#0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1":
+    {
+      baseline: "66bea9b6dfa514c19df8607daa173efddd26de74",
+      captured: "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
+      current: "b5344202cf358e7a5f61d8b0d73f4086c59157e395d12eda5f719a532bf79e63",
+    },
+  "apps/web/src/components/ResponsiveDataView.vue#28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa":
+    {
+      baseline: "d99f047c95a15508066cdd191275344d3086f46a",
+      captured: "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
+      current: "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+    },
+  "apps/web/src/components/ResponsiveDataView.vue#52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c":
+    {
+      baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
+      captured: "52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c",
+      current: "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+    },
+  "apps/web/src/components/ResponsiveDataView.vue#6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac":
+    {
+      baseline: "af239b08b69f7d97cd0372f9840a70009eeef0c7",
+      captured: "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
+      current: "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+    },
+  "apps/web/src/components/RuntimeTopologyCenter.vue#457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79":
+    {
+      baseline: "c8318852f498fc72ca863dbbdae8244a5879a686",
+      captured: "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
+      current: "aedf6a1e9a83b11ba8376aad116fe6e048261b79c6bbe92063e185d76cd3a7a3",
+    },
+  "apps/web/src/components/SecurityOperationsCenter.vue#1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3":
+    {
+      baseline: "5695ae753d1d8e821dff9871d7a4dc00865bbb3f",
+      captured: "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
+      current: "a583e75d6491fedc7ae94e449c5a31f421055587168101c81bf4922ffd4c2ba3",
+    },
+  "apps/web/src/components/use-platform-content-review.ts#e700d67e95e44859d7283b7370ad4690fd13cf341cb87a1e556a414ede9dbfe2":
+    {
+      baseline: "66bea9b6dfa514c19df8607daa173efddd26de74",
+      captured: "e700d67e95e44859d7283b7370ad4690fd13cf341cb87a1e556a414ede9dbfe2",
+      current: "04a83f402bc5b98ede50e7b7ac2d05da0580d47aee638b04915917993d1436e6",
+    },
+  "apps/web/src/components/use-platform-status.ts#735f0c250153e075fdf39ca40c5c47b63b7aa30dfe85e1c9f9381bc7e56d068a":
+    {
+      baseline: "ca1cbc697d8f3dc6d1a2440c20803270fc7ea215",
+      captured: "735f0c250153e075fdf39ca40c5c47b63b7aa30dfe85e1c9f9381bc7e56d068a",
+      current: "3866ef2b8c4d1031386356f870e413870184e5c087599da0946c391a704ec855",
+    },
+  "apps/web/src/runtime-topology.css#951a21caa2251c3fb136a3197a432d28ed13cc0f586b5cf5ce7574494fedfbb8":
+    {
+      baseline: "d022499143cbd6c35400922a77c4191f3be0bda9",
+      captured: "951a21caa2251c3fb136a3197a432d28ed13cc0f586b5cf5ce7574494fedfbb8",
+      current: "1f1bb535e78927aa2991e745478d9fe0271234231cfee55b2d83b93842055eb4",
+    },
+  "apps/web/src/signal-ledger.css#b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b":
+    {
+      baseline: "0c5c48ee4959d24238af106ae6d2610a48aa9b9c",
+      captured: "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+      current: "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+    },
+  "scripts/lib/ui-phase2-api-coverage-design-data.mjs#34ad1d77eeb70a6297aadc2a6322a377aa8b7025765d6c07aa29a2193e3a272d":
+    {
+      baseline: "b5c39aab2f46fabf59ac3a78f135a99febdc0a28",
+      captured: "34ad1d77eeb70a6297aadc2a6322a377aa8b7025765d6c07aa29a2193e3a272d",
+      current: "977bfcdb2a53cad8828ee9bb7e1ccc4eaee268ff53bf83dc8ec6cd5833ca8073",
+    },
+  "tests/e2e/m07-04-backup-recovery.spec.ts#f9c712921c576a00c0ef4f9f4c24721f06a38d609514ee924557316259f17f53":
+    {
+      baseline: "dd31af05629215a4863f7a6a14bf973f43f6f10a",
+      captured: "f9c712921c576a00c0ef4f9f4c24721f06a38d609514ee924557316259f17f53",
+      current: "f66b07ceb740f84724badbb74e4e5da2c7f351273bdfdcafaa849171641ba1b6",
+    },
+  "tests/e2e/m03-05-collection-tasks.spec.ts#9218c2552339e5c25f2920f9fc340d9b546e89621c0978f4208179ae66151afd":
+    {
+      baseline: "5ad7b7b9c08697873b3f66d52fe53ebe6f133184",
+      captured: "9218c2552339e5c25f2920f9fc340d9b546e89621c0978f4208179ae66151afd",
+      current: "66bcb37988f1c064cff418506013a45b0b44c2d7eed6fa2d38e6a1420964fe96",
+    },
+  "tests/e2e/m03-02-credential-assets.spec.ts#0b735d56167c0c9e86b4bc7a3f3f8e8c3b6bc04106c0286bb9b1d05353c16929":
+    {
+      baseline: "a728f810feefe11706579903b86f0e6e1b165dda",
+      captured: "0b735d56167c0c9e86b4bc7a3f3f8e8c3b6bc04106c0286bb9b1d05353c16929",
+      current: "98b997aa88f7678f38fa28f7385e0e718341bd3f9c7b4f87417df5250f472c88",
+    },
+  "tests/e2e/m06-02-platform-dashboard.spec.ts#ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0":
+    {
+      baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
+      captured: "ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0",
+      current: "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+    },
+  "tests/unit/platform-notification-operations.test.mjs#366dc7309b7def6692fb8edd0861d37e3da3a82b3a713a9b0aa7004e2e3d2f75":
+    {
+      baseline: "6fe2178855964865e12f324e0a411d63ed7d3a5e",
+      captured: "366dc7309b7def6692fb8edd0861d37e3da3a82b3a713a9b0aa7004e2e3d2f75",
+      current: "ae983ba8987ee41a41e03887caab254b9d0315b8ea9d0ced98ed23ca6bd97370",
+    },
+  "tests/e2e/platform-message-management.spec.ts#ed45f8df2572d35492fe289a6de397b861dacee8d552fd9b77bc6bf0934c2dad":
+    {
+      baseline: "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
+      captured: "ed45f8df2572d35492fe289a6de397b861dacee8d552fd9b77bc6bf0934c2dad",
+      current: "7111e8e7831a20b9a05030018384daa5000d632c9e488330d3cac1ff54d5d239",
+    },
+  "tests/e2e/m03-03-provider-adapter.spec.ts#f189c28a32f3d25bd0686379f9cfa978bd260df6085ea3650b0f1f5bedf28e74":
+    {
+      baseline: "ed4e8edfd358e4d7ab36e71007bff15a859f5854",
+      captured: "f189c28a32f3d25bd0686379f9cfa978bd260df6085ea3650b0f1f5bedf28e74",
+      current: "f5c6bd4e0d265e83dbb3179f732ff4db18409f79e87568248767827230ef1452",
+    },
 });
 
 const hash = (source) => createHash("sha256").update(source).digest("hex");

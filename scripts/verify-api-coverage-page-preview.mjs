@@ -23,8 +23,14 @@ const targetMotions = process.env.P63_MOTION
   : smoke
     ? ["reduce"]
     : ["reduce", "no-preference"];
-assert.deepEqual(targetWidths.every((width) => [390, 1440].includes(width)), true);
-assert.deepEqual(targetMotions.every((motion) => ["reduce", "no-preference"].includes(motion)), true);
+assert.deepEqual(
+  targetWidths.every((width) => [390, 1440].includes(width)),
+  true,
+);
+assert.deepEqual(
+  targetMotions.every((motion) => ["reduce", "no-preference"].includes(motion)),
+  true,
+);
 assert.ok(
   args.length === 0 ||
     (args.length === 2 && args[0] === "--capture-review" && /^r[1-9]\d*$/.test(args[1])),
@@ -253,7 +259,10 @@ try {
   }
   await includeImportedStyleSources(sources, (file) => readFile(file, "utf8"));
   const allImages = [...(priorManifest?.images ?? []), ...images]
-      .filter((image, index, values) => values.findLastIndex((item) => item.file === image.file) === index)
+      .filter(
+        (image, index, values) =>
+          values.findLastIndex((item) => item.file === image.file) === index,
+      )
       .sort((a, b) => a.file.localeCompare(b.file)),
     allResults = [...(priorManifest?.results ?? []), ...results]
       .filter(

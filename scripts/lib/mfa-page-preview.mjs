@@ -1,11 +1,19 @@
 import assert from "node:assert/strict";
 import path from "node:path";
 
-export const mfaReviewCss = "design-plans/ui-phase-2-2026-09-07/implementation/mfa-page-preview.css";
-export const mfaPageSources = [mfaReviewCss, "scripts/lib/mfa-page-preview.mjs", "apps/web/src/components/LocalIdentity.vue", "apps/web/src/router.ts"];
+export const mfaReviewCss =
+  "design-plans/ui-phase-2-2026-09-07/implementation/mfa-page-preview.css";
+export const mfaPageSources = [
+  mfaReviewCss,
+  "scripts/lib/mfa-page-preview.mjs",
+  "apps/web/src/components/LocalIdentity.vue",
+  "apps/web/src/router.ts",
+];
 
 export function previewMfaPage(input) {
-  const source = input.replaceAll("\r\n", "\n"), start = source.indexOf("<template>"), end = source.lastIndexOf("</template>");
+  const source = input.replaceAll("\r\n", "\n"),
+    start = source.indexOf("<template>"),
+    end = source.lastIndexOf("</template>");
   assert.ok(start > 0 && end > start, "P07 template bounds");
   const next = `<template>
   <main class="identity-page identity-page--review" style="background:#f3f6fb" :data-mode="mode" :data-state="requestState" :data-mfa-enabled="mfaEnabled">
@@ -34,5 +42,23 @@ export function previewMfaPage(input) {
 }
 
 export function mfaPagePlugin() {
-  return { name: "p07-actual-vue-review", enforce: "pre", transform(source, id) { if (id.replaceAll("\\", "/") === path.resolve("apps/web/src/components/LocalIdentity.vue").replaceAll("\\", "/")) return { code: previewMfaPage(source), map: null }; }, transformIndexHtml(html) { return html.replace("<body>", '<body class="p07-review">').replace("</head>", `<link rel="stylesheet" href="/@fs/${path.resolve(mfaReviewCss).replaceAll("\\", "/")}"></head>`); } };
+  return {
+    name: "p07-actual-vue-review",
+    enforce: "pre",
+    transform(source, id) {
+      if (
+        id.replaceAll("\\", "/") ===
+        path.resolve("apps/web/src/components/LocalIdentity.vue").replaceAll("\\", "/")
+      )
+        return { code: previewMfaPage(source), map: null };
+    },
+    transformIndexHtml(html) {
+      return html
+        .replace("<body>", '<body class="p07-review">')
+        .replace(
+          "</head>",
+          `<link rel="stylesheet" href="/@fs/${path.resolve(mfaReviewCss).replaceAll("\\", "/")}"></head>`,
+        );
+    },
+  };
 }

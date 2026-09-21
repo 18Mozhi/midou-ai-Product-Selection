@@ -51,7 +51,9 @@ export function registerPagePlugin() {
     enforce: "pre",
     transform(source, id) {
       const file = id.replaceAll("\\", "/");
-      const target = path.resolve("apps/web/src/components/LocalIdentity.vue").replaceAll("\\", "/");
+      const target = path
+        .resolve("apps/web/src/components/LocalIdentity.vue")
+        .replaceAll("\\", "/");
       if (file === target) return { code: previewRegisterPage(source), map: null };
     },
     transformIndexHtml(html) {

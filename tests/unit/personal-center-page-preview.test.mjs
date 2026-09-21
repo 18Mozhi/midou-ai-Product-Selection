@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { previewAccountShell, previewPersonalCenter } from "../../scripts/lib/personal-center-page-preview.mjs";
+import {
+  previewAccountShell,
+  previewPersonalCenter,
+} from "../../scripts/lib/personal-center-page-preview.mjs";
 
 test("P11 review templates preserve account request and five-section contracts", async () => {
   const [account, personal] = await Promise.all([

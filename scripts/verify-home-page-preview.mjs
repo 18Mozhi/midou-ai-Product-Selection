@@ -7,9 +7,393 @@ import { chromium } from "playwright";
 import { createServer } from "vite";
 import { homePagePlugin, homeReviewCss } from "./lib/home-page-preview.mjs";
 
-const args=process.argv.slice(2);assert.ok(args.length===0||(args.length===2&&args[0]==="--capture-review"&&/^r[1-9]\d*$/.test(args[1])));const smoke=process.env.P12_SMOKE==="1",widths=process.env.P12_VIEWPORT?[Number(process.env.P12_VIEWPORT)]:smoke?[390]:[1440,390],motions=process.env.P12_MOTION?[process.env.P12_MOTION]:smoke?["reduce"]:["reduce","no-preference"],output=args.length?path.resolve(`output/playwright/p12-page-composition-${args[1]}`):null;if(output)await mkdir(output,{recursive:true});const previous=output?await readFile(path.join(output,"manifest.json"),"utf8").then(JSON.parse).catch(()=>null):null;const probe=reservePort();await new Promise(resolve=>probe.listen(0,"127.0.0.1",resolve));const port=probe.address().port;await new Promise(resolve=>probe.close(resolve));const server=await createServer({configFile:path.resolve("apps/web/vite.config.ts"),logLevel:"error",define:{"import.meta.env.VITE_API_BASE_URL":JSON.stringify("/api/v1")},plugins:[homePagePlugin()],server:{host:"127.0.0.1",port,strictPort:true,proxy:{},hmr:false,open:false}});
-const nav={shell:"member",organization_id:"p12-org",workspace_id:"p12-workspace",roles:["member"],capabilities:["task:read","task:create","trend:read","trend:manage","opportunity:read","competitor:read","sourcing:read","notification:read"],platform_roles:[],platform_capabilities:[],guard_reason:"navigation_member_allowed"};
-const item=(id,title,route,extra={})=>({id,kind:"action",title,reason:"来自当前工作区的已验证投影",route,source_module:"projection",source_label:"工作事项",context_label:"去处理",priority:"high_value",risk_level:null,value_score:null,blocked:false,owner_label:null,due_at:null,source_count:null,observed_at:"2026-09-20T08:00:00.000Z",severity:"info",source_version:1,...extra});
-const running=()=>({actions:[item("p12-other","复核成本假设","/tasks")],changes:[],follows:[],health:[item("p12-health","竞品来源延迟","/platform-admin/collection",{kind:"health",severity:"warning",priority:"blocking"})],automatic_selection:{state:"running",enabled_rule_count:2,candidate_count:7,rule_candidate_count:3,recommended_count:1,awaiting_evidence_count:4,adopted_count:1,recommended_items:[item("p12-recommend","便携咖啡机候选","/opportunities/p12-recommend",{source_module:"opportunity",value_score:86})],last_collection_at:"2026-09-20T07:00:00.000Z",next_collection_at:"2026-09-20T09:00:00.000Z"},scope:{organization_id:"p12-org",workspace_id:"p12-workspace"},generated_at:"2026-09-20T08:00:00.000Z"});
-const empty=()=>({...running(),actions:[],health:[],automatic_selection:{state:"not_configured",enabled_rule_count:0,candidate_count:0,rule_candidate_count:0,recommended_count:0,awaiting_evidence_count:0,adopted_count:0,recommended_items:[],last_collection_at:null,next_collection_at:null}});const envelope=(data,id="p12-request")=>({data,request_id:id,trace_id:id}),failure=(status,code,id)=>({status,json:{error:{code,message:code,action_hint:"本地审核恢复提示"},request_id:id,trace_id:id}}),hash=value=>createHash("sha256").update(value).digest("hex"),images=[],results=[];let browser;
-try{await server.listen();browser=await chromium.launch();const origin=`http://127.0.0.1:${port}`;console.log(`P12 actual Vue review ${origin}`);for(const width of widths)for(const motion of motions){let scene="running",rules=[];const context=await browser.newContext({viewport:{width,height:width===390?844:1050},locale:"zh-CN",reducedMotion:motion}),errors=[],unexpected=[],writes=[];let checks=0;const check=(actual,expected,label)=>{assert.deepEqual(actual,expected,`${width}/${motion}: ${label}`);checks+=1};const capture=async(page,name)=>{await page.evaluate(()=>new Promise(resolve=>{scrollTo(0,0);requestAnimationFrame(resolve)}));const bytes=await page.screenshot({animations:"disabled",fullPage:true}),file=`${width}-${name}.png`;await writeFile(path.join(output,file),bytes);images.push({file,sha256:hash(bytes),pixelWidth:bytes.readUInt32BE(16),pixelHeight:bytes.readUInt32BE(20)})};try{context.on("page",page=>page.on("pageerror",error=>errors.push(error.message)));await context.route("**/*",async route=>{const request=route.request(),url=new URL(request.url());if(url.origin!==origin)return route.abort();if(!url.pathname.startsWith("/api/"))return route.continue();const key=`${request.method()} ${url.pathname}`;if(key==="GET /api/v1/auth/session-status")return route.fulfill({json:envelope({authenticated:true},"p12-session")});if(key==="GET /api/v1/me/navigation")return route.fulfill({json:envelope(nav,"p12-nav")});if(key==="GET /api/v1/me/ui-preferences")return route.fulfill({json:envelope({theme:"deep-ocean",version:1},"p12-theme")});if(key==="GET /api/v1/me/home-dashboard"){if(scene==="failure")return route.fulfill(failure(503,"dependency_unavailable","p12-failure"));return route.fulfill({json:envelope(scene==="empty"||scene==="paused"?empty():running(),"p12-home")})}if(key==="GET /api/v1/trends/monitoring-rules")return route.fulfill({json:envelope(scene==="paused"?[{id:"p12-rule",name:"户外收纳",include_keywords:["storage"],negative_keywords:[],market:"US",language:"en-US",category:null,collection_interval_minutes:60,recommendation_min_source_count:2,status:"paused",version:3}]:rules,"p12-rules")});if(key==="POST /api/v1/trends/monitoring-rules"){const body=request.postDataJSON();writes.push({key,body});rules=[{id:"p12-new",...body,status:"enabled",version:1}];scene="running";return route.fulfill({status:201,json:envelope(rules[0],"p12-create")})}if(key==="PATCH /api/v1/trends/monitoring-rules/p12-rule"){writes.push({key,body:request.postDataJSON()});scene="running";return route.fulfill({json:envelope({id:"p12-rule"},"p12-resume")})}unexpected.push(key);return route.abort()});const page=await context.newPage();await page.goto(`${origin}/home`,{waitUntil:"domcontentloaded"});const root=page.locator(".p12-home");await root.getByRole("heading",{name:"先处理需要人决定的事",exact:true}).waitFor({timeout:8000});check(await root.getByText("自动发现只提供候选；五项质量门通过后，最终采纳仍由人完成。",{exact:true}).count(),1,"human decision boundary");const create=root.getByRole("link",{name:"创建选品",exact:true});await create.focus();check(await create.evaluate(node=>getComputedStyle(node).outlineWidth),"3px","main action focus visible");if(output&&motion==="reduce")await capture(page,"running");await root.getByText("展开运行详情",{exact:true}).click();check(await root.getByText(/上次采集：/).count(),1,"runtime details disclose actual timestamps");if(output&&motion==="reduce")await capture(page,"running-details");scene="empty";const setup=await context.newPage();await setup.goto(`${origin}/home`,{waitUntil:"domcontentloaded"});const setupRoot=setup.locator(".p12-home");await setupRoot.getByRole("heading",{name:"创建自动选品规则",exact:true}).waitFor({timeout:8000});if(output&&motion==="reduce")await capture(setup,"not-configured");await setupRoot.getByLabel("想找的商品关键词").fill("egg washer, egg brush");await setupRoot.getByLabel("来源门槛").selectOption("2");await setupRoot.getByRole("button",{name:"保存并开始自动选品",exact:true}).click();await setupRoot.getByText(/规则已启用/).waitFor({timeout:8000});check(writes[0],{key:"POST /api/v1/trends/monitoring-rules",body:{name:"自动选品 · egg washer",include_keywords:["egg washer","egg brush"],negative_keywords:[],market:"US",language:"en-US",category:null,notification_channel:"in_app",collection_interval_minutes:60,recommendation_min_source_count:2}},"exact create rule body");if(output&&motion==="reduce")await capture(setup,"rule-created");scene="paused";const paused=await context.newPage();await paused.goto(`${origin}/home`,{waitUntil:"domcontentloaded"});const pausedRoot=paused.locator(".p12-home");await pausedRoot.getByRole("button",{name:"恢复自动选品",exact:true}).click();await pausedRoot.getByText(/户外收纳.*已恢复/).waitFor({timeout:8000});check(writes[1],{key:"PATCH /api/v1/trends/monitoring-rules/p12-rule",body:{status:"enabled",expected_version:3,collection_interval_minutes:60,recommendation_min_source_count:2}},"only first paused rule resumes");if(output&&motion==="reduce")await capture(paused,"paused-resumed");scene="failure";const failed=await context.newPage();await failed.goto(`${origin}/home`,{waitUntil:"domcontentloaded"});const failedRoot=failed.locator(".p12-home");await failedRoot.getByText("首页暂时无法读取",{exact:true}).waitFor({timeout:8000});check(await failedRoot.getByRole("button",{name:"重新读取",exact:true}).count(),1,"failure offers retry");if(output&&motion==="reduce")await capture(failed,"failure");check(unexpected,[],"no unexpected API");check(errors,[],"no page errors");results.push({width,motion,checks,writes:writes.length});console.log(JSON.stringify({width,motion,checks,writes:writes.length}))}finally{await context.close()}}const sources=["apps/web/src/components/HomeDashboard.vue","apps/web/src/components/HomeAutomationOverview.vue","scripts/lib/home-page-preview.mjs","scripts/verify-home-page-preview.mjs",homeReviewCss],allImages=[...(previous?.images??[]),...images].filter((x,i,a)=>a.findLastIndex(y=>y.file===x.file)===i).sort((a,b)=>a.file.localeCompare(b.file)),allResults=[...(previous?.results??[]),...results].filter((x,i,a)=>a.findLastIndex(y=>y.width===x.width&&y.motion===x.motion)===i).sort((a,b)=>a.width-b.width||a.motion.localeCompare(b.motion));if(output)await writeFile(path.join(output,"manifest.json"),JSON.stringify({page:"P12",revision:args[1],capturedAt:new Date().toISOString(),scope:"local actual Vue C review; navigation, home and rule responses are locally intercepted",sources:Object.fromEntries(await Promise.all(sources.sort().map(async file=>[file,hash(await readFile(file))]))),images:allImages,results:allResults},null,2)+"\n");console.log(JSON.stringify({groups:allResults.length,checks:allResults.reduce((n,x)=>n+x.checks,0),writes:allResults.reduce((n,x)=>n+x.writes,0),images:allImages.length,sources:sources.length,port}))}finally{await browser?.close();await server.close()}
+const args = process.argv.slice(2);
+assert.ok(
+  args.length === 0 ||
+    (args.length === 2 && args[0] === "--capture-review" && /^r[1-9]\d*$/.test(args[1])),
+);
+const smoke = process.env.P12_SMOKE === "1",
+  widths = process.env.P12_VIEWPORT
+    ? [Number(process.env.P12_VIEWPORT)]
+    : smoke
+      ? [390]
+      : [1440, 390],
+  motions = process.env.P12_MOTION
+    ? [process.env.P12_MOTION]
+    : smoke
+      ? ["reduce"]
+      : ["reduce", "no-preference"],
+  output = args.length ? path.resolve(`output/playwright/p12-page-composition-${args[1]}`) : null;
+if (output) await mkdir(output, { recursive: true });
+const previous = output
+  ? await readFile(path.join(output, "manifest.json"), "utf8")
+      .then(JSON.parse)
+      .catch(() => null)
+  : null;
+const probe = reservePort();
+await new Promise((resolve) => probe.listen(0, "127.0.0.1", resolve));
+const port = probe.address().port;
+await new Promise((resolve) => probe.close(resolve));
+const server = await createServer({
+  configFile: path.resolve("apps/web/vite.config.ts"),
+  logLevel: "error",
+  define: { "import.meta.env.VITE_API_BASE_URL": JSON.stringify("/api/v1") },
+  plugins: [homePagePlugin()],
+  server: { host: "127.0.0.1", port, strictPort: true, proxy: {}, hmr: false, open: false },
+});
+const nav = {
+  shell: "member",
+  organization_id: "p12-org",
+  workspace_id: "p12-workspace",
+  roles: ["member"],
+  capabilities: [
+    "task:read",
+    "task:create",
+    "trend:read",
+    "trend:manage",
+    "opportunity:read",
+    "competitor:read",
+    "sourcing:read",
+    "notification:read",
+  ],
+  platform_roles: [],
+  platform_capabilities: [],
+  guard_reason: "navigation_member_allowed",
+};
+const item = (id, title, route, extra = {}) => ({
+  id,
+  kind: "action",
+  title,
+  reason: "来自当前工作区的已验证投影",
+  route,
+  source_module: "projection",
+  source_label: "工作事项",
+  context_label: "去处理",
+  priority: "high_value",
+  risk_level: null,
+  value_score: null,
+  blocked: false,
+  owner_label: null,
+  due_at: null,
+  source_count: null,
+  observed_at: "2026-09-20T08:00:00.000Z",
+  severity: "info",
+  source_version: 1,
+  ...extra,
+});
+const running = () => ({
+  actions: [item("p12-other", "复核成本假设", "/tasks")],
+  changes: [],
+  follows: [],
+  health: [
+    item("p12-health", "竞品来源延迟", "/platform-admin/collection", {
+      kind: "health",
+      severity: "warning",
+      priority: "blocking",
+    }),
+  ],
+  automatic_selection: {
+    state: "running",
+    enabled_rule_count: 2,
+    candidate_count: 7,
+    rule_candidate_count: 3,
+    recommended_count: 1,
+    awaiting_evidence_count: 4,
+    adopted_count: 1,
+    recommended_items: [
+      item("p12-recommend", "便携咖啡机候选", "/opportunities/p12-recommend", {
+        source_module: "opportunity",
+        value_score: 86,
+      }),
+    ],
+    last_collection_at: "2026-09-20T07:00:00.000Z",
+    next_collection_at: "2026-09-20T09:00:00.000Z",
+  },
+  scope: { organization_id: "p12-org", workspace_id: "p12-workspace" },
+  generated_at: "2026-09-20T08:00:00.000Z",
+});
+const empty = () => ({
+  ...running(),
+  actions: [],
+  health: [],
+  automatic_selection: {
+    state: "not_configured",
+    enabled_rule_count: 0,
+    candidate_count: 0,
+    rule_candidate_count: 0,
+    recommended_count: 0,
+    awaiting_evidence_count: 0,
+    adopted_count: 0,
+    recommended_items: [],
+    last_collection_at: null,
+    next_collection_at: null,
+  },
+});
+const envelope = (data, id = "p12-request") => ({ data, request_id: id, trace_id: id }),
+  failure = (status, code, id) => ({
+    status,
+    json: {
+      error: { code, message: code, action_hint: "本地审核恢复提示" },
+      request_id: id,
+      trace_id: id,
+    },
+  }),
+  hash = (value) => createHash("sha256").update(value).digest("hex"),
+  images = [],
+  results = [];
+let browser;
+try {
+  await server.listen();
+  browser = await chromium.launch();
+  const origin = `http://127.0.0.1:${port}`;
+  console.log(`P12 actual Vue review ${origin}`);
+  for (const width of widths)
+    for (const motion of motions) {
+      let scene = "running",
+        rules = [];
+      const context = await browser.newContext({
+          viewport: { width, height: width === 390 ? 844 : 1050 },
+          locale: "zh-CN",
+          reducedMotion: motion,
+        }),
+        errors = [],
+        unexpected = [],
+        writes = [];
+      let checks = 0;
+      const check = (actual, expected, label) => {
+        assert.deepEqual(actual, expected, `${width}/${motion}: ${label}`);
+        checks += 1;
+      };
+      const capture = async (page, name) => {
+        await page.evaluate(
+          () =>
+            new Promise((resolve) => {
+              scrollTo(0, 0);
+              requestAnimationFrame(resolve);
+            }),
+        );
+        const bytes = await page.screenshot({ animations: "disabled", fullPage: true }),
+          file = `${width}-${name}.png`;
+        await writeFile(path.join(output, file), bytes);
+        images.push({
+          file,
+          sha256: hash(bytes),
+          pixelWidth: bytes.readUInt32BE(16),
+          pixelHeight: bytes.readUInt32BE(20),
+        });
+      };
+      try {
+        context.on("page", (page) => page.on("pageerror", (error) => errors.push(error.message)));
+        await context.route("**/*", async (route) => {
+          const request = route.request(),
+            url = new URL(request.url());
+          if (url.origin !== origin) return route.abort();
+          if (!url.pathname.startsWith("/api/")) return route.continue();
+          const key = `${request.method()} ${url.pathname}`;
+          if (key === "GET /api/v1/auth/session-status")
+            return route.fulfill({ json: envelope({ authenticated: true }, "p12-session") });
+          if (key === "GET /api/v1/me/navigation")
+            return route.fulfill({ json: envelope(nav, "p12-nav") });
+          if (key === "GET /api/v1/me/ui-preferences")
+            return route.fulfill({
+              json: envelope({ theme: "deep-ocean", version: 1 }, "p12-theme"),
+            });
+          if (key === "GET /api/v1/me/home-dashboard") {
+            if (scene === "failure")
+              return route.fulfill(failure(503, "dependency_unavailable", "p12-failure"));
+            return route.fulfill({
+              json: envelope(
+                scene === "empty" || scene === "paused" ? empty() : running(),
+                "p12-home",
+              ),
+            });
+          }
+          if (key === "GET /api/v1/trends/monitoring-rules")
+            return route.fulfill({
+              json: envelope(
+                scene === "paused"
+                  ? [
+                      {
+                        id: "p12-rule",
+                        name: "户外收纳",
+                        include_keywords: ["storage"],
+                        negative_keywords: [],
+                        market: "US",
+                        language: "en-US",
+                        category: null,
+                        collection_interval_minutes: 60,
+                        recommendation_min_source_count: 2,
+                        status: "paused",
+                        version: 3,
+                      },
+                    ]
+                  : rules,
+                "p12-rules",
+              ),
+            });
+          if (key === "POST /api/v1/trends/monitoring-rules") {
+            const body = request.postDataJSON();
+            writes.push({ key, body });
+            rules = [{ id: "p12-new", ...body, status: "enabled", version: 1 }];
+            scene = "running";
+            return route.fulfill({ status: 201, json: envelope(rules[0], "p12-create") });
+          }
+          if (key === "PATCH /api/v1/trends/monitoring-rules/p12-rule") {
+            writes.push({ key, body: request.postDataJSON() });
+            scene = "running";
+            return route.fulfill({ json: envelope({ id: "p12-rule" }, "p12-resume") });
+          }
+          unexpected.push(key);
+          return route.abort();
+        });
+        const page = await context.newPage();
+        await page.goto(`${origin}/home`, { waitUntil: "domcontentloaded" });
+        const root = page.locator(".p12-home");
+        await root
+          .getByRole("heading", { name: "先处理需要人决定的事", exact: true })
+          .waitFor({ timeout: 8000 });
+        check(
+          await root
+            .getByText("自动发现只提供候选；五项质量门通过后，最终采纳仍由人完成。", {
+              exact: true,
+            })
+            .count(),
+          1,
+          "human decision boundary",
+        );
+        const create = root.getByRole("link", { name: "创建选品", exact: true });
+        await create.focus();
+        check(
+          await create.evaluate((node) => getComputedStyle(node).outlineWidth),
+          "3px",
+          "main action focus visible",
+        );
+        if (output && motion === "reduce") await capture(page, "running");
+        await root.getByText("展开运行详情", { exact: true }).click();
+        check(
+          await root.getByText(/上次采集：/).count(),
+          1,
+          "runtime details disclose actual timestamps",
+        );
+        if (output && motion === "reduce") await capture(page, "running-details");
+        scene = "empty";
+        const setup = await context.newPage();
+        await setup.goto(`${origin}/home`, { waitUntil: "domcontentloaded" });
+        const setupRoot = setup.locator(".p12-home");
+        await setupRoot
+          .getByRole("heading", { name: "创建自动选品规则", exact: true })
+          .waitFor({ timeout: 8000 });
+        if (output && motion === "reduce") await capture(setup, "not-configured");
+        await setupRoot.getByLabel("想找的商品关键词").fill("egg washer, egg brush");
+        await setupRoot.getByLabel("来源门槛").selectOption("2");
+        await setupRoot.getByRole("button", { name: "保存并开始自动选品", exact: true }).click();
+        await setupRoot.getByText(/规则已启用/).waitFor({ timeout: 8000 });
+        check(
+          writes[0],
+          {
+            key: "POST /api/v1/trends/monitoring-rules",
+            body: {
+              name: "自动选品 · egg washer",
+              include_keywords: ["egg washer", "egg brush"],
+              negative_keywords: [],
+              market: "US",
+              language: "en-US",
+              category: null,
+              notification_channel: "in_app",
+              collection_interval_minutes: 60,
+              recommendation_min_source_count: 2,
+            },
+          },
+          "exact create rule body",
+        );
+        if (output && motion === "reduce") await capture(setup, "rule-created");
+        scene = "paused";
+        const paused = await context.newPage();
+        await paused.goto(`${origin}/home`, { waitUntil: "domcontentloaded" });
+        const pausedRoot = paused.locator(".p12-home");
+        await pausedRoot.getByRole("button", { name: "恢复自动选品", exact: true }).click();
+        await pausedRoot.getByText(/户外收纳.*已恢复/).waitFor({ timeout: 8000 });
+        check(
+          writes[1],
+          {
+            key: "PATCH /api/v1/trends/monitoring-rules/p12-rule",
+            body: {
+              status: "enabled",
+              expected_version: 3,
+              collection_interval_minutes: 60,
+              recommendation_min_source_count: 2,
+            },
+          },
+          "only first paused rule resumes",
+        );
+        if (output && motion === "reduce") await capture(paused, "paused-resumed");
+        scene = "failure";
+        const failed = await context.newPage();
+        await failed.goto(`${origin}/home`, { waitUntil: "domcontentloaded" });
+        const failedRoot = failed.locator(".p12-home");
+        await failedRoot.getByText("首页暂时无法读取", { exact: true }).waitFor({ timeout: 8000 });
+        check(
+          await failedRoot.getByRole("button", { name: "重新读取", exact: true }).count(),
+          1,
+          "failure offers retry",
+        );
+        if (output && motion === "reduce") await capture(failed, "failure");
+        check(unexpected, [], "no unexpected API");
+        check(errors, [], "no page errors");
+        results.push({ width, motion, checks, writes: writes.length });
+        console.log(JSON.stringify({ width, motion, checks, writes: writes.length }));
+      } finally {
+        await context.close();
+      }
+    }
+  const sources = [
+      "apps/web/src/components/HomeDashboard.vue",
+      "apps/web/src/components/HomeAutomationOverview.vue",
+      "scripts/lib/home-page-preview.mjs",
+      "scripts/verify-home-page-preview.mjs",
+      homeReviewCss,
+    ],
+    allImages = [...(previous?.images ?? []), ...images]
+      .filter((x, i, a) => a.findLastIndex((y) => y.file === x.file) === i)
+      .sort((a, b) => a.file.localeCompare(b.file)),
+    allResults = [...(previous?.results ?? []), ...results]
+      .filter(
+        (x, i, a) => a.findLastIndex((y) => y.width === x.width && y.motion === x.motion) === i,
+      )
+      .sort((a, b) => a.width - b.width || a.motion.localeCompare(b.motion));
+  if (output)
+    await writeFile(
+      path.join(output, "manifest.json"),
+      JSON.stringify(
+        {
+          page: "P12",
+          revision: args[1],
+          capturedAt: new Date().toISOString(),
+          scope:
+            "local actual Vue C review; navigation, home and rule responses are locally intercepted",
+          sources: Object.fromEntries(
+            await Promise.all(
+              sources.sort().map(async (file) => [file, hash(await readFile(file))]),
+            ),
+          ),
+          images: allImages,
+          results: allResults,
+        },
+        null,
+        2,
+      ) + "\n",
+    );
+  console.log(
+    JSON.stringify({
+      groups: allResults.length,
+      checks: allResults.reduce((n, x) => n + x.checks, 0),
+      writes: allResults.reduce((n, x) => n + x.writes, 0),
+      images: allImages.length,
+      sources: sources.length,
+      port,
+    }),
+  );
+} finally {
+  await browser?.close();
+  await server.close();
+}

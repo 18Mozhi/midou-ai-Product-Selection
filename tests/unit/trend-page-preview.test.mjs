@@ -1,2 +1,15 @@
-import assert from "node:assert/strict";import {readFile} from "node:fs/promises";import test from "node:test";import {previewTrendDashboard} from "../../scripts/lib/trend-page-preview.mjs";
-test("P14 review preserves trend reads and monitoring quality boundary",async()=>{const source=await readFile("apps/web/src/components/TrendDashboard.vue","utf8"),preview=previewTrendDashboard(source);assert.match(preview,/\/trends\/monitoring-rules/);assert.match(preview,/\/trends\/change-requests/);assert.match(preview,/\/trends\/\$\{currentId\}/);assert.match(preview,/五项质量门/);assert.match(preview,/来源门槛只形成规则命中候选/);assert.match(preview,/TrendDetailPanel/);assert.match(preview,/TrendChangeQueue/)})
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import test from "node:test";
+import { previewTrendDashboard } from "../../scripts/lib/trend-page-preview.mjs";
+test("P14 review preserves trend reads and monitoring quality boundary", async () => {
+  const source = await readFile("apps/web/src/components/TrendDashboard.vue", "utf8"),
+    preview = previewTrendDashboard(source);
+  assert.match(preview, /\/trends\/monitoring-rules/);
+  assert.match(preview, /\/trends\/change-requests/);
+  assert.match(preview, /\/trends\/\$\{currentId\}/);
+  assert.match(preview, /五项质量门/);
+  assert.match(preview, /来源门槛只形成规则命中候选/);
+  assert.match(preview, /TrendDetailPanel/);
+  assert.match(preview, /TrendChangeQueue/);
+});

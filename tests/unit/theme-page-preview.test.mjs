@@ -4,7 +4,9 @@ import test from "node:test";
 import { previewThemePage } from "../../scripts/lib/theme-page-preview.mjs";
 
 test("P10 review preserves theme persistence and session-only density", async () => {
-  const source = previewThemePage(await readFile("apps/web/src/components/ThemeStudio.vue", "utf8"));
+  const source = previewThemePage(
+    await readFile("apps/web/src/components/ThemeStudio.vue", "utf8"),
+  );
   assert.match(source, /request<Preference>\("\/me\/ui-preferences"/);
   assert.match(source, /expected_version/);
   assert.match(source, /chooseDensity\(density\.id\)/);

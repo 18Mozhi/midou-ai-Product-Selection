@@ -42,7 +42,10 @@ export function taskDetailPagePlugin() {
     transformIndexHtml(html) {
       return html
         .replace("<body>", '<body class="p24-review">')
-        .replace("</head>", `<link rel="stylesheet" href="/@fs/${path.resolve(taskDetailReviewCss).replaceAll("\\", "/")}"></head>`);
+        .replace(
+          "</head>",
+          `<link rel="stylesheet" href="/@fs/${path.resolve(taskDetailReviewCss).replaceAll("\\", "/")}"></head>`,
+        );
     },
   };
 }

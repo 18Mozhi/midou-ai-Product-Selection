@@ -4,7 +4,9 @@ import test from "node:test";
 import { previewMfaPage } from "../../scripts/lib/mfa-page-preview.mjs";
 
 test("P07 preserves MFA request actions and does not invent secret utilities", async () => {
-  const source = previewMfaPage(await readFile("apps/web/src/components/LocalIdentity.vue", "utf8"));
+  const source = previewMfaPage(
+    await readFile("apps/web/src/components/LocalIdentity.vue", "utf8"),
+  );
   assert.match(source, /loadMfa[\s\S]*?"\/me\/mfa"/);
   assert.match(source, /startMfa[\s\S]*?"\/me\/mfa\/totp\/enrollment"/);
   assert.match(source, /confirmMfa[\s\S]*?"\/me\/mfa\/totp\/confirm"/);

@@ -355,21 +355,21 @@
   & .technical-details button:hover {
     background: #edf4ff;
   }
-      & .redis-resilience__state,
-      & .redis-resilience__refresh-notice {
-        border: 1px solid #dce4ee;
-        background: white;
-        border-radius: 0;
-        padding: 24px;
-      }
-      & .redis-resilience__state h3,
-      & .redis-resilience__refresh-notice h3 {
-        display: block;
-        margin: 0;
-        font-size: 18px;
-        line-height: 1.5;
-      }
-      & .redis-resilience__state p,
+  & .redis-resilience__state,
+  & .redis-resilience__refresh-notice {
+    border: 1px solid #dce4ee;
+    background: white;
+    border-radius: 0;
+    padding: 24px;
+  }
+  & .redis-resilience__state h3,
+  & .redis-resilience__refresh-notice h3 {
+    display: block;
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+  & .redis-resilience__state p,
   & .redis-resilience__refresh-notice p {
     font-family: inherit;
     color: #526784;

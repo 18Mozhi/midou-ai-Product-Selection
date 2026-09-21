@@ -5,8 +5,12 @@ import { previewUiStatePage } from "../../scripts/lib/ui-state-page-preview.mjs"
 
 const file = "apps/web/src/components/UiStateShowcase.vue";
 test("P72 C review preserves the state and confirmation script", async () => {
-  const source = await readFile(file, "utf8"), reviewed = previewUiStatePage(source);
-  assert.equal(reviewed.slice(0, reviewed.indexOf("<template>")), source.slice(0, source.indexOf("<template>")));
+  const source = await readFile(file, "utf8"),
+    reviewed = previewUiStatePage(source);
+  assert.equal(
+    reviewed.slice(0, reviewed.indexOf("<template>")),
+    source.slice(0, source.indexOf("<template>")),
+  );
   assert.match(reviewed, /@click="selectState\(kind\)"/);
   assert.match(reviewed, /confirmation-text="确认撤销"/);
 });

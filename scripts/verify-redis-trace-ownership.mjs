@@ -294,7 +294,11 @@ try {
           failure.json.request_id = "retained-failure";
           await refresh.click();
           await notice.waitFor();
-          check(await notice.getAttribute("aria-busy"), "false", "settled retained failure not busy");
+          check(
+            await notice.getAttribute("aria-busy"),
+            "false",
+            "settled retained failure not busy",
+          );
           check(
             await surface.getByRole("region", { name: "刷新未完成", exact: true }).count(),
             1,

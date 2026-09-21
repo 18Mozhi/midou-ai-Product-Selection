@@ -5,17 +5,249 @@ import { createServer as reservePort } from "node:net";
 import path from "node:path";
 import { chromium } from "playwright";
 import { createServer } from "vite";
-import { emailVerificationPagePlugin, emailVerificationPageSources } from "./lib/email-verification-page-preview.mjs";
-const args=process.argv.slice(2),smoke=process.env.P05_SMOKE==="1";
-assert.ok(args.length===0||(args.length===2&&args[0]==="--capture-review"&&/^r[1-9]\d*$/.test(args[1])));
-const widths=process.env.P05_VIEWPORT?[Number(process.env.P05_VIEWPORT)]:smoke?[390]:[1440,390],motions=process.env.P05_MOTION?[process.env.P05_MOTION]:smoke?["reduce"]:["reduce","no-preference"],output=args.length?path.resolve(`output/playwright/p05-page-composition-${args[1]}`):null;
-if(output)await mkdir(output,{recursive:true});const previous=output?await readFile(path.join(output,"manifest.json"),"utf8").then(JSON.parse).catch(()=>null):null;
-const probe=reservePort();await new Promise(r=>probe.listen(0,"127.0.0.1",r));const port=probe.address().port;await new Promise(r=>probe.close(r));
-const server=await createServer({configFile:path.resolve("apps/web/vite.config.ts"),logLevel:"error",define:{"import.meta.env.VITE_API_BASE_URL":JSON.stringify("/api/v1")},plugins:[emailVerificationPagePlugin()],server:{host:"127.0.0.1",port,strictPort:true,proxy:{},hmr:false,open:false}});
-const hash=v=>createHash("sha256").update(v).digest("hex"),images=[],results=[];let browser;
-try{await server.listen();browser=await chromium.launch();const origin=`http://127.0.0.1:${port}`;console.log(`P05 actual Vue review ${origin}`);
-for(const width of widths)for(const motion of motions){const context=await browser.newContext({viewport:{width,height:width===390?844:1000},locale:"zh-CN",reducedMotion:motion}),errors=[],unexpected=[],requests=[];let checks=0,release;const held=new Promise(r=>release=r),check=(a,e,l)=>{assert.deepEqual(a,e,`${width}/${motion}: ${l}`);checks++},capture=async(page,name)=>{await page.evaluate(()=>new Promise(r=>{scrollTo(0,0);requestAnimationFrame(()=>{scrollTo(0,0);r()})}));const bytes=await page.screenshot({animations:"disabled"}),file=`${width}-${name}.png`;await writeFile(path.join(output,file),bytes);images.push({file,sha256:hash(bytes),pixelWidth:bytes.readUInt32BE(16),pixelHeight:bytes.readUInt32BE(20)})};
-try{context.on("page",p=>p.on("pageerror",e=>errors.push(e.message)));await context.route("**/*",async route=>{const req=route.request(),url=new URL(req.url());if(url.origin!==origin)return route.abort();if(!url.pathname.startsWith("/api/"))return route.continue();if(req.method()!=="POST"||url.pathname!=="/api/v1/auth/email-verification/confirm"){unexpected.push(`${req.method()} ${url.pathname}`);return route.abort()}const body=req.postDataJSON();requests.push(body);if(body.token==="p05-local-success"){await held;return route.fulfill({status:200,json:{data:{status:"verified"},request_id:"p05-success",trace_id:"p05-success"}})}if(body.token==="p05-local-failure")return route.fulfill({status:503,json:{error:{code:"verification_unavailable",message:"验证服务暂不可用。",action_hint:"请稍后重新打开验证链接。"},request_id:"p05-failure",trace_id:"p05-failure"}});return route.abort()});
-const noToken=await context.newPage();await noToken.goto(origin+"/verify-email",{waitUntil:"domcontentloaded"});const root=noToken.locator(".identity-page--review");await root.waitFor();check(await root.getByText("尚未提供验证链接",{exact:true}).count(),1,"no-token material state");check(requests.length,0,"no token makes zero POST");check(await noToken.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,"no-token no overflow");if(output&&motion==="reduce")await capture(noToken,"no-token");
-const success=await context.newPage();await success.goto(origin+"/verify-email?token=p05-local-success",{waitUntil:"domcontentloaded"});const successRoot=success.locator(".identity-page--review");await successRoot.getByText("正在核验链接",{exact:true}).waitFor();check(await successRoot.getByRole("button",{name:"返回登录",exact:true}).count(),1,"loading has only safe return action");if(output&&motion==="reduce")await capture(success,"loading");release();await successRoot.getByText("邮箱验证完成",{exact:true}).waitFor();check(await successRoot.getByText("邮箱验证完成，现在可以返回登录。",{exact:true}).count(),1,"success is explicit");check(await success.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,"success no overflow");if(output&&motion==="reduce")await capture(success,"success");
-const failure=await context.newPage();await failure.goto(origin+"/verify-email?token=p05-local-failure",{waitUntil:"domcontentloaded"});const failureRoot=failure.locator(".identity-page--review");await failureRoot.getByText("验证未完成",{exact:true}).waitFor();check(await failureRoot.getByText("验证服务暂不可用。",{exact:true}).count(),1,"failure is explicit");check(await failureRoot.getByText(/关联编号：p05-failure/).count(),1,"failure request id shown");if(output&&motion==="reduce")await capture(failure,"failure");check(requests,[{token:"p05-local-success"},{token:"p05-local-failure"}],"only synthetic token bodies");check(unexpected,[],"no unexpected api");check(errors,[],"no page errors");results.push({width,motion,checks,requests:requests.length});console.log(JSON.stringify({width,motion,checks,requests:requests.length}))}finally{await context.close()}}const sources=new Set(emailVerificationPageSources);for(const m of server.moduleGraph.idToModuleMap.values()){const f=m.file&&path.relative(process.cwd(),m.file).replaceAll("\\","/");if(f&&!f.startsWith("..")&&!f.includes("node_modules")&&/\.(vue|ts|css|json)$/.test(f))sources.add(f)}const allImages=[...(previous?.images??[]),...images].filter((x,i,a)=>a.findLastIndex(y=>y.file===x.file)===i).sort((a,b)=>a.file.localeCompare(b.file)),allResults=[...(previous?.results??[]),...results].filter((x,i,a)=>a.findLastIndex(y=>y.width===x.width&&y.motion===x.motion)===i).sort((a,b)=>a.width-b.width||a.motion.localeCompare(b.motion));if(output)await writeFile(path.join(output,"manifest.json"),JSON.stringify({page:"P05",revision:args[1],capturedAt:new Date().toISOString(),scope:"local actual Vue C review; synthetic token placeholders are intercepted and never rendered",sources:Object.fromEntries(await Promise.all([...sources].sort().map(async f=>[f,hash(await readFile(f))]))),images:allImages,results:allResults},null,2)+"\n");console.log(JSON.stringify({groups:allResults.length,checks:allResults.reduce((s,x)=>s+x.checks,0),requests:allResults.reduce((s,x)=>s+x.requests,0),images:allImages.length,sources:sources.size,port}))}finally{await browser?.close();await server.close()}
+import {
+  emailVerificationPagePlugin,
+  emailVerificationPageSources,
+} from "./lib/email-verification-page-preview.mjs";
+const args = process.argv.slice(2),
+  smoke = process.env.P05_SMOKE === "1";
+assert.ok(
+  args.length === 0 ||
+    (args.length === 2 && args[0] === "--capture-review" && /^r[1-9]\d*$/.test(args[1])),
+);
+const widths = process.env.P05_VIEWPORT
+    ? [Number(process.env.P05_VIEWPORT)]
+    : smoke
+      ? [390]
+      : [1440, 390],
+  motions = process.env.P05_MOTION
+    ? [process.env.P05_MOTION]
+    : smoke
+      ? ["reduce"]
+      : ["reduce", "no-preference"],
+  output = args.length ? path.resolve(`output/playwright/p05-page-composition-${args[1]}`) : null;
+if (output) await mkdir(output, { recursive: true });
+const previous = output
+  ? await readFile(path.join(output, "manifest.json"), "utf8")
+      .then(JSON.parse)
+      .catch(() => null)
+  : null;
+const probe = reservePort();
+await new Promise((r) => probe.listen(0, "127.0.0.1", r));
+const port = probe.address().port;
+await new Promise((r) => probe.close(r));
+const server = await createServer({
+  configFile: path.resolve("apps/web/vite.config.ts"),
+  logLevel: "error",
+  define: { "import.meta.env.VITE_API_BASE_URL": JSON.stringify("/api/v1") },
+  plugins: [emailVerificationPagePlugin()],
+  server: { host: "127.0.0.1", port, strictPort: true, proxy: {}, hmr: false, open: false },
+});
+const hash = (v) => createHash("sha256").update(v).digest("hex"),
+  images = [],
+  results = [];
+let browser;
+try {
+  await server.listen();
+  browser = await chromium.launch();
+  const origin = `http://127.0.0.1:${port}`;
+  console.log(`P05 actual Vue review ${origin}`);
+  for (const width of widths)
+    for (const motion of motions) {
+      const context = await browser.newContext({
+          viewport: { width, height: width === 390 ? 844 : 1000 },
+          locale: "zh-CN",
+          reducedMotion: motion,
+        }),
+        errors = [],
+        unexpected = [],
+        requests = [];
+      let checks = 0,
+        release;
+      const held = new Promise((r) => (release = r)),
+        check = (a, e, l) => {
+          assert.deepEqual(a, e, `${width}/${motion}: ${l}`);
+          checks++;
+        },
+        capture = async (page, name) => {
+          await page.evaluate(
+            () =>
+              new Promise((r) => {
+                scrollTo(0, 0);
+                requestAnimationFrame(() => {
+                  scrollTo(0, 0);
+                  r();
+                });
+              }),
+          );
+          const bytes = await page.screenshot({ animations: "disabled" }),
+            file = `${width}-${name}.png`;
+          await writeFile(path.join(output, file), bytes);
+          images.push({
+            file,
+            sha256: hash(bytes),
+            pixelWidth: bytes.readUInt32BE(16),
+            pixelHeight: bytes.readUInt32BE(20),
+          });
+        };
+      try {
+        context.on("page", (p) => p.on("pageerror", (e) => errors.push(e.message)));
+        await context.route("**/*", async (route) => {
+          const req = route.request(),
+            url = new URL(req.url());
+          if (url.origin !== origin) return route.abort();
+          if (!url.pathname.startsWith("/api/")) return route.continue();
+          if (
+            req.method() !== "POST" ||
+            url.pathname !== "/api/v1/auth/email-verification/confirm"
+          ) {
+            unexpected.push(`${req.method()} ${url.pathname}`);
+            return route.abort();
+          }
+          const body = req.postDataJSON();
+          requests.push(body);
+          if (body.token === "p05-local-success") {
+            await held;
+            return route.fulfill({
+              status: 200,
+              json: {
+                data: { status: "verified" },
+                request_id: "p05-success",
+                trace_id: "p05-success",
+              },
+            });
+          }
+          if (body.token === "p05-local-failure")
+            return route.fulfill({
+              status: 503,
+              json: {
+                error: {
+                  code: "verification_unavailable",
+                  message: "验证服务暂不可用。",
+                  action_hint: "请稍后重新打开验证链接。",
+                },
+                request_id: "p05-failure",
+                trace_id: "p05-failure",
+              },
+            });
+          return route.abort();
+        });
+        const noToken = await context.newPage();
+        await noToken.goto(origin + "/verify-email", { waitUntil: "domcontentloaded" });
+        const root = noToken.locator(".identity-page--review");
+        await root.waitFor();
+        check(
+          await root.getByText("尚未提供验证链接", { exact: true }).count(),
+          1,
+          "no-token material state",
+        );
+        check(requests.length, 0, "no token makes zero POST");
+        check(
+          await noToken.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
+          true,
+          "no-token no overflow",
+        );
+        if (output && motion === "reduce") await capture(noToken, "no-token");
+        const success = await context.newPage();
+        await success.goto(origin + "/verify-email?token=p05-local-success", {
+          waitUntil: "domcontentloaded",
+        });
+        const successRoot = success.locator(".identity-page--review");
+        await successRoot.getByText("正在核验链接", { exact: true }).waitFor();
+        check(
+          await successRoot.getByRole("button", { name: "返回登录", exact: true }).count(),
+          1,
+          "loading has only safe return action",
+        );
+        if (output && motion === "reduce") await capture(success, "loading");
+        release();
+        await successRoot.getByText("邮箱验证完成", { exact: true }).waitFor();
+        check(
+          await successRoot.getByText("邮箱验证完成，现在可以返回登录。", { exact: true }).count(),
+          1,
+          "success is explicit",
+        );
+        check(
+          await success.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
+          true,
+          "success no overflow",
+        );
+        if (output && motion === "reduce") await capture(success, "success");
+        const failure = await context.newPage();
+        await failure.goto(origin + "/verify-email?token=p05-local-failure", {
+          waitUntil: "domcontentloaded",
+        });
+        const failureRoot = failure.locator(".identity-page--review");
+        await failureRoot.getByText("验证未完成", { exact: true }).waitFor();
+        check(
+          await failureRoot.getByText("验证服务暂不可用。", { exact: true }).count(),
+          1,
+          "failure is explicit",
+        );
+        check(
+          await failureRoot.getByText(/关联编号：p05-failure/).count(),
+          1,
+          "failure request id shown",
+        );
+        if (output && motion === "reduce") await capture(failure, "failure");
+        check(
+          requests,
+          [{ token: "p05-local-success" }, { token: "p05-local-failure" }],
+          "only synthetic token bodies",
+        );
+        check(unexpected, [], "no unexpected api");
+        check(errors, [], "no page errors");
+        results.push({ width, motion, checks, requests: requests.length });
+        console.log(JSON.stringify({ width, motion, checks, requests: requests.length }));
+      } finally {
+        await context.close();
+      }
+    }
+  const sources = new Set(emailVerificationPageSources);
+  for (const m of server.moduleGraph.idToModuleMap.values()) {
+    const f = m.file && path.relative(process.cwd(), m.file).replaceAll("\\", "/");
+    if (f && !f.startsWith("..") && !f.includes("node_modules") && /\.(vue|ts|css|json)$/.test(f))
+      sources.add(f);
+  }
+  const allImages = [...(previous?.images ?? []), ...images]
+      .filter((x, i, a) => a.findLastIndex((y) => y.file === x.file) === i)
+      .sort((a, b) => a.file.localeCompare(b.file)),
+    allResults = [...(previous?.results ?? []), ...results]
+      .filter(
+        (x, i, a) => a.findLastIndex((y) => y.width === x.width && y.motion === x.motion) === i,
+      )
+      .sort((a, b) => a.width - b.width || a.motion.localeCompare(b.motion));
+  if (output)
+    await writeFile(
+      path.join(output, "manifest.json"),
+      JSON.stringify(
+        {
+          page: "P05",
+          revision: args[1],
+          capturedAt: new Date().toISOString(),
+          scope:
+            "local actual Vue C review; synthetic token placeholders are intercepted and never rendered",
+          sources: Object.fromEntries(
+            await Promise.all([...sources].sort().map(async (f) => [f, hash(await readFile(f))])),
+          ),
+          images: allImages,
+          results: allResults,
+        },
+        null,
+        2,
+      ) + "\n",
+    );
+  console.log(
+    JSON.stringify({
+      groups: allResults.length,
+      checks: allResults.reduce((s, x) => s + x.checks, 0),
+      requests: allResults.reduce((s, x) => s + x.requests, 0),
+      images: allImages.length,
+      sources: sources.size,
+      port,
+    }),
+  );
+} finally {
+  await browser?.close();
+  await server.close();
+}

@@ -88,7 +88,9 @@ export function loginPagePlugin() {
     enforce: "pre",
     transform(source, id) {
       const file = id.replaceAll("\\", "/");
-      const target = path.resolve("apps/web/src/components/LocalIdentity.vue").replaceAll("\\", "/");
+      const target = path
+        .resolve("apps/web/src/components/LocalIdentity.vue")
+        .replaceAll("\\", "/");
       if (file === target) return { code: previewLoginPage(source), map: null };
     },
     transformIndexHtml(html) {

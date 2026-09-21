@@ -25,8 +25,14 @@ const motions = process.env.P02_MOTION
   : smoke
     ? ["reduce"]
     : ["reduce", "no-preference"];
-assert.deepEqual(widths.every((value) => [390, 1440].includes(value)), true);
-assert.deepEqual(motions.every((value) => ["reduce", "no-preference"].includes(value)), true);
+assert.deepEqual(
+  widths.every((value) => [390, 1440].includes(value)),
+  true,
+);
+assert.deepEqual(
+  motions.every((value) => ["reduce", "no-preference"].includes(value)),
+  true,
+);
 
 const output = args.length
   ? path.resolve(`output/playwright/p02-page-composition-${args[1]}`)
@@ -112,7 +118,11 @@ try {
             unexpected.push(`${request.method()} ${url.pathname}`);
             return route.abort();
           }
-          requests.push({ method: request.method(), path: url.pathname, body: request.postDataJSON() });
+          requests.push({
+            method: request.method(),
+            path: url.pathname,
+            body: request.postDataJSON(),
+          });
           loginRequests++;
           return route.fulfill({
             status: 202,
@@ -169,22 +179,36 @@ try {
           1,
           "challenge explains its safety boundary",
         );
-        check(await root.locator(".p02-context li.is-current").getByText("认证器挑战").count(), 1, "challenge step current");
+        check(
+          await root.locator(".p02-context li.is-current").getByText("认证器挑战").count(),
+          1,
+          "challenge step current",
+        );
         if (output && motion === "reduce") await capture(page, "challenge");
-        check(requests[0], {
-          method: "POST",
-          path: "/api/v1/auth/login",
-          body: { identifier: "member@example.test", password: "Long-enough-password-123!" },
-        }, "MFA login request contract");
+        check(
+          requests[0],
+          {
+            method: "POST",
+            path: "/api/v1/auth/login",
+            body: { identifier: "member@example.test", password: "Long-enough-password-123!" },
+          },
+          "MFA login request contract",
+        );
 
         const seed = await context.newPage();
-        await seed.goto(origin + "/login?mode=login&review=seed", { waitUntil: "domcontentloaded" });
+        await seed.goto(origin + "/login?mode=login&review=seed", {
+          waitUntil: "domcontentloaded",
+        });
         await seed.getByLabel("账号").fill("seed@example.test");
         await seed.getByLabel("密码").fill("Long-enough-password-456!");
         await seed.getByRole("button", { name: "登录", exact: true }).click();
         await seed.getByTestId("security-setup").waitFor();
         const seedRoot = seed.locator(".identity-page--review");
-        check(await seedRoot.getAttribute("data-mode"), "security-setup", "login enters seed security setup");
+        check(
+          await seedRoot.getAttribute("data-mode"),
+          "security-setup",
+          "login enters seed security setup",
+        );
         check(
           await seed.getByRole("button", { name: "修改密码并撤销当前会话", exact: true }).count(),
           1,
@@ -196,11 +220,15 @@ try {
           "seed setup has no overflow",
         );
         if (output && motion === "reduce") await capture(seed, "seed-setup");
-        check(requests[1], {
-          method: "POST",
-          path: "/api/v1/auth/login",
-          body: { identifier: "seed@example.test", password: "Long-enough-password-456!" },
-        }, "seed login request contract");
+        check(
+          requests[1],
+          {
+            method: "POST",
+            path: "/api/v1/auth/login",
+            body: { identifier: "seed@example.test", password: "Long-enough-password-456!" },
+          },
+          "seed login request contract",
+        );
         check(unexpected, [], "no unexpected api");
         check(errors, [], "no page errors");
         results.push({ width, motion, checks, requests: requests.length });
@@ -223,7 +251,9 @@ try {
       sources.add(file);
   }
   const allImages = [...(previous?.images ?? []), ...images]
-    .filter((item, index, values) => values.findLastIndex((value) => value.file === item.file) === index)
+    .filter(
+      (item, index, values) => values.findLastIndex((value) => value.file === item.file) === index,
+    )
     .sort((a, b) => a.file.localeCompare(b.file));
   const allResults = [...(previous?.results ?? []), ...results]
     .filter(

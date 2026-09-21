@@ -12,7 +12,9 @@ export const notFoundPageSources = [
 
 // Review-only: preserves safe destination resolution and heading-focus script byte-for-byte.
 export function previewNotFoundPage(input) {
-  const source = input.replaceAll("\r\n", "\n"), start = source.indexOf("<template>"), end = source.lastIndexOf("</template>");
+  const source = input.replaceAll("\r\n", "\n"),
+    start = source.indexOf("<template>"),
+    end = source.lastIndexOf("</template>");
   assert.ok(start > 0 && end > start, "P73 template bounds");
   const next = `<template>
   <main class="not-found-page not-found-page--review" aria-labelledby="not-found-title">
@@ -31,12 +33,18 @@ export function notFoundPagePlugin() {
     name: "p73-actual-vue-review",
     enforce: "pre",
     transform(source, id) {
-      const file = id.replaceAll("\\", "/"), target = path.resolve("apps/web/src/components/NotFoundPage.vue").replaceAll("\\", "/");
+      const file = id.replaceAll("\\", "/"),
+        target = path.resolve("apps/web/src/components/NotFoundPage.vue").replaceAll("\\", "/");
       if (file === target) return { code: previewNotFoundPage(source), map: null };
     },
     transformIndexHtml(html) {
       assert.equal(html.split("<body>").length, 2, "P73 body anchor");
-      return html.replace("<body>", '<body class="p73-review">').replace("</head>", `<link rel="stylesheet" href="/@fs/${path.resolve(notFoundReviewCss).replaceAll("\\", "/")}"></head>`);
+      return html
+        .replace("<body>", '<body class="p73-review">')
+        .replace(
+          "</head>",
+          `<link rel="stylesheet" href="/@fs/${path.resolve(notFoundReviewCss).replaceAll("\\", "/")}"></head>`,
+        );
     },
   };
 }
