@@ -58,7 +58,9 @@ runner =
   runner.slice(0, start) +
   `
         await expect(page.getByRole("heading",{name:"组织配额与用量",exact:true})).toBeVisible();
-        await expect(page.getByRole("button",{name:"编辑",exact:true})).toBeVisible();
+        const planTask=page.getByRole("button",{name:"方案目录 全局配置与额度"}), orgTask=page.getByRole("button",{name:"组织配额 读取组织、分配与用量"});
+        if(["edit","activate","retire"].includes(scenario)) await planTask.click(); else await orgTask.click();
+        if(["edit","activate","retire"].includes(scenario)) await expect(page.getByRole("button",{name:"编辑",exact:true})).toBeVisible();
         const background=await page.locator(".commercial").screenshot({animations:"disabled"});
         const dialog=page.getByRole("dialog",{name:"确认配额变更",exact:true});
         const titles={edit:"保存配额方案修改",activate:"启用配额方案",retire:"退役配额方案",assign:"分配组织配额方案",renew:"调整组织配额方案",suspend:"暂停组织配额",resume:"恢复组织配额",end:"结束组织配额",adjust:"人工调整配额",revoke:"撤销人工调整"};

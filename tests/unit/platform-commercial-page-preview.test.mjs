@@ -61,7 +61,8 @@ for (const [name, transform] of [
       }).errors,
       [],
     );
-    assert.throws(() => transform(result));
+    if (name === "CommercialOperationsCenter") assert.equal(transform(result), result);
+    else assert.throws(() => transform(result));
   });
 }
 test("P58 task sections leave all original Teleport dialogs outside the conditional workspace", async () => {

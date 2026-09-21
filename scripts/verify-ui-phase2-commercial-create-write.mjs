@@ -91,6 +91,7 @@ runner =
   pictures +
   `
         await expect(page.getByText("380 / 1050")).toBeVisible();
+        await page.getByRole("button", { name: "方案目录 全局配置与额度" }).click();
         await trigger.focus(); await page.keyboard.press("Enter"); await expect(dialog).toBeVisible();
         await dialog.getByLabel("内部标识", { exact: true }).fill("basic_2026");
         await dialog.getByLabel("方案名称", { exact: true }).fill("审核样例配额方案");

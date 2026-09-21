@@ -99,9 +99,9 @@ export function previewCommercialCreateOutcome(source) {
     '    if (readResult?.kind === "ready") setNotice("配额方案草稿已创建；启用前不影响任何组织。", "success");',
   );
   result = result.slice(0, createStart) + create + result.slice(createEnd);
-  replace(
-    '    <p v-if="notice" class="notice"',
-    outcomeTemplate + '    <p v-if="notice" class="notice"',
-  );
+  const noticeAnchor = result.includes('    <p v-if="notice && loadedOnce" class="notice"')
+    ? '    <p v-if="notice && loadedOnce" class="notice"'
+    : '    <p v-if="notice" class="notice"';
+  replace(noticeAnchor, outcomeTemplate + noticeAnchor);
   return result;
 }

@@ -1,12 +1,12 @@
 # P58 当前 Vue C 组合 · 批111
 
-状态：待用户审核；不是生产实现完成、真实配额验收或全 73 页签收。
+状态：已按用户统一批准继续实施；P58 C 方向工作区布局已迁移到实际 Vue 并随本次提交部署。不是完整业务生命周期、真实配额验收或全 73 页签收。
 
 ## 本次复核范围
 
 复核已保留的实际 Vue 审核宿主：`/platform-admin/commercial` 的 App / Router / NavigationShell / CommercialOperationsCenter 转换层。C 方向将“方案目录”和“组织配额”分为两个工作区：前者只展示全局方案统计、筛选及目录，后者才展示组织读取、分配、周期用量与人工调整。原 UUID 输入、字段校验、业务脚本、请求地址和三个 Teleport 弹窗均未在本批改写。
 
-本批只登记并复验既有 r1 图包；不重新捕获、不覆盖旧图、不触发真实读取或写入。
+本批在保留 r1 设计图包的同时，完成实际 Vue 的双工作区迁移：方案目录与组织配额通过任务切换互斥展示；组织 UUID 入口保留，读写请求、字段和三个 Teleport 弹窗契约不改。所有新增图证据均为本地受控 fixture，不触发真实读取或写入。
 
 ## 可审核图
 
@@ -23,8 +23,10 @@
 ## 当前复验证据
 
 - `node --test tests/unit/platform-commercial-page-preview.test.mjs`：5/5 通过，覆盖 CommercialOperationsCenter 与 NavigationShell 的原脚本/合同/样式保留及 SFC 编译、Teleport 位置与 CLI 参数拒绝。
+- P58 实际 Vue 双端 E2E：`npx playwright test tests/e2e/m06-06-commercial.spec.ts --project=desktop-chromium --project=mobile-390 --workers=1`，4/4 通过。
+- P58 当前创建、创建结果、拒绝写入、编辑与焦点证据均已按当前源刷新：创建结果 24 组/444 检查/66 图，拒绝写入 12 组/216 检查/42 图，编辑 6 组/168 检查/33 图；对应单测 22/22 通过。
 - 已逐张计算并比对 [r1 清单](../../output/playwright/p58-page-composition-r1/manifest.json) 中 7 张 PNG 的 SHA-256；全部与清单一致。
-- 本轮没有启动常驻审核宿主、没有访问生产地址，也没有发生 API 写请求、数据库写入或截图覆盖。
+- 本地证据仅覆盖受控 fixture、焦点、错误/空态和读取恢复；没有访问生产地址、真实数据库写入或生产权限验收。
 
 ## 明确未覆盖
 

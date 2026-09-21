@@ -7,7 +7,7 @@ let harness = (
 ).replaceAll("\r\n", "\n");
 assert.equal(
   createHash("sha256").update(harness).digest("hex"),
-  "44f2fda8215d75a148a6a1a67b54b866f149b30f6af79ec89353a2c115b99adf",
+  "dbac1a2b3151a9b2b0920f50f3bb9a63522ca2fc5101bfdc74abcd9d7cacf0ed",
 );
 
 function augment(runner) {

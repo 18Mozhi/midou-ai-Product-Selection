@@ -72,12 +72,16 @@ test("M06-06.A07/A08/A15 desktop and 390 quota management", async ({ page }) => 
   await page.goto("/platform-admin/commercial?organization_id=o1");
   await expect(page.getByRole("heading", { name: "组织配额与用量" })).toBeVisible();
   await expect(page.getByText("380 / 1050")).toBeVisible();
+  await page.getByRole("button", { name: "方案目录 全局配置与额度" }).click();
   await expect(page.getByText("当前只展示已配置额度，不包含价格或计费")).toBeVisible();
+  await page.getByRole("button", { name: "组织配额 读取组织、分配与用量" }).click();
   await expect(page.getByRole("button", { name: "确认调整" })).toBeVisible();
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
-  await expect(page.getByText("成长配额方案").first()).toBeVisible();
+  await expect(page.getByText("380 / 1050")).toBeVisible();
+  await page.getByRole("button", { name: "方案目录 全局配置与额度" }).click();
+  await expect(page.locator(".commercial-catalog").getByText("成长配额方案")).toBeVisible();
   await expect(page.getByText(/会员|续期|套餐/)).toHaveCount(0);
 });
 test("M06-06 edit, renew, status confirmation and dependency recovery", async ({ page }) => {
@@ -87,9 +91,12 @@ test("M06-06 edit, renew, status confirmation and dependency recovery", async ({
     await route.fulfill({ status: 201, json: env({ id: "a1", status: "active", version: 2 }) });
   });
   await page.goto("/platform-admin/commercial?organization_id=o1");
+  await expect(page.getByText("380 / 1050")).toBeVisible();
+  await page.getByRole("button", { name: "方案目录 全局配置与额度" }).click();
   await page.getByRole("button", { name: "编辑", exact: true }).click();
   await expect(page.getByRole("heading", { name: "编辑配额方案" })).toBeVisible();
   await page.getByRole("button", { name: "取消" }).click();
+  await page.getByRole("button", { name: "组织配额 读取组织、分配与用量" }).click();
   await page.getByLabel("结束", { exact: true }).fill("2026-10-01T00:00");
   await page.getByRole("button", { name: "确认调整" }).click();
   await expect(page.getByText("确认调整组织配额方案？")).toBeVisible();
@@ -102,6 +109,7 @@ test("M06-06 edit, renew, status confirmation and dependency recovery", async ({
   await expect
     .poll(() => renewal)
     .toMatchObject({ organization_id: "o1", plan_id: "p1", reason: "分配或调整配额方案" });
+  await page.getByRole("button", { name: "方案目录 全局配置与额度" }).click();
   await page.getByRole("button", { name: "退役", exact: true }).click();
   await expect(page.getByText("确认退役配额方案？")).toBeVisible();
   await expect(page.getByLabel("配额变更影响范围")).toContainText("3 个当前仍分配该方案的组织");

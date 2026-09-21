@@ -16,6 +16,7 @@ const once = (source, before, after) => {
 };
 export function previewCommercialPage(source) {
   let text = source.replaceAll("\r\n", "\n");
+  if (text.includes('class="commercial commercial--review"')) return text;
   text = once(text, 'const notice = ref("");', commercialReviewSetup + 'const notice = ref("");');
   text = once(text, 'class="commercial"', 'class="commercial commercial--review"');
   text = once(text, "<h2>组织配额与用量</h2>", "<h1>组织配额与用量</h1>");

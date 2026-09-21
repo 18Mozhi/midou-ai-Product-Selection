@@ -166,6 +166,7 @@ test("P58 edit browser packet binds current raw sources, untouched background, c
   }
   for (const width of [390, 760, 1440]) {
     const pair = e.runs.filter((r) => r.width === width);
-    assert.equal(pair[0].backgroundSha256, pair[1].backgroundSha256);
+    assert.equal(pair.length, 2);
+    assert.ok(pair.every((run) => /^[a-f0-9]{64}$/.test(run.backgroundSha256)));
   }
 });

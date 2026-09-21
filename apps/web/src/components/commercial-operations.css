@@ -684,3 +684,290 @@ dialog::backdrop {
     grid-template-columns: 1fr;
   }
 }
+
+/* P58 C direction: separate global plan configuration from organization quota work. */
+.commercial--review {
+  --so-primary: #1748b5;
+  --so-primary-strong: #102a63;
+  --so-text: #17253c;
+  --so-text-muted: #536985;
+  --so-panel: #fff;
+  --so-panel-soft: #edf2fa;
+  --so-bg-elevated: #fff;
+  --so-border: #c7d3e4;
+  --so-border-strong: #94a8c4;
+  --so-focus: #2f6ee5;
+  min-width: 0;
+  padding: 0;
+  gap: 20px;
+  border: 0;
+  background: transparent;
+  color: var(--so-text);
+  font-family: "Microsoft YaHei", sans-serif;
+}
+
+.commercial--review .commercial-hero {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.commercial--review .commercial-hero h1 {
+  margin: 6px 0 12px;
+  font:
+    700 30px/1.4 "Microsoft YaHei",
+    sans-serif;
+}
+
+.commercial--review :is(.commercial-hero-copy, .commercial-catalog header) > p {
+  font-size: 13px;
+}
+
+.commercial--review :is(button, input, select, textarea) {
+  min-height: 44px;
+  min-width: 0;
+  box-sizing: border-box;
+  border-radius: 5px;
+  font:
+    16px/1.5 "Microsoft YaHei",
+    sans-serif;
+}
+
+.commercial--review :is(input, select, textarea) {
+  width: 100%;
+  background: #fff;
+  color: var(--so-text);
+}
+
+.commercial--review button {
+  color: var(--so-primary);
+  background: #fff;
+  border: 1px solid var(--so-border-strong);
+}
+
+.commercial--review button.primary {
+  color: #fff;
+  background: var(--so-primary);
+  border-color: var(--so-primary);
+}
+
+.commercial--review button.danger {
+  color: #a52630;
+  border-color: #d9949b;
+  background: #fff;
+}
+
+.commercial--review :is(h2, h3, h4, strong, b, th, code) {
+  font-family: "Microsoft YaHei", sans-serif;
+  letter-spacing: normal;
+}
+
+.commercial--review :is(button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid var(--so-focus);
+  outline-offset: 3px;
+}
+
+.commercial--review .p58-task-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.commercial--review .p58-task-switch button {
+  display: grid;
+  gap: 4px;
+  min-height: 76px;
+  padding: 14px 18px;
+  text-align: left;
+  font-weight: 700;
+}
+
+.commercial--review .p58-task-switch button span {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.commercial--review .p58-task-switch button[aria-pressed="true"] {
+  color: #fff;
+  background: var(--so-primary-strong);
+  border-color: var(--so-primary-strong);
+}
+
+.commercial--review .commercial-summary {
+  gap: 0;
+  border: 1px solid var(--so-border);
+  border-radius: 0;
+  background: #fff;
+}
+
+.commercial--review .commercial-summary article {
+  padding: 18px;
+  border: 0;
+  border-right: 1px solid var(--so-border);
+  border-radius: 0;
+  background: transparent;
+}
+
+.commercial--review .commercial-summary article:last-child {
+  border: 0;
+}
+
+.commercial--review :is(.commercial-catalog, .p58-organization-task) {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--so-border);
+  border-radius: 0;
+  background: #fff;
+}
+
+.commercial--review .p58-task-heading h3 {
+  margin: 0 0 8px;
+  font:
+    700 22px/1.4 "Microsoft YaHei",
+    sans-serif;
+}
+
+.commercial--review .p58-task-heading p {
+  margin: 0;
+  color: var(--so-text-muted);
+  line-height: 1.6;
+}
+
+.commercial--review .commercial-organization-lookup {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  margin: 20px 0;
+  padding: 18px;
+  border: 1px solid var(--so-border);
+  background: var(--so-panel-soft);
+}
+
+.commercial--review .p58-unselected {
+  margin: 0;
+  padding: 24px;
+  color: var(--so-text-muted);
+  background: #f3f6fa;
+  line-height: 1.7;
+}
+
+.commercial--review .membership {
+  padding: 24px;
+  border: 1px solid var(--so-border);
+  border-radius: 0;
+  background: #fff;
+}
+
+.commercial--review :is(.renew, .adjust) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--so-border);
+  border-radius: 0;
+  background: var(--so-panel-soft);
+}
+
+.commercial--review :is(.renew, .adjust) :is(h4, .wide) {
+  grid-column: 1 / -1;
+}
+
+.commercial--review .commercial-guide {
+  padding: 14px 18px;
+  border: 0;
+  border-left: 3px solid var(--so-primary);
+  border-radius: 0;
+  background: var(--so-panel-soft);
+}
+
+.commercial--review .commercial-catalog > header button {
+  color: var(--so-primary);
+  background: #fff;
+}
+
+.commercial--review .commercial-plan-table-wrap {
+  border-radius: 0;
+}
+
+.commercial--review .commercial-plan-table {
+  min-width: 0;
+}
+
+.commercial--review .commercial-plan-table :is(th, td) {
+  border-color: var(--so-border);
+}
+
+.commercial--review .commercial-plan-table th {
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+
+.commercial--review .commercial-plan-table td {
+  overflow-wrap: anywhere;
+}
+
+.commercial--review > :is(.state, .notice) {
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--so-border);
+  border-radius: 0;
+  background: #fff;
+  line-height: 1.7;
+}
+
+.commercial--review > .notice {
+  border-left: 3px solid var(--so-primary);
+  background: #edf2fa;
+}
+
+.commercial--review > .state > strong {
+  font-size: 20px;
+}
+
+.commercial--review > .state > button {
+  justify-self: start;
+  padding-inline: 18px;
+  color: #fff;
+  background: var(--so-primary);
+}
+
+@media (max-width: 1100px) {
+  .commercial--review .commercial-hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .commercial--review .commercial-hero-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 760px) {
+  .commercial--review .commercial-hero h1 {
+    font-size: 27px;
+  }
+
+  .commercial--review :is(.commercial-catalog, .p58-organization-task, .membership) {
+    padding: 16px;
+  }
+
+  .commercial--review :is(.renew, .adjust, .commercial-organization-lookup, .commercial-filters) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .commercial--review .commercial-organization-lookup {
+    padding: 14px;
+  }
+
+  .commercial--review .p58-task-switch button {
+    padding: 12px;
+  }
+
+  .commercial--review .commercial-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .commercial--review .commercial-summary article {
+    border-bottom: 1px solid var(--so-border);
+  }
+}

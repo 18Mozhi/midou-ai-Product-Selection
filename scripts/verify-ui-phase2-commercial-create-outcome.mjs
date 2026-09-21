@@ -114,6 +114,7 @@ runner =
           screenshots.push({file,mode,width,scene,suffix,sha256:hash(bytes),pixelWidth:bytes.readUInt32BE(16),pixelHeight:bytes.readUInt32BE(20)});
         };
         await expect(page.getByText("380 / 1050")).toBeVisible();
+        await page.getByRole("button", { name: "方案目录 全局配置与额度" }).click();
         await trigger.click(); await expect(dialog).toBeVisible();
         await dialog.getByLabel("内部标识",{exact:true}).fill("basic_2026");
         await dialog.getByLabel("方案名称",{exact:true}).fill("审核样例配额方案");
@@ -135,7 +136,7 @@ runner =
         const expectedFailures=scene==="ready"?0:scene==="blocked"?3:1;
         check("original GET retry count",failures,expectedFailures);
         if(scene!=="ready"){
-          await expect(page.getByText("成长配额方案").first()).toBeVisible();
+          await expect(page.locator(".commercial-catalog").getByText("成长配额方案", { exact: true })).toBeVisible();
           check("previous catalog retained",true);
           check("read error remains visible",await page.locator(".commercial > .notice").getAttribute("data-kind"),mode==="review"?"error":"success");
           await page.locator(".commercial > .notice summary").click();

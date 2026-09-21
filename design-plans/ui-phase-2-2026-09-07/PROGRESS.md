@@ -1,5 +1,9 @@
 # 第二阶段实施记录
 
+## 2026-09-22 · P58商业运营中心C方向实际Vue迁移与部署准备
+
+[P58批111](P58-PAGE-COMPOSITION-BATCH111.md)：按用户统一批准将“方案目录/组织配额”双工作区从审核转换层迁移到实际 `CommercialOperationsCenter.vue`，保留组织UUID入口、原请求字段、读写契约和Teleport弹窗；补齐任务切换、焦点、帮助文字、错误追踪和移动端布局样式。4/4双端实际Vue E2E通过，创建结果/拒绝写入/编辑/焦点证据刷新，关联22项单测通过。仅为本地受控fixture证据，不代表完整业务生命周期、真实权限或生产验收；本轮将按发布门提交并部署。
+
 ## 2026-09-14 · P34审批记录双端组合局部通过
 
 用户通过App-r3两图中的蓝色说明、白底字段、技术详情及桌面双列/手机单列排列，完整图SHA
@@ -3343,6 +3347,7 @@ frontend-design技能用于将选定C的蓝色范围面、白色内容面、圆�
 只读合同对账保持164源/28合同/1478候选全部有引用、73路由/规格问题0；verify:docs（73/60/6/153）、verify:runtime-docs、verify:static-analysis（390文件）通过。最后画面文案和移动折叠调整后重新采图/同源浏览器验证，最终格式及差异门单独收尾。未改apps生产源码、后端/API/OpenAPI、数据库/迁移、权限、.env/参数/依赖，不重复跑不受影响的产品构建或E2E。
 
 本轮新建的16张PNG、evidence.json和可交互稿全部是永久审核交付，目录精确为design-plans/ui-phase-2-2026-09-07/design/task-direction-c；未创建临时脚本/日志/服务。浏览器及上下文finally关闭，4101/5173无监听。历史30批清理受阻记录不变，不重试绕过。未部署、不重启；用户下一步审TASK-C-r1布局与密度，再补剩余具体稿及按原调用链进入Vue，不再让用户重复选A/B/C。
+
 # P47 刷新当前入口接续分页版本
 
 见[P47-REFRESH-PAGINATION-CURRENT-REVIEW.md](P47-REFRESH-PAGINATION-CURRENT-REVIEW.md)：

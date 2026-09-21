@@ -33,6 +33,7 @@ const state = ref<PageState>("loading"),
 const initialParameters = new URLSearchParams(location.search),
   organizationId = ref(initialParameters.get("organization_id") ?? ""),
   organizationInput = ref(organizationId.value);
+const reviewTask = ref<"plans" | "organization">(organizationId.value ? "organization" : "plans");
 const notice = ref("");
 const noticeKind = ref<"info" | "success" | "error">("info");
 const requestId = ref("");
@@ -543,6 +544,7 @@ function changeAdjustmentPage(nextPage: number) {
 }
 function readOrganization() {
   if (refreshing.value) return;
+  reviewTask.value = "organization";
   organizationId.value = organizationInput.value.trim();
   adjustmentPage.value = 1;
   syncLocation("push");
@@ -550,6 +552,7 @@ function readOrganization() {
 }
 function clearOrganization() {
   if (refreshing.value) return;
+  reviewTask.value = "plans";
   organizationId.value = "";
   organizationInput.value = "";
   adjustmentPage.value = 1;
@@ -574,11 +577,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="commercial" :aria-busy="refreshing">
+  <section class="commercial commercial--review" :aria-busy="refreshing">
     <header class="commercial-hero">
       <div class="commercial-hero-copy">
         <p>配额管理</p>
-        <h2>组织配额与用量</h2>
+        <h1>组织配额与用量</h1>
         <span
           >创建配额方案、设置使用额度、分配给组织并处理有效期、暂停和临时额度调整。当前不包含计费、价格或支付。</span
         >
@@ -589,6 +592,28 @@ onBeforeUnmount(() => {
         </button>
         <button type="button" class="primary" @click="creatingPlan = true">新建配额方案</button>
       </div>
+    </header>
+    <div class="p58-task-switch" role="group" aria-label="配额工作区切换">
+      <button type="button" :aria-pressed="reviewTask === 'plans'" @click="reviewTask = 'plans'">
+        方案目录<span>全局配置与额度</span>
+      </button>
+      <button
+        type="button"
+        :aria-pressed="reviewTask === 'organization'"
+        @click="reviewTask = 'organization'"
+      >
+        组织配额<span>读取组织、分配与用量</span>
+      </button>
+    </div>
+    <section
+      v-show="reviewTask === 'organization'"
+      class="p58-organization-task"
+      aria-label="组织配额工作区"
+    >
+      <header class="p58-task-heading">
+        <h3>读取组织配额</h3>
+        <p>使用组织内部编号读取分配和用量；不改变全局方案统计。</p>
+      </header>
       <form class="commercial-organization-lookup" @submit.prevent="readOrganization">
         <label
           >组织内部编号<input
@@ -607,8 +632,11 @@ onBeforeUnmount(() => {
           清除组织
         </button>
       </form>
-    </header>
-    <p v-if="notice" class="notice" :data-kind="noticeKind" aria-live="polite">
+      <p v-if="!organizationId" class="p58-unselected">
+        尚未读取组织。填写组织内部编号后，点击“读取组织”。
+      </p>
+    </section>
+    <p v-if="notice && loadedOnce" class="notice" :data-kind="noticeKind" aria-live="polite">
       {{ notice }} <TechnicalDetails :request-id="requestId" />
     </p>
     <section v-if="state === 'loading'" class="state commercial-loading" aria-live="polite">
@@ -623,11 +651,12 @@ onBeforeUnmount(() => {
             ? "配额管理依赖受阻"
             : "暂时无法读取配额数据"
       }}</strong
-      ><span>{{ notice || "当前没有可展示的旧数据。" }}</span
-      ><button :disabled="refreshing" @click="load()">重新读取</button>
+      ><span>{{ notice || "当前没有可展示的旧数据。" }}</span>
+      <TechnicalDetails :request-id="requestId" />
+      <button :disabled="refreshing" @click="load()">重新读取</button>
     </section>
     <template v-else>
-      <section class="commercial-summary" aria-label="配额方案概览">
+      <section v-show="reviewTask === 'plans'" class="commercial-summary" aria-label="配额方案概览">
         <article>
           <span>全部方案</span><strong>{{ data.summary.total }}</strong>
         </article>
@@ -641,7 +670,7 @@ onBeforeUnmount(() => {
           <span>已退役</span><strong>{{ data.summary.retired }}</strong>
         </article>
       </section>
-      <section v-if="organizationId" class="membership">
+      <section v-if="organizationId" v-show="reviewTask === 'organization'" class="membership">
         <header>
           <div>
             <h3>组织配额与本周期用量</h3>
@@ -730,7 +759,7 @@ onBeforeUnmount(() => {
           ><button :disabled="mutating">{{ data.assignment ? "确认调整" : "确认分配" }}</button>
         </form>
         <p v-if="!selectablePlans.length" class="commercial-inline-help">
-          当前列表没有启用方案。请在下方按名称或内部标识搜索，并筛选“已启用”后再选择。
+          当前列表没有启用方案。请在“方案目录”按名称或内部标识搜索，并筛选“已启用”后再选择。
         </p>
         <template v-if="data.assignment"
           ><div class="usage">
@@ -826,7 +855,7 @@ onBeforeUnmount(() => {
         <strong>操作顺序</strong>
         <span>创建草稿并核对额度 → 启用方案 → 读取组织并分配 → 按实际需要调整额度。</span>
       </aside>
-      <section class="commercial-catalog">
+      <section v-show="reviewTask === 'plans'" class="commercial-catalog">
         <header>
           <div>
             <p>方案目录</p>

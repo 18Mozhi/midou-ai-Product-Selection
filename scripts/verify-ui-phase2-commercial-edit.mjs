@@ -50,6 +50,7 @@ runner =
   runner.slice(0, start) +
   `
         await expect(page.getByText("380 / 1050")).toBeVisible();
+        await page.getByRole("button", { name: "方案目录 全局配置与额度" }).click();
         const background = await page.locator(".commercial").screenshot({ animations: "disabled" });
         await trigger.focus();await page.keyboard.press("Enter");await expect(dialog).toBeVisible();
         const fields=dialog.locator("input,textarea,select"), submit=dialog.locator("footer button.primary");
