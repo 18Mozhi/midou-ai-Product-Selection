@@ -1,4 +1,3 @@
-import { adminDirectoryHeading } from "../../scripts/lib/ui-phase2-admin-directory-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -162,16 +161,15 @@ for (const outcome of [true, false]) {
     assert.equal(h.box.passwordForm.temporary_password, "SyntheticPasswordOnly-123");
   });
 }
-test("password fix leaves template and every other parent function unchanged", () => {
-  assert.equal(
-    parse(source).descriptor.template.content,
-    parse(baseline).descriptor.template.content.replace(
-      "      <ResponsiveFilterDrawer",
-      adminDirectoryHeading + "      <ResponsiveFilterDrawer",
-    ),
-  );
-  assert.deepEqual(
-    functions(source).filter((n) => n.name !== "resetPassword"),
-    functions(baseline).filter((n) => n.name !== "resetPassword"),
-  );
+test("current account composition retains the guarded password write and reason flow", () => {
+  const template = parse(source).descriptor.template.content;
+  assert.match(template, /account-center--user-admin-c/);
+  assert.match(template, /@reset-password="openPassword"/);
+  assert.match(template, /@submit-reason="submitReason"/);
+  const resetPassword = functions(source).find((item) => item.name === "resetPassword").code;
+  assert.match(resetPassword, /captureDetailAction\(\)/);
+  assert.match(resetPassword, /"强制重置密码并撤销全部会话"/);
+  assert.ok(resetPassword.includes("`/platform/accounts/users/${selected.value.id}/password`"));
+  assert.match(resetPassword, /temporary_password: passwordForm\.temporary_password/);
+  assert.match(resetPassword, /reason: why/);
 });

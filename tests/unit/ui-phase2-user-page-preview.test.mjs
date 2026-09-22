@@ -65,7 +65,7 @@ test("P43 transformation fails closed on mismatched source and unknown surface",
   );
   assert.throws(() =>
     currentUserPagePreview(
-      read(detail).replace("<h4>组织与角色</h4>", "<h4>Changed</h4>"),
+      read(detail).replace('class="user-detail-shell"', 'class="changed-detail-shell"'),
       "detail",
     ),
   );

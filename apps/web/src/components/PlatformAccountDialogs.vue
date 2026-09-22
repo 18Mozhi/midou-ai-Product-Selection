@@ -60,12 +60,15 @@ const { dialogElement: createUserDialogElement, handleCancel: handleCreateUserCa
 <template>
   <dialog
     ref="createUserDialogElement"
+    class="p43-account-dialog p43-create-user-dialog"
     aria-label="新建用户或平台管理员"
     @cancel="handleCreateUserCancel"
   >
     <form @submit.prevent="emit('createUser')">
-      <h3>{{ createUserTitle }}</h3>
-      <p>账号立即可用；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。</p>
+      <header class="p43-account-dialog-head">
+        <h3>{{ createUserTitle }}</h3>
+        <p>账号立即可用；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。</p>
+      </header>
       <p v-if="createUserError" class="dialog-feedback dialog-feedback--error" role="alert">
         {{ createUserError }}
       </p>
@@ -113,10 +116,17 @@ const { dialogElement: createUserDialogElement, handleCancel: handleCreateUserCa
     </form>
   </dialog>
 
-  <dialog ref="passwordDialogElement" aria-label="强制重置密码" @cancel="handlePasswordCancel">
+  <dialog
+    ref="passwordDialogElement"
+    class="p43-account-dialog p43-password-dialog"
+    aria-label="强制重置密码"
+    @cancel="handlePasswordCancel"
+  >
     <form @submit.prevent="emit('resetPassword')">
-      <h3>强制重置密码</h3>
-      <p>保存后会撤销该用户全部活动会话，并要求首次登录修改密码。</p>
+      <header class="p43-account-dialog-head">
+        <h3>强制重置密码</h3>
+        <p>保存后会撤销该用户全部活动会话，并要求首次登录修改密码。</p>
+      </header>
       <p v-if="passwordError" class="dialog-feedback dialog-feedback--error" role="alert">
         {{ passwordError }}
       </p>

@@ -3,6 +3,12 @@ import { parse } from "@vue/compiler-sfc";
 
 // Isolated presentation only. No password, target, permission or write logic changes.
 export function userPasswordPreview(original) {
+  if (original.includes('class="p43-account-dialog p43-password-dialog"')) {
+    assert.ok(original.includes("<h3>强制重置密码</h3>"), "P43 password source drift");
+    assert.ok(original.includes("<h3>{{ reasonTitle }}</h3>"), "P43 reason source drift");
+    assert.deepEqual(parse(original).errors, []);
+    return original;
+  }
   let source = original;
   const replace = (before, after) => {
     assert.equal(source.split(before).length, 2, `P43 password source drift: ${before}`);

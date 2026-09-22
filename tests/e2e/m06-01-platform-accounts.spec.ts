@@ -719,7 +719,7 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
   await expect(page.getByText(/platform:operate|platform:superadmin/)).toHaveCount(0);
   await expect(
     mobile
-      ? page.getByLabel("管理员记录").getByText("admin@example.test", { exact: true })
+      ? page.getByLabel("管理员记录").getByRole("button", { name: /admin@example\.test/ })
       : page.getByRole("table").getByText("admin@example.test", { exact: true }),
   ).toBeVisible();
   await expect(page.locator(".account-table-wrap")).toBeVisible();
@@ -1015,7 +1015,7 @@ test("M06-01.A06/A09 creates organization with audited idempotent request", asyn
   const detail = page.getByRole("dialog").filter({
     has: page.getByRole("heading", { name: "新团队" }),
   });
-  await expect(detail.getByText("组织详情", { exact: true })).toBeVisible();
+  await expect(detail.getByText("资料与设置", { exact: true })).toBeVisible();
   await expect(detail.getByRole("button", { name: "保存组织资料" })).toBeVisible();
 });
 
@@ -1199,8 +1199,34 @@ test("M06-01 account actions expose tooltips, user-panel switch, create account 
   } else {
     await page.getByRole("button", { name: "账号详情" }).click();
   }
+  const accountDetail = page.locator(".detail-dialog");
   await expect(page.getByRole("heading", { name: "buyer@example.test" })).toBeVisible();
-  await expect(page.getByText("Chrome", { exact: true })).toBeVisible();
+  await expect(accountDetail.getByRole("navigation", { name: "账号详情分区" })).toBeVisible();
+  await expect(accountDetail.getByRole("heading", { name: "组织关系" })).toBeVisible();
+  await accountDetail.getByRole("button", { name: "平台权限" }).click();
+  await expect(accountDetail.getByRole("heading", { name: "平台权限" })).toBeInViewport();
+  await accountDetail.getByRole("button", { name: "登录安全" }).click();
+  await expect(accountDetail.getByText("Chrome", { exact: true })).toBeVisible();
+  const composition = await accountDetail.evaluate((element) => {
+    const identity = element.querySelector<HTMLElement>(".user-detail-identity");
+    const main = element.querySelector<HTMLElement>(".user-detail-main");
+    if (!identity || !main) throw new Error("Account detail composition is incomplete");
+    const identityBox = identity.getBoundingClientRect();
+    const mainBox = main.getBoundingClientRect();
+    return {
+      identityX: identityBox.x,
+      identityY: identityBox.y,
+      mainX: mainBox.x,
+      mainY: mainBox.y,
+    };
+  });
+  if ((page.viewportSize()?.width ?? 0) <= 760)
+    expect(composition.mainY).toBeGreaterThan(composition.identityY);
+  else expect(composition.mainX).toBeGreaterThan(composition.identityX);
+  await expect(accountDetail.getByRole("button", { name: "关闭详情" })).toBeVisible();
+  await expect
+    .poll(() => accountDetail.evaluate((element) => element.scrollWidth <= element.clientWidth))
+    .toBe(true);
 });
 
 test("administrator list persists filters and exposes a desktop and mobile empty state", async ({

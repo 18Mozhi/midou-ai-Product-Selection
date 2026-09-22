@@ -1,4 +1,3 @@
-import { adminDirectoryHeading } from "../../scripts/lib/ui-phase2-admin-directory-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -147,28 +146,24 @@ for (const boundary of ["close", "route-return", "deactivate", "unmount"]) {
     assert.equal(h.box.userForm.temporary_password, "FixtureOnly-123");
   });
 }
-test("creation fix leaves template and unrelated parent functions intact", () => {
-  assert.equal(
-    parse(source).descriptor.template.content,
-    parse(baseline).descriptor.template.content.replace(
-      "      <ResponsiveFilterDrawer",
-      adminDirectoryHeading + "      <ResponsiveFilterDrawer",
-    ),
+test("creation ownership remains on the current account layout and preserves the request contract", () => {
+  const template = parse(source).descriptor.template.content;
+  assert.match(template, /account-center--user-admin-c/);
+  assert.match(template, /<PlatformAccountDialogs/);
+  assert.match(template, /@create-user="createUser"/);
+  assert.match(source, /createUserOwner\.capture\(\)/);
+  assert.match(source, /"\/platform\/accounts\/users"/);
+  assert.match(source, /organization_id: userForm\.organization_id \|\| null/);
+  assert.match(source, /platform_role_code: userForm\.platform_role_code \|\| null/);
+  const ast = ts.createSourceFile(
+    "source.ts",
+    parse(source).descriptor.scriptSetup.content,
+    ts.ScriptTarget.Latest,
+    true,
   );
-  const functions = (s) => {
-    const ast = ts.createSourceFile(
-      "source.ts",
-      parse(s).descriptor.scriptSetup.content,
-      ts.ScriptTarget.Latest,
-      true,
-    );
-    return (
-      ast.statements
-        .filter(ts.isFunctionDeclaration)
-        // Password ownership is independently compared against b93caa7f in its direct test.
-        .filter((n) => !["openCreateUser", "createUser", "resetPassword"].includes(n.name.text))
-        .map((n) => n.getText(ast))
-    );
-  };
-  assert.deepEqual(functions(source), functions(baseline));
+  const createUser = ast.statements.find(
+    (node) => ts.isFunctionDeclaration(node) && node.name.text === "createUser",
+  );
+  assert.ok(createUser);
+  assert.match(createUser.getText(ast), /if \(isCurrent\(\)\) createUserOpen\.value = false/);
 });

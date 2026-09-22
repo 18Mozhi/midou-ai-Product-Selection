@@ -3,6 +3,9 @@ import { userPagePreview as originalPreview } from "./ui-phase2-user-page-previe
 
 // P43 review only. Keep the later P44-only heading/condition without changing the shared archived helper.
 export function userPagePreview(original, surface) {
+  // The former review-only detail transform is obsolete now that the approved
+  // three-section composition ships in the production detail component.
+  if (surface === "detail" && original.includes('class="user-detail-shell"')) return original;
   if (surface !== "parent") return originalPreview(original, surface);
   const heading = `      <header v-if="tab === 'admins'" class="admin-directory-heading">
         <h3>可授权账号</h3>

@@ -544,3 +544,35 @@ dialog button {
     grid-template-columns: 1fr;
   }
 }
+.account-center--user-admin-c {
+  --account-review-blue: #254a9c;
+  --account-review-blue-deep: #18386f;
+  --account-review-ink: #202c3d;
+  --account-review-muted: #58677b;
+  --account-review-line: #dbe1e9;
+  --account-review-soft: #edf1f6;
+}
+.account-center--user-admin-c .account-hero {
+  border-color: #18386f;
+  background: #254a9c;
+}
+.account-center--user-admin-c .account-tabs {
+  width: fit-content;
+  max-width: 100%;
+}
+.account-center--user-admin-c .account-table-wrap {
+  border-top: 3px solid #254a9c;
+}
+.account-center--user-admin-c th {
+  background: #edf1f6;
+}
+.account-center--user-admin-c td button:hover,
+.account-center--user-admin-c .account-empty button:hover,
+.account-center--user-admin-c .account-state button:hover {
+  border-color: #254a9c;
+  color: #18386f;
+  background: #f4f7fc;
+}
+.account-center--user-admin-c :is(a, button, input, select, textarea):focus-visible {
+  outline-color: rgb(37 74 156 / 38%);
+}

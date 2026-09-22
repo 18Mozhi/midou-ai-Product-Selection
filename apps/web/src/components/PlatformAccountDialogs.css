@@ -143,3 +143,90 @@ button {
   color: #58677b;
   opacity: 1;
 }
+.p43-account-dialog {
+  width: min(620px, calc(100% - 28px));
+  max-height: min(92dvh, 900px);
+  padding: 0;
+  border-color: #dbe1e9;
+  border-radius: 12px;
+  color: #202c3d;
+  background: #fff;
+}
+.p43-account-dialog form {
+  gap: 14px;
+  min-width: 0;
+  padding: 0 22px 20px;
+}
+.p43-account-dialog-head {
+  margin: 0 -22px;
+  padding: 20px 22px;
+  color: #fff;
+  background: #254a9c;
+}
+.p43-account-dialog-head h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 21px;
+}
+.p43-account-dialog-head p {
+  margin: 8px 0 0;
+  color: #e5edff;
+  line-height: 1.5;
+}
+.p43-account-dialog label {
+  gap: 7px;
+  color: #202c3d;
+  font-weight: 650;
+}
+.p43-account-dialog input,
+.p43-account-dialog select {
+  min-height: 46px;
+  border-color: #9cabc0;
+  color: #202c3d;
+  background: #fff;
+  font: inherit;
+  font-size: 16px;
+}
+.p43-account-dialog footer {
+  position: sticky;
+  bottom: 0;
+  padding-top: 12px;
+  background: #fff;
+}
+.p43-account-dialog footer button {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid #cbd6e4;
+  border-radius: 8px;
+  color: #202c3d;
+  background: #fff;
+  font: inherit;
+}
+.p43-account-dialog footer button:last-child {
+  border-color: #254a9c;
+  color: #fff;
+  background: #254a9c;
+}
+.p43-account-dialog :is(button, input, select):focus-visible {
+  outline: 3px solid rgb(37 74 156 / 38%);
+  outline-offset: 2px;
+}
+.p43-account-dialog button:disabled {
+  border-color: #dbe1e9;
+  color: #58677b;
+  background: #edf1f6;
+  opacity: 1;
+}
+@media (max-width: 640px) {
+  .p43-account-dialog form {
+    padding: 0 16px 16px;
+  }
+  .p43-account-dialog-head {
+    margin-inline: -16px;
+    padding: 18px 16px;
+  }
+  .p43-account-dialog footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}

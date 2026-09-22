@@ -586,7 +586,10 @@ onMounted(load);
 <template>
   <section
     class="account-center account-center--review"
-    :class="{ 'account-center--organization-review': organizationListRoute }"
+    :class="{
+      'account-center--organization-review': organizationListRoute,
+      'account-center--user-admin-c': tab === 'users' || tab === 'admins',
+    }"
   >
     <header class="account-hero">
       <div>
