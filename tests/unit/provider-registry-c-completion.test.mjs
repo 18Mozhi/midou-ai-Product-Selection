@@ -20,7 +20,11 @@ test("P46 C completion stays route-scoped and imports after the approved structu
   const root = postcss.parse(css);
   root.walkRules((rule) => {
     for (const selector of rule.selectors)
-      assert.match(selector, /html body:has\(#app \.provider-registry\)/, selector);
+      assert.match(
+        selector.replace(/\s+/g, " "),
+        /html body:has\(#app \.provider-registry\)/,
+        selector,
+      );
   });
 });
 

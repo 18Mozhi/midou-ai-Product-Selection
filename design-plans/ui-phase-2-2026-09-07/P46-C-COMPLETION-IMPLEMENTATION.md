@@ -21,6 +21,8 @@
 - `npm run verify:docs`：通过，73路由、60保护路由、6角色及153份必需文档。
 - 选取旧 P46 历史图证/哈希合同运行时，它们按设计绑定早期 Vue、共享文件和截图的不可变哈希；对当前源码的旧指纹检查不再代表本批。历史图证未覆盖或改写；当前变更由新增结构合同、Web 构建和真实路由双端 E2E 验证。旧全局色板合同也有与本批无关的现行样式硬编码失败，需另行治理。
 
-## 发布边界
+## 发布与线上核验
 
-本批仅静态前端，不需要重启 Node API、Worker 或 Python Crawler。部署使用项目唯一允许的 `python scripts/deploy-baota.py`，并按固定对象范围与既有发布/恢复门执行。真实生产 RBAC、来源配置持久化、审计和采集执行没有由本地夹具证明，也不是该 CSS/UI 发布的验证结论。全73页阶段仍在继续，不能将本页部署等同全项目收官。
+`python scripts/deploy-baota.py` 成功返回 `deployed`，远端构建 SHA 为 `1a6f164549100026a99b29539a33b9d2eeae7b2c`；上传临时产物由部署器清理。线上只读 GET 核验：`/platform-admin/providers`、`/api/v1/health/live`、`/api/v1/health/ready`、`/api/v1/health/version`、`/assets/ProviderRegistry-CcLV0ccH.js`、`/assets/provider-registry-c-completion-CCHL-dIk.css` 均 HTTP 200；version 的 build_sha 匹配部署 SHA，新 CSS 检查含编辑器与详情抽屉规则。
+
+本批仅静态前端，不需要重启 Node API、Worker 或 Python Crawler。部署使用项目唯一允许的固定宝塔部署器，且 M07-03 部署前预检通过。`node scripts/verify-baota-deployment.mjs --production` 仍因正式签收证据文件 `.artifacts/verification/baota-production-evidence.json` 缺失而返回 `blocked`；故仅声明 P46 UI 已部署且线上资源/健康端点核验通过，不声明完整 M07-03 生产签收、真实生产 RBAC、来源配置持久化、审计或采集验收。全73页阶段仍在继续，不能将本页部署等同全项目收官。
