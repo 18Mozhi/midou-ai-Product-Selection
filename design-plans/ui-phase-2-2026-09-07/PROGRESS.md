@@ -4,6 +4,10 @@
 
 [P17生产实施](P17-PAGE-COMPOSITION-IMPLEMENTATION.md)：将蓝白评分规则工作区、五项配置覆盖、版本目录、阈值与权重事实、创建草稿、只读影响预览和五类生命周期动作窗迁移到实际 `ScoreRuleConsole.vue`；保留原读取、能力判断、原因必填、回滚目标、`expected_revision` 与只读预览合同。定向单测 6/6，M04-03 评分 E2E 桌面/390px 共8/8，类型检查、格式检查和视觉基线更新通过；本批随后执行完整发布门并部署。真实 RBAC、审批/回滚写入、跨页预览、正式 M07-03 证据仍待。
 
+## 2026-09-22 · P16创建选品C方向生产收口
+
+[P16生产实施](P16-PAGE-COMPOSITION-IMPLEMENTATION.md)：核对并收口真实 `SelectionJourney.vue` 的蓝色阶段栏、白色工作区、输入/处理中/候选/决策分区、五项质量门、时间轴和手机单列状态；原创建、恢复、轮询、五门采纳、观察/驳回合同保持不变。桌面/390px `ui-phase2-journey-contracts` 32/32，线上 `/opportunities/start` 为 200；随当前已部署构建提供页面证据。真实会话、RBAC、采集凭证、数据库竞争和正式 M07-03 证据仍待。
+
 ## 2026-09-22 · P23全部任务目录C方向迁移到生产Vue
 
 [P23生产实施](P23-PAGE-COMPOSITION-IMPLEMENTATION.md)：将蓝白工作区任务目录、本人优先摘要、状态筛选、搜索/排序、任务记录、进度条与分页迁移到实际 `TaskWorkspace(mode=all)` 与 `TaskListPanel`；保留全范围任务读取、当前 actor 摘要、成员读取、详情、创建、批量与导出视图合同。1440/390、reduced/no-preference 四组共28项本地核验、零写入单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。导出视图、弹窗、真实权限和正式 M07-03 证据仍待。
@@ -3426,18 +3430,23 @@ frontend-design技能用于将选定C的蓝色范围面、白色内容面、圆�
 现有两块手机空态批准保留。当前刷新入口的来源链接入严格分页逆向，只用于核验、
 不用于渲染；四宽度8组152检查、40关联单测通过。无新图、真实写入、生产改动或部署，
 全局139失败仍为此前快照，不推算剩余数量，其他审核与全73页交付继续。
+
 ## 2026-09-22 · P22 成本规则 C 方向迁移到生产 Vue
 
 [P22 生产实施](P22-PAGE-COMPOSITION-IMPLEMENTATION.md)：将蓝白成本规则身份、准备度、版本目录、显式费用、汇率依据、审批链、详情与动作区迁移到实际 `CostRuleConsole`；保留 `GET /cost-rules`、筛选、分页、角色能力与 `expected_revision` 合同。1440/390、reduced/no-preference 共 32 项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。新建草稿、七类动作窗、真实 RBAC/写入和正式 M07-03 证据仍待。
+
 ## 2026-09-22 · P21 供应链找货 C 方向迁移到生产 Vue
 
 [P21 生产实施](P21-PAGE-COMPOSITION-IMPLEMENTATION.md)：将蓝色说明区、找货流程、记录目录、采集进度、候选事实、已确认报价与对比历史迁移到实际 `SourcingWorkspace`；保留既有读取、缺失字段、最多五家对比与已确认 quote 边界。1440/390、reduced/no-preference 共 32 项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。真实写入、RBAC、采集与正式 M07-03 证据仍待。
+
 ## 2026-09-22 · P20 竞品监控规则 C 方向迁移到生产 Vue
 
 [P20 生产实施](P20-PAGE-COMPOSITION-IMPLEMENTATION.md)：将规则就绪、作用范围、触发条件、版本和生效状态迁移到实际 `CompetitorMonitor(mode="rules")`；保留真实读取顺序、全局范围、enabled/disabled 状态与 `competitor:manage` 创建边界。1440/390、reduced/no-preference 共 36 项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。新建表单、真实写入、RBAC 与正式 M07-03 证据仍待。
+
 ## 2026-09-22 · P19 竞品目录与事实详情 C 方向迁移到生产 Vue
 
 [P19 生产实施](P19-PAGE-COMPOSITION-IMPLEMENTATION.md)：将竞品准备度、搜索、目录、当前快照、变化时间轴、告警任务、采集历史和帮助区迁移到实际 `CompetitorMonitor(mode="list")`；保留缺失价格/快照语义、读取路径及 `competitor:manage`、`task:create` 权限边界。1440/390、reduced/no-preference 共 32 项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。创建/删除/规则弹窗、真实采集、RBAC 与正式 M07-03 证据仍待。
+
 ## 2026-09-22 · P18 机会详情 C 方向迁移到生产 Vue
 
 [P18 生产实施](P18-PAGE-COMPOSITION-IMPLEMENTATION.md)：将机会身份、系统结论、五项质量门、人工决定条件、Tab 与事实分区迁移到实际 `OpportunityWorkspace.vue` 详情分支；保留“推荐且五门全通过才可采纳”合同及既有读取/决定边界。1440/390、reduced/no-preference 共 32 项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。真实会话/RBAC、写入动作与正式 M07-03 证据仍待。
