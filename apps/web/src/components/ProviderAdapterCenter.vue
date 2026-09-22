@@ -9,6 +9,7 @@ import "../provider-adapters-c-page.css";
 import "../provider-adapters-c-detail.css";
 import "../provider-adapters-c-feedback.css";
 import "../provider-adapters-empty-mobile.css";
+import "../provider-adapters-c-table-tools.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface AdapterSummary {
   id: string;

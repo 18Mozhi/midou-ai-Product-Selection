@@ -1,0 +1,161 @@
+@import "./design/provider-adapter-tokens.css";
+
+/* P47 approved table controls; scoped to the active C page only. */
+html body:has(#app .adapter-center--c) #app .adapter-center--c .table-view-controls {
+  padding: 0;
+  border: 1px solid var(--p47-border);
+  border-radius: 8px;
+  background: var(--p47-panel);
+}
+
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .table-view-controls__toolbar {
+  min-height: 68px;
+  margin: 0;
+  padding: 12px 16px;
+  gap: 10px;
+  border-bottom: 1px solid var(--p47-border);
+  background: var(--p47-canvas);
+}
+
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .table-view-controls__toolbar
+  :is(summary, button, select) {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--p47-border-strong);
+  border-radius: 6px;
+  background: var(--p47-panel);
+  color: var(--p47-accent);
+  font-size: 14px;
+}
+
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .table-view-controls__toolbar
+  button[aria-pressed="true"] {
+  border-color: var(--p47-on-accent-border);
+  background: var(--p47-accent-soft);
+  color: var(--p47-secondary-ink);
+}
+
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .table-view-controls__toolbar
+  > label {
+  min-height: 44px;
+  color: var(--p47-muted);
+  font-size: 13px;
+}
+
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .table-view-controls__toolbar
+  details {
+  position: relative;
+}
+
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .table-view-controls__toolbar
+  fieldset {
+  top: calc(100% + 8px);
+  width: min(340px, 80vw);
+  max-height: 380px;
+  padding: 14px;
+  gap: 4px;
+  border: 1px solid var(--p47-border-strong);
+  border-radius: 7px;
+  background: var(--p47-panel);
+  box-shadow: var(--so-shadow);
+}
+
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .table-view-controls__toolbar
+  legend {
+  padding: 0 4px;
+  color: var(--p47-ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .table-view-controls__toolbar
+  fieldset
+  div {
+  min-height: 44px;
+  padding: 8px;
+  border-bottom: 1px solid var(--p47-empty-canvas);
+  color: var(--p47-secondary-ink);
+  font-size: 14px;
+}
+
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .table-view-controls__toolbar
+  fieldset
+  div:last-child {
+  border-bottom: 0;
+}
+
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .table-view-controls__toolbar
+  input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  accent-color: var(--p47-empty-accent);
+}
+
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .table-view-controls__toolbar
+  :is(summary, button, select, input):focus-visible {
+  outline: 3px solid var(--p47-empty-accent);
+  outline-offset: 3px;
+}
+
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .table-view-controls__content {
+  border-radius: 0 0 8px 8px;
+}
+
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .table-view-controls__content
+  .adapter-table-wrap {
+  border: 0;
+  border-radius: 0 0 8px 8px;
+}

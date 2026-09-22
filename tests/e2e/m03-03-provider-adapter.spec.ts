@@ -174,9 +174,55 @@ test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visu
       .click();
     await expect(page.getByRole("link", { name: "前往解除暂停" })).toBeVisible();
   }
-  await expect(page.getByRole("status")).toContainText("健康检查通过");
+  await expect(page.locator(".adapter-message[role='status']")).toContainText("健康检查通过");
   await page.evaluate(() => window.scrollTo(0, 0));
 });
+
+test("P47 approved table controls are styled on desktop and stay hidden on mobile", async ({
+  page,
+}, testInfo) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/provider-adapters", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        data: items,
+        request_id: "p47-table-controls-list",
+        trace_id: "p47-table-controls-list",
+      }),
+    }),
+  );
+  await page.goto("/platform-admin/providers/adapters");
+  const desktop = page.locator(".responsive-data-view__desktop"),
+    mobile = page.locator(".responsive-data-view__mobile");
+
+  if (testInfo.project.name === "mobile-390") {
+    await expect(desktop).toBeHidden();
+    await expect(mobile).toBeVisible();
+    return;
+  }
+
+  const controls = desktop,
+    toolbar = controls.locator(".table-view-controls__toolbar"),
+    columnMenu = toolbar.locator("details");
+  await expect(controls).toBeVisible();
+  await expect(toolbar.locator("summary")).toHaveCSS("min-height", "44px");
+  await expect(toolbar.locator("button")).toHaveAttribute("aria-pressed", "true");
+  await expect(controls).toHaveCSS("border-radius", "8px");
+  await columnMenu.locator("summary").click();
+  const fieldset = columnMenu.locator("fieldset");
+  await expect(fieldset).toBeVisible();
+  await expect(fieldset.locator("div")).toHaveCount(5);
+  await expect(fieldset.locator("div").first()).toHaveCSS("min-height", "44px");
+  await fieldset.getByLabel("切换第 3 列").uncheck();
+  await expect(desktop.locator("table thead th").nth(2)).toBeHidden();
+  await toolbar.locator("select").selectOption("compact");
+  await expect(desktop.locator("table")).toHaveAttribute("data-table-density", "compact");
+  await toolbar.locator("button").click();
+  await expect(toolbar.locator("button")).toHaveAttribute("aria-pressed", "false");
+});
+
 test("M03-03.A08/A16 filters and empty results are explicit", async ({ page }, testInfo) => {
   await nav(page);
   await page.route("**/api/v1/platform/provider-adapters", (route) =>
@@ -193,7 +239,14 @@ test("M03-03.A08/A16 filters and empty results are explicit", async ({ page }, t
   await page.goto("/platform-admin/providers/adapters");
   await page.getByText("更多筛选与排序", { exact: true }).click();
   await page.getByLabel("接入模式").selectOption("manual");
-  await expect(page.getByRole("heading", { name: "没有符合筛选条件的适配器" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", {
+      name:
+        testInfo.project.name === "mobile-390"
+          ? "当前筛选下没有匹配来源"
+          : "没有符合筛选条件的适配器",
+    }),
+  ).toBeVisible();
   await page.getByRole("button", { name: "清除筛选" }).click();
   await expect(
     page.getByText(
@@ -203,7 +256,7 @@ test("M03-03.A08/A16 filters and empty results are explicit", async ({ page }, t
   ).toBeVisible();
 });
 for (const cause of ["query", "provider-status", "registration", "combined"] as const) {
-  test(`UI2-PR47 empty recovery resets all controls ${cause}`, async ({ page }) => {
+  test(`UI2-PR47 empty recovery resets all controls ${cause}`, async ({ page }, testInfo) => {
     await nav(page);
     let reads = 0;
     const writes: string[] = [];
@@ -237,7 +290,14 @@ for (const cause of ["query", "provider-status", "registration", "combined"] as 
       await page.getByRole("combobox", { name: "接入模式", exact: true }).selectOption("manual");
       await page.getByRole("combobox", { name: "健康状态", exact: true }).selectOption("degraded");
     }
-    await expect(page.getByRole("heading", { name: "没有符合筛选条件的适配器" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", {
+        name:
+          testInfo.project.name === "mobile-390"
+            ? "当前筛选下没有匹配来源"
+            : "没有符合筛选条件的适配器",
+      }),
+    ).toBeVisible();
     await page.getByRole("button", { name: "清除筛选", exact: true }).click();
     await expect(page.getByLabel("搜索来源", { exact: true })).toHaveValue("");
     for (const label of ["接入模式", "来源状态", "登记状态", "健康状态"])
@@ -247,7 +307,14 @@ for (const cause of ["query", "provider-status", "registration", "combined"] as 
     );
     await expect(page.getByText("2 个结果", { exact: true })).toBeVisible();
     await expect(page.getByText("第 1 / 1 页 · 每页 20 条", { exact: true })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "没有符合筛选条件的适配器" })).toHaveCount(0);
+    await expect(
+      page.getByRole("heading", {
+        name:
+          testInfo.project.name === "mobile-390"
+            ? "当前筛选下没有匹配来源"
+            : "没有符合筛选条件的适配器",
+      }),
+    ).toHaveCount(0);
     expect(reads).toBe(1);
     expect(writes).toEqual([]);
   });
@@ -298,7 +365,7 @@ test("adapter catalog search, registration filter, reset and pagination bound th
 });
 test("M03-03.A08/A09/A16 empty forbidden and dependency states stay actionable", async ({
   page,
-}) => {
+}, testInfo) => {
   await nav(page);
   let status = 200;
   await page.route("**/api/v1/platform/provider-adapters", (route) =>
@@ -329,7 +396,14 @@ test("M03-03.A08/A09/A16 empty forbidden and dependency states stay actionable",
     ),
   );
   await page.goto("/platform-admin/providers/adapters");
-  await expect(page.getByRole("heading", { name: "还没有来源可绑定适配器" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", {
+      name:
+        testInfo.project.name === "mobile-390"
+          ? "还没有可查看的来源"
+          : "还没有来源可绑定适配器",
+    }),
+  ).toBeVisible();
   status = 403;
   await page.reload();
   await expect(page.getByRole("heading", { name: "你没有此项权限" })).toBeVisible();
