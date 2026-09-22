@@ -1,0 +1,656 @@
+@import "../design/provider-registry-tokens.css";
+
+/* P46 C completion: scoped only to the Provider Registry route. */
+html body:has(#app .provider-registry) #app .provider-list-tools,
+html body:has(#app .provider-registry) #app .provider-empty,
+html body:has(#app .provider-registry) #app .ui-state-panel {
+  color: var(--p46-ink);
+  font-family: "Microsoft YaHei", sans-serif;
+}
+html body:has(#app .provider-registry) #app .provider-list-tools {
+  margin-top: 24px;
+  padding: 24px;
+  border: 1px solid var(--p46-border);
+  border-radius: 8px 8px 0 0;
+  background: var(--p46-panel);
+}
+html body:has(#app .provider-registry) #app .provider-list-heading h3 {
+  color: var(--p46-ink);
+  font-size: 20px;
+}
+html body:has(#app .provider-registry) #app .provider-list-heading span,
+html body:has(#app .provider-registry) #app .provider-filters label {
+  color: var(--p46-muted);
+}
+html body:has(#app .provider-registry) #app .provider-list-heading > button,
+html body:has(#app .provider-registry) #app .provider-reset,
+html body:has(#app .provider-registry) #app .provider-pagination button,
+html body:has(#app .provider-registry) #app .provider-table-wrap td button,
+html body:has(#app .provider-registry) #app .provider-empty button,
+html body:has(#app .provider-registry) #app .ui-state-panel button {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--p46-border-strong);
+  border-radius: 6px;
+  color: var(--p46-accent);
+  background: var(--p46-panel);
+  font-family: "Microsoft YaHei", sans-serif;
+  font-size: 14px;
+}
+html body:has(#app .provider-registry) #app .provider-filters {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+html body:has(#app .provider-registry) #app .provider-filters :is(input, select) {
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid var(--p46-border-strong);
+  border-radius: 6px;
+  color: var(--p46-ink);
+  background: var(--p46-panel);
+  font-size: 16px;
+}
+html body:has(#app .provider-registry) #app .provider-list-heading > button:disabled,
+html body:has(#app .provider-registry) #app .provider-pagination button:disabled,
+html body:has(#app .provider-registry) #app .provider-editor :is(button, input, select):disabled {
+  border-color: var(--p46-border);
+  color: var(--p46-disabled-ink);
+  background: var(--p46-disabled-panel);
+  opacity: 1;
+  cursor: not-allowed;
+}
+html body:has(#app .provider-registry) #app .provider-truth-note {
+  border: 0;
+  border-left: 3px solid var(--p46-accent);
+  border-radius: 0;
+  color: var(--p46-secondary-ink);
+  background: var(--p46-accent-soft);
+}
+html body:has(#app .provider-registry) #app .provider-feedback {
+  border-radius: 6px;
+}
+html body:has(#app .provider-registry) #app .provider-feedback[data-tone="success"] {
+  border-color: var(--p46-border);
+  color: var(--p46-secondary-ink);
+  background: var(--p46-accent-soft);
+}
+html body:has(#app .provider-registry) #app .provider-feedback[data-tone="warning"] {
+  border-color: var(--p46-saved-warning-border);
+  color: var(--p46-saved-warning-ink);
+  background: var(--p46-saved-warning-panel);
+}
+
+html body:has(#app .provider-registry) #app .responsive-data-view {
+  padding: 20px 24px;
+  border: 1px solid var(--p46-border);
+  border-top: 0;
+  background: var(--p46-panel);
+}
+html body:has(#app .provider-registry) #app .table-view-controls__toolbar {
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+html body:has(#app .provider-registry) #app .table-view-controls__toolbar label {
+  color: var(--p46-muted);
+  font-size: 14px;
+}
+html
+  body:has(#app .provider-registry)
+  #app
+  .table-view-controls__toolbar
+  :is(button, summary, select) {
+  min-height: 44px;
+  border-color: var(--p46-border-strong);
+  border-radius: 6px;
+  color: var(--p46-accent);
+  background: var(--p46-panel);
+  font: inherit;
+}
+html body:has(#app .provider-registry) #app .table-view-controls__toolbar fieldset {
+  border: 1px solid var(--p46-border-strong);
+  border-radius: 6px;
+  color: var(--p46-ink);
+  background: var(--p46-panel);
+  box-shadow: 0 12px 28px rgb(20 42 70 / 12%);
+}
+html body:has(#app .provider-registry) #app .table-view-controls__toolbar input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  min-height: 20px;
+  padding: 0;
+  accent-color: var(--p46-accent);
+}
+html body:has(#app .provider-registry) #app .provider-table-wrap {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--p46-panel);
+}
+html body:has(#app .provider-registry) #app .provider-table-wrap table {
+  min-width: 1000px;
+  color: var(--p46-ink);
+  font-size: 14px;
+}
+html body:has(#app .provider-registry) #app .provider-table-wrap :is(th, td) {
+  padding: 18px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--p46-border);
+  color: var(--p46-ink);
+  background: var(--p46-panel);
+  vertical-align: top;
+}
+html body:has(#app .provider-registry) #app .provider-table-wrap th {
+  color: var(--p46-muted);
+  background: var(--p46-canvas);
+  font-size: 13px;
+}
+html body:has(#app .provider-registry) #app .provider-table-wrap td:first-child {
+  min-width: 190px;
+}
+html body:has(#app .provider-registry) #app .provider-table-wrap td:nth-child(6) {
+  min-width: 220px;
+}
+html body:has(#app .provider-registry) #app .provider-table-wrap small {
+  color: var(--p46-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+html body:has(#app .provider-registry) #app .provider-table-wrap code {
+  color: var(--p46-accent);
+}
+html body:has(#app .provider-registry) #app .provider-table-wrap td > span {
+  display: inline-block;
+  padding: 5px 8px;
+  border: 1px solid var(--p46-border);
+  border-radius: 999px;
+  color: var(--p46-accent);
+  background: var(--p46-accent-soft);
+  font-size: 13px;
+}
+html
+  body:has(#app .provider-registry)
+  #app
+  .provider-table-wrap
+  td
+  > span[data-admission="blocked"] {
+  border-color: var(--p46-saved-warning-border);
+  color: var(--p46-saved-warning-ink);
+  background: var(--p46-saved-warning-panel);
+}
+html body:has(#app .provider-registry) #app .table-view-controls__frozen {
+  background: var(--p46-panel);
+  box-shadow: 1px 0 0 var(--p46-border);
+}
+html body:has(#app .provider-registry) #app .provider-pagination {
+  margin-top: 0;
+  padding: 20px 24px;
+  border: 1px solid var(--p46-border);
+  border-top: 0;
+  color: var(--p46-muted);
+  background: var(--p46-panel);
+}
+html body:has(#app .provider-registry) #app .provider-empty {
+  margin-top: 24px;
+  padding: 48px 24px;
+  border: 1px solid var(--p46-border);
+  border-radius: 8px;
+  color: var(--p46-ink);
+  background: var(--p46-panel);
+  text-align: left;
+}
+html body:has(#app .provider-registry) #app .provider-empty p {
+  color: var(--p46-muted);
+}
+html body:has(#app .provider-registry) #app .provider-empty > button,
+html body:has(#app .provider-registry) #app .provider-registry > .provider-hero > button,
+html body:has(#app .provider-registry) #app .ui-state-panel footer button.primary {
+  border-color: var(--p46-accent);
+  color: var(--p46-panel);
+  background: var(--p46-accent);
+}
+html body:has(#app .provider-registry) #app .ui-state-panel {
+  margin-top: 24px;
+  padding: 32px;
+  border: 1px solid var(--p46-border);
+  border-radius: 8px;
+  background: var(--p46-panel);
+  box-shadow: none;
+}
+html body:has(#app .provider-registry) #app .ui-state-panel footer button:not(.primary) {
+  display: none;
+}
+html
+  body:has(#app .provider-registry)
+  #app
+  .provider-registry
+  :is(button, input, select, summary):focus-visible,
+html
+  body:has(#app .provider-registry)
+  .responsive-data-view__drawer
+  :is(button, summary):focus-visible {
+  outline: 3px solid var(--p46-focus);
+  outline-offset: 3px;
+}
+
+/* The details drawer is teleported to body, so route presence scopes its styling. */
+html body:has(#app .provider-registry) .responsive-data-view__scrim {
+  background: var(--p46-scrim);
+}
+html body:has(#app .provider-registry) .responsive-data-view__drawer {
+  inset: 12px auto auto 50%;
+  transform: translateX(-50%);
+  width: min(640px, calc(100% - 24px));
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  border: 1px solid var(--p46-divider);
+  border-radius: 12px;
+  color: var(--p46-ink);
+  background: var(--p46-panel);
+  box-shadow: none;
+  scroll-padding-block: 20px;
+}
+html body:has(#app .provider-registry) .responsive-data-view__drawer > header {
+  margin: 0;
+  padding: 24px;
+  align-items: flex-start;
+  gap: 20px;
+  color: var(--p46-panel);
+  background: var(--p46-accent);
+}
+html body:has(#app .provider-registry) .responsive-data-view__drawer > header strong {
+  color: var(--p46-panel);
+  font-size: 22px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+html body:has(#app .provider-registry) .responsive-data-view__drawer > header small {
+  color: var(--p46-on-accent-muted);
+}
+html body:has(#app .provider-registry) .responsive-data-view__drawer > header button {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--p46-on-accent-border);
+  border-radius: 6px;
+  color: var(--p46-panel);
+  background: transparent;
+  font-size: 22px;
+}
+html body:has(#app .provider-registry) .responsive-data-view__drawer > header button:focus-visible {
+  outline-color: var(--p46-panel);
+}
+html body:has(#app .provider-registry) .responsive-data-view__details {
+  padding: 24px;
+  gap: 24px;
+}
+html body:has(#app .provider-registry) .responsive-data-view__details dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 24px;
+}
+html body:has(#app .provider-registry) .responsive-data-view__details dl > div {
+  min-width: 0;
+  padding: 0 0 16px;
+  border: 0;
+  border-bottom: 1px solid var(--p46-border);
+  background: transparent;
+}
+html body:has(#app .provider-registry) .responsive-data-view__details dt {
+  color: var(--p46-muted);
+  font-size: 13px;
+}
+html body:has(#app .provider-registry) .responsive-data-view__details dd {
+  margin: 8px 0 0;
+  color: var(--p46-ink);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+html body:has(#app .provider-registry) .responsive-data-view__details > button {
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 1px solid var(--p46-accent);
+  border-radius: 6px;
+  color: var(--p46-panel);
+  background: var(--p46-accent);
+  font-size: 16px;
+}
+html body:has(#app .provider-registry) .responsive-data-view__details > details {
+  border: 1px solid var(--p46-border);
+  border-radius: 6px;
+  background: #f5f7fb;
+}
+html body:has(#app .provider-registry) .responsive-data-view__details summary {
+  min-height: 48px;
+  padding: 12px 16px;
+  color: var(--p46-accent);
+  font-size: 14px;
+}
+html body:has(#app .provider-registry) .responsive-data-view__details details dl {
+  grid-template-columns: minmax(0, 1fr);
+  padding: 16px;
+}
+
+@media (min-width: 761px) {
+  html body:has(#app .provider-registry) #app .provider-editor-layer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: var(--p46-scrim);
+    backdrop-filter: none;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor {
+    width: min(100%, 1000px);
+    height: auto;
+    max-width: none;
+    max-height: calc(100dvh - 48px);
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    border: 1px solid var(--p46-divider);
+    border-radius: 12px;
+    color: var(--p46-ink);
+    background: var(--p46-panel);
+    box-shadow: none;
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 0;
+    scroll-padding-block: 24px 96px;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor > header {
+    grid-column: 1/-1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 24px 28px;
+    border: 0;
+    border-radius: 0;
+    color: var(--p46-panel);
+    background: var(--p46-accent);
+  }
+  html body:has(#app .provider-registry) #app .provider-editor > header p {
+    margin: 0 0 8px;
+    color: var(--p46-on-accent-muted);
+    font-size: 13px;
+    letter-spacing: 0;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor > header h3 {
+    margin: 0;
+    color: var(--p46-panel);
+    font-size: 26px;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor :is(button, summary) {
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid var(--p46-border-strong);
+    border-radius: 6px;
+    color: var(--p46-accent);
+    background: var(--p46-panel);
+    font-size: 14px;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor > header button {
+    min-width: 44px;
+    color: var(--p46-panel);
+    background: transparent;
+    border-color: var(--p46-on-accent-border);
+    font-size: 22px;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor-steps {
+    grid-column: 1;
+    grid-row: 2/5;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin: 0;
+    padding: 24px 16px;
+    background: var(--p46-accent);
+    border: 0;
+    border-radius: 0;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor-steps li {
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor-steps button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    color: var(--p46-panel);
+    background: transparent;
+    border-color: transparent;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor-steps button span {
+    width: 24px;
+    height: 24px;
+    border: 0;
+    color: inherit;
+    background: none;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor-steps [aria-current="step"] {
+    color: var(--p46-accent);
+    background: var(--p46-panel);
+  }
+  html body:has(#app .provider-registry) #app .provider-template-bar {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0;
+    padding: 20px 28px;
+    border: 0;
+    border-radius: 0;
+    color: var(--p46-muted);
+    background: var(--p46-canvas);
+    font-size: 14px;
+  }
+  html body:has(#app .provider-registry) #app .provider-fields {
+    grid-column: 2;
+    grid-row: 3;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 20px;
+    margin: 0;
+    padding: 28px;
+  }
+  html body:has(#app .provider-registry) #app .provider-fields label {
+    min-width: 0;
+    display: grid;
+    gap: 8px;
+    color: var(--p46-muted);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  html body:has(#app .provider-registry) #app .provider-fields :is(input, select) {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 10px 12px;
+    border: 1px solid var(--p46-border-strong);
+    border-radius: 6px;
+    color: var(--p46-ink);
+    background: var(--p46-panel);
+    font-size: 16px;
+  }
+  html body:has(#app .provider-registry) #app .provider-fields small {
+    color: var(--p46-error);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  html body:has(#app .provider-registry) #app .provider-publish-preview {
+    padding: 18px;
+    display: grid;
+    gap: 10px;
+    border: 0;
+    border-left: 3px solid var(--p46-accent);
+    border-radius: 0;
+    color: var(--p46-muted);
+    background: var(--p46-canvas);
+    font-size: 14px;
+  }
+  html body:has(#app .provider-registry) #app .provider-publish-preview strong {
+    color: var(--p46-ink);
+  }
+  html body:has(#app .provider-registry) #app .provider-editor-message {
+    grid-column: 2;
+    grid-row: 4;
+    margin: 0 28px 24px;
+    padding: 16px;
+    border: 1px solid var(--p46-saved-warning-border);
+    border-radius: 6px;
+    color: var(--p46-saved-warning-ink);
+    background: var(--p46-saved-warning-panel);
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor-message code {
+    display: block;
+    margin-top: 10px;
+    color: var(--p46-muted);
+  }
+  html body:has(#app .provider-registry) #app .provider-editor > footer {
+    grid-column: 1/-1;
+    grid-row: 5;
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0;
+    padding: 18px 28px;
+    border: 0;
+    border-top: 1px solid var(--p46-border);
+    color: var(--p46-muted);
+    background: var(--p46-panel);
+    font-size: 13px;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor > footer > span {
+    flex: 1;
+  }
+  html body:has(#app .provider-registry) #app .provider-editor > footer button:not(.secondary) {
+    border-color: var(--p46-accent);
+    color: var(--p46-panel);
+    background: var(--p46-accent);
+  }
+  html
+    body:has(#app .provider-registry)
+    #app
+    .provider-editor
+    :is(button, input, select, summary):focus-visible {
+    outline: 3px solid var(--p46-focus);
+    outline-offset: 3px;
+  }
+  html
+    body:has(#app .provider-registry)
+    #app
+    .provider-editor
+    :is(header, .provider-editor-steps)
+    button:focus-visible {
+    outline-color: var(--p46-panel);
+  }
+}
+@media (min-width: 761px) and (max-width: 1023px) {
+  html body:has(#app .provider-registry) #app .provider-editor {
+    grid-template-columns: 180px minmax(0, 1fr);
+  }
+  html body:has(#app .provider-registry) #app .provider-fields {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 24px;
+  }
+  html body:has(#app .provider-registry) #app .provider-fields .wide {
+    grid-column: auto;
+  }
+}
+@media (max-width: 760px) {
+  html body:has(#app .provider-registry) #app .provider-list-tools {
+    padding: 20px 16px;
+  }
+  html body:has(#app .provider-registry) #app .provider-list-heading {
+    display: grid;
+    gap: 16px;
+  }
+  html body:has(#app .provider-registry) #app .provider-list-heading > button {
+    justify-self: start;
+  }
+  html body:has(#app .provider-registry) #app .provider-filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html body:has(#app .provider-registry) #app .responsive-data-view {
+    padding: 0 16px;
+  }
+  html body:has(#app .provider-registry) #app .responsive-data-view__mobile article {
+    border: 0;
+    border-bottom: 1px solid var(--p46-border);
+    border-radius: 0;
+    background: var(--p46-panel);
+  }
+  html body:has(#app .provider-registry) #app .responsive-data-view__mobile article > button {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 24px 0;
+    border: 0;
+    border-radius: 0;
+    color: var(--p46-ink);
+    background: var(--p46-panel);
+    text-align: left;
+  }
+  html body:has(#app .provider-registry) #app .responsive-record-summary {
+    gap: 10px;
+  }
+  html body:has(#app .provider-registry) #app .responsive-record-summary strong {
+    color: var(--p46-ink);
+    font-size: 18px;
+  }
+  html body:has(#app .provider-registry) #app .responsive-record-summary small {
+    color: var(--p46-muted);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  html body:has(#app .provider-registry) #app .responsive-record-summary em {
+    justify-self: start;
+    padding: 5px 8px;
+    border: 1px solid var(--p46-border);
+    border-radius: 999px;
+    color: var(--p46-accent);
+    background: var(--p46-accent-soft);
+    font-style: normal;
+  }
+  html
+    body:has(#app .provider-registry)
+    #app
+    .responsive-record-summary
+    em[data-admission="blocked"] {
+    border-color: var(--p46-saved-warning-border);
+    color: var(--p46-saved-warning-ink);
+    background: var(--p46-saved-warning-panel);
+  }
+  html body:has(#app .provider-registry) #app .responsive-data-view__action {
+    justify-self: start;
+    color: var(--p46-accent);
+    font-size: 14px;
+  }
+  html body:has(#app .provider-registry) #app .provider-pagination {
+    padding: 20px 16px;
+    display: grid;
+    gap: 16px;
+  }
+  html body:has(#app .provider-registry) #app .provider-feedback {
+    display: grid;
+  }
+  html body:has(#app .provider-registry) .responsive-data-view__drawer > header {
+    padding: 20px;
+  }
+  html body:has(#app .provider-registry) .responsive-data-view__details {
+    padding: 20px;
+  }
+  html body:has(#app .provider-registry) .responsive-data-view__details dl {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+}

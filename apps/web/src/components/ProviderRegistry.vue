@@ -674,6 +674,7 @@ onActivated(() => {
     <UiStatePanel
       v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
+      primary-label="重新读取来源"
       :request-id="requestId"
       @primary="load"
     />
@@ -765,7 +766,7 @@ onActivated(() => {
                 <th>超时 / 重试</th>
                 <th>解析器</th>
                 <th>状态</th>
-                <th></th>
+                <th scope="col">操作</th>
               </tr>
             </thead>
             <tbody>
@@ -1344,3 +1345,4 @@ onActivated(() => {
 
 <style src="../styles/provider-approved-feedback.css"></style>
 <style src="../styles/provider-approved-structure.css"></style>
+<style src="../styles/provider-registry-c-completion.css"></style>
