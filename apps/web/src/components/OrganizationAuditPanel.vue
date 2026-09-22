@@ -311,25 +311,6 @@ async function copy(value: string, field: string) {
       </aside>
     </header>
 
-    <div class="org-audit-metrics" aria-label="当前已加载审计汇总">
-      <article>
-        <span>当前已加载</span><b>{{ events.length }}</b
-        ><small>不是全库总数</small>
-      </article>
-      <article data-tone="success">
-        <span>成功</span><b>{{ loadedCounts.succeeded }}</b
-        ><small>已加载范围</small>
-      </article>
-      <article data-tone="danger">
-        <span>失败</span><b>{{ loadedCounts.failed }}</b
-        ><small>已加载范围</small>
-      </article>
-      <article data-tone="warning">
-        <span>已阻止</span><b>{{ loadedCounts.blocked }}</b
-        ><small>已加载范围</small>
-      </article>
-    </div>
-
     <form
       class="org-audit-filters"
       aria-label="组织审计筛选"
@@ -405,6 +386,25 @@ async function copy(value: string, field: string) {
         </button>
       </footer>
     </form>
+
+    <div class="org-audit-metrics" aria-label="当前已加载审计汇总">
+      <article>
+        <span>当前已加载</span><b>{{ events.length }}</b
+        ><small>不是全库总数</small>
+      </article>
+      <article data-tone="success">
+        <span>成功</span><b>{{ loadedCounts.succeeded }}</b
+        ><small>已加载范围</small>
+      </article>
+      <article data-tone="danger">
+        <span>失败</span><b>{{ loadedCounts.failed }}</b
+        ><small>已加载范围</small>
+      </article>
+      <article data-tone="warning">
+        <span>已阻止</span><b>{{ loadedCounts.blocked }}</b
+        ><small>已加载范围</small>
+      </article>
+    </div>
 
     <section class="org-audit-ledger" aria-label="组织审计记录">
       <header>
