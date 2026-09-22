@@ -17,9 +17,11 @@
 
 - P45/共享账号目录定向单测18/18通过。
 - `m06-01-platform-accounts.spec.ts` 桌面 Chromium 49/49、390px mobile 49/49通过；全请求由本地夹具控制，不能证明生产 RBAC 或真实角色写入。
-- `npm run typecheck:web` 与 `npm run format:check`通过；生产构建、发布矩阵、部署和线上核验结果在完成后补记。
-- 前端入口 CSS 预算门当前基线为129451/122880字节，未通过；本批不扩大预算或改动无关样式。
+- `npm run typecheck:web`、`npm run format:check`、`npm run verify:docs`、`npm run verify:static-analysis`、`npm run verify:release-matrix`、`npm run verify:runtime-docs`和`npm run build:web`通过；部署脚本的M07-01发布矩阵及M07-03预检通过，22/22工作区构建通过。
+- `npm run verify:frontend-budget`未通过：入口 CSS 为129451字节，限制122880字节。本批未绕过或调整预算门。
+- 已提交并推送 `e098b13a88244d3b0aeebf8300934a2910c9a5db`，宝塔部署返回相同 build SHA，部署器报告临时上传产物已删除。
+- 生产只读核验：`live`、`ready`、`version`均HTTP 200，build SHA一致，MySQL/Redis/supervisor为available；P45深链HTTP 200。父/比较区JS与CSS共4个资源HTTP 200，实际响应包含P45作用域标记。
 
 ## 不在本批范围
 
-无 API/OpenAPI、数据模型、数据库、环境变量、依赖、角色能力、安全策略或权限判断变更。真实服务端 RBAC、MySQL 权限数据及正式 M07-03 生产验收不由本地夹具或 UI 布局测试证明。全73页的整体实施目标继续开放。
+无 API/OpenAPI、数据模型、数据库、环境变量、依赖、角色能力、安全策略或权限判断变更。真实服务端RBAC和MySQL角色权限语义未通过本地夹具证明；正式M07-03生产验收仍未完成。生产仅进行本批所需的健康与静态资源读取，没有执行角色写入。全73页的整体实施目标继续开放。

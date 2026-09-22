@@ -2,7 +2,7 @@
 
 ## 2026-09-23 · P45平台角色权限比较C方向迁移到生产Vue
 
-[P45生产实施](P45-PAGE-COMPOSITION-IMPLEMENTATION.md)：真实 `/platform-admin/permissions` 桌面为蓝色双角色上下文栏与白色能力比较区，760px及以下改为单列；角色说明、能力计数、五项URL查询、只读目录、筛选和差异结果沿用原行为，P44管理员页共享实例保持原布局。定向单测18/18、账号管理桌面 Chromium 49/49、390px mobile 49/49、Web类型/格式检查通过。完整构建/发布检查、CSS预算结果、提交与生产核验待本批结束后补记。真实RBAC与M07-03未由本地夹具证明，全73页目标继续。
+[P45生产实施](P45-PAGE-COMPOSITION-IMPLEMENTATION.md)：真实 `/platform-admin/permissions` 桌面为蓝色双角色上下文栏与白色能力比较区，760px及以下改为单列；角色说明、能力计数、五项URL查询、只读目录、筛选和差异结果沿用原行为，P44管理员页共享实例保持原布局。定向单测18/18、账号管理桌面 Chromium 49/49、390px mobile 49/49、Web类型/格式/文档/静态分析/发布矩阵/M07-03预检、22工作区构建通过；CSS预算门129451/122880未通过。已提交推送并部署，线上build SHA `e098b13a88244d3b0aeebf8300934a2910c9a5db`，live/ready/version、P45深链与4个组件JS/CSS只读核验HTTP 200。真实RBAC及正式M07-03未由本地夹具证明，全73页目标继续。
 
 ## 2026-09-23 · P44可授权账号C方向迁移到生产Vue
 
