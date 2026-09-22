@@ -12,7 +12,11 @@ const manifests = Object.freeze({
   "teams-fields-direction-c": "4f9ce8529347282c71384f223654f7d5349a46b3e0b476b03770cd1ba1a5a547",
 });
 const dialog = "apps/web/src/components/AuditedReasonDialog.vue";
-const currentDialogHash = "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a";
+const currentSourceHashes = Object.freeze({
+  [dialog]: "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+  "apps/web/src/components/OrganizationAdminCenter.vue":
+    "05c00c7339dd6bbffd2d8bd64b80a50e7222737a60dd60dcbb850ce5e7126c89",
+});
 const normalize = (value) => value.toString("utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const cache = new Map();
@@ -64,7 +68,7 @@ export function assertTeamsCurrentSources(name, read = (file) => readFileSync(fi
   for (const [file, capturedHash] of Object.entries(evidence.sourceHashes)) {
     assert.equal(
       hash(normalize(read(file))),
-      file === dialog ? currentDialogHash : capturedHash,
+      currentSourceHashes[file] ?? capturedHash,
       `Unverified current P33 source: ${file}`,
     );
   }

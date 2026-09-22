@@ -4817,3 +4817,346 @@
     padding: 18px;
   }
 }
+
+/* P33 C composition: the team directory is a collaboration boundary, not a card wall. */
+.org-admin-center--team-review {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-bottom: 28px;
+  color: #182d4a;
+  background: #f3f6fb;
+}
+
+.org-admin-center--team-review .org-admin-hero {
+  padding: 31px 36px;
+  border: 0;
+  border-radius: 0;
+  background: #1748a0;
+}
+
+.org-admin-center--team-review .org-admin-hero :is(p, h1, h2, span) {
+  color: #fff;
+}
+
+.org-admin-center--team-review .org-admin-hero h1 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.org-admin-center--team-review .org-team-panel {
+  gap: 16px;
+}
+
+.org-admin-center--team-review .org-team-overview {
+  min-height: 144px;
+  padding: 27px 30px;
+  border: 0;
+  border-left: 5px solid #1748a0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--team-review .org-team-overview::before,
+.org-admin-center--team-review .org-team-overview::after {
+  display: none;
+}
+
+.org-admin-center--team-review .org-team-overview :is(p, h3, span) {
+  color: #182d4a;
+}
+
+.org-admin-center--team-review .org-team-overview p,
+.org-admin-center--team-review .org-team-create header p,
+.org-admin-center--team-review .org-team-section-heading p,
+.org-admin-center--team-review .org-team-detail header p,
+.org-admin-center--team-review .org-team-membership header p {
+  letter-spacing: 0.12em;
+}
+
+.org-admin-center--team-review .org-team-overview > button,
+.org-admin-center--team-review .org-team-create > footer button,
+.org-admin-center--team-review .org-team-empty > button {
+  border: 1px solid #1748a0;
+  border-radius: 0;
+  color: #fff;
+  background: #1748a0;
+  box-shadow: none;
+}
+
+.org-admin-center--team-review .org-team-overview > button:hover,
+.org-admin-center--team-review .org-team-create > footer button:hover,
+.org-admin-center--team-review .org-team-empty > button:hover {
+  color: #1748a0;
+  background: #eaf1ff;
+}
+
+.org-admin-center--team-review .org-team-metrics {
+  gap: 0;
+  border: 1px solid #d6e0ec;
+  background: #fff;
+}
+
+.org-admin-center--team-review .org-team-metrics article {
+  min-height: 108px;
+  border: 0;
+  border-right: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--team-review .org-team-metrics article:last-child {
+  border-right: 0;
+}
+
+.org-admin-center--team-review .org-team-metrics b,
+.org-admin-center--team-review .org-team-list b {
+  color: #1748a0;
+}
+
+.org-admin-center--team-review .org-team-create,
+.org-admin-center--team-review .org-team-directory,
+.org-admin-center--team-review .org-team-detail {
+  border-color: #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--team-review .org-team-create {
+  border-top: 5px solid #1748a0;
+}
+
+.org-admin-center--team-review .org-team-create :is(input, select, textarea),
+.org-admin-center--team-review .org-team-toolbar :is(input, select),
+.org-admin-center--team-review .org-team-membership select {
+  min-height: 44px;
+  border-color: #c7d4e4;
+  border-radius: 0;
+  color: #182d4a;
+  background: #fff;
+}
+
+.org-admin-center--team-review .org-team-create textarea {
+  min-height: 104px;
+}
+
+.org-admin-center--team-review .org-team-browser {
+  grid-template-columns: minmax(0, 1.35fr) minmax(340px, 0.9fr);
+  gap: 16px;
+}
+
+.org-admin-center--team-review .org-team-directory,
+.org-admin-center--team-review .org-team-detail {
+  padding: 22px;
+}
+
+.org-admin-center--team-review .org-team-status-tabs {
+  gap: 0;
+  margin: 17px 0 12px;
+  padding: 0;
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+}
+
+.org-admin-center--team-review .org-team-status-tabs button {
+  min-height: 42px;
+  border: 0;
+  border-right: 1px solid #d6e0ec;
+  border-radius: 0;
+  color: #61738b;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center--team-review .org-team-status-tabs button:last-child {
+  border-right: 0;
+}
+
+.org-admin-center--team-review .org-team-status-tabs button[aria-pressed="true"] {
+  color: #1748a0;
+  background: #edf4ff;
+  box-shadow: inset 0 -3px #1748a0;
+}
+
+.org-admin-center--team-review .org-team-toolbar {
+  padding: 14px;
+  border: 1px solid #d6e0ec;
+  background: #f7faff;
+}
+
+.org-admin-center--team-review .org-team-toolbar button,
+.org-admin-center--team-review .org-team-member-actions button.org-admin-secondary,
+.org-admin-center--team-review .org-team-create > header button {
+  border-color: #c7d4e4;
+  border-radius: 0;
+  color: #1748a0;
+  background: #fff;
+}
+
+.org-admin-center--team-review .org-team-list {
+  gap: 0;
+  border: 1px solid #d6e0ec;
+}
+
+.org-admin-center--team-review .org-team-list > button {
+  min-height: 84px;
+  padding: 13px 14px;
+  border: 0;
+  border-bottom: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+}
+
+.org-admin-center--team-review .org-team-list > button:last-child {
+  border-bottom: 0;
+}
+
+.org-admin-center--team-review .org-team-list > button:hover,
+.org-admin-center--team-review .org-team-list > button.is-selected {
+  border-color: #d6e0ec;
+  border-left: 5px solid #1748a0;
+  background: #edf4ff;
+  transform: none;
+}
+
+.org-admin-center--team-review .org-team-mark {
+  border-radius: 0;
+  border-color: #b9cceb;
+  color: #1748a0;
+  background: #f7faff;
+}
+
+.org-admin-center--team-review .org-team-list em,
+.org-admin-center--team-review .org-team-section-heading > span,
+.org-admin-center--team-review .org-team-membership header > span {
+  border-radius: 0;
+  color: #1748a0;
+  border-color: #b9cceb;
+  background: #f7faff;
+}
+
+.org-admin-center--team-review .org-team-detail {
+  border-top: 5px solid #1748a0;
+}
+
+.org-admin-center--team-review .org-team-detail dl > div {
+  border-color: #d6e0ec;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center--team-review .org-team-membership {
+  border-color: #b9cceb;
+  border-radius: 0;
+  background: #edf4ff;
+}
+
+.org-admin-center--team-review .org-team-boundary-note {
+  border-radius: 0;
+  border-left-width: 5px;
+  background: #f7faff;
+}
+
+.org-admin-center--team-review .org-team-links a,
+.org-admin-center--team-review .org-team-empty,
+.org-admin-center--team-review .org-admin-pagination {
+  border-radius: 0;
+}
+
+.org-admin-center--team-review :is(button, input, select, textarea, a, summary):focus-visible {
+  border-color: #1748a0;
+  outline: 3px solid #a9c5f5;
+  outline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+  .org-admin-center--team-review {
+    margin: 12px -8px 70px;
+    padding-bottom: 16px;
+  }
+
+  .org-admin-center--team-review .org-admin-hero {
+    padding: 25px 19px;
+  }
+
+  .org-admin-center--team-review .org-team-overview {
+    align-items: stretch;
+    padding: 22px 18px;
+  }
+
+  .org-admin-center--team-review .org-team-overview > button {
+    width: 100%;
+  }
+
+  .org-admin-center--team-review .org-team-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .org-admin-center--team-review .org-team-metrics article:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .org-admin-center--team-review .org-team-create,
+  .org-admin-center--team-review .org-team-directory,
+  .org-admin-center--team-review .org-team-detail {
+    padding: 18px;
+  }
+
+  .org-admin-center--team-review .org-team-create-grid,
+  .org-admin-center--team-review .org-team-toolbar,
+  .org-admin-center--team-review .org-team-browser {
+    grid-template-columns: 1fr;
+  }
+
+  .org-admin-center--team-review .org-team-status-tabs {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .org-admin-center--team-review .org-team-status-tabs button {
+    border-right: 0;
+    border-bottom: 1px solid #d6e0ec;
+    text-align: left;
+  }
+
+  .org-admin-center--team-review .org-team-status-tabs button:last-child {
+    border-bottom: 0;
+  }
+
+  .org-admin-center--team-review .org-team-list > button {
+    grid-template-columns: 34px minmax(0, 1fr);
+  }
+
+  .org-admin-center--team-review .org-team-list em,
+  .org-admin-center--team-review .org-team-list i {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .org-admin-center--team-review .org-team-detail {
+    position: static;
+  }
+
+  .org-admin-center--team-review .org-team-detail dl {
+    grid-template-columns: 1fr;
+  }
+
+  .org-admin-center--team-review .org-team-create > header,
+  .org-admin-center--team-review .org-team-create > footer,
+  .org-admin-center--team-review .org-team-section-heading,
+  .org-admin-center--team-review .org-team-detail > header,
+  .org-admin-center--team-review .org-team-membership > header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .org-admin-center--team-review .org-team-create > footer button,
+  .org-admin-center--team-review .org-team-member-actions button {
+    width: 100%;
+  }
+}

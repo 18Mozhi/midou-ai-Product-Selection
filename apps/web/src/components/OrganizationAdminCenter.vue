@@ -950,6 +950,7 @@ onMounted(() => void load());
       'org-admin-center--workspace-review': view === 'workspaces',
       'org-admin-center--member-review': view === 'members',
       'org-admin-center--role-review': view === 'roles',
+      'org-admin-center--team-review': view === 'teams',
       'org-admin-center--profile-review': view === 'summary',
     }"
     :data-state="state"
@@ -965,7 +966,11 @@ onMounted(() => void load());
       <div>
         <p>组织后台</p>
         <component
-          :is="['data', 'workspaces', 'members', 'roles', 'summary'].includes(view) ? 'h1' : 'h2'"
+          :is="
+            ['data', 'workspaces', 'members', 'roles', 'teams', 'summary'].includes(view)
+              ? 'h1'
+              : 'h2'
+          "
           >{{ title }}</component
         >
         <span>{{ subtitle }}</span>
