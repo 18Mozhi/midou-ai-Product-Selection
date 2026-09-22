@@ -782,7 +782,10 @@ watch(
 );
 </script>
 <template>
-  <section class="task-workspace" :class="{ 'task-detail-route': Boolean(taskId) }">
+  <section
+    class="task-workspace task-workspace--review"
+    :class="{ 'task-detail-route': Boolean(taskId) }"
+  >
     <header class="task-title">
       <div>
         <p>{{ mode === "today" ? "今日行动" : "工作队列" }}</p>

@@ -1,5 +1,9 @@
 # 第二阶段实施记录
 
+## 2026-09-22 · P24任务详情C方向迁移到生产Vue
+
+[P24生产实施](P24-PAGE-COMPOSITION-IMPLEMENTATION.md)：将蓝白任务卷宗标题、事实网格、进度/期限/负责人、阻塞上下文、采集关联、技术详情、动作区、活动评论和动作窗迁移到实际 `TaskWorkspace.vue` 与 `TaskDetailPanel.vue`；保留详情读取、成员读取、进度提交与权限判断合同。1440/390、reduced/no-preference 四组共32项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。真实会话、RBAC、数据库写入、版本冲突、其余动作和正式 M07-03 证据仍待。
+
 ## 2026-09-22 · P25审批中心C方向迁移到生产Vue
 
 [P25生产实施](P25-PAGE-COMPOSITION-IMPLEMENTATION.md)：将蓝白审批范围、重点计数、审批队列、状态筛选、详情事实、证据差异、审批动作及模板/发起窗迁移到实际 `ApprovalWorkspace.vue` 与 `ApprovalQueuePanel.vue`；保留读取、快照、当前证据与批准/驳回合同。1440/390、reduced/no-preference 四组共32项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。真实会话、RBAC、数据库写入、模板生命周期、版本冲突和正式 M07-03 证据仍待。
