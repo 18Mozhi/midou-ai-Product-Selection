@@ -471,3 +471,332 @@
     justify-self: start;
   }
 }
+
+/* P22 C direction: production cost-rule workbench aligned with the approved ledger. */
+.cost-console--review {
+  --review-blue: #1748a0;
+  --review-blue-strong: #123d8a;
+  --review-ink: #182d4a;
+  --review-muted: #52647b;
+  --review-line: #dce4ee;
+  --review-pale: #edf4ff;
+  max-width: 1160px;
+  margin: 0 auto;
+  color: var(--review-ink);
+  font: 16px/1.6 "Microsoft YaHei", sans-serif;
+}
+
+.cost-console--review > header {
+  min-height: 136px;
+  padding: 28px 30px;
+  border: 0;
+  border-radius: 0;
+  background: var(--review-blue);
+  color: #fff;
+}
+
+.cost-console--review > header p,
+.cost-console--review > header h1,
+.cost-console--review > header span {
+  color: #fff;
+}
+
+.cost-console--review > header h1 {
+  margin: 7px 0;
+  font-size: clamp(28px, 3vw, 34px);
+  line-height: 1.1;
+}
+
+.cost-console--review > header p {
+  margin: 0;
+  color: #d8e5ff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cost-console--review button,
+.cost-console--review .cost-head-actions a,
+.cost-console--review .quality-gate-setup-summary a {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid var(--review-blue);
+  border-radius: 0;
+  background: #fff;
+  color: var(--review-blue);
+  box-shadow: none;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.cost-console--review button:hover:not(:disabled),
+.cost-console--review a:hover {
+  background: #f3f7ff;
+  color: var(--review-blue-strong);
+}
+
+.cost-console--review button:focus-visible,
+.cost-console--review a:focus-visible,
+.cost-console--review input:focus-visible,
+.cost-console--review select:focus-visible,
+.cost-console--review textarea:focus-visible,
+.cost-console--review summary:focus-visible {
+  outline: 3px solid #2465d7;
+  outline-offset: 3px;
+}
+
+.cost-console--review > header .cost-head-actions button,
+.cost-console--review .quality-gate-next,
+.cost-console--review .cost-rule-actions button:not(.danger) {
+  background: var(--review-blue);
+  color: #fff;
+}
+
+.cost-console--review > header .cost-head-actions a {
+  border-color: #fff;
+  background: #fff;
+  color: var(--review-blue);
+}
+
+.cost-console--review .cost-notice {
+  margin: 0;
+  padding: 14px 18px;
+  border-left: 4px solid var(--review-blue);
+  border-radius: 0;
+  background: var(--review-pale);
+  color: var(--review-muted);
+}
+
+.cost-console--review .quality-gate-setup-summary,
+.cost-console--review .cost-layout,
+.cost-console--review .cost-rule-list,
+.cost-console--review .cost-rule-detail {
+  border: 1px solid var(--review-line);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.cost-console--review .quality-gate-setup-summary {
+  margin: 0;
+  padding: 24px 28px;
+  background: #fff;
+}
+
+.cost-console--review .quality-gate-setup-summary h3,
+.cost-console--review .cost-rule-detail h3 {
+  color: var(--review-blue);
+}
+
+.cost-console--review .quality-gate-setup-summary li {
+  border-radius: 0;
+  background: var(--review-pale);
+}
+
+.cost-console--review .cost-layout {
+  grid-template-columns: minmax(300px, 0.85fr) minmax(0, 2fr);
+  gap: 0;
+  overflow: hidden;
+  background: #fff;
+}
+
+.cost-console--review .cost-rule-browser {
+  padding: 0;
+  border-right: 1px solid var(--review-line);
+  background: #f3f6fb;
+}
+
+.cost-console--review .cost-rule-filters {
+  gap: 10px;
+  padding: 16px;
+  border-bottom: 1px solid var(--review-line);
+  background: #fff;
+}
+
+.cost-console--review .cost-rule-filters label {
+  color: var(--review-muted);
+}
+
+.cost-console--review .cost-rule-filters input,
+.cost-console--review .cost-rule-filters select,
+.cost-console--review .cost-modal input,
+.cost-console--review .cost-modal select,
+.cost-console--review .cost-modal textarea {
+  min-height: 44px;
+  border: 1px solid #b9c9dc;
+  border-radius: 0;
+  background: #fff;
+  color: var(--review-ink);
+}
+
+.cost-console--review .cost-rule-filters button {
+  width: max-content;
+  background: #fff;
+  color: var(--review-blue);
+}
+
+.cost-console--review .cost-rule-list {
+  border: 0;
+  border-radius: 0;
+  background: #f3f6fb;
+}
+
+.cost-console--review .cost-rule-list > button {
+  min-height: 120px;
+  border: 0;
+  border-bottom: 1px solid var(--review-line);
+  border-radius: 0;
+  background: #f3f6fb;
+  color: var(--review-ink);
+}
+
+.cost-console--review .cost-rule-list > button.selected {
+  border-left: 5px solid var(--review-blue);
+  background: var(--review-pale);
+  box-shadow: none;
+}
+
+.cost-console--review .cost-rule-list i {
+  border-radius: 0;
+  background: var(--review-blue);
+}
+
+.cost-console--review .cost-rule-list b,
+.cost-console--review .cost-rule-detail > header > b {
+  border-radius: 0;
+}
+
+.cost-console--review .cost-rule-detail {
+  padding: 28px;
+  border: 0;
+  background: #fff;
+}
+
+.cost-console--review .cost-rule-detail > header {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--review-line);
+}
+
+.cost-console--review .cost-rule-detail > header > b {
+  padding: 7px 10px;
+  border: 1px solid var(--review-blue);
+  background: var(--review-pale);
+  color: var(--review-blue);
+}
+
+.cost-console--review .cost-fees {
+  gap: 0;
+  border: 1px solid var(--review-line);
+  border-radius: 0;
+}
+
+.cost-console--review .cost-fees article {
+  border: 0;
+  border-right: 1px solid var(--review-line);
+  border-radius: 0;
+  background: #f3f6fb;
+}
+
+.cost-console--review .cost-fees article:last-child {
+  border-right: 0;
+}
+
+.cost-console--review .cost-rule-detail section {
+  border-color: var(--review-line);
+  background: #fff;
+}
+
+.cost-console--review .cost-rule-detail section p {
+  border-radius: 0;
+  background: var(--review-pale);
+}
+
+.cost-console--review .cost-rule-actions {
+  padding-top: 18px;
+  border-top: 3px solid var(--review-blue);
+}
+
+.cost-console--review .cost-rule-actions .danger {
+  border-color: #b42318;
+  background: #fff;
+  color: #b42318;
+}
+
+.cost-console--review .cost-modal {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.cost-console--review .cost-modal::backdrop {
+  background: rgb(24 45 74 / 50%);
+}
+
+.cost-console--review .cost-modal form {
+  border: 1px solid var(--review-line);
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+@media (max-width: 760px) {
+  .cost-console--review > header {
+    align-items: stretch;
+    min-height: 0;
+    padding: 22px 18px;
+  }
+
+  .cost-console--review > header h1 {
+    font-size: 27px;
+  }
+
+  .cost-console--review .cost-head-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .cost-console--review .cost-head-actions > * {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cost-console--review .cost-layout {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    border: 0;
+    overflow: visible;
+    background: transparent;
+  }
+
+  .cost-console--review .cost-rule-browser,
+  .cost-console--review .cost-rule-detail {
+    border: 1px solid var(--review-line);
+  }
+
+  .cost-console--review .cost-rule-browser {
+    border-right: 1px solid var(--review-line);
+  }
+
+  .cost-console--review .cost-rule-detail {
+    padding: 22px 18px;
+  }
+
+  .cost-console--review .cost-fees {
+    grid-template-columns: 1fr;
+  }
+
+  .cost-console--review .cost-fees article {
+    border-right: 0;
+    border-bottom: 1px solid var(--review-line);
+  }
+
+  .cost-console--review .cost-rule-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .cost-console--review .cost-rule-actions button {
+    width: 100%;
+  }
+}

@@ -512,11 +512,11 @@ onMounted(load);
 </script>
 
 <template>
-  <section class="cost-console" aria-labelledby="cost-rule-title">
+  <section class="cost-console cost-console--review" aria-labelledby="cost-rule-title">
     <header>
       <div>
         <p>自动推荐 · 成本与利润</p>
-        <h2 id="cost-rule-title">成本质量门</h2>
+        <h1 id="cost-rule-title">成本质量门</h1>
         <span>费用规则生效后，双人复核或高置信爬虫证据可触发利润计算与成本质量门。</span>
       </div>
       <div class="cost-head-actions">
