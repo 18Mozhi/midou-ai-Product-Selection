@@ -3425,3 +3425,6 @@ frontend-design技能用于将选定C的蓝色范围面、白色内容面、圆�
 ## 2026-09-22 · P22 成本规则 C 方向迁移到生产 Vue
 
 [P22 生产实施](P22-PAGE-COMPOSITION-IMPLEMENTATION.md)：将蓝白成本规则身份、准备度、版本目录、显式费用、汇率依据、审批链、详情与动作区迁移到实际 `CostRuleConsole`；保留 `GET /cost-rules`、筛选、分页、角色能力与 `expected_revision` 合同。1440/390、reduced/no-preference 共 32 项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。新建草稿、七类动作窗、真实 RBAC/写入和正式 M07-03 证据仍待。
+## 2026-09-22 · P21 供应链找货 C 方向迁移到生产 Vue
+
+[P21 生产实施](P21-PAGE-COMPOSITION-IMPLEMENTATION.md)：将蓝色说明区、找货流程、记录目录、采集进度、候选事实、已确认报价与对比历史迁移到实际 `SourcingWorkspace`；保留既有读取、缺失字段、最多五家对比与已确认 quote 边界。1440/390、reduced/no-preference 共 32 项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。真实写入、RBAC、采集与正式 M07-03 证据仍待。

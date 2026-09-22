@@ -366,7 +366,7 @@ watch(
 );
 </script>
 <template>
-  <section class="sourcing-workspace">
+  <section class="sourcing-workspace sourcing-workspace--review">
     <section class="member-module-guide">
       <div>
         <p>供应链与利润怎么用</p>
@@ -395,7 +395,7 @@ watch(
     <header class="sourcing-head">
       <div>
         <p>供应商发现</p>
-        <h2>供应链找货</h2>
+        <h1>供应链找货</h1>
         <span>采集事实先投影为候选；缺失规格、交期、地点、可信度与风险时禁止进入可靠对比。</span>
       </div>
       <button v-if="canManage" type="button" @click="openSearch">发起供应商找货</button>
