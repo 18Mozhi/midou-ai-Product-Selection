@@ -228,7 +228,11 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <section class="platform-dashboard" aria-live="polite" :aria-busy="pending">
+  <section
+    class="platform-dashboard platform-dashboard--review"
+    aria-live="polite"
+    :aria-busy="pending"
+  >
     <div class="platform-dashboard-toolbar">
       <div>
         <p>管理员首页</p>

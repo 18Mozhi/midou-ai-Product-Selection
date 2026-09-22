@@ -445,3 +445,213 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* P38 C composition: a blue operating rail with a white factual workbench. */
+.platform-dashboard--review {
+  max-width: 1280px;
+  grid-template-columns: minmax(220px, 240px) minmax(0, 1fr);
+  gap: 14px 24px;
+  padding: 0;
+  color: #182d4a;
+  background: #edf2f8;
+}
+
+.platform-dashboard--review > :not(.platform-dashboard-toolbar):not(.platform-dashboard-state) {
+  grid-column: 2;
+}
+
+.platform-dashboard--review .platform-dashboard-toolbar {
+  grid-column: 1;
+  grid-row: 1 / span 12;
+  position: sticky;
+  top: 16px;
+  min-height: 0;
+  box-sizing: border-box;
+  align-items: stretch;
+  flex-direction: column;
+  padding: 22px 20px;
+  border: 0;
+  border-radius: 0;
+  color: #fff;
+  background: #1748a0;
+  box-shadow: none;
+}
+
+.platform-dashboard--review .platform-dashboard-toolbar > div {
+  flex: 0 0 auto;
+}
+
+.platform-dashboard--review .platform-dashboard-toolbar :is(p, h2, span, label) {
+  color: #fff;
+}
+
+.platform-dashboard--review .platform-dashboard-toolbar h2 {
+  margin: 8px 0 12px;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.platform-dashboard--review .platform-dashboard-toolbar label {
+  margin-top: 24px;
+}
+
+.platform-dashboard--review .platform-dashboard-toolbar :is(select, button) {
+  width: 100%;
+  border-radius: 0;
+  border-color: #b9cbea;
+  color: #182d4a;
+  background: #fff;
+}
+
+.platform-dashboard--review .platform-dashboard-toolbar button {
+  margin-top: 12px;
+}
+
+.platform-dashboard--review .platform-refresh-feedback,
+.platform-dashboard--review .platform-facts,
+.platform-dashboard--review .platform-get-started,
+.platform-dashboard--review .platform-dashboard-grid > section {
+  border-color: #dce4ee;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.platform-dashboard--review .platform-refresh-feedback {
+  border-left: 4px solid #b57900;
+}
+
+.platform-dashboard--review .platform-action-summary {
+  gap: 0;
+  border: 1px solid #dce4ee;
+}
+
+.platform-dashboard--review .platform-action-summary a {
+  border: 0;
+  border-right: 1px solid #dce4ee;
+  border-radius: 0;
+  background: #fff;
+}
+
+.platform-dashboard--review .platform-action-summary a:last-child {
+  border-right: 0;
+}
+
+.platform-dashboard--review .platform-action-summary strong {
+  color: #1748a0;
+}
+
+.platform-dashboard--review .platform-facts,
+.platform-dashboard--review .platform-get-started {
+  padding: 20px;
+}
+
+.platform-dashboard--review .platform-facts > div {
+  gap: 0;
+  border: 1px solid #dce4ee;
+}
+
+.platform-dashboard--review .platform-facts article {
+  border-right: 1px solid #dce4ee;
+  border-left: 0;
+  background: #fff;
+}
+
+.platform-dashboard--review .platform-facts article:last-child {
+  border-right: 0;
+}
+
+.platform-dashboard--review .platform-facts article strong {
+  color: #1748a0;
+}
+
+.platform-dashboard--review .platform-get-started a,
+.platform-dashboard--review .platform-provider-disclosure {
+  border-radius: 0;
+  border-color: #dce4ee;
+  background: #f7faff;
+}
+
+.platform-dashboard--review .platform-dashboard-grid {
+  gap: 14px;
+}
+
+.platform-dashboard--review .platform-dashboard-grid > section {
+  padding: 20px;
+}
+
+.platform-dashboard--review .platform-dashboard-grid table {
+  border: 1px solid #dce4ee;
+}
+
+.platform-dashboard--review .platform-dashboard-grid :is(th, td) {
+  border-color: #dce4ee;
+}
+
+.platform-dashboard--review .platform-dashboard-grid tr:nth-child(even) {
+  background: #f7faff;
+}
+
+.platform-dashboard--review :is(button, select, a, summary):focus-visible {
+  outline: 3px solid #2465d7;
+  outline-offset: 3px;
+}
+
+.platform-dashboard--review .platform-dashboard-state {
+  grid-column: 1 / -1;
+  border-radius: 0;
+  border-color: #dce4ee;
+  background: #fff;
+}
+
+@media (max-width: 1100px) {
+  .platform-dashboard--review {
+    grid-template-columns: 1fr;
+  }
+
+  .platform-dashboard--review > :not(.platform-dashboard-toolbar):not(.platform-dashboard-state) {
+    grid-column: 1;
+  }
+
+  .platform-dashboard--review .platform-dashboard-toolbar {
+    grid-column: 1;
+    grid-row: auto;
+    position: static;
+  }
+}
+
+@media (max-width: 700px) {
+  .platform-dashboard--review {
+    margin: 12px -8px 70px;
+  }
+
+  .platform-dashboard--review .platform-dashboard-toolbar {
+    padding: 20px;
+  }
+
+  .platform-dashboard--review .platform-action-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .platform-dashboard--review .platform-action-summary a {
+    border-right: 0;
+    border-bottom: 1px solid #dce4ee;
+  }
+
+  .platform-dashboard--review .platform-action-summary a:last-child {
+    border-bottom: 0;
+  }
+
+  .platform-dashboard--review .platform-facts > div {
+    grid-template-columns: 1fr;
+  }
+
+  .platform-dashboard--review .platform-facts article {
+    border-right: 0;
+    border-bottom: 1px solid #dce4ee;
+  }
+
+  .platform-dashboard--review .platform-facts article:last-child {
+    border-bottom: 0;
+  }
+}
