@@ -21,7 +21,7 @@
 - `npm run typecheck:web` 通过。
 - `npm run verify:docs`、`npm run format:check`、`npm run verify:static-analysis` 与 `npm run build:web` 通过。`npm run verify:frontend-budget` 未通过：既有全局入口 CSS 为129451 bytes，超过122880 bytes限额；本批没有修改全局CSS或放宽预算。
 - 本轮全量 `npm run test:unit` 执行2281项，1982通过、299失败；已观察到的失败包括历史源码摘要与归档像素证据绑定旧版本。其余失败未逐项归因，因此全量门禁明确记为未通过；本批定向集合32项通过。
-- 部署后的 health/ready、P42页面与静态资源检查将作为只读生产核验，不执行真实组织写入。
+- 宝塔部署成功，生产 `health/live` 返回 `ok` 且 `build_sha=aab4560f0951f575ea9635e2addbd19e977bffbf`；`health/ready` 返回 `ready`。P42组织详情深链返回 HTTP 200，HTML 应用壳及其 JS/CSS 静态资源均返回 HTTP 200。均为只读核验，未执行真实组织写入。
 
 ## 未覆盖
 
