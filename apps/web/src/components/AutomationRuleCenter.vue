@@ -464,11 +464,11 @@ watch(
 );
 </script>
 <template>
-  <section class="automation-center">
+  <section class="automation-center automation-center--review">
     <header>
       <div>
         <p>团队自动化</p>
-        <h2>自动化规则</h2>
+        <h1>自动化规则</h1>
         <span>配置“发生什么情况、通知谁或创建什么任务”，并查看每次执行结果。</span>
       </div>
       <button :disabled="busy" @click="openCreator">创建规则</button>

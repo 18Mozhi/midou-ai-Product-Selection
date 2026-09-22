@@ -382,3 +382,459 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* P27 C direction: production surface aligned with the approved review composition. */
+.automation-center--review {
+  --review-blue: #1748a0;
+  --review-blue-strong: #123d8a;
+  --review-ink: #17263c;
+  --review-muted: #5d6d82;
+  --review-line: #dce4ee;
+  --review-pale: #edf4ff;
+  max-width: 1160px;
+  margin: 0 auto;
+  gap: 16px;
+  color: var(--review-ink);
+}
+
+.automation-center--review > header {
+  min-height: 136px;
+  padding: 31px 36px;
+  border: 0;
+  border-radius: 0;
+  background: var(--review-blue);
+  color: #fff;
+  box-shadow: none;
+}
+
+.automation-center--review > header > div {
+  display: grid;
+  gap: 6px;
+}
+
+.automation-center--review > header p,
+.automation-center--review > header span {
+  color: #d9e6ff;
+}
+
+.automation-center--review > header p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.automation-center--review > header h1 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(25px, 3vw, 34px);
+  line-height: 1.1;
+}
+
+.automation-center--review > header span {
+  font-size: 14px;
+}
+
+.automation-center--review button {
+  min-height: 44px;
+  border: 1px solid var(--review-blue);
+  border-radius: 0;
+  background: #fff;
+  color: var(--review-blue);
+  box-shadow: none;
+  font-weight: 700;
+}
+
+.automation-center--review button:hover:not(:disabled) {
+  background: #f3f7ff;
+  color: var(--review-blue-strong);
+}
+
+.automation-center--review button:focus-visible,
+.automation-center--review a:focus-visible,
+.automation-center--review input:focus-visible,
+.automation-center--review select:focus-visible,
+.automation-center--review textarea:focus-visible {
+  outline: 3px solid #6f9fff;
+  outline-offset: 2px;
+}
+
+.automation-center--review > header button,
+.automation-center--review dialog form > footer button:last-child {
+  border-color: var(--review-blue);
+  background: var(--review-blue);
+  color: #fff;
+}
+
+.automation-center--review > header button:hover:not(:disabled),
+.automation-center--review dialog form > footer button:last-child:hover:not(:disabled) {
+  background: var(--review-blue-strong);
+  color: #fff;
+}
+
+.automation-center--review .automation-notice,
+.automation-center--review .automation-state,
+.automation-center--review .automation-grid article,
+.automation-center--review .automation-editor,
+.automation-center--review .automation-detail {
+  border: 1px solid var(--review-line);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.automation-center--review .automation-notice,
+.automation-center--review .automation-state {
+  background: #fff;
+  color: var(--review-ink);
+}
+
+.automation-center--review .automation-state {
+  min-height: 180px;
+  padding: 32px;
+}
+
+.automation-center--review .automation-state h3 {
+  margin: 0 0 8px;
+  color: var(--review-blue);
+}
+
+.automation-center--review .automation-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+.automation-center--review .automation-grid article {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.25fr) minmax(290px, 1.7fr) minmax(180px, 0.9fr) auto;
+  grid-template-rows: auto auto;
+  gap: 18px 24px;
+  padding: 22px 24px;
+  background: #fff;
+}
+
+.automation-center--review .automation-grid article:hover {
+  border-color: #b8cbe5;
+  background: #f8fbff;
+}
+
+.automation-center--review .automation-grid article > div:first-child {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+}
+
+.automation-center--review .automation-grid article > h3 {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
+  margin: 30px 0 0;
+  font-size: 20px;
+}
+
+.automation-center--review .automation-grid article > p {
+  grid-column: 1;
+  grid-row: 2;
+  margin: 0;
+  color: var(--review-muted);
+}
+
+.automation-center--review .automation-grid article > .automation-flow {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  margin: 0;
+  padding: 0;
+  align-self: stretch;
+}
+
+.automation-center--review .automation-grid article > dl {
+  grid-column: 3;
+  grid-row: 1;
+  margin: 0;
+  padding-left: 18px;
+  border-left: 1px solid var(--review-line);
+}
+
+.automation-center--review .automation-grid article > .automation-last-run {
+  grid-column: 3;
+  grid-row: 2;
+  margin: 0;
+  padding-left: 18px;
+  border-left: 1px solid var(--review-line);
+}
+
+.automation-center--review .automation-grid article > footer {
+  grid-column: 4;
+  grid-row: 1 / span 2;
+  display: grid;
+  align-content: center;
+  gap: 8px;
+  min-width: 116px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.automation-center--review .automation-grid article > footer button {
+  width: 100%;
+}
+
+.automation-center--review .automation-grid article > div:first-child i,
+.automation-center--review .automation-grid article > div:first-child small {
+  display: inline-block;
+  min-height: 26px;
+  padding: 4px 8px;
+  border: 1px solid var(--review-line);
+  border-radius: 0;
+  font-style: normal;
+  font-size: 12px;
+}
+
+.automation-center--review .automation-grid article > div:first-child i {
+  border-color: var(--review-blue);
+  background: var(--review-blue);
+  color: #fff;
+  font-weight: 700;
+}
+
+.automation-center--review .automation-grid article > div:first-child small {
+  margin-left: 6px;
+  color: var(--review-muted);
+}
+
+.automation-center--review .automation-flow li {
+  min-height: 44px;
+  border: 1px solid var(--review-line);
+  border-radius: 0;
+  background: var(--review-pale);
+}
+
+.automation-center--review .automation-flow li + li {
+  margin-top: 8px;
+}
+
+.automation-center--review .automation-flow li small {
+  color: var(--review-blue);
+  font-weight: 700;
+}
+
+.automation-center--review .automation-grid article > dl dd,
+.automation-center--review .automation-last-run b {
+  color: var(--review-blue);
+  font-weight: 700;
+}
+
+.automation-center--review .automation-last-run em,
+.automation-center--review .automation-grid article > em {
+  color: #a23b3b;
+}
+
+.automation-center--review dialog {
+  border: 1px solid var(--review-line);
+  border-radius: 0;
+  box-shadow: 0 20px 60px rgb(12 31 64 / 18%);
+}
+
+.automation-center--review dialog::backdrop {
+  background: rgb(13 28 52 / 48%);
+}
+
+.automation-center--review dialog.automation-detail[open] {
+  border-left: 4px solid var(--review-blue);
+  padding: 32px;
+}
+
+.automation-center--review dialog.automation-detail > p {
+  color: var(--review-blue);
+  font-weight: 700;
+}
+
+.automation-center--review dialog.automation-detail li {
+  border: 1px solid var(--review-line);
+  border-radius: 0;
+  background: #fff;
+}
+
+.automation-center--review dialog form {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+}
+
+.automation-center--review dialog form > h3 {
+  margin: 0;
+  color: var(--review-blue);
+  font-size: 24px;
+}
+
+.automation-center--review dialog form > label,
+.automation-center--review .automation-pair label,
+.automation-center--review .automation-builder label {
+  display: grid;
+  gap: 7px;
+  color: var(--review-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.automation-center--review input,
+.automation-center--review select,
+.automation-center--review textarea {
+  min-height: 44px;
+  border: 1px solid var(--review-line);
+  border-radius: 0;
+  background: #fff;
+  color: var(--review-ink);
+  padding: 10px 12px;
+}
+
+.automation-center--review textarea {
+  min-height: 96px;
+}
+
+.automation-center--review .automation-templates,
+.automation-center--review .automation-impact-preview {
+  border: 1px solid var(--review-line);
+  border-left: 4px solid var(--review-blue);
+  border-radius: 0;
+  background: var(--review-pale);
+  padding: 16px;
+}
+
+.automation-center--review .automation-templates > header,
+.automation-center--review .automation-impact-preview > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 12px;
+}
+
+.automation-center--review .automation-templates > header span,
+.automation-center--review .automation-impact-preview small,
+.automation-center--review .automation-impact-preview dt {
+  color: var(--review-muted);
+}
+
+.automation-center--review .automation-templates > div {
+  gap: 12px;
+}
+
+.automation-center--review .automation-templates button {
+  min-height: 84px;
+  border-color: var(--review-line);
+  background: #fff;
+}
+
+.automation-center--review .automation-templates button b {
+  color: var(--review-blue);
+}
+
+.automation-center--review .automation-builder {
+  gap: 12px;
+}
+
+.automation-center--review .automation-builder label {
+  min-height: 112px;
+  padding: 14px;
+  border: 1px solid var(--review-line);
+  border-radius: 0;
+  background: #fff;
+}
+
+.automation-center--review .automation-builder label > b {
+  color: var(--review-blue);
+  font-size: 18px;
+}
+
+.automation-center--review .automation-builder label > span {
+  color: var(--review-ink);
+}
+
+.automation-center--review .automation-impact-preview > header i {
+  color: var(--review-blue);
+  font-style: normal;
+  font-weight: 700;
+}
+
+.automation-center--review .automation-impact-preview dd {
+  color: var(--review-blue);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.automation-center--review dialog form > footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+  padding-top: 16px;
+  border-top: 1px solid var(--review-line);
+}
+
+@media (max-width: 900px) {
+  .automation-center--review .automation-grid article {
+    grid-template-columns: minmax(180px, 1fr) minmax(250px, 1.3fr) auto;
+  }
+
+  .automation-center--review .automation-grid article > dl,
+  .automation-center--review .automation-grid article > .automation-last-run {
+    display: none;
+  }
+
+  .automation-center--review .automation-grid article > footer {
+    grid-column: 3;
+  }
+}
+
+@media (max-width: 700px) {
+  .automation-center--review > header {
+    min-height: 0;
+    padding: 24px;
+  }
+
+  .automation-center--review .automation-grid article {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 18px;
+  }
+
+  .automation-center--review .automation-grid article > div:first-child,
+  .automation-center--review .automation-grid article > h3,
+  .automation-center--review .automation-grid article > p,
+  .automation-center--review .automation-grid article > .automation-flow,
+  .automation-center--review .automation-grid article > footer {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .automation-center--review .automation-grid article > h3 {
+    margin: 0;
+  }
+
+  .automation-center--review .automation-grid article > footer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    min-width: 0;
+  }
+
+  .automation-center--review .automation-flow li {
+    min-height: 40px;
+  }
+
+  .automation-center--review .automation-templates > header,
+  .automation-center--review .automation-impact-preview > header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .automation-center--review dialog form {
+    padding: 18px;
+  }
+
+  .automation-center--review dialog form > footer {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
