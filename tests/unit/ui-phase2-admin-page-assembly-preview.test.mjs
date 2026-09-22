@@ -62,13 +62,16 @@ for (const [file, surface] of [
 test("P44 transformation fails closed on mismatched source and unknown surface", () => {
   assert.throws(() =>
     adminPageAssemblyPreview(
-      read(parent).replace('class="account-metrics"', 'class="unexpected"'),
+      read(parent).replaceAll('class="account-metrics"', 'class="unexpected"'),
       "parent",
     ),
   );
   assert.throws(() =>
     adminPageAssemblyPreview(
-      read(detail).replace("<h4>组织与角色</h4>", "<h4>Changed</h4>"),
+      read(detail).replace(
+        'data-user-detail-section="memberships"',
+        'data-user-detail-section="changed"',
+      ),
       "detail",
     ),
   );

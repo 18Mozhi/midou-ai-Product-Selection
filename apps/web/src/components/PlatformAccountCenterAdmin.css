@@ -1,0 +1,554 @@
+.account-center--admins-c {
+  --account-review-blue: #254a9c;
+  --account-review-blue-deep: #18386f;
+  --account-review-ink: #202c3d;
+  --account-review-muted: #58677b;
+  --account-review-line: #dbe1e9;
+  --account-review-soft: #edf1f6;
+  color: var(--account-review-ink);
+}
+
+.account-center--admins-c .account-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 24px;
+  padding: 0 0 24px;
+  border: 0;
+  border-bottom: 1px solid #cbd6e5;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--account-review-ink);
+}
+
+.account-center--admins-c .account-hero > div:first-child {
+  min-width: 0;
+  padding: 0;
+}
+
+.account-center--admins-c .account-hero p {
+  color: var(--account-review-blue);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+.account-center--admins-c .account-hero h2 {
+  margin: 8px 0;
+  color: var(--account-review-ink);
+  font-size: clamp(24px, 2.1vw, 30px);
+  line-height: 1.35;
+}
+
+.account-center--admins-c .account-hero span {
+  max-width: 760px;
+  color: var(--account-review-muted);
+  line-height: 1.7;
+}
+
+.account-center--admins-c .hero-actions {
+  justify-content: flex-end;
+  padding: 0;
+  background: transparent;
+}
+
+.account-center--admins-c .hero-actions button,
+.account-center--admins-c .hero-actions a {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #bdcbe0;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--account-review-blue-deep);
+  font-weight: 700;
+}
+
+.account-center--admins-c .hero-actions button:nth-child(2) {
+  border-color: var(--account-review-blue);
+  background: var(--account-review-blue);
+  color: #fff;
+}
+
+.account-center--admins-c .hero-actions button:last-child {
+  border-color: #bdcbe0;
+  background: #fff;
+  color: var(--account-review-blue-deep);
+}
+
+.account-page-layout:not(.account-page-layout--admins),
+.account-page-layout:not(.account-page-layout--admins) .account-page-main {
+  display: contents;
+}
+
+.account-page-layout--admins {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+  min-width: 0;
+}
+
+.account-page-rail {
+  position: sticky;
+  top: 16px;
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid #18386f;
+  border-radius: 14px;
+  background: var(--account-review-blue);
+  color: #fff;
+}
+
+.account-page-rail__intro {
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgb(255 255 255 / 28%);
+}
+
+.account-page-rail__intro small {
+  color: #dce8ff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.account-page-rail__intro h3 {
+  margin: 8px 0 6px;
+  color: #fff;
+  font-size: 22px;
+}
+
+.account-page-rail__intro p {
+  margin: 0;
+  color: #e4edff;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.account-center--admins-c .account-page-rail .account-metrics {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin: 0;
+}
+
+.account-center--admins-c .account-page-rail .account-metrics article {
+  padding: 16px 0;
+  border: 0;
+  border-bottom: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #fff;
+}
+
+.account-center--admins-c .account-page-rail .account-metrics :is(small, strong, span) {
+  display: block;
+  color: #fff;
+}
+
+.account-center--admins-c .account-page-rail .account-metrics small,
+.account-center--admins-c .account-page-rail .account-metrics span {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.account-center--admins-c .account-page-rail .account-metrics strong {
+  margin: 3px 0;
+  font-family: Bahnschrift, "Microsoft YaHei", sans-serif;
+  font-size: 25px;
+  line-height: 1.2;
+}
+
+.account-center--admins-c .account-tabs {
+  display: grid;
+  gap: 7px;
+  width: 100%;
+  margin: 18px 0 0;
+}
+
+.account-center--admins-c .account-page-rail .account-tabs a {
+  min-width: 0;
+  min-height: 44px;
+  justify-content: flex-start;
+  padding: 9px 12px;
+  border: 1px solid rgb(255 255 255 / 36%);
+  border-radius: 7px;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.account-center--admins-c .account-page-rail .account-tabs a.on {
+  border-color: #fff;
+  background: #fff;
+  color: var(--account-review-blue-deep);
+  font-weight: 800;
+}
+
+.account-page-main {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  min-width: 0;
+}
+
+.account-center--admins-c .admin-directory-heading {
+  display: block;
+  margin: 0;
+  padding: 2px 0 0;
+  border: 0;
+  background: transparent;
+}
+
+.account-center--admins-c .admin-directory-heading h3 {
+  margin: 0 0 6px;
+  color: var(--account-review-ink);
+  font-size: 22px;
+}
+
+.account-center--admins-c .admin-directory-heading p {
+  max-width: 65ch;
+  margin: 0;
+  color: var(--account-review-muted);
+  line-height: 1.7;
+}
+
+.account-filter--admins-c {
+  grid-template-columns: minmax(0, 1.4fr) minmax(180px, 1fr) auto;
+  align-items: end;
+  gap: 16px;
+  padding: 18px 20px;
+  border: 1px solid var(--account-review-line);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.admin-filter-field {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  color: var(--account-review-ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.admin-filter-field input,
+.admin-filter-field select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 9px 11px;
+  border: 1px solid #bdcbe0;
+  border-radius: 7px;
+  background: #fff;
+  color: var(--account-review-ink);
+  font: inherit;
+  font-weight: 500;
+}
+
+.admin-filter-field small {
+  color: var(--account-review-muted);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.55;
+}
+
+.admin-filter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.account-center--admins-c .admin-filter-actions button {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid var(--account-review-blue);
+  border-radius: 7px;
+  background: var(--account-review-blue);
+  color: #fff;
+}
+
+.account-center--admins-c .admin-filter-actions button.secondary {
+  border-color: #bdcbe0;
+  background: var(--account-review-soft);
+  color: var(--account-review-ink);
+}
+
+.account-center--admins-c :deep(.account-table-wrap) {
+  overflow: hidden;
+  border: 1px solid var(--account-review-line);
+  border-top: 3px solid var(--account-review-blue);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.account-center--admins-c :deep(.account-table-wrap table) {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.account-center--admins-c :deep(.account-table-wrap th:first-child) {
+  width: 42%;
+}
+
+.account-center--admins-c :deep(.account-table-wrap th:last-child) {
+  width: 136px;
+}
+
+.account-center--admins-c :deep(.account-table-wrap td) {
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+}
+
+.account-center--admins-c :deep(.account-table-wrap td button) {
+  white-space: nowrap;
+}
+
+.account-center--admins-c :deep(.role-comparison) {
+  display: grid;
+  gap: 0;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid var(--account-review-line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.account-center--admins-c :deep(.role-comparison > header) {
+  align-items: center;
+  padding: 20px 22px;
+  background: var(--account-review-blue);
+  color: #fff;
+}
+
+.account-center--admins-c :deep(.role-comparison > header p),
+.account-center--admins-c :deep(.role-comparison > header h3),
+.account-center--admins-c :deep(.role-comparison > header span) {
+  color: #fff;
+}
+
+.account-center--admins-c :deep(.role-comparison > header p) {
+  opacity: 0.82;
+}
+
+.account-center--admins-c :deep(.role-comparison > header span) {
+  opacity: 0.9;
+}
+
+.account-center--admins-c :deep(.role-comparison__toggle) {
+  padding: 8px 12px;
+  border: 1px solid rgb(255 255 255 / 45%);
+  border-radius: 7px;
+  color: #fff;
+}
+
+.account-center--admins-c :deep(.role-comparison__selectors),
+.account-center--admins-c :deep(.role-comparison__filters),
+.account-center--admins-c :deep(.role-comparison__summaries),
+.account-center--admins-c :deep(.role-comparison__result),
+.account-center--admins-c :deep(.role-comparison__matrix) {
+  margin-inline: 20px;
+}
+
+.account-center--admins-c :deep(.role-comparison__selectors) {
+  margin-top: 18px;
+}
+
+.account-center--admins-c :deep(.role-comparison__filters) {
+  margin-top: 4px;
+}
+
+.account-center--admins-c :deep(.role-comparison__summaries article) {
+  border-radius: 7px;
+  background: #f4f7fb;
+}
+
+.account-center--admins-c :deep(.role-comparison__result) {
+  margin-top: 2px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--account-review-soft);
+}
+
+.account-center--admins-c :deep(.role-comparison__matrix) {
+  margin-bottom: 20px;
+}
+
+.account-center--admins-c :deep(.role-comparison__matrix article) {
+  border-radius: 7px;
+  background: #fff;
+}
+
+.account-center--admins-c :is(a, button, input, select, textarea):focus-visible,
+.account-center--admins-c
+  :deep(.role-comparison :is(a, button, input, select, textarea):focus-visible) {
+  outline: 3px solid rgb(37 74 156 / 42%);
+  outline-offset: 3px;
+}
+
+@media (max-width: 1200px) {
+  .account-page-layout--admins {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .account-page-rail {
+    position: static;
+    display: grid;
+    grid-template-columns: minmax(190px, 0.55fr) minmax(0, 1.45fr);
+    align-items: center;
+    gap: 12px 20px;
+  }
+
+  .account-page-rail__intro {
+    padding: 0;
+    border: 0;
+  }
+
+  .account-center--admins-c .account-page-rail .account-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .account-center--admins-c .account-page-rail .account-metrics article {
+    padding: 4px 12px;
+    border: 0;
+    border-left: 1px solid rgb(255 255 255 / 28%);
+  }
+
+  .account-center--admins-c .account-tabs {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+  }
+
+  .account-center--admins-c .account-page-rail .account-tabs a {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 940px) {
+  .account-center--admins-c .account-hero {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .account-center--admins-c .hero-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 900px) {
+  .account-filter--admins-c {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .account-filter--admins-c .admin-filter-actions {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .account-center--admins-c .account-hero {
+    gap: 14px;
+    padding-bottom: 18px;
+  }
+
+  .account-center--admins-c .account-hero h2 {
+    font-size: 23px;
+  }
+
+  .account-center--admins-c .hero-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 8px;
+  }
+
+  .account-center--admins-c .hero-actions > * {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .account-center--admins-c .hero-actions button:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .account-page-rail {
+    display: block;
+    padding: 18px;
+  }
+
+  .account-page-rail__intro {
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgb(255 255 255 / 28%);
+  }
+
+  .account-center--admins-c .account-page-rail .account-metrics {
+    gap: 10px;
+  }
+
+  .account-center--admins-c .account-page-rail .account-metrics article {
+    min-width: 0;
+    padding: 4px 8px;
+  }
+
+  .account-center--admins-c .account-page-rail .account-metrics strong {
+    font-size: 20px;
+  }
+
+  .account-center--admins-c .account-page-rail .account-metrics span {
+    overflow-wrap: anywhere;
+  }
+
+  .account-center--admins-c .account-tabs {
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  .account-center--admins-c .account-page-rail .account-tabs a {
+    padding: 8px 5px;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .account-filter--admins-c {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    padding: 16px 0;
+    border: 0;
+  }
+
+  .account-filter--admins-c .admin-filter-actions {
+    grid-column: auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .account-center--admins-c :deep(.role-comparison > header) {
+    display: grid;
+    gap: 12px;
+    padding: 18px;
+  }
+
+  .account-center--admins-c :deep(.role-comparison__selectors),
+  .account-center--admins-c :deep(.role-comparison__filters),
+  .account-center--admins-c :deep(.role-comparison__summaries) {
+    grid-template-columns: minmax(0, 1fr);
+    margin-inline: 16px;
+  }
+
+  .account-center--admins-c :deep(.role-comparison__matrix) {
+    margin-inline: 16px;
+  }
+
+  .account-center--admins-c :deep(.role-comparison__matrix article),
+  .account-center--admins-c :deep(.role-comparison__matrix dl) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .account-center--admins-c :deep(.role-comparison__result) {
+    margin-inline: 16px;
+  }
+}

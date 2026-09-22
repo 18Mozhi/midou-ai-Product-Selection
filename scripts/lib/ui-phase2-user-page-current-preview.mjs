@@ -3,6 +3,20 @@ import { userPagePreview as originalPreview } from "./ui-phase2-user-page-previe
 
 // P43 review only. Keep the later P44-only heading/condition without changing the shared archived helper.
 export function userPagePreview(original, surface) {
+  // Once P44's approved composition is in production, review helpers must inspect
+  // the real component rather than replaying the obsolete archived mockup edits.
+  if (surface === "parent" && original.includes('class="account-page-layout"')) {
+    assert.ok(original.includes('class="account-metrics"'), "Current P44 metrics drift");
+    assert.ok(original.includes('class="admin-directory-heading"'), "Current P44 heading drift");
+    return original;
+  }
+  if (surface === "detail" && original.includes('class="user-detail-shell"')) {
+    assert.ok(
+      original.includes('data-user-detail-section="memberships"'),
+      "Current P43 detail section drift",
+    );
+    return original;
+  }
   // The former review-only detail transform is obsolete now that the approved
   // three-section composition ships in the production detail component.
   if (surface === "detail" && original.includes('class="user-detail-shell"')) return original;

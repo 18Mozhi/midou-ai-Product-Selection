@@ -1263,6 +1263,56 @@ test("administrator list persists filters and exposes a desktop and mobile empty
   ).toBeVisible();
 });
 
+test("P44 admin workspace composes the approved C directory and read-only comparison", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/platform-admin/admins");
+
+  const shell = page.locator(".account-center--admins-c");
+  const rail = shell.locator(".account-page-rail");
+  const main = shell.locator(".account-page-main");
+  const assertColumns = async (wide: boolean) => {
+    const boxes = await Promise.all([rail.boundingBox(), main.boundingBox()]);
+    expect(boxes[0]).not.toBeNull();
+    expect(boxes[1]).not.toBeNull();
+    if (wide) expect(boxes[0]!.x + boxes[0]!.width).toBeLessThanOrEqual(boxes[1]!.x + 1);
+    else expect(boxes[1]!.y).toBeGreaterThanOrEqual(boxes[0]!.y + boxes[0]!.height - 1);
+  };
+
+  await expect(shell.getByRole("heading", { name: "账号与组织" })).toBeVisible();
+  await expect(shell.getByRole("heading", { name: "可授权账号" })).toBeVisible();
+  await expect(rail.locator(".account-metrics article")).toHaveCount(3);
+  await expect(rail.locator(".account-metrics article:last-child strong")).toHaveText("2");
+  await expect(main.locator(".platform-admin-role-comparison")).toBeVisible();
+  await assertColumns((page.viewportSize()?.width ?? 0) > 1200);
+
+  await page.setViewportSize({ width: 1200, height: 900 });
+  await assertColumns(false);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await assertColumns(false);
+  await expect
+    .poll(() => shell.evaluate((element) => element.scrollWidth <= element.clientWidth))
+    .toBe(true);
+
+  await page.getByRole("button", { name: "管理员筛选" }).click();
+  const filters = page.getByRole("dialog", { name: "管理员筛选" });
+  const search = filters.locator(".admin-filter-field input");
+  await expect(search).toHaveAttribute("aria-describedby", "admin-query-help");
+  await search.fill("admin@example.test");
+  await filters.getByRole("button", { name: "搜索" }).click();
+  await expect(page).toHaveURL(/query=admin(?:%40|@)example\.test/);
+  await expect(rail.locator(".account-metrics article:last-child strong")).toHaveText("2");
+
+  const comparison = main.locator(".platform-admin-role-comparison");
+  await comparison.getByLabel("左侧角色").selectOption("platform_security_admin");
+  await expect(comparison.locator(".role-comparison__result")).toContainText("当前显示 0 项能力");
+  await expect(page).toHaveURL(/query=admin(?:%40|@)example\.test$/);
+  await expect(page).not.toHaveURL(
+    /left_role|right_role|show_all|capability_query|capability_group/,
+  );
+});
+
 test("administrator write failures stay inside their active dialogs", async ({ page }) => {
   await setup(page);
   const adminId = overview.admins[0].id;
