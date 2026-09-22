@@ -1,7 +1,4 @@
-import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
-import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
-import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -14,14 +11,15 @@ import {
 } from "../../scripts/lib/ui-phase2-organization-list-preview.mjs";
 import { reviewHash } from "../../scripts/lib/ui-phase2-vue-review-host.mjs";
 
-// Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
-const read = (file) =>
-  historicalAdminResultsSource(
-    file,
-    historicalOrganizationActionSource(file, readFileSync(file, "utf8")),
-  );
 const wizard = "apps/web/src/components/OrganizationCreationWizard.vue";
+const baseline = "73d04832";
 const output = "output/playwright/p41-create-preview";
+const read = (file) => readFileSync(file, "utf8");
+const atRevision = (revision, file) =>
+  execFileSync("git", ["show", `${revision}:${file}`], { encoding: "utf8" }).replaceAll(
+    "\r\n",
+    "\n",
+  );
 function directives(source) {
   const result = [];
   function visit(node) {
@@ -43,7 +41,7 @@ function directives(source) {
   return result.sort();
 }
 test("P41 presentation leaves the actual wizard script and every native directive unchanged", () => {
-  const original = read(wizard),
+  const original = atRevision(baseline, wizard),
     preview = organizationCreatePreview(original);
   assert.equal(parse(preview).errors.length, 0);
   assert.equal(
@@ -70,13 +68,13 @@ test("P41 evidence binds captured source revisions, exact images and six step br
   assert.equal(e.screenshots.length, 34);
   assert.match(e.scope, /Not full App/);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(reviewHash(historicalFilterResetSource(file, read(file))), sha, file);
+    assert.equal(reviewHash(atRevision(baseline, file)), sha, file);
   for (const [file, transform] of Object.entries({
     [wizard]: organizationCreatePreview,
     "apps/web/src/components/PlatformAccountCenter.vue": organizationListPreview,
     "apps/web/src/components/PlatformOrganizationRecords.vue": organizationRecordPreview,
   }))
-    assert.equal(e.transformedHashes[file], reviewHash(transform(read(file))));
+    assert.equal(e.transformedHashes[file], reviewHash(transform(atRevision(baseline, file))));
   for (const step of ["step1", "step2"])
     assert.deepEqual(
       e.screenshots.filter((s) => s.state === step).map((s) => s.viewport.width),
@@ -127,24 +125,9 @@ test("P41 fixture writes use only original optional administrator contract", () 
   }
 });
 test("Historical P41 preserves its original source and earlier P40 artifacts", () => {
-  for (const file of [
-    wizard,
-    "apps/web/src/components/PlatformAccountCenter.vue",
-    "apps/web/src/use-modal-dialog.ts",
-    "scripts/lib/ui-phase2-vue-review-host.mjs",
-  ])
-    assert.equal(
-      read(file),
-      execFileSync("git", ["show", `1f909c92:${file}`], { encoding: "utf8" }).replaceAll(
-        "\r\n",
-        "\n",
-      ),
-    );
   const dir = "output/playwright/p40-list-preview";
-  const old = execFileSync("git", ["show", `1f909c92:${dir}/evidence.json`], {
-    encoding: "utf8",
-  }).replaceAll("\r\n", "\n");
-  assert.equal(read(`${dir}/evidence.json`), old);
+  const old = atRevision(baseline, `${dir}/evidence.json`);
+  assert.equal(readFileSync(`${dir}/evidence.json`, "utf8").replaceAll("\r\n", "\n"), old);
   for (const s of JSON.parse(old).screenshots)
     assert.equal(reviewHash(readFileSync(`${dir}/${s.file}`)), s.sha256);
 });

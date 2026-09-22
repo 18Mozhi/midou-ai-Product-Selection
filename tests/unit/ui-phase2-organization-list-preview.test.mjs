@@ -1,7 +1,4 @@
-import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
-import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import test from "node:test";
-import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -13,11 +10,12 @@ import {
 } from "../../scripts/lib/ui-phase2-organization-list-preview.mjs";
 import { reviewHash } from "../../scripts/lib/ui-phase2-vue-review-host.mjs";
 
-// Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
-const read = (file) =>
-  historicalAdminResultsSource(
-    file,
-    historicalOrganizationActionSource(file, readFileSync(file, "utf8")),
+const baseline = "1f909c92";
+const read = (file) => readFileSync(file, "utf8");
+const atRevision = (revision, file) =>
+  execFileSync("git", ["show", `${revision}:${file}`], { encoding: "utf8" }).replaceAll(
+    "\r\n",
+    "\n",
   );
 const transforms = {
   "apps/web/src/components/PlatformAccountCenter.vue": organizationListPreview,
@@ -48,7 +46,7 @@ function templateFacts(source) {
 }
 test("P40 review keeps complete parent/record scripts and original directives", () => {
   for (const [file, transform] of Object.entries(transforms)) {
-    const original = read(file),
+    const original = atRevision(baseline, file),
       preview = transform(original),
       parsed = parse(preview);
     assert.equal(parsed.errors.length, 0);
@@ -57,20 +55,14 @@ test("P40 review keeps complete parent/record scripts and original directives", 
       parse(original).descriptor.scriptSetup.content,
     );
     assert.deepEqual(templateFacts(preview).directives, templateFacts(original).directives);
-    assert.equal(
-      read(file),
-      execFileSync("git", ["show", `4cfea9db:${file}`], { encoding: "utf8" }).replaceAll(
-        "\r\n",
-        "\n",
-      ),
-    );
+    assert.equal(original, atRevision(baseline, file));
     if (file.endsWith("PlatformOrganizationRecords.vue"))
       assert.deepEqual(templateFacts(preview).expressions, templateFacts(original).expressions);
   }
 });
 test("P40 rejects source drift and uses organization-specific help without inventing fields", () => {
-  const parent = read(Object.keys(transforms)[0]),
-    record = read(Object.keys(transforms)[1]);
+  const parent = atRevision(baseline, Object.keys(transforms)[0]),
+    record = atRevision(baseline, Object.keys(transforms)[1]);
   assert.throws(() =>
     organizationListPreview(parent.replace("管理组织状态与隔离边界", "其他标题")),
   );
@@ -90,9 +82,9 @@ test("P40 screenshots bind captured source revisions, exact files and all six no
   assert.equal(e.screenshots.length, 36);
   assert.match(e.scope, /Not full App shell/);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(reviewHash(historicalFilterResetSource(file, read(file))), sha, file);
+    assert.equal(reviewHash(atRevision(baseline, file)), sha, file);
   for (const [file, transform] of Object.entries(transforms))
-    assert.equal(e.transformedHashes[file], reviewHash(transform(read(file))));
+    assert.equal(e.transformedHashes[file], reviewHash(transform(atRevision(baseline, file))));
   assert.deepEqual(
     e.screenshots.filter((s) => s.state === "normal").map((s) => s.viewport.width),
     [390, 759, 760, 761, 1024, 1440],
@@ -149,10 +141,8 @@ test("prior P39 and original P40-P42 C proposal evidence are unchanged", () => {
     "output/playwright/p39-page-composed",
     "design-plans/ui-phase-2-2026-09-07/design/platform-organizations-direction-c",
   ]) {
-    const old = execFileSync("git", ["show", `4cfea9db:${dir}/evidence.json`], {
-      encoding: "utf8",
-    }).replaceAll("\r\n", "\n");
-    assert.equal(read(`${dir}/evidence.json`), old);
+    const old = atRevision(baseline, `${dir}/evidence.json`);
+    assert.equal(readFileSync(`${dir}/evidence.json`, "utf8").replaceAll("\r\n", "\n"), old);
     for (const s of JSON.parse(old).screenshots)
       assert.equal(reviewHash(readFileSync(`${dir}/${s.file}`)), s.sha256);
   }

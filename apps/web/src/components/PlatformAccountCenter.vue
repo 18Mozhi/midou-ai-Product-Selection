@@ -79,6 +79,10 @@ const createUserOwner = useUserCreationOwner(
   () => createUserOpen.value,
   () => props.routePath,
 );
+const createOrganizationOwner = useUserCreationOwner(
+  () => createOpen.value,
+  () => props.routePath,
+);
 const {
   detailOpen,
   detail,
@@ -324,6 +328,7 @@ async function write<T = unknown>(
 }
 async function createOrganization() {
   if (busy.value) return;
+  const isCurrent = createOrganizationOwner.capture();
   createError.value = "";
   const body = {
     name: form.name,
@@ -334,9 +339,10 @@ async function createOrganization() {
     "/platform/accounts/organizations",
     body,
     "POST",
-    (value) => (createError.value = value),
+    (value) => isCurrent() && (createError.value = value),
+    isCurrent,
   );
-  if (created) {
+  if (created && isCurrent()) {
     form.name = "";
     form.slug = "";
     form.initial_admin_user_id = "";

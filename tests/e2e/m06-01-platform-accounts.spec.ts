@@ -1037,6 +1037,64 @@ test("organization creation keeps API failures inside the wizard and supports re
   expect(attempts).toBe(2);
 });
 
+test("organization creation keeps a late response from taking over a newer route", async ({
+  page,
+}) => {
+  await setup(page);
+  let release!: () => void;
+  const pending = new Promise<void>((resolve) => (release = resolve));
+  let writes = 0;
+  await page.route("**/api/v1/platform/accounts/organizations", async (route: any) => {
+    writes += 1;
+    await pending;
+    await route.fulfill({
+      status: 201,
+      json: env({
+        id: createdOrg,
+        name: "晚到组织",
+        slug: "late-org",
+        status: "active",
+        default_workspace_id: ws,
+      }),
+    });
+  });
+  try {
+    await page.goto("/platform-admin/organizations/new");
+    const dialog = page.getByRole("dialog", { name: "新建组织" });
+    await dialog.getByLabel("组织名称", { exact: true }).fill("晚到组织");
+    await dialog.getByLabel("组织标识").fill("late-org");
+    await dialog.getByRole("button", { name: "下一步：选择管理员" }).click();
+    const request = page.waitForRequest(
+      (candidate) =>
+        candidate.url().includes("/api/v1/platform/accounts/organizations") &&
+        candidate.method() === "POST",
+    );
+    await dialog.getByRole("button", { name: "确认创建" }).click();
+    await request;
+    await expect.poll(() => writes).toBe(1);
+    await dialog.getByRole("button", { name: "取消" }).click();
+    await expect(page).toHaveURL(/\/platform-admin\/organizations$/);
+    await page
+      .getByLabel("账号与组织二级导航")
+      .getByRole("link", { name: "用户管理", exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/platform-admin\/users$/);
+    const response = page.waitForResponse(
+      (candidate) =>
+        candidate.url().includes("/api/v1/platform/accounts/organizations") &&
+        candidate.request().method() === "POST",
+    );
+    release();
+    await (await response).finished();
+    await page.waitForTimeout(100);
+    await expect(page).toHaveURL(/\/platform-admin\/users$/);
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    expect(writes).toBe(1);
+  } finally {
+    release();
+  }
+});
+
 test("M06-01 account actions expose tooltips, user-panel switch, create account and session detail", async ({
   page,
 }) => {
