@@ -952,6 +952,7 @@ onMounted(() => void load());
       'org-admin-center--role-review': view === 'roles',
       'org-admin-center--team-review': view === 'teams',
       'org-admin-center--profile-review': view === 'summary',
+      'org-admin-center--token-review': view === 'tokens',
     }"
     :data-state="state"
     :data-approval-first-failure="

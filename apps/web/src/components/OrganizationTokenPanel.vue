@@ -346,14 +346,6 @@ async function copySecret() {
       </article>
     </div>
 
-    <aside class="org-token-truth" aria-label="组织令牌安全说明">
-      <span aria-hidden="true">只读</span>
-      <div>
-        <b>令牌不是成员账号，也不能绕过组织权限</b>
-        <p>当前能力只发放四种固定读取范围；页面不提供写入 scope、跨组织共享或明文找回。</p>
-      </div>
-    </aside>
-
     <section v-if="secret" class="org-token-secret" aria-labelledby="org-token-secret-title">
       <header>
         <div>
@@ -381,112 +373,6 @@ async function copySecret() {
     </section>
 
     <div class="org-token-workbench">
-      <form class="org-token-create" @submit.prevent="submitCreate">
-        <header>
-          <div>
-            <p>CREATE · 最小权限</p>
-            <h4>创建组织令牌</h4>
-          </div>
-          <span>明文只显示一次</span>
-        </header>
-
-        <label class="org-token-field">
-          <span>令牌名称</span>
-          <input
-            v-model="createForm.name"
-            required
-            maxlength="120"
-            autocomplete="off"
-            placeholder="例如：月度经营报表"
-          />
-          <small>使用系统或用途命名，不要填写密钥、密码或个人隐私。</small>
-        </label>
-
-        <fieldset
-          class="org-token-scope-field"
-          :aria-describedby="scopeError ? 'token-scope-error' : undefined"
-        >
-          <legend>允许读取的内容</legend>
-          <p>必须明确选择；未选择时不会静默添加默认权限。</p>
-          <div>
-            <label
-              v-for="scope in scopeOptions"
-              :key="scope.value"
-              :data-selected="createForm.scopes.includes(scope.value)"
-            >
-              <input
-                type="checkbox"
-                :checked="createForm.scopes.includes(scope.value)"
-                @change="toggleScope(scope.value)"
-              />
-              <span
-                ><b>{{ scope.label }}</b
-                ><small>{{ scope.description }}</small></span
-              >
-            </label>
-          </div>
-          <strong v-if="scopeError" id="token-scope-error" role="alert">{{ scopeError }}</strong>
-        </fieldset>
-
-        <div class="org-token-duration">
-          <label class="org-token-field">
-            <span>有效天数</span>
-            <input v-model.number="createForm.ttl_days" type="number" min="1" max="365" required />
-            <small>预计到期：{{ expiryPreview }}</small>
-          </label>
-          <div aria-label="常用有效期">
-            <button
-              v-for="days in [30, 90, 180, 365]"
-              :key="days"
-              type="button"
-              class="org-admin-secondary"
-              :aria-pressed="createForm.ttl_days === days"
-              @click="createForm.ttl_days = days"
-            >
-              {{ days }} 天
-            </button>
-          </div>
-        </div>
-
-        <label class="org-token-field">
-          <span>创建原因</span>
-          <textarea
-            v-model="createForm.reason"
-            required
-            maxlength="500"
-            rows="3"
-            placeholder="说明接入系统、负责人和业务用途"
-          ></textarea>
-          <small>{{ createForm.reason.length }} / 500；原因会写入组织审计。</small>
-        </label>
-
-        <aside class="org-token-preview" aria-label="令牌创建预览">
-          <b>提交前核对</b>
-          <dl>
-            <div>
-              <dt>数据边界</dt>
-              <dd>仅当前组织</dd>
-            </div>
-            <div>
-              <dt>权限范围</dt>
-              <dd>{{ selectedScopeLabels.join("、") || "尚未选择" }}</dd>
-            </div>
-            <div>
-              <dt>到期日期</dt>
-              <dd>{{ expiryPreview }}</dd>
-            </div>
-            <div>
-              <dt>生命周期</dt>
-              <dd>可轮换、可撤销、不可找回明文</dd>
-            </div>
-          </dl>
-        </aside>
-
-        <button type="submit" :disabled="busy">
-          {{ busy ? "正在创建并写入审计…" : "创建并显示一次明文" }}
-        </button>
-      </form>
-
       <section class="org-token-ledger" aria-labelledby="org-token-ledger-title">
         <header class="org-token-ledger-heading">
           <div>
@@ -659,6 +545,120 @@ async function copySecret() {
           </div>
         </footer>
       </section>
+
+      <aside class="org-token-truth" aria-label="组织令牌安全说明">
+        <span aria-hidden="true">只读</span>
+        <div>
+          <b>令牌不是成员账号，也不能绕过组织权限</b>
+          <p>当前能力只发放四种固定读取范围；页面不提供写入 scope、跨组织共享或明文找回。</p>
+        </div>
+      </aside>
+
+      <form class="org-token-create" @submit.prevent="submitCreate">
+        <header>
+          <div>
+            <p>CREATE · 最小权限</p>
+            <h4>创建组织令牌</h4>
+          </div>
+          <span>明文只显示一次</span>
+        </header>
+
+        <label class="org-token-field">
+          <span>令牌名称</span>
+          <input
+            v-model="createForm.name"
+            required
+            maxlength="120"
+            autocomplete="off"
+            placeholder="例如：月度经营报表"
+          />
+          <small>使用系统或用途命名，不要填写密钥、密码或个人隐私。</small>
+        </label>
+
+        <fieldset
+          class="org-token-scope-field"
+          :aria-describedby="scopeError ? 'token-scope-error' : undefined"
+        >
+          <legend>允许读取的内容</legend>
+          <p>必须明确选择；未选择时不会静默添加默认权限。</p>
+          <div>
+            <label
+              v-for="scope in scopeOptions"
+              :key="scope.value"
+              :data-selected="createForm.scopes.includes(scope.value)"
+            >
+              <input
+                type="checkbox"
+                :checked="createForm.scopes.includes(scope.value)"
+                @change="toggleScope(scope.value)"
+              />
+              <span
+                ><b>{{ scope.label }}</b
+                ><small>{{ scope.description }}</small></span
+              >
+            </label>
+          </div>
+          <strong v-if="scopeError" id="token-scope-error" role="alert">{{ scopeError }}</strong>
+        </fieldset>
+
+        <div class="org-token-duration">
+          <label class="org-token-field">
+            <span>有效天数</span>
+            <input v-model.number="createForm.ttl_days" type="number" min="1" max="365" required />
+            <small>预计到期：{{ expiryPreview }}</small>
+          </label>
+          <div aria-label="常用有效期">
+            <button
+              v-for="days in [30, 90, 180, 365]"
+              :key="days"
+              type="button"
+              class="org-admin-secondary"
+              :aria-pressed="createForm.ttl_days === days"
+              @click="createForm.ttl_days = days"
+            >
+              {{ days }} 天
+            </button>
+          </div>
+        </div>
+
+        <label class="org-token-field">
+          <span>创建原因</span>
+          <textarea
+            v-model="createForm.reason"
+            required
+            maxlength="500"
+            rows="3"
+            placeholder="说明接入系统、负责人和业务用途"
+          ></textarea>
+          <small>{{ createForm.reason.length }} / 500；原因会写入组织审计。</small>
+        </label>
+
+        <aside class="org-token-preview" aria-label="令牌创建预览">
+          <b>提交前核对</b>
+          <dl>
+            <div>
+              <dt>数据边界</dt>
+              <dd>仅当前组织</dd>
+            </div>
+            <div>
+              <dt>权限范围</dt>
+              <dd>{{ selectedScopeLabels.join("、") || "尚未选择" }}</dd>
+            </div>
+            <div>
+              <dt>到期日期</dt>
+              <dd>{{ expiryPreview }}</dd>
+            </div>
+            <div>
+              <dt>生命周期</dt>
+              <dd>可轮换、可撤销、不可找回明文</dd>
+            </div>
+          </dl>
+        </aside>
+
+        <button type="submit" :disabled="busy">
+          {{ busy ? "正在创建并写入审计…" : "创建并显示一次明文" }}
+        </button>
+      </form>
     </div>
   </section>
 </template>
