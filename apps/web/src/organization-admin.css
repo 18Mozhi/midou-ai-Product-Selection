@@ -5160,3 +5160,401 @@
     width: 100%;
   }
 }
+
+/* P34 C composition: approval governance is a read-only evidence desk. */
+.org-admin-center:has(.org-approval-governance) {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-bottom: 28px;
+  color: #182d4a;
+  background: #f3f6fb;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-admin-hero {
+  padding: 31px 36px;
+  border: 0;
+  border-radius: 0;
+  background: #1748a0;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-admin-hero :is(p, h1, h2, span) {
+  color: #fff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-admin-hero :is(h1, h2) {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-governance {
+  gap: 16px;
+  margin-top: 0;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-overview {
+  min-height: 144px;
+  padding: 27px 30px;
+  border: 0;
+  border-left: 5px solid #1748a0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-overview::after {
+  display: none;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-overview :is(p, h3, span) {
+  color: #182d4a;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-overview p,
+.org-admin-center:has(.org-approval-governance) .org-approval-section-heading p,
+.org-admin-center:has(.org-approval-governance) .org-approval-version-diff > header span {
+  letter-spacing: 0.12em;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-overview aside {
+  border-left: 4px solid #1748a0;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-metrics {
+  gap: 0;
+  border: 1px solid #d6e0ec;
+  background: #fff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-metrics article {
+  min-height: 108px;
+  border: 0;
+  border-right: 1px solid #d6e0ec;
+  border-top: 4px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-metrics article:last-child {
+  border-right: 0;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-metrics b {
+  color: #1748a0;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-section-tabs {
+  gap: 0;
+  width: 100%;
+  padding: 0;
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-section-tabs button {
+  flex: 1;
+  min-height: 44px;
+  border: 0;
+  border-right: 1px solid #d6e0ec;
+  border-radius: 0;
+  color: #61738b;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-section-tabs button:last-child {
+  border-right: 0;
+}
+
+.org-admin-center:has(.org-approval-governance)
+  .org-approval-section-tabs
+  button[aria-pressed="true"] {
+  color: #1748a0;
+  background: #edf4ff;
+  box-shadow: inset 0 -3px #1748a0;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-section-tabs span {
+  border-radius: 0;
+  color: #1748a0;
+  background: #dfeaff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-section {
+  padding: 22px;
+  border: 1px solid #d6e0ec;
+  border-top: 5px solid #1748a0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-section-heading > span {
+  color: #61738b;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-toolbar {
+  padding: 14px;
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-toolbar :is(input, select, button) {
+  min-height: 42px;
+  border-color: #c7d4e4;
+  border-radius: 0;
+  color: #182d4a;
+  background: #fff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-toolbar > button {
+  color: #1748a0;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-request-list {
+  gap: 0;
+  border: 1px solid #d6e0ec;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-request-list > article {
+  padding: 16px;
+  border: 0;
+  border-right: 1px solid #d6e0ec;
+  border-bottom: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-request-list > article:nth-child(2n) {
+  border-right: 0;
+}
+
+.org-admin-center:has(.org-approval-governance)
+  .org-approval-request-list
+  > article:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-request-list dl > div,
+.org-admin-center:has(.org-approval-governance) .org-approval-template-detail > dl > div {
+  border-left: 0;
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-template-summary {
+  gap: 0;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-template-summary span {
+  border-radius: 0;
+  border-color: #d6e0ec;
+  color: #61738b;
+  background: #f7faff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-template-summary b {
+  color: #1748a0;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-template-browser {
+  grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.45fr);
+  gap: 16px;
+}
+
+.org-admin-center:has(.org-approval-governance)
+  :is(.org-approval-template-directory, .org-approval-template-detail) {
+  padding: 14px;
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-template-directory {
+  gap: 0;
+  padding: 0;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-template-directory > button {
+  min-height: 84px;
+  padding: 13px 14px;
+  border: 0;
+  border-bottom: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+}
+
+.org-admin-center:has(.org-approval-governance)
+  .org-approval-template-directory
+  > button.is-selected {
+  border-left: 5px solid #1748a0;
+  background: #edf4ff;
+  box-shadow: none;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-template-detail {
+  border-top: 5px solid #1748a0;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-version-diff {
+  border-color: #d6e0ec;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-version-diff > article {
+  border-radius: 0;
+  background: #fff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-empty {
+  min-height: 220px;
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #f7faff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-empty > span {
+  color: #b9cceb;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-pagination {
+  padding-top: 14px;
+  border-top: 1px solid #d6e0ec;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-links {
+  border: 1px solid #d6e0ec;
+  border-radius: 0;
+  background: #fff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-approval-links a {
+  border-radius: 0;
+  color: #1748a0;
+  background: #f7faff;
+}
+
+.org-admin-center:has(.org-approval-governance) .org-admin-notice,
+.org-admin-center:has(.org-approval-governance) .org-admin-state {
+  border-radius: 0;
+}
+
+.org-admin-center:has(.org-approval-governance)
+  :is(button, input, select, textarea, a, summary):focus-visible {
+  border-color: #1748a0;
+  outline: 3px solid #a9c5f5;
+  outline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+  .org-admin-center:has(.org-approval-governance) {
+    margin: 12px -8px 70px;
+    padding-bottom: 16px;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-admin-hero {
+    padding: 25px 19px;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-overview {
+    align-items: stretch;
+    padding: 22px 18px;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-overview aside {
+    width: auto;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-metrics article:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-section-tabs {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-section-tabs button {
+    border-right: 0;
+    border-bottom: 1px solid #d6e0ec;
+    text-align: left;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-section-tabs button:last-child {
+    border-bottom: 0;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-section {
+    padding: 18px;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-section-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-section-heading > span {
+    text-align: left;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-toolbar,
+  .org-admin-center:has(.org-approval-governance) .org-approval-template-browser {
+    grid-template-columns: 1fr;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-request-list {
+    grid-template-columns: 1fr;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-request-list > article,
+  .org-admin-center:has(.org-approval-governance)
+    .org-approval-request-list
+    > article:nth-child(2n) {
+    border-right: 0;
+    border-bottom: 1px solid #d6e0ec;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-request-list > article:last-child {
+    border-bottom: 0;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-request-list dl,
+  .org-admin-center:has(.org-approval-governance) .org-approval-template-detail > dl {
+    grid-template-columns: 1fr;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-template-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-template-summary span {
+    padding: 8px;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-template-detail {
+    position: static;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-links {
+    grid-template-columns: 1fr;
+  }
+
+  .org-admin-center:has(.org-approval-governance) .org-approval-links a {
+    width: 100%;
+    text-align: center;
+  }
+}
