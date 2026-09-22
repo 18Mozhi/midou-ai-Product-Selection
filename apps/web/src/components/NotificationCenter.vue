@@ -463,11 +463,11 @@ watch(
 );
 </script>
 <template>
-  <section class="notification-center">
+  <section class="notification-center notification-center--review">
     <header>
       <div>
         <p>协作中心</p>
-        <h2>通知中心</h2>
+        <h1>通知中心</h1>
         <span>只显示当前组织、工作区和当前用户的事务事件投影。</span>
       </div>
       <div>
