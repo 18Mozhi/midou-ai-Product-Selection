@@ -784,7 +784,7 @@ watch(
 <template>
   <section
     class="task-workspace task-workspace--review"
-    :class="{ 'task-detail-route': Boolean(taskId) }"
+    :class="{ 'task-detail-route': Boolean(taskId), 'task-workspace--today': mode === 'today' }"
   >
     <header class="task-title">
       <div>
