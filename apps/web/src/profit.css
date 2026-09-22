@@ -483,7 +483,9 @@
   max-width: 1160px;
   margin: 0 auto;
   color: var(--review-ink);
-  font: 16px/1.6 "Microsoft YaHei", sans-serif;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
 }
 
 .cost-console--review > header {
