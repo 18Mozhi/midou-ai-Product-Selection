@@ -3428,3 +3428,6 @@ frontend-design技能用于将选定C的蓝色范围面、白色内容面、圆�
 ## 2026-09-22 · P21 供应链找货 C 方向迁移到生产 Vue
 
 [P21 生产实施](P21-PAGE-COMPOSITION-IMPLEMENTATION.md)：将蓝色说明区、找货流程、记录目录、采集进度、候选事实、已确认报价与对比历史迁移到实际 `SourcingWorkspace`；保留既有读取、缺失字段、最多五家对比与已确认 quote 边界。1440/390、reduced/no-preference 共 32 项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。真实写入、RBAC、采集与正式 M07-03 证据仍待。
+## 2026-09-22 · P20 竞品监控规则 C 方向迁移到生产 Vue
+
+[P20 生产实施](P20-PAGE-COMPOSITION-IMPLEMENTATION.md)：将规则就绪、作用范围、触发条件、版本和生效状态迁移到实际 `CompetitorMonitor(mode="rules")`；保留真实读取顺序、全局范围、enabled/disabled 状态与 `competitor:manage` 创建边界。1440/390、reduced/no-preference 共 36 项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。新建表单、真实写入、RBAC 与正式 M07-03 证据仍待。

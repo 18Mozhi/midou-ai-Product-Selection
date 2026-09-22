@@ -638,7 +638,7 @@ watch(
 );
 </script>
 <template>
-  <section class="competitor-monitor" aria-label="竞品监控工作区">
+  <section class="competitor-monitor competitor-monitor--review" aria-label="竞品监控工作区">
     <template v-if="rulesPage">
       <MonitoringReadinessStrip
         eyebrow="竞争质量门 · 规则就绪"
