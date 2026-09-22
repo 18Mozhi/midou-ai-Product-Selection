@@ -15,9 +15,7 @@ test("P47 production page imports its route-scoped table controls stylesheet", (
       assert.ok(selector.includes(".adapter-center--c"), selector);
       assert.ok(selector.includes(".table-view-controls"), selector);
     }
-    assert.ok(
-      rule.nodes.filter((node) => node.type === "decl").every((node) => !node.important),
-    );
+    assert.ok(rule.nodes.filter((node) => node.type === "decl").every((node) => !node.important));
   });
 });
 
@@ -26,7 +24,7 @@ test("P47 production table controls retain the approved desktop states", () => {
   for (const approved of [
     ".table-view-controls__toolbar",
     "min-height: 44px",
-    "button[aria-pressed=\"true\"]",
+    'button[aria-pressed="true"]',
     "fieldset",
     "div:last-child",
     ":focus-visible",

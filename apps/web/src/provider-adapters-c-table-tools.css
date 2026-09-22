@@ -8,11 +8,7 @@ html body:has(#app .adapter-center--c) #app .adapter-center--c .table-view-contr
   background: var(--p47-panel);
 }
 
-html
-  body:has(#app .adapter-center--c)
-  #app
-  .adapter-center--c
-  .table-view-controls__toolbar {
+html body:has(#app .adapter-center--c) #app .adapter-center--c .table-view-controls__toolbar {
   min-height: 68px;
   margin: 0;
   padding: 12px 16px;
@@ -142,11 +138,7 @@ html
   outline-offset: 3px;
 }
 
-html
-  body:has(#app .adapter-center--c)
-  #app
-  .adapter-center--c
-  .table-view-controls__content {
+html body:has(#app .adapter-center--c) #app .adapter-center--c .table-view-controls__content {
   border-radius: 0 0 8px 8px;
 }
 

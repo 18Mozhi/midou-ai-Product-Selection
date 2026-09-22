@@ -399,9 +399,7 @@ test("M03-03.A08/A09/A16 empty forbidden and dependency states stay actionable",
   await expect(
     page.getByRole("heading", {
       name:
-        testInfo.project.name === "mobile-390"
-          ? "还没有可查看的来源"
-          : "还没有来源可绑定适配器",
+        testInfo.project.name === "mobile-390" ? "还没有可查看的来源" : "还没有来源可绑定适配器",
     }),
   ).toBeVisible();
   status = 403;
