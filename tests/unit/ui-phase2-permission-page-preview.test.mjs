@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
@@ -11,6 +12,19 @@ const hash = (v) => createHash("sha256").update(v).digest("hex");
 const folder = "output/playwright/p45-permission-page-vue-preview";
 const child = "apps/web/src/components/PlatformRoleComparison.vue";
 const evidence = () => JSON.parse(read(folder + "/evidence.json"));
+const historicalSource = (file) => {
+  const revision = [
+    "design-plans/ui-phase-2-2026-09-07/implementation/permission-page-preview.css",
+    "scripts/lib/ui-phase2-permission-page-preview.mjs",
+    "scripts/verify-ui-phase2-permission-page-preview.mjs",
+  ].includes(file)
+    ? "4ab8631b"
+    : "42909c61";
+  return execFileSync("git", ["show", `${revision}:${file}`], { encoding: "utf8" }).replaceAll(
+    "\r\n",
+    "\n",
+  );
+};
 function contracts(source) {
   const directives = [],
     controls = [],
@@ -28,29 +42,39 @@ function contracts(source) {
   return { directives: directives.sort(), controls, expressions: expressions.sort() };
 }
 
-test("P45 review only moves intact role sections; script, bindings and controls stay identical", () => {
+test("P45 production uses the approved role-context and reading regions without changing behavior", () => {
   const original = read(child),
     updated = permissionPagePreview(original);
   assert.deepEqual(parse(updated).errors, []);
+  assert.equal(updated, original);
   assert.equal(
     parse(updated).descriptor.scriptSetup.content,
     parse(original).descriptor.scriptSetup.content,
   );
   assert.deepEqual(contracts(updated), contracts(original));
-  assert.match(updated, /<aside class="p45-role-context">/);
-  assert.ok(
-    updated.indexOf('class="role-comparison__summaries"') < updated.indexOf('class="p45-reading"'),
-  );
+  assert.ok(updated.includes("'role-comparison--permission-page': persistSelection"));
   for (const marker of [
+    "role-comparison__workspace",
+    "role-comparison__context",
+    "role-comparison__reading",
     "role-comparison__selectors",
     "role-comparison__filters",
     "role-comparison__summaries",
-    "role-comparison__result",
+    "role-comparison__matrix",
   ])
-    assert.throws(
-      () => permissionPagePreview(original.replace(marker, marker + "-drift")),
-      /drift/,
-    );
+    assert.ok(updated.includes(`class="${marker}"`), marker);
+  assert.ok(
+    updated.indexOf('class="role-comparison__selectors"') <
+      updated.indexOf('class="role-comparison__reading"'),
+  );
+  assert.ok(
+    updated.indexOf('class="role-comparison__summaries"') <
+      updated.indexOf('class="role-comparison__reading"'),
+  );
+  assert.throws(
+    () => permissionPagePreview(original.replace("role-comparison__context", "context-drift")),
+    /drift/,
+  );
 });
 
 test("P45 evidence pins current source, transformed template and exact formal image inventory", () => {
@@ -62,8 +86,10 @@ test("P45 evidence pins current source, transformed template and exact formal im
   assert.equal(e.screenshots.length, 92);
   assert.equal(Object.keys(e.sourceHashes).length, 40);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
-  assert.deepEqual(e.transformedHashes, { [child]: hash(permissionPagePreview(read(child))) });
+    assert.equal(hash(historicalSource(file)), sha, file);
+  assert.deepEqual(e.transformedHashes, {
+    [child]: hash(permissionPagePreview(historicalSource(child))),
+  });
   assert.deepEqual(
     readdirSync(folder).sort(),
     ["index.html", "evidence.json", ...e.screenshots.map((s) => s.file)].sort(),

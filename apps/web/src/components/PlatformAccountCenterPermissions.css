@@ -1,0 +1,209 @@
+.account-center--permissions-c {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  color: #142a46;
+}
+
+.account-center--permissions-c .account-hero {
+  display: flex;
+  align-items: center;
+  overflow: visible;
+  padding: 0 0 22px;
+  border: 0;
+  border-bottom: 1px solid #c9d6e8;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.account-center--permissions-c .account-hero > div:first-child {
+  padding: 0;
+}
+
+.account-center--permissions-c .account-hero p {
+  color: #294caf;
+  font-size: 14px;
+}
+
+.account-center--permissions-c .account-hero h2 {
+  margin: 8px 0;
+  color: #142a46;
+  font-size: 28px;
+}
+
+.account-center--permissions-c .account-hero span {
+  max-width: 72ch;
+  color: #536b86;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.account-center--permissions-c .hero-actions {
+  flex-shrink: 0;
+  gap: 12px;
+  padding: 0;
+  background: transparent;
+}
+
+.account-center--permissions-c .hero-actions a.secondary,
+.account-center--permissions-c .hero-actions button.secondary {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #9db1cc;
+  border-radius: 6px;
+  background: #fff;
+  color: #294caf;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.account-center--permissions-c .hero-actions button:disabled {
+  border-color: #d8e1ed;
+  background: #e8edf4;
+  color: #66748a;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.account-center--permissions-c .permission-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 4px 0 0;
+  padding: 0;
+  background: transparent;
+}
+
+.account-center--permissions-c .permission-metrics article {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  min-height: 34px;
+  padding: 0 22px 0 0;
+  border: 0;
+  border-right: 1px solid #c9d6e8;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.account-center--permissions-c .permission-metrics article:last-child {
+  border-right: 0;
+}
+
+.account-center--permissions-c .permission-metrics :is(small, span) {
+  color: #536b86;
+  font-size: 13px;
+}
+
+.account-center--permissions-c .permission-metrics strong {
+  margin: 0;
+  color: #142a46;
+  font-size: 18px;
+}
+
+.account-center--permissions-c .account-updated {
+  margin: 0;
+  color: #536b86;
+  font-size: 13px;
+  text-align: right;
+}
+
+.account-center--permissions-c .account-message {
+  margin: 0;
+  padding: 14px 18px;
+  border: 1px solid #e5bca4;
+  border-radius: 8px;
+  background: #fff8ef;
+  color: #75461f;
+  line-height: 1.6;
+}
+
+.account-center--permissions-c .account-state,
+.account-center--permissions-c .account-empty {
+  display: grid;
+  justify-items: start;
+  gap: 14px;
+  padding: 30px 24px;
+  border: 1px solid #d8e1ed;
+  border-radius: 10px;
+  background: #fff;
+  color: #142a46;
+}
+
+.account-center--permissions-c .account-state button,
+.account-center--permissions-c .account-empty button {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #9db1cc;
+  border-radius: 6px;
+  background: #fff;
+  color: #294caf;
+}
+
+.account-center--permissions-c .account-state button:disabled,
+.account-center--permissions-c .account-empty button:disabled {
+  border-color: #d8e1ed;
+  background: #e8edf4;
+  color: #66748a;
+  cursor: not-allowed;
+}
+
+.account-center--permissions-c :is(a, button, input, select):focus-visible {
+  outline: 3px solid #4276df;
+  outline-offset: 3px;
+}
+
+.account-center--permissions-c :deep(.role-comparison--permission-page) {
+  min-width: 0;
+}
+
+@media (max-width: 1100px) {
+  .account-center--permissions-c .account-hero {
+    display: grid;
+    align-items: start;
+  }
+
+  .account-center--permissions-c .hero-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 760px) {
+  .account-center--permissions-c .account-hero {
+    gap: 16px;
+    padding-bottom: 18px;
+  }
+
+  .account-center--permissions-c .account-hero h2 {
+    font-size: 24px;
+  }
+
+  .account-center--permissions-c .hero-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .account-center--permissions-c .hero-actions > * {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .account-center--permissions-c .permission-metrics {
+    display: grid;
+    gap: 12px;
+  }
+
+  .account-center--permissions-c .permission-metrics article {
+    min-height: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .account-center--permissions-c .account-updated {
+    margin-top: 0;
+  }
+}

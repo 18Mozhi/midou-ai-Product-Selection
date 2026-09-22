@@ -3,6 +3,22 @@ import { parse } from "@vue/compiler-sfc";
 
 // P45 isolated review only: move intact sections, preserving all scripts and controls.
 export function permissionPagePreview(original) {
+  const isProductionComposition = original.includes(
+    "'role-comparison--permission-page': persistSelection",
+  );
+  if (isProductionComposition) {
+    for (const marker of [
+      'class="role-comparison__workspace"',
+      'class="role-comparison__context"',
+      'class="role-comparison__reading"',
+      'class="role-comparison__selectors"',
+      'class="role-comparison__summaries"',
+      'class="role-comparison__filters"',
+      'class="role-comparison__matrix"',
+    ])
+      assert.ok(original.includes(marker), `P45 production composition drift: ${marker}`);
+    return original;
+  }
   let source = original;
   const between = (start, end) => {
     assert.equal(source.split(start).length, 2, "P45 section start drift");

@@ -156,6 +156,7 @@ watch([compareLeft, compareRight, differencesOnly, capabilityQuery, capabilityGr
   <section
     class="role-comparison"
     :class="{
+      'role-comparison--permission-page': persistSelection,
       'role-comparison--same-role-result': Boolean(
         !persistSelection &&
         comparedRoles.left &&
@@ -175,75 +176,88 @@ watch([compareLeft, compareRight, differencesOnly, capabilityQuery, capabilityGr
         <input v-model="differencesOnly" type="checkbox" />只看差异
       </label>
     </header>
-    <div class="role-comparison__selectors">
-      <label>
-        左侧角色
-        <select v-model="compareLeft">
-          <option v-for="role in roles" :key="role.code" :value="role.code">
-            {{ role.name }}
-          </option>
-        </select>
-      </label>
-      <label>
-        右侧角色
-        <select v-model="compareRight">
-          <option v-for="role in roles" :key="role.code" :value="role.code">
-            {{ role.name }}
-          </option>
-        </select>
-      </label>
-    </div>
-    <div class="role-comparison__filters" role="search" aria-label="权限筛选">
-      <label>
-        搜索权限
-        <input v-model="capabilityQuery" maxlength="80" placeholder="搜索权限名称" />
-      </label>
-      <label>
-        能力分组
-        <select v-model="capabilityGroup" aria-label="能力分组">
-          <option value="">全部分组</option>
-          <option v-for="group in capabilityGroups" :key="group" :value="group">{{ group }}</option>
-        </select>
-      </label>
-      <button type="button" :disabled="!activeFilterCount" @click="resetComparison">重置</button>
-    </div>
-    <div class="role-comparison__summaries">
-      <article v-for="role in [comparedRoles.left, comparedRoles.right]" :key="role?.code">
-        <strong>{{ role?.name }}</strong>
-        <span>{{ role?.description }}</span>
-        <small>{{ role?.capabilities.length ?? 0 }} 项权限</small>
-      </article>
-    </div>
-    <p class="role-comparison__result" aria-live="polite">
-      当前显示 {{ comparison.length }} 项能力<span v-if="activeFilterCount">
-        · {{ activeFilterCount }} 个筛选条件</span
-      >
-    </p>
-    <div class="role-comparison__matrix">
-      <p v-if="!comparison.length">
-        {{ activeFilterCount ? "没有符合当前筛选的权限" : "当前筛选下，两侧角色没有权限差异。" }}
-      </p>
-      <article v-for="item in comparison" :key="item.capability">
-        <h4>
-          {{ item.label }}<small>{{ item.group }}</small>
-        </h4>
-        <dl>
-          <div>
-            <dt>{{ comparedRoles.left?.name }}</dt>
-            <dd :data-enabled="item.left">{{ item.left ? "拥有" : "无" }}</dd>
-          </div>
-          <div>
-            <dt>{{ comparedRoles.right?.name }}</dt>
-            <dd :data-enabled="item.right">{{ item.right ? "拥有" : "无" }}</dd>
-          </div>
-          <div>
-            <dt>差异</dt>
-            <dd>{{ item.difference }}</dd>
-          </div>
-        </dl>
-      </article>
+    <div class="role-comparison__workspace">
+      <div class="role-comparison__context" :role="persistSelection ? 'complementary' : undefined">
+        <div class="role-comparison__selectors">
+          <label>
+            左侧角色
+            <select v-model="compareLeft">
+              <option v-for="role in roles" :key="role.code" :value="role.code">
+                {{ role.name }}
+              </option>
+            </select>
+          </label>
+          <label>
+            右侧角色
+            <select v-model="compareRight">
+              <option v-for="role in roles" :key="role.code" :value="role.code">
+                {{ role.name }}
+              </option>
+            </select>
+          </label>
+        </div>
+        <div class="role-comparison__summaries">
+          <article v-for="role in [comparedRoles.left, comparedRoles.right]" :key="role?.code">
+            <strong>{{ role?.name }}</strong>
+            <span>{{ role?.description }}</span>
+            <small>{{ role?.capabilities.length ?? 0 }} 项权限</small>
+          </article>
+        </div>
+      </div>
+      <div class="role-comparison__reading">
+        <div class="role-comparison__filters" role="search" aria-label="权限筛选">
+          <label>
+            搜索权限
+            <input v-model="capabilityQuery" maxlength="80" placeholder="搜索权限名称" />
+          </label>
+          <label>
+            能力分组
+            <select v-model="capabilityGroup" aria-label="能力分组">
+              <option value="">全部分组</option>
+              <option v-for="group in capabilityGroups" :key="group" :value="group">
+                {{ group }}
+              </option>
+            </select>
+          </label>
+          <button type="button" :disabled="!activeFilterCount" @click="resetComparison">
+            重置
+          </button>
+        </div>
+        <p class="role-comparison__result" aria-live="polite">
+          当前显示 {{ comparison.length }} 项能力<span v-if="activeFilterCount">
+            · {{ activeFilterCount }} 个筛选条件</span
+          >
+        </p>
+        <div class="role-comparison__matrix">
+          <p v-if="!comparison.length">
+            {{
+              activeFilterCount ? "没有符合当前筛选的权限" : "当前筛选下，两侧角色没有权限差异。"
+            }}
+          </p>
+          <article v-for="item in comparison" :key="item.capability">
+            <h4>
+              {{ item.label }}<small>{{ item.group }}</small>
+            </h4>
+            <dl>
+              <div>
+                <dt>{{ comparedRoles.left?.name }}</dt>
+                <dd :data-enabled="item.left">{{ item.left ? "拥有" : "无" }}</dd>
+              </div>
+              <div>
+                <dt>{{ comparedRoles.right?.name }}</dt>
+                <dd :data-enabled="item.right">{{ item.right ? "拥有" : "无" }}</dd>
+              </div>
+              <div>
+                <dt>差异</dt>
+                <dd>{{ item.difference }}</dd>
+              </div>
+            </dl>
+          </article>
+        </div>
+      </div>
     </div>
   </section>
 </template>
 
 <style scoped src="./PlatformRoleComparison.css"></style>
+<style scoped src="./PlatformRoleComparisonPermissions.css"></style>

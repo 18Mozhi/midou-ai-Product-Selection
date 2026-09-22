@@ -590,6 +590,7 @@ onMounted(load);
       'account-center--organization-review': organizationListRoute,
       'account-center--user-admin-c': tab === 'users' || tab === 'admins',
       'account-center--admins-c': adminListRoute,
+      'account-center--permissions-c': permissionsRoute,
     }"
   >
     <header class="account-hero">
@@ -945,6 +946,7 @@ onMounted(load);
   </section>
 </template>
 <style scoped src="./PlatformAccountCenter.css"></style>
+<style scoped src="./PlatformAccountCenterPermissions.css"></style>
 <style scoped src="./PlatformAccountCenterAdmin.css"></style>
 <style src="./PlatformAdminComparisonMobile.css"></style>
 <style src="./PlatformAdminDirectoryMobile.css"></style>

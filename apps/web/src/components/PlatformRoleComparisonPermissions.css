@@ -1,0 +1,292 @@
+.role-comparison__workspace {
+  display: grid;
+  gap: 16px;
+}
+
+.role-comparison__context,
+.role-comparison__reading {
+  display: contents;
+}
+
+.role-comparison--permission-page {
+  display: grid;
+  gap: 0;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.role-comparison--permission-page > header {
+  align-items: center;
+  padding: 22px 24px;
+  border: 1px solid #d8e1ed;
+  border-bottom: 0;
+  border-radius: 12px 12px 0 0;
+  background: #fff;
+}
+
+.role-comparison--permission-page > header :is(p, h3) {
+  color: #142a46;
+}
+
+.role-comparison--permission-page > header p {
+  color: #294caf;
+}
+
+.role-comparison--permission-page > header span {
+  color: #536b86;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.role-comparison--permission-page .role-comparison__toggle {
+  min-height: 44px;
+  margin: 0;
+  color: #294caf;
+  font-size: 14px;
+}
+
+.role-comparison--permission-page .role-comparison__toggle input {
+  width: 20px;
+  height: 20px;
+  min-height: 20px;
+  margin: 0;
+  padding: 0;
+  accent-color: #294caf;
+}
+
+.role-comparison--permission-page .role-comparison__workspace {
+  display: grid;
+  grid-template-columns: 310px minmax(0, 1fr);
+  gap: 0;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #d8e1ed;
+  border-radius: 0 0 12px 12px;
+}
+
+.role-comparison--permission-page .role-comparison__context {
+  display: block;
+  min-width: 0;
+  padding: 28px 24px;
+  background: #294caf;
+  color: #fff;
+}
+
+.role-comparison--permission-page .role-comparison__selectors {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+}
+
+.role-comparison--permission-page .role-comparison__selectors label {
+  gap: 8px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.role-comparison--permission-page .role-comparison__selectors select {
+  width: 100%;
+  min-height: 48px;
+  border-color: #bdcbe0;
+  border-radius: 6px;
+  background: #fff;
+  color: #142a46;
+  font-size: 16px;
+}
+
+.role-comparison--permission-page .role-comparison__context select:focus-visible {
+  outline-color: #fff;
+}
+
+.role-comparison--permission-page .role-comparison__summaries {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  margin-top: 28px;
+}
+
+.role-comparison--permission-page .role-comparison__summaries article {
+  min-width: 0;
+  padding: 20px 0 0;
+  overflow-wrap: anywhere;
+  border: 0;
+  border-top: 1px solid #7795d8;
+  border-radius: 0;
+  background: transparent;
+}
+
+.role-comparison--permission-page .role-comparison__summaries strong {
+  display: block;
+  color: #fff;
+  font-size: 17px;
+}
+
+.role-comparison--permission-page .role-comparison__summaries :is(span, small) {
+  display: block;
+  margin-top: 8px;
+  color: #edf3ff;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.role-comparison--permission-page .role-comparison__reading {
+  display: block;
+  min-width: 0;
+  padding: 28px;
+  background: #fff;
+}
+
+.role-comparison--permission-page .role-comparison__filters {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr) auto;
+  gap: 14px;
+}
+
+.role-comparison--permission-page .role-comparison__filters label {
+  min-width: 0;
+  color: #536b86;
+  font-size: 14px;
+}
+
+.role-comparison--permission-page .role-comparison__filters :is(input, select) {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 6px;
+  background: #fff;
+  color: #142a46;
+  font-size: 16px;
+}
+
+.role-comparison--permission-page .role-comparison__filters button {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #d8e1ed;
+  border-radius: 6px;
+  background: #e8edf4;
+  color: #294caf;
+}
+
+.role-comparison--permission-page .role-comparison__filters button:disabled {
+  color: #66748a;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.role-comparison--permission-page .role-comparison__result {
+  margin: 22px 0 0;
+  padding: 14px 16px;
+  background: #eef2f7;
+  color: #536b86;
+  font-size: 14px;
+}
+
+.role-comparison--permission-page .role-comparison__matrix {
+  gap: 0;
+}
+
+.role-comparison--permission-page .role-comparison__matrix article {
+  display: block;
+  min-width: 0;
+  padding: 22px 0;
+  overflow-wrap: anywhere;
+  border: 0;
+  border-bottom: 1px solid #d8e1ed;
+  border-radius: 0;
+  background: #fff;
+}
+
+.role-comparison--permission-page .role-comparison__matrix h4 {
+  margin: 0 0 14px;
+  color: #142a46;
+  font-size: 18px;
+}
+
+.role-comparison--permission-page .role-comparison__matrix h4 small {
+  margin-top: 5px;
+  color: #536b86;
+  font-size: 13px;
+}
+
+.role-comparison--permission-page .role-comparison__matrix dl {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.role-comparison--permission-page .role-comparison__matrix dt {
+  color: #536b86;
+  font-size: 13px;
+}
+
+.role-comparison--permission-page .role-comparison__matrix dd {
+  margin: 6px 0 0;
+  color: #142a46;
+  font-size: 16px;
+}
+
+.role-comparison--permission-page .role-comparison__matrix dd[data-enabled="true"] {
+  color: #294caf;
+  font-weight: 700;
+}
+
+.role-comparison--permission-page .role-comparison__matrix > p {
+  padding: 28px 16px;
+  background: #f6f8fc;
+  color: #536b86;
+  text-align: left;
+}
+
+.role-comparison--permission-page :is(button, input, select):focus-visible {
+  outline: 3px solid #4276df;
+  outline-offset: 3px;
+}
+
+@media (max-width: 1100px) {
+  .role-comparison--permission-page .role-comparison__workspace {
+    grid-template-columns: 265px minmax(0, 1fr);
+  }
+
+  .role-comparison--permission-page .role-comparison__reading {
+    padding: 24px;
+  }
+
+  .role-comparison--permission-page .role-comparison__filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .role-comparison--permission-page .role-comparison__filters button {
+    justify-self: start;
+  }
+
+  .role-comparison--permission-page .role-comparison__matrix dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .role-comparison--permission-page .role-comparison__matrix dl > div:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .role-comparison--permission-page > header {
+    display: grid;
+    padding: 20px 16px;
+  }
+
+  .role-comparison--permission-page .role-comparison__workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .role-comparison--permission-page .role-comparison__context {
+    padding: 24px 20px;
+  }
+
+  .role-comparison--permission-page .role-comparison__reading {
+    padding: 20px 16px;
+  }
+
+  .role-comparison--permission-page .role-comparison__matrix dl {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
