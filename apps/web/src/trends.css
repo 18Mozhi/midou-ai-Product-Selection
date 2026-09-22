@@ -786,3 +786,455 @@
     text-align: center;
   }
 }
+
+/* P14 C direction: evidence desk with one clear reading path. */
+.trend-dashboard--review {
+  --trend-blue: #2853a4;
+  --trend-blue-strong: #173b82;
+  --trend-ink: #14284a;
+  --trend-muted: #5b6f91;
+  --trend-line: #d4deec;
+  --trend-focus: #0f6fff;
+  gap: 14px;
+  color: var(--trend-ink);
+}
+.trend-dashboard--review :is(button, a, input, select, textarea, summary):focus-visible {
+  outline: 3px solid var(--trend-focus);
+  outline-offset: 2px;
+}
+.trend-dashboard--review .monitoring-readiness {
+  min-height: 188px;
+  padding: 28px 32px 25px;
+  grid-template-columns: minmax(0, 1.35fr) minmax(360px, 1fr);
+  align-items: stretch;
+  gap: 22px 32px;
+  border: 0;
+  border-radius: 0;
+  background: var(--trend-blue);
+  color: #fff;
+  box-shadow: none;
+}
+.trend-dashboard--review .monitoring-readiness__summary {
+  display: grid;
+  align-content: center;
+  gap: 8px;
+}
+.trend-dashboard--review .monitoring-readiness :is(p, h2, span, dt, small) {
+  color: rgba(255, 255, 255, 0.9);
+}
+.trend-dashboard--review .monitoring-readiness p {
+  letter-spacing: 0.14em;
+}
+.trend-dashboard--review .monitoring-readiness h2 {
+  color: #fff;
+  font-size: clamp(26px, 3.2vw, 40px);
+  line-height: 1.1;
+}
+.trend-dashboard--review .monitoring-readiness__summary span {
+  color: rgba(255, 255, 255, 0.82);
+}
+.trend-dashboard--review .monitoring-readiness__summary > strong {
+  justify-self: start;
+  min-height: 0;
+  padding: 0;
+  color: #fff;
+  background: transparent;
+  font-size: 15px;
+}
+.trend-dashboard--review .monitoring-readiness dl {
+  align-self: stretch;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+}
+.trend-dashboard--review .monitoring-readiness dl > div {
+  min-height: 84px;
+  padding: 12px 18px;
+  display: grid;
+  align-content: center;
+  border: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 0;
+  background: transparent;
+}
+.trend-dashboard--review .monitoring-readiness dd,
+.trend-dashboard--review .monitoring-readiness dl > div[data-state] dd {
+  color: #fff;
+  font-size: 20px;
+}
+.trend-dashboard--review .monitoring-readiness footer {
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+.trend-dashboard--review .monitoring-readiness footer :is(button, a) {
+  min-height: 42px;
+  padding-inline: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  border-radius: 4px;
+  color: #fff;
+  background: transparent;
+}
+.trend-dashboard--review .monitoring-readiness footer .primary {
+  border-color: #fff;
+  color: var(--trend-blue-strong);
+  background: #fff;
+}
+.trend-dashboard--review .trend-tabs {
+  padding: 0;
+  gap: 0;
+  border: 1px solid var(--trend-line);
+  border-radius: 0;
+  background: #fff;
+}
+.trend-dashboard--review .trend-tabs button {
+  min-height: 48px;
+  flex: 1 1 0;
+  border-radius: 0;
+  border-bottom: 3px solid transparent;
+  color: var(--trend-muted);
+  background: #fff;
+  font-weight: 750;
+}
+.trend-dashboard--review .trend-tabs button[aria-current="page"] {
+  border-bottom-color: var(--trend-blue);
+  color: var(--trend-blue);
+  background: #edf3fc;
+}
+.trend-dashboard--review .trend-tabs b {
+  min-width: 22px;
+  padding: 2px 6px;
+  display: inline-flex;
+  justify-content: center;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--trend-blue);
+}
+.trend-dashboard--review .trend-message {
+  margin: 0;
+  padding: 12px 15px;
+  border: 1px solid #bed0ea;
+  border-left: 4px solid var(--trend-blue);
+  border-radius: 0;
+  color: var(--trend-ink);
+  background: #edf4ff;
+}
+.trend-dashboard--review .trend-filters {
+  margin: 0;
+  padding: 22px 24px;
+  grid-template-columns: 112px minmax(140px, 1fr) 132px minmax(220px, 1.6fr) 140px repeat(3, auto);
+  gap: 12px;
+  border: 1px solid var(--trend-line);
+  border-radius: 0;
+  background: #fff;
+}
+.trend-dashboard--review .trend-filters label {
+  color: var(--trend-muted);
+}
+.trend-dashboard--review .trend-filters :is(input, select),
+.trend-dashboard--review .trend-modal :is(input, select, textarea) {
+  min-height: 44px;
+  border: 1px solid #9db2d0;
+  border-radius: 4px;
+  color: var(--trend-ink);
+  background: #fff;
+}
+.trend-dashboard--review .trend-filters button {
+  min-height: 44px;
+  padding-inline: 14px;
+  border: 1px solid #9db2d0;
+  border-radius: 4px;
+  color: var(--trend-blue);
+  background: #fff;
+}
+.trend-dashboard--review .trend-filters button:hover:not(:disabled),
+.trend-dashboard--review .trend-filters button:focus-visible {
+  border-color: var(--trend-blue);
+  background: #edf3fc;
+}
+.trend-dashboard--review .trend-workbench {
+  height: auto;
+  min-height: 620px;
+  max-height: none;
+  grid-template-columns: minmax(340px, 38%) minmax(0, 1fr);
+  border: 1px solid var(--trend-line);
+  border-radius: 0;
+  background: #fff;
+}
+.trend-dashboard--review .trend-list {
+  padding: 20px 0 0;
+  border-right: 1px solid var(--trend-line);
+  background: #fff;
+}
+.trend-dashboard--review .trend-list > header {
+  padding: 0 22px 17px;
+}
+.trend-dashboard--review .trend-list > header strong {
+  color: var(--trend-ink);
+  font-size: 18px;
+}
+.trend-dashboard--review .trend-list > header :is(span, small) {
+  color: var(--trend-muted);
+}
+.trend-dashboard--review .trend-list > button {
+  min-height: 102px;
+  padding: 15px 22px;
+  grid-template-columns: 12px minmax(0, 1fr) 66px auto;
+  gap: 14px;
+  border: 0;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+}
+.trend-dashboard--review .trend-list > button + button {
+  margin-top: 0;
+}
+.trend-dashboard--review .trend-list > button[aria-pressed="true"] {
+  border-top-color: #d5e1f2;
+  border-bottom-color: #d5e1f2;
+  box-shadow: inset 3px 0 var(--trend-blue);
+  background: #edf3fc;
+}
+.trend-dashboard--review .topic-mark {
+  width: 10px;
+  height: 10px;
+  border-radius: 0;
+  background: var(--trend-blue);
+}
+.trend-dashboard--review .topic-mark::after {
+  display: none;
+}
+.trend-dashboard--review .topic-mark[data-followed="true"] {
+  background: #c78322;
+}
+.trend-dashboard--review .trend-list button strong {
+  color: var(--trend-ink);
+  font-size: 16px;
+}
+.trend-dashboard--review .trend-list button small {
+  color: var(--trend-muted);
+}
+.trend-dashboard--review .trend-list button > span > b {
+  color: var(--trend-blue);
+  font-size: 24px;
+}
+.trend-dashboard--review .trend-list em {
+  padding: 0;
+  color: var(--trend-muted);
+  background: transparent;
+  font-size: 12px;
+}
+.trend-dashboard--review .trend-pagination {
+  margin: 0;
+  padding: 16px 22px;
+  border-top: 1px solid var(--trend-line);
+}
+.trend-dashboard--review .trend-pagination button {
+  min-height: 42px;
+  border: 1px solid #b9c9df;
+  border-radius: 4px;
+  color: var(--trend-blue);
+  background: #f4f7fb;
+}
+.trend-dashboard--review .trend-detail {
+  padding: 26px 28px 32px;
+  background: #fff;
+}
+.trend-dashboard--review .trend-detail h3 {
+  margin: 9px 0 8px;
+  color: var(--trend-ink);
+  font-size: clamp(26px, 3vw, 38px);
+}
+.trend-dashboard--review .trend-detail > header :is(p, span) {
+  color: var(--trend-muted);
+}
+.trend-dashboard--review .heat-summary {
+  min-width: 112px;
+  padding: 12px 14px;
+  border-left: 1px solid var(--trend-line);
+  text-align: left;
+}
+.trend-dashboard--review .heat-summary b {
+  color: var(--trend-blue);
+  font-size: 36px;
+}
+.trend-dashboard--review .trend-actions {
+  margin: 22px 0;
+  padding: 9px 0;
+  border-block: 1px solid var(--trend-line);
+  border-inline: 0;
+  background: #fff;
+}
+.trend-dashboard--review .trend-actions :is(button, a) {
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid #9db2d0;
+  border-radius: 4px;
+  color: var(--trend-blue);
+  background: #fff;
+}
+.trend-dashboard--review .trend-actions .quiet {
+  border-color: transparent;
+  color: var(--trend-muted);
+}
+.trend-dashboard--review .trend-conclusion,
+.trend-dashboard--review .trend-evidence,
+.trend-dashboard--review .trend-lower > section {
+  border: 1px solid var(--trend-line);
+  border-radius: 0;
+  background: #fff;
+}
+.trend-dashboard--review .trend-conclusion {
+  padding: 20px;
+  background: #f8fbff;
+}
+.trend-dashboard--review .trend-conclusion p,
+.trend-dashboard--review .trend-evidence > header p,
+.trend-dashboard--review .trend-lower p {
+  color: var(--trend-blue);
+}
+.trend-dashboard--review .trend-conclusion dl div {
+  border: 1px solid var(--trend-line);
+  border-radius: 0;
+  background: #fff;
+}
+.trend-dashboard--review .trend-evidence-item,
+.trend-dashboard--review .keyword-cloud > span {
+  border: 1px solid var(--trend-line);
+  border-radius: 0;
+  background: #f8fbff;
+}
+.trend-dashboard--review .trend-evidence-actions :is(a, button) {
+  min-height: 40px;
+  border-radius: 4px;
+  color: var(--trend-blue);
+  background: #fff;
+}
+.trend-dashboard--review .trend-explainer {
+  border: 0;
+  color: var(--trend-blue);
+}
+.trend-dashboard--review .trend-explainer summary {
+  width: fit-content;
+  min-height: 42px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.trend-dashboard--review .trend-rules > article,
+.trend-dashboard--review .trend-rule-empty {
+  border: 1px solid var(--trend-line);
+  border-radius: 0;
+  background: #fff;
+}
+.trend-dashboard--review .trend-rule-heading {
+  padding: 18px 0 14px;
+}
+.trend-dashboard--review .trend-rule-heading h3 {
+  color: var(--trend-ink);
+}
+.trend-dashboard--review .trend-rule-heading button,
+.trend-dashboard--review .trend-rules article > button:first-of-type,
+.trend-dashboard--review .trend-rule-empty button {
+  min-height: 42px;
+  border: 1px solid var(--trend-blue);
+  border-radius: 4px;
+  color: #fff;
+  background: var(--trend-blue);
+}
+.trend-dashboard--review .trend-rules article > button.secondary {
+  color: var(--trend-blue);
+  background: #fff;
+}
+.trend-dashboard--review .trend-modal {
+  background: rgba(20, 40, 74, 0.56);
+  backdrop-filter: blur(6px);
+}
+.trend-dashboard--review .trend-modal form {
+  border: 1px solid var(--trend-line);
+  border-top: 5px solid var(--trend-blue);
+  border-radius: 0;
+  background: #fff;
+  box-shadow: 0 22px 48px rgba(20, 40, 74, 0.24);
+}
+.trend-dashboard--review .trend-modal footer button:last-child {
+  border-color: var(--trend-blue);
+  border-radius: 4px;
+  background: var(--trend-blue);
+}
+@media (max-width: 1100px) {
+  .trend-dashboard--review .monitoring-readiness {
+    grid-template-columns: 1fr;
+  }
+  .trend-dashboard--review .monitoring-readiness footer {
+    grid-column: auto;
+    justify-content: flex-start;
+  }
+  .trend-dashboard--review .trend-workbench {
+    border: 1px solid var(--trend-line);
+  }
+}
+@media (max-width: 640px) {
+  .trend-dashboard--review .monitoring-readiness {
+    min-height: 0;
+    padding: 22px 18px;
+  }
+  .trend-dashboard--review .monitoring-readiness h2 {
+    font-size: 28px;
+  }
+  .trend-dashboard--review .monitoring-readiness dl {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .trend-dashboard--review .monitoring-readiness dl > div {
+    min-height: 72px;
+    padding: 8px 10px;
+  }
+  .trend-dashboard--review .monitoring-readiness dd,
+  .trend-dashboard--review .monitoring-readiness dl > div[data-state] dd {
+    font-size: 16px;
+  }
+  .trend-dashboard--review .monitoring-readiness footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .trend-dashboard--review .monitoring-readiness footer :is(button, a) {
+    width: 100%;
+  }
+  .trend-dashboard--review .monitoring-readiness footer :last-child {
+    grid-column: 1 / -1;
+  }
+  .trend-dashboard--review .trend-tabs button {
+    padding-inline: 8px;
+    font-size: 13px;
+  }
+  .trend-dashboard--review .trend-filters {
+    padding: 15px;
+  }
+  .trend-dashboard--review .trend-list {
+    padding-top: 14px;
+  }
+  .trend-dashboard--review .trend-list > button {
+    min-height: 94px;
+    padding: 14px 15px;
+    grid-template-columns: 10px minmax(0, 1fr) 52px;
+  }
+  .trend-dashboard--review .trend-list > button em {
+    display: none;
+  }
+  .trend-dashboard--review .trend-detail {
+    padding: 20px 15px 26px;
+  }
+  .trend-dashboard--review .heat-summary {
+    min-width: 72px;
+    padding-inline: 10px;
+  }
+  .trend-dashboard--review .trend-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .trend-dashboard--review .trend-actions .quiet {
+    margin-left: 0;
+  }
+  .trend-dashboard--review .trend-actions :last-child {
+    grid-column: 1 / -1;
+  }
+}

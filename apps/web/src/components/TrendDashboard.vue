@@ -453,7 +453,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="trend-dashboard">
+  <section class="trend-dashboard trend-dashboard--review">
     <MonitoringReadinessStrip
       eyebrow="市场质量门 · 证据就绪"
       :title="trendReadiness.summary.title"

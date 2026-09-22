@@ -247,6 +247,7 @@ watch(resourceType, () => {
 <template>
   <Teleport to="body"
     ><dialog
+      v-if="open"
       ref="dialogElement"
       class="discovery-backdrop"
       :aria-label="mode === 'search' ? '全局搜索' : '快捷创建'"
