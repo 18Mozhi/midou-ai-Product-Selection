@@ -386,7 +386,7 @@ async function runAction() {
 onMounted(() => void load());
 </script>
 <template>
-  <section class="score-rules">
+  <section class="score-rules score-rules--review">
     <header class="score-rules-hero">
       <div>
         <p>自动推荐 · 评分与证据</p>
