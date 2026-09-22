@@ -3434,3 +3434,6 @@ frontend-design技能用于将选定C的蓝色范围面、白色内容面、圆�
 ## 2026-09-22 · P19 竞品目录与事实详情 C 方向迁移到生产 Vue
 
 [P19 生产实施](P19-PAGE-COMPOSITION-IMPLEMENTATION.md)：将竞品准备度、搜索、目录、当前快照、变化时间轴、告警任务、采集历史和帮助区迁移到实际 `CompetitorMonitor(mode="list")`；保留缺失价格/快照语义、读取路径及 `competitor:manage`、`task:create` 权限边界。1440/390、reduced/no-preference 共 32 项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。创建/删除/规则弹窗、真实采集、RBAC 与正式 M07-03 证据仍待。
+## 2026-09-22 · P18 机会详情 C 方向迁移到生产 Vue
+
+[P18 生产实施](P18-PAGE-COMPOSITION-IMPLEMENTATION.md)：将机会身份、系统结论、五项质量门、人工决定条件、Tab 与事实分区迁移到实际 `OpportunityWorkspace.vue` 详情分支；保留“推荐且五门全通过才可采纳”合同及既有读取/决定边界。1440/390、reduced/no-preference 共 32 项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。真实会话/RBAC、写入动作与正式 M07-03 证据仍待。

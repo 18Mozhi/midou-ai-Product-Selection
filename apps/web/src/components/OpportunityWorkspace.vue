@@ -637,7 +637,7 @@ watch(
 );
 </script>
 <template>
-  <section class="opportunity-workspace">
+  <section class="opportunity-workspace opportunity-workspace--review">
     <header v-if="!opportunityId" class="opportunity-hero">
       <div>
         <p>自动选品</p>
