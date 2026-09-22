@@ -1019,6 +1019,285 @@
   }
 }
 
+/* P19 C direction: production competitor evidence workspace aligned with the approved ledger. */
+.competitor-monitor--review {
+  --ink: #182d4a;
+  --blue: #1748a0;
+  display: grid;
+  gap: 14px;
+  color: #182d4a;
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+.competitor-monitor--review :is(h1, h2, h3, h4, p, ol, ul) {
+  margin: 0;
+}
+.competitor-monitor--review :is(button, input, select, textarea, a, summary):focus-visible {
+  outline: 3px solid #2465d7;
+  outline-offset: 3px;
+}
+.competitor-monitor--review .monitoring-readiness-strip {
+  margin: 0;
+  padding: 28px 30px;
+  border: 1px solid #1748a0;
+  border-radius: 0;
+  background: #1748a0;
+  box-shadow: none;
+}
+.competitor-monitor--review .monitoring-readiness-strip :is(h1, h2, h3, p, span, small, strong, b) {
+  color: #fff;
+}
+.competitor-monitor--review .monitoring-readiness-strip :is(button, a) {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid #fff !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #1748a0 !important;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+}
+.competitor-monitor--review .monitoring-readiness-strip .primary {
+  background: #edf4ff !important;
+}
+.competitor-monitor--review .competitor-toolbar {
+  margin: 0;
+  padding: 14px 18px;
+  border: 1px solid #dce4ee;
+  border-radius: 0;
+  background: #fff;
+}
+.competitor-monitor--review .competitor-toolbar input,
+.competitor-monitor--review .competitor-modal :is(input, select, textarea) {
+  min-height: 44px;
+  border: 1px solid #b9c9dc;
+  border-radius: 0;
+  background: #fff;
+  color: #182d4a;
+}
+.competitor-monitor--review .competitor-grid {
+  grid-template-columns: minmax(280px, 0.8fr) minmax(0, 2fr);
+  gap: 0;
+  min-height: 580px;
+  border: 1px solid #dce4ee;
+  background: #fff;
+}
+.competitor-monitor--review .competitor-list {
+  gap: 0;
+  border-right: 1px solid #dce4ee;
+  background: #f3f6fb;
+}
+.competitor-monitor--review .competitor-list button {
+  min-height: 126px;
+  border: 0 !important;
+  border-bottom: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f3f6fb !important;
+  box-shadow: none !important;
+}
+.competitor-monitor--review .competitor-list button.selected {
+  border-left: 5px solid #1748a0 !important;
+  background: #edf4ff !important;
+  box-shadow: none !important;
+}
+.competitor-monitor--review .competitor-list .competitor-detail-entry {
+  color: #1748a0 !important;
+}
+.competitor-monitor--review .competitor-detail {
+  min-width: 0;
+  padding: 28px 30px;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.competitor-monitor--review .competitor-detail > header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #dce4ee;
+}
+.competitor-monitor--review .competitor-detail h3 {
+  font-size: 30px;
+  line-height: 1.25;
+}
+.competitor-monitor--review .competitor-detail header p,
+.competitor-monitor--review .competitor-history h4 {
+  color: #1748a0 !important;
+}
+.competitor-monitor--review .competitor-detail a {
+  color: #1748a0 !important;
+  font-weight: 800;
+}
+.competitor-monitor--review .competitor-actions button,
+.competitor-monitor--review .competitor-guide summary,
+.competitor-monitor--review .competitor-modal button {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid #1748a0 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #1748a0 !important;
+  font: inherit;
+  font-weight: 800;
+}
+.competitor-monitor--review .competitor-actions button:first-child,
+.competitor-monitor--review .competitor-modal button[type="submit"] {
+  background: #1748a0 !important;
+  color: #fff !important;
+}
+.competitor-monitor--review .competitor-actions .danger,
+.competitor-monitor--review .competitor-modal .danger {
+  border-color: #b42318 !important;
+  color: #b42318 !important;
+}
+.competitor-monitor--review .competitor-metrics,
+.competitor-monitor--review .competitor-comparison {
+  gap: 0;
+  margin: 20px 0;
+  border: 1px solid #dce4ee;
+}
+.competitor-monitor--review :is(.competitor-metrics, .competitor-comparison) article {
+  min-height: 124px;
+  padding: 16px;
+  border: 0 !important;
+  border-right: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #f3f6fb !important;
+}
+.competitor-monitor--review :is(.competitor-metrics, .competitor-comparison) article:last-child {
+  border-right: 0 !important;
+}
+.competitor-monitor--review .competitor-source,
+.competitor-monitor--review .competitor-collection-state,
+.competitor-monitor--review .competitor-baseline-pending {
+  border: 1px solid #dce4ee !important;
+  border-radius: 0 !important;
+  background: #edf4ff !important;
+}
+.competitor-monitor--review .competitor-history {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 3px solid #1748a0;
+}
+.competitor-monitor--review .competitor-history > header {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #dce4ee;
+}
+.competitor-monitor--review .competitor-history > article {
+  grid-template-columns: 130px 1fr auto;
+  border-bottom-color: #dce4ee;
+}
+.competitor-monitor--review
+  :is(.snapshot-history, .competitor-activity-timeline)
+  > article::before {
+  border-radius: 0;
+  background: #1748a0;
+  box-shadow: none;
+}
+.competitor-monitor--review .competitor-timeline-status span {
+  border-radius: 0;
+  background: #f3f6fb;
+}
+.competitor-monitor--review .competitor-guide {
+  padding: 16px 18px;
+  border: 1px solid #dce4ee;
+  border-radius: 0;
+  background: #fff;
+}
+.competitor-monitor--review .competitor-guide[open] summary {
+  margin-bottom: 14px;
+}
+.competitor-monitor--review .competitor-modal {
+  background: rgba(24, 45, 74, 0.5);
+}
+.competitor-monitor--review .competitor-modal form {
+  border: 1px solid #dce4ee;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+.competitor-monitor--review .competitor-create-steps li {
+  border-radius: 0;
+}
+@media (max-width: 760px) {
+  .competitor-monitor--review .monitoring-readiness-strip {
+    padding: 22px 18px;
+  }
+  .competitor-monitor--review .monitoring-readiness-strip :is(button, a) {
+    width: 100%;
+    text-align: center;
+  }
+  .competitor-monitor--review .competitor-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .competitor-monitor--review .competitor-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    border: 0;
+    background: transparent;
+  }
+  .competitor-monitor--review .competitor-list {
+    border: 1px solid #dce4ee;
+  }
+  .competitor-monitor--review .competitor-list button {
+    min-height: 112px;
+  }
+  .competitor-monitor--review .competitor-detail {
+    padding: 22px 18px;
+    border: 1px solid #dce4ee !important;
+  }
+  .competitor-monitor--review .competitor-detail > header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .competitor-monitor--review .competitor-detail h3 {
+    font-size: 26px;
+  }
+  .competitor-monitor--review .competitor-actions,
+  .competitor-monitor--review .competitor-desktop-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .competitor-monitor--review .competitor-actions button {
+    width: 100%;
+  }
+  .competitor-monitor--review .competitor-metrics,
+  .competitor-monitor--review .competitor-comparison {
+    grid-template-columns: 1fr;
+  }
+  .competitor-monitor--review :is(.competitor-metrics, .competitor-comparison) article {
+    min-height: 0;
+    border-right: 0 !important;
+    border-bottom: 1px solid #dce4ee !important;
+  }
+  .competitor-monitor--review :is(.competitor-metrics, .competitor-comparison) article:last-child {
+    border-bottom: 0 !important;
+  }
+  .competitor-monitor--review .competitor-source,
+  .competitor-monitor--review .competitor-collection-state {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .competitor-monitor--review .competitor-history > article {
+    grid-template-columns: 1fr;
+    gap: 5px;
+    padding-left: 22px;
+  }
+  .competitor-monitor--review .competitor-history article p,
+  .competitor-monitor--review .competitor-timeline-status {
+    grid-column: auto;
+  }
+  .competitor-monitor--review .competitor-modal {
+    padding: 12px;
+  }
+  .competitor-monitor--review .competitor-modal form {
+    padding: 20px 16px;
+  }
+}
+
 @media (max-width: 760px) {
   .competitor-monitor--review .monitoring-readiness-strip {
     padding: 22px 18px;

@@ -3431,3 +3431,6 @@ frontend-design技能用于将选定C的蓝色范围面、白色内容面、圆�
 ## 2026-09-22 · P20 竞品监控规则 C 方向迁移到生产 Vue
 
 [P20 生产实施](P20-PAGE-COMPOSITION-IMPLEMENTATION.md)：将规则就绪、作用范围、触发条件、版本和生效状态迁移到实际 `CompetitorMonitor(mode="rules")`；保留真实读取顺序、全局范围、enabled/disabled 状态与 `competitor:manage` 创建边界。1440/390、reduced/no-preference 共 36 项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。新建表单、真实写入、RBAC 与正式 M07-03 证据仍待。
+## 2026-09-22 · P19 竞品目录与事实详情 C 方向迁移到生产 Vue
+
+[P19 生产实施](P19-PAGE-COMPOSITION-IMPLEMENTATION.md)：将竞品准备度、搜索、目录、当前快照、变化时间轴、告警任务、采集历史和帮助区迁移到实际 `CompetitorMonitor(mode="list")`；保留缺失价格/快照语义、读取路径及 `competitor:manage`、`task:create` 权限边界。1440/390、reduced/no-preference 共 32 项本地核验、单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。创建/删除/规则弹窗、真实采集、RBAC 与正式 M07-03 证据仍待。
