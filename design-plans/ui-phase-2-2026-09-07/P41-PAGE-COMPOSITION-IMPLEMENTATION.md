@@ -18,7 +18,7 @@
 - 定向 E2E：桌面 Chromium 与 390px 移动端共 6/6 通过；未创建真实组织。
 - `npm run typecheck:web`、`npm run format:check`、`npm run verify:docs`、`npm run verify:static-analysis`、`npm run build:web` 与 `git diff --check` 均通过。
 - `npm run verify:frontend-budget` 仍报告全局入口 CSS `index-3FlW1W8G.css` 为 129451 bytes，超过现有 122880 bytes 门槛；本次 P41 样式被构建为独立 `OrganizationCreationWizard-iRZRwtrt.css`（5966 bytes），未调整无关全局样式或预算阈值。
-- BaoTa 部署及线上版本核验结果在本提交部署后补记。
+- BaoTa 部署成功，部署脚本确认临时发布包已删除；生产 `BUILD_SHA=1c5a61206d2b09d2a83313989942736af591f411`。线上 `/api/v1/health/live`、`/api/v1/health/ready`、P41 深链接及向导/父页面 JS、CSS 资源均返回 200；ready 报告 MySQL、Redis、supervisor 可用。仅为只读运行核验，不执行真实组织创建，也不等于正式 M07-03 验收。
 
 ## 未覆盖
 
