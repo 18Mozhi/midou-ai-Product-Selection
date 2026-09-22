@@ -19,7 +19,8 @@
 - `m06-01-platform-accounts.spec.ts`：桌面 Chromium 47/47、390px mobile 47/47 通过；真实写接口由本地夹具拦截。
 - P43 定向单元测试 43/43、Web 类型、格式、文档、静态分析、M07-01 发布矩阵及 Web 生产构建通过。
 - `verify:frontend-budget` 未通过：全局入口 CSS 为 129451/122880 字节，与 P42 已记录的既有超限相同；未修改预算或全局入口 CSS以绕过门禁。
-- 宝塔部署及生产 live/ready、目标深链和所引用静态资源的只读核验将在部署后回填；不会创建、修改、授权、停用或改密真实账号。
+- 宝塔部署通过，生产 `health/live` 为 `ok`、`health/ready` 为 `ready`、`health/available` 为 `available`；生产 build SHA 为 `8d345180d64da16795f0f7894ec71c4e84afc5cc`。
+- 生产 `/platform-admin/users` 深链返回 HTTP 200；`PlatformAccountCenter`、`PlatformAccountDialogs`、`PlatformUserDetailDialog` 对应 JS/CSS 均返回 HTTP 200。均为只读核验，不会创建、修改、授权、停用或改密真实账号。
 
 ## 未覆盖
 
