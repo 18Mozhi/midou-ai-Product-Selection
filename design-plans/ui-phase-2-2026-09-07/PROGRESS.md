@@ -8,6 +8,10 @@
 
 [P16生产实施](P16-PAGE-COMPOSITION-IMPLEMENTATION.md)：核对并收口真实 `SelectionJourney.vue` 的蓝色阶段栏、白色工作区、输入/处理中/候选/决策分区、五项质量门、时间轴和手机单列状态；原创建、恢复、轮询、五门采纳、观察/驳回合同保持不变。桌面/390px `ui-phase2-journey-contracts` 32/32，线上 `/opportunities/start` 为 200；随当前已部署构建提供页面证据。真实会话、RBAC、采集凭证、数据库竞争和正式 M07-03 证据仍待。
 
+## 2026-09-23 · P15机会列表C方向迁移到生产Vue
+
+[P15生产实施](P15-PAGE-COMPOSITION-IMPLEMENTATION.md)：将蓝色机会工作台、四队列、筛选工作区、五项配置摘要、事实列表、批量条、分页和手机单列布局迁移到真实 `OpportunityWorkspace` / `OpportunityListPanel`；保留四队列查询、五门人工采纳、权限与批量/ERP合同，修复移动详情“更多分析”可达性。单测 9/9，M04-02 列表/详情/筛选 E2E 桌面/390px 6/6，视觉基线随本批更新；随后执行发布门与宝塔部署。真实 RBAC、批量/ERP 写入和正式 M07-03 证据仍待。
+
 ## 2026-09-22 · P23全部任务目录C方向迁移到生产Vue
 
 [P23生产实施](P23-PAGE-COMPOSITION-IMPLEMENTATION.md)：将蓝白工作区任务目录、本人优先摘要、状态筛选、搜索/排序、任务记录、进度条与分页迁移到实际 `TaskWorkspace(mode=all)` 与 `TaskListPanel`；保留全范围任务读取、当前 actor 摘要、成员读取、详情、创建、批量与导出视图合同。1440/390、reduced/no-preference 四组共28项本地核验、零写入单测、类型检查、格式检查、构建与宝塔部署将在本批提交前完成。导出视图、弹窗、真实权限和正式 M07-03 证据仍待。
