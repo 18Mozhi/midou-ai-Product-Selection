@@ -3,6 +3,339 @@
   padding: 4px 0 48px;
 }
 
+/* P25 C direction: production surface aligned with the approved approval workspace. */
+.approval-workspace--review {
+  --review-blue: #1748a0;
+  --review-blue-strong: #123d8a;
+  --review-ink: #182d4a;
+  --review-muted: #52647b;
+  --review-line: #dce4ee;
+  --review-pale: #edf4ff;
+  max-width: 1160px;
+  margin: 0 auto;
+  color: var(--review-ink);
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+
+.approval-workspace--review .approval-header {
+  min-height: 136px;
+  padding: 31px 36px;
+  border: 0;
+  border-radius: 0;
+  background: var(--review-blue);
+  color: #fff;
+}
+
+.approval-workspace--review .approval-header p,
+.approval-workspace--review .approval-header span,
+.approval-workspace--review .approval-header h1 {
+  color: #fff;
+}
+
+.approval-workspace--review .approval-header > div:first-child {
+  display: grid;
+  gap: 6px;
+}
+
+.approval-workspace--review .approval-header > div:first-child > p {
+  margin: 0;
+  color: #d8e5ff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.approval-workspace--review .approval-header h1 {
+  margin: 0;
+  font-size: clamp(28px, 3vw, 34px);
+  line-height: 1.1;
+}
+
+.approval-workspace--review button,
+.approval-workspace--review a {
+  min-height: 44px;
+  border: 1px solid var(--review-blue);
+  border-radius: 0;
+  background: #fff;
+  color: var(--review-blue);
+  box-shadow: none;
+  font: inherit;
+  font-weight: 800;
+}
+
+.approval-workspace--review button:hover:not(:disabled),
+.approval-workspace--review a:hover {
+  background: #f3f7ff;
+  color: var(--review-blue-strong);
+}
+
+.approval-workspace--review button:focus-visible,
+.approval-workspace--review a:focus-visible,
+.approval-workspace--review input:focus-visible,
+.approval-workspace--review select:focus-visible,
+.approval-workspace--review textarea:focus-visible,
+.approval-workspace--review summary:focus-visible {
+  outline: 3px solid #2465d7;
+  outline-offset: 3px;
+}
+
+.approval-workspace--review .approval-header button:not(.secondary),
+.approval-workspace--review .approval-detail button:not(.secondary):not(.danger),
+.approval-workspace--review dialog button:not(.secondary):not(.danger),
+.approval-workspace--review .approval-state button:not(.secondary) {
+  background: var(--review-blue);
+  color: #fff;
+}
+
+.approval-workspace--review .approval-header button:not(.secondary):hover:not(:disabled),
+.approval-workspace--review
+  .approval-detail
+  button:not(.secondary):not(.danger):hover:not(:disabled),
+.approval-workspace--review dialog button:not(.secondary):not(.danger):hover:not(:disabled),
+.approval-workspace--review .approval-state button:not(.secondary):hover:not(:disabled) {
+  background: var(--review-blue-strong);
+  color: #fff;
+}
+
+.approval-workspace--review .approval-notice,
+.approval-workspace--review .approval-focus-strip,
+.approval-workspace--review .approval-queue-panel,
+.approval-workspace--review .approval-pagination,
+.approval-workspace--review .approval-state,
+.approval-workspace--review .approval-detail-state {
+  border: 1px solid var(--review-line);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.approval-workspace--review .approval-notice {
+  border-left: 4px solid var(--review-blue);
+  background: var(--review-pale);
+  color: var(--review-muted);
+}
+
+.approval-workspace--review .approval-focus-strip {
+  grid-template-columns: 4px minmax(0, 1fr) auto;
+  background: #fff;
+}
+
+.approval-workspace--review .approval-focus-signal {
+  border-radius: 0;
+  background: var(--review-blue);
+}
+
+.approval-workspace--review .approval-focus-strip dl {
+  gap: 0;
+  border-left: 1px solid var(--review-line);
+}
+
+.approval-workspace--review .approval-focus-strip dl div {
+  min-width: 92px;
+  padding: 0 15px;
+  border-right: 1px solid var(--review-line);
+}
+
+.approval-workspace--review .approval-focus-strip dl div:last-child {
+  border-right: 0;
+}
+
+.approval-workspace--review .approval-focus-strip dd,
+.approval-workspace--review .approval-focus-strip strong {
+  color: var(--review-blue);
+}
+
+.approval-workspace--review .approval-queue-panel {
+  overflow: hidden;
+  background: #fff;
+}
+
+.approval-workspace--review .approval-queue-toolbar {
+  border-bottom: 1px solid var(--review-line);
+  background: #fff;
+}
+
+.approval-workspace--review .approval-inbox-tabs button,
+.approval-workspace--review .approval-status-filter button {
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: #fff;
+  color: var(--review-muted);
+}
+
+.approval-workspace--review .approval-inbox-tabs button[aria-pressed="true"],
+.approval-workspace--review .approval-status-filter button[aria-pressed="true"] {
+  border-bottom-color: var(--review-blue);
+  background: var(--review-pale);
+  color: var(--review-blue);
+}
+
+.approval-workspace--review .approval-list > button {
+  border: 0;
+  border-bottom: 1px solid var(--review-line);
+  border-radius: 0;
+  background: #fff;
+  color: var(--review-ink);
+}
+
+.approval-workspace--review .approval-list > button:hover {
+  background: #f8fbff;
+}
+
+.approval-workspace--review .approval-list .approval-mark {
+  border: 1px solid var(--review-blue);
+  border-radius: 0;
+  color: var(--review-blue);
+}
+
+.approval-workspace--review .approval-row-link,
+.approval-workspace--review .approval-row-kicker em {
+  color: var(--review-blue);
+}
+
+.approval-workspace--review .approval-pagination {
+  margin: 0;
+  padding: 14px;
+  background: #fff;
+  color: var(--review-muted);
+}
+
+.approval-workspace--review .approval-state {
+  background: #fff;
+  color: var(--review-muted);
+}
+
+.approval-workspace--review dialog[open] {
+  border: 1px solid var(--review-line);
+  border-radius: 0;
+  background: #fff;
+  color: var(--review-ink);
+  box-shadow: 0 0 0 100vmax rgb(24 45 74 / 42%);
+}
+
+.approval-workspace--review dialog.approval-detail[open] {
+  border-top: 8px solid var(--review-blue);
+  box-shadow: -18px 0 0 rgb(24 45 74 / 15%);
+}
+
+.approval-workspace--review .approval-impact-summary,
+.approval-workspace--review .approval-decision-context,
+.approval-workspace--review .approval-context-diff,
+.approval-workspace--review .approval-action-history,
+.approval-workspace--review .approval-rule-versions,
+.approval-workspace--review .approval-requested-decision,
+.approval-workspace--review .approval-decision-basis {
+  border-color: var(--review-line);
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.approval-workspace--review .approval-impact-summary > div,
+.approval-workspace--review .approval-decision-context > header > div,
+.approval-workspace--review .approval-diff-summary span,
+.approval-workspace--review .approval-context-origin,
+.approval-workspace--review .approval-context-note,
+.approval-workspace--review .approval-evidence-warning,
+.approval-workspace--review .readonly {
+  border-radius: 0;
+  background: var(--review-pale);
+  color: var(--review-muted);
+}
+
+.approval-workspace--review .approval-requirements > a,
+.approval-workspace--review .approval-form-technical,
+.approval-workspace--review dialog input,
+.approval-workspace--review dialog select,
+.approval-workspace--review dialog textarea {
+  border-color: var(--review-line);
+  border-radius: 0;
+  background: #fff;
+  color: var(--review-ink);
+}
+
+.approval-workspace--review .approval-detail .danger,
+.approval-workspace--review dialog .danger {
+  border-color: #b42318;
+  background: #fff;
+  color: #b42318;
+}
+
+.approval-workspace--review .approval-timeline i,
+.approval-workspace--review .approval-escalation-path span {
+  border-radius: 0;
+  border-color: var(--review-blue);
+}
+
+.approval-workspace--review .approval-timeline article:not(:last-child)::before,
+.approval-workspace--review .template-list {
+  border-color: var(--review-line);
+}
+
+.approval-workspace--review dialog form {
+  gap: 14px;
+}
+
+.approval-workspace--review dialog form h3 {
+  color: var(--review-blue);
+}
+
+.approval-workspace--review dialog form > label {
+  color: var(--review-muted);
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .approval-workspace--review .approval-header {
+    align-items: stretch;
+    min-height: 0;
+    padding: 25px 19px;
+  }
+
+  .approval-workspace--review .approval-header-actions {
+    width: 100%;
+  }
+
+  .approval-workspace--review .approval-header-actions > button {
+    flex: 1;
+  }
+
+  .approval-workspace--review .approval-focus-strip {
+    margin: 0;
+    border-right: 0;
+    border-left: 0;
+  }
+
+  .approval-workspace--review .approval-focus-strip dl {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--review-line);
+  }
+
+  .approval-workspace--review .approval-focus-strip dl div {
+    min-width: 0;
+    padding: 9px;
+  }
+
+  .approval-workspace--review .approval-queue-panel {
+    border-right: 0;
+    border-left: 0;
+  }
+
+  .approval-workspace--review dialog[open] {
+    width: calc(100vw - 24px);
+    max-height: calc(100dvh - 24px);
+    overflow: auto;
+  }
+
+  .approval-workspace--review dialog.approval-detail[open] {
+    padding: 22px 18px 80px;
+  }
+}
+
 .approval-workspace header {
   display: flex;
   justify-content: space-between;
