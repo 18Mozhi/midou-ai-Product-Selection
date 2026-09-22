@@ -499,6 +499,18 @@ dialog button {
   outline: 3px solid rgb(13 110 253 / 32%);
   outline-offset: 3px;
 }
+.account-center--organization-review .account-hero {
+  grid-template-columns: minmax(0, 1fr) minmax(270px, 0.55fr);
+}
+.account-center--organization-review .account-metrics article:first-child {
+  border-color: color-mix(in srgb, var(--account-review-blue) 48%, var(--account-review-line));
+}
+.account-center--organization-review .account-filter {
+  border-top: 3px solid var(--account-review-blue);
+}
+.account-center--organization-review .account-table-wrap {
+  border-top: 3px solid var(--account-review-blue-deep);
+}
 @media (max-width: 940px) {
   .account-center--review .account-hero {
     grid-template-columns: 1fr;

@@ -575,7 +575,10 @@ function revokeSessions(item: any, sessionId: string | null = null) {
 onMounted(load);
 </script>
 <template>
-  <section class="account-center account-center--review">
+  <section
+    class="account-center account-center--review"
+    :class="{ 'account-center--organization-review': organizationListRoute }"
+  >
     <header class="account-hero">
       <div>
         <p>
