@@ -12,8 +12,10 @@
 - `m06-01-platform-accounts.spec.ts`：桌面 Chromium 48/48、390px mobile 48/48。P44新增用例核验桌面/1200px/390px栏位顺序、横向溢出、标签关联、搜索查询、全局汇总稳定及比较状态不进入URL；写入均由本地夹具拦截。
 - 相关 P43/P44 页面预览和目录回归测试 14/14、Web 类型、格式、文档/路由图、静态分析、M07-01发布矩阵及 Web 生产构建通过。
 - `verify:frontend-budget` 仍失败：入口 CSS `index-3FlW1W8G.css` 为 129451/122880 bytes，与既有 P43 记录的超限一致；未修改预算或绕过该门。
-- 宝塔部署 SHA、线上健康和静态资源只读核验在部署后补录。
+- 宝塔部署成功，build SHA 为 `2b99cf75b55cf257b6a6ffd5a511664fd2511ff0`；部署器确认网站、Node、Python运行包更新完成，上传临时包已删除。
+- 线上 `/api/v1/health/live`、`ready`、`available` 及 `/platform-admin/admins` 深链均 HTTP 200；health/live 返回相同 build SHA。入口 JS/CSS、`PlatformAccountCenter`、`PlatformAdminRecords`、`PlatformRoleComparison` 引用资源均 HTTP 200；管理员组件 JS 与 CSS 含预期目录标题及 `.account-page-layout--admins` 样式。
+- 线上入口 CSS 仍为 129451 bytes，超过现有 122880 bytes 门限；门禁已记录为未通过，不扩大 CSS 预算或声称全局门禁通过。
 
 ## 未覆盖
 
-不改 API/OpenAPI、数据库、环境变量、RBAC、数据处理和服务拓扑。夹具不能证明生产账号权限、真实写入或正式 M07-03 验收；全 73 页交付继续推进。
+不改 API/OpenAPI、数据库、环境变量、RBAC、数据处理和服务拓扑。深链 HTTP 200 只证明静态入口可达，不证明账号授权；夹具不能证明生产账号权限、真实写入或正式 M07-03 验收；全 73 页交付继续推进。
