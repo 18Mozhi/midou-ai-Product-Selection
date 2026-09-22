@@ -18,14 +18,22 @@ import {
 import { reviewHash } from "../../scripts/lib/ui-phase2-vue-review-host.mjs";
 
 // Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
-const read = (file) =>
-  historicalAdminResultsSource(
-    file,
-    historicalOrganizationActionSource(file, readFileSync(file, "utf8")),
-  );
+const historicalP42Revision = "73d04832";
+const output = "output/playwright/p42-detail-preview";
+const read = (file) => {
+  let source;
+  try {
+    source = execFileSync("git", ["show", `${historicalP42Revision}:${file}`], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    });
+  } catch {
+    source = readFileSync(file, "utf8");
+  }
+  return historicalAdminResultsSource(file, historicalOrganizationActionSource(file, source));
+};
 const detail = "apps/web/src/components/PlatformOrganizationDetailDialog.vue";
 const reason = "apps/web/src/components/PlatformAccountDialogs.vue";
-const output = "output/playwright/p42-detail-preview";
 function directives(source) {
   const result = [];
   function visit(node) {

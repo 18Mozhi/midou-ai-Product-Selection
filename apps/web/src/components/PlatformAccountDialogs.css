@@ -68,3 +68,78 @@ button {
     min-width: 0;
   }
 }
+.p42-reason-dialog {
+  width: min(580px, calc(100% - 32px));
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  border-color: #dbe1e9;
+  border-radius: 12px;
+  color: #202c3d;
+  background: #fff;
+}
+.p42-reason-dialog form {
+  display: grid;
+  min-width: 0;
+  gap: 0;
+  padding: 0;
+}
+.p42-reason-head {
+  padding: 24px;
+  color: #fff;
+  background: #254a9c;
+}
+.p42-reason-head h3 {
+  margin: 0 0 12px;
+  color: #fff;
+  font-size: 24px;
+}
+.p42-reason-head p {
+  margin: 0;
+  color: #e5edff;
+  font-size: 14px;
+}
+.p42-reason-dialog label {
+  gap: 10px;
+  padding: 24px;
+}
+.p42-reason-dialog textarea {
+  min-height: 140px;
+  border-color: #6680a2;
+  color: #202c3d;
+  background: #fff;
+  font: inherit;
+  font-size: 16px;
+}
+.p42-reason-dialog footer {
+  gap: 10px;
+  padding: 18px 24px;
+  border-top: 1px solid #dbe1e9;
+}
+.p42-reason-dialog footer button {
+  min-height: 44px;
+  border: 1px solid #dbe1e9;
+  border-radius: 8px;
+  color: #202c3d;
+  background: #fff;
+  font: inherit;
+  font-size: 15px;
+}
+.p42-reason-dialog footer button:last-child {
+  border-color: #254a9c;
+  color: #fff;
+  background: #254a9c;
+}
+.p42-reason-dialog[aria-label="停用组织"] footer button:last-child {
+  border-color: #8c3c32;
+  background: #8c3c32;
+}
+.p42-reason-dialog :is(textarea, button):focus-visible {
+  outline: 3px solid #254a9c;
+  outline-offset: 3px;
+}
+.p42-reason-dialog button:disabled {
+  border-color: #dbe1e9;
+  background: #edf1f6;
+  color: #58677b;
+  opacity: 1;
+}

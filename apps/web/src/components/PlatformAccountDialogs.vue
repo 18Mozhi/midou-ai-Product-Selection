@@ -136,10 +136,17 @@ const { dialogElement: createUserDialogElement, handleCancel: handleCreateUserCa
     </form>
   </dialog>
 
-  <dialog ref="reasonDialogElement" :aria-label="reasonTitle" @cancel="handleReasonCancel">
+  <dialog
+    ref="reasonDialogElement"
+    class="p42-reason-dialog"
+    :aria-label="reasonTitle"
+    @cancel="handleReasonCancel"
+  >
     <form @submit.prevent="emit('submitReason')">
-      <h3>{{ reasonTitle }}</h3>
-      <p>原因会写入平台审计记录。</p>
+      <header class="p42-reason-head">
+        <h3>{{ reasonTitle }}</h3>
+        <p>原因会写入平台审计记录。</p>
+      </header>
       <label
         >操作原因<textarea
           :value="reasonText"

@@ -10,6 +10,7 @@ const file = "apps/web/src/components/PlatformAccountCenter.vue";
 const current = readFileSync(file, "utf8");
 const controller = readFileSync("apps/web/src/use-platform-organization-actions.ts", "utf8");
 const baseline = execFileSync("git", ["show", `aa611c40:${file}`], { encoding: "utf8" });
+const currentHead = execFileSync("git", ["show", `HEAD:${file}`], { encoding: "utf8" });
 const plain = (v) => JSON.parse(JSON.stringify(v));
 function harness(source = current) {
   const ast = ts.createSourceFile(
@@ -58,6 +59,8 @@ function harness(source = current) {
     organizationMissing: ref(false),
     organizationError: ref(""),
     organizationSuccess: ref(""),
+    organizationRefreshWarning: ref(""),
+    refreshWarning: ref(""),
     reasonOpen: ref(false),
     reasonTitle: ref(""),
     reasonText: ref(""),
@@ -75,8 +78,13 @@ function harness(source = current) {
   };
   box.load = async () => {
     box.loads++;
+    if (box.loadResult === false) box.message.value = "重新加载未成功。";
+    return box.loadResult ?? true;
   };
   box.loadAccounts = box.load;
+  box.showOrganization = (organization) => {
+    box.selected.value = organization;
+  };
   box.router = {
     replace: async (path) => {
       box.props.routePath = path;
@@ -97,7 +105,7 @@ function harness(source = current) {
       ? controller.replace(/^import .*?;\s*/s, "").replace("export function", "function") +
         `
 const {updateOrganization,toggleOrganization,invalidateOrganizationAction}=usePlatformOrganizationActions({
-selected,form:organizationForm,data,detailOpen:organizationDetailOpen,missing:organizationMissing,error:organizationError,success:organizationSuccess,pendingReasonAction,
+ selected,form:organizationForm,data,detailOpen:organizationDetailOpen,missing:organizationMissing,error:organizationError,success:organizationSuccess,refreshWarning:organizationRefreshWarning,message,pendingReasonAction,
 routePath:()=>props.routePath,organizationId:()=>props.organizationId,clearFeedback:clearOrganizationFeedback,showOrganization,askReason,cancelReason,write});
 `
       : "";
@@ -110,7 +118,12 @@ routePath:()=>props.routePath,organizationId:()=>props.organizationId,clearFeedb
         [
           ...functions.map((n) => n.name.text),
           ...(source === current
-            ? ["updateOrganization", "toggleOrganization", "invalidateOrganizationAction"]
+            ? [
+                "updateOrganization",
+                "toggleOrganization",
+                "invalidateOrganizationAction",
+                "showOrganization",
+              ]
             : []),
         ].join(",") +
         "};",
@@ -209,19 +222,17 @@ test("invalidation guards routes, lifecycle and does not cancel an unrelated rea
     h.box.props.organizationId,
   ]);
 });
-test("unscoped writes still reread and parent template is unchanged", async () => {
+test("unscoped writes still reread and organization feedback is connected", async () => {
   const h = harness();
   const run = h.api.write("/unrelated", {});
   h.resolve({ ok: true });
   await run;
   assert.equal(h.box.loads, 1);
-  assert.equal(
-    parse(current).descriptor.template.content,
-    parse(baseline).descriptor.template.content.replace(
-      "      <ResponsiveFilterDrawer",
-      adminDirectoryHeading + "      <ResponsiveFilterDrawer",
-    ),
-  );
+  const template = parse(current).descriptor.template.content;
+  assert.match(template, /:refresh-warning="organizationRefreshWarning"/);
+  assert.match(template, /:refreshing="refreshing"/);
+  assert.match(template, /@retry="retryOrganizationRead"/);
+  assert.ok(template.includes(adminDirectoryHeading));
 });
 test("current restore retains active target status and original reason", async () => {
   const h = harness();
@@ -231,6 +242,26 @@ test("current restore retains active target status and original reason", async (
   await run;
   assert.equal(h.box.requests[0].body.status, "active");
   assert.equal(h.box.organizationSuccess.value, "组织已恢复。");
+});
+test("successful write receipt stays visible when overview reread fails", async () => {
+  const h = harness();
+  h.box.loadResult = false;
+  const { run } = await start(h, "save");
+  h.resolve({
+    id: "original-org",
+    name: "Saved organization",
+    timezone: "UTC",
+    data_retention_days: 30,
+  });
+  await run;
+  assert.equal(h.box.selected.value.name, "Saved organization");
+  assert.equal(h.box.selected.value.member_count, undefined);
+  assert.equal(h.box.selected.value.workspace_count, undefined);
+  assert.equal(
+    h.box.organizationRefreshWarning.value,
+    "组织资料已保存，但最新组织资料暂未读取。请重新加载核对。",
+  );
+  assert.equal(h.box.organizationSuccess.value, "组织资料已保存。");
 });
 for (const failure of [false, true])
   test(`owned reread ignores late ${failure ? "failure" : "success"} after scope invalidation`, async () => {
@@ -298,7 +329,7 @@ test("all unrelated parent functions remain textually unchanged", () => {
       ts.ScriptTarget.Latest,
       true,
     );
-  const old = functions(baseline),
+  const old = functions(currentHead),
     now = functions(current);
   const excluded = new Set([
     // Independently covered against 01af0262 in platform-user-creation-owner.test.mjs.
@@ -306,8 +337,12 @@ test("all unrelated parent functions remain textually unchanged", () => {
     "createUser",
     "resetPassword", // Independently covered in platform-user-password-ownership.test.mjs.
     "load",
+    "loadAccounts",
     "write",
     "closeOrganizationDetail",
+    "clearOrganizationFeedback",
+    "showOrganization",
+    "syncOrganizationRoute",
     "updateOrganization",
     "toggleOrganization",
   ]);

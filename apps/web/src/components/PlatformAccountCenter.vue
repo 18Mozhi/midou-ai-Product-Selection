@@ -5,6 +5,7 @@ import type { RoleCapabilitySummary } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
 import { usePlatformUserDetail } from "../use-platform-user-detail";
 import { usePlatformOrganizationActions } from "../use-platform-organization-actions";
+import { usePlatformOrganizationDetailState } from "../use-platform-organization-detail-state";
 import { useUserCreationOwner } from "../use-user-creation-owner";
 import type { AccountData, AccountTab, MembershipInput } from "../platform-account-types";
 import AppIcon from "./AppIcon.vue";
@@ -53,6 +54,7 @@ const props = withDefaults(
   organizationMissing = ref(false),
   organizationError = ref(""),
   organizationSuccess = ref(""),
+  organizationRefreshWarning = ref(""),
   passwordOpen = ref(false),
   passwordError = ref(""),
   reasonOpen = ref(false),
@@ -92,6 +94,16 @@ const {
   closeUserDetail,
   openUserDetail,
 } = usePlatformUserDetail(request, selected, () => props.routePath);
+const { showOrganization, syncOrganizationRoute } = usePlatformOrganizationDetailState({
+  selected,
+  data,
+  detailOpen: organizationDetailOpen,
+  missing: organizationMissing,
+  createOpen,
+  form: organizationForm,
+  routePath: () => props.routePath,
+  organizationId: () => props.organizationId,
+});
 const { updateOrganization, toggleOrganization, invalidateOrganizationAction } =
   usePlatformOrganizationActions({
     selected,
@@ -101,6 +113,8 @@ const { updateOrganization, toggleOrganization, invalidateOrganizationAction } =
     missing: organizationMissing,
     error: organizationError,
     success: organizationSuccess,
+    refreshWarning: organizationRefreshWarning,
+    message,
     pendingReasonAction,
     routePath: () => props.routePath,
     organizationId: () => props.organizationId,
@@ -119,7 +133,10 @@ watch(
 );
 watch(
   () => [props.routePath, props.organizationId],
-  () => syncOrganizationRoute(),
+  () => {
+    clearOrganizationFeedback();
+    syncOrganizationRoute();
+  },
 );
 watch(
   () => [route.query.query, route.query.status],
@@ -234,11 +251,11 @@ async function loadPlatformRoles() {
   }
 }
 async function load() {
-  await loadAccounts();
+  return loadAccounts();
 }
-async function loadAccounts(ownsResult?: () => boolean) {
+async function loadAccounts(ownsResult?: () => boolean): Promise<boolean> {
   if (permissionsRoute.value) {
-    if (rolesLoading.value) return;
+    if (rolesLoading.value) return false;
     if (!platformRoles.value.length) state.value = "loading";
     const loaded = await loadPlatformRoles();
     state.value = loaded
@@ -248,9 +265,9 @@ async function loadAccounts(ownsResult?: () => boolean) {
       : platformRoles.value.length
         ? "ready"
         : "error";
-    return;
+    return loaded;
   }
-  if (refreshing.value) return;
+  if (refreshing.value) return false;
   const hadData = Boolean(data.value);
   if (!hadData) state.value = "loading";
   refreshing.value = true;
@@ -264,14 +281,15 @@ async function loadAccounts(ownsResult?: () => boolean) {
     const accountResponse = await request<AccountData>(`/platform/accounts?${p}`, {
       signal: controller.signal,
     });
-    if (ownsResult && !ownsResult()) return;
+    if (ownsResult && !ownsResult()) return false;
     data.value = accountResponse.data;
     state.value = "ready";
     lastUpdatedAt.value = new Date();
     syncOrganizationRoute();
     if (tab.value === "admins") await loadPlatformRoles();
+    return true;
   } catch (e) {
-    if (ownsResult && !ownsResult()) return;
+    if (ownsResult && !ownsResult()) return false;
     const action =
       e instanceof DOMException && e.name === "AbortError"
         ? "读取超过 12 秒，请稍后重试。"
@@ -280,6 +298,7 @@ async function loadAccounts(ownsResult?: () => boolean) {
           : "读取失败";
     message.value = hadData ? `${action} 已保留上次成功读取的数据。` : action;
     state.value = hadData ? "ready" : "error";
+    return false;
   } finally {
     window.clearTimeout(timeout);
     refreshing.value = false;
@@ -310,12 +329,16 @@ async function write<T = unknown>(
   method = "POST",
   onError?: (value: string) => void,
   ownsResult?: () => boolean,
+  onReload?: (loaded: boolean) => void,
 ) {
   busy.value = path;
   message.value = "";
   try {
     const response = await request<T>(path, { method, body });
-    if (!ownsResult || ownsResult()) await loadAccounts(ownsResult);
+    if (!ownsResult || ownsResult()) {
+      const loaded = await loadAccounts(ownsResult);
+      if (!ownsResult || ownsResult()) onReload?.(loaded);
+    }
     return response.data;
   } catch (e) {
     const action = e instanceof ApiClientError ? e.actionHint : "操作失败";
@@ -447,14 +470,6 @@ async function addMembership(userId: string, value: MembershipInput) {
   detailSuccess.value = `${roleText(value.role_code)}组织关系已创建。`;
   await openUserDetail(selected.value, true);
 }
-function showOrganization(item: any) {
-  selected.value = item;
-  organizationMissing.value = false;
-  organizationForm.name = item.name;
-  organizationForm.timezone = item.timezone || "Asia/Shanghai";
-  organizationForm.data_retention_days = Number(item.data_retention_days || 365);
-  organizationDetailOpen.value = true;
-}
 async function openOrganization(item: any) {
   clearOrganizationFeedback();
   showOrganization(item);
@@ -470,28 +485,16 @@ async function closeOrganizationDetail() {
 function clearOrganizationFeedback() {
   organizationError.value = "";
   organizationSuccess.value = "";
+  organizationRefreshWarning.value = "";
 }
-function syncOrganizationRoute() {
-  if (props.routePath.endsWith("/new")) {
-    createOpen.value = true;
-    organizationDetailOpen.value = false;
-    organizationMissing.value = false;
-    return;
-  }
-  createOpen.value = false;
-  if (props.organizationId && data.value) {
-    const organization = data.value.organizations.find((item) => item.id === props.organizationId);
-    if (organization) showOrganization(organization);
-    else if (selected.value?.id === props.organizationId) showOrganization(selected.value);
-    else {
-      selected.value = null;
-      organizationMissing.value = true;
-      organizationDetailOpen.value = true;
-    }
-    return;
-  }
-  organizationDetailOpen.value = false;
-  organizationMissing.value = false;
+async function retryOrganizationRead() {
+  organizationRefreshWarning.value = "";
+  const loaded = await load();
+  organizationRefreshWarning.value = loaded
+    ? organizationMissing.value
+      ? "本次组织列表仍未返回这个目标。"
+      : ""
+    : "重新加载未成功。";
 }
 function openCreateUser(asAdmin = false) {
   createUserOwner.invalidate();
@@ -825,9 +828,11 @@ onMounted(load);
       :missing="organizationMissing"
       :error-message="organizationError"
       :success-message="organizationSuccess"
+      :refresh-warning="organizationRefreshWarning"
+      :refreshing="refreshing"
       :status-text="statusText"
       @close="closeOrganizationDetail"
-      @retry="load"
+      @retry="retryOrganizationRead"
       @clear-feedback="clearOrganizationFeedback"
       @save="updateOrganization"
       @toggle-status="toggleOrganization"

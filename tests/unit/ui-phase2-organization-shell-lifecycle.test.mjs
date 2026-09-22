@@ -5,12 +5,24 @@ import { historicalUserCreationSource } from "../../scripts/lib/ui-phase2-user-c
 import { historicalFilterResetSource } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 
 const folder = "output/playwright/p42-shell-lifecycle";
-const read = (file) =>
-  historicalAdminResultsSource(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n"));
+const capturedRevision = "af056d31";
+const read = (file) => {
+  let source;
+  try {
+    source = execFileSync("git", ["show", `${capturedRevision}:${file}`], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    });
+  } catch {
+    source = readFileSync(file, "utf8");
+  }
+  return historicalAdminResultsSource(file, source.replaceAll("\r\n", "\n"));
+};
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const evidence = JSON.parse(read(`${folder}/evidence.json`));
 test("P42 historical full app capture binds original loaded sources and exact screenshot inventory", () => {

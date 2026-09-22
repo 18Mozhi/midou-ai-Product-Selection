@@ -883,15 +883,26 @@ test("organization detail exposes missing, inline failure, retry success and tou
   page,
 }) => {
   await setup(page);
-  await page.goto("/platform-admin/organizations/00000000-0000-4000-8000-000000000699");
-  const missing = page.getByRole("dialog", { name: "未找到组织" });
-  await expect(missing.getByRole("heading", { name: "未找到该组织" })).toBeVisible();
-  await expect(missing.getByRole("button", { name: "重新加载" })).toBeVisible();
-
-  let attempts = 0;
+  let readAttempts = 0;
+  let writeAttempts = 0;
+  let writeRequest: { body: unknown; headers: Record<string, string> } | null = null;
+  await page.route("**/api/v1/platform/accounts?**", async (route: any) => {
+    readAttempts += 1;
+    const updated = structuredClone(overview);
+    updated.organizations[0].name = "米豆选品团队更新";
+    await route.fulfill({ json: env(writeAttempts >= 2 ? updated : overview) });
+  });
   await page.route(`**/api/v1/platform/accounts/organizations/${org}`, async (route: any) => {
-    attempts += 1;
-    if (attempts === 1) {
+    if (route.request().method() !== "PATCH") {
+      await route.continue();
+      return;
+    }
+    writeAttempts += 1;
+    writeRequest = {
+      body: route.request().postDataJSON(),
+      headers: route.request().headers(),
+    };
+    if (writeAttempts === 1) {
       await route.fulfill({
         status: 500,
         json: {
@@ -906,14 +917,26 @@ test("organization detail exposes missing, inline failure, retry success and tou
       });
       return;
     }
-    await route.fulfill({ json: env({ id: org, name: "米豆选品团队" }) });
+    await route.fulfill({
+      json: env({
+        id: org,
+        name: "米豆选品团队更新",
+        timezone: "Asia/Shanghai",
+        data_retention_days: 365,
+      }),
+    });
   });
+  await page.goto("/platform-admin/organizations/00000000-0000-4000-8000-000000000699");
+  const missing = page.getByRole("dialog", { name: "未找到组织" });
+  await expect(missing.getByRole("heading", { name: "当前列表未找到该组织" })).toBeVisible();
+  await expect(missing.getByRole("button", { name: "重新加载" })).toBeVisible();
+
   await page.goto(`/platform-admin/organizations/${org}`);
-  const detail = page.getByRole("dialog", { name: "米豆选品团队" });
+  const detail = page.locator("dialog.organization-detail-dialog");
   const technicalDetails = detail.getByText("技术详情", { exact: true });
   await expect(technicalDetails).toBeVisible();
   expect((await technicalDetails.boundingBox())?.height).toBeGreaterThanOrEqual(44);
-  await detail.getByLabel("组织名称", { exact: true }).fill("米豆选品团队更新");
+  await detail.locator('input[aria-describedby="organization-name-help"]').fill("米豆选品团队更新");
   await detail.getByRole("button", { name: "保存组织资料" }).click();
   await page
     .getByRole("dialog", { name: "保存组织资料" })
@@ -926,7 +949,14 @@ test("organization detail exposes missing, inline failure, retry success and tou
     .getByRole("button", { name: "确认执行" })
     .click();
   await expect(detail.getByRole("status")).toContainText("组织资料已更新。");
-  expect(attempts).toBe(2);
+  expect(writeAttempts).toBe(2);
+  expect(readAttempts).toBeGreaterThanOrEqual(3);
+  expect(writeRequest?.body).toMatchObject({
+    name: "米豆选品团队更新",
+    timezone: "Asia/Shanghai",
+    data_retention_days: 365,
+  });
+  expect(writeRequest?.headers["idempotency-key"]).toBeTruthy();
 });
 
 test("M06-01.A06/A09 creates organization with audited idempotent request", async ({

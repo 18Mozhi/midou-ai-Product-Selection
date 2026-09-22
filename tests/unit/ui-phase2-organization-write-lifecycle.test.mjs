@@ -7,12 +7,20 @@ import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { reviewHash } from "../../scripts/lib/ui-phase2-vue-review-host.mjs";
 // Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
-const read = (file) =>
-  historicalAdminResultsSource(
-    file,
-    historicalOrganizationActionSource(file, readFileSync(file, "utf8")),
-  );
+const historicalP42Revision = "08aeb8dc";
 const dir = "output/playwright/p42-write-lifecycle";
+const read = (file) => {
+  let source;
+  try {
+    source = execFileSync("git", ["show", `${historicalP42Revision}:${file}`], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    });
+  } catch {
+    source = readFileSync(file, "utf8");
+  }
+  return historicalAdminResultsSource(file, historicalOrganizationActionSource(file, source));
+};
 const evidence = () => JSON.parse(read(`${dir}/evidence.json`));
 test("P42 lifecycle is diagnostic, bound to captured source revisions and exact images", () => {
   const e = evidence();
