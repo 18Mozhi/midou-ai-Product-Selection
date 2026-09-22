@@ -575,7 +575,7 @@ function revokeSessions(item: any, sessionId: string | null = null) {
 onMounted(load);
 </script>
 <template>
-  <section class="account-center">
+  <section class="account-center account-center--review">
     <header class="account-hero">
       <div>
         <p>

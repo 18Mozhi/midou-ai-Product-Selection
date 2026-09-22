@@ -320,3 +320,215 @@ dialog button {
     min-width: 0;
   }
 }
+
+/* P39 C composition: a blue scope rail, factual account workbench, and quiet actions. */
+.account-center--review {
+  --account-review-blue: #0b63ce;
+  --account-review-blue-deep: #08458f;
+  --account-review-ink: #14243a;
+  --account-review-muted: #60728b;
+  --account-review-line: #d7e1ec;
+  --account-review-soft: #f4f7fb;
+  max-width: 1280px;
+  margin-inline: auto;
+  gap: 20px;
+  color: var(--account-review-ink);
+}
+.account-center--review .account-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(330px, 0.7fr);
+  align-items: stretch;
+  gap: 24px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--account-review-blue-deep);
+  border-radius: 18px;
+  background: var(--account-review-blue);
+  color: #fff;
+  box-shadow: 0 16px 40px rgb(8 69 143 / 14%);
+}
+.account-center--review .account-hero > div:first-child {
+  padding: 30px 32px;
+}
+.account-center--review .account-hero p {
+  color: #cfe3ff;
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.account-center--review .account-hero h2 {
+  max-width: 680px;
+  margin: 9px 0 10px;
+  color: #fff;
+  font-size: clamp(26px, 3vw, 38px);
+  line-height: 1.08;
+}
+.account-center--review .account-hero span {
+  display: block;
+  max-width: 700px;
+  color: #e8f2ff;
+  line-height: 1.6;
+}
+.account-center--review .hero-actions {
+  align-content: center;
+  justify-content: flex-end;
+  padding: 24px 26px;
+  background: rgb(5 47 102 / 28%);
+}
+.account-center--review .account-hero button,
+.account-center--review .account-hero .hero-actions a {
+  border: 1px solid rgb(255 255 255 / 38%);
+  background: #fff;
+  color: var(--account-review-blue-deep);
+  box-shadow: none;
+}
+.account-center--review .account-hero button:last-child,
+.account-center--review .hero-actions button:last-child,
+.account-center--review .hero-actions a.secondary {
+  border-color: rgb(255 255 255 / 45%);
+  background: transparent;
+  color: #fff;
+}
+.account-center--review .account-metrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.account-center--review .account-metrics article {
+  min-height: 116px;
+  padding: 18px 20px;
+  border: 1px solid var(--account-review-line);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 7px 22px rgb(20 36 58 / 5%);
+}
+.account-center--review .account-metrics small,
+.account-center--review .account-metrics span {
+  color: var(--account-review-muted);
+}
+.account-center--review .account-metrics strong {
+  color: var(--account-review-ink);
+  font-size: 30px;
+}
+.account-center--review .account-tabs {
+  gap: 0;
+  padding: 4px;
+  border: 1px solid var(--account-review-line);
+  border-radius: 12px;
+  background: var(--account-review-soft);
+}
+.account-center--review .account-tabs a {
+  min-height: 42px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--account-review-muted);
+  font-weight: 800;
+}
+.account-center--review .account-tabs a.on {
+  background: #fff;
+  color: var(--account-review-blue-deep);
+  box-shadow: 0 2px 8px rgb(20 36 58 / 9%);
+}
+.account-center--review .account-filter {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 170px auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--account-review-line);
+  border-radius: 14px;
+  background: #fff;
+}
+.account-center--review .account-filter input,
+.account-center--review .account-filter select {
+  min-width: 0;
+  border-color: var(--account-review-line);
+  background: #fff;
+}
+.account-center--review .account-filter button {
+  background: var(--account-review-blue);
+}
+.account-center--review .account-filter button.secondary {
+  color: var(--account-review-ink);
+  background: var(--account-review-soft);
+}
+.account-center--review .admin-directory-heading {
+  margin: 0;
+  padding: 18px 20px;
+  border-left: 4px solid var(--account-review-blue);
+  background: var(--account-review-soft);
+}
+.account-center--review .admin-directory-heading h3,
+.account-center--review .admin-directory-heading p {
+  margin: 0;
+}
+.account-center--review .admin-directory-heading p {
+  margin-top: 5px;
+  color: var(--account-review-muted);
+}
+.account-center--review .account-table-wrap,
+.account-center--review .account-empty,
+.account-center--review .account-state {
+  border: 1px solid var(--account-review-line);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 7px 22px rgb(20 36 58 / 4%);
+}
+.account-center--review .account-table-wrap {
+  overflow: auto;
+}
+.account-center--review th {
+  background: var(--account-review-soft);
+  color: var(--account-review-muted);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+.account-center--review td,
+.account-center--review th {
+  border-bottom-color: var(--account-review-line);
+}
+.account-center--review td button,
+.account-center--review .account-empty button,
+.account-center--review .account-state button {
+  border-color: var(--account-review-line);
+  background: #fff;
+  color: var(--account-review-blue-deep);
+}
+.account-center--review :is(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid rgb(13 110 253 / 32%);
+  outline-offset: 3px;
+}
+@media (max-width: 940px) {
+  .account-center--review .account-hero {
+    grid-template-columns: 1fr;
+  }
+  .account-center--review .hero-actions {
+    justify-content: flex-start;
+    padding: 0 26px 26px;
+    background: transparent;
+  }
+}
+@media (max-width: 700px) {
+  .account-center--review .account-hero > div:first-child {
+    padding: 24px 20px 18px;
+  }
+  .account-center--review .account-hero h2 {
+    font-size: 27px;
+  }
+  .account-center--review .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 0 20px 20px;
+  }
+  .account-center--review .hero-actions > * {
+    width: 100%;
+    justify-content: center;
+  }
+  .account-center--review .account-metrics {
+    grid-template-columns: 1fr;
+  }
+  .account-center--review .account-filter {
+    grid-template-columns: 1fr;
+  }
+}
