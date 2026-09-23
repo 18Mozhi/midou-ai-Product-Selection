@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "pageId": "P12",
   "route": "/home",
-  "status": "source-reviewed-not-user-approved",
+  "status": "implemented-user-auto-approved-local-e2e-verified",
   "contract": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/HomeDashboard.vue": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+    "apps/web/src/components/HomeDashboard.vue": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0",
     "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4"
   },
   "dialogs": {
@@ -270,7 +270,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "仅第一条、不是批量恢复。handler无setupBusy早退；成功文案不证明采集已运行，写成功后读失败/真实调度另验。"
+      "remaining": "仅第一条、不是批量恢复；已有单飞防重复和写入受理/后续读取分离反馈。真实权限、SQL写入和采集调度仍需独立验收。"
     },
     {
       "actionId": "HD-SETUP",
@@ -319,7 +319,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "原型busy锁是提案。load只在明确not_configured且rules空时自动展开，缺字段仅fallback并不满足该自动展开条件。"
+      "remaining": "自动展开要求明确not_configured、规则成功读取且无规则；缺automatic_selection保持未知，规则读取失败不开放创建/恢复。"
     },
     {
       "actionId": "HD-CREATE-RULE",
@@ -385,7 +385,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "关键词保留重复；语言按现有市场映射，渠道in_app、空分类null、默认名称首关键词。不清七输入；读失败不能抹掉写成功事实，真实权限/SQL/调度待验。"
+      "remaining": "关键词保留重复；语言按现有市场映射，渠道in_app、空分类null、默认名称首关键词。七字段写中锁定，重复提交被拦；读失败保留写入已受理事实。真实权限/SQL/调度待验。"
     },
     {
       "actionId": "HD-RECOMMENDATION",
@@ -694,21 +694,21 @@
     }
   ],
   "surfaceReview": {
-    "status": "source-reviewed-not-runtime-accepted",
+    "status": "actual-vue-local-e2e-verified-not-production-accepted",
     "files": [
       "apps/web/src/components/HomeDashboard.vue",
       "apps/web/src/components/HomeAutomationOverview.vue"
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/HomeDashboard.vue": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+      "apps/web/src/components/HomeDashboard.vue": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0",
       "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
       "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
-      "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
-      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+      "apps/web/src/components/NavigationShell.vue": "a4802ba4c400d15410cdf7093809f2c22b6ed63fabcd71597d7c02969378b955",
+      "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
     },
@@ -790,18 +790,18 @@
     "sharedRemaining": [
       "NavigationShell实际surfaceProps传capabilities，HomeAutomationOverview接selection；没有把共享导航内部全部控件纳入20个局部候选分母。",
       "UiStatePanel默认secondary部分状态有标签但本页无监听；过期/无权限新恢复链接为提案，实际调用方未修改。",
-      "目录/home为reset_on_scope，父key含组织/工作区且KeepAlive最大12。没有本地scope watcher不等于完全无范围隔离；回到已缓存key是否及时刷新及旧请求结果仍须真实Vue验收。"
+      "目录/home为reset_on_scope，父key含组织/工作区且KeepAlive最大12；本页读取代次隔离迟到响应。切换范围、缓存返回与真实权限仍须生产身份场景验收。"
     ]
   },
   "compositionGaps": [
     "20源位置/14组；顶部/全部无view链接、计数view链接、item.route和首条恢复分开，不将同中文字当相同目标。",
-    "七字段内联form，无原生弹窗；rules失败不等于无规则。缺automatic_selection显示fallback未配置/0，但load不会因此自动展开；明确not_configured加rules失败才自动展开。",
+    "七字段内联form，无原生弹窗；rules失败与无规则明确区分，不开放创建/恢复。缺automatic_selection显示未知，不显示0；只有明确not_configured且规则成功读取为空才自动展开。",
     "既有64图为独立工作面，未组合真实顶/底导航，不能证明实际首条推荐仍在手机首屏；84槽保守未映射。",
     "/home声明reset_on_scope，父key结合组织/工作区。返回旧缓存key、写入后重读失败和全生命周期仍未真实验收，不把缺watcher直接定性为跨范围泄露。"
   ],
-  "approval": "pending-user-review",
+  "approval": "user-approved-remaining-pages-auto",
   "limits": [
-    "source/scene/testReferences只是源审阅与离线提案关联，不授予用户批准或真实运行验收。",
-    "不修改现有生产UI、API/OpenAPI、主题ID、密度持久化、权限、数据库或部署。"
+    "用户已授权剩余页面视觉自动通过；本地实际 Vue 与隔离测试不证明生产会话/RBAC、数据库、真实采集或正式 M07-03。",
+    "未修改共享导航、API/OpenAPI、主题ID、密度持久化、权限、数据库结构或运行配置。"
   ]
 }

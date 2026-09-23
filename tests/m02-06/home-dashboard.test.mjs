@@ -315,7 +315,15 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
     assert.match(home, new RegExp(`to="${destination}"`));
   assert.match(home, /home-primary-action[\s\S]*创建选品/);
   assert.match(home, /home-secondary-action[\s\S]*查看推荐清单/);
-  assert.match(home, /<HomeAutomationOverview :selection="selection"/);
+  assert.match(home, /HomeAutomationOverview v-if="selection" :selection="selection"/);
+  assert.match(
+    home,
+    /selection = computed\(\(\) => data\.value\?\.automatic_selection \?\? null\)/,
+  );
+  assert.match(home, /rulesState\.value === "ready"/);
+  assert.match(home, /generation !== loadGeneration/);
+  assert.match(home, /首页或规则状态暂时未能完整读取，因此暂不显示首次创建或恢复操作/);
+  assert.match(home, /规则创建请求已受理。实际采集进度以首页运行状态为准。/);
   assert.match(home, /home-review-queue[\s\S]*推荐清单/);
   assert.match(home, /recommended_items[\s\S]*recommended_count/);
   assert.match(
@@ -334,7 +342,7 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   assert.doesNotMatch(home, /按真实来源门槛推荐/);
   assert.match(overview, /home-runtime-details[\s\S]*监控平台[\s\S]*质量门校验/);
   assert.match(overview, /人工采纳[\s\S]*人工已采纳/);
-  assert.match(home, /<details class="home-truth">[\s\S]*自动推荐不等于自动采纳/);
+  assert.match(home, /<details v-if="selection" class="home-truth">[\s\S]*自动推荐不等于自动采纳/);
   assert.doesNotMatch(home, /全链路教学/);
   assert.match(opportunity, /机会暂无详情[\s\S]*等待真实数据/);
   assert.doesNotMatch(opportunity, /SKELETON|P04/);

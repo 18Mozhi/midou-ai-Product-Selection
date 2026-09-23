@@ -296,6 +296,7 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
 }, testInfo) => {
   await nav(page);
   let blocked = false;
+  let failRefreshAfterCreate = false;
   let createdRuleBody: Record<string, unknown> | null = null;
   await page.unroute("**/api/v1/trends/monitoring-rules");
   await page.route("**/api/v1/trends/monitoring-rules", async (route) => {
@@ -315,7 +316,7 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
   });
   await page.route("**/api/v1/me/home-dashboard", (route) =>
     route.fulfill(
-      blocked
+      blocked || (failRefreshAfterCreate && createdRuleBody)
         ? {
             status: 503,
             contentType: "application/json",
@@ -377,11 +378,60 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
   }
   await page.getByLabel("想找的商品关键词").fill("egg washer, egg brush");
   await page.getByLabel("形成候选的来源门槛").selectOption("2");
+  failRefreshAfterCreate = true;
   await page.getByRole("button", { name: "保存并开始自动选品" }).click();
   await expect.poll(() => createdRuleBody?.recommendation_min_source_count).toBe(2);
   await expect.poll(() => createdRuleBody?.include_keywords).toEqual(["egg washer", "egg brush"]);
+  await expect(
+    page.getByText("规则创建请求已受理。实际采集进度以首页运行状态为准。"),
+  ).toBeVisible();
+  await expect(page.getByText(/首页数据暂未刷新，当前显示上次成功读取的快照/)).toBeVisible();
   blocked = true;
   await page.reload();
   await expect(page.getByRole("heading", { name: "依赖暂时受阻" })).toBeVisible();
   await expect(page.getByText("关联编号")).toBeVisible();
+});
+
+test("M02-06.A10/A12 missing selection and failed rule read remain unknown and non-actionable", async ({
+  page,
+}) => {
+  await nav(page);
+  await page.unroute("**/api/v1/trends/monitoring-rules");
+  await page.route("**/api/v1/trends/monitoring-rules", (route) =>
+    route.fulfill({
+      status: 403,
+      contentType: "application/json",
+      body: JSON.stringify({
+        error: { code: "forbidden", message: "无权限", action_hint: "请联系管理员" },
+        request_id: "m02-06-rules-forbidden",
+        trace_id: "m02-06-rules-forbidden",
+      }),
+    }),
+  );
+  await page.route("**/api/v1/me/home-dashboard", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(
+        envelope({
+          actions: [],
+          changes: [],
+          follows: [],
+          health: [],
+          scope: { organization_id: org, workspace_id: workspace },
+          generated_at: at,
+        }),
+      ),
+    }),
+  );
+
+  await page.goto("/home");
+  await expect(page.getByText("自动选品状态暂不可用")).toBeVisible();
+  await expect(page.getByText("自动选品数据暂不可用")).toBeVisible();
+  await expect(
+    page.getByText(/首页或规则状态暂时未能完整读取，因此暂不显示首次创建或恢复操作/),
+  ).toBeVisible();
+  await expect(page.getByText("先告诉系统要找什么")).toBeHidden();
+  await expect(page.getByRole("heading", { name: "创建自动选品规则" })).toBeHidden();
+  await expect(page.locator(".home-status-facts")).toHaveCount(0);
 });

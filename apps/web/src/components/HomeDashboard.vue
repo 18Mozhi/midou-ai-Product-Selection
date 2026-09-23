@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import HomeAutomationOverview from "./HomeAutomationOverview.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../home-dashboard.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+type RuleReadState = "loading" | "ready" | "error";
 interface Item {
   id: string;
   kind: "action" | "change" | "follow" | "health";
@@ -63,10 +64,13 @@ const props = withDefaults(defineProps<{ apiBaseUrl: string; capabilities?: stri
   }),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
+  rulesState = ref<RuleReadState>("loading"),
+  rulesError = ref(""),
   data = ref<Summary | null>(null),
   requestId = ref(""),
   traceId = ref(""),
   actionHint = ref(""),
+  mutationFeedback = ref(""),
   rules = ref<Rule[]>([]),
   setupOpen = ref(false),
   setupBusy = ref(false),
@@ -80,6 +84,7 @@ const setupForm = reactive({
   collection_interval_minutes: 60,
   recommendation_min_source_count: 1,
 });
+let loadGeneration = 0;
 const total = computed(() =>
     data.value
       ? data.value.actions.length +
@@ -88,22 +93,8 @@ const total = computed(() =>
         data.value.health.length
       : 0,
   ),
-  selection = computed(
-    () =>
-      data.value?.automatic_selection ?? {
-        state: "not_configured" as const,
-        enabled_rule_count: 0,
-        candidate_count: 0,
-        rule_candidate_count: 0,
-        recommended_count: 0,
-        awaiting_evidence_count: 0,
-        adopted_count: 0,
-        recommended_items: [],
-        last_collection_at: null,
-        next_collection_at: null,
-      },
-  ),
-  decisionActions = computed(() => selection.value.recommended_items ?? []),
+  selection = computed(() => data.value?.automatic_selection ?? null),
+  decisionActions = computed(() => selection.value?.recommended_items ?? []),
   otherActions = computed(() =>
     (data.value?.actions ?? []).filter((item) => item.source_module !== "opportunity"),
   ),
@@ -127,47 +118,67 @@ const failure = (kind: ApiFailureKind): State =>
       : kind === "blocked" || kind === "rate_limited"
         ? "blocked"
         : "error";
-async function load() {
-  state.value = "loading";
-  requestId.value = "";
-  traceId.value = "";
+async function load(options: { keepMutationFeedback?: boolean } = {}) {
+  const generation = ++loadGeneration;
+  if (!data.value) state.value = "loading";
+  rulesState.value = "loading";
+  rulesError.value = "";
+  rules.value = [];
   actionHint.value = "";
+  if (!options.keepMutationFeedback) mutationFeedback.value = "";
   try {
     const response = await request<Summary>("/me/home-dashboard");
+    if (generation !== loadGeneration) return;
     requestId.value = response.request_id;
     traceId.value = response.trace_id;
     data.value = response.data;
+    state.value =
+      response.data.actions.length +
+        response.data.changes.length +
+        response.data.follows.length +
+        response.data.health.length || response.data.automatic_selection?.state === "running"
+        ? "ready"
+        : "empty";
     try {
       const ruleResponse = await request<Rule[]>("/trends/monitoring-rules");
+      if (generation !== loadGeneration) return;
       rules.value = ruleResponse.data;
-    } catch {
-      rules.value = [];
+      rulesState.value = "ready";
+    } catch (error) {
+      if (generation !== loadGeneration) return;
+      rulesState.value = "error";
+      rulesError.value =
+        error instanceof ApiClientError ? error.actionHint : "规则暂时无法读取，请稍后重试。";
     }
     if (
+      rulesState.value === "ready" &&
       canManageRules.value &&
-      response.data.automatic_selection?.state === "not_configured" &&
+      selection.value?.state === "not_configured" &&
       !rules.value.length
     )
       setupOpen.value = true;
-    state.value =
-      response.data.actions.length +
-      response.data.changes.length +
-      response.data.follows.length +
-      response.data.health.length
-        ? "ready"
-        : response.data.automatic_selection?.state === "running"
-          ? "ready"
-          : "empty";
   } catch (error) {
+    if (generation !== loadGeneration) return;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       traceId.value = error.traceId;
       actionHint.value = error.actionHint;
-      state.value = failure(error.kind);
+      rulesState.value = "error";
+      rulesError.value = error.actionHint;
+      if (error.kind === "expired" || error.kind === "forbidden") {
+        data.value = null;
+        rules.value = [];
+        setupOpen.value = false;
+        state.value = failure(error.kind);
+      } else if (!data.value) {
+        state.value = failure(error.kind);
+      }
       return;
     }
     actionHint.value = "网络连接异常，请稍后重试。";
-    state.value = "blocked";
+    rulesState.value = "error";
+    rulesError.value = actionHint.value;
+    if (!data.value) state.value = "blocked";
   }
 }
 const keywordList = (value: string) =>
@@ -176,6 +187,7 @@ const keywordList = (value: string) =>
     .map((item) => item.trim())
     .filter(Boolean);
 async function createRule() {
+  if (setupBusy.value || rulesState.value !== "ready") return;
   const included = keywordList(setupForm.include_keywords);
   if (!included.length || !canManageRules.value) {
     setupMessage.value = "至少填写一个希望持续寻找的商品关键词。";
@@ -208,8 +220,9 @@ async function createRule() {
       },
     });
     setupOpen.value = false;
-    setupMessage.value = "规则已启用，系统会立即开始首轮采集。";
-    await load();
+    setupMessage.value = "规则创建请求已受理。实际采集进度以首页运行状态为准。";
+    mutationFeedback.value = setupMessage.value;
+    await load({ keepMutationFeedback: true });
   } catch (error) {
     setupMessage.value =
       error instanceof ApiClientError ? error.actionHint : "暂时无法保存，请稍后重试。";
@@ -218,7 +231,7 @@ async function createRule() {
   }
 }
 async function resumeRule(item: Rule | undefined) {
-  if (!item || !canManageRules.value) return;
+  if (!item || !canManageRules.value || setupBusy.value) return;
   setupBusy.value = true;
   setupMessage.value = "";
   try {
@@ -231,8 +244,9 @@ async function resumeRule(item: Rule | undefined) {
         recommendation_min_source_count: item.recommendation_min_source_count,
       },
     });
-    setupMessage.value = `“${item.name}”已恢复，系统会立即开始采集。`;
-    await load();
+    setupMessage.value = `“${item.name}”恢复请求已受理。实际采集进度以首页运行状态为准。`;
+    mutationFeedback.value = setupMessage.value;
+    await load({ keepMutationFeedback: true });
   } catch (error) {
     setupMessage.value =
       error instanceof ApiClientError ? error.actionHint : "暂时无法恢复，请稍后重试。";
@@ -240,10 +254,19 @@ async function resumeRule(item: Rule | undefined) {
     setupBusy.value = false;
   }
 }
-onMounted(load);
+onMounted(() => void load());
+onBeforeUnmount(() => {
+  loadGeneration += 1;
+});
 </script>
 <template>
   <section class="home-dashboard" :data-state="state">
+    <p v-if="mutationFeedback" class="home-write-feedback" role="status">{{ mutationFeedback }}</p>
+    <p v-if="actionHint && data" class="home-read-alert" role="alert">
+      首页数据暂未刷新，当前显示上次成功读取的快照。{{ actionHint }}
+      <button type="button" @click="load()">重新读取</button>
+      <span v-if="requestId">追踪编号：{{ requestId }}</span>
+    </p>
     <UiStatePanel
       v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
@@ -255,14 +278,16 @@ onMounted(load);
     /><template v-else>
       <header class="home-command-bar">
         <div>
-          <span class="home-system-state" :data-state="selection.state">
-            <i></i
-            >{{
-              selection.state === "running"
+          <span class="home-system-state" :data-state="selection?.state ?? 'unknown'">
+            <i></i>
+            {{
+              selection?.state === "running"
                 ? "自动选品运行中"
-                : selection.state === "attention"
+                : selection?.state === "attention"
                   ? "自动选品需检查"
-                  : "自动选品未配置"
+                  : selection?.state === "not_configured"
+                    ? "自动选品未配置"
+                    : "自动选品状态暂不可用"
             }}
           </span>
           <h2>选品控制台</h2>
@@ -281,7 +306,7 @@ onMounted(load);
         </nav>
       </header>
 
-      <section v-if="selection.state === 'not_configured'" class="home-setup-callout">
+      <section v-if="selection?.state === 'not_configured'" class="home-setup-callout">
         <div>
           <b>{{ pausedRules.length ? "自动选品当前已暂停" : "先告诉系统要找什么" }}</b
           ><span>{{
@@ -291,21 +316,38 @@ onMounted(load);
           }}</span>
         </div>
         <button
-          v-if="pausedRules.length && canManageRules"
+          v-if="rulesState === 'ready' && pausedRules.length && canManageRules"
           type="button"
           :disabled="setupBusy"
           @click="resumeRule(pausedRules[0])"
         >
           {{ setupBusy ? "正在恢复…" : "恢复自动选品" }}
         </button>
-        <button v-else-if="canManageRules" type="button" @click="setupOpen = !setupOpen">
+        <button
+          v-else-if="rulesState === 'ready' && canManageRules"
+          type="button"
+          :disabled="setupBusy"
+          @click="setupOpen = !setupOpen"
+        >
           {{ setupOpen ? "收起设置" : "开始设置" }}
         </button>
+        <span v-else-if="rulesState === 'loading'">正在核对现有规则…</span>
+        <button v-else-if="canManageRules" type="button" @click="load()">重新读取规则</button>
         <RouterLink v-else to="/trends?section=rules">查看规则 →</RouterLink>
       </section>
-      <p v-if="setupMessage" class="home-setup-message" role="status">{{ setupMessage }}</p>
+      <p v-if="rulesState === 'error'" class="home-rules-alert" role="alert">
+        首页或规则状态暂时未能完整读取，因此暂不显示首次创建或恢复操作。{{ rulesError }}
+        <button type="button" @click="load()">重新读取</button>
+      </p>
+      <p v-if="setupMessage && !mutationFeedback" class="home-setup-message" role="status">
+        {{ setupMessage }}
+      </p>
 
-      <form v-if="setupOpen && canManageRules" class="home-rule-setup" @submit.prevent="createRule">
+      <form
+        v-if="setupOpen && canManageRules && rulesState === 'ready'"
+        class="home-rule-setup"
+        @submit.prevent="createRule"
+      >
         <header>
           <div>
             <span>首次设置</span>
@@ -320,13 +362,14 @@ onMounted(load);
               v-model="setupForm.include_keywords"
               required
               maxlength="500"
+              :disabled="setupBusy"
               placeholder="例如：egg washer, egg cleaning brush"
             />
             <small>多个关键词用逗号分隔。</small>
           </label>
           <label>
             <span>目标市场</span>
-            <select v-model="setupForm.market">
+            <select v-model="setupForm.market" :disabled="setupBusy">
               <option value="US">美国</option>
               <option value="GB">英国</option>
               <option value="DE">德国</option>
@@ -341,7 +384,7 @@ onMounted(load);
           </label>
           <label>
             <span>采集频率</span>
-            <select v-model.number="setupForm.collection_interval_minutes">
+            <select v-model.number="setupForm.collection_interval_minutes" :disabled="setupBusy">
               <option :value="15">每 15 分钟</option>
               <option :value="60">每小时</option>
               <option :value="360">每 6 小时</option>
@@ -351,7 +394,10 @@ onMounted(load);
           </label>
           <label>
             <span>形成候选的来源门槛</span>
-            <select v-model.number="setupForm.recommendation_min_source_count">
+            <select
+              v-model.number="setupForm.recommendation_min_source_count"
+              :disabled="setupBusy"
+            >
               <option :value="1">命中 1 个真实来源</option>
               <option :value="2">至少 2 个独立来源</option>
               <option :value="3">至少 3 个独立来源</option>
@@ -362,12 +408,18 @@ onMounted(load);
             <input
               v-model="setupForm.negative_keywords"
               maxlength="500"
+              :disabled="setupBusy"
               placeholder="例如：used, replacement"
             />
           </label>
           <label>
             <span>商品分类（可选）</span>
-            <input v-model="setupForm.category" maxlength="80" placeholder="例如：Home & Kitchen" />
+            <input
+              v-model="setupForm.category"
+              maxlength="80"
+              :disabled="setupBusy"
+              placeholder="例如：Home & Kitchen"
+            />
           </label>
         </div>
         <footer>
@@ -376,6 +428,7 @@ onMounted(load);
             <input
               v-model="setupForm.name"
               maxlength="120"
+              :disabled="setupBusy"
               placeholder="留空将按第一个关键词命名"
             />
           </label>
@@ -385,14 +438,16 @@ onMounted(load);
         </footer>
       </form>
 
-      <section class="home-main-grid">
+      <section class="home-main-grid" aria-labelledby="home-review-title">
         <section class="home-review-queue so-ledger-surface">
           <header>
             <div>
-              <span>需要你决定</span>
-              <h3>推荐清单</h3>
+              <span>01 / 人工决策</span>
+              <h3 id="home-review-title">推荐清单</h3>
             </div>
-            <RouterLink to="/opportunities">全部 {{ selection.recommended_count }} 条 →</RouterLink>
+            <RouterLink v-if="selection" to="/opportunities">
+              全部 {{ selection.recommended_count }} 条 →
+            </RouterLink>
           </header>
           <RouterLink
             v-for="item in decisionActions"
@@ -407,22 +462,26 @@ onMounted(load);
             <span v-if="item.value_score !== null">{{ score(item.value_score) }} 分</span
             ><b>查看 →</b>
           </RouterLink>
-          <div v-if="!decisionActions.length" class="home-quiet-empty">
+          <div v-if="!selection" class="home-quiet-empty" role="status">
+            <b>自动选品数据暂不可用</b>
+            <span>已保留本人待办；推荐和运行计数将在读取到明确数据后显示。</span>
+          </div>
+          <div v-else-if="!decisionActions.length" class="home-quiet-empty">
             <b>当前没有待人工采纳的推荐</b
             ><span>{{
-              selection.rule_candidate_count
+              selection.rule_candidate_count > 0
                 ? `${selection.rule_candidate_count} 条规则命中候选正在完成五项质量门校验。`
-                : selection.awaiting_evidence_count
+                : selection.awaiting_evidence_count > 0
                   ? `${selection.awaiting_evidence_count} 条商品仍在采集。`
                   : "系统会在五项质量门全部通过后自动加入这里。"
             }}</span>
             <RouterLink
-              v-if="selection.rule_candidate_count"
+              v-if="selection.rule_candidate_count > 0"
               to="/opportunities?view=rule_candidates"
               >查看候选进度</RouterLink
             >
             <RouterLink
-              v-else-if="selection.awaiting_evidence_count"
+              v-else-if="selection.awaiting_evidence_count > 0"
               to="/opportunities?view=evidence_pending"
               >查看采集进度</RouterLink
             >
@@ -435,7 +494,10 @@ onMounted(load);
         class="home-operations-strip so-ledger-surface"
       >
         <header>
-          <h3>其他待办与异常</h3>
+          <div>
+            <span>02 / 本人事项</span>
+            <h3>其他待办与异常</h3>
+          </div>
           <span>只显示与你有关的事项</span>
         </header>
         <div>
@@ -453,16 +515,17 @@ onMounted(load);
         </div>
       </section>
 
-      <HomeAutomationOverview :selection="selection" />
+      <HomeAutomationOverview v-if="selection" :selection="selection" />
 
-      <details class="home-truth">
+      <details v-if="selection" class="home-truth">
         <summary>数据说明</summary>
         <div>
           <span>共 {{ total }} 条可见投影</span
           ><span>生成时间 {{ date(data?.generated_at ?? null) }}</span
           ><span>自动推荐不等于自动采纳</span>
         </div>
-      </details></template
-    >
+      </details>
+      <p v-else class="home-truth-unknown">自动选品的计数与时间暂不可用，不以缺失值代替零。</p>
+    </template>
   </section>
 </template>
