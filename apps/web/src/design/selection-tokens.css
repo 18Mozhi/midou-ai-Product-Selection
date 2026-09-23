@@ -1,4 +1,4 @@
-/* P16 C palette: approved values, scoped to this workflow; no theme override. */
+/* P16 C palette: approved blue accents with shared theme-aware content surfaces. */
 html #app .selection-journey {
   --so-selection-primary: #254a9c;
   --so-selection-text: #202c3d;
@@ -6,7 +6,7 @@ html #app .selection-journey {
   --so-selection-border: #dbe1e9;
   --so-selection-field-border: #7a8ba8;
   --so-selection-canvas: #edf1f6;
-  --so-selection-surface: #fff;
+  --so-selection-surface: var(--so-panel);
   --so-selection-on-primary-muted: #e1eafb;
   --so-selection-stage-border: #9bb1db;
   --so-selection-stage-divider: #6886bd;

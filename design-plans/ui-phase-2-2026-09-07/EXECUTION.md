@@ -680,6 +680,8 @@ W09前核对线上base SHA、发布归属、固定站点29和Node/Python身份�
 
 总范围、六个里程碑及退出条件见PLAN 2.14；七包逐页范围仍使用PAGES与PLAN第5节。当前不是重新补73份规格，也不是继续旧风格修补；实施成果必须最终回到全新正式稿、真实Vue与用户审核。
 
+2026-09-23 当前状态校正：本节最初列出的 DI01/DI05 三项 red 与 DI06 快捷目录缺口已在现有代码/测试中落实。重新运行 `tests/e2e/ui-phase2-discovery-shell-contracts.spec.ts` 后，desktop-chromium 和 mobile-390 各55/55通过，见 [PROGRESS](PROGRESS.md)。不重复领取这批局部修复；这只验证发现层隔离合同，不等于全站 G0 冻结、真实后端/RBAC、生产或用户总体验收通过。下一步继续补齐其余路由、角色、动作、弹窗及状态的来源映射与实际消费者验收。
+
 #### 第一批：F04b发现层剩余合同
 
 1. 记录最新branch/HEAD/status，检查`tests/e2e/ui-phase2-discovery-shell-contracts.spec.ts`既有增量及归属；计划修订时其SHA256为`cd7260b4a2d10b0c44bcf90ee54133b5130ac0fe4937acaf7ec49670a594ad19`，后续若变化先读diff，不覆盖。

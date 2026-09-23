@@ -303,6 +303,8 @@ test("approval notification and real-selection surfaces follow every member them
       const style = getComputedStyle(element);
       return `${style.backgroundColor}|${style.backgroundImage}`;
     });
-    expect(after).not.toBe(before);
+    expect(after, `${item.path} should update its surface when the member theme changes`).not.toBe(
+      before,
+    );
   }
 });

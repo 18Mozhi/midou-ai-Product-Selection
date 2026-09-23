@@ -530,6 +530,7 @@
   margin-top: 16px;
   padding: 34px;
   color: var(--review-muted);
+  background: var(--so-panel);
 }
 
 .notification-center--review .notification-state h3 {
