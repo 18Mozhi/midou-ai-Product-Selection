@@ -18,7 +18,9 @@
 - 实际 Vue 页面检查：1440px 与 390px、reduced/no-preference 两种动效，共 304 项；4 组、181 个来源文件，无生成图片或外部页面请求。
 - `tests/e2e/m08-01-single-server.spec.ts`：desktop-chromium 4/4、mobile-390 4/4；覆盖 19 种实际队列策略可达性、页面分区、手机布局、刷新单飞、空闲队列真实文案，以及空/阻断/过期/未授权/限流/不可用反馈。桌面与手机视觉基线均更新为蓝白生产壳层。
 - `npm run typecheck:web` 通过。
-- 本次实现的真实数据库权限、审计副作用、宝塔生产运行事实或 M07-03 正式证据并未由本地 E2E/页面检查证明。
+- `npm run build:web`、`npm run format:check`、`npm run verify:docs`、`npm run verify:static-analysis`、`npm run verify:plans`、`npm run verify:release-matrix`、`npm run verify:runtime-docs` 均通过；固定部署脚本完成 22 工作区构建及 M07-03 `preflight_passed`。
+- `python scripts/deploy-baota.py` 已按固定目录完成部署，构建 SHA 为 `00906bf6bafee04f4529fed352a967f6d7391f6d`，部署输出确认临时包已删除。只读线上检查：live/ready/version 与 `/platform-admin/topology` 返回 HTTP 200，ready 的 MySQL/Redis 为 available，version/live SHA 与提交一致；拓扑 JS `RuntimeTopologyCenter-CCBSSOAW.js` 和 CSS `RuntimeTopologyCenter-Hg9INRk3.css` 均 HTTP 200。
+- 本地拦截 E2E、页面矩阵、线上资源可达和部署预检不证明真实用户 RBAC/SQL 审计语义，也不等于正式 M07-03 全部生产证据已签收。
 
 ## 未改变及待完成边界
 
@@ -26,6 +28,6 @@
 
 ## 交付记录
 
-代码提交与推送：待验证后记录。
+代码提交与推送：`00906bf6bafee04f4529fed352a967f6d7391f6d`（`main`）。
 
-宝塔部署版本与线上核验：待本次部署后记录。
+宝塔部署版本与线上核验：build SHA 同上；live/ready/version、页面深链及 P66 JS/CSS 资源均已只读核验 HTTP 200，MySQL/Redis readiness 为 available。
