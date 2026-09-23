@@ -8,6 +8,7 @@ const props = defineProps<{
   title: string;
   detailTitle: (row: DataRow) => string;
   emptyMessage?: string;
+  columnLabels?: boolean;
   appearance?: "default" | "governance" | "content" | "security";
   focusFallback?: () => HTMLElement | null;
 }>();
@@ -149,7 +150,7 @@ function handleTab(event: KeyboardEvent) {
     :aria-label="title"
     tabindex="-1"
   >
-    <TableViewControls class="responsive-data-view__desktop"
+    <TableViewControls class="responsive-data-view__desktop" :column-labels="columnLabels"
       ><slot name="desktop" :show="show"
     /></TableViewControls>
     <div ref="mobileList" class="responsive-data-view__mobile" :aria-label="title" tabindex="-1">

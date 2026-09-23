@@ -6,6 +6,7 @@ interface TableColumn {
   label: string;
 }
 
+const props = defineProps<{ columnLabels?: boolean }>();
 const root = ref<HTMLElement | null>(null),
   columns = ref<TableColumn[]>([]),
   hiddenColumns = ref<number[]>([]),
@@ -88,7 +89,15 @@ watch([hiddenColumns, freezeFirst, density], () => void nextTick(applySettings),
               :disabled="!hiddenColumns.includes(column.index) && visibleColumnCount <= 1"
               @change="toggleColumn(column.index)"
             />
-            <span :id="`${controlId}-column-${column.index}-description`">{{ column.label }}</span>
+            <label
+              v-if="props.columnLabels"
+              :for="`${controlId}-column-${column.index}`"
+              :id="`${controlId}-column-${column.index}-description`"
+              >{{ column.label }}</label
+            >
+            <span v-else :id="`${controlId}-column-${column.index}-description`">{{
+              column.label
+            }}</span>
           </div>
         </fieldset>
       </details>

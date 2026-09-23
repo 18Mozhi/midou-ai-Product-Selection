@@ -165,6 +165,16 @@ try {
         0,
         "no unconditional encryption claim",
       );
+      const columnLabels = assets.locator(".table-view-controls__toolbar fieldset label");
+      check(await columnLabels.count(), 7, "seven production column labels are present");
+      check(
+        await columnLabels.first().evaluate((label) => {
+          const input = label.ownerDocument.getElementById(label.htmlFor);
+          return Boolean(input && input.getAttribute("aria-describedby") === label.id);
+        }),
+        true,
+        "production column labels associate with controls and descriptions",
+      );
       check(
         await surface.evaluate((el) => el.scrollWidth <= el.clientWidth + 1),
         true,

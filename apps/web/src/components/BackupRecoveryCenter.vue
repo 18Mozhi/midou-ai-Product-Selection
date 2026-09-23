@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import TechnicalDetails from "./TechnicalDetails.vue";
+import BackupRecoveryDirectory from "./BackupRecoveryDirectory.vue";
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
 type ViewState =
@@ -173,12 +174,12 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="backup-center">
+  <section class="backup-center backup-center--c">
     <header class="backup-hero">
       <div>
-        <p class="eyebrow">备份恢复管理</p>
-        <h2>备份与恢复控制台</h2>
-        <span>惠州当前主机内的加密副本与隔离恢复；不代表整机或异地灾备。</span>
+        <p class="eyebrow">P64 / 恢复证据</p>
+        <h1>备份与恢复控制台</h1>
+        <span>核对结论、目标和证据；此页只读取事实。</span>
       </div>
       <button
         ref="refreshButton"
@@ -191,283 +192,329 @@ onBeforeUnmount(() => {
         {{ refreshing ? "正在刷新…" : "刷新事实" }}
       </button>
     </header>
-    <section
-      v-if="data && refreshFailure"
-      class="refresh-notice"
-      :data-kind="refreshFailure"
-      aria-live="polite"
-      aria-labelledby="backup-refresh-title"
-      :aria-busy="refreshing"
-    >
-      <div>
-        <h3 id="backup-refresh-title">
-          {{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}
-        </h3>
-        <span>{{ refreshNotice }}</span>
-        <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
-      </div>
-      <button ref="noticeRetryButton" type="button" :disabled="refreshing" @click="load">
-        重新核验
-      </button>
-    </section>
-    <section
-      v-if="state === 'loading'"
-      class="state-card"
-      data-kind="loading"
-      aria-live="polite"
-      aria-labelledby="backup-read-title"
-      :aria-busy="refreshing"
-    >
-      <h3 id="backup-read-title">正在读取备份事实</h3>
-      <span>校验数据库记录、恢复副本和最近演练。</span>
-    </section>
-    <section
-      v-else-if="['forbidden', 'expired', 'rate_limited', 'timeout', 'unavailable'].includes(state)"
-      class="state-card"
-      :data-kind="state"
-      aria-live="polite"
-      aria-labelledby="backup-read-title"
-      :aria-busy="refreshing"
-    >
-      <h3 id="backup-read-title">{{ failureTitle }}</h3>
-      <span>{{ hint || "请重新登录、稍后重试或联系平台管理员。" }}</span>
-      <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
-      <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink>
-      <button
-        v-else-if="state !== 'forbidden'"
-        ref="retryButton"
-        type="button"
-        :disabled="refreshing"
-        @click="load"
-      >
-        重新核验
-      </button>
-    </section>
-    <template v-else-if="data">
-      <section class="truth-banner" :data-kind="state">
-        <div>
-          <small>当前结论</small
-          ><strong>{{
-            state === "verified"
-              ? "同机恢复链路已验证"
-              : state === "stale"
-                ? "恢复演练已过期"
-                : state === "empty"
-                  ? "尚无备份记录"
-                  : "恢复链路受阻"
-          }}</strong>
-        </div>
-        <p>
-          {{
-            state === "verified"
-              ? "同机加密副本与隔离恢复均在有效期内；整机故障仍不受保护。"
-              : "未满足的条件不会被标记为健康；请按阻断项完成宝塔任务与隔离演练。"
-          }}
-        </p>
-      </section>
-      <div class="policy-grid">
-        <article>
-          <span>主站</span><strong>{{ data.policy.primary_region }}</strong
-          ><small>单机运行</small>
-        </article>
-        <article>
-          <span>恢复目标</span><strong>{{ data.policy.recovery_region }}</strong
-          ><small>{{ data.recovery_copy_verified ? "同机副本已核验" : "同机副本未核验" }}</small>
-        </article>
-        <article>
-          <span>数据库最多可丢失时间</span><strong>{{ data.policy.rpo_minutes }} min</strong
-          ><small>目标上限</small>
-        </article>
-        <article>
-          <span>数据库恢复耗时</span><strong>{{ data.policy.rto_minutes }} min</strong
-          ><small>目标上限</small>
-        </article>
-      </div>
-      <div class="backup-grid">
-        <section class="panel">
-          <div class="panel-title">
-            <h3>备份资产</h3>
-            <span>高强度加密</span>
+    <div class="p64-layout">
+      <BackupRecoveryDirectory :has-data="Boolean(data)" />
+      <div class="p64-content">
+        <section
+          v-if="data && refreshFailure"
+          class="refresh-notice"
+          :data-kind="refreshFailure"
+          aria-live="polite"
+          aria-labelledby="backup-refresh-title"
+          :aria-busy="refreshing"
+        >
+          <div>
+            <h2 id="backup-refresh-title">
+              {{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}
+            </h2>
+            <span>{{ refreshNotice }}</span>
+            <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
           </div>
-          <div v-if="!data.targets.length" class="empty">没有可展示的备份资产。</div>
-          <ResponsiveDataView
-            v-else
-            :rows="data.targets"
-            :row-key="(target) => `${target.asset_kind}-${target.region}-${target.storage_role}`"
-            title="备份资产"
-            :detail-title="(target) => assetText(target.asset_kind)"
+          <button ref="noticeRetryButton" type="button" :disabled="refreshing" @click="load">
+            重新核验
+          </button>
+        </section>
+        <section
+          v-if="state === 'loading'"
+          class="state-card"
+          data-kind="loading"
+          aria-live="polite"
+          aria-labelledby="backup-read-title"
+          :aria-busy="refreshing"
+        >
+          <h2 id="backup-read-title">正在读取备份事实</h2>
+          <span>校验数据库记录、恢复副本和最近演练。</span>
+        </section>
+        <section
+          v-else-if="
+            ['forbidden', 'expired', 'rate_limited', 'timeout', 'unavailable'].includes(state)
+          "
+          class="state-card"
+          :data-kind="state"
+          aria-live="polite"
+          aria-labelledby="backup-read-title"
+          :aria-busy="refreshing"
+        >
+          <h2 id="backup-read-title">{{ failureTitle }}</h2>
+          <span>{{ hint || "请重新登录、稍后重试或联系平台管理员。" }}</span>
+          <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
+          <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink>
+          <button
+            v-else-if="state !== 'forbidden'"
+            ref="retryButton"
+            type="button"
+            :disabled="refreshing"
+            @click="load"
           >
-            <template #desktop>
-              <table>
-                <thead>
-                  <tr>
-                    <th>对象</th>
-                    <th>角色</th>
-                    <th>区域</th>
-                    <th>数量</th>
-                    <th>体积</th>
-                    <th>完整性</th>
-                    <th>技术信息</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="target in data.targets"
-                    :key="`${target.asset_kind}-${target.region}-${target.storage_role}`"
-                  >
-                    <td>{{ assetText(target.asset_kind) }}</td>
-                    <td>{{ roleText(target.storage_role) }}</td>
-                    <td>{{ target.region }}</td>
-                    <td>{{ target.bundle_count }}</td>
-                    <td>{{ bytes(target.size_bytes) }}</td>
-                    <td>{{ target.integrity_verified ? "已核验" : "未核验" }}</td>
-                    <td>
-                      <details>
-                        <summary>技术详情</summary>
-                        <dl>
-                          <div>
-                            <dt>对象代码</dt>
-                            <dd>{{ target.asset_kind }}</dd>
-                          </div>
-                          <div>
-                            <dt>存储角色代码</dt>
-                            <dd>{{ target.storage_role }}</dd>
-                          </div>
-                        </dl>
-                      </details>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </template>
-            <template #summary="{ row }"
-              ><span class="responsive-record-summary"
-                ><strong>{{ assetText(row.asset_kind) }} · {{ roleText(row.storage_role) }}</strong
-                ><small
-                  >{{ row.region }} · {{ row.bundle_count }} 份 · {{ bytes(row.size_bytes) }}</small
-                ></span
-              ></template
-            >
-            <template #detail="{ row }">
-              <dl>
-                <div>
-                  <dt>备份角色</dt>
-                  <dd>{{ roleText(row.storage_role) }}</dd>
-                </div>
-                <div>
-                  <dt>区域</dt>
-                  <dd>{{ row.region }}</dd>
-                </div>
-                <div>
-                  <dt>文件数量</dt>
-                  <dd>{{ row.bundle_count }} 份</dd>
-                </div>
-                <div>
-                  <dt>总体积</dt>
-                  <dd>{{ bytes(row.size_bytes) }}</dd>
-                </div>
-                <div>
-                  <dt>加密</dt>
-                  <dd>{{ row.encrypted ? "已加密" : "未核验" }}</dd>
-                </div>
-                <div>
-                  <dt>完整性</dt>
-                  <dd>{{ row.integrity_verified ? "已核验" : "未核验" }}</dd>
-                </div>
-              </dl>
-              <details>
-                <summary>技术详情</summary>
+            重新核验
+          </button>
+        </section>
+        <template v-else-if="data">
+          <section class="truth-banner" :data-kind="state">
+            <div>
+              <small>当前结论</small
+              ><strong>{{
+                state === "verified"
+                  ? "同机恢复链路已验证"
+                  : state === "stale"
+                    ? "恢复演练已过期"
+                    : state === "empty"
+                      ? "尚无备份记录"
+                      : "恢复链路受阻"
+              }}</strong>
+            </div>
+            <p>
+              {{
+                state === "verified"
+                  ? "同机加密副本与隔离恢复均在有效期内；整机故障仍不受保护。"
+                  : "未满足的条件不会被标记为健康；请按阻断项完成宝塔任务与隔离演练。"
+              }}
+            </p>
+          </section>
+          <section
+            class="p64-objectives"
+            id="p64-objectives"
+            tabindex="-1"
+            aria-labelledby="p64-objectives-title"
+          >
+            <h2 id="p64-objectives-title">恢复目标与实际</h2>
+            <dl class="p64-regions">
+              <div>
+                <dt>主站 · 单机运行</dt>
+                <dd>{{ data.policy.primary_region }}</dd>
+              </div>
+              <div>
+                <dt>恢复目标</dt>
+                <dd>
+                  {{ data.policy.recovery_region }} ·
+                  {{ data.recovery_copy_verified ? "同机副本已核验" : "同机副本未核验" }}
+                </dd>
+              </div>
+            </dl>
+            <div class="p64-comparisons">
+              <section aria-label="数据库最多可丢失时间">
+                <h3>数据库最多可丢失时间</h3>
                 <dl>
                   <div>
-                    <dt>对象代码</dt>
-                    <dd>{{ row.asset_kind }}</dd>
+                    <dt>目标上限</dt>
+                    <dd>{{ data.policy.rpo_minutes }} min</dd>
                   </div>
                   <div>
-                    <dt>存储角色代码</dt>
-                    <dd>{{ row.storage_role }}</dd>
+                    <dt>实际记录</dt>
+                    <dd>
+                      {{
+                        data.latest_backup?.actual_rpo_minutes == null
+                          ? "未记录"
+                          : `${data.latest_backup.actual_rpo_minutes} min`
+                      }}
+                    </dd>
                   </div>
                 </dl>
-              </details>
-            </template>
-          </ResponsiveDataView>
-        </section>
-        <section class="panel">
-          <div class="panel-title">
-            <h3>恢复证据</h3>
-            <span>{{ data.policy.maximum_drill_age_days }} 天有效期</span>
+              </section>
+              <section aria-label="数据库恢复耗时">
+                <h3>数据库恢复耗时</h3>
+                <dl>
+                  <div>
+                    <dt>目标上限</dt>
+                    <dd>{{ data.policy.rto_minutes }} min</dd>
+                  </div>
+                  <div>
+                    <dt>实际记录</dt>
+                    <dd>
+                      {{
+                        data.latest_drill?.actual_rto_minutes == null
+                          ? "未记录"
+                          : `${data.latest_drill.actual_rto_minutes} min`
+                      }}
+                    </dd>
+                  </div>
+                </dl>
+              </section>
+            </div>
+          </section>
+          <div class="backup-grid p64-sections">
+            <section
+              class="panel p64-evidence"
+              id="p64-evidence"
+              tabindex="-1"
+              aria-labelledby="p64-evidence-title"
+            >
+              <div class="panel-title">
+                <h2 id="p64-evidence-title">恢复证据</h2>
+                <span>{{ data.policy.maximum_drill_age_days }} 天有效期</span>
+              </div>
+              <dl>
+                <div>
+                  <dt>最近备份</dt>
+                  <dd>{{ when(data.latest_backup?.finished_at) }}</dd>
+                </div>
+                <div>
+                  <dt>最近隔离恢复</dt>
+                  <dd>{{ when(data.latest_drill?.finished_at) }}</dd>
+                </div>
+                <div class="drill-expiry" :data-expired="data.days_until_drill_expiry < 0">
+                  <dt>演练证据到期</dt>
+                  <dd>
+                    {{ when(data.drill_expires_at) }}
+                    <small>{{ drillReminder(data.days_until_drill_expiry) }}</small>
+                  </dd>
+                </div>
+                <div>
+                  <dt>权限边界</dt>
+                  <dd>
+                    {{ data.latest_drill?.permission_boundary_verified ? "已核验" : "未核验" }}
+                  </dd>
+                </div>
+                <div>
+                  <dt>审计链 / 证据哈希</dt>
+                  <dd>
+                    {{
+                      data.latest_drill?.audit_chain_verified &&
+                      data.latest_drill?.evidence_hash_verified
+                        ? "已核验"
+                        : "未核验"
+                    }}
+                  </dd>
+                </div>
+              </dl>
+            </section>
+            <section
+              class="panel p64-assets"
+              id="p64-assets"
+              tabindex="-1"
+              aria-labelledby="p64-assets-title"
+            >
+              <div class="panel-title">
+                <h2 id="p64-assets-title">备份资产</h2>
+                <span>按实际记录核对</span>
+              </div>
+              <div v-if="!data.targets.length" class="empty">没有可展示的备份资产。</div>
+              <ResponsiveDataView
+                v-else
+                :rows="data.targets"
+                :row-key="
+                  (target) => `${target.asset_kind}-${target.region}-${target.storage_role}`
+                "
+                title="备份资产"
+                :detail-title="(target) => assetText(target.asset_kind)"
+                column-labels
+              >
+                <template #desktop>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>对象</th>
+                        <th>角色</th>
+                        <th>区域</th>
+                        <th>数量</th>
+                        <th>体积</th>
+                        <th>完整性</th>
+                        <th>技术信息</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="target in data.targets"
+                        :key="`${target.asset_kind}-${target.region}-${target.storage_role}`"
+                      >
+                        <td>{{ assetText(target.asset_kind) }}</td>
+                        <td>{{ roleText(target.storage_role) }}</td>
+                        <td>{{ target.region }}</td>
+                        <td>{{ target.bundle_count }}</td>
+                        <td>{{ bytes(target.size_bytes) }}</td>
+                        <td>{{ target.integrity_verified ? "已核验" : "未核验" }}</td>
+                        <td>
+                          <details>
+                            <summary>技术详情</summary>
+                            <dl>
+                              <div>
+                                <dt>对象代码</dt>
+                                <dd>{{ target.asset_kind }}</dd>
+                              </div>
+                              <div>
+                                <dt>存储角色代码</dt>
+                                <dd>{{ target.storage_role }}</dd>
+                              </div>
+                            </dl>
+                          </details>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </template>
+                <template #summary="{ row }">
+                  <span class="responsive-record-summary">
+                    <strong
+                      >{{ assetText(row.asset_kind) }} · {{ roleText(row.storage_role) }}</strong
+                    >
+                    <small
+                      >{{ row.region }} · {{ row.bundle_count }} 份 ·
+                      {{ bytes(row.size_bytes) }}</small
+                    >
+                  </span>
+                </template>
+                <template #detail="{ row }">
+                  <dl>
+                    <div>
+                      <dt>备份角色</dt>
+                      <dd>{{ roleText(row.storage_role) }}</dd>
+                    </div>
+                    <div>
+                      <dt>区域</dt>
+                      <dd>{{ row.region }}</dd>
+                    </div>
+                    <div>
+                      <dt>文件数量</dt>
+                      <dd>{{ row.bundle_count }} 份</dd>
+                    </div>
+                    <div>
+                      <dt>总体积</dt>
+                      <dd>{{ bytes(row.size_bytes) }}</dd>
+                    </div>
+                    <div>
+                      <dt>加密</dt>
+                      <dd>{{ row.encrypted ? "已加密" : "未核验" }}</dd>
+                    </div>
+                    <div>
+                      <dt>完整性</dt>
+                      <dd>{{ row.integrity_verified ? "已核验" : "未核验" }}</dd>
+                    </div>
+                  </dl>
+                  <details>
+                    <summary>技术详情</summary>
+                    <dl>
+                      <div>
+                        <dt>对象代码</dt>
+                        <dd>{{ row.asset_kind }}</dd>
+                      </div>
+                      <div>
+                        <dt>存储角色代码</dt>
+                        <dd>{{ row.storage_role }}</dd>
+                      </div>
+                    </dl>
+                  </details>
+                </template>
+              </ResponsiveDataView>
+            </section>
           </div>
-          <dl>
-            <div>
-              <dt>最近备份</dt>
-              <dd>{{ when(data.latest_backup?.finished_at) }}</dd>
-            </div>
-            <div>
-              <dt>实际最多可丢失时间</dt>
-              <dd>
-                {{
-                  data.latest_backup?.actual_rpo_minutes == null
-                    ? "未记录"
-                    : `${data.latest_backup.actual_rpo_minutes} min`
-                }}
-              </dd>
-            </div>
-            <div>
-              <dt>最近隔离恢复</dt>
-              <dd>{{ when(data.latest_drill?.finished_at) }}</dd>
-            </div>
-            <div class="drill-expiry" :data-expired="data.days_until_drill_expiry < 0">
-              <dt>演练证据到期</dt>
-              <dd>
-                {{ when(data.drill_expires_at) }}
-                <small>{{ drillReminder(data.days_until_drill_expiry) }}</small>
-              </dd>
-            </div>
-            <div>
-              <dt>实际恢复耗时</dt>
-              <dd>
-                {{
-                  data.latest_drill?.actual_rto_minutes == null
-                    ? "未记录"
-                    : `${data.latest_drill.actual_rto_minutes} min`
-                }}
-              </dd>
-            </div>
-            <div>
-              <dt>权限边界</dt>
-              <dd>
-                {{ data.latest_drill?.permission_boundary_verified ? "已核验" : "未核验" }}
-              </dd>
-            </div>
-            <div>
-              <dt>审计链 / 证据哈希</dt>
-              <dd>
-                {{
-                  data.latest_drill?.audit_chain_verified &&
-                  data.latest_drill?.evidence_hash_verified
-                    ? "已核验"
-                    : "未核验"
-                }}
-              </dd>
-            </div>
-          </dl>
-        </section>
+          <section v-if="data.blockers.length" class="blockers">
+            <h2>阻断项</h2>
+            <article v-for="item in data.blockers" :key="item.code">
+              <strong>{{ blockerText(item.code) }}</strong>
+              <p>{{ item.action_hint }}</p>
+              <details>
+                <summary>技术详情</summary>
+                <code>{{ item.code }}</code>
+              </details>
+            </article>
+          </section>
+          <footer>
+            观测时间 {{ when(data.observed_at) }} · 恢复动作仅由宝塔受控任务执行
+            <TechnicalDetails :request-id="requestId" summary="快照读取追踪" />
+          </footer>
+        </template>
       </div>
-      <section v-if="data.blockers.length" class="blockers">
-        <h3>阻断项</h3>
-        <article v-for="item in data.blockers" :key="item.code">
-          <strong>{{ blockerText(item.code) }}</strong>
-          <p>{{ item.action_hint }}</p>
-          <details>
-            <summary>技术详情</summary>
-            <code>{{ item.code }}</code>
-          </details>
-        </article>
-      </section>
-      <footer>
-        观测时间 {{ when(data.observed_at) }} · 恢复动作仅由宝塔受控任务执行
-        <TechnicalDetails :request-id="requestId" summary="快照读取追踪" />
-      </footer>
-    </template>
+    </div>
   </section>
 </template>
 
@@ -753,3 +800,4 @@ footer details span {
   }
 }
 </style>
+<style src="../backup-recovery-center-c.css"></style>

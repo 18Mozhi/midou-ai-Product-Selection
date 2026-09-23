@@ -533,7 +533,11 @@ onUnmounted(() => {
           </template>
         </nav>
         <header
-          v-if="!opportunityId && routePath !== '/platform-admin/status'"
+          v-if="
+            !opportunityId &&
+            routePath !== '/platform-admin/status' &&
+            routePath !== '/platform-admin/operations'
+          "
           class="role-page-title"
         >
           <b class="role-page-folio" aria-hidden="true">{{ pageFolio }}</b>
