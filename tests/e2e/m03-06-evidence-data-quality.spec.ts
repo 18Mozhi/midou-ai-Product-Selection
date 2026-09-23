@@ -213,13 +213,23 @@ test("M02-01 semantic roles keep data quality readable in every theme", async ({
   await dashboard(page);
   await page.goto("/platform-admin/data");
   await page.getByRole("button", { name: "证据与质量" }).click();
+  await expect(page.locator(".quality-task")).toBeVisible();
   const samples = [];
   for (const theme of ["deep-ocean", "aurora-purple", "cloud-white"]) {
     samples.push(
       await page.evaluate((value) => {
         document.documentElement.dataset.theme = value;
-        const card = getComputedStyle(document.querySelector(".quality-card")),
-          cell = getComputedStyle(document.querySelector(".quality-card td"));
+        const cardElement = document.querySelector(".quality-task"),
+          textElement = [
+            ...document.querySelectorAll(
+              ".quality-task table td, .quality-task .responsive-data-view__summary strong",
+            ),
+          ].find((element) => element.getClientRects().length > 0);
+        if (!(cardElement instanceof HTMLElement) || !(textElement instanceof HTMLElement)) {
+          throw new Error("No visible data-quality text sample for the current viewport.");
+        }
+        const card = getComputedStyle(cardElement),
+          cell = getComputedStyle(textElement);
         const rgb = (input) =>
             input
               .match(/[\d.]+/g)

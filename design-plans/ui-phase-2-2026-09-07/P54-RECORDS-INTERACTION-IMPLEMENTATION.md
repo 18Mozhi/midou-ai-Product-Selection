@@ -1,6 +1,6 @@
 # P54 近期业务记录 · C 方向真实 Vue 实现
 
-状态：实现与本地双端夹具回归完成，视觉待用户审核；未部署。范围仅为 `/platform-admin/data` 的“近期记录”，不包含 `DataQualityCenter` 内部视觉与业务流重构。
+状态：实现与本地双端夹具回归完成；视觉依用户 2026-09-24 全局授权自动通过。已随整站构建 `06ae38230de2b5b7a35b89727aa22432387030d5` 上线；`PlatformDataCenter` JS/CSS 线上 HTTP 200，SHA-256 与本地构建一致。范围为 `/platform-admin/data` 的“近期记录”，与 `DataQualityCenter` 共同构成 P54 数据中心。
 
 ## 实现范围
 
@@ -26,6 +26,7 @@
 - `UI2-P54 locks record scope during export and blocks repeat after an unknown result`：桌面/手机。
 - 真实 Vue 审核图位于 `design/data-records-direction-c/vue-implementation/`：1440与390的默认态、导出未知态各一组；图片使用本地fixture，不代表生产数据或后端验收。
 
-## 下一步
+## 审核与生产边界
 
-用户审核本批四张真实 Vue 图后，继续 P54 “证据与质量”工作区的真实 Vue C方向重构、交互归属与双端验收；完成整页后才进入生产部署门。
+- 本批四张实际 Vue 图的视觉已按用户全局授权通过；P54 两个工作区均已有真实 Vue 接入并包含在当前线上构建中。
+- 真实 CSV 下载、审计、权限、MySQL 及导出/证据完整性业务验收仍需独立证据，不由视觉批准、离线夹具或静态资源核验替代。
