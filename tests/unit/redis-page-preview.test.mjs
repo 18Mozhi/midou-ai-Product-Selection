@@ -9,7 +9,14 @@ const source = readFileSync("apps/web/src/components/RedisResilienceCenter.vue",
   "\n",
 );
 const preview = previewRedisPage(source),
-  template = parse(preview).descriptor.template.content;
+  template = [
+    parse(preview).descriptor.template.content,
+    ...["RedisResilienceSummary.vue", "RedisResourceEvidence.vue", "RedisKeyspaceSample.vue"].map(
+      (name) =>
+        parse(readFileSync(`apps/web/src/components/redis-resilience/${name}`, "utf8")).descriptor
+          .template.content,
+    ),
+  ].join("\n");
 test("P67 C preserves production script, GET, timeout, thresholds and lifecycle", () => {
   assert.equal(
     parse(preview).descriptor.scriptSetup.content,
@@ -41,15 +48,15 @@ test("P67 preserves native read controls and three disclosures without execution
 test("P67 unavailable placeholders, local threshold and unmeasured targets are explicit", () => {
   assert.match(template, /item.code === 'redis_unavailable'/);
   assert.match(template, /不是容量承诺/);
-  assert.match(template, /当前探针没有读取 appendfsync/);
-  assert.match(template, /内存阈值为 80%/);
+  assert.match(template, /当前探针没有读取\s+appendfsync/);
+  assert.match(template, /内存阈值为\s+80%/);
   assert.match(template, /服务比例已封顶为 100%/);
 });
 test("P67 sampling distinguishes partial failure, zero denominator and independent verdict", () => {
   assert.match(template, /status === 'partial'/);
   assert.match(template, /不能据此判断没有业务键/);
   assert.match(template, /无比例分母/);
-  assert.match(template, /v-if="data.keyspace_sample.total_sampled_bytes > 0" class="p67-bar"/);
+  assert.match(template, /v-if="sample.total_sampled_bytes > 0"[\s\S]*?class="p67-bar"/);
 });
 test("P67 review datasets run actual inert probe/evaluator/service and preserve original E2E", async () => {
   const { data } = await buildRedisDesignData(process.cwd());

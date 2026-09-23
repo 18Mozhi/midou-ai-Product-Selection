@@ -181,7 +181,7 @@ try {
             return route.fulfill(mode === "failure" ? failure : { json: envelope(fixture) });
           });
           await page.goto(origin + "/platform-admin/redis");
-          const surface = page.locator(".redis-resilience--review"),
+          const surface = page.locator(".redis-resilience--c"),
             header = surface.locator(".redis-resilience__hero"),
             refresh = header.getByRole("button"),
             state = surface.locator(".redis-resilience__state"),

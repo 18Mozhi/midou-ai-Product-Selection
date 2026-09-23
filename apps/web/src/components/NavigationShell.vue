@@ -557,7 +557,8 @@ onUnmounted(() => {
             routePath !== '/platform-admin/mysql' &&
             routePath !== '/platform-admin/crawler-scheduler' &&
             routePath !== '/platform-admin/capacity' &&
-            routePath !== '/platform-admin/files'
+            routePath !== '/platform-admin/files' &&
+            routePath !== '/platform-admin/redis'
           "
           class="role-page-title"
         >

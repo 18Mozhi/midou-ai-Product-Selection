@@ -74,15 +74,15 @@ test("M08-02.A07/A08/A15 desktop and 390 Redis resilience truth", async ({ page 
     route.fulfill({ json: envelope(base) }),
   );
   await page.goto("/platform-admin/redis");
-  await expect(page.getByRole("heading", { name: "缓存服务单实例韧性" })).toBeVisible();
-  await expect(page.getByText("单 Redis 韧性门已满足")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Redis 运行核验" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "当前韧性门满足" })).toBeVisible();
   await expect(page.getByText("512.0 MiB")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "键淘汰风险" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "资源与累计计数" })).toBeVisible();
   await expect(page.getByText("noeviction 已启用，当前未记录键淘汰。")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "键空间占用热点" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "有界键空间采样" })).toBeVisible();
   await expect(page.getByText("采集任务租约")).toBeVisible();
   await expect(page.getByText("75.0%")).toBeVisible();
-  await expect(page.getByText(/不把内存占比冒充访问频率/)).toBeVisible();
+  await expect(page.getByText(/不是总 Redis 内存占比或访问频率/)).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
   );
@@ -124,7 +124,7 @@ test("Redis refresh is single-flight and preserves the last verified snapshot on
     });
   });
   await page.goto("/platform-admin/redis");
-  await expect(page.getByText("单 Redis 韧性门已满足")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "当前韧性门满足" })).toBeVisible();
   const refresh = page.getByRole("button", { name: "刷新运行事实" });
   await refresh.click();
   await expect(page.getByRole("button", { name: "正在刷新…" })).toBeDisabled();
@@ -133,15 +133,15 @@ test("Redis refresh is single-flight and preserves the last verified snapshot on
     button.click();
   });
   expect(calls).toBe(2);
-  await expect(page.getByText("单 Redis 韧性门已满足")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "当前韧性门满足" })).toBeVisible();
   await expect(page.getByText("512.0 MiB")).toBeVisible();
   releaseRefresh?.();
   await expect(page.getByText("刷新未完成")).toBeVisible();
   await expect(page.getByText(/已保留上次成功的 Redis 运行事实/)).toBeVisible();
-  await expect(page.getByText("单 Redis 韧性门已满足")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "当前韧性门满足" })).toBeVisible();
 });
 
-test("M08-02.A08/A09/A16 warning blocked empty forbidden expired rate limited unavailable and recovering", async ({
+test("M08-02.A08/A09/A16 warning blocked empty forbidden expired and unavailable states", async ({
   page,
 }) => {
   let status = 200;
@@ -165,14 +165,14 @@ test("M08-02.A08/A09/A16 warning blocked empty forbidden expired rate limited un
         }),
   );
   await page.goto("/platform-admin/redis");
-  await expect(page.getByText("Redis 资源接近预警线")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "运行观测存在预警" })).toBeVisible();
   response = {
     ...base,
     state: "blocked",
     findings: [{ code: "redis_aof_disabled", severity: "blocked", action_hint: "通过宝塔恢复。" }],
   };
   await page.reload();
-  await expect(page.getByText("Redis 韧性门已阻断")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "当前韧性门阻断" })).toBeVisible();
   response = null;
   await page.reload();
   await expect(page.getByText("尚无 Redis 观测")).toBeVisible();
@@ -187,5 +187,5 @@ test("M08-02.A08/A09/A16 warning blocked empty forbidden expired rate limited un
     await expect(page.getByText(label)).toBeVisible();
   }
   await page.goto("/platform-admin/redis?state=recovering");
-  await expect(page.getByRole("heading", { name: "缓存服务单实例韧性" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Redis 运行事实暂不可用" })).toBeVisible();
 });

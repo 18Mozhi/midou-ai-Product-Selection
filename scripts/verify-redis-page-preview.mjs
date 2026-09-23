@@ -167,7 +167,7 @@ try {
           return route.fulfill({ json: envelope(current) });
         });
         await page.goto(origin + "/platform-admin/redis");
-        const root = page.locator(".redis-resilience--review"),
+        const root = page.locator(".redis-resilience--c"),
           refresh = root.getByRole("button", { name: "刷新运行事实", exact: true });
         await root.locator(".p67-sampling").waitFor();
         check(await page.locator("h1").count(), 1, "one page h1");
@@ -244,17 +244,24 @@ try {
               check(await root.locator(selector).isVisible(), true, selector);
             const ids = await page.locator("[id]").evaluateAll((ns) => ns.map((n) => n.id));
             check(ids.length, new Set(ids).size, "no duplicate ids");
+            const headingStyles = await root.locator("h1,h2,h3").evaluateAll((ns) =>
+              ns.map((n) => {
+                const css = getComputedStyle(n);
+                return {
+                  tag: n.tagName.toLowerCase(),
+                  text: n.textContent?.trim().slice(0, 50),
+                  fontFamily: css.fontFamily,
+                  fontWeight: css.fontWeight,
+                };
+              }),
+            );
             check(
-              await root.locator("h1,h2,h3").evaluateAll((ns) =>
-                ns.every((n) => {
-                  const css = getComputedStyle(n);
-                  return (
-                    css.fontFamily.includes("Microsoft YaHei") && Number(css.fontWeight) >= 700
-                  );
-                }),
+              headingStyles.every(
+                (item) =>
+                  item.fontFamily.includes("Microsoft YaHei") && Number(item.fontWeight) >= 700,
               ),
               true,
-              "C headings do not inherit old serif font",
+              `C headings do not inherit old serif font: ${JSON.stringify(headingStyles)}`,
             );
             check(
               await root.locator(".redis-resilience__footer").evaluate((el) => {

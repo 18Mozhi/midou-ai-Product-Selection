@@ -1,5 +1,5 @@
 /* P67 C direction production stylesheet. */
-.redis-resilience--review {
+.redis-resilience--c {
   --rr-cyan: #1748a0;
   --rr-muted: #526784;
   color: #182d4a;
@@ -113,11 +113,6 @@
   & .redis-resilience__hero button {
     flex-shrink: 0;
   }
-  & .p67-review-note {
-    font-size: 13px;
-    color: #526784;
-    margin: 0;
-  }
   & .p67-boundary-strip {
     display: flex;
     gap: 24px;
@@ -166,6 +161,10 @@
     padding: 24px;
     min-width: 0;
     border-bottom: 1px solid #dce4ee;
+  }
+  & .p67-summary-layout,
+  & .p67-operational-layout {
+    display: contents;
   }
   & .p67-findings,
   & .p67-resources,
@@ -439,4 +438,8 @@
       align-items: stretch;
     }
   }
+}
+
+html[data-design="signal-ledger"] body .redis-resilience--c :is(h1, h2, h3) {
+  font-family: "Microsoft YaHei", sans-serif;
 }

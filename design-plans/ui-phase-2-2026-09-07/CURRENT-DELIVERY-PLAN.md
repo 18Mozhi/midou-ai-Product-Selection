@@ -2,6 +2,10 @@
 
 P69 已将 FILES-C-r1 接入真实 `/platform-admin/files`，由原父组件继续负责 GET、15秒超时、单飞、快照与权限状态；三个 typed-props 子组件分别呈现结论/发现、目录水位/活动索引、抽样完整性/同机恢复。桌面/手机两动效 180 项/52 本地 GET 与 M08-04 E2E 双端各4/4通过，定向测试11/11、Web类型/构建与格式检查通过。API、权限、状态门槛和文件/恢复边界未改。发布版本、线上SHA及健康核验见[P69实施记录](P69-PAGE-COMPOSITION-IMPLEMENTATION.md)。真实文件系统、生产权限/审计/恢复及正式M07-03仍需独立证据；全73页目标继续。
 
+# P67 Redis 运行核验 C 方向接入 · 本批实施
+
+P67 C 页面现已接入实际 `/platform-admin/redis`，父页继续负责原 GET、15秒超时、单飞、权限状态、快照/失败追踪和焦点交接；三个只读子组件分别呈现结论/发现、资源/持久化/边界、有界采样。定向单测37/37、实际 Vue 1342 项/148 次本地 GET、桌面与390px E2E各3/3、Web类型/生产构建及格式检查通过；本地样例不证明真实 Redis、MySQL、RBAC、恢复或 M07-03。发布 build SHA 与线上状态见[P67实施记录](P67-PAGE-COMPOSITION-IMPLEMENTATION.md)。
+
 # P71 容量边界 C 方向生产 Vue 接入 · 本次实施
 
 2026-09-23：已将自动通过的 CAPACITY-C-r1 接入并部署至真实 `/platform-admin/capacity`：单机蓝色边界、通过档位/停止事实、性能参考、归档与恢复签认、绝对资源及逐项告警；资源不再伪装为容量比例。父控制器继续保留 GET/15秒单飞、失败快照、权限/状态、确认框与原签认 POST/body/key，展示证据拆为 typed-props 子组件。定向单测3/3、M08-06回归16/16、实际Vue矩阵144项/52次本地GET、桌面/手机E2E各5/5、Web类型/生产及22工作区构建通过。提交/build SHA `defcbe4f11274d83d7ec4700023f06b021226b93` 已推送并经固定宝塔脚本部署；线上 ready/available/version、P71深链与专属JS/CSS均通过，版本SHA匹配。未改容量/恢复合同。全73页目标继续。详见[P71实施记录](P71-PAGE-COMPOSITION-IMPLEMENTATION.md)。
