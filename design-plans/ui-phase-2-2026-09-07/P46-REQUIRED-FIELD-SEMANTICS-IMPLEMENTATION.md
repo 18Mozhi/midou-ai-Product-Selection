@@ -23,5 +23,6 @@
 - M03-01 真实 Vue 路由 E2E：桌面 Chromium 3/3、390px 手机 3/3。覆盖四步字段、可选健康检查 URL、公开/人工模式及启用/禁用状态切换；使用本地 API fixture，不提交数据。
 - `npm run typecheck:web`、`npm run build:web`、`npm run verify:docs`、`npm run format:check` 与 `git diff --check` 通过。
 - 不证明 NVDA/VoiceOver 等真实读屏器语音输出、真实权限/保存或 M07-03 生产签收。无 API/OpenAPI/DB/env/依赖/权限或服务拓扑改动。
+- 部署核验：代码提交 `836967c4104b184dba7d08c01d3ab02715ba0e4f` 已推送；固定 `python scripts/deploy-baota.py` 返回 `deployed`，生产 build SHA 与代码提交一致。部署脚本报告固定网站、Node、Python 目标路径并清理临时包；这不替代真实读屏器、RBAC/保存或正式 M07-03 签收。本次仅静态前端变更，无需 Node/Python 重启。
 
 完整 73 页面目标继续。

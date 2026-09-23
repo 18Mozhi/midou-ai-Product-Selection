@@ -2,7 +2,7 @@
 
 ## 2026-09-24 · P46 必填字段语义补齐
 
-依照 ProviderRegistry 现有 `formErrors`，为16个固定必填字段补 `aria-required`；3个公开来源条款字段仅在公开接入模式且发布状态为启用时动态必填。可选健康检查 URL 不标必填，原 `novalidate`、业务校验、错误文字/关联、焦点、请求和保存门槛不变。新合同1/1、M03-01桌面/390px手机各3/3、Web类型、生产构建、153文件/73路由文档门、格式与diff检查通过。测试只走本地fixture，不触发保存，不能替代真实读屏器或生产签收。详见[P46必填字段语义实施](P46-REQUIRED-FIELD-SEMANTICS-IMPLEMENTATION.md)。
+依照 ProviderRegistry 现有 `formErrors`，为16个固定必填字段补 `aria-required`；3个公开来源条款字段仅在公开接入模式且发布状态为启用时动态必填。可选健康检查 URL 不标必填，原 `novalidate`、业务校验、错误文字/关联、焦点、请求和保存门槛不变。新合同1/1、M03-01桌面/390px手机各3/3、Web类型、生产构建、153文件/73路由文档门、格式与diff检查通过。提交 `836967c4104b184dba7d08c01d3ab02715ba0e4f` 已推送；固定宝塔脚本返回 `deployed` 且生产 build SHA 一致。本轮仅静态前端，无需 Node/Python 重启；测试只走本地fixture，不触发保存，不能替代真实读屏器、RBAC或正式生产签收。详见[P46必填字段语义实施](P46-REQUIRED-FIELD-SEMANTICS-IMPLEMENTATION.md)。
 
 ## 2026-09-24 · P47 首次读取失败实际 Vue 接入
 
