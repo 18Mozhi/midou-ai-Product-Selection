@@ -2,7 +2,7 @@
 
 ## 2026-09-24 · P01 根入口 C 方向实施
 
-已将获批的轻量蓝色入口边界/白色解析区接入 `LandingRedirectSurface.vue`；保留 `GET /me/landing`、安全重试、`/home` 最近成员路径、服务端目标 replace 和 expired→`/login`，加载中无按钮、失败只显示单一重新检查，缺 route 保持受阻。用户已授权剩余页面视觉自动同意，本页审核状态按授权登记。审核原型双端/两种动效48项及24次本地GET、P01桌面/390移动端加载/失败/重试/缺失目标回归和根路由成功/401回归通过；Web类型检查与定向单测通过。未改API/OpenAPI/权限/数据库/配置/依赖。生产只读证据见[P01实施记录](P01-PAGE-COMPOSITION-IMPLEMENTATION.md)，全73页目标继续，下一页P08。
+已将获批的轻量蓝色入口边界/白色解析区接入 `LandingRedirectSurface.vue`；保留 `GET /me/landing`、安全重试、`/home` 最近成员路径、服务端目标 replace 和 expired→`/login`，加载中无按钮、失败只显示单一重新检查，缺 route 保持受阻。用户已授权剩余页面视觉自动同意，本页审核状态按授权登记。审核原型双端/两种动效48项及24次本地GET、P01桌面/390移动端加载/失败/重试/缺失目标回归和根路由成功/401回归通过；Web类型检查与定向单测通过。未改API/OpenAPI/权限/数据库/配置/依赖。提交 `de035c93b9e4ca7c7e74393a5dd085a5bac2cdca` 已按固定宝塔脚本部署；生产 live/ready/available、匿名 `/`→401→`/login`、线上JS/CSS及本地构建哈希核对通过。真实会话、角色权限及正式 M07-03 验收仍未由只读 smoke 证明，详见[P01实施记录](P01-PAGE-COMPOSITION-IMPLEMENTATION.md)。全73页目标继续，下一页P08。
 
 ## 2026-09-24 · P02 登录、MFA 挑战与首次安全设置实施
 

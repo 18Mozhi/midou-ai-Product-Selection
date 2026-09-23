@@ -23,4 +23,8 @@ P01 `/` 已将获批的轻量入口构图接入实际 `LandingRedirectSurface.vu
 
 ## 生产与验收边界
 
-页面视觉按用户“剩余页面视觉通过”的授权自动登记为已同意。上线后需在此补记固定宝塔部署与只读生产核验；健康端点和静态页面可达不代表真实会话、角色权限或正式 M07-03 验收。生产 smoke 不执行身份写入。
+页面视觉按用户“剩余页面视觉通过”的授权自动登记为已同意。固定宝塔脚本已成功部署 build SHA `de035c93b9e4ca7c7e74393a5dd085a5bac2cdca`；脚本回执为 `deployed`，网站、Node、Python 包均按项目固定目录发布，临时上传包已删除。
+
+生产只读核验：`/api/v1/health/live`、`ready`、`available` 均 HTTP 200；live 的 `build_sha` 与上述提交一致。`/` 返回 HTTP 200，引用的 JS `index-BKco_TWp.js`、CSS `index-DZmb6GGd.css` 均 HTTP 200，线上 SHA-256 分别为 `D5AE2F0E5618C056DC9CF50D4CE25E3C29BAF1181EE4736BE59872AC71B97BF4`、`06BD3C12EADC67FD927980328BCA15164497DE07C68E6A3FA9E718B7FB307618`，与本地构建文件一致。匿名真实浏览器访问 `/` 后只发出一次 `GET /api/v1/me/landing`，收到预期 401 并进入 `/login`；页面无 JS 异常，静态资源无失败。没有使用账号或执行身份写入。
+
+此 smoke 证明本次版本、静态资产与匿名路由边界已上线，不代表真实会话落点、目标角色权限或正式 M07-03 验收通过；这些仍需独立证据。

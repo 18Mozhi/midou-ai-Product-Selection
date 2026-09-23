@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "pageId": "P01",
   "route": "/",
-  "status": "implemented-user-approved-local-vue-verified-not-production-accepted",
+  "status": "implemented-user-approved-production-smoke-verified-not-formally-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/LandingRedirect.vue": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5",
@@ -74,7 +74,7 @@
     }
   ],
   "surfaceReview": {
-    "status": "actual-vue-local-browser-verified-not-production-accepted",
+    "status": "production-readonly-smoke-verified-not-formally-accepted",
     "files": [
       "apps/web/src/components/LandingRedirect.vue",
       "apps/web/src/components/LandingRedirectSurface.vue"
