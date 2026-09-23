@@ -1,3 +1,7 @@
+# P11 个人中心 C 方向实际 Vue 接入 · 本轮实施
+
+P11 `/me` 已将旧账号索引页重构为蓝色账号边界、五分区目录与白色任务面板；以 typed panel + composable 独立管理真实资料、权限、安全/会话、通知、本人资产各自的读取结果。保留原请求路径、字段、版本、权限与会话守卫合同；未知偏好不显示为默认，邮件启用按后端 503 明确失败。实际 Vue 矩阵覆盖1440/390与两种动效48项/12个隔离写入；A04/A05桌面和手机均通过，Web类型、定向单测通过。提交/build SHA与宝塔线上检查将在本次部署完成后补入[P11实施记录](P11-PAGE-COMPOSITION-IMPLEMENTATION.md)。正式 M07-03、真实 RBAC/密码/会话/邮件能力仍另行验收；全73页继续。
+
 # P01 根入口 C 方向实际 Vue 接入 · 本轮实施
 
 P01 `/` 已接入获批的轻量入口解析界面；读取/路由合同不变。双端 loading/blocked/缺目标、重试、成功落点及401→登录隔离浏览器验证通过。P01实施和后续宝塔只读生产证据详见[P01实施记录](P01-PAGE-COMPOSITION-IMPLEMENTATION.md)；真实角色权限、会话及正式M07-03不由本地样例证明。下一页P08，全73页目标继续。
@@ -1496,9 +1500,11 @@ W09 发布前必须取得干净且归属明确的提交，核对本地/远端/�
 # 历史交付接续 · P09/P08
 
 P10「外观偏好」C 方向已迁入实际 ThemeStudio Vue，实施、线上 SHA 与资源核验见 [P10-PAGE-COMPOSITION-IMPLEMENTATION.md](P10-PAGE-COMPOSITION-IMPLEMENTATION.md)。2026-09-23 已按用户自动同意授权完成 P09 三步引导与 P08 组织/工作区选择真实 Vue 重构，分别见 [P09 实施记录](P09-PAGE-COMPOSITION-IMPLEMENTATION.md) 和 [P08 实施记录](P08-PAGE-COMPOSITION-IMPLEMENTATION.md)；P08 commit/build SHA `b1e53eac9d731ffd8e90029ab6192bdda6c215f3` 已推送并经固定宝塔脚本部署，线上 health/version、深链和 P08 JS/CSS 资源核验通过。全 73 页目标和正式阶段验收仍开放；下一页面接续 P07 MFA 身份安全。
+
 # P03 注册 C 方向生产 Vue 接入 · 本轮实施
 
 P03 `/register` 已接入独立蓝色注册边界、白色三字段表单、错误/请求追踪、桌面与手机状态；保留 `POST /auth/register {email,password}`、确认密码仅本地比较和201后同 URL 待验证语义。不改 API/OpenAPI、权限、存储、环境、依赖或真实邮件流程。本地合同/预览4/4、桌面与390px E2E各2/2、相邻P04–P06回归双端各6/6、22工作区构建及身份源映射通过。提交 `972685b432491b5b12b0c1dd69b2b37cccc5ef05` 已推送并部署；线上 health/version SHA、`/register` 双视口只读及身份 JS/CSS 哈希匹配。见[P03实施记录](P03-PAGE-COMPOSITION-IMPLEMENTATION.md)；完整73页继续，下一页P02。
+
 # P02 登录 C 方向生产 Vue 接入 · 本轮实施
 
 P02 `/login` 的普通登录、MFA challenge 和种子安全设置已按用户授权接入实际 Vue，桌面/390px 定向回归各 7/7。保留现有 auth/password/MFA 请求体、服务端分流和会话边界，不修改 API、权限、数据或配置。完整代码/build SHA、宝塔过程、线上健康版本/页面/资源只读验证见[P02实施记录](P02-PAGE-COMPOSITION-IMPLEMENTATION.md)；合成账号测试不证明真实 MFA、Cookie、RBAC 或正式 M07-03。全73页目标继续，下一页 P01。

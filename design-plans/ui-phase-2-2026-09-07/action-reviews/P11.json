@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "pageId": "P11",
   "route": "/me",
-  "status": "source-reviewed-not-user-approved",
+  "status": "implemented-user-auto-approved",
   "contract": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/AccountShell.vue": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
@@ -47,10 +47,7 @@
       "routeApplicability": "P11",
       "condition": "账号壳层可见",
       "handler": "RouterLink to /",
-      "variants": [
-        "brand",
-        "breadcrumb"
-      ],
+      "variants": ["brand", "breadcrumb"],
       "scenes": [
         {
           "package": "personal-direction-c",
@@ -120,16 +117,12 @@
     {
       "actionId": "AC-CONTEXT",
       "label": "组织与工作区",
-      "sourceCandidateIds": [
-        "apps/web/src/components/AccountShell.vue#0f58e919e43acff5.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/AccountShell.vue#0f58e919e43acff5.1"],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "账号壳层可见",
       "handler": "RouterLink to /select-context",
-      "variants": [
-        "link"
-      ],
+      "variants": ["link"],
       "scenes": [
         {
           "package": "personal-direction-c",
@@ -199,20 +192,12 @@
     {
       "actionId": "AC-SECTION",
       "label": "个人中心五分区",
-      "sourceCandidateIds": [
-        "apps/web/src/components/AccountShell.vue#1f54ecd0f870df67.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/AccountShell.vue#1f54ecd0f870df67.1"],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "五个固定 section；非法 query 回 profile",
       "handler": "RouterLink /me?section=item.key -> activeSection",
-      "variants": [
-        "profile",
-        "permissions",
-        "security",
-        "notifications",
-        "assets"
-      ],
+      "variants": ["profile", "permissions", "security", "notifications", "assets"],
       "scenes": [
         {
           "package": "personal-direction-c",
@@ -302,16 +287,12 @@
     {
       "actionId": "TH-ROUTE",
       "label": "外观偏好",
-      "sourceCandidateIds": [
-        "apps/web/src/components/AccountShell.vue#508ee18711ffdef2.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/AccountShell.vue#508ee18711ffdef2.1"],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "账号壳层可见",
       "handler": "RouterLink to /settings/theme",
-      "variants": [
-        "link"
-      ],
+      "variants": ["link"],
       "scenes": [
         {
           "package": "personal-direction-c",
@@ -389,10 +370,7 @@
       "routeApplicability": "P11",
       "condition": "顶部刷新；profile error 时另有重试",
       "handler": "load -> GET /me/profile then loadSections",
-      "variants": [
-        "refresh",
-        "profile-error-retry"
-      ],
+      "variants": ["refresh", "profile-error-retry"],
       "scenes": [
         {
           "package": "personal-direction-c",
@@ -488,16 +466,12 @@
     {
       "actionId": "PC-LEGACY-TAB",
       "label": "旧内嵌标签",
-      "sourceCandidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#1076771cfdefa098.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#1076771cfdefa098.1"],
       "kind": "excluded",
       "routeApplicability": "excluded-source-site",
       "condition": "!accountShell；P11由AccountShell传true",
       "handler": "tab = item.key",
-      "variants": [
-        "five-inline-tabs-outside-P11"
-      ],
+      "variants": ["five-inline-tabs-outside-P11"],
       "scenes": [],
       "testReferences": [],
       "visualStates": {
@@ -521,10 +495,7 @@
       "routeApplicability": "P11",
       "condition": "ready && tab=profile；原生required校验；无源码busy锁",
       "handler": "saveProfile -> PATCH /me/profile",
-      "variants": [
-        "form-submit",
-        "submit-button"
-      ],
+      "variants": ["form-submit", "submit-button"],
       "scenes": [
         {
           "package": "personal-direction-c",
@@ -620,17 +591,12 @@
     {
       "actionId": "PC-ORG-TOKENS",
       "label": "组织令牌入口",
-      "sourceCandidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#f395dfc785eeb3e5.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#f395dfc785eeb3e5.1"],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "permissions且capabilities含organization_token:manage",
       "handler": "RouterLink /org-admin/tokens",
-      "variants": [
-        "capability-present",
-        "capability-absent"
-      ],
+      "variants": ["capability-present", "capability-absent"],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -704,16 +670,12 @@
     {
       "actionId": "AC-MFA",
       "label": "管理MFA",
-      "sourceCandidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#df188704ef470c64.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#df188704ef470c64.1"],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "ready && tab=security",
       "handler": "RouterLink /security/mfa",
-      "variants": [
-        "link"
-      ],
+      "variants": ["link"],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -791,10 +753,7 @@
       "routeApplicability": "P11",
       "condition": "security；三输入required/minlength12；确认相等；源码无busy锁",
       "handler": "changePassword -> POST /me/password -> replace /login",
-      "variants": [
-        "form-submit",
-        "submit-button"
-      ],
+      "variants": ["form-submit", "submit-button"],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -894,18 +853,12 @@
     {
       "actionId": "PC-REVOKE",
       "label": "撤销设备会话",
-      "sourceCandidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#065748ba997faf11.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#065748ba997faf11.1"],
       "kind": "write",
       "routeApplicability": "P11",
       "condition": "security；源对返回的每条会话均显示按钮",
       "handler": "revokeSession(id) -> DELETE /me/sessions/{id}",
-      "variants": [
-        "active",
-        "revoked",
-        "expired"
-      ],
+      "variants": ["active", "revoked", "expired"],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -1017,11 +970,7 @@
       "routeApplicability": "P11",
       "condition": "ready && tab=notifications；源码无busy锁",
       "handler": "savePreferences -> PUT /me/notification-preferences",
-      "variants": [
-        "form-submit",
-        "submit-button",
-        "mail-provider-pending"
-      ],
+      "variants": ["form-submit", "submit-button", "mail-provider-pending"],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -1129,16 +1078,12 @@
     {
       "actionId": "PC-TREND",
       "label": "查看关注热点",
-      "sourceCandidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#d31010912340ba44.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#d31010912340ba44.1"],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "assets.followed_trends各返回项",
       "handler": "RouterLink /trends?topic={id}",
-      "variants": [
-        "each-trend"
-      ],
+      "variants": ["each-trend"],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -1216,16 +1161,12 @@
     {
       "actionId": "PC-DECISION",
       "label": "查看本人决策机会",
-      "sourceCandidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#fe2ef7002fcbab8c.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#fe2ef7002fcbab8c.1"],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "assets.decisions各返回项",
       "handler": "RouterLink /opportunities/{opportunity_id}",
-      "variants": [
-        "each-decision"
-      ],
+      "variants": ["each-decision"],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -1295,16 +1236,12 @@
     {
       "actionId": "PC-TASK",
       "label": "查看本人任务",
-      "sourceCandidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#ee2568a050e8c314.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#ee2568a050e8c314.1"],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "assets.tasks各返回项",
       "handler": "RouterLink /tasks",
-      "variants": [
-        "each-task-to-list"
-      ],
+      "variants": ["each-task-to-list"],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -1373,12 +1310,12 @@
     }
   ],
   "compositionGaps": [
-    "连续五分区离线提案及三主题两密度已有双端图；尚未合并真实Vue，未证明浏览器history、实际200%缩放和全输入长文本组合。",
-    "14组代表控件适用六态均显式绑定；不代表每个重复入口、导航/会话变体与主题交叉状态全验，用户批准仍pending。"
+    "已并入真实Vue并完成1440/390与两种动效的隔离浏览器验证；本地夹具不替代生产账号、真实RBAC、数据库审计或正式验收。",
+    "用户授权剩余页面与状态自动通过；此审核记录仅表示视觉与交互方案采纳，不表示外部依赖或生产行为已验收。"
   ],
-  "approval": "pending-user-review",
+  "approval": "user-approved-remaining-pages-auto",
   "limits": [
     "沿用合同actionId和源码candidateId，不改历史actions/dialogs/coverage。",
-    "这里是人工源码语义对应和既有图/测试引用；非动态挂载Vue、SQL、认证或用户批准。"
+    "批准基于用户对剩余页面自动通过的明确授权；本文件不证明SQL、真实身份认证、生产权限或邮件投递。"
   ]
 }

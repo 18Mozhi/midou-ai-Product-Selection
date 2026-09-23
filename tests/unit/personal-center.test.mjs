@@ -145,23 +145,35 @@ test("personal profile reads and writes do not resolve a tenant context", async 
 });
 
 test("personal center delivery contains real profile assets security preferences and route contracts", async () => {
-  const [component, routes, repository, migration, openapi, map] = await Promise.all([
+  const [component, composable, routes, repository, migration, openapi, map] = await Promise.all([
     readFile("apps/web/src/components/PersonalCenter.vue", "utf8"),
+    readFile("apps/web/src/components/personal-center/usePersonalCenter.ts", "utf8"),
     readFile("apps/api/src/personal-center-routes.ts", "utf8"),
     readFile("apps/api/src/mysql-personal-center-repository.ts", "utf8"),
     readFile("database/migrations/0039_personal_center.up.sql", "utf8"),
     readFile("docs/openapi.yaml", "utf8"),
     readFile("docs/feature-map.json", "utf8"),
   ]);
-  assert.match(component, /基本资料.*我的权限.*安全中心.*通知偏好.*我的资产/s);
-  assert.match(component, /changePassword.*revokeSession.*savePreferences/s);
-  assert.match(component, /登录用户名[\s\S]*form\.username/);
-  assert.match(component, /onMounted\(\(\) => void load\(\)\)/);
-  assert.ok(
-    component.indexOf('await call("/me/profile")') < component.indexOf("Promise.allSettled"),
-    "profile must render before optional personal-center sections finish",
+  assert.match(
+    component,
+    /PersonalProfilePanel[\s\S]*PersonalPermissionsPanel[\s\S]*PersonalSecurityPanel[\s\S]*PersonalNotificationsPanel[\s\S]*PersonalAssetsPanel/,
   );
-  assert.match(component, /finally \{[\s\S]*window\.clearTimeout\(timeout\)/);
+  assert.match(composable, /async function changePassword\(\)/);
+  assert.match(composable, /async function revokeSession\(id: string\)/);
+  assert.match(composable, /async function savePreferences\(\)/);
+  assert.match(composable, /onMounted/);
+  assert.match(
+    await readFile("apps/web/src/components/personal-center/PersonalProfilePanel.vue", "utf8"),
+    /登录用户名[\s\S]*draft\.username/,
+  );
+  assert.match(composable, /onMounted\(\(\) => void load\(\)\)/);
+  assert.ok(
+    composable.indexOf('call<PersonalProfile>("/me/profile")') <
+      composable.indexOf('loadSection("authorization"'),
+    "profile must render before optional personal-center sections start",
+  );
+  assert.match(composable, /finally \{[\s\S]*window\.clearTimeout\(timeout\)/);
+  assert.match(composable, /profileRequestInFlight/);
   assert.match(routes, /\/api\/v1\/me\/profile/);
   assert.match(routes, /const current = await identity\(request\)/);
   assert.match(routes, /\/api\/v1\/me\/assets/);

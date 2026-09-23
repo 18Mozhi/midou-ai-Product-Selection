@@ -124,6 +124,7 @@ try {
   for (const width of widths)
     for (const motion of motions) {
       let scenario = "ready";
+      let failedPreferenceRead = false;
       const context = await browser.newContext({
         viewport: { width, height: width === 390 ? 844 : 1050 },
         locale: "zh-CN",
@@ -173,8 +174,15 @@ try {
             return route.fulfill({ json: envelope(authorization, "p11-authorization") });
           if (key === "GET /api/v1/me/sessions")
             return route.fulfill({ json: envelope(sessions, "p11-sessions") });
-          if (key === "GET /api/v1/me/notification-preferences")
+          if (key === "GET /api/v1/me/notification-preferences") {
+            if (scenario === "preference-failure" && !failedPreferenceRead) {
+              failedPreferenceRead = true;
+              return route.fulfill(
+                failure(403, "preferences_forbidden", "p11-preferences-failure"),
+              );
+            }
             return route.fulfill({ json: envelope(preferences, "p11-preferences") });
+          }
           if (key === "GET /api/v1/me/assets")
             return route.fulfill({ json: envelope(assets, "p11-assets") });
           if (key === "PATCH /api/v1/me/profile") {
@@ -239,9 +247,9 @@ try {
         );
         if (output && motion === "reduce") await capture(page, "profile-saved");
         for (const [section, heading] of [
-          ["permissions", "能力目录"],
-          ["security", "会话状态"],
-          ["assets", "当前待办"],
+          ["permissions", "可执行动作"],
+          ["security", "设备会话"],
+          ["assets", "我的任务"],
           ["notifications", "五项可保存开关"],
         ]) {
           await root
@@ -270,7 +278,7 @@ try {
               "session revoke has exact target",
             );
             check(
-              await root.getByText("暂无活动会话。", { exact: true }).count(),
+              await root.getByText("当前没有可显示的设备会话。", { exact: true }).count(),
               1,
               "successful revoke removes only local session row",
             );
@@ -279,7 +287,7 @@ try {
         const competitor = root.getByLabel("竞品通知");
         await competitor.uncheck();
         await root.getByRole("button", { name: "保存偏好", exact: true }).click();
-        await root.getByText(/偏好已保存/).waitFor({ timeout: 8000 });
+        await root.getByText(/通知偏好已保存/).waitFor({ timeout: 8000 });
         check(
           writes[2],
           {
@@ -306,6 +314,34 @@ try {
           "profile failure has recovery",
         );
         if (output && motion === "reduce") await capture(failed, "profile-failure");
+        scenario = "preference-failure";
+        const failedPreferences = await context.newPage();
+        await failedPreferences.goto(`${origin}/me?section=notifications`, {
+          waitUntil: "domcontentloaded",
+        });
+        const preferenceRoot = failedPreferences.locator(".p11-account-review");
+        await preferenceRoot.getByText("通知偏好读取未完成", { exact: true }).waitFor();
+        check(
+          await preferenceRoot.getByText("p11-preferences-failure", { exact: true }).count(),
+          2,
+          "section failure keeps request and trace provenance",
+        );
+        check(
+          await preferenceRoot.getByRole("button", { name: "保存偏好", exact: true }).count(),
+          0,
+          "unknown preferences are not presented as writable defaults",
+        );
+        await preferenceRoot.getByRole("button", { name: "重新读取分区", exact: true }).click();
+        await preferenceRoot
+          .getByRole("heading", { name: "五项可保存开关", exact: true })
+          .waitFor({ timeout: 8000 });
+        check(
+          await preferenceRoot.getByRole("checkbox", { name: "竞品通知" }).count(),
+          1,
+          "isolated section retry recovers without reloading profile",
+        );
+        if (output && motion === "reduce")
+          await capture(failedPreferences, "preferences-recovered");
         check(unexpected, [], "no unexpected API");
         check(errors, [], "no page errors");
         results.push({ width, motion, checks, writes: writes.length });

@@ -168,7 +168,12 @@ test("UI2-A04 profile remains writable when tenant sections fail without request
   }
   await page.goto("/me");
   await expect(page.getByRole("heading", { name: "隔离成员", exact: true })).toBeVisible();
-  await expect(page.getByText("个人资料已读取，另有 3 个分区暂不可用，可稍后刷新。")).toBeVisible();
+  await expect(page.getByText("个人资料已读取，另有 3 个分区暂不可用，可稍后刷新。")).toHaveCount(
+    0,
+  );
+  await page.getByRole("link", { name: /我的权限/ }).click();
+  await expect(page.getByText("权限读取未完成", { exact: true })).toBeVisible();
+  await page.getByRole("link", { name: /基本资料/ }).click();
   await expect(page.getByLabel("邮箱", { exact: false }).first()).toBeDisabled();
   await page.getByLabel("显示名称", { exact: true }).fill("隔离成员新名称");
   await page.getByRole("button", { name: "保存资料", exact: true }).click();
@@ -215,6 +220,19 @@ test("UI2-A05 notification preferences keep five booleans and the latest server 
       const body = route.request().postDataJSON();
       bodies.push(body);
       expect(route.request().headers()["idempotency-key"]).toBeTruthy();
+      if (bodies.length === 1) {
+        return route.fulfill({
+          status: 503,
+          json: {
+            error: {
+              code: "mail_provider_pending",
+              action_hint: "邮件服务尚未接入，请关闭邮件通知并使用站内通知。",
+            },
+            request_id: "ui2-mail-pending",
+            trace_id: "ui2-mail-pending",
+          },
+        });
+      }
       version += 1;
       return route.fulfill({
         json: envelope({
@@ -230,17 +248,18 @@ test("UI2-A05 notification preferences keep five booleans and the latest server 
     await route.fulfill({ json: envelope(initial) });
   });
   await page.goto("/me?section=notifications");
-  await expect(page.getByRole("heading", { name: "通知偏好", exact: true })).toBeVisible();
-  await expect(
-    page.getByText("基本资料已显示，正在后台读取权限、安全、通知和资产信息…"),
-  ).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "五项可保存开关", exact: true })).toBeVisible();
   await page.getByRole("checkbox", { name: "邮件通知", exact: true }).check();
   await page.getByRole("checkbox", { name: "任务通知", exact: true }).uncheck();
   await page.getByRole("button", { name: "保存偏好", exact: true }).click();
-  await expect(page.getByText("偏好已保存；邮件服务商未配置前只记录待投递状态。")).toBeVisible();
+  await expect(page.locator('.p11-action-feedback[data-status="error"]')).toContainText(
+    "邮件服务尚未接入，请关闭邮件通知并使用站内通知。",
+  );
   await page.getByRole("checkbox", { name: "邮件通知", exact: true }).uncheck();
   await page.getByRole("button", { name: "保存偏好", exact: true }).click();
-  await expect(page.locator(".personal-notice")).toContainText("通知偏好已保存。");
+  await expect(
+    page.getByText("通知偏好已保存。保存偏好不代表邮件已送达。", { exact: true }),
+  ).toBeVisible();
   expect(bodies).toEqual([
     {
       expected_version: 7,
@@ -251,7 +270,7 @@ test("UI2-A05 notification preferences keep five booleans and the latest server 
       competitor_enabled: true,
     },
     {
-      expected_version: 8,
+      expected_version: 7,
       in_app_enabled: true,
       email_enabled: false,
       task_enabled: false,
