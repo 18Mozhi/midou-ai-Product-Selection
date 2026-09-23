@@ -1,6 +1,6 @@
 # P70 采集调度 C 方向生产 Vue 接入 · 本次实施
 
-2026-09-23：已将自动通过的 C 方向接入真实 `/platform-admin/crawler-scheduler`：桌面/手机呈现蓝色单机边界和分区证据；保留原 GET/15 秒单飞、失败快照/追踪、筛选分页及两个既有确认动作。P70 单测 2/2、M08-05 模块测试 15/15、实际 Vue 视口/动效矩阵 144 项与 52 次本地 GET、桌面/手机 E2E 各 7/7、Web 类型检查通过。提交/宝塔部署与线上 SHA/资源核验待完成；不改 API、调度、Worker/Python、权限、审计或数据规则。全 73 页目标继续。详见[P70实施记录](P70-PAGE-COMPOSITION-IMPLEMENTATION.md)。
+2026-09-23：已将自动通过的 C 方向接入并部署至真实 `/platform-admin/crawler-scheduler`：桌面/手机呈现蓝色单机边界和分区证据；保留原 GET/15 秒单飞、失败快照/追踪、筛选分页及两个既有确认动作。P70 单测 2/2、M08-05 模块测试 15/15、实际 Vue 视口/动效矩阵 144 项与 52 次本地 GET、桌面/手机 E2E 各 7/7、Web 类型检查及生产构建通过。提交/build SHA `ca5364d35f8e05feb736d09366ae9aa1b0283422` 已推送并经固定宝塔脚本部署；线上 ready/available/version、P70 深链与专属 JS/CSS 均通过，版本 SHA 匹配。未改 API、调度、Worker/Python、权限、审计或数据规则。全 73 页目标继续。详见[P70实施记录](P70-PAGE-COMPOSITION-IMPLEMENTATION.md)。
 
 # P68 MySQL 运行 C 方向生产 Vue 接入 · 前序实施
 

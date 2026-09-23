@@ -16,4 +16,10 @@
 
 ## 提交与部署
 
-提交/build SHA、宝塔部署及线上只读核验将在代码部署完成后补记。全 73 页阶段目标继续；页面与本地夹具不证明生产 RBAC、真实回收/审计或正式 M07-03 验收。
+- 提交/build SHA：`ca5364d35f8e05feb736d09366ae9aa1b0283422`，已推送 `main`。
+- `python scripts/deploy-baota.py`：成功；22 个工作区构建通过，M07-03 六对象预检通过，上传临时包已删除。
+- 线上 `/api/v1/health/ready=ready`、`/api/v1/health/available=available`，`/api/v1/health/version.build_sha` 与提交一致。
+- `/platform-admin/crawler-scheduler` 返回 HTTP 200；专属页面 JS（15,514 bytes）、CSS（23,836 bytes）及证据子组件 JS（3,224 bytes）均 HTTP 200。
+- 部署由固定宝塔脚本完成；无需用户手工重启。本次未调用调度读取/恢复等受保护业务接口，也未触发真实恢复。
+
+全 73 页阶段目标继续。页面与本地夹具不证明生产 RBAC、真实回收/审计或正式 M07-03 验收；M07-03 输出是部署预检，不是正式生产验收。
