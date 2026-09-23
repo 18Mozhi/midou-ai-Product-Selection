@@ -14,6 +14,12 @@ const once = (source, before, after) => {
 };
 export function previewSecurityPage(source) {
   let result = source.replaceAll("\r\n", "\n");
+  if (result.includes('class="security-ops security-ops--c"'))
+    return once(
+      result,
+      'class="security-ops security-ops--c"',
+      'class="security-ops security-ops--c security-ops--review"',
+    );
   result = once(result, 'class="security-ops"', 'class="security-ops security-ops--review"');
   result = once(
     result,
@@ -58,8 +64,10 @@ ${summary[0]}
   return result;
 }
 export function previewSecurityShell(source) {
+  const result = previewShellVue(source);
+  if (result.includes("routePath !== '/platform-admin/security'")) return result;
   return once(
-    previewShellVue(source),
+    result,
     '<header v-if="!opportunityId" class="role-page-title">',
     '<header v-if="!opportunityId && routePath !== \'/platform-admin/security\'" class="role-page-title">',
   );

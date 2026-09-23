@@ -8,7 +8,7 @@ const props = defineProps<{
   title: string;
   detailTitle: (row: DataRow) => string;
   emptyMessage?: string;
-  appearance?: "default" | "governance" | "content";
+  appearance?: "default" | "governance" | "content" | "security";
   focusFallback?: () => HTMLElement | null;
 }>();
 
@@ -171,6 +171,7 @@ function handleTab(event: KeyboardEvent) {
         :class="{
           'responsive-data-view__overlay--governance': appearance === 'governance',
           'responsive-data-view__overlay--content': appearance === 'content',
+          'responsive-data-view__overlay--security': appearance === 'security',
         }"
         @keydown.esc="close"
         @keydown="handleTab"

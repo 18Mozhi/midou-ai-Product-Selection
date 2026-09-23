@@ -66,6 +66,19 @@ test("P59 grouping keeps all five original data-view consumers and ready/error b
   assert.ok(result.indexOf('class="p59-background"') < result.indexOf('class="p59-investigation"'));
   assert.equal((result.match(/id="security-operations-title"/g) || []).length, 1);
 });
+test("P59 production C layout owns one heading, separates background counts, and scopes all details", async () => {
+  const page = await readFile("apps/web/src/components/SecurityOperationsCenter.vue", "utf8"),
+    details = await readFile("apps/web/src/components/ResponsiveDataView.vue", "utf8"),
+    styles = await readFile("apps/web/src/security-operations-c.css", "utf8");
+  assert.match(page, /class="security-ops security-ops--c"/);
+  assert.match(page, /<h1 id="security-operations-title">安全中心<\/h1>/);
+  assert.match(styles, /\.role-shell:has\(\.security-ops--c\) \.role-page-title/);
+  assert.ok(page.indexOf('class="security-view-nav"') < page.indexOf('class="p59-background"'));
+  assert.ok(page.indexOf('class="p59-background"') < page.indexOf('class="p59-investigation"'));
+  assert.equal((page.match(/appearance="security"/g) || []).length, 5);
+  assert.match(details, /responsive-data-view__overlay--security/);
+  assert.match(styles, /\.responsive-data-view__overlay--security \.responsive-data-view__drawer/);
+});
 test("review snapshots reuse original E2E fields and keep the two credential collections separate", async () => {
   const { fixture, snapshot } = await securityReviewFixtures();
   const credentials = snapshot("credentials");

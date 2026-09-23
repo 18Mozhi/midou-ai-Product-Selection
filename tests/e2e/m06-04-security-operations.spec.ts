@@ -112,7 +112,9 @@ test("M06-04.A07/A08/A15 security operations visual sanitized", async ({ page })
     r.fulfill({ json: env(data) }),
   );
   await page.goto("/platform-admin/security");
-  await expect(page.getByRole("heading", { name: "安全与密钥运营", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "安全中心", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+  await expect(page.getByRole("region", { name: "全平台背景摘要" })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "安全中心二级导航" })).toBeVisible();
   await expect(page.getByRole("button", { name: "刷新数据" })).toBeVisible();
   await expect(page.getByRole("button", { name: "下一页" })).toBeVisible();
