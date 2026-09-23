@@ -23,4 +23,7 @@
 
 ## 部署
 
-待提交、推送与宝塔发布完成后补记发布 SHA 和线上只读核验结果。正式生产证据文件缺失时，不宣称 M07-03 正式签收。
+- commit/build SHA：`44bc87b47239bef78c25a8b1e7fbe6b5a916e29e`，已推送 `main` 并通过 `python scripts/deploy-baota.py` 发布。
+- 发布脚本返回 `deployed`，站点、Node、Python 固定目录均为项目规定的宝塔路径，临时包已删除。
+- 线上只读核验：`/api/v1/health/ready`、`available`、`version`、`/platform-admin/logs` 及 PlatformLogCenter/PlatformLogWorkspace 专属 JS/CSS 均 HTTP 200；`version.data.build_sha` 与部署 SHA 一致。
+- `node scripts/verify-baota-deployment.mjs --production` 仍因缺少 `.artifacts/verification/baota-production-evidence.json` 返回 `production_evidence_missing`。因此仅证明应用发布、健康端点和静态资源可达，不宣称 M07-03 正式签收、生产 SQL/RBAC、真实 CSV 下载或全 73 页验收。
