@@ -910,8 +910,24 @@ test("1688 acceptance shows the factual search detail and pagination coverage ma
       }),
     });
   });
-  await page.route("**/api/v1/platform/provider-sources/1688-acceptance", (route) =>
-    route.fulfill({
+  let acceptanceReads = 0;
+  await page.route("**/api/v1/platform/provider-sources/1688-acceptance", (route) => {
+    acceptanceReads += 1;
+    if (acceptanceReads > 1 && acceptanceReads < 5) {
+      return route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "acceptance_read_unavailable",
+            message: "启用条件读取暂不可用",
+            action_hint: "启用条件暂未能更新。",
+          },
+          request_id: `acceptance-read-${acceptanceReads}`,
+          trace_id: `acceptance-read-${acceptanceReads}`,
+        },
+      });
+    }
+    return route.fulfill({
       json: envelope({
         provider_id: setup[2].provisioned.id,
         source_status: "disabled",
@@ -972,16 +988,18 @@ test("1688 acceptance shows the factual search detail and pagination coverage ma
         },
         pending_reasons: ["需要用真实登录样本完成当前解析器版本回放。"],
       }),
-    }),
-  );
+    });
+  });
   await page.goto("/platform-admin/providers/sources/1688-acceptance");
   await expect(page.getByRole("heading", { name: "尚未满足启用条件" })).toBeVisible();
-  await expect(page.getByText("2 / 3", { exact: true })).toBeVisible();
+  await expect(
+    page.getByLabel("1688 来源检查摘要").getByText("2 / 3", { exact: true }),
+  ).toBeVisible();
   await expect(page.getByText("overall setup_required", { exact: true })).toBeHidden();
   await expect(page.getByRole("heading", { name: "搜索、详情与翻页矩阵" })).toBeVisible();
   await expect(page.getByText("搜索结果")).toBeVisible();
   await expect(page.getByText("商品详情", { exact: true })).toBeVisible();
-  await expect(page.getByText("翻页覆盖")).toBeVisible();
+  await expect(page.getByText("翻页覆盖", { exact: true })).toBeVisible();
   await expect(page.getByText("执行计划只允许 1 页，本次未演练翻页。")).toBeVisible();
   await expect(page.getByText("1688.search.v1 · 12 项")).toBeVisible();
   const acceptanceForm = page.locator(".acceptance-1688__start");
@@ -997,14 +1015,125 @@ test("1688 acceptance shows the factual search detail and pagination coverage ma
       query: "桌面灯",
       acceptance_run: true,
     });
-  await expect(page.getByRole("status")).toContainText("登录验收运行已提交");
+  const runFeedback = page.locator(".acceptance-1688__run-feedback");
+  await expect(runFeedback).toContainText("登录验收运行已确认排队");
+  await expect(runFeedback).toContainText("不表示浏览器运行已完成");
+  await expect(page.locator(".acceptance-1688__notice")).toContainText(
+    "仍显示上一次成功读取的证据",
+  );
+  await expect(runFeedback).toContainText("00000000-0000-4000-8000-000000001688");
+  await expect(page.locator(".acceptance-1688__notice")).toContainText("acceptance-read-4");
+  await expect(acceptanceForm.getByLabel("验收关键词")).toHaveValue("桌面灯");
+  await page.locator(".acceptance-1688__refresh button").click();
+  await expect(page.locator(".acceptance-1688__notice")).toContainText("启用条件已刷新");
+  await expect(runFeedback).toContainText("登录验收运行已确认排队");
+  expect(acceptanceReads).toBe(5);
   const sampleLink = page.getByRole("link", { name: "定位 1688 固定样本" });
   await expect(sampleLink).toHaveAttribute(
     "href",
     `/platform-admin/providers/sources?provider_id=${setup[2].provisioned.id}`,
   );
-  await page.getByText("技术详情", { exact: true }).click();
+  await page.getByText("技术详情与读取追踪", { exact: true }).click();
   await expect(page.getByText("overall setup_required", { exact: true })).toBeVisible();
+});
+
+test("1688 acceptance does not retry or resubmit an unknown task creation outcome", async ({
+  page,
+}) => {
+  await nav(page, "platform_admin");
+  let submissionCount = 0;
+  const acceptance = {
+    provider_id: setup[2].provisioned.id,
+    source_status: "disabled",
+    owner_label: "平台来源中心",
+    overall: "setup_required",
+    gates: [
+      { key: "login", state: "pending", evidence_at: null, reason: "等待登录证据。" },
+      { key: "captcha", state: "pending", evidence_at: null, reason: "等待验证码证据。" },
+      { key: "parser", state: "pending", evidence_at: null, reason: "等待解析证据。" },
+    ],
+    latest_run: null,
+    coverage_matrix: {
+      parser_version: "1688-browser-contract-v3",
+      observed_at: null,
+      rows: [
+        {
+          key: "search",
+          contract: "1688.search.v1",
+          state: "not_observed",
+          observed_count: 0,
+          reason: "尚无搜索记录。",
+        },
+        {
+          key: "detail",
+          contract: "1688.offer-detail.v1",
+          state: "not_observed",
+          observed_count: 0,
+          reason: "尚无详情记录。",
+        },
+        {
+          key: "pagination",
+          contract: "browser-plan-pagination-v1",
+          state: "not_observed",
+          observed_count: 0,
+          reason: "尚无翻页记录。",
+        },
+      ],
+    },
+    pending_reasons: ["等待真实登录证据。"],
+  };
+  await page.route("**/api/v1/org/memberships", (route) =>
+    route.fulfill({
+      json: envelope([
+        {
+          id: org,
+          name: "验收组织",
+          slug: "acceptance-org",
+          status: "active",
+          default_workspace_id: ws,
+          membership_status: "active",
+        },
+      ]),
+    }),
+  );
+  await page.route(`**/api/v1/org/${org}/workspaces`, (route) =>
+    route.fulfill({
+      json: envelope([
+        {
+          id: ws,
+          organization_id: org,
+          name: "验收工作区",
+          slug: "acceptance-workspace",
+          status: "active",
+          version: 1,
+        },
+      ]),
+    }),
+  );
+  await page.route("**/api/v1/platform/provider-sources/1688-acceptance", (route) =>
+    route.fulfill({ json: envelope(acceptance) }),
+  );
+  await page.route("**/api/v1/platform/provider-sources/**/replays", async (route) => {
+    submissionCount += 1;
+    await route.abort("failed");
+  });
+
+  await page.goto("/platform-admin/providers/sources/1688-acceptance");
+  const form = page.locator(".acceptance-1688__start");
+  await expect(form.getByLabel("组织", { exact: true })).toHaveValue(org);
+  await expect(form.getByLabel("工作区", { exact: true })).toHaveValue(ws);
+  await form.getByLabel("验收关键词").fill("桌面灯");
+  await form.getByRole("button", { name: "发起登录验收运行" }).click();
+  const feedback = page.locator('.acceptance-1688__run-feedback[data-kind="unknown"]');
+  await expect(feedback).toContainText("任务可能已创建");
+  await expect(feedback).toContainText("系统不会自动重发");
+  await expect(form.getByRole("button", { name: "发起登录验收运行" })).toBeDisabled();
+  await page.locator(".acceptance-1688__refresh button").click();
+  await expect(page.locator(".acceptance-1688__notice")).toContainText("启用条件已刷新");
+  await expect(feedback).toBeVisible();
+  await expect(form.getByLabel("验收关键词")).toHaveValue("桌面灯");
+  await expect(form.getByRole("button", { name: "发起登录验收运行" })).toBeDisabled();
+  expect(submissionCount).toBe(1);
 });
 
 test("1688 acceptance refresh keeps verified facts and suppresses duplicate reads on failure", async ({
@@ -1087,7 +1216,9 @@ test("1688 acceptance refresh keeps verified facts and suppresses duplicate read
   expect(reads).toBe(2);
   releaseRefresh();
   await pendingRefresh;
-  await expect(page.getByRole("status")).toContainText("已保留上一次成功读取的启用条件");
+  await expect(page.locator(".acceptance-1688__notice")).toContainText(
+    "已保留上一次成功读取的启用条件",
+  );
   await expect(page.getByRole("heading", { name: "尚未满足启用条件" })).toBeVisible();
   await expect(refresh).toBeEnabled();
   expect(reads).toBeGreaterThanOrEqual(2);

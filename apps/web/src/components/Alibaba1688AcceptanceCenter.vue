@@ -1,83 +1,41 @@
 <script setup lang="ts">
-import type { OrganizationMembershipSummary, WorkspaceSummary } from "@scoutops/contracts";
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import { ApiClientError, createApiClient } from "../api-client";
-
-interface Acceptance {
-  provider_id: string;
-  source_status: "draft" | "disabled" | "enabled";
-  owner_label: string;
-  overall: "setup_required" | "ready_for_enable" | "production_ready";
-  gates: Array<{
-    key: "login" | "captcha" | "parser";
-    state: "passed" | "blocked" | "pending";
-    evidence_at: string | null;
-    reason: string;
-  }>;
-  latest_run: {
-    status: string;
-    error_code: string | null;
-    started_at: string;
-    finished_at: string | null;
-  } | null;
-  coverage_matrix: {
-    parser_version: string;
-    observed_at: string | null;
-    rows: Array<{
-      key: "search" | "detail" | "pagination";
-      contract: string;
-      state: "covered" | "not_observed" | "not_exercised" | "invalid";
-      observed_count: number;
-      reason: string;
-    }>;
-  };
-  pending_reasons: string[];
-}
-
-interface ScheduledReplay {
-  task_id: string;
-  status: "scheduled";
-}
-
-type ViewState = "loading" | "ready" | "error" | "forbidden" | "expired";
-type NoticeTone = "success" | "danger";
+import { computed } from "vue";
+import { useAlibaba1688Acceptance } from "../composables/useAlibaba1688Acceptance";
+import ProviderAcceptanceEvidence from "./ProviderAcceptanceEvidence.vue";
+import ProviderAcceptanceExecution from "./ProviderAcceptanceExecution.vue";
+import ProviderAcceptanceOperations from "./ProviderAcceptanceOperations.vue";
 
 const props = defineProps<{ apiBaseUrl: string }>();
-const request = createApiClient(props.apiBaseUrl);
-const state = ref<ViewState>("loading");
-const data = ref<Acceptance | null>(null);
-const message = ref("");
-const requestId = ref("");
-const refreshing = ref(false);
-const lastUpdatedAt = ref<string | null>(null);
-const notice = ref("");
-const noticeTone = ref<NoticeTone>("success");
-const organizations = ref<OrganizationMembershipSummary[]>([]);
-const workspaces = ref<WorkspaceSummary[]>([]);
-const selectedOrganizationId = ref("");
-const selectedWorkspaceId = ref("");
-const acceptanceQuery = ref("");
-const scopeLoading = ref(false);
-const scheduling = ref(false);
-const scopeMessage = ref("");
-const scheduledTaskId = ref("");
-let activeController: AbortController | null = null;
+const page = useAlibaba1688Acceptance(props.apiBaseUrl);
+const {
+  state,
+  data,
+  message,
+  readNotice,
+  readNoticeTone,
+  refreshing,
+  lastUpdatedAt,
+  readRequestId,
+  readFailureRequestId,
+  organizations,
+  workspaces,
+  selectedOrganizationId,
+  selectedWorkspaceId,
+  acceptanceQuery,
+  scopeLoading,
+  scopeMessage,
+  scopeRequestId,
+  scopeRetryable,
+  scheduling,
+  runOutcome,
+  canSchedule,
+  load,
+  selectOrganization,
+  retryExecutionScopes,
+  scheduleAcceptanceRun,
+} = page;
 
-const gateName = { login: "登录态", captcha: "验证码", parser: "字段解析" } as const;
 const gateState = { passed: "已通过", blocked: "已阻断", pending: "待验收" } as const;
-const gateAction = {
-  login: "配置有效登录档案，并完成一次真实登录态运行。",
-  captcha: "由同一次真实登录运行自动确认未被验证码阻断。",
-  parser: "固定真实样本，完成当前解析器回放和第二人审批。",
-} as const;
-const matrixName = { search: "搜索结果", detail: "商品详情", pagination: "翻页覆盖" } as const;
-const matrixState = {
-  covered: "已覆盖",
-  not_observed: "未观测",
-  not_exercised: "未演练",
-  invalid: "合同异常",
-} as const;
-const sourceState = { draft: "草稿", disabled: "已停用", enabled: "已启用" } as const;
 const overallState = {
   setup_required: "尚未满足启用条件",
   ready_for_enable: "门禁已通过，等待负责人启用",
@@ -97,7 +55,7 @@ const runState: Record<string, string> = {
 const passedGateCount = computed(
   () => data.value?.gates.filter((gate) => gate.state === "passed").length ?? 0,
 );
-const title = computed(() => (data.value ? overallState[data.value.overall] : "1688 启用条件"));
+const title = computed(() => (data.value ? overallState[data.value.overall] : "1688 启用检查"));
 const conclusion = computed(() => {
   if (data.value?.overall === "production_ready")
     return "来源已经启用，仍应持续关注登录有效期、验证码和解析合同漂移。";
@@ -134,727 +92,638 @@ const currentRunState = computed(() => {
   const status = data.value?.latest_run?.status;
   return status ? (runState[status] ?? status) : "尚无运行";
 });
-const canSchedule = computed(
-  () =>
-    Boolean(
-      data.value?.provider_id &&
-      selectedOrganizationId.value &&
-      selectedWorkspaceId.value &&
-      acceptanceQuery.value.trim(),
-    ) &&
-    !scopeLoading.value &&
-    !scheduling.value,
-);
-const time = (value: string | null) =>
-  value ? new Date(value).toLocaleString("zh-CN", { hour12: false }) : "尚无证据";
-
-async function loadWorkspaces() {
-  workspaces.value = [];
-  selectedWorkspaceId.value = "";
-  if (!selectedOrganizationId.value) return;
-  scopeLoading.value = true;
-  scopeMessage.value = "";
-  try {
-    const response = await request<WorkspaceSummary[]>(
-      `/org/${selectedOrganizationId.value}/workspaces`,
-    );
-    const active = response.data.filter((workspace) => workspace.status === "active");
-    workspaces.value = active;
-    const organization = organizations.value.find(
-      (item) => item.id === selectedOrganizationId.value,
-    );
-    selectedWorkspaceId.value =
-      active.find((workspace) => workspace.id === organization?.default_workspace_id)?.id ??
-      active[0]?.id ??
-      "";
-    if (!active.length) scopeMessage.value = "该组织没有可用于验收的活动工作区。";
-  } catch (error) {
-    scopeMessage.value =
-      error instanceof ApiClientError ? error.actionHint : "工作区读取失败，请稍后重试。";
-  } finally {
-    scopeLoading.value = false;
-  }
-}
-
-async function loadExecutionScopes() {
-  scopeLoading.value = true;
-  scopeMessage.value = "";
-  try {
-    const response = await request<OrganizationMembershipSummary[]>("/org/memberships");
-    organizations.value = response.data.filter(
-      (organization) =>
-        organization.status === "active" && organization.membership_status === "active",
-    );
-    selectedOrganizationId.value = organizations.value[0]?.id ?? "";
-    if (!organizations.value.length) {
-      scopeMessage.value = "当前账号没有可用于验收的活动组织。";
-      scopeLoading.value = false;
-      return;
-    }
-  } catch (error) {
-    scopeMessage.value =
-      error instanceof ApiClientError ? error.actionHint : "组织范围读取失败，请稍后重试。";
-    scopeLoading.value = false;
-    return;
-  }
-  scopeLoading.value = false;
-  await loadWorkspaces();
-}
-
-async function scheduleAcceptanceRun() {
-  if (!canSchedule.value || !data.value) return;
-  scheduling.value = true;
-  notice.value = "";
-  scopeMessage.value = "";
-  try {
-    const response = await request<ScheduledReplay>(
-      `/platform/provider-sources/${data.value.provider_id}/replays`,
-      {
-        method: "POST",
-        body: {
-          organization_id: selectedOrganizationId.value,
-          workspace_id: selectedWorkspaceId.value,
-          query: acceptanceQuery.value.trim(),
-          acceptance_run: true,
-        },
-      },
-    );
-    requestId.value = response.request_id;
-    scheduledTaskId.value = response.data.task_id;
-    await load();
-    noticeTone.value = "success";
-    notice.value = "登录验收运行已提交；刷新检查结果可查看真实浏览器运行结论。";
-  } catch (error) {
-    if (error instanceof ApiClientError) {
-      requestId.value = error.requestId;
-      scopeMessage.value = error.actionHint;
-    } else scopeMessage.value = "验收运行提交失败，请稍后重试。";
-  } finally {
-    scheduling.value = false;
-  }
-}
-
-async function load() {
-  if (refreshing.value) return;
-  const preserve = data.value !== null;
-  if (!preserve) state.value = "loading";
-  refreshing.value = true;
-  message.value = "";
-  notice.value = "";
-  activeController = new AbortController();
-  const timer = window.setTimeout(() => activeController?.abort(), 12_000);
-  try {
-    const response = await request<Acceptance>("/platform/provider-sources/1688-acceptance", {
-      signal: activeController.signal,
-    });
-    requestId.value = response.request_id;
-    data.value = response.data;
-    state.value = "ready";
-    lastUpdatedAt.value = new Date().toISOString();
-    if (preserve) {
-      noticeTone.value = "success";
-      notice.value = "启用条件已刷新，页面结论来自最新一次运行记录。";
-    }
-  } catch (error) {
-    const timedOut = error instanceof DOMException && error.name === "AbortError";
-    if (error instanceof ApiClientError) {
-      requestId.value = error.requestId;
-      message.value = error.actionHint;
-    } else {
-      message.value = timedOut ? "读取超过 12 秒，请稍后重试。" : "网络连接异常，请稍后重试。";
-    }
-    if (preserve) {
-      state.value = "ready";
-      noticeTone.value = "danger";
-      notice.value = timedOut
-        ? "刷新超过 12 秒，已保留上一次成功读取的启用条件。"
-        : `${message.value} 已保留上一次成功读取的启用条件。`;
-    } else if (error instanceof ApiClientError) {
-      state.value =
-        error.kind === "expired" ? "expired" : error.kind === "forbidden" ? "forbidden" : "error";
-    } else state.value = "error";
-  } finally {
-    window.clearTimeout(timer);
-    activeController = null;
-    refreshing.value = false;
-  }
-}
-
-onMounted(() => {
-  void load();
-  void loadExecutionScopes();
-});
-onBeforeUnmount(() => activeController?.abort());
 </script>
 
 <template>
   <section class="acceptance-1688" :data-state="state" :aria-busy="refreshing">
-    <header class="acceptance-1688__hero">
-      <div>
-        <p>登录来源启用条件</p>
-        <h2>1688 启用检查</h2>
-        <span>只展示真实浏览器运行、固定样本回放和审批结论，不展示 Cookie 或账号秘密。</span>
-      </div>
-      <div class="acceptance-1688__refresh">
-        <small>最近读取 {{ lastUpdatedLabel }}</small>
-        <button type="button" :disabled="refreshing" @click="load">
-          {{ refreshing ? "刷新中…" : "刷新检查结果" }}
-        </button>
-      </div>
-    </header>
-
-    <p
-      v-if="notice"
-      class="acceptance-1688__notice"
-      :data-tone="noticeTone"
-      role="status"
-      aria-live="polite"
-    >
-      {{ notice }}
-    </p>
-
-    <section v-if="state !== 'ready'" class="acceptance-1688__state" :data-kind="state">
-      <span aria-hidden="true">{{ state === "loading" ? "···" : "!" }}</span>
-      <div aria-live="polite">
-        <p>启用检查</p>
-        <h3>{{ stateTitle }}</h3>
-        <p>{{ message || "正在核对登录、验证码和字段解析三项证据。" }}</p>
-        <details v-if="requestId">
-          <summary>故障详情</summary>
-          <code>关联编号：{{ requestId }}</code>
-        </details>
-      </div>
-      <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink>
-      <RouterLink v-else-if="state === 'forbidden'" to="/platform-admin">返回平台概览</RouterLink>
-      <button v-else-if="state !== 'loading'" type="button" :disabled="refreshing" @click="load">
-        重新读取
-      </button>
-    </section>
-
-    <template v-else-if="data">
-      <section class="acceptance-1688__verdict" :data-overall="data.overall">
-        <div class="acceptance-1688__verdict-copy">
-          <span>当前结论</span>
-          <h3>{{ title }}</h3>
-          <p>{{ conclusion }}</p>
-        </div>
-        <dl>
+    <div class="acceptance-1688__layout">
+      <aside class="acceptance-1688__rail" aria-label="1688 来源检查摘要">
+        <div class="acceptance-1688__identity">
+          <span class="acceptance-1688__mark" aria-hidden="true">1688</span>
           <div>
-            <dt>来源状态</dt>
-            <dd>{{ sourceState[data.source_status] }}</dd>
+            <p>平台来源 · 启用检查</p>
+            <h2>1688</h2>
+          </div>
+        </div>
+        <div class="acceptance-1688__rail-state" :data-overall="data?.overall || 'loading'">
+          <span>服务端结论</span
+          ><strong>{{ data ? overallState[data.overall] : stateTitle }}</strong>
+          <p>{{ data ? conclusion : "正在读取来源启用证据。" }}</p>
+        </div>
+        <dl class="acceptance-1688__rail-stats">
+          <div>
+            <dt>来源编号</dt>
+            <dd>{{ data?.provider_id || "读取中" }}</dd>
           </div>
           <div>
             <dt>通过门禁</dt>
-            <dd>{{ passedGateCount }} / 3</dd>
+            <dd>{{ data ? `${passedGateCount} / 3` : "—" }}</dd>
           </div>
           <div>
             <dt>责任人</dt>
-            <dd>{{ data.owner_label }}</dd>
+            <dd>{{ data?.owner_label || "—" }}</dd>
           </div>
         </dl>
-      </section>
-
-      <section class="acceptance-1688__section" aria-labelledby="acceptance-1688-gates-title">
-        <header>
-          <div>
-            <p>启用门禁</p>
-            <h3 id="acceptance-1688-gates-title">三项必须逐项有证据</h3>
-          </div>
-          <small>全部通过仍需负责人显式启用</small>
-        </header>
-        <div class="acceptance-1688__gates" aria-label="1688 启用条件">
-          <article
-            v-for="(gate, index) in data.gates"
-            :key="gate.key"
-            :data-gate-state="gate.state"
-          >
-            <div class="acceptance-1688__card-title">
-              <span
-                ><b>{{ index + 1 }}</b
-                >{{ gateName[gate.key] }}</span
-              >
-              <strong>{{ gateState[gate.state] }}</strong>
-            </div>
-            <p>{{ gate.reason }}</p>
-            <small>{{ gateAction[gate.key] }}</small>
-            <time :datetime="gate.evidence_at || undefined"
-              >证据时间：{{ time(gate.evidence_at) }}</time
-            >
-          </article>
-        </div>
-      </section>
-
-      <section class="acceptance-1688__section" aria-labelledby="acceptance-1688-matrix-title">
-        <header>
-          <div>
-            <p>真实作业覆盖</p>
-            <h3 id="acceptance-1688-matrix-title">搜索、详情与翻页矩阵</h3>
-          </div>
-          <small
-            >解析器 {{ data.coverage_matrix.parser_version }} ·
-            {{ time(data.coverage_matrix.observed_at) }}</small
-          >
-        </header>
-        <div class="acceptance-1688__matrix">
-          <article
-            v-for="row in data.coverage_matrix.rows"
-            :key="row.key"
-            :data-matrix-state="row.state"
-          >
-            <div class="acceptance-1688__card-title">
-              <span>{{ matrixName[row.key] }}</span>
-              <strong>{{ matrixState[row.state] }}</strong>
-            </div>
-            <p>{{ row.reason }}</p>
-            <small>{{ row.contract }} · {{ row.observed_count }} 项</small>
-          </article>
-        </div>
-      </section>
-
-      <section class="acceptance-1688__start" aria-labelledby="acceptance-1688-start-title">
-        <header>
-          <div>
-            <p>真实登录验收</p>
-            <h3 id="acceptance-1688-start-title">发起一次受控浏览器运行</h3>
-          </div>
-          <small>只创建本次人工验收；不会启用来源或加入自动调度。</small>
-        </header>
-        <form @submit.prevent="scheduleAcceptanceRun">
-          <label>
-            <span>组织</span>
-            <select
-              v-model="selectedOrganizationId"
-              aria-label="组织"
-              :disabled="scopeLoading || scheduling"
-              @change="loadWorkspaces"
-            >
-              <option value="">请选择组织</option>
-              <option
-                v-for="organization in organizations"
-                :key="organization.id"
-                :value="organization.id"
-              >
-                {{ organization.name }}
-              </option>
-            </select>
-          </label>
-          <label>
-            <span>工作区</span>
-            <select
-              v-model="selectedWorkspaceId"
-              aria-label="工作区"
-              :disabled="scopeLoading || scheduling"
-            >
-              <option value="">请选择工作区</option>
-              <option v-for="workspace in workspaces" :key="workspace.id" :value="workspace.id">
-                {{ workspace.name }}
-              </option>
-            </select>
-          </label>
-          <label class="acceptance-1688__query">
-            <span>验收关键词</span>
-            <input
-              v-model="acceptanceQuery"
-              type="text"
-              aria-label="验收关键词"
-              maxlength="200"
-              autocomplete="off"
-              placeholder="例如：桌面灯"
-              :disabled="scheduling"
-            />
-          </label>
-          <button class="acceptance-1688__start-button" type="submit" :disabled="!canSchedule">
-            {{ scheduling ? "提交中…" : "发起登录验收运行" }}
-          </button>
-        </form>
-        <p v-if="scopeMessage" class="acceptance-1688__form-message" role="alert">
-          {{ scopeMessage }}
-        </p>
-        <details v-if="scheduledTaskId">
-          <summary>运行详情</summary>
-          <code>任务编号：{{ scheduledTaskId }}</code>
+        <nav v-if="data" aria-label="来源配置入口">
+          <RouterLink :to="credentialsLink">登录档案 <span aria-hidden="true">↗</span></RouterLink
+          ><RouterLink :to="sampleLink">固定样本 <span aria-hidden="true">↗</span></RouterLink>
+        </nav>
+        <details class="acceptance-1688__rail-context">
+          <summary>检查口径</summary>
+          <p>
+            登录态、验证码与字段解析是三项独立启用门；搜索、详情、翻页覆盖单独记录，不替代门禁。
+          </p>
+          <p>页面不会显示 Cookie 或账号秘密。</p>
         </details>
-      </section>
+      </aside>
 
-      <div class="acceptance-1688__operations">
-        <section class="acceptance-1688__actions">
+      <main class="acceptance-1688__content">
+        <header class="acceptance-1688__hero">
           <div>
-            <p>下一步</p>
-            <h3>{{ data.pending_reasons.length ? "按阻塞项逐项收口" : "门禁已全部通过" }}</h3>
+            <p class="acceptance-1688__eyebrow">来源治理 / 1688</p>
+            <h1>启用检查</h1>
+            <p>逐项核对真实证据，再由来源负责人决定是否启用。</p>
           </div>
-          <ol v-if="data.pending_reasons.length">
-            <li v-for="reason in data.pending_reasons" :key="reason">{{ reason }}</li>
-          </ol>
-          <p v-else>当前没有待配置原因；由 {{ data.owner_label }} 复核后显式启用来源。</p>
-          <nav aria-label="1688 启用检查下一步操作">
-            <RouterLink :to="credentialsLink">配置或续期登录档案</RouterLink>
-            <RouterLink :to="sampleLink">定位 1688 固定样本</RouterLink>
-          </nav>
-        </section>
+          <div class="acceptance-1688__refresh">
+            <small>最近读取 {{ lastUpdatedLabel }}</small
+            ><button type="button" :disabled="refreshing" @click="load()">
+              {{ refreshing ? "刷新中…" : "刷新检查结果" }}
+            </button>
+          </div>
+        </header>
 
-        <section class="acceptance-1688__run">
-          <div>
-            <p>最近浏览器运行</p>
-            <h3>{{ currentRunState }}</h3>
-          </div>
-          <dl v-if="data.latest_run">
-            <div>
-              <dt>开始</dt>
-              <dd>{{ time(data.latest_run.started_at) }}</dd>
-            </div>
-            <div>
-              <dt>完成</dt>
-              <dd>{{ time(data.latest_run.finished_at) }}</dd>
-            </div>
-            <div>
-              <dt>错误分类</dt>
-              <dd>{{ data.latest_run.error_code || "无" }}</dd>
-            </div>
-          </dl>
-          <p v-else>配置有效登录档案后，从真实业务采集任务发起一次 1688 浏览器运行。</p>
-          <details>
-            <summary>技术详情</summary>
-            <code>overall {{ data.overall }}</code>
-            <code>来源内部编号：{{ data.provider_id }}</code>
-            <code>关联编号：{{ requestId || "—" }}</code>
+        <p
+          v-if="readNotice"
+          class="acceptance-1688__notice"
+          :data-tone="readNoticeTone"
+          role="status"
+          aria-live="polite"
+        >
+          {{ readNotice }}
+          <details v-if="readFailureRequestId">
+            <summary>本次读取追踪</summary>
+            <code>读取关联编号：{{ readFailureRequestId }}</code>
           </details>
+        </p>
+
+        <section v-if="state !== 'ready'" class="acceptance-1688__state" :data-kind="state">
+          <span aria-hidden="true">{{ state === "loading" ? "···" : "!" }}</span>
+          <div aria-live="polite">
+            <p>启用检查</p>
+            <h3>{{ stateTitle }}</h3>
+            <p>{{ message || "正在核对登录、验证码和字段解析三项证据。" }}</p>
+            <details v-if="readFailureRequestId">
+              <summary>故障详情</summary>
+              <code>关联编号：{{ readFailureRequestId }}</code>
+            </details>
+          </div>
+          <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
+          ><RouterLink v-else-if="state === 'forbidden'" to="/platform-admin"
+            >返回平台概览</RouterLink
+          ><button
+            v-else-if="state !== 'loading'"
+            type="button"
+            :disabled="refreshing"
+            @click="load()"
+          >
+            重新读取
+          </button>
         </section>
-      </div>
-    </template>
+
+        <template v-else-if="data">
+          <ProviderAcceptanceEvidence
+            :data="data"
+            :passed-gate-count="passedGateCount"
+            :title="title"
+            :conclusion="conclusion"
+          />
+          <ProviderAcceptanceExecution
+            v-model:organization-id="selectedOrganizationId"
+            v-model:workspace-id="selectedWorkspaceId"
+            v-model:query="acceptanceQuery"
+            :organizations="organizations"
+            :workspaces="workspaces"
+            :scope-loading="scopeLoading"
+            :scope-message="scopeMessage"
+            :scope-request-id="scopeRequestId"
+            :scope-retryable="scopeRetryable"
+            :scheduling="scheduling"
+            :can-schedule="canSchedule"
+            :run-outcome="runOutcome"
+            @organization-change="selectOrganization"
+            @submit="scheduleAcceptanceRun"
+            @retry-scopes="retryExecutionScopes"
+          />
+          <ProviderAcceptanceOperations
+            :data="data"
+            :credentials-link="credentialsLink"
+            :sample-link="sampleLink"
+            :current-run-state="currentRunState"
+            :read-request-id="readRequestId"
+            :read-failure-request-id="readFailureRequestId"
+            :run-outcome="runOutcome"
+          />
+        </template>
+      </main>
+    </div>
   </section>
 </template>
 
 <style scoped>
 .acceptance-1688 {
-  display: grid;
-  gap: 16px;
+  --acceptance-blue: #185adb;
+  --acceptance-ink: #14243a;
+  --acceptance-muted: #64748b;
+  color: var(--acceptance-ink);
 }
-.acceptance-1688__hero,
-.acceptance-1688__state,
-.acceptance-1688__verdict,
-.acceptance-1688__section,
-.acceptance-1688__start,
-.acceptance-1688__actions,
-.acceptance-1688__run {
-  border: 1px solid var(--so-border);
-  background: var(--so-bg-elevated);
-  box-shadow: var(--so-shadow);
-  border-radius: 14px;
+.acceptance-1688__layout {
+  display: grid;
+  grid-template-columns: minmax(230px, 270px) minmax(0, 1fr);
+  align-items: start;
+  gap: 18px;
+}
+.acceptance-1688__rail {
+  position: sticky;
+  top: 12px;
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(155deg, #123f9c, #185adb 60%, #2878ed);
+  color: #fff;
+  box-shadow: 0 12px 32px #173f8729;
+}
+.acceptance-1688__identity {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.acceptance-1688__identity p,
+.acceptance-1688__identity h2,
+.acceptance-1688__rail-state p,
+.acceptance-1688__rail-stats dd,
+.acceptance-1688__rail-context p {
+  margin: 0;
+}
+.acceptance-1688__identity p,
+.acceptance-1688__rail-state > span {
+  color: #d9e7ff;
+  font-size: 12px;
+}
+.acceptance-1688__mark {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 1px solid #ffffff55;
+  border-radius: 13px;
+  background: #ffffff16;
+  font-size: 13px;
+  font-weight: 800;
+}
+.acceptance-1688__identity h2 {
+  margin-top: 2px;
+  font-size: 23px;
+}
+.acceptance-1688__rail-state {
+  display: grid;
+  gap: 7px;
+  padding: 14px;
+  border: 1px solid #ffffff2e;
+  border-radius: 12px;
+  background: #ffffff12;
+}
+.acceptance-1688__rail-state strong {
+  font-size: 17px;
+  line-height: 1.35;
+}
+.acceptance-1688__rail-state p,
+.acceptance-1688__rail-context p {
+  color: #e2ecff;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.acceptance-1688__rail-stats {
+  display: grid;
+  gap: 11px;
+  margin: 0;
+}
+.acceptance-1688__rail-stats dt {
+  color: #d9e7ff;
+  font-size: 12px;
+}
+.acceptance-1688__rail-stats dd {
+  margin-top: 3px;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  font-weight: 650;
+}
+.acceptance-1688__rail nav {
+  display: grid;
+  gap: 7px;
+}
+.acceptance-1688__rail nav a {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 11px;
+  border: 1px solid #ffffff42;
+  border-radius: 9px;
+  color: #fff;
+  text-decoration: none;
+}
+.acceptance-1688__rail-context {
+  border-top: 1px solid #ffffff35;
+  padding-top: 12px;
+}
+.acceptance-1688__rail-context summary {
+  min-height: 38px;
+  cursor: pointer;
+  color: #fff;
+}
+.acceptance-1688__rail-context p + p {
+  margin-top: 7px;
+}
+.acceptance-1688__content {
+  display: grid;
+  min-width: 0;
+  gap: 14px;
 }
 .acceptance-1688__hero {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: end;
-  gap: 24px;
-  padding: 22px;
+  gap: 20px;
+  padding: 5px 3px 13px;
+  border-bottom: 1px solid var(--so-border);
 }
-.acceptance-1688 p,
-.acceptance-1688 h2,
-.acceptance-1688 h3,
-.acceptance-1688 dl {
+.acceptance-1688__hero h1 {
+  margin: 2px 0 4px;
+  font-size: clamp(23px, 2vw, 30px);
+  letter-spacing: -0.025em;
+}
+.acceptance-1688__hero p {
   margin: 0;
+  color: var(--acceptance-muted);
 }
-.acceptance-1688 p,
-.acceptance-1688 small,
-.acceptance-1688 time {
-  color: var(--so-text-muted);
-}
-.acceptance-1688 h2,
-.acceptance-1688 h3 {
-  margin-top: 5px;
-}
-.acceptance-1688__hero > div:first-child > p,
-.acceptance-1688__section > header p,
-.acceptance-1688__actions > div > p,
-.acceptance-1688__run > div > p {
-  color: var(--so-primary);
-  font-size: 13px;
+.acceptance-1688__hero .acceptance-1688__eyebrow {
+  color: var(--acceptance-blue);
+  font-size: 12px;
+  font-weight: 700;
 }
 .acceptance-1688__refresh {
   display: grid;
   justify-items: end;
-  gap: 8px;
+  gap: 7px;
   flex: 0 0 auto;
 }
-.acceptance-1688 button,
-.acceptance-1688 a {
-  min-height: 40px;
-  border: 1px solid var(--so-primary-border);
-  background: var(--so-primary-soft);
-  color: var(--so-text);
-  border-radius: 9px;
-  padding: 9px 12px;
-  text-decoration: none;
+.acceptance-1688__refresh small {
+  color: var(--acceptance-muted);
 }
-.acceptance-1688 button:disabled {
-  cursor: wait;
-  opacity: 0.65;
+.acceptance-1688__content :deep(.acceptance-1688__verdict),
+.acceptance-1688__content :deep(.acceptance-1688__section),
+.acceptance-1688__content :deep(.acceptance-1688__start),
+.acceptance-1688__content :deep(.acceptance-1688__actions),
+.acceptance-1688__content :deep(.acceptance-1688__run),
+.acceptance-1688__content :deep(.acceptance-1688__state) {
+  border: 1px solid var(--so-border);
+  border-radius: 13px;
+  background: var(--so-bg-elevated);
+  box-shadow: var(--so-shadow);
 }
-.acceptance-1688 button:focus-visible,
-.acceptance-1688 a:focus-visible,
-.acceptance-1688 summary:focus-visible {
-  outline: 3px solid var(--so-primary-soft);
-  outline-offset: 2px;
-}
-.acceptance-1688__notice {
-  padding: 11px 14px;
-  border: 1px solid var(--so-success);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--so-success) 10%, var(--so-bg-elevated));
-}
-.acceptance-1688__notice[data-tone="danger"] {
-  border-color: var(--so-danger);
-  background: color-mix(in srgb, var(--so-danger) 10%, var(--so-bg-elevated));
-}
-.acceptance-1688__state {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 16px;
-  padding: 20px;
-}
-.acceptance-1688__state > span {
-  display: grid;
-  width: 42px;
-  height: 42px;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--so-primary-soft);
-  color: var(--so-primary);
-  font-weight: 800;
-}
-.acceptance-1688__state code {
-  display: block;
-  margin-top: 8px;
-  overflow-wrap: anywhere;
-}
-.acceptance-1688__verdict {
+.acceptance-1688__content :deep(.acceptance-1688__verdict) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 24px;
-  padding: 20px;
-  border-left: 4px solid var(--so-warning);
-}
-.acceptance-1688__verdict[data-overall="production_ready"],
-.acceptance-1688__verdict[data-overall="ready_for_enable"] {
-  border-left-color: var(--so-success);
-}
-.acceptance-1688__verdict-copy > span {
-  color: var(--so-primary);
-  font-size: 13px;
-}
-.acceptance-1688__verdict-copy p {
-  margin-top: 7px;
-  max-width: 760px;
-}
-.acceptance-1688__verdict dl {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(110px, auto));
   gap: 18px;
-  align-content: center;
+  padding: 17px;
+  border-left: 4px solid var(--acceptance-blue);
 }
-.acceptance-1688 dt {
-  color: var(--so-text-muted);
-  font-size: 13px;
+.acceptance-1688__content :deep(.acceptance-1688__verdict-copy > span),
+.acceptance-1688__content :deep(.acceptance-1688__section header p),
+.acceptance-1688__content :deep(.acceptance-1688__start header p),
+.acceptance-1688__content :deep(.acceptance-1688__actions > div p),
+.acceptance-1688__content :deep(.acceptance-1688__run > div p) {
+  color: var(--acceptance-blue);
+  font-size: 12px;
 }
-.acceptance-1688 dd {
+.acceptance-1688__content :deep(.acceptance-1688__verdict h3),
+.acceptance-1688__content :deep(.acceptance-1688__section h3),
+.acceptance-1688__content :deep(.acceptance-1688__start h3),
+.acceptance-1688__content :deep(.acceptance-1688__actions h3),
+.acceptance-1688__content :deep(.acceptance-1688__run h3) {
   margin: 4px 0 0;
+  font-size: 17px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__verdict p),
+.acceptance-1688__content :deep(.acceptance-1688__section p),
+.acceptance-1688__content :deep(.acceptance-1688__start p),
+.acceptance-1688__content :deep(.acceptance-1688__actions p),
+.acceptance-1688__content :deep(.acceptance-1688__run p) {
+  line-height: 1.55;
+}
+.acceptance-1688__content :deep(.acceptance-1688__verdict dl) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(90px, auto));
+  gap: 13px;
+  align-content: center;
+  margin: 0;
+}
+.acceptance-1688__content :deep(dt),
+.acceptance-1688__content :deep(.acceptance-1688__section header small),
+.acceptance-1688__content :deep(.acceptance-1688__start header small),
+.acceptance-1688__content :deep(.acceptance-1688__start label > span) {
+  color: var(--acceptance-muted);
+  font-size: 12px;
+}
+.acceptance-1688__content :deep(dd) {
+  margin: 3px 0 0;
   font-weight: 700;
 }
-.acceptance-1688__section {
-  padding: 18px;
+.acceptance-1688__content :deep(.acceptance-1688__section),
+.acceptance-1688__content :deep(.acceptance-1688__start),
+.acceptance-1688__content :deep(.acceptance-1688__actions),
+.acceptance-1688__content :deep(.acceptance-1688__run) {
+  padding: 16px;
 }
-.acceptance-1688__section > header,
-.acceptance-1688__start > header {
+.acceptance-1688__content :deep(.acceptance-1688__section > header),
+.acceptance-1688__content :deep(.acceptance-1688__start > header) {
   display: flex;
+  align-items: end;
   justify-content: space-between;
-  align-items: end;
-  gap: 16px;
-  margin-bottom: 13px;
+  gap: 14px;
+  margin-bottom: 12px;
 }
-.acceptance-1688__start {
-  padding: 18px;
+.acceptance-1688__content :deep(.acceptance-1688__section header p),
+.acceptance-1688__content :deep(.acceptance-1688__start header p) {
+  margin: 0;
 }
-.acceptance-1688__start > header > div > p {
-  color: var(--so-primary);
-  font-size: 13px;
-}
-.acceptance-1688__start form {
-  display: grid;
-  grid-template-columns: minmax(160px, 0.8fr) minmax(160px, 0.8fr) minmax(220px, 1.4fr) auto;
-  gap: 10px;
-  align-items: end;
-  margin-top: 14px;
-}
-.acceptance-1688__start label {
-  display: grid;
-  gap: 6px;
-}
-.acceptance-1688__start label > span {
-  color: var(--so-text-muted);
-  font-size: 13px;
-}
-.acceptance-1688__start select,
-.acceptance-1688__start input {
-  min-width: 0;
-  min-height: 40px;
-  border: 1px solid var(--so-border);
-  border-radius: 9px;
-  background: var(--so-bg);
-  color: var(--so-text);
-  padding: 8px 10px;
-}
-.acceptance-1688__start-button {
-  background: var(--so-primary) !important;
-  color: white !important;
-}
-.acceptance-1688__form-message {
-  margin-top: 10px !important;
-  color: var(--so-danger) !important;
-}
-.acceptance-1688__start details {
-  margin-top: 10px;
-}
-.acceptance-1688__start code {
-  display: block;
-  margin-top: 5px;
-  overflow-wrap: anywhere;
-}
-.acceptance-1688__gates,
-.acceptance-1688__matrix {
+.acceptance-1688__content :deep(.acceptance-1688__gates),
+.acceptance-1688__content :deep(.acceptance-1688__matrix) {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 9px;
 }
-.acceptance-1688__gates article,
-.acceptance-1688__matrix article {
+.acceptance-1688__content :deep(.acceptance-1688__gates article),
+.acceptance-1688__content :deep(.acceptance-1688__matrix article) {
   display: grid;
   align-content: start;
-  gap: 10px;
-  padding: 15px;
+  gap: 8px;
+  padding: 12px;
   border: 1px solid var(--so-border);
   border-top: 3px solid var(--so-warning);
   border-radius: 10px;
 }
-.acceptance-1688__gates article[data-gate-state="passed"],
-.acceptance-1688__matrix article[data-matrix-state="covered"] {
+.acceptance-1688__content :deep(.acceptance-1688__gates article[data-gate-state="passed"]),
+.acceptance-1688__content :deep(.acceptance-1688__matrix article[data-matrix-state="covered"]) {
   border-top-color: var(--so-success);
 }
-.acceptance-1688__gates article[data-gate-state="blocked"],
-.acceptance-1688__matrix article[data-matrix-state="invalid"] {
+.acceptance-1688__content :deep(.acceptance-1688__gates article[data-gate-state="blocked"]),
+.acceptance-1688__content :deep(.acceptance-1688__matrix article[data-matrix-state="invalid"]) {
   border-top-color: var(--so-danger);
 }
-.acceptance-1688__card-title {
+.acceptance-1688__content :deep(.acceptance-1688__card-title) {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
-.acceptance-1688__card-title > span {
-  display: inline-flex;
-  align-items: center;
   gap: 8px;
 }
-.acceptance-1688__card-title b {
+.acceptance-1688__content :deep(.acceptance-1688__card-title strong) {
+  font-size: 12px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__gates small),
+.acceptance-1688__content :deep(.acceptance-1688__matrix small) {
+  color: var(--acceptance-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.acceptance-1688__content :deep(.acceptance-1688__gates time) {
+  color: var(--acceptance-muted);
+  font-size: 11px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__execution-form) {
   display: grid;
-  width: 24px;
-  height: 24px;
-  place-items: center;
-  border-radius: 50%;
+  grid-template-columns: minmax(140px, 0.8fr) minmax(140px, 0.8fr) minmax(190px, 1.35fr) auto;
+  align-items: end;
+  gap: 9px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__start label) {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__start select),
+.acceptance-1688__content :deep(.acceptance-1688__start input) {
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  background: var(--so-bg);
+  color: var(--so-text);
+  padding: 9px 10px;
+  font-size: 16px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__query small) {
+  color: var(--acceptance-muted);
+  font-size: 11px;
+}
+.acceptance-1688__content :deep(button),
+.acceptance-1688__content :deep(a:not(.acceptance-1688__rail a)) {
+  min-height: 44px;
+  border: 1px solid var(--so-primary-border);
+  border-radius: 9px;
   background: var(--so-primary-soft);
-  color: var(--so-primary);
-}
-.acceptance-1688__gates time,
-.acceptance-1688__matrix small {
-  display: block;
-  margin-top: auto;
-  font-size: var(--so-font-meta);
-}
-.acceptance-1688__operations {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(340px, 0.8fr);
-  gap: 16px;
-}
-.acceptance-1688__actions,
-.acceptance-1688__run {
-  padding: 19px;
-}
-.acceptance-1688__actions ol {
-  margin: 14px 0;
-  padding-left: 22px;
-}
-.acceptance-1688__actions li + li {
-  margin-top: 6px;
-}
-.acceptance-1688__actions nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 14px;
-}
-.acceptance-1688__run dl {
-  display: grid;
-  gap: 10px;
-  margin-top: 14px;
-}
-.acceptance-1688__run > p {
-  margin-top: 12px;
-}
-.acceptance-1688__run details {
-  margin-top: 14px;
-}
-.acceptance-1688__run summary {
+  color: var(--so-text);
+  padding: 9px 12px;
+  text-decoration: none;
   cursor: pointer;
 }
-.acceptance-1688__run code {
+.acceptance-1688__content :deep(button:focus-visible),
+.acceptance-1688__content :deep(a:focus-visible),
+.acceptance-1688__content :deep(summary:focus-visible) {
+  outline: 3px solid #8bb7ff;
+  outline-offset: 2px;
+}
+.acceptance-1688__content :deep(button:disabled) {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.acceptance-1688__content :deep(.acceptance-1688__start-button) {
+  border-color: var(--acceptance-blue);
+  background: var(--acceptance-blue);
+  color: #fff;
+  font-weight: 700;
+}
+.acceptance-1688__content :deep(.acceptance-1688__scope-feedback),
+.acceptance-1688__content :deep(.acceptance-1688__run-feedback) {
+  display: grid;
+  gap: 7px;
+  margin-top: 10px;
+  padding: 11px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  background: var(--so-bg);
+}
+.acceptance-1688__content :deep(.acceptance-1688__run-feedback[data-kind="unknown"]) {
+  border-color: var(--so-warning);
+  background: color-mix(in srgb, var(--so-warning) 10%, var(--so-bg-elevated));
+}
+.acceptance-1688__content :deep(.acceptance-1688__run-feedback[data-kind="failed"]) {
+  border-color: var(--so-danger);
+}
+.acceptance-1688__content :deep(.acceptance-1688__run-feedback h4),
+.acceptance-1688__content :deep(.acceptance-1688__run-feedback p) {
+  margin: 2px 0;
+}
+.acceptance-1688__content :deep(.acceptance-1688__run-feedback > div > p:first-child) {
+  color: var(--acceptance-blue);
+  font-size: 12px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__unknown-note) {
+  font-size: 12px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__scope-feedback details),
+.acceptance-1688__content :deep(.acceptance-1688__run-feedback details) {
+  font-size: 12px;
+}
+.acceptance-1688__content :deep(code) {
   display: block;
   margin-top: 5px;
   overflow-wrap: anywhere;
 }
-@media (max-width: 980px) {
-  .acceptance-1688__verdict,
-  .acceptance-1688__operations {
+.acceptance-1688__content :deep(.acceptance-1688__operations) {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+  gap: 12px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__actions > div p),
+.acceptance-1688__content :deep(.acceptance-1688__run > div p) {
+  margin: 0;
+}
+.acceptance-1688__content :deep(.acceptance-1688__actions ol) {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__actions li + li) {
+  margin-top: 5px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__actions nav) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 11px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__run dl) {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__run details) {
+  margin-top: 11px;
+}
+.acceptance-1688__content :deep(summary) {
+  min-height: 38px;
+  padding: 8px 0;
+  cursor: pointer;
+}
+.acceptance-1688__content :deep(.acceptance-1688__notice) {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--so-success);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--so-success) 9%, var(--so-bg-elevated));
+}
+.acceptance-1688__content :deep(.acceptance-1688__notice[data-tone="danger"]) {
+  border-color: var(--so-warning);
+  background: color-mix(in srgb, var(--so-warning) 10%, var(--so-bg-elevated));
+}
+.acceptance-1688__content :deep(.acceptance-1688__notice details) {
+  margin-top: 5px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__state) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 13px;
+  padding: 16px;
+}
+.acceptance-1688__content :deep(.acceptance-1688__state > span) {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--so-primary-soft);
+  color: var(--acceptance-blue);
+  font-weight: 800;
+}
+.acceptance-1688__content :deep(.acceptance-1688__state p),
+.acceptance-1688__content :deep(.acceptance-1688__state h3) {
+  margin: 3px 0;
+}
+@media (max-width: 1080px) {
+  .acceptance-1688__layout {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .acceptance-1688__content :deep(.acceptance-1688__verdict) {
     grid-template-columns: 1fr;
   }
-  .acceptance-1688__start form {
+  .acceptance-1688__content :deep(.acceptance-1688__execution-form) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .acceptance-1688__query {
+  .acceptance-1688__content :deep(.acceptance-1688__query) {
     grid-column: 1 / -1;
   }
-  .acceptance-1688__verdict dl {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
-@media (max-width: 700px) {
+@media (max-width: 760px) {
+  .acceptance-1688__layout {
+    grid-template-columns: 1fr;
+  }
+  .acceptance-1688__rail {
+    position: static;
+    gap: 12px;
+    padding: 14px;
+  }
+  .acceptance-1688__rail-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .acceptance-1688__rail nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .acceptance-1688__hero,
-  .acceptance-1688__section > header,
-  .acceptance-1688__start > header {
+  .acceptance-1688__content :deep(.acceptance-1688__section > header),
+  .acceptance-1688__content :deep(.acceptance-1688__start > header) {
     align-items: stretch;
     flex-direction: column;
   }
   .acceptance-1688__refresh {
     justify-items: stretch;
   }
-  .acceptance-1688__refresh small {
-    text-align: left;
-  }
-  .acceptance-1688__state {
+  .acceptance-1688__content :deep(.acceptance-1688__verdict dl),
+  .acceptance-1688__content :deep(.acceptance-1688__gates),
+  .acceptance-1688__content :deep(.acceptance-1688__matrix),
+  .acceptance-1688__content :deep(.acceptance-1688__operations),
+  .acceptance-1688__content :deep(.acceptance-1688__execution-form) {
     grid-template-columns: 1fr;
   }
-  .acceptance-1688__verdict dl,
-  .acceptance-1688__gates,
-  .acceptance-1688__matrix {
-    grid-template-columns: 1fr;
+  .acceptance-1688__content :deep(.acceptance-1688__query) {
+    grid-column: auto;
   }
-  .acceptance-1688__actions nav {
+  .acceptance-1688__content :deep(.acceptance-1688__actions nav) {
     display: grid;
   }
-  .acceptance-1688__start form {
+  .acceptance-1688__content :deep(.acceptance-1688__state) {
     grid-template-columns: 1fr;
   }
-  .acceptance-1688__query {
-    grid-column: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .acceptance-1688 *,
+  .acceptance-1688 *::before,
+  .acceptance-1688 *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
 </style>
