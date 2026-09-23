@@ -17,14 +17,14 @@ test("P66 loading and first failure have associated headings and busy state", ()
     const region = byClass(name).loc.source;
     assert.match(region, /aria-labelledby="topology-read-title"/);
     assert.match(region, /:aria-busy="refreshing"/);
-    assert.match(region, /<h3 id="topology-read-title">{{ verdict\[0\] }}<\/h3>/);
+    assert.match(region, /<h2 id="topology-read-title">{{ verdict\[0\] }}<\/h2>/);
   }
 });
 test("P66 retained failure is independently named without changing retry or trace bindings", () => {
   const region = byClass("topology-refresh-notice").loc.source;
   assert.match(region, /aria-labelledby="topology-refresh-title"/);
   assert.match(region, /:aria-busy="refreshing"/);
-  assert.match(region, /<h3 id="topology-refresh-title">/);
+  assert.match(region, /<h2 id="topology-refresh-title">/);
   assert.match(region, /:request-id="readFailureId"/);
   assert.match(region, /ref="noticeRetryButton"/);
 });

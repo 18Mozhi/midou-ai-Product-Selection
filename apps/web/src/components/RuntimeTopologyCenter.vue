@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import TechnicalDetails from "./TechnicalDetails.vue";
 import "../runtime-topology.css";
+import "../runtime-topology-c.css";
 
 type ViewState =
   | "loading"
@@ -405,11 +406,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="topology-center" :data-state="state">
+  <section class="topology-center topology-center--c" :data-state="state">
     <header class="topology-hero">
       <div>
-        <p>单服务器</p>
-        <h2>单机运行控制台</h2>
+        <p>P66 / 运行证据</p>
+        <h1>服务拓扑</h1>
         <span>长期固定为一台惠州宝塔服务器，不启用负载均衡、备用服务器或多节点模式。</span>
       </div>
       <button
@@ -424,391 +425,15 @@ onBeforeUnmount(() => {
       </button>
     </header>
 
-    <section
-      v-if="data && refreshFailure"
-      class="topology-refresh-notice"
-      :data-kind="refreshFailure"
-      aria-live="polite"
-      aria-labelledby="topology-refresh-title"
-      :aria-busy="refreshing"
-    >
-      <div>
-        <h3 id="topology-refresh-title">
-          {{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}
-        </h3>
-        <p>{{ refreshNotice }}</p>
-        <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
-      </div>
-      <button ref="noticeRetryButton" type="button" :disabled="refreshing" @click="load">
-        重新核验
-      </button>
-    </section>
-
-    <section
-      v-if="state === 'loading'"
-      class="topology-state"
-      aria-live="polite"
-      aria-labelledby="topology-read-title"
-      :aria-busy="refreshing"
-    >
-      <span class="topology-pulse" aria-hidden="true"></span>
-      <div>
-        <h3 id="topology-read-title">{{ verdict[0] }}</h3>
-        <p>{{ verdict[1] }}</p>
-      </div>
-    </section>
-    <section
-      v-else-if="['forbidden', 'expired', 'rate_limited', 'timeout', 'unavailable'].includes(state)"
-      class="topology-state topology-state--danger"
-      aria-live="polite"
-      aria-labelledby="topology-read-title"
-      :aria-busy="refreshing"
-    >
-      <strong aria-hidden="true">!</strong>
-      <div>
-        <h3 id="topology-read-title">{{ verdict[0] }}</h3>
-        <p>{{ verdict[1] }}</p>
-        <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
-      </div>
-      <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
-      ><button v-else ref="retryButton" type="button" :disabled="refreshing" @click="load">
-        重新核验
-      </button>
-    </section>
-
-    <template v-else-if="data">
-      <section class="topology-verdict" :data-verdict="state" aria-live="polite">
-        <div>
-          <small>S0 · {{ state.toUpperCase() }}</small
-          ><strong>{{ verdict[0] }}</strong>
-        </div>
-        <p>{{ verdict[1] }}</p>
-        <em>单机 · 无高可用承诺</em>
-      </section>
-      <section class="topology-metrics" aria-label="单机运行指标">
-        <article>
-          <span>健康后端实例</span><strong>{{ data.active_api_instances }}</strong
-          ><small>固定一个本机实例</small>
-        </article>
-        <article><span>运行主机</span><strong>1</strong><small>惠州宝塔单机</small></article>
-        <article>
-          <span>过期节点</span><strong>{{ data.stale_node_count }}</strong
-          ><small>心跳失败关闭</small>
-        </article>
-        <article>
-          <span>入口模式</span><strong class="topology-metric-word">单上游</strong
-          ><small>不做负载均衡</small>
-        </article>
-      </section>
-
-      <div class="topology-layout">
-        <section class="topology-panel topology-map">
-          <header>
-            <div>
-              <p>实时拓扑</p>
-              <h3>网站与本机后端</h3>
-            </div>
-            <span>{{ data.nodes.length }} 个当前节点</span>
-          </header>
-          <div v-if="data.nodes.length" class="topology-flow">
-            <div class="topology-entry">
-              <i>网站</i><b>宝塔网页服务</b><small>单上游反向代理</small>
-            </div>
-            <div class="topology-rail" aria-hidden="true"><span></span></div>
-            <div class="topology-nodes">
-              <article
-                v-for="node in data.nodes"
-                :key="node.node_id"
-                :data-node-state="node.status"
-              >
-                <div>
-                  <i>后端</i><span>{{ node.status }}</span>
-                </div>
-                <h4>{{ node.node_id }}</h4>
-                <dl>
-                  <div>
-                    <dt>主机</dt>
-                    <dd>{{ node.host_id }}</dd>
-                  </div>
-                  <div>
-                    <dt>区域</dt>
-                    <dd>
-                      {{ node.region || "未登记" }} /
-                      {{ node.zone || "未登记" }}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>构建</dt>
-                    <dd>{{ short(node.build_sha) }}</dd>
-                  </div>
-                </dl>
-                <small>心跳 {{ time(node.last_heartbeat_at) }}</small>
-              </article>
-            </div>
-          </div>
-          <div v-else class="topology-empty">
-            <b>没有当前节点可绘制</b><span>由宝塔托管的后端写入真实心跳后再核验。</span>
-          </div>
-          <section v-if="data.processes.length" class="topology-processes">
-            <header>
-              <div>
-                <p>进程监督</p>
-                <h3>API 与 Worker</h3>
-              </div>
-              <small>监督器 PID {{ data.supervisor_pid ?? "—" }}</small>
-            </header>
-            <article
-              v-for="process in data.processes"
-              :key="process.name"
-              :data-node-state="process.status"
-            >
-              <span
-                ><b>{{ process.name === "api" ? "Node API" : "Node Worker" }}</b
-                ><small>{{ process.status }}</small></span
-              >
-              <dl>
-                <div>
-                  <dt>PID</dt>
-                  <dd>{{ process.pid ?? "—" }}</dd>
-                </div>
-                <div>
-                  <dt>重启次数</dt>
-                  <dd>{{ process.restart_count }}</dd>
-                </div>
-                <div>
-                  <dt>真实就绪</dt>
-                  <dd>{{ process.ready_at ? time(process.ready_at) : "尚未就绪" }}</dd>
-                </div>
-              </dl>
-              <p v-if="process.circuit_open_until">熔断至 {{ time(process.circuit_open_until) }}</p>
-              <details v-if="process.last_failure">
-                <summary>最近失败</summary>
-                <code>{{ process.last_failure }}</code>
-              </details>
-            </article>
-            <div v-if="restartSeries.length" class="topology-restart-trends">
-              <article v-for="series in restartSeries" :key="series.name">
-                <header>
-                  <span
-                    ><b>{{ series.name === "api" ? "Node API" : "Node Worker" }}</b
-                    ><small>最近 24 小时 · 五分钟观测桶</small></span
-                  >
-                  <strong>新增重启 {{ series.restart_delta }}</strong>
-                </header>
-                <svg
-                  viewBox="0 0 240 64"
-                  role="img"
-                  :aria-label="`${series.name} 最近 24 小时累计重启趋势`"
-                  preserveAspectRatio="none"
-                >
-                  <line x1="0" y1="56" x2="240" y2="56" />
-                  <polyline :points="restartPoints(series.rows)" />
-                </svg>
-                <footer>
-                  <span>{{ series.rows.length }} 个真实观测</span>
-                  <span v-if="series.counter_resets"
-                    >计数器重置 {{ series.counter_resets }} 次</span
-                  >
-                  <span v-else>未发现计数器重置</span>
-                  <span>最新 {{ time(series.rows.at(-1)?.observed_at) }}</span>
-                </footer>
-              </article>
-            </div>
-          </section>
-          <section v-if="data.health_probes" class="topology-health-probes">
-            <header>
-              <div>
-                <p>连续探测</p>
-                <h3>健康接口耗时分位数</h3>
-              </div>
-              <span :data-node-state="data.health_probes.status">
-                {{
-                  data.health_probes.status === "ready"
-                    ? "持续观测中"
-                    : data.health_probes.status === "empty"
-                      ? "等待首轮样本"
-                      : "观测不可用"
-                }}
-              </span>
-            </header>
-            <div v-if="data.health_probes.endpoints.length" class="topology-health-grid">
-              <article
-                v-for="endpoint in data.health_probes.endpoints"
-                :key="endpoint.endpoint"
-                :data-probe-outcome="endpoint.last_outcome || 'empty'"
-              >
-                <header>
-                  <span
-                    ><b>{{ healthEndpointLabels[endpoint.endpoint] }}</b
-                    ><small>/health/{{ endpoint.endpoint }}</small></span
-                  >
-                  <strong>{{
-                    endpoint.last_outcome ? healthOutcomeLabels[endpoint.last_outcome] : "尚无样本"
-                  }}</strong>
-                </header>
-                <dl>
-                  <div>
-                    <dt>P50</dt>
-                    <dd>{{ endpoint.latency_p50_ms ?? "—" }} ms</dd>
-                  </div>
-                  <div>
-                    <dt>P95</dt>
-                    <dd>{{ endpoint.latency_p95_ms ?? "—" }} ms</dd>
-                  </div>
-                  <div>
-                    <dt>P99</dt>
-                    <dd>{{ endpoint.latency_p99_ms ?? "—" }} ms</dd>
-                  </div>
-                  <div>
-                    <dt>超时</dt>
-                    <dd>{{ endpoint.timeout_count }}</dd>
-                  </div>
-                </dl>
-                <footer>
-                  <span>可用率 {{ (endpoint.availability_basis_points / 100).toFixed(2) }}%</span>
-                  <span>{{ endpoint.sample_count }} 个样本</span>
-                  <span>最近 HTTP {{ endpoint.last_status_code ?? "—" }}</span>
-                </footer>
-              </article>
-            </div>
-            <div v-else class="topology-empty">
-              <b>连续探测样本暂不可用</b>
-              <span>运行拓扑仍保留心跳事实；检查迁移和 Node API 日志后重试。</span>
-            </div>
-            <small>
-              最近 {{ data.health_probes.window_minutes }} 分钟 · 每
-              {{ Math.round(data.health_probes.interval_ms / 1000) }} 秒 · 超时门
-              {{ data.health_probes.timeout_ms }} ms · 样本保留
-              {{ data.health_probes.retention_hours }} 小时
-            </small>
-          </section>
-          <section v-if="data.worker_scheduler" class="topology-scheduler">
-            <header>
-              <div>
-                <p>统一调度</p>
-                <h3>队列老化与实际调度延迟</h3>
-              </div>
-              <div class="topology-scheduler-actions">
-                <span :data-node-state="data.worker_scheduler.status">{{
-                  data.worker_scheduler.status === "running" ? "运行中" : "未运行"
-                }}</span>
-                <button
-                  type="button"
-                  :aria-expanded="showAllQueues"
-                  @click="showAllQueues = !showAllQueues"
-                >
-                  {{ showAllQueues ? "仅看运行与异常" : `查看全部 ${queueRows.length} 个队列策略` }}
-                </button>
-              </div>
-            </header>
-            <dl class="topology-scheduler-metrics">
-              <div>
-                <dt>活动任务</dt>
-                <dd>
-                  {{ data.worker_scheduler.active_runs }} /
-                  {{ data.worker_scheduler.max_concurrency }}
-                </dd>
-              </div>
-              <div>
-                <dt>等待调度</dt>
-                <dd>{{ data.worker_scheduler.due_queue_count }}</dd>
-              </div>
-              <div>
-                <dt>最长延迟</dt>
-                <dd>{{ data.worker_scheduler.max_queue_delay_ms }} ms</dd>
-              </div>
-              <div>
-                <dt>一分钟失败率</dt>
-                <dd>{{ data.worker_scheduler.failure_rate_percent }}%</dd>
-              </div>
-              <div>
-                <dt>疑似卡死</dt>
-                <dd>{{ data.worker_scheduler.suspected_stuck_runs }}</dd>
-              </div>
-              <div>
-                <dt>已老化队列</dt>
-                <dd>{{ agedQueueCount }}</dd>
-              </div>
-              <div>
-                <dt>饥饿风险</dt>
-                <dd>{{ starvationRiskCount }}</dd>
-              </div>
-            </dl>
-            <div class="topology-queue-list">
-              <div v-if="!visibleQueues.length" class="topology-queue-empty">
-                <b>当前没有等待、运行或异常队列</b>
-                <span>
-                  {{ hiddenIdleQueueCount }}
-                  个空闲队列已收起；需要核对并发、超时和重试时可查看全部策略。
-                </span>
-              </div>
-              <article
-                v-for="queue in visibleQueues"
-                :key="queue.name"
-                :data-queue-alert="
-                  queue.suspected_stuck || queue.circuit_state === 'open' || queue.starvation_risk
-                "
-              >
-                <span
-                  ><b>{{ queueLabels[queue.name] ?? "后台任务" }}</b
-                  ><small
-                    >基础优先级 {{ queue.priority }} · 有效优先级
-                    {{ queue.effective_priority }}</small
-                  ></span
-                >
-                <span
-                  ><b>{{
-                    queue.circuit_state === "open"
-                      ? "已熔断"
-                      : queue.suspected_stuck
-                        ? "疑似卡死"
-                        : queue.running
-                          ? "执行中"
-                          : queue.due
-                            ? "等待中"
-                            : "空闲"
-                  }}</b
-                  ><small v-if="queue.running">运行 {{ queue.longest_running_ms }} ms</small
-                  ><small v-else-if="queue.due">实际调度延迟 {{ queue.queue_delay_ms }} ms</small
-                  ><small v-else>未进入等待队列</small></span
-                >
-                <span class="topology-queue-aging" :data-risk="queue.starvation_risk"
-                  ><b>{{
-                    !queue.due && !queue.running
-                      ? "未进入等待"
-                      : queue.starvation_risk
-                        ? "饥饿风险"
-                        : queue.aging_boost > 0
-                          ? "老化保护中"
-                          : "等待老化"
-                  }}</b
-                  ><small v-if="queue.due && queue.aging_boost > 0"
-                    >优先级已提升 {{ queue.aging_boost }} / {{ queue.maximum_aging_boost }}</small
-                  ><small v-else-if="queue.due"
-                    >每 {{ queue.aging_interval_ms || "—" }} ms 检查一次</small
-                  ><small v-else>当前空闲，不累计老化</small></span
-                >
-                <details>
-                  <summary>调度策略</summary>
-                  <small
-                    >并发 {{ queue.active_runs }}/{{ queue.max_concurrency }} · 超时
-                    {{ queue.timeout_ms }} ms · 重试 {{ queue.retry_total }}/{{
-                      queue.max_retries
-                    }}
-                    · 连续失败 {{ queue.consecutive_failures }}</small
-                  >
-                </details>
-              </article>
-            </div>
-            <details v-if="data.worker_scheduler.snapshot_publish_failed_total">
-              <summary>状态文件异常</summary>
-              <code>{{ data.worker_scheduler.last_snapshot_error || "写入失败" }}</code>
-            </details>
-            <small>观测 {{ time(data.worker_scheduler.observed_at) }}</small>
-          </section>
-        </section>
-
-        <aside class="topology-panel topology-evidence">
+    <div class="p66-layout">
+      <aside class="p66-directory">
+        <h2>阅读运行证据</h2>
+        <p>惠州单主机 · 固定单后端</p>
+        <nav v-if="data" aria-label="服务拓扑页内导航">
+          <a href="#p66-nodes">节点与进程</a><a href="#p66-health">健康探测</a
+          ><a href="#p66-queues">队列调度</a><a href="#p66-alerts">告警与阻断</a>
+        </nav>
+        <div v-if="data" class="p66-boundary">
           <header>
             <div>
               <p>运行边界</p>
@@ -841,79 +466,532 @@ onBeforeUnmount(() => {
               <dd>宝塔 Node + Python</dd>
             </div>
           </dl>
-        </aside>
-      </div>
-
-      <section v-if="data.alerts?.length" class="topology-panel topology-alerts">
-        <header>
-          <div>
-            <p>需要处理</p>
-            <h3>运行告警</h3>
-          </div>
-          <span>{{ data.alerts.length }} 项</span>
-        </header>
-        <article
-          v-for="item in data.alerts"
-          :key="`${item.code}:${item.queues.join(',')}:${item.root_cause_code || ''}`"
-          :data-severity="item.severity"
+          <p>容量尚未验证；无高可用或备用服务器承诺。</p>
+        </div>
+      </aside>
+      <div class="p66-content">
+        <section
+          v-if="data && refreshFailure"
+          class="topology-refresh-notice"
+          :data-kind="refreshFailure"
+          aria-live="polite"
+          aria-labelledby="topology-refresh-title"
+          :aria-busy="refreshing"
         >
-          <strong>{{ alertLabels[item.code] ?? "运行状态异常" }}</strong>
-          <p>{{ item.actionHint }}</p>
-          <div v-if="item.queues.length" class="topology-alert-associations">
-            <span>关联队列</span>
-            <b v-for="queue in item.queues" :key="queue">{{ queueLabels[queue] ?? "后台任务" }}</b>
+          <div>
+            <h2 id="topology-refresh-title">
+              {{ refreshFailure === "timeout" ? "刷新已超时" : "刷新未完成" }}
+            </h2>
+            <p>{{ refreshNotice }}</p>
+            <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
           </div>
-          <div v-if="item.business_objects.length" class="topology-alert-associations">
-            <span>关联业务对象</span>
-            <template v-for="object in item.business_objects" :key="`${object.type}:${object.id}`">
-              <RouterLink v-if="object.href" :to="object.href"
-                >{{ object.label }} · {{ short(object.id) }}</RouterLink
+          <button ref="noticeRetryButton" type="button" :disabled="refreshing" @click="load">
+            重新核验
+          </button>
+        </section>
+
+        <section
+          v-if="state === 'loading'"
+          class="topology-state"
+          aria-live="polite"
+          aria-labelledby="topology-read-title"
+          :aria-busy="refreshing"
+        >
+          <span class="topology-pulse" aria-hidden="true"></span>
+          <div>
+            <h2 id="topology-read-title">{{ verdict[0] }}</h2>
+            <p>{{ verdict[1] }}</p>
+          </div>
+        </section>
+        <section
+          v-else-if="
+            ['forbidden', 'expired', 'rate_limited', 'timeout', 'unavailable'].includes(state)
+          "
+          class="topology-state topology-state--danger"
+          aria-live="polite"
+          aria-labelledby="topology-read-title"
+          :aria-busy="refreshing"
+        >
+          <div>
+            <h2 id="topology-read-title">{{ verdict[0] }}</h2>
+            <p>{{ verdict[1] }}</p>
+            <TechnicalDetails :request-id="readFailureId" summary="本次失败读取追踪" />
+          </div>
+          <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
+          ><button v-else ref="retryButton" type="button" :disabled="refreshing" @click="load">
+            重新核验
+          </button>
+        </section>
+
+        <template v-else-if="data">
+          <section class="topology-verdict" :data-verdict="state" aria-live="polite">
+            <div>
+              <small>S0 · {{ state.toUpperCase() }}</small
+              ><strong>{{ verdict[0] }}</strong>
+            </div>
+            <p>{{ verdict[1] }}</p>
+            <em>单机 · 无高可用承诺</em>
+          </section>
+          <dl class="p66-summary">
+            <div>
+              <dt>健康后端实例</dt>
+              <dd>{{ data.active_api_instances }}</dd>
+            </div>
+            <div>
+              <dt>过期节点</dt>
+              <dd>{{ data.stale_node_count }}</dd>
+            </div>
+            <div>
+              <dt>运行告警</dt>
+              <dd>{{ data.alerts?.length || 0 }}</dd>
+            </div>
+            <div>
+              <dt>阻断项</dt>
+              <dd>{{ data.blockers.length }}</dd>
+            </div>
+          </dl>
+          <p class="p66-section-note">
+            节点结论、监督器阻断与运行告警分别核对；标题不代表所有服务均健康。
+          </p>
+
+          <section
+            class="topology-panel topology-map"
+            id="p66-nodes"
+            tabindex="-1"
+            aria-labelledby="p66-nodes-title"
+          >
+            <header>
+              <div>
+                <p>01 / 节点与进程</p>
+                <h2 id="p66-nodes-title">节点与进程记录</h2>
+              </div>
+              <span>{{ data.nodes.length }} 个当前节点</span>
+            </header>
+            <div v-if="data.nodes.length" class="topology-flow">
+              <p class="p66-relation-note">
+                部署关系说明：宝塔网页服务 →
+                本机后端。此关系来自单上游合同，不是本次网络连通性实测。
+              </p>
+
+              <div class="topology-nodes">
+                <article
+                  v-for="node in data.nodes"
+                  :key="node.node_id"
+                  :data-node-state="node.status"
+                >
+                  <div>
+                    <i>后端</i><span>{{ node.status }}</span>
+                  </div>
+                  <h3>{{ node.node_id }}</h3>
+                  <dl>
+                    <div>
+                      <dt>主机</dt>
+                      <dd>{{ node.host_id }}</dd>
+                    </div>
+                    <div>
+                      <dt>区域</dt>
+                      <dd>
+                        {{ node.region || "未登记" }} /
+                        {{ node.zone || "未登记" }}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>构建</dt>
+                      <dd>{{ node.build_sha || "未记录" }}</dd>
+                    </div>
+                  </dl>
+                  <small>心跳 {{ time(node.last_heartbeat_at) }}</small>
+                </article>
+              </div>
+            </div>
+            <div v-else class="topology-empty">
+              <b>没有当前节点可绘制</b><span>由宝塔托管的后端写入真实心跳后再核验。</span>
+            </div>
+            <section v-if="data.processes.length" class="topology-processes">
+              <header>
+                <div>
+                  <p>进程监督</p>
+                  <h3>API 与 Worker</h3>
+                </div>
+                <small>监督器 PID {{ data.supervisor_pid ?? "—" }}</small>
+              </header>
+              <article
+                v-for="process in data.processes"
+                :key="process.name"
+                :data-node-state="process.status"
               >
-              <b v-else>{{ object.label }} · {{ short(object.id) }}</b>
-            </template>
-          </div>
-          <small v-if="item.occurred_at">发生于 {{ time(item.occurred_at) }}</small>
-          <details>
-            <summary>技术详情</summary>
-            <code>{{ item.code }}</code>
-            <code v-if="item.root_cause_code">root_cause {{ item.root_cause_code }}</code>
-            <code v-for="object in item.business_objects" :key="object.id">
-              {{ object.type }} {{ object.id }}
-            </code>
-          </details>
-        </article>
-      </section>
+                <span
+                  ><b>{{ process.name === "api" ? "Node API" : "Node Worker" }}</b
+                  ><small>{{ process.status }}</small></span
+                >
+                <dl>
+                  <div>
+                    <dt>PID</dt>
+                    <dd>{{ process.pid ?? "—" }}</dd>
+                  </div>
+                  <div>
+                    <dt>重启次数</dt>
+                    <dd>{{ process.restart_count }}</dd>
+                  </div>
+                  <div>
+                    <dt>真实就绪</dt>
+                    <dd>{{ process.ready_at ? time(process.ready_at) : "尚未就绪" }}</dd>
+                  </div>
+                </dl>
+                <p v-if="process.circuit_open_until">
+                  熔断至 {{ time(process.circuit_open_until) }}
+                </p>
+                <details v-if="process.last_failure">
+                  <summary>最近失败</summary>
+                  <code>{{ process.last_failure }}</code>
+                </details>
+              </article>
+              <div v-if="restartSeries.length" class="p66-restart-records">
+                <p>
+                  最近24小时记录；五分钟桶由授权查看触发，不代表无人查看时持续采样。各次观测按实际时间阅读。
+                </p>
+                <details v-for="series in restartSeries" :key="series.name">
+                  <summary>
+                    {{ series.name === "api" ? "Node API" : "Node Worker" }} · 新增重启
+                    {{ series.restart_delta }} · {{ series.rows.length }} 次观测
+                  </summary>
+                  <p>
+                    计数重置
+                    {{ series.counter_resets }} 次；首次记录与计数重置的新增值按服务返回保留。
+                  </p>
+                  <ol>
+                    <li v-for="(row, index) in series.rows" :key="index">
+                      <time :datetime="row.observed_at">{{ time(row.observed_at) }}</time>
+                      <dl>
+                        <div>
+                          <dt>进程状态</dt>
+                          <dd>{{ row.status }}</dd>
+                        </div>
+                        <div>
+                          <dt>累计重启</dt>
+                          <dd>{{ row.restart_count }}</dd>
+                        </div>
+                        <div>
+                          <dt>本次新增</dt>
+                          <dd>{{ row.restart_delta }}</dd>
+                        </div>
+                        <div>
+                          <dt>计数重置</dt>
+                          <dd>{{ row.counter_reset ? "是" : "否" }}</dd>
+                        </div>
+                      </dl>
+                    </li>
+                  </ol>
+                </details>
+              </div>
+            </section>
+          </section>
+          <section
+            class="p66-section"
+            id="p66-health"
+            tabindex="-1"
+            aria-labelledby="p66-health-title"
+          >
+            <h2 id="p66-health-title">02 / 健康探测</h2>
+            <section v-if="data.health_probes" class="topology-health-probes">
+              <header>
+                <div>
+                  <p>连续探测</p>
+                  <h3>健康接口耗时分位数</h3>
+                </div>
+                <span :data-node-state="data.health_probes.status">
+                  {{
+                    data.health_probes.status === "ready"
+                      ? "持续观测中"
+                      : data.health_probes.status === "empty"
+                        ? "等待首轮样本"
+                        : "观测不可用"
+                  }}
+                </span>
+              </header>
+              <p class="p66-section-note">
+                各端点与各自窗口独立呈现；耗时分位数包括失败和超时样本。
+              </p>
+              <div v-if="data.health_probes.endpoints.length" class="topology-health-grid">
+                <article
+                  v-for="endpoint in data.health_probes.endpoints"
+                  :key="endpoint.endpoint"
+                  :data-probe-outcome="endpoint.last_outcome || 'empty'"
+                >
+                  <header>
+                    <span
+                      ><b>{{ healthEndpointLabels[endpoint.endpoint] }}</b
+                      ><small>/health/{{ endpoint.endpoint }}</small></span
+                    >
+                    <strong>{{
+                      endpoint.last_outcome
+                        ? healthOutcomeLabels[endpoint.last_outcome]
+                        : "尚无样本"
+                    }}</strong>
+                  </header>
+                  <dl>
+                    <div>
+                      <dt>P50</dt>
+                      <dd>{{ endpoint.latency_p50_ms ?? "—" }} ms</dd>
+                    </div>
+                    <div>
+                      <dt>P95</dt>
+                      <dd>{{ endpoint.latency_p95_ms ?? "—" }} ms</dd>
+                    </div>
+                    <div>
+                      <dt>P99</dt>
+                      <dd>{{ endpoint.latency_p99_ms ?? "—" }} ms</dd>
+                    </div>
+                    <div>
+                      <dt>超时</dt>
+                      <dd>{{ endpoint.timeout_count }}</dd>
+                    </div>
+                  </dl>
+                  <footer>
+                    <span v-if="endpoint.sample_count > 0"
+                      >可用率 {{ (endpoint.availability_basis_points / 100).toFixed(2) }}%</span
+                    ><span v-else>无样本，暂不提供实测可用率</span>
+                    <span>{{ endpoint.sample_count }} 个样本</span>
+                    <span>最近 HTTP {{ endpoint.last_status_code ?? "—" }}</span>
+                  </footer>
+                </article>
+              </div>
+              <div v-else class="topology-empty">
+                <b>连续探测样本暂不可用</b>
+                <span>运行拓扑仍保留心跳事实；检查迁移和 Node API 日志后重试。</span>
+              </div>
+              <small>
+                最近 {{ data.health_probes.window_minutes }} 分钟 · 每
+                {{ Math.round(data.health_probes.interval_ms / 1000) }} 秒 · 超时门
+                {{ data.health_probes.timeout_ms }} ms · 样本保留
+                {{ data.health_probes.retention_hours }} 小时
+              </small>
+            </section>
+            <p v-if="!data.health_probes">尚未提供健康探测摘要；不据此判断端点可用性。</p>
+          </section>
+          <section
+            class="p66-section"
+            id="p66-queues"
+            tabindex="-1"
+            aria-labelledby="p66-queues-title"
+          >
+            <h2 id="p66-queues-title">03 / 队列调度</h2>
+            <section v-if="data.worker_scheduler" class="topology-scheduler">
+              <header>
+                <div>
+                  <p>统一调度</p>
+                  <h3>队列老化与实际调度延迟</h3>
+                </div>
+                <div class="topology-scheduler-actions">
+                  <span :data-node-state="data.worker_scheduler.status">{{
+                    data.worker_scheduler.status === "running" ? "运行中" : "未运行"
+                  }}</span>
+                  <button
+                    type="button"
+                    :aria-expanded="showAllQueues"
+                    @click="showAllQueues = !showAllQueues"
+                  >
+                    {{
+                      showAllQueues ? "仅看运行与异常" : `查看全部 ${queueRows.length} 个队列策略`
+                    }}
+                  </button>
+                </div>
+              </header>
+              <dl class="topology-scheduler-metrics">
+                <div>
+                  <dt>活动任务</dt>
+                  <dd>
+                    {{ data.worker_scheduler.active_runs }} /
+                    {{ data.worker_scheduler.max_concurrency }}
+                  </dd>
+                </div>
+                <div>
+                  <dt>等待调度</dt>
+                  <dd>{{ data.worker_scheduler.due_queue_count }}</dd>
+                </div>
+                <div>
+                  <dt>最长延迟</dt>
+                  <dd>{{ data.worker_scheduler.max_queue_delay_ms }} ms</dd>
+                </div>
+                <div>
+                  <dt>一分钟失败率</dt>
+                  <dd>{{ data.worker_scheduler.failure_rate_percent }}%</dd>
+                </div>
+                <div>
+                  <dt>疑似卡死</dt>
+                  <dd>{{ data.worker_scheduler.suspected_stuck_runs }}</dd>
+                </div>
+                <div>
+                  <dt>已老化队列</dt>
+                  <dd>{{ agedQueueCount }}</dd>
+                </div>
+                <div>
+                  <dt>饥饿风险</dt>
+                  <dd>{{ starvationRiskCount }}</dd>
+                </div>
+              </dl>
+              <div class="topology-queue-list">
+                <div v-if="!visibleQueues.length" class="topology-queue-empty">
+                  <b>当前没有等待、运行或异常队列</b>
+                  <span>
+                    {{ hiddenIdleQueueCount }}
+                    个空闲队列已收起；需要核对并发、超时和重试时可查看全部策略。
+                  </span>
+                </div>
+                <article
+                  v-for="queue in visibleQueues"
+                  :key="queue.name"
+                  :data-queue-alert="
+                    queue.suspected_stuck || queue.circuit_state === 'open' || queue.starvation_risk
+                  "
+                >
+                  <span
+                    ><b>{{ queueLabels[queue.name] ?? "后台任务" }}</b
+                    ><small
+                      >基础优先级 {{ queue.priority }} · 有效优先级
+                      {{ queue.effective_priority }}</small
+                    ></span
+                  >
+                  <span
+                    ><b>{{
+                      queue.circuit_state === "open"
+                        ? "已熔断"
+                        : queue.suspected_stuck
+                          ? "疑似卡死"
+                          : queue.running
+                            ? "执行中"
+                            : queue.due
+                              ? "等待中"
+                              : "空闲"
+                    }}</b
+                    ><small v-if="queue.running">运行 {{ queue.longest_running_ms }} ms</small
+                    ><small v-else-if="queue.due">实际调度延迟 {{ queue.queue_delay_ms }} ms</small
+                    ><small v-else>未进入等待队列</small></span
+                  >
+                  <span class="topology-queue-aging" :data-risk="queue.starvation_risk"
+                    ><b>{{
+                      !queue.due && !queue.running
+                        ? "未进入等待"
+                        : queue.starvation_risk
+                          ? "饥饿风险"
+                          : queue.aging_boost > 0
+                            ? "老化保护中"
+                            : "等待老化"
+                    }}</b
+                    ><small v-if="queue.due && queue.aging_boost > 0"
+                      >优先级已提升 {{ queue.aging_boost }} / {{ queue.maximum_aging_boost }}</small
+                    ><small v-else-if="queue.due"
+                      >每 {{ queue.aging_interval_ms || "—" }} ms 检查一次</small
+                    ><small v-else>{{
+                      queue.running ? "当前执行中，不处于等待队列" : "当前空闲，不累计老化"
+                    }}</small></span
+                  >
+                  <details>
+                    <summary>调度策略</summary>
+                    <code class="p66-queue-code">{{ queue.name }}</code>
+                    <small
+                      >并发 {{ queue.active_runs }}/{{ queue.max_concurrency }} · 超时
+                      {{ queue.timeout_ms }} ms · 重试 {{ queue.retry_total }}/{{
+                        queue.max_retries
+                      }}
+                      · 连续失败 {{ queue.consecutive_failures }}</small
+                    >
+                  </details>
+                </article>
+              </div>
+              <details v-if="data.worker_scheduler.snapshot_publish_failed_total">
+                <summary>状态文件异常</summary>
+                <code>{{ data.worker_scheduler.last_snapshot_error || "写入失败" }}</code>
+              </details>
+              <small>观测 {{ time(data.worker_scheduler.observed_at) }}</small>
+            </section>
+            <p v-if="!data.worker_scheduler">尚未提供 Worker 调度快照。</p>
+          </section>
+          <section
+            class="p66-section"
+            id="p66-alerts"
+            tabindex="-1"
+            aria-labelledby="p66-alerts-title"
+          >
+            <h2 id="p66-alerts-title">04 / 告警与阻断</h2>
+            <section v-if="data.alerts?.length" class="topology-panel topology-alerts">
+              <header>
+                <div>
+                  <p>需要处理</p>
+                  <h3>运行告警</h3>
+                </div>
+                <span>{{ data.alerts.length }} 项</span>
+              </header>
+              <article
+                v-for="item in data.alerts"
+                :key="`${item.code}:${item.queues.join(',')}:${item.root_cause_code || ''}`"
+                :data-severity="item.severity"
+              >
+                <strong>{{ alertLabels[item.code] ?? "运行状态异常" }}</strong>
+                <p>{{ item.actionHint }}</p>
+                <div v-if="item.queues.length" class="topology-alert-associations">
+                  <span>关联队列</span>
+                  <b v-for="queue in item.queues" :key="queue">{{
+                    queueLabels[queue] ?? "后台任务"
+                  }}</b>
+                </div>
+                <div v-if="item.business_objects.length" class="topology-alert-associations">
+                  <span>关联业务对象</span>
+                  <template
+                    v-for="object in item.business_objects"
+                    :key="`${object.type}:${object.id}`"
+                  >
+                    <RouterLink v-if="object.href" :to="object.href"
+                      >{{ object.label }} · {{ short(object.id) }}</RouterLink
+                    >
+                    <b v-else>{{ object.label }} · {{ short(object.id) }}</b>
+                  </template>
+                </div>
+                <small v-if="item.occurred_at">发生于 {{ time(item.occurred_at) }}</small>
+                <details>
+                  <summary>技术详情</summary>
+                  <code>{{ item.code }}</code>
+                  <code v-if="item.root_cause_code">root_cause {{ item.root_cause_code }}</code>
+                  <code v-for="object in item.business_objects" :key="object.id">
+                    {{ object.type }} {{ object.id }}
+                  </code>
+                </details>
+              </article>
+            </section>
+            <section class="topology-panel topology-blockers">
+              <header>
+                <div>
+                  <p>失败时拒绝放行</p>
+                  <h3>阻断项</h3>
+                </div>
+                <span>{{ data.blockers.length }} 项</span>
+              </header>
+              <div v-if="data.blockers.length">
+                <article v-for="(item, index) in data.blockers" :key="item.code">
+                  <span>{{ String(index + 1).padStart(2, "0") }}</span
+                  ><strong>{{ blockerLabels[item.code] ?? "运行条件未满足" }}</strong>
+                  <p>{{ item.actionHint }}</p>
+                  <details>
+                    <summary>技术详情</summary>
+                    <code>{{ item.code }}</code>
+                  </details>
+                </article>
+              </div>
+              <div v-else class="topology-clear">
+                <b>当前单机运行门无阻断</b
+                ><span>Node 后端负责 API 与 Worker，Python 项目负责采集桥接。</span>
+              </div>
+            </section>
+          </section>
 
-      <section class="topology-panel topology-blockers">
-        <header>
-          <div>
-            <p>失败时拒绝放行</p>
-            <h3>阻断项</h3>
-          </div>
-          <span>{{ data.blockers.length }} 项</span>
-        </header>
-        <div v-if="data.blockers.length">
-          <article v-for="(item, index) in data.blockers" :key="item.code">
-            <span>{{ String(index + 1).padStart(2, "0") }}</span
-            ><strong>{{ blockerLabels[item.code] ?? "运行条件未满足" }}</strong>
-            <p>{{ item.actionHint }}</p>
-            <details>
-              <summary>技术详情</summary>
-              <code>{{ item.code }}</code>
-            </details>
-          </article>
-        </div>
-        <div v-else class="topology-clear">
-          <b>当前单机运行门无阻断</b
-          ><span>Node 后端负责 API 与 Worker，Python 项目负责采集桥接。</span>
-        </div>
-      </section>
-      <footer class="topology-footer">
-        <span>观测 {{ time(data.observed_at) }}</span
-        ><TechnicalDetails :request-id="requestId" summary="快照读取追踪" /><strong
-          >重启、恢复与回滚只允许通过宝塔执行</strong
-        >
-      </footer>
-    </template>
+          <footer class="topology-footer">
+            <span>观测 {{ time(data.observed_at) }}</span
+            ><TechnicalDetails :request-id="requestId" summary="快照读取追踪" /><strong
+              >重启、恢复与回滚只允许通过宝塔执行</strong
+            >
+          </footer>
+        </template>
+      </div>
+    </div>
   </section>
 </template>

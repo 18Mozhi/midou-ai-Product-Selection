@@ -38,7 +38,7 @@ test("P66 restart records retain actual time, cumulative, delta and reset withou
   for (const field of ["observed_at", "restart_count", "restart_delta", "counter_reset", "status"])
     assert.ok(template.includes(`row.${field}`));
   assert.match(template, /不代表无人查看时持续采样/);
-  assert.match(template, /node\.build_sha \|\| '未记录'/);
+  assert.match(template, /node\.build_sha \|\| ["']未记录["']/);
 });
 test("P66 no samples are not presented as measured zero availability, running is not called idle", () => {
   assert.match(template, /v-if="endpoint.sample_count > 0"/);

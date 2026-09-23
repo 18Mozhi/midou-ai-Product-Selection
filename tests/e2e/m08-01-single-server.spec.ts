@@ -328,9 +328,16 @@ test("M08-01.A07/A08/A15 desktop and 390 single-server truth", async ({ page }) 
     route.fulfill({ json: envelope(base) }),
   );
   await page.goto("/platform-admin/topology");
-  await expect(page.getByRole("heading", { name: "单机运行控制台" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "服务拓扑", exact: true })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "服务拓扑页内导航" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "节点与进程" })).toHaveAttribute(
+    "href",
+    "#p66-nodes",
+  );
+  await page.getByRole("link", { name: "健康探测" }).click();
+  await expect(page).toHaveURL(/#p66-health$/);
   await expect(page.getByText("单机运行门已满足")).toBeVisible();
-  await expect(page.getByText("不做负载均衡")).toBeVisible();
+  await expect(page.getByText("未启用", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "队列老化与实际调度延迟" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "健康接口耗时分位数" })).toBeVisible();
   await expect(page.getByText("P99", { exact: true }).first()).toBeVisible();
@@ -348,7 +355,7 @@ test("M08-01.A07/A08/A15 desktop and 390 single-server truth", async ({ page }) 
   await expect(businessAlert.getByText("source_changed", { exact: false })).toBeHidden();
   await expect(page.getByText("5.56%")).toBeVisible();
   await expect(page.getByText("新增重启 2")).toBeVisible();
-  await expect(page.getByText("2 个真实观测")).toBeVisible();
+  await expect(page.getByText("120 个样本", { exact: true })).toHaveCount(3);
   await expect(page.getByText("运行 15200 ms")).toBeVisible();
   await expect(page.getByText("实际调度延迟 68000 ms")).toBeVisible();
   await expect(page.locator('.topology-queue-aging[data-risk="true"]')).toContainText("饥饿风险");
@@ -441,7 +448,12 @@ test("M08-01.A08/A09 empty blocked stale forbidden expired and rate limited", as
         active_api_instances: state === "empty" ? 0 : 1,
         stale_node_count: state === "stale" ? 1 : 0,
         nodes: state === "empty" ? [] : [node],
-        blockers: [{ code: `runtime_${state}`, actionHint: "通过宝塔恢复当前单机 API。" }],
+        blockers: [
+          {
+            code: state === "stale" ? "runtime_node_stale" : `runtime_${state}`,
+            actionHint: "通过宝塔恢复当前单机 API。",
+          },
+        ],
       }),
     });
   });
@@ -449,7 +461,7 @@ test("M08-01.A08/A09 empty blocked stale forbidden expired and rate limited", as
   await expect(page.getByText("尚无当前 API 心跳")).toBeVisible();
   for (const [next, label] of [
     ["blocked", "单机运行条件未满足"],
-    ["stale", "运行心跳已过期"],
+    ["stale", "运行观测需重新核验"],
   ]) {
     state = next;
     await page.reload();

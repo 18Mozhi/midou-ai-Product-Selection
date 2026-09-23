@@ -9,6 +9,7 @@ import {
 export const topologyReviewCss =
   "design-plans/ui-phase-2-2026-09-07/implementation/topology-page-preview.css";
 export const topologyPageSources = [
+  "apps/web/src/runtime-topology-c.css",
   topologyReviewCss,
   shellReviewCss,
   shellReviewModule,
@@ -42,6 +43,17 @@ export function topologyNodes(source) {
 export function previewTopologyPage(input) {
   const source = input.replaceAll("\r\n", "\n"),
     { byClass } = topologyNodes(source);
+  if (source.includes('class="topology-center topology-center--c"')) {
+    return once(
+      once(
+        source,
+        'class="topology-center topology-center--c"',
+        'class="topology-center topology-center--review"',
+      ),
+      '<div class="p66-layout">',
+      '<p class="p66-review-note">实际 Vue C 审核版 · 本地样例 · 未执行探测、重启或调度 · 尚未部署</p><div class="p66-layout">',
+    );
+  }
   const get = (name) => byClass(name).loc.source;
   const root = get("topology-center"),
     hero = get("topology-hero"),
@@ -180,14 +192,7 @@ export function topologyPagePlugin() {
       if (file === absolute("apps/web/src/components/RuntimeTopologyCenter.vue"))
         return { code: previewTopologyPage(source), map: null };
       if (file === absolute("apps/web/src/components/NavigationShell.vue"))
-        return {
-          code: once(
-            previewShellVue(source),
-            '<header v-if="!opportunityId" class="role-page-title">',
-            '<header v-if="!opportunityId && routePath !== \'/platform-admin/topology\'" class="role-page-title">',
-          ),
-          map: null,
-        };
+        return { code: previewShellVue(source), map: null };
     },
     transformIndexHtml(html) {
       return once(
