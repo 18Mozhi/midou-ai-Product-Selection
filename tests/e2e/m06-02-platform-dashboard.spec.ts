@@ -1102,6 +1102,53 @@ test("API coverage dashboard exposes the current production truth dimensions on 
   page,
 }) => {
   await nav(page, "platform_super_admin", "platform:superadmin");
+  const operationFixture = {
+    operation_id: "get_platform_management",
+    method: "GET",
+    path: "/api/v1/platform/management",
+    required_capability: null,
+    expected_roles: ["platform_super_admin"],
+    verification_role: "platform_super_admin",
+    http_status: 200,
+    outcome: "success",
+    request_id: "request-p63-0",
+    trace_id: "trace-p63-0",
+    data_source: "mysql57_business",
+    ui_consumers: ["/platform-admin/api-coverage"],
+    crawler_side_effect: "none",
+    evidence: {
+      normal: {
+        applicable: true,
+        status: "passed",
+        test_id: "production:trace:get_platform_management:normal",
+        latest_result: "200:success",
+      },
+      authorization: {
+        applicable: true,
+        status: "passed",
+        test_id: "production:trace:get_platform_management:authorization",
+        latest_result: "401:unauthenticated",
+      },
+      parameters: {
+        applicable: true,
+        status: "not_run",
+        test_id: null,
+        latest_result: null,
+      },
+      idempotency: {
+        applicable: false,
+        status: "not_applicable",
+        test_id: null,
+        latest_result: null,
+      },
+      fault: {
+        applicable: true,
+        status: "not_run",
+        test_id: null,
+        latest_result: null,
+      },
+    },
+  };
   await page.route("**/api/v1/platform/management?domain=api_coverage**", (route) =>
     route.fulfill({
       json: env({
@@ -1109,9 +1156,9 @@ test("API coverage dashboard exposes the current production truth dimensions on 
         report_status: "current",
         catalog_fingerprint: "a".repeat(64),
         summary: {
-          paths: 223,
-          operations: 256,
-          verified: 256,
+          paths: 225,
+          operations: 258,
+          verified: 258,
           coverage_percent: 100,
           evidence_applicable: 1080,
           evidence_passed: 512,
@@ -1119,12 +1166,16 @@ test("API coverage dashboard exposes the current production truth dimensions on 
           ui_consumed: 180,
           crawler_side_effects: 12,
         },
-        by_outcome: [{ key: "success", count: 255 }],
+        by_outcome: [
+          { key: "success", count: 255 },
+          { key: "empty", count: 2 },
+          { key: "unauthorized", count: 1 },
+        ],
         evidence_dimensions: [
           {
             key: "normal",
-            applicable: 256,
-            passed: 256,
+            applicable: 258,
+            passed: 258,
             failed: 0,
             not_run: 0,
             not_applicable: 0,
@@ -1136,7 +1187,7 @@ test("API coverage dashboard exposes the current production truth dimensions on 
             passed: 245,
             failed: 0,
             not_run: 0,
-            not_applicable: 11,
+            not_applicable: 13,
             coverage_percent: 100,
           },
           {
@@ -1145,7 +1196,7 @@ test("API coverage dashboard exposes the current production truth dimensions on 
             passed: 11,
             failed: 0,
             not_run: 173,
-            not_applicable: 72,
+            not_applicable: 74,
             coverage_percent: 5.98,
           },
           {
@@ -1154,15 +1205,15 @@ test("API coverage dashboard exposes the current production truth dimensions on 
             passed: 0,
             failed: 0,
             not_run: 139,
-            not_applicable: 117,
+            not_applicable: 119,
             coverage_percent: 0,
           },
           {
             key: "fault",
-            applicable: 256,
+            applicable: 258,
             passed: 0,
             failed: 0,
-            not_run: 256,
+            not_run: 258,
             not_applicable: 0,
             coverage_percent: 0,
           },
@@ -1170,63 +1221,25 @@ test("API coverage dashboard exposes the current production truth dimensions on 
         by_role: [
           {
             key: "platform_super_admin",
-            expected_allowed: 256,
-            verified: 256,
-            success: 256,
-            empty: 0,
+            expected_allowed: 258,
+            verified: 258,
+            success: 255,
+            empty: 2,
             blocked: 0,
-            unauthorized: 0,
+            unauthorized: 1,
           },
         ],
-        by_data_source: [{ key: "mysql57_business", count: 256 }],
-        by_ui_consumer: [{ key: "/platform-admin/api-coverage", count: 1 }],
-        by_crawler_side_effect: [{ key: "none", count: 255 }],
-        operations: [
-          {
-            operation_id: "get_platform_management",
-            method: "GET",
-            path: "/api/v1/platform/management",
-            expected_roles: ["platform_super_admin"],
-            verification_role: "platform_super_admin",
-            outcome: "success",
-            data_source: "mysql57_business",
-            ui_consumers: ["/platform-admin/api-coverage"],
-            crawler_side_effect: "none",
-            evidence: {
-              normal: {
-                applicable: true,
-                status: "passed",
-                test_id: "production:trace:get_platform_management:normal",
-                latest_result: "200:success",
-              },
-              authorization: {
-                applicable: true,
-                status: "passed",
-                test_id: "production:trace:get_platform_management:authorization",
-                latest_result: "401:unauthenticated",
-              },
-              parameters: {
-                applicable: true,
-                status: "not_run",
-                test_id: null,
-                latest_result: null,
-              },
-              idempotency: {
-                applicable: false,
-                status: "not_applicable",
-                test_id: null,
-                latest_result: null,
-              },
-              fault: {
-                applicable: true,
-                status: "not_run",
-                test_id: null,
-                latest_result: null,
-              },
-            },
-          },
-        ],
-        total_filtered: 256,
+        by_data_source: [{ key: "mysql57_business", count: 258 }],
+        by_ui_consumer: [{ key: "/platform-admin/api-coverage", count: 258 }],
+        by_crawler_side_effect: [{ key: "none", count: 258 }],
+        operations: Array.from({ length: 258 }, (_, index) => ({
+          ...operationFixture,
+          operation_id: index ? `fixture_operation_${index}` : operationFixture.operation_id,
+          path: index ? `/api/v1/fixture/operation-${index}` : operationFixture.path,
+          request_id: `request-p63-${index}`,
+          trace_id: `trace-p63-${index}`,
+        })),
+        total_filtered: 258,
         captured_at: "2026-08-23T12:00:00.000Z",
         age_seconds: 60,
       }),
@@ -1234,18 +1247,20 @@ test("API coverage dashboard exposes the current production truth dimensions on 
   );
   await page.goto("/platform-admin/api-coverage");
   await expect(page.getByRole("heading", { name: "接口覆盖证据", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "接口覆盖核验", level: 1 })).toBeVisible();
   for (const heading of [
-    "结果覆盖",
-    "证据维度",
-    "六角色覆盖",
-    "数据来源",
-    "UI 消费方",
-    "爬虫副作用",
+    "运行结果记录",
+    "五维验证证据",
+    "角色验证记录",
+    "数据来源声明",
+    "UI 消费方声明",
+    "爬虫副作用声明",
   ])
     await expect(page.getByRole("heading", { name: heading })).toBeVisible();
-  await expect(page.getByText("100.00%", { exact: true })).toBeVisible();
-  await expect(page.getByText("47.41%", { exact: true })).toBeVisible();
+  await expect(page.locator(".p63-summary")).toContainText("100.00%");
+  await expect(page.locator(".p63-summary")).toContainText("47.41%");
   await expect(page.getByText("get_platform_management", { exact: true })).toBeVisible();
+  await expect(page.locator(".p63-operation")).toHaveCount(258);
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();

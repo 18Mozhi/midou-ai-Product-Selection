@@ -397,8 +397,7 @@ export async function buildApiCoverageDesignData(repo) {
   const script = component.split(/<script setup[^>]*>/)[1].split("</script>")[0];
   const labelBox = { defineProps: () => {} };
   vm.runInNewContext(
-    compile(script) +
-      "\nglobalThis.labels={outcomeName,sourceName,dimensionName,evidenceStatusName};",
+    compile(strip(script)) + "\nglobalThis.labels={outcomeName,sourceName,dimensionName};",
     labelBox,
   );
   const logic =
@@ -408,8 +407,14 @@ export async function buildApiCoverageDesignData(repo) {
       .join(",") +
     "};\n";
   const testAst = ast(await read(sourcePaths[13]));
-  let initializer;
+  let initializer, operationFixtureInitializer;
   function visit(n) {
+    if (
+      ts.isVariableDeclaration(n) &&
+      n.name.getText(testAst) === "operationFixture" &&
+      n.initializer
+    )
+      operationFixtureInitializer = n.initializer;
     if (
       ts.isCallExpression(n) &&
       n.expression.getText(testAst) === "env" &&
@@ -426,8 +431,17 @@ export async function buildApiCoverageDesignData(repo) {
   }
   visit(testAst);
   assert.ok(initializer);
+  assert.ok(operationFixtureInitializer);
   const originalBox = {};
-  vm.runInNewContext(compile("globalThis.fixture=" + initializer.getText(testAst)), originalBox);
+  vm.runInNewContext(
+    compile(
+      "const operationFixture=" +
+        operationFixtureInitializer.getText(testAst) +
+        ";globalThis.fixture=" +
+        initializer.getText(testAst),
+    ),
+    originalBox,
+  );
   datasets.original = plain(originalBox.fixture);
   const long = plain(current);
   const chosenRecord = long.operations.find((o) => o.evidence.idempotency.applicable);

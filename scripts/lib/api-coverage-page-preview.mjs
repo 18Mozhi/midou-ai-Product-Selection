@@ -1,21 +1,10 @@
 import assert from "node:assert/strict";
 import path from "node:path";
 import { baseParse } from "@vue/compiler-dom";
-import {
-  previewShellVue,
-  shellReviewCss,
-  shellReviewModule,
-} from "./ui-phase2-shell-vue-preview.mjs";
 
 export const apiCoverageReviewCss =
   "design-plans/ui-phase-2-2026-09-07/implementation/api-coverage-page-preview.css";
-export const apiCoveragePageSources = [
-  apiCoverageReviewCss,
-  shellReviewCss,
-  shellReviewModule,
-  "scripts/lib/ui-phase2-shell-vue-preview.mjs",
-  "scripts/lib/api-coverage-page-preview.mjs",
-];
+export const apiCoveragePageSources = ["scripts/lib/api-coverage-page-preview.mjs"];
 const once = (value, before, after) => {
   assert.equal(value.split(before).length, 2, "P63 unique anchor: " + before.slice(0, 80));
   return value.replace(before, after);
@@ -23,6 +12,7 @@ const once = (value, before, after) => {
 
 // Review-only transformation: production report fields, filtering and parent request behavior are preserved.
 export function previewApiCoveragePage(input) {
+  if (input.includes('class="api-coverage api-coverage--c"')) return input;
   const source = input.replaceAll("\r\n", "\n"),
     template = source.slice(source.indexOf("<template>") + 10, source.lastIndexOf("</template>"));
   const nodes = [],
@@ -61,27 +51,6 @@ export function apiCoveragePagePlugin() {
         absolute = (value) => path.resolve(value).replaceAll("\\", "/");
       if (file === absolute("apps/web/src/components/ApiCoverageDashboard.vue"))
         return { code: previewApiCoveragePage(source), map: null };
-      if (file === absolute("apps/web/src/components/NavigationShell.vue"))
-        return {
-          code: once(
-            previewShellVue(source),
-            '<header v-if="!opportunityId" class="role-page-title">',
-            '<header v-if="!opportunityId && routePath !== \'/platform-admin/api-coverage\'" class="role-page-title">',
-          ),
-          map: null,
-        };
-    },
-    transformIndexHtml(html) {
-      return once(
-        once(html, "<body>", '<body class="shell-vue-c">'),
-        "</head>",
-        [shellReviewCss, apiCoverageReviewCss]
-          .map(
-            (file) =>
-              `<link rel="stylesheet" href="/@fs/${path.resolve(file).replaceAll("\\", "/")}">`,
-          )
-          .join("") + "</head>",
-      );
     },
   };
 }

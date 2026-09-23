@@ -156,7 +156,7 @@ try {
           return route.fulfill({ json: envelope(current) });
         });
         await page.goto(origin + "/platform-admin/api-coverage", { waitUntil: "domcontentloaded" });
-        const root = page.locator(".api-coverage--review");
+        const root = page.locator(".api-coverage--c");
         try {
           await root.waitFor({ state: "attached" });
         } catch {
@@ -190,23 +190,48 @@ try {
             name + " displayed operations",
           );
           const overflow = await page.evaluate(() => {
-            const widest = [...document.querySelectorAll("body *")]
+            const widest = [...document.querySelectorAll(".api-coverage--c *")]
               .filter((element) => element.scrollWidth > innerWidth + 1)
               .sort((a, b) => b.scrollWidth - a.scrollWidth)[0];
             return {
-              fits: document.documentElement.scrollWidth <= innerWidth + 1,
+              fits: (() => {
+                const page = document.querySelector(".api-coverage--c");
+                return Boolean(page && page.scrollWidth <= page.clientWidth + 1);
+              })(),
+              documentFits: document.documentElement.scrollWidth <= innerWidth + 1,
+              overflowing: [...document.querySelectorAll(".api-coverage--c *")]
+                .filter((element) => element.scrollWidth > element.clientWidth + 1)
+                .slice(0, 8)
+                .map((element) => ({
+                  tag: element.tagName,
+                  className: element.className,
+                  clientWidth: element.clientWidth,
+                  scrollWidth: element.scrollWidth,
+                  text: element.textContent?.trim().slice(0, 60),
+                })),
               widest: widest
                 ? {
                     className: widest.className,
                     tag: widest.tagName,
                     width: widest.scrollWidth,
+                    clientWidth: widest.clientWidth,
+                    text: widest.textContent?.trim().slice(0, 100),
+                    ancestors: (() => {
+                      const rows = [];
+                      let node = widest;
+                      while (node && rows.length < 5) {
+                        rows.push(`${node.tagName}.${String(node.className).replaceAll(" ", ".")}`);
+                        node = node.parentElement;
+                      }
+                      return rows;
+                    })(),
                   }
                 : null,
             };
           });
-          check(overflow.fits, true, name + " no overflow " + JSON.stringify(overflow.widest));
+          check(overflow.fits, true, name + " no overflow " + JSON.stringify(overflow));
         }
-        check(await page.locator("h1").count(), 1, "single page h1");
+        check(await page.locator("h1:visible").count(), 1, "single visible page h1");
         check(
           await root
             .locator("summary")

@@ -1,4 +1,8 @@
-# P60 开放平台 C 方向生产 Vue 接入 · 当前发版
+# P63 接口覆盖证据 C 方向生产 Vue 接入 · 当前发版
+
+批153已将P63蓝色报告身份、目录关联边界、全目录统计/分布与逐操作只读五维证据卡接入真实Vue，详见[P63实施记录](P63-PAGE-COMPOSITION-IMPLEMENTATION.md)；保持父级`api-coverage`到API `api_coverage`映射、superadmin守卫、GET和筛选合同不变。报告current仅表示当前method/path目录可关联，不表示构建版本、权限新鲜度或维度全部通过；缺失/无效/过期、拒绝/受阻和未执行仍独立表达。真实组件隔离验证、桌面及390px定向E2E、P63定向单测、Web类型/22工作区生产构建和文档/静态门通过。宝塔部署核验待此提交推送后执行并回填；CSS/NavigationShell bundle budget 尚未通过。全M06-02旧页面用例仍有非P63标题断言失败，不计入P63定向失败，也未宣称全套件通过。真实受限报告、SQL/RBAC与正式M07-03证据仍待；全73页目标继续。
+
+# P60 开放平台 C 方向生产 Vue 接入 · 前序发版
 
 P60 已将 OPEN-PLATFORM-C-r1 蓝色三工作区、组织范围、白色连接/投递台账、创建填写窗、操作原因窗与详情样式接入真实 Vue。代码提交 `f0c424cdaaf87f626821c0cb02cf40b1544919f0` 已推送并部署；线上 build SHA 匹配，live/ready/version、页面深链和懒加载 JS/CSS 均 HTTP 200。Client/Webhook/delivery 读取、九类动作、参数、幂等/审计与一次性密钥语义保持；操作原因先核对，提交仍由原 ConfirmDialog 完成。双端 E2E、默认/详情/读取/写后结果/键盘连续性本地矩阵、22工作区构建通过。真实 MySQL、RBAC、加密、回调外发与正式 M07-03 仍需独立证据；全73页目标继续。
 

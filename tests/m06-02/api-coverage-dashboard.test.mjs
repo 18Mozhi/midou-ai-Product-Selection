@@ -20,9 +20,9 @@ test("API coverage joins the complete current catalog only to a matching schema-
     read("config/api-coverage-metadata.json"),
   ]);
   const parsed = parseOpenApiCoverage(openapiSource);
-  assert.equal(parsed.paths.length, 223);
-  assert.equal(parsed.operations.length, 256);
-  assert.equal(new Set(parsed.operations.map(apiOperationId)).size, 256);
+  assert.equal(parsed.paths.length, 225);
+  assert.equal(parsed.operations.length, 258);
+  assert.equal(new Set(parsed.operations.map(apiOperationId)).size, 258);
   const sample = parsed.operations.slice(0, 4).map((operation, index) => ({
     operation_id: apiOperationId(operation),
     method: operation.method,
@@ -70,8 +70,8 @@ test("API coverage joins the complete current catalog only to a matching schema-
   const report = {
     schema_version: 3,
     operation_id_policy: "method_path_v1",
-    path_count: 223,
-    operation_count: 256,
+    path_count: parsed.paths.length,
+    operation_count: parsed.operations.length,
     catalog_fingerprint: apiCoverageFingerprint(openapiSource),
     captured_at: "2026-08-23T12:00:00.000Z",
     operations: sample,
@@ -124,24 +124,42 @@ test("API coverage fails closed when the production report is invalid JSON", asy
 });
 
 test("API coverage UI, route, runtime packaging and production report fingerprint stay synchronized", async () => {
-  const [component, center, routeCatalog, verifier, deployer, config, schema, openapi, feature] =
-    await Promise.all(
-      [
-        "apps/web/src/components/ApiCoverageDashboard.vue",
-        "apps/web/src/components/PlatformManagementCenter.vue",
-        "config/route-catalog.json",
-        "scripts/verify-production-api-coverage.mjs",
-        "scripts/deploy-baota.py",
-        "packages/config/src/index.ts",
-        "config/schema.json",
-        "docs/openapi.yaml",
-        "docs/feature-map.json",
-      ].map(read),
-    );
-  for (const copy of ["证据维度", "六角色覆盖", "结果覆盖", "数据来源", "UI 消费方", "爬虫副作用"])
+  const [
+    component,
+    operationCard,
+    center,
+    routeCatalog,
+    verifier,
+    deployer,
+    config,
+    schema,
+    openapi,
+    feature,
+  ] = await Promise.all(
+    [
+      "apps/web/src/components/ApiCoverageDashboard.vue",
+      "apps/web/src/components/ApiCoverageOperationCard.vue",
+      "apps/web/src/components/PlatformManagementCenter.vue",
+      "config/route-catalog.json",
+      "scripts/verify-production-api-coverage.mjs",
+      "scripts/deploy-baota.py",
+      "packages/config/src/index.ts",
+      "config/schema.json",
+      "docs/openapi.yaml",
+      "docs/feature-map.json",
+    ].map(read),
+  );
+  for (const copy of [
+    "五维验证证据",
+    "角色验证记录",
+    "运行结果记录",
+    "数据来源声明",
+    "UI 消费方声明",
+    "爬虫副作用声明",
+  ])
     assert.match(component, new RegExp(copy));
   assert.match(component, /operation\.operation_id/);
-  assert.match(component, /item\.latest_result/);
+  assert.match(operationCard, /item\.latest_result/);
   assert.match(center, /domain === ["']api-coverage["']/);
   assert.match(center, /domain\.value === ["']api-coverage["'] \? ["']api_coverage["']/);
   const route = JSON.parse(routeCatalog).routes.find(
