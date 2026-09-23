@@ -64,18 +64,36 @@ test("M01-03.A07/A08/A15 organization and workspace chooser is responsive and ke
   page,
 }) => {
   await mockReady(page);
+  const contextWrites: unknown[] = [];
+  await page.route("**/api/v1/auth/context", async (route) => {
+    contextWrites.push(route.request().postDataJSON());
+    await route.fulfill({
+      json: envelope({ organization: { id: organization.id, name: organization.name }, workspace }),
+    });
+  });
   await page.goto("/select-context");
   await expect(page.getByRole("heading", { name: "选择组织" })).toBeVisible();
+  const viewportWidth = await page.evaluate(() => window.innerWidth);
+  const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+  expect(documentWidth).toBeLessThanOrEqual(viewportWidth);
   await expect(page.locator('[aria-label="可用工作区"]')).toHaveCount(0);
   await expect(page.getByText("组织团队")).toHaveCount(0);
+  await expect(page.getByText("选择组织 →")).toBeVisible();
+  await page.getByRole("searchbox", { name: "搜索组织" }).fill("not-a-match");
+  await expect(page.getByText("没有匹配的组织")).toBeVisible();
+  await page.getByRole("button", { name: "清除搜索" }).click();
+  await expect(page.getByRole("button", { name: /华南增长中心/ })).toBeVisible();
   await page.getByRole("button", { name: /华南增长中心/ }).focus();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("heading", { name: "选择工作区" })).toBeVisible();
   await expect(page.locator('[aria-label="可用工作区"]')).toBeVisible();
   await expect(page.getByText("组织团队")).toBeVisible();
+  await expect(page.getByRole("button", { name: /历史归档区/ })).toBeDisabled();
+  expect(contextWrites).toHaveLength(0);
   await page.getByRole("button", { name: /新品决策工作区/ }).focus();
   await page.keyboard.press("Enter");
   await expect(page.getByText("工作范围已就绪")).toBeVisible();
+  expect(contextWrites).toEqual([{ organization_id: organization.id, workspace_id: workspace.id }]);
 });
 
 test("M01-03.A08/A16 empty state gives a next action", async ({ page }) => {
@@ -117,8 +135,8 @@ test("M01-03.A08/A16 forbidden state does not expose another organization", asyn
     }),
   );
   await page.goto("/select-context");
-  await expect(page.getByText("无权访问该组织")).toBeVisible();
-  await expect(page.getByText("请求标识：forbidden-request")).toBeVisible();
+  await expect(page.getByText("当前没有可用的组织权限")).toBeVisible();
+  await expect(page.getByText("关联编号：forbidden-request")).toBeVisible();
 });
 
 test("M01-03.A08 expired session offers only reauthentication", async ({ page }) => {

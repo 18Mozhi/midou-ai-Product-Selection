@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import ts from "typescript";
-import { ref, computed } from "vue";
+import { ref, shallowRef, computed } from "vue";
 
 // Execute actual setup scripts with isolated transport/router; no HTTP, cookies or SQL.
 export async function verifyIdentitySource() {
@@ -39,7 +39,10 @@ export async function verifyIdentitySource() {
     const url = new URL(location, "https://fixture.invalid");
     const env = {
       ref,
+      shallowRef,
       computed,
+      nextTick: async () => {},
+      useTemplateRef: () => ref(null),
       onMounted: (f) => mounted.push(f),
       useRoute: () => ({ query }),
       useRouter: () => ({ replace: async (to) => targets.push(to) }),
@@ -51,6 +54,12 @@ export async function verifyIdentitySource() {
       getLastMemberRoute: () => "/tasks",
       getRecentOrganizationIds: () => [],
       rememberOrganization: (id) => [id],
+      onboardingSteps: [{ number: 1 }, { number: 2 }, { number: 3 }],
+      resolveOnboardingStep: (search) => {
+        const value = Number(new URLSearchParams(search).get("step"));
+        if (!Number.isFinite(value) || !Number.isInteger(value)) return 1;
+        return Math.min(3, Math.max(1, value));
+      },
     };
     const js = ts.transpileModule(script + `\nreturn {${expose}};`, {
       compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.None },
@@ -202,7 +211,7 @@ export async function verifyIdentitySource() {
   const chooser = (query) =>
     setup(
       "TenancyChooser",
-      "state,organizations,workspaces,teams,organizationQuery,filteredOrganizations,selectedContext,safeReturnTo,loadOrganizations,chooseOrganization,chooseWorkspace,createPersonalWorkspace",
+      "state,organizations,workspaces,teams,selectedOrganization,selectedWorkspace,organizationQuery,filteredOrganizations,selectedContext,safeReturnTo,loadOrganizations,chooseOrganization,chooseWorkspace,createPersonalWorkspace",
       "/select-context",
       query,
     );
@@ -250,6 +259,41 @@ export async function verifyIdentitySource() {
   checks.push(
     "workspace/team reads, archived zero write, exact context body and explicit continue boundary",
   );
+  s = await chooser({});
+  let releaseOldMembership;
+  s.replies.push(() => new Promise((resolve) => (releaseOldMembership = resolve)));
+  const oldMembershipLoad = s.loadOrganizations();
+  await Promise.resolve();
+  await Promise.resolve();
+  s.replies.push(envelope([org]));
+  await s.loadOrganizations();
+  releaseOldMembership?.(envelope([]));
+  await oldMembershipLoad;
+  assert.deepEqual(s.organizations.value, [org]);
+  assert.equal(s.state.value, "ready");
+  checks.push("superseded membership response cannot replace current organization directory");
+  s = await chooser({});
+  s.selectedOrganization.value = org;
+  s.state.value = "ready";
+  s.replies.push(() => new Promise((resolve) => (releaseOldMembership = resolve)));
+  const oldContextWrite = s.chooseWorkspace({
+    id: "synthetic-ws",
+    organization_id: org.id,
+    status: "active",
+  });
+  await Promise.resolve();
+  await Promise.resolve();
+  s.replies.push(envelope([]));
+  await s.loadOrganizations();
+  releaseOldMembership?.(
+    envelope({ organization: org, workspace: { id: "synthetic-ws", name: "旧范围" } }),
+  );
+  await oldContextWrite;
+  assert.equal(s.selectedContext.value, null);
+  assert.equal(s.state.value, "empty");
+  checks.push(
+    "superseded context write cannot restore a selected workspace after returning to scope list",
+  );
   for (const [kind, expected] of [
     ["expired", "expired"],
     ["forbidden", "forbidden"],
@@ -272,7 +316,7 @@ export async function verifyIdentitySource() {
   await s.resolveLanding();
   assert.equal(s.targets.at(-1), "/login");
   checks.push("root restores member path, blocks missing route, redirects expiry");
-  s = await setup("OnboardingGuide", "step,page,next,previous", "/onboarding?step=2");
+  s = await setup("OnboardingGuide", "step,currentStep,next,previous", "/onboarding?step=2");
   assert.equal(s.step.value, 2);
   s.next();
   assert.equal(s.step.value, 3);
@@ -280,14 +324,14 @@ export async function verifyIdentitySource() {
   assert.equal(s.step.value, 3);
   s.previous();
   assert.equal(s.step.value, 2);
-  s = await setup("OnboardingGuide", "step,page", "/onboarding?step=1.5");
-  assert.equal(s.page.value, undefined);
-  checks.push("guide legal steps and known fractional-query undefined gap; not fixed in product");
+  s = await setup("OnboardingGuide", "step,currentStep", "/onboarding?step=1.5");
+  assert.equal(s.currentStep.value.number, 1);
+  checks.push("guide legal steps and fractional query safely resolves to the first step");
   return {
     checks,
     count: checks.length,
     scope:
-      "actual Vue setup functions with isolated transport/router; no Vue mount, HTML constraint, cookie, auth, SQL, race or production proof",
+      "actual Vue setup functions with isolated transport/router; P08 membership/context stale-response guards are exercised, but this is not a Vue mount, cookie, auth, SQL, or production proof",
   };
 }
 if (process.argv[1]?.endsWith("verify-ui-phase2-identity-source.mjs"))

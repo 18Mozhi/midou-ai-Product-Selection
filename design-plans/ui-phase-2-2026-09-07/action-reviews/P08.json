@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "pageId": "P08",
   "route": "/select-context",
-  "status": "source-reviewed-not-user-approved",
+  "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TenancyChooser.vue": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e"
+    "apps/web/src/components/TenancyChooser.vue": "eefdaee04457ad3ee1391b4a0474129ab2bf8a707831a84c4eb852410abd6273"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -63,7 +63,7 @@
       "kind": "excluded",
       "routeApplicability": "P08-local-caller-only",
       "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#fbfed57848d7366f.1"],
-      "condition": "源button无handler/href",
+      "condition": "当前账号以无handler/href的文字占位呈现",
       "handler": "无业务处理",
       "variants": ["placeholder"],
       "scenes": [
@@ -97,7 +97,7 @@
         "disabled": "not-applicable-excluded",
         "busy": "not-applicable-excluded"
       },
-      "remaining": "源视觉上可按但没有账号菜单；新稿非交互呈现是待审，不新增用户菜单。"
+      "remaining": "当前视觉明确为非交互文字；不新增用户菜单或账号业务动作。"
     },
     {
       "actionId": "ID-LOGIN-ROUTE",
@@ -523,11 +523,11 @@
     }
   ],
   "surfaceReview": {
-    "status": "source-reviewed-not-runtime-accepted",
+    "status": "user-approved-visual-direction-not-runtime-accepted",
     "files": ["apps/web/src/components/TenancyChooser.vue"],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/TenancyChooser.vue": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
+      "apps/web/src/components/TenancyChooser.vue": "eefdaee04457ad3ee1391b4a0474129ab2bf8a707831a84c4eb852410abd6273",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
@@ -573,7 +573,7 @@
   "compositionGaps": [
     "仅本页局部源与列明结构已核；全共享消费者/所有状态/主题/真实Vue与用户批准待验。"
   ],
-  "approval": "pending-user-review",
+  "approval": "user-approved-visual-direction",
   "limits": [
     "语义映射是源审阅与图片关联，不是测试、审批或全站分母冻结。",
     "不改实际UI/鉴权/接口/业务数据，不以重构图替代生产验证。"

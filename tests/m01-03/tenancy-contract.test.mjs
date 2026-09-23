@@ -76,6 +76,25 @@ test("M01-03.A07/A08/A15 UI implements reference-backed desktop and 390 states",
   assert.match(e2e, /keyboard\.press\(["']Enter["']\)/);
 });
 
+test("P08 production Vue uses the reviewed C scope layout and ignores superseded reads", async () => {
+  const [component, styles] = await Promise.all([
+    read("apps/web/src/components/TenancyChooser.vue"),
+    read("apps/web/src/styles.css"),
+  ]);
+  assert.match(component, /class="p08-hero"/);
+  assert.match(component, /class="p08-directory"/);
+  assert.match(component, /class="p08-organization"/);
+  assert.match(component, /class="p08-account">当前账号<\/span>/);
+  assert.match(component, /organizationLoadSequence/);
+  assert.match(component, /contextWriteSequence/);
+  assert.match(component, /if \(sequence !== organizationLoadSequence\) return/);
+  assert.match(component, /if \(sequence !== contextWriteSequence\) return/);
+  assert.doesNotMatch(component, /class="tenancy-account"/);
+  assert.match(styles, /P08: production C-direction organization\/workspace scope selector/);
+  assert.match(styles, /@media\s*\(max-width:\s*760px\)/);
+  assert.match(styles, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
+});
+
 test("M01-03.A01/A05/A10/A11/A17 docs and machine map state exact non-goals and operations", async () => {
   const [architecture, runbook, map, env, blueprint, docsGate, registry] = await Promise.all([
     read("docs/architecture/m01-03-tenancy-context.md"),
