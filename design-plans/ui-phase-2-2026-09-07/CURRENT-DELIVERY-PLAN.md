@@ -1475,4 +1475,4 @@ W09 发布前必须取得干净且归属明确的提交，核对本地/远端/�
 
 # 本轮交付接续 · P09
 
-P10「外观偏好」C 方向已迁入实际 ThemeStudio Vue，实施、线上 SHA 与资源核验见 [P10-PAGE-COMPOSITION-IMPLEMENTATION.md](P10-PAGE-COMPOSITION-IMPLEMENTATION.md)。2026-09-23 已按用户自动同意授权完成 P09 三步引导真实 Vue 实施；测试、提交和宝塔上线证据见 [P09-PAGE-COMPOSITION-IMPLEMENTATION.md](P09-PAGE-COMPOSITION-IMPLEMENTATION.md)。P08 组织与工作区选择正接入真实 Vue，闭环记录见 [P08-PAGE-COMPOSITION-IMPLEMENTATION.md](P08-PAGE-COMPOSITION-IMPLEMENTATION.md)。全 73 页目标和正式阶段验收仍开放；P08 部署后按总计划继续下一项未实施页面。
+P10「外观偏好」C 方向已迁入实际 ThemeStudio Vue，实施、线上 SHA 与资源核验见 [P10-PAGE-COMPOSITION-IMPLEMENTATION.md](P10-PAGE-COMPOSITION-IMPLEMENTATION.md)。2026-09-23 已按用户自动同意授权完成 P09 三步引导与 P08 组织/工作区选择真实 Vue 重构，分别见 [P09 实施记录](P09-PAGE-COMPOSITION-IMPLEMENTATION.md) 和 [P08 实施记录](P08-PAGE-COMPOSITION-IMPLEMENTATION.md)；P08 commit/build SHA `b1e53eac9d731ffd8e90029ab6192bdda6c215f3` 已推送并经固定宝塔脚本部署，线上 health/version、深链和 P08 JS/CSS 资源核验通过。全 73 页目标和正式阶段验收仍开放；下一页面接续 P07 MFA 身份安全。
