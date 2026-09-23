@@ -160,7 +160,7 @@ test("M03-04.A07/A08/A15 runtime monitor is responsive and visual", async ({ pag
     }),
   );
   await page.goto(runtimePath);
-  await expect(page.getByRole("heading", { name: "采集运行监控", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "采集运行监控", level: 1 })).toBeVisible();
   await expect(page.getByText("US Market Profile")).toBeVisible();
   await expect(page.getByText("过期占用", { exact: true }).first()).toBeVisible();
   await expect(page.getByText(/租约已过期，存在僵尸占用风险/)).toBeVisible();
