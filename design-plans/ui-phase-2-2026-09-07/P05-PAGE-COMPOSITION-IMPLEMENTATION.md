@@ -28,4 +28,13 @@
 
 ## 提交与部署
 
-待本轮提交与固定宝塔脚本部署后补录代码 SHA、部署结果、线上 health/version、深链与静态资源 SHA。静态可达性不证明真实邮件投递、有效令牌、账号写入、生产 RBAC 或正式 M07-03 接收。
+P05 页面实现提交为 `6be50711ea35005fc0059300218e0666f643184a`；生产只读检查发现全局 `signal-ledger` 按钮主题权重覆盖了 P05 蓝色，最小修正提交为 `9df27897dbfbea8b78c72668f0c45d4236a05569`。二者均已推送 `main`。固定宝塔部署脚本最终返回 `status=deployed`、`build_sha=9df27897dbfbea8b78c72668f0c45d4236a05569`、`M07-03 preflight_passed`；发布归属精确覆盖 2 个提交/17 个路径，服务器临时上传包已删除。
+
+| 生产只读核验 | 结果 |
+| --- | --- |
+| `/api/v1/health/live`、`ready`、`available`、`version` | 全部 HTTP 200；live/version 的 build SHA 均为 `9df27897dbfbea8b78c72668f0c45d4236a05569`；ready 的 MySQL/Redis/supervisor available，available 的 API/worker available |
+| `/verify-email` 深链 | HTTP 200；浏览器正常挂载验证页 |
+| 懒加载资源 | `LocalIdentity-BV-EWj5k.js` 与 `LocalIdentity-bVD3VL9V.css` 均 HTTP 200，线上 SHA-256 与本地构建一致（JS `14befcc21a0873423339ed3de153c2d0fd8cb202b78aeabf730d00bde14297c7`；CSS `3440d05bed979f409cb49c6dfd5a56ca82b58154dc4e8ee9b7d3e67844c55558`） |
+| 生产 Chromium，1440px / 390px | 两端 HTTP 200；页面无横向溢出、主要按钮高 44px 且实际蓝色为 `rgb(23, 72, 160)`；token 未展示、无非 GET 请求、无页面异常 |
+
+无需人工额外重启；固定宝塔脚本负责受管发布，前端静态资源随现有站点更新。未新增服务、环境变量或迁移。线上只读核验不能证明真实邮件投递、有效单次令牌、账号验证写入、生产 RBAC 或正式 M07-03 签收。

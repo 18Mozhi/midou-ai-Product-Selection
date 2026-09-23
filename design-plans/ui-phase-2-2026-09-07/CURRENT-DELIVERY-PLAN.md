@@ -1,6 +1,6 @@
 # P05 邮箱验证 C 方向生产 Vue 接入 · 本轮实施
 
-P05 `/verify-email` 已从共用营销卡片拆为蓝色验证边界与白色结果工作区，保留原 token 门控自动 `POST /auth/email-verification/confirm {token}`、无 token 零请求与显式返回登录。注册邮件受理不再被展示为邮箱已验证；实际接口失败、限流、受阻有独立告警反馈，且不回显 token。未改变 API/OpenAPI、认证规则、权限、存储、配置或依赖。测试、发布 SHA、线上深链/资源与健康核验详见[P05实施记录](P05-PAGE-COMPOSITION-IMPLEMENTATION.md)。真实邮件投递、有效 token、账号验证写入及正式 M07-03 仍需独立证据；全73页目标继续。
+P05 `/verify-email` 已从共用营销卡片拆为蓝色验证边界与白色结果工作区，保留原 token 门控自动 `POST /auth/email-verification/confirm {token}`、无 token 零请求与显式返回登录。注册邮件受理不再被展示为邮箱已验证；实际接口失败、限流、受阻有独立告警反馈，且不回显 token。实现 SHA `6be50711` 与蓝色主题权重修正 SHA `9df27897` 已提交、推送并按固定宝塔脚本部署；线上 health/version、深链、JS/CSS 哈希与双视口只读检查通过。未改变 API/OpenAPI、认证规则、权限、存储、配置或依赖。完整证据与 M02-02 回归限制详见[P05实施记录](P05-PAGE-COMPOSITION-IMPLEMENTATION.md)。真实邮件投递、有效 token、账号验证写入及正式 M07-03 仍需独立证据；全73页目标继续。
 
 # P69 文件存储核验 C 方向生产 Vue 接入 · 本次实施
 
