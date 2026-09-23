@@ -2,7 +2,7 @@
 
 2026-09-11 共享复制增量：TechnicalDetails 的哈希行已更新为当前实现；其余历史描述不扩大为最新验收。复制拒绝现有就地反馈、重试和迟到结果隔离，见 [共享复制反馈复核](TECHNICAL-COPY-FEEDBACK-REVIEW.md)。无 API、权限或复制内容调整。
 
-依据：main/c5d647c，2026-09-08实际源码核对；本批补七份规格及父/共享清单，复用P43，不宣称正式设计、完整运行时验证或生产通过。范围P38–P45，路由/组件见各页规格；API以下短路径均由既有客户端加/api/v1。全局导航属于W01共享壳层，本合同不代替NavigationShell及全站G0。当前G0未冻结、用户通过0。
+历史依据：main/c5d647c，2026-09-08实际源码核对；本批补七份规格及父/共享清单，复用P43，不宣称正式设计、完整运行时验证或生产通过。范围P38–P45，路由/组件见各页规格；API以下短路径均由既有客户端加/api/v1。全局导航属于W01共享壳层，本合同不代替NavigationShell及全站G0。2026-09-24用户已统一批准73页视觉方向；G0源语义、完整运行时和生产门仍分别核验。
 
 ## 1. 数量口径与源码别名
 
@@ -63,6 +63,13 @@
 | C | c43be07eff2d7020.1 | 同上一项组织详情组件调用 |
 | C | 39878a11789ae9ce.1 | PA43 close/retry/status/role/membership/password/session转发 |
 | C | cab997ead119619a.1 | 同上一项用户详情组件调用 |
+| C | 6d8a89fda1f94214.2 | PA-NAV-ORG 同一组织管理路径；`!adminListRoute` 导航分支 |
+| C | 454d991f8fed8550.2 | PA-NAV-USER 同一用户管理路径；`!adminListRoute` 导航分支 |
+| C | 4681ec75ac4845ca.2 | PA-NAV-ADMIN 同一管理员管理路径；`!adminListRoute` 导航分支 |
+| C | 1d3e2d941d1ed0f3.1 | PA-FILTER-DRAWER ResponsiveFilterDrawer调用；共享容器，不另计业务动作 |
+| C | 636343c5842c998f.1 | PA-FILTER form提交调用applyFilters；搜索与form语义归并 |
+| C | 6f151cbab1f5518e.1 | PA42 close/retry/clear-feedback/save/toggle-status事件转发，非新增动作 |
+| C | 39ba950db197263c.1 | 同上一项PlatformOrganizationDetailDialog调用 |
 | O | 6923b73e52535ef3.1 | PA-ORG-DETAIL 桌面详情；busy禁用 |
 | O | 2a07373cb016b4b5.1 | PA-ORG-DETAIL 移动预览→详情并close预览 |
 | O | 1c008f867673db60.1 | PA-ORG-TECH 预览UUID展开 |
@@ -109,6 +116,7 @@
 | Q | 483082db5a776bf3.1 | PA-Q-CLOSE 筛选遮罩关闭 |
 | Q | df1390feb7424a07.1 | PA-Q-CLOSE 筛选页首关闭 |
 | Q | cd956325fcd081da.1 | PA-Q-CLOSE 捕获form submit先关闭抽屉 |
+| Q | 7e0fa28eaeb1cc09.1 | PA-Q-OPEN 手机筛选触发按钮调用show |
 | T | e2fd0d02cbd9f684.1 | PA-T-COLUMNS 原生details列设置 |
 | T | 921f4be18a3fe814.1 | PA-T-COLUMN 每列checked/change，至少留一列 |
 | T | d09cd5524db7bee5.1 | PA-T-FREEZE 冻结/取消首个可见列 |
@@ -116,6 +124,10 @@
 | X | c19091da9e2471f1.1 | PA-X-COPY 每项复制系统剪贴板，1500ms反馈 |
 
 S/T本族四类消费者为D来源健康、O组织记录、U用户记录、M管理员记录；动态列数分别4/5/5/3，T从实际th读取，不把这四组扩成四个不同共享组件。Q由父C调用，非P45筛选区使用；X在D失败态与ready观测footer调用，其props当前只给requestId；局部原生技术details没有自动获得X复制能力。
+
+### 1.4 2026-09-24 当前源位置补记
+
+上表新增8个当前候选，来自 P39 第二组三条导航（仅 `!adminListRoute` 分支）、筛选抽屉调用/提交、组织详情子组件调用/事件及共享筛选触发。三条导航仍归并到既有 PA-NAV 组；抽屉、form 与详情事件是容器/提交/转发，不因此增加业务写动作。依据 `PlatformAccountCenter.vue` 与 `ResponsiveFilterDrawer.vue` 当前模板和 handler 定义；此补记只校准静态源身份，不代表完整变体、读屏、RBAC或生产验收。
 
 Q动态`:role="overlay ? 'dialog' : 'group'"`未被当前扫描器识别为dialog-definition；已人工补记移动筛选模态，不能据零定义漏验。Q以760px matchMedia切换，离开移动关闭；submit捕获立即收起，不等待查询结果，重置type=button不触发这条关闭路径；取消保留父字段。S初始聚焦关闭按钮，close返焦点，但源码没有显式Tab循环、背景inert或KeepAlive离开清理；selectedKey所指记录临时消失后又回来也需复验，不直接推断安全。
 
