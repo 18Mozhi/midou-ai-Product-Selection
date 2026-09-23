@@ -1,6 +1,6 @@
 # P60 开放平台 C 方向生产 Vue 接入
 
-状态：P60 C 方向已接入生产页面组件和路由懒加载样式；用户已授权完成页面自动同意。局部设计通过不替代真实接口、权限、密钥或外发验收。
+状态：P60 C 方向已接入、提交并部署。代码提交及生产 build SHA 为 `f0c424cdaaf87f626821c0cb02cf40b1544919f0`；live/ready/version、页面深链、P60 JS/CSS 线上检查均 HTTP 200，22 工作区构建和 M07-03 结构预检通过。用户已授权完成页面自动同意。局部设计通过不替代真实接口、权限、密钥或外发验收。
 
 ## 页面实现
 
@@ -28,7 +28,8 @@
 - `tests/e2e/m06-05-open-platform.spec.ts`：desktop Chromium 与390px手机各3项通过；样例 API 全拦截，仅验证布局、创建/原因/确认取消、查询、详情与读取错误，无写入。
 - `npm run typecheck:web`、`npm run build:web`：通过；P60 JS 31.20 kB、页面 CSS 独立懒加载。`npm run format:check`、`verify:docs`、`verify:plans`、`verify:runtime-docs`、`verify:static-analysis`、`verify:release-matrix`：通过。
 - `npm run verify:frontend-budget`：未通过既有共享资源上限；本次实测入口 CSS 129451/122880 bytes、NavigationShell JS 52297/51200 bytes。P60 样式仍独立延迟加载，未修改共享 NavigationShell 源码；此预算失败不表示页面构建失败。
-- 22工作区发布构建、宝塔部署、线上 build SHA 与页面资产核验将在本批发布后补记。正式 M07-03 生产证据门仍以当前提交对应证据文件为准。
+- `python scripts/deploy-baota.py`：22/22工作区构建、M07-03结构预检、宝塔部署通过，部署脚本报告临时上传包已删除。线上 `/api/v1/health/live`、`/ready`、`/version`、`/platform-admin/open-platform` 均HTTP 200，version SHA匹配代码提交；本批 P60 JS/CSS 资源均HTTP 200。
+- 正式 M07-03 证据文件 `.artifacts/verification/baota-production-evidence.json` 缺失；部署/结构预检不等于正式生产签收。真实RBAC、数据库、密钥加密与外部回调投递仍需独立验收。
 
 ## 未声明完成的边界
 
