@@ -16,6 +16,7 @@ import ConfirmDialog from "./ConfirmDialog.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import "../credential-assets.css";
 import "../credential-login.css";
+import "../credential-assets-c.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type EditorKind = "asset" | "rotate" | "profile" | "login";
 type LoginSaveStage = "idle" | "asset" | "profile" | "partial" | "unknown";
