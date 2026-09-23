@@ -408,7 +408,7 @@ html
     .p61-workspace {
       gap: 16px;
     }
-    .p61-directory :is(p, strong) {
+    .p61-directory p {
       display: none;
     }
     .p61-directory small br {

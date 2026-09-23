@@ -532,7 +532,10 @@ onUnmounted(() => {
             ><b v-if="index < breadcrumbs.length - 1">/</b>
           </template>
         </nav>
-        <header v-if="!opportunityId" class="role-page-title">
+        <header
+          v-if="!opportunityId && routePath !== '/platform-admin/status'"
+          class="role-page-title"
+        >
           <b class="role-page-folio" aria-hidden="true">{{ pageFolio }}</b>
           <div>
             <p>{{ activeItem?.group || shellTitle }} / SIGNAL LEDGER</p>

@@ -1889,18 +1889,22 @@ test("system status aggregates real operations observations and management links
     }),
   );
   await page.goto("/platform-admin/status");
-  await expect(page.getByRole("heading", { name: "系统状态", level: 2 })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "依赖拓扑与故障传播", level: 3 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "系统状态", level: 1 })).toBeVisible();
+  await expect(page.locator(".role-page-title")).toHaveCount(0);
+  await page.locator('[data-status-view="dependencies"]').click();
+  await expect(page.getByRole("heading", { name: "依赖关系与最新观测", level: 3 })).toBeVisible();
   await expect(page.getByText("访问入口", { exact: true })).toBeVisible();
   await expect(page.getByText("共享依赖", { exact: true })).toBeVisible();
   await expect(page.getByText("异步执行", { exact: true })).toBeVisible();
   await expect(page.getByText("Python Crawler", { exact: true })).toBeVisible();
   await expect(page.getByText("1 个实例 · 1 个活动任务")).toBeVisible();
+  await page.locator('[data-status-view="attention"]').click();
   const propagation = page.locator(".platform-propagation");
   await expect(propagation.getByText("Redis当前警告", { exact: true })).toBeVisible();
   await expect(propagation.getByText("文件存储当前已过期", { exact: true })).toBeVisible();
   await expect(propagation).toContainText("API 就绪、队列协调、限流与实时通知");
   await expect(propagation).toContainText("证据保存、报表导出与采集回执暂存");
+  await page.locator('[data-status-view="session"]').click();
   const realtime = page.getByRole("region", { name: "实时连接退化统计" });
   await expect(realtime.getByText("SSE 重连率", { exact: true })).toBeVisible();
   await expect(realtime.getByText("20.00%", { exact: true })).toBeVisible();
@@ -1910,6 +1914,7 @@ test("system status aggregates real operations observations and management links
   await expect(
     page.locator(".platform-topology-node").filter({ hasText: /^Redis/ }),
   ).toHaveAttribute("href", "/platform-admin/redis");
+  await page.locator('[data-status-view="attention"]').click();
   await capturePhase2Evidence(page, testInfo, "P61", "dependency-degraded", [
     "redis-warning",
     "files-stale",
@@ -1920,7 +1925,11 @@ test("system status aggregates real operations observations and management links
   await page.route("**/api/v1/platform/management?**", failRefresh);
   await page.getByRole("button", { name: "刷新数据", exact: true }).click();
   await expect(page.locator(".platform-management-message")).toContainText("已保留上次成功数据");
-  await expect(page.getByText("1 个实例 · 1 个活动任务")).toBeVisible();
+  await page.locator('[data-status-view="activity"]').click();
+  const activityPanel = page.locator("#p61-panel-activity");
+  await expect(activityPanel.getByRole("heading", { name: "采集任务状态" })).toBeVisible();
+  await expect(activityPanel.getByText("运行中", { exact: true })).toBeVisible();
+  await expect(activityPanel.getByText("138", { exact: true })).toBeVisible();
   await capturePhase2Evidence(page, testInfo, "P61", "refresh-failed-retained", [
     "expected-transport-abort",
     "last-success-data-retained",
