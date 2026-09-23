@@ -6,6 +6,10 @@
 
 2026-09-24：用户授权剩余页面/状态视觉自动通过，故 P54 两个工作区的局部设计审核已记录通过。真实 Vue 的近期记录与证据质量工作区均已包含在整站构建 `06ae38230de2b5b7a35b89727aa22432387030d5`；生产 `/platform-admin/data` 返回 HTTP 200，两个工作区 JS/CSS 均 HTTP 200，四项 SHA-256 与本地构建一致。未改 P54 业务代码或合同；真实会话/RBAC、MySQL、CSV/证据下载、审计事实与正式 M07-03 仍需独立验证。具体边界见[P54近期记录](P54-RECORDS-INTERACTION-IMPLEMENTATION.md)与[P54证据质量](P54-QUALITY-INTERACTION-IMPLEMENTATION.md)。
 
+# P52 采集总览 C 方向视觉审核与线上核验
+
+2026-09-24：按用户“剩下的全部通过”授权，P52 桌面/手机 C 方向视觉审核通过。实际 Vue 的读取生命周期、批量写入归属及焦点实现均在生产 BUILD_SHA `e86a58915c28ddf5f076892a73297375d382704e` 中；M06-03 双端 E2E 各 21/21、定向单测 4/4。生产 `/platform-admin/collection/overview` HTTP 200，P52 JS 与应用 CSS HTTP 200 且哈希匹配本地构建；本轮只修正两处过时的标题级别断言并更新审核记录，没有运行时代码差异，因此无需再次部署。401/403 快照策略、真实会话/RBAC、MySQL 事实、真实批量重放/Worker 与正式 M07-03 仍未验收，详见[P52实施记录](P52-PAGE-COMPOSITION-IMPLEMENTATION.md)。
+
 # P12 首页 C 方向实际 Vue 接入 · 本轮收官
 
 2026-09-24：用户授权剩余页面视觉自动通过。已将 HOME-C-r1 接入真实 `/home`：蓝色工作边界、人工推荐决策、本人待办/异常和下置自动发现进度；七字段 inline 创建、精确十市场 POST、首条暂停规则 PATCH、原路由/返回顺序均保持。缺 `automatic_selection` 不再伪装零；规则/首页读取不完整时不显示创建/恢复；读取代次隔离迟到响应，过期/拒绝清除快照，写入受理与后续读取失败分开报告。桌面 Chromium 与 390px E2E 各4/4；单测8/8、Web类型、文档/发布门、M07-03 preflight及22工作区构建通过。提交/build SHA `06ae38230de2b5b7a35b89727aa22432387030d5` 已推送并由固定宝塔脚本部署；线上 ready/available/version、`/home` 和专属 JS/CSS HTTP 200，JS/CSS SHA-256 与本地构建相同。真实会话/RBAC、采集器实际执行及正式 M07-03 仍需独立验证。未改共享导航、API/OpenAPI、数据库、规则、权限、环境或依赖。详见 [P12实施记录](P12-PAGE-COMPOSITION-IMPLEMENTATION.md)。

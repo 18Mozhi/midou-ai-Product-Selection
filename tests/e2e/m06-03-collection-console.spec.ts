@@ -150,7 +150,7 @@ test("M06-03.A07/A08/A15 filters source and time, drills exact root cause, and r
   });
   const startsMobile = (page.viewportSize()?.width ?? 0) <= 760;
   await page.goto("/platform-admin/collection/overview");
-  await expect(page.getByRole("heading", { name: "来源与采集控制台", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "来源与采集控制台", level: 1 })).toBeVisible();
   await expect(
     startsMobile
       ? page.getByRole("button", { name: /公开趋势 RSS/ })
@@ -712,7 +712,7 @@ test("UI2-CL52 restores every supported filter and page from same-route history"
     });
   });
   await page.goto("/platform-admin/collection/overview");
-  await expect(page.getByRole("heading", { name: "来源与采集控制台", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "来源与采集控制台", level: 1 })).toBeVisible();
   const historyQuery = new URLSearchParams({
     organization_id: "00000000-0000-4000-8000-000000000632",
     workspace_id: "00000000-0000-4000-8000-000000000633",
