@@ -99,7 +99,7 @@ actions扫描不将普通v-model输入当独立动作，不能因此遗漏它们
 
 | 文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ScoreRuleConsole.vue | cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28 |
+| apps/web/src/components/ScoreRuleConsole.vue | d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723 |
 
 共28个源候选：25个控件/事件、3个原生dialog定义。同一个dialog位置可分别有cancel事件候选和dialog-definition，二者不是重复业务；定义不能代替各变体的提交/关闭/焦点验收。下表业务前缀沿用scoring.；原语义中的{x}/{action}严格只代表前述显式变体，不扩展成任意动作。
 

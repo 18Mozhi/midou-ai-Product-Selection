@@ -20,6 +20,32 @@ async function collectNodeTests(directory) {
 }
 
 const nodeTests = await collectNodeTests(resolve(root, "tests"));
+const nodeTestCommandPrefix = ["--experimental-strip-types", "--test", "--test-concurrency=4"];
+const nodeTestArgumentLimit = 12_000;
+const nodeTestBatches = [];
+let currentNodeTestBatch = [...nodeTestCommandPrefix];
+let currentNodeTestArgumentLength =
+  process.execPath.length +
+  1 +
+  nodeTestCommandPrefix.reduce((length, argument) => length + argument.length + 1, 0);
+for (const file of nodeTests) {
+  const argumentLength = file.length + 1;
+  if (
+    currentNodeTestBatch.length > nodeTestCommandPrefix.length &&
+    currentNodeTestArgumentLength + argumentLength > nodeTestArgumentLimit
+  ) {
+    nodeTestBatches.push(currentNodeTestBatch);
+    currentNodeTestBatch = [...nodeTestCommandPrefix];
+    currentNodeTestArgumentLength =
+      process.execPath.length +
+      1 +
+      nodeTestCommandPrefix.reduce((length, argument) => length + argument.length + 1, 0);
+  }
+  currentNodeTestBatch.push(file);
+  currentNodeTestArgumentLength += argumentLength;
+}
+if (currentNodeTestBatch.length > nodeTestCommandPrefix.length)
+  nodeTestBatches.push(currentNodeTestBatch);
 const steps = [
   {
     id: "verify-code-style",
@@ -44,9 +70,9 @@ const steps = [
   },
   {
     id: "node-tests",
-    label: `node-tests (${nodeTests.length} files)`,
+    label: `node-tests (${nodeTests.length} files, ${nodeTestBatches.length} Windows-safe batches)`,
     command: process.execPath,
-    args: ["--experimental-strip-types", "--test", "--test-concurrency=4", ...nodeTests],
+    batches: nodeTestBatches,
   },
   {
     id: "python-tests",
@@ -97,23 +123,45 @@ let status = "passed";
 for (const step of steps) {
   console.log(`[FUNCTIONAL] RUN ${step.label}`);
   const started = Date.now();
-  const result = spawnSync(step.command, step.args, {
-    cwd: root,
-    env: process.env,
-    encoding: "utf8",
-    timeout,
-    maxBuffer: 32 * 1024 * 1024,
-    shell: step.shell ?? false,
-  });
-  if (result.stdout) process.stdout.write(result.stdout);
-  if (result.stderr) process.stderr.write(result.stderr);
-  const timedOut = result.error?.code === "ETIMEDOUT";
-  const passed = result.status === 0 && !timedOut;
+  const batches = step.batches ?? [step.args];
+  const batchResults = [];
+  for (const [index, args] of batches.entries()) {
+    if (step.batches)
+      console.log(
+        `[FUNCTIONAL] NODE TEST BATCH ${index + 1}/${batches.length} files=${args.length - nodeTestCommandPrefix.length}`,
+      );
+    const result = spawnSync(step.command, args, {
+      cwd: root,
+      env: process.env,
+      encoding: "utf8",
+      timeout,
+      maxBuffer: 32 * 1024 * 1024,
+      shell: step.shell ?? false,
+    });
+    if (result.stdout) process.stdout.write(result.stdout);
+    if (result.stderr) process.stderr.write(result.stderr);
+    if (result.error)
+      process.stderr.write(
+        `[FUNCTIONAL] ${step.id} spawn error ${result.error.code}: ${result.error.message}\n`,
+      );
+    const timedOut = result.error?.code === "ETIMEDOUT";
+    const passed = result.status === 0 && !timedOut;
+    batchResults.push({
+      status: passed ? "passed" : "failed",
+      exit_code: result.status,
+      signal: result.signal,
+      error_code: result.error?.code ?? null,
+      timed_out: timedOut,
+      argument_count: args.length - nodeTestCommandPrefix.length,
+    });
+  }
+  const passed = batchResults.every((batch) => batch.status === "passed");
   results.push({
     id: step.id,
     status: passed ? "passed" : "failed",
-    exit_code: result.status,
-    timed_out: timedOut,
+    exit_code: passed ? 0 : 1,
+    timed_out: batchResults.some((batch) => batch.timed_out),
+    batches: batchResults,
     duration_ms: Date.now() - started,
   });
   if (!passed) {

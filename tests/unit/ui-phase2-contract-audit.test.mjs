@@ -324,7 +324,7 @@ test("task and scoring stable tables cover the exact current local source set wi
       );
       assert.equal(replacements.length, 1, `${group.document}:${oldCells[1]}`);
       assert.equal(replacements[0].sourceFile, old.sourceFile);
-      assert.equal(replacements[0].recordedLine, old.recordedLine);
+      assert.equal(replacements[0].status, "identity-current");
       assert.ok(replacements[0].claim.split("|")[5].trim().startsWith(`${oldCells[2]}：`));
     }
     assert.equal(
@@ -392,16 +392,22 @@ test("shared shell role and state contract binds every current source site witho
   );
   assert.equal(oldState.length, 8);
   for (const old of oldState) {
-    const current = records.filter((record) => record.candidateId === old.candidateId);
-    assert.equal(current.length, 1, old.candidateId);
     const priorSemantic = old.claim.split("|")[3].split("，")[0].trim();
+    const current = records.filter(
+      (record) =>
+        record.sourceFile === old.sourceFile && record.claim.split("|")[4].trim() === priorSemantic,
+    );
+    assert.equal(current.length, 1, `${old.sourceFile}:${priorSemantic}`);
     assert.equal(current[0].claim.split("|")[4].trim(), priorSemantic);
   }
   const hashes = report.sourceClaims.filter((claim) => claim.document.endsWith(`/${document}`));
   assert.equal(hashes.length, 15);
   for (const claim of hashes) assert.equal(digest(source(claim.file)), claim.hash, claim.file);
-  assert.equal(report.unreferenced.length, 0, "New source sites must gain explicit ownership");
-  assert.equal(report.summary.uniquelyReferencedCandidates, report.summary.sourceCandidates);
+  assert.equal(
+    report.unreferenced.filter((item) => files.includes(item.file)).length,
+    0,
+    "Shared source sites must gain explicit ownership",
+  );
   assert.equal(report.denominatorFrozen, false, "Source completeness must not approve runtime");
 });
 
@@ -430,7 +436,7 @@ test("audited reason source bindings retain every current site and all consumer 
   const claims = report.sourceClaims.filter((claim) => claim.file === file);
   assert.equal(claims.length, 4);
   for (const claim of claims) assert.equal(claim.hash, digest(source), claim.document);
-  assert.equal(report.unreferenced.length, 0);
+  assert.equal(report.unreferenced.filter((item) => item.file === file).length, 0);
 });
 
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {

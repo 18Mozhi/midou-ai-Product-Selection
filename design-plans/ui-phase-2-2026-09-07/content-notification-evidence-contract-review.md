@@ -78,31 +78,31 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
 | 2f53f8bf6591930e.1 | 383 | control | PN57-NEW 新通知草稿 |
-| 5eebd25c337b0a2c.1 | 386 | control | EMAIL-CLOSED 关闭路由保留分支 |
-| 62c28f83dd77541b.1 | 387 | control | CT56/PN57/AC63/P61-LOAD 按域刷新 |
+| 5eebd25c337b0a2c.1 | 455 | control | EMAIL-CLOSED 关闭路由保留分支 |
+| 62c28f83dd77541b.1 | 456 | control | CT56/PN57/AC63/P61-LOAD 按域刷新 |
 | 3a1faf0f5682bde3.1 | 392 | event-binding | CT56/PN57/AC63-FILTER 父转发 |
-| 79f3cfdde95076be.1 | 414 | control | CT56/PN57/AC63/P61-RETRY 非loading重读 |
-| dd1ae8b1dd3126a2.1 | 423 | event-binding | EMAIL-CLOSED 草稿转发 |
+| 79f3cfdde95076be.1 | 502 | control | CT56/PN57/AC63/P61-RETRY 非loading重读 |
+| dd1ae8b1dd3126a2.1 | 514 | event-binding | EMAIL-CLOSED 草稿转发 |
 | f2761a2c8d2de54d.1 | 432 | event-binding | CT56-REVIEW 内容行审核；email-action在本分支无生产触发 |
 | d5eb4065543ab970.1 | 442 | event-binding | CT56-PAGE 父转发 |
 | 280c245be99b4194.1 | 448 | event-binding | PN57 编辑/发布/取消及双分页父转发 |
-| 1cb3318f1d3fb321.1 | 459 | event-binding | EMAIL-CLOSED 邮件行转发 |
+| 1cb3318f1d3fb321.1 | 523 | event-binding | EMAIL-CLOSED 邮件行转发 |
 | 528025bcfd01008c.1 | 477 | control | P61 拓扑关联链接（复用记录） |
 | 5ec3f86a53bdd26b.1 | 485 | control | P61 动态节点链接（复用记录） |
 | 1c29b9e693b1be23.1 | 520 | control | P61 异常处理链接（复用记录） |
 | 4c8c3c0ab5222aee.1 | 575 | control | P61 采集任务关联（复用记录） |
 | 0e70539c0b003023.1 | 584 | control | P61 来源配置关联（复用记录） |
-| 1c008f867673db60.1 | 590 | control | SHARED-TECH 请求编号披露 |
+| 1c008f867673db60.1 | 551 | control | SHARED-TECH 请求编号披露 |
 | ca5a09f3ba2d41f2.1 | 595 | dialog-definition | CT56-REVIEW 原生审核定义 |
 | 13361d81d5bab45e.1 | 595 | event-binding | CT56-CANCEL 原生Escape事件 |
 | bc72ebe875dbe028.1 | 596 | form-event | CT56-CONFIRM 审核form |
 | 55da33db3f9ca4bf.1 | 616 | control | CT56-CANCEL 取消审核 |
 | 642126a04c8cf655.1 | 617 | control | CT56-CONFIRM 提交按钮（同form） |
 | d0dbab0cf156eec0.1 | 621 | event-binding | PN57-EDITOR 编辑器保存/关闭调用 |
-| 2c3cf7108ad053c1.1 | 630 | event-binding | SHARED-REASON 原因提交/取消转发 |
-| 4b3a546a74b4e7c1.1 | 630 | dialog-component-call | SHARED-REASON 同组件调用候选，不重复业务计数 |
-| b285a03c301c82db.1 | 239 | dialog-script-call | EMAIL-CLOSED 重试/抑制原因变体 |
-| f85ae0968844933a.1 | 318 | dialog-script-call | PN57-PUBLISH/CANCEL 发布/取消原因变体 |
+| 2c3cf7108ad053c1.1 | 576 | event-binding | SHARED-REASON 原因提交/取消转发 |
+| 4b3a546a74b4e7c1.1 | 576 | dialog-component-call | SHARED-REASON 同组件调用候选，不重复业务计数 |
+| b285a03c301c82db.1 | 260 | dialog-script-call | EMAIL-CLOSED 重试/抑制原因变体 |
+| f85ae0968844933a.1 | 343 | dialog-script-call | PN57-PUBLISH/CANCEL 发布/取消原因变体 |
 
 ### apps/web/src/components/PlatformManagementFilter.vue
 
@@ -110,38 +110,38 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | --- | --- | --- | --- |
 | ef05faf55a95a9e3.1 | 12 | dialog-component-call | CT56/PN57/AC63-FILTER 移动筛选调用 |
 | b0cd0b7f407d1c7c.1 | 13 | form-event | CT56/PN57/AC63-FILTER 表单提交 |
-| 9e678b77e73d5618.1 | 61 | control | CT56/PN57/AC63-FILTER 筛选按钮（同form） |
-| 790334fe5c024f7f.1 | 62 | control | CT56/PN57/AC63-RESET 清空读取 |
+| 9e678b77e73d5618.1 | 79 | control | CT56/PN57/AC63-FILTER 筛选按钮（同form） |
+| 790334fe5c024f7f.1 | 80 | control | CT56/PN57/AC63-RESET 清空读取 |
 
 ### apps/web/src/components/PlatformManagementRecordList.vue
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| 8a99fcbf66489c03.1 | 75 | control | CT56-REVIEW desktop active |
-| 7c7221d887da19c4.1 | 81 | control | CT56-REVIEW desktop irrelevant |
-| 668b99a263ed84a6.1 | 87 | control | CT56-REVIEW desktop stale |
-| 456551eceb771f7f.1 | 133 | control | CT56-REVIEW mobile active并关闭详情 |
-| d84e8cde45e4e349.1 | 142 | control | CT56-REVIEW mobile irrelevant并关闭详情 |
-| b64b166846728769.1 | 152 | control | CT56-REVIEW mobile stale并关闭详情 |
-| 1c008f867673db60.1 | 164 | control | CT56-TECH 内容ID/版本 |
-| 9af5f9dbe2a91364.1 | 218 | control | EMAIL-CLOSED desktop retry |
-| 372de81aab2cb631.1 | 226 | control | EMAIL-CLOSED desktop suppress |
-| 316dcafef0b88f9e.1 | 278 | control | EMAIL-CLOSED mobile retry |
-| b6cb512d02e6e29b.1 | 288 | control | EMAIL-CLOSED mobile suppress |
-| 1c008f867673db60.2 | 302 | control | EMAIL-CLOSED 邮件技术信息 |
+| 8a99fcbf66489c03.1 | 79 | control | CT56-REVIEW desktop active |
+| 7c7221d887da19c4.1 | 85 | control | CT56-REVIEW desktop irrelevant |
+| 668b99a263ed84a6.1 | 91 | control | CT56-REVIEW desktop stale |
+| 456551eceb771f7f.1 | 144 | control | CT56-REVIEW mobile active并关闭详情 |
+| d84e8cde45e4e349.1 | 153 | control | CT56-REVIEW mobile irrelevant并关闭详情 |
+| b64b166846728769.1 | 163 | control | CT56-REVIEW mobile stale并关闭详情 |
+| 1c008f867673db60.1 | 175 | control | CT56-TECH 内容ID/版本 |
+| 9af5f9dbe2a91364.1 | 229 | control | EMAIL-CLOSED desktop retry |
+| 372de81aab2cb631.1 | 237 | control | EMAIL-CLOSED desktop suppress |
+| 316dcafef0b88f9e.1 | 289 | control | EMAIL-CLOSED mobile retry |
+| b6cb512d02e6e29b.1 | 299 | control | EMAIL-CLOSED mobile suppress |
+| 1c008f867673db60.2 | 313 | control | EMAIL-CLOSED 邮件技术信息 |
 
 ### apps/web/src/components/PlatformContentPagination.vue
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| 3a1c06036af4d8a4.1 | 15 | control | CT56-PAGE 上一页 |
-| ab6f56976164b3f3.1 | 22 | control | CT56-PAGE 下一页 |
+| 3a1c06036af4d8a4.1 | 18 | control | CT56-PAGE 上一页 |
+| ab6f56976164b3f3.1 | 25 | control | CT56-PAGE 下一页 |
 
 ### apps/web/src/components/PlatformMessageWorkbench.vue
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| f095166e216904be.1 | 37 | control | PN57-BODY 完整正文原生展开/收起，三状态 |
+| f095166e216904be.1 | 96 | control | PN57-BODY 完整正文原生展开/收起，三状态 |
 | 2ae2df8d01820411.1 | 69 | control | PN57-EDIT 草稿编辑 |
 | 1161d842890c2c3d.1 | 70 | control | PN57-PUBLISH 草稿发布；邮件变体关闭 |
 | 5c263905603687c7.1 | 73 | control | PN57-CANCEL 取消草稿而非撤回 |
@@ -172,14 +172,14 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | bf271304a21c8a72.1 | 83 | control | PN57-LINK /me 当前操作者偏好 |
 | 656bc15c15ec0ab7.1 | 95 | control | PN57-LINK /platform-admin/governance |
 | 2f1d0bb94a278adc.1 | 112 | control | PN57-LINK 同治理页另一个调用点 |
-| 1c008f867673db60.1 | 185 | control | PN57-TECH 移动投递技术字段 |
+| 1c008f867673db60.1 | 106 | control | PN57-TECH 移动投递技术字段 |
 
 ### apps/web/src/components/PlatformNotificationPagination.vue
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| 3a1c06036af4d8a4.1 | 17 | control | PN57-PAGE/MESSAGE-PAGE 上一页，两消费者 |
-| ab6f56976164b3f3.1 | 24 | control | PN57-PAGE/MESSAGE-PAGE 下一页，两消费者 |
+| 3a1c06036af4d8a4.1 | 18 | control | PN57-PAGE/MESSAGE-PAGE 上一页，两消费者 |
+| ab6f56976164b3f3.1 | 25 | control | PN57-PAGE/MESSAGE-PAGE 下一页，两消费者 |
 
 ### apps/web/src/components/ApiCoverageDashboard.vue
 
@@ -196,13 +196,13 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| 9f8a46068562150e.1 | 88 | control | CT56-LOAD 刷新当前内容快照 |
-| 5ac8ba0a1715c083.1 | 105 | control | CT56-LOAD 首次读取失败后重新加载 |
-| 4a3f771edf9d117c.1 | 136 | event-binding | CT56-FILTER 转发筛选应用与重置 |
-| 6a03af01ac2673c0.1 | 153 | event-binding | CT56-REVIEW 转发当前记录与目标状态 |
-| 2b1baa06888c105d.1 | 170 | control | CT56-FILTER 空结果清除筛选 |
-| d44cbeebe40f60b2.1 | 175 | event-binding | CT56-PAGE 转发服务端分页目标 |
-| 71ad1e14ab5adcdd.1 | 186 | control | CT56-TRACE 展开本次读取追踪编号 |
+| 9f8a46068562150e.1 | 92 | control | CT56-LOAD 刷新当前内容快照 |
+| 5ac8ba0a1715c083.1 | 109 | control | CT56-LOAD 首次读取失败后重新加载 |
+| 4a3f771edf9d117c.1 | 140 | event-binding | CT56-FILTER 转发筛选应用与重置 |
+| 6a03af01ac2673c0.1 | 157 | event-binding | CT56-REVIEW 转发当前记录与目标状态 |
+| 2b1baa06888c105d.1 | 174 | control | CT56-FILTER 空结果清除筛选 |
+| d44cbeebe40f60b2.1 | 179 | event-binding | CT56-PAGE 转发服务端分页目标 |
+| 71ad1e14ab5adcdd.1 | 190 | control | CT56-TRACE 展开本次读取追踪编号 |
 
 ### apps/web/src/components/PlatformContentReviewDialog.vue
 
@@ -230,10 +230,10 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| bfe687b5e3775fab.1 | 405 | event-binding | CT56-LOAD/FILTER/PAGE/REVIEW 将P56专用工作台事件转发到当前组合式状态 |
+| bfe687b5e3775fab.1 | 419 | event-binding | CT56-LOAD/FILTER/PAGE/REVIEW 将P56专用工作台事件转发到当前组合式状态 |
 | 7da8341abecdd3b7.1 | 444 | event-binding | 非P56管理域继续使用旧筛选分支；`domain !== 'content'` 明确隔离 |
-| f5cb087b206b4a60.1 | 633 | event-binding | CT56-CANCEL/CONFIRM 将P56审核窗事件转发到单飞提交状态 |
-| 6ac3264cbd6eac5b.1 | 633 | dialog-component-call | CT56-REVIEW P56专用审核窗组件调用；与同节点事件候选不重复计数 |
+| f5cb087b206b4a60.1 | 556 | event-binding | CT56-CANCEL/CONFIRM 将P56审核窗事件转发到单飞提交状态 |
+| 6ac3264cbd6eac5b.1 | 556 | dialog-component-call | CT56-REVIEW P56专用审核窗组件调用；与同节点事件候选不重复计数 |
 
 #### apps/web/src/components/PlatformManagementFilter.vue
 
@@ -281,13 +281,13 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
 | apps/web/src/components/TableViewControls.vue | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
-| apps/web/src/components/AuditedReasonDialog.vue | b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb |
+| apps/web/src/components/AuditedReasonDialog.vue | 3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a |
 | apps/web/src/components/use-platform-content-list.ts | 48005b5d0b70e22358f7aba27048717b980701ae2fcaaab52b32943a65770ff9 |
 | apps/web/src/components/use-platform-content-review.ts | e700d67e95e44859d7283b7370ad4690fd13cf341cb87a1e556a414ede9dbfe2 |
 | apps/web/src/components/use-platform-notification-list.ts | 2e697d3a5f53cdfded5335bc693fcd9f7ed1a7d9f8b2dc0a543708269bfdc61b |
 | apps/web/src/components/use-platform-status.ts | 735f0c250153e075fdf39ca40c5c47b63b7aa30dfe85e1c9f9381bc7e56d068a |
 | apps/web/src/components/platform-management-presentation.ts | 1d5bfec09dfc7efb63cc6d31bdbc924b35eb1d4092fe1e20fa60d779bd259133 |
-| apps/web/src/use-modal-dialog.ts | 08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f |
+| apps/web/src/use-modal-dialog.ts | 5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc |
 | apps/web/src/use-audited-reason.ts | e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab |
 | apps/api/src/platform-dashboard-routes.ts | 1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30 |
 | apps/api/src/platform-dashboard-service.ts | 568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e |

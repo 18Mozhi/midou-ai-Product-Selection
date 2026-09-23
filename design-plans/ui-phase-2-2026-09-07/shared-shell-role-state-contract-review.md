@@ -23,18 +23,18 @@ LF归一SHA256。六个候选文件完整扫描；辅助文件只沿相关调用
 
 | 文件 | SHA256 |
 | --- | --- |
-| apps/web/src/components/DiscoveryOverlay.vue | 6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27 |
-| apps/web/src/components/NavigationShell.vue | 4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc |
-| apps/web/src/components/NotFoundPage.vue | 2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b |
+| apps/web/src/components/DiscoveryOverlay.vue | 2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977 |
+| apps/web/src/components/NavigationShell.vue | 01878e559a84192b08c4086b0d0f00d3b35d4e6f34b82c6fc9c66c2211366a6e |
+| apps/web/src/components/NotFoundPage.vue | 9ebbf97a724300fa2b17be2bc76973fe22abb14a290d84222915c09b7e2f44b7 |
 | apps/web/src/components/OrganizationRolePanel.vue | aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415 |
-| apps/web/src/components/UiStateShowcase.vue | c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30 |
-| apps/web/src/use-modal-dialog.ts | 08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f |
+| apps/web/src/components/UiStateShowcase.vue | 398e4c5ad69feb5259a69bc034ca6fdc98cf936426d3075637b253576d236ad3 |
+| apps/web/src/use-modal-dialog.ts | 5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc |
 | apps/web/src/use-navigation-discovery.ts | e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94 |
 | apps/web/src/use-navigation-shell-theme.ts | b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56 |
 | apps/web/src/navigation-memory.ts | af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f |
 | apps/web/src/navigation-shell-permissions.ts | 8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1 |
-| apps/web/src/navigation-shell-route-state.ts | 40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974 |
-| apps/web/src/components/OrganizationAdminCenter.vue | 3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93 |
+| apps/web/src/navigation-shell-route-state.ts | 7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458 |
+| apps/web/src/components/OrganizationAdminCenter.vue | 0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04 |
 | apps/web/src/App.vue | e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531 |
 | apps/web/src/router.ts | 67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4 |
 | apps/api/src/discovery-routes.ts | 7c281090d8f7e76121b0abcdf1c88b40d066cdcad38f5d9a4e6e2df29d886579 |
@@ -47,60 +47,60 @@ LF归一SHA256。六个候选文件完整扫描；辅助文件只沿相关调用
 
 | candidateId | 行 | 类型 | 语义归属 | 真实动作与边界 | 待验组 |
 | --- | --- | --- | --- | --- | --- |
-| apps/web/src/components/DiscoveryOverlay.vue#fc9fbb3a461cfbb6.1 | 249 | dialog-definition | discovery.dialog | 原生dialog定义；search/create两个模式，复用同一实例 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#002b8e0f6dc06a65.1 | 249 | event-binding | discovery.close.escape/backdrop; discovery.focus.cycle | cancel经handleCancel.preventDefault；仅mousedown.self.prevent取消遮罩默认抢焦；keydown Tab在可见可用首末控件循环 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#3886e9e1d2205bab.1 | 265 | control | discovery.close.button | 关闭按钮emit close；三种关闭入口分别验证返焦 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#6e4c847155323708.1 | 267 | form-event | discovery.search | submit.prevent调用search；与Enter入口共用动作，短查询给本地字段提示 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#422ce833775d95d6.1 | 270 | event-binding | discovery.search | input keydown.enter.prevent调用search；搜索关键词关联queryError和aria-invalid，合法重试清除错误 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#372af47cc630ef33.1 | 316 | event-binding | discovery.retry.{mode}; discovery.close.state | UiStatePanel primary转search或loadActions，新读清旧关联标识；secondary显式关闭，不假称申请权限 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#2954096bdfc7268c.1 | 343 | control | discovery.result.navigate.{resourceType} | RouterLink到服务端item.route；普通点击先关闭，修饰键/非左键保留窗口语义 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#eabfc750d1907e5d.1 | 354 | control | discovery.quick.navigate.{actionId} | 记录当前组件最近ID；普通点击关闭并导航item.route，不提前创建对象 | UI2-DI01–DI06 |
-| apps/web/src/components/DiscoveryOverlay.vue#65142520df6ee647.1 | 373 | control | discovery.notifications | member底部链接去/notifications；普通点击关闭弹窗 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#fc1b08713168f528.1 | 249 | dialog-definition | discovery.dialog | 原生dialog定义；search/create两个模式，复用同一实例 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#0bdd86949b1fd9d3.1 | 249 | event-binding | discovery.close.escape/backdrop; discovery.focus.cycle | cancel经handleCancel.preventDefault；仅mousedown.self.prevent取消遮罩默认抢焦；keydown Tab在可见可用首末控件循环 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#3886e9e1d2205bab.1 | 266 | control | discovery.close.button | 关闭按钮emit close；三种关闭入口分别验证返焦 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#6e4c847155323708.1 | 268 | form-event | discovery.search | submit.prevent调用search；与Enter入口共用动作，短查询给本地字段提示 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#422ce833775d95d6.1 | 271 | event-binding | discovery.search | input keydown.enter.prevent调用search；搜索关键词关联queryError和aria-invalid，合法重试清除错误 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#372af47cc630ef33.1 | 317 | event-binding | discovery.retry.{mode}; discovery.close.state | UiStatePanel primary转search或loadActions，新读清旧关联标识；secondary显式关闭，不假称申请权限 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#2954096bdfc7268c.1 | 344 | control | discovery.result.navigate.{resourceType} | RouterLink到服务端item.route；普通点击先关闭，修饰键/非左键保留窗口语义 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#eabfc750d1907e5d.1 | 355 | control | discovery.quick.navigate.{actionId} | 记录当前组件最近ID；普通点击关闭并导航item.route，不提前创建对象 | UI2-DI01–DI06 |
+| apps/web/src/components/DiscoveryOverlay.vue#65142520df6ee647.1 | 374 | control | discovery.notifications | member底部链接去/notifications；普通点击关闭弹窗 | UI2-DI01–DI06 |
 
 ### apps/web/src/components/NavigationShell.vue
 
 | candidateId | 行 | 类型 | 语义归属 | 真实动作与边界 | 待验组 |
 | --- | --- | --- | --- | --- | --- |
-| apps/web/src/components/NavigationShell.vue#d597913db5935f66.1 | 349 | control | shell.brand | 按三种shell跳转/home、/org-admin或/platform-admin | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#4406969a265df88c.1 | 368 | control | shell.menu.toggle | menuOpen取反；控制role-navigation，不写业务数据 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#8dd0e178ad9b3805.1 | 380 | control | shell.theme.toggle | themeOpen取反；是浮层开关，不是原生dialog | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#3e7327184ae485df.1 | 384 | control | discovery.open.search | member搜索入口；openDiscovery(search) | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#a7c175d8d28f0e5d.1 | 387 | control | shell.platform.organization.new | platform_admin且platform:superadmin时导航到创建组织页，不在此创建 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#144c13fb8312e48f.1 | 394 | control | shell.organization.members | organization_admin壳层且guard.roles含organization_admin时导航成员页，不发送邀请 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#4a47ef3decd65106.1 | 402 | control | discovery.open.create | member快捷入口；openDiscovery(create)，不创建实体 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#5f177f6584a8f0d2.1 | 411 | control | shell.notifications | member导航/notifications | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#834cb169e185e0d1.1 | 413 | control | shell.account | 导航/me，目标为AccountShell | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#31e4cab37308ba7f.1 | 454 | control | shell.navigation.group.toggle | 原生details/summary；按动态group展开，搜索时自动open | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#b78108402d8cae8b.1 | 459 | control | shell.navigation.item | 按授权items导航；同时关闭menuOpen并清空menuQuery | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#3afd6f3de7d5759c.1 | 472 | control | shell.platform.return.context | 平台返回先选范围；return_to为最近成员路由，from为当前fullPath | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#a37faaadc1909cc4.1 | 478 | control | shell.organization.return.member | 组织壳层返回getLastMemberRoute() | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#3eee0be2f448f7bb.1 | 484 | control | shell.member.enter.organization | member且guard.roles含organization_admin才显示 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#8ca53865fab9dca4.1 | 490 | control | shell.member.enter.platform | member且guard.platform_roles非空才显示；导航不是授权证明 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#ff6d5fbc586803ed.1 | 508 | control | shell.gate.technical.toggle | requestId/traceId存在时披露故障详情 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#5587941412d5210f.1 | 512 | control | shell.gate.login | 导航读取expired时去/login；当前代码不附带return_to | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#35c184e325be143b.1 | 513 | control | shell.gate.context | context_required去/select-context | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#31a7202bbbcbf38a.1 | 515 | control | shell.gate.home | 导航读取forbidden去/home | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#b83ca94093e36cba.1 | 516 | control | shell.gate.retry | 非loading且非前三类恢复链接时load()；重读/me/navigation | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#be9e2c92e3dca900.1 | 521 | control | shell.breadcrumb.navigate | breadcrumbTrail产生path才可导航；无path只显示文本 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#827ec3c5575d94f5.1 | 563 | control | shell.context.disclose | 上下文原生details；非机会ID页面，响应式可见性另验 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#3a4be4a53966fde8.1 | 592 | control | shell.operations.navigate | 平台运维二级导航固定十项目；链接展示不代替目标路由权限 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#6d2a591c632f75fb.1 | 612 | control | shell.surface.missing.return | 无selectedSurfaceComponent时去items[0].path或/ | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#6ba08dfa7cf297ec.1 | 622 | control | shell.route.forbidden.return | ready但routeAllowed=false时去items[0].path或/home | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#5689a1a88f3983e9.1 | 623 | control | shell.route.forbidden.permissions | 导航/me?section=permissions，不直接申请或修改权限 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#155e2256621bdcb3.1 | 628 | control | shell.navigation.item | 移动primaryItems=items前四项；同导航语义的另一个渲染点，此处不清menuQuery | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#0b2e86222c168adc.1 | 634 | control | shell.menu.open | 移动更多仅设置menuOpen=true，不等于toggle | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#8c3e23399022ee54.1 | 645 | control | shell.theme.choose.{themeId} | 三主题动态按钮；member/org版本化保存，platform只本地应用；见主题边界 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#f8690b21af426414.1 | 660 | control | shell.theme.settings | 导航/settings/theme；此链接本身没有关闭themeOpen处理 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#c5cd954168e369ca.1 | 665 | event-binding | discovery.close | DiscoveryOverlay的close事件转closeDiscovery()，清discoveryMode | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#5e8a6b546ab251fb.1 | 665 | dialog-component-call | discovery.dialog | DiscoveryOverlay组件调用；搜索/创建两变体，与定义非重复业务弹窗 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#d597913db5935f66.1 | 371 | control | shell.brand | 按三种shell跳转/home、/org-admin或/platform-admin | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#4406969a265df88c.1 | 390 | control | shell.menu.toggle | menuOpen取反；控制role-navigation，不写业务数据 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#8dd0e178ad9b3805.1 | 402 | control | shell.theme.toggle | themeOpen取反；是浮层开关，不是原生dialog | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#3e7327184ae485df.1 | 406 | control | discovery.open.search | member搜索入口；openDiscovery(search) | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#a7c175d8d28f0e5d.1 | 409 | control | shell.platform.organization.new | platform_admin且platform:superadmin时导航到创建组织页，不在此创建 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#144c13fb8312e48f.1 | 416 | control | shell.organization.members | organization_admin壳层且guard.roles含organization_admin时导航成员页，不发送邀请 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#4a47ef3decd65106.1 | 424 | control | discovery.open.create | member快捷入口；openDiscovery(create)，不创建实体 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#5f177f6584a8f0d2.1 | 433 | control | shell.notifications | member导航/notifications | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#834cb169e185e0d1.1 | 435 | control | shell.account | 导航/me，目标为AccountShell | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#31e4cab37308ba7f.1 | 476 | control | shell.navigation.group.toggle | 原生details/summary；按动态group展开，搜索时自动open | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#b78108402d8cae8b.1 | 481 | control | shell.navigation.item | 按授权items导航；同时关闭menuOpen并清空menuQuery | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#3afd6f3de7d5759c.1 | 494 | control | shell.platform.return.context | 平台返回先选范围；return_to为最近成员路由，from为当前fullPath | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#a37faaadc1909cc4.1 | 500 | control | shell.organization.return.member | 组织壳层返回getLastMemberRoute() | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#3eee0be2f448f7bb.1 | 506 | control | shell.member.enter.organization | member且guard.roles含organization_admin才显示 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#8ca53865fab9dca4.1 | 512 | control | shell.member.enter.platform | member且guard.platform_roles非空才显示；导航不是授权证明 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#ff6d5fbc586803ed.1 | 530 | control | shell.gate.technical.toggle | requestId/traceId存在时披露故障详情 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#5587941412d5210f.1 | 534 | control | shell.gate.login | 导航读取expired时去/login；当前代码不附带return_to | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#35c184e325be143b.1 | 535 | control | shell.gate.context | context_required去/select-context | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#31a7202bbbcbf38a.1 | 537 | control | shell.gate.home | 导航读取forbidden去/home | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#b83ca94093e36cba.1 | 538 | control | shell.gate.retry | 非loading且非前三类恢复链接时load()；重读/me/navigation | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#be9e2c92e3dca900.1 | 543 | control | shell.breadcrumb.navigate | breadcrumbTrail产生path才可导航；无path只显示文本 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#827ec3c5575d94f5.1 | 597 | control | shell.context.disclose | 上下文原生details；非机会ID页面，响应式可见性另验 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#3a4be4a53966fde8.1 | 626 | control | shell.operations.navigate | 平台运维二级导航固定十项目；链接展示不代替目标路由权限 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#6d2a591c632f75fb.1 | 646 | control | shell.surface.missing.return | 无selectedSurfaceComponent时去items[0].path或/ | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#6ba08dfa7cf297ec.1 | 656 | control | shell.route.forbidden.return | ready但routeAllowed=false时去items[0].path或/home | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#5689a1a88f3983e9.1 | 657 | control | shell.route.forbidden.permissions | 导航/me?section=permissions，不直接申请或修改权限 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#155e2256621bdcb3.1 | 662 | control | shell.navigation.item | 移动primaryItems=items前四项；同导航语义的另一个渲染点，此处不清menuQuery | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#0b2e86222c168adc.1 | 668 | control | shell.menu.open | 移动更多仅设置menuOpen=true，不等于toggle | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#8c3e23399022ee54.1 | 679 | control | shell.theme.choose.{themeId} | 三主题动态按钮；member/org版本化保存，platform只本地应用；见主题边界 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#f8690b21af426414.1 | 694 | control | shell.theme.settings | 导航/settings/theme；此链接本身没有关闭themeOpen处理 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#c5cd954168e369ca.1 | 699 | event-binding | discovery.close | DiscoveryOverlay的close事件转closeDiscovery()，清discoveryMode | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#5e8a6b546ab251fb.1 | 699 | dialog-component-call | discovery.dialog | DiscoveryOverlay组件调用；搜索/创建两变体，与定义非重复业务弹窗 | UI2-SH01–SH06 |
 
 ### apps/web/src/components/NotFoundPage.vue
 
 | candidateId | 行 | 类型 | 语义归属 | 真实动作与边界 | 待验组 |
 | --- | --- | --- | --- | --- | --- |
 | apps/web/src/components/NotFoundPage.vue#ad49e2f05ad189d6.1 | 46 | control | NF-BRAND | 沿用state-recovery合同：品牌导航/home | NF03/NF04 |
-| apps/web/src/components/NotFoundPage.vue#0b84761726a96f8e.1 | 78 | control | NF-RETURN | 沿用原ID：router.resolve最近有效路由；未登记/解析失败回/home | NF03/NF04 |
-| apps/web/src/components/NotFoundPage.vue#7ed277e44773eac9.1 | 81 | control | NF-HOME | 沿用原ID：最近目标path非/home时另显/home链接 | NF03/NF04 |
+| apps/web/src/components/NotFoundPage.vue#0b84761726a96f8e.1 | 70 | control | NF-RETURN | 沿用原ID：router.resolve最近有效路由；未登记/解析失败回/home | NF03/NF04 |
+| apps/web/src/components/NotFoundPage.vue#7ed277e44773eac9.1 | 73 | control | NF-HOME | 沿用原ID：最近目标path非/home时另显/home链接 | NF03/NF04 |
 
 ### apps/web/src/components/OrganizationRolePanel.vue
 
@@ -130,12 +130,12 @@ LF归一SHA256。六个候选文件完整扫描；辅助文件只沿相关调用
 
 | candidateId | 行 | 类型 | 语义归属 | 真实动作与边界 | 待验组 |
 | --- | --- | --- | --- | --- | --- |
-| apps/web/src/components/UiStateShowcase.vue#a51b976ddba112e1.1 | 98 | control | ST-HOME | 沿用state-recovery合同：品牌导航/home | ST05/ST06 |
-| apps/web/src/components/UiStateShowcase.vue#7f48e1357c8dae41.1 | 106 | control | ST-SELECT.{kind} | 八态选择；query合法同态不增加history，initialState存在则不接管query | ST05/ST06 |
-| apps/web/src/components/UiStateShowcase.vue#659be34503b475d2.1 | 117 | control | ST-OPEN | 仅dialogOpen=true，打开演示确认 | ST05/ST06 |
-| apps/web/src/components/UiStateShowcase.vue#b2a9d9fdd632dd45.1 | 126 | event-binding | ST-PRIMARY.{kind}/ST-SECONDARY.{kind} | UiStatePanel两个事件绑定在同一候选；按既有八态表执行本地示例或导航 | ST05/ST06 |
-| apps/web/src/components/UiStateShowcase.vue#5cb580b48eea94d3.1 | 151 | event-binding | ST-CANCEL/ST-CONFIRM | 关闭演示；confirm额外confirmed=true，不执行授权撤销 | ST05/ST06 |
-| apps/web/src/components/UiStateShowcase.vue#2067b78f30a4668d.1 | 151 | dialog-component-call | ST-DEMO-CONFIRM | ConfirmDialog演示调用变体；与共享定义归一，不是useModalDialog消费者 | ST05/ST06 |
+| apps/web/src/components/UiStateShowcase.vue#6716f11d5cb87664.1 | 98 | control | ST-HOME | 沿用state-recovery合同：品牌导航/home | ST05/ST06 |
+| apps/web/src/components/UiStateShowcase.vue#7f48e1357c8dae41.1 | 113 | control | ST-SELECT.{kind} | 八态选择；query合法同态不增加history，initialState存在则不接管query | ST05/ST06 |
+| apps/web/src/components/UiStateShowcase.vue#659be34503b475d2.1 | 161 | control | ST-OPEN | 仅dialogOpen=true，打开演示确认 | ST05/ST06 |
+| apps/web/src/components/UiStateShowcase.vue#b2a9d9fdd632dd45.1 | 133 | event-binding | ST-PRIMARY.{kind}/ST-SECONDARY.{kind} | UiStatePanel两个事件绑定在同一候选；按既有八态表执行本地示例或导航 | ST05/ST06 |
+| apps/web/src/components/UiStateShowcase.vue#5cb580b48eea94d3.1 | 173 | event-binding | ST-CANCEL/ST-CONFIRM | 关闭演示；confirm额外confirmed=true，不执行授权撤销 | ST05/ST06 |
+| apps/web/src/components/UiStateShowcase.vue#2067b78f30a4668d.1 | 173 | dialog-component-call | ST-DEMO-CONFIRM | ConfirmDialog演示调用变体；与共享定义归一，不是useModalDialog消费者 | ST05/ST06 |
 
 ### apps/web/src/use-modal-dialog.ts
 

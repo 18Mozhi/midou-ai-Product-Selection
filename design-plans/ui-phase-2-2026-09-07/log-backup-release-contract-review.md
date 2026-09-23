@@ -70,22 +70,22 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | ------------------ | --- | --------------------- | -------------------------------- |
 | a4a224d771806ee7.1 | 265 | control               | LG62-EXPORT 导出原因入口         |
 | a73ee10987ddca35.1 | 268 | control               | LG62-LOAD 刷新                   |
-| e4314256fea2aeac.1 | 274 | dialog-component-call | LG62-FILTER 移动筛选消费者       |
-| ef169b3c5b08be4e.1 | 275 | form-event            | LG62-APPLY 查询form              |
-| d2bd484790411f68.1 | 294 | control               | LG62-RESET 重置                  |
-| 280c88beee4f3de8.1 | 297 | control               | LG62-APPLY 同form提交            |
+| e4314256fea2aeac.1 | 380 | dialog-component-call | LG62-FILTER 移动筛选消费者       |
+| ef169b3c5b08be4e.1 | 381 | form-event            | LG62-APPLY 查询form              |
+| d2bd484790411f68.1 | 400 | control               | LG62-RESET 重置                  |
+| 280c88beee4f3de8.1 | 403 | control               | LG62-APPLY 同form提交            |
 | fc60d9191880683a.1 | 317 | control               | LG62-LOAD 重新加载               |
-| d7ff6351cbc06807.1 | 352 | control               | LG62-TRACE 展开完整链编号        |
-| af1fa7b422aa7bcd.1 | 401 | control               | LG62-TASK 桌面异常任务跳转       |
-| c4b53a994d00ca34.1 | 404 | control               | LG62-PROVIDER 桌面异常来源跳转   |
-| 5d0b99550cb761b8.1 | 413 | control               | LG62-IDS 桌面记录编号            |
-| 1b10ffebcf6798fe.1 | 459 | control               | LG62-TASK 移动异常任务跳转       |
-| ec46ae5cddba062a.1 | 460 | control               | LG62-PROVIDER 移动异常来源跳转   |
-| 1c008f867673db60.1 | 464 | control               | LG62-IDS 移动技术展开            |
+| d7ff6351cbc06807.1 | 528 | control               | LG62-TRACE 展开完整链编号        |
+| af1fa7b422aa7bcd.1 | 577 | control               | LG62-TASK 桌面异常任务跳转       |
+| c4b53a994d00ca34.1 | 580 | control               | LG62-PROVIDER 桌面异常来源跳转   |
+| 5d0b99550cb761b8.1 | 591 | control               | LG62-IDS 桌面记录编号            |
+| 1b10ffebcf6798fe.1 | 637 | control               | LG62-TASK 移动异常任务跳转       |
+| ec46ae5cddba062a.1 | 638 | control               | LG62-PROVIDER 移动异常来源跳转   |
+| 1c008f867673db60.1 | 644 | control               | LG62-IDS 移动技术展开            |
 | 1f77079e4af40f1a.1 | 476 | control               | LG62-REQUEST 查询编号            |
 | 30a784886ed82e8b.1 | 481 | event-binding         | LG62-REASON 提交/取消转发        |
 | 1bfd5d9fa0fdcd5e.1 | 481 | dialog-component-call | LG62-REASON 原因组件调用         |
-| 5d23ad02d6538b9c.1 | 193 | dialog-script-call    | LG62-EXPORT 同一原因窗的脚本请求 |
+| 5d23ad02d6538b9c.1 | 276 | dialog-script-call    | LG62-EXPORT 同一原因窗的脚本请求 |
 
 | v-model | 属性行 | 元素   |
 | ------- | ------ | ------ |
@@ -98,33 +98,33 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | ------------------ | --- | ------- | ------------------- |
 | de2ebca33ff1e487.1 | 150 | control | BR64-LOAD 刷新      |
 | 21c66441891be768.1 | 165 | control | BR64-RETRY 快照告警 |
-| 5587941412d5210f.1 | 178 | control | BR64-LOGIN 过期登录 |
+| 5587941412d5210f.1 | 241 | control | BR64-LOGIN 过期登录 |
 | 227b66d9ec4e0216.1 | 179 | control | BR64-RETRY 首次错误 |
-| 1c008f867673db60.1 | 263 | control | BR64-TECH 桌面资产  |
-| 1c008f867673db60.2 | 316 | control | BR64-TECH 移动资产  |
-| 1c008f867673db60.3 | 398 | control | BR64-TECH 阻断代码  |
+| 1c008f867673db60.1 | 428 | control | BR64-TECH 桌面资产  |
+| 1c008f867673db60.2 | 484 | control | BR64-TECH 移动资产  |
+| 1c008f867673db60.3 | 506 | control | BR64-TECH 阻断代码  |
 
 ### apps/web/src/components/ReleaseRolloutCenter.vue
 
 | 签名.序号          | 行  | 类型    | 语义/消费者                    |
 | ------------------ | --- | ------- | ------------------------------ |
 | f801437d922c379b.1 | 154 | control | RL65-LOAD 刷新                 |
-| 7e7fceb8ddc95b63.1 | 157 | control | RL65-COVERAGE 超管查看接口证据 |
+| 7e7fceb8ddc95b63.1 | 199 | control | RL65-COVERAGE 超管查看接口证据 |
 | 21c66441891be768.1 | 175 | control | RL65-RETRY 快照告警            |
-| 5587941412d5210f.1 | 187 | control | RL65-LOGIN 过期登录            |
+| 5587941412d5210f.1 | 252 | control | RL65-LOGIN 过期登录            |
 | 227b66d9ec4e0216.1 | 188 | control | RL65-RETRY 首次错误            |
-| 1c008f867673db60.1 | 334 | control | RL65-TECH 桌面门指标           |
-| 1c008f867673db60.2 | 391 | control | RL65-TECH 移动门指标           |
-| 1c008f867673db60.3 | 441 | control | RL65-TECH 阻断代码             |
+| 1c008f867673db60.1 | 530 | control | RL65-TECH 桌面门指标           |
+| 1c008f867673db60.2 | 588 | control | RL65-TECH 移动门指标           |
+| 1c008f867673db60.3 | 714 | control | RL65-TECH 阻断代码             |
 
 ### apps/web/src/components/AuditedReasonDialog.vue
 
 | 签名.序号          | 行  | 类型              | 语义/消费者                                                   |
 | ------------------ | --- | ----------------- | ------------------------------------------------------------- |
-| 0a9c82c5c5fb1fd7.1 | 59  | dialog-definition | LG62-REASON 原生dialog定义；可选P32恢复上下文不改变本调用     |
-| 0b86489e495d6b17.1 | 59  | event-binding     | LG62-REASON Escape转发及可用控件首末Tab循环；处理函数不变     |
-| 7aa809a5cd2d2124.1 | 69  | form-event        | LG62-REASON 表单提交；可选P54上限提示不改变P62默认校验/submit |
-| f850a4abcc7ccc3a.1 | 75  | control           | LG62-REASON 顶部取消                                          |
+| 0a9c82c5c5fb1fd7.1 | 60 | dialog-definition | LG62-REASON 原生dialog定义；可选P32恢复上下文不改变本调用     |
+| 0b86489e495d6b17.1 | 60 | event-binding     | LG62-REASON Escape转发及可用控件首末Tab循环；处理函数不变     |
+| 7aa809a5cd2d2124.1 | 69 | form-event        | LG62-REASON 表单提交；可选P54上限提示不改变P62默认校验/submit |
+| f850a4abcc7ccc3a.1 | 75 | control           | LG62-REASON 顶部取消                                          |
 | 8724bc1f65aaf63a.1 | 108 | control           | LG62-REASON 底部取消                                          |
 | e7e63c4215a43738.1 | 109 | control           | LG62-REASON 同form确认                                        |
 
@@ -136,30 +136,30 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 签名.序号          | 行  | 类型          | 语义/消费者                  |
 | ------------------ | --- | ------------- | ---------------------------- |
-| 28fb788b88500472.1 | 71  | event-binding | LG62-FILTER 外层键盘         |
+| 28fb788b88500472.1 | 99 | event-binding | LG62-FILTER 外层键盘         |
 | beb5f8d5846aa028.1 | 76  | control       | LG62-FILTER 打开筛选         |
-| e03968eb8d9e92a8.1 | 89  | event-binding | LG62-FILTER portal键盘       |
-| 483082db5a776bf3.1 | 99  | control       | LG62-FILTER 遮罩取消         |
-| df1390feb7424a07.1 | 117 | control       | LG62-FILTER 顶部关闭         |
-| cd956325fcd081da.1 | 121 | event-binding | LG62-FILTER form提交捕获关闭 |
+| e03968eb8d9e92a8.1 | 118 | event-binding | LG62-FILTER portal键盘       |
+| 483082db5a776bf3.1 | 133 | control       | LG62-FILTER 遮罩取消         |
+| df1390feb7424a07.1 | 152 | control       | LG62-FILTER 顶部关闭         |
+| cd956325fcd081da.1 | 156 | event-binding | LG62-FILTER form提交捕获关闭 |
 
 ### apps/web/src/components/ResponsiveDataView.vue
 
 | 签名.序号          | 行  | 类型              | 语义/消费者                          |
 | ------------------ | --- | ----------------- | ------------------------------------ |
-| 6da4dad42cb34c8d.1 | 46  | control           | 三页移动记录打开（日志每链一个实例） |
+| 6da4dad42cb34c8d.1 | 165 | control           | 三页移动记录打开（日志每链一个实例） |
 | 4fa7deb3456a41ae.1 | 53  | event-binding     | 三页移动详情Escape                   |
 | 53d89072117d7eda.1 | 54  | control           | 三页移动详情遮罩关闭                 |
 | e23893d134b1daa1.1 | 60  | dialog-definition | 三页移动详情dialog定义               |
-| 847801b2ac6e7a17.1 | 71  | control           | 三页移动详情顶部关闭                 |
+| 847801b2ac6e7a17.1 | 203 | control           | 三页移动详情顶部关闭                 |
 
 ### apps/web/src/components/TableViewControls.vue
 
 | 签名.序号          | 行  | 类型          | 语义/消费者            |
 | ------------------ | --- | ------------- | ---------------------- |
-| e2fd0d02cbd9f684.1 | 78  | control       | 三页桌面记录列设置     |
-| 921f4be18a3fe814.1 | 82  | event-binding | 三页桌面列显隐至少留一 |
-| d09cd5524db7bee5.1 | 95  | control       | 三页桌面冻结首个可见列 |
+| e2fd0d02cbd9f684.1 | 79 | control       | 三页桌面记录列设置     |
+| 921f4be18a3fe814.1 | 84 | event-binding | 三页桌面列显隐至少留一 |
+| d09cd5524db7bee5.1 | 105 | control       | 三页桌面冻结首个可见列 |
 
 | v-model | 属性行 | 元素   |
 | ------- | ------ | ------ |
@@ -169,8 +169,8 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 签名.序号          | 行  | 类型    | 语义/消费者             |
 | ------------------ | --- | ------- | ----------------------- |
-| b3ffca8eb967d682.1 | 36  | control | P64/P65请求编号技术展开 |
-| c19091da9e2471f1.1 | 43  | control | P64/P65请求编号复制     |
+| b3ffca8eb967d682.1 | 62 | control | P64/P65请求编号技术展开 |
+| c19091da9e2471f1.1 | 69 | control | P64/P65请求编号复制     |
 
 ## 6. 来源指纹
 
@@ -181,13 +181,13 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | apps/web/src/components/PlatformLogCenter.vue       | 4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d |
 | apps/web/src/components/BackupRecoveryCenter.vue    | 6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02 |
 | apps/web/src/components/ReleaseRolloutCenter.vue    | 0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1 |
-| apps/web/src/components/AuditedReasonDialog.vue     | b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb |
+| apps/web/src/components/AuditedReasonDialog.vue     | 3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a |
 | apps/web/src/components/ResponsiveFilterDrawer.vue  | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
 | apps/web/src/components/ResponsiveDataView.vue      | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/TableViewControls.vue       | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
 | apps/web/src/components/TechnicalDetails.vue        | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 | apps/web/src/use-audited-reason.ts                  | e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab |
-| apps/web/src/use-modal-dialog.ts                    | 08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f |
+| apps/web/src/use-modal-dialog.ts                    | 5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc |
 | apps/web/src/api-client.ts                          | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | apps/api/src/platform-dashboard-routes.ts           | 1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30 |
 | apps/api/src/platform-dashboard-service.ts          | 568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e |
