@@ -263,6 +263,141 @@ test("first-time security setup uses native MFA validation and preserves the sam
   });
 });
 
+test("P02 completes the seeded password-change and MFA setup chain without retaining setup secrets", async ({
+  page,
+}) => {
+  const writes: Array<{ url: string; method: string; body: unknown }> = [];
+  let loginCount = 0;
+  await page.route("**/api/v1/auth/login", async (route) => {
+    loginCount += 1;
+    writes.push({
+      url: "/auth/login",
+      method: route.request().method(),
+      body: route.request().postDataJSON(),
+    });
+    await route.fulfill({
+      json: {
+        data: {
+          security_setup: {
+            required: true,
+            must_change_password: loginCount === 1,
+            must_enroll_mfa: true,
+          },
+        },
+        request_id: `p02-seed-login-${loginCount}`,
+        trace_id: `p02-seed-login-${loginCount}`,
+      },
+    });
+  });
+  await page.route("**/api/v1/me/password", async (route) => {
+    writes.push({
+      url: "/me/password",
+      method: route.request().method(),
+      body: route.request().postDataJSON(),
+    });
+    await route.fulfill({ status: 204 });
+  });
+  await page.route("**/api/v1/me/mfa/totp/enrollment", async (route) => {
+    writes.push({
+      url: "/me/mfa/totp/enrollment",
+      method: route.request().method(),
+      body: route.request().postDataJSON(),
+    });
+    await route.fulfill({
+      status: 201,
+      json: {
+        data: { secret: "p02-synthetic-seed-secret" },
+        request_id: "p02-seed-enrollment",
+        trace_id: "p02-seed-enrollment",
+      },
+    });
+  });
+  await page.route("**/api/v1/me/mfa/totp/confirm", async (route) => {
+    writes.push({
+      url: "/me/mfa/totp/confirm",
+      method: route.request().method(),
+      body: route.request().postDataJSON(),
+    });
+    await route.fulfill({
+      json: {
+        data: { recovery_codes: ["p02-synthetic-recovery"] },
+        request_id: "p02-seed-confirm",
+        trace_id: "p02-seed-confirm",
+      },
+    });
+  });
+
+  const identifier = "seed@example.invalid";
+  const seedPassword = "synthetic-seed-password";
+  const permanentPassword = "synthetic-long-term-password-45!";
+  await page.goto("/login");
+  await page.getByLabel("账号（邮箱或用户名）").fill(identifier);
+  await page.getByLabel("密码").fill(seedPassword);
+  await page.getByRole("button", { name: "登录" }).click();
+  const setup = page.getByTestId("security-setup");
+  await expect(setup).toBeVisible();
+
+  const currentPassword = page.getByLabel("当前种子密码");
+  const newPassword = page.getByLabel("新的长期密码");
+  const changePassword = page.getByRole("button", { name: "更新密码并重新登录" });
+  await changePassword.click();
+  await expect(newPassword).toBeFocused();
+  expect(writes).toHaveLength(1);
+  await currentPassword.fill(seedPassword);
+  await newPassword.fill(permanentPassword);
+  await changePassword.click();
+  await expect(page.getByRole("heading", { name: "安全登录" })).toBeVisible();
+  await expect(page.getByLabel("密码")).toHaveValue(permanentPassword);
+  expect(writes[0]).toEqual({
+    url: "/auth/login",
+    method: "POST",
+    body: { identifier, password: seedPassword },
+  });
+  expect(writes[1]).toEqual({
+    url: "/me/password",
+    method: "POST",
+    body: { current_password: seedPassword, new_password: permanentPassword },
+  });
+
+  await page.getByRole("button", { name: "登录" }).click();
+  await expect(page.getByTestId("security-setup")).toBeVisible();
+  expect(writes[2]).toEqual({
+    url: "/auth/login",
+    method: "POST",
+    body: { identifier, password: permanentPassword },
+  });
+
+  const startEnrollment = page.getByRole("button", { name: "开始绑定认证器" });
+  expect(writes).toHaveLength(3);
+  await startEnrollment.click();
+  await expect(page.getByText("p02-synthetic-seed-secret", { exact: true })).toBeVisible();
+  expect(writes[3]).toEqual({
+    url: "/me/mfa/totp/enrollment",
+    method: "POST",
+    body: { current_password: permanentPassword },
+  });
+
+  const code = page.getByLabel("认证器验证码");
+  const confirm = page.getByRole("button", { name: "确认并完成安全设置" });
+  await confirm.click();
+  await expect(code).toBeFocused();
+  expect(writes).toHaveLength(4);
+  await code.fill("123456");
+  await confirm.click();
+  await expect(page.getByText("p02-synthetic-recovery", { exact: true })).toBeVisible();
+  expect(writes[4]).toEqual({
+    url: "/me/mfa/totp/confirm",
+    method: "POST",
+    body: { code: "123456" },
+  });
+
+  await page.locator(".p02-login-complete").getByRole("button", { name: "返回登录" }).click();
+  await expect(page.getByTestId("login")).toBeVisible();
+  await expect(page.getByLabel("密码")).toHaveValue("");
+  await expect(page.getByText("p02-synthetic-seed-secret", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("p02-synthetic-recovery", { exact: true })).toHaveCount(0);
+});
+
 test("P07 disable stays on the page only after success and requires explicit relogin", async ({
   page,
 }) => {
@@ -346,10 +481,9 @@ test("M01-02.A08/A15 stale MFA state returns to password login at desktop and 39
   await page.getByLabel("密码").fill("Correct-Horse-42");
   await page.getByRole("button", { name: "登录" }).click();
   const code = page.getByLabel("认证器验证码或恢复码");
-  await code.focus();
   await code.fill("123456");
-  await expect(page.getByRole("button", { name: "验证并登录" })).toBeEnabled();
-  await page.getByRole("button", { name: "验证并登录" }).click();
+  await expect(page.getByRole("button", { name: "验证并继续" })).toBeEnabled();
+  await page.getByRole("button", { name: "验证并继续" }).click();
   await expect(page.getByLabel("账号（邮箱或用户名）")).toBeVisible();
   await expect(page.getByTestId("error")).toContainText("MFA 登录挑战无效或已过期");
 });

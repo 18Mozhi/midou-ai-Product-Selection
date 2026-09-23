@@ -42,6 +42,7 @@ test("M02-02.A07/A08/A11/A15/A16 pages expose responsive keyboard visual and tru
     tenancy,
     onboarding,
     foundationStyles,
+    loginStyles,
     navigationStyles,
     onboardingStyles,
     e2e,
@@ -53,6 +54,7 @@ test("M02-02.A07/A08/A11/A15/A16 pages expose responsive keyboard visual and tru
       "apps/web/src/components/TenancyChooser.vue",
       "apps/web/src/components/OnboardingGuide.vue",
       "apps/web/src/styles.css",
+      "apps/web/src/components/local-identity-login.css",
       "apps/web/src/styles/onboarding-navigation.css",
       "apps/web/src/components/onboarding-page-c.css",
       "tests/e2e/m02-02-auth-onboarding.spec.ts",
@@ -60,24 +62,17 @@ test("M02-02.A07/A08/A11/A15/A16 pages expose responsive keyboard visual and tru
       "docs/feature-map.json",
     ].map(read),
   );
-  const styles = `${foundationStyles}\n${navigationStyles}\n${onboardingStyles}`;
+  const styles = `${foundationStyles}\n${loginStyles}\n${navigationStyles}\n${onboardingStyles}`;
   for (const state of ["rate_limited", "blocked", "expired"])
     assert.match(identity, new RegExp(state));
   assert.match(identity, /请求标识/);
-  assert.match(identity, /智能选品账号/);
+  assert.match(identity, /SECURE ACCESS/);
+  assert.match(identity, /安全身份入口/);
   assert.doesNotMatch(identity, /AI SELECTION ACCOUNT|SECURITY CENTER/);
-  assert.match(styles, /identity-form-row \.text-button[\s\S]*white-space:\s*nowrap/);
+  assert.match(styles, /p02-login-brand[\s\S]*min-height:\s*44px/);
   assert.match(
     styles,
-    /identity-page\[data-mode=["']login["']\] \.identity-brand[\s\S]*min-height:\s*44px/,
-  );
-  assert.match(
-    styles,
-    /@media\s*\(\s*max-width:\s*820px\s*\)[\s\S]*identity-page\[data-mode=["']login["']\] \.identity-card__foot[\s\S]*grid-template-columns:\s*repeat\(2/,
-  );
-  assert.match(
-    styles,
-    /identity-page\[data-mode=["']login["']\] \.identity-card__foot button,[\s\S]*identity-page\[data-mode=["']login["']\] \.identity-card__foot a[\s\S]*min-height:\s*44px/,
+    /@media\s*\(\s*max-width:\s*760px\s*\)[\s\S]*p02-login-actions[\s\S]*min-height:\s*44px/,
   );
   for (const state of ["empty", "forbidden", "expired", "selected"])
     assert.match(tenancy, new RegExp(state));

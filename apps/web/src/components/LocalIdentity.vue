@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import "./local-identity-mfa.css";
+import "./local-identity-login.css";
 import "./local-identity-registration.css";
 import "./local-identity-recovery.css";
 import "./local-identity-reset.css";
@@ -96,6 +97,13 @@ const title = computed(
 
 function switchMode(next: IdentityMode) {
   if (mode.value === "mfa" && next !== "mfa") clearMfaMaterial();
+  if (mode.value === "mfa-challenge" && next !== "mfa-challenge") mfaCode.value = "";
+  if (mode.value === "security-setup" && next !== "security-setup") {
+    currentPassword.value = "";
+    newPassword.value = "";
+    password.value = "";
+    clearMfaMaterial();
+  }
   mode.value = next;
   requestState.value = "idle";
   message.value = "";
@@ -174,6 +182,7 @@ async function submit() {
     });
     if (result?.data?.mfa_required) {
       mfaCode.value = "";
+      password.value = "";
       mode.value = "mfa-challenge";
       requestState.value = "idle";
       message.value = "密码已验证，请输入认证器验证码。";
@@ -182,6 +191,7 @@ async function submit() {
     if (result?.data?.security_setup?.required) {
       securitySetup.value = result.data.security_setup;
       currentPassword.value = password.value;
+      password.value = "";
       mode.value = "security-setup";
       requestState.value = "idle";
       message.value = "种子账号必须完成改密和 MFA 后才能进入业务功能。";
@@ -219,7 +229,10 @@ async function submit() {
     const result = await request("/auth/mfa/totp/verify", {
       code: mfaCode.value,
     });
-    if (result) await enterApplication();
+    if (result) {
+      mfaCode.value = "";
+      await enterApplication();
+    }
   }
 }
 async function loadSessions() {
@@ -535,6 +548,315 @@ onBeforeUnmount(() => clearMfaMaterial());
     </section>
     <footer class="p07-mfa-boundary">
       不提供二维码、下载或复制入口 · 恢复码仅在服务端返回后显示 · 错误状态不会伪装成停用成功
+    </footer>
+  </main>
+  <main
+    v-else-if="mode === 'login' || mode === 'mfa-challenge' || mode === 'security-setup'"
+    class="p02-login-page"
+    :data-mode="mode"
+    :data-state="requestState"
+    :aria-busy="requestState === 'loading' || mfaActionBusy"
+    :data-testid="
+      mode === 'security-setup'
+        ? 'security-setup'
+        : mode === 'mfa-challenge'
+          ? 'mfa-challenge'
+          : 'login'
+    "
+  >
+    <header class="p02-login-top">
+      <RouterLink to="/" aria-label="ScoutOps 首页" class="p02-login-brand">ScoutOps</RouterLink>
+      <strong>安全身份入口</strong>
+      <small>本地账号 · 服务端验证</small>
+    </header>
+    <div class="p02-login-shell">
+      <aside class="p02-login-context" aria-label="登录与安全步骤">
+        <p>SECURE ACCESS</p>
+        <h1>
+          {{
+            mode === "security-setup"
+              ? "先完成账号安全设置"
+              : mode === "mfa-challenge"
+                ? "完成第二步验证"
+                : "通过身份核验继续工作"
+          }}
+        </h1>
+        <span>
+          {{
+            mode === "security-setup"
+              ? "种子账号受限期间，只能完成密码更新与认证器绑定。"
+              : mode === "mfa-challenge"
+                ? "密码已由身份服务校验；此时仍未建立正式登录会话。"
+                : "使用已验证邮箱或唯一用户名登录，后续安全步骤由服务端状态决定。"
+          }}
+        </span>
+        <ol>
+          <li :class="{ 'is-complete': mode !== 'login', 'is-current': mode === 'login' }">
+            <b>01</b><span>身份核验</span>
+          </li>
+          <li
+            :class="{
+              'is-complete': mode === 'security-setup' && !securitySetup.must_change_password,
+              'is-current': mode === 'mfa-challenge' || mode === 'security-setup',
+            }"
+          >
+            <b>02</b><span>{{ mode === "security-setup" ? "安全设置" : "按需验证" }}</span>
+          </li>
+          <li><b>03</b><span>进入工作区</span></li>
+        </ol>
+        <footer>
+          <span>权限与会话由服务端决定</span>
+          <span>凭证不写入本地存储</span>
+        </footer>
+      </aside>
+
+      <section
+        class="p02-login-workspace"
+        aria-live="polite"
+        :aria-busy="requestState === 'loading' || mfaActionBusy"
+        :aria-labelledby="
+          mode === 'login'
+            ? 'p02-login-title'
+            : mode === 'mfa-challenge'
+              ? 'p02-challenge-title'
+              : 'p02-setup-title'
+        "
+      >
+        <header>
+          <p>
+            {{
+              mode === "login"
+                ? "ACCOUNT SIGN IN"
+                : mode === "mfa-challenge"
+                  ? "ADDITIONAL VERIFICATION"
+                  : "REQUIRED SECURITY SETUP"
+            }}
+          </p>
+          <h2 v-if="mode === 'login'" id="p02-login-title">安全登录</h2>
+          <h2 v-else-if="mode === 'mfa-challenge'" id="p02-challenge-title">验证你的身份</h2>
+          <h2 v-else id="p02-setup-title">完成首次安全设置</h2>
+          <span>
+            {{
+              mode === "login"
+                ? "输入邮箱或唯一用户名与密码。"
+                : mode === "mfa-challenge"
+                  ? "输入认证器验证码或一次性恢复码。"
+                  : securitySetup.must_change_password
+                    ? "先更新种子密码；旧会话会被撤销，之后需重新登录。"
+                    : securitySetup.must_enroll_mfa
+                      ? "先验证当前密码，再绑定认证器并离线保存恢复码。"
+                      : "安全设置已完成，可返回登录继续。"
+            }}
+          </span>
+        </header>
+
+        <div
+          v-if="requestState === 'expired'"
+          class="p02-login-notice p02-login-warning"
+          role="status"
+        >
+          <strong>链接已过期</strong>
+          <span>安全链接为单次使用。请重新发起请求，不要继续使用旧链接。</span>
+        </div>
+        <div
+          v-if="route.query.reason === 'authentication_required'"
+          class="p02-login-notice"
+          role="status"
+        >
+          <strong>需要登录</strong>
+          <span>请先登录，再进入安全会话或 MFA 设置。</span>
+        </div>
+        <div
+          v-if="['error', 'rate_limited', 'blocked'].includes(requestState)"
+          class="p02-login-notice p02-login-error"
+          role="alert"
+          data-testid="error"
+        >
+          <strong>{{
+            requestState === "rate_limited"
+              ? "请求过于频繁"
+              : requestState === "blocked"
+                ? "身份服务暂不可用"
+                : "操作未完成"
+          }}</strong>
+          <span>{{ message }}</span>
+          <small v-if="actionHint">{{ actionHint }}</small>
+          <small v-if="requestId">请求标识：{{ requestId }}</small>
+          <small v-if="traceId && traceId !== requestId">链路标识：{{ traceId }}</small>
+        </div>
+        <div v-else-if="message" class="p02-login-notice" role="status" aria-live="polite">
+          <strong>{{ requestState === "success" ? "操作已完成" : "当前步骤" }}</strong>
+          <span>{{ message }}</span>
+        </div>
+
+        <form
+          v-if="mode === 'login' || mode === 'mfa-challenge'"
+          class="p02-login-form"
+          @submit.prevent="submit"
+        >
+          <template v-if="mode === 'login'">
+            <label for="p02-login-identifier">账号（邮箱或用户名）</label>
+            <small id="p02-login-identifier-help">使用已验证邮箱或唯一用户名。</small>
+            <input
+              id="p02-login-identifier"
+              v-model="identifier"
+              type="text"
+              autocomplete="username"
+              required
+              minlength="2"
+              maxlength="254"
+              aria-describedby="p02-login-identifier-help"
+              placeholder="邮箱或用户名"
+            />
+            <label for="p02-login-password">密码</label>
+            <small id="p02-login-password-help">密码仅用于本次登录验证。</small>
+            <input
+              id="p02-login-password"
+              v-model="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              minlength="12"
+              maxlength="128"
+              aria-describedby="p02-login-password-help"
+              placeholder="输入密码"
+            />
+            <div class="p02-login-form-row">
+              <span>会话与可访问范围由服务端校验。</span>
+              <button type="button" @click="switchMode('forgot')">忘记密码？</button>
+            </div>
+            <button class="p02-login-primary" type="submit" :disabled="requestState === 'loading'">
+              {{ requestState === "loading" ? "正在验证…" : "登录" }}
+            </button>
+          </template>
+          <template v-else>
+            <label for="p02-login-mfa-code">认证器验证码或恢复码</label>
+            <small id="p02-login-mfa-help">恢复码为一次性凭证；成功后会消费当前挑战。</small>
+            <input
+              id="p02-login-mfa-code"
+              v-model="mfaCode"
+              type="text"
+              autocomplete="one-time-code"
+              required
+              minlength="6"
+              maxlength="32"
+              aria-describedby="p02-login-mfa-help"
+              placeholder="输入验证码或恢复码"
+            />
+            <button class="p02-login-primary" type="submit" :disabled="requestState === 'loading'">
+              {{ requestState === "loading" ? "正在验证…" : "验证并继续" }}
+            </button>
+          </template>
+        </form>
+
+        <section v-else class="p02-login-security">
+          <form v-if="securitySetup.must_change_password" @submit.prevent="changeSeedPassword">
+            <p class="p02-login-step">步骤 1 / 2 · 更新密码</p>
+            <label for="p02-seed-current-password">当前种子密码</label>
+            <input
+              id="p02-seed-current-password"
+              v-model="currentPassword"
+              type="password"
+              autocomplete="current-password"
+              required
+              minlength="12"
+              maxlength="128"
+              placeholder="验证当前种子密码"
+            />
+            <label for="p02-seed-new-password">新的长期密码</label>
+            <small id="p02-seed-new-password-help">至少 12 位，最多 128 位。</small>
+            <input
+              id="p02-seed-new-password"
+              v-model="newPassword"
+              type="password"
+              autocomplete="new-password"
+              required
+              minlength="12"
+              maxlength="128"
+              aria-describedby="p02-seed-new-password-help"
+              placeholder="设置新的登录密码"
+            />
+            <button class="p02-login-primary" type="submit" :disabled="requestState === 'loading'">
+              {{ requestState === "loading" ? "正在更新…" : "更新密码并重新登录" }}
+            </button>
+          </form>
+          <template v-else-if="securitySetup.must_enroll_mfa">
+            <p class="p02-login-step">步骤 2 / 2 · 绑定认证器</p>
+            <form v-if="!mfaSecret" @submit.prevent="startMfa">
+              <label for="p02-seed-enrollment-password">当前密码</label>
+              <small id="p02-seed-enrollment-help">用于启动本次认证器绑定。</small>
+              <input
+                id="p02-seed-enrollment-password"
+                v-model="currentPassword"
+                type="password"
+                autocomplete="current-password"
+                minlength="12"
+                maxlength="128"
+                aria-describedby="p02-seed-enrollment-help"
+                required
+                placeholder="验证当前密码"
+              />
+              <button
+                class="p02-login-primary"
+                type="submit"
+                :disabled="mfaActionBusy || requestState === 'loading'"
+              >
+                {{ mfaActionBusy ? "正在启动绑定…" : "开始绑定认证器" }}
+              </button>
+            </form>
+            <form v-else class="p02-login-confirm" @submit.prevent="confirmMfa">
+              <p>手动输入密钥</p>
+              <code>{{ mfaSecret }}</code>
+              <small id="p02-seed-confirm-help"
+                >密钥仅在本次绑定期间显示，请保存在受信任的认证器中。</small
+              >
+              <label for="p02-seed-confirm-code">认证器验证码</label>
+              <input
+                id="p02-seed-confirm-code"
+                v-model="mfaCode"
+                type="text"
+                autocomplete="one-time-code"
+                minlength="6"
+                maxlength="8"
+                aria-describedby="p02-seed-confirm-help"
+                required
+                placeholder="输入当前验证码"
+              />
+              <button
+                class="p02-login-primary"
+                type="submit"
+                :disabled="mfaActionBusy || requestState === 'loading'"
+              >
+                {{ mfaActionBusy ? "正在确认…" : "确认并完成安全设置" }}
+              </button>
+            </form>
+          </template>
+          <section v-else class="p02-login-complete" role="status">
+            <strong>账号安全设置已完成</strong>
+            <span>恢复码仅本次显示。请离线保存后返回登录。</span>
+            <code v-for="code in recoveryCodes" :key="code">{{ code }}</code>
+            <button class="p02-login-primary" type="button" @click="switchMode('login')">
+              返回登录
+            </button>
+          </section>
+        </section>
+
+        <footer class="p02-login-actions">
+          <template v-if="mode === 'login'">
+            <button type="button" @click="switchMode('register')">创建本地账号</button>
+            <RouterLink to="/me?section=security">查看安全会话</RouterLink>
+            <RouterLink to="/security/mfa">了解 MFA</RouterLink>
+          </template>
+          <template v-else>
+            <button type="button" @click="switchMode('login')">返回登录</button>
+            <RouterLink v-if="mode === 'mfa-challenge'" to="/security/mfa">了解 MFA</RouterLink>
+          </template>
+        </footer>
+      </section>
+    </div>
+    <footer class="p02-login-boundary">
+      <span>不在 URL 或本地存储中保存密码、验证码、挑战令牌。</span>
+      <span>身份校验与会话授权由服务端完成。</span>
     </footer>
   </main>
   <main
@@ -953,13 +1275,8 @@ onBeforeUnmount(() => clearMfaMaterial());
 
       <section class="identity-card" aria-live="polite">
         <div class="identity-card__head">
-          <p>
-            {{ mode === "sessions" ? "账号中心" : "智能选品账号" }}
-          </p>
+          <p>账号中心</p>
           <h2>{{ title }}</h2>
-          <span v-if="mode === 'login'">使用已验证的邮箱或唯一用户名登录</span>
-          <span v-else-if="mode === 'mfa-challenge'">短时挑战保存在浏览器安全凭证中</span>
-          <span v-else-if="mode === 'security-setup'">完成全部步骤前，业务后端保持拒绝</span>
         </div>
 
         <div
@@ -1003,138 +1320,7 @@ onBeforeUnmount(() => clearMfaMaterial());
           <p>{{ message }}</p>
         </div>
 
-        <form v-if="['login', 'reset', 'mfa-challenge'].includes(mode)" @submit.prevent="submit">
-          <label v-if="mode === 'mfa-challenge'"
-            >认证器验证码或恢复码<input
-              v-model="mfaCode"
-              inputmode="numeric"
-              autocomplete="one-time-code"
-              required
-              minlength="6"
-              maxlength="32"
-              placeholder="6 位验证码"
-          /></label>
-          <label v-if="mode === 'login'"
-            >账号（邮箱或用户名）<input
-              v-model="identifier"
-              type="text"
-              autocomplete="username"
-              required
-              minlength="2"
-              maxlength="254"
-              placeholder="name@company.com 或用户名"
-          /></label>
-          <label v-else-if="mode !== 'mfa-challenge'"
-            >邮箱<input
-              v-model="email"
-              type="email"
-              autocomplete="email"
-              required
-              maxlength="254"
-              placeholder="name@company.com"
-          /></label>
-          <label v-if="!['forgot', 'mfa-challenge'].includes(mode)"
-            >密码<input
-              v-model="password"
-              type="password"
-              :autocomplete="mode === 'login' ? 'current-password' : 'new-password'"
-              required
-              minlength="12"
-              maxlength="128"
-              placeholder="输入安全密码"
-          /></label>
-          <div v-if="mode === 'login'" class="identity-form-row">
-            <span>登录状态最长保留 30 天，可在安全中心主动退出</span
-            ><button type="button" class="text-button" @click="switchMode('forgot')">
-              忘记密码？
-            </button>
-          </div>
-          <button class="identity-primary" type="submit" :disabled="requestState === 'loading'">
-            {{
-              requestState === "loading"
-                ? "正在安全处理…"
-                : mode === "login"
-                  ? "登录"
-                  : mode === "mfa-challenge"
-                    ? "验证并登录"
-                    : "更新密码"
-            }}
-          </button>
-        </form>
-
-        <section
-          v-else-if="mode === 'security-setup'"
-          class="mfa-panel"
-          data-testid="security-setup"
-        >
-          <div class="mfa-status">
-            <span class="is-pending">强制</span>
-            <div>
-              <strong>种子管理员安全激活</strong>
-              <p>单次种子密码不能作为长期凭证；改密后必须启用认证器。</p>
-            </div>
-          </div>
-          <template v-if="securitySetup.must_change_password"
-            ><label
-              >当前种子密码<input
-                v-model="currentPassword"
-                type="password"
-                autocomplete="current-password"
-                minlength="12"
-                maxlength="128" /></label
-            ><label
-              >新的长期密码<input
-                v-model="newPassword"
-                type="password"
-                autocomplete="new-password"
-                minlength="12"
-                maxlength="128" /></label
-            ><button class="identity-primary" type="button" @click="changeSeedPassword">
-              修改密码并撤销当前会话
-            </button></template
-          >
-          <template v-else-if="securitySetup.must_enroll_mfa">
-            <form v-if="!mfaSecret" @submit.prevent="startMfa">
-              <label
-                >当前密码<input
-                  v-model="currentPassword"
-                  type="password"
-                  autocomplete="current-password"
-                  minlength="12"
-                  maxlength="128"
-                  required
-              /></label>
-              <button class="identity-primary" type="submit" :disabled="mfaActionBusy">
-                {{ mfaActionBusy ? "正在启动绑定…" : "开始绑定认证器" }}
-              </button>
-            </form>
-            <form v-else class="mfa-setup" @submit.prevent="confirmMfa">
-              <p>手动输入密钥</p>
-              <code>{{ mfaSecret }}</code>
-              <label
-                >认证器验证码<input
-                  v-model="mfaCode"
-                  inputmode="numeric"
-                  autocomplete="one-time-code"
-                  minlength="6"
-                  maxlength="32"
-                  required
-              /></label>
-              <button class="identity-primary" type="submit" :disabled="mfaActionBusy">
-                {{ mfaActionBusy ? "正在确认…" : "确认并完成安全设置" }}
-              </button>
-            </form>
-          </template>
-          <div v-else class="recovery-codes">
-            <strong>安全设置已完成</strong>
-            <p>恢复码仅显示本次，请离线保存后重新登录。</p>
-            <code v-for="code in recoveryCodes" :key="code">{{ code }}</code
-            ><button class="identity-primary" type="button" @click="switchMode('login')">
-              返回登录
-            </button>
-          </div>
-        </section>
-        <div v-else class="session-list" data-testid="sessions">
+        <div class="session-list" data-testid="sessions">
           <div v-if="requestState === 'loading'" class="identity-loading">正在读取本人会话…</div>
           <p v-else-if="sessions.length === 0" class="identity-empty">
             暂无可显示的活动会话；登录失效时请重新登录。
@@ -1152,22 +1338,9 @@ onBeforeUnmount(() => clearMfaMaterial());
           <button type="button" class="text-button" @click="switchMode('register')">
             创建本地账号
           </button>
-          <button
-            v-if="mode !== 'login'"
-            type="button"
-            class="text-button"
-            @click="switchMode('login')"
-          >
-            返回登录
-          </button>
+          <button type="button" class="text-button" @click="switchMode('login')">返回登录</button>
           <RouterLink class="text-button" to="/me?section=security">查看安全会话</RouterLink>
           <RouterLink class="text-button" to="/security/mfa">管理 MFA</RouterLink>
-          <RouterLink
-            v-if="mode === 'login' && requestState === 'success'"
-            class="text-button"
-            to="/select-context"
-            >继续选择组织</RouterLink
-          >
         </footer>
       </section>
     </section>

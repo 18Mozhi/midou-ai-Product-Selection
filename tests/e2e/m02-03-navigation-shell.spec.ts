@@ -358,7 +358,7 @@ test("M02-03 regression: public root resolves the authenticated landing instead 
   );
   await page.goto("/");
   await expect(page).toHaveURL(/\/login$/);
-  await expect(page.getByRole("heading", { name: "欢迎回到智能选品" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "安全登录" })).toBeVisible();
 });
 
 test("M02-03 platform shell exposes management navigation without member-only shortcuts", async ({

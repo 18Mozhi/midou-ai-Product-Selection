@@ -4,10 +4,10 @@ test("M01-01.A07/A15 local identity login and registration are visually stable",
   page,
 }) => {
   await page.goto("/login");
-  await expect(page.getByRole("heading", { name: "欢迎回到智能选品" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "安全登录" })).toBeVisible();
 
   await page.getByRole("button", { name: "创建本地账号" }).click();
-  await expect(page.getByRole("heading", { name: "创建本地账号" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /创建账号/ })).toBeVisible();
 });
 
 test("M01-01.A08/A15 anonymous security entry returns to login without protected 401", async ({

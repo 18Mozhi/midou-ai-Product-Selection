@@ -10,20 +10,21 @@ test("M02-02.A07/A15 login brand and mobile auxiliary actions keep compact touch
   page,
 }) => {
   await page.goto("/login");
-  const brand = page.getByRole("link", { name: /智能选品/ }).first();
+  const brand = page.getByRole("link", { name: "ScoutOps 首页" });
   await expect(brand).toBeVisible();
   expect((await brand.boundingBox())?.height).toBeGreaterThanOrEqual(44);
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
-  const actions = await page.locator(".identity-card__foot .text-button").evaluateAll((nodes) =>
+  const actions = await page.locator(".p02-login-actions > :is(button, a)").evaluateAll((nodes) =>
     nodes.map((node) => {
       const box = node.getBoundingClientRect();
       return { y: box.y, height: box.height };
     }),
   );
   expect(actions).toHaveLength(3);
-  expect(Math.abs(actions[0].y - actions[1].y)).toBeLessThanOrEqual(1);
+  expect(actions[1].y).toBeGreaterThanOrEqual(actions[0].y + actions[0].height);
+  expect(actions[2].y).toBeGreaterThanOrEqual(actions[1].y + actions[1].height);
   for (const action of actions) expect(action.height).toBeGreaterThanOrEqual(44);
 });
 test("M02-02.A07/A08/A15 login uses the real contract and continues to tenancy by keyboard", async ({
@@ -49,7 +50,7 @@ test("M02-02.A07/A08/A15 login uses the real contract and continues to tenancy b
   );
   await page.route("**/api/v1/org/memberships", (route) => route.fulfill({ json: envelope([]) }));
   await page.goto("/login");
-  await page.getByLabel("邮箱").fill("member@example.test");
+  await page.getByLabel("账号（邮箱或用户名）").fill("member@example.test");
   await page.getByLabel("密码").fill("Long-enough-password-123!");
   await page.getByRole("button", { name: "登录", exact: true }).focus();
   await page.keyboard.press("Enter");
@@ -143,7 +144,7 @@ test("P03 registration shows service feedback and preserves local navigation", a
     true,
   );
   await page.getByRole("button", { name: "返回登录" }).click();
-  await expect(page.getByRole("heading", { name: "欢迎回到智能选品" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "安全登录" })).toBeVisible();
   await expect(page).toHaveURL(/\/register$/);
 });
 test("P05 verification uses one token-gated confirmation and explicit return", async ({ page }) => {
@@ -179,7 +180,7 @@ test("P05 verification uses one token-gated confirmation and explicit return", a
   expect(writes).toEqual([{ method: "POST", body: { token: "synthetic-single-use-token" } }]);
 
   await page.getByRole("button", { name: "返回登录" }).click();
-  await expect(page.getByRole("heading", { name: "欢迎回到智能选品" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "安全登录" })).toBeVisible();
 });
 test("P05 verification failures replace the loading title and retain service guidance", async ({
   page,
@@ -267,7 +268,7 @@ test("P04 recovery renders rate-limit guidance and keeps local login navigation"
   await expect(page.getByRole("alert")).toContainText("请求标识：p04-rate-request");
   await expect(page.getByRole("alert")).toContainText("链路标识：p04-rate-trace");
   await page.getByRole("button", { name: "返回登录" }).click();
-  await expect(page.getByRole("heading", { name: "欢迎回到智能选品" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "安全登录" })).toBeVisible();
   await expect(page).toHaveURL(/\/login$/);
 });
 test("M02-02.A08/A16 password recovery covers generic request reset and rate-limit recovery", async ({
@@ -338,7 +339,7 @@ test("P06 reset password keeps the one-field contract and explicit successful re
     new_password: "New-long-password-456!",
   });
   await page.getByRole("button", { name: "返回登录" }).click();
-  await expect(page.getByRole("heading", { name: "欢迎回到智能选品" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "安全登录" })).toBeVisible();
 });
 test("P06 expired reset link cannot be resubmitted and returns to the existing recovery entry", async ({
   page,
