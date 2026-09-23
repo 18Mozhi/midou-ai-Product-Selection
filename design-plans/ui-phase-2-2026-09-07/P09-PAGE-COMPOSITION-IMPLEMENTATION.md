@@ -26,4 +26,6 @@
 
 ## 发布
 
-状态：本记录初建时等待提交与宝塔部署。发布必须由本机固定命令 `python scripts/deploy-baota.py` 执行；它会按宝塔模型短暂停止/重启 Node、校验现有迁移白名单并验证服务。此页没有数据库迁移或环境变量更改；Worker/Python 无需因本页变更重启。部署后补记最终提交/线上版本 SHA、健康和静态资源核验结果。全 73 页阶段目标继续。
+已提交并推送 `b7f951b541f52c69d3594774d9b3430d8fb2597d`（`main`），固定 `python scripts/deploy-baota.py` 发布成功，生产 build SHA 与该代码提交一致。宝塔发布流程受控停止并重启 Node、校验既有迁移白名单和健康；本页无迁移、环境变量、API 或数据库变化，Worker/Python 不需要因本页重启，部署脚本报告上传临时包已删除。
+
+发布后证据：`/api/v1/health/live`=`ok`、`ready`=`ready`、`version` 返回上述 SHA；`/onboarding?step=1` HTTP 200。线上 1440px 与 390px Chromium 均完成三步键盘交互，页面脚本/样式资源（含 `OnboardingGuide` 懒加载 JS/CSS）全部 HTTP 200，零页面错误、零 API 请求、无水平溢出。此为前端部署与本页实际路由验收，不证明真实身份、租户、RBAC、M07-03 正式签收或全站交付。全 73 页阶段目标继续。
