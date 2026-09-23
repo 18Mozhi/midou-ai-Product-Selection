@@ -12,7 +12,15 @@
 - `node scripts/verify-mysql-page-preview.mjs`：1440/390px × reduced/no-preference 共 180 项、52 次本地 GET；无截图、无写请求。
 - `node scripts/run-playwright-projects.mjs tests/e2e/m08-03-mysql-resilience.spec.ts`：桌面 3/3、手机 3/3。
 - `npm run typecheck:web` 通过。
-- 生产构建、文档/格式/静态/计划/发布门及线上部署证据待最终提交后补记。
+- `npm run build:web` 通过；部署脚本中的 22 工作区构建和 M07-03 preflight（6 个部署对象）通过。`npm run verify:docs`、`format:check`、`verify:static-analysis`、`verify:plans`、`verify:runtime-docs`、`verify:release-matrix`、发布归属检查通过。
+
+## 提交与部署
+
+- 代码提交/构建版本：`caf6b7f320e531e876986d9afbfb4df6627337fd`，已推送 `main`。
+- 已通过 `python scripts/deploy-baota.py` 部署到项目固定宝塔目录；脚本停止并启动宝塔 Node 项目以完成受控迁移/部署流程，生产包临时文件已删除。未新增本任务专属数据库迁移。
+- 线上 `health/ready=ready`、`health/available=available`、`health/version.build_sha` 与代码提交一致；`/platform-admin/mysql` 返回 HTTP 200。
+- P68 专属资源返回 HTTP 200：`/assets/MySqlResilienceCenter-CKZOq6do.js`（12,952 bytes）、`/assets/MySqlResilienceCenter-CW4KI6qI.css`（23,773 bytes）。已检查 CSS 含 `.mysql-resilience--c`、`p68-boundary`，JS 含页面标题与同机恢复区标记。
+- 部署由固定脚本处理；无需用户手工重启。涉及真实线上 MySQL/权限/审计/恢复的确认仍由独立运维流程负责，本次没有调用受保护的 MySQL 页面接口。
 
 ## 明确边界
 
