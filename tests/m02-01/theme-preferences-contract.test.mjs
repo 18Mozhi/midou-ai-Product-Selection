@@ -36,12 +36,13 @@ test("M02-01.A03/A06/A10/A13/A17 contracts include migrations API maps and no ne
   assert.match(runbook, /Worker 与 Python Crawler.*无需重启/);
 });
 test("M02-01.A07/A08/A15 token and UI contracts keep semantic accessibility and responsive support", async () => {
-  const [tokens, theme, ui, styles, e2e] = await Promise.all(
+  const [tokens, theme, ui, radio, styles, e2e] = await Promise.all(
     [
       "apps/web/src/design/tokens.css",
       "apps/web/src/design/theme.ts",
       "apps/web/src/components/ThemeStudio.vue",
-      "apps/web/src/styles/access-governance.css",
+      "apps/web/src/components/theme-studio/PreferenceRadioGroup.vue",
+      "apps/web/src/components/theme-studio-c.css",
       "tests/e2e/m02-01-theme-studio.spec.ts",
     ].map(read),
   );
@@ -51,9 +52,14 @@ test("M02-01.A07/A08/A15 token and UI contracts keep semantic accessibility and 
   }
   for (const semantic of ["--so-success", "--so-warning", "--so-danger", "--so-focus"])
     assert.match(tokens, new RegExp(semantic));
-  assert.match(ui, /role="radiogroup"/);
-  assert.match(ui, /数值、时间范围、来源/);
-  assert.match(styles, /@media\s*\(\s*max-width:\s*900px\s*\)/);
+  assert.match(ui, /PreferenceRadioGroup/);
+  assert.match(radio, /role="radiogroup"/);
+  assert.match(ui, /此期间选择已锁定/);
+  assert.match(ui, /preference_scope_required/);
+  assert.match(ui, /rate_limited/);
+  assert.match(styles, /theme-page--c/);
+  assert.doesNotMatch(styles, /#[0-9a-f]{3,8}\b|(?:rgb|hsl)a?\(|!important/i);
+  assert.match(ui, /PreferenceRadioGroup/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(e2e, /keyboard\.press/);
 });

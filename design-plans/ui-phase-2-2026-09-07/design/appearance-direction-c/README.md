@@ -1,20 +1,22 @@
 # P10外观设置整页 · APPEARANCE-C-r1
 
-使用frontend-design技能按已选C方向重构：白色身份栏、主题化范围侧区、主题选择与服务器记录并排核对、独立效果样例和会话密度分区。不是旧纸张界面换色，也不是主题浮层的重复交付。具体配色/名称/布局/交互仍待用户审核。
+使用frontend-design技能按已选C方向重构：白色身份栏、主题化范围侧区、主题选择与服务器记录并排核对、独立效果样例和会话密度分区。不是旧纸张界面换色，也不是主题浮层的重复交付。2026-09-23用户授权“剩下的全部通过”，本方向及其余未完成页面自动同意进入实施；本授权是设计方向同意，不等于真实 API、权限、生产或全73页验收。当前生产迁移与验证见 [P10 实施记录](../../P10-PAGE-COMPOSITION-IMPLEMENTATION.md)。
+
+下文的“待审”“尚未修复”和“未部署”均为本图稿当时的历史状态，不再描述当前生产组件；旧图与历史源码复现保留作为来源记录。
 
 [打开交互稿](index.html) · [证据清单](evidence.json) · [P10规格](../../page-specs/P10.md)
 
 ## 行为边界
 
-| 动作 | 本稿表现 | 依据与边界 |
-| --- | --- | --- |
-| TH-PREVIEW | 三主题radio、键盘箭头/Home/End、即时预览 | 保留deep-ocean/aurora-purple/cloud-white；名称与新配色沿共享C提案，不是生产名称已改；当前真实applyTheme也写本地缓存，本稿刻意不写storage |
-| TH-DENSITY | 标准/紧凑两radio，当前预览行距变化 | 密度不进入PUT；撤销主题不撤销密度，行政壳层覆盖不当作已保存偏好 |
-| TH-SAVE | 明确保存主题，显示当前预览/服务器记录/版本 | 实际PUT只含theme和expected_version；本稿只记录离线模拟请求，不验证后端版本锁/幂等审计 |
-| TH-RESTORE | 恢复最近已读主题 | 保存中锁定是待审修正；真实源码未禁用撤销且存在竞态，不能把截图当修复 |
-| TH-LOAD | 错误/冲突后刷新最新偏好，再重新选择 | 冲突不自动覆盖；加载失败和未知值不冒充默认保存成功 |
-| AC-ROOT/PROFILE/MFA、TH-ROUTE | /、/me、/security/mfa、/settings/theme | 本稿记录真实目标，不访问生产 |
-| AC-LOGIN/CONTEXT | 过期去登录；明确preference_scope_required去选择范围 | 实际服务端scope抛409该码；当前Vue把其他conflict/blocked/429一并映射blocked。新稿按真实错误类型区分，不能从网络失败推断无工作区 |
+| 动作                          | 本稿表现                                            | 依据与边界                                                                                                                               |
+| ----------------------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| TH-PREVIEW                    | 三主题radio、键盘箭头/Home/End、即时预览            | 保留deep-ocean/aurora-purple/cloud-white；名称与新配色沿共享C提案，不是生产名称已改；当前真实applyTheme也写本地缓存，本稿刻意不写storage |
+| TH-DENSITY                    | 标准/紧凑两radio，当前预览行距变化                  | 密度不进入PUT；撤销主题不撤销密度，行政壳层覆盖不当作已保存偏好                                                                          |
+| TH-SAVE                       | 明确保存主题，显示当前预览/服务器记录/版本          | 实际PUT只含theme和expected_version；本稿只记录离线模拟请求，不验证后端版本锁/幂等审计                                                    |
+| TH-RESTORE                    | 恢复最近已读主题                                    | 保存中锁定是待审修正；真实源码未禁用撤销且存在竞态，不能把截图当修复                                                                     |
+| TH-LOAD                       | 错误/冲突后刷新最新偏好，再重新选择                 | 冲突不自动覆盖；加载失败和未知值不冒充默认保存成功                                                                                       |
+| AC-ROOT/PROFILE/MFA、TH-ROUTE | /、/me、/security/mfa、/settings/theme              | 本稿记录真实目标，不访问生产                                                                                                             |
+| AC-LOGIN/CONTEXT              | 过期去登录；明确preference_scope_required去选择范围 | 实际服务端scope抛409该码；当前Vue把其他conflict/blocked/429一并映射blocked。新稿按真实错误类型区分，不能从网络失败推断无工作区           |
 
 无原生弹窗；所有设置、错误与结果均内联。不新增深色模式、密度持久化、自动保存、主题ID或API字段。样例仅说明三壳层与文字状态，不显示旧87分/18.4%等假业务指标。
 
@@ -39,32 +41,33 @@
 ## 图册
 
 <!-- GALLERY:START -->
+
 正式图86张，22个整页场景，另含七控件的悬停/焦点/按下状态。
 
-| 场景 | 桌面 | 手机 |
-| --- | --- | --- |
-| 目录蓝 / 标准 | [1440](1440-deep-ocean-standard.png) | [390](390-deep-ocean-standard.png) |
-| 目录蓝 / 紧凑 | [1440](1440-deep-ocean-compact.png) | [390](390-deep-ocean-compact.png) |
-| 冷雾蓝 / 标准 | [1440](1440-aurora-purple-standard.png) | [390](390-aurora-purple-standard.png) |
-| 冷雾蓝 / 紧凑 | [1440](1440-aurora-purple-compact.png) | [390](390-aurora-purple-compact.png) |
-| 净页白 / 标准 | [1440](1440-cloud-white-standard.png) | [390](390-cloud-white-standard.png) |
-| 净页白 / 紧凑 | [1440](1440-cloud-white-compact.png) | [390](390-cloud-white-compact.png) |
-| 默认偏好，不冒充已保存 | [1440](1440-default.png) | [390](390-default.png) |
-| 本地预览，服务器记录未变 | [1440](1440-dirty.png) | [390](390-dirty.png) |
-| 仅调整密度，不启用保存 | [1440](1440-density-only.png) | [390](390-density-only.png) |
-| 正在保存，锁定选择与撤销 | [1440](1440-saving.png) | [390](390-saving.png) |
-| 服务器返回成功 | [1440](1440-saved.png) | [390](390-saved.png) |
-| 写入已返回，预览仍有差异 | [1440](1440-saved-different.png) | [390](390-saved-different.png) |
-| 读取中，不声称已同步 | [1440](1440-loading.png) | [390](390-loading.png) |
-| 读取失败，无可确认的记录 | [1440](1440-read-error.png) | [390](390-read-error.png) |
-| 返回主题不可识别 | [1440](1440-read-invalid.png) | [390](390-read-invalid.png) |
-| 登录已过期 | [1440](1440-expired.png) | [390](390-expired.png) |
-| 当前范围无权限 | [1440](1440-forbidden.png) | [390](390-forbidden.png) |
-| 明确返回 preference_scope_required | [1440](1440-scope.png) | [390](390-scope.png) |
-| 版本冲突，刷新再选 | [1440](1440-conflict.png) | [390](390-conflict.png) |
-| 请求频繁，不推断无工作区 | [1440](1440-rate-limited.png) | [390](390-rate-limited.png) |
-| 保存服务受阻，结果未知 | [1440](1440-service-error.png) | [390](390-service-error.png) |
-| 保存失败，保留预览 | [1440](1440-save-error.png) | [390](390-save-error.png) |
+| 场景                               | 桌面                                    | 手机                                  |
+| ---------------------------------- | --------------------------------------- | ------------------------------------- |
+| 目录蓝 / 标准                      | [1440](1440-deep-ocean-standard.png)    | [390](390-deep-ocean-standard.png)    |
+| 目录蓝 / 紧凑                      | [1440](1440-deep-ocean-compact.png)     | [390](390-deep-ocean-compact.png)     |
+| 冷雾蓝 / 标准                      | [1440](1440-aurora-purple-standard.png) | [390](390-aurora-purple-standard.png) |
+| 冷雾蓝 / 紧凑                      | [1440](1440-aurora-purple-compact.png)  | [390](390-aurora-purple-compact.png)  |
+| 净页白 / 标准                      | [1440](1440-cloud-white-standard.png)   | [390](390-cloud-white-standard.png)   |
+| 净页白 / 紧凑                      | [1440](1440-cloud-white-compact.png)    | [390](390-cloud-white-compact.png)    |
+| 默认偏好，不冒充已保存             | [1440](1440-default.png)                | [390](390-default.png)                |
+| 本地预览，服务器记录未变           | [1440](1440-dirty.png)                  | [390](390-dirty.png)                  |
+| 仅调整密度，不启用保存             | [1440](1440-density-only.png)           | [390](390-density-only.png)           |
+| 正在保存，锁定选择与撤销           | [1440](1440-saving.png)                 | [390](390-saving.png)                 |
+| 服务器返回成功                     | [1440](1440-saved.png)                  | [390](390-saved.png)                  |
+| 写入已返回，预览仍有差异           | [1440](1440-saved-different.png)        | [390](390-saved-different.png)        |
+| 读取中，不声称已同步               | [1440](1440-loading.png)                | [390](390-loading.png)                |
+| 读取失败，无可确认的记录           | [1440](1440-read-error.png)             | [390](390-read-error.png)             |
+| 返回主题不可识别                   | [1440](1440-read-invalid.png)           | [390](390-read-invalid.png)           |
+| 登录已过期                         | [1440](1440-expired.png)                | [390](390-expired.png)                |
+| 当前范围无权限                     | [1440](1440-forbidden.png)              | [390](390-forbidden.png)              |
+| 明确返回 preference_scope_required | [1440](1440-scope.png)                  | [390](390-scope.png)                  |
+| 版本冲突，刷新再选                 | [1440](1440-conflict.png)               | [390](390-conflict.png)               |
+| 请求频繁，不推断无工作区           | [1440](1440-rate-limited.png)           | [390](390-rate-limited.png)           |
+| 保存服务受阻，结果未知             | [1440](1440-service-error.png)          | [390](390-service-error.png)          |
+| 保存失败，保留预览                 | [1440](1440-save-error.png)             | [390](390-save-error.png)             |
 
 控件图：
 
@@ -110,4 +113,5 @@
 - [390-restore-hover.png](390-restore-hover.png)
 - [390-restore-focus.png](390-restore-focus.png)
 - [390-restore-pressed.png](390-restore-pressed.png)
+
 <!-- GALLERY:END -->

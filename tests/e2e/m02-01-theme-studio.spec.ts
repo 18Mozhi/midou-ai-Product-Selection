@@ -1,11 +1,13 @@
 import { expect, test, type Page } from "@playwright/test";
-const org = "00000000-0000-4000-8000-000000000221",
-  workspace = "00000000-0000-4000-8000-000000000222";
+
+const org = "00000000-0000-4000-8000-000000000221";
+const workspace = "00000000-0000-4000-8000-000000000222";
 const envelope = (data: unknown) => ({
   data,
   request_id: "theme-e2e-request",
   trace_id: "theme-e2e-trace",
 });
+
 async function ready(page: Page) {
   let preference = {
     theme: "deep-ocean",
@@ -28,23 +30,24 @@ async function ready(page: Page) {
     await route.fulfill({ json: envelope(preference) });
   });
 }
-test("M02-01.A07/A08/A15 theme studio previews and saves by keyboard without changing semantics", async ({
+
+test("M02-01 theme studio previews and saves theme without changing semantics", async ({
   page,
 }) => {
   await ready(page);
   await page.goto("/settings/theme");
-  await expect(page.getByRole("heading", { name: "账页与信号语义" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "界面外观" })).toBeVisible();
   const aurora = page.getByRole("radio", { name: /档案纸/ });
   await aurora.focus();
   await page.keyboard.press("Enter");
   await expect(aurora).toHaveAttribute("aria-checked", "true");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "aurora-purple");
-  await page.getByRole("button", { name: "保存主题" }).click();
-  await expect(page.getByText("✓ 已保存")).toBeVisible();
-  await expect(page.getByText("需求变化")).toBeVisible();
-  await expect(page.getByText("近 30 天 · 来源：公开市场信号")).toBeVisible();
+  await page.getByRole("button", { name: "保存主题偏好" }).click();
+  await expect(page.getByText("服务器已确认当前主题偏好。")).toBeVisible();
+  await expect(page.getByText("权限、数据范围或业务结论")).toBeVisible();
 });
-test("M02-01.A08/A15/A16 blocked scope has an explicit 390px recovery path", async ({ page }) => {
+
+test("M02-01 blocked scope has an explicit recovery path and trace", async ({ page }) => {
   await page.route("**/api/v1/me/ui-preferences", (route) =>
     route.fulfill({
       status: 409,
@@ -56,21 +59,103 @@ test("M02-01.A08/A15/A16 blocked scope has an explicit 390px recovery path", asy
     }),
   );
   await page.goto("/settings/theme");
-  await expect(page.getByText("尚未选择组织与工作区")).toBeVisible();
+  await expect(page.getByText("还需要选择组织和工作区")).toBeVisible();
   await expect(page.getByRole("link", { name: "选择工作区" })).toHaveAttribute(
     "href",
     "/select-context",
   );
-  await expect(page.getByText("请求标识：theme-blocked-request")).toBeVisible();
+  await page.getByText("查看关联编号").click();
+  await expect(page.getByText("theme-blocked-request")).toBeVisible();
 });
-test("M02-01 density switches immediately and keeps its accessible radio contract", async ({
-  page,
-}) => {
+
+test("M02-01 radio groups support arrow and Home/End keyboard navigation", async ({ page }) => {
   await ready(page);
   await page.goto("/settings/theme");
-  const compact = page.getByRole("radio", { name: /紧凑/ });
-  await compact.click();
+  const themes = page.getByRole("radiogroup", { name: "界面主题" });
+  const signal = themes.getByRole("radio", { name: /信号纸/ });
+  const archive = themes.getByRole("radio", { name: /档案纸/ });
+  const white = themes.getByRole("radio", { name: /净页白/ });
+  await signal.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(archive).toBeFocused();
+  await expect(archive).toHaveAttribute("aria-checked", "true");
+  await page.keyboard.press("End");
+  await expect(white).toBeFocused();
+  await page.keyboard.press("Home");
+  await expect(signal).toBeFocused();
+  await expect(signal).toHaveAttribute("aria-checked", "true");
+});
+
+test("M02-01 save locks theme and density choices until the request settles", async ({ page }) => {
+  await ready(page);
+  let releaseSave!: () => void;
+  await page.route("**/api/v1/me/ui-preferences", async (route) => {
+    if (route.request().method() === "PUT") {
+      await new Promise<void>((resolve) => (releaseSave = resolve));
+      await route.fulfill({
+        json: envelope({
+          theme: "cloud-white",
+          source: "saved",
+          organization_id: org,
+          workspace_id: workspace,
+          version: 2,
+          updated_at: "2026-08-07T14:05:00.000Z",
+        }),
+      });
+      return;
+    }
+    await route.fulfill({
+      json: envelope({
+        theme: "deep-ocean",
+        source: "saved",
+        organization_id: org,
+        workspace_id: workspace,
+        version: 1,
+        updated_at: "2026-08-07T14:00:00.000Z",
+      }),
+    });
+  });
+  await page.goto("/settings/theme");
+  await page.getByRole("radio", { name: /净页白/ }).click();
+  await page.getByRole("button", { name: "保存主题偏好" }).click();
+  await expect(page.getByRole("button", { name: "正在保存…" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "撤销主题预览" })).toBeDisabled();
+  await expect(page.getByRole("radio", { name: /档案纸/ })).toBeDisabled();
+  await expect(page.getByRole("radiogroup", { name: "页面密度" }).getByRole("radio")).toHaveCount(
+    2,
+  );
+  await expect(
+    page.getByRole("radiogroup", { name: "页面密度" }).getByRole("radio").first(),
+  ).toBeDisabled();
+  releaseSave();
+  await expect(page.getByText("服务器已确认当前主题偏好。")).toBeVisible();
+});
+
+test("M02-01 rate limits do not masquerade as missing organization context", async ({ page }) => {
+  await page.route("**/api/v1/me/ui-preferences", (route) =>
+    route.fulfill({
+      status: 429,
+      json: {
+        error: { code: "rate_limited", action_hint: "请稍后再试。" },
+        request_id: "theme-rate-limited",
+        trace_id: "theme-rate-limited",
+      },
+    }),
+  );
+  await page.goto("/settings/theme");
+  await expect(page.getByText("请求较频繁，请稍后再试")).toBeVisible();
+  await expect(page.getByText("请稍后再试。")).toBeVisible();
+  await expect(page.getByText("还需要选择组织和工作区")).toHaveCount(0);
+});
+
+test("M02-01 density is immediate, session-only and keyboard accessible", async ({ page }) => {
+  await ready(page);
+  await page.goto("/settings/theme");
+  const density = page.getByRole("radiogroup", { name: "页面密度" });
+  const compact = density.getByRole("radio", { name: /紧凑/ });
+  await density.getByRole("radio", { name: /标准/ }).focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(compact).toBeFocused();
   await expect(compact).toHaveAttribute("aria-checked", "true");
   await expect(page.locator("html")).toHaveAttribute("data-density", "compact");
-  await expect(page.getByText("移动端仍保留 44 像素触控区域")).toBeVisible();
 });

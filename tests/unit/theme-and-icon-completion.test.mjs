@@ -61,7 +61,7 @@ test("saved theme and session density are applied before Vue mounts", async () =
   assert.match(main, /applyShellDensity\(false\)/);
   assert.match(theme, /densityIds = \["standard", "compact"\]/);
   assert.match(theme, /applyShellDensity\(administrative: boolean\)/);
-  assert.match(studio, /aria-label="页面密度"/);
+  assert.match(studio, /label="页面密度"/);
   assert.match(shell, /applyShellDensity\(props\.shell !== "member"\)/);
   assert.match(shellTheme, /\/me\/ui-preferences/);
   assert.match(shellTheme, /主题保存失败，已恢复原主题/);

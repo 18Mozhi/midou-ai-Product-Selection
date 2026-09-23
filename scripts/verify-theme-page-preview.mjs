@@ -115,7 +115,9 @@ try {
             if (scenario === "expired")
               return route.fulfill(failure(401, "session_expired", "p10-expired"));
             if (scenario === "blocked")
-              return route.fulfill(failure(409, "context_required", "p10-context"));
+              return route.fulfill(failure(409, "preference_scope_required", "p10-context"));
+            if (scenario === "rate-limited")
+              return route.fulfill(failure(429, "rate_limited", "p10-rate-limit"));
             return route.fulfill({ json: envelope(preference, "p10-read") });
           }
           if (key === "PUT /api/v1/me/ui-preferences") {
@@ -140,33 +142,61 @@ try {
         });
         const page = await context.newPage();
         await page.goto(`${origin}/settings/theme`, { waitUntil: "domcontentloaded" });
-        const root = page.locator(".theme-page--review");
-        await root
-          .getByRole("heading", { name: "预览与已保存偏好分开显示", exact: true })
-          .waitFor();
+        const root = page.locator(".theme-page--c");
+        await root.getByRole("heading", { name: "界面外观", exact: true }).waitFor();
         await root.getByText("当前主题与服务器已保存偏好一致。", { exact: true }).waitFor();
         check(
-          await root.getByText("主题可保存；页面密度只在当前会话生效。", { exact: true }).count(),
+          await root.getByText("仅在当前会话生效，不会保存到服务器。", { exact: true }).count(),
           1,
           "session-only density statement",
         );
         check(
-          await root.getByRole("button", { name: "保存主题", exact: true }).isDisabled(),
+          await root.getByRole("button", { name: "保存主题偏好", exact: true }).isDisabled(),
           true,
           "clean theme cannot save",
         );
         if (output && motion === "reduce") await capture(page, "saved-preference");
         const themes = root.getByRole("radio", { name: /净页白/ });
-        await themes.focus();
+        const archiveTheme = root.getByRole("radio", { name: /档案纸/ });
+        const firstTheme = root.getByRole("radio", { name: /信号纸/ });
+        await firstTheme.focus();
+        await page.keyboard.press("ArrowRight");
+        await page.waitForFunction(() => {
+          const group = document.querySelector('[role="radiogroup"][aria-label="界面主题"]');
+          return (
+            group?.contains(document.activeElement) &&
+            document.activeElement.getAttribute("aria-checked") === "true"
+          );
+        });
+        check(
+          await archiveTheme.evaluate((node) => node === document.activeElement),
+          true,
+          "radio arrow focus",
+        );
+        check(await archiveTheme.getAttribute("aria-checked"), "true", "radio arrow selection");
+        await page.keyboard.press("End");
+        await page.waitForFunction(() => {
+          const group = document.querySelector('[role="radiogroup"][aria-label="界面主题"]');
+          return (
+            group?.contains(document.activeElement) &&
+            document.activeElement.getAttribute("aria-checked") === "true"
+          );
+        });
+        check(
+          await themes.evaluate((node) => node === document.activeElement),
+          true,
+          "radio End focus",
+        );
+        check(await themes.getAttribute("aria-checked"), "true", "radio End selection");
         check(
           await themes.evaluate((node) => getComputedStyle(node).outlineWidth),
           "3px",
           "theme focus visible",
         );
         await themes.click();
-        await root.getByText("当前主题尚未保存。", { exact: true }).waitFor();
+        await root.getByText("当前预览尚未保存到服务器。", { exact: true }).waitFor();
         check(
-          await root.getByRole("button", { name: "保存主题", exact: true }).isDisabled(),
+          await root.getByRole("button", { name: "保存主题偏好", exact: true }).isDisabled(),
           false,
           "theme difference enables save",
         );
@@ -179,8 +209,8 @@ try {
           "compact",
           "density applies inside current session",
         );
-        await root.getByRole("button", { name: "保存主题", exact: true }).click();
-        await root.getByText("当前主题已由服务器确认。", { exact: true }).waitFor();
+        await root.getByRole("button", { name: "保存主题偏好", exact: true }).click();
+        await root.getByText("服务器已确认当前主题偏好。", { exact: true }).waitFor();
         check(
           writes,
           [{ theme: "cloud-white", expected_version: 7 }],
@@ -190,13 +220,17 @@ try {
         scenario = "conflict";
         const conflict = await context.newPage();
         await conflict.goto(`${origin}/settings/theme`, { waitUntil: "domcontentloaded" });
-        const conflictRoot = conflict.locator(".theme-page--review");
+        const conflictRoot = conflict.locator(".theme-page--c");
         await conflictRoot.getByText("当前主题与服务器已保存偏好一致。", { exact: true }).waitFor();
         await conflictRoot.getByRole("radio", { name: /档案纸/ }).click();
-        await conflictRoot.getByRole("button", { name: "保存主题", exact: true }).click();
+        await conflictRoot.getByRole("button", { name: "保存主题偏好", exact: true }).click();
         await conflictRoot.getByText("偏好已在其他窗口更新", { exact: true }).waitFor();
         check(
-          await conflictRoot.getByText("刷新最新偏好后重新选择。", { exact: true }).count(),
+          await conflictRoot
+            .getByText("先刷新服务器上的最新偏好，再重新选择；不会覆盖其他窗口的更新。", {
+              exact: true,
+            })
+            .count(),
           1,
           "conflict requires refresh rather than overwrite",
         );
@@ -204,25 +238,42 @@ try {
         scenario = "blocked";
         const blocked = await context.newPage();
         await blocked.goto(`${origin}/settings/theme`, { waitUntil: "domcontentloaded" });
-        const blockedRoot = blocked.locator(".theme-page--review");
-        await blockedRoot.getByText("尚未选择组织与工作区", { exact: true }).waitFor();
+        const blockedRoot = blocked.locator(".theme-page--c");
+        await blockedRoot.getByText("还需要选择组织和工作区", { exact: true }).waitFor();
         check(
           await blockedRoot.getByRole("link", { name: "选择工作区", exact: true }).count(),
           1,
           "blocked gives scope recovery",
         );
+        await blockedRoot.getByText("查看关联编号", { exact: true }).click();
+        check(
+          await blockedRoot.getByText("p10-context", { exact: true }).count(),
+          1,
+          "trace is disclosed on demand",
+        );
         if (output && motion === "reduce") await capture(blocked, "blocked");
         scenario = "expired";
         const expired = await context.newPage();
         await expired.goto(`${origin}/settings/theme`, { waitUntil: "domcontentloaded" });
-        const expiredRoot = expired.locator(".theme-page--review");
-        await expiredRoot.getByText("登录已过期", { exact: true }).waitFor();
+        const expiredRoot = expired.locator(".theme-page--c");
+        await expiredRoot.getByText("登录状态已过期", { exact: true }).waitFor();
         check(
           await expiredRoot.getByRole("link", { name: "重新登录", exact: true }).count(),
           1,
           "expired gives login recovery",
         );
         if (output && motion === "reduce") await capture(expired, "expired");
+        scenario = "rate-limited";
+        const limited = await context.newPage();
+        await limited.goto(`${origin}/settings/theme`, { waitUntil: "domcontentloaded" });
+        const limitedRoot = limited.locator(".theme-page--c");
+        await limitedRoot.getByText("请求较频繁，请稍后再试", { exact: true }).waitFor();
+        check(
+          await limitedRoot.getByText("还需要选择组织和工作区", { exact: true }).count(),
+          0,
+          "rate limit is not a scope error",
+        );
+        if (output && motion === "reduce") await capture(limited, "rate-limited");
         check(unexpected, [], "no unexpected API");
         check(errors, [], "no page errors");
         results.push({ width, motion, checks, writes: writes.length });

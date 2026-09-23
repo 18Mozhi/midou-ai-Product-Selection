@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import PreferenceRadioGroup from "./theme-studio/PreferenceRadioGroup.vue";
+import "./theme-studio-c.css";
 import {
   applyDensity,
   applyTheme,
@@ -11,6 +13,7 @@ import {
   type DensityId,
   type ThemeId,
 } from "../design/theme";
+
 const props = defineProps<{ apiBaseUrl: string }>();
 const request = createApiClient(props.apiBaseUrl);
 type State =
@@ -22,7 +25,8 @@ type State =
   | "forbidden"
   | "expired"
   | "blocked"
-  | "conflict";
+  | "conflict"
+  | "rate_limited";
 interface Preference {
   theme: ThemeId;
   source: "default" | "saved";
@@ -31,39 +35,47 @@ interface Preference {
   version: number;
   updated_at: string | null;
 }
-const state = ref<State>("loading"),
-  selected = ref<ThemeId>("deep-ocean"),
-  selectedDensity = ref<DensityId>(
-    isDensityId(document.documentElement.dataset.density)
-      ? document.documentElement.dataset.density
-      : "standard",
-  ),
-  saved = ref<Preference | null>(null),
-  requestId = ref("");
+
+const state = ref<State>("loading");
+const selected = ref<ThemeId>("deep-ocean");
+const selectedDensity = ref<DensityId>(
+  isDensityId(document.documentElement.dataset.density)
+    ? document.documentElement.dataset.density
+    : "standard",
+);
+const saved = ref<Preference | null>(null);
+const requestId = ref("");
+const actionHint = ref("");
 const themeDirty = computed(() => selected.value !== (saved.value?.theme ?? "deep-ocean"));
-const dirty = themeDirty;
-const selectedName = computed(() => themes.find((item) => item.id === selected.value)!.name);
-function choose(theme: ThemeId) {
+const isDirty = computed(() => themeDirty.value);
+const selectedTheme = computed(() => themes.find((item) => item.id === selected.value)!);
+
+function chooseTheme(theme: ThemeId) {
   if (state.value === "saving") return;
   selected.value = theme;
   applyTheme(theme);
   if (state.value === "saved") state.value = "ready";
 }
+
 function chooseDensity(density: DensityId) {
   if (state.value === "saving") return;
   selectedDensity.value = density;
   applyDensity(density);
 }
+
 function mapError(kind: ApiFailureKind, code?: string): State {
   if (kind === "expired") return "expired";
   if (kind === "forbidden") return "forbidden";
+  if (kind === "conflict" && code === "preference_scope_required") return "blocked";
   if (kind === "conflict" && code === "preference_version_conflict") return "conflict";
-  if (kind === "conflict" || kind === "blocked" || kind === "rate_limited") return "blocked";
+  if (kind === "rate_limited") return "rate_limited";
   return "error";
 }
+
 async function load() {
   state.value = "loading";
   requestId.value = "";
+  actionHint.value = "";
   try {
     const response = await request<Preference>("/me/ui-preferences");
     requestId.value = response.request_id;
@@ -75,15 +87,18 @@ async function load() {
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
+      actionHint.value = error.actionHint;
       state.value = mapError(error.kind, error.code);
       return;
     }
     state.value = "error";
   }
 }
+
 async function save() {
-  if (!dirty.value || state.value === "saving") return;
+  if (!isDirty.value || state.value === "saving") return;
   state.value = "saving";
+  actionHint.value = "";
   const clientRequestId = crypto.randomUUID();
   try {
     if (themeDirty.value) {
@@ -102,6 +117,7 @@ async function save() {
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
+      actionHint.value = error.actionHint;
       state.value = mapError(error.kind, error.code);
       return;
     }
@@ -109,211 +125,212 @@ async function save() {
     state.value = "error";
   }
 }
+
 function restore() {
+  if (state.value === "saving") return;
   selected.value = saved.value?.theme ?? "deep-ocean";
   applyTheme(selected.value);
   state.value = "ready";
 }
+
 onMounted(load);
 </script>
 
 <template>
-  <main class="theme-page" data-testid="theme-studio">
-    <aside class="theme-nav">
-      <RouterLink class="theme-brand" to="/"><b>S</b><span>SCOUTOPS / 智能选品</span></RouterLink>
-      <p>个人中心</p>
-      <nav>
-        <RouterLink to="/me">个人资料</RouterLink
-        ><RouterLink to="/security/mfa">安全设置</RouterLink
-        ><RouterLink class="active" to="/settings/theme">主题设置</RouterLink>
+  <main class="theme-page theme-page--c" data-testid="theme-studio">
+    <header class="theme-c-topbar">
+      <RouterLink class="theme-c-brand" to="/" aria-label="ScoutOps 首页">
+        <span class="theme-c-brand__mark" aria-hidden="true">S</span>
+        <span>ScoutOps <i>/</i> 个人设置</span>
+      </RouterLink>
+      <nav aria-label="个人设置">
+        <RouterLink to="/me">个人资料</RouterLink>
+        <RouterLink to="/security/mfa">安全设置</RouterLink>
+        <RouterLink class="is-current" to="/settings/theme" aria-current="page"
+          >外观偏好</RouterLink
+        >
       </nav>
-      <small>主题不改变权限、数据范围或业务结论</small>
-    </aside>
-    <section class="theme-main">
-      <header class="theme-header">
-        <div>
-          <p>VISUAL REGISTER / 个人外观</p>
-          <h1>账页与信号语义</h1>
-          <span>选择适合工作环境的界面。所有状态同时保留图标、文字与数值。</span>
-        </div>
-        <div class="theme-context">
-          <span>当前主题</span><strong>{{ selectedName }}</strong
-          ><small v-if="saved">工作区 · {{ saved.workspace_id.slice(0, 8) }}</small>
-        </div>
-      </header>
-      <section v-if="state === 'loading'" class="theme-state" aria-live="polite">
-        <span class="theme-spinner"></span><strong>正在读取你的工作区偏好</strong>
-        <p>默认显示信号纸；服务器确认前不会覆盖已保存选择。</p>
-      </section>
-      <section
-        v-else-if="['error', 'forbidden', 'expired', 'blocked', 'conflict'].includes(state)"
-        class="theme-state theme-state--error"
-        aria-live="assertive"
-      >
-        <b>{{
+    </header>
+
+    <section class="theme-c-pagehead">
+      <div>
+        <p class="theme-c-eyebrow">PREFERENCES <span>·</span> 外观偏好</p>
+        <h1>界面外观</h1>
+        <p class="theme-c-intro">选择主题即时预览；确认保存后才会更新服务器偏好。</p>
+      </div>
+      <div class="theme-c-context">
+        <span>当前预览</span>
+        <strong>{{ selectedTheme.name }}</strong>
+        <small v-if="saved">工作区 · {{ saved.workspace_id.slice(0, 8) }}</small>
+      </div>
+    </section>
+
+    <section
+      v-if="state === 'loading'"
+      class="theme-c-message"
+      data-state="loading"
+      aria-live="polite"
+    >
+      <span class="theme-c-message__symbol" aria-hidden="true">…</span>
+      <div>
+        <strong>正在读取已保存偏好</strong>
+        <p>读取完成前不会把本地默认值描述为服务器确认。</p>
+      </div>
+    </section>
+
+    <section
+      v-else-if="
+        ['error', 'forbidden', 'expired', 'blocked', 'conflict', 'rate_limited'].includes(state)
+      "
+      class="theme-c-message theme-c-message--error"
+      :data-state="state"
+      aria-live="assertive"
+    >
+      <span class="theme-c-message__symbol" aria-hidden="true">{{
+        state === "conflict" ? "↻" : "!"
+      }}</span>
+      <div class="theme-c-message__body">
+        <strong>{{
           state === "forbidden"
-            ? "403"
+            ? "当前账号无权读取此偏好范围"
             : state === "expired"
-              ? "401"
-              : state === "conflict"
-                ? "↻"
-                : "!"
-        }}</b
-        ><strong>{{
-          state === "forbidden"
-            ? "无权访问当前偏好范围"
-            : state === "expired"
-              ? "登录已过期"
+              ? "登录状态已过期"
               : state === "blocked"
-                ? "尚未选择组织与工作区"
+                ? "还需要选择组织和工作区"
                 : state === "conflict"
-                  ? "主题偏好已在其他窗口更新"
-                  : "主题偏好暂时无法读取"
+                  ? "偏好已在其他窗口更新"
+                  : state === "rate_limited"
+                    ? "请求较频繁，请稍后再试"
+                    : "暂时无法读取主题偏好"
         }}</strong>
         <p>
           {{
             state === "blocked"
-              ? "先完成组织与工作区选择，再返回主题设置。"
+              ? "选择当前工作区后，可以重新读取偏好。"
               : state === "conflict"
-                ? "刷新最新偏好后重新选择。"
-                : "重试；如仍失败，请向管理员提供请求标识。"
+                ? "先刷新服务器上的最新偏好，再重新选择；不会覆盖其他窗口的更新。"
+                : actionHint || "请稍后重试；如仍无法继续，可将关联编号提供给管理员。"
           }}
         </p>
-        <small v-if="requestId">请求标识：{{ requestId }}</small
-        ><RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
-        ><RouterLink v-else-if="state === 'blocked'" to="/select-context">选择工作区</RouterLink
-        ><button v-else @click="load">刷新偏好</button>
-      </section>
-      <template v-else>
-        <section class="theme-workbench">
-          <div class="theme-picker">
-            <div class="section-heading">
-              <div>
-                <p>界面主题</p>
-                <h2>三种纸张，同一套判断</h2>
-              </div>
-              <span>{{
-                state === "saved" ? "✓ 已保存" : dirty ? "● 有未保存更改" : "✓ 已同步"
-              }}</span>
-            </div>
-            <div class="theme-options" role="radiogroup" aria-label="界面主题">
-              <button
-                v-for="theme in themes"
-                :key="theme.id"
-                class="theme-option"
-                :class="{ selected: selected === theme.id }"
-                role="radio"
-                :aria-checked="selected === theme.id"
-                @click="choose(theme.id)"
-              >
-                <i :data-swatch="theme.id"><span></span><span></span><span></span></i
-                ><b>{{ theme.name }}</b
-                ><small>{{ theme.mode }} · {{ theme.caption }}</small
-                ><em>{{ selected === theme.id ? "当前预览" : "选择预览" }}</em>
-              </button>
-            </div>
-            <div class="density-setting">
-              <div>
-                <p>页面密度</p>
-                <h3>选择标准或紧凑布局</h3>
-                <span>切换在当前会话立即生效；移动端仍保留 44 像素触控区域。</span>
-              </div>
-              <div class="density-options" role="radiogroup" aria-label="页面密度">
-                <button
-                  v-for="density in densities"
-                  :key="density.id"
-                  type="button"
-                  role="radio"
-                  :aria-checked="selectedDensity === density.id"
-                  :class="{ selected: selectedDensity === density.id }"
-                  @click="chooseDensity(density.id)"
-                >
-                  <b>{{ density.name }}</b
-                  ><small>{{ density.caption }}</small>
-                </button>
-              </div>
-            </div>
-            <div class="theme-actions">
-              <button class="secondary" :disabled="!dirty" @click="restore">撤销预览</button
-              ><button class="primary" :disabled="!dirty || state === 'saving'" @click="save">
-                {{ state === "saving" ? "正在保存…" : "保存主题" }}
-              </button>
-            </div>
-          </div>
-          <aside class="theme-preview" aria-label="主题实时预览">
-            <div class="preview-top">
-              <span><b>S</b>决策账页</span><small>实时预览</small>
-            </div>
-            <div class="theme-shell-previews" aria-label="三套壳层同步预览">
-              <article data-shell-preview="member">
-                <small>成员工作台</small><strong>今日行动</strong><span>业务操作与主题同步</span>
-              </article>
-              <article data-shell-preview="organization">
-                <small>组织管理后台</small><strong>治理概览</strong><span>沿用同一账页语义</span>
-              </article>
-              <article data-shell-preview="platform">
-                <small>平台管理后台</small><strong>异常优先</strong><span>继承当前主题</span>
-              </article>
-            </div>
-            <div class="preview-metrics">
-              <article>
-                <span>机会评分</span><strong>87</strong><small>高潜力 · 文字结论</small>
-              </article>
-              <article>
-                <span>证据新鲜度</span><strong>2 小时</strong><small>最新 · 2026-08-07</small>
-              </article>
-            </div>
-            <div class="preview-chart">
-              <div class="chart-copy">
-                <span>需求变化</span><strong>+18.4%</strong
-                ><small>近 30 天 · 来源：公开市场信号</small>
-              </div>
-              <svg
-                viewBox="0 0 320 110"
-                role="img"
-                aria-label="近 30 天需求上升 18.4%，来源为公开市场信号"
-              >
-                <path
-                  class="chart-area"
-                  d="M4 91 C45 82 52 67 90 72 S142 34 176 53 S229 18 316 24 L316 108 L4 108Z"
-                />
-                <path
-                  class="chart-line"
-                  d="M4 91 C45 82 52 67 90 72 S142 34 176 53 S229 18 316 24"
-                />
-              </svg>
-            </div>
-            <ul class="semantic-status">
-              <li>
-                <i data-kind="success">✓</i
-                ><span><b>数据可用</b><small>完整度 96% · 刚刚检查</small></span>
-              </li>
-              <li>
-                <i data-kind="warning">!</i
-                ><span><b>需要复核</b><small>2 项成本假设待确认</small></span>
-              </li>
-              <li>
-                <i data-kind="danger">×</i
-                ><span><b>风险受阻</b><small>1 项资质证据缺失</small></span>
-              </li>
-            </ul>
-          </aside>
-        </section>
-        <section class="theme-contract">
-          <article>
-            <span>01</span><strong>状态不只靠颜色</strong>
-            <p>成功、警告和受阻均提供符号、文字与下一步。</p>
-          </article>
-          <article>
-            <span>02</span><strong>图表可被读懂</strong>
-            <p>同时提供数值、时间范围、来源和新鲜度。</p>
-          </article>
-          <article>
-            <span>03</span><strong>权限保持不变</strong>
-            <p>主题不会改变路由、操作权限或数据范围。</p>
-          </article>
-        </section>
-      </template>
+        <details v-if="requestId" class="theme-c-trace">
+          <summary>查看关联编号</summary>
+          <code>{{ requestId }}</code>
+        </details>
+        <div class="theme-c-message__actions">
+          <RouterLink
+            v-if="state === 'expired'"
+            class="theme-c-action theme-c-action--primary"
+            to="/login"
+            >重新登录</RouterLink
+          >
+          <RouterLink
+            v-else-if="state === 'blocked'"
+            class="theme-c-action theme-c-action--primary"
+            to="/select-context"
+            >选择工作区</RouterLink
+          >
+          <button v-else type="button" class="theme-c-action theme-c-action--primary" @click="load">
+            重新读取
+          </button>
+        </div>
+      </div>
     </section>
+
+    <template v-else>
+      <section
+        class="theme-c-save-status"
+        :data-state="
+          state === 'saving'
+            ? 'saving'
+            : state === 'saved'
+              ? 'saved'
+              : isDirty
+                ? 'preview'
+                : 'synced'
+        "
+        aria-live="polite"
+      >
+        <span class="theme-c-save-status__label">{{
+          state === "saving"
+            ? "正在保存"
+            : state === "saved"
+              ? "服务器已确认"
+              : isDirty
+                ? "本地预览"
+                : "已同步"
+        }}</span>
+        <p>
+          {{
+            state === "saving"
+              ? "正在写入主题偏好；此期间选择已锁定。"
+              : state === "saved"
+                ? "服务器已确认当前主题偏好。"
+                : isDirty
+                  ? "当前预览尚未保存到服务器。"
+                  : saved?.source === "default"
+                    ? "当前主题来自服务器默认值，尚未保存为个人偏好。"
+                    : "当前主题与服务器已保存偏好一致。"
+          }}
+        </p>
+      </section>
+
+      <section class="theme-c-settings" aria-label="外观设置">
+        <div class="theme-c-section-head">
+          <div>
+            <p class="theme-c-eyebrow">01 <span>·</span> COLOR</p>
+            <h2>主题</h2>
+          </div>
+          <p>主题预览立即应用于当前界面；保存操作仅写入主题偏好。</p>
+        </div>
+        <PreferenceRadioGroup
+          label="界面主题"
+          :options="themes"
+          :selected="selected"
+          :disabled="state === 'saving'"
+          @select="chooseTheme($event)"
+        />
+
+        <div class="theme-c-section-head theme-c-section-head--density">
+          <div>
+            <p class="theme-c-eyebrow">02 <span>·</span> SPACING</p>
+            <h2>页面密度</h2>
+          </div>
+          <p>仅在当前会话生效，不会保存到服务器。</p>
+        </div>
+        <PreferenceRadioGroup
+          label="页面密度"
+          :options="densities"
+          :selected="selectedDensity"
+          :disabled="state === 'saving'"
+          @select="chooseDensity($event)"
+        />
+
+        <footer class="theme-c-actions">
+          <p>
+            当前选择：<strong>{{ selectedTheme.name }}</strong
+            ><span> · {{ selectedDensity === "compact" ? "紧凑" : "标准" }}密度</span>
+          </p>
+          <div>
+            <button
+              class="theme-c-action theme-c-action--quiet"
+              type="button"
+              :disabled="!isDirty || state === 'saving'"
+              @click="restore"
+            >
+              撤销主题预览
+            </button>
+            <button
+              class="theme-c-action theme-c-action--primary"
+              type="button"
+              :disabled="!isDirty || state === 'saving'"
+              @click="save"
+            >
+              {{ state === "saving" ? "正在保存…" : state === "saved" ? "已保存" : "保存主题偏好" }}
+            </button>
+          </div>
+        </footer>
+      </section>
+      <p class="theme-c-boundary">主题与密度只影响显示方式，不改变权限、数据范围或业务结论。</p>
+    </template>
   </main>
 </template>
