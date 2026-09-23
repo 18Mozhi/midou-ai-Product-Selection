@@ -166,9 +166,23 @@ test("M06-04.A07/A08/A15 security operations visual sanitized", async ({ page })
   await page.reload();
   await expect(page.getByText("登录与风险事件")).toBeVisible();
   await page.getByRole("button", { name: /登录失败/ }).click();
+  const eventTrigger = page.getByRole("button", { name: /登录失败/ });
   const eventDialog = page.getByRole("dialog", { name: "登录失败" });
   await expect(eventDialog).toBeVisible();
-  await eventDialog.getByText("技术详情").click();
+  const closeDetails = eventDialog.getByRole("button", { name: "关闭详情" });
+  const technicalDetails = eventDialog.getByText("技术详情", { exact: true });
+  await expect(closeDetails).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(technicalDetails).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(closeDetails).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(technicalDetails).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(eventDialog).toBeHidden();
+  await expect(eventTrigger).toBeFocused();
+  await eventTrigger.click();
+  await eventDialog.getByText("技术详情", { exact: true }).click();
   await expect(
     eventDialog.getByText(data.security_events[0].user_id, { exact: true }),
   ).toBeVisible();

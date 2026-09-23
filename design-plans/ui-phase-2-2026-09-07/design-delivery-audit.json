@@ -4,34 +4,34 @@
   "baselineRevision": "c79a062616ea0d83e63e004fcf8d5c3acb22974b",
   "scope": "73 canonical routes plus C-direction local artifacts; no product runtime or production access",
   "inputHashes": {
-    "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+    "config/route-catalog.json": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
     "design-plans/ui-phase-2-2026-09-07/coverage.json": "512bec42b1b4dd65834c0c82be662ea5843f308a0035186d9fd5248fe11f5466",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "design-plans/ui-phase-2-2026-09-07/PAGES.md": "ca41a447eb5be9317f20642bd87acc71ae31f9fe00147f1a7a63b7c48d39320d",
     "scripts/audit-ui-phase2-design-delivery.mjs": "f6d7d0808e0728150f7c104f3086fecd02cde084f8bad78cbe2128e4e11ef2e1",
     "scripts/lib/ui-phase2-organization-action-baseline.mjs": "120bf0d7417c51e38c31b8dc38f009a32feb5553bcae49e6064c680fd178ba47",
-    "scripts/lib/ui-phase2-token-copy-baseline.mjs": "bb93e58271aba9065cf4c5eeb31d2af806e6653119e3aca54e90e967722171bf",
+    "scripts/lib/ui-phase2-token-copy-baseline.mjs": "967246d811250b1784d482b5fc065402a10a9772016d097f9ab27ce1d1708853",
     "scripts/lib/ui-phase2-filter-reset-baseline.mjs": "b16cce55c4f07892ecf8758578003dd75198092fa60421b388b6e1ca57580a27",
-    "scripts/lib/ui-phase2-redis-review-baseline.mjs": "a465cb59ff95e8283264d5a53eec1df7cc6e3d457c9251bb88cf21dcef727079",
+    "scripts/lib/ui-phase2-redis-review-baseline.mjs": "6aa51b66fe6c9d3b86c1ae9a039c43e7e3f272131a79655dbb80cea0b10e8b52",
     "scripts/lib/ui-phase2-modal-dialog-baseline.mjs": "86ccba2cedc2054ecbbfca2f6e0a4e9845d4f877566c07750b972294b4ebdab7",
-    "scripts/lib/ui-phase2-shared-review-baseline.mjs": "4e69817a6036c3e634c938c80cc8c6baec656a600459404c66ac27b06646080e",
+    "scripts/lib/ui-phase2-shared-review-baseline.mjs": "c7df82d2de95ea92bc68c95ce991807414c9d3853fb408b7616f022bc2503673",
     "scripts/lib/ui-phase2-user-creation-baseline.mjs": "0de1f363d021bb5a7601cd8f12b17f1bb7f6406db179ef10cfe1fb6b98ec236e",
     "scripts/lib/ui-phase2-password-baseline.mjs": "44bbd10895a491ba672294d97e5eb06cd639c8d4e611a9443ec7aabeacdd6714",
-    "scripts/lib/ui-phase2-admin-controls-baseline.mjs": "82eaf9d3aa54b88230e34758610a9ba0b538c7b66e331d49e7cf797edbdc8e37",
-    "scripts/lib/ui-phase2-admin-results-baseline.mjs": "3209f2459829767a5d6a84d5ae0b490b2be1db6115e1129fc81bafd9cb93b4b9",
+    "scripts/lib/ui-phase2-admin-controls-baseline.mjs": "fc1f1abcf2293f4595e5f54f40ba336933bac74c638fd26925a32c1e8c607da2",
+    "scripts/lib/ui-phase2-admin-results-baseline.mjs": "ad076768daaf7690a3171e2e7c64b2871a7ae02dc579aef620a7d38eac540b57",
     "scripts/lib/ui-phase2-admin-directory-baseline.mjs": "c2b6a90174caa8e5a9b1344bc7026f6103c918677993b5dc2443c71c04146761",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "69ad9e30b5429b03ac9be5b85c5bde659ad74ae6c65c6e4eeb846fc282ae5d81",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "6895931d60263e0375cc92c821140be7e55bc9c5de86fae3863e0fe685a8449c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "435afff9ab504ef90f77444813b7ee37e0fad2aa1e7fc9ffbeb718b342e77d0e",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P04.md": "dc46a63f8f4472203d41ce937e4d46a69c154c3635ed9ba6e44d099fd1cc5880",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P05.md": "83199522866028ae4015e7c5a6b37172389718d0bed1ddc763969637e4740844",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P06.md": "e2cc65b5d826d0df1620a089a43abc4c3f52302c56656d431bf98ab9cdc8a3cc",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P07.md": "2dfba875d918508b9f1679b33a66c1363f52b822f19c03c0853d8c54461c2c85",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P08.md": "e2ba1a126ba241ad2a7e98cc3db2661bf02b0175e1f17c0fbd8316b5ffe9adaf",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P09.md": "aeba6c9886eecb62eaeba12e1ff30c706b214a9eb1b34b92d1ec0e04b0109c1d",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P10.md": "f0321ef7ea5380b40172823a7ce2043b2b3d2275ea33766d2b2a1f695b4f2a72",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "257c3d921344b12f1f77d2cbddab8b2488a5aa8d2ff3d884b9f21bd19d946be1",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "3d7cb49609c8d86a5e1ffd2570cca3e96f171a2f742f6b3c24bd32463549bcc9",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "b55592c802f1c2298d7910080beae7e68aec828a11357363546a1007f3c859fa",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "c429b797dbd4a03d6ae7ab46566440059f39dd47ba2c41b7913cf99d76677ee5",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P04.md": "e592009c74a8105a5e013cee45d66b9a72d9bfe439ed21d8721801475a92db5a",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P05.md": "3bf5ce1459a9d0d489a61865f02196745279af4ac711716939ed655c14bbe742",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P06.md": "60023b0f0f1b7ce1ea9f97d7d3ef70a3f50d388d2b7f5263c40934e95b4222c6",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P07.md": "29e870f11baee5d386d6aa04afca8bc6ce63fb72e05da8862fc6366ecd1a101e",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P08.md": "d05a636ce7eb3227573e7b28c456f25e440140484df0446517af24fdb8c0259a",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P09.md": "a79abe5883d65357d0066e7f2f64c6921179a8da0516ba5eaf47c0bdbd32a835",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P10.md": "5d19b2cf3d14acc1beb1a6f415b06e887fc09b43f97f4442d368a66b2bf27594",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "1b73dc9bf3ae8ede7d3b94faba9d6b480d2265437f4f9b9b4fdc12f9c39343c5",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "682add91925a79ee3dd98493cc141bed7d98c29b52c5c77c0de9d1ef985fe98f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "1ba521c8d8cfeeff0e4d6e2386e4b2ba04756bc88337036632892739bf8bf752",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "e439b04641fceed35085dfa81e36cfc5ce84215ee0e55fe8e2349cc12b919b50",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "1477d73750991d2c8834f3648215871ce1348a3704e65a38120966d5e6f48fa0",
@@ -42,7 +42,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "3054941f06b46e2c2278f71dd027fb3b9f86e401df813fa174720ca40a02a765",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "cf7274836ef2ded4b059478198182c594d59d73ecc58488d9329751724ad82ee",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "43b1a9ee01ad1de633e82feb852718bdce4e0b5edafc53d9b5310387e85fae18",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "ab1a3ea181bcc99710c57b86dbf703c4bee5963ee8c959a91e536912c3983d14",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "84552707eed90206805e243a56b2eae3efc79831cc113a93fcb5e3fc88ee7e62",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "e3d7ac984106976b4afa21d110fab7ad2597cc9d67dea397847e2b693322f8e2",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "1636ba8b1e8ee5cac64b9097d54838c330591ad64d33bc841a8ffcf731deab74",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "053ca2f35ff0e6c09c964671af9c76203f03b10b1dff2e870e0e7d9b94a78533",
@@ -58,59 +58,71 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P36.md": "e143a6287617cc2053dba041b080b1e2bc6841d45ee5fc941993b49c48615ada",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P37.md": "25461f58ea42a945a3c2c62a3f46b1886ea7490e51118caf326d9f9af7b6565e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P38.md": "a94063447c9da3fbcfd0fad7c362ce558ed958e42820c4e261e70c4c6ce67f3d",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P39.md": "38a00165d43b2919d6da9f9b476845893258ba546a60cbc5d0811875827bfa1f",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P39.md": "638346022284e1f27c7736c0925a6657c39e21e4cc23a334b674e6155fcedd28",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P40.md": "d83dfc9714d790070ac6ad9f9841ac9dffa400e93685d17949289ea2dd36be02",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P41.md": "a49cd4953dd9d3e48e4d9f26c0edac5c397718a1cab15920d966eee06c1b1257",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P42.md": "83b575cf49c568829e3f46b0af51d89c9bce488089a0a269aa80137727d2672a",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P41.md": "6219290f4c3403823da4f9bde40535d0e9bf6781f4460da5d47cd35af3d49b7e",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P42.md": "8f1ffd9af2eaec3dda24b7a4630b0d52127a9805d94595d92c252fbd0caa28e6",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P43.md": "8266f393cd17ac6d1be339d6f657152e2e37adcadaddd26558fb541e3654d182",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P44.md": "2ede4acf8d40faa102438a32461abd7783e3d251e48c4df2be851618a3b3c011",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P45.md": "a16a5566b9566e94f59e56be39f552f096a5c6e4f6013b7a673b07e76ba79cdb",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P46.md": "c66884f1b9cc3353ca1225449611593884d2dbc47eaf99ec9c248975c9842382",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P47.md": "67222ad1e96c37b29166ed25d3d0ecbb8e687135b047ee558c72d3cf473a1044",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P48.md": "f436a890e2c8295d0462e4d65558419d12b8244c7478f86097de3069e5603e2b",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P49.md": "122c4c394641c0028d6baf085b34b82793c006b7abda6590201ad3f765ae0827",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P50.md": "aa84f72eef49a552e52f5f324c558b9458fdedc448e9410d60771b3eefb960e7",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md": "ecec9d33500f647e7dcc2afa75040bcc37b5bb893b899f4fbbc94846c1c099ce",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md": "3fe9b8bad57238f6dc57dc3e52cf2fd5ed2dd3c8f9b65f27b4db17476e9f4a98",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md": "851ac8e629b2fa91262a505db4961808b93d027983ca551c12cbffde025ff49a",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "24b8d4ba8be61d5d261d8f7aadec1a1561eea3646d933e27a5ace8d08c66fe76",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P55.md": "19ee3ba99d45f9ce2afb57d00992f69d1bf1e1e2d4bb2c69c2a344072d6cbf98",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P56.md": "84ada3a02ab3cd43744184116e22f0fc6bebada40b02cf723fdcfc11ad533d5d",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "1ff3ce60914aeb2a63015b86a77c51d4f19f4285758213083e626f6f45df45de",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P58.md": "2862ac5c9e052661269e25301b23f3a343105d67b6d2939cc9e81ad36bcd5447",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P59.md": "f50dd5cdff3177e284032763b0895207acd0d5ea9d3b3c24bb8bd7813ac700f2",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "8bc72df438daea55ab7572e20416c180e2b1ede2abbe47b8b509eb793078cf17",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "6311053ef6d6d2d0b8a2b205638203eb313861098f5defc8eb12593c244ba7cf",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "480006a580cc066c9eeb84935d511551deba23d42f170149056a44076940adf8",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "f905a7f61249da224ba49863de44e695f4c085b632c7a299ce6f41b22023f240",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "e6bb9a28720ac4091a5467cfeec29a6e58ad834a73b95f78e6175526f8d15a4d",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P45.md": "88cf61feef9df714003bdb8eb4a5cc6d5d7ce31594ac6e39efbfe187a9243687",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P46.md": "eabe3a7b48f37fe113acf0c69084ead9a50b4835248dff821c9b6263c7bc1d2b",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P47.md": "66af69788896fa8dbb75addce94d60eca1218681390f477c857c35f8002d6269",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P48.md": "4a5cb92a6568dc94b2f3edc4479fc6bd7f26cab83692e3008743ac9e01493722",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P49.md": "242f27618e2b314c7ba6aa8b7cc3873a9c037f34fdf99b1a477ef70c8cff19a0",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P50.md": "7eeb239f876d2c643dffd84ad0b7d7fcf0712747e3d7e9eccb692987f712c335",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md": "0a08d794066c028595d9b3688d896252307c4821dc74740b7e42b6d6be72dbc0",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md": "2f68c0bef8f89ee48cdeed946c2008f13031a04c8aaec386a341510fc0348646",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md": "2db7f2d52d988d874d6520882168b02234f5adca5b963154bed9deb933f16cc1",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "1e949d78479d99a6f9110b4d8a26ef8bedf8e99d6ed7e6657eea09ce77f19449",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P55.md": "eecb01a5420fe50237138a202cd58f9623faac8741c8942a50695acda7f1499a",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P56.md": "0e4e2251072e0b24a261d350bd476434aebcb2a1dfc4c329e5d2625a7d667222",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "8b3ecc637cdd7afadc3906676aa6bcd083a0cc5c1bb4bf6608e20c73b8e9dc5b",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P58.md": "c29131899d379f94166b28fee3180ee5458a15464eb94972d1802756e4e66c9b",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P59.md": "64716e1e0ee58c12a9727a37c4ed872b0546be2b05349552589a728153c766bc",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "a2bf26800169f245383b622582c8f0767e6d9849a9a4ba5dedafc505ea8e345f",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "72af7291f7d1b8d03f95fe02106b7a2a772e348277562ab5377e8847171c4a4a",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "90ace44955294c0a8ed4cdd4f27ab7b6ede4d762dd867d76c1e11e6e5ec46efd",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "15e7e5d5894b5b896994249d89c3be91422ebdfdd9beb02cbc8069f1c604d854",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "4869f2a7553d65cb5355570511b38e73af1a34075a028e1d07f7564c89d71ee3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P65.md": "65b44de90a0dfb850a5511f7cbfa75c14a2ef0fce5a3279aefeada46560ba2e8",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "016e30d8770c26e75d0ea132196e62d42ffe8ebfc7af46a7e9b9340bf4e8f284",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "f4fa542e7577ecf6cfe82c0a79f15f18a77d469bbcbfed584052f2d5b3b032cb",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "6f8fe3d18f65378381dc5fd304ba7d3ac2be6f7a3f019e898dad2a0b85edc33c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "94746ed37d24a264589ae157bbd3cc7aac1cd6b33a129a5865c0ec001f47a382",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "c5d78f0e761d077a150ff8dadd20fcf64cc7259cf6d23f23934900e443a260cd",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "b8179a19edc86714bd88b31e38eb499d9614a5b8fb2eaf1a888592d325a3f7e3",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "b8cee964d50e40f6f87c2f2e867476f12cd022cb6442e0ab4cf07fd1dd551553",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "e1d459e00227acafabe8c8605fad1b0b84e15c154d074c77984f0dcbe4ddedd9",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "3ebf9ddfc3f3f904fd1b49292af6f5fd1d5acf5c8714202051275f02e6fd0640",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "b5eaf2a2c801252cbb0fbeed4c7b359b8c5e53398a9ba7faf519220c378314a9",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "db69bd311015caeae05d648c1b455d2c57886b7fcc86d955bea3e0e69b64836a",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "5d2647db685bf56ec6621c5d6730fe71f45d57afdd34a9c0fa33cd8c34f9d7f1"
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "03fcc4cbdb1615d5a55b60daf5b8b4809f93157065ff809695fb489ef5997773",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "6ae1dfb2006bf2f162a2279d4819f07bd93a00cafe366e7119e2c775a666b020",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "9d3cc2106db392ab9ff72215f3e9c79f8375e592477ce15aa4866bfe2ef01c3a"
   },
   "summary": {
     "routes": 73,
     "specifications": 73,
-    "relatedProposalRoutes": 73,
-    "noLinkedPageProposalRoutes": 0,
-    "missingPageIds": [],
+    "relatedProposalRoutes": 68,
+    "noLinkedPageProposalRoutes": 5,
+    "missingPageIds": [
+      "P51",
+      "P52",
+      "P53",
+      "P63",
+      "P71"
+    ],
     "packages": 102,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
     "uniqueBoundFiles": 974,
     "sourceBindings": 2004,
-    "sourceDrift": 0,
+    "sourceDrift": 133,
     "pngs": 15069,
     "pngDrift": 0,
     "unmanifestedPng": 0,
-    "readmeLinksChecked": 10151,
-    "unlinkedPagePackages": [],
+    "readmeLinksChecked": 10157,
+    "unlinkedPagePackages": [
+      "api-coverage-direction-c",
+      "browser-runtime-direction-c",
+      "capacity-direction-c",
+      "collection-overview-direction-c",
+      "collection-tasks-direction-c"
+    ],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
     "verifiedDialogVariants": 0,
@@ -1306,13 +1318,9 @@
       "batch": "W06",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md",
-      "references": [
-        "collection-tasks-direction-c"
-      ],
-      "proposalPackages": [
-        "collection-tasks-direction-c"
-      ],
-      "artifactAssociation": "related-proposal-not-complete-proof",
+      "references": [],
+      "proposalPackages": [],
+      "artifactAssociation": "no-page-proposal-linked",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -1328,13 +1336,9 @@
       "batch": "W06",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md",
-      "references": [
-        "collection-overview-direction-c"
-      ],
-      "proposalPackages": [
-        "collection-overview-direction-c"
-      ],
-      "artifactAssociation": "related-proposal-not-complete-proof",
+      "references": [],
+      "proposalPackages": [],
+      "artifactAssociation": "no-page-proposal-linked",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -1350,13 +1354,9 @@
       "batch": "W06",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md",
-      "references": [
-        "browser-runtime-direction-c"
-      ],
-      "proposalPackages": [
-        "browser-runtime-direction-c"
-      ],
-      "artifactAssociation": "related-proposal-not-complete-proof",
+      "references": [],
+      "proposalPackages": [],
+      "artifactAssociation": "no-page-proposal-linked",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -1578,13 +1578,9 @@
       "batch": "W07",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md",
-      "references": [
-        "api-coverage-direction-c"
-      ],
-      "proposalPackages": [
-        "api-coverage-direction-c"
-      ],
-      "artifactAssociation": "related-proposal-not-complete-proof",
+      "references": [],
+      "proposalPackages": [],
+      "artifactAssociation": "no-page-proposal-linked",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -1754,13 +1750,9 @@
       "batch": "W08",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md",
-      "references": [
-        "capacity-direction-c"
-      ],
-      "proposalPackages": [
-        "capacity-direction-c"
-      ],
-      "artifactAssociation": "related-proposal-not-complete-proof",
+      "references": [],
+      "proposalPackages": [],
+      "artifactAssociation": "no-page-proposal-linked",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -1825,7 +1817,20 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 14,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
+          "expected": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+          "actual": "30a6bef5841efc8ff53164e0b828e7da50a90d6f7ce149f8c971eed05f6e9b74",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/m03-07-provider-sources.spec.ts",
+          "expected": "29c1232a33cb260beeee6851f33c4558873d25e47e538d6a2e04c47eaa6ba5fe",
+          "actual": "71507eea28b215924527c5f66d9bbeba7e01edb9ee6d5a2d746b8dc8e66be709",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 134,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -1862,7 +1867,20 @@
       "approval": "pending-user-review",
       "role": "direction-selection-research",
       "sourceCount": 12,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+          "expected": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+          "actual": "87e0b0906fded03d7c5337dafa5e6bfc801a2367d12deb652cc36f0f88d32d9a",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 18,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -1885,7 +1903,7 @@
         {
           "file": "apps/web/src/components/PlatformAccountCenter.vue",
           "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
-          "actual": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+          "actual": "0e577c1e35a346166c3fdb071b91baf95bda65c442b788fad91b67481b7efd1f",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -1904,7 +1922,26 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 18,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "expected": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0",
+          "actual": "843fcd060a9dbdcf4ba42b62ddff25f15628efa4b38206dd75a78cd46ce3f1b8",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 86,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -1939,13 +1976,13 @@
         {
           "file": "apps/web/src/components/PlatformAccountCenter.vue",
           "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
-          "actual": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+          "actual": "0e577c1e35a346166c3fdb071b91baf95bda65c442b788fad91b67481b7efd1f",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -1976,7 +2013,26 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 24,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/ApiCoverageDashboard.vue",
+          "expected": "dfa6e82e10a8410c3ad761bf8d0f9c56bb018a29c3f9ba935a67014c16d1a126",
+          "actual": "3086f5e99bf67c5a3839297b05419f70cfa0b1548e4ed4fffd8d26aad4ca87e6",
+          "encoding": "raw"
+        },
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/m06-02/api-coverage-dashboard.test.mjs",
+          "expected": "b3a63610a59ed07a73a1598e469c0823c88da72f3436b3d7a9c48588935c93cf",
+          "actual": "70455dae0beb8591657ae1790c59322027ef71a1e8db8cdff014b3bca7102681",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 90,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2011,7 +2067,7 @@
         {
           "file": "apps/web/src/components/PlatformManagementCenter.vue",
           "expected": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
-          "actual": "471e940d9f254ade77f69cbe47ad3f80d6a3b722189f7dca8c252094013aa6f1",
+          "actual": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -2041,13 +2097,13 @@
         {
           "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
           "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "actual": "ed3ffa8de3b4913e8a5d14655f3e22d94967c7245add05cad0bb81d439c7980b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "scripts/lib/ui-phase2-api-coverage-design-data.mjs",
           "expected": "34ad1d77eeb70a6297aadc2a6322a377aa8b7025765d6c07aa29a2193e3a272d",
-          "actual": "977bfcdb2a53cad8828ee9bb7e1ccc4eaee268ff53bf83dc8ec6cd5833ca8073",
+          "actual": "dd7ffe49a55748486128c35fc7962eb7e17e4b46dba65b35aef2a7db6615ad23",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -2061,16 +2117,23 @@
       "readme": "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/appearance-direction-c/evidence.json",
       "manifestHash": "05109682b313e1d53239758847cb4744f219a42de3b36b2f65110d45213e6b8e",
-      "readmeHash": "7331273496f8ae33dac6982bf1f42bcb1d4ce10baaeea181699ee7062d504eaf",
+      "readmeHash": "b588f3edccea584fa17ad2a95b1bbb302e6c665b33b7c91fdbc3670d8571ecf7",
       "kind": "page-proposal",
       "approval": "pending-user-review",
       "role": "page-or-section-proposal",
       "sourceCount": 11,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/ThemeStudio.vue",
+          "expected": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+          "actual": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 86,
       "screenshotDrift": [],
       "unmanifestedPng": [],
-      "readmeLinksChecked": 89,
+      "readmeLinksChecked": 90,
       "checkedSourceFiles": [
         "apps/web/src/components/ThemeStudio.vue",
         "apps/web/src/design/theme.ts",
@@ -2100,7 +2163,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 20,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 64,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2143,7 +2213,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 10,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 12,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2176,7 +2253,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 14,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 94,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2213,7 +2297,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 25,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 88,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2261,7 +2352,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 36,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 54,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2320,7 +2418,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 31,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 354,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2374,7 +2479,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 18,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/AutomationRuleCenter.vue",
+          "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 208,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2422,7 +2534,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 14,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/AutomationRuleCenter.vue",
+          "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 122,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2466,7 +2585,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 20,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/AutomationRuleCenter.vue",
+          "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 114,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2516,7 +2642,20 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 19,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        },
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 123,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2552,13 +2691,13 @@
         {
           "file": "apps/web/src/components/BackupRecoveryCenter.vue",
           "expected": "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
-          "actual": "969cd10fc0a99f35243278bbbc3b5896b10ea4627722f295911fc9ffb0d45100",
+          "actual": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -2578,16 +2717,35 @@
       "readme": "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/browser-runtime-direction-c/evidence.json",
       "manifestHash": "a5b6616ff6b04e16a38c2a2830b1d4d12ccaaffc11e0e43075658f8f9be280e7",
-      "readmeHash": "32c89e49e71eba92ad7a822b0514d0b32aa720601df2f8c0abe020a6c1593436",
+      "readmeHash": "b5c7c6bcc9b426ba4f9da0a4f9765916e6d74fa366be49cb48499979e80a004f",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 20,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "tests/e2e/m03-04-playwright-crawler.spec.ts",
+          "expected": "f49ea67728ed94dab151725403d5cec0e3b46338798d6104cafd879bc2afe287",
+          "actual": "5d2f0a0d28aef84a9cf821693434d9e8cf7a688ba1e3283077c35cb87a79df4a",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
+          "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
+          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 108,
       "screenshotDrift": [],
       "unmanifestedPng": [],
-      "readmeLinksChecked": 111,
+      "readmeLinksChecked": 112,
       "checkedSourceFiles": [
         "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
         "tests/e2e/m03-04-playwright-crawler.spec.ts",
@@ -2620,7 +2778,7 @@
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -2639,7 +2797,20 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 18,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
+          "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
+          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/m08-06-capacity-boundary.spec.ts",
+          "expected": "a0168954da211a90ff349842302adde110a2834cbd4617a0a5c8a0f0d2e4e249",
+          "actual": "e9cc8c30d52f7316ae6cdfb1d2891c9defc57e5d7f75d88b66c8e2a31a4e7db8",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 175,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2687,7 +2858,20 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 19,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "tests/e2e/m06-03-collection-console.spec.ts",
+          "expected": "6ef5270197d6a59ed4e5fabf92f4259c4bf831b8fbc0c891fa48034e8720dd76",
+          "actual": "c119e6da514b40d3a01ab78be6a49a9f9b76fed130237914afd95cc7ce8c3235",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/CollectionOperationsConsole.vue",
+          "expected": "7acded3c40ce98f08e87955cd161bba67874aca496d1768b34505bb35b527d7d",
+          "actual": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 124,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2729,7 +2913,7 @@
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -2748,7 +2932,20 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 21,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
+          "expected": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
+          "actual": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 202,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2786,7 +2983,7 @@
         {
           "file": "apps/web/src/components/CollectionTaskCenter.vue",
           "expected": "1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed",
-          "actual": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
+          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -2798,13 +2995,13 @@
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "tests/e2e/m03-05-collection-tasks.spec.ts",
           "expected": "9218c2552339e5c25f2920f9fc340d9b546e89621c0978f4208179ae66151afd",
-          "actual": "66bcb37988f1c064cff418506013a45b0b44c2d7eed6fa2d38e6a1420964fe96",
+          "actual": "2e5f76d5cc12f537b81924644877e144fc1c5b8bef275cd96c287daa337d82b9",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -2823,7 +3020,20 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 18,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/m06-06-commercial.spec.ts",
+          "expected": "4904d7473ce746b65f6233015121f8e3eab730047fbfb9f46b08af61d6a38982",
+          "actual": "0621032e429bd97f50a6bfa96c32cd973a7f0073e4c48712ed5ad9fb00613d9f",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 192,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2852,7 +3062,7 @@
         {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
           "expected": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
-          "actual": "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed",
+          "actual": "5fea14bb21308bc2df7526e8485698525881b227d5ba1715b5eea5bea6e1754e",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -2877,7 +3087,14 @@
       "approval": "pending-user-review",
       "role": "page-or-section-proposal",
       "sourceCount": 20,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/CompetitorMonitor.vue",
+          "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 682,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2922,7 +3139,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 26,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 120,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -2977,7 +3201,7 @@
         {
           "file": "apps/web/src/components/PlatformManagementCenter.vue",
           "expected": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
-          "actual": "471e940d9f254ade77f69cbe47ad3f80d6a3b722189f7dca8c252094013aa6f1",
+          "actual": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -3001,7 +3225,7 @@
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -3019,7 +3243,7 @@
         {
           "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
           "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "actual": "ed3ffa8de3b4913e8a5d14655f3e22d94967c7245add05cad0bb81d439c7980b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -3038,7 +3262,14 @@
       "approval": "pending-user-review",
       "role": "page-or-section-proposal",
       "sourceCount": 14,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/CostRuleConsole.vue",
+          "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+          "actual": "e758b90453bda8b028798b627c53bbe4c46587c1c1b9b3ccfad1c8ec1c63ef9b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 166,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -3084,7 +3315,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 16,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 149,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -3111,7 +3349,7 @@
         {
           "file": "apps/web/src/components/CredentialAssetCenter.vue",
           "expected": "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
-          "actual": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+          "actual": "092105c8ad2b110178abb8c8f1485c993aea560428188b7a0e0c130b74b56c1b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -3123,7 +3361,7 @@
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -3148,7 +3386,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 47,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 294,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -3212,13 +3457,13 @@
         {
           "file": "apps/web/src/components/PlatformDataCenter.vue",
           "expected": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
-          "actual": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "actual": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
           "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "actual": "ed3ffa8de3b4913e8a5d14655f3e22d94967c7245add05cad0bb81d439c7980b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -3230,7 +3475,7 @@
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -3290,7 +3535,7 @@
         {
           "file": "tests/e2e/m03-06-evidence-data-quality.spec.ts",
           "expected": "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
-          "actual": "e5b9b8ea389ca406d6a9e18f0794d243b6ba1843b41570197a19d4e7a0c13ece",
+          "actual": "8e9291d084f792ff1725c66df006310433a39e09597373f75ebcf7df0c3aa6b7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -3327,7 +3572,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 52,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 364,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -3396,13 +3648,13 @@
         {
           "file": "apps/web/src/components/PlatformDataCenter.vue",
           "expected": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
-          "actual": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "actual": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
           "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "actual": "ed3ffa8de3b4913e8a5d14655f3e22d94967c7245add05cad0bb81d439c7980b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -3414,7 +3666,7 @@
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -3474,7 +3726,7 @@
         {
           "file": "tests/e2e/m03-06-evidence-data-quality.spec.ts",
           "expected": "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
-          "actual": "e5b9b8ea389ca406d6a9e18f0794d243b6ba1843b41570197a19d4e7a0c13ece",
+          "actual": "8e9291d084f792ff1725c66df006310433a39e09597373f75ebcf7df0c3aa6b7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -3549,7 +3801,7 @@
         {
           "file": "tests/e2e/m03-06-evidence-data-quality.spec.ts",
           "expected": "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
-          "actual": "e5b9b8ea389ca406d6a9e18f0794d243b6ba1843b41570197a19d4e7a0c13ece",
+          "actual": "8e9291d084f792ff1725c66df006310433a39e09597373f75ebcf7df0c3aa6b7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -3568,7 +3820,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 52,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 72,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -3637,13 +3896,13 @@
         {
           "file": "apps/web/src/components/PlatformDataCenter.vue",
           "expected": "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
-          "actual": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "actual": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
           "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "actual": "ed3ffa8de3b4913e8a5d14655f3e22d94967c7245add05cad0bb81d439c7980b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -3655,7 +3914,7 @@
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -3715,7 +3974,7 @@
         {
           "file": "tests/e2e/m03-06-evidence-data-quality.spec.ts",
           "expected": "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
-          "actual": "e5b9b8ea389ca406d6a9e18f0794d243b6ba1843b41570197a19d4e7a0c13ece",
+          "actual": "8e9291d084f792ff1725c66df006310433a39e09597373f75ebcf7df0c3aa6b7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -3752,7 +4011,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 21,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 115,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -3790,19 +4056,19 @@
         {
           "file": "apps/web/src/components/PlatformDataCenter.vue",
           "expected": "10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4",
-          "actual": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "actual": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
           "expected": "ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0",
-          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "actual": "ed3ffa8de3b4913e8a5d14655f3e22d94967c7245add05cad0bb81d439c7980b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -3827,7 +4093,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 33,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 352,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -3890,7 +4163,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 28,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 48,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -3948,7 +4228,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 25,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 52,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -3996,7 +4283,14 @@
       "approval": "pending",
       "role": "shared-surface-only",
       "sourceCount": 17,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/DiscoveryOverlay.vue",
+          "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 68,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -4043,7 +4337,20 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 19,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/FileResilienceCenter.vue",
+          "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
+          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/m08-04-file-resilience.spec.ts",
+          "expected": "9fe7bef0ae8630bd19d13af3244a4587addd068d3bf9f4867c85a288c896af1a",
+          "actual": "bf1525c098c67d1212a684a430cd5b087eb36722b72c47ae079385eeed74335c",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 138,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -4117,13 +4424,13 @@
         {
           "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
           "expected": "76eae80f51225c3af676a17ab9c4ec94369262cc5e8c968be7fd62ef5f2280db",
-          "actual": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048",
+          "actual": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
           "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "actual": "ed3ffa8de3b4913e8a5d14655f3e22d94967c7245add05cad0bb81d439c7980b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -4137,16 +4444,29 @@
       "readme": "design-plans/ui-phase-2-2026-09-07/design/home-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/home-direction-c/evidence.json",
       "manifestHash": "557bcb85020006497933cda75ada8b0807f83fce8e86781c84d221090078ce7a",
-      "readmeHash": "8b229c9b1746ad9db3480ec4a33c3aa53c4be7a8384024915e44bd3bc0207b76",
+      "readmeHash": "27f17e7cb911dcfc3c1d92f6dec26377d6db21db6ad605d2dd55cd9c13be148a",
       "kind": null,
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 17,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/HomeDashboard.vue",
+          "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0",
+          "encoding": "raw"
+        },
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 64,
       "screenshotDrift": [],
       "unmanifestedPng": [],
-      "readmeLinksChecked": 68,
+      "readmeLinksChecked": 69,
       "checkedSourceFiles": [
         "design-plans/ui-phase-2-2026-09-07/design/home-direction-c/index.html",
         "design-plans/ui-phase-2-2026-09-07/design/home-direction-c/data.js",
@@ -4176,8 +4496,8 @@
       "folder": "identity-direction-c",
       "readme": "design-plans/ui-phase-2-2026-09-07/design/identity-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/identity-direction-c/evidence.json",
-      "manifestHash": "f4329b047be3573ee185ff78cc0924e1eea4e2bde5d9c2a83f77330dd0814ce6",
-      "readmeHash": "2a904e2ddc46a05edd586346d7df678701e75b04b9ab5a932e947c850b89664a",
+      "manifestHash": "262136fe2bcc42167d3e227250ff77ec649bbedcc49efb879de1da4c31165746",
+      "readmeHash": "8db765cb3c56ed1450629c1a6f7caa773229f9d42d4792dca6ad8dece8420424",
       "kind": "page-proposal",
       "approval": "pending-user-review",
       "role": "page-or-section-proposal",
@@ -4221,7 +4541,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 16,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 82,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -4310,7 +4637,20 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 23,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        },
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 130,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -4350,7 +4690,7 @@
         {
           "file": "apps/web/src/components/PlatformLogCenter.vue",
           "expected": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
-          "actual": "caaf302bb0218ee1dc90117a77f558999d5765b9c7044408431b4a673231945a",
+          "actual": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -4368,7 +4708,7 @@
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -4380,7 +4720,7 @@
         {
           "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
           "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "actual": "ed3ffa8de3b4913e8a5d14655f3e22d94967c7245add05cad0bb81d439c7980b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -4430,7 +4770,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -4494,7 +4834,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -4563,7 +4903,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -4595,16 +4935,29 @@
       "readme": "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/evidence.json",
       "manifestHash": "eb912a8cb3e4be8a8edf248ae68dcf51fd9d5e78bc2590c4a500f685e3e3fce5",
-      "readmeHash": "08cfcbe30c47b8440c67dcd232922747e8fda85a4cb871d239ef0efdf878b0c3",
+      "readmeHash": "ccbf15d5c532a5d5fe16aa46bc375550ab26c8e569fa90d8108dadbb4c09fb2c",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 18,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/MySqlResilienceCenter.vue",
+          "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
+          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/m08-03-mysql-resilience.spec.ts",
+          "expected": "b24d65304dfcd0daf65d43943ad63efb836563de17f517bdc88f09faa5dea5b8",
+          "actual": "b76a3bb0ec3a479ccb71432bb95013b13c52cd96c701892fd35f581e8f4d9636",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 145,
       "screenshotDrift": [],
       "unmanifestedPng": [],
-      "readmeLinksChecked": 147,
+      "readmeLinksChecked": 148,
       "checkedSourceFiles": [
         "packages/database/src/index.ts",
         "apps/api/src/mysql-resilience-probe.ts",
@@ -4641,7 +4994,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 18,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/NotificationCenter.vue",
+          "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 60,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -4689,7 +5049,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 14,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/NotificationCenter.vue",
+          "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 98,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -4733,7 +5100,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 21,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/NotificationCenter.vue",
+          "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 70,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -4784,7 +5158,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 18,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/NotificationCenter.vue",
+          "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 240,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -4832,7 +5213,26 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 22,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        },
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/m06-05-open-platform.spec.ts",
+          "expected": "e6748c821528db225c9e88a199e020edef31516f20c4199ba7a21c9dbcf6f79f",
+          "actual": "8f9f30083ee1130a6b1b3498cbe4091bda23ddb421830af69724f6a8324497cb",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 224,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -4871,13 +5271,13 @@
         {
           "file": "apps/web/src/components/OpenPlatformCenter.vue",
           "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
-          "actual": "81dad2d4a82e49b089d97dba8ed28a1eee23b5597446d3e460febea341f3b97b",
+          "actual": "9bcb38c92f614302ad155436cbdba9e43507bddb62bca0a8d0fefee676ddb3b1",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -4902,7 +5302,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 20,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 102,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -4945,7 +5352,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 24,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 126,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -5035,7 +5449,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -5085,7 +5499,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -5145,7 +5559,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -5164,7 +5578,26 @@
       "approval": "pending-concrete-parent-section-review",
       "role": "page-or-section-proposal",
       "sourceCount": 28,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/main.ts",
+          "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/organization-admin.css",
+          "expected": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+          "actual": "8442ac6897985cce39ecda8a2a7ae9e0c0a04efe9706a1e944be68337cda67ba",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/styles.css",
+          "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+          "actual": "4d3f496112ece29924eafe59dd7f09fb68572542ffa42bda2d0f003d3adbc509",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 74,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -5203,13 +5636,13 @@
         {
           "file": "apps/web/src/components/NavigationShell.vue",
           "expected": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
-          "actual": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "actual": "a4802ba4c400d15410cdf7093809f2c22b6ed63fabcd71597d7c02969378b955",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -5240,7 +5673,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 13,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/OrganizationAuditPanel.vue",
+          "expected": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+          "actual": "c8de7f2d7fbb4839ef85770efda70ff3d75769ca301f9b4bbbefd5cfbaad86fa",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 104,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -5264,7 +5704,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -5283,7 +5723,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 13,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/OrganizationDataPanel.vue",
+          "expected": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+          "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 94,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -5307,7 +5754,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -5358,13 +5805,13 @@
         {
           "file": "apps/web/src/components/OrganizationTokenPanel.vue",
           "expected": "81ba6a86c80bdcdb1cfea7832b3c13b0d85a5a9bf8dd6922583a5ada5d0e326d",
-          "actual": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+          "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -5416,7 +5863,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -5458,7 +5905,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -5504,7 +5951,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -5523,7 +5970,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 14,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "expected": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0",
+          "actual": "843fcd060a9dbdcf4ba42b62ddff25f15628efa4b38206dd75a78cd46ce3f1b8",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 88,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -5548,13 +6002,13 @@
         {
           "file": "apps/web/src/components/PlatformRoleComparison.vue",
           "expected": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
-          "actual": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+          "actual": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "apps/web/src/components/PlatformAccountCenter.vue",
           "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
-          "actual": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+          "actual": "0e577c1e35a346166c3fdb071b91baf95bda65c442b788fad91b67481b7efd1f",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -5573,7 +6027,32 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 25,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/PersonalCenter.vue",
+          "expected": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+          "actual": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/AccountShell.vue",
+          "expected": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+          "actual": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39",
+          "encoding": "raw"
+        },
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/ui-phase2-account-contracts.spec.ts",
+          "expected": "f9620d10927606815bb530ce2224346d6a2ceb7659a614438b9af415ac3799d9",
+          "actual": "309464b5514b0b842fe8495248994c5378cde34475f001fd6d1bfde1566e7c64",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 204,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -5621,7 +6100,32 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 15,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/AccountShell.vue",
+          "expected": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+          "actual": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/PersonalCenter.vue",
+          "expected": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+          "actual": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee",
+          "encoding": "raw"
+        },
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/ui-phase2-account-contracts.spec.ts",
+          "expected": "f9620d10927606815bb530ce2224346d6a2ceb7659a614438b9af415ac3799d9",
+          "actual": "309464b5514b0b842fe8495248994c5378cde34475f001fd6d1bfde1566e7c64",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 24,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -5659,7 +6163,32 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 21,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/PersonalCenter.vue",
+          "expected": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+          "actual": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/AccountShell.vue",
+          "expected": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+          "actual": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39",
+          "encoding": "raw"
+        },
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/ui-phase2-account-contracts.spec.ts",
+          "expected": "f9620d10927606815bb530ce2224346d6a2ceb7659a614438b9af415ac3799d9",
+          "actual": "309464b5514b0b842fe8495248994c5378cde34475f001fd6d1bfde1566e7c64",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 62,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -5703,7 +6232,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 31,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 230,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -5757,7 +6293,7 @@
         {
           "file": "apps/web/src/components/PlatformManagementCenter.vue",
           "expected": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
-          "actual": "471e940d9f254ade77f69cbe47ad3f80d6a3b722189f7dca8c252094013aa6f1",
+          "actual": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -5799,7 +6335,7 @@
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -5817,13 +6353,13 @@
         {
           "file": "tests/e2e/platform-message-management.spec.ts",
           "expected": "ed45f8df2572d35492fe289a6de397b861dacee8d552fd9b77bc6bf0934c2dad",
-          "actual": "7111e8e7831a20b9a05030018384daa5000d632c9e488330d3cac1ff54d5d239",
+          "actual": "3cc3638f3cda517fc4162466e49f2235838a8649cecd64c8f1e4b3581cbb90df",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
           "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "actual": "ed3ffa8de3b4913e8a5d14655f3e22d94967c7245add05cad0bb81d439c7980b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -5842,7 +6378,32 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 14,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+          "expected": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+          "actual": "06f42856f4bd044703b7859d8218f2adf52ac3ae6d6ed66e30139f58067ae8b3",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+          "expected": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+          "actual": "99466d18329d4315db351e535f52214ae0c14d9d8cec8fc47307d41b4afb487e",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "expected": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0",
+          "actual": "843fcd060a9dbdcf4ba42b62ddff25f15628efa4b38206dd75a78cd46ce3f1b8",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 102,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -5867,7 +6428,7 @@
         {
           "file": "apps/web/src/components/PlatformAccountCenter.vue",
           "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
-          "actual": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+          "actual": "0e577c1e35a346166c3fdb071b91baf95bda65c442b788fad91b67481b7efd1f",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -5892,7 +6453,20 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 19,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/PlatformDashboard.vue",
+          "expected": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+          "actual": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 91,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -5922,13 +6496,13 @@
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
           "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "actual": "ed3ffa8de3b4913e8a5d14655f3e22d94967c7245add05cad0bb81d439c7980b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -5947,7 +6521,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 19,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 100,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -5989,7 +6570,20 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 18,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
+          "expected": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+          "actual": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 111,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6018,19 +6612,19 @@
         {
           "file": "apps/web/src/components/ProviderAdapterCenter.vue",
           "expected": "0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075",
-          "actual": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
+          "actual": "7fce30d574f08ef93c5530b7d609e5d5fde38c0ab246e20c91fbd8c45497b798",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "tests/e2e/m03-03-provider-adapter.spec.ts",
           "expected": "f189c28a32f3d25bd0686379f9cfa978bd260df6085ea3650b0f1f5bedf28e74",
-          "actual": "f5c6bd4e0d265e83dbb3179f732ff4db18409f79e87568248767827230ef1452",
+          "actual": "5382d8b68c3bf4e313daed5339c5f78c255570fa0df7d154ce8d7eb6a3dfd91f",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -6049,7 +6643,20 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 19,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
+          "expected": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+          "actual": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 176,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6079,13 +6686,13 @@
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e",
-          "actual": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+          "actual": "29878b51e5b7c405ffd298b51769781dd903a15a261f8b8936558202a4478508",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -6099,16 +6706,35 @@
       "readme": "design-plans/ui-phase-2-2026-09-07/design/recovery-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/recovery-direction-c/evidence.json",
       "manifestHash": "5cdc96a665ad092eb2e0b1220bfa406548c793b142b1524aab6186f9aa94f3ea",
-      "readmeHash": "cf288a7042e06858f29d26d76c0acc506344c66e97dc7e38decd8f13a8ba9bf2",
+      "readmeHash": "3a92b9f8a6e57359d5077908903ee8ab30ebbc076b340830deea816cba016c0a",
       "kind": null,
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 19,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/UiStateShowcase.vue",
+          "expected": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
+          "actual": "398e4c5ad69feb5259a69bc034ca6fdc98cf936426d3075637b253576d236ad3",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/NotFoundPage.vue",
+          "expected": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b",
+          "actual": "9ebbf97a724300fa2b17be2bc76973fe22abb14a290d84222915c09b7e2f44b7",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/route-catalog.generated.json",
+          "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+          "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 63,
       "screenshotDrift": [],
       "unmanifestedPng": [],
-      "readmeLinksChecked": 66,
+      "readmeLinksChecked": 68,
       "checkedSourceFiles": [
         "design-plans/ui-phase-2-2026-09-07/design/recovery-direction-c/index.html",
         "design-plans/ui-phase-2-2026-09-07/design/recovery-direction-c/not-found.html",
@@ -6153,7 +6779,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 18,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "tests/e2e/m08-02-redis-resilience.spec.ts",
+          "expected": "8f59ae6c739b6bc6bccd12631286da67195715ffebe37869d4c3b8ae0b3a0c3f",
+          "actual": "2f44d75bcb05fb246b8c8516eab2599b33153f63df7e087468443e728fb726e0",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 126,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6182,7 +6815,7 @@
         {
           "file": "apps/web/src/components/RedisResilienceCenter.vue",
           "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
-          "actual": "35614a7bdafc08e2b5c0079a5eefb423c4df71703b358daacd3c40d50217f344",
+          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -6207,7 +6840,26 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 22,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        },
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/m07-05-release-rollout.spec.ts",
+          "expected": "d81a9538c41daec1d1e556bf9e6d988a219db2c51fc7c8108caa6b894ec8ec47",
+          "actual": "783bc7cb2af831e7d6f7564b2598b5d57b64c798fc6fe851fbd5f44008e13aa8",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 169,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6246,13 +6898,13 @@
         {
           "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
           "expected": "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
-          "actual": "b5344202cf358e7a5f61d8b0d73f4086c59157e395d12eda5f719a532bf79e63",
+          "actual": "f362e65bea501d183d809d458497e5b3775377d12e83b8e4f52496d00b62107d",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -6271,7 +6923,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 17,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/ReportCenter.vue",
+          "expected": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+          "actual": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 208,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6318,7 +6977,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 13,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/ReportCenter.vue",
+          "expected": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+          "actual": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 90,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6361,7 +7027,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 27,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 102,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6445,7 +7118,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -6493,7 +7166,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -6549,7 +7222,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -6574,7 +7247,20 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 20,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+          "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
+          "actual": "5b35df7957658ea4b40e6a2e9110c7e58d306287b5b6dc5615503a76d7bb491c",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/m08-05-crawler-scheduler.spec.ts",
+          "expected": "9d0cfe3d8d26a0c50173e81f534954ec0c831515a01c6a47b35f99260982abcd",
+          "actual": "b2d8758ab4138550f343fb73e98e9c04ce2ef7803791c7fca41e04762949ac16",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 197,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6624,7 +7310,14 @@
       "approval": "pending-user-review",
       "role": "page-or-section-proposal",
       "sourceCount": 11,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/ScoreRuleConsole.vue",
+          "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 48,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6658,7 +7351,26 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 20,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+          "encoding": "raw"
+        },
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/m06-04-security-operations.spec.ts",
+          "expected": "17552a0868d9f7b751afb2da89ca1adfddfa9c19e04f27aefd7af4d5e7610730",
+          "actual": "2b9b53de9d2e8ecadc3a360d526a1c6cd47f862e7ded429b4be68912b1968605",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 177,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6695,13 +7407,13 @@
         {
           "file": "apps/web/src/components/SecurityOperationsCenter.vue",
           "expected": "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
-          "actual": "a583e75d6491fedc7ae94e449c5a31f421055587168101c81bf4922ffd4c2ba3",
+          "actual": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "apps/web/src/components/ResponsiveDataView.vue",
           "expected": "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-          "actual": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -6720,7 +7432,32 @@
       "approval": "pending",
       "role": "shared-surface-only",
       "sourceCount": 18,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/navigation-shell-route-state.ts",
+          "expected": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+          "actual": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
+          "encoding": "raw"
+        },
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/m02-03-navigation-shell.spec.ts",
+          "expected": "606edbe19f01bbd3ffd5b2ad8127b6fee446d916a9f07df1c69015c82d1f29e8",
+          "actual": "d6b12669c1d5203527fdc757a9313fea807cfe2417d2380a670b0780c0bc9122",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/m02-03/navigation-shell.test.mjs",
+          "expected": "fdfb87f5a39667a5da2bae7a6a6cbc1f0a353ec68e3b390955c988c61d8d7ea0",
+          "actual": "0874d8f0b5711232a7b052a78164d328ad52ebff2e58107958f2ac2a7522681b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 50,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6749,7 +7486,7 @@
         {
           "file": "apps/web/src/components/NavigationShell.vue",
           "expected": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
-          "actual": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "actual": "a4802ba4c400d15410cdf7093809f2c22b6ed63fabcd71597d7c02969378b955",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -6768,7 +7505,32 @@
       "approval": "pending-composed-layout-review",
       "role": "page-or-section-proposal",
       "sourceCount": 18,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/design/selection-tokens.css",
+          "expected": "e3b001839a45970bb0c39ae89a0d7f32ac104e4c9c5c43443f83f38f80a78c74",
+          "actual": "c231efe624ed656a3e43f81c4069577634d57d20544b1e45fe5a99f8092232de",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-route-state.ts",
+          "expected": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+          "actual": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/route-catalog.generated.json",
+          "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+          "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c",
+          "encoding": "raw"
+        },
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 9,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6803,7 +7565,7 @@
         {
           "file": "apps/web/src/components/NavigationShell.vue",
           "expected": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
-          "actual": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "actual": "a4802ba4c400d15410cdf7093809f2c22b6ed63fabcd71597d7c02969378b955",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -6822,7 +7584,44 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 20,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+          "actual": "bfb1ea618996a14d687b4b70b15c75a871bddc7e5cd489c9bedd105d0d26f489",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+          "expected": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+          "actual": "3cb10851f9ec95552dabf2ee858e0e1c9081c27855625c5161902408fdb296f9",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
+          "expected": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+          "actual": "fecfc130948a6e88c37cf35cf4d55acec74fa722ad8898202ce889b10832f842",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleReview.vue",
+          "expected": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+          "actual": "772658f4ec7fea171f1b690000f9329efc86a45c63efe1094840fb16c66da598",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
+          "expected": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+          "actual": "32752031767eb5e54917fb3791709dfde6d96aa851a3762dcd751d3b2258543e",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/m03-07-provider-sources.spec.ts",
+          "expected": "29c1232a33cb260beeee6851f33c4558873d25e47e538d6a2e04c47eaa6ba5fe",
+          "actual": "71507eea28b215924527c5f66d9bbeba7e01edb9ee6d5a2d746b8dc8e66be709",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 201,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6865,7 +7664,14 @@
       "approval": "pending-user-review",
       "role": "page-or-section-proposal",
       "sourceCount": 20,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/SourcingWorkspace.vue",
+          "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 695,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6910,7 +7716,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 15,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 46,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6936,7 +7749,7 @@
         {
           "file": "apps/web/src/components/PlatformManagementCenter.vue",
           "expected": "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
-          "actual": "471e940d9f254ade77f69cbe47ad3f80d6a3b722189f7dca8c252094013aa6f1",
+          "actual": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -6948,7 +7761,7 @@
         {
           "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
           "expected": "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-          "actual": "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+          "actual": "ed3ffa8de3b4913e8a5d14655f3e22d94967c7245add05cad0bb81d439c7980b",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -6967,7 +7780,14 @@
       "approval": "pending-user-review",
       "role": "page-or-section-proposal",
       "sourceCount": 12,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TaskWorkspace.vue",
+          "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+          "actual": "13f899b89bdfeb5d7cd261b87dbff89cd90f757e5a16997cd79ccd654647db7f",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 16,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -7002,7 +7822,14 @@
       "approval": "pending-user-review",
       "role": "page-or-section-proposal",
       "sourceCount": 11,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TaskWorkspace.vue",
+          "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+          "actual": "13f899b89bdfeb5d7cd261b87dbff89cd90f757e5a16997cd79ccd654647db7f",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 44,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -7067,7 +7894,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -7118,7 +7945,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -7174,7 +8001,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -7223,7 +8050,7 @@
         {
           "file": "apps/web/src/components/NavigationShell.vue",
           "expected": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
-          "actual": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "actual": "a4802ba4c400d15410cdf7093809f2c22b6ed63fabcd71597d7c02969378b955",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         }
       ],
@@ -7242,7 +8069,14 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 20,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "tests/e2e/m08-01-single-server.spec.ts",
+          "expected": "ddc02d16bd45a1c13a76ba9b12448afa3bc29536f613e9b5f869589f2383e874",
+          "actual": "8d418800034fb4c4d633fb52d136fe05b891e1d6f9dfc5179c0db261d79a4103",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 181,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -7273,7 +8107,7 @@
         {
           "file": "apps/web/src/components/RuntimeTopologyCenter.vue",
           "expected": "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
-          "actual": "aedf6a1e9a83b11ba8376aad116fe6e048261b79c6bbe92063e185d76cd3a7a3",
+          "actual": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -7298,7 +8132,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 24,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TrendDashboard.vue",
+          "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+          "actual": "7e894cc321871b09052f72daeaf8113edbb80956f4244e734d89ebddf73fc9a4",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 146,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -7352,7 +8193,26 @@
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 21,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+          "expected": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+          "actual": "87e0b0906fded03d7c5337dafa5e6bfc801a2367d12deb652cc36f0f88d32d9a",
+          "encoding": "raw"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
+          "encoding": "raw"
+        },
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "expected": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0",
+          "actual": "843fcd060a9dbdcf4ba42b62ddff25f15628efa4b38206dd75a78cd46ce3f1b8",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 256,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -7384,13 +8244,13 @@
         {
           "file": "apps/web/src/components/PlatformAccountCenter.vue",
           "expected": "2b41c1f174bf0a1a67c97e8252e1d805a01c559d7bcb6817da80d7affd4b3474",
-          "actual": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+          "actual": "0e577c1e35a346166c3fdb071b91baf95bda65c442b788fad91b67481b7efd1f",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
           "file": "apps/web/src/components/PlatformRoleComparison.vue",
           "expected": "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
-          "actual": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+          "actual": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -7415,7 +8275,14 @@
       "approval": "pending",
       "role": "page-or-section-proposal",
       "sourceCount": 14,
-      "sourceDrift": [],
+      "sourceDrift": [
+        {
+          "file": "apps/web/src/components/TaskWorkspace.vue",
+          "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+          "actual": "13f899b89bdfeb5d7cd261b87dbff89cd90f757e5a16997cd79ccd654647db7f",
+          "encoding": "raw"
+        }
+      ],
       "screenshotCount": 66,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -7482,7 +8349,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -7533,7 +8400,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -7589,7 +8456,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -7648,7 +8515,7 @@
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
           "encoding": "historical-LF-exact-revision-not-current-acceptance"
         },
         {
@@ -7664,7 +8531,939 @@
       ]
     }
   ],
-  "sourceDrift": [],
+  "sourceDrift": [
+    {
+      "package": "1688-acceptance-direction-c",
+      "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
+      "expected": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+      "actual": "30a6bef5841efc8ff53164e0b828e7da50a90d6f7ce149f8c971eed05f6e9b74",
+      "encoding": "raw"
+    },
+    {
+      "package": "1688-acceptance-direction-c",
+      "file": "tests/e2e/m03-07-provider-sources.spec.ts",
+      "expected": "29c1232a33cb260beeee6851f33c4558873d25e47e538d6a2e04c47eaa6ba5fe",
+      "actual": "71507eea28b215924527c5f66d9bbeba7e01edb9ee6d5a2d746b8dc8e66be709",
+      "encoding": "raw"
+    },
+    {
+      "package": "account-direction-c",
+      "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+      "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+      "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
+      "encoding": "raw"
+    },
+    {
+      "package": "account-direction-c",
+      "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+      "expected": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+      "actual": "87e0b0906fded03d7c5337dafa5e6bfc801a2367d12deb652cc36f0f88d32d9a",
+      "encoding": "raw"
+    },
+    {
+      "package": "account-overview-direction-c",
+      "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+      "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+      "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
+      "encoding": "raw"
+    },
+    {
+      "package": "account-overview-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "account-overview-direction-c",
+      "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+      "expected": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0",
+      "actual": "843fcd060a9dbdcf4ba42b62ddff25f15628efa4b38206dd75a78cd46ce3f1b8",
+      "encoding": "raw"
+    },
+    {
+      "package": "api-coverage-direction-c",
+      "file": "apps/web/src/components/ApiCoverageDashboard.vue",
+      "expected": "dfa6e82e10a8410c3ad761bf8d0f9c56bb018a29c3f9ba935a67014c16d1a126",
+      "actual": "3086f5e99bf67c5a3839297b05419f70cfa0b1548e4ed4fffd8d26aad4ca87e6",
+      "encoding": "raw"
+    },
+    {
+      "package": "api-coverage-direction-c",
+      "file": "config/route-catalog.json",
+      "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+      "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "encoding": "raw"
+    },
+    {
+      "package": "api-coverage-direction-c",
+      "file": "tests/m06-02/api-coverage-dashboard.test.mjs",
+      "expected": "b3a63610a59ed07a73a1598e469c0823c88da72f3436b3d7a9c48588935c93cf",
+      "actual": "70455dae0beb8591657ae1790c59322027ef71a1e8db8cdff014b3bca7102681",
+      "encoding": "raw"
+    },
+    {
+      "package": "appearance-direction-c",
+      "file": "apps/web/src/components/ThemeStudio.vue",
+      "expected": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+      "actual": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f",
+      "encoding": "raw"
+    },
+    {
+      "package": "approval-controls-direction-c",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+      "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee",
+      "encoding": "raw"
+    },
+    {
+      "package": "approval-diagnostics-direction-c",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+      "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee",
+      "encoding": "raw"
+    },
+    {
+      "package": "approval-direction-c",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+      "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee",
+      "encoding": "raw"
+    },
+    {
+      "package": "approval-forms-direction-c",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+      "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee",
+      "encoding": "raw"
+    },
+    {
+      "package": "approval-lifecycle-direction-c",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+      "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee",
+      "encoding": "raw"
+    },
+    {
+      "package": "approval-navigation-direction-c",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+      "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee",
+      "encoding": "raw"
+    },
+    {
+      "package": "automation-controls-direction-c",
+      "file": "apps/web/src/components/AutomationRuleCenter.vue",
+      "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+      "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f",
+      "encoding": "raw"
+    },
+    {
+      "package": "automation-direction-c",
+      "file": "apps/web/src/components/AutomationRuleCenter.vue",
+      "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+      "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f",
+      "encoding": "raw"
+    },
+    {
+      "package": "automation-forms-direction-c",
+      "file": "apps/web/src/components/AutomationRuleCenter.vue",
+      "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+      "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f",
+      "encoding": "raw"
+    },
+    {
+      "package": "backup-recovery-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "backup-recovery-direction-c",
+      "file": "config/route-catalog.json",
+      "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+      "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "encoding": "raw"
+    },
+    {
+      "package": "browser-runtime-direction-c",
+      "file": "tests/e2e/m03-04-playwright-crawler.spec.ts",
+      "expected": "f49ea67728ed94dab151725403d5cec0e3b46338798d6104cafd879bc2afe287",
+      "actual": "5d2f0a0d28aef84a9cf821693434d9e8cf7a688ba1e3283077c35cb87a79df4a",
+      "encoding": "raw"
+    },
+    {
+      "package": "browser-runtime-direction-c",
+      "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
+      "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
+      "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17",
+      "encoding": "raw"
+    },
+    {
+      "package": "browser-runtime-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "capacity-direction-c",
+      "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
+      "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
+      "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8",
+      "encoding": "raw"
+    },
+    {
+      "package": "capacity-direction-c",
+      "file": "tests/e2e/m08-06-capacity-boundary.spec.ts",
+      "expected": "a0168954da211a90ff349842302adde110a2834cbd4617a0a5c8a0f0d2e4e249",
+      "actual": "e9cc8c30d52f7316ae6cdfb1d2891c9defc57e5d7f75d88b66c8e2a31a4e7db8",
+      "encoding": "raw"
+    },
+    {
+      "package": "collection-overview-direction-c",
+      "file": "tests/e2e/m06-03-collection-console.spec.ts",
+      "expected": "6ef5270197d6a59ed4e5fabf92f4259c4bf831b8fbc0c891fa48034e8720dd76",
+      "actual": "c119e6da514b40d3a01ab78be6a49a9f9b76fed130237914afd95cc7ce8c3235",
+      "encoding": "raw"
+    },
+    {
+      "package": "collection-overview-direction-c",
+      "file": "apps/web/src/components/CollectionOperationsConsole.vue",
+      "expected": "7acded3c40ce98f08e87955cd161bba67874aca496d1768b34505bb35b527d7d",
+      "actual": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f",
+      "encoding": "raw"
+    },
+    {
+      "package": "collection-tasks-direction-c",
+      "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
+      "expected": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
+      "actual": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
+      "encoding": "raw"
+    },
+    {
+      "package": "collection-tasks-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "commercial-direction-c",
+      "file": "config/route-catalog.json",
+      "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+      "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "encoding": "raw"
+    },
+    {
+      "package": "commercial-direction-c",
+      "file": "tests/e2e/m06-06-commercial.spec.ts",
+      "expected": "4904d7473ce746b65f6233015121f8e3eab730047fbfb9f46b08af61d6a38982",
+      "actual": "0621032e429bd97f50a6bfa96c32cd973a7f0073e4c48712ed5ad9fb00613d9f",
+      "encoding": "raw"
+    },
+    {
+      "package": "competitor-direction-c",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+      "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0",
+      "encoding": "raw"
+    },
+    {
+      "package": "content-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "cost-rules-direction-c",
+      "file": "apps/web/src/components/CostRuleConsole.vue",
+      "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+      "actual": "e758b90453bda8b028798b627c53bbe4c46587c1c1b9b3ccfad1c8ec1c63ef9b",
+      "encoding": "raw"
+    },
+    {
+      "package": "credential-assets-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "data-composed-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "data-controls-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "data-record-detail-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "data-records-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "detail-adaptive-direction-c",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+      "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+      "encoding": "raw"
+    },
+    {
+      "package": "detail-assembly-direction-c",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+      "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+      "encoding": "raw"
+    },
+    {
+      "package": "detail-cost-context-direction-c",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+      "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+      "encoding": "raw"
+    },
+    {
+      "package": "discovery-direction-c",
+      "file": "apps/web/src/components/DiscoveryOverlay.vue",
+      "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+      "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977",
+      "encoding": "raw"
+    },
+    {
+      "package": "files-direction-c",
+      "file": "apps/web/src/components/FileResilienceCenter.vue",
+      "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
+      "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9",
+      "encoding": "raw"
+    },
+    {
+      "package": "files-direction-c",
+      "file": "tests/e2e/m08-04-file-resilience.spec.ts",
+      "expected": "9fe7bef0ae8630bd19d13af3244a4587addd068d3bf9f4867c85a288c896af1a",
+      "actual": "bf1525c098c67d1212a684a430cd5b087eb36722b72c47ae079385eeed74335c",
+      "encoding": "raw"
+    },
+    {
+      "package": "home-direction-c",
+      "file": "apps/web/src/components/HomeDashboard.vue",
+      "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+      "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0",
+      "encoding": "raw"
+    },
+    {
+      "package": "home-direction-c",
+      "file": "config/route-catalog.json",
+      "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+      "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "encoding": "raw"
+    },
+    {
+      "package": "insights-direction-c",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+      "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+      "encoding": "raw"
+    },
+    {
+      "package": "logs-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "logs-direction-c",
+      "file": "config/route-catalog.json",
+      "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+      "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "encoding": "raw"
+    },
+    {
+      "package": "mysql-direction-c",
+      "file": "apps/web/src/components/MySqlResilienceCenter.vue",
+      "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
+      "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c",
+      "encoding": "raw"
+    },
+    {
+      "package": "mysql-direction-c",
+      "file": "tests/e2e/m08-03-mysql-resilience.spec.ts",
+      "expected": "b24d65304dfcd0daf65d43943ad63efb836563de17f517bdc88f09faa5dea5b8",
+      "actual": "b76a3bb0ec3a479ccb71432bb95013b13c52cd96c701892fd35f581e8f4d9636",
+      "encoding": "raw"
+    },
+    {
+      "package": "notification-controls-direction-c",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+      "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036",
+      "encoding": "raw"
+    },
+    {
+      "package": "notification-direction-c",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+      "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036",
+      "encoding": "raw"
+    },
+    {
+      "package": "notification-forms-direction-c",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+      "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036",
+      "encoding": "raw"
+    },
+    {
+      "package": "notification-navigation-direction-c",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+      "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036",
+      "encoding": "raw"
+    },
+    {
+      "package": "open-platform-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "open-platform-direction-c",
+      "file": "config/route-catalog.json",
+      "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+      "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "encoding": "raw"
+    },
+    {
+      "package": "open-platform-direction-c",
+      "file": "tests/e2e/m06-05-open-platform.spec.ts",
+      "expected": "e6748c821528db225c9e88a199e020edef31516f20c4199ba7a21c9dbcf6f79f",
+      "actual": "8f9f30083ee1130a6b1b3498cbe4091bda23ddb421830af69724f6a8324497cb",
+      "encoding": "raw"
+    },
+    {
+      "package": "opportunity-detail-direction-c",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+      "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+      "encoding": "raw"
+    },
+    {
+      "package": "opportunity-direction-c",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+      "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+      "encoding": "raw"
+    },
+    {
+      "package": "org-approvals-parent-direction-c",
+      "file": "apps/web/src/main.ts",
+      "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+      "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1",
+      "encoding": "raw"
+    },
+    {
+      "package": "org-approvals-parent-direction-c",
+      "file": "apps/web/src/organization-admin.css",
+      "expected": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+      "actual": "8442ac6897985cce39ecda8a2a7ae9e0c0a04efe9706a1e944be68337cda67ba",
+      "encoding": "raw"
+    },
+    {
+      "package": "org-approvals-parent-direction-c",
+      "file": "apps/web/src/styles.css",
+      "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+      "actual": "4d3f496112ece29924eafe59dd7f09fb68572542ffa42bda2d0f003d3adbc509",
+      "encoding": "raw"
+    },
+    {
+      "package": "org-audit-direction-c",
+      "file": "apps/web/src/components/OrganizationAuditPanel.vue",
+      "expected": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+      "actual": "c8de7f2d7fbb4839ef85770efda70ff3d75769ca301f9b4bbbefd5cfbaad86fa",
+      "encoding": "raw"
+    },
+    {
+      "package": "org-data-direction-c",
+      "file": "apps/web/src/components/OrganizationDataPanel.vue",
+      "expected": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+      "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270",
+      "encoding": "raw"
+    },
+    {
+      "package": "permission-comparison-direction-c",
+      "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+      "expected": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0",
+      "actual": "843fcd060a9dbdcf4ba42b62ddff25f15628efa4b38206dd75a78cd46ce3f1b8",
+      "encoding": "raw"
+    },
+    {
+      "package": "personal-composed-direction-c",
+      "file": "apps/web/src/components/PersonalCenter.vue",
+      "expected": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+      "actual": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee",
+      "encoding": "raw"
+    },
+    {
+      "package": "personal-composed-direction-c",
+      "file": "apps/web/src/components/AccountShell.vue",
+      "expected": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+      "actual": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39",
+      "encoding": "raw"
+    },
+    {
+      "package": "personal-composed-direction-c",
+      "file": "config/route-catalog.json",
+      "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+      "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "encoding": "raw"
+    },
+    {
+      "package": "personal-composed-direction-c",
+      "file": "tests/e2e/ui-phase2-account-contracts.spec.ts",
+      "expected": "f9620d10927606815bb530ce2224346d6a2ceb7659a614438b9af415ac3799d9",
+      "actual": "309464b5514b0b842fe8495248994c5378cde34475f001fd6d1bfde1566e7c64",
+      "encoding": "raw"
+    },
+    {
+      "package": "personal-direction-c",
+      "file": "apps/web/src/components/AccountShell.vue",
+      "expected": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+      "actual": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39",
+      "encoding": "raw"
+    },
+    {
+      "package": "personal-direction-c",
+      "file": "apps/web/src/components/PersonalCenter.vue",
+      "expected": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+      "actual": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee",
+      "encoding": "raw"
+    },
+    {
+      "package": "personal-direction-c",
+      "file": "config/route-catalog.json",
+      "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+      "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "encoding": "raw"
+    },
+    {
+      "package": "personal-direction-c",
+      "file": "tests/e2e/ui-phase2-account-contracts.spec.ts",
+      "expected": "f9620d10927606815bb530ce2224346d6a2ceb7659a614438b9af415ac3799d9",
+      "actual": "309464b5514b0b842fe8495248994c5378cde34475f001fd6d1bfde1566e7c64",
+      "encoding": "raw"
+    },
+    {
+      "package": "personal-sections-direction-c",
+      "file": "apps/web/src/components/PersonalCenter.vue",
+      "expected": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+      "actual": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee",
+      "encoding": "raw"
+    },
+    {
+      "package": "personal-sections-direction-c",
+      "file": "apps/web/src/components/AccountShell.vue",
+      "expected": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+      "actual": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39",
+      "encoding": "raw"
+    },
+    {
+      "package": "personal-sections-direction-c",
+      "file": "config/route-catalog.json",
+      "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+      "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "encoding": "raw"
+    },
+    {
+      "package": "personal-sections-direction-c",
+      "file": "tests/e2e/ui-phase2-account-contracts.spec.ts",
+      "expected": "f9620d10927606815bb530ce2224346d6a2ceb7659a614438b9af415ac3799d9",
+      "actual": "309464b5514b0b842fe8495248994c5378cde34475f001fd6d1bfde1566e7c64",
+      "encoding": "raw"
+    },
+    {
+      "package": "platform-notifications-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "platform-organizations-direction-c",
+      "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+      "expected": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+      "actual": "06f42856f4bd044703b7859d8218f2adf52ac3ae6d6ed66e30139f58067ae8b3",
+      "encoding": "raw"
+    },
+    {
+      "package": "platform-organizations-direction-c",
+      "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+      "expected": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+      "actual": "99466d18329d4315db351e535f52214ae0c14d9d8cec8fc47307d41b4afb487e",
+      "encoding": "raw"
+    },
+    {
+      "package": "platform-organizations-direction-c",
+      "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+      "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+      "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
+      "encoding": "raw"
+    },
+    {
+      "package": "platform-organizations-direction-c",
+      "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+      "expected": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0",
+      "actual": "843fcd060a9dbdcf4ba42b62ddff25f15628efa4b38206dd75a78cd46ce3f1b8",
+      "encoding": "raw"
+    },
+    {
+      "package": "platform-overview-direction-c",
+      "file": "apps/web/src/components/PlatformDashboard.vue",
+      "expected": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+      "actual": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e",
+      "encoding": "raw"
+    },
+    {
+      "package": "platform-overview-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "profit-direction-c",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+      "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+      "encoding": "raw"
+    },
+    {
+      "package": "provider-adapters-direction-c",
+      "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
+      "expected": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+      "actual": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
+      "encoding": "raw"
+    },
+    {
+      "package": "provider-adapters-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "provider-registry-direction-c",
+      "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
+      "expected": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+      "actual": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
+      "encoding": "raw"
+    },
+    {
+      "package": "provider-registry-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "recovery-direction-c",
+      "file": "apps/web/src/components/UiStateShowcase.vue",
+      "expected": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
+      "actual": "398e4c5ad69feb5259a69bc034ca6fdc98cf936426d3075637b253576d236ad3",
+      "encoding": "raw"
+    },
+    {
+      "package": "recovery-direction-c",
+      "file": "apps/web/src/components/NotFoundPage.vue",
+      "expected": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b",
+      "actual": "9ebbf97a724300fa2b17be2bc76973fe22abb14a290d84222915c09b7e2f44b7",
+      "encoding": "raw"
+    },
+    {
+      "package": "recovery-direction-c",
+      "file": "apps/web/src/route-catalog.generated.json",
+      "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+      "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c",
+      "encoding": "raw"
+    },
+    {
+      "package": "redis-direction-c",
+      "file": "tests/e2e/m08-02-redis-resilience.spec.ts",
+      "expected": "8f59ae6c739b6bc6bccd12631286da67195715ffebe37869d4c3b8ae0b3a0c3f",
+      "actual": "2f44d75bcb05fb246b8c8516eab2599b33153f63df7e087468443e728fb726e0",
+      "encoding": "raw"
+    },
+    {
+      "package": "release-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "release-direction-c",
+      "file": "config/route-catalog.json",
+      "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+      "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "encoding": "raw"
+    },
+    {
+      "package": "release-direction-c",
+      "file": "tests/e2e/m07-05-release-rollout.spec.ts",
+      "expected": "d81a9538c41daec1d1e556bf9e6d988a219db2c51fc7c8108caa6b894ec8ec47",
+      "actual": "783bc7cb2af831e7d6f7564b2598b5d57b64c798fc6fe851fbd5f44008e13aa8",
+      "encoding": "raw"
+    },
+    {
+      "package": "report-controls-direction-c",
+      "file": "apps/web/src/components/ReportCenter.vue",
+      "expected": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+      "actual": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f",
+      "encoding": "raw"
+    },
+    {
+      "package": "report-direction-c",
+      "file": "apps/web/src/components/ReportCenter.vue",
+      "expected": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+      "actual": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f",
+      "encoding": "raw"
+    },
+    {
+      "package": "review-direction-c",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+      "actual": "30d69570de8699efb45638a5059e946ffa10d5843272ad5353e553154987b2cf",
+      "encoding": "raw"
+    },
+    {
+      "package": "scheduler-direction-c",
+      "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+      "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
+      "actual": "5b35df7957658ea4b40e6a2e9110c7e58d306287b5b6dc5615503a76d7bb491c",
+      "encoding": "raw"
+    },
+    {
+      "package": "scheduler-direction-c",
+      "file": "tests/e2e/m08-05-crawler-scheduler.spec.ts",
+      "expected": "9d0cfe3d8d26a0c50173e81f534954ec0c831515a01c6a47b35f99260982abcd",
+      "actual": "b2d8758ab4138550f343fb73e98e9c04ce2ef7803791c7fca41e04762949ac16",
+      "encoding": "raw"
+    },
+    {
+      "package": "scoring-direction-c",
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+      "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723",
+      "encoding": "raw"
+    },
+    {
+      "package": "security-direction-c",
+      "file": "apps/web/src/components/TableViewControls.vue",
+      "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "encoding": "raw"
+    },
+    {
+      "package": "security-direction-c",
+      "file": "config/route-catalog.json",
+      "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+      "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "encoding": "raw"
+    },
+    {
+      "package": "security-direction-c",
+      "file": "tests/e2e/m06-04-security-operations.spec.ts",
+      "expected": "17552a0868d9f7b751afb2da89ca1adfddfa9c19e04f27aefd7af4d5e7610730",
+      "actual": "2b9b53de9d2e8ecadc3a360d526a1c6cd47f862e7ded429b4be68912b1968605",
+      "encoding": "raw"
+    },
+    {
+      "package": "shell-direction-c",
+      "file": "apps/web/src/navigation-shell-route-state.ts",
+      "expected": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+      "actual": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
+      "encoding": "raw"
+    },
+    {
+      "package": "shell-direction-c",
+      "file": "config/route-catalog.json",
+      "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+      "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "encoding": "raw"
+    },
+    {
+      "package": "shell-direction-c",
+      "file": "tests/e2e/m02-03-navigation-shell.spec.ts",
+      "expected": "606edbe19f01bbd3ffd5b2ad8127b6fee446d916a9f07df1c69015c82d1f29e8",
+      "actual": "d6b12669c1d5203527fdc757a9313fea807cfe2417d2380a670b0780c0bc9122",
+      "encoding": "raw"
+    },
+    {
+      "package": "shell-direction-c",
+      "file": "tests/m02-03/navigation-shell.test.mjs",
+      "expected": "fdfb87f5a39667a5da2bae7a6a6cbc1f0a353ec68e3b390955c988c61d8d7ea0",
+      "actual": "0874d8f0b5711232a7b052a78164d328ad52ebff2e58107958f2ac2a7522681b",
+      "encoding": "raw"
+    },
+    {
+      "package": "shell-journey-direction-c",
+      "file": "apps/web/src/design/selection-tokens.css",
+      "expected": "e3b001839a45970bb0c39ae89a0d7f32ac104e4c9c5c43443f83f38f80a78c74",
+      "actual": "c231efe624ed656a3e43f81c4069577634d57d20544b1e45fe5a99f8092232de",
+      "encoding": "raw"
+    },
+    {
+      "package": "shell-journey-direction-c",
+      "file": "apps/web/src/navigation-shell-route-state.ts",
+      "expected": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+      "actual": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
+      "encoding": "raw"
+    },
+    {
+      "package": "shell-journey-direction-c",
+      "file": "apps/web/src/route-catalog.generated.json",
+      "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+      "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c",
+      "encoding": "raw"
+    },
+    {
+      "package": "shell-journey-direction-c",
+      "file": "config/route-catalog.json",
+      "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+      "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "encoding": "raw"
+    },
+    {
+      "package": "source-channels-direction-c",
+      "file": "apps/web/src/components/ProviderSourceCenter.vue",
+      "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+      "actual": "bfb1ea618996a14d687b4b70b15c75a871bddc7e5cd489c9bedd105d0d26f489",
+      "encoding": "raw"
+    },
+    {
+      "package": "source-channels-direction-c",
+      "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+      "expected": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+      "actual": "3cb10851f9ec95552dabf2ee858e0e1c9081c27855625c5161902408fdb296f9",
+      "encoding": "raw"
+    },
+    {
+      "package": "source-channels-direction-c",
+      "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
+      "expected": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+      "actual": "fecfc130948a6e88c37cf35cf4d55acec74fa722ad8898202ce889b10832f842",
+      "encoding": "raw"
+    },
+    {
+      "package": "source-channels-direction-c",
+      "file": "apps/web/src/components/ProviderParserSampleReview.vue",
+      "expected": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+      "actual": "772658f4ec7fea171f1b690000f9329efc86a45c63efe1094840fb16c66da598",
+      "encoding": "raw"
+    },
+    {
+      "package": "source-channels-direction-c",
+      "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
+      "expected": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+      "actual": "32752031767eb5e54917fb3791709dfde6d96aa851a3762dcd751d3b2258543e",
+      "encoding": "raw"
+    },
+    {
+      "package": "source-channels-direction-c",
+      "file": "tests/e2e/m03-07-provider-sources.spec.ts",
+      "expected": "29c1232a33cb260beeee6851f33c4558873d25e47e538d6a2e04c47eaa6ba5fe",
+      "actual": "71507eea28b215924527c5f66d9bbeba7e01edb9ee6d5a2d746b8dc8e66be709",
+      "encoding": "raw"
+    },
+    {
+      "package": "sourcing-direction-c",
+      "file": "apps/web/src/components/SourcingWorkspace.vue",
+      "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+      "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219",
+      "encoding": "raw"
+    },
+    {
+      "package": "status-direction-c",
+      "file": "config/route-catalog.json",
+      "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+      "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "encoding": "raw"
+    },
+    {
+      "package": "task-direction-c",
+      "file": "apps/web/src/components/TaskWorkspace.vue",
+      "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+      "actual": "13f899b89bdfeb5d7cd261b87dbff89cd90f757e5a16997cd79ccd654647db7f",
+      "encoding": "raw"
+    },
+    {
+      "package": "task-direction-c-forms",
+      "file": "apps/web/src/components/TaskWorkspace.vue",
+      "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+      "actual": "13f899b89bdfeb5d7cd261b87dbff89cd90f757e5a16997cd79ccd654647db7f",
+      "encoding": "raw"
+    },
+    {
+      "package": "topology-direction-c",
+      "file": "tests/e2e/m08-01-single-server.spec.ts",
+      "expected": "ddc02d16bd45a1c13a76ba9b12448afa3bc29536f613e9b5f869589f2383e874",
+      "actual": "8d418800034fb4c4d633fb52d136fe05b891e1d6f9dfc5179c0db261d79a4103",
+      "encoding": "raw"
+    },
+    {
+      "package": "trend-direction-c",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+      "actual": "7e894cc321871b09052f72daeaf8113edbb80956f4244e734d89ebddf73fc9a4",
+      "encoding": "raw"
+    },
+    {
+      "package": "user-admin-direction-c",
+      "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+      "expected": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+      "actual": "87e0b0906fded03d7c5337dafa5e6bfc801a2367d12deb652cc36f0f88d32d9a",
+      "encoding": "raw"
+    },
+    {
+      "package": "user-admin-direction-c",
+      "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+      "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+      "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
+      "encoding": "raw"
+    },
+    {
+      "package": "user-admin-direction-c",
+      "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+      "expected": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0",
+      "actual": "843fcd060a9dbdcf4ba42b62ddff25f15628efa4b38206dd75a78cd46ce3f1b8",
+      "encoding": "raw"
+    },
+    {
+      "package": "work-direction-c",
+      "file": "apps/web/src/components/TaskWorkspace.vue",
+      "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+      "actual": "13f899b89bdfeb5d7cd261b87dbff89cd90f757e5a16997cd79ccd654647db7f",
+      "encoding": "raw"
+    }
+  ],
   "screenshotDrift": [],
   "unmanifested": [],
   "limits": [

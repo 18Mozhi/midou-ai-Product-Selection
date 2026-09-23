@@ -12,7 +12,7 @@ export const tokenCopyRevisions = {
   },
   [tokenCopyComponent]: {
     before: "81ba6a86c80bdcdb1cfea7832b3c13b0d85a5a9bf8dd6922583a5ada5d0e326d",
-    after: "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+    after: "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c",
   },
 };
 const hash = (source) => createHash("sha256").update(source).digest("hex");

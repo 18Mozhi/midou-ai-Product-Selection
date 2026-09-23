@@ -6,6 +6,10 @@
 
 定向合同单测8/8，Home+机会详情 E2E 桌面/390px 各4/4；Web类型、格式、文档、runtime-docs、release matrix、静态分析、前端预算、M07-03 preflight 与22工作区构建通过。提交 `06ae38230de2b5b7a35b89727aa22432387030d5` 已推送并通过固定 `python scripts/deploy-baota.py` 部署。线上 ready/available/version与 build SHA匹配，`/home` HTTP200，P12专属JS/CSS HTTP200且SHA-256与本地构建相同；远端临时包由部署脚本删除。未新增数据迁移或要求手动重启。正式 M07-03、生产RBAC/会话、MySQL真实隔离及真实采集仍需独立验证。详见[P12实施记录](P12-PAGE-COMPOSITION-IMPLEMENTATION.md)。
 
+## 2026-09-24 · P59 安全详情键盘闭环回归
+
+补充真实浏览器回归：移动事件详情初始焦点位于关闭按钮，Tab/Shift+Tab 在关闭与技术详情间双向环绕，Escape 关闭后焦点返回原记录入口；技术详情字段断言保留。M06-04 桌面 Chromium 与 390px 项目各6/6通过，定向复核12/12。仅扩展E2E及更新Feature Map/P59记录；不改共享Vue实现、权限、API或数据。此用例仅覆盖事件详情代表状态，不视为五类消费者、叠层对话框或正式无障碍验收；未重部署。
+
 ## 2026-09-24 · P11 个人中心 C 方向实施
 
 P11 `/me` 已迁入真实 Vue：账号壳层由旧横向账页式索引重构为蓝色账号边界、五分区可访问目录与白色任务区；资料、权限、安全/设备、通知偏好、本人资产拆为 typed panels，异步/写操作集中在 composable。首次资料加载不再被初始 loading 状态拦截；各分区独立保留失败追踪与单独重试，未成功读取的通知偏好不会伪装成默认值；离开安全区及卸载时清理密码字段。保留现有 API 路径/body/version、权限、会话撤销和邮件服务未配置时的 503 行为，未增加 API/OpenAPI、数据库、权限、配置或依赖。实际 Vue 1440/390 × 两种动效 48 项/12 次拦截写入通过；P11 A04/A05 桌面和手机通过，类型检查、定向测试和22工作区构建通过。代码/build SHA `6f8356026573d35a203c0e729d89794c96214c1c` 已推送部署；线上 ready/available/version、五分区深链和页面 JS/CSS 哈希复核通过。正式 M07-03、真实 RBAC、密码/会话持久化及邮件投递仍需独立验收；全73页目标继续。详见[P11实施记录](P11-PAGE-COMPOSITION-IMPLEMENTATION.md)。

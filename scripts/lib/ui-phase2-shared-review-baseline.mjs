@@ -7,7 +7,7 @@ export const sharedReviewRevisions = Object.freeze({
   "apps/web/src/components/OrganizationAdminCenter.vue": {
     baseline: "df4b7263b1684e94e4ecc8d46c856c202fd9ee7b",
     captured: "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-    current: "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+    current: "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
   },
   "apps/web/src/components/AuditedReasonDialog.vue": {
     baseline: "4a6368ef1178908688cd6519c5cafafb25c1afcb",
@@ -17,7 +17,7 @@ export const sharedReviewRevisions = Object.freeze({
   "apps/web/src/components/ResponsiveDataView.vue": {
     baseline: "54ec47364b3422b1d49a6eea18f070229af56a59",
     captured: "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-    current: "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+    current: "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
   },
   "scripts/lib/ui-phase2-responsive-focus-contract.mjs": {
     baseline: "54ec47364b3422b1d49a6eea18f070229af56a59",
@@ -37,7 +37,7 @@ export const sharedReviewRevisions = Object.freeze({
   "apps/web/src/components/NavigationShell.vue": {
     baseline: "243941a0620cd7444bd494a0242d471b343e58c5",
     captured: "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
-    current: "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+    current: "a4802ba4c400d15410cdf7093809f2c22b6ed63fabcd71597d7c02969378b955",
   },
   "apps/web/src/components/OrganizationApprovalPanel.vue": {
     baseline: "d77ce47ba93ed91c2aaff4263f398e13cdfbfff9",
@@ -47,17 +47,17 @@ export const sharedReviewRevisions = Object.freeze({
   "apps/web/src/components/PlatformManagementCenter.vue": {
     baseline: "48f61a5290236cb0de76fd010d775a00d2bce67c",
     captured: "57c60bbdc5e61f63762057c3c217016e4fa1a0594ab3c368ffee003e748d9615",
-    current: "471e940d9f254ade77f69cbe47ad3f80d6a3b722189f7dca8c252094013aa6f1",
+    current: "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00",
   },
   "tests/e2e/m06-02-platform-dashboard.spec.ts": {
     baseline: "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
     captured: "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-    current: "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+    current: "ed3ffa8de3b4913e8a5d14655f3e22d94967c7245add05cad0bb81d439c7980b",
   },
   "tests/e2e/m03-06-evidence-data-quality.spec.ts": {
     baseline: "d99f047c95a15508066cdd191275344d3086f46a",
     captured: "e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb",
-    current: "e5b9b8ea389ca406d6a9e18f0794d243b6ba1843b41570197a19d4e7a0c13ece",
+    current: "8e9291d084f792ff1725c66df006310433a39e09597373f75ebcf7df0c3aa6b7",
   },
   "scripts/lib/ui-phase2-members-design-data.mjs": {
     baseline: "b72725feaacaa4523e2bb2cd7c0dc271b4fb4c9e",
@@ -72,7 +72,7 @@ export const sharedReviewRevisions = Object.freeze({
   "apps/web/src/components/PlatformDataCenter.vue": {
     baseline: "b4bdcf11059aa414419d4002303e973b7e126eb8",
     captured: "bfeead63eec768c7b20bb5cc2fdd0279e9c4ccffa70c5d5dfbe41afc0f28cd2a",
-    current: "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+    current: "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08",
   },
 });
 
@@ -173,31 +173,31 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "dd31af05629215a4863f7a6a14bf973f43f6f10a",
       captured: "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
-      current: "969cd10fc0a99f35243278bbbc3b5896b10ea4627722f295911fc9ffb0d45100",
+      current: "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de",
     },
   "apps/web/src/components/CollectionTaskCenter.vue#1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed":
     {
       baseline: "5ad7b7b9c08697873b3f66d52fe53ebe6f133184",
       captured: "1e2c3b8ae78152dc01991641730fcfe5f8e835395c6919bb674875e7c6fa79ed",
-      current: "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
+      current: "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de",
     },
   "apps/web/src/components/CommercialOperationsCenter.vue#4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33":
     {
       baseline: "66bea9b6dfa514c19df8607daa173efddd26de74",
       captured: "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
-      current: "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed",
+      current: "5fea14bb21308bc2df7526e8485698525881b227d5ba1715b5eea5bea6e1754e",
     },
   "apps/web/src/components/CredentialAssetCenter.vue#4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be":
     {
       baseline: "a728f810feefe11706579903b86f0e6e1b165dda",
       captured: "4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be",
-      current: "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+      current: "092105c8ad2b110178abb8c8f1485c993aea560428188b7a0e0c130b74b56c1b",
     },
   "apps/web/src/components/OpenPlatformCenter.vue#5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5":
     {
       baseline: "66bea9b6dfa514c19df8607daa173efddd26de74",
       captured: "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
-      current: "81dad2d4a82e49b089d97dba8ed28a1eee23b5597446d3e460febea341f3b97b",
+      current: "9bcb38c92f614302ad155436cbdba9e43507bddb62bca0a8d0fefee676ddb3b1",
     },
   "apps/web/src/components/PlatformContentPagination.vue#2c59ac9fa920dd095d36718eb86638a58abaebc6dd99bd8b73e869af5a0e6402":
     {
@@ -209,19 +209,19 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
       captured: "10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4",
-      current: "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+      current: "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08",
     },
   "apps/web/src/components/PlatformGovernanceCenter.vue#76eae80f51225c3af676a17ab9c4ec94369262cc5e8c968be7fd62ef5f2280db":
     {
       baseline: "b4bdcf11059aa414419d4002303e973b7e126eb8",
       captured: "76eae80f51225c3af676a17ab9c4ec94369262cc5e8c968be7fd62ef5f2280db",
-      current: "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048",
+      current: "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9",
     },
   "apps/web/src/components/PlatformLogCenter.vue#4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d":
     {
       baseline: "9c1f755acc559cd17446dcabd775a3eb39646de0",
       captured: "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
-      current: "caaf302bb0218ee1dc90117a77f558999d5765b9c7044408431b4a673231945a",
+      current: "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518",
     },
   "apps/web/src/components/PlatformManagementRecordList.vue#3ec74f90ff5740a58f70ea98fdc9c76835da9d223f01dd31d23ffd6a7cf78bfc":
     {
@@ -263,49 +263,49 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "ed4e8edfd358e4d7ab36e71007bff15a859f5854",
       captured: "0ef775e4638ffdee87eb12caf959891d30b52932f4b5eb6b9b96ebec88851075",
-      current: "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
+      current: "7fce30d574f08ef93c5530b7d609e5d5fde38c0ab246e20c91fbd8c45497b798",
     },
   "apps/web/src/components/ProviderRegistry.vue#e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e":
     {
       baseline: "7b86e25d7ed1f3a75400887b4ab6efa7f0585031",
       captured: "e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e",
-      current: "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+      current: "29878b51e5b7c405ffd298b51769781dd903a15a261f8b8936558202a4478508",
     },
   "apps/web/src/components/ReleaseRolloutCenter.vue#0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1":
     {
       baseline: "66bea9b6dfa514c19df8607daa173efddd26de74",
       captured: "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
-      current: "b5344202cf358e7a5f61d8b0d73f4086c59157e395d12eda5f719a532bf79e63",
+      current: "f362e65bea501d183d809d458497e5b3775377d12e83b8e4f52496d00b62107d",
     },
   "apps/web/src/components/ResponsiveDataView.vue#28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa":
     {
       baseline: "d99f047c95a15508066cdd191275344d3086f46a",
       captured: "28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa",
-      current: "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+      current: "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
     },
   "apps/web/src/components/ResponsiveDataView.vue#52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c":
     {
       baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
       captured: "52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c",
-      current: "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+      current: "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
     },
   "apps/web/src/components/ResponsiveDataView.vue#6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac":
     {
       baseline: "af239b08b69f7d97cd0372f9840a70009eeef0c7",
       captured: "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
-      current: "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+      current: "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
     },
   "apps/web/src/components/RuntimeTopologyCenter.vue#457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79":
     {
       baseline: "c8318852f498fc72ca863dbbdae8244a5879a686",
       captured: "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
-      current: "aedf6a1e9a83b11ba8376aad116fe6e048261b79c6bbe92063e185d76cd3a7a3",
+      current: "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd",
     },
   "apps/web/src/components/SecurityOperationsCenter.vue#1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3":
     {
       baseline: "5695ae753d1d8e821dff9871d7a4dc00865bbb3f",
       captured: "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
-      current: "a583e75d6491fedc7ae94e449c5a31f421055587168101c81bf4922ffd4c2ba3",
+      current: "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4",
     },
   "apps/web/src/components/use-platform-content-review.ts#e700d67e95e44859d7283b7370ad4690fd13cf341cb87a1e556a414ede9dbfe2":
     {
@@ -335,7 +335,7 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "b5c39aab2f46fabf59ac3a78f135a99febdc0a28",
       captured: "34ad1d77eeb70a6297aadc2a6322a377aa8b7025765d6c07aa29a2193e3a272d",
-      current: "977bfcdb2a53cad8828ee9bb7e1ccc4eaee268ff53bf83dc8ec6cd5833ca8073",
+      current: "dd7ffe49a55748486128c35fc7962eb7e17e4b46dba65b35aef2a7db6615ad23",
     },
   "tests/e2e/m07-04-backup-recovery.spec.ts#f9c712921c576a00c0ef4f9f4c24721f06a38d609514ee924557316259f17f53":
     {
@@ -347,7 +347,7 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "5ad7b7b9c08697873b3f66d52fe53ebe6f133184",
       captured: "9218c2552339e5c25f2920f9fc340d9b546e89621c0978f4208179ae66151afd",
-      current: "66bcb37988f1c064cff418506013a45b0b44c2d7eed6fa2d38e6a1420964fe96",
+      current: "2e5f76d5cc12f537b81924644877e144fc1c5b8bef275cd96c287daa337d82b9",
     },
   "tests/e2e/m03-02-credential-assets.spec.ts#0b735d56167c0c9e86b4bc7a3f3f8e8c3b6bc04106c0286bb9b1d05353c16929":
     {
@@ -359,7 +359,7 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
       captured: "ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0",
-      current: "d4f205c4abd85dd76caab7a8a8de83b27999cd4238afa387b6cce9cf7e023019",
+      current: "ed3ffa8de3b4913e8a5d14655f3e22d94967c7245add05cad0bb81d439c7980b",
     },
   "tests/unit/platform-notification-operations.test.mjs#366dc7309b7def6692fb8edd0861d37e3da3a82b3a713a9b0aa7004e2e3d2f75":
     {
@@ -371,13 +371,13 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
       captured: "ed45f8df2572d35492fe289a6de397b861dacee8d552fd9b77bc6bf0934c2dad",
-      current: "7111e8e7831a20b9a05030018384daa5000d632c9e488330d3cac1ff54d5d239",
+      current: "3cc3638f3cda517fc4162466e49f2235838a8649cecd64c8f1e4b3581cbb90df",
     },
   "tests/e2e/m03-03-provider-adapter.spec.ts#f189c28a32f3d25bd0686379f9cfa978bd260df6085ea3650b0f1f5bedf28e74":
     {
       baseline: "ed4e8edfd358e4d7ab36e71007bff15a859f5854",
       captured: "f189c28a32f3d25bd0686379f9cfa978bd260df6085ea3650b0f1f5bedf28e74",
-      current: "f5c6bd4e0d265e83dbb3179f732ff4db18409f79e87568248767827230ef1452",
+      current: "5382d8b68c3bf4e313daed5339c5f78c255570fa0df7d154ce8d7eb6a3dfd91f",
     },
 });
 

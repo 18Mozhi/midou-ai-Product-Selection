@@ -8,10 +8,12 @@ export const adminResultsRevisions = {
   "apps/web/src/components/PlatformRoleComparison.vue": {
     before: "d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba",
     after: "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+    current: "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309",
   },
   "apps/web/src/components/PlatformAdminComparisonMobile.css": {
     before: "492517572b9ff66dad74bf08c5372caab32bb09adf3deb08d8aa728c61bebbe7",
     after: "aab8b73f01e26f8da808c60e5cdef04dfb67504d179292e0d4a9f3209670a64d",
+    current: "03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae",
   },
 };
 const hash = (s) => createHash("sha256").update(s).digest("hex");
@@ -29,6 +31,13 @@ export function historicalAdminRoleFactsSource(file, source) {
   if (file !== r.file || hash(source) === r.before) return source;
   // The older pre-results stylesheet is also a known historical input.
   if (hash(source) === adminResultsRevisions[file].before) return source;
+  if (hash(source) === adminResultsRevisions[file].current) {
+    const resultStage = execFileSync("git", ["show", `66ea2f60:${file}`], {
+      encoding: "utf8",
+    }).replaceAll("\r\n", "\n");
+    assert.equal(hash(resultStage), adminResultsRevisions[file].after);
+    return resultStage;
+  }
   assert.equal(hash(source), r.after, `Unreviewed admin results source: ${file}`);
   const key = "role-facts:" + file;
   if (!cache.has(key)) {
@@ -45,6 +54,13 @@ export function historicalAdminResultsSource(file, source) {
   source = historicalAdminRoleFactsSource(file, source);
   const revision = adminResultsRevisions[file];
   if (!revision || hash(source) === revision.before) return source;
+  if (hash(source) === revision.current) {
+    source = execFileSync("git", ["show", `66ea2f60:${file}`], {
+      encoding: "utf8",
+    }).replaceAll("\r\n", "\n");
+    assert.equal(hash(source), revision.after);
+  }
+  if (hash(source) === revision.before) return source;
   assert.equal(hash(source), revision.after, `Unreviewed admin results source: ${file}`);
   if (!cache.has(file)) {
     const old = execFileSync("git", ["show", `${adminResultsBaseline}:${file}`], {

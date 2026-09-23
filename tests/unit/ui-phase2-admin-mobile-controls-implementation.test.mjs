@@ -33,7 +33,7 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
     assert.equal(e.screenshots.length, 16);
     assert.equal(
       Object.keys(e.sourceHashes).length,
-      mode === "baseline" ? 35 : mode === "current" ? 40 : 36,
+      mode === "baseline" ? 35 : mode === "current" ? 43 : 36,
     );
     for (const [file, sha] of Object.entries(e.sourceHashes)) {
       const source = capture ? capture.source(file) : read(file);
@@ -60,14 +60,21 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
           .filter((file) => !Object.hasOwn(after.sourceHashes, file))
           .sort(),
         [
+          "apps/web/src/components/PlatformAccountCenterAdmin.css",
+          "apps/web/src/components/PlatformAccountCenterPermissions.css",
           "apps/web/src/components/PlatformAdminDirectoryMobile.css",
+          "apps/web/src/components/PlatformRoleComparisonPermissions.css",
           "apps/web/src/design/platform-admin-mobile-tokens.css",
           "apps/web/src/design/platform-overlay-tokens.css",
+          "apps/web/src/use-platform-organization-detail-state.ts",
           "scripts/lib/ui-imported-style-sources.mjs",
         ],
       );
-      assert.ok(
-        Object.keys(after.sourceHashes).every((file) => Object.hasOwn(e.sourceHashes, file)),
+      assert.deepEqual(
+        Object.keys(after.sourceHashes)
+          .filter((file) => !Object.hasOwn(e.sourceHashes, file))
+          .sort(),
+        ["apps/web/src/styles/platform-dashboard.css"],
       );
     }
     assert.equal(e.observations.length, 8);
@@ -126,7 +133,7 @@ test("historical P44 controls-only stage: excluded styles, focus geometry and de
 test("historical P44 controls-only parent appends stylesheet; script/template and other styles unchanged", () => {
   const current = implemented.source(adminControlsRevision.file);
   const old = historicalAdminControlsSource(adminControlsRevision.file, current);
-  assert.equal(hash(current), adminControlsRevision.after);
+  assert.equal(hash(current), adminControlsRevision.priorAfter);
   assert.equal(hash(old), adminControlsRevision.before);
   assert.equal(current, old + '<style src="./PlatformAdminComparisonMobile.css"></style>\n');
   assert.equal(before.sourceHashes[css], undefined);
@@ -144,6 +151,11 @@ test("historical P44 controls-only parent appends stylesheet; script/template an
 
 test("historical association fails closed for an unregistered source and preserves CRLF equivalence", () => {
   const current = read(adminControlsRevision.file);
+  assert.equal(hash(current), adminControlsRevision.after);
+  assert.equal(
+    hash(historicalAdminControlsSource(adminControlsRevision.file, current)),
+    adminControlsRevision.before,
+  );
   assert.throws(
     () =>
       historicalAdminControlsSource(adminControlsRevision.file, current + "\n<!-- unknown -->\n"),

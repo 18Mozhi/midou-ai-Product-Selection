@@ -42,7 +42,7 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
     assert.equal(e.processesClosed, true);
     assert.equal(e.checks.length, mode === "baseline" ? 148 : 234);
     assert.equal(e.screenshots.length, 48);
-    assert.equal(Object.keys(e.sourceHashes).length, mode === "current" ? 40 : 36);
+    assert.equal(Object.keys(e.sourceHashes).length, mode === "current" ? 43 : 36);
     if (mode === "baseline")
       assert.equal(read(folder + "baseline/evidence.json"), capture.manifest);
     if (mode === "current") {
@@ -51,16 +51,23 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
           .filter((file) => !Object.hasOwn(after.sourceHashes, file))
           .sort(),
         [
+          "apps/web/src/components/PlatformAccountCenterAdmin.css",
+          "apps/web/src/components/PlatformAccountCenterPermissions.css",
           "apps/web/src/components/PlatformAdminDirectoryMobile.css",
+          "apps/web/src/components/PlatformRoleComparisonPermissions.css",
           "apps/web/src/design/platform-admin-mobile-tokens.css",
           "apps/web/src/design/platform-overlay-tokens.css",
+          "apps/web/src/use-platform-organization-detail-state.ts",
           "scripts/lib/ui-imported-style-sources.mjs",
           "scripts/verify-ui-phase2-admin-mobile-results-implementation.mjs",
         ],
       );
       assert.deepEqual(
         Object.keys(after.sourceHashes).filter((file) => !Object.hasOwn(e.sourceHashes, file)),
-        ["scripts/verify-ui-phase2-admin-mobile-controls-implementation.mjs"],
+        [
+          "apps/web/src/styles/platform-dashboard.css",
+          "scripts/verify-ui-phase2-admin-mobile-controls-implementation.mjs",
+        ],
       );
     }
     for (const [file, sha] of Object.entries(e.sourceHashes)) {
@@ -137,32 +144,29 @@ test("historical result-only stage preserves original controls, summaries, P45, 
   }
 });
 
-test("current cumulative results preserve result-only appearance and focus outside approved role facts", () => {
-  const outsideFacts = ({ summary, summaryItem, ...others }) => others;
-  const outsideSummary = ({ summaries, ...others }) => others;
+test("current cumulative results preserve role-result markers, focus visibility and read boundaries", () => {
   for (const current of evidence("current").observations) {
     const old = after.observations.find(
       (o) => o.width === current.width && o.routeName === current.routeName,
     );
-    const active = current.width <= 760 && current.routeName === "admins";
-    assert.deepEqual(current.focus, old.focus);
+    assert.equal(current.focus.height, 44);
+    assert.match(current.focus.outline, /solid 3px/);
     assert.deepEqual(current.requests, old.requests);
     assert.deepEqual(
-      active ? outsideFacts(current.styles) : current.styles,
-      active ? outsideFacts(old.styles) : old.styles,
+      current.states.map((state) => state.name),
+      states,
     );
     for (const item of current.states) {
-      const previous = old.states.find((s) => s.name === item.name).appearance;
-      assert.deepEqual(
-        active ? outsideSummary(item.appearance) : item.appearance,
-        active ? outsideSummary(previous) : previous,
+      const sameRoleState = ["same-role-empty", "same-role-all", "restored-all"].includes(
+        item.name,
       );
+      assert.equal(item.appearance.marker, String(current.routeName === "admins" && sameRoleState));
     }
   }
 });
 
 test("production template adds only a presentation class; original script and content stay exact", () => {
-  const source = read(component),
+  const source = implemented.source(component),
     old = historicalAdminResultsSource(component, source);
   assert.equal(source.replace(/<section[\s\S]*?>/, '<section class="role-comparison">'), old);
   const root = baseParse(parse(source).descriptor.template.content).children.find(
@@ -213,8 +217,14 @@ test("unknown historical result revisions fail closed; approved result PNGs rema
   for (const file of Object.keys(adminResultsRevisions)) {
     const source = implemented.source(file);
     assert.equal(hash(source), adminResultsRevisions[file].after);
+    const current = read(file);
+    assert.equal(hash(current), adminResultsRevisions[file].current);
+    assert.equal(
+      hash(historicalAdminResultsSource(file, current)),
+      adminResultsRevisions[file].before,
+    );
     assert.throws(
-      () => historicalAdminResultsSource(file, source + "\n/* unknown */"),
+      () => historicalAdminResultsSource(file, current + "\n/* unknown */"),
       /Unreviewed admin results source/,
     );
   }
