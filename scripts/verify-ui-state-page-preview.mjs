@@ -96,6 +96,11 @@ try {
         const root = page.locator(".state-showcase--review");
         await root.waitFor();
         check(await root.locator("h1").count(), 1, "single h1");
+        check(
+          await root.locator(".p72-hero h1").evaluate((node) => getComputedStyle(node).color),
+          "rgb(255, 255, 255)",
+          "hero title contrast",
+        );
         check(await root.locator(".p72-state-picker button").count(), 8, "eight state controls");
         check(
           await root
@@ -143,6 +148,14 @@ try {
         const dialog = page.getByRole("alertdialog", { name: "确认撤销示例授权？", exact: true }),
           cancel = dialog.getByRole("button", { name: "取消", exact: true }),
           confirm = dialog.getByRole("button", { name: "确认演示", exact: true });
+        check(
+          await dialog
+            .locator("aside")
+            .first()
+            .evaluate((node) => getComputedStyle(node).borderLeftColor),
+          "rgb(180, 35, 24)",
+          "demo-only destructive impact marker",
+        );
         check(
           await cancel.evaluate((node) => node === document.activeElement),
           true,

@@ -14,16 +14,16 @@ P72共22场景×双端44图，加390×667短视口确认1图；P73共9场景×�
 
 ## P72 动作合同
 
-| 状态 | 主动作 | 次动作 |
-| --- | --- | --- |
-| loading | 不显示 | 不显示 |
-| empty | 首次操作演示提示 | 筛选演示提示 |
-| error | 切恢复示例 | 切空结果示例，不是history.back |
-| forbidden | 记录/home意图 | 说明申请须由所属业务页发起 |
-| expired | 记录/login意图 | 无 |
-| blocked | 切恢复示例 | 本地影响说明，不判定真实写入结果 |
-| recovery | 切空结果示例 | 无 |
-| not_found | 记录最近目标；目标即展示页时切empty | 记录/home意图 |
+| 状态      | 主动作                              | 次动作                           |
+| --------- | ----------------------------------- | -------------------------------- |
+| loading   | 不显示                              | 不显示                           |
+| empty     | 首次操作演示提示                    | 筛选演示提示                     |
+| error     | 切恢复示例                          | 切空结果示例，不是history.back   |
+| forbidden | 记录/home意图                       | 说明申请须由所属业务页发起       |
+| expired   | 记录/login意图                      | 无                               |
+| blocked   | 切恢复示例                          | 本地影响说明，不判定真实写入结果 |
+| recovery  | 切空结果示例                        | 无                               |
+| not_found | 记录最近目标；目标即展示页时切empty | 记录/home意图                    |
 
 八态及原始动作来自实际UiStateShowcase和state-contract。query只接受单个合法state；非法/多值显示empty但不重写原URL。选择新态push并保留其他query，同合法态不增加history；前后退/刷新恢复state并清除旧动作提示。confirmed不随普通切态清空，重建或切审稿预设场景才重置。当前路由未用initialState prop，助手只验证其源函数边界，不增加UI入口。
 
@@ -45,6 +45,8 @@ P72共22场景×双端44图，加390×667短视口确认1图；P73共9场景×�
 
 P72顶部选择预设或手动操作八态；P73案例可用not-found.html?case=recent、case=long等链接参数选择。`node scripts/verify-ui-phase2-recovery-c.mjs`检查源码、数据、图片哈希与交互；加`--capture`重建本目录63PNG及evidence，不覆盖旧稿。
 
+实施状态更新：P72 C 构图已按用户授权接入开发专用 Vue 组件并部署，见[实施记录](../../P72-PAGE-COMPOSITION-IMPLEMENTATION.md)。此处原始“本批无Vue/未部署”是设计原型完成时的历史边界，不再描述当前 P72；P73 的公开恢复仍是独立页面实施范围。
+
 源助手执行实际八态动作/query、canConfirm、sanitizeCorrelationId、导航存储与404计算函数；生产route-catalog经原表达式过滤，实际解析/ui-states为fallback。App DEV条件/afterEach不记404是静态证据，不代替实际发布包与线上访问。
 
 浏览器覆盖：双端31场景、63图，八态所有可见动作、query非法/多值/同态/history/刷新、签认五组合/trim/重置/双向焦点/遮罩、标识过滤、404九目标/路径/焦点/链接意图。额外320/768/780/781/1024断点和390×667确认；无横溢出、重复ID、控制台错误、HTTP或存储写入。浏览器finally关闭，不启动服务。
@@ -53,38 +55,38 @@ P72顶部选择预设或手动操作八态；P73案例可用not-found.html?case=
 
 ## 图册
 
-| 页面与场景 | 桌面 | 手机 |
-| --- | --- | --- |
-| P72 加载 | [1440](1440-p72-loading.png) | [390](390-p72-loading.png) |
-| P72 空结果 | [1440](1440-p72-empty.png) | [390](390-p72-empty.png) |
-| P72 错误 | [1440](1440-p72-error.png) | [390](390-p72-error.png) |
-| P72 无权限 | [1440](1440-p72-forbidden.png) | [390](390-p72-forbidden.png) |
-| P72 登录失效 | [1440](1440-p72-expired.png) | [390](390-p72-expired.png) |
-| P72 受阻 | [1440](1440-p72-blocked.png) | [390](390-p72-blocked.png) |
-| P72 恢复 | [1440](1440-p72-recovery.png) | [390](390-p72-recovery.png) |
-| P72 404示例 | [1440](1440-p72-not_found.png) | [390](390-p72-not_found.png) |
-| P72 首次操作提示 | [1440](1440-p72-first-action.png) | [390](390-p72-first-action.png) |
-| P72 筛选提示 | [1440](1440-p72-filter-action.png) | [390](390-p72-filter-action.png) |
-| P72 重试提示 | [1440](1440-p72-retry-action.png) | [390](390-p72-retry-action.png) |
-| P72 权限申请说明 | [1440](1440-p72-permission-action.png) | [390](390-p72-permission-action.png) |
-| P72 影响说明 | [1440](1440-p72-impact-action.png) | [390](390-p72-impact-action.png) |
-| P72 确认未签认 | [1440](1440-p72-confirm-empty.png) | [390](390-p72-confirm-empty.png) |
-| P72 确认仅勾选 | [1440](1440-p72-confirm-check.png) | [390](390-p72-confirm-check.png) |
-| P72 确认仅短语 | [1440](1440-p72-confirm-phrase.png) | [390](390-p72-confirm-phrase.png) |
-| P72 确认错误短语 | [1440](1440-p72-confirm-wrong.png) | [390](390-p72-confirm-wrong.png) |
-| P72 确认可提交 | [1440](1440-p72-confirm-ready.png) | [390](390-p72-confirm-ready.png) |
-| P72 本地确认完成 | [1440](1440-p72-confirmed.png) | [390](390-p72-confirmed.png) |
-| P72 非法标识 | [1440](1440-p72-invalid-ids.png) | [390](390-p72-invalid-ids.png) |
-| P72 长标识 | [1440](1440-p72-long-ids.png) | [390](390-p72-long-ids.png) |
-| P72 返回当前展示页 | [1440](1440-p72-self-return.png) | [390](390-p72-self-return.png) |
-| P73 无最近目标 | [1440](1440-p73-home.png) | [390](390-p73-home.png) |
-| P73 合法最近目标 | [1440](1440-p73-recent.png) | [390](390-p73-recent.png) |
-| P73 今日行动带query | [1440](1440-p73-home-query.png) | [390](390-p73-home-query.png) |
-| P73 已注销目标 | [1440](1440-p73-retired.png) | [390](390-p73-retired.png) |
-| P73 外部值 | [1440](1440-p73-external.png) | [390](390-p73-external.png) |
-| P73 协议相对值 | [1440](1440-p73-protocol.png) | [390](390-p73-protocol.png) |
-| P73 存储读取异常 | [1440](1440-p73-storage-error.png) | [390](390-p73-storage-error.png) |
-| P73 长路径 | [1440](1440-p73-long.png) | [390](390-p73-long.png) |
-| P73 内部目标不可达 | [1440](1440-p73-internal-unavailable.png) | [390](390-p73-internal-unavailable.png) |
+| 页面与场景          | 桌面                                      | 手机                                    |
+| ------------------- | ----------------------------------------- | --------------------------------------- |
+| P72 加载            | [1440](1440-p72-loading.png)              | [390](390-p72-loading.png)              |
+| P72 空结果          | [1440](1440-p72-empty.png)                | [390](390-p72-empty.png)                |
+| P72 错误            | [1440](1440-p72-error.png)                | [390](390-p72-error.png)                |
+| P72 无权限          | [1440](1440-p72-forbidden.png)            | [390](390-p72-forbidden.png)            |
+| P72 登录失效        | [1440](1440-p72-expired.png)              | [390](390-p72-expired.png)              |
+| P72 受阻            | [1440](1440-p72-blocked.png)              | [390](390-p72-blocked.png)              |
+| P72 恢复            | [1440](1440-p72-recovery.png)             | [390](390-p72-recovery.png)             |
+| P72 404示例         | [1440](1440-p72-not_found.png)            | [390](390-p72-not_found.png)            |
+| P72 首次操作提示    | [1440](1440-p72-first-action.png)         | [390](390-p72-first-action.png)         |
+| P72 筛选提示        | [1440](1440-p72-filter-action.png)        | [390](390-p72-filter-action.png)        |
+| P72 重试提示        | [1440](1440-p72-retry-action.png)         | [390](390-p72-retry-action.png)         |
+| P72 权限申请说明    | [1440](1440-p72-permission-action.png)    | [390](390-p72-permission-action.png)    |
+| P72 影响说明        | [1440](1440-p72-impact-action.png)        | [390](390-p72-impact-action.png)        |
+| P72 确认未签认      | [1440](1440-p72-confirm-empty.png)        | [390](390-p72-confirm-empty.png)        |
+| P72 确认仅勾选      | [1440](1440-p72-confirm-check.png)        | [390](390-p72-confirm-check.png)        |
+| P72 确认仅短语      | [1440](1440-p72-confirm-phrase.png)       | [390](390-p72-confirm-phrase.png)       |
+| P72 确认错误短语    | [1440](1440-p72-confirm-wrong.png)        | [390](390-p72-confirm-wrong.png)        |
+| P72 确认可提交      | [1440](1440-p72-confirm-ready.png)        | [390](390-p72-confirm-ready.png)        |
+| P72 本地确认完成    | [1440](1440-p72-confirmed.png)            | [390](390-p72-confirmed.png)            |
+| P72 非法标识        | [1440](1440-p72-invalid-ids.png)          | [390](390-p72-invalid-ids.png)          |
+| P72 长标识          | [1440](1440-p72-long-ids.png)             | [390](390-p72-long-ids.png)             |
+| P72 返回当前展示页  | [1440](1440-p72-self-return.png)          | [390](390-p72-self-return.png)          |
+| P73 无最近目标      | [1440](1440-p73-home.png)                 | [390](390-p73-home.png)                 |
+| P73 合法最近目标    | [1440](1440-p73-recent.png)               | [390](390-p73-recent.png)               |
+| P73 今日行动带query | [1440](1440-p73-home-query.png)           | [390](390-p73-home-query.png)           |
+| P73 已注销目标      | [1440](1440-p73-retired.png)              | [390](390-p73-retired.png)              |
+| P73 外部值          | [1440](1440-p73-external.png)             | [390](390-p73-external.png)             |
+| P73 协议相对值      | [1440](1440-p73-protocol.png)             | [390](390-p73-protocol.png)             |
+| P73 存储读取异常    | [1440](1440-p73-storage-error.png)        | [390](390-p73-storage-error.png)        |
+| P73 长路径          | [1440](1440-p73-long.png)                 | [390](390-p73-long.png)                 |
+| P73 内部目标不可达  | [1440](1440-p73-internal-unavailable.png) | [390](390-p73-internal-unavailable.png) |
 
 [390×667 短视口确认](390-p72-confirm-short-667.png)
