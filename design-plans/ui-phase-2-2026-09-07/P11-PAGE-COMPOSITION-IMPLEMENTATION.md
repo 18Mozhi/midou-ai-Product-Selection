@@ -22,8 +22,8 @@
 - `node scripts/verify-personal-center-page-preview.mjs`：真实 Vue 1440/390 × reduced/no-preference 共48项断言、12次被拦截写入通过；覆盖资料 PATCH、会话撤销、通知 PUT、资料读取失败、单分区权限拒绝及请求/追踪归属、未知偏好不可写、分区重试恢复。
 - `node scripts/run-playwright-projects.mjs tests/e2e/ui-phase2-account-contracts.spec.ts --grep "UI2-A04"`：桌面与手机均通过。
 - 同命令 `--grep "UI2-A05"`：桌面与手机均通过；邮件服务 503 后版本仍为7，关闭邮件后按该版本重试成功。
-- 全文件 E2E 命令同时会执行不属于 P11 的 UI2-A01–A03；该三个外观偏好用例当前未通过（测试找不到“保存主题”按钮），因此不将其记为 P11 通过，也未在本任务改动 P10。
+- 全文件 E2E 命令还包含不属于 P11 的 UI2-A01–A03；A01、A02 当前因测试找不到“保存主题”按钮而失败，A03 本轮未完成执行，因此不将它们记为 P11 通过，也未在本任务改动 P10。
 
 ## 生产部署证据
 
-待本次代码提交后通过固定 `python scripts/deploy-baota.py` 部署并进行只读检查，再补充提交/build SHA、线上 live/ready/version、`/me` 深链和本页专属静态资源校验。线上资源检查不能证明真实已登录账号、生产 RBAC/审计、密码与会话持久化、邮件服务或正式 M07-03 验收。
+代码提交 `6f8356026573d35a203c0e729d89794c96214c1c` 已推送，并由固定 `python scripts/deploy-baota.py` 完成部署。该脚本报告临时上传包已删除；构建与 M07-03 结构预检通过。只读复核中线上 `ready` 与 `available` 均正常，`/api/v1/health/version` 的 `build_sha` 与上述提交一致；`/me?section=profile|permissions|security|notifications|assets` 五个深链均 HTTP 200。账号壳层 JS、个人中心 JS 与专属 CSS 的线上 SHA-256 均与本地构建一致：`52632ca83d2a445bbf2b30407a0976d407fd206cd2e6fafa4d7fd04294493244`、`26ebceb9820e45bef5ea4aab57da101589f7ad8d5c3a951a30abf0f68d8f71a6`、`3e066ef198111e292e684d94a588036fa3e1f21581fd0af7548640e6accdeb31`。本次没有新增数据库迁移；部署只证明发布、健康、版本、深链与静态资源，不证明真实已登录账号、生产 RBAC/审计、密码与会话持久化、邮件服务或正式 M07-03 验收。
