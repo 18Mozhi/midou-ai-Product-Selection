@@ -51,4 +51,4 @@
 - 用户授权将剩余视觉项统一视为通过；该记录仅覆盖视觉，不提升真实权限、审核写入或业务验收状态。
 - `node --test tests/unit/content-page-preview.test.mjs`：1/1 通过。
 - `node scripts/run-playwright-projects.mjs tests/e2e/m06-02-platform-dashboard.spec.ts --grep UI2-PN56`：桌面 Chromium 6/6、手机 390 6/6 通过。首次运行暴露测试将实际 `<h1>` 错写为 level 2；依据 `PlatformContentCenter.vue` 的真实标题语义，仅将该断言改为 level 1 后重跑通过。
-- 生产 `/platform-admin/content`、`PlatformContentCenter-B6JQ71Fz.js`、`PlatformContentCenter-DYbXOE5E.css` 均 HTTP 200，页面资源 SHA-256 与本地构建一致；当前生产 BUILD_SHA 为 `e86a58915c28ddf5f076892a73297375d382704e`。本次未改运行时代码，正式 M07-03、会话/RBAC、真实审核写入、MySQL/审计、幂等和读屏/软键盘仍未验收。
+- 首次核验时生产 BUILD_SHA 为 `e86a58915c28ddf5f076892a73297375d382704e`；应用户要求随后再次运行固定宝塔部署脚本，部署返回成功，当前 BUILD_SHA 为 `84885c2e05f9d613999d76805b6b7812e37801ee`。重新核验 `/platform-admin/content` 及入口 JS/CSS、P56 页面 JS/CSS 均 HTTP 200，四项资源 SHA-256 全部与本地构建一致。正式 M07-03、会话/RBAC、真实审核写入、MySQL/审计、幂等和读屏/软键盘仍未验收。
