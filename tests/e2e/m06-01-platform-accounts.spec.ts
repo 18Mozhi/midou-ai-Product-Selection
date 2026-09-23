@@ -724,6 +724,9 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
   if (mobile) {
     await page.getByRole("button", { name: "账号筛选" }).click();
     const filters = page.getByRole("dialog", { name: "账号筛选" });
+    await expect(filters.getByPlaceholder("搜索组织名称或用户邮箱")).toHaveAccessibleName(
+      "搜索组织名称或用户邮箱",
+    );
     await filters.getByPlaceholder("搜索组织名称或用户邮箱").fill("米豆");
     await filters.getByRole("button", { name: "关闭筛选条件" }).click();
     await page.getByRole("button", { name: /账号筛选.*1 项已选/ }).click();
@@ -736,6 +739,9 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
     await expect(organizationDetail.getByText(org, { exact: true })).toBeVisible();
     await organizationDetail.getByRole("button", { name: "关闭详情" }).click();
   } else {
+    await expect(page.getByPlaceholder("搜索组织名称或用户邮箱")).toHaveAccessibleName(
+      "搜索组织名称或用户邮箱",
+    );
     await expect(page.getByRole("cell", { name: "米豆选品团队 midou-team" })).toBeVisible();
   }
   await accountTabs.getByRole("link", { name: "用户管理", exact: true }).click();

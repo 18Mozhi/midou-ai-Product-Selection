@@ -792,7 +792,12 @@ onMounted(load);
                 />
                 <small id="admin-query-help">输入邮箱关键词，搜索后更新列表。</small>
               </label>
-              <input v-else v-model="query" :placeholder="searchPlaceholder" />
+              <input
+                v-else
+                v-model="query"
+                :placeholder="searchPlaceholder"
+                :aria-label="searchPlaceholder"
+              />
               <label v-if="adminListRoute" class="admin-filter-field">
                 <span>账号状态</span>
                 <select v-model="status" :aria-label="statusLabel">
