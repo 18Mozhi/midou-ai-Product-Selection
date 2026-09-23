@@ -125,6 +125,69 @@ test("M03-01.A07/A08/A15 provider list and editor are responsive and visual", as
   if (testInfo.project.name === "mobile-390")
     await expect(page.locator(".provider-editor")).toBeVisible();
 });
+test("M03-01.P46 editor announces required fields without changing validation behavior", async ({
+  page,
+}) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/providers", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        data: definitions,
+        request_id: "m03-01-required",
+        trace_id: "m03-01-required",
+      }),
+    }),
+  );
+  await page.goto("/platform-admin/providers");
+  await page.getByRole("button", { name: "新建来源" }).click();
+  const editor = page.getByRole("dialog", { name: "登记来源" });
+  const field = (name: string) =>
+    editor.locator(`[aria-labelledby="provider-field-${name}-label"]`);
+
+  for (const name of ["code", "name", "target_url", "owner_label"])
+    await expect(field(name)).toHaveAttribute("aria-required", "true");
+
+  await editor.getByRole("button", { name: "2 范围与字段" }).click();
+  for (const name of ["markets", "languages", "fields", "dedupe_key", "parser_version"])
+    await expect(field(name)).toHaveAttribute("aria-required", "true");
+  await expect(field("healthcheck_url")).not.toHaveAttribute("aria-required", "true");
+
+  await editor.getByRole("button", { name: "3 执行策略" }).click();
+  for (const name of [
+    "schedule_minutes",
+    "concurrency_limit",
+    "timeout_ms",
+    "retry_limit",
+    "circuit_failure_threshold",
+    "retention_days",
+    "failure_rules",
+  ])
+    await expect(field(name)).toHaveAttribute("aria-required", "true");
+
+  await editor.getByRole("button", { name: "4 合规与发布" }).click();
+  const termsFields = ["terms_reference_url", "terms_version", "terms_expires_at"];
+  for (const name of termsFields)
+    await expect(field(name)).not.toHaveAttribute("aria-required", "true");
+  await editor.getByRole("combobox", { name: "发布状态" }).selectOption("enabled");
+  for (const name of termsFields)
+    await expect(field(name)).toHaveAttribute("aria-required", "true");
+
+  await editor.getByRole("button", { name: "1 基本信息" }).click();
+  await editor.getByRole("combobox", { name: "接入模式" }).selectOption("manual");
+  await editor.getByRole("button", { name: "4 合规与发布" }).click();
+  for (const name of termsFields)
+    await expect(field(name)).not.toHaveAttribute("aria-required", "true");
+  await editor.getByRole("button", { name: "1 基本信息" }).click();
+  await editor.getByRole("combobox", { name: "接入模式" }).selectOption("public_page");
+  await editor.getByRole("button", { name: "4 合规与发布" }).click();
+  for (const name of termsFields)
+    await expect(field(name)).toHaveAttribute("aria-required", "true");
+  await editor.getByRole("combobox", { name: "发布状态" }).selectOption("disabled");
+  for (const name of termsFields)
+    await expect(field(name)).not.toHaveAttribute("aria-required", "true");
+});
 test("M03-01.A08/A16 empty, forbidden and dependency states stay actionable", async ({ page }) => {
   await nav(page);
   let status = 200;

@@ -299,6 +299,9 @@ const list = (v: string) =>
   currentStepErrors = computed(() =>
     Object.entries(formErrors.value).filter(([field]) => stepForField[field] === editorStep.value),
   );
+const publicTermsRequired = computed(
+  () => ["public_page", "public_rss"].includes(form.access_mode) && form.status === "enabled",
+);
 watch(
   [editorStep, currentStepErrors, () => Object.keys(formErrors.value).length],
   ([step, errors, total], [previousStep]) => {
@@ -962,6 +965,7 @@ onActivated(() => {
             ><span id="provider-field-code-label">来源代码（技术标识）</span
             ><input
               aria-labelledby="provider-field-code-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.code)"
               :aria-describedby="formErrors.code ? 'provider-field-code-error' : undefined"
               v-model.trim="form.code"
@@ -974,6 +978,7 @@ onActivated(() => {
             ><span id="provider-field-name-label">名称</span
             ><input
               aria-labelledby="provider-field-name-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.name)"
               :aria-describedby="formErrors.name ? 'provider-field-name-error' : undefined"
               v-model="form.name"
@@ -985,6 +990,7 @@ onActivated(() => {
             ><span id="provider-field-target_url-label">目标 URL</span
             ><input
               aria-labelledby="provider-field-target_url-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.target_url)"
               :aria-describedby="
                 formErrors.target_url ? 'provider-field-target_url-error' : undefined
@@ -998,6 +1004,7 @@ onActivated(() => {
             ><span id="provider-field-owner_label-label">负责人</span
             ><input
               aria-labelledby="provider-field-owner_label-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.owner_label)"
               :aria-describedby="
                 formErrors.owner_label ? 'provider-field-owner_label-error' : undefined
@@ -1031,6 +1038,7 @@ onActivated(() => {
             ><span id="provider-field-markets-label">市场</span
             ><input
               aria-labelledby="provider-field-markets-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.markets)"
               :aria-describedby="formErrors.markets ? 'provider-field-markets-error' : undefined"
               v-model="form.markets"
@@ -1043,6 +1051,7 @@ onActivated(() => {
             ><span id="provider-field-languages-label">语言</span
             ><input
               aria-labelledby="provider-field-languages-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.languages)"
               :aria-describedby="
                 formErrors.languages ? 'provider-field-languages-error' : undefined
@@ -1057,6 +1066,7 @@ onActivated(() => {
             ><span id="provider-field-fields-label">字段清单</span
             ><input
               aria-labelledby="provider-field-fields-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.fields)"
               :aria-describedby="formErrors.fields ? 'provider-field-fields-error' : undefined"
               v-model="form.fields"
@@ -1068,6 +1078,7 @@ onActivated(() => {
             ><span id="provider-field-dedupe_key-label">去重键</span
             ><input
               aria-labelledby="provider-field-dedupe_key-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.dedupe_key)"
               :aria-describedby="
                 formErrors.dedupe_key ? 'provider-field-dedupe_key-error' : undefined
@@ -1081,6 +1092,7 @@ onActivated(() => {
             ><span id="provider-field-parser_version-label">解析器版本</span
             ><input
               aria-labelledby="provider-field-parser_version-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.parser_version)"
               :aria-describedby="
                 formErrors.parser_version ? 'provider-field-parser_version-error' : undefined
@@ -1110,6 +1122,7 @@ onActivated(() => {
             ><span id="provider-field-schedule_minutes-label">频率（分钟）</span
             ><input
               aria-labelledby="provider-field-schedule_minutes-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.schedule_minutes)"
               :aria-describedby="
                 formErrors.schedule_minutes ? 'provider-field-schedule_minutes-error' : undefined
@@ -1126,6 +1139,7 @@ onActivated(() => {
             ><span id="provider-field-concurrency_limit-label">并发</span
             ><input
               aria-labelledby="provider-field-concurrency_limit-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.concurrency_limit)"
               :aria-describedby="
                 formErrors.concurrency_limit ? 'provider-field-concurrency_limit-error' : undefined
@@ -1144,6 +1158,7 @@ onActivated(() => {
             ><span id="provider-field-timeout_ms-label">超时 ms</span
             ><input
               aria-labelledby="provider-field-timeout_ms-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.timeout_ms)"
               :aria-describedby="
                 formErrors.timeout_ms ? 'provider-field-timeout_ms-error' : undefined
@@ -1160,6 +1175,7 @@ onActivated(() => {
             ><span id="provider-field-retry_limit-label">重试</span
             ><input
               aria-labelledby="provider-field-retry_limit-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.retry_limit)"
               :aria-describedby="
                 formErrors.retry_limit ? 'provider-field-retry_limit-error' : undefined
@@ -1176,6 +1192,7 @@ onActivated(() => {
             ><span id="provider-field-circuit_failure_threshold-label">熔断阈值</span
             ><input
               aria-labelledby="provider-field-circuit_failure_threshold-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.circuit_failure_threshold)"
               :aria-describedby="
                 formErrors.circuit_failure_threshold
@@ -1196,6 +1213,7 @@ onActivated(() => {
             ><span id="provider-field-retention_days-label">保留天数</span
             ><input
               aria-labelledby="provider-field-retention_days-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.retention_days)"
               :aria-describedby="
                 formErrors.retention_days ? 'provider-field-retention_days-error' : undefined
@@ -1212,6 +1230,7 @@ onActivated(() => {
             ><span id="provider-field-failure_rules-label">失败规则</span
             ><input
               aria-labelledby="provider-field-failure_rules-label"
+              aria-required="true"
               :aria-invalid="Boolean(formErrors.failure_rules)"
               :aria-describedby="
                 formErrors.failure_rules ? 'provider-field-failure_rules-error' : undefined
@@ -1245,6 +1264,7 @@ onActivated(() => {
             ><span id="provider-field-terms_reference_url-label">条款参考 URL</span
             ><input
               aria-labelledby="provider-field-terms_reference_url-label"
+              :aria-required="publicTermsRequired"
               :aria-invalid="Boolean(formErrors.terms_reference_url)"
               :aria-describedby="
                 formErrors.terms_reference_url
@@ -1264,6 +1284,7 @@ onActivated(() => {
             ><span id="provider-field-terms_version-label">条款版本</span
             ><input
               aria-labelledby="provider-field-terms_version-label"
+              :aria-required="publicTermsRequired"
               :aria-invalid="Boolean(formErrors.terms_version)"
               :aria-describedby="
                 formErrors.terms_version ? 'provider-field-terms_version-error' : undefined
@@ -1278,6 +1299,7 @@ onActivated(() => {
             ><span id="provider-field-terms_expires_at-label">条款到期时间</span
             ><input
               aria-labelledby="provider-field-terms_expires_at-label"
+              :aria-required="publicTermsRequired"
               :aria-invalid="Boolean(formErrors.terms_expires_at)"
               :aria-describedby="
                 formErrors.terms_expires_at ? 'provider-field-terms_expires_at-error' : undefined
