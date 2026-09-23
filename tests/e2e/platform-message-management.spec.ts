@@ -346,7 +346,7 @@ test("UI2-PN57 C workspace separates messages, deliveries and system facts", asy
     route.fulfill({ json: envelope(notificationSnapshot()) }),
   );
   await page.goto("/platform-admin/notifications");
-  await expect(page.getByRole("heading", { name: "通知管理", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "通知管理", level: 1 })).toBeVisible();
   await expect(page.locator(".message-directory button")).toHaveCount(3);
   await expect(page.getByText("投递统计范围：全部投递 · 全部类型", { exact: false })).toBeVisible();
   await capturePhase2Evidence(page, testInfo, "P57", "notifications-default", [

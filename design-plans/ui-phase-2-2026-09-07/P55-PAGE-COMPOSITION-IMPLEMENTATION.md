@@ -15,3 +15,11 @@
 ## 未覆盖
 
 本批未改变治理事实读取、RBAC、工作台写入、真实 MySQL 或生产发布/回滚；本地 fixture 证据不等同于正式 M07-03 生产验收。
+
+## 2026-09-24 收口记录
+
+- 用户授权剩余视觉项统一通过；此结论仅覆盖视觉审核，不代替真实会话/RBAC或目标工作台权限验收。
+- `node --test tests/unit/platform-governance.test.mjs tests/unit/governance-page-preview.test.mjs`：4/4 通过。
+- `node scripts/run-playwright-projects.mjs tests/e2e/m06-02-platform-dashboard.spec.ts --grep UI2-DG55`：桌面 Chromium 5/5、手机390 5/5通过。修正三处把页面实际唯一 `<h1>` 当作 `<h2>` 的过期测试定位。
+- 当前生产 BUILD_SHA `84885c2e05f9d613999d76805b6b7812e37801ee`；`/platform-admin/governance` HTTP 200，P55 专属 JS/CSS 与父管理 JS/CSS 均 HTTP 200，SHA-256 与本地构建相同。本次无运行时代码修改，不重复部署。
+- 真实登录/RBAC、目标工作台权限和跨组织跳转、真实 MySQL、读屏/软键盘及正式 M07-03 仍未验收。

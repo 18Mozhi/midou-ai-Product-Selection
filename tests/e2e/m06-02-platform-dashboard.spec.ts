@@ -621,7 +621,7 @@ test("UI2-DG55 C directory exposes factual counts and complete automation detail
   });
 
   await page.goto("/platform-admin/governance");
-  await expect(page.getByRole("heading", { name: "规则、工作流与自动化", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "规则、工作流与自动化", level: 1 })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "治理数据类型" })).toContainText("评分规则");
   const mobile = (page.viewportSize()?.width ?? 1000) <= 760;
   if (mobile)
@@ -644,7 +644,7 @@ test("UI2-DG55 C directory exposes factual counts and complete automation detail
   const governanceFont = await page
     .locator(".platform-governance")
     .evaluate((element) => getComputedStyle(element).fontFamily);
-  await expect(page.getByRole("heading", { name: "规则、工作流与自动化", level: 2 })).toHaveCSS(
+  await expect(page.getByRole("heading", { name: "规则、工作流与自动化", level: 1 })).toHaveCSS(
     "font-family",
     governanceFont,
   );
@@ -1728,7 +1728,7 @@ test("platform completion exposes data governance notifications and user-panel s
   }
 
   await page.goto("/platform-admin/governance");
-  await expect(page.getByRole("heading", { name: "规则、工作流与自动化", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "规则、工作流与自动化", level: 1 })).toBeVisible();
   if ((page.viewportSize()?.width ?? 1000) <= 760)
     await expect(page.getByRole("button", { name: /^标准评分规则 · 启用/ })).toBeVisible();
   else await expect(page.getByText("标准评分规则", { exact: true })).toBeVisible();
@@ -1762,7 +1762,7 @@ test("platform completion exposes data governance notifications and user-panel s
   await expect(page.getByText("active", { exact: true })).toHaveCount(0);
 
   await page.goto("/platform-admin/notifications");
-  await expect(page.getByRole("heading", { name: "通知管理", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "通知管理", level: 1 })).toBeVisible();
   await page.getByRole("button", { name: /系统事实/ }).click();
   await expect(page.getByText("任务状态通知")).toBeVisible();
   await page.getByRole("button", { name: /投递观测/ }).click();
@@ -1771,7 +1771,7 @@ test("platform completion exposes data governance notifications and user-panel s
   else await expect(page.getByRole("table").getByText("member@example.test")).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
-  await expect(page.getByRole("heading", { name: "通知管理", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "通知管理", level: 1 })).toBeVisible();
   await page.getByRole("button", { name: /系统事实/ }).click();
   await expect(page.getByText("站内通知 · 启用", { exact: true })).toBeVisible();
   await expect(page.getByText("启用站内通知", { exact: true })).toBeVisible();

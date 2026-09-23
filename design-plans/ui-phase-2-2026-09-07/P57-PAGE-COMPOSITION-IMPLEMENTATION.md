@@ -20,3 +20,12 @@
 
 - 未连接真实 MySQL、权限服务、收件人去重、邮件 Provider 或实际送达渠道。
 - 未把本地 GET fixture、截图或 shell 审核包当成生产投递验收；正式 M07-03 生产证据门仍待现场采集。
+
+## 2026-09-24 收口记录
+
+- 用户授权剩余视觉项统一通过；不据此提升真实发送、收件人权限或邮件渠道验收状态。
+- 五组通知单测共34/34通过；`UI2-PN57` Playwright 桌面 Chromium 11/11、手机390 10通过/1个按设计跳过（编辑请求归属专测仅跑桌面）；共享平台管理工作流桌面/手机各1/1通过。
+- `node scripts/verify-platform-notification-app.mjs`：实际 Vue 390/1440px、两种动效4组共56检查通过；浏览器与服务器关闭，未写入图像。
+- `node scripts/verify-platform-notification-app.mjs --shell-preview --responsive`：840/841px、两种动效4组共112检查通过；浏览器与服务器关闭，未写入图像。同步修复仅审核预览脚本的旧式标题锚点，不改生产 NavigationShell。
+- 当前生产 BUILD_SHA `84885c2e05f9d613999d76805b6b7812e37801ee`；`/platform-admin/notifications` HTTP 200，父管理及 P57 JS/CSS 均 HTTP 200，SHA-256 与本地构建一致。本批没有生产运行时代码变更，不需要再次部署。
+- 真实会话/RBAC、收件人去重、真实发布/取消送达与邮件 Provider、审计和正式 M07-03 仍未验收。

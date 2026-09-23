@@ -21,10 +21,12 @@ const once = (text, from, to) => {
 };
 
 export function notificationShellPreview(source) {
+  const text = previewShellVue(source),
+    anchor = "            routePath !== '/platform-admin/redis'";
   return once(
-    previewShellVue(source),
-    '<header v-if="!opportunityId" class="role-page-title">',
-    '<header v-if="!opportunityId && routePath !== \'/platform-admin/notifications\'" class="role-page-title">',
+    text,
+    anchor,
+    `${anchor} &&\n            routePath !== '/platform-admin/notifications'`,
   );
 }
 
