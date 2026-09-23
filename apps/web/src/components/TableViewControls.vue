@@ -6,7 +6,7 @@ interface TableColumn {
   label: string;
 }
 
-const props = defineProps<{ columnLabels?: boolean }>();
+const props = defineProps<{ columnLabels?: boolean; columnHelp?: string }>();
 const root = ref<HTMLElement | null>(null),
   columns = ref<TableColumn[]>([]),
   hiddenColumns = ref<number[]>([]),
@@ -79,6 +79,7 @@ watch([hiddenColumns, freezeFirst, density], () => void nextTick(applySettings),
         <summary>列设置</summary>
         <fieldset>
           <legend>选择显示列</legend>
+          <p v-if="props.columnHelp" class="table-view-controls__help">{{ props.columnHelp }}</p>
           <div v-for="column in columns" :key="column.index">
             <input
               :id="`${controlId}-column-${column.index}`"
@@ -176,6 +177,12 @@ watch([hiddenColumns, freezeFirst, density], () => void nextTick(applySettings),
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.table-view-controls__help {
+  margin: 0;
+  color: var(--so-text-muted);
+  font-size: 0.875em;
 }
 
 .table-view-controls__toolbar > label {

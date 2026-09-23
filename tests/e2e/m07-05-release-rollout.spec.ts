@@ -110,14 +110,14 @@ test("M07-05.A07/A08/A15 desktop and 390 rollout truth", async ({ page }) => {
     route.fulfill({ json: env({ ...base, state: "verified" }) }),
   );
   await page.goto("/platform-admin/releases");
-  await expect(page.getByRole("heading", { name: "发布与回滚控制台" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "发布证据", exact: true })).toBeVisible();
   await expect(page.getByText("发布门已通过")).toBeVisible();
-  await expect(page.getByText("迁移耗时 1.3 秒")).toBeVisible();
-  await expect(page.getByText("回滚耗时").locator("..")).toContainText("2.5 秒");
+  await expect(page.locator("#p65-actions").getByText("1.3 秒", { exact: true })).toBeVisible();
+  await expect(page.locator("#p65-actions").getByText("2.5 秒", { exact: true })).toBeVisible();
   await expect(page).toHaveScreenshot("m07-05-release-rollout-desktop.png", { fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
-  await expect(page.getByText("5% → 25% → 100%")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "历史观察门指标" })).toBeVisible();
   await page.getByRole("button", { name: /^5% · 已通过/ }).click();
   const dialog = page.getByRole("dialog", { name: "5% 观察门" });
   await expect(dialog).toBeVisible();
@@ -160,8 +160,8 @@ test("M07-05.A08/A16 empty blocked stale stopped rolled back forbidden expired",
   for (const [next, label] of [
     ["blocked", "发布条件未满足"],
     ["stale", "观察证据已过期"],
-    ["stopped", "发布已自动停止"],
-    ["rolled_back", "已回滚到稳定版本"],
+    ["stopped", "服务返回停止结论"],
+    ["rolled_back", "服务返回回滚结论"],
   ]) {
     state = next;
     await page.reload();
@@ -218,7 +218,7 @@ test("M07-05 refresh is single-flight and preserves the last verified snapshot o
   });
   expect(calls).toBe(2);
   await expect(page.getByText("发布门已通过")).toBeVisible();
-  await expect(page.getByText("5% → 25% → 100%", { exact: true })).toBeVisible();
+  await expect(page.getByText(/5% \/ 25% \/ 100% 仅用于阅读历史观察记录/)).toBeVisible();
   releaseRefresh?.();
   await expect(page.getByText("刷新未完成")).toBeVisible();
   await expect(page.getByText(/已保留上次成功的发布事实/)).toBeVisible();

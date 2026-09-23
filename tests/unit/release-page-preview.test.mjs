@@ -2,11 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { parse, compileTemplate } from "@vue/compiler-sfc";
-import {
-  releaseNodes,
-  previewReleasePage,
-  previewReleaseTableControls,
-} from "../../scripts/lib/release-page-preview.mjs";
+import { releaseNodes, previewReleasePage } from "../../scripts/lib/release-page-preview.mjs";
 import { releaseReviewFixtures } from "../../scripts/lib/release-review-fixtures.mjs";
 const original = readFileSync(
   "apps/web/src/components/ReleaseRolloutCenter.vue",
@@ -14,23 +10,23 @@ const original = readFileSync(
 ).replaceAll("\r\n", "\n");
 const preview = previewReleasePage(original),
   template = parse(preview).descriptor.template.content;
-test("P65 C table labels retain script and input constraints while making full names clickable", () => {
+test("P65 table labels and column guidance are production markup with existing input constraints", () => {
   const source = readFileSync("apps/web/src/components/TableViewControls.vue", "utf8");
-  const review = previewReleaseTableControls(source);
-  assert.equal(
-    parse(review).descriptor.scriptSetup.content,
-    parse(source).descriptor.scriptSetup.content,
-  );
-  assert.match(review, /<label :for="`\$\{controlId\}-column-\$\{column.index\}`"/);
-  assert.match(review, /:aria-label="`切换第 \$\{column.index \+ 1\} 列`"/);
+  assert.match(source, /<label\s+v-if="props\.columnLabels"/);
+  assert.match(source, /<p v-if="props\.columnHelp" class="table-view-controls__help"/);
   assert.match(
-    review,
+    source,
+    /<label\s+v-if="props\.columnLabels"[\s\S]*?:for="`\$\{controlId\}-column-\$\{column.index\}`"/,
+  );
+  assert.match(source, /:aria-label="`切换第 \$\{column.index \+ 1\} 列`"/);
+  assert.match(
+    source,
     /:disabled="!hiddenColumns.includes\(column.index\) && visibleColumnCount <= 1"/,
   );
-  assert.match(review, /至少保留一列/);
+  assert.match(original, /column-help="至少保留一列"/);
   assert.deepEqual(
     compileTemplate({
-      source: parse(review).descriptor.template.content,
+      source: parse(source).descriptor.template.content,
       filename: "TableViewControls.vue",
       id: "p65-table",
     }).errors,
@@ -52,6 +48,7 @@ test("P65 C verdict labels do not infer an automatic stop or an audited stable r
   assert.doesNotMatch(template, /发布已自动停止|已回滚到稳定版本|回滚事实已审计/);
   assert.match(template, /服务返回停止结论/);
   assert.match(template, /服务返回回滚结论/);
+  assert.match(template, /服务返回观察门通过结论/);
   assert.match(template, /请结合下方回滚记录与证据标记核对/);
 });
 test("P65 read feedback has named headings, busy regions and separate trace consumers", () => {
@@ -60,16 +57,18 @@ test("P65 read feedback has named headings, busy regions and separate trace cons
   assert.equal((t.match(/aria-labelledby="release-read-title"/g) ?? []).length, 2);
   assert.match(t, /aria-labelledby="release-refresh-title"/);
   assert.equal((t.match(/:aria-busy="refreshing"/g) ?? []).length, 4);
-  assert.match(template, /<h2 id="release-read-title">/);
+  assert.match(template, /<h3 id="release-read-title">/);
   assert.match(t, /state === "timeout"\s*\? "读取超过 15 秒，已停止本次等待。请重新核验。"/);
 });
-test("P65 C review preserves all production script and request/permission behavior", () => {
+test("P65 review adds only a review marker to the production SFC", () => {
   assert.equal(
     parse(preview).descriptor.scriptSetup.content,
     parse(original).descriptor.scriptSetup.content,
   );
   assert.match(template, /capabilities\?\.includes\('platform:superadmin'\)/);
   assert.match(template, /to="\/platform-admin\/api-coverage"/);
+  assert.match(template, /release-center--c release-center--review/);
+  assert.match(template, /p65-review-note/);
 });
 test("P65 C actual template compiles", () => {
   assert.deepEqual(
@@ -84,8 +83,9 @@ test("P65 original six-column table and complete mobile slots are unchanged", ()
   assert.equal(table(preview), table(original));
   assert.equal((table(preview).match(/<th>/g) ?? []).length, 6);
 });
-test("P65 removes card/ring inference and shows full source identities with fallback caveat", () => {
-  assert.doesNotMatch(template, /class="(?:identity-grid|gate-grid|ring)"|sha\(data\.versions/);
+test("P65 removes old layout from render and shows full source identities with fallback caveat", () => {
+  assert.match(template, /v-if="false" class="identity-grid"/);
+  assert.match(template, /v-if="false" class="panel p65-legacy-stages"/);
   assert.match(template, /返回文本一致不代表独立核验/);
   for (const key of ["local", "remote", "production"])
     assert.ok(template.includes(`data.versions?.${key}?.build_sha`));
@@ -94,8 +94,8 @@ test("P65 removes card/ring inference and shows full source identities with fall
 test("P65 separates matching versus latest historical release and preserves null-aware durations", () => {
   assert.match(template, /data\.latest_release\.build_sha/);
   assert.match(template, /data\.latest_historical_release\.build_sha/);
-  assert.match(template, /duration\(gate\('migration'\)\?\.duration_ms\)/);
-  assert.match(template, /duration\(gate\('rollback'\)\?\.duration_ms\)/);
+  assert.match(template, /duration\(gate\("migration"\)\?\.duration_ms\)/);
+  assert.match(template, /duration\(gate\("rollback"\)\?\.duration_ms\)/);
   assert.match(template, /data\.automatic_stop_verified/);
   assert.match(template, /data\.rollback_verified/);
   assert.equal((template.match(/<h1>/g) ?? []).length, 1);

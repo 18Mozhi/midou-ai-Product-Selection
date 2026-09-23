@@ -179,12 +179,12 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="release-center">
+  <section class="release-center release-center--c">
     <header class="hero">
       <div>
-        <p>发布控制</p>
-        <h2>发布与回滚控制台</h2>
-        <span>只展示宝塔发布任务写入的版本、观察门、自动停止与回滚事实。</span>
+        <p>P65 / 只读核验</p>
+        <h1>发布证据</h1>
+        <span>区分运行身份、部署捕获与历史观察记录。</span>
       </div>
       <button
         ref="refreshButton"
@@ -231,7 +231,7 @@ onBeforeUnmount(() => {
       :aria-busy="refreshing"
     >
       <h3 id="release-read-title">正在核验当前发布</h3>
-      <span>读取构建身份、迁移、备份前置和 5% / 25% / 100% 观察门。</span>
+      <span>读取运行身份、部署捕获与历史观察证据。</span>
     </section>
     <section
       v-else-if="['forbidden', 'expired', 'rate_limited', 'timeout', 'unavailable'].includes(state)"
@@ -261,264 +261,467 @@ onBeforeUnmount(() => {
       </button>
     </section>
     <template v-else-if="data">
-      <section class="verdict" :data-state="state">
-        <div>
-          <small>当前结论</small
-          ><strong>{{
-            state === "verified"
-              ? "发布门已通过"
-              : state === "rolled_back"
-                ? "已回滚到稳定版本"
-                : state === "stopped"
-                  ? "发布已自动停止"
-                  : state === "stale"
-                    ? "观察证据已过期"
-                    : state === "empty"
-                      ? "尚无发布记录"
-                      : "发布条件未满足"
-          }}</strong>
-        </div>
-        <p>
-          {{
-            state === "verified"
-              ? "当前版本完成全部观察门；后续指标退化仍应停止新发布。"
-              : state === "rolled_back"
-                ? "回滚事实已审计，需重新完成发布门才可签发新版本。"
-                : "失败关闭：任何门缺失、超阈值或版本不一致都不会显示为健康。"
-          }}
-        </p>
-      </section>
-      <div class="identity-grid">
-        <article>
-          <span>本地发布提交</span><strong>{{ sha(data.versions?.local?.build_sha) }}</strong
-          ><small>部署器构建输入</small>
-        </article>
-        <article>
-          <span>远端主分支</span><strong>{{ sha(data.versions?.remote?.build_sha) }}</strong
-          ><small
-            >{{ data.versions?.remote?.repository || "未记录仓库" }} ·
-            {{ data.versions?.remote?.branch || "—" }}</small
-          >
-        </article>
-        <article>
-          <span>生产运行版本</span><strong>{{ sha(data.versions?.production?.build_sha) }}</strong
-          ><small>{{ data.versions?.production?.app_version || "未签发" }}</small>
-        </article>
-        <article>
-          <span>版本同源</span
-          ><strong>{{
-            data.blockers.some(
-              (item: any) =>
-                item.code === "release_source_mismatch" ||
-                item.code === "release_identity_mismatch",
-            )
-              ? "已阻断"
-              : "一致"
-          }}</strong
-          ><small>SHA / 配置指纹 / 迁移</small>
-        </article>
-        <article>
-          <span>迁移</span><strong>{{ data.versions?.production?.migration_version || "—" }}</strong
-          ><small>迁移耗时 {{ duration(gate("migration")?.duration_ms) }}</small>
-        </article>
-        <article>
-          <span>回滚耗时</span><strong>{{ duration(gate("rollback")?.duration_ms) }}</strong
-          ><small>{{
-            gate("rollback") ? statusText(gate("rollback")?.status) : "尚未发生回滚"
-          }}</small>
-        </article>
-        <article>
-          <span>发布状态</span><strong>{{ statusText(data.latest_release?.status) }}</strong
-          ><small>{{ time(data.latest_release?.finished_at) }}</small>
-        </article>
-      </div>
-      <section class="panel">
-        <header>
-          <div>
-            <h3>渐进观察门</h3>
-            <span>每阶段生产至少 {{ data.policy.minimum_observation_seconds / 60 }} 分钟</span>
-          </div>
-          <code>5% → 25% → 100%</code>
-        </header>
-        <div class="gate-grid">
-          <article v-for="percent in data.policy.percentages" :key="percent">
-            <div
-              class="ring"
-              :data-pass="
-                data.gates.some(
-                  (g: any) => g.gate_kind === `canary_${percent}` && g.status === 'passed',
-                )
-              "
-            >
-              <strong>{{ percent }}%</strong>
+      <div class="p65-layout">
+        <aside class="p65-directory">
+          <h2>阅读发布证据</h2>
+          <p>当前为单后端固定目录部署。5% / 25% / 100% 仅用于阅读历史观察记录。</p>
+          <nav v-if="data" aria-label="发布证据页内导航">
+            <a href="#p65-identities">运行身份</a>
+            <a href="#p65-metrics">历史观察</a>
+            <a href="#p65-actions">动作与历史</a>
+          </nav>
+          <p>此页没有发布、停止、回滚或迁移执行入口。</p>
+        </aside>
+        <div class="p65-content">
+          <section class="verdict" :data-state="state">
+            <div>
+              <small>当前结论</small
+              ><strong>{{
+                state === "verified"
+                  ? "发布门已通过"
+                  : state === "rolled_back"
+                    ? "服务返回回滚结论"
+                    : state === "stopped"
+                      ? "服务返回停止结论"
+                      : state === "stale"
+                        ? "观察证据已过期"
+                        : state === "empty"
+                          ? "尚无发布记录"
+                          : "发布条件未满足"
+              }}</strong>
             </div>
-            <b>{{
-              statusText(data.gates.find((g: any) => g.gate_kind === `canary_${percent}`)?.status)
-            }}</b
-            ><small
-              >观察
+            <p>
               {{
-                data.gates.find((g: any) => g.gate_kind === `canary_${percent}`)?.observe_seconds ||
-                0
+                state === "verified"
+                  ? "服务返回观察门通过结论；不代表独立来源核验或本页执行了发布。"
+                  : state === "rolled_back"
+                    ? "请结合下方回滚记录与证据标记核对；该结论不表示本页执行或独立核验了回滚。"
+                    : "结论由服务返回；请结合当前构建匹配记录、历史门指标和阻断说明核对。"
               }}
-              秒</small
-            >
-          </article>
-        </div>
-      </section>
-      <div class="detail-grid">
-        <section class="panel">
-          <header>
-            <h3>门禁指标</h3>
-            <span>超过任一阈值自动停止</span>
-          </header>
-          <ResponsiveDataView
-            :rows="data.gates.filter((gate: any) => gate.gate_kind.startsWith('canary_'))"
-            :row-key="(gate) => gate.id"
-            title="发布门禁指标"
-            :detail-title="(gate) => `${gate.traffic_percent}% 观察门`"
+            </p>
+          </section>
+          <section
+            id="p65-identities"
+            class="p65-identities"
+            tabindex="-1"
+            aria-labelledby="p65-identities-title"
           >
-            <template #desktop
-              ><table>
-                <thead>
-                  <tr>
-                    <th>阶段</th>
-                    <th>服务错误</th>
-                    <th>95% 读取耗时</th>
-                    <th>95% 写入耗时</th>
-                    <th>异步延迟</th>
-                    <th>技术信息</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="gate in data.gates.filter((g: any) => g.gate_kind.startsWith('canary_'))"
-                    :key="gate.id"
-                  >
-                    <td>{{ gate.traffic_percent }}%</td>
-                    <td>{{ metric(gate.error_rate_percent, "%") }}</td>
-                    <td>{{ metric(gate.read_p95_ms, " ms") }}</td>
-                    <td>{{ metric(gate.write_p95_ms, " ms") }}</td>
-                    <td>{{ metric(gate.async_lag_seconds, " s") }}</td>
-                    <td>
-                      <details>
-                        <summary>技术详情</summary>
-                        <dl>
-                          <div>
-                            <dt>门禁 ID</dt>
-                            <dd>{{ gate.id }}</dd>
-                          </div>
-                          <div>
-                            <dt>门禁类型</dt>
-                            <dd>{{ gate.gate_kind }}</dd>
-                          </div>
-                          <div>
-                            <dt>发布 ID</dt>
-                            <dd>{{ gate.release_id }}</dd>
-                          </div>
-                        </dl>
-                      </details>
-                    </td>
-                  </tr>
-                </tbody>
-              </table></template
-            >
-            <template #summary="{ row }"
-              ><span class="responsive-record-summary"
-                ><strong>{{ row.traffic_percent }}% · {{ statusText(row.status) }}</strong
-                ><small
-                  >错误 {{ metric(row.error_rate_percent, "%") }} · 读取
-                  {{ metric(row.read_p95_ms, " ms") }}</small
-                ></span
-              ></template
-            >
-            <template #detail="{ row }"
-              ><dl>
+            <h2 id="p65-identities-title">运行身份与部署捕获</h2>
+            <p class="p65-source-note">
+              来源字段可能由服务回退填充；返回文本一致不代表独立核验。部署捕获值不是刷新时实时查询
+              Git。
+            </p>
+            <section class="p65-version p65-version-production" aria-label="生产运行身份">
+              <h3>生产运行身份</h3>
+              <dl>
                 <div>
-                  <dt>观察状态</dt>
-                  <dd>{{ statusText(row.status) }}</dd>
+                  <dt>完整构建 SHA</dt>
+                  <dd>
+                    <code>{{ data.versions?.production?.build_sha || "未记录" }}</code>
+                  </dd>
                 </div>
                 <div>
-                  <dt>观察时长 / 样本</dt>
-                  <dd>{{ row.observe_seconds }} 秒 / {{ row.sample_count }} 个</dd>
+                  <dt>应用版本</dt>
+                  <dd>{{ data.versions?.production?.app_version || "未记录" }}</dd>
                 </div>
                 <div>
-                  <dt>服务错误率</dt>
-                  <dd>{{ metric(row.error_rate_percent, "%") }}</dd>
-                </div>
-                <div>
-                  <dt>95% 读取耗时</dt>
-                  <dd>{{ metric(row.read_p95_ms, " ms") }}</dd>
-                </div>
-                <div>
-                  <dt>95% 写入耗时</dt>
-                  <dd>{{ metric(row.write_p95_ms, " ms") }}</dd>
-                </div>
-                <div>
-                  <dt>异步延迟</dt>
-                  <dd>{{ metric(row.async_lag_seconds, " 秒") }}</dd>
+                  <dt>迁移版本</dt>
+                  <dd>
+                    <code>{{ data.versions?.production?.migration_version || "未记录" }}</code>
+                  </dd>
                 </div>
               </dl>
               <details>
-                <summary>技术详情</summary>
+                <summary>配置技术详情</summary>
                 <dl>
                   <div>
-                    <dt>门禁 ID</dt>
-                    <dd>{{ row.id }}</dd>
-                  </div>
-                  <div>
-                    <dt>门禁代码</dt>
-                    <dd>{{ row.gate_kind }}</dd>
-                  </div>
-                  <div>
-                    <dt>发布 ID</dt>
-                    <dd>{{ row.release_id }}</dd>
+                    <dt>配置指纹</dt>
+                    <dd>
+                      <code>{{ data.versions?.production?.config_fingerprint || "未记录" }}</code>
+                    </dd>
                   </div>
                 </dl>
-              </details></template
+              </details>
+            </section>
+            <div class="p65-sources">
+              <section class="p65-version p65-version-local" aria-label="本地构建输入">
+                <h3>本地构建输入</h3>
+                <dl>
+                  <div>
+                    <dt>完整构建 SHA</dt>
+                    <dd>
+                      <code>{{ data.versions?.local?.build_sha || "未记录" }}</code>
+                    </dd>
+                  </div>
+                </dl>
+              </section>
+              <section class="p65-version p65-version-remote" aria-label="远端部署捕获">
+                <h3>远端部署捕获</h3>
+                <dl>
+                  <div>
+                    <dt>完整构建 SHA</dt>
+                    <dd>
+                      <code>{{ data.versions?.remote?.build_sha || "未记录" }}</code>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>仓库</dt>
+                    <dd>
+                      <code>{{ data.versions?.remote?.repository || "未记录仓库" }}</code>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>分支</dt>
+                    <dd>
+                      <code>{{ data.versions?.remote?.branch || "未记录" }}</code>
+                    </dd>
+                  </div>
+                </dl>
+              </section>
+            </div>
+            <section class="p65-match">
+              <h3>当前构建匹配记录</h3>
+              <p v-if="!data.latest_release">当前构建尚无匹配发布记录。</p>
+              <dl v-else>
+                <div>
+                  <dt>构建 SHA</dt>
+                  <dd>
+                    <code>{{ data.latest_release.build_sha || "未记录" }}</code>
+                  </dd>
+                </div>
+                <div>
+                  <dt>记录状态</dt>
+                  <dd>{{ statusText(data.latest_release.status) }}</dd>
+                </div>
+                <div>
+                  <dt>完成时间</dt>
+                  <dd>{{ time(data.latest_release.finished_at) }}</dd>
+                </div>
+              </dl>
+            </section>
+          </section>
+          <div v-if="false" class="identity-grid">
+            <article>
+              <span>本地发布提交</span><strong>{{ sha(data.versions?.local?.build_sha) }}</strong
+              ><small>部署器构建输入</small>
+            </article>
+            <article>
+              <span>远端主分支</span><strong>{{ sha(data.versions?.remote?.build_sha) }}</strong
+              ><small
+                >{{ data.versions?.remote?.repository || "未记录仓库" }} ·
+                {{ data.versions?.remote?.branch || "—" }}</small
+              >
+            </article>
+            <article>
+              <span>生产运行版本</span
+              ><strong>{{ sha(data.versions?.production?.build_sha) }}</strong
+              ><small>{{ data.versions?.production?.app_version || "未签发" }}</small>
+            </article>
+            <article>
+              <span>版本同源</span
+              ><strong>{{
+                data.blockers.some(
+                  (item: any) =>
+                    item.code === "release_source_mismatch" ||
+                    item.code === "release_identity_mismatch",
+                )
+                  ? "已阻断"
+                  : "一致"
+              }}</strong
+              ><small>SHA / 配置指纹 / 迁移</small>
+            </article>
+            <article>
+              <span>迁移</span
+              ><strong>{{ data.versions?.production?.migration_version || "—" }}</strong
+              ><small>迁移耗时 {{ duration(gate("migration")?.duration_ms) }}</small>
+            </article>
+            <article>
+              <span>回滚耗时</span><strong>{{ duration(gate("rollback")?.duration_ms) }}</strong
+              ><small>{{
+                gate("rollback") ? statusText(gate("rollback")?.status) : "尚未发生回滚"
+              }}</small>
+            </article>
+            <article>
+              <span>发布状态</span><strong>{{ statusText(data.latest_release?.status) }}</strong
+              ><small>{{ time(data.latest_release?.finished_at) }}</small>
+            </article>
+          </div>
+          <section v-if="false" class="panel p65-legacy-stages">
+            <header>
+              <div>
+                <h3>渐进观察门</h3>
+                <span>每阶段生产至少 {{ data.policy.minimum_observation_seconds / 60 }} 分钟</span>
+              </div>
+              <code>5% → 25% → 100%</code>
+            </header>
+            <div class="gate-grid">
+              <article v-for="percent in data.policy.percentages" :key="percent">
+                <div
+                  class="ring"
+                  :data-pass="
+                    data.gates.some(
+                      (g: any) => g.gate_kind === `canary_${percent}` && g.status === 'passed',
+                    )
+                  "
+                >
+                  <strong>{{ percent }}%</strong>
+                </div>
+                <b>{{
+                  statusText(
+                    data.gates.find((g: any) => g.gate_kind === `canary_${percent}`)?.status,
+                  )
+                }}</b
+                ><small
+                  >观察
+                  {{
+                    data.gates.find((g: any) => g.gate_kind === `canary_${percent}`)
+                      ?.observe_seconds || 0
+                  }}
+                  秒</small
+                >
+              </article>
+            </div>
+          </section>
+          <div class="detail-grid">
+            <section
+              id="p65-metrics"
+              class="panel p65-metrics"
+              tabindex="-1"
+              aria-labelledby="p65-metrics-title"
             >
-          </ResponsiveDataView>
-        </section>
-        <section class="panel threshold">
-          <header>
-            <h3>停止阈值</h3>
-            <span>固定失败关闭</span>
-          </header>
-          <dl>
-            <div>
-              <dt>服务错误率</dt>
-              <dd>&lt; {{ data.policy.error_rate_stop_percent }}%</dd>
+              <header>
+                <h2 id="p65-metrics-title">历史观察门指标</h2>
+                <span>只读历史记录，不是当前分流或发布操作</span>
+              </header>
+              <ResponsiveDataView
+                :rows="data.gates.filter((gate: any) => gate.gate_kind.startsWith('canary_'))"
+                :row-key="(gate) => gate.id"
+                title="发布门禁指标"
+                :detail-title="(gate) => `${gate.traffic_percent}% 观察门`"
+                :column-labels="true"
+                column-help="至少保留一列"
+              >
+                <template #desktop
+                  ><table>
+                    <thead>
+                      <tr>
+                        <th>阶段</th>
+                        <th>服务错误</th>
+                        <th>95% 读取耗时</th>
+                        <th>95% 写入耗时</th>
+                        <th>异步延迟</th>
+                        <th>技术信息</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="gate in data.gates.filter((g: any) =>
+                          g.gate_kind.startsWith('canary_'),
+                        )"
+                        :key="gate.id"
+                      >
+                        <td>{{ gate.traffic_percent }}%</td>
+                        <td>{{ metric(gate.error_rate_percent, "%") }}</td>
+                        <td>{{ metric(gate.read_p95_ms, " ms") }}</td>
+                        <td>{{ metric(gate.write_p95_ms, " ms") }}</td>
+                        <td>{{ metric(gate.async_lag_seconds, " s") }}</td>
+                        <td>
+                          <details>
+                            <summary>技术详情</summary>
+                            <dl>
+                              <div>
+                                <dt>门禁 ID</dt>
+                                <dd>{{ gate.id }}</dd>
+                              </div>
+                              <div>
+                                <dt>门禁类型</dt>
+                                <dd>{{ gate.gate_kind }}</dd>
+                              </div>
+                              <div>
+                                <dt>发布 ID</dt>
+                                <dd>{{ gate.release_id }}</dd>
+                              </div>
+                            </dl>
+                          </details>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table></template
+                >
+                <template #summary="{ row }"
+                  ><span class="responsive-record-summary"
+                    ><strong>{{ row.traffic_percent }}% · {{ statusText(row.status) }}</strong
+                    ><small
+                      >错误 {{ metric(row.error_rate_percent, "%") }} · 读取
+                      {{ metric(row.read_p95_ms, " ms") }}</small
+                    ></span
+                  ></template
+                >
+                <template #detail="{ row }"
+                  ><dl>
+                    <div>
+                      <dt>观察状态</dt>
+                      <dd>{{ statusText(row.status) }}</dd>
+                    </div>
+                    <div>
+                      <dt>观察时长 / 样本</dt>
+                      <dd>{{ row.observe_seconds }} 秒 / {{ row.sample_count }} 个</dd>
+                    </div>
+                    <div>
+                      <dt>服务错误率</dt>
+                      <dd>{{ metric(row.error_rate_percent, "%") }}</dd>
+                    </div>
+                    <div>
+                      <dt>95% 读取耗时</dt>
+                      <dd>{{ metric(row.read_p95_ms, " ms") }}</dd>
+                    </div>
+                    <div>
+                      <dt>95% 写入耗时</dt>
+                      <dd>{{ metric(row.write_p95_ms, " ms") }}</dd>
+                    </div>
+                    <div>
+                      <dt>异步延迟</dt>
+                      <dd>{{ metric(row.async_lag_seconds, " 秒") }}</dd>
+                    </div>
+                  </dl>
+                  <details>
+                    <summary>技术详情</summary>
+                    <dl>
+                      <div>
+                        <dt>门禁 ID</dt>
+                        <dd>{{ row.id }}</dd>
+                      </div>
+                      <div>
+                        <dt>门禁代码</dt>
+                        <dd>{{ row.gate_kind }}</dd>
+                      </div>
+                      <div>
+                        <dt>发布 ID</dt>
+                        <dd>{{ row.release_id }}</dd>
+                      </div>
+                    </dl>
+                  </details></template
+                >
+              </ResponsiveDataView>
+            </section>
+            <section class="panel threshold">
+              <header>
+                <h3>历史观察策略</h3>
+                <span>记录对应的阈值要求</span>
+              </header>
+              <p>
+                每阶段至少 {{ data.policy.minimum_observation_seconds }} 秒；证据有效期
+                {{ data.policy.maximum_evidence_age_minutes }} 分钟。比例要求
+                {{ data.policy.percentages.join(" / ") }}%。
+              </p>
+              <dl>
+                <div>
+                  <dt>服务错误率</dt>
+                  <dd>&lt; {{ data.policy.error_rate_stop_percent }}%</dd>
+                </div>
+                <div>
+                  <dt>95% 核心读取耗时</dt>
+                  <dd>≤ {{ data.policy.read_p95_stop_ms }} ms</dd>
+                </div>
+                <div>
+                  <dt>95% 核心写入耗时</dt>
+                  <dd>≤ {{ data.policy.write_p95_stop_ms }} ms</dd>
+                </div>
+                <div>
+                  <dt>异步等待</dt>
+                  <dd>≤ {{ data.policy.async_lag_stop_seconds }} s</dd>
+                </div>
+              </dl>
+            </section>
+          </div>
+          <section
+            id="p65-actions"
+            class="p65-actions"
+            tabindex="-1"
+            aria-labelledby="p65-actions-title"
+          >
+            <h2 id="p65-actions-title">动作计时与最近历史</h2>
+            <div class="p65-sources">
+              <section>
+                <h3>迁移记录</h3>
+                <dl>
+                  <div>
+                    <dt>耗时</dt>
+                    <dd>{{ duration(gate("migration")?.duration_ms) }}</dd>
+                  </div>
+                  <div>
+                    <dt>门状态</dt>
+                    <dd>
+                      {{ gate("migration") ? statusText(gate("migration")?.status) : "尚无记录" }}
+                    </dd>
+                  </div>
+                </dl>
+              </section>
+              <section>
+                <h3>回滚记录</h3>
+                <dl>
+                  <div>
+                    <dt>耗时</dt>
+                    <dd>{{ duration(gate("rollback")?.duration_ms) }}</dd>
+                  </div>
+                  <div>
+                    <dt>门状态</dt>
+                    <dd>
+                      {{ gate("rollback") ? statusText(gate("rollback")?.status) : "尚无记录" }}
+                    </dd>
+                  </div>
+                </dl>
+              </section>
             </div>
-            <div>
-              <dt>95% 核心读取耗时</dt>
-              <dd>≤ {{ data.policy.read_p95_stop_ms }} ms</dd>
-            </div>
-            <div>
-              <dt>95% 核心写入耗时</dt>
-              <dd>≤ {{ data.policy.write_p95_stop_ms }} ms</dd>
-            </div>
-            <div>
-              <dt>异步等待</dt>
-              <dd>≤ {{ data.policy.async_lag_stop_seconds }} s</dd>
-            </div>
-          </dl>
-        </section>
+            <dl>
+              <div>
+                <dt>自动停止证据</dt>
+                <dd>{{ data.automatic_stop_verified ? "已记录" : "未核验" }}</dd>
+              </div>
+              <div>
+                <dt>回滚证据</dt>
+                <dd>{{ data.rollback_verified ? "已记录" : "未核验" }}</dd>
+              </div>
+            </dl>
+            <section class="p65-history">
+              <h3>最近一条历史记录</h3>
+              <p>该记录不一定属于当前构建，不能据此推导其观察门。</p>
+              <p v-if="!data.latest_historical_release">尚无历史发布记录。</p>
+              <dl v-else>
+                <div>
+                  <dt>构建 SHA</dt>
+                  <dd>
+                    <code>{{ data.latest_historical_release.build_sha || "未记录" }}</code>
+                  </dd>
+                </div>
+                <div>
+                  <dt>记录状态</dt>
+                  <dd>{{ statusText(data.latest_historical_release.status) }}</dd>
+                </div>
+                <div>
+                  <dt>完成时间</dt>
+                  <dd>{{ time(data.latest_historical_release.finished_at) }}</dd>
+                </div>
+              </dl>
+            </section>
+          </section>
+          <section v-if="data.blockers.length" class="blockers">
+            <h2>阻断项</h2>
+            <article v-for="item in data.blockers" :key="item.code">
+              <strong>{{ blockerText(item.code) }}</strong>
+              <p>{{ item.action_hint }}</p>
+              <details>
+                <summary>技术详情</summary>
+                <code>{{ item.code }}</code>
+              </details>
+            </article>
+          </section>
+          <footer>
+            观测 {{ time(data.observed_at) }}
+            <TechnicalDetails :request-id="requestId" summary="快照读取追踪" />
+          </footer>
+        </div>
       </div>
-      <section v-if="data.blockers.length" class="blockers">
-        <h3>阻断项</h3>
-        <article v-for="item in data.blockers" :key="item.code">
-          <strong>{{ blockerText(item.code) }}</strong>
-          <p>{{ item.action_hint }}</p>
-          <details>
-            <summary>技术详情</summary>
-            <code>{{ item.code }}</code>
-          </details>
-        </article>
-      </section>
-      <footer>
-        观测 {{ time(data.observed_at) }} · 发布和回滚只能由宝塔任务执行
-        <TechnicalDetails :request-id="requestId" summary="快照读取追踪" />
-      </footer>
     </template>
   </section>
 </template>
@@ -839,6 +1042,314 @@ footer details span {
   .ring {
     height: 72px;
     width: 72px;
+  }
+}
+</style>
+
+<style scoped>
+.release-center--c {
+  --so-text: #182739;
+  --so-text-muted: #526278;
+  --so-border: #c7d3e4;
+  --so-primary: #1249b8;
+  --so-primary-strong: #1249b8;
+  --so-on-primary: #fff;
+  --so-panel: #fff;
+  --so-panel-soft: #fff;
+  --so-bg-elevated: #fff;
+  color: #182739;
+  font:
+    16px/1.65 "Microsoft YaHei",
+    "PingFang SC",
+    sans-serif;
+  gap: 20px;
+  min-width: 0;
+}
+.release-center--c h1,
+.release-center--c h2,
+.release-center--c h3 {
+  color: #182739;
+  font-family: inherit;
+  font-weight: 700;
+}
+.release-center--c h1 {
+  font-size: 32px;
+  line-height: 1.3;
+  margin: 4px 0 10px;
+}
+.release-center--c h2 {
+  font-size: 23px;
+  line-height: 1.4;
+  margin: 0 0 16px;
+}
+.release-center--c h3 {
+  font-size: 18px;
+  margin: 0 0 14px;
+}
+.release-center--c p {
+  overflow-wrap: anywhere;
+}
+.release-center--c .hero {
+  align-items: center;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  flex-wrap: wrap;
+  gap: 20px;
+  min-height: 0;
+  padding: 0;
+}
+.release-center--c .hero > div {
+  flex: 1 1 420px;
+}
+.release-center--c .hero p {
+  color: #1249b8;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+.release-center--c .hero span {
+  color: #526278;
+}
+.release-center--c .release-read-action,
+.release-center--c .release-center__secondary-tool {
+  align-items: center;
+  background: #1249b8;
+  border: 1px solid #1249b8;
+  border-radius: 0;
+  color: #fff;
+  display: inline-flex;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  text-decoration: none;
+}
+.release-center--c :is(button, a, summary, select, input):focus-visible {
+  outline: 3px solid #1249b8;
+  outline-offset: 3px;
+}
+.release-center--c button:disabled,
+.release-center--c [aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+.release-center--c .p65-layout {
+  align-items: start;
+  display: grid;
+  gap: 28px;
+  grid-template-columns: 220px minmax(0, 1fr);
+}
+.release-center--c .p65-directory {
+  align-self: start;
+  background: #1249b8;
+  color: #fff;
+  padding: 24px;
+}
+.release-center--c .p65-directory :is(h2, p, a) {
+  color: #fff;
+}
+.release-center--c .p65-directory nav {
+  display: grid;
+  gap: 8px;
+  margin: 24px 0;
+}
+.release-center--c .p65-directory a {
+  border-bottom: 1px solid #7196e2;
+  min-height: 44px;
+  padding: 12px 0;
+  text-decoration: none;
+}
+.release-center--c .p65-directory a:hover {
+  text-decoration: underline;
+}
+.release-center--c .p65-directory p:last-child {
+  font-size: 14px;
+  margin: 0;
+}
+.release-center--c .p65-content {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+}
+.release-center--c
+  :is(.verdict, .p65-identities, .p65-actions, .panel, .blockers, .state, .refresh-notice) {
+  background: #fff;
+  border: 1px solid #c7d3e4;
+  border-radius: 0;
+  min-width: 0;
+  padding: 24px;
+}
+.release-center--c .identity-grid,
+.release-center--c .p65-legacy-stages {
+  display: none;
+}
+.release-center--c .verdict {
+  border-left: 4px solid #1249b8;
+  display: block;
+}
+.release-center--c .verdict strong {
+  font-size: 23px;
+}
+.release-center--c .verdict p {
+  margin: 12px 0 0;
+  max-width: none;
+}
+.release-center--c .p65-identities {
+  display: block;
+}
+.release-center--c .p65-source-note {
+  background: #edf3ff;
+  color: #29446e;
+  padding: 16px;
+}
+.release-center--c .p65-sources {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr 1fr;
+}
+.release-center--c .p65-version,
+.release-center--c .p65-match,
+.release-center--c .p65-history {
+  margin-top: 24px;
+  min-width: 0;
+}
+.release-center--c .p65-version-production {
+  border-bottom: 1px solid #c7d3e4;
+  margin-top: 0;
+  padding-bottom: 12px;
+}
+.release-center--c .p65-match,
+.release-center--c .p65-history {
+  border-top: 1px solid #c7d3e4;
+  padding-top: 20px;
+}
+.release-center--c dl {
+  margin: 0;
+}
+.release-center--c dl > div {
+  border-bottom: 1px solid #e5ebf3;
+  display: block;
+  min-width: 0;
+  padding: 12px 0;
+}
+.release-center--c dt {
+  color: #526278;
+  font-size: 14px;
+}
+.release-center--c dd {
+  color: #182739;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 5px 0 0;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+.release-center--c code {
+  color: #29446e;
+  font:
+    15px/1.65 Consolas,
+    monospace;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.release-center--c .panel > header {
+  display: block;
+  margin-bottom: 18px;
+}
+.release-center--c .panel header span {
+  color: #526278;
+  font-size: 14px;
+}
+.release-center--c .threshold > dl {
+  display: grid;
+  gap: 0 24px;
+  grid-template-columns: 1fr 1fr;
+}
+.release-center--c .p65-metrics,
+.release-center--c .responsive-data-view__desktop {
+  overflow: visible;
+}
+.release-center--c .responsive-data-view {
+  min-width: 0;
+}
+.release-center--c table {
+  border: 0;
+  border-collapse: collapse;
+  box-shadow: none;
+  min-width: 640px;
+  width: 100%;
+}
+.release-center--c :is(th, td) {
+  border: 0;
+  border-bottom: 1px solid #c7d3e4;
+  font-size: 14px;
+  padding: 12px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+.release-center--c th {
+  background: #f3f6fa;
+  color: #526278;
+}
+.release-center--c td {
+  background: #fff;
+}
+.release-center--c .blockers h2 {
+  margin-bottom: 16px;
+}
+.release-center--c .blockers article {
+  border-top: 1px solid #c7d3e4;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 210px 1fr;
+  padding: 13px 0;
+}
+.release-center--c .blockers details {
+  grid-column: 2;
+}
+.release-center--c footer {
+  color: #526278;
+  font-size: 13px;
+}
+.release-center--c :is(.blockers details summary, footer details summary) {
+  align-items: center;
+  color: #1249b8;
+  cursor: pointer;
+  display: inline-flex;
+  min-height: var(--so-touch-target);
+}
+.release-center--c :is(.blockers p, footer details span) {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 900px) {
+  .release-center--c .p65-layout {
+    grid-template-columns: 1fr;
+  }
+  .release-center--c .p65-directory nav {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 760px) {
+  .release-center--c :is(.hero, .verdict, .refresh-notice) {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .release-center--c .p65-sources,
+  .release-center--c .threshold > dl {
+    grid-template-columns: 1fr;
+  }
+  .release-center--c .panel {
+    overflow-x: auto;
+  }
+  .release-center--c .blockers article {
+    grid-template-columns: 1fr;
+  }
+  .release-center--c .blockers details {
+    grid-column: auto;
+  }
+  .release-center--c .hero {
+    padding: 0;
   }
 }
 </style>

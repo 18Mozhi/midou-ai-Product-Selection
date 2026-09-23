@@ -536,7 +536,8 @@ onUnmounted(() => {
           v-if="
             !opportunityId &&
             routePath !== '/platform-admin/status' &&
-            routePath !== '/platform-admin/operations'
+            routePath !== '/platform-admin/operations' &&
+            routePath !== '/platform-admin/releases'
           "
           class="role-page-title"
         >

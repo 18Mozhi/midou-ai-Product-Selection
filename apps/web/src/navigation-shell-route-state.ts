@@ -158,7 +158,7 @@ export function pageSummary(shell: NavigationShellKind, path: string) {
   if (path === "/platform-admin/operations")
     return "备份副本、RPO/RTO 与隔离恢复结论均来自可审计记录；未验证条件明确阻断。";
   if (path === "/platform-admin/releases")
-    return "版本、迁移、渐进观察门、自动停止与回滚均来自宝塔发布任务的审计事实。";
+    return "区分运行身份、部署捕获与历史观察记录；页面只读，不执行发布或回滚。";
   if (path === "/platform-admin/topology")
     return "当前惠州单机的 API 心跳、宝塔 Nginx 单上游和私有服务只按可审计事实判定；不启用负载均衡或多节点。";
   if (path === "/platform-admin/redis")
