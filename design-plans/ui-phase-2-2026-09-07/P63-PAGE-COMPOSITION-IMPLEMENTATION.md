@@ -15,4 +15,4 @@
 
 ## 部署状态
 
-本记录随 P63 实施提交；宝塔部署及线上 build SHA、ready/available、深链和页面静态资源核验结果在部署完成后补记。部署按项目固定脚本和宝塔对象执行，不增加生产服务或迁移。
+宝塔固定部署脚本已成功执行，线上 `BUILD_SHA=aa8e7c4da4d6ac1da2e2df3217ce26cb0fa8555e`，与 P63 实施提交一致；脚本报告临时上传/暂存文件已清理。ready/available/version 健康轮询和应用版本核验通过；`/platform-admin/api-coverage` 深链 HTTP 200，`ApiCoverageDashboard` 与 `ApiCoverageOperationCard` 的 JS/CSS 四项静态资源均 HTTP 200。没有新增宝塔服务或数据库迁移。未使用生产 superadmin 会话读取真实受限报告，亦未把本地合成数据或线上静态资源可达当作正式 M07-03、生产报告、SQL/RBAC 验收。
