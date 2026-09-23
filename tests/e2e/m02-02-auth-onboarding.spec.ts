@@ -116,6 +116,89 @@ test("M02-02.A08/A16 password recovery covers generic request reset and rate-lim
   await page.getByRole("button", { name: "发送重置说明" }).click();
   await expect(page.getByText("请求标识：rate-request")).toBeVisible();
 });
+test("P06 reset password keeps the one-field contract and explicit successful return", async ({
+  page,
+}) => {
+  let completeRequest!: () => void;
+  const responseGate = new Promise<void>((resolve) => {
+    completeRequest = resolve;
+  });
+  let requestBody: unknown;
+  await page.route("**/api/v1/auth/password-reset/confirm", async (route) => {
+    requestBody = route.request().postDataJSON();
+    await responseGate;
+    await route.fulfill({ status: 204 });
+  });
+
+  await page.goto("/reset-password?token=synthetic-reset-token");
+  await expect(page.getByTestId("reset-password")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "设置新的登录密码" })).toBeVisible();
+  await expect(page.getByLabel("新密码")).toHaveAttribute("minlength", "12");
+  await expect(page.getByLabel("新密码")).toHaveAttribute("maxlength", "128");
+  await expect(page.getByLabel("确认密码")).toHaveCount(0);
+  await expect(page.getByText("synthetic-reset-token")).toHaveCount(0);
+
+  await page.getByLabel("新密码").fill("New-long-password-456!");
+  await page.getByRole("button", { name: "更新密码" }).click();
+  await expect(page.getByRole("button", { name: "正在安全处理…" })).toBeDisabled();
+  completeRequest();
+
+  await expect(page.getByText("密码已更新，请重新登录。")).toBeVisible();
+  await expect(page.getByRole("button", { name: "返回登录" })).toBeVisible();
+  await expect(page).toHaveURL(/\/reset-password\?/);
+  expect(requestBody).toEqual({
+    token: "synthetic-reset-token",
+    new_password: "New-long-password-456!",
+  });
+  await page.getByRole("button", { name: "返回登录" }).click();
+  await expect(page.getByRole("heading", { name: "欢迎回到智能选品" })).toBeVisible();
+});
+test("P06 expired reset link cannot be resubmitted and returns to the existing recovery entry", async ({
+  page,
+}) => {
+  const writes: unknown[] = [];
+  await page.route("**/api/v1/auth/password-reset/confirm", (route) => {
+    writes.push(route.request().postDataJSON());
+    return route.fulfill({ status: 204 });
+  });
+  await page.goto("/reset-password?state=expired&token=synthetic-expired-token");
+  await expect(page.getByRole("heading", { name: "链接已过期" })).toBeVisible();
+  await expect(page.getByLabel("新密码")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "找回密码" })).toBeVisible();
+  await expect(page.getByText("synthetic-expired-token")).toHaveCount(0);
+  await expect(
+    page.getByText("重置链接为单次使用。请重新申请，不要继续使用旧链接。"),
+  ).toBeVisible();
+  expect(writes).toEqual([]);
+  await page.getByRole("button", { name: "找回密码" }).click();
+  await expect(page.getByRole("heading", { name: "找回密码" })).toBeVisible();
+});
+test("P06 reset API failure shows server guidance and correlation id without changing route", async ({
+  page,
+}) => {
+  await page.route("**/api/v1/auth/password-reset/confirm", (route) =>
+    route.fulfill({
+      status: 503,
+      json: {
+        error: {
+          code: "service_unavailable",
+          message: "密码暂未更新，请稍后重试。",
+          action_hint: "请稍后重新提交。",
+        },
+        request_id: "reset-request-id",
+        trace_id: "reset-trace-id",
+      },
+    }),
+  );
+  await page.goto("/reset-password?token=synthetic-reset-token");
+  await page.getByLabel("新密码").fill("New-long-password-456!");
+  await page.getByRole("button", { name: "更新密码" }).click();
+  await expect(page.getByRole("alert")).toContainText("密码暂未更新，请稍后重试。");
+  await expect(page.getByRole("alert")).toContainText("请稍后重新提交。");
+  await expect(page.getByRole("alert")).toContainText("关联编号：reset-request-id");
+  await expect(page.getByText("链路标识：reset-trace-id")).toHaveCount(0);
+  await expect(page).toHaveURL(/\/reset-password\?/);
+});
 test("M02-02.A07/A08/A15 tenancy hands off to all three onboarding steps at desktop and 390px", async ({
   page,
 }) => {

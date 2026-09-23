@@ -1477,6 +1477,10 @@ W09 发布前必须取得干净且归属明确的提交，核对本地/远端/�
 
 2026-09-23：P07 MFA 已迁入 `/security/mfa` 实际 Vue，保留既有 MFA API 合同；commit/build SHA `3925719f65062687506e0b58ff1098d7fd7fd8b5` 已部署。桌面与 390px 浏览器验证、线上 health/version、深链及懒加载资源证据见 [P07 实施记录](P07-PAGE-COMPOSITION-IMPLEMENTATION.md)。真实 MFA/Cookie 撤销、生产 RBAC 与正式 M07-03 未由本地夹具证明；安全门执行受本地 Git 清单缓冲上限阻止；全 73 页目标继续，下一页接续 P06。
 
+# 本轮交付接续 · P06 重置密码
+
+2026-09-23：P06 已按用户自动通过授权，把 C 方向接入实际 `/reset-password` Vue；保留现有 token/new_password、空 token 交服务端拒绝、成功不自动登录等合同。桌面/390px E2E 6/6、类型检查、身份源映射通过。部署 SHA 与线上健康/资源核验见[P06实施记录](P06-PAGE-COMPOSITION-IMPLEMENTATION.md)。真实重置邮件链接、真实账号改密、RBAC 与正式 M07-03 仍未由本地夹具证明；全 73 页继续，下一页接续 P05。
+
 # 历史交付接续 · P09/P08
 
 P10「外观偏好」C 方向已迁入实际 ThemeStudio Vue，实施、线上 SHA 与资源核验见 [P10-PAGE-COMPOSITION-IMPLEMENTATION.md](P10-PAGE-COMPOSITION-IMPLEMENTATION.md)。2026-09-23 已按用户自动同意授权完成 P09 三步引导与 P08 组织/工作区选择真实 Vue 重构，分别见 [P09 实施记录](P09-PAGE-COMPOSITION-IMPLEMENTATION.md) 和 [P08 实施记录](P08-PAGE-COMPOSITION-IMPLEMENTATION.md)；P08 commit/build SHA `b1e53eac9d731ffd8e90029ab6192bdda6c215f3` 已推送并经固定宝塔脚本部署，线上 health/version、深链和 P08 JS/CSS 资源核验通过。全 73 页目标和正式阶段验收仍开放；下一页面接续 P07 MFA 身份安全。

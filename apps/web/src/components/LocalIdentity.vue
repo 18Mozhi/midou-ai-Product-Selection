@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import "./local-identity-mfa.css";
+import "./local-identity-reset.css";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiEnvelope } from "../api-client";
 import { publicConfig } from "../config";
@@ -533,6 +534,119 @@ onBeforeUnmount(() => clearMfaMaterial());
       不提供二维码、下载或复制入口 · 恢复码仅在服务端返回后显示 · 错误状态不会伪装成停用成功
     </footer>
   </main>
+  <main
+    v-else-if="mode === 'reset'"
+    class="p06-reset-page"
+    data-testid="reset-password"
+    :data-state="requestState"
+    :aria-busy="requestState === 'loading'"
+  >
+    <header class="p06-reset-top">
+      <RouterLink to="/" aria-label="ScoutOps 首页">ScoutOps</RouterLink>
+      <strong>设置新密码</strong>
+      <small>一次性链接 · 不展示 token</small>
+    </header>
+    <section class="p06-reset-hero" aria-labelledby="p06-reset-title">
+      <p>PASSWORD RESET</p>
+      <h1 id="p06-reset-title">
+        {{
+          requestState === "success"
+            ? "密码已更新"
+            : requestState === "expired"
+              ? "链接已过期"
+              : ["error", "rate_limited", "blocked"].includes(requestState)
+                ? "更新未完成"
+                : "设置新的登录密码"
+        }}
+      </h1>
+      <span>新密码仅在本次提交中发送；更新成功后不会自动登录。</span>
+    </section>
+    <section
+      class="p06-reset-workspace"
+      aria-label="密码重置"
+      aria-live="polite"
+      :aria-busy="requestState === 'loading'"
+    >
+      <div
+        v-if="requestState === 'expired'"
+        class="p06-reset-notice p06-reset-warning"
+        role="status"
+      >
+        <strong>链接已过期</strong>
+        <span>重置链接为单次使用。请重新申请，不要继续使用旧链接。</span>
+      </div>
+      <div
+        v-else-if="['error', 'rate_limited', 'blocked'].includes(requestState)"
+        class="p06-reset-notice p06-reset-error"
+        role="alert"
+      >
+        <strong>{{
+          requestState === "rate_limited"
+            ? "请求过于频繁"
+            : requestState === "blocked"
+              ? "身份服务暂不可用"
+              : "更新未完成"
+        }}</strong>
+        <span>{{ message }}</span>
+        <small v-if="actionHint">{{ actionHint }}</small>
+        <code v-if="requestId">关联编号：{{ requestId }}</code>
+      </div>
+      <div
+        v-else-if="requestState === 'success' && message"
+        class="p06-reset-notice p06-reset-success"
+        role="status"
+      >
+        <strong>密码已更新</strong>
+        <span>{{ message }}</span>
+      </div>
+
+      <form
+        v-if="requestState !== 'expired' && requestState !== 'success'"
+        aria-labelledby="p06-reset-title"
+        @submit.prevent="submit"
+      >
+        <label for="p06-new-password">
+          <span>新密码</span>
+          <small id="p06-password-help">至少 12 位；不在页面显示或保存链接 token。</small>
+          <input
+            id="p06-new-password"
+            v-model="password"
+            type="password"
+            autocomplete="new-password"
+            aria-describedby="p06-password-help"
+            required
+            minlength="12"
+            maxlength="128"
+            placeholder="输入安全密码"
+          />
+        </label>
+        <button class="p06-reset-primary" type="submit" :disabled="requestState === 'loading'">
+          {{ requestState === "loading" ? "正在安全处理…" : "更新密码" }}
+        </button>
+      </form>
+      <section v-else-if="requestState === 'success'" class="p06-reset-next">
+        <strong>下一步：重新登录</strong>
+        <p>已更新的密码不会自动创建登录状态；请使用新密码重新登录。</p>
+        <button class="p06-reset-primary" type="button" @click="switchMode('login')">
+          返回登录
+        </button>
+      </section>
+      <section v-else class="p06-reset-next">
+        <strong>需要重新申请链接？</strong>
+        <p>请从找回密码入口发起新的受控请求。</p>
+        <button class="p06-reset-primary" type="button" @click="switchMode('forgot')">
+          找回密码
+        </button>
+      </section>
+      <footer>
+        <button v-if="requestState !== 'success'" type="button" @click="switchMode('login')">
+          返回登录
+        </button>
+        <RouterLink to="/security/mfa">了解 MFA 设置</RouterLink>
+      </footer>
+    </section>
+    <footer class="p06-reset-boundary">不显示 token · 不自动登录 · 不新增确认密码字段</footer>
+  </main>
   <main v-else class="identity-page" :data-mode="mode" :data-state="requestState">
     <header class="identity-header">
       <RouterLink class="identity-brand" to="/"><span>S</span>SCOUTOPS / 智能选品</RouterLink>
@@ -629,7 +743,7 @@ onBeforeUnmount(() => clearMfaMaterial());
               maxlength="254"
               placeholder="name@company.com 或用户名"
           /></label>
-          <label v-else-if="!['reset', 'mfa-challenge'].includes(mode)"
+          <label v-else-if="mode !== 'mfa-challenge'"
             >邮箱<input
               v-model="email"
               type="email"
@@ -639,8 +753,7 @@ onBeforeUnmount(() => clearMfaMaterial());
               placeholder="name@company.com"
           /></label>
           <label v-if="!['forgot', 'mfa-challenge'].includes(mode)"
-            >{{ mode === "reset" ? "新密码" : "密码"
-            }}<input
+            >密码 }}<input
               v-model="password"
               type="password"
               :autocomplete="mode === 'login' ? 'current-password' : 'new-password'"
