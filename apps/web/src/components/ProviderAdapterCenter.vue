@@ -10,6 +10,7 @@ import "../provider-adapters-c-detail.css";
 import "../provider-adapters-c-feedback.css";
 import "../provider-adapters-empty-mobile.css";
 import "../provider-adapters-c-table-tools.css";
+import "../provider-adapters-c-read-error.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface AdapterSummary {
   id: string;
@@ -313,6 +314,8 @@ onMounted(load);
     <UiStatePanel
       v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
+      :title="state === 'error' ? '暂时未能读取采集状态' : ''"
+      :description="state === 'error' ? '这次读取未完成。你可以重新读取，获取最新状态。' : ''"
       :primary-label="state === 'loading' ? '' : '重新读取状态'"
       :request-id="requestId"
       @primary="load"

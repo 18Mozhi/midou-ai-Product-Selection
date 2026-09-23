@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { parse, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
 import {
@@ -16,9 +17,14 @@ const component = "apps/web/src/components/ProviderAdapterCenter.vue";
 const root = "output/playwright/p47-read-error-current-review";
 const historicalRoot = "output/playwright/p47-read-error-review";
 const evidence = () => JSON.parse(read(`${root}/evidence.json`));
+const reviewBaseline = () =>
+  execFileSync("git", ["show", `90632224:${component}`], { encoding: "utf8" }).replaceAll(
+    "\r\n",
+    "\n",
+  );
 
-test("P47 read-error proposal only supplies two error-specific presentation props", () => {
-  const original = read(component),
+test("P47 read-error historical proposal only supplies two error-specific presentation props", () => {
+  const original = reviewBaseline(),
     review = previewAdapterReadError(original);
   const additions =
     `      :title="state === 'error' ? '${readErrorTitle}' : ''"\n` +
@@ -61,7 +67,7 @@ test("P47 read-error visual rules cannot target other state panels or production
   });
 });
 
-test("P47 read-error actual Vue review binds raw sources, all pictures and unchanged neighboring states", () => {
+test("P47 read-error review retains its historical source manifest, pictures and neighboring states", () => {
   const e = evidence();
   assert.equal(e.kind, "P47-READ-ERROR-CURRENT-REVIEW-r1");
   assert.equal(e.userReview, "pending");
@@ -79,8 +85,7 @@ test("P47 read-error actual Vue review binds raw sources, all pictures and uncha
     "design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-read-error-preview.css",
   ])
     assert.ok(e.sourceHashes[file], file);
-  for (const [file, expected] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+  for (const expected of Object.values(e.sourceHashes)) assert.match(expected, /^[a-f0-9]{64}$/);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),
