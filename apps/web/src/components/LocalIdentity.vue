@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import "./local-identity-mfa.css";
 import "./local-identity-reset.css";
+import "./local-identity-verification.css";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiEnvelope } from "../api-client";
 import { publicConfig } from "../config";
@@ -647,6 +648,100 @@ onBeforeUnmount(() => clearMfaMaterial());
     </section>
     <footer class="p06-reset-boundary">不显示 token · 不自动登录 · 不新增确认密码字段</footer>
   </main>
+  <main
+    v-else-if="mode === 'verify'"
+    class="p05-verification-page"
+    data-testid="email-verification"
+    :data-state="requestState"
+    :aria-busy="requestState === 'loading'"
+  >
+    <header class="p05-verification-top">
+      <RouterLink to="/" aria-label="ScoutOps 首页">ScoutOps</RouterLink>
+      <strong>邮箱验证</strong>
+      <small>一次性链接 · 不展示 token</small>
+    </header>
+    <section class="p05-verification-hero">
+      <p>EMAIL VERIFICATION</p>
+      <h1>
+        {{
+          params.get("token") && requestState === "success" && message
+            ? "邮箱验证完成"
+            : ["error", "rate_limited", "blocked", "expired"].includes(requestState)
+              ? "验证未完成"
+              : params.get("token")
+                ? "正在验证邮箱"
+                : "检查验证邮件"
+        }}
+      </h1>
+      <span>一次性验证链接由身份服务核验；页面不会展示或记录链接令牌。</span>
+    </section>
+    <section class="p05-verification-workspace" aria-label="邮箱验证结果" aria-live="polite">
+      <div
+        v-if="params.get('token') && requestState === 'success' && message"
+        class="p05-verification-notice p05-verification-success"
+        role="status"
+      >
+        <strong>验证完成</strong>
+        <span>{{ message }}</span>
+      </div>
+      <div
+        v-else-if="['error', 'rate_limited', 'blocked'].includes(requestState)"
+        class="p05-verification-notice p05-verification-error"
+        role="alert"
+      >
+        <strong>{{
+          requestState === "rate_limited"
+            ? "请求过于频繁"
+            : requestState === "blocked"
+              ? "身份服务暂不可用"
+              : "验证未完成"
+        }}</strong>
+        <span>{{ message || "身份服务暂时无法完成验证。" }}</span>
+        <small v-if="actionHint">{{ actionHint }}</small>
+        <small v-if="requestId">关联编号：{{ requestId }}</small>
+        <small v-if="traceId && traceId !== requestId">链路标识：{{ traceId }}</small>
+      </div>
+      <div v-else-if="requestState === 'expired'" class="p05-verification-notice" role="status">
+        <strong>链接需要重新确认</strong>
+        <span>当前页面标记为链接已过期。本页不会重新发送邮件，也没有向身份服务提交验证请求。</span>
+      </div>
+      <div v-else class="p05-verification-notice" role="status">
+        <strong>{{
+          params.get("token")
+            ? "正在核验链接"
+            : requestState === "success" && message
+              ? "验证邮件已提交"
+              : "尚未提供验证链接"
+        }}</strong>
+        <span>{{
+          params.get("token")
+            ? "系统正在自动提交单次验证；无需重复操作。"
+            : requestState === "success" && message
+              ? message
+              : "请打开注册邮件中的一次性链接。未提供链接时不会发送确认请求。"
+        }}</span>
+      </div>
+
+      <section class="p05-verification-next">
+        <strong>{{
+          params.get("token") && requestState === "success" ? "下一步：返回登录" : "需要帮助？"
+        }}</strong>
+        <p>
+          {{
+            params.get("token") && requestState === "success"
+              ? "邮箱验证不会自动登录；请返回登录后继续。"
+              : "若链接失效或请求未完成，请按注册时的受控邮件流程处理。本页不提供未定义的重发操作。"
+          }}
+        </p>
+        <button type="button" class="p05-verification-primary" @click="switchMode('login')">
+          返回登录
+        </button>
+      </section>
+    </section>
+    <footer class="p05-verification-boundary">
+      不显示 token · 不推断邮箱或账号状态 · 验证完成后不自动进入业务
+    </footer>
+  </main>
   <main v-else class="identity-page" :data-mode="mode" :data-state="requestState">
     <header class="identity-header">
       <RouterLink class="identity-brand" to="/"><span>S</span>SCOUTOPS / 智能选品</RouterLink>
@@ -753,7 +848,7 @@ onBeforeUnmount(() => clearMfaMaterial());
               placeholder="name@company.com"
           /></label>
           <label v-if="!['forgot', 'mfa-challenge'].includes(mode)"
-            >密码 }}<input
+            >密码<input
               v-model="password"
               type="password"
               :autocomplete="mode === 'login' ? 'current-password' : 'new-password'"
@@ -794,27 +889,6 @@ onBeforeUnmount(() => clearMfaMaterial());
             }}
           </button>
         </form>
-
-        <div v-else-if="mode === 'verify'" class="identity-centered" data-testid="verify">
-          <span class="mail-icon" aria-hidden="true">✉</span>
-          <h3>
-            {{
-              params.get("token")
-                ? requestState === "success"
-                  ? "邮箱验证完成"
-                  : "正在验证邮箱"
-                : "检查验证邮件"
-            }}
-          </h3>
-          <p>
-            {{
-              params.get("token")
-                ? "验证链接只使用一次；失败时按上方提示重新申请。"
-                : "账号邮件由受限邮件通道投递；异常时会明确显示受阻，不会假报已发送。"
-            }}
-          </p>
-          <button type="button" @click="switchMode('login')">返回登录</button>
-        </div>
 
         <section
           v-else-if="mode === 'security-setup'"

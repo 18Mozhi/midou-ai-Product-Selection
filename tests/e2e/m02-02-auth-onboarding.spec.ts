@@ -78,10 +78,67 @@ test("M02-02.A07/A08 registration and email confirmation preserve single-use tru
     maxDiffPixels: 140,
   });
   await page.route("**/api/v1/auth/email-verification/confirm", (route) =>
-    route.fulfill({ status: 204 }),
+    route.fulfill({ json: envelope({ status: "verified" }) }),
   );
   await page.goto("/verify-email?token=single-use-token");
   await expect(page.getByRole("heading", { name: "邮箱验证完成" })).toBeVisible();
+});
+test("P05 verification uses one token-gated confirmation and explicit return", async ({ page }) => {
+  const writes: Array<{ method: string; body: unknown }> = [];
+  await page.route("**/api/v1/auth/email-verification/confirm", async (route) => {
+    writes.push({ method: route.request().method(), body: route.request().postDataJSON() });
+    await route.fulfill({ json: envelope({ status: "verified" }) });
+  });
+
+  await page.goto("/verify-email");
+  await expect(page.getByTestId("email-verification")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "检查验证邮件" })).toBeVisible();
+  const returnButton = page.getByRole("button", { name: "返回登录" });
+  await expect(returnButton).toBeVisible();
+  expect((await returnButton.boundingBox())?.height).toBeGreaterThanOrEqual(44);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  );
+  expect(writes).toEqual([]);
+
+  await page.goto("/verify-email?state=expired");
+  await expect(page.getByRole("heading", { name: "验证未完成" })).toBeVisible();
+  await expect(page.getByText(/当前页面标记为链接已过期/)).toBeVisible();
+  expect(writes).toEqual([]);
+
+  await page.goto("/verify-email?token=synthetic-single-use-token");
+  await expect(page.getByRole("heading", { name: "邮箱验证完成" })).toBeVisible();
+  await expect(page.getByText("synthetic-single-use-token")).toHaveCount(0);
+  await expect(page).toHaveURL(/\/verify-email\?/);
+  expect(writes).toEqual([{ method: "POST", body: { token: "synthetic-single-use-token" } }]);
+
+  await page.getByRole("button", { name: "返回登录" }).click();
+  await expect(page.getByRole("heading", { name: "欢迎回到智能选品" })).toBeVisible();
+});
+test("P05 verification failures replace the loading title and retain service guidance", async ({
+  page,
+}) => {
+  await page.route("**/api/v1/auth/email-verification/confirm", (route) =>
+    route.fulfill({
+      status: 503,
+      json: {
+        error: {
+          code: "service_unavailable",
+          message: "验证暂未完成，请稍后重试。",
+          action_hint: "请稍后重新打开验证邮件中的链接。",
+        },
+        request_id: "verify-request-id",
+        trace_id: "verify-trace-id",
+      },
+    }),
+  );
+  await page.goto("/verify-email?token=synthetic-failed-token");
+  await expect(page.getByRole("heading", { name: "验证未完成" })).toBeVisible();
+  await expect(page.getByRole("alert")).toContainText("验证暂未完成，请稍后重试。");
+  await expect(page.getByRole("alert")).toContainText("请稍后重新打开验证邮件中的链接。");
+  await expect(page.getByRole("alert")).toContainText("关联编号：verify-request-id");
+  await expect(page.getByRole("alert")).toContainText("链路标识：verify-trace-id");
+  await expect(page.getByText("synthetic-failed-token")).toHaveCount(0);
 });
 test("M02-02.A08/A16 password recovery covers generic request reset and rate-limit recovery", async ({
   page,

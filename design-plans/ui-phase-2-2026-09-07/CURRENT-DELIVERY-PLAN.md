@@ -1,3 +1,7 @@
+# P05 邮箱验证 C 方向生产 Vue 接入 · 本轮实施
+
+P05 `/verify-email` 已从共用营销卡片拆为蓝色验证边界与白色结果工作区，保留原 token 门控自动 `POST /auth/email-verification/confirm {token}`、无 token 零请求与显式返回登录。注册邮件受理不再被展示为邮箱已验证；实际接口失败、限流、受阻有独立告警反馈，且不回显 token。未改变 API/OpenAPI、认证规则、权限、存储、配置或依赖。测试、发布 SHA、线上深链/资源与健康核验详见[P05实施记录](P05-PAGE-COMPOSITION-IMPLEMENTATION.md)。真实邮件投递、有效 token、账号验证写入及正式 M07-03 仍需独立证据；全73页目标继续。
+
 # P69 文件存储核验 C 方向生产 Vue 接入 · 本次实施
 
 P69 已将 FILES-C-r1 接入真实 `/platform-admin/files`，由原父组件继续负责 GET、15秒超时、单飞、快照与权限状态；三个 typed-props 子组件分别呈现结论/发现、目录水位/活动索引、抽样完整性/同机恢复。桌面/手机两动效 180 项/52 本地 GET 与 M08-04 E2E 双端各4/4通过，定向测试11/11、Web类型/构建与格式检查通过。API、权限、状态门槛和文件/恢复边界未改。发布版本、线上SHA及健康核验见[P69实施记录](P69-PAGE-COMPOSITION-IMPLEMENTATION.md)。真实文件系统、生产权限/审计/恢复及正式M07-03仍需独立证据；全73页目标继续。
