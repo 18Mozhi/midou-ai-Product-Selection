@@ -17,10 +17,30 @@ test("native business dialogs share modal top-layer and focus-return behavior", 
   assert.ok(dialogSources.length >= 10);
   for (const { path, source } of dialogSources) {
     assert.doesNotMatch(source, /<dialog[^>]*\s:open=/, path);
-    assert.match(source, /useModalDialog/, path);
+    if (/useModalDialog/.test(source)) {
+      assert.match(source, /useModalDialog/, path);
+    } else if (path.endsWith("/PlatformMessageWorkbench.vue")) {
+      const reader = await readFile(
+        "apps/web/src/components/use-platform-notification-reader.ts",
+        "utf8",
+      );
+      const dialogHelpers = await readFile(
+        "apps/web/src/components/platform-notification-dialog.ts",
+        "utf8",
+      );
+      assert.match(source, /usePlatformNotificationReader/, path);
+      assert.match(source, /trapNotificationDialogTab/, path);
+      assert.match(reader, /useModalDialog/);
+      assert.match(dialogHelpers, /event\.key !== "Tab"/);
+    } else {
+      assert.match(source, /\.showModal\(\)/, path);
+      assert.match(source, /\.close\(\)/, path);
+      assert.match(source, /(?:returnFocus\?\.focus|trigger\.value\?\.focus)/, path);
+      assert.match(source, /event\.key !== "Tab"/, path);
+    }
     assert.match(source, /<dialog[^>]*\sref=/, path);
     assert.match(source, /<dialog[^>]*\s:?(?:aria-label|aria-labelledby)=/, path);
-    assert.match(source, /<dialog[^>]*@cancel=/, path);
+    assert.match(source, /<dialog[^>]*@cancel(?:\.[\w-]+)*=/, path);
   }
 
   const modal = await readFile("apps/web/src/use-modal-dialog.ts", "utf8");

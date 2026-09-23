@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Locator } from "@playwright/test";
 const orgId = "00000000-0000-4000-8000-000000000605",
   env = (data: any) => ({ data, request_id: "m06-05-e2e", trace_id: "m06-05-e2e" }),
   data = {
@@ -109,13 +109,36 @@ test("M06-05.A07/A08/A15 desktop and 390 open platform", async ({ page }) => {
 });
 test("M06-05.A08/A16 confirmation rate limit and dependency recovery", async ({ page }) => {
   await page.goto("/platform-admin/open-platform");
+  const actionWrites: string[] = [];
+  page.on("request", (request) => {
+    const path = new URL(request.url()).pathname;
+    if (path.startsWith("/api/v1/platform/open") && request.method() !== "GET")
+      actionWrites.push(request.method() + " " + path);
+  });
+  let actionTrigger: Locator;
   if ((page.viewportSize()?.width ?? 1000) <= 760) {
     await page.getByRole("button", { name: /^报表只读 Client/ }).click();
     const dialog = page.getByRole("dialog", { name: "报表只读 Client" });
-    await dialog.getByRole("button", { name: "轮换密钥" }).click();
-  } else await page.getByRole("button", { name: "轮换", exact: true }).click();
+    actionTrigger = dialog.getByRole("button", { name: "轮换密钥" });
+  } else actionTrigger = page.getByRole("button", { name: "轮换", exact: true });
+  await actionTrigger.click();
   const actionReason = page.getByRole("dialog", { name: "轮换接口访问密钥" });
   await expect(actionReason).toContainText("影响范围");
+  const reasonInput = actionReason.getByLabel("本次变更原因");
+  const closeReason = actionReason.getByRole("button", { name: "关闭操作原因窗口" });
+  const continueReason = actionReason.getByRole("button", { name: "继续核对" });
+  await expect(reasonInput).toBeFocused();
+  await closeReason.focus();
+  await page.keyboard.press("Shift+Tab");
+  await expect(continueReason).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(closeReason).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(actionReason).not.toBeVisible();
+  await expect(actionTrigger).toBeFocused();
+
+  await actionTrigger.click();
+  await expect(actionReason).toBeVisible();
   await actionReason.getByLabel("本次变更原因").fill("轮换接口访问密钥");
   await actionReason.getByRole("button", { name: "继续核对" }).click();
   const rotationRisk = page.getByRole("alertdialog");
@@ -123,7 +146,9 @@ test("M06-05.A08/A16 confirmation rate limit and dependency recovery", async ({ 
   await expect(rotationRisk).toContainText("报表只读 Client");
   await expect(rotationRisk).toContainText("每分钟 60 次限额保持不变");
   await expect(rotationRisk).toContainText("旧密钥立即失效");
+  await expect(rotationRisk.getByRole("button", { name: "取消" })).toBeFocused();
   await page.getByRole("button", { name: "取消" }).click();
+  expect(actionWrites).toEqual([]);
   await page.unroute(/\/api\/v1\/platform\/open(?:\?.*)?$/);
   let status = 429;
   await page.route(/\/api\/v1\/platform\/open(?:\?.*)?$/, (r) =>
