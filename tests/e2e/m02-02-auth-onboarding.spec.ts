@@ -143,6 +143,70 @@ test("P05 verification failures replace the loading title and retain service gui
   await expect(page.getByRole("alert")).toContainText("链路标识：verify-trace-id");
   await expect(page.getByText("synthetic-failed-token")).toHaveCount(0);
 });
+test("P04 recovery validates the email and submits one generic reset request", async ({ page }) => {
+  const writes: Array<{ method: string; body: unknown }> = [];
+  await page.route("**/api/v1/auth/password-reset/request", async (route) => {
+    writes.push({ method: route.request().method(), body: route.request().postDataJSON() });
+    await route.fulfill({ status: 202, json: envelope({ accepted: true }) });
+  });
+
+  await page.goto("/forgot-password");
+  await expect(page.getByTestId("password-recovery")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "找回密码" })).toBeVisible();
+  const email = page.getByLabel("邮箱");
+  await expect(email).toHaveAttribute("type", "email");
+  await expect(email).toHaveAttribute("required", "");
+  await expect(email).toHaveAttribute("maxlength", "254");
+  await email.fill("not-an-email");
+  expect(await email.evaluate((element: HTMLInputElement) => element.checkValidity())).toBe(false);
+  await page.getByRole("button", { name: "发送重置说明" }).click();
+  expect(writes).toEqual([]);
+
+  await email.fill("member@example.test");
+  const submit = page.getByRole("button", { name: "发送重置说明" });
+  await submit.click();
+  await expect(page.getByRole("status")).toContainText("如账号存在，重置邮件会进入受控投递队列。");
+  expect(writes).toEqual([{ method: "POST", body: { email: "member@example.test" } }]);
+  await page.mouse.move(8, 8);
+  await expect(submit).toHaveCSS("background-color", "rgb(23, 72, 160)");
+  expect((await submit.boundingBox())?.height).toBeGreaterThanOrEqual(44);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  );
+  await expect(page).toHaveURL(/\/forgot-password$/);
+  await expect(page.getByText(/不表示邮件已经送达或账号存在/)).toBeVisible();
+});
+test("P04 recovery renders rate-limit guidance and keeps local login navigation", async ({
+  page,
+}) => {
+  await page.route("**/api/v1/auth/password-reset/request", (route) =>
+    route.fulfill({
+      status: 429,
+      json: {
+        error: {
+          code: "rate_limited",
+          message: "请求过于频繁。",
+          action_hint: "稍后重试。",
+        },
+        request_id: "p04-rate-request",
+        trace_id: "p04-rate-trace",
+      },
+    }),
+  );
+  await page.goto("/login");
+  await page.getByRole("button", { name: "忘记密码？" }).click();
+  await expect(page.getByTestId("password-recovery")).toBeVisible();
+  await expect(page).toHaveURL(/\/login$/);
+  await page.getByLabel("邮箱").fill("member@example.test");
+  await page.getByRole("button", { name: "发送重置说明" }).click();
+  await expect(page.getByRole("alert")).toContainText("请求过于频繁");
+  await expect(page.getByRole("alert")).toContainText("稍后重试。");
+  await expect(page.getByRole("alert")).toContainText("请求标识：p04-rate-request");
+  await expect(page.getByRole("alert")).toContainText("链路标识：p04-rate-trace");
+  await page.getByRole("button", { name: "返回登录" }).click();
+  await expect(page.getByRole("heading", { name: "欢迎回到智能选品" })).toBeVisible();
+  await expect(page).toHaveURL(/\/login$/);
+});
 test("M02-02.A08/A16 password recovery covers generic request reset and rate-limit recovery", async ({
   page,
 }) => {

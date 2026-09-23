@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import "./local-identity-mfa.css";
+import "./local-identity-recovery.css";
 import "./local-identity-reset.css";
 import "./local-identity-verification.css";
 import { useRoute, useRouter } from "vue-router";
@@ -649,6 +650,87 @@ onBeforeUnmount(() => clearMfaMaterial());
     <footer class="p06-reset-boundary">不显示 token · 不自动登录 · 不新增确认密码字段</footer>
   </main>
   <main
+    v-else-if="mode === 'forgot'"
+    class="p04-recovery-page"
+    data-testid="password-recovery"
+    :data-state="requestState"
+    :aria-busy="requestState === 'loading'"
+  >
+    <header class="p04-recovery-top">
+      <RouterLink to="/" aria-label="ScoutOps 首页">ScoutOps</RouterLink>
+      <strong>账号恢复</strong>
+      <small>公开入口 · 不判断账号是否存在</small>
+    </header>
+    <section class="p04-recovery-shell">
+      <aside class="p04-recovery-boundary">
+        <p>PASSWORD RECOVERY</p>
+        <h1>请求恢复说明，<br />不暴露账号状态。</h1>
+        <span>邮箱存在与否都使用相同受理口径；请按实际错误提示处理。</span>
+        <footer>无短信 · 无人工核验 · 无倒计时</footer>
+      </aside>
+      <section class="p04-recovery-workspace" aria-label="密码恢复请求" aria-live="polite">
+        <header>
+          <p>恢复请求</p>
+          <h2>找回密码</h2>
+          <span>输入用于接收一次性验证链接的邮箱。</span>
+        </header>
+        <div
+          v-if="['error', 'rate_limited', 'blocked'].includes(requestState)"
+          class="p04-recovery-notice p04-recovery-error"
+          role="alert"
+        >
+          <strong>{{
+            requestState === "rate_limited"
+              ? "请求过于频繁"
+              : requestState === "blocked"
+                ? "身份服务暂不可用"
+                : "请求未完成"
+          }}</strong>
+          <span>{{ message || "当前无法完成恢复请求。" }}</span>
+          <small v-if="actionHint">{{ actionHint }}</small>
+          <small v-if="requestId">请求标识：{{ requestId }}</small>
+          <small v-if="traceId && traceId !== requestId">链路标识：{{ traceId }}</small>
+        </div>
+        <div
+          v-else-if="requestState === 'success' && message"
+          class="p04-recovery-notice p04-recovery-success"
+          role="status"
+        >
+          <strong>请求已受理</strong>
+          <span>{{ message }}</span>
+          <small v-if="requestId">请求标识：{{ requestId }}</small>
+        </div>
+        <form class="p04-recovery-form" @submit.prevent="submit">
+          <label for="p04-recovery-email">
+            <span>邮箱</span>
+            <small id="p04-recovery-email-help">不论账号是否存在，反馈都保持一致。</small>
+          </label>
+          <input
+            id="p04-recovery-email"
+            v-model="email"
+            type="email"
+            autocomplete="email"
+            required
+            maxlength="254"
+            aria-describedby="p04-recovery-email-help"
+            placeholder="name@company.com"
+          />
+          <button class="p04-recovery-primary" type="submit" :disabled="requestState === 'loading'">
+            {{ requestState === "loading" ? "正在安全处理…" : "发送重置说明" }}
+          </button>
+        </form>
+        <footer class="p04-recovery-footer">
+          <button type="button" @click="switchMode('login')">返回登录</button>
+          <RouterLink to="/security/mfa">了解 MFA 设置</RouterLink>
+        </footer>
+      </section>
+    </section>
+    <footer class="p04-recovery-disclosure">
+      <strong>反馈边界</strong>
+      <span>202 表示请求已受理，不表示邮件已经送达或账号存在。</span>
+    </footer>
+  </main>
+  <main
     v-else-if="mode === 'verify'"
     class="p05-verification-page"
     data-testid="email-verification"
@@ -768,7 +850,6 @@ onBeforeUnmount(() => clearMfaMaterial());
           <h2>{{ title }}</h2>
           <span v-if="mode === 'login'">使用已验证的邮箱或唯一用户名登录</span>
           <span v-else-if="mode === 'register'">先创建账号，再完成邮箱验证</span>
-          <span v-else-if="mode === 'forgot'">无论账号是否存在，页面提示保持一致</span>
           <span v-else-if="mode === 'mfa-challenge'">短时挑战保存在浏览器安全凭证中</span>
           <span v-else-if="mode === 'security-setup'">完成全部步骤前，业务后端保持拒绝</span>
         </div>
@@ -815,7 +896,7 @@ onBeforeUnmount(() => clearMfaMaterial());
         </div>
 
         <form
-          v-if="['login', 'register', 'forgot', 'reset', 'mfa-challenge'].includes(mode)"
+          v-if="['login', 'register', 'reset', 'mfa-challenge'].includes(mode)"
           @submit.prevent="submit"
         >
           <label v-if="mode === 'mfa-challenge'"
@@ -881,11 +962,9 @@ onBeforeUnmount(() => clearMfaMaterial());
                   ? "登录"
                   : mode === "register"
                     ? "创建账号"
-                    : mode === "forgot"
-                      ? "发送重置说明"
-                      : mode === "mfa-challenge"
-                        ? "验证并登录"
-                        : "更新密码"
+                    : mode === "mfa-challenge"
+                      ? "验证并登录"
+                      : "更新密码"
             }}
           </button>
         </form>
