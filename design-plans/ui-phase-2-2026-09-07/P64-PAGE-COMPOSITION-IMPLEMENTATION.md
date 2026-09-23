@@ -18,4 +18,8 @@
 
 ## 发布记录
 
-提交、推送、部署SHA、线上health/version、路由和专属资源结果将在P64实施完成后补充。静态UI只需发布新版前端资产，不需要重启Node API或Python crawler。
+实施提交 `72ba3c6d84c7a9f9f96dcea0dcb528ea4a9d1af5` 已推送至 `origin/main`，并通过 `python scripts/deploy-baota.py` 发布。部署器执行22工作区构建、既有迁移集合检查/执行及固定宝塔发布流程；本任务没有新增迁移。宝塔受控停启Node并重载Nginx，Python crawler代码未改。上传临时包已删除。
+
+线上 `GET /api/v1/health/live`、`ready`、`version`、`/platform-admin/operations` 均返回HTTP 200；version的`build_sha`为 `72ba3c6d84c7a9f9f96dcea0dcb528ea4a9d1af5`。本页资源 `/assets/BackupRecoveryCenter-BH-tvTVe.js`（12363 bytes）和 `/assets/BackupRecoveryCenter-Da8SN1ub.css`（16145 bytes）均返回HTTP 200。线上验证只证明发布版本与静态入口/资源可达，不等于受限账号权限、生产备份数据、审计或隔离恢复演练验收。
+
+全局 `verify:frontend-budget` 本次仍报告主CSS和 `NavigationShell` JS分别超过预算；它们不阻断本次定向页面构建/发布，细节已记录在“验证”。
