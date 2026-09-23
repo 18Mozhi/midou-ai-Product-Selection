@@ -159,17 +159,21 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-  <section class="mysql-resilience" :data-state="state">
+  <section class="mysql-resilience mysql-resilience--c" :data-state="state">
     <header class="mysql-resilience__hero">
       <div>
-        <p>单主数据库</p>
-        <h2>数据库 5.7 单主韧性</h2>
+        <p>ScoutOps / 数据库运行</p>
+        <h1>MySQL 运行核验</h1>
         <span>惠州单机只运行一个宝塔 MySQL 主实例；不启用读副本、负载均衡或备用服务器。</span>
       </div>
       <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
         {{ refreshing ? "正在刷新…" : "刷新运行事实" }}
       </button>
     </header>
+
+    <aside class="p68-boundary" aria-label="运行边界">
+      <b>惠州同机 / 宝塔受管</b><span>固定单主；不新增读副本、负载均衡或备用服务器。</span>
+    </aside>
     <section
       v-if="data && refreshFailure"
       class="mysql-resilience__refresh-notice"
@@ -188,7 +192,6 @@ onBeforeUnmount(() => {
       class="mysql-resilience__state"
       aria-live="polite"
     >
-      <i></i>
       <div>
         <b>{{ verdict[0] }}</b>
         <p>{{ verdict[1] }}</p>
@@ -201,7 +204,6 @@ onBeforeUnmount(() => {
       class="mysql-resilience__state mysql-resilience__state--danger"
       aria-live="polite"
     >
-      <strong>!</strong>
       <div>
         <b>{{ verdict[0] }}</b>
         <p>{{ verdict[1] }}</p>
@@ -211,143 +213,221 @@ onBeforeUnmount(() => {
       ><button v-else type="button" :disabled="refreshing" @click="load">重新核验</button>
     </section>
     <template v-else-if="data">
-      <section class="mysql-resilience__verdict" :data-verdict="state">
-        <div>
-          <small>S0 · {{ state.toUpperCase() }}</small
-          ><strong>{{ verdict[0] }}</strong>
-        </div>
-        <p>{{ verdict[1] }}</p>
-        <em>单主 · 运行状态已核对</em>
-      </section>
-      <section class="mysql-resilience__metrics">
-        <article>
-          <span>连接使用</span><strong>{{ percent(data.connections.usage_basis_points) }}</strong
-          ><small>{{ data.connections.connected }} / {{ data.connections.maximum }}</small>
-        </article>
-        <article>
-          <span>数据盘使用</span><strong>{{ percent(data.storage.usage_basis_points) }}</strong
-          ><small
-            >{{ bytes(data.storage.used_bytes) }} / {{ bytes(data.storage.total_bytes) }}</small
-          >
-        </article>
-        <article>
-          <span>缓冲池命中</span
-          ><strong>{{ percent(data.io.buffer_pool_hit_rate_basis_points) }}</strong
-          ><small>{{ bytes(data.io.buffer_pool_data_bytes) }} 数据</small>
-        </article>
-        <article>
-          <span>慢查询速率</span><strong>{{ data.slow_queries.per_minute.toFixed(2) }}</strong
-          ><small>次/分钟 · 阈值 {{ data.slow_queries.long_query_time_seconds }} 秒</small>
-        </article>
-      </section>
-      <div class="mysql-resilience__layout">
-        <section class="mysql-resilience__panel">
-          <header>
-            <div>
-              <p>持久化保障</p>
-              <h3>持久化与单主合同</h3>
-            </div>
-            <span>宝塔管理</span>
-          </header>
-          <dl>
-            <div>
-              <dt>二进制日志</dt>
-              <dd>
-                {{ data.durability.log_bin_enabled ? "已启用" : "未启用" }}
-              </dd>
-            </div>
-            <div>
-              <dt>数据库日志格式</dt>
-              <dd>{{ data.durability.binlog_format }}</dd>
-            </div>
-            <div>
-              <dt>事务日志刷盘</dt>
-              <dd>{{ data.durability.innodb_flush_log_at_trx_commit }}</dd>
-            </div>
-            <div>
-              <dt>数据库日志同步</dt>
-              <dd>{{ data.durability.sync_binlog }}</dd>
-            </div>
-            <div>
-              <dt>副本</dt>
-              <dd>{{ data.replica_enabled ? "已启用" : "未启用" }}</dd>
-            </div>
-          </dl>
+      <section class="p68-paper">
+        <section class="p68-conclusion" :data-verdict="state">
+          <div>
+            <small>S0 / {{ state }}</small>
+            <h2>
+              {{
+                state === "ready"
+                  ? "当前单主韧性门满足"
+                  : state === "warning"
+                    ? "当前观测存在预警"
+                    : "当前单主韧性门阻断"
+              }}
+            </h2>
+            <p>返回 {{ data.findings.length }} 项发现；ready 不替代真实恢复或生产验收。</p>
+          </div>
+          <div>
+            <b>观测时间</b><time :datetime="data.observed_at">{{ time(data.observed_at) }}</time>
+          </div>
         </section>
-        <aside class="mysql-resilience__panel">
-          <header>
-            <div>
-              <p>恢复能力</p>
-              <h3>同机加密恢复事实</h3>
-            </div>
-          </header>
-          <dl>
-            <div>
-              <dt>状态</dt>
-              <dd>{{ data.recovery.status }}</dd>
-            </div>
-            <div>
-              <dt>实际最多可丢失时间</dt>
-              <dd>{{ data.recovery.actual_rpo_minutes ?? "—" }} 分钟</dd>
-            </div>
-            <div>
-              <dt>实际恢复耗时</dt>
-              <dd>{{ data.recovery.actual_rto_minutes ?? "—" }} 分钟</dd>
-            </div>
-            <div>
-              <dt>演练距今</dt>
-              <dd>{{ data.recovery.drill_age_days ?? "—" }} 天</dd>
-            </div>
-            <div>
-              <dt>备用服务器</dt>
-              <dd>{{ data.backup_server_used ? "已启用" : "未启用" }}</dd>
-            </div>
-          </dl>
-        </aside>
-      </div>
-      <section class="mysql-resilience__panel mysql-resilience__impact">
-        <header>
-          <div>
-            <p>业务影响</p>
-            <h3>慢查询与锁等待影响</h3>
-          </div>
-          <span>不把累计值冒充当前延迟</span>
-        </header>
-        <div>
-          <article
-            :data-severity="findingSeverity(['mysql_slow_query_warning', 'mysql_slow_query_stop'])"
-          >
-            <strong>慢查询</strong><b>{{ data.slow_queries.per_minute.toFixed(2) }} 次/分钟</b
-            ><span>{{ slowQueryImpact }}</span>
-          </article>
-          <article :data-severity="findingSeverity(['mysql_row_lock_waits'])">
-            <strong>行锁等待</strong><b>{{ data.io.innodb_row_lock_waits }} 次累计</b
-            ><span>{{ rowLockImpact }}；当前运行线程 {{ data.connections.running }}。</span>
-          </article>
-        </div>
-      </section>
-      <section class="mysql-resilience__panel mysql-resilience__findings">
-        <header>
-          <div>
-            <p>失败时拒绝放行</p>
-            <h3>告警与阻断项</h3>
-          </div>
-          <span>{{ data.findings.length }} 项</span>
-        </header>
-        <div v-if="data.findings.length">
-          <article
-            v-for="(item, index) in data.findings"
-            :key="item.code"
-            :data-severity="item.severity"
-          >
-            <span>{{ String(index + 1).padStart(2, "0") }}</span
+        <section v-if="data.findings.length" class="p68-findings">
+          <h2>
+            当前发现 <small>{{ data.findings.length }} 项</small>
+          </h2>
+          <article v-for="item in data.findings" :key="item.code" :data-severity="item.severity">
+            <b>{{ item.severity === "blocked" ? "阻断" : "预警" }}</b
             ><code>{{ item.code }}</code>
             <p>{{ item.action_hint }}</p>
           </article>
+          <small>提示仅供人工核对，不会执行停任务、调优、迁移或恢复。</small>
+        </section>
+        <div class="p68-evidence">
+          <div class="p68-runtime">
+            <section class="p68-section">
+              <header>
+                <h2>资源观测</h2>
+                <p>连接和文件系统各自按对应 finding 显示。</p>
+              </header>
+              <div class="p68-resource-grid">
+                <article
+                  class="p68-resource"
+                  data-resource="connections"
+                  :data-severity="
+                    findingSeverity(['mysql_connections_warning', 'mysql_connections_stop'])
+                  "
+                >
+                  <h3>连接使用</h3>
+                  <strong>{{
+                    data.findings.some((item) => item.code === "mysql_unavailable")
+                      ? "未取得观测"
+                      : data.connections.maximum > 0
+                        ? percent(data.connections.usage_basis_points)
+                        : "上限 / 容量未知"
+                  }}</strong>
+                  <p>{{ data.connections.connected }} / {{ data.connections.maximum }}</p>
+                  <div
+                    v-if="
+                      !data.findings.some((item) => item.code === 'mysql_unavailable') &&
+                      data.connections.maximum > 0
+                    "
+                    class="p68-meter"
+                    :data-level="
+                      findingSeverity(['mysql_connections_warning', 'mysql_connections_stop'])
+                    "
+                    aria-hidden="true"
+                  >
+                    <span :style="{ width: percent(data.connections.usage_basis_points) }"></span>
+                  </div>
+                  <small v-if="data.connections.maximum <= 0"
+                    >接口比例为未知上限约定，不是实测满额。</small
+                  ><small v-else>已连接为瞬时计数，不是查询吞吐量。</small>
+                </article>
+                <article
+                  class="p68-resource"
+                  data-resource="storage"
+                  :data-severity="
+                    findingSeverity(['mysql_data_capacity_warning', 'mysql_data_capacity_stop'])
+                  "
+                >
+                  <h3>数据盘使用</h3>
+                  <strong>{{
+                    data.findings.some((item) => item.code === "mysql_unavailable")
+                      ? "未取得观测"
+                      : data.storage.total_bytes > 0
+                        ? percent(data.storage.usage_basis_points)
+                        : "上限 / 容量未知"
+                  }}</strong>
+                  <p>
+                    {{ bytes(data.storage.used_bytes) }} / {{ bytes(data.storage.total_bytes) }}
+                  </p>
+                  <div
+                    v-if="
+                      !data.findings.some((item) => item.code === 'mysql_unavailable') &&
+                      data.storage.total_bytes > 0
+                    "
+                    class="p68-meter"
+                    :data-level="
+                      findingSeverity(['mysql_data_capacity_warning', 'mysql_data_capacity_stop'])
+                    "
+                    aria-hidden="true"
+                  >
+                    <span :style="{ width: percent(data.storage.usage_basis_points) }"></span>
+                  </div>
+                  <small v-if="data.storage.total_bytes <= 0"
+                    >接口比例为未知容量约定，不是实测满额。</small
+                  ><small v-else>数据目录所在文件系统，不等于数据库表体积。</small>
+                </article>
+              </div>
+            </section>
+            <section class="p68-section">
+              <header>
+                <h2>速率、累计与瞬时</h2>
+                <p>不同口径分开，不组合成“当前性能分数”。</p>
+              </header>
+              <dl class="p68-measurements">
+                <div>
+                  <dt>慢查询近似速率</dt>
+                  <dd>{{ data.slow_queries.per_minute.toFixed(2) }} 次/分钟</dd>
+                  <p>累计非负增量除以至少一分钟间隔；无上次观测时按运行分钟平均。</p>
+                </div>
+                <div>
+                  <dt>累计缓冲池命中</dt>
+                  <dd>{{ percent(data.io.buffer_pool_hit_rate_basis_points) }}</dd>
+                  <p>来自启动以来 reads / requests；零 requests 的 100% 不能独立证明实际命中。</p>
+                </div>
+                <div>
+                  <dt>行锁等待</dt>
+                  <dd>{{ data.io.innodb_row_lock_waits }} 次累计</dd>
+                  <p>{{ rowLockImpact }}</p>
+                </div>
+                <div>
+                  <dt>日志等待</dt>
+                  <dd>{{ data.io.innodb_log_waits }} 次累计</dd>
+                  <p>累计等待不能直接表示当前磁盘延迟。</p>
+                </div>
+                <div>
+                  <dt>运行线程</dt>
+                  <dd>{{ data.connections.running }} 个</dd>
+                  <p>当前状态计数，不是活跃用户数或容量。</p>
+                </div>
+              </dl>
+            </section>
+          </div>
+          <aside class="p68-recovery">
+            <header>
+              <h2>同机恢复证据</h2>
+              <p>与运行资源独立核对，不是高可用或异地容灾。</p>
+            </header>
+            <div class="p68-recovery-state">
+              <b>{{ data.recovery.status }}</b
+              ><small>仍需与总体 findings 对照。</small>
+            </div>
+            <dl>
+              <div>
+                <dt>RPO / 最多可丢失时间</dt>
+                <dd>
+                  {{ data.recovery.actual_rpo_minutes ?? "未记录"
+                  }}<small>{{
+                    data.recovery.actual_rpo_minutes == null ? "未知不填0" : "分钟"
+                  }}</small>
+                </dd>
+              </div>
+              <div>
+                <dt>RTO / 实际恢复耗时</dt>
+                <dd>
+                  {{ data.recovery.actual_rto_minutes ?? "未记录"
+                  }}<small>{{
+                    data.recovery.actual_rto_minutes == null ? "未知不填0" : "分钟"
+                  }}</small>
+                </dd>
+              </div>
+              <div>
+                <dt>演练距今</dt>
+                <dd>
+                  {{ data.recovery.drill_age_days ?? "未记录"
+                  }}<small>{{ data.recovery.drill_age_days == null ? "未知不填0" : "天" }}</small>
+                </dd>
+              </div>
+            </dl>
+            <p class="p68-note">
+              探针按15分钟 RPO、240分钟 RTO、90天演练检查；运行 policy
+              还会再次检查。页面不发起备份或恢复。
+            </p>
+          </aside>
         </div>
-        <div v-else class="mysql-resilience__clear">
-          <b>当前无数据库韧性阻断</b><span>连接、持久化、慢查询与恢复功能均处于可用状态。</span>
-        </div>
+        <section class="p68-section p68-durability">
+          <header>
+            <h2>持久化实际值与单主合同</h2>
+            <p>目标用于对照，不是可编辑配置表。</p>
+          </header>
+          <div class="p68-contract p68-contract--head">
+            <span>核对项</span><span>当前返回</span><span>合同目标</span>
+          </div>
+          <div class="p68-contract">
+            <code>二进制日志</code
+            ><span>{{ data.durability.log_bin_enabled ? "已启用" : "未启用" }}</span
+            ><span>启用</span>
+          </div>
+          <div class="p68-contract">
+            <code>binlog_format</code><span>{{ data.durability.binlog_format }}</span
+            ><span>ROW</span>
+          </div>
+          <div class="p68-contract">
+            <code>innodb_flush_log_at_trx_commit</code
+            ><span>{{ data.durability.innodb_flush_log_at_trx_commit }}</span
+            ><span>2</span>
+          </div>
+          <div class="p68-contract">
+            <code>sync_binlog</code><span>{{ data.durability.sync_binlog }}</span
+            ><span>1</span>
+          </div>
+          <p class="p68-note">
+            固定单主/无副本是边界，不覆盖只读主库或非预期副本
+            findings；接口不返回主机、账号、目录、binlog 文件或 SQL。
+          </p>
+        </section>
       </section>
       <footer class="mysql-resilience__footer">
         <span>观测 {{ time(data.observed_at) }}</span
@@ -358,3 +438,7 @@ onBeforeUnmount(() => {
     </template>
   </section>
 </template>
+
+<style>
+@import "../mysql-resilience-c.css";
+</style>

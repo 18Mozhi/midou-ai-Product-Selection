@@ -90,11 +90,11 @@
 
 最新视觉：[批66 P69实际Vue C组合](P69-PAGE-COMPOSITION-BATCH66.md)，r6双端16图/174来源；手机蓝色运行边界、目录水位与活动索引分区、抽样完整性、同机恢复证据的默认组合，以及503保留快照、403清空快照与两个真实Tab焦点待审。不包含追踪、真实文件系统、审计、恢复或生产；180项/52本地GET通过。
 
-最新视觉：[批65 P68键盘焦点](P68-PAGE-COMPOSITION-BATCH65.md)，r15手机局部8图/173来源；顶部“刷新运行事实”与保留快照后的“重新核验”真实Tab焦点及3px蓝色轮廓待审。不包含整页、真实键盘辅助技术、真实MySQL/权限或生产；45项/13本地GET通过，局部状态取景时固定底部导航仅隐藏视觉层。
+P68 页面视觉与已展示的局部控件组合已通过用户审核并接入真实 Vue，桌面/手机布局与实施门禁见[P68实施记录](P68-PAGE-COMPOSITION-IMPLEMENTATION.md)。r15焦点图册及批65状态稿保留为历史设计证据；本地检查不替代真实MySQL、生产RBAC/审计、恢复演练或M07-03验收。
 
-最新视觉：[批65 P68读取状态](P68-PAGE-COMPOSITION-BATCH65.md)，r15手机局部8图/173来源；“刷新未完成”保留旧快照的说明、技术详情和重新核验，以及“没有平台运维权限”清空快照后的说明、技术详情和操作入口待审。不包含默认布局、真实MySQL、权限、审计、恢复或生产；45项/13本地GET通过，固定底部导航仅在局部状态取景时隐藏视觉层。
+P68 的503快照保留、403清空快照与读请求追踪状态已按用户授权纳入交付；实际 Vue 验证与证据边界见[P68实施记录](P68-PAGE-COMPOSITION-IMPLEMENTATION.md)。历史局部截图仍不证明真实数据库或权限策略。
 
-最新视觉：[批65 P68实际Vue C组合](P68-PAGE-COMPOSITION-BATCH65.md)，r7双端8图/173来源；手机蓝色运行边界、资源、恢复证据与持久化实际/目标组合待审，不含失败状态、真实MySQL、权限、审计、恢复或生产。
+P68 实际 Vue C 默认页与单主边界、资源/恢复/持久化证据组合已获用户通过并接入生产；部署范围不包含 MySQL、权限、审计或恢复策略变更，详见[P68实施记录](P68-PAGE-COMPOSITION-IMPLEMENTATION.md)。
 
 最新视觉：[批64 P67读取状态语义](P67-READ-SEMANTICS-BATCH64.md)，r3双端22图/173来源；手机首次失败白区的标题、说明、失败追踪与底部“重新核验”待审，不含整页、其他状态、真实读屏、权限、Redis、审计或生产。44相关测试/1694浏览器检查、类型构建/253预算通过；此前待审和已批准范围不自动改变。
 
@@ -343,7 +343,7 @@ r1/r3原证据保留诊断，r2部分图已清理；完整页面/调用方/真�
 | P65 | 发布管理 · `/platform-admin/releases` | [规格](page-specs/P65.md) | [release](design/release-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P66 | 服务拓扑 · `/platform-admin/topology` | [规格](page-specs/P66.md) | [topology](design/topology-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P67 | Redis 运行 · `/platform-admin/redis` | [规格](page-specs/P67.md) | [redis](design/redis-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
-| P68 | MySQL 运行 · `/platform-admin/mysql` | [规格](page-specs/P68.md) | [mysql](design/mysql-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
+| P68 | MySQL 运行 · `/platform-admin/mysql` | [规格](page-specs/P68.md) | [mysql](design/mysql-direction-c/README.md) | C 页面及已展示状态/控件组合已通过并部署；真实 MySQL/RBAC/审计/恢复及全站验收仍未证明 |
 | P69 | 文件存储 · `/platform-admin/files` | [规格](page-specs/P69.md) | [files](design/files-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P70 | 采集调度 · `/platform-admin/crawler-scheduler` | [规格](page-specs/P70.md) | [scheduler](design/scheduler-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P71 | 容量边界 · `/platform-admin/capacity` | [规格](page-specs/P71.md) | [capacity](design/capacity-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |

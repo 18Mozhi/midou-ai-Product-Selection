@@ -1,0 +1,783 @@
+/* P68 route-scoped C layout; inherited shell composition is isolated to this page. */
+html body:has(#app .mysql-resilience--c) {
+  background: #f3f6fb;
+  color: #172d4c;
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-rows: 76px minmax(0, 1fr);
+  min-height: 100dvh;
+  padding: 0;
+  background: #f3f6fb;
+  color: #172d4c;
+  font-family: inherit;
+}
+html body:has(#app .mysql-resilience--c) #app .role-topbar {
+  grid-column: 1 / -1;
+  position: relative;
+  inset: auto;
+  height: 76px;
+  min-height: 0;
+  padding: 0 24px;
+  border: 0;
+  border-bottom: 1px solid #d8e2ef;
+  background: #fff;
+}
+html body:has(#app .mysql-resilience--c) #app .role-brand {
+  gap: 12px;
+  color: #172d4c;
+}
+html body:has(#app .mysql-resilience--c) #app .role-brand > span {
+  border: 0;
+  border-radius: 8px;
+  background: #244bb0;
+  color: #fff;
+}
+html body:has(#app .mysql-resilience--c) #app .role-brand > b {
+  font-family: inherit;
+  font-size: 16px;
+  letter-spacing: 0.06em;
+}
+html body:has(#app .mysql-resilience--c) #app .role-brand > em {
+  color: #536985;
+  font-size: 13px;
+  letter-spacing: 0;
+}
+html body:has(#app .mysql-resilience--c) #app .role-top-actions :is(a, button) {
+  min-height: 44px;
+  min-width: 44px;
+  border: 1px solid #d8e2ef;
+  border-radius: 7px;
+  background: #fff;
+  color: #172d4c;
+}
+html body:has(#app .mysql-resilience--c) #app .role-sidebar {
+  grid-column: 1;
+  grid-row: 2;
+  position: sticky;
+  inset: auto;
+  top: 0;
+  align-self: start;
+  box-sizing: border-box;
+  width: 240px;
+  height: calc(100dvh - 76px);
+  padding: 22px 16px;
+  overflow-y: auto;
+  border: 0;
+  border-radius: 0;
+  background: #244bb0;
+  color: #fff;
+  transform: none;
+  transition: none;
+}
+html body:has(#app .mysql-resilience--c) #app .role-sidebar-head {
+  width: auto;
+  padding: 0 8px 20px;
+  gap: 7px;
+  border: 0;
+}
+html body:has(#app .mysql-resilience--c) #app .role-sidebar-head strong {
+  color: #fff;
+  font:
+    700 18px/1.5 "Microsoft YaHei",
+    sans-serif;
+}
+html body:has(#app .mysql-resilience--c) #app .role-sidebar-head small {
+  color: #e2ebff;
+  font:
+    13px/1.7 "Microsoft YaHei",
+    sans-serif;
+  white-space: normal;
+}
+html body:has(#app .mysql-resilience--c) #app .role-menu-search {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  margin-bottom: 16px;
+  padding: 0 10px;
+  border: 1px solid #91afea;
+  border-radius: 7px;
+  background: #fff;
+  color: #172d4c;
+}
+html body:has(#app .mysql-resilience--c) #app .role-menu-search input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  border: 0;
+  background: #fff;
+  color: #172d4c;
+  font:
+    16px/1.5 "Microsoft YaHei",
+    sans-serif;
+}
+html body:has(#app .mysql-resilience--c) #app .role-nav-groups {
+  display: grid;
+  flex: none;
+  gap: 8px;
+  overflow: visible;
+}
+html body:has(#app .mysql-resilience--c) #app .role-nav-groups details,
+html body:has(#app .mysql-resilience--c) #app .role-nav-menu {
+  border: 0;
+}
+html body:has(#app .mysql-resilience--c) #app .role-nav-groups details > summary {
+  height: auto;
+  min-height: 44px;
+  padding: 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+html body:has(#app .mysql-resilience--c) #app .role-nav-groups summary:hover,
+html body:has(#app .mysql-resilience--c) #app .role-nav-menu a:hover {
+  background: #365fc6;
+}
+html body:has(#app .mysql-resilience--c) #app .role-nav-menu {
+  position: static;
+  width: 100%;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+html body:has(#app .mysql-resilience--c) #app .role-nav-menu a {
+  min-width: 0;
+  min-height: 44px;
+  margin: 3px 0;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #eef3ff;
+  font-size: 14px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-nav-menu a[aria-current="page"] {
+  background: #fff;
+  color: #244bb0;
+  font-weight: 700;
+}
+html body:has(#app .mysql-resilience--c) #app .role-sidebar-utility {
+  display: grid;
+  margin: 24px 0 0;
+  border: 0;
+}
+html body:has(#app .mysql-resilience--c) #app .role-sidebar-utility a {
+  width: auto;
+  min-height: 44px;
+  padding: 10px 8px;
+  border: 0;
+  border-top: 1px solid #7595db;
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  white-space: normal;
+}
+html body:has(#app .mysql-resilience--c) #app .role-content {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 24px 32px 48px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-context-rail {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0 0 24px;
+  padding: 12px 0;
+  border: 0;
+  border-block: 1px solid #d8e2ef;
+  border-radius: 0;
+  background: transparent;
+}
+html body:has(#app .mysql-resilience--c) #app .role-context-rail > div {
+  padding: 0;
+  border: 0;
+}
+html body:has(#app .mysql-resilience--c) #app .role-context-rail small {
+  color: #536985;
+  font:
+    13px/1.5 "Microsoft YaHei",
+    sans-serif;
+}
+html body:has(#app .mysql-resilience--c) #app .role-context-rail strong {
+  margin-top: 3px;
+  color: #172d4c;
+  font-size: 14px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-context-drawer,
+html body:has(#app .mysql-resilience--c) #app .role-mobile-nav {
+  display: none;
+}
+html body:has(#app .mysql-resilience--c) #app .platform-secondary-nav {
+  gap: 0;
+  border: 1px solid #c7d3e4;
+  background: #fff;
+}
+html body:has(#app .mysql-resilience--c) #app .platform-secondary-nav a {
+  min-height: 44px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: #fff;
+  color: #526278;
+  box-shadow: none;
+}
+html body:has(#app .mysql-resilience--c) #app .platform-secondary-nav a[aria-current="page"] {
+  border-bottom-color: #1249b8;
+  background: #edf3ff;
+  color: #1249b8;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  :is(a, button, input, summary):focus-visible {
+  outline: 3px solid #4878e9;
+  outline-offset: 3px;
+}
+@media (max-width: 1100px) and (min-width: 841px) {
+  html body:has(#app .mysql-resilience--c) #app .role-shell {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-sidebar {
+    width: 220px;
+    padding-inline: 12px;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-content {
+    padding-inline: 20px;
+  }
+}
+@media (max-width: 840px) {
+  html body:has(#app .mysql-resilience--c) #app .role-shell {
+    display: block;
+    padding: 0 0 calc(80px + env(safe-area-inset-bottom));
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-topbar {
+    height: 64px;
+    padding: 0 12px;
+    gap: 8px;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-brand {
+    margin-right: auto;
+    gap: 0;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-brand > :is(b, em) {
+    display: none;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-menu-toggle {
+    display: inline-flex;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-content {
+    padding: 18px 16px 32px;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-context-rail {
+    display: none;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-context-drawer {
+    display: block;
+    margin-bottom: 20px;
+    border: 1px solid #d8e2ef;
+    border-radius: 7px;
+    background: #fff;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-context-drawer > div {
+    grid-template-columns: 1fr 1fr;
+  }
+  html body:has(#app .mysql-resilience--c) #app .platform-secondary-nav {
+    display: flex;
+    overflow-x: auto;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 100;
+    width: min(340px, calc(100vw - 32px));
+    height: 100dvh;
+    max-height: 100dvh;
+    padding: 16px;
+    overflow-y: auto;
+    box-shadow: 12px 0 32px rgb(12 29 54 / 24%);
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-sidebar:not(.is-open) {
+    display: none;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-mobile-nav {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 90;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    min-height: 72px;
+    border: 0;
+    border-top: 1px solid #d8e2ef;
+    background: #fff;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-mobile-nav :is(a, button, i) {
+    color: #536985;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-mobile-nav [aria-current="page"] {
+    background: #e8efff;
+    color: #244bb0;
+  }
+}
+
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c {
+  --p68-blue: #1748a0;
+  --p68-ink: #182d4a;
+  --p68-line: #dce4ee;
+  --p68-muted: #52647b;
+  color: var(--p68-ink);
+  font:
+    16px/1.65 "Microsoft YaHei",
+    sans-serif;
+  display: grid;
+  gap: 20px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c * {
+  box-sizing: border-box;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c h1,
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c h2,
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c h3,
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c p,
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c dl,
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c dd {
+  margin: 0;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c h1 {
+  font-size: 30px;
+  line-height: 1.35;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c h2 {
+  font-size: 21px;
+  line-height: 1.45;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c h3 {
+  font-size: 17px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c button,
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c summary,
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c a {
+  min-height: 44px;
+  font: inherit;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c button {
+  background: var(--p68-blue);
+  border: 1px solid var(--p68-blue);
+  border-radius: 4px;
+  color: #fff;
+  padding: 9px 16px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c button:focus-visible,
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  summary:focus-visible {
+  outline: 3px solid #2465d7;
+  outline-offset: 3px;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .mysql-resilience__hero {
+  background: var(--p68-blue);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: #fff;
+  padding: 24px 28px;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .mysql-resilience__hero
+  p {
+  color: #d9e6ff;
+  letter-spacing: 0;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .mysql-resilience__hero
+  span {
+  color: #e2ebff;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .mysql-resilience__hero
+  button {
+  background: #fff;
+  color: var(--p68-blue);
+  border-color: #fff;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-review-note {
+  color: var(--p68-muted);
+  font-size: 13px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-boundary {
+  background: #edf4ff;
+  border-left: 3px solid var(--p68-blue);
+  display: flex;
+  gap: 14px;
+  padding: 12px 16px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-boundary span {
+  color: var(--p68-muted);
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-paper {
+  background: #fff;
+  border: 1px solid var(--p68-line);
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-conclusion {
+  background: #f6f9ff;
+  border-bottom: 1px solid var(--p68-line);
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 28px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-conclusion h2 {
+  font-size: 26px;
+  margin-top: 5px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-conclusion p,
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c small,
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c dt {
+  color: var(--p68-muted);
+  font-size: 13px;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .p68-conclusion
+  > div:last-child {
+  text-align: right;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c time {
+  display: block;
+  margin-top: 6px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-findings,
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-section {
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--p68-line);
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .p68-findings
+  article {
+  background: #fff5f5;
+  border-left: 3px solid #b02d3c;
+  margin: 12px 0;
+  padding: 14px 16px;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .p68-findings
+  article[data-severity="warning"] {
+  background: #fffbf1;
+  border-color: #875300;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-findings code {
+  display: block;
+  color: var(--p68-muted);
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-findings p {
+  margin-top: 6px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-evidence {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-resource-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .p68-resource
+  strong {
+  display: block;
+  font:
+    700 30px/1.4 Consolas,
+    monospace;
+  margin: 10px 0 6px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-meter {
+  background: #e5ecf6;
+  border-radius: 3px;
+  height: 10px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-meter span {
+  background: var(--p68-blue);
+  display: block;
+  height: 100%;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .p68-meter[data-level="warning"]
+  span {
+  background: #875300;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .p68-meter[data-level="blocked"]
+  span {
+  background: #b02d3c;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .p68-measurements
+  > div {
+  border-bottom: 1px solid var(--p68-line);
+  padding: 17px 0;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .p68-measurements
+  dd {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 8px 0;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-recovery {
+  background: #f9fbfe;
+  border-left: 1px solid var(--p68-line);
+  padding: 26px 28px;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .p68-recovery
+  header
+  p {
+  color: var(--p68-muted);
+  font-size: 14px;
+  margin: 6px 0 18px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-recovery-state {
+  border-block: 1px solid var(--p68-line);
+  padding: 14px 0;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .p68-recovery-state
+  b {
+  display: block;
+  font-size: 21px;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .p68-recovery
+  dl
+  > div {
+  border-bottom: 1px solid var(--p68-line);
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 0;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-recovery dd {
+  font-size: 21px;
+  font-weight: 700;
+  text-align: right;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .p68-recovery
+  dd
+  small {
+  display: block;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-note {
+  background: #f1f5fa;
+  border-left: 3px solid #8aa0bc;
+  color: var(--p68-muted);
+  font-size: 14px;
+  margin-top: 16px;
+  padding: 12px 14px;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-contract {
+  border-bottom: 1px solid var(--p68-line);
+  display: grid;
+  gap: 20px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr) minmax(0, 0.8fr);
+  padding: 14px 0;
+}
+html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-contract--head {
+  color: var(--p68-muted);
+  font-size: 13px;
+  padding-top: 0;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .mysql-resilience__footer {
+  color: var(--p68-muted);
+  font-size: 13px;
+  justify-content: flex-start;
+  text-align: left;
+}
+html
+  body:has(#app .mysql-resilience--c)
+  #app
+  .role-shell
+  .mysql-resilience--c
+  .mysql-resilience__footer
+  strong {
+  color: var(--p68-muted);
+}
+@media (max-width: 1050px) {
+  html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-evidence {
+    grid-template-columns: 1fr;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-recovery {
+    border-left: 0;
+    border-top: 1px solid var(--p68-line);
+  }
+}
+@media (max-width: 760px) {
+  html
+    body:has(#app .mysql-resilience--c)
+    #app
+    .role-shell
+    .mysql-resilience--c
+    .mysql-resilience__hero,
+  html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-conclusion {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 16px;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-conclusion {
+    display: flex;
+    padding: 20px 18px;
+  }
+  html
+    body:has(#app .mysql-resilience--c)
+    #app
+    .role-shell
+    .mysql-resilience--c
+    .p68-conclusion
+    > div:last-child {
+    text-align: left;
+    border-top: 1px solid #b8c9e6;
+    padding-top: 14px;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-boundary {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-findings,
+  html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-section,
+  html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-recovery {
+    padding: 22px 18px;
+  }
+  html
+    body:has(#app .mysql-resilience--c)
+    #app
+    .role-shell
+    .mysql-resilience--c
+    .p68-resource-grid {
+    grid-template-columns: 1fr;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-contract {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 14px;
+  }
+  html
+    body:has(#app .mysql-resilience--c)
+    #app
+    .role-shell
+    .mysql-resilience--c
+    .p68-contract
+    > *:first-child {
+    grid-column: 1/-1;
+    font-weight: 700;
+  }
+  html
+    body:has(#app .mysql-resilience--c)
+    #app
+    .role-shell
+    .mysql-resilience--c
+    .p68-contract--head {
+    display: none;
+  }
+  html
+    body:has(#app .mysql-resilience--c)
+    #app
+    .role-shell
+    .mysql-resilience--c
+    .p68-recovery
+    dl
+    > div {
+    display: flex;
+  }
+  html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c .p68-recovery dd {
+    margin: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body:has(#app .mysql-resilience--c) #app .role-shell .mysql-resilience--c * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

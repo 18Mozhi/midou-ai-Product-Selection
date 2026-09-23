@@ -538,7 +538,8 @@ onUnmounted(() => {
             routePath !== '/platform-admin/status' &&
             routePath !== '/platform-admin/operations' &&
             routePath !== '/platform-admin/releases' &&
-            routePath !== '/platform-admin/topology'
+            routePath !== '/platform-admin/topology' &&
+            routePath !== '/platform-admin/mysql'
           "
           class="role-page-title"
         >

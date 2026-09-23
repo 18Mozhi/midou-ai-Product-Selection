@@ -49,14 +49,14 @@ test("M08-03.A07/A08/A15 desktop and 390 single-primary truth", async ({ page })
     route.fulfill({ json: envelope(base) }),
   );
   await page.goto("/platform-admin/mysql");
-  await expect(page.getByRole("heading", { name: "数据库 5.7 单主韧性" })).toBeVisible();
-  await expect(page.getByText("MySQL 单主韧性门已满足")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "慢查询与锁等待影响" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "MySQL 运行核验" })).toBeVisible();
+  await expect(page.getByText("当前单主韧性门满足")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "速率、累计与瞬时" })).toBeVisible();
   await expect(page.getByText("实例启动后未记录行锁等待")).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(
-    page.getByText("惠州单机只运行一个宝塔 MySQL 主实例；不启用读副本、负载均衡或备用服务器。", {
+    page.getByText("固定单主；不新增读副本、负载均衡或备用服务器。", {
       exact: true,
     }),
   ).toBeVisible();
@@ -87,7 +87,7 @@ test("MySQL refresh is single-flight and preserves the last verified snapshot on
     });
   });
   await page.goto("/platform-admin/mysql");
-  await expect(page.getByText("MySQL 单主韧性门已满足")).toBeVisible();
+  await expect(page.getByText("当前单主韧性门满足")).toBeVisible();
   const refresh = page.getByRole("button", { name: "刷新运行事实" });
   await refresh.click();
   await expect(page.getByRole("button", { name: "正在刷新…" })).toBeDisabled();
@@ -96,12 +96,12 @@ test("MySQL refresh is single-flight and preserves the last verified snapshot on
     button.click();
   });
   expect(calls).toBe(2);
-  await expect(page.getByText("MySQL 单主韧性门已满足")).toBeVisible();
-  await expect(page.getByText("ROW", { exact: true })).toBeVisible();
+  await expect(page.getByText("当前单主韧性门满足")).toBeVisible();
+  await expect(page.getByText("ROW", { exact: true })).toHaveCount(2);
   releaseRefresh?.();
   await expect(page.getByText("刷新未完成")).toBeVisible();
   await expect(page.getByText(/已保留上次成功的 MySQL 运行事实/)).toBeVisible();
-  await expect(page.getByText("MySQL 单主韧性门已满足")).toBeVisible();
+  await expect(page.getByText("当前单主韧性门满足")).toBeVisible();
 });
 test("M08-03.A08/A09/A16 warning blocked empty forbidden expired rate limited unavailable and recovering", async ({
   page,
@@ -127,7 +127,7 @@ test("M08-03.A08/A09/A16 warning blocked empty forbidden expired rate limited un
         }),
   );
   await page.goto("/platform-admin/mysql");
-  await expect(page.getByText("MySQL 指标接近预警线")).toBeVisible();
+  await expect(page.getByText("当前观测存在预警")).toBeVisible();
   response = {
     ...base,
     state: "blocked",
@@ -136,7 +136,7 @@ test("M08-03.A08/A09/A16 warning blocked empty forbidden expired rate limited un
     ],
   };
   await page.reload();
-  await expect(page.getByText("MySQL 韧性门已阻断")).toBeVisible();
+  await expect(page.getByText("当前单主韧性门阻断")).toBeVisible();
   response = null;
   await page.reload();
   await expect(page.getByText("尚无 MySQL 观测")).toBeVisible();
@@ -151,5 +151,5 @@ test("M08-03.A08/A09/A16 warning blocked empty forbidden expired rate limited un
     await expect(page.getByText(label)).toBeVisible();
   }
   await page.goto("/platform-admin/mysql?state=recovering");
-  await expect(page.getByRole("heading", { name: "数据库 5.7 单主韧性" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "MySQL 运行核验" })).toBeVisible();
 });

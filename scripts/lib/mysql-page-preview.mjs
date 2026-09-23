@@ -10,6 +10,7 @@ import {
 export const mysqlReviewCss =
   "design-plans/ui-phase-2-2026-09-07/implementation/mysql-page-preview.css";
 export const mysqlPageSources = [
+  "apps/web/src/mysql-resilience-c.css",
   mysqlReviewCss,
   shellReviewCss,
   shellReviewModule,
@@ -24,6 +25,16 @@ const once = (value, before, after) => {
 // Review-only transformation: the production script, request and lifecycle stay byte-for-byte intact.
 export function previewMysqlPage(input) {
   const source = input.replaceAll("\r\n", "\n");
+  if (source.includes('class="mysql-resilience mysql-resilience--c"'))
+    return once(
+      once(
+        source,
+        'class="mysql-resilience mysql-resilience--c"',
+        'class="mysql-resilience mysql-resilience--review"',
+      ),
+      '<aside class="p68-boundary"',
+      '<p class="p68-review-note">实际 Vue C 审核版 · 本地样例 · 未连接 MySQL 或执行恢复 · 尚未部署</p><aside class="p68-boundary"',
+    );
   const template = source.slice(
     source.indexOf("<template>") + 10,
     source.lastIndexOf("</template>"),
@@ -98,14 +109,7 @@ export function mysqlPagePlugin() {
       if (file === absolute("apps/web/src/components/MySqlResilienceCenter.vue"))
         return { code: previewMysqlPage(source), map: null };
       if (file === absolute("apps/web/src/components/NavigationShell.vue"))
-        return {
-          code: once(
-            previewShellVue(source),
-            '<header v-if="!opportunityId" class="role-page-title">',
-            '<header v-if="!opportunityId && routePath !== \'/platform-admin/mysql\'" class="role-page-title">',
-          ),
-          map: null,
-        };
+        return { code: previewShellVue(source), map: null };
     },
     transformIndexHtml(html) {
       return once(

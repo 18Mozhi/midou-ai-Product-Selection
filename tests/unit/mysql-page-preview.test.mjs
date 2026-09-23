@@ -15,6 +15,8 @@ test("P68 C review preserves the production script and Vue compilation", () => {
     preview.template.content,
     /mysql-resilience__metrics|mysql-resilience__impact/,
   );
+  assert.match(original.template.content, /mysql-resilience--c/);
+  assert.match(original.styles[0].content, /mysql-resilience-c\.css/);
 });
 
 test("P68 C review separates runtime evidence, recovery and actual-to-target durability", () => {

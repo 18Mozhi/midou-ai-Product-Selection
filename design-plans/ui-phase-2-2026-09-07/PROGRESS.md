@@ -1,5 +1,9 @@
 # 第二阶段实施记录
 
+## 2026-09-23 · P68 MySQL 运行 C 方向
+
+P68 已按用户“已通过页面自动继续”的授权，将 C 方向接入真实 Vue；保留原读取/API、权限、快照和单主/宝塔边界，不增加 SQL 或恢复操作。定向页面矩阵与双端 E2E、提交和线上核验见[P68实施记录](P68-PAGE-COMPOSITION-IMPLEMENTATION.md)。真实数据库、生产权限与正式恢复证据仍由独立运维验收确认；全 73 页目标继续。
+
 ## 2026-09-23 · P60 开放平台 C 方向生产 Vue 部署
 
 [P60生产实施](P60-PAGE-COMPOSITION-IMPLEMENTATION.md)：提交 `f0c424cdaaf87f626821c0cb02cf40b1544919f0` 已推送并由宝塔部署；22 工作区构建及 M07-03 结构预检通过。线上 live/ready/version 与 `/platform-admin/open-platform` 均 HTTP 200，version build SHA 匹配，P60 JS/CSS 各 HTTP 200。双端 M06-05 E2E 各3/3、定向单测12/12、页面134、详情1556、读取708、动作结果192及键盘744项本地夹具矩阵通过。前端预算门仍超限：入口 CSS 129451/122880 bytes、NavigationShell JS 52297/51200 bytes；正式 M07-03 证据、真实权限/数据库/回调交付与全73页目标仍待。

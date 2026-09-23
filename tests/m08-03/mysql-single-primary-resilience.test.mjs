@@ -573,7 +573,7 @@ test("M08-03.A07/A08/A15/A16 UI and production evidence cover full states and re
     "recovering",
   ])
     assert.match(ui, new RegExp(state));
-  assert.match(ui, /慢查询与锁等待影响[\s\S]*不把累计值冒充当前延迟[\s\S]*innodb_row_lock_waits/);
+  assert.match(ui, /速率、累计与瞬时[\s\S]*行锁等待[\s\S]*innodb_row_lock_waits/);
   assert.match(e2e, /390/);
   for (const token of ["AbortController", "15_000", "refreshing", "refreshFailure"])
     assert.match(ui, new RegExp(token));
