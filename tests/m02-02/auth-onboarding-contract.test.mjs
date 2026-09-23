@@ -30,27 +30,37 @@ test("M02-02.A01-A06/A09/A10/A13 reuses real identity tenancy contracts without 
   assert.match(identity, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   assert.doesNotMatch(identity, /Google|Microsoft|手机登录|SSO 单点登录/);
-  assert.match(onboarding, /三步|step\s*<\s*3|第 \{\{\s*step\s*\}\} \/ 3/);
+  assert.match(onboarding, /onboardingSteps/);
   assert.match(architecture, /本模块不新增迁移/);
   assert.doesNotMatch(env, /ONBOARDING_|AUTH_PAGE_/);
   const migrations = await readdir("database/migrations");
   assert.equal(migrations.filter((name) => name.includes("m02_02")).length, 0);
 });
 test("M02-02.A07/A08/A11/A15/A16 pages expose responsive keyboard visual and truthful recovery states", async () => {
-  const [identity, tenancy, onboarding, foundationStyles, navigationStyles, e2e, runbook, feature] =
-    await Promise.all(
-      [
-        "apps/web/src/components/LocalIdentity.vue",
-        "apps/web/src/components/TenancyChooser.vue",
-        "apps/web/src/components/OnboardingGuide.vue",
-        "apps/web/src/styles.css",
-        "apps/web/src/styles/onboarding-navigation.css",
-        "tests/e2e/m02-02-auth-onboarding.spec.ts",
-        "docs/runbooks/m02-02-auth-onboarding-pages.md",
-        "docs/feature-map.json",
-      ].map(read),
-    );
-  const styles = `${foundationStyles}\n${navigationStyles}`;
+  const [
+    identity,
+    tenancy,
+    onboarding,
+    foundationStyles,
+    navigationStyles,
+    onboardingStyles,
+    e2e,
+    runbook,
+    feature,
+  ] = await Promise.all(
+    [
+      "apps/web/src/components/LocalIdentity.vue",
+      "apps/web/src/components/TenancyChooser.vue",
+      "apps/web/src/components/OnboardingGuide.vue",
+      "apps/web/src/styles.css",
+      "apps/web/src/styles/onboarding-navigation.css",
+      "apps/web/src/components/onboarding-page-c.css",
+      "tests/e2e/m02-02-auth-onboarding.spec.ts",
+      "docs/runbooks/m02-02-auth-onboarding-pages.md",
+      "docs/feature-map.json",
+    ].map(read),
+  );
+  const styles = `${foundationStyles}\n${navigationStyles}\n${onboardingStyles}`;
   for (const state of ["rate_limited", "blocked", "expired"])
     assert.match(identity, new RegExp(state));
   assert.match(identity, /请求标识/);
@@ -72,12 +82,12 @@ test("M02-02.A07/A08/A11/A15/A16 pages expose responsive keyboard visual and tru
   for (const state of ["empty", "forbidden", "expired", "selected"])
     assert.match(tenancy, new RegExp(state));
   assert.match(onboarding, /aria-current/);
-  assert.match(styles, /@media\s*\(\s*max-width:\s*780px\s*\)/);
+  assert.match(styles, /@media\s*\(\s*max-width:\s*760px\s*\)/);
   assert.match(e2e, /keyboard\.press/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
-  assert.match(runbook, /宝塔发布 Vue Web 静态资源/);
-  assert.match(runbook, /公开会话状态读取的 Node API/);
-  assert.match(runbook, /宝塔重启 Node 项目 `ai选品`/);
-  assert.match(runbook, /Node Worker 与 Python Crawler 不需要重启/);
+  assert.match(runbook, /python scripts\/deploy-baota\.py/);
+  assert.match(runbook, /live\/ready\/version/);
+  assert.match(runbook, /停止并重启 Node/);
+  assert.match(runbook, /Worker 与 Python Crawler 不需要因本次 Vue 页面改动而重启/);
   assert.match(feature, /authOnboardingPages/);
 });

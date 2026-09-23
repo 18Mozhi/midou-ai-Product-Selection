@@ -1,79 +1,85 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-const params = new URLSearchParams(window.location.search),
-  initial = Math.min(3, Math.max(1, Number(params.get("step")) || 1)),
-  step = ref(initial);
-const pages = [
-  {
-    eyebrow: "FROM SIGNAL TO ACTION",
-    title: "把市场变化，变成今天的行动",
-    copy: "智能选品将来源证据、机会判断与团队任务串在同一个工作范围里。",
-    mark: "↗",
-    points: ["变化附带来源与新鲜度", "机会保留评分依据", "行动进入可追踪任务"],
-  },
-  {
-    eyebrow: "ONE SHARED CONTEXT",
-    title: "让协作围绕同一份证据展开",
-    copy: "组织、工作区与角色决定可见范围。评论、审批和结论不会脱离原始上下文。",
-    mark: "◎",
-    points: ["组织与工作区隔离", "角色决定最小权限", "审批保留版本与审计"],
-  },
-  {
-    eyebrow: "EVIDENCE BEFORE ANSWER",
-    title: "先看事实，再做可解释的决定",
-    copy: "AI 只负责摘要、解释和缺失提示；价格、利润、资质与最终决策始终由事实和人员负责。",
-    mark: "◇",
-    points: ["缺失证据明确受阻", "风险不用颜色代替文字", "所有结论可以回到来源"],
-  },
-];
-const page = computed(() => pages[step.value - 1]!);
-function next() {
-  if (step.value < 3) step.value += 1;
+import { computed, nextTick, shallowRef, useTemplateRef } from "vue";
+import OnboardingStepPanel from "./onboarding-guide/OnboardingStepPanel.vue";
+import { onboardingSteps, resolveOnboardingStep } from "./onboarding-guide/steps";
+import type { OnboardingStepNumber } from "./onboarding-guide/steps";
+import "./onboarding-page-c.css";
+
+const step = shallowRef<OnboardingStepNumber>(resolveOnboardingStep(window.location.search));
+const currentStep = computed(
+  () => onboardingSteps.find((item) => item.number === step.value) ?? onboardingSteps[0],
+);
+const finishLink = useTemplateRef<HTMLAnchorElement>("finishLink");
+
+function selectStep(nextStep: OnboardingStepNumber) {
+  step.value = nextStep;
 }
+
+async function next() {
+  if (step.value >= onboardingSteps.length) return;
+  step.value = (step.value + 1) as OnboardingStepNumber;
+  if (step.value === onboardingSteps.length) {
+    await nextTick();
+    finishLink.value?.focus();
+  }
+}
+
 function previous() {
-  if (step.value > 1) step.value -= 1;
+  if (step.value > 1) step.value = (step.value - 1) as OnboardingStepNumber;
 }
 </script>
+
 <template>
-  <main class="onboarding-page" data-testid="onboarding">
-    <header>
-      <RouterLink to="/" class="identity-brand"><span>选</span>智能选品</RouterLink
-      ><RouterLink to="/">跳过引导</RouterLink>
+  <main class="onboarding-page onboarding-page--c" data-testid="onboarding">
+    <header class="p09-header">
+      <RouterLink class="p09-brand" to="/" aria-label="ScoutOps 首页">
+        <span aria-hidden="true">S</span>
+        <span>ScoutOps <i>/</i> 快速引导</span>
+      </RouterLink>
+      <RouterLink class="p09-skip" to="/">跳过引导</RouterLink>
     </header>
-    <section class="onboarding-shell">
-      <div class="onboarding-copy">
-        <p>{{ page.eyebrow }}</p>
-        <h1>{{ page.title }}</h1>
-        <span>{{ page.copy }}</span>
-        <ul>
-          <li v-for="point in page.points" :key="point"><b>✓</b>{{ point }}</li>
-        </ul>
-      </div>
-      <div class="onboarding-visual" aria-hidden="true">
-        <div class="orbit orbit-one"></div>
-        <div class="orbit orbit-two"></div>
-        <strong>{{ page.mark }}</strong
-        ><i></i><i></i><i></i>
-      </div>
-    </section>
-    <footer>
-      <div class="onboarding-progress">
+
+    <OnboardingStepPanel :step="currentStep" />
+
+    <footer class="p09-actions">
+      <nav class="p09-steps" aria-label="引导步骤">
         <button
-          v-for="index in 3"
-          :key="index"
-          :aria-label="`前往第 ${index} 步`"
-          :aria-current="step === index ? 'step' : undefined"
-          @click="step = index"
+          v-for="item in onboardingSteps"
+          :key="item.number"
+          type="button"
+          :aria-label="`前往第 ${item.number} 步`"
+          :aria-current="step === item.number ? 'step' : undefined"
+          @click="selectStep(item.number)"
         >
-          <span>{{ index }}</span>
+          <span aria-hidden="true">{{ item.number }}</span>
         </button>
-      </div>
-      <div>
-        <button v-if="step > 1" class="onboarding-back" @click="previous">上一步</button
-        ><button v-if="step < 3" class="onboarding-next" @click="next">下一步</button
-        ><RouterLink v-else class="onboarding-next" to="/">进入智能选品</RouterLink>
+      </nav>
+
+      <div class="p09-actions__controls">
+        <button v-if="step > 1" class="p09-secondary" type="button" @click="previous">
+          上一步
+        </button>
+        <button
+          v-if="step < onboardingSteps.length"
+          class="p09-primary"
+          type="button"
+          @click="next"
+        >
+          下一步
+        </button>
+        <RouterLink v-else to="/" custom v-slot="{ href, navigate }">
+          <a
+            ref="finishLink"
+            class="p09-primary"
+            :href="href"
+            data-testid="onboarding-finish"
+            @click="navigate"
+            >进入智能选品</a
+          >
+        </RouterLink>
       </div>
     </footer>
-    <small>第 {{ step }} / 3 步 · 可使用键盘完成</small>
+
+    <p class="p09-status">第 {{ step }} / {{ onboardingSteps.length }} 步 · 步骤只保存在当前页面</p>
   </main>
 </template>

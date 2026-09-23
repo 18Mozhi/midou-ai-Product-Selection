@@ -1,0 +1,322 @@
+.onboarding-page.onboarding-page--c {
+  width: min(820px, calc(100% - 40px));
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding: 24px 0 32px;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  align-content: center;
+  gap: 16px;
+  color: var(--so-text);
+  background: var(--so-bg);
+  font-family: var(--so-font-ui);
+}
+
+.onboarding-page--c,
+.onboarding-page--c * {
+  box-sizing: border-box;
+}
+
+.onboarding-page--c > .p09-header,
+.onboarding-page--c > .p09-actions,
+.onboarding-page--c > .p09-status {
+  width: 100%;
+  margin-inline: 0;
+}
+
+.p09-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 44px;
+}
+
+.p09-brand,
+.onboarding-page--c > .p09-header > .p09-skip {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--so-info);
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.p09-brand {
+  gap: 10px;
+}
+
+.p09-brand > span:first-child {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: var(--so-on-primary);
+  background: var(--so-info);
+  font-weight: 800;
+}
+
+.p09-brand i {
+  padding-inline: 4px;
+  color: var(--so-text-muted);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.p09-skip {
+  padding-inline: 8px;
+}
+
+.p09-panel {
+  align-self: center;
+  border: 1px solid var(--so-border);
+  background: var(--so-panel);
+}
+
+.p09-panel__intro {
+  padding: clamp(24px, 5vw, 48px);
+  color: var(--so-on-primary);
+  background: var(--so-info);
+}
+
+.p09-panel__intro > p {
+  margin: 0 0 8px;
+  color: var(--so-on-primary);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.onboarding-page.onboarding-page--c .p09-panel__intro h1 {
+  max-width: 700px;
+  margin: 0 0 12px;
+  color: var(--so-on-primary);
+  font-family: var(--so-font-display);
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.p09-panel__intro > span {
+  display: block;
+  max-width: 700px;
+  color: var(--so-on-primary);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.p09-panel__body {
+  display: grid;
+  gap: 22px;
+  padding: clamp(20px, 4vw, 36px) clamp(24px, 5vw, 48px);
+}
+
+.p09-relations {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--so-info-border);
+  list-style: none;
+}
+
+.p09-relations li {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  color: var(--so-info);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.p09-relations li + li {
+  border-left: 1px solid var(--so-info-border);
+}
+
+.p09-relations__index {
+  color: var(--so-text-muted);
+  font-family: var(--so-font-mono);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.p09-points {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.p09-points li {
+  min-height: 48px;
+  padding: 10px 12px;
+  border-left: 2px solid var(--so-info);
+  color: var(--so-text);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.p09-boundary {
+  margin: 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--so-info);
+  color: var(--so-text-muted);
+  background: var(--so-info-soft);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.onboarding-page--c > .p09-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--so-border);
+  border-bottom: 1px solid var(--so-border);
+}
+
+.p09-steps,
+.onboarding-page--c > .p09-actions > .p09-actions__controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.p09-steps button,
+.p09-secondary,
+.p09-primary {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--so-info-border);
+  border-radius: var(--so-control-radius, 0);
+  padding: 8px 14px;
+  color: var(--so-info);
+  background: var(--so-panel);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.p09-steps button[aria-current="step"],
+.p09-primary {
+  border-color: var(--so-info);
+  color: var(--so-on-primary);
+  background: var(--so-info);
+}
+
+.p09-primary {
+  min-width: 132px;
+}
+
+.p09-steps button:hover,
+.p09-secondary:hover {
+  border-color: var(--so-info);
+  background: var(--so-info-soft);
+}
+
+.p09-primary:hover {
+  background: color-mix(in srgb, var(--so-info) 88%, var(--so-text));
+}
+
+.onboarding-page--c :is(a, button):focus-visible {
+  outline: 3px solid var(--so-info);
+  outline-offset: 3px;
+}
+
+.onboarding-page--c > .p09-status {
+  margin: 0;
+  color: var(--so-text-muted);
+  font-size: 13px;
+  text-align: right;
+}
+
+@media (max-width: 760px) {
+  .onboarding-page.onboarding-page--c {
+    width: calc(100% - 32px);
+    padding-block: 12px;
+    gap: 8px;
+  }
+
+  .p09-brand {
+    font-size: 14px;
+  }
+
+  .p09-panel__intro {
+    padding: 18px;
+  }
+
+  .onboarding-page.onboarding-page--c .p09-panel__intro h1 {
+    font-size: 26px;
+  }
+
+  .p09-panel__body {
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .p09-relations {
+    grid-template-columns: 1fr;
+  }
+
+  .p09-relations li {
+    min-height: 44px;
+  }
+
+  .p09-relations li + li {
+    border-top: 1px solid var(--so-info-border);
+    border-left: 0;
+  }
+
+  .p09-points {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .p09-points li {
+    min-height: 40px;
+    line-height: 1.45;
+  }
+
+  .onboarding-page--c > .p09-actions {
+    display: grid;
+    gap: 8px;
+  }
+
+  .onboarding-page--c > .p09-actions > .p09-actions__controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .p09-primary {
+    min-width: 0;
+    grid-column: 1 / -1;
+  }
+
+  .p09-secondary + .p09-primary {
+    grid-column: auto;
+  }
+
+  .onboarding-page--c > .p09-status {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onboarding-page--c * {
+    scroll-behavior: auto;
+    transition: none;
+    animation: none;
+  }
+}

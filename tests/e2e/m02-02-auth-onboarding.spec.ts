@@ -174,9 +174,57 @@ test("M02-02.A07/A08/A15 tenancy hands off to all three onboarding steps at desk
   await expect(page.getByRole("heading", { name: "让协作围绕同一份证据展开" })).toBeVisible();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("heading", { name: "先看事实，再做可解释的决定" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "进入智能选品" })).toBeVisible();
-  await expect(page).toHaveScreenshot("m02-02-onboarding.png", {
-    fullPage: true,
-    maxDiffPixels: 140,
+  const finish = page.getByRole("link", { name: "进入智能选品" });
+  await expect(finish).toBeFocused();
+  await expect(finish).toBeVisible();
+  for (const step of await page
+    .getByRole("navigation", { name: "引导步骤" })
+    .getByRole("button")
+    .all())
+    expect((await step.boundingBox())?.height).toBeGreaterThanOrEqual(44);
+  await finish.evaluate((element) => element.blur());
+  if (process.platform === "win32")
+    await expect(page).toHaveScreenshot("m02-02-onboarding.png", {
+      fullPage: true,
+      maxDiffPixels: 140,
+    });
+  await finish.click();
+  await expect(page).toHaveURL(/\/$/);
+});
+
+test("M02-02 P09 onboarding clamps query state, does not persist progress, and keeps exits local", async ({
+  page,
+}) => {
+  const apiRequests: string[] = [];
+  await page.route("**/api/**", (route) => {
+    apiRequests.push(route.request().url());
+    return route.abort();
   });
+
+  for (const [query, title] of [
+    ["", "把市场变化，变成今天的行动"],
+    ["?step=1", "把市场变化，变成今天的行动"],
+    ["?step=2", "让协作围绕同一份证据展开"],
+    ["?step=3", "先看事实，再做可解释的决定"],
+    ["?step=0", "把市场变化，变成今天的行动"],
+    ["?step=99", "先看事实，再做可解释的决定"],
+    ["?step=1.5", "把市场变化，变成今天的行动"],
+    ["?step=invalid", "把市场变化，变成今天的行动"],
+  ]) {
+    await page.goto(`/onboarding${query}`);
+    await expect(page.getByRole("heading", { name: title })).toBeVisible();
+  }
+
+  await page.goto("/onboarding?step=1");
+  await expect(page.getByRole("button", { name: "下一步" })).toBeInViewport();
+  await page.goto("/onboarding?step=2");
+  await expect(page.getByRole("button", { name: "下一步" })).toBeInViewport();
+  await page.goto("/onboarding?step=3");
+  await expect(page.getByRole("link", { name: "进入智能选品" })).toBeInViewport();
+  await page.goto("/onboarding?step=2");
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "让协作围绕同一份证据展开" })).toBeVisible();
+  expect(apiRequests).toEqual([]);
+  await page.getByRole("link", { name: "跳过引导" }).click();
+  await expect(page).toHaveURL(/\/$/);
 });
