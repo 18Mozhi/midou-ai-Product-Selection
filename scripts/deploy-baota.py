@@ -624,6 +624,23 @@ try:
         next_site = legacy_pattern.sub(lambda _: managed_block, previous_site, count=1)
     else:
         raise RuntimeError("BaoTa website SPA fallback contract is not recognized")
+    default_error_page_pattern = re.compile(
+        r"(?m)^(?P<indent>[ \\t]*)#ERROR-PAGE-START[^\\r\\n]*\\r?\\n"
+        r"(?P=indent)error_page 404 /404\\.html;\\r?\\n"
+    )
+    default_error_page_line_pattern = re.compile(
+        r"(?m)^[ \\t]*error_page 404 /404\\.html;\\r?$"
+    )
+    default_error_page_lines = list(default_error_page_line_pattern.finditer(next_site))
+    default_error_page_matches = list(default_error_page_pattern.finditer(next_site))
+    if len(default_error_page_lines) > 1 or len(default_error_page_lines) != len(default_error_page_matches):
+        raise RuntimeError("BaoTa default website 404 mapping is ambiguous")
+    if default_error_page_matches:
+        next_site = default_error_page_pattern.sub(
+            lambda match: match.group("indent") + match.group(0).splitlines()[0].lstrip() + "\\n",
+            next_site,
+            count=1,
+        )
     nginx_backup_dir = backups / "nginx"
     nginx_backup_dir.mkdir(mode=0o750, exist_ok=True)
     nginx_backup = nginx_backup_dir / ("midouai.medouai.com.conf.before-" + v["build_sha"])

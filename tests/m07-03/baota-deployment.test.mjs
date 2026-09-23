@@ -81,6 +81,9 @@ test("M07-03 deployer runs source and built-artifact gates before remote credent
   assert.match(deployer, /config \/ "nginx-spa-routes\.conf"/);
   assert.match(deployer, /route\.get\("acceptance"\) == "fallback"/);
   assert.match(deployer, /legacy_pattern = re\.compile/);
+  assert.match(deployer, /default_error_page_pattern = re\.compile/);
+  assert.match(deployer, /error_page 404 \/404/);
+  assert.match(deployer, /BaoTa default website 404 mapping is ambiguous/);
   assert.match(deployer, /managed_matches = list\(managed_pattern\.finditer\(previous_site\)\)/);
   assert.match(deployer, /indent = legacy_matches\[0\]\.group\("indent"\)/);
   assert.match(deployer, /swapped = True[\s\S]*rolled_back=swapped and not recovery_errors/);
