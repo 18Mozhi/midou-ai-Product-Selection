@@ -6,7 +6,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/LocalIdentity.vue": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
-    "apps/web/src/components/local-identity-verification.css": "85e246732afee2f60aa5c44a66107614ccfaa50fd448b06ab5c21c22588d868f"
+    "apps/web/src/components/local-identity-verification.css": "10bbd822340ce45966c70af0c336ece7083977175a7a72674aa0563570d59f89"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -939,7 +939,7 @@
     "includeStructuralContainers": true,
     "dependencyHashes": {
       "apps/web/src/components/LocalIdentity.vue": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
-      "apps/web/src/components/local-identity-verification.css": "85e246732afee2f60aa5c44a66107614ccfaa50fd448b06ab5c21c22588d868f",
+      "apps/web/src/components/local-identity-verification.css": "10bbd822340ce45966c70af0c336ece7083977175a7a72674aa0563570d59f89",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",

@@ -96,6 +96,9 @@ test("P05 verification uses one token-gated confirmation and explicit return", a
   const returnButton = page.getByRole("button", { name: "返回登录" });
   await expect(returnButton).toBeVisible();
   expect((await returnButton.boundingBox())?.height).toBeGreaterThanOrEqual(44);
+  expect(await returnButton.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe(
+    "rgb(23, 72, 160)",
+  );
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
   );

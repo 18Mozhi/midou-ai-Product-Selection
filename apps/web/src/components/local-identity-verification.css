@@ -114,7 +114,7 @@
   color: var(--p05-muted);
 }
 
-.p05-verification-primary {
+.p05-verification-page .p05-verification-primary {
   min-height: 44px;
   border: 1px solid var(--p05-blue);
   border-radius: 0;
@@ -125,15 +125,15 @@
   cursor: pointer;
 }
 
-.p05-verification-primary:hover {
+.p05-verification-page .p05-verification-primary:hover {
   background: #123b85;
 }
 
-.p05-verification-primary:active {
+.p05-verification-page .p05-verification-primary:active {
   background: #0f3270;
 }
 
-.p05-verification-primary:disabled {
+.p05-verification-page .p05-verification-primary:disabled {
   border-color: #aab6c5;
   background: #e7ebf0;
   color: #52647b;
@@ -178,7 +178,7 @@
     padding: 0 18px 24px;
   }
 
-  .p05-verification-primary {
+  .p05-verification-page .p05-verification-primary {
     width: 100%;
   }
 }
