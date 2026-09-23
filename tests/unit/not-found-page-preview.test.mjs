@@ -4,17 +4,14 @@ import test from "node:test";
 import { previewNotFoundPage } from "../../scripts/lib/not-found-page-preview.mjs";
 
 const file = "apps/web/src/components/NotFoundPage.vue";
-test("P73 C review preserves safe fallback and heading-focus script", async () => {
+test("P73 uses the actual Vue composition for C review", async () => {
   const source = await readFile(file, "utf8"),
     reviewed = previewNotFoundPage(source);
-  assert.equal(
-    reviewed.slice(0, reviewed.indexOf("<template>")),
-    source.slice(0, source.indexOf("<template>")),
-  );
+  assert.equal(reviewed, source);
   assert.match(reviewed, /:to="recentDestination.fullPath"/);
   assert.match(reviewed, /ref="heading" tabindex="-1"/);
 });
-test("P73 C review removes old orbital decoration", async () => {
+test("P73 C view removes old orbital decoration", async () => {
   const reviewed = previewNotFoundPage(await readFile(file, "utf8"));
   const template = reviewed.slice(
     reviewed.indexOf("<template>"),
@@ -22,4 +19,5 @@ test("P73 C review removes old orbital decoration", async () => {
   );
   assert.doesNotMatch(template, /not-found-orbit|not-found-satellite/);
   assert.match(template, /公开兜底 \/ 不读业务数据/);
+  assert.match(reviewed, /<style scoped>/);
 });

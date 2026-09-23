@@ -82,8 +82,8 @@ test("M02-04 fallback contains long paths and keeps mobile actions reachable", a
   const layout = await page.evaluate(() => ({
     viewportWidth: window.innerWidth,
     documentWidth: document.documentElement.scrollWidth,
-    pathText: document.querySelector<HTMLElement>(".not-found-path code")?.innerText ?? "",
-    actionHeights: [...document.querySelectorAll<HTMLElement>(".not-found-content nav a")].map(
+    pathText: document.querySelector<HTMLElement>(".p73-route code")?.innerText ?? "",
+    actionHeights: [...document.querySelectorAll<HTMLElement>(".p73-recovery nav a")].map(
       (element) => element.getBoundingClientRect().height,
     ),
   }));

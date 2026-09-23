@@ -92,12 +92,18 @@ try {
           if (new URL(request.url()).pathname.startsWith("/api/"))
             unexpected.push(request.method() + " " + new URL(request.url()).pathname);
         });
-        await page.goto(`${origin}/not-registered/p73-review-very-long-path-${"x".repeat(120)}`, {
-          waitUntil: "domcontentloaded",
-        });
+        await page.goto(
+          `${origin}/not-registered/p73-review-very-long-path-${"x".repeat(120)}?token=hidden#section`,
+          { waitUntil: "domcontentloaded" },
+        );
         const root = page.locator(".not-found-page--review");
         await root.waitFor();
         check(await root.locator("h1").count(), 1, "single h1");
+        check(
+          await root.locator(".p73-hero h1").evaluate((node) => getComputedStyle(node).color),
+          "rgb(255, 255, 255)",
+          "hero title contrast",
+        );
         check(
           await root.locator("h1").evaluate((node) => node === document.activeElement),
           true,
@@ -115,6 +121,14 @@ try {
             .then((value) => value.endsWith("…")),
           true,
           "long route truncation",
+        );
+        check(
+          await root
+            .locator(".p73-route code")
+            .innerText()
+            .then((value) => !/[?#]|token=hidden/u.test(value)),
+          true,
+          "query and hash excluded from requested path",
         );
         check(
           await root

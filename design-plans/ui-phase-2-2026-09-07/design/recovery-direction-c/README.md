@@ -45,7 +45,7 @@ P72共22场景×双端44图，加390×667短视口确认1图；P73共9场景×�
 
 P72顶部选择预设或手动操作八态；P73案例可用not-found.html?case=recent、case=long等链接参数选择。`node scripts/verify-ui-phase2-recovery-c.mjs`检查源码、数据、图片哈希与交互；加`--capture`重建本目录63PNG及evidence，不覆盖旧稿。
 
-实施状态更新：P72 C 构图已按用户授权接入开发专用 Vue 组件并部署，见[实施记录](../../P72-PAGE-COMPOSITION-IMPLEMENTATION.md)。此处原始“本批无Vue/未部署”是设计原型完成时的历史边界，不再描述当前 P72；P73 的公开恢复仍是独立页面实施范围。
+实施状态更新：P72 C 构图已按用户授权接入开发专用 Vue 组件并部署，见[P72 实施记录](../../P72-PAGE-COMPOSITION-IMPLEMENTATION.md)；P73 C 构图也已按授权接入公开 fallback，见[P73 实施记录](../../P73-PAGE-COMPOSITION-IMPLEMENTATION.md)。此处原始“本批无Vue/未部署”是设计原型完成时的历史边界，不再描述当前 P72/P73。
 
 源助手执行实际八态动作/query、canConfirm、sanitizeCorrelationId、导航存储与404计算函数；生产route-catalog经原表达式过滤，实际解析/ui-states为fallback。App DEV条件/afterEach不记404是静态证据，不代替实际发布包与线上访问。
 

@@ -41,39 +41,31 @@ watch(() => route.fullPath, focusHeading);
 </script>
 
 <template>
-  <main class="not-found-page" aria-labelledby="not-found-title">
-    <header class="not-found-header">
+  <main class="not-found-page not-found-page--review" aria-labelledby="not-found-title">
+    <header class="p73-top">
       <RouterLink to="/home" aria-label="返回智能选品今日行动">
-        <span aria-hidden="true">选</span>
-        <b>智能选品</b>
+        <span aria-hidden="true">选</span><b>ScoutOps</b>
       </RouterLink>
-      <p>页面未找到</p>
+      <p>页面恢复边界</p>
     </header>
-
-    <section class="not-found-layout">
-      <div class="not-found-signal" aria-hidden="true">
-        <div class="not-found-orbit not-found-orbit-outer"></div>
-        <div class="not-found-orbit not-found-orbit-inner"></div>
-        <i class="not-found-satellite not-found-satellite-one"></i>
-        <i class="not-found-satellite not-found-satellite-two"></i>
-        <div class="not-found-code">
-          <strong>404</strong>
-          <span>信号未抵达</span>
-        </div>
+    <section class="p73-hero">
+      <p>404 / 页面未登记</p>
+      <h1 id="not-found-title" ref="heading" tabindex="-1">没有找到这个页面</h1>
+      <span
+        >地址可能已变更、页面已下线，或链接输入有误。这里不会把不存在的页面解释为无权限，也不会展示任何受限数据。</span
+      >
+    </section>
+    <section class="p73-workspace" aria-label="页面恢复信息">
+      <div class="p73-route">
+        <small>当前地址</small>
+        <code :title="route.path" dir="ltr">{{ requestedPath }}</code>
       </div>
-
-      <div class="not-found-content">
-        <p class="not-found-eyebrow">404 / PAGE NOT FOUND</p>
-        <h1 id="not-found-title" ref="heading" tabindex="-1">没有找到这个页面</h1>
-        <p class="not-found-description">
-          地址可能已变更、页面已下线，或链接输入有误。这里不会把不存在的页面解释为无权限，也不会展示任何受限数据。
-        </p>
-
-        <div class="not-found-path">
-          <span>当前地址</span>
-          <code :title="route.path" dir="ltr">{{ requestedPath }}</code>
+      <div class="p73-recovery">
+        <div>
+          <small>下一步</small>
+          <h2>回到有效工作区</h2>
+          <p>恢复入口只使用现有安全路由；没有网络读取或业务数据访问。</p>
         </div>
-
         <nav aria-label="页面恢复操作">
           <RouterLink class="not-found-primary" :to="recentDestination.fullPath">
             {{ hasDistinctRecentDestination ? "返回最近页面" : "返回今日行动" }}
@@ -82,329 +74,229 @@ watch(() => route.fullPath, focusHeading);
             返回今日行动
           </RouterLink>
         </nav>
-
-        <p class="not-found-continuity">
-          <template v-if="hasDistinctRecentDestination">将返回：{{ recentTitle }}</template>
-          <template v-else>将从今日行动重新进入业务流程</template>
-        </p>
       </div>
+      <p class="not-found-continuity">
+        <template v-if="hasDistinctRecentDestination">将返回：{{ recentTitle }}</template>
+        <template v-else>将从今日行动重新进入业务流程</template>
+      </p>
     </section>
-
+    <aside class="p73-boundary">
+      <b>公开兜底 / 不读业务数据</b>
+      <span>未知地址与真实权限状态保持分离；路径仅作本地可读提示。</span>
+    </aside>
     <footer class="not-found-footer">
       <span>当前地址未匹配任何已登记页面</span>
-      <span>未调用接口，未读取业务数据</span>
+      <span>本页不发起业务读取请求</span>
     </footer>
   </main>
 </template>
 
 <style scoped>
 .not-found-page {
-  min-height: 100vh;
-  padding: 24px clamp(18px, 4vw, 58px) 18px;
-  display: flex;
-  flex-direction: column;
-  color: var(--so-text);
-  background:
-    radial-gradient(
-      circle at 72% 38%,
-      color-mix(in srgb, var(--so-primary) 10%, transparent),
-      transparent 26%
-    ),
-    var(--so-bg);
+  --p73-blue: #1748a0;
+  --p73-ink: #182d4a;
+  --p73-muted: #52647b;
+  --p73-line: #dce4ee;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 28px max(24px, calc((100vw - 940px) / 2)) 44px;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  color: var(--p73-ink);
+  background: #f3f6fb;
+  font:
+    16px/1.65 "Microsoft YaHei",
+    sans-serif;
 }
-
-.not-found-page *:focus-visible {
-  outline: 3px solid var(--so-focus);
+.not-found-page *,
+.not-found-page *::before,
+.not-found-page *::after {
+  box-sizing: border-box;
+}
+.not-found-page :is(h1, h2, p) {
+  margin: 0;
+}
+.not-found-page :is(a, button):focus-visible {
+  outline: 3px solid #2465d7;
   outline-offset: 3px;
 }
-
-.not-found-header,
-.not-found-layout,
-.not-found-footer {
-  width: min(1180px, 100%);
-  margin-inline: auto;
-}
-
-.not-found-header,
+.p73-top,
 .not-found-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--so-space-4);
+  gap: 16px;
+  color: var(--p73-muted);
+  font-size: 13px;
 }
-
-.not-found-header > a {
+.p73-top a {
   min-height: 44px;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  color: var(--so-text);
-  font-size: 19px;
+  gap: 9px;
+  color: var(--p73-ink);
+  font-size: 17px;
   text-decoration: none;
 }
-
-.not-found-header > a > span {
-  width: 38px;
-  height: 38px;
+.p73-top a span {
+  width: 32px;
+  height: 32px;
   display: grid;
   place-items: center;
-  border-radius: var(--so-card-radius);
-  color: var(--so-on-primary);
-  background: linear-gradient(145deg, var(--so-primary), var(--so-primary-strong));
-  font-weight: 850;
+  color: #fff;
+  background: var(--p73-blue);
 }
-
-.not-found-header p,
-.not-found-footer {
-  margin: 0;
-  color: var(--so-text-muted);
-  font-size: var(--so-font-meta);
+.p73-hero {
+  padding: 34px 36px;
+  color: #fff;
+  background: var(--p73-blue);
 }
-
-.not-found-layout {
-  min-height: 650px;
-  margin-block: clamp(22px, 5vh, 54px);
-  padding: clamp(28px, 5vw, 72px);
-  display: grid;
-  grid-template-columns: minmax(320px, 0.9fr) minmax(420px, 1.1fr);
-  align-items: center;
-  gap: clamp(36px, 7vw, 96px);
-  border: 1px solid var(--so-border);
-  border-radius: var(--so-dialog-radius);
-  background: color-mix(in srgb, var(--so-panel) 88%, transparent);
-  box-shadow: var(--so-shadow);
-  overflow: hidden;
+.p73-hero p {
+  color: #d9e6ff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
 }
-
-.not-found-signal {
-  position: relative;
-  aspect-ratio: 1;
-  width: min(430px, 100%);
-  margin-inline: auto;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--so-border);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle, var(--so-primary-soft), transparent 48%),
-    color-mix(in srgb, var(--so-panel-soft) 55%, transparent);
+.p73-hero h1 {
+  margin: 5px 0;
+  color: #fff;
+  font-size: 34px;
+  line-height: 1.35;
 }
-
-.not-found-orbit {
-  position: absolute;
-  border: 1px solid color-mix(in srgb, var(--so-primary) 42%, transparent);
-  border-radius: 50%;
-}
-
-.not-found-orbit-outer {
-  inset: 9%;
-}
-
-.not-found-orbit-inner {
-  inset: 25%;
-}
-
-.not-found-satellite {
-  position: absolute;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: var(--so-primary);
-  box-shadow: 0 0 0 7px color-mix(in srgb, var(--so-primary) 12%, transparent);
-}
-
-.not-found-satellite-one {
-  top: 18%;
-  right: 24%;
-}
-
-.not-found-satellite-two {
-  bottom: 24%;
-  left: 16%;
-  background: var(--so-chart-3);
-  box-shadow: 0 0 0 7px color-mix(in srgb, var(--so-chart-3) 12%, transparent);
-}
-
-.not-found-code {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  justify-items: center;
-  gap: 10px;
-}
-
-.not-found-code strong {
-  font-size: clamp(66px, 9vw, 108px);
-  line-height: 0.95;
-  letter-spacing: -0.08em;
-  color: var(--so-primary);
-}
-
-.not-found-code span,
-.not-found-eyebrow {
-  color: var(--so-primary);
-  font-size: var(--so-font-meta);
-  font-weight: 850;
-  letter-spacing: 0.16em;
-}
-
-.not-found-content {
-  max-width: 560px;
-}
-
-.not-found-eyebrow {
-  margin: 0 0 var(--so-space-4);
-}
-
-.not-found-content h1 {
-  margin: 0;
-  font-size: clamp(38px, 5vw, 62px);
-  line-height: 1.08;
-  letter-spacing: -0.04em;
-}
-
-.not-found-content h1:focus {
+.p73-hero h1:focus {
   outline: none;
 }
-
-.not-found-description {
-  margin: var(--so-space-5) 0 0;
-  color: var(--so-text-muted);
-  line-height: 1.75;
+.p73-hero > span {
+  color: #e2ebff;
 }
-
-.not-found-path {
-  margin-top: var(--so-space-5);
-  padding: 14px 16px;
+.p73-workspace {
+  border: 1px solid var(--p73-line);
+  background: #fff;
+}
+.p73-route {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 14px;
   align-items: center;
-  gap: var(--so-space-3);
-  border: 1px solid var(--so-border);
-  border-radius: var(--so-card-radius);
-  background: var(--so-panel-soft);
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--p73-line);
+  background: #f6f9ff;
 }
-
-.not-found-path span {
-  color: var(--so-text-muted);
-  font-size: var(--so-font-meta);
+.p73-route small,
+.p73-recovery small {
+  color: var(--p73-muted);
+  font-size: 13px;
 }
-
-.not-found-path code {
+.p73-route code {
   min-width: 0;
   overflow: hidden;
-  color: var(--so-text);
+  overflow-wrap: anywhere;
+  color: var(--p73-ink);
   font-family: Consolas, "Courier New", monospace;
-  font-size: var(--so-font-meta);
-  text-align: right;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
-
-.not-found-content nav {
-  margin-top: var(--so-space-5);
+.p73-recovery {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 22px;
+}
+.p73-recovery h2 {
+  margin-top: 3px;
+  font-size: 23px;
+}
+.p73-recovery p {
+  max-width: 460px;
+  margin-top: 5px;
+  color: var(--p73-muted);
+}
+.p73-recovery nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
-
-.not-found-content nav a {
+.p73-recovery nav a {
   min-height: 44px;
-  padding: 10px 18px;
+  padding: 10px 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--so-border);
-  border-radius: var(--so-control-radius);
-  color: var(--so-text);
+  border: 1px solid var(--p73-blue);
+  color: var(--p73-blue);
+  background: #fff;
   text-decoration: none;
-  transition:
-    border-color var(--so-transition),
-    background var(--so-transition),
-    transform var(--so-transition);
 }
-
-.not-found-content nav a:hover {
-  transform: translateY(-1px);
+.p73-recovery nav .not-found-primary {
+  color: #fff;
+  background: var(--p73-blue);
 }
-
-.not-found-content nav .not-found-primary {
-  color: var(--so-on-primary);
-  border-color: transparent;
-  background: linear-gradient(120deg, var(--so-primary-strong), var(--so-primary));
-  font-weight: 750;
-}
-
-.not-found-secondary {
-  background: var(--so-panel-soft);
-}
-
 .not-found-continuity {
-  margin: var(--so-space-4) 0 0;
-  color: var(--so-text-muted);
-  font-size: var(--so-font-meta);
+  padding: 13px 22px;
+  border-top: 1px solid var(--p73-line);
+  color: var(--p73-muted);
+  font-size: 13px;
 }
-
-@media (max-width: 780px) {
+.p73-boundary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding: 12px 16px;
+  border-left: 3px solid var(--p73-blue);
+  background: #edf4ff;
+}
+.p73-boundary span {
+  color: var(--p73-muted);
+}
+.not-found-footer {
+  width: 100%;
+  margin-top: 0;
+}
+@media (max-width: 760px) {
   .not-found-page {
-    padding: 14px 12px 18px;
+    padding: 18px 16px 36px;
   }
-
-  .not-found-header p {
+  .p73-top p {
     display: none;
   }
-
-  .not-found-layout {
-    min-height: 0;
-    margin-block: 12px 18px;
-    padding: 28px 20px;
+  .p73-hero {
+    padding: 24px 18px;
+  }
+  .p73-hero h1 {
+    font-size: 28px;
+  }
+  .p73-route {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 4px;
+    padding: 18px;
   }
-
-  .not-found-signal {
-    width: min(270px, 82vw);
+  .p73-recovery {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 20px 18px;
   }
-
-  .not-found-content {
-    max-width: none;
-  }
-
-  .not-found-content h1 {
-    font-size: clamp(34px, 11vw, 48px);
-  }
-
-  .not-found-description {
-    margin-top: var(--so-space-4);
-  }
-
-  .not-found-path {
-    grid-template-columns: 1fr;
-    gap: 6px;
-  }
-
-  .not-found-path code {
-    text-align: left;
-  }
-
-  .not-found-content nav {
+  .p73-recovery nav {
     display: grid;
   }
-
-  .not-found-content nav a {
+  .p73-recovery nav a {
     width: 100%;
   }
-
+  .not-found-continuity {
+    padding: 13px 18px;
+  }
+  .p73-boundary,
   .not-found-footer {
     align-items: flex-start;
     flex-direction: column;
-    gap: 6px;
   }
 }
-
 @media (prefers-reduced-motion: reduce) {
-  .not-found-content nav a {
-    transition: none;
+  .not-found-page * {
+    transition: none !important;
+    animation: none !important;
   }
 }
 </style>
