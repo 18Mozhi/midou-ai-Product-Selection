@@ -2019,6 +2019,8 @@ test("chain logs group trace events and deep-link exceptional task and source fa
   const sharedChain = page.locator(".platform-log-chain").filter({ hasText: "trace-shared" });
   await expect(sharedChain).toContainText("2 个事件 · 1 个异常");
   const workerChain = page.locator(".platform-log-chain").filter({ hasText: "trace-worker" });
+  await expect(sharedChain).toBeVisible();
+  await expect(workerChain).toBeHidden();
   if ((page.viewportSize()?.width ?? 1280) <= 760) {
     const sharedEvents = sharedChain.locator(".responsive-data-view__mobile article > button");
     await expect(sharedEvents.first()).toContainText("collection.task.read");
@@ -2034,6 +2036,8 @@ test("chain logs group trace events and deep-link exceptional task and source fa
       /\/platform-admin\/providers\/sources\?provider_id=/,
     );
     await crawlerDetail.getByRole("button", { name: "关闭详情" }).click();
+    await page.locator('[data-log-chain="trace-worker"]').click();
+    await expect(workerChain).toBeVisible();
     await workerChain.locator(".responsive-data-view__mobile article > button").click();
     const workerDetail = page.getByRole("dialog", { name: "Worker · collection.task.failed" });
     await expect(workerDetail.getByRole("link", { name: "查看关联任务" })).toBeVisible();
@@ -2050,9 +2054,12 @@ test("chain logs group trace events and deep-link exceptional task and source fa
       "href",
       /\/platform-admin\/providers\/sources\?provider_id=/,
     );
+    await page.locator('[data-log-chain="trace-worker"]').click();
+    await expect(workerChain).toBeVisible();
     await expect(workerChain.getByRole("link", { name: "查看关联任务" })).toBeVisible();
     await expect(workerChain.getByRole("link", { name: "查看关联来源" })).toHaveCount(0);
   }
+  await page.locator('[data-log-chain="trace-shared"]').click();
   const logQuery = page.getByPlaceholder("请求编号、链路编号、任务、事件或错误码");
   if (!(await logQuery.isVisible())) {
     await page.getByRole("button", { name: "筛选链路日志" }).click();

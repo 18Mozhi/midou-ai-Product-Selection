@@ -6,11 +6,9 @@ import {
   shellReviewCss,
   shellReviewModule,
 } from "./ui-phase2-shell-vue-preview.mjs";
-export const logReviewComponent =
-  "design-plans/ui-phase-2-2026-09-07/implementation/LogWorkspaceReview.vue";
+export const logReviewComponent = "apps/web/src/components/PlatformLogWorkspace.vue";
 export const logReviewCss =
   "design-plans/ui-phase-2-2026-09-07/implementation/platform-log-page-preview.css";
-export const logReviewImport = `import LogWorkspaceReview from "../../../../${logReviewComponent}";\n`;
 const once = (s, a, b) => {
   assert.equal(s.split(a).length, 2, "P62 unique anchor: " + a);
   return s.replace(a, b);
@@ -33,37 +31,16 @@ export function originalLogChain(source) {
   return matches[0].loc.source;
 }
 export function previewLogPage(source) {
-  let s = source.replaceAll("\r\n", "\n");
-  const chain = originalLogChain(s),
-    single = once(
-      once(chain, '        v-for="chain in traceChains"\n', ""),
-      '        :key="chain.traceId"\n',
-      "",
-    );
-  s = once(s, '<script setup lang="ts">\n', '<script setup lang="ts">\n' + logReviewImport);
-  s = once(
-    s,
-    'class="platform-log-center"',
-    'class="platform-log-center platform-log-center--review"',
+  return once(
+    source.replaceAll("\r\n", "\n"),
+    'class="platform-log-center platform-log-center--c"',
+    'class="platform-log-center platform-log-center--c platform-log-center--review"',
   );
-  s = once(s, "<h2>链路日志</h2>", "<h1>链路日志</h1>");
-  s = once(s, '<h3 id="platform-log-read-title">', '<h2 id="platform-log-read-title">');
-  s = once(s, "</h3>\n      <p>{{ message", "</h2>\n      <p>{{ message");
-  s = once(s, "<p>系统运维</p>", "<p>P62 / 事件检索</p>");
-  s = once(
-    s,
-    chain,
-    `<LogWorkspaceReview :chains="traceChains"><template #chain="{ chain }">${single}</template></LogWorkspaceReview>`,
-  );
-  s = once(
-    s,
-    '    <ResponsiveFilterDrawer label="筛选链路日志"',
-    `    <p class="p62-review-note">实际 Vue 审核版 · 本地合成日志 · 最多返回 200 条，不代表完整链 · 尚未部署</p>\n    <ResponsiveFilterDrawer label="筛选链路日志"`,
-  );
-  return s;
 }
 export const logPageSources = [
   logReviewComponent,
+  "apps/web/src/components/platform-log-types.ts",
+  "apps/web/src/platform-log-center-c.css",
   logReviewCss,
   shellReviewCss,
   shellReviewModule,

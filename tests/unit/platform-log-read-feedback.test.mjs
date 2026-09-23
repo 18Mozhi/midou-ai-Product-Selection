@@ -236,7 +236,7 @@ test("P62 refused focus does not scroll an unrelated target", () => {
 });
 test("P62 initial read has a named busy region and compiles without changing ready feedback", () => {
   assert.match(source, /:aria-busy="refreshing"\s+aria-labelledby="platform-log-read-title"/);
-  assert.match(source, /<h3 id="platform-log-read-title">/);
+  assert.match(source, /<h2 id="platform-log-read-title">/);
   assert.match(source, /v-if="message && state === 'ready'"/);
   const { descriptor, errors } = parse(source);
   assert.deepEqual(errors, []);
