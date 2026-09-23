@@ -12,11 +12,10 @@ import AppIcon from "./AppIcon.vue";
 const OrganizationCreationWizard = defineAsyncComponent(
   () => import("./OrganizationCreationWizard.vue"),
 );
-const PlatformAccountDialogs = defineAsyncComponent(() => import("./PlatformAccountDialogs.vue"));
-const PlatformAdminRecords = defineAsyncComponent(() => import("./PlatformAdminRecords.vue"));
-const PlatformOrganizationRecords = defineAsyncComponent(
-  () => import("./PlatformOrganizationRecords.vue"),
+const PlatformAccountDirectoryWorkspace = defineAsyncComponent(
+  () => import("./PlatformAccountDirectoryWorkspace.vue"),
 );
+const PlatformAccountDialogs = defineAsyncComponent(() => import("./PlatformAccountDialogs.vue"));
 const PlatformOrganizationDetailDialog = defineAsyncComponent(
   () => import("./PlatformOrganizationDetailDialog.vue"),
 );
@@ -24,8 +23,6 @@ const PlatformRoleComparison = defineAsyncComponent(() => import("./PlatformRole
 const PlatformUserDetailDialog = defineAsyncComponent(
   () => import("./PlatformUserDetailDialog.vue"),
 );
-const PlatformUserRecords = defineAsyncComponent(() => import("./PlatformUserRecords.vue"));
-const ResponsiveFilterDrawer = defineAsyncComponent(() => import("./ResponsiveFilterDrawer.vue"));
 const props = withDefaults(
     defineProps<{
       apiBaseUrl: string;
@@ -726,203 +723,36 @@ onMounted(load);
       <PlatformRoleComparison v-else :roles="platformRoles" :persist-selection="true" />
     </template>
     <template v-else>
-      <div class="account-page-layout" :class="{ 'account-page-layout--admins': adminListRoute }">
-        <aside v-if="adminListRoute" class="account-page-rail" aria-label="全平台汇总与管理入口">
-          <header class="account-page-rail__intro">
-            <small>平台全局</small>
-            <h3>账号与组织</h3>
-            <p>以下为全平台汇总，不是当前列表条数。</p>
-          </header>
-          <div v-if="data" class="account-metrics">
-            <article>
-              <small>组织</small
-              ><strong
-                >{{ data.summary.active_organizations }} / {{ data.summary.organizations }}</strong
-              ><span>正常 / 全部</span>
-            </article>
-            <article>
-              <small>用户</small
-              ><strong>{{ data.summary.active_users }} / {{ data.summary.users }}</strong
-              ><span>可登录 / 全部</span>
-            </article>
-            <article>
-              <small>平台管理员</small><strong>{{ data.summary.platform_admins }}</strong
-              ><span>拥有平台后台权限</span>
-            </article>
-          </div>
-          <nav class="account-tabs" aria-label="账号与组织二级导航">
-            <RouterLink
-              to="/platform-admin/organizations"
-              :class="{ on: tab === 'organizations' }"
-              :aria-current="tab === 'organizations' ? 'page' : undefined"
-              >组织管理</RouterLink
-            ><RouterLink
-              to="/platform-admin/users"
-              :class="{ on: tab === 'users' }"
-              :aria-current="tab === 'users' ? 'page' : undefined"
-              >用户管理</RouterLink
-            ><RouterLink
-              to="/platform-admin/admins"
-              :class="{ on: tab === 'admins' }"
-              :aria-current="tab === 'admins' ? 'page' : undefined"
-              >管理员管理</RouterLink
-            >
-          </nav>
-        </aside>
-        <div class="account-page-main">
-          <template v-if="!adminListRoute">
-            <div v-if="data" class="account-metrics">
-              <article>
-                <small>组织</small
-                ><strong
-                  >{{ data.summary.active_organizations }} /
-                  {{ data.summary.organizations }}</strong
-                ><span>正常 / 全部</span>
-              </article>
-              <article>
-                <small>用户</small
-                ><strong>{{ data.summary.active_users }} / {{ data.summary.users }}</strong
-                ><span>可登录 / 全部</span>
-              </article>
-              <article>
-                <small>平台管理员</small><strong>{{ data.summary.platform_admins }}</strong
-                ><span>拥有平台后台权限</span>
-              </article>
-            </div>
-            <nav class="account-tabs" aria-label="账号与组织二级导航">
-              <RouterLink
-                to="/platform-admin/organizations"
-                :class="{ on: tab === 'organizations' }"
-                :aria-current="tab === 'organizations' ? 'page' : undefined"
-                >组织管理</RouterLink
-              ><RouterLink
-                to="/platform-admin/users"
-                :class="{ on: tab === 'users' }"
-                :aria-current="tab === 'users' ? 'page' : undefined"
-                >用户管理</RouterLink
-              ><RouterLink
-                to="/platform-admin/admins"
-                :class="{ on: tab === 'admins' }"
-                :aria-current="tab === 'admins' ? 'page' : undefined"
-                >管理员管理</RouterLink
-              >
-            </nav>
-          </template>
-          <header v-if="adminListRoute" class="admin-directory-heading">
-            <h3>可授权账号</h3>
-            <p>包含尚未授予平台角色的账号。进入详情后核对身份与当前授权。</p>
-          </header>
-          <ResponsiveFilterDrawer :label="filterLabel" :active-count="activeFilterCount">
-            <form
-              class="account-filter"
-              :class="{ 'account-filter--admins-c': adminListRoute }"
-              @submit.prevent="applyFilters"
-            >
-              <label v-if="adminListRoute" class="admin-filter-field">
-                <span>账号邮箱</span>
-                <input
-                  v-model="query"
-                  :placeholder="searchPlaceholder"
-                  aria-describedby="admin-query-help"
-                />
-                <small id="admin-query-help">输入邮箱关键词，搜索后更新列表。</small>
-              </label>
-              <input
-                v-else
-                v-model="query"
-                :placeholder="searchPlaceholder"
-                :aria-label="searchPlaceholder"
-              />
-              <label v-if="adminListRoute" class="admin-filter-field">
-                <span>账号状态</span>
-                <select v-model="status" :aria-label="statusLabel">
-                  <option value="">全部状态</option>
-                  <option value="active">正常使用</option>
-                  <option value="disabled">已停用</option>
-                </select>
-                <small>仅筛选账号状态，不代表角色权限范围。</small>
-              </label>
-              <select v-else v-model="status" :aria-label="statusLabel">
-                <option value="">全部状态</option>
-                <option value="active">正常使用</option>
-                <option v-if="!organizationListRoute" value="disabled">已停用</option>
-                <option v-if="tab === 'organizations'" value="archived">已停用组织</option>
-              </select>
-              <div :class="{ 'admin-filter-actions': adminListRoute }">
-                <button :disabled="refreshing">搜索</button>
-                <button
-                  type="button"
-                  class="secondary"
-                  :disabled="!activeFilterCount || refreshing"
-                  @click="resetFilters"
-                >
-                  重置
-                </button>
-              </div>
-            </form>
-          </ResponsiveFilterDrawer>
-          <p class="account-updated" aria-live="polite">{{ updatedText }}</p>
-          <p v-if="message" class="account-message">{{ message }}</p>
-          <section v-if="state === 'loading'" class="account-state">
-            {{ adminListRoute ? "正在读取可授权账号…" : "正在读取真实组织与用户…" }}
-          </section>
-          <section v-else-if="state === 'error'" class="account-state">
-            {{ adminListRoute ? "暂时无法读取可授权账号。" : "暂时无法读取。" }}
-            <button @click="load">重新加载</button>
-          </section>
-          <template v-else>
-            <section v-if="organizationEmptyState" class="account-empty" aria-live="polite">
-              <strong>{{ activeFilterCount ? "没有符合当前条件的组织" : "还没有组织" }}</strong>
-              <span>{{
-                activeFilterCount
-                  ? "调整组织名称、标识或状态筛选后重试。"
-                  : "创建首个组织后，系统会同时建立默认工作区和组织级数据范围。"
-              }}</span>
-              <button v-if="activeFilterCount" type="button" @click="resetFilters">清除筛选</button>
-              <button
-                v-else-if="organizationListRoute"
-                type="button"
-                @click="openOrganizationWizard"
-              >
-                新建组织
-              </button>
-            </section>
-            <PlatformOrganizationRecords
-              v-else-if="tab === 'organizations'"
-              :rows="rows"
-              :busy="Boolean(busy)"
-              :status-text="statusText"
-              @open-organization="openOrganization"
-            />
-            <PlatformUserRecords
-              v-else-if="tab === 'users'"
-              :rows="rows"
-              :status-text="statusText"
-              :role-text="roleText"
-              @open-user="openUserDetail"
-            />
-            <section v-else-if="adminEmptyState" class="account-empty" aria-live="polite">
-              <strong>{{
-                activeFilterCount ? "没有符合当前条件的管理员" : "还没有可授权账号"
-              }}</strong>
-              <span>{{
-                activeFilterCount
-                  ? "调整管理员邮箱或状态筛选后重试。"
-                  : "创建首位平台管理员，或从用户管理选择现有账号授予平台角色。"
-              }}</span>
-              <button v-if="activeFilterCount" type="button" @click="resetFilters">清除筛选</button>
-              <button v-else type="button" @click="openCreateUser(true)">新建管理员</button>
-            </section>
-            <PlatformAdminRecords v-else :rows="rows" @open-user="openUserDetail" />
-            <div v-if="adminListRoute && platformRoles.length" class="admin-comparison-workspace">
-              <PlatformRoleComparison
-                class="platform-admin-role-comparison"
-                :roles="platformRoles"
-              />
-            </div>
-          </template>
-        </div>
-      </div>
+      <PlatformAccountDirectoryWorkspace
+        v-model:query="query"
+        v-model:status="status"
+        :data="data"
+        :rows="rows"
+        :busy="Boolean(busy)"
+        :state="state"
+        :tab="tab"
+        :organization-list-route="organizationListRoute"
+        :organization-empty-state="organizationEmptyState"
+        :admin-list-route="adminListRoute"
+        :admin-empty-state="adminEmptyState"
+        :platform-roles="platformRoles"
+        :filter-label="filterLabel"
+        :active-filter-count="activeFilterCount"
+        :search-placeholder="searchPlaceholder"
+        :status-label="statusLabel"
+        :refreshing="refreshing"
+        :updated-text="updatedText"
+        :message="message"
+        :status-text="statusText"
+        :role-text="roleText"
+        @apply-filters="applyFilters"
+        @reset-filters="resetFilters"
+        @load="load"
+        @create-organization="openOrganizationWizard"
+        @create-admin="openCreateUser(true)"
+        @open-organization="openOrganization"
+        @open-user="openUserDetail"
+      />
     </template>
     <OrganizationCreationWizard
       :open="createOpen"
@@ -993,8 +823,8 @@ onMounted(load);
     />
   </section>
 </template>
-<style scoped src="./PlatformAccountCenter.css"></style>
+<style src="./PlatformAccountCenter.css"></style>
 <style scoped src="./PlatformAccountCenterPermissions.css"></style>
-<style scoped src="./PlatformAccountCenterAdmin.css"></style>
+<style src="./PlatformAccountCenterAdmin.css"></style>
 <style src="./PlatformAdminComparisonMobile.css"></style>
 <style src="./PlatformAdminDirectoryMobile.css"></style>

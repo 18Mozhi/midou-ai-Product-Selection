@@ -7,6 +7,7 @@ const components = "apps/web/src/components";
 test("thousand-line platform pages keep data orchestration in bounded presentation components", async () => {
   const limits = new Map([
     [`${components}/PlatformAccountCenter.vue`, 850],
+    [`${components}/PlatformAccountDirectoryWorkspace.vue`, 280],
     [`${components}/PlatformOrganizationRecords.vue`, 180],
     [`${components}/PlatformUserRecords.vue`, 180],
     [`${components}/PlatformAdminRecords.vue`, 240],
@@ -37,21 +38,28 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
     assert.ok(source.split(/\r?\n/u).length < limit, `${path} must remain below ${limit} lines`);
   }
 
-  const [accounts, sources, opportunities, trends, sourcing, organization] = await Promise.all([
-    readFile(`${components}/PlatformAccountCenter.vue`, "utf8"),
-    readFile(`${components}/ProviderSourceCenter.vue`, "utf8"),
-    readFile(`${components}/OpportunityWorkspace.vue`, "utf8"),
-    readFile(`${components}/TrendDashboard.vue`, "utf8"),
-    readFile(`${components}/SourcingWorkspace.vue`, "utf8"),
-    readFile(`${components}/OrganizationAdminCenter.vue`, "utf8"),
-  ]);
-  assert.match(accounts, /import PlatformAdminRecords/);
+  const [accounts, accountDirectory, sources, opportunities, trends, sourcing, organization] =
+    await Promise.all([
+      readFile(`${components}/PlatformAccountCenter.vue`, "utf8"),
+      readFile(`${components}/PlatformAccountDirectoryWorkspace.vue`, "utf8"),
+      readFile(`${components}/ProviderSourceCenter.vue`, "utf8"),
+      readFile(`${components}/OpportunityWorkspace.vue`, "utf8"),
+      readFile(`${components}/TrendDashboard.vue`, "utf8"),
+      readFile(`${components}/SourcingWorkspace.vue`, "utf8"),
+      readFile(`${components}/OrganizationAdminCenter.vue`, "utf8"),
+    ]);
+  assert.match(accounts, /import PlatformAccountDirectoryWorkspace/);
+  assert.match(accounts, /loadAccounts/);
+  assert.match(accountDirectory, /defineModel<string>\("query"/);
+  assert.match(accountDirectory, /emit\("open-user"/);
+  assert.doesNotMatch(accountDirectory, /createApiClient|fetch\(/);
+  assert.match(accountDirectory, /import PlatformAdminRecords/);
   assert.match(accounts, /usePlatformUserDetail\(request, selected,/);
-  assert.match(accounts, /<PlatformAdminRecords/);
-  assert.match(accounts, /import PlatformOrganizationRecords/);
-  assert.match(accounts, /<PlatformOrganizationRecords/);
-  assert.match(accounts, /import PlatformUserRecords/);
-  assert.match(accounts, /<PlatformUserRecords/);
+  assert.match(accountDirectory, /<PlatformAdminRecords/);
+  assert.match(accountDirectory, /import PlatformOrganizationRecords/);
+  assert.match(accountDirectory, /<PlatformOrganizationRecords/);
+  assert.match(accountDirectory, /import PlatformUserRecords/);
+  assert.match(accountDirectory, /<PlatformUserRecords/);
   assert.match(sources, /import ProviderParserSampleDialog/);
   assert.match(sources, /<ProviderParserSampleDialog/);
   const parserDialog = await readFile(`${components}/ProviderParserSampleDialog.vue`, "utf8");

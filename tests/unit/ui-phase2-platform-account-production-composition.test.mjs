@@ -3,6 +3,11 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const panel = await readFile("apps/web/src/components/PlatformAccountCenter.vue", "utf8");
+const workspace = await readFile(
+  "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+  "utf8",
+);
+const accountSurface = `${panel}\n${workspace}`;
 const styles = await readFile("apps/web/src/components/PlatformAccountCenter.css", "utf8");
 
 test("P39 production account center opts into the scoped C composition", () => {
@@ -10,12 +15,12 @@ test("P39 production account center opts into the scoped C composition", () => {
 });
 
 test("P39 keeps the account facts, tabs, filters and records on the real page", () => {
-  assert.match(panel, /class="account-metrics"/);
-  assert.match(panel, /账号与组织二级导航/);
-  assert.match(panel, /class="account-filter"/);
-  assert.match(panel, /PlatformOrganizationRecords/);
-  assert.match(panel, /PlatformUserRecords/);
-  assert.match(panel, /PlatformAdminRecords/);
+  assert.match(accountSurface, /class="account-metrics"/);
+  assert.match(accountSurface, /账号与组织二级导航/);
+  assert.match(accountSurface, /class="account-filter"/);
+  assert.match(accountSurface, /PlatformOrganizationRecords/);
+  assert.match(accountSurface, /PlatformUserRecords/);
+  assert.match(accountSurface, /PlatformAdminRecords/);
 });
 
 test("P39 C composition has desktop rail, responsive collapse and focus treatment", () => {

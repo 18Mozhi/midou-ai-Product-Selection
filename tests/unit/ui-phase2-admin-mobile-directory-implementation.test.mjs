@@ -110,7 +110,10 @@ test("only mobile admin directory changes; P43/P45/desktop and original dialogs/
 });
 
 test("historical directory captures stay immutable and current P44 composition stays explicit", () => {
-  const source = read("apps/web/src/components/PlatformAccountCenter.vue");
+  const source = [
+    read("apps/web/src/components/PlatformAccountCenter.vue"),
+    read("apps/web/src/components/PlatformAccountDirectoryWorkspace.vue"),
+  ].join("\n");
   assert.ok(historicalHashes(before) && historicalHashes(after));
   assert.ok(source.includes('class="account-page-layout"'));
   assert.ok(source.includes('class="account-page-rail"'));

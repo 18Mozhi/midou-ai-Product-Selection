@@ -333,6 +333,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       "apps/api/src/mysql-platform-account-repository.ts",
       "apps/api/src/platform-account-routes.ts",
       "apps/web/src/components/PlatformAccountCenter.vue",
+      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
       "apps/web/src/components/PlatformOrganizationRecords.vue",
       "apps/web/src/components/PlatformUserRecords.vue",
       "apps/web/src/components/OrganizationCreationWizard.vue",
@@ -354,6 +355,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       repository,
       routes,
       accountShell,
+      accountDirectory,
       organizationRecords,
       userRecords,
       wizard,
@@ -370,6 +372,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
     ] = values,
     web = [
       accountShell,
+      accountDirectory,
       organizationRecords,
       userRecords,
       wizard,
@@ -423,13 +426,13 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
     accountShell,
     /if \(refreshing\.value\) \{[\s\S]*queuedAccountsRead = true[\s\S]*return false/,
   );
-  assert.match(accountShell, /没有符合当前条件的组织/);
+  assert.match(accountDirectory, /没有符合当前条件的组织/);
   assert.match(accountShell, /organizationListRoute[\s\S]*管理组织状态与隔离边界/);
   assert.match(accountShell, /搜索组织名称或标识/);
   assert.match(accountShell, /organizationEmptyState/);
-  assert.match(accountShell, /清除筛选/);
+  assert.match(accountDirectory, /清除筛选/);
   assert.match(accountShell, /搜索管理员邮箱/);
-  assert.match(accountShell, /没有符合当前条件的管理员/);
+  assert.match(accountDirectory, /没有符合当前条件的管理员/);
   assert.match(accountShell, /adminEmptyState/);
   assert.match(accountShell, /createUserError/);
   assert.match(accountShell, /passwordError/);
@@ -459,17 +462,17 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(web, /不以页面按钮推测权限/);
   for (const capability of CAPABILITIES)
     assert.match(web, new RegExp(capability.replace(":", "\\:")));
-  assert.ok(accountShell.split(/\r?\n/).length < 1000);
+  assert.ok(accountShell.split(/\r?\n/).length < 850);
   for (const component of [
     organizationRecords,
     userRecords,
-    wizard,
-    organizationDetail,
     adminRecords,
     comparison,
-    detailDialog,
+    accountDirectory,
   ])
     assert.ok(component.split(/\r?\n/).length < 300);
+  for (const dialog of [wizard, organizationDetail, detailDialog])
+    assert.ok(dialog.split(/\r?\n/).length < 600);
   assert.match(routeCatalog, /账号与组织/);
   assert.match(routeCatalog, /"title": "角色权限"/);
   assert.match(routeCatalog, /"label": "角色权限"/);
