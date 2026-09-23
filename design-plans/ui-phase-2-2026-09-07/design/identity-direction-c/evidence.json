@@ -3,8 +3,8 @@
   "approval": "pending-user-review",
   "kind": "page-proposal",
   "sourceHashes": {
-    "apps/web/src/components/LocalIdentity.vue": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
-    "apps/web/src/components/LandingRedirect.vue": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7",
+    "apps/web/src/components/LocalIdentity.vue": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a",
+    "apps/web/src/components/LandingRedirect.vue": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5",
     "apps/web/src/components/TenancyChooser.vue": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8",
     "apps/web/src/components/OnboardingGuide.vue": "abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed",
     "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
@@ -12,8 +12,8 @@
     "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
     "config/route-catalog.json": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
-    "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "5ac68a4b12a31c45c97a103338ee6be97b7bdecc8f81eb5199f5dd470cbc34ab",
-    "scripts/verify-ui-phase2-identity-source.mjs": "dded99c50b470bbd14ce1e38b747fbe6e1babe037bfea6e09d99b086b742436f",
+    "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "1b8a18033247fa94d61e3ca0ad271f52c7bfd9b3b6c25bf9a5b0e933a4d9de23",
+    "scripts/verify-ui-phase2-identity-source.mjs": "bf5b3cc4c8d684fe20ac09ea46862dc68181494e17dc9611805f96c301941ef6",
     "scripts/verify-ui-phase2-identity-c.mjs": "e738ed2727df69f8a856bb951ee8ecae593d58600b2af9bf8c037f14a56ea874",
     "design-plans/ui-phase-2-2026-09-07/design/identity-direction-c/index.html": "1d64f9ad1d8bf40552de5541fd09361347628f830ed9f98528ddf84eb6b4d5aa",
     "design-plans/ui-phase-2-2026-09-07/design/identity-direction-c/app.js": "70b96a27f2145f5a6ff662f2c8962039d4c3d209299a575ae5fe6140a06605bc",
@@ -30,17 +30,19 @@
       "forgot generic acceptance does not confirm account or delivery",
       "verify no-token zero request; data-bearing response success (transport status not simulated)",
       "reset missing token still submitted by current source; 204 no automatic navigation, only one new password",
-      "known source gap: false initial MFA flag survives read failure; draft must show unknown",
-      "MFA enrollment/confirm/disable exact methods and bodies; source retains materials after disable, no cookie proof",
-      "source mode switch retains sensitive refs; draft is not a lifecycle/security fix",
+      "MFA read failure remains unknown and only explicit retry loads a status",
+      "MFA enrollment/confirm/disable exact methods and bodies; material cleared after confirmation/disable, no cookie proof",
+      "MFA sensitive material clears when leaving the component",
       "empty organizations provision no body; default onboarding return replaced with home",
       "workspace/team reads, archived zero write, exact context body and explicit continue boundary",
+      "superseded membership response cannot replace current organization directory",
+      "superseded context write cannot restore a selected workspace after returning to scope list",
       "chooser expiry/forbidden/other failure separated",
       "root restores member path, blocks missing route, redirects expiry",
-      "guide legal steps and known fractional-query undefined gap; not fixed in product"
+      "guide legal steps and fractional query safely resolves to the first step"
     ],
-    "count": 16,
-    "scope": "actual Vue setup functions with isolated transport/router; no Vue mount, HTML constraint, cookie, auth, SQL, race or production proof"
+    "count": 18,
+    "scope": "actual Vue setup functions with isolated transport/router; P08 membership/context stale-response guards are exercised, but this is not a Vue mount, cookie, auth, SQL, or production proof"
   },
   "checks": [
     "1440: registration empty/mismatch and inline queued result, focus transfer",
@@ -714,7 +716,7 @@
       "pageId": "P08",
       "scene": "p08-organizations-focus",
       "width": 1440,
-      "sha256": "b0cb051ef792876eedb6f8393e8ed6219d86d71e02906f3b2dc296f372ac9f15"
+      "sha256": "a7fbebbd9d3f49e7635dc4b12d9da9b2a36e14214e95808630fc2609ebf98081"
     },
     {
       "file": "1440-p08-organizations-pressed.png",

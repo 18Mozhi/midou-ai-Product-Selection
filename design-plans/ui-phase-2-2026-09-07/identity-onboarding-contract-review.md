@@ -79,6 +79,26 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 | O#f74e91375a9aef9f.1 | 73 | ID-GUIDE-NEXT | step<3→next；I12 |
 | O#176ac690f7c39e94.1 | 74 | ID-GUIDE-FINISH | 第3步→P01；I12 |
 
+### 2.1 当前 LocalIdentity 源标识补记
+
+当前静态合同审计发现 `LocalIdentity.vue` 有45个候选未被本合同正文引用。逐项对照 `action-reviews/P02.json` 至 `P07.json` 的 `sourceCandidateIds` 与当前模板后，45/45 均能归入既有身份动作；下表仅补齐当前源标识，不新增业务动作、路由、请求或权限结论。`L#` 仍表示 `LocalIdentity.vue`，具体路由和模式条件以模板及下方P02–P07合同为准。
+
+| actionId | 当前候选键 | 当前源码语义 |
+| --- | --- | --- |
+| ID-ROOT | L#d545c6b53ab2b2a8.1；L#77c47b63bed1a205.1；L#77c47b63bed1a205.2；L#77c47b63bed1a205.3；L#77c47b63bed1a205.4；L#77c47b63bed1a205.5 | 身份路由各实际模式中的品牌根入口 |
+| ID-MFA-RELOAD | L#9734082c2e28b39f.1 | MFA 读取失败后显式重读 |
+| ID-MFA-START | L#24e4d3a67a2b28f1.1；L#3a0dc4e3156efd96.1；L#05351529fe9e3358.1；L#f068679ed044d696.1 | MFA 独立绑定及首次安全设置绑定；表单提交与按钮归并 |
+| ID-MFA-CONFIRM | L#4ce7b78a016bd6b5.1；L#7d20870a6b6ed73c.1；L#d9c0ff91de01c471.1；L#e7030ff0d08dfdb7.1 | MFA 绑定确认及首次安全设置确认；表单提交与按钮归并 |
+| ID-MFA-DISABLE | L#29abd90f9774564d.1；L#6735871aaf8e0556.1 | MFA 停用表单提交与确认按钮，沿用撤销全部会话边界 |
+| ID-MFA-RETURN-LOGIN | L#e4840b8a830571e2.1 | MFA 管理页返回登录路由 |
+| ID-FORM-SUBMIT | L#b4ef7a9c4f34af7b.1；L#3d0185dcb1b90a38.1；L#55432de3fcde4409.1；L#62294b45ceb45f22.1；L#a8e9d7ee5148dbe5.1；L#be82854e01e5e049.1；L#4b32d082f043e0da.1；L#e448c4ea094171f6.1；L#8cc6c6d54ed246f6.1 | login、MFA challenge、reset、forgot、register 的模式表单及提交按钮；不是一个业务请求 |
+| ID-SEED-PASSWORD | L#15cfc05b46fac8ba.1；L#361a7d3b3e6c57b1.1 | 首次安全设置中的改密提交与按钮 |
+| ID-SHOW-REGISTER | L#f3edcccf9be30a1b.1；L#f3edcccf9be30a1b.2 | 登录/旧 sessions 模式切换到注册 |
+| ID-ACCOUNT-SECURITY | L#ba3feba8b42af0bf.2；L#ba3feba8b42af0bf.3 | 跳转本人 `/me?section=security`；旧 sessions 入口不等于该组件内会话撤销 |
+| ID-MFA-ROUTE | L#dce7dc58cd80c932.1；L#341395d9a1567247.1；L#e0691d9aef4aa1e2.1；L#e0691d9aef4aa1e2.2；L#393c4351ab80bac7.1 | 跳转 `/security/mfa` 的说明/管理入口，仍受该路由会话守卫约束 |
+| ID-SHOW-LOGIN | L#dc876249a8119b09.3；L#6f57070c49bdbca1.1；L#dc876249a8119b09.4；L#dc876249a8119b09.5；L#dc876249a8119b09.6；L#dc876249a8119b09.7 | 注册、验证、找回、重置、MFA 与旧 sessions 模式返回登录 |
+| ID-SHOW-FORGOT | L#56d7e5b963aa0067.1 | 失效重置链接状态进入既有找回密码模式 |
+
 额外运行边界：P01 使用共享 UiStatePanel。blocked 默认还渲染“查看影响”次按钮，组件 emit secondary，但 LandingRedirect 没有对应监听；记录为 `NONACTION-LANDING-SECONDARY`，不假设它可打开影响详情。该候选位于共享组件，不加入上述四文件的38行分母；其余共享消费者留到壳层/通用状态批归并。
 
 四文件在 dialogs.json 无原生定义/确认调用候选，源码无实际模态弹窗。MFA、首次设置、验证结果均是内联模式；不得为了图数凭空添加弹窗或把它们从状态图包排除。今后若选定稿改为弹窗，须补具体触发、焦点、关闭及秘密清理合同，不改变安全流程。
