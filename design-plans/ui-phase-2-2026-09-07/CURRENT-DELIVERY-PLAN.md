@@ -10,7 +10,7 @@
 
 2026-09-24：将 `PlatformAccountCenter.vue` 中组织/用户/管理员目录、筛选及空/错/加载状态的渲染移入 `PlatformAccountDirectoryWorkspace.vue`；父组件从 1000 行降至 830 行，展示组件 246 行。父组件仍持有 API 请求、路由筛选、权限比较数据、状态计算、弹窗、授权写入及全部业务动作；子组件仅用 props、v-model 与 typed emits 呈现并转发意图。账号样式改为 `.account-center` 命名空间选择器，以便父作用域样式覆盖新子组件内部，同时限制全局作用范围。Feature Map 已登记该边界。
 
-验证：Web 类型检查、生产构建、前端 bundle budget（202 项资源）及 153 份文档/73 路由门通过；M06-01 定向单测 7/7、桌面 Chromium 和 390px 手机 E2E 各 50/50 通过，覆盖目录筛选/空态、详情、权限页和写入反馈。全局 `frontend-component-boundary.test.mjs` 仍被基线中的 `ProviderSourceCenter.vue` 行数超限阻断（HEAD 上该文件已有 1587 行，本批改后为 1622 行；账号父页和本批展示子组件自己的上限及后续边界断言通过）。本批未改来源中心；发布时单独记录该既有结构门失败，不据此宣称整套结构门通过。真实 RBAC 与正式 M07-03 验收未由本批覆盖。
+验证：Web 类型检查、生产构建、前端 bundle budget（202 项资源）及 153 份文档/73 路由门通过；M06-01 定向单测 7/7、桌面 Chromium 和 390px 手机 E2E 各 50/50 通过，覆盖目录筛选/空态、详情、权限页和写入反馈。全局 `frontend-component-boundary.test.mjs` 仍被未修改的 `ProviderSourceCenter.vue` 超过 1000 行阻断；本批账号父页及新目录展示组件的各自行数上限检查通过。该全局结构门未整体通过。真实 RBAC 与正式 M07-03 验收未由本批覆盖。
 
 # P58 商业运营 C 工作区视觉与生产核验
 
