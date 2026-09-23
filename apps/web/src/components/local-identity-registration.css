@@ -1,0 +1,293 @@
+#app .p03-registration-page {
+  --p03-blue: #1748a0;
+  --p03-ink: #182d4a;
+  --p03-muted: #52647b;
+  --p03-line: #dce4ee;
+  box-sizing: border-box;
+  width: min(860px, calc(100% - 48px));
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 28px 0 48px;
+  color: var(--p03-ink);
+  font:
+    16px/1.6 "Microsoft YaHei",
+    sans-serif;
+}
+
+#app .p03-registration-page * {
+  box-sizing: border-box;
+}
+
+#app .p03-registration-page :is(h1, h2, p) {
+  margin: 0;
+}
+
+#app .p03-registration-page :is(button, input, a):focus-visible {
+  outline: 3px solid #2465d7;
+  outline-offset: 3px;
+}
+
+#app .p03-registration-top {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+#app .p03-registration-top > a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0 12px;
+  color: #fff;
+  background: var(--p03-blue);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+#app .p03-registration-top > strong {
+  font-size: 16px;
+}
+
+#app .p03-registration-top > small {
+  margin-left: auto;
+  color: var(--p03-muted);
+  font-size: 14px;
+  text-align: right;
+}
+
+#app .p03-registration-hero {
+  padding: 34px 38px;
+  color: #fff;
+  background: var(--p03-blue);
+}
+
+#app .p03-registration-hero > p,
+#app .p03-registration-workspace > header > p {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+#app .p03-registration-hero > h1 {
+  margin: 10px 0 12px;
+  color: #fff;
+  font-size: 34px;
+  line-height: 1.35;
+}
+
+#app .p03-registration-hero > span {
+  color: #e2ecff;
+}
+
+#app .p03-registration-workspace {
+  border: 1px solid var(--p03-line);
+  background: #fff;
+}
+
+#app .p03-registration-workspace > header {
+  padding: 27px 38px;
+  border-bottom: 1px solid var(--p03-line);
+  background: #f6f9ff;
+}
+
+#app .p03-registration-workspace > header > p {
+  color: var(--p03-blue);
+}
+
+#app .p03-registration-workspace > header > h2 {
+  margin: 6px 0;
+  font-size: 28px;
+}
+
+#app .p03-registration-workspace > header > span,
+#app .p03-registration-notice > span {
+  color: var(--p03-muted);
+}
+
+#app .p03-registration-notice {
+  display: grid;
+  gap: 4px;
+  margin: 22px 38px 0;
+  padding: 13px 15px;
+  border-left: 3px solid var(--p03-blue);
+  background: #edf4ff;
+  font-size: 14px;
+}
+
+#app .p03-registration-error {
+  border-left-color: #b42318;
+  background: #fff6f5;
+}
+
+#app .p03-registration-error > strong {
+  color: #812018;
+}
+
+#app .p03-registration-error > small {
+  color: #52647b;
+  overflow-wrap: anywhere;
+}
+
+#app .p03-registration-form {
+  display: grid;
+  gap: 18px;
+  padding: 30px 38px;
+}
+
+#app .p03-registration-form > label {
+  display: grid;
+  gap: 5px;
+  color: var(--p03-ink);
+  font-weight: 700;
+}
+
+#app .p03-registration-form > label > small {
+  color: var(--p03-muted);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+#app .p03-registration-form input {
+  width: 100%;
+  min-height: 48px;
+  padding: 9px 12px;
+  border: 1px solid #bfcddd;
+  border-radius: 0;
+  color: var(--p03-ink);
+  background: #fff;
+  font: inherit;
+}
+
+#app .p03-registration-form input:hover {
+  border-color: #7187a3;
+}
+
+#app .p03-registration-primary {
+  min-height: 48px;
+  border: 1px solid var(--p03-blue);
+  border-radius: 0;
+  color: #fff;
+  background: var(--p03-blue);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+#app .p03-registration-primary:hover:not(:disabled) {
+  background: #103b88;
+}
+
+#app .p03-registration-primary:active:not(:disabled) {
+  background: #0c2e6a;
+}
+
+#app .p03-registration-primary:disabled {
+  border-color: #d5dde8;
+  color: #65758a;
+  background: #edf1f6;
+  cursor: not-allowed;
+}
+
+#app .p03-registration-footer {
+  display: flex;
+  min-height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 38px;
+  border-top: 1px solid var(--p03-line);
+}
+
+#app .p03-registration-footer > :is(button, a) {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  color: var(--p03-blue);
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#app .p03-registration-boundary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  margin-top: 16px;
+  padding: 14px 18px;
+  border-left: 3px solid var(--p03-blue);
+  color: var(--p03-muted);
+  background: #edf4ff;
+}
+
+#app .p03-registration-boundary > strong {
+  color: var(--p03-ink);
+}
+
+@media (max-width: 760px) {
+  #app .p03-registration-page {
+    width: min(calc(100% - 32px), 520px);
+    padding-top: 18px;
+  }
+
+  #app .p03-registration-top {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  #app .p03-registration-top > small {
+    max-width: 150px;
+  }
+
+  #app .p03-registration-hero {
+    padding: 24px 18px;
+  }
+
+  #app .p03-registration-hero > h1 {
+    font-size: 28px;
+  }
+
+  #app .p03-registration-workspace > header,
+  #app .p03-registration-form {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  #app .p03-registration-workspace > header > h2 {
+    font-size: 24px;
+  }
+
+  #app .p03-registration-notice {
+    margin-right: 18px;
+    margin-left: 18px;
+  }
+
+  #app .p03-registration-footer {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0;
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  #app .p03-registration-footer > :is(button, a) {
+    justify-content: flex-start;
+  }
+
+  #app .p03-registration-boundary {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #app .p03-registration-page * {
+    scroll-behavior: auto;
+    transition: none !important;
+  }
+}

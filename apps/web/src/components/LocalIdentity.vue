@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import "./local-identity-mfa.css";
+import "./local-identity-registration.css";
 import "./local-identity-recovery.css";
 import "./local-identity-reset.css";
 import "./local-identity-verification.css";
@@ -731,6 +732,114 @@ onBeforeUnmount(() => clearMfaMaterial());
     </footer>
   </main>
   <main
+    v-else-if="mode === 'register'"
+    class="p03-registration-page"
+    data-testid="registration"
+    :data-state="requestState"
+    :aria-busy="requestState === 'loading'"
+  >
+    <header class="p03-registration-top">
+      <RouterLink to="/" aria-label="ScoutOps 首页">ScoutOps</RouterLink>
+      <strong>创建本地账号</strong>
+      <small>邮箱验证后方可继续</small>
+    </header>
+    <section class="p03-registration-hero" aria-labelledby="p03-registration-title">
+      <p>ACCOUNT REGISTRATION</p>
+      <h1 id="p03-registration-title">创建账号，<br />从可信信息开始。</h1>
+      <span>使用邮箱建立本地账号。创建后请通过验证邮件确认邮箱；此步骤不会自动登录。</span>
+    </section>
+    <section
+      class="p03-registration-workspace"
+      aria-label="账号注册"
+      aria-live="polite"
+      :aria-busy="requestState === 'loading'"
+    >
+      <header>
+        <p>注册信息</p>
+        <h2>填写账号资料</h2>
+        <span>密码仅在本次提交中发送，不会在页面回显。</span>
+      </header>
+      <div
+        v-if="['error', 'rate_limited', 'blocked'].includes(requestState)"
+        class="p03-registration-notice p03-registration-error"
+        role="alert"
+      >
+        <strong>{{
+          requestState === "rate_limited"
+            ? "请求过于频繁"
+            : requestState === "blocked"
+              ? "身份服务暂不可用"
+              : "请检查注册信息"
+        }}</strong>
+        <span>{{ message }}</span>
+        <small v-if="actionHint">{{ actionHint }}</small>
+        <small v-if="requestId">请求标识：{{ requestId }}</small>
+        <small v-if="traceId && traceId !== requestId">链路标识：{{ traceId }}</small>
+      </div>
+      <form class="p03-registration-form" @submit.prevent="submit">
+        <label for="p03-registration-email">
+          <span>邮箱</span>
+          <small id="p03-registration-email-help">用于登录及接收一次性验证链接。</small>
+          <input
+            id="p03-registration-email"
+            v-model="email"
+            type="email"
+            autocomplete="email"
+            required
+            maxlength="254"
+            aria-describedby="p03-registration-email-help"
+            placeholder="name@example.com"
+          />
+        </label>
+        <label for="p03-registration-password">
+          <span>密码</span>
+          <small id="p03-registration-password-help">至少 12 位；请使用不重复的强密码。</small>
+          <input
+            id="p03-registration-password"
+            v-model="password"
+            type="password"
+            autocomplete="new-password"
+            required
+            minlength="12"
+            maxlength="128"
+            aria-describedby="p03-registration-password-help"
+            placeholder="输入安全密码"
+          />
+        </label>
+        <label for="p03-registration-confirm">
+          <span>确认密码</span>
+          <small id="p03-registration-confirm-help">再次输入密码；确认值仅在本地比较。</small>
+          <input
+            id="p03-registration-confirm"
+            v-model="confirmPassword"
+            type="password"
+            autocomplete="new-password"
+            required
+            minlength="12"
+            maxlength="128"
+            aria-describedby="p03-registration-confirm-help"
+            placeholder="再次输入密码"
+          />
+        </label>
+        <button
+          class="p03-registration-primary"
+          type="submit"
+          :disabled="requestState === 'loading'"
+        >
+          {{ requestState === "loading" ? "正在安全处理…" : "创建账号" }}
+        </button>
+      </form>
+      <footer class="p03-registration-footer">
+        <button type="button" @click="switchMode('login')">返回登录</button>
+        <RouterLink to="/security/mfa">账号安全说明</RouterLink>
+      </footer>
+    </section>
+    <footer class="p03-registration-boundary">
+      <strong>验证边界</strong>
+      <span>创建成功表示请求已受理，不代表邮箱已验证或账号已登录。</span>
+    </footer>
+  </main>
+  <main
     v-else-if="mode === 'verify'"
     class="p05-verification-page"
     data-testid="email-verification"
@@ -849,7 +958,6 @@ onBeforeUnmount(() => clearMfaMaterial());
           </p>
           <h2>{{ title }}</h2>
           <span v-if="mode === 'login'">使用已验证的邮箱或唯一用户名登录</span>
-          <span v-else-if="mode === 'register'">先创建账号，再完成邮箱验证</span>
           <span v-else-if="mode === 'mfa-challenge'">短时挑战保存在浏览器安全凭证中</span>
           <span v-else-if="mode === 'security-setup'">完成全部步骤前，业务后端保持拒绝</span>
         </div>
@@ -895,10 +1003,7 @@ onBeforeUnmount(() => clearMfaMaterial());
           <p>{{ message }}</p>
         </div>
 
-        <form
-          v-if="['login', 'register', 'reset', 'mfa-challenge'].includes(mode)"
-          @submit.prevent="submit"
-        >
+        <form v-if="['login', 'reset', 'mfa-challenge'].includes(mode)" @submit.prevent="submit">
           <label v-if="mode === 'mfa-challenge'"
             >认证器验证码或恢复码<input
               v-model="mfaCode"
@@ -938,16 +1043,6 @@ onBeforeUnmount(() => clearMfaMaterial());
               maxlength="128"
               placeholder="输入安全密码"
           /></label>
-          <label v-if="mode === 'register'"
-            >确认密码<input
-              v-model="confirmPassword"
-              type="password"
-              autocomplete="new-password"
-              required
-              minlength="12"
-              maxlength="128"
-              placeholder="再次输入密码"
-          /></label>
           <div v-if="mode === 'login'" class="identity-form-row">
             <span>登录状态最长保留 30 天，可在安全中心主动退出</span
             ><button type="button" class="text-button" @click="switchMode('forgot')">
@@ -960,11 +1055,9 @@ onBeforeUnmount(() => clearMfaMaterial());
                 ? "正在安全处理…"
                 : mode === "login"
                   ? "登录"
-                  : mode === "register"
-                    ? "创建账号"
-                    : mode === "mfa-challenge"
-                      ? "验证并登录"
-                      : "更新密码"
+                  : mode === "mfa-challenge"
+                    ? "验证并登录"
+                    : "更新密码"
             }}
           </button>
         </form>
@@ -1056,12 +1149,7 @@ onBeforeUnmount(() => clearMfaMaterial());
         </div>
 
         <footer class="identity-card__foot">
-          <button
-            v-if="mode !== 'register'"
-            type="button"
-            class="text-button"
-            @click="switchMode('register')"
-          >
+          <button type="button" class="text-button" @click="switchMode('register')">
             创建本地账号
           </button>
           <button

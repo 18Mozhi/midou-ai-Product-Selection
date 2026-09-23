@@ -1,5 +1,9 @@
 # 第二阶段实施记录
 
+## 2026-09-24 · P03 注册 C 方向实施
+
+P03 `/register` 已从共用登录卡片拆为独立蓝色注册边界与白色三字段工作区，补上本地确认密码校验、内联服务失败/追踪、桌面/390px 操作状态；保留原 `POST /auth/register {email,password}`、12–128 密码约束、201 后同 URL 待验证，不自动登录、不声称邮件送达。定向合同/预览单测4/4，实际Vue桌面和手机E2E各2/2，22工作区build通过；刷新一张过期的P05移动待验证视觉基线。共享身份动作映射P02–P07各45个源控件/18项检查通过。已提交与生产GET-only证据待本轮部署后补记；真实账号/邮件及正式M07-03验收仍独立待证；全73页继续，下一页P02。详见[P03实施记录](P03-PAGE-COMPOSITION-IMPLEMENTATION.md)。
+
 ## 2026-09-23 · P04 找回密码 C 方向实施
 
 P04 `/forgot-password` 已迁入实际 `LocalIdentity.vue`：蓝色恢复边界、白色邮箱工作区、原生邮箱校验、通用 202 受理与原有限流追踪。保留既有 `POST /auth/password-reset/request {email}` 及局部返回登录，不真实发送邮件，不改 API/权限/存储/配置/依赖。代码/build SHA `93b70fe963c6348d818373a8fb6a95ee07260898` 已推送、部署；健康/version、深链、JS/CSS 资源和生产双视口只读检查匹配。真实邮件、账号与密码状态不由 GET smoke 证明；全73页目标继续，下一页 P03。详见[P04实施记录](P04-PAGE-COMPOSITION-IMPLEMENTATION.md)。

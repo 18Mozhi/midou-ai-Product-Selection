@@ -61,18 +61,42 @@ test("M02-02.A07/A08/A15 login uses the real contract and continues to tenancy b
 test("M02-02.A07/A08 registration and email confirmation preserve single-use truth", async ({
   page,
 }) => {
+  const writes: Array<{ method: string; body: unknown }> = [];
   await page.route("**/api/v1/auth/register", (route) =>
-    route.fulfill({
-      status: 201,
-      json: envelope({ id: "u", email: "new@example.test", status: "pending_verification" }),
-    }),
+    (async () => {
+      writes.push({ method: route.request().method(), body: route.request().postDataJSON() });
+      await route.fulfill({
+        status: 201,
+        json: envelope({ id: "u", email: "new@example.test", status: "pending_verification" }),
+      });
+    })(),
   );
   await page.goto("/register");
-  await page.getByLabel("邮箱").fill("new@example.test");
-  await page.getByLabel("密码", { exact: true }).fill("Long-enough-password-123!");
-  await page.getByLabel("确认密码").fill("Long-enough-password-123!");
+  await expect(page.getByTestId("registration")).toBeVisible();
+  await expect(page.getByRole("heading", { name: /从可信信息开始/ })).toBeVisible();
+  const email = page.locator("#p03-registration-email");
+  const password = page.locator("#p03-registration-password");
+  const confirmPassword = page.locator("#p03-registration-confirm");
+  await expect(email).toHaveAttribute("type", "email");
+  await expect(email).toHaveAttribute("maxlength", "254");
+  await expect(password).toHaveAttribute("minlength", "12");
+  await expect(password).toHaveAttribute("maxlength", "128");
+  await email.fill("new@example.test");
+  await password.fill("Long-enough-password-123!");
+  await confirmPassword.fill("Different-password-456!");
+  await page.getByRole("button", { name: "创建账号" }).click();
+  await expect(page.getByRole("alert")).toContainText("两次输入的密码不一致。");
+  expect(writes).toEqual([]);
+  await expect(email).toHaveValue("new@example.test");
+  await expect(password).toHaveValue("Long-enough-password-123!");
+  await confirmPassword.fill("Long-enough-password-123!");
   await page.getByRole("button", { name: "创建账号" }).click();
   await expect(page.getByRole("heading", { name: "检查验证邮件" })).toBeVisible();
+  await expect(page).toHaveURL(/\/register$/);
+  expect(writes).toEqual([
+    { method: "POST", body: { email: "new@example.test", password: "Long-enough-password-123!" } },
+  ]);
+  expect(await page.locator(".p03-registration-primary").count()).toBe(0);
   await expect(page).toHaveScreenshot("m02-02-register-verify.png", {
     fullPage: true,
     maxDiffPixels: 140,
@@ -82,6 +106,45 @@ test("M02-02.A07/A08 registration and email confirmation preserve single-use tru
   );
   await page.goto("/verify-email?token=single-use-token");
   await expect(page.getByRole("heading", { name: "邮箱验证完成" })).toBeVisible();
+});
+test("P03 registration shows service feedback and preserves local navigation", async ({ page }) => {
+  await page.route("**/api/v1/auth/register", (route) =>
+    route.fulfill({
+      status: 503,
+      json: {
+        error: {
+          code: "service_unavailable",
+          message: "注册暂时无法完成，请稍后重试。",
+          action_hint: "请保留此编号并稍后再试。",
+        },
+        request_id: "registration-request-id",
+        trace_id: "registration-trace-id",
+      },
+    }),
+  );
+  await page.goto("/register");
+  await page.locator("#p03-registration-email").fill("new@example.test");
+  await page.locator("#p03-registration-password").fill("Long-enough-password-123!");
+  await page.locator("#p03-registration-confirm").fill("Long-enough-password-123!");
+  await page.getByRole("button", { name: "创建账号" }).click();
+  await expect(page.getByRole("alert")).toContainText("注册暂时无法完成，请稍后重试。");
+  await expect(page.getByRole("alert")).toContainText("请保留此编号并稍后再试。");
+  await expect(page.getByRole("alert")).toContainText("请求标识：registration-request-id");
+  await expect(page.getByRole("alert")).toContainText("链路标识：registration-trace-id");
+  await expect(page.locator("#p03-registration-email")).toHaveValue("new@example.test");
+  await expect(page).toHaveURL(/\/register$/);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.reload();
+  await expect(page.getByTestId("registration")).toBeVisible();
+  const submit = page.getByRole("button", { name: "创建账号" });
+  expect((await submit.boundingBox())?.height).toBeGreaterThanOrEqual(44);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  );
+  await page.getByRole("button", { name: "返回登录" }).click();
+  await expect(page.getByRole("heading", { name: "欢迎回到智能选品" })).toBeVisible();
+  await expect(page).toHaveURL(/\/register$/);
 });
 test("P05 verification uses one token-gated confirmation and explicit return", async ({ page }) => {
   const writes: Array<{ method: string; body: unknown }> = [];

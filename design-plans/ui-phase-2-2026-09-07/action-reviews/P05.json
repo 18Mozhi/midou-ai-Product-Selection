@@ -5,7 +5,7 @@
   "status": "implemented-not-production-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/LocalIdentity.vue": "45a60be2d615533f0dd870823b89c9c27fb56079b15f7fff1a3e40efc9be87ff",
+    "apps/web/src/components/LocalIdentity.vue": "f57c425d7f040c0f8bc2debc59003da9c63ed3dace7bd80211f516170d192e13",
     "apps/web/src/components/local-identity-verification.css": "10bbd822340ce45966c70af0c336ece7083977175a7a72674aa0563570d59f89"
   },
   "dialogs": {
@@ -34,6 +34,7 @@
         "apps/web/src/components/LocalIdentity.vue#d545c6b53ab2b2a8.1",
         "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.1",
         "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.2",
+        "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.4",
         "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.3"
       ],
       "condition": "全部局部模式的RouterLink",
@@ -95,9 +96,14 @@
           "reason": "P05邮箱验证页品牌入口；沿用相同身份根路由"
         },
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.3",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.4",
           "classification": "route-mode-family",
           "reason": "P04找回密码品牌根入口；继续既有身份根路由"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.3",
+          "classification": "route-mode-family",
+          "reason": "P03注册页独立品牌返回入口；同属身份根路由"
         }
       ]
     },
@@ -107,12 +113,14 @@
       "kind": "write",
       "routeApplicability": "shared-identity-modes-not-initial-screen-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#cf8c4816a1b9f646.1",
-        "apps/web/src/components/LocalIdentity.vue#2a12c728f1a15626.1",
+        "apps/web/src/components/LocalIdentity.vue#fbbe007aca02e2ec.1",
+        "apps/web/src/components/LocalIdentity.vue#693629caf587c35f.1",
         "apps/web/src/components/LocalIdentity.vue#62294b45ceb45f22.1",
         "apps/web/src/components/LocalIdentity.vue#a8e9d7ee5148dbe5.1",
         "apps/web/src/components/LocalIdentity.vue#be82854e01e5e049.1",
-        "apps/web/src/components/LocalIdentity.vue#4b32d082f043e0da.1"
+        "apps/web/src/components/LocalIdentity.vue#4b32d082f043e0da.1",
+        "apps/web/src/components/LocalIdentity.vue#e448c4ea094171f6.1",
+        "apps/web/src/components/LocalIdentity.vue#8cc6c6d54ed246f6.1"
       ],
       "condition": "login/register/forgot/reset/mfa-challenge；按钮loading禁用，但submit无单飞早退",
       "handler": "submit -> 按mode请求既有auth端点；register不一致零请求",
@@ -179,12 +187,12 @@
       "remaining": "同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。",
       "sourceCandidateApplicability": [
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#cf8c4816a1b9f646.1",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#fbbe007aca02e2ec.1",
           "classification": "route-mode-family",
           "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
         },
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#2a12c728f1a15626.1",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#693629caf587c35f.1",
           "classification": "route-mode-family",
           "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
         },
@@ -207,6 +215,16 @@
           "candidateId": "apps/web/src/components/LocalIdentity.vue#4b32d082f043e0da.1",
           "classification": "route-mode-family",
           "reason": "P04找回密码主提交按钮；调用既有submit"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#e448c4ea094171f6.1",
+          "classification": "route-mode-family",
+          "reason": "P03注册页使用既有submit注册流程"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#8cc6c6d54ed246f6.1",
+          "classification": "route-mode-family",
+          "reason": "P03注册页创建账号按钮提交既有表单"
         }
       ]
     },
@@ -281,10 +299,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.1",
         "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.2",
-        "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.3",
+        "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.4",
         "apps/web/src/components/LocalIdentity.vue#170fb1546e423ddb.1",
         "apps/web/src/components/LocalIdentity.vue#6f57070c49bdbca1.1",
-        "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.4"
+        "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.5",
+        "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.3"
       ],
       "condition": "verify正文、安全设置完成区及非login页脚三入口",
       "handler": "switchMode('login')，URL不变；不自动触发confirmEmail/loadMfa",
@@ -345,7 +364,7 @@
           "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
         },
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.3",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.4",
           "classification": "route-mode-family",
           "reason": "首次安全设置完成后的局部登录入口"
         },
@@ -360,9 +379,14 @@
           "reason": "P06非成功状态返回登录的局部入口"
         },
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.4",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.5",
           "classification": "route-mode-family",
           "reason": "首次安全设置页脚的局部返回登录入口"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.3",
+          "classification": "route-mode-family",
+          "reason": "P03注册页局部返回既有登录模式"
         }
       ]
     },
@@ -715,7 +739,7 @@
       "kind": "local",
       "routeApplicability": "shared-identity-modes-not-initial-screen-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#c29c165271e564d1.1"
+        "apps/web/src/components/LocalIdentity.vue#f3edcccf9be30a1b.1"
       ],
       "condition": "mode非register；按钮无busy禁用",
       "handler": "switchMode('register')，只改局部模式与反馈",
@@ -760,7 +784,7 @@
       "remaining": "首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。",
       "sourceCandidateApplicability": [
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#c29c165271e564d1.1",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#f3edcccf9be30a1b.1",
           "classification": "route-mode-family",
           "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
         }
@@ -902,7 +926,8 @@
       "sourceCandidateIds": [
         "apps/web/src/components/LocalIdentity.vue#df188704ef470c64.1",
         "apps/web/src/components/LocalIdentity.vue#e0691d9aef4aa1e2.1",
-        "apps/web/src/components/LocalIdentity.vue#e0691d9aef4aa1e2.2"
+        "apps/web/src/components/LocalIdentity.vue#e0691d9aef4aa1e2.2",
+        "apps/web/src/components/LocalIdentity.vue#393c4351ab80bac7.1"
       ],
       "condition": "全部局部模式固定RouterLink",
       "handler": "RouterLink /security/mfa；App按routePath重挂载",
@@ -960,6 +985,11 @@
           "candidateId": "apps/web/src/components/LocalIdentity.vue#e0691d9aef4aa1e2.2",
           "classification": "route-mode-family",
           "reason": "P04页脚继续到既有MFA管理路由"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#393c4351ab80bac7.1",
+          "classification": "route-mode-family",
+          "reason": "P03注册页安全说明继续使用既有MFA路由"
         }
       ]
     },
@@ -1025,7 +1055,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/LocalIdentity.vue": "45a60be2d615533f0dd870823b89c9c27fb56079b15f7fff1a3e40efc9be87ff",
+      "apps/web/src/components/LocalIdentity.vue": "f57c425d7f040c0f8bc2debc59003da9c63ed3dace7bd80211f516170d192e13",
       "apps/web/src/components/local-identity-verification.css": "10bbd822340ce45966c70af0c336ece7083977175a7a72674aa0563570d59f89",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
