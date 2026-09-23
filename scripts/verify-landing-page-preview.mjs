@@ -136,7 +136,7 @@ try {
         });
 
         await page.goto(origin + "/", { waitUntil: "domcontentloaded" });
-        const root = page.locator(".landing-redirect--review");
+        const root = page.locator(".landing-redirect");
         await root.waitFor();
         check(await root.locator("h1").count(), 1, "single h1");
         check(

@@ -2,10 +2,11 @@
   "schemaVersion": 1,
   "pageId": "P01",
   "route": "/",
-  "status": "source-reviewed-not-user-approved",
+  "status": "implemented-user-approved-local-vue-verified-not-production-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/LandingRedirect.vue": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7"
+    "apps/web/src/components/LandingRedirect.vue": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5",
+    "apps/web/src/components/LandingRedirectSurface.vue": "7c4100c1eb8d4dd56d5dec61446ef2ebe544873b9c57cec49db62d1a2bad370d"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -20,9 +21,9 @@
       "label": "重新确定登录落点",
       "kind": "read",
       "routeApplicability": "P01-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/LandingRedirect.vue#0c5f729c6e5f1db6.1"],
-      "condition": "挂载自动读取；blocked才显示primary，loading无按钮",
-      "handler": "resolveLanding -> GET /me/landing -> /home恢复最近成员路径，否则replace；expired回/login",
+      "sourceCandidateIds": ["apps/web/src/components/LandingRedirect.vue#0f7c864f959a1c13.1"],
+      "condition": "挂载自动读取；blocked才显示primary，loading无按钮；错误时只提供一次有效重新检查",
+      "handler": "LandingRedirectSurface发出retry -> resolveLanding -> GET /me/landing -> /home恢复最近成员路径，否则replace；expired回/login",
       "variants": ["mounted", "blocked-retry"],
       "scenes": [
         {
@@ -49,25 +50,39 @@
           "file": "scripts/verify-ui-phase2-identity-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "tests/e2e/m00-01-runtime.spec.ts",
+          "evidenceType": "actual-vue-isolated-browser",
+          "claim": "桌面和390px覆盖延迟加载/无重复动作、503后单一重试及恢复转入服务端返回路由、成功响应缺route保持受阻；不证明生产会话或角色授权。"
+        },
+        {
+          "file": "scripts/verify-landing-page-preview.mjs",
+          "evidenceType": "actual-vue-review-fixture",
+          "claim": "1440/390与reduced/no-preference共48项、24个拦截GET；没有写入、额外API或页面错误。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "蓝色主重试按钮，44px最小高度",
+        "hover": "深蓝色背景",
+        "focus": "3px蓝色键盘焦点框",
+        "pressed": "更深蓝色按下状态",
+        "disabled": "无disabled按钮；读取中不渲染重试操作",
+        "busy": "正在加载时隐藏所有操作；不接受重复触发"
       },
-      "remaining": "共享blocked次按钮有emit却无本页监听；不是影响详情。缺失目标/角色/真实会话、导航与重复读取待验。"
+      "remaining": "真实会话、真实角色权限、全部服务端目标、生产错误边界与正式M07-03仍未验证。"
     }
   ],
   "surfaceReview": {
-    "status": "source-reviewed-not-runtime-accepted",
-    "files": ["apps/web/src/components/LandingRedirect.vue"],
+    "status": "actual-vue-local-browser-verified-not-production-accepted",
+    "files": [
+      "apps/web/src/components/LandingRedirect.vue",
+      "apps/web/src/components/LandingRedirectSurface.vue"
+    ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/LandingRedirect.vue": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7",
+      "apps/web/src/components/LandingRedirect.vue": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5",
+      "apps/web/src/components/LandingRedirectSurface.vue": "7c4100c1eb8d4dd56d5dec61446ef2ebe544873b9c57cec49db62d1a2bad370d",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
@@ -85,11 +100,11 @@
     ]
   },
   "compositionGaps": [
-    "仅本页局部源与列明结构已核；全共享消费者/所有状态/主题/真实Vue与用户批准待验。"
+      "局部Vue覆盖加载、依赖受阻、缺少目标与过期转登录；真实会话/角色、目标页面自身权限及M07-03仍需独立验证。"
   ],
-  "approval": "pending-user-review",
+  "approval": "user-approved-visual-direction; remaining page visuals auto-approved by user",
   "limits": [
-    "语义映射是源审阅与图片关联，不是测试、审批或全站分母冻结。",
-    "不改实际UI/鉴权/接口/业务数据，不以重构图替代生产验证。"
+    "用户批准针对视觉构图，不代表真实会话、目标权限或全站分母冻结。",
+    "没有改变认证/导航/API/数据库/权限合同，也没有执行生产身份写入。"
   ]
 }

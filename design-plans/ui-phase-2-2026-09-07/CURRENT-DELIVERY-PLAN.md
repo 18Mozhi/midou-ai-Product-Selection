@@ -1,3 +1,7 @@
+# P01 根入口 C 方向实际 Vue 接入 · 本轮实施
+
+P01 `/` 已接入获批的轻量入口解析界面；读取/路由合同不变。双端 loading/blocked/缺目标、重试、成功落点及401→登录隔离浏览器验证通过。P01实施和后续宝塔只读生产证据详见[P01实施记录](P01-PAGE-COMPOSITION-IMPLEMENTATION.md)；真实角色权限、会话及正式M07-03不由本地样例证明。下一页P08，全73页目标继续。
+
 # P04 找回密码 C 方向生产 Vue 接入 · 本轮实施
 
 P04 `/forgot-password` 现采用蓝色恢复边界与白色单字段工作区，保留 `POST /auth/password-reset/request {email}`、原生 email 验证、通用 202 反馈、既有限流/服务失败追踪和局部返回登录。代码/build SHA `93b70fe963c6348d818373a8fb6a95ee07260898` 已推送并经固定宝塔脚本部署；健康、版本、深链、JS/CSS哈希和1440/390双视口只读检查通过。没有真实发邮件；未改 API/OpenAPI、账号判断、安全权限、数据、配置或依赖。详见[P04实施记录](P04-PAGE-COMPOSITION-IMPLEMENTATION.md)。生产检查不证明邮箱存在、真实投递或重置成功；全73页继续，下一页 P03。

@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, shallowRef } from "vue";
 import { useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import { getLastMemberRoute } from "../navigation-memory";
-import UiStatePanel from "./UiStatePanel.vue";
+import LandingRedirectSurface from "./LandingRedirectSurface.vue";
 
 type State = "loading" | "blocked";
 const props = defineProps<{ apiBaseUrl: string }>();
 const router = useRouter();
 const request = createApiClient(props.apiBaseUrl);
-const state = ref<State>("loading");
-const requestId = ref("");
+const state = shallowRef<State>("loading");
+const requestId = shallowRef("");
 
 async function resolveLanding() {
   state.value = "loading";
@@ -38,12 +38,5 @@ onMounted(resolveLanding);
 </script>
 
 <template>
-  <main class="landing-redirect" aria-live="polite">
-    <UiStatePanel
-      :kind="state === 'loading' ? 'loading' : 'blocked'"
-      :request-id="requestId"
-      :primary-label="state === 'loading' ? '正在进入工作台' : '重新检查'"
-      @primary="resolveLanding"
-    />
-  </main>
+  <LandingRedirectSurface :state="state" :request-id="requestId" @retry="resolveLanding" />
 </template>

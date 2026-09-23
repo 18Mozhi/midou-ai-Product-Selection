@@ -1,5 +1,9 @@
 # 第二阶段实施记录
 
+## 2026-09-24 · P01 根入口 C 方向实施
+
+已将获批的轻量蓝色入口边界/白色解析区接入 `LandingRedirectSurface.vue`；保留 `GET /me/landing`、安全重试、`/home` 最近成员路径、服务端目标 replace 和 expired→`/login`，加载中无按钮、失败只显示单一重新检查，缺 route 保持受阻。用户已授权剩余页面视觉自动同意，本页审核状态按授权登记。审核原型双端/两种动效48项及24次本地GET、P01桌面/390移动端加载/失败/重试/缺失目标回归和根路由成功/401回归通过；Web类型检查与定向单测通过。未改API/OpenAPI/权限/数据库/配置/依赖。生产只读证据见[P01实施记录](P01-PAGE-COMPOSITION-IMPLEMENTATION.md)，全73页目标继续，下一页P08。
+
 ## 2026-09-24 · P02 登录、MFA 挑战与首次安全设置实施
 
 P02 `/login` 已迁入独立蓝色安全步骤边界与白色身份工作区；保留后端主导的普通登录/MFA challenge/seed setup 分流、首次改密后强制重新登录再绑 TOTP、恢复码显示及 redirect/landing 规则。清理旧通用模板中不可达的登录分支；离开挑战/安全设置时清理敏感字段。定向浏览器 E2E 桌面及 390px 各 7/7、登录页源预览单测 2/2、Web 类型检查通过。未改 API、OpenAPI、数据库、权限、配置或依赖。代码提交/build SHA `d4c0e6295c4064b41652fa34ea50d6968a16aae4` 已推送并通过固定宝塔脚本部署；health/ready/available/version、`/login` 双视口及专属 JS/CSS 资源哈希线上只读核验通过，详见[P02实施记录](P02-PAGE-COMPOSITION-IMPLEMENTATION.md)。真实账号/MFA/Cookie/RBAC 与正式 M07-03 验收仍需独立证据，全73页目标继续，下一页 P01。
