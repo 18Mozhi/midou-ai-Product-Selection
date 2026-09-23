@@ -21,6 +21,6 @@
 
 ## 部署结果
 
-实现提交 `6fd36ca62d214c5c9b00a5dfe22313dc08119582` 已推送并由 `python scripts/deploy-baota.py` 部署。部署器报告成功且临时上传包已删除；宝塔固定 Node 项目受控更新/启动，Python 项目配置更新，Nginx 配置检查与 reload 完成。公网 live/ready/available/version、`/platform-admin/releases`、P65 专属 JS/CSS 资源均 HTTP 200，`/api/v1/health/version` 返回该部署 SHA；专属 JS 含 C 布局标记和“运行身份与部署捕获”文案，专属 CSS 含 C 页面作用域。
+基础 C 内容提交 `6fd36ca62d214c5c9b00a5dfe22313dc08119582` 和随后完成的批准蓝白外壳提交 `0f982d4f49588d83698a3d2bac845c95c39a8b5c` 均已推送；最终运行版本由 `python scripts/deploy-baota.py` 部署，build SHA 为 `0f982d4f49588d83698a3d2bac845c95c39a8b5c`。部署器报告成功且临时上传包已删除；宝塔固定 Node 项目受控更新/启动，Python 项目配置更新，Nginx 配置检查与 reload 完成。独立公网核验的 live/ready/available/version、`/platform-admin/releases`、P65 专属 JS/CSS 资源均 HTTP 200，`/api/v1/health/version` 返回该部署 SHA；专属 JS 含 C 布局标记和“运行身份与部署捕获”文案，专属 CSS 含 C 页面作用域。新增 E2E 断言覆盖桌面网格与 240px 侧栏、手机隐藏侧栏/折叠上下文/固定快捷栏。
 
 本地夹具/E2E/静态资源可达不证明生产权限、MySQL 审计、真实发布/回滚或正式 M07-03 签收；没有触发写探针、历史双槽流程、数据库迁移或发布操作。P65 已部署不等于 M07-05 正式生产签收，也不等于全73页阶段完成。
