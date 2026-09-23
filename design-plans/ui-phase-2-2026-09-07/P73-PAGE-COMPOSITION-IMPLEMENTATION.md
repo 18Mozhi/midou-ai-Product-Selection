@@ -19,7 +19,12 @@
 
 首次线上未知地址检查发现，HTTP 404 正确，但正文是宝塔默认 Nginx 错误页，Vue fallback 未显示。只读检查确认站点 `#ERROR-PAGE-START` 块内的 `error_page 404 /404.html` 优先于应用的 `error_page 404 /index.html`。部署器现仅移除该块中的精确默认映射；匹配重复或偏离预期位置时失败关闭。它沿用原来的站点备份、`nginx -t`、Nginx reload 与失败回滚步骤，不改未知路径 HTTP 状态、白名单 SPA 路由、API 或权限合同。
 
-最终部署 SHA、未知地址 HTTP 状态与 Vue fallback 正文、健康状态和静态资源读取结果在部署后复核完成后补录。
+## 最终线上核验
+
+- 修复提交 `44d5b0bd1f99f06bd5e78a367ba1e9d2cea5eed8` 已推送并部署；22 个工作区构建和 M07-03 六对象 preflight 通过，部署器报告临时上传包已删除。部署脚本已对 Nginx 执行 `nginx -t` 与 reload，无需重启 Node/Python。
+- 隔离未知深链的 HTTP 响应为 `404 text/html`；Playwright 实际浏览器页面标题为“页面不存在 · 智能选品”，主标题“没有找到这个页面”、当前路径、恢复链接均渲染，正文不是 Nginx 默认页。query/hash 未进入路径提示。
+- `/api/v1/health/ready`、`/api/v1/health/available`、`/api/v1/health/version` 均为 200，版本 `build_sha` 等于修复提交；P73 专属 JS/CSS 均为 200。页面读取未触发业务 API。
+- 浏览器控制台的一条资源错误仅对应主文档按设计返回 HTTP 404；未观察到 JavaScript 运行异常或控制台警告。
 
 ## 边界
 
