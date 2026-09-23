@@ -1,6 +1,6 @@
 # P04 找回密码 C 方向生产 Vue 接入 · 本轮实施
 
-P04 `/forgot-password` 现采用蓝色恢复边界与白色单字段工作区，保留 `POST /auth/password-reset/request {email}`、原生 email 验证、通用 202 反馈、既有限流/服务失败追踪和局部返回登录。没有真实发邮件；未改 API/OpenAPI、账号判断、安全权限、数据、配置或依赖。桌面/390px 定向 E2E、构建/门禁与生产只读检查详见[P04实施记录](P04-PAGE-COMPOSITION-IMPLEMENTATION.md)。生产检查不证明邮箱存在、真实投递或重置成功；全73页继续，下一页 P03。
+P04 `/forgot-password` 现采用蓝色恢复边界与白色单字段工作区，保留 `POST /auth/password-reset/request {email}`、原生 email 验证、通用 202 反馈、既有限流/服务失败追踪和局部返回登录。代码/build SHA `93b70fe963c6348d818373a8fb6a95ee07260898` 已推送并经固定宝塔脚本部署；健康、版本、深链、JS/CSS哈希和1440/390双视口只读检查通过。没有真实发邮件；未改 API/OpenAPI、账号判断、安全权限、数据、配置或依赖。详见[P04实施记录](P04-PAGE-COMPOSITION-IMPLEMENTATION.md)。生产检查不证明邮箱存在、真实投递或重置成功；全73页继续，下一页 P03。
 
 # P05 邮箱验证 C 方向生产 Vue 接入 · 本轮实施
 

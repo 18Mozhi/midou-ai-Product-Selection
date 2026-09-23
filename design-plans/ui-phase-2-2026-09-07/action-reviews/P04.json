@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "pageId": "P04",
   "route": "/forgot-password",
-  "status": "implemented-user-approved-visual-not-production-accepted",
+  "status": "implemented-user-approved-production-smoke-verified-not-formally-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/LocalIdentity.vue": "45a60be2d615533f0dd870823b89c9c27fb56079b15f7fff1a3e40efc9be87ff"
@@ -1017,7 +1017,7 @@
     }
   ],
   "surfaceReview": {
-    "status": "implemented-not-production-accepted",
+    "status": "production-readonly-smoke-verified-not-formally-accepted",
     "files": [
       "apps/web/src/components/LocalIdentity.vue",
       "apps/web/src/components/local-identity-recovery.css"

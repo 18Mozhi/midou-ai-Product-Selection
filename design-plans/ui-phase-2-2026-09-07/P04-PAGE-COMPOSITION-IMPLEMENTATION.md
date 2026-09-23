@@ -17,11 +17,16 @@
 - `node --test tests/unit/forgot-password-page-preview.test.mjs tests/m02-02/auth-onboarding-contract.test.mjs`：3/3 通过。
 - `node scripts/run-playwright-projects.mjs "--grep=P04 recovery" --workers=1`：桌面 Chromium 2/2、390px mobile 2/2 通过。本地拦截的测试响应验证无效邮箱零 POST、有效邮箱精确发送一次 `{email}`、通用 202、429追踪和局部返回登录；不发送真实邮件。
 - `node scripts/verify-ui-phase2-identity-review.mjs`：P02–P07 每路径40源控件映射、共享身份源18项检查通过。
-- 完整构建、文档/计划/格式/静态与发布门、commit SHA、部署结果和线上只读 smoke 在部署后补记。
+- P04/P05/P06及原M02-02找回用例定向 E2E：桌面 7/7、390px mobile 7/7。先前筛选词过宽时也执行了无关 UI2-CP04 竞争监控手机用例，该项以“恢复监控”严格匹配到两个按钮而失败；精确身份页回归通过，未触碰竞争监控代码。
+- `npm run build`：22/22工作区构建通过；`verify:docs`、`verify:plans`、`format:check`、`verify:runtime-docs`、`verify:static-analysis`、`verify:release-matrix`、`verify:frontend-budget` 与身份控件映射门均通过。
 
 ## 部署与生产核验
 
-待代码提交、推送与固定宝塔部署后填写。生产核验仅对健康端点、版本、`/forgot-password` GET 页面和静态资源做只读检查，不执行邮件发送，不声称真实邮箱/账号/重置流程通过。
+代码提交 `93b70fe963c6348d818373a8fb6a95ee07260898` 已推送并按固定 `python scripts/deploy-baota.py` 部署；宝塔预检 `preflight_passed`、6个既有对象，脚本结果 `deployed`，构建 SHA 与提交一致。上传临时包已由脚本删除。依部署脚本流程 Nginx 配置测试/重载且 Node 项目受控停启；本批没有 Python 代码、后端契约或数据库变化。
+
+生产 `GET` 检查均为 HTTP 200：`/api/v1/health/live`、`/ready`、`/available`、`/version` 及 `/forgot-password`；live/version 的 build SHA 为 `93b70fe963c6348d818373a8fb6a95ee07260898`，MySQL、Redis、supervisor、API 与 worker 状态均为 available。实际生产 Playwright 在1440px和390px各加载 P04：页面与身份 JS/CSS HTTP 200、找回标题/邮箱类型与约束正常、主按钮 `rgb(23,72,160)` 且48px高、无横向溢出、无浏览器异常、无任何非GET API请求。生产身份资源 SHA-256 与本地构建逐字匹配：`LocalIdentity-CpynZBDH.js` `cbfc99e049500fd5e9189d2d6c497188dd0d9e57506039cbdfbd428febdc2e45`；`LocalIdentity-1815kNiR.css` `79cae1c99b5c196ec126d214d49d566bb39beaef522c0367eee4def3f6d013bb`。
+
+所有线上交互核验只读浏览器页面，没有提交邮箱、发送邮件或验证账号重置。上述证据证明部署版本、页面和资产可达，不证明真实邮件送达、账户存在、有效重置令牌、密码变更或正式 M07-03 验收。
 
 ## 不在本次范围
 

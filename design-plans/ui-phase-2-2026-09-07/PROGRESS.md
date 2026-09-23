@@ -2,7 +2,7 @@
 
 ## 2026-09-23 · P04 找回密码 C 方向实施
 
-P04 `/forgot-password` 已迁入实际 `LocalIdentity.vue`：蓝色恢复边界、白色邮箱工作区、原生邮箱校验、通用 202 受理与原有限流追踪。保留既有 `POST /auth/password-reset/request {email}` 及局部返回登录，不真实发送邮件，不改 API/权限/存储/配置/依赖。定向单测和桌面/390px浏览器测试证据、完整构建及线上 SHA/深链/资源检查见[P04实施记录](P04-PAGE-COMPOSITION-IMPLEMENTATION.md)。线上 GET smoke 不代表真实邮箱、邮件或密码已重置；全73页目标继续，下一页 P03。
+P04 `/forgot-password` 已迁入实际 `LocalIdentity.vue`：蓝色恢复边界、白色邮箱工作区、原生邮箱校验、通用 202 受理与原有限流追踪。保留既有 `POST /auth/password-reset/request {email}` 及局部返回登录，不真实发送邮件，不改 API/权限/存储/配置/依赖。代码/build SHA `93b70fe963c6348d818373a8fb6a95ee07260898` 已推送、部署；健康/version、深链、JS/CSS 资源和生产双视口只读检查匹配。真实邮件、账号与密码状态不由 GET smoke 证明；全73页目标继续，下一页 P03。详见[P04实施记录](P04-PAGE-COMPOSITION-IMPLEMENTATION.md)。
 
 ## 2026-09-23 · P05 邮箱验证 C 方向实施
 
