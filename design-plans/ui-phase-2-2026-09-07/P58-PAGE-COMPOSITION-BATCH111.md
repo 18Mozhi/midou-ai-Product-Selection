@@ -35,3 +35,11 @@
 - 全部 hover/disabled/焦点、读屏、触控、断点、主题、错误/空态以及生产验收。
 
 已确认的其他 P58 局部弹窗/反馈审核范围保持原样；本批不把它们扩大为整页通过。
+
+## 2026-09-24 收口记录
+
+- 用户授权剩余视觉项统一通过；C 双工作区构图视觉据此记录通过，不涵盖未知创建结果的写入语义。
+- `node --test tests/unit/commercial-read-timeout.test.mjs tests/unit/platform-commercial-page-preview.test.mjs tests/m06-06/commercial.test.mjs`：13/13通过。审核预览壳层转换器原以过期的单行标题为锚点，已改为使用现行导航条件，范围只限审核工具，不进入生产前端包。
+- `node scripts/run-playwright-projects.mjs tests/e2e/m06-06-commercial.spec.ts`：桌面 Chromium 2/2、手机390 2/2通过。
+- 当前生产 BUILD_SHA `84885c2e05f9d613999d76805b6b7812e37801ee`；`/platform-admin/commercial` HTTP 200，父管理 JS/CSS 与 `CommercialOperationsCenter` JS/CSS 均 HTTP 200，SHA-256 与本地构建一致。本批无运行时代码更改，不重复部署。
+- 真实会话/RBAC、组织目标有效性、配额写入与审计/事务仍未验证。创建超时后冻结原内容/幂等键的产品规则仍待确认；本记录不将已复现的幂等错配作为期望行为。

@@ -68,11 +68,9 @@ ${lookup[0]}      <p v-if="!organizationId" class="p58-unselected">尚未读取�
   return text;
 }
 export function previewCommercialShell(source) {
-  return once(
-    previewShellVue(source),
-    '<header v-if="!opportunityId" class="role-page-title">',
-    '<header v-if="!opportunityId && routePath !== \'/platform-admin/commercial\'" class="role-page-title">',
-  );
+  const text = previewShellVue(source),
+    anchor = "            routePath !== '/platform-admin/redis'";
+  return once(text, anchor, `${anchor} &&\n            routePath !== '/platform-admin/commercial'`);
 }
 
 export const commercialPageSources = [
