@@ -2,7 +2,7 @@
 
 ## 2026-09-23 · P50 凭证与档案 C 方向生产样式
 
-[P50 C方向样式实施](P50-CREDENTIAL-ASSETS-C-IMPLEMENTATION.md)：把已通过视觉稿中的蓝色安全资料库身份/唯一登录主任务、连续概要与凭证/档案台账接入真实 CredentialAssetCenter；三个现有样式文件之后加载路由可见时匹配的 page-scoped CSS，覆盖 Teleport 编辑窗，离页不影响其他路由。保留原数据/请求/权限/密钥/文件/助手合同。M03-02 桌面 Chromium 24/24、390px 手机 24/24；Web 类型、构建/文档/格式/静态分析已检查。全局 CSS 与 NavigationShell 预算报告既有超限；本发布构建/部署与生产证据另行记录。
+[P50 C方向样式实施](P50-CREDENTIAL-ASSETS-C-IMPLEMENTATION.md)：把已通过视觉稿中的蓝色安全资料库身份/唯一登录主任务、连续概要与凭证/档案台账接入真实 CredentialAssetCenter；三个现有样式文件之后加载路由可见时匹配的 page-scoped CSS，覆盖 Teleport 编辑窗，离页不影响其他路由。保留原数据/请求/权限/密钥/文件/助手合同。M03-02 桌面 Chromium 24/24、390px 手机 24/24；Web 类型、完整构建、文档/格式/静态分析通过。宝塔部署成功；live/ready/version、凭证深链和3个专属资源均HTTP 200。预算门继续列全局CSS 129451/122880及NavigationShell 51825/51200超限。正式M07-03生产签收因脱敏证据文件缺失而阻断；本地夹具不证明真实链路。
 
 ## 2026-09-23 · P49 1688启用检查 C 方向生产 Vue
 
