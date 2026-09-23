@@ -4119,6 +4119,7 @@
     "Secrets are held only in Baota restricted configuration or runtime environment; never in this map or Git.",
     "No production service may run outside Baota panel management."
   ],
+  "uiPhase2P39LatestRouteReadFix": "PlatformAccountCenter drops stale account-list responses when the query/status in route.query changes in flight and queues one read for the latest filters; desktop-chromium and mobile-390 E2E cover the deferred-response race. No API, permission, schema, environment, or dependency change. See design-plans/ui-phase-2-2026-09-07/page-specs/P39.md.",
   "statusDetail": "P00_P08_product_functionally_verified_single_server",
   "statusEnum": ["planned", "implemented", "verified", "blocked", "deprecated"],
   "routeCatalogSource": "../config/route-catalog.json"

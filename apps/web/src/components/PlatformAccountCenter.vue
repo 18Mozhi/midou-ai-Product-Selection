@@ -261,6 +261,8 @@ async function loadPlatformRoles() {
 async function load() {
   return loadAccounts();
 }
+let queuedAccountsRead = false;
+let activeAccountsRead: { query: string; status: string } | null = null;
 async function loadAccounts(ownsResult?: () => boolean): Promise<boolean> {
   if (permissionsRoute.value) {
     if (rolesLoading.value) return false;
@@ -275,7 +277,28 @@ async function loadAccounts(ownsResult?: () => boolean): Promise<boolean> {
         : "error";
     return loaded;
   }
-  if (refreshing.value) return false;
+  if (refreshing.value) {
+    const routeQuery =
+      typeof route.query.query === "string" ? route.query.query.slice(0, 120).trim() : "";
+    const routeStatus =
+      typeof route.query.status === "string" ? route.query.status.slice(0, 30) : "";
+    if (
+      activeAccountsRead &&
+      (routeQuery !== activeAccountsRead.query || routeStatus !== activeAccountsRead.status)
+    )
+      queuedAccountsRead = true;
+    return false;
+  }
+  const requestedQuery = query.value.trim();
+  const requestedStatus = status.value;
+  activeAccountsRead = { query: requestedQuery, status: requestedStatus };
+  const routeFiltersChanged = () => {
+    const routeQuery =
+      typeof route.query.query === "string" ? route.query.query.slice(0, 120).trim() : "";
+    const routeStatus =
+      typeof route.query.status === "string" ? route.query.status.slice(0, 30) : "";
+    return requestedQuery !== routeQuery || requestedStatus !== routeStatus;
+  };
   const hadData = Boolean(data.value);
   if (!hadData) state.value = "loading";
   refreshing.value = true;
@@ -284,12 +307,12 @@ async function loadAccounts(ownsResult?: () => boolean): Promise<boolean> {
   const timeout = window.setTimeout(() => controller.abort(), 12_000);
   try {
     const p = new URLSearchParams();
-    if (query.value.trim()) p.set("query", query.value.trim());
-    if (status.value) p.set("status", status.value);
+    if (requestedQuery) p.set("query", requestedQuery);
+    if (requestedStatus) p.set("status", requestedStatus);
     const accountResponse = await request<AccountData>(`/platform/accounts?${p}`, {
       signal: controller.signal,
     });
-    if (ownsResult && !ownsResult()) return false;
+    if ((ownsResult && !ownsResult()) || routeFiltersChanged()) return false;
     data.value = accountResponse.data;
     state.value = "ready";
     lastUpdatedAt.value = new Date();
@@ -297,7 +320,7 @@ async function loadAccounts(ownsResult?: () => boolean): Promise<boolean> {
     if (tab.value === "admins") await loadPlatformRoles();
     return true;
   } catch (e) {
-    if (ownsResult && !ownsResult()) return false;
+    if ((ownsResult && !ownsResult()) || routeFiltersChanged()) return false;
     const action =
       e instanceof DOMException && e.name === "AbortError"
         ? "读取超过 12 秒，请稍后重试。"
@@ -309,7 +332,12 @@ async function loadAccounts(ownsResult?: () => boolean): Promise<boolean> {
     return false;
   } finally {
     window.clearTimeout(timeout);
+    activeAccountsRead = null;
     refreshing.value = false;
+    if (queuedAccountsRead) {
+      queuedAccountsRead = false;
+      void loadAccounts();
+    }
   }
 }
 async function applyFilters() {

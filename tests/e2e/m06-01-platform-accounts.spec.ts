@@ -875,6 +875,43 @@ test("account overview exposes a recoverable empty filter state", async ({ page 
   ).toBeVisible();
 });
 
+test("account overview rereads the latest route filters after an older read settles", async ({
+  page,
+}) => {
+  await setup(page);
+  let releaseFirst!: () => void;
+  let markFirstStarted!: () => void;
+  const firstGate = new Promise<void>((resolve) => (releaseFirst = resolve));
+  const firstStarted = new Promise<void>((resolve) => (markFirstStarted = resolve));
+  let latestRequests = 0;
+  await page.route("**/api/v1/platform/accounts?**", async (route: any) => {
+    const query = new URL(route.request().url()).searchParams.get("query");
+    if (query === "older") {
+      markFirstStarted();
+      await firstGate;
+    }
+    if (query === "latest") latestRequests += 1;
+    await route.fulfill({ json: env(overview) });
+  });
+  const navigation = page.goto("/platform-admin/accounts?query=older");
+  await firstStarted;
+  await page.evaluate(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("query", "latest");
+    window.history.pushState({}, "", url);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+  await expect(page).toHaveURL(/query=latest/);
+  releaseFirst();
+  await navigation;
+  await expect.poll(() => latestRequests).toBe(1);
+  await expect(
+    (page.viewportSize()?.width ?? 0) <= 760
+      ? page.getByRole("button", { name: /米豆选品团队.*查看详情/ })
+      : page.getByRole("cell", { name: "米豆选品团队 midou-team" }),
+  ).toBeVisible();
+});
+
 test("organization list uses organization-specific filters and a recoverable empty state", async ({
   page,
 }) => {
