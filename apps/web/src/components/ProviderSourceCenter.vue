@@ -391,6 +391,8 @@ async function handleSourceRefresh() {
 
 function beginEdit(item: SourceItem) {
   if (!item.provisioned) return;
+  message.value = "";
+  requestId.value = "";
   editing.value = item;
   Object.assign(form, {
     schedule_minutes: item.provisioned.schedule_minutes,
@@ -449,6 +451,8 @@ async function save() {
 }
 async function loadConfigurationVersions(item: SourceItem) {
   if (!item.provisioned) return;
+  message.value = "";
+  requestId.value = "";
   versionSource.value = item;
   versionLoading.value = true;
   versionHistory.value = [];
@@ -519,6 +523,7 @@ async function testSource(item: SourceItem) {
 
 async function loadCompatibility(item: SourceItem) {
   if (!item.provisioned) return;
+  requestId.value = "";
   compatibilitySource.value = item;
   compatibilityLoading.value = true;
   compatibilityError.value = "";
@@ -544,6 +549,8 @@ async function loadCompatibility(item: SourceItem) {
 }
 async function loadParserSamples(item: SourceItem) {
   if (!item.provisioned) return;
+  message.value = "";
+  requestId.value = "";
   sampleSource.value = item;
   sampleLoading.value = true;
   latestReplay.value = null;
@@ -859,6 +866,8 @@ onMounted(load);
       :version-history="versionHistory"
       :rolling-back="rollingBack"
       :rollback-reason="rollbackReason"
+      :message="message"
+      :request-id="requestId"
       @close-edit="editing = null"
       @save="save"
       @close-versions="versionSource = null"
@@ -876,6 +885,8 @@ onMounted(load);
       :saving-candidate-id="sampleSaving"
       :replaying-sample-id="sampleReplaying"
       :reviewing-sample-id="sampleReviewing"
+      :message="message"
+      :request-id="requestId"
       @close="sampleSource = null"
       @create="createParserSample"
       @replay="replayParserSample"
@@ -887,6 +898,7 @@ onMounted(load);
       :adapter-version="compatibilityAdapterVersion"
       :loading="compatibilityLoading"
       :error="compatibilityError"
+      :request-id="requestId"
       :rows="compatibilityRows"
       @close="compatibilitySource = null"
     />

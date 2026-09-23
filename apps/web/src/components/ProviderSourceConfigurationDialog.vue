@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from "vue";
+import { useProviderSourceDialogFocus } from "./useProviderSourceDialogFocus";
 import type {
   ConfigurationChange,
   ConfigurationVersion,
@@ -17,6 +19,8 @@ const props = defineProps<{
   versionHistory: ConfigurationVersion[];
   rollingBack: number | null;
   rollbackReason: string;
+  message: string;
+  requestId: string;
 }>();
 
 const emit = defineEmits<{
@@ -27,6 +31,27 @@ const emit = defineEmits<{
   "update:form": [form: ProviderSourceConfigurationForm];
   "update:rollbackReason": [value: string];
 }>();
+
+const editDialog = ref<HTMLElement | null>(null);
+const editTitle = ref<HTMLElement | null>(null);
+const versionDialog = ref<HTMLElement | null>(null);
+const versionTitle = ref<HTMLElement | null>(null);
+const editFocus = useProviderSourceDialogFocus(
+  () => Boolean(props.editing),
+  editDialog,
+  editTitle,
+  () => {
+    if (!props.saving) emit("closeEdit");
+  },
+);
+const versionFocus = useProviderSourceDialogFocus(
+  () => Boolean(props.versionSource),
+  versionDialog,
+  versionTitle,
+  () => {
+    if (props.rollingBack === null) emit("closeVersions");
+  },
+);
 
 const updateForm = (field: keyof ProviderSourceConfigurationForm, value: string | number) =>
   emit("update:form", { ...props.form, [field]: value });
@@ -57,19 +82,51 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
 <template>
   <div
     v-if="editing"
-    class="source-modal"
+    ref="editDialog"
+    class="source-modal p48-source-configuration-modal"
     role="dialog"
     aria-modal="true"
     aria-labelledby="source-edit-title"
+    aria-describedby="source-edit-description"
+    @keydown="editFocus.onKeydown"
   >
-    <form @submit.prevent="$emit('save')">
+    <form class="p48-source-configuration-form" :aria-busy="saving" @submit.prevent="$emit('save')">
       <header>
         <div>
-          <p>编辑采集来源</p>
-          <h3 id="source-edit-title">{{ editing.name }}</h3>
+          <p>来源采集 / 编辑设置</p>
+          <h3 id="source-edit-title" ref="editTitle" tabindex="-1">
+            采集设置 · {{ editing.name }}
+          </h3>
+          <p id="source-edit-description">
+            调整采集节奏和运行状态。系统会记录本次原因，并保留历史版本。
+          </p>
+          <div class="p48-source-configuration-meta" aria-label="当前来源信息">
+            <span>{{
+              editing.access_mode === "authenticated_browser" ? "网页登录来源" : "公开来源"
+            }}</span>
+            <span>{{
+              editing.provisioned?.status === "enabled" ? "当前已启用" : "当前已停用"
+            }}</span>
+            <span>配置版本 {{ editing.provisioned?.version }}</span>
+          </div>
         </div>
-        <button type="button" aria-label="关闭来源编辑" @click="$emit('closeEdit')">×</button>
+        <button
+          type="button"
+          :aria-label="`关闭 ${editing.name} 采集设置`"
+          :disabled="saving"
+          @click="$emit('closeEdit')"
+        >
+          ×
+        </button>
       </header>
+      <section v-if="message" class="p48-source-dialog-feedback" role="status" aria-live="polite">
+        <strong>{{ saving ? "正在保存采集设置" : "采集设置处理结果" }}</strong>
+        <p>{{ message }}</p>
+        <details v-if="requestId">
+          <summary>技术详情</summary>
+          <code>{{ requestId }}</code>
+        </details>
+      </section>
       <label
         >采集频率（分钟）<input
           :value="form.schedule_minutes"
@@ -77,10 +134,10 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
           min="1"
           max="10080"
           required
-          @input="
-            updateForm('schedule_minutes', Number(($event.target as HTMLInputElement).value))
-          "
-      /></label>
+          aria-describedby="source-edit-schedule-help"
+          @input="updateForm('schedule_minutes', Number(($event.target as HTMLInputElement).value))"
+        /><small id="source-edit-schedule-help">允许 1–10080 的整数。</small></label
+      >
       <label
         >单次超时（毫秒）<input
           :value="form.timeout_ms"
@@ -88,8 +145,10 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
           min="1000"
           max="120000"
           required
+          aria-describedby="source-edit-timeout-help"
           @input="updateForm('timeout_ms', Number(($event.target as HTMLInputElement).value))"
-      /></label>
+        /><small id="source-edit-timeout-help">允许 1000–120000 毫秒的整数。</small></label
+      >
       <label
         >失败重试次数<input
           :value="form.retry_limit"
@@ -97,17 +156,20 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
           min="0"
           max="10"
           required
+          aria-describedby="source-edit-retry-help"
           @input="updateForm('retry_limit', Number(($event.target as HTMLInputElement).value))"
-      /></label>
+        /><small id="source-edit-retry-help">允许 0–10 次。</small></label
+      >
       <label>
         {{ editing.availability === "automatic" ? "运行状态" : "来源设置状态" }}
         <select
           :value="form.status"
+          aria-describedby="source-edit-status-help"
           @change="updateForm('status', ($event.target as HTMLSelectElement).value)"
         >
           <option value="enabled">启用</option>
-          <option value="disabled">停用</option>
-        </select>
+          <option value="disabled">停用</option></select
+        ><small id="source-edit-status-help">网页登录来源仍需完成登录和来源验收后才能运行。</small>
       </label>
       <p v-if="requiresSmokeTest(editing, form)" class="source-smoke-notice">
         启用时会先以停用状态保存这版配置，再访问真实来源页面并验证解析结果；烟测失败不会启用来源。
@@ -145,8 +207,10 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
           minlength="2"
           maxlength="500"
           required
+          aria-describedby="source-edit-reason-help"
           @input="updateForm('reason', ($event.target as HTMLTextAreaElement).value)"
-        ></textarea>
+        ></textarea
+        ><small id="source-edit-reason-help">填写 2–500 个字符，说明这次调整的原因。</small>
       </label>
       <footer>
         <button type="button" @click="$emit('closeEdit')">取消</button>
@@ -158,28 +222,53 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
   </div>
   <div
     v-if="versionSource"
-    class="source-modal"
+    ref="versionDialog"
+    class="source-modal p48-source-versions-modal"
     role="dialog"
     aria-modal="true"
     aria-labelledby="configuration-version-title"
+    @keydown="versionFocus.onKeydown"
   >
-    <section class="configuration-version-panel">
-      <header>
+    <section
+      class="configuration-version-panel p48-source-versions-panel"
+      :aria-busy="versionLoading || rollingBack !== null"
+    >
+      <header class="p48-source-versions-identity">
         <div>
-          <p>配置版本</p>
-          <h3 id="configuration-version-title">版本、差异与回滚 · {{ versionSource.name }}</h3>
+          <p>来源采集 / 配置版本</p>
+          <h3 id="configuration-version-title" ref="versionTitle" tabindex="-1">
+            版本、差异与回滚 · {{ versionSource.name }}
+          </h3>
         </div>
-        <button type="button" aria-label="关闭配置版本" @click="$emit('closeVersions')">×</button>
+        <button
+          type="button"
+          aria-label="关闭配置版本"
+          :disabled="rollingBack !== null"
+          @click="$emit('closeVersions')"
+        >
+          ×
+        </button>
       </header>
       <p>只展示采集频率、超时、重试和启停状态；凭证、Cookie 与受限环境值不会进入版本详情。</p>
-      <label
+      <section v-if="message" class="p48-source-dialog-feedback" role="status" aria-live="polite">
+        <strong>{{ rollingBack !== null ? "正在恢复配置版本" : "配置版本处理结果" }}</strong>
+        <p>{{ message }}</p>
+        <details v-if="requestId">
+          <summary>技术详情</summary>
+          <code>{{ requestId }}</code>
+        </details>
+      </section>
+      <label class="p48-source-versions-rollback"
         >回滚原因<textarea
           :value="rollbackReason"
           minlength="2"
           maxlength="500"
           required
+          :disabled="rollingBack !== null"
+          aria-describedby="configuration-rollback-help"
           @input="$emit('update:rollbackReason', ($event.target as HTMLTextAreaElement).value)"
-        ></textarea>
+        ></textarea
+        ><small id="configuration-rollback-help">填写 2–500 个字符，说明恢复该版本的原因。</small>
       </label>
       <div v-if="versionLoading" class="source-state">正在读取配置版本…</div>
       <ol v-else class="configuration-version-list">
@@ -196,7 +285,7 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
             <button
               v-else-if="version.rollback_available"
               type="button"
-              :disabled="rollingBack === version.version || rollbackReason.trim().length < 2"
+              :disabled="rollingBack !== null || rollbackReason.trim().length < 2"
               @click="$emit('rollback', version)"
             >
               {{ rollingBack === version.version ? "恢复中…" : "恢复此版本" }}
@@ -212,6 +301,12 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
         </li>
       </ol>
       <p v-if="!versionLoading && !versionHistory.length">还没有可用配置版本。</p>
+      <footer class="p48-source-versions-actions">
+        <p>恢复会生成新的当前版本，不会改写历史记录。</p>
+        <button type="button" :disabled="rollingBack !== null" @click="$emit('closeVersions')">
+          关闭
+        </button>
+      </footer>
     </section>
   </div>
 </template>
@@ -354,6 +449,328 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
 @media (max-width: 760px) {
   .source-schedule-preview dl {
     grid-template-columns: 1fr;
+  }
+}
+
+.source-modal.p48-source-configuration-modal,
+.source-modal.p48-source-versions-modal {
+  padding: 24px;
+  background: rgb(15 23 42 / 72%);
+  backdrop-filter: blur(8px);
+}
+.p48-source-configuration-form,
+.p48-source-versions-panel {
+  width: min(820px, 100%);
+  max-height: calc(100dvh - 48px);
+  gap: 0;
+  padding: 0;
+  overflow: auto;
+  border: 1px solid #d3deec;
+  border-radius: 20px;
+  background: #f7f9fc;
+  color: #172033;
+  box-shadow: 0 28px 72px rgb(15 23 42 / 28%);
+}
+.p48-source-configuration-form > header,
+.p48-source-versions-identity {
+  align-items: flex-start;
+  padding: 26px 30px;
+  color: #fff;
+  background: #164fae;
+}
+.p48-source-configuration-form > header > div,
+.p48-source-versions-identity > div {
+  display: grid;
+  gap: 8px;
+}
+.p48-source-configuration-form > header p,
+.p48-source-versions-identity p {
+  color: rgb(255 255 255 / 82%);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.p48-source-configuration-form > header h3,
+.p48-source-versions-identity h3 {
+  color: #fff;
+  font-size: clamp(23px, 3vw, 31px);
+  line-height: 1.2;
+  outline: none;
+}
+.p48-source-configuration-form > header > button,
+.p48-source-versions-identity > button {
+  flex: 0 0 44px;
+  width: 44px;
+  min-height: 44px;
+  border: 1px solid rgb(255 255 255 / 40%);
+  border-radius: 10px;
+  color: #fff;
+  background: rgb(255 255 255 / 10%);
+}
+.p48-source-configuration-form > header > button:disabled,
+.p48-source-versions-identity > button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.p48-source-configuration-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.p48-source-configuration-meta span {
+  padding: 6px 10px;
+  border: 1px solid rgb(255 255 255 / 32%);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 12px;
+}
+.p48-source-configuration-form > label,
+.p48-source-configuration-form > .source-schedule-preview,
+.p48-source-configuration-form > .source-smoke-notice,
+.p48-source-configuration-form > .p48-source-dialog-feedback,
+.p48-source-versions-panel > .p48-source-dialog-feedback {
+  padding: 18px 30px;
+  border: 0;
+  border-bottom: 1px solid #dce4ef;
+  border-radius: 0;
+  background: #fff;
+}
+.p48-source-configuration-form > .p48-source-dialog-feedback,
+.p48-source-versions-panel > .p48-source-dialog-feedback {
+  display: grid;
+  gap: 6px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  border-left: 4px solid #1769e0;
+  color: #344d6a;
+  background: #eaf3ff;
+}
+.p48-source-dialog-feedback p {
+  margin: 0;
+  line-height: 1.55;
+}
+.p48-source-dialog-feedback summary {
+  min-height: 44px;
+  line-height: 44px;
+}
+.p48-source-dialog-feedback code {
+  overflow-wrap: anywhere;
+}
+.p48-source-configuration-form > label {
+  display: grid;
+  gap: 8px;
+  color: #243247;
+  font-size: 14px;
+  font-weight: 650;
+}
+.p48-source-configuration-form input,
+.p48-source-configuration-form select,
+.p48-source-configuration-form textarea,
+.p48-source-versions-panel textarea {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #aebdd0;
+  border-radius: 9px;
+  background: #fff;
+  color: #172033;
+}
+.p48-source-configuration-form small,
+.p48-source-versions-panel small {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 450;
+  line-height: 1.5;
+}
+.p48-source-configuration-form textarea,
+.p48-source-versions-panel textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+.p48-source-configuration-form :focus-visible,
+.p48-source-versions-panel :focus-visible {
+  outline: 3px solid #66a3ff;
+  outline-offset: 3px;
+}
+.p48-source-configuration-form .source-smoke-notice {
+  border-left: 5px solid #d97706;
+  color: #6b4a1c;
+  background: #fff8e8;
+  line-height: 1.6;
+}
+.p48-source-configuration-form .source-schedule-preview {
+  border-bottom: 1px solid #dce4ef;
+  background: #edf4ff;
+}
+.p48-source-configuration-form .source-schedule-preview dl > div {
+  border: 1px solid #d6e2f1;
+  background: #fff;
+}
+.p48-source-configuration-form > footer,
+.p48-source-versions-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  justify-content: space-between;
+  padding: 14px 30px;
+  border-top: 1px solid #d3deec;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 -10px 22px rgb(15 23 42 / 6%);
+  backdrop-filter: blur(10px);
+}
+.p48-source-configuration-form > footer p,
+.p48-source-versions-actions p {
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.p48-source-configuration-form > footer > div {
+  display: flex;
+  gap: 10px;
+}
+.p48-source-configuration-form > footer button,
+.p48-source-versions-actions button,
+.configuration-version-list button {
+  min-height: 44px;
+  padding: 9px 15px;
+  border-radius: 9px;
+}
+.p48-source-configuration-form > footer button:first-child,
+.p48-source-versions-actions button {
+  border: 1px solid #aebdd0;
+  color: #243247;
+  background: #fff;
+}
+.p48-source-versions-panel {
+  width: min(920px, 100%);
+}
+.p48-source-versions-panel > header > div {
+  min-width: 0;
+}
+.p48-source-versions-panel > p {
+  padding: 14px 30px;
+  color: #53657d;
+  background: #eaf3ff;
+  line-height: 1.55;
+}
+.p48-source-versions-panel > label {
+  display: grid;
+  gap: 8px;
+  padding: 16px 30px;
+  border-bottom: 1px solid #dce4ef;
+  background: #fff;
+  font-weight: 650;
+}
+.p48-source-versions-panel > .source-state,
+.p48-source-versions-panel > p:last-of-type {
+  margin: 0;
+  padding: 28px 30px;
+}
+.configuration-version-list {
+  gap: 0;
+  padding: 0 30px;
+  background: #fff;
+}
+.configuration-version-list > li {
+  display: grid;
+  gap: 10px;
+  padding: 16px 0;
+  border: 0;
+  border-bottom: 1px solid #dce4ef;
+  border-radius: 0;
+  background: transparent;
+}
+.configuration-version-list > li > header > div {
+  gap: 5px;
+}
+.configuration-version-list > li > header strong {
+  color: #172033;
+  font-size: 16px;
+}
+.configuration-version-list > li > header span,
+.configuration-version-list > li > p {
+  color: #64748b;
+  font-size: 13px;
+}
+.configuration-version-list ul {
+  gap: 0;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.configuration-version-list ul li {
+  align-items: baseline;
+  padding: 8px 0;
+  border-top: 1px solid #edf1f6;
+  font-size: 13px;
+}
+.configuration-version-list code {
+  overflow-wrap: anywhere;
+  color: #334155;
+}
+.p48-source-versions-actions {
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 760px) {
+  .source-modal.p48-source-configuration-modal,
+  .source-modal.p48-source-versions-modal {
+    align-items: stretch;
+    padding: 0;
+  }
+  .p48-source-configuration-form,
+  .p48-source-versions-panel {
+    width: 100%;
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+  .p48-source-configuration-form > header,
+  .p48-source-versions-identity,
+  .p48-source-configuration-form > label,
+  .p48-source-configuration-form > .source-schedule-preview,
+  .p48-source-configuration-form > .source-smoke-notice,
+  .p48-source-versions-panel > p,
+  .p48-source-versions-panel > label {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+  .p48-source-configuration-form > header h3,
+  .p48-source-versions-identity h3 {
+    font-size: 25px;
+  }
+  .p48-source-configuration-form .source-schedule-preview dl {
+    grid-template-columns: 1fr;
+  }
+  .p48-source-configuration-form > footer,
+  .p48-source-versions-actions {
+    display: grid;
+    gap: 8px;
+    padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
+  }
+  .p48-source-configuration-form > footer > div {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr;
+  }
+  .p48-source-configuration-form > footer p,
+  .p48-source-versions-actions p {
+    margin: 0;
+  }
+  .configuration-version-list {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+  .configuration-version-list > li > header {
+    align-items: flex-start;
+  }
+  .configuration-version-list ul li {
+    display: grid;
+    gap: 4px;
+  }
+}
+@media (forced-colors: active) {
+  .p48-source-configuration-form,
+  .p48-source-versions-panel,
+  .p48-source-configuration-form > header,
+  .p48-source-versions-identity {
+    border: 1px solid CanvasText;
   }
 }
 </style>

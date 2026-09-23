@@ -169,7 +169,7 @@ test("M03-07.A07/A08/A15 novice catalog shows 100+ automatic setup and manual ch
   await expect(page.getByLabel("采集频率（分钟）")).toHaveValue("30");
   await expect(page.getByLabel("来源设置状态")).toHaveValue("disabled");
   await expect(page.getByRole("heading", { name: "调度同频与当前并发占用" })).toBeVisible();
-  await page.getByRole("button", { name: "关闭来源编辑" }).click();
+  await page.getByRole("button", { name: /关闭 .*采集设置/ }).click();
   await page.evaluate(() => window.scrollTo(0, 0));
 });
 
@@ -336,7 +336,27 @@ test("platform administrator can save source schedule, retry and enablement", as
   await page.goto("/platform-admin/providers/sources");
   await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
   await openMobileSourceDetails(page);
-  await page.getByRole("button", { name: "编辑采集设置" }).click();
+  const editTrigger = page.getByRole("button", { name: "编辑采集设置" }).first();
+  await editTrigger.click();
+  const editDialog = page.getByRole("dialog", { name: /采集设置/ });
+  const editTitle = editDialog.getByRole("heading", { name: /采集设置/ });
+  await expect(editTitle).toBeFocused();
+  await expect(page.locator(".source-center > .source-guide")).toHaveAttribute("inert", "");
+  await expect(page.getByLabel("采集频率（分钟）")).toHaveAttribute(
+    "aria-describedby",
+    "source-edit-schedule-help",
+  );
+  await page.keyboard.press("Shift+Tab");
+  await expect(editDialog.getByRole("button", { name: "保存配置" })).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(editDialog.getByRole("button", { name: /关闭.*采集设置/ })).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(editDialog.getByRole("button", { name: "保存配置" })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(editDialog).not.toBeVisible();
+  await expect(page.locator(".source-center > .source-guide")).not.toHaveAttribute("inert");
+  await expect(editTrigger).toBeFocused();
+  await editTrigger.click();
   await page.getByLabel("采集频率（分钟）").fill("45");
   await page.getByLabel("来源设置状态").selectOption("enabled");
   await page.getByLabel("变更原因").fill("调整 Amazon 公开来源采集频率");
@@ -381,15 +401,24 @@ test("source detail shows parser and observed page-version compatibility", async
   await page.goto("/platform-admin/providers/sources");
   await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill(item.name);
   await openMobileSourceDetails(page);
-  await page.getByRole("button", { name: "解析兼容矩阵" }).click();
+  const compatTrigger = page.getByRole("button", { name: "解析兼容矩阵" }).first();
+  await compatTrigger.click();
   const dialog = page.getByRole("dialog", { name: `解析器与页面版本 · ${item.name}` });
+  await expect(dialog).toBeVisible();
+  await expect(
+    dialog.getByRole("heading", { name: `解析器与页面版本 · ${item.name}` }),
+  ).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).not.toBeVisible();
+  await expect(compatTrigger).toBeFocused();
+  await compatTrigger.click();
   await expect(dialog).toBeVisible();
   await expect(dialog.getByText("sha256:aaaaaaaaaaaa", { exact: true })).toBeVisible();
   await expect(dialog.getByText("structured-public-page-v1", { exact: true })).toBeVisible();
   await expect(dialog.getByText("已兼容", { exact: true })).toBeVisible();
   await expect(dialog.getByText("3 / 0", { exact: true })).toBeVisible();
   await expect(dialog.getByText(pageHash, { exact: true })).not.toBeVisible();
-  await dialog.getByText("技术详情").click();
+  await dialog.getByText("完整指纹").click();
   await expect(dialog.getByText(pageHash, { exact: true })).toBeVisible();
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
@@ -501,7 +530,14 @@ test("platform administrator can compare source configuration versions and resto
   await page.goto("/platform-admin/providers/sources");
   await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
   await openMobileSourceDetails(page);
-  await page.getByRole("button", { name: "版本与回滚" }).click();
+  const versionsTrigger = page.getByRole("button", { name: "版本与回滚" }).first();
+  await versionsTrigger.click();
+  const versionsDialog = page.getByRole("dialog", { name: /版本、差异与回滚/ });
+  await expect(versionsDialog.getByRole("heading", { name: /版本、差异与回滚/ })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(versionsDialog).not.toBeVisible();
+  await expect(versionsTrigger).toBeFocused();
+  await versionsTrigger.click();
   await expect(page.getByRole("heading", { name: /版本、差异与回滚/ })).toBeVisible();
   await expect(page.getByText("采集频率").first()).toBeVisible();
   await page.getByLabel("回滚原因").fill("恢复稳定采集设置");
@@ -844,8 +880,15 @@ test("fixed parser sample keeps an immutable second-person approval conclusion",
   );
   await page.goto("/platform-admin/providers/sources");
   await openMobileSourceDetails(page);
-  await page.getByRole("button", { name: "固定样本回放" }).click();
-  await expect(page.getByRole("heading", { name: /固定样本回放/ })).toBeVisible();
+  const samplesTrigger = page.getByRole("button", { name: "固定样本回放" }).first();
+  await samplesTrigger.click();
+  const samplesDialog = page.getByRole("dialog", { name: /固定样本回放/ });
+  await expect(samplesDialog.getByRole("heading", { name: /固定样本回放/ })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(samplesDialog).not.toBeVisible();
+  await expect(samplesTrigger).toBeFocused();
+  await samplesTrigger.click();
+  await expect(samplesDialog).toBeVisible();
   await expect(page.getByText("一致通过 · 待另一管理员审批")).toBeVisible();
   await page.getByLabel("审批原因").fill("字段基线与真实页面一致");
   await page.getByRole("button", { name: "审批通过" }).click();
