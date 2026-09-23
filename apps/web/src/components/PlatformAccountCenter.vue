@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
+import { computed, defineAsyncComponent, nextTick, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import type { RoleCapabilitySummary } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
@@ -9,15 +9,23 @@ import { usePlatformOrganizationDetailState } from "../use-platform-organization
 import { useUserCreationOwner } from "../use-user-creation-owner";
 import type { AccountData, AccountTab, MembershipInput } from "../platform-account-types";
 import AppIcon from "./AppIcon.vue";
-import OrganizationCreationWizard from "./OrganizationCreationWizard.vue";
-import PlatformAccountDialogs from "./PlatformAccountDialogs.vue";
-import PlatformAdminRecords from "./PlatformAdminRecords.vue";
-import PlatformOrganizationRecords from "./PlatformOrganizationRecords.vue";
-import PlatformOrganizationDetailDialog from "./PlatformOrganizationDetailDialog.vue";
-import PlatformRoleComparison from "./PlatformRoleComparison.vue";
-import PlatformUserDetailDialog from "./PlatformUserDetailDialog.vue";
-import PlatformUserRecords from "./PlatformUserRecords.vue";
-import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
+const OrganizationCreationWizard = defineAsyncComponent(
+  () => import("./OrganizationCreationWizard.vue"),
+);
+const PlatformAccountDialogs = defineAsyncComponent(() => import("./PlatformAccountDialogs.vue"));
+const PlatformAdminRecords = defineAsyncComponent(() => import("./PlatformAdminRecords.vue"));
+const PlatformOrganizationRecords = defineAsyncComponent(
+  () => import("./PlatformOrganizationRecords.vue"),
+);
+const PlatformOrganizationDetailDialog = defineAsyncComponent(
+  () => import("./PlatformOrganizationDetailDialog.vue"),
+);
+const PlatformRoleComparison = defineAsyncComponent(() => import("./PlatformRoleComparison.vue"));
+const PlatformUserDetailDialog = defineAsyncComponent(
+  () => import("./PlatformUserDetailDialog.vue"),
+);
+const PlatformUserRecords = defineAsyncComponent(() => import("./PlatformUserRecords.vue"));
+const ResponsiveFilterDrawer = defineAsyncComponent(() => import("./ResponsiveFilterDrawer.vue"));
 const props = withDefaults(
     defineProps<{
       apiBaseUrl: string;

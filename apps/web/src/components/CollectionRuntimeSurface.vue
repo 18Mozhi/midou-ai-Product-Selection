@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import CollectionOperationsConsole from "./CollectionOperationsConsole.vue";
-import CollectionRuntimeCenter from "./CollectionRuntimeCenter.vue";
-import CollectionTaskCenter from "./CollectionTaskCenter.vue";
+import { defineAsyncComponent } from "vue";
+
+const CollectionOperationsConsole = defineAsyncComponent(
+  () => import("./CollectionOperationsConsole.vue"),
+);
+const CollectionRuntimeCenter = defineAsyncComponent(() => import("./CollectionRuntimeCenter.vue"));
+const CollectionTaskCenter = defineAsyncComponent(() => import("./CollectionTaskCenter.vue"));
 
 defineProps<{ apiBaseUrl: string; routePath: string }>();
 </script>

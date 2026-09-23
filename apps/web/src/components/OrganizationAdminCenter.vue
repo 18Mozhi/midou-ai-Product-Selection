@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from "vue";
+import {
+  computed,
+  defineAsyncComponent,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
 import {
   ApiClientError,
   createApiClient,
@@ -7,16 +16,22 @@ import {
   type ApiRequestOptions,
 } from "../api-client";
 import { useAuditedReason, type WorkspaceRestoreReasonContext } from "../use-audited-reason";
-import AuditedReasonDialog from "./AuditedReasonDialog.vue";
-import OrganizationAuditPanel from "./OrganizationAuditPanel.vue";
-import OrganizationApprovalPanel from "./OrganizationApprovalPanel.vue";
-import OrganizationApprovalFirstFailure from "./OrganizationApprovalFirstFailure.vue";
-import OrganizationDataPanel from "./OrganizationDataPanel.vue";
-import OrganizationMemberPanel from "./OrganizationMemberPanel.vue";
-import OrganizationRolePanel from "./OrganizationRolePanel.vue";
-import OrganizationTeamPanel from "./OrganizationTeamPanel.vue";
-import OrganizationTokenPanel from "./OrganizationTokenPanel.vue";
-import OrganizationWorkspacePanel from "./OrganizationWorkspacePanel.vue";
+const AuditedReasonDialog = defineAsyncComponent(() => import("./AuditedReasonDialog.vue"));
+const OrganizationAuditPanel = defineAsyncComponent(() => import("./OrganizationAuditPanel.vue"));
+const OrganizationApprovalPanel = defineAsyncComponent(
+  () => import("./OrganizationApprovalPanel.vue"),
+);
+const OrganizationApprovalFirstFailure = defineAsyncComponent(
+  () => import("./OrganizationApprovalFirstFailure.vue"),
+);
+const OrganizationDataPanel = defineAsyncComponent(() => import("./OrganizationDataPanel.vue"));
+const OrganizationMemberPanel = defineAsyncComponent(() => import("./OrganizationMemberPanel.vue"));
+const OrganizationRolePanel = defineAsyncComponent(() => import("./OrganizationRolePanel.vue"));
+const OrganizationTeamPanel = defineAsyncComponent(() => import("./OrganizationTeamPanel.vue"));
+const OrganizationTokenPanel = defineAsyncComponent(() => import("./OrganizationTokenPanel.vue"));
+const OrganizationWorkspacePanel = defineAsyncComponent(
+  () => import("./OrganizationWorkspacePanel.vue"),
+);
 import "../organization-admin.css";
 type OrganizationAuditFilters = {
   action: string;

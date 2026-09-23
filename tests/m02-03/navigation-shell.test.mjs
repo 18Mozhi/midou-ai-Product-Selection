@@ -185,6 +185,64 @@ test("M02-03 shell presents business labels grouped search and collapsed failure
   assert.deepEqual(generatedCatalog, catalog);
 });
 
+test("M02-03 route shell lazily imports only registered surfaces and page-owned dashboard CSS", async () => {
+  const [shell, main, dashboard, catalogRaw] = await Promise.all([
+    read("apps/web/src/components/NavigationShell.vue"),
+    read("apps/web/src/main.ts"),
+    read("apps/web/src/components/PlatformDashboard.vue"),
+    read("config/route-catalog.json"),
+  ]);
+  const imports = new Set(
+    [...shell.matchAll(/import\("\.\/([^"]+\.vue)"\)/gu)].map((match) => match[1]),
+  );
+  const lazyNames = new Set(
+    [...shell.matchAll(/lazy\("([^"]+)"\)/gu)].map((match) => `${match[1]}.vue`),
+  );
+  const routeSurfaces = new Set(
+    JSON.parse(catalogRaw)
+      .routes.filter((route) => route.shell && route.acceptance !== "internal")
+      .map((route) => route.surface),
+  );
+  const surfaceBindings = new Set(
+    [...shell.matchAll(/^  "([^"]+)": lazy\("([^"]+)"\),?$/gmu)].map((match) => match[1]),
+  );
+
+  assert.doesNotMatch(shell, /import\.meta\.glob/);
+  assert.deepEqual([...imports].sort(), [...lazyNames].sort());
+  assert.deepEqual([...surfaceBindings].sort(), [...routeSurfaces].sort());
+  assert.doesNotMatch(main, /styles\/platform-dashboard\.css/);
+  assert.match(dashboard, /import "\.\.\/styles\/platform-dashboard\.css"/);
+});
+
+test("M02-03 aggregate surfaces defer their inactive route views and dialogs", async () => {
+  const aggregateSurfaces = [
+    "CollectionRuntimeSurface.vue",
+    "OpportunityWorkspace.vue",
+    "OrganizationAdminCenter.vue",
+    "PlatformAccountCenter.vue",
+    "PlatformDataCenter.vue",
+    "PlatformManagementCenter.vue",
+    "ProviderRuntimeSurface.vue",
+    "ProviderSourceCenter.vue",
+  ];
+  for (const name of aggregateSurfaces) {
+    const source = await read(`apps/web/src/components/${name}`);
+    assert.match(source, /defineAsyncComponent/);
+    const staticChildImports = [
+      ...source.matchAll(/^import\s+\w+\s+from\s+["']\.\/([^"']+\.vue)["'];?$/gmu),
+    ].map((match) => match[1]);
+    assert.deepEqual(
+      staticChildImports,
+      name === "OpportunityWorkspace.vue"
+        ? ["UiStatePanel.vue", "AuditedReasonDialog.vue"]
+        : name === "PlatformAccountCenter.vue"
+          ? ["AppIcon.vue"]
+          : [],
+      `${name} should defer its route-owned child views`,
+    );
+  }
+});
+
 test("M02-03.A06/A13 authenticated API validates shell and preserves error contract", async () => {
   const repo = new InMemoryAuthorizationRepository();
   repo.contexts.set(session, { user_id: actor, organization_id: org, workspace_id: workspace });

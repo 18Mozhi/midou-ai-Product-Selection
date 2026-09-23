@@ -1,12 +1,27 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
+import {
+  computed,
+  defineAsyncComponent,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
-import ProviderCompatibilityMatrixDialog from "./ProviderCompatibilityMatrixDialog.vue";
-import ProviderParserSampleDialog from "./ProviderParserSampleDialog.vue";
-import ProviderSourceDirectory from "./ProviderSourceDirectory.vue";
-import ProviderSourceFilters from "./ProviderSourceFilters.vue";
-import ProviderSourceConfigurationDialog from "./ProviderSourceConfigurationDialog.vue";
+const ProviderCompatibilityMatrixDialog = defineAsyncComponent(
+  () => import("./ProviderCompatibilityMatrixDialog.vue"),
+);
+const ProviderParserSampleDialog = defineAsyncComponent(
+  () => import("./ProviderParserSampleDialog.vue"),
+);
+const ProviderSourceDirectory = defineAsyncComponent(() => import("./ProviderSourceDirectory.vue"));
+const ProviderSourceFilters = defineAsyncComponent(() => import("./ProviderSourceFilters.vue"));
+const ProviderSourceConfigurationDialog = defineAsyncComponent(
+  () => import("./ProviderSourceConfigurationDialog.vue"),
+);
 import type {
   ConfigurationVersion,
   ParserSample,

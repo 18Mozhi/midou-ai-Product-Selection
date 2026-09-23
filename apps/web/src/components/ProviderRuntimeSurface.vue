@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import Alibaba1688AcceptanceCenter from "./Alibaba1688AcceptanceCenter.vue";
-import CredentialAssetCenter from "./CredentialAssetCenter.vue";
-import ProviderAdapterCenter from "./ProviderAdapterCenter.vue";
-import ProviderRegistry from "./ProviderRegistry.vue";
-import ProviderSourceCenter from "./ProviderSourceCenter.vue";
+import { defineAsyncComponent } from "vue";
+
+const Alibaba1688AcceptanceCenter = defineAsyncComponent(
+  () => import("./Alibaba1688AcceptanceCenter.vue"),
+);
+const CredentialAssetCenter = defineAsyncComponent(() => import("./CredentialAssetCenter.vue"));
+const ProviderAdapterCenter = defineAsyncComponent(() => import("./ProviderAdapterCenter.vue"));
+const ProviderRegistry = defineAsyncComponent(() => import("./ProviderRegistry.vue"));
+const ProviderSourceCenter = defineAsyncComponent(() => import("./ProviderSourceCenter.vue"));
 
 defineProps<{ apiBaseUrl: string; routePath: string; capabilities: string[] }>();
 </script>

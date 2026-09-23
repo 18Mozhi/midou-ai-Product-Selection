@@ -1,16 +1,26 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, defineAsyncComponent, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
-import OpportunityListPanel from "./OpportunityListPanel.vue";
-import OpportunityDecisionPanel from "./OpportunityDecisionPanel.vue";
-import OpportunityFeedbackPanel from "./OpportunityFeedbackPanel.vue";
-import OpportunityLineagePanel from "./OpportunityLineagePanel.vue";
-import OpportunityProfitPanel from "./OpportunityProfitPanel.vue";
-import OpportunityEvidencePanel from "./OpportunityEvidencePanel.vue";
-import OpportunityDetailInsights from "./OpportunityDetailInsights.vue";
-import OpportunityAiPanel from "./OpportunityAiPanel.vue";
-import OpportunityWorkspaceDialogs from "./OpportunityWorkspaceDialogs.vue";
+const OpportunityListPanel = defineAsyncComponent(() => import("./OpportunityListPanel.vue"));
+const OpportunityDecisionPanel = defineAsyncComponent(
+  () => import("./OpportunityDecisionPanel.vue"),
+);
+const OpportunityFeedbackPanel = defineAsyncComponent(
+  () => import("./OpportunityFeedbackPanel.vue"),
+);
+const OpportunityLineagePanel = defineAsyncComponent(() => import("./OpportunityLineagePanel.vue"));
+const OpportunityProfitPanel = defineAsyncComponent(() => import("./OpportunityProfitPanel.vue"));
+const OpportunityEvidencePanel = defineAsyncComponent(
+  () => import("./OpportunityEvidencePanel.vue"),
+);
+const OpportunityDetailInsights = defineAsyncComponent(
+  () => import("./OpportunityDetailInsights.vue"),
+);
+const OpportunityAiPanel = defineAsyncComponent(() => import("./OpportunityAiPanel.vue"));
+const OpportunityWorkspaceDialogs = defineAsyncComponent(
+  () => import("./OpportunityWorkspaceDialogs.vue"),
+);
 import { createOpportunityWorkspaceForms } from "./opportunity-workspace-forms";
 import UiStatePanel from "./UiStatePanel.vue";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";

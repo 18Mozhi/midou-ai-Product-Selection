@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import TechnicalDetails from "./TechnicalDetails.vue";
+import "../styles/platform-dashboard.css";
 const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>();
 const request = createApiClient(props.apiBaseUrl);
 type State = "loading" | "ready" | "empty" | "expired" | "forbidden" | "rate_limited" | "blocked";

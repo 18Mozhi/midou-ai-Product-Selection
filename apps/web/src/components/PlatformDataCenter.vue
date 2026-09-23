@@ -1,13 +1,22 @@
 <script setup lang="ts">
-import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from "vue";
+import {
+  computed,
+  defineAsyncComponent,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, createApiResponseClient } from "../api-client";
 import { useAuditedReason } from "../use-audited-reason";
-import AuditedReasonDialog from "./AuditedReasonDialog.vue";
-import DataQualityCenter from "./DataQualityCenter.vue";
-import ResponsiveDataView from "./ResponsiveDataView.vue";
-import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
-import TechnicalDetails from "./TechnicalDetails.vue";
+const AuditedReasonDialog = defineAsyncComponent(() => import("./AuditedReasonDialog.vue"));
+const DataQualityCenter = defineAsyncComponent(() => import("./DataQualityCenter.vue"));
+const ResponsiveDataView = defineAsyncComponent(() => import("./ResponsiveDataView.vue"));
+const ResponsiveFilterDrawer = defineAsyncComponent(() => import("./ResponsiveFilterDrawer.vue"));
+const TechnicalDetails = defineAsyncComponent(() => import("./TechnicalDetails.vue"));
 
 type Entity = "trends" | "opportunities" | "competitors" | "suppliers";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";

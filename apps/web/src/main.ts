@@ -4,7 +4,6 @@ import "./styles.css";
 import "./styles/access-governance.css";
 import "./styles/onboarding-navigation.css";
 import "./styles/platform-operations.css";
-import "./styles/platform-dashboard.css";
 import "./design/tokens.css";
 import "./accessibility.css";
 import "./responsive-baselines.css";

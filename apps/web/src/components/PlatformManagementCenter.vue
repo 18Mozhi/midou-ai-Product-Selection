@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { computed, onActivated, onDeactivated, onMounted, onUnmounted, ref, watch } from "vue";
+import {
+  computed,
+  defineAsyncComponent,
+  onActivated,
+  onDeactivated,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+} from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import {
   readRealtimeClientMetrics,
@@ -8,16 +17,28 @@ import {
   type RealtimeClientMetrics,
 } from "../realtime-client-metrics";
 import { useAuditedReason } from "../use-audited-reason";
-import AuditedReasonDialog from "./AuditedReasonDialog.vue";
-import ApiCoverageDashboard from "./ApiCoverageDashboard.vue";
-import PlatformContentCenter from "./PlatformContentCenter.vue";
-import PlatformContentReviewDialog from "./PlatformContentReviewDialog.vue";
-import PlatformMessageEditor from "./PlatformMessageEditor.vue";
-import PlatformMessageWorkbench from "./PlatformMessageWorkbench.vue";
-import PlatformManagementRecordList from "./PlatformManagementRecordList.vue";
-import PlatformManagementFilter from "./PlatformManagementFilter.vue";
-import PlatformNotificationCenter from "./PlatformNotificationCenter.vue";
-import PlatformStatusCenterView from "./PlatformStatusCenterView.vue";
+const AuditedReasonDialog = defineAsyncComponent(() => import("./AuditedReasonDialog.vue"));
+const ApiCoverageDashboard = defineAsyncComponent(() => import("./ApiCoverageDashboard.vue"));
+const PlatformContentCenter = defineAsyncComponent(() => import("./PlatformContentCenter.vue"));
+const PlatformContentReviewDialog = defineAsyncComponent(
+  () => import("./PlatformContentReviewDialog.vue"),
+);
+const PlatformMessageEditor = defineAsyncComponent(() => import("./PlatformMessageEditor.vue"));
+const PlatformMessageWorkbench = defineAsyncComponent(
+  () => import("./PlatformMessageWorkbench.vue"),
+);
+const PlatformManagementRecordList = defineAsyncComponent(
+  () => import("./PlatformManagementRecordList.vue"),
+);
+const PlatformManagementFilter = defineAsyncComponent(
+  () => import("./PlatformManagementFilter.vue"),
+);
+const PlatformNotificationCenter = defineAsyncComponent(
+  () => import("./PlatformNotificationCenter.vue"),
+);
+const PlatformStatusCenterView = defineAsyncComponent(
+  () => import("./PlatformStatusCenterView.vue"),
+);
 import type { PlatformNotificationForm } from "./platform-notification-types";
 import {
   formatPlatformManagementTime as when,
