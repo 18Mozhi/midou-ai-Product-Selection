@@ -2,7 +2,7 @@
 
 日期：2026-09-12
 路由：`/platform-admin/content`
-状态：真实 Vue 已实现并完成本地夹具验证；用户视觉审核、真实 MySQL/RBAC/审计与生产验收待办。
+状态：真实 Vue 已实现并完成本地夹具验证；视觉项按用户统一授权通过；真实 MySQL/RBAC/审计与完整生产验收待办。
 
 ## 实现结果
 
@@ -44,4 +44,11 @@
 
 全局合同审计仍有64个来自P50–P53、ConfirmDialog与ProviderAdapterCenter等既有批次的未引用候选；本批新增或改动的P56候选已全部引用，不用本页合同替其他批次补签。
 
-仍待：用户对当前图的逐项审核、真实登录与`platform:operate`、MySQL 5.7版本冲突/三类审计事件、同源和幂等回放、真实软键盘/读屏器、共享NavigationShell重构、宝塔部署及生产签收。
+仍待：真实登录与`platform:operate`、MySQL 5.7版本冲突/三类审计事件、同源和幂等回放、真实软键盘/读屏器、共享NavigationShell重构与正式M07-03生产签收；当前生产静态页面及P56资源已核验，见下方本次收口记录。
+
+## 2026-09-24 收口记录
+
+- 用户授权将剩余视觉项统一视为通过；该记录仅覆盖视觉，不提升真实权限、审核写入或业务验收状态。
+- `node --test tests/unit/content-page-preview.test.mjs`：1/1 通过。
+- `node scripts/run-playwright-projects.mjs tests/e2e/m06-02-platform-dashboard.spec.ts --grep UI2-PN56`：桌面 Chromium 6/6、手机 390 6/6 通过。首次运行暴露测试将实际 `<h1>` 错写为 level 2；依据 `PlatformContentCenter.vue` 的真实标题语义，仅将该断言改为 level 1 后重跑通过。
+- 生产 `/platform-admin/content`、`PlatformContentCenter-B6JQ71Fz.js`、`PlatformContentCenter-DYbXOE5E.css` 均 HTTP 200，页面资源 SHA-256 与本地构建一致；当前生产 BUILD_SHA 为 `e86a58915c28ddf5f076892a73297375d382704e`。本次未改运行时代码，正式 M07-03、会话/RBAC、真实审核写入、MySQL/审计、幂等和读屏/软键盘仍未验收。
