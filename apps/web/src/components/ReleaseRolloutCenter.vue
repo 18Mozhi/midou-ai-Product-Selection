@@ -1047,6 +1047,339 @@ footer details span {
 </style>
 
 <style scoped>
+:global(html body:has(#app .release-center--c)) {
+  background: #f3f6fb;
+  color: #172d4c;
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+:global(html body:has(#app .release-center--c) #app .role-shell) {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-rows: 76px minmax(0, 1fr);
+  min-height: 100dvh;
+  padding: 0;
+  background: #f3f6fb;
+  color: #172d4c;
+  font-family: inherit;
+}
+:global(html body:has(#app .release-center--c) #app .role-topbar) {
+  grid-column: 1 / -1;
+  position: relative;
+  inset: auto;
+  height: 76px;
+  min-height: 0;
+  padding: 0 24px;
+  border: 0;
+  border-bottom: 1px solid #d8e2ef;
+  background: #fff;
+}
+:global(html body:has(#app .release-center--c) #app .role-brand) {
+  gap: 12px;
+  color: #172d4c;
+}
+:global(html body:has(#app .release-center--c) #app .role-brand > span) {
+  border: 0;
+  border-radius: 8px;
+  background: #244bb0;
+  color: #fff;
+}
+:global(html body:has(#app .release-center--c) #app .role-brand > b) {
+  font-family: inherit;
+  font-size: 16px;
+  letter-spacing: 0.06em;
+}
+:global(html body:has(#app .release-center--c) #app .role-brand > em) {
+  color: #536985;
+  font-size: 13px;
+  letter-spacing: 0;
+}
+:global(html body:has(#app .release-center--c) #app .role-top-actions :is(a, button)) {
+  min-height: 44px;
+  min-width: 44px;
+  border: 1px solid #d8e2ef;
+  border-radius: 7px;
+  background: #fff;
+  color: #172d4c;
+}
+:global(html body:has(#app .release-center--c) #app .role-sidebar) {
+  grid-column: 1;
+  grid-row: 2;
+  position: sticky;
+  inset: auto;
+  top: 0;
+  align-self: start;
+  box-sizing: border-box;
+  width: 240px;
+  height: calc(100dvh - 76px);
+  padding: 22px 16px;
+  overflow-y: auto;
+  border: 0;
+  border-radius: 0;
+  background: #244bb0;
+  color: #fff;
+  transform: none;
+  transition: none;
+}
+:global(html body:has(#app .release-center--c) #app .role-sidebar-head) {
+  width: auto;
+  padding: 0 8px 20px;
+  gap: 7px;
+  border: 0;
+}
+:global(html body:has(#app .release-center--c) #app .role-sidebar-head strong) {
+  color: #fff;
+  font:
+    700 18px/1.5 "Microsoft YaHei",
+    sans-serif;
+}
+:global(html body:has(#app .release-center--c) #app .role-sidebar-head small) {
+  color: #e2ebff;
+  font:
+    13px/1.7 "Microsoft YaHei",
+    sans-serif;
+  white-space: normal;
+}
+:global(html body:has(#app .release-center--c) #app .role-menu-search) {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  margin-bottom: 16px;
+  padding: 0 10px;
+  border: 1px solid #91afea;
+  border-radius: 7px;
+  background: #fff;
+  color: #172d4c;
+}
+:global(html body:has(#app .release-center--c) #app .role-menu-search input) {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  border: 0;
+  background: #fff;
+  color: #172d4c;
+  font:
+    16px/1.5 "Microsoft YaHei",
+    sans-serif;
+}
+:global(html body:has(#app .release-center--c) #app .role-nav-groups) {
+  display: grid;
+  flex: none;
+  gap: 8px;
+  overflow: visible;
+}
+:global(html body:has(#app .release-center--c) #app .role-nav-groups details) {
+  border: 0;
+}
+:global(html body:has(#app .release-center--c) #app .role-nav-groups details > summary) {
+  height: auto;
+  min-height: 44px;
+  padding: 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+:global(html body:has(#app .release-center--c) #app .role-nav-groups summary:hover),
+:global(html body:has(#app .release-center--c) #app .role-nav-menu a:hover) {
+  background: #365fc6;
+}
+:global(html body:has(#app .release-center--c) #app .role-nav-menu) {
+  position: static;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+:global(html body:has(#app .release-center--c) #app .role-nav-menu a) {
+  min-width: 0;
+  min-height: 44px;
+  margin: 3px 0;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #eef3ff;
+  font-size: 14px;
+}
+:global(html body:has(#app .release-center--c) #app .role-nav-menu a[aria-current="page"]) {
+  background: #fff;
+  color: #244bb0;
+  font-weight: 700;
+}
+:global(html body:has(#app .release-center--c) #app .role-sidebar-utility) {
+  display: grid;
+  margin: 24px 0 0;
+  border: 0;
+}
+:global(html body:has(#app .release-center--c) #app .role-sidebar-utility a) {
+  width: auto;
+  min-height: 44px;
+  padding: 10px 8px;
+  border: 0;
+  border-top: 1px solid #7595db;
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  white-space: normal;
+}
+:global(html body:has(#app .release-center--c) #app .role-content) {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 24px 32px 48px;
+}
+:global(html body:has(#app .release-center--c) #app .role-context-rail) {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0 0 24px;
+  padding: 12px 0;
+  border: 0;
+  border-block: 1px solid #d8e2ef;
+  border-radius: 0;
+  background: transparent;
+}
+:global(html body:has(#app .release-center--c) #app .role-context-rail > div) {
+  padding: 0;
+  border: 0;
+}
+:global(html body:has(#app .release-center--c) #app .role-context-rail small) {
+  color: #536985;
+  font:
+    13px/1.5 "Microsoft YaHei",
+    sans-serif;
+}
+:global(html body:has(#app .release-center--c) #app .role-context-rail strong) {
+  margin-top: 3px;
+  color: #172d4c;
+  font-size: 14px;
+}
+:global(html body:has(#app .release-center--c) #app .role-context-drawer) {
+  display: none;
+}
+:global(html body:has(#app .release-center--c) #app .role-mobile-nav) {
+  display: none;
+}
+:global(
+  html
+    body:has(#app .release-center--c)
+    #app
+    .role-shell
+    :is(a, button, input, summary):focus-visible
+) {
+  outline: 3px solid #4878e9;
+  outline-offset: 3px;
+}
+@media (max-width: 1100px) and (min-width: 841px) {
+  :global(html body:has(#app .release-center--c) #app .role-shell) {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+  :global(html body:has(#app .release-center--c) #app .role-sidebar) {
+    width: 220px;
+    padding-inline: 12px;
+  }
+  :global(html body:has(#app .release-center--c) #app .role-content) {
+    padding-inline: 20px;
+  }
+}
+@media (max-width: 840px) {
+  :global(html body:has(#app .release-center--c) #app .role-shell) {
+    display: block;
+    padding: 0 0 calc(80px + env(safe-area-inset-bottom));
+  }
+  :global(html body:has(#app .release-center--c) #app .role-topbar) {
+    height: 64px;
+    padding: 0 12px;
+    gap: 8px;
+  }
+  :global(html body:has(#app .release-center--c) #app .role-brand) {
+    margin-right: auto;
+    gap: 0;
+  }
+  :global(html body:has(#app .release-center--c) #app .role-brand > :is(b, em)) {
+    display: none;
+  }
+  :global(html body:has(#app .release-center--c) #app .role-menu-toggle) {
+    display: inline-flex;
+  }
+  :global(html body:has(#app .release-center--c) #app .role-content) {
+    padding: 18px 16px 32px;
+  }
+  :global(html body:has(#app .release-center--c) #app .role-context-rail) {
+    display: none;
+  }
+  :global(html body:has(#app .release-center--c) #app .role-context-drawer) {
+    display: block;
+    margin-bottom: 20px;
+    border: 1px solid #d8e2ef;
+    border-radius: 7px;
+    background: #fff;
+  }
+  :global(html body:has(#app .release-center--c) #app .role-context-drawer > div) {
+    grid-template-columns: 1fr 1fr;
+  }
+  :global(html body:has(#app .release-center--c) #app .platform-secondary-nav) {
+    display: flex;
+    overflow-x: auto;
+  }
+  :global(html body:has(#app .release-center--c) #app .role-sidebar) {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 100;
+    width: min(340px, calc(100vw - 32px));
+    height: 100dvh;
+    max-height: 100dvh;
+    padding: 16px;
+    overflow-y: auto;
+    box-shadow: 12px 0 32px rgb(12 29 54 / 24%);
+  }
+  :global(html body:has(#app .release-center--c) #app .role-sidebar:not(.is-open)) {
+    display: none;
+  }
+  :global(html body:has(#app .release-center--c) #app .role-mobile-nav) {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 90;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    min-height: 72px;
+    border: 0;
+    border-top: 1px solid #d8e2ef;
+    background: #fff;
+  }
+  :global(html body:has(#app .release-center--c) #app .role-mobile-nav :is(a, button, i)) {
+    color: #536985;
+  }
+  :global(html body:has(#app .release-center--c) #app .role-mobile-nav [aria-current="page"]) {
+    background: #e8efff;
+    color: #244bb0;
+  }
+}
+:global(body:has(.release-center--c) #app .platform-secondary-nav) {
+  background: #fff;
+  border: 1px solid #c7d3e4;
+  gap: 0;
+}
+:global(body:has(.release-center--c) #app .platform-secondary-nav a) {
+  min-height: 44px;
+  background: #fff;
+  color: #526278;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  box-shadow: none;
+}
+:global(body:has(.release-center--c) #app .platform-secondary-nav a[aria-current="page"]) {
+  color: #1249b8;
+  background: #edf3ff;
+  border-bottom-color: #1249b8;
+}
 .release-center--c {
   --so-text: #182739;
   --so-text-muted: #526278;
