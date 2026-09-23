@@ -123,16 +123,16 @@ test("M08-04.A07/A08/A15 desktop and 390 local-file truth", async ({ page }) => 
     route.fulfill({ json: envelope(base) }),
   );
   await page.goto("/platform-admin/files");
-  await expect(page.getByRole("heading", { name: "本机文件韧性" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "文件存储核验" })).toBeVisible();
   await expect(page.getByText("本机文件韧性门已满足")).toBeVisible();
   await expect(page.getByText("20 / 20")).toBeVisible();
   await expect(page.getByText("临时目录", { exact: true })).toBeVisible();
-  await expect(page.getByText("不建立持久索引")).toBeVisible();
+  await expect(page.getByText("不建立持久索引", { exact: true })).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(
     page.getByText(
-      "证据、导出与临时文件只写入惠州当前主机的宝塔受控目录；不使用共享存储或备用服务器。",
+      "证据、导出与临时文件均在当前主机；不使用共享存储或备用服务器。",
     ),
   ).toBeVisible();
 });
@@ -226,5 +226,5 @@ test("M08-04.A08/A09/A16 warning blocked empty forbidden expired rate limited un
     await expect(page.getByText(label)).toBeVisible();
   }
   await page.goto("/platform-admin/files?state=recovering");
-  await expect(page.getByRole("heading", { name: "本机文件韧性" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "文件存储核验" })).toBeVisible();
 });

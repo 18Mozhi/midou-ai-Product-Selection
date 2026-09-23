@@ -399,6 +399,12 @@ test("M08-04.A07/A08/A15/A16 UI evidence and rollback cover full states and imag
       "scripts/verify-file-resilience-production.mjs",
     ].map((path) => readFile(path, "utf8")),
   );
+  const [directoryLedger, integrityAndRecovery] = await Promise.all(
+    [
+      "apps/web/src/components/file-resilience/FileResilienceDirectoryLedger.vue",
+      "apps/web/src/components/file-resilience/FileResilienceIntegrityAndRecovery.vue",
+    ].map((path) => readFile(path, "utf8")),
+  );
   for (const state of [
     "loading",
     "ready",
@@ -413,7 +419,8 @@ test("M08-04.A07/A08/A15/A16 UI evidence and rollback cover full states and imag
     "recovering",
   ])
     assert.match(ui, new RegExp(state));
-  assert.match(ui, /临时目录[\s\S]*不建立持久索引/);
+  assert.match(`${ui}\n${directoryLedger}`, /临时目录[\s\S]*不建立持久索引/);
+  assert.match(integrityAndRecovery, /零样本可以是 ready/);
   assert.match(e2e, /390/);
   for (const token of ["AbortController", "15_000", "refreshing", "refreshFailure"])
     assert.match(ui, new RegExp(token));

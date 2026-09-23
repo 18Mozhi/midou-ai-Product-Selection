@@ -114,7 +114,7 @@ try {
           return route.fulfill({ json: envelope(current.data) });
         });
         await page.goto(origin + "/platform-admin/files");
-        const root = page.locator(".file-resilience--review"),
+        const root = page.locator(".file-resilience--c"),
           refresh = root.getByRole("button", { name: "刷新文件事实", exact: true });
         await root.locator(".p69-directories").waitFor();
         for (const [name, fixture] of Object.entries(designData.datasets).filter(([name]) =>
