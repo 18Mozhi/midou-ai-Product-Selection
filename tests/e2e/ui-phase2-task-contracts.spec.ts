@@ -1,4 +1,4 @@
-import { test, expect, type Page, type Locator } from "@playwright/test";
+import { test, expect, type Page, type Locator, type Route } from "@playwright/test";
 import { setupBusinessTasks as setup, taskId, actor, env, task } from "./helpers/business-tasks";
 
 // Real Vue, existing isolated fixture; these cases do not verify MySQL or production writes.
@@ -283,6 +283,49 @@ test("UI2-T07 edit preserves assignee and version; delete returns to the origina
     method: "DELETE",
     body: { expected_version: 2, reason: "测试任务已合并" },
   });
+});
+
+test("UI2-T07 closing a pending delete does not lose the submitted target", async ({ page }) => {
+  const observed = await setup(page);
+  const writes: { method: string; body: unknown }[] = [];
+  const pageErrors: string[] = [];
+  let pending: Route | undefined;
+  let releaseRoute!: () => void;
+  const routeGate = new Promise<void>((resolve) => {
+    releaseRoute = resolve;
+  });
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await page.route(`**/api/v1/tasks/${taskId}`, async (route) => {
+    if (route.request().method() === "GET") return route.fallback();
+    writes.push({ method: route.request().method(), body: route.request().postDataJSON() });
+    pending = route;
+    await routeGate;
+  });
+
+  await page.goto(`${detail}?from=${encodeURIComponent("/tasks?status=in_progress")}`);
+  await more(page).click();
+  await page.locator(".task-detail").getByRole("button", { name: "删除任务", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "删除任务", exact: true });
+  await dialog.getByLabel("删除原因").fill("重复任务已合并");
+  await dialog.getByRole("button", { name: "确认删除", exact: true }).click();
+  await expect.poll(() => Boolean(pending)).toBe(true);
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator("button[type=submit]")).toBeDisabled();
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await pending!.fulfill({ json: env({ id: taskId, deleted: true }) });
+  releaseRoute();
+
+  await expect(page).toHaveURL(/\/tasks\?status=in_progress$/);
+  await expect.poll(() => observed.listRequests).toBeGreaterThan(0);
+  expect(writes).toEqual([
+    {
+      method: "DELETE",
+      body: { expected_version: 2, reason: "重复任务已合并" },
+    },
+  ]);
+  expect(pageErrors).toEqual([]);
 });
 
 test("UI2-T08 detail not-found reload retries the read without list or summary requests", async ({

@@ -189,11 +189,16 @@ export async function verifyTaskListReview() {
   });
   assert.equal(deleting.value, null);
   release();
-  await assert.rejects(deletion, (error) => error.name === "TypeError" && /id/.test(error.message));
-  assert.equal(refreshed, 0);
+  await deletion;
+  assert.deepEqual(calls[0], {
+    url: "/tasks/A",
+    method: "DELETE",
+    body: { expected_version: 2, reason: "核对后删除" },
+  });
+  assert.equal(refreshed, 1);
   assert.equal(busy.value, false);
   checks.push(
-    "UNFIXED: pending DELETE then actual closeDeleteDialog clears target; successful response dereferences null target before list refresh. Source composition only, not a mounted Escape/service proof",
+    "Pending DELETE keeps its submitted task/version/reason after actual closeDeleteDialog clears the live target; successful response refreshes the list without reopening or dereferencing dialog state",
   );
   return {
     shared: {

@@ -567,16 +567,20 @@ function askRemove(task: Task) {
 }
 async function removeTask() {
   if (busy.value || !canUpdate.value || !deleting.value || !deleteReason.value.trim()) return;
+  const target = deleting.value;
+  const reason = deleteReason.value.trim();
   busy.value = true;
   try {
-    await api(`/tasks/${deleting.value.id}`, {
+    await api(`/tasks/${target.id}`, {
       method: "DELETE",
-      body: { expected_version: deleting.value.version, reason: deleteReason.value.trim() },
+      body: { expected_version: target.version, reason },
     });
     notice.value = "任务已删除，历史审计记录仍然保留。";
-    const removedSelectedTask = selected.value?.id === deleting.value.id;
-    deleting.value = null;
-    deleteReason.value = "";
+    const removedSelectedTask = selected.value?.id === target.id;
+    if (deleting.value?.id === target.id) {
+      deleting.value = null;
+      deleteReason.value = "";
+    }
     if (props.taskId && removedSelectedTask) {
       await router.replace(returnPath.value);
       return;
