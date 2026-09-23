@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { nextTick, ref, watch } from "vue";
 import { useProviderSourceDialogFocus } from "./useProviderSourceDialogFocus";
 import type {
   ConfigurationChange,
@@ -14,19 +14,28 @@ const props = defineProps<{
   form: ProviderSourceConfigurationForm;
   preview: ProviderSourceConfigurationPreview | null;
   saving: boolean;
+  saveStage: string;
+  saveTitle: string;
+  saveDescription: string;
+  saveRequestId: string;
   versionSource: ProviderSourceItem | null;
   versionLoading: boolean;
   versionHistory: ConfigurationVersion[];
+  versionActionStage: string;
+  versionActionTitle: string;
+  versionActionDescription: string;
+  versionActionRequestId: string;
+  versionWriteConfirmed: boolean;
   rollingBack: number | null;
   rollbackReason: string;
-  message: string;
-  requestId: string;
 }>();
 
 const emit = defineEmits<{
   closeEdit: [];
+  acknowledge: [];
   save: [];
   closeVersions: [];
+  retryVersions: [];
   rollback: [version: ConfigurationVersion];
   "update:form": [form: ProviderSourceConfigurationForm];
   "update:rollbackReason": [value: string];
@@ -34,15 +43,44 @@ const emit = defineEmits<{
 
 const editDialog = ref<HTMLElement | null>(null);
 const editTitle = ref<HTMLElement | null>(null);
+const saveFeedbackTitle = ref<HTMLElement | null>(null);
 const versionDialog = ref<HTMLElement | null>(null);
 const versionTitle = ref<HTMLElement | null>(null);
+const versionActionHeading = ref<HTMLElement | null>(null);
+function closeEditDialog() {
+  if (props.saving) return;
+  if (["success", "partial", "conflict"].includes(props.saveStage)) emit("acknowledge");
+  else emit("closeEdit");
+}
+
 const editFocus = useProviderSourceDialogFocus(
   () => Boolean(props.editing),
   editDialog,
   editTitle,
-  () => {
-    if (!props.saving) emit("closeEdit");
+  closeEditDialog,
+);
+
+watch(
+  () => props.saveStage,
+  async (stage) => {
+    if (!["success", "partial", "failed", "conflict"].includes(stage)) return;
+    await nextTick();
+    saveFeedbackTitle.value?.focus({ preventScroll: true });
   },
+  { flush: "post" },
+);
+
+watch(
+  () => props.versionActionStage,
+  async (stage) => {
+    if (
+      !["success", "sync_failed", "read_failed", "conflict", "forbidden", "failed"].includes(stage)
+    )
+      return;
+    await nextTick();
+    versionActionHeading.value?.focus({ preventScroll: true });
+  },
+  { flush: "post" },
 );
 const versionFocus = useProviderSourceDialogFocus(
   () => Boolean(props.versionSource),
@@ -114,17 +152,32 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
           type="button"
           :aria-label="`关闭 ${editing.name} 采集设置`"
           :disabled="saving"
-          @click="$emit('closeEdit')"
+          @click="closeEditDialog"
         >
           ×
         </button>
       </header>
-      <section v-if="message" class="p48-source-dialog-feedback" role="status" aria-live="polite">
-        <strong>{{ saving ? "正在保存采集设置" : "采集设置处理结果" }}</strong>
-        <p>{{ message }}</p>
-        <details v-if="requestId">
+      <section
+        v-if="saveStage !== 'idle'"
+        class="p48-source-configuration-save-feedback"
+        :data-stage="saveStage"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        :aria-busy="['saving', 'saving_disabled', 'smoke_testing', 'enabling'].includes(saveStage)"
+      >
+        <p>
+          {{
+            ["saving", "saving_disabled", "smoke_testing", "enabling"].includes(saveStage)
+              ? "正在处理"
+              : "处理结果"
+          }}
+        </p>
+        <h4 ref="saveFeedbackTitle" tabindex="-1">{{ saveTitle }}</h4>
+        <p>{{ saveDescription }}</p>
+        <details v-if="saveRequestId && ['partial', 'failed', 'conflict'].includes(saveStage)">
           <summary>技术详情</summary>
-          <code>{{ requestId }}</code>
+          <code>{{ saveRequestId }}</code>
         </details>
       </section>
       <label
@@ -134,6 +187,7 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
           min="1"
           max="10080"
           required
+          :disabled="saving"
           aria-describedby="source-edit-schedule-help"
           @input="updateForm('schedule_minutes', Number(($event.target as HTMLInputElement).value))"
         /><small id="source-edit-schedule-help">允许 1–10080 的整数。</small></label
@@ -145,6 +199,7 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
           min="1000"
           max="120000"
           required
+          :disabled="saving"
           aria-describedby="source-edit-timeout-help"
           @input="updateForm('timeout_ms', Number(($event.target as HTMLInputElement).value))"
         /><small id="source-edit-timeout-help">允许 1000–120000 毫秒的整数。</small></label
@@ -156,6 +211,7 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
           min="0"
           max="10"
           required
+          :disabled="saving"
           aria-describedby="source-edit-retry-help"
           @input="updateForm('retry_limit', Number(($event.target as HTMLInputElement).value))"
         /><small id="source-edit-retry-help">允许 0–10 次。</small></label
@@ -164,6 +220,7 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
         {{ editing.availability === "automatic" ? "运行状态" : "来源设置状态" }}
         <select
           :value="form.status"
+          :disabled="saving"
           aria-describedby="source-edit-status-help"
           @change="updateForm('status', ($event.target as HTMLSelectElement).value)"
         >
@@ -204,6 +261,7 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
       <label
         >变更原因<textarea
           :value="form.reason"
+          :disabled="saving"
           minlength="2"
           maxlength="500"
           required
@@ -213,10 +271,42 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
         ><small id="source-edit-reason-help">填写 2–500 个字符，说明这次调整的原因。</small>
       </label>
       <footer>
-        <button type="button" @click="$emit('closeEdit')">取消</button>
-        <button :disabled="saving">
-          {{ saving ? "处理中…" : requiresSmokeTest(editing, form) ? "烟测并启用" : "保存配置" }}
+        <p>
+          {{
+            saveStage === "success" || saveStage === "partial" || saveStage === "conflict"
+              ? "结果已确认，关闭后同步来源目录"
+              : requiresSmokeTest(editing, form)
+                ? "将先保存停用版，再进行烟测"
+                : "保存后会生成新的配置版本"
+          }}
+        </p>
+        <button
+          v-if="['success', 'partial', 'conflict'].includes(saveStage)"
+          type="button"
+          @click="closeEditDialog"
+        >
+          {{
+            saveStage === "success" ? "完成" : saveStage === "conflict" ? "关闭后重新读取" : "关闭"
+          }}
         </button>
+        <template v-else>
+          <button type="button" :disabled="saving" @click="closeEditDialog">取消</button>
+          <button :disabled="saving">
+            {{
+              saving
+                ? saveStage === "smoke_testing"
+                  ? "正在烟测…"
+                  : saveStage === "enabling"
+                    ? "正在启用…"
+                    : "正在保存…"
+                : saveStage === "idle"
+                  ? requiresSmokeTest(editing, form)
+                    ? "烟测并启用"
+                    : "保存配置"
+                  : "重新保存"
+            }}
+          </button>
+        </template>
       </footer>
     </form>
   </div>
@@ -231,7 +321,7 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
   >
     <section
       class="configuration-version-panel p48-source-versions-panel"
-      :aria-busy="versionLoading || rollingBack !== null"
+      :aria-busy="versionLoading || rollingBack !== null || versionActionStage === 'reloading'"
     >
       <header class="p48-source-versions-identity">
         <div>
@@ -250,13 +340,45 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
         </button>
       </header>
       <p>只展示采集频率、超时、重试和启停状态；凭证、Cookie 与受限环境值不会进入版本详情。</p>
-      <section v-if="message" class="p48-source-dialog-feedback" role="status" aria-live="polite">
-        <strong>{{ rollingBack !== null ? "正在恢复配置版本" : "配置版本处理结果" }}</strong>
-        <p>{{ message }}</p>
-        <details v-if="requestId">
+      <section
+        v-if="versionActionStage !== 'idle'"
+        class="p48-source-version-action-feedback"
+        :data-stage="versionActionStage"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        :aria-busy="['submitting', 'reloading'].includes(versionActionStage)"
+      >
+        <p>
+          {{ ["submitting", "reloading"].includes(versionActionStage) ? "正在处理" : "处理结果" }}
+        </p>
+        <h4 ref="versionActionHeading" tabindex="-1">{{ versionActionTitle }}</h4>
+        <p>{{ versionActionDescription }}</p>
+        <details
+          v-if="
+            versionActionRequestId &&
+            ['sync_failed', 'read_failed', 'conflict', 'forbidden', 'failed'].includes(
+              versionActionStage,
+            )
+          "
+        >
           <summary>技术详情</summary>
-          <code>{{ requestId }}</code>
+          <code>{{ versionActionRequestId }}</code>
         </details>
+        <button
+          v-if="['sync_failed', 'read_failed', 'conflict', 'failed'].includes(versionActionStage)"
+          type="button"
+          :disabled="versionLoading || rollingBack !== null || versionActionStage === 'reloading'"
+          @click="$emit('retryVersions')"
+        >
+          {{
+            versionWriteConfirmed
+              ? "重新核对目录与历史"
+              : versionActionStage === "conflict"
+                ? "读取最新配置"
+                : "重新读取配置历史"
+          }}
+        </button>
       </section>
       <label class="p48-source-versions-rollback"
         >回滚原因<textarea
@@ -270,7 +392,9 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
         ></textarea
         ><small id="configuration-rollback-help">填写 2–500 个字符，说明恢复该版本的原因。</small>
       </label>
-      <div v-if="versionLoading" class="source-state">正在读取配置版本…</div>
+      <div v-if="versionLoading || versionActionStage === 'reloading'" class="source-state">
+        {{ versionActionStage === "reloading" ? "正在核对目录与历史…" : "正在读取配置版本…" }}
+      </div>
       <ol v-else class="configuration-version-list">
         <li v-for="version in versionHistory" :key="version.version">
           <header>
@@ -664,6 +788,57 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
   margin: 0;
   padding: 28px 30px;
 }
+.p48-source-versions-panel > .p48-source-version-action-feedback {
+  display: grid;
+  gap: 7px;
+  padding: 14px 30px;
+  border-bottom: 1px solid #dce4ef;
+  border-left: 4px solid #294caf;
+  background: #f6f9ff;
+}
+.p48-source-version-action-feedback[data-stage="success"] {
+  border-left-color: #3b7d63;
+  background: #f8fcfa;
+}
+.p48-source-version-action-feedback[data-stage="sync_failed"],
+.p48-source-version-action-feedback[data-stage="read_failed"],
+.p48-source-version-action-feedback[data-stage="conflict"],
+.p48-source-version-action-feedback[data-stage="forbidden"],
+.p48-source-version-action-feedback[data-stage="failed"] {
+  border-left-color: #a97016;
+  background: #fffdf8;
+}
+.p48-source-version-action-feedback > :is(p, h4) {
+  margin: 0;
+}
+.p48-source-version-action-feedback > p {
+  color: #52657e;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.p48-source-version-action-feedback > button {
+  min-height: 44px;
+  justify-self: start;
+  padding: 8px 12px;
+  border: 1px solid #294caf;
+  border-radius: 5px;
+  color: #fff;
+  background: #294caf;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+}
+.p48-source-version-action-feedback > button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.p48-source-version-action-feedback details summary {
+  min-height: 44px;
+  line-height: 44px;
+}
+.p48-source-version-action-feedback code {
+  overflow-wrap: anywhere;
+}
 .configuration-version-list {
   gap: 0;
   padding: 0 30px;
@@ -727,7 +902,9 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
   .p48-source-configuration-form > label,
   .p48-source-configuration-form > .source-schedule-preview,
   .p48-source-configuration-form > .source-smoke-notice,
+  .p48-source-configuration-form > .p48-source-configuration-save-feedback,
   .p48-source-versions-panel > p,
+  .p48-source-versions-panel > .p48-source-version-action-feedback,
   .p48-source-versions-panel > label {
     padding-right: 20px;
     padding-left: 20px;
@@ -772,5 +949,45 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
   .p48-source-versions-identity {
     border: 1px solid CanvasText;
   }
+}
+
+.p48-source-configuration-form > .p48-source-configuration-save-feedback {
+  display: grid;
+  gap: 6px;
+  padding: 14px 30px;
+  border: 0;
+  border-bottom: 1px solid #dce4ef;
+  border-left: 4px solid #294caf;
+  background: #f6f9ff;
+}
+.p48-source-configuration-form > .p48-source-configuration-save-feedback[data-stage="success"] {
+  border-left-color: #3b7d63;
+  background: #f8fcfa;
+}
+.p48-source-configuration-form > .p48-source-configuration-save-feedback[data-stage="partial"],
+.p48-source-configuration-form > .p48-source-configuration-save-feedback[data-stage="failed"],
+.p48-source-configuration-form > .p48-source-configuration-save-feedback[data-stage="conflict"] {
+  border-left-color: #a97016;
+  background: #fffdf8;
+}
+.p48-source-configuration-save-feedback > :is(p, h4) {
+  margin: 0;
+}
+.p48-source-configuration-save-feedback > p {
+  color: #52657e;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.p48-source-configuration-form > footer > p {
+  flex: 1 1 100%;
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.p48-source-configuration-form :is(input, select, textarea):disabled {
+  color: #64748b;
+  background: #eef2f7;
+  cursor: wait;
 }
 </style>

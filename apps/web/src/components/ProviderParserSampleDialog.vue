@@ -35,6 +35,9 @@ interface ParserSampleReplay {
 const props = defineProps<{
   sourceName: string;
   loading: boolean;
+  loaded: boolean;
+  readError: string;
+  readRequestId: string;
   samples: ParserSample[];
   candidates: ParserSampleCandidate[];
   latestReplay: ParserSampleReplay | null;
@@ -50,6 +53,7 @@ const emit = defineEmits<{
   create: [candidate: ParserSampleCandidate];
   replay: [sample: ParserSample];
   review: [sample: ParserSample, decision: "approved" | "rejected", reason: string];
+  retry: [];
 }>();
 
 const sampleDialog = ref<HTMLElement | null>(null);
@@ -129,8 +133,24 @@ const displayValue = (value: unknown) => {
             <code>{{ requestId }}</code>
           </details>
         </section>
-        <div v-if="loading" class="source-state">正在读取固定样本…</div>
+        <div v-if="loading && !loaded" class="source-state">正在读取固定样本…</div>
         <template v-else>
+          <section v-if="loading && loaded" class="p48-parser-samples-refreshing" role="status">
+            正在刷新列表；仍显示上次成功读取的样本。
+          </section>
+          <section v-if="readError" class="p48-parser-samples-read-error" role="alert">
+            <strong>最新样本列表暂未更新</strong>
+            <p>
+              {{ readError }} 已保留上次成功读取的样本；可以只重新读取，不会重复提交刚才的操作。
+            </p>
+            <details v-if="readRequestId">
+              <summary>读取追踪</summary>
+              <code>{{ readRequestId }}</code>
+            </details>
+            <button type="button" :disabled="loading || busy" @click="emit('retry')">
+              {{ loading ? "正在重新读取…" : "重新读取固定样本" }}
+            </button>
+          </section>
           <section>
             <h4>可固定的真实作业</h4>
             <article v-for="candidate in candidates" :key="candidate.browser_job_id">
@@ -356,6 +376,41 @@ const displayValue = (value: unknown) => {
   color: #344d6a;
   background: #eaf3ff;
 }
+.p48-parser-samples-body > .p48-parser-samples-refreshing {
+  margin: 14px 30px 0;
+  padding: 11px 14px;
+  border-left: 3px solid #1769e0;
+  color: #244a7c;
+  background: #edf4ff;
+  font-size: 13px;
+}
+.p48-parser-samples-body > .p48-parser-samples-read-error {
+  display: grid;
+  gap: 8px;
+  margin: 14px 30px 0;
+  padding: 14px 16px;
+  border: 1px solid #f2c9c5;
+  border-left: 4px solid #c2413b;
+  color: #633b39;
+  background: #fff8f7;
+}
+.p48-parser-samples-read-error p {
+  margin: 0;
+  line-height: 1.55;
+}
+.p48-parser-samples-read-error details summary {
+  min-height: 44px;
+  line-height: 44px;
+}
+.p48-parser-samples-read-error code {
+  overflow-wrap: anywhere;
+}
+.p48-parser-samples-read-error button {
+  justify-self: start;
+  min-height: 44px;
+  padding: 9px 14px;
+  border-radius: 9px;
+}
 .p48-parser-samples-feedback p {
   margin: 0;
   line-height: 1.55;
@@ -399,7 +454,8 @@ const displayValue = (value: unknown) => {
   cursor: not-allowed;
 }
 .p48-parser-samples-body :focus-visible,
-.p48-parser-samples-actions :focus-visible {
+.p48-parser-samples-actions :focus-visible,
+.p48-parser-samples-read-error :focus-visible {
   outline: 3px solid #66a3ff;
   outline-offset: 3px;
 }
@@ -449,6 +505,11 @@ const displayValue = (value: unknown) => {
     padding-left: 20px;
   }
   .p48-parser-samples-feedback {
+    margin-right: 20px;
+    margin-left: 20px;
+  }
+  .p48-parser-samples-body > .p48-parser-samples-refreshing,
+  .p48-parser-samples-body > .p48-parser-samples-read-error {
     margin-right: 20px;
     margin-left: 20px;
   }

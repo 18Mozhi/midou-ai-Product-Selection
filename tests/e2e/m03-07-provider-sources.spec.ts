@@ -369,7 +369,193 @@ test("platform administrator can save source schedule, retry and enablement", as
       expected_version: 1,
       reason: "调整 Amazon 公开来源采集频率",
     });
-  await expect(page.locator(".source-message")).toContainText("来源设置已保存");
+  const saveFeedback = page.locator(".p48-source-configuration-save-feedback");
+  await expect(saveFeedback).toHaveAttribute("data-stage", "success");
+  await expect(saveFeedback).toContainText("采集设置已保存");
+  await expect(editDialog.getByRole("heading", { name: "采集设置已保存" })).toBeFocused();
+  await editDialog.getByRole("button", { name: "完成" }).click();
+  await expect(page.locator(".p48-source-configuration-return")).toHaveAttribute(
+    "data-state",
+    "success",
+  );
+  await expect(page.locator(".p48-source-configuration-return")).toContainText(
+    "设置已保存，来源目录已更新",
+  );
+});
+
+test("configuration write remains confirmed when catalog reread fails and retry performs only GET", async ({
+  page,
+}) => {
+  await nav(page, "platform_admin");
+  let catalogReads = 0;
+  await page.route("**/api/v1/platform/provider-sources", async (route) => {
+    catalogReads += 1;
+    if (catalogReads === 2) {
+      await route.fulfill({
+        status: 500,
+        json: {
+          error: {
+            code: "internal_error",
+            message: "来源目录暂时未能读取。",
+            action_hint: "可以重新读取来源目录。",
+          },
+          request_id: "m03-07-catalog-reread-failed",
+          trace_id: "m03-07-catalog-reread-failed",
+        },
+      });
+      return;
+    }
+    await route.fulfill({ json: envelope(sources) });
+  });
+  let putCount = 0;
+  await page.route("**/api/v1/platform/provider-sources/**/configuration", async (route) => {
+    putCount += 1;
+    const body = route.request().postDataJSON();
+    await route.fulfill({
+      json: envelope({
+        ...automatic[0].provisioned,
+        status: body.status,
+        schedule_minutes: body.schedule_minutes,
+        timeout_ms: body.timeout_ms,
+        retry_limit: body.retry_limit,
+        version: 2,
+      }),
+    });
+  });
+
+  await page.goto("/platform-admin/providers/sources");
+  await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
+  await openMobileSourceDetails(page);
+  await page.getByRole("button", { name: "编辑采集设置" }).first().click();
+  const dialog = page.getByRole("dialog", { name: /采集设置/ });
+  await page.getByLabel("采集频率（分钟）").fill("45");
+  await page.getByLabel("变更原因").fill("更新来源采集频率");
+  await page.getByRole("button", { name: "保存配置" }).click();
+  await expect(dialog.locator(".p48-source-configuration-save-feedback")).toHaveAttribute(
+    "data-stage",
+    "success",
+  );
+  await dialog.getByRole("button", { name: "完成" }).click();
+  const returnFeedback = page.locator(".p48-source-configuration-return");
+  await expect(returnFeedback).toHaveAttribute("data-state", "failed");
+  await expect(returnFeedback).toContainText("设置已保存，但来源目录尚未更新");
+  await expect(returnFeedback).toContainText("刚才的写入不会撤销");
+  await expect(returnFeedback.getByText("m03-07-catalog-reread-failed")).not.toBeVisible();
+  await expect(page.locator(".source-list article").first()).toBeVisible();
+  await returnFeedback.getByRole("button", { name: "重新读取来源目录" }).click();
+  await expect(returnFeedback).toHaveAttribute("data-state", "success");
+  await expect(returnFeedback.getByRole("heading")).toBeFocused();
+  expect(catalogReads).toBe(3);
+  expect(putCount).toBe(1);
+});
+
+test("failed smoke keeps the disabled configuration and never performs the enabling PUT", async ({
+  page,
+}) => {
+  await nav(page, "platform_admin");
+  const smokeSource = {
+    ...automatic[0],
+    provisioned: {
+      ...automatic[0].provisioned,
+      status: "disabled",
+      schedule_minutes: 15,
+      timeout_ms: 20_000,
+      retry_limit: 3,
+      updated_at: "2026-08-20T02:00:00.000Z",
+    },
+  };
+  await page.route("**/api/v1/platform/provider-sources", (route) =>
+    route.fulfill({ json: envelope([smokeSource]) }),
+  );
+  let putCount = 0;
+  await page.route("**/api/v1/platform/provider-sources/**/configuration", async (route) => {
+    putCount += 1;
+    const body = route.request().postDataJSON();
+    await route.fulfill({
+      json: envelope({ ...smokeSource.provisioned, ...body, version: 2 }),
+    });
+  });
+  let smokeCount = 0;
+  await page.route("**/api/v1/platform/provider-adapters/**/health-check", async (route) => {
+    smokeCount += 1;
+    await route.fulfill({
+      json: envelope({ health_status: "failed", last_error_code: "parser_mismatch" }),
+    });
+  });
+
+  await page.goto("/platform-admin/providers/sources");
+  await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("crawler_001");
+  await openMobileSourceDetails(page);
+  await page.getByRole("button", { name: "编辑采集设置" }).first().click();
+  await page.getByLabel("运行状态").selectOption("enabled");
+  await page.getByLabel("变更原因").fill("烟测失败时保留停用");
+  await page.getByRole("button", { name: "烟测并启用" }).click();
+  const dialog = page.getByRole("dialog", { name: /采集设置/ });
+  const feedback = dialog.locator(".p48-source-configuration-save-feedback");
+  await expect(feedback).toHaveAttribute("data-stage", "partial");
+  await expect(feedback).toContainText("停用配置已保存，来源尚未启用");
+  await expect(feedback).toContainText("parser_mismatch");
+  expect(putCount).toBe(1);
+  expect(smokeCount).toBe(1);
+  await dialog.getByRole("button", { name: "关闭", exact: true }).click();
+  await expect(page.locator(".p48-source-configuration-return")).toHaveAttribute(
+    "data-outcome",
+    "partial",
+  );
+  await expect(page.locator(".p48-source-configuration-return")).toContainText(
+    "停用配置已保存，来源目录已更新",
+  );
+});
+
+test("configuration version conflict closes only into a safe catalog reread", async ({ page }) => {
+  await nav(page, "platform_admin");
+  await catalog(page);
+  let catalogReads = 0;
+  await page.route("**/api/v1/platform/provider-sources", async (route) => {
+    catalogReads += 1;
+    await route.fulfill({ json: envelope(sources) });
+  });
+  let putCount = 0;
+  await page.route("**/api/v1/platform/provider-sources/**/configuration", async (route) => {
+    putCount += 1;
+    await route.fulfill({
+      status: 409,
+      json: {
+        error: {
+          code: "version_conflict",
+          message: "配置版本已变化。",
+          action_hint: "重新读取配置后再试。",
+        },
+        request_id: "m03-07-configuration-conflict",
+        trace_id: "m03-07-configuration-conflict",
+      },
+    });
+  });
+
+  await page.goto("/platform-admin/providers/sources");
+  await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
+  await openMobileSourceDetails(page);
+  await page.getByRole("button", { name: "编辑采集设置" }).first().click();
+  const dialog = page.getByRole("dialog", { name: /采集设置/ });
+  await page.getByLabel("变更原因").fill("按最新版本检查修改");
+  await dialog.getByRole("button", { name: "保存配置" }).click();
+  const feedback = dialog.locator(".p48-source-configuration-save-feedback");
+  await expect(feedback).toHaveAttribute("data-stage", "conflict");
+  await expect(feedback).toContainText("配置已经更新，请重新读取");
+  await expect(feedback.getByRole("heading")).toBeFocused();
+  await feedback.getByText("技术详情").click();
+  await expect(feedback.getByText("m03-07-configuration-conflict")).toBeVisible();
+  await dialog.getByRole("button", { name: "关闭后重新读取" }).click();
+  await expect(page.locator(".p48-source-configuration-return")).toHaveAttribute(
+    "data-outcome",
+    "conflict",
+  );
+  await expect(page.locator(".p48-source-configuration-return")).toHaveAttribute(
+    "data-state",
+    "success",
+  );
+  expect(catalogReads).toBe(2);
+  expect(putCount).toBe(1);
 });
 
 test("source detail shows parser and observed page-version compatibility", async ({ page }) => {
@@ -480,7 +666,19 @@ test("public source is staged disabled, smoke-tested on the real page, then enab
     ["enabled", 2],
   ]);
   expect(smokeCount).toBe(1);
-  await expect(page.locator(".source-message")).toContainText("真实页面烟测已通过");
+  const smokeDialog = page.getByRole("dialog", { name: /采集设置/ });
+  await expect(smokeDialog.locator(".p48-source-configuration-save-feedback")).toHaveAttribute(
+    "data-stage",
+    "success",
+  );
+  await expect(smokeDialog.locator(".p48-source-configuration-save-feedback")).toContainText(
+    "烟测通过，来源已启用",
+  );
+  await smokeDialog.getByRole("button", { name: "完成" }).click();
+  await expect(page.locator(".p48-source-configuration-return")).toHaveAttribute(
+    "data-state",
+    "success",
+  );
 });
 
 test("platform administrator can compare source configuration versions and restore one as a new version", async ({
@@ -489,18 +687,31 @@ test("platform administrator can compare source configuration versions and resto
   await nav(page, "platform_admin");
   await catalog(page);
   let rollbackBody: any = null;
+  let currentVersion = 3;
   await page.route("**/api/v1/platform/provider-sources/**/configuration/versions", (route) =>
     route.fulfill({
       json: envelope({
         provider_id: setup[0].provisioned.id,
-        current_version: 3,
+        current_version: currentVersion,
         versions: [
+          ...(currentVersion === 4
+            ? [
+                {
+                  version: 4,
+                  action: "configuration_rolled_back",
+                  created_at: "2026-08-20T04:00:00.000Z",
+                  current: true,
+                  rollback_available: false,
+                  changes: [{ field: "schedule_minutes", before: 45, after: 30 }],
+                },
+              ]
+            : []),
           {
             version: 3,
             action: "configuration_updated",
             created_at: "2026-08-20T03:00:00.000Z",
-            current: true,
-            rollback_available: false,
+            current: currentVersion === 3,
+            rollback_available: currentVersion === 4,
             changes: [{ field: "schedule_minutes", before: 30, after: 45 }],
           },
           {
@@ -524,6 +735,7 @@ test("platform administrator can compare source configuration versions and resto
       rollbackBody = route.request().postDataJSON();
       expect(route.request().method()).toBe("POST");
       expect(route.request().headers()["idempotency-key"]).toBeTruthy();
+      currentVersion = 4;
       await route.fulfill({ json: envelope({ ...setup[0].provisioned, version: 4 }) });
     },
   );
@@ -549,7 +761,109 @@ test("platform administrator can compare source configuration versions and resto
       expected_version: 3,
       reason: "恢复稳定采集设置",
     });
-  await expect(page.locator(".source-message")).toContainText("生成新的当前版本");
+  await expect(versionsDialog.locator(".p48-source-version-action-feedback")).toHaveAttribute(
+    "data-stage",
+    "success",
+  );
+  await expect(versionsDialog.locator(".p48-source-version-action-feedback")).toContainText(
+    "已生成新的当前版本",
+  );
+  await expect(versionsDialog.getByText("第 4 版", { exact: true })).toBeVisible();
+});
+
+test("confirmed rollback is never resubmitted when catalog reread fails", async ({ page }) => {
+  await nav(page, "platform_admin");
+  let catalogReads = 0;
+  await page.route("**/api/v1/platform/provider-sources", async (route) => {
+    catalogReads += 1;
+    if (catalogReads === 2) {
+      await route.fulfill({
+        status: 500,
+        json: {
+          error: {
+            code: "internal_error",
+            message: "来源目录暂时未能读取。",
+            action_hint: "可以重新核对目录与历史。",
+          },
+          request_id: "m03-07-rollback-catalog-failed",
+          trace_id: "m03-07-rollback-catalog-failed",
+        },
+      });
+      return;
+    }
+    await route.fulfill({ json: envelope(sources) });
+  });
+  let currentVersion = 3;
+  let versionReads = 0;
+  await page.route(
+    "**/api/v1/platform/provider-sources/**/configuration/versions",
+    async (route) => {
+      versionReads += 1;
+      await route.fulfill({
+        json: envelope({
+          provider_id: setup[0].provisioned.id,
+          current_version: currentVersion,
+          versions: [
+            ...(currentVersion === 4
+              ? [
+                  {
+                    version: 4,
+                    action: "configuration_rolled_back",
+                    created_at: "2026-08-20T04:00:00.000Z",
+                    current: true,
+                    rollback_available: false,
+                    changes: [{ field: "schedule_minutes", before: 45, after: 30 }],
+                  },
+                ]
+              : []),
+            {
+              version: 3,
+              action: "configuration_updated",
+              created_at: "2026-08-20T03:00:00.000Z",
+              current: currentVersion === 3,
+              rollback_available: currentVersion === 4,
+              changes: [{ field: "schedule_minutes", before: 30, after: 45 }],
+            },
+            {
+              version: 1,
+              action: "created",
+              created_at: "2026-08-18T00:00:00.000Z",
+              current: false,
+              rollback_available: true,
+              changes: [{ field: "schedule_minutes", before: null, after: 30 }],
+            },
+          ],
+        }),
+      });
+    },
+  );
+  let rollbackCount = 0;
+  await page.route(
+    "**/api/v1/platform/provider-sources/**/configuration/rollbacks",
+    async (route) => {
+      rollbackCount += 1;
+      currentVersion = 4;
+      await route.fulfill({ json: envelope({ ...setup[0].provisioned, version: 4 }) });
+    },
+  );
+
+  await page.goto("/platform-admin/providers/sources");
+  await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
+  await openMobileSourceDetails(page);
+  await page.getByRole("button", { name: "版本与回滚" }).first().click();
+  const dialog = page.getByRole("dialog", { name: /版本、差异与回滚/ });
+  await page.getByLabel("回滚原因").fill("恢复稳定采集设置");
+  await dialog.getByRole("button", { name: "恢复此版本" }).click();
+  const feedback = dialog.locator(".p48-source-version-action-feedback");
+  await expect(feedback).toHaveAttribute("data-stage", "sync_failed");
+  await expect(feedback).toContainText("新版本已生成，来源目录尚未更新");
+  await expect(dialog.locator(".configuration-version-list")).toContainText("第 3 版");
+  await feedback.getByRole("button", { name: "重新核对目录与历史" }).click();
+  await expect(feedback).toHaveAttribute("data-stage", "success");
+  await expect(dialog.getByText("第 4 版", { exact: true })).toBeVisible();
+  expect(catalogReads).toBe(3);
+  expect(versionReads).toBe(2);
+  expect(rollbackCount).toBe(1);
 });
 
 test("1688 acceptance shows the factual search detail and pagination coverage matrix", async ({
@@ -840,14 +1154,34 @@ test("fixed parser sample keeps an immutable second-person approval conclusion",
   const provider = { ...setup[2], code: "1688_search" };
   const sampleId = "30000000-0000-4000-8000-000000000001";
   let reviewStatus: "pending" | "approved" = "pending",
-    reviewBody: any = null;
+    reviewBody: any = null,
+    sampleReads = 0,
+    reviewWrites = 0,
+    failedReviewReads = 0;
   await page.route("**/api/v1/platform/provider-sources", (route) =>
     route.fulfill({ json: envelope([provider]) }),
   );
   await page.route(
     `**/api/v1/platform/provider-sources/${provider.provisioned.id}/parser-samples`,
-    (route) =>
-      route.fulfill({
+    async (route) => {
+      sampleReads += 1;
+      if (reviewWrites > 0 && failedReviewReads < 3) {
+        failedReviewReads += 1;
+        await route.fulfill({
+          status: 503,
+          json: {
+            error: {
+              code: "sample_read_unavailable",
+              message: "样本列表暂时不可用",
+              action_hint: "样本列表暂未能更新。",
+            },
+            request_id: `sample-read-after-review-503-${failedReviewReads}`,
+            trace_id: `sample-read-after-review-503-${failedReviewReads}`,
+          },
+        });
+        return;
+      }
+      await route.fulfill({
         json: envelope({
           candidates: [],
           samples: [
@@ -868,11 +1202,13 @@ test("fixed parser sample keeps an immutable second-person approval conclusion",
             },
           ],
         }),
-      }),
+      });
+    },
   );
   await page.route(
     `**/api/v1/platform/provider-sources/${provider.provisioned.id}/parser-samples/${sampleId}/reviews`,
     async (route) => {
+      reviewWrites += 1;
       reviewBody = route.request().postDataJSON();
       reviewStatus = "approved";
       await route.fulfill({ status: 201, json: envelope({ status: "approved" }) });
@@ -899,5 +1235,17 @@ test("fixed parser sample keeps an immutable second-person approval conclusion",
       reason: "字段基线与真实页面一致",
       expected_version: 1,
     });
+  await expect.poll(() => failedReviewReads).toBe(3);
+  await expect(
+    samplesDialog.getByText("复核决定已记录，但样本列表暂未能更新。", { exact: true }),
+  ).toBeVisible();
+  await expect(samplesDialog.getByText("最新样本列表暂未更新")).toBeVisible();
+  await samplesDialog.getByText("读取追踪").click();
+  await expect(samplesDialog.getByText("sample-read-after-review-503-3")).toBeVisible();
+  await expect(samplesDialog.getByText("一致通过 · 待另一管理员审批")).toBeVisible();
+  const readsBeforeRetry = sampleReads;
+  await samplesDialog.getByRole("button", { name: "重新读取固定样本" }).click();
   await expect(page.getByText("审批结论：字段基线与真实页面一致")).toBeVisible();
+  expect(sampleReads).toBe(readsBeforeRetry + 1);
+  expect(reviewWrites).toBe(1);
 });
