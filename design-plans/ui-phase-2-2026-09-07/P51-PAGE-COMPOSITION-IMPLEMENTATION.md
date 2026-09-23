@@ -27,5 +27,5 @@
 - 用户授权剩余视觉状态自动通过，P51 C 方向页面视觉审核记录为通过；修正 E2E 对页面唯一 `h1` 的过期级别断言，并以当前实际 Vue 刷新 Windows Chromium 桌面/390px 快照基线。
 - P51 双端完整 E2E：桌面 18/18、手机 18/18；定向页面单测、文档门、格式检查通过。
 - 生产 `/platform-admin/collection` 返回 HTTP 200；`CollectionTaskCenter-DbUxrG8P.js` 与 `CollectionTaskCenter-bvM7acia.css` 均 HTTP 200，SHA-256 分别为 `732534822d524ed2b0dac9df45457619b8fd3f703fb5ab3809ad8db5d5908e93`、`1f73c33e2a3d4746383f188dc26611ea2aeaa9514f4d450f3073da15bfa57537`，与本地 `apps/web/dist/assets` 一致。
-- 本轮只有测试、截图基线和审核台账变化，没有新的运行时代码；线上静态资源已与本地一致，因此没有触发全量宝塔发布、服务重启或重复迁移。
+- 本轮只有测试、截图基线和审核台账变化，没有新的运行时代码。用户明确要求部署后，已按固定 `scripts/deploy-baota.py` 完成全量宝塔发布：22 个工作区构建通过，部署状态 `deployed`，线上 BUILD_SHA 为 `e86a58915c28ddf5f076892a73297375d382704e`；READY/AVAILABLE 与 BUILD_SHA 核验通过，P51 路由及 JS/CSS 哈希匹配。部署器删除了服务器临时包。
 - 以上只证明该页面静态资源当前在线且版本一致，不替代真实会话/RBAC、MySQL、人工重放、Worker 或 M07-03 验收。
