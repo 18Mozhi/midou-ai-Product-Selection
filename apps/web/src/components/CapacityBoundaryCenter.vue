@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
+import CapacityBoundaryEvidence from "./CapacityBoundaryEvidence.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import TechnicalDetails from "./TechnicalDetails.vue";
 import "../capacity-boundary.css";
@@ -220,11 +221,11 @@ async function attest() {
 onMounted(() => void load());
 </script>
 <template>
-  <section class="capacity-boundary" :data-state="state">
+  <section class="capacity-boundary capacity-boundary--c" :data-state="state">
     <header class="capacity-boundary__hero">
       <div>
-        <p>单机实测容量边界</p>
-        <h2>单机容量边界</h2>
+        <p>ScoutOps / 容量边界</p>
+        <h1>容量边界核验</h1>
         <span
           >只展示惠州当前单机实测结论；规划 100
           用户不等于并发承诺，不启用负载均衡、备用服务器或多节点。</span
@@ -244,6 +245,11 @@ onMounted(() => void load());
         </button>
       </div>
     </header>
+
+    <aside class="p71-boundary" aria-label="运行边界">
+      <b>惠州单机 / 宝塔受管</b
+      ><span>不启用负载均衡、备用服务器或多节点；规划用户数不是并发承诺。</span>
+    </aside>
     <section
       v-if="data && refreshFailure"
       class="capacity-boundary__notice"
@@ -280,137 +286,15 @@ onMounted(() => void load());
       </button>
     </section>
     <template v-else-if="data"
-      ><section class="capacity-boundary__verdict" :data-verdict="state">
-        <div>
-          <small>S0 · {{ state.toUpperCase() }}</small
-          ><strong>{{ verdict[0] }}</strong>
-        </div>
-        <p>{{ verdict[1] }}</p>
-        <em>{{
-          data.boundary.capacity_claim === "measured_single_host_limited"
-            ? "实测单机有限边界"
-            : "容量未验证"
-        }}</em>
-      </section>
-      <section class="capacity-boundary__metrics">
-        <article>
-          <span>最后通过并发档位</span><strong>{{ data.boundary.measured_concurrency }}</strong
-          ><small>{{ boundaryHint }}</small>
-        </article>
-        <article>
-          <span>95% 核心读取耗时</span><strong>{{ data.performance.read_p95_ms }} ms</strong
-          ><small>停止线 300 毫秒</small>
-        </article>
-        <article>
-          <span>95% 核心写入耗时</span><strong>{{ data.performance.write_p95_ms }} ms</strong
-          ><small>停止线 600 毫秒</small>
-        </article>
-        <article>
-          <span>错误率 / 异步滞后</span
-          ><strong>{{ pct(data.performance.error_rate_basis_points) }}</strong
-          ><small>{{ data.performance.async_lag_seconds }} 秒 · 停止线 60 秒</small>
-        </article>
-      </section>
-      <div class="capacity-boundary__layout">
-        <section class="capacity-boundary__panel">
-          <header>
-            <div>
-              <p>资源水位</p>
-              <h3>单机资源水位</h3>
-            </div>
-            <span>{{ time(data.observed_at) }}</span>
-          </header>
-          <div class="capacity-boundary__bars">
-            <label
-              ><span>归一化负载</span><b>{{ pct(data.resource.load_basis_points) }}</b
-              ><progress :value="data.resource.load_basis_points" max="10000"></progress></label
-            ><label
-              ><span>可用内存</span><b>{{ data.resource.available_memory_mb }} MB</b
-              ><progress
-                :value="Math.min(data.resource.available_memory_mb, 8192)"
-                max="8192"
-              ></progress></label
-            ><label
-              ><span>可用磁盘</span><b>{{ data.resource.free_disk_mb }} MB</b
-              ><progress
-                :value="Math.min(data.resource.free_disk_mb, 262144)"
-                max="262144"
-              ></progress
-            ></label>
-          </div>
-        </section>
-        <aside class="capacity-boundary__panel">
-          <header>
-            <div>
-              <p>降级策略</p>
-              <h3>降载与恢复</h3>
-            </div>
-            <span>{{ data.degradation.mode }}</span>
-          </header>
-          <dl>
-            <div>
-              <dt>归档</dt>
-              <dd>
-                {{ data.resilience.archive_verified ? "已核验" : "未核验" }}
-              </dd>
-            </div>
-            <div>
-              <dt>隔离恢复</dt>
-              <dd>
-                {{ data.resilience.recovery_verified ? "已核验" : "未核验" }}
-              </dd>
-            </div>
-            <div>
-              <dt>后端接口拓扑</dt>
-              <dd>单一 4101</dd>
-            </div>
-            <div>
-              <dt>下一档</dt>
-              <dd>{{ nextStageHint }}</dd>
-            </div>
-          </dl>
-        </aside>
-      </div>
-      <section class="capacity-boundary__panel capacity-boundary__findings">
-        <header>
-          <div>
-            <p>失败时拒绝放行</p>
-            <h3>容量告警与处置手册动作</h3>
-          </div>
-          <span>{{ data.findings.length }} 项</span>
-        </header>
-        <div v-if="data.findings.length">
-          <article
-            v-for="(item, index) in data.findings"
-            :key="item.code"
-            :data-severity="item.severity"
-          >
-            <span>{{ String(index + 1).padStart(2, "0") }}</span>
-            <div>
-              <strong>{{ item.reason }}</strong>
-              <small>责任人：{{ item.owner_label }}</small>
-              <p>{{ item.action_hint }}</p>
-              <details>
-                <summary>技术详情</summary>
-                <code>{{ item.code }} · {{ item.owner_role_code }}</code>
-              </details>
-            </div>
-          </article>
-        </div>
-        <div v-else class="capacity-boundary__clear">
-          <b>当前实测档位无阻断</b
-          ><span
-            >结论仅限本次惠州单机实测；不证明 100 人同时在线、多节点、高可用或 10,000
-            用户能力。</span
-          >
-        </div>
-      </section>
-      <footer>
-        <TechnicalDetails :request-id="requestId" /><span
-          >未启用负载均衡 · 未配置备用服务器 · 未启用多节点</span
-        ><strong>生产操作只允许通过宝塔</strong>
-      </footer></template
-    ><ConfirmDialog
+      ><CapacityBoundaryEvidence
+        :data="data"
+        :state="data.state"
+        :boundary-hint="boundaryHint"
+        :next-stage-hint="nextStageHint"
+        :pct="pct"
+        :time="time"
+    /></template>
+    <ConfirmDialog
       :open="confirming"
       title="签认归档与恢复演练？"
       description="服务端仅在同提交容量证据已证明归档与隔离恢复时允许签认。"
@@ -422,3 +306,7 @@ onMounted(() => void load());
     />
   </section>
 </template>
+
+<style>
+@import "../capacity-boundary-c.css";
+</style>

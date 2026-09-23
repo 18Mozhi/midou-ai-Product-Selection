@@ -112,9 +112,9 @@ test("M08-06.A07/A08/A15 desktop and 390 measured single-host capacity truth", a
     route.fulfill({ json: envelope(base) }),
   );
   await page.goto("/platform-admin/capacity");
-  await expect(page.getByRole("heading", { name: "单机容量边界" })).toBeVisible();
-  await expect(page.getByText("S0 单机实测边界已满足")).toBeVisible();
-  await expect(page.getByText("实测单机有限边界")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "容量边界核验" })).toBeVisible();
+  await expect(page.getByText("当前单机容量门满足")).toBeVisible();
+  await expect(page.getByText("单机有限实测")).toBeVisible();
   await expect(page.getByText("规划测量上限已完成；仍仅限当前单机实测")).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
@@ -124,9 +124,7 @@ test("M08-06.A07/A08/A15 desktop and 390 measured single-host capacity truth", a
       { exact: true },
     ),
   ).toBeVisible();
-  await expect(
-    page.getByText(/不证明 100 人同时在线、多节点、高可用或 10,000 用户能力/),
-  ).toBeVisible();
+  await expect(page.getByText(/不证明 100 人、多节点或高可用能力/)).toBeVisible();
 });
 
 test("M08-06.A08/A09/A16 warning blocked empty forbidden expired rate limited and unavailable", async ({
@@ -168,7 +166,7 @@ test("M08-06.A08/A09/A16 warning blocked empty forbidden expired rate limited an
         }),
   );
   await page.goto("/platform-admin/capacity");
-  await expect(page.getByText("单机有限边界已签发")).toBeVisible();
+  await expect(page.getByText("当前容量需人工关注")).toBeVisible();
   await expect(page.getByText("并发 10 已失败；声明只限并发 5")).toBeVisible();
   response = {
     ...base,
@@ -191,7 +189,7 @@ test("M08-06.A08/A09/A16 warning blocked empty forbidden expired rate limited an
     ],
   };
   await page.reload();
-  await expect(page.getByText("单机容量门已阻断")).toBeVisible();
+  await expect(page.getByText("当前容量门阻断")).toBeVisible();
   await expect(page.getByText("固定并发 5 未通过；容量保持未验证")).toBeVisible();
   await expect(page.getByText("固定并发 5 未通过", { exact: true })).toBeVisible();
   status = 503;
@@ -230,14 +228,14 @@ test("M08-06 refresh preserves the last snapshot and hidden query state cannot s
     });
   });
   await page.goto("/platform-admin/capacity");
-  await expect(page.getByText("S0 单机实测边界已满足")).toBeVisible();
+  await expect(page.getByText("当前单机容量门满足")).toBeVisible();
   await page.getByRole("button", { name: "刷新实测事实" }).click();
   await expect(page.getByRole("button", { name: "刷新中…" })).toBeDisabled();
-  await expect(page.getByText("S0 单机实测边界已满足")).toBeVisible();
+  await expect(page.getByText("当前单机容量门满足")).toBeVisible();
   await expect(page.getByText("刷新未完成")).toBeVisible();
   await expect(page.getByText("检查 MySQL 后重试。")).toBeVisible();
   await page.goto("/platform-admin/capacity?state=verifying");
-  await expect(page.getByText("S0 单机实测边界已满足")).toBeVisible();
+  await expect(page.getByText("当前单机容量门满足")).toBeVisible();
   expect(reads).toBeGreaterThanOrEqual(5);
 });
 
@@ -272,7 +270,7 @@ test("M08-06 drill is single-submit and success survives the follow-up read", as
   const confirm = page.getByRole("button", { name: "确认签认", exact: true });
   await confirm.dblclick();
   await expect(page.getByRole("button", { name: "签认中…" })).toBeDisabled();
-  await expect(page.getByText("S0 单机实测边界已满足")).toBeVisible();
+  await expect(page.getByText("当前单机容量门满足")).toBeVisible();
   await expect(page.getByText("归档与隔离恢复演练已签认。")).toBeVisible();
   await expect(page.getByText("刷新未完成")).toBeVisible();
   expect(posts).toBe(1);

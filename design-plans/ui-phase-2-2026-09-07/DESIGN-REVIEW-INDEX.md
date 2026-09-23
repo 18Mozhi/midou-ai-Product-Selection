@@ -1,6 +1,6 @@
 # C方向逐页审核索引与交付缺口
 
-P70 已按用户授权自动通过并完成真实 Vue 接入和宝塔部署；桌面/390px 采集调度证据布局、原有读取/筛选/分页/确认合同及线上 build SHA/专属资源均核验通过。详细提交、双端 E2E 和生产只读证据见[P70实施记录](P70-PAGE-COMPOSITION-IMPLEMENTATION.md)。这不代表 M08-05 真实恢复/RBAC/审计验收或全 73 页目标完成；当前视觉审核队列继续到后续页面。
+P71 已按用户授权自动通过并完成真实 Vue 接入和宝塔部署；桌面/390px 容量证据布局、原有读取/签认合同及线上 build SHA/专属资源均核验通过。详细提交、双端 E2E 和生产只读证据见[P71实施记录](P71-PAGE-COMPOSITION-IMPLEMENTATION.md)。这不代表 M08-06 真实测量/签认/RBAC/审计验收或全 73 页目标完成。前一页 [P70 采集调度](P70-PAGE-COMPOSITION-IMPLEMENTATION.md) 也已部署，后续页面与全站验收继续推进。
 
 最新视觉：[批111 P58当前Vue C组合](P58-PAGE-COMPOSITION-BATCH111.md)，复验已保留的桌面/手机双工作区7图；方案目录与组织配额的分区、蓝色导航、统计及组织读取入口待审。5项源码变换/编译和7图清单哈希通过；不重捕图片、不触发真实读取或写入，既有P58弹窗的局部审核不扩大为整页、真实配额或生产验收。
 
@@ -86,7 +86,7 @@ P70 已按用户授权自动通过并完成真实 Vue 接入和宝塔部署；�
 
 最新视觉：[批69 P63实际Vue C组合](P63-PAGE-COMPOSITION-BATCH69.md)，r1双端6图/199来源；蓝色目录身份、白色全目录统计/分布和逐操作五维证据的默认组合待审。实际 Vue 在双端两动效80项/24本地GET通过；仅本地报告样例，不含共享筛选、403/恢复、完整读屏、真实报告/角色/RBAC或生产验收。
 
-最新视觉：[批68 P71实际Vue C组合](P71-PAGE-COMPOSITION-BATCH68.md)，r1双端16图/171来源；蓝色容量边界、通过档位/停止事实、性能参考、归档恢复、资源绝对值与处置的默认组合，以及503保留快照、403清空快照和两个真实Tab焦点待审。不包含告警详情、签认弹窗、真实测量/签认/权限/审计或生产；144项/52本地GET通过。
+历史视觉：[批68 P71实际Vue C组合](P71-PAGE-COMPOSITION-BATCH68.md)，r1双端16图/171来源；该页已按用户授权自动通过并完成真实 Vue 接入/部署。144项/52本地GET、双端E2E和线上资源检查见[P71实施记录](P71-PAGE-COMPOSITION-IMPLEMENTATION.md)。视觉实现不包含真实测量/签认/权限/审计或正式生产验收。
 
 最新视觉：[批67 P70实际Vue C组合](P70-PAGE-COMPOSITION-BATCH67.md)，r1双端16图/173来源；蓝色调度边界、单机/资源、来源并发队列、回执/租约与24小时样本的默认组合，以及503保留快照、403清空快照和两个真实Tab焦点待审。不包含筛选分页、两确认弹窗、真实恢复/权限/审计或生产；144项/52本地GET通过。
 
@@ -348,7 +348,7 @@ r1/r3原证据保留诊断，r2部分图已清理；完整页面/调用方/真�
 | P68 | MySQL 运行 · `/platform-admin/mysql` | [规格](page-specs/P68.md) | [mysql](design/mysql-direction-c/README.md) | C 页面及已展示状态/控件组合已通过并部署；真实 MySQL/RBAC/审计/恢复及全站验收仍未证明 |
 | P69 | 文件存储 · `/platform-admin/files` | [规格](page-specs/P69.md) | [files](design/files-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P70 | 采集调度 · `/platform-admin/crawler-scheduler` | [规格](page-specs/P70.md) | [scheduler](design/scheduler-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
-| P71 | 容量边界 · `/platform-admin/capacity` | [规格](page-specs/P71.md) | [capacity](design/capacity-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
+| P71 | 容量边界 · `/platform-admin/capacity` | [规格](page-specs/P71.md) | [capacity](design/capacity-direction-c/README.md) | C方向已实施/部署；真实容量测量、签认、权限与审计验收仍未证明 |
 | P72 | 界面状态 · `/ui-states` | [规格](page-specs/P72.md) | [recovery](design/recovery-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 | P73 | 页面不存在 · `/:pathMatch(.*)*` | [规格](page-specs/P73.md) | [recovery](design/recovery-direction-c/README.md) | 相关稿待审；整页/全动作未证明 |
 

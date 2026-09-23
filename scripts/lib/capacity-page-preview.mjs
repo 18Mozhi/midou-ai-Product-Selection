@@ -15,6 +15,8 @@ export const capacityPageSources = [
   shellReviewModule,
   "scripts/lib/ui-phase2-shell-vue-preview.mjs",
   "scripts/lib/capacity-page-preview.mjs",
+  "apps/web/src/components/CapacityBoundaryEvidence.vue",
+  "apps/web/src/capacity-boundary-c.css",
 ];
 const once = (value, before, after) => {
   assert.equal(value.split(before).length, 2, "P71 unique anchor: " + before.slice(0, 80));
@@ -23,8 +25,21 @@ const once = (value, before, after) => {
 
 // Review-only transformation: production request, attestation and snapshot code remain byte-for-byte intact.
 export function previewCapacityPage(input) {
-  const source = input.replaceAll("\r\n", "\n"),
-    template = source.slice(source.indexOf("<template>") + 10, source.lastIndexOf("</template>"));
+  const source = input.replaceAll("\r\n", "\n");
+  if (source.includes('class="capacity-boundary capacity-boundary--c"'))
+    return once(
+      once(
+        source,
+        'class="capacity-boundary capacity-boundary--c"',
+        'class="capacity-boundary capacity-boundary--review"',
+      ),
+      '<aside class="p71-boundary"',
+      '<p class="p71-review-note">实际 Vue C 审核版 · 本地样例 · 不签认演练或读取生产测量 · 尚未部署</p><aside class="p71-boundary"',
+    );
+  const template = source.slice(
+    source.indexOf("<template>") + 10,
+    source.lastIndexOf("</template>"),
+  );
   const nodes = [],
     walk = (node) => {
       nodes.push(node);
@@ -79,11 +94,13 @@ export function capacityPagePlugin() {
         return { code: previewCapacityPage(source), map: null };
       if (file === absolute("apps/web/src/components/NavigationShell.vue"))
         return {
-          code: once(
-            previewShellVue(source),
-            '<header v-if="!opportunityId" class="role-page-title">',
-            '<header v-if="!opportunityId && routePath !== \'/platform-admin/capacity\'" class="role-page-title">',
-          ),
+          code: source.includes("routePath !== '/platform-admin/capacity'")
+            ? previewShellVue(source)
+            : once(
+                previewShellVue(source),
+                '<header v-if="!opportunityId" class="role-page-title">',
+                '<header v-if="!opportunityId && routePath !== \'/platform-admin/capacity\'" class="role-page-title">',
+              ),
           map: null,
         };
     },
