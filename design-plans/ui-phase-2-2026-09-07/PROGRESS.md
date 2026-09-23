@@ -2,7 +2,7 @@
 
 ## 2026-09-24 · P02 登录、MFA 挑战与首次安全设置实施
 
-P02 `/login` 已迁入独立蓝色安全步骤边界与白色身份工作区；保留后端主导的普通登录/MFA challenge/seed setup 分流、首次改密后强制重新登录再绑 TOTP、恢复码显示及 redirect/landing 规则。清理旧通用模板中不可达的登录分支；离开挑战/安全设置时清理敏感字段。定向浏览器 E2E 桌面及 390px 各 7/7、登录页源预览单测 2/2、Web 类型检查通过。未改 API、OpenAPI、数据库、权限、配置或依赖。部署和生产只读核验详见[P02实施记录](P02-PAGE-COMPOSITION-IMPLEMENTATION.md)；真实账号/MFA/Cookie/RBAC 与正式 M07-03 验收仍需独立证据，全73页目标继续，下一页 P01。
+P02 `/login` 已迁入独立蓝色安全步骤边界与白色身份工作区；保留后端主导的普通登录/MFA challenge/seed setup 分流、首次改密后强制重新登录再绑 TOTP、恢复码显示及 redirect/landing 规则。清理旧通用模板中不可达的登录分支；离开挑战/安全设置时清理敏感字段。定向浏览器 E2E 桌面及 390px 各 7/7、登录页源预览单测 2/2、Web 类型检查通过。未改 API、OpenAPI、数据库、权限、配置或依赖。代码提交/build SHA `d4c0e6295c4064b41652fa34ea50d6968a16aae4` 已推送并通过固定宝塔脚本部署；health/ready/available/version、`/login` 双视口及专属 JS/CSS 资源哈希线上只读核验通过，详见[P02实施记录](P02-PAGE-COMPOSITION-IMPLEMENTATION.md)。真实账号/MFA/Cookie/RBAC 与正式 M07-03 验收仍需独立证据，全73页目标继续，下一页 P01。
 
 ## 2026-09-24 · P03 注册 C 方向实施
 

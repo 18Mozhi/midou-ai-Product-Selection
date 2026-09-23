@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "pageId": "P02",
   "route": "/login",
-  "status": "implemented-user-approved-not-production-accepted",
+  "status": "implemented-user-approved-production-smoke-verified-not-formally-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/LocalIdentity.vue": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
@@ -1087,7 +1087,7 @@
     }
   ],
   "surfaceReview": {
-    "status": "actual-vue-local-browser-verified-not-production-accepted",
+    "status": "production-readonly-smoke-verified-not-formally-accepted",
     "files": [
       "apps/web/src/components/LocalIdentity.vue",
       "apps/web/src/components/local-identity-login.css"

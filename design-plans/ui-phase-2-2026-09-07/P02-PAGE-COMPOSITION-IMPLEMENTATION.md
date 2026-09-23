@@ -21,4 +21,8 @@
 
 ## 部署与生产边界
 
-本地构建、提交、推送、宝塔部署与线上 GET-only smoke 将在同一轮部署后补录。生产身份写入、真实 MFA/Cookie/RBAC、真实账号权限和正式 M07-03 验收不由本地拦截式 E2E 或静态资源访问证明。应用服务是否重启以固定宝塔部署脚本实际结果为准；本次无环境变量或后端运行契约变化。
+代码提交 `d4c0e6295c4064b41652fa34ea50d6968a16aae4` 已推送至 `origin/main`，并通过项目固定命令 `python scripts/deploy-baota.py` 部署。部署结果报告 `build_sha` 与该提交一致，网站、Node、Python 固定目标均由部署器处理，临时上传包已删除；该脚本依项目既定宝塔流程执行受控服务重载。
+
+部署后对生产环境只执行 GET-only 检查：`/api/v1/health/live`、`/ready`、`/available`、`/version` 和 `/login` 均为 HTTP 200，三个健康端点分别报告 `ok`、`ready`、`available`，版本 `build_sha` 为 `d4c0e6295c4064b41652fa34ea50d6968a16aae4`。生产 `/login` 在 1440×960 桌面及 390×844 手机视口均成功渲染，无横向溢出及浏览器控制台错误；可见辅助正文为 17px。生产请求的 P02 JS/CSS 资源分别为 `/assets/LocalIdentity-4n70bUbB.js`（SHA-256 `9d22f56fedc418190e071ce939711f2582937f3ad0c82d553578d4ed75e88964`）和 `/assets/LocalIdentity-MNiveUnL.css`（SHA-256 `689fb7502e7bd7c172bfb77fba82983da604de1c6e365a117e0338b6d7fb1951`），均与本地构建文件逐字节匹配。浏览器未发出 API 请求；本次线上核验没有提交身份或其他写入。
+
+上述生产检查证明的是已部署静态版本、健康端点及页面可达，不证明生产身份写入、真实 MFA/Cookie/RBAC、真实账号权限或正式 M07-03 验收；本地 E2E 使用合成测试数据，也不替代这些证据。本次没有环境变量、后端运行契约或依赖变化；代码已由固定部署流程处理，无需另行手工重启。全 73 页第二阶段目标继续开放。
