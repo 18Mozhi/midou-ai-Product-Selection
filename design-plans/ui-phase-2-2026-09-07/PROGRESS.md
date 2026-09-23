@@ -2,7 +2,7 @@
 
 ## 2026-09-23 · P71 容量边界 C 方向
 
-P71 已把 CAPACITY-C-r1 接入真实 Vue，保持父页面 API/权限/快照/操作/确认职责，证据区拆为 typed-props 子组件；不画误导性的容量比例条。定向单测3/3、M08-06回归16/16、实际Vue 144项/52次本地GET、桌面与390px E2E各5/5、Web类型检查通过。代码提交、宝塔部署与线上核验待完成；本次未测量容量或执行签认/恢复。详见[P71实施记录](P71-PAGE-COMPOSITION-IMPLEMENTATION.md)，全73页目标继续。
+P71 已把 CAPACITY-C-r1 接入并部署到真实 Vue，保持父页面 API/权限/快照/操作/确认职责，证据区拆为 typed-props 子组件；不画误导性的容量比例条。定向单测3/3、M08-06回归16/16、实际Vue 144项/52次本地GET、桌面与390px E2E各5/5、Web类型/生产构建与22工作区构建通过。提交/build SHA `defcbe4f11274d83d7ec4700023f06b021226b93` 已推送，线上 ready/available/version、P71深链与专属资源均核验通过，上传临时包已删除。未测量容量或执行签认/恢复。详见[P71实施记录](P71-PAGE-COMPOSITION-IMPLEMENTATION.md)，全73页目标继续。
 
 ## 2026-09-23 · P70 采集调度 C 方向
 

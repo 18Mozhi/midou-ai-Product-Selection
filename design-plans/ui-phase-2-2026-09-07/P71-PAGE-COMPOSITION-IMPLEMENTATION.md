@@ -16,4 +16,11 @@
 
 ## 提交与部署
 
-代码提交/build SHA、宝塔部署与线上只读核验待完成。全 73 页阶段目标继续；本地夹具与部署预检不证明真实测量、签认、生产权限/审计或正式 M07-03 容量验收。
+代码提交/build SHA：`defcbe4f11274d83d7ec4700023f06b021226b93`，已推送 `main`。
+
+- `python scripts/deploy-baota.py`：成功；22 个工作区构建通过，M07-03 六对象预检通过，上传临时包已删除。
+- 线上 `/api/v1/health/ready=ready`、`/api/v1/health/available=available`，`/api/v1/health/version.build_sha` 与提交一致。
+- `/platform-admin/capacity` 返回 HTTP 200；专属页面 JS（7,449 bytes）、CSS（17,777 bytes）及证据子组件 JS（4,950 bytes）均 HTTP 200。
+- 部署由固定宝塔脚本完成；无需用户手工重启。本次未调用受保护容量读/写 API，未触发真实测量、签认或恢复。
+
+全 73 页阶段目标继续；部署预检不证明真实测量、签认、生产权限/审计或正式 M07-03 容量验收。

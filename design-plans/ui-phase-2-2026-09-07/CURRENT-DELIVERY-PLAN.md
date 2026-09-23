@@ -1,6 +1,6 @@
 # P71 容量边界 C 方向生产 Vue 接入 · 本次实施
 
-2026-09-23：已将自动通过的 CAPACITY-C-r1 接入真实 `/platform-admin/capacity`：单机蓝色边界、通过档位/停止事实、性能参考、归档与恢复签认、绝对资源及逐项告警；资源不再伪装为容量比例。父控制器继续保留 GET/15秒单飞、失败快照、权限/状态、确认框与原签认 POST/body/key，展示证据拆为 typed-props 子组件。定向单测3/3、M08-06回归16/16、实际Vue矩阵144项/52次本地GET、桌面/手机E2E各5/5、Web类型检查通过。提交、宝塔部署与线上SHA/资源核验待完成；不改容量/恢复合同。全73页目标继续。详见[P71实施记录](P71-PAGE-COMPOSITION-IMPLEMENTATION.md)。
+2026-09-23：已将自动通过的 CAPACITY-C-r1 接入并部署至真实 `/platform-admin/capacity`：单机蓝色边界、通过档位/停止事实、性能参考、归档与恢复签认、绝对资源及逐项告警；资源不再伪装为容量比例。父控制器继续保留 GET/15秒单飞、失败快照、权限/状态、确认框与原签认 POST/body/key，展示证据拆为 typed-props 子组件。定向单测3/3、M08-06回归16/16、实际Vue矩阵144项/52次本地GET、桌面/手机E2E各5/5、Web类型/生产及22工作区构建通过。提交/build SHA `defcbe4f11274d83d7ec4700023f06b021226b93` 已推送并经固定宝塔脚本部署；线上 ready/available/version、P71深链与专属JS/CSS均通过，版本SHA匹配。未改容量/恢复合同。全73页目标继续。详见[P71实施记录](P71-PAGE-COMPOSITION-IMPLEMENTATION.md)。
 
 # P70 采集调度 C 方向生产 Vue 接入 · 前序实施
 
