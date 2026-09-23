@@ -1475,7 +1475,7 @@ W09 发布前必须取得干净且归属明确的提交，核对本地/远端/�
 
 # 本轮交付接续 · P07
 
-2026-09-23：P07 MFA 已迁入 `/security/mfa` 实际 Vue，保留既有 MFA API 合同；桌面与 390px 浏览器验证、来源/路由映射和部署证据见 [P07 实施记录](P07-PAGE-COMPOSITION-IMPLEMENTATION.md)。真实 MFA/Cookie 撤销、生产 RBAC 与正式 M07-03 仍未由本地夹具证明；全 73 页目标继续，下一页按计划接续。
+2026-09-23：P07 MFA 已迁入 `/security/mfa` 实际 Vue，保留既有 MFA API 合同；commit/build SHA `3925719f65062687506e0b58ff1098d7fd7fd8b5` 已部署。桌面与 390px 浏览器验证、线上 health/version、深链及懒加载资源证据见 [P07 实施记录](P07-PAGE-COMPOSITION-IMPLEMENTATION.md)。真实 MFA/Cookie 撤销、生产 RBAC 与正式 M07-03 未由本地夹具证明；安全门执行受本地 Git 清单缓冲上限阻止；全 73 页目标继续，下一页接续 P06。
 
 # 历史交付接续 · P09/P08
 

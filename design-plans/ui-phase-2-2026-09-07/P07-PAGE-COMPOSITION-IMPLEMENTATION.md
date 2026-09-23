@@ -40,4 +40,8 @@
 
 ## 提交与线上部署
 
-本节在本轮自动提交和固定宝塔部署完成后补录精确 commit/build SHA、健康/版本/深链/页面资源结果、部署器迁移核对与临时上传包清理情况。生产行为仍由宝塔管理；不使用旁路服务或仓库外源码构建。
+代码、测试与实施记录以 commit/build SHA `3925719f65062687506e0b58ff1098d7fd7fd8b5` 提交并推送到 `main`；通过 `python scripts/deploy-baota.py` 按固定宝塔网站与受管 Node/Python 对象发布。部署器前置归属检查精确覆盖 1 个提交、15 个路径；M07-03 部署预检通过，22 工作区本地构建通过，部署命令返回 `status=deployed`，服务器临时上传包已删除。
+
+线上只读复核：`/api/v1/health/live`、`ready`、`available`、`version` 均 HTTP 200；版本 SHA 与本次提交一致。`/security/mfa` 深链返回 HTTP 200；懒加载 `LocalIdentity-Cxxk2hfy.js`（22,915 bytes）与 `LocalIdentity-DiXI0H4Y.css`（5,513 bytes）均 HTTP 200，均包含 P07 标记。部署器还通过 `/login`、未知路径 404 和 browser-helper 资源核验。此项证明部署版本/路由/资源可取，不是登录后 MFA 业务验收。
+
+本批不含迁移文件或 SQL；固定部署器仍按项目既有 allowlist 调用幂等迁移 runner，运行成功，不把它描述为本批新增数据库迁移。未通过生产账号执行 MFA 绑定/停用，未验证 Cookie 撤销、真实 MFA 种子、生产 RBAC 或正式 M07-03 用户签收。全部服务继续由宝塔管理；没有新增运行服务、环境变量或人工启动进程。
