@@ -1475,4 +1475,4 @@ W09 发布前必须取得干净且归属明确的提交，核对本地/远端/�
 
 # 本轮交付接续 · P10
 
-P10「外观偏好」C 方向已迁入实际 ThemeStudio Vue，实施细节与本地验证见 [P10-PAGE-COMPOSITION-IMPLEMENTATION.md](P10-PAGE-COMPOSITION-IMPLEMENTATION.md)。保留版本化主题 GET/PUT、只写当前会话的密度、冲突刷新及既有错误/权限边界；页面状态与键盘操作已覆盖本地双端矩阵。提交、宝塔发布及线上资源核验随后记录。本轮用户授权剩余设计自动同意，但不据此宣告业务验收或阶段完成；下一实施页面为 P09。
+P10「外观偏好」C 方向已迁入实际 ThemeStudio Vue，实施、线上 SHA 与资源核验见 [P10-PAGE-COMPOSITION-IMPLEMENTATION.md](P10-PAGE-COMPOSITION-IMPLEMENTATION.md)。保留版本化主题 GET/PUT、只写当前会话的密度、冲突刷新及既有错误/权限边界；本地页面状态与键盘操作矩阵通过，生产路由、健康版本和专属 JS/CSS 指纹匹配。本轮用户授权剩余设计自动同意，但不据此宣告业务验收或阶段完成；下一实施页面为 P09。

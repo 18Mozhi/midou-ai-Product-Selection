@@ -3607,4 +3607,4 @@ frontend-design技能用于将选定C的蓝色范围面、白色内容面、圆�
 
 本地真实生产 Vue 矩阵 1440/390 × reduced/no-preference 共72项与8个被拦截写入通过；P10 E2E 桌面和390px各6/6；M02-01 API/领域/合同9/9、P10组件模板定向3/3。22 workspace 构建、格式（587生产文件）、文档（73/60/6/153）、runtime-docs、静态分析433文件、前端预算203 assets、M07-01 release matrix 均通过。两个全局设计样式汇总测试仍报告其他页面已有的11/12px说明文字、`!important` 与硬编码颜色，非本页CSS；未顺手扩大修改。
 
-部署与线上版本证据待本批提交后补记。隔离响应不证明生产会话/RBAC/MySQL审计或真实写入。P10完成不代表其余页面或全73页目标完成；下一页按剩余最早编号转 P09。
+代码提交 `c3d2315eead08fa6d27d7a800b6730c3649c7ad4` 已推送并用固定宝塔脚本部署，临时上传包已删除。线上 live/ready/version 与 `/settings/theme` 均 HTTP 200，build SHA 匹配，ready 中 MySQL/Redis/supervisor 为 available；P10 专属 JS/CSS 均 HTTP 200 且远端 SHA-256 与本地构建相同。隔离响应与未登录深链不证明生产会话/RBAC/MySQL审计或真实偏好写入。P10完成不代表其余页面或全73页目标完成；下一页按剩余最早编号转 P09。

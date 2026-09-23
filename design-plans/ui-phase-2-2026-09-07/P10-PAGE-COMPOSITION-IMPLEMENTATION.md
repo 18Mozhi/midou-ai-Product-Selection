@@ -31,4 +31,9 @@
 
 ## 部署与边界
 
-提交、固定宝塔部署及线上版本/资源核验结果待本批发布后补记。隔离 API 夹具不证明真实会话、生产 RBAC、MySQL 审计或生产写入。P10 页面结束不代表其余路由或全73页目标完成。
+- 代码提交 `c3d2315eead08fa6d27d7a800b6730c3649c7ad4` 已推送 `main` 并由 `python scripts/deploy-baota.py` 部署；脚本回报临时上传包已删除。
+- 线上 `/api/v1/health/live`、`/api/v1/health/ready`、`/api/v1/health/version` 与 `/settings/theme` 均 HTTP 200；版本 build SHA 为 `c3d2315eead08fa6d27d7a800b6730c3649c7ad4`，ready 的 MySQL/Redis/supervisor 均为 `available`。
+- P10 生产资源 `ThemeStudio-CIwOO5Ow.js` 与 `ThemeStudio-CJJY9j6a.css` 均 HTTP 200，远端 SHA-256 分别与本地构建匹配：`ba5f9ea27ea980bbd59c686d9675b93107224b4bd7cedfbe270ba8fd79d7eed6`、`0822c4640992549077aeb261273a257e6d4ab2f0bb970295efe29fbe1ce97076`。
+- 本次仅前端代码变化，没有新增数据库迁移、配置变更或服务端行为。固定部署器按既有流程停止并启动宝塔 Node 项目、执行其固定迁移 allowlist 检查、测试并重载 Nginx，同时重新申明 Python 项目配置；没有手工额外重启。部署后线上 readiness 恢复正常，因此本次无需再补做重启。后续即使只改 Vue/CSS，也应按固定宝塔发布流程执行，不要绕过部署器做静态文件热拷贝。
+
+隔离 API 夹具和无登录深链检查不证明真实会话、生产 RBAC、MySQL 审计或真实偏好写入。P10 页面完成不代表其余路由或全73页目标完成。
