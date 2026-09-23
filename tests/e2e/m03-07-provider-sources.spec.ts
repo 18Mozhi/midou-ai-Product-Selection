@@ -129,6 +129,21 @@ async function catalog(page: any) {
     route.fulfill({ json: envelope(sources) }),
   );
 }
+async function openMobileSourceDetails(page: any, sourceName?: string) {
+  const article = sourceName
+    ? page.locator(".source-list article").filter({ hasText: sourceName }).first()
+    : page.locator(".source-list article").first();
+  const button = article.getByRole("button", { name: "查看来源详情" }).first();
+  if ((page.viewportSize()?.width ?? 0) <= 760) {
+    await expect(button).toBeVisible();
+    await button.click();
+    await article.getByRole("button", { name: "返回来源目录" }).waitFor({ state: "visible" });
+  }
+}
+async function openMobileFilters(page: any) {
+  const button = page.getByRole("button", { name: "更多筛选与排序" });
+  if (await button.isVisible()) await button.click();
+}
 
 test("M03-07.A07/A08/A15 novice catalog shows 100+ automatic setup and manual channels", async ({
   page,
@@ -141,6 +156,7 @@ test("M03-07.A07/A08/A15 novice catalog shows 100+ automatic setup and manual ch
   await expect(page.getByText("已经替你配置好的部分")).toBeVisible();
   await expect(page.getByRole("heading", { name: "市场热点与消费者信号" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "商品与竞品观察" })).toBeVisible();
+  await openMobileFilters(page);
   await page.getByLabel("业务类型").selectOption("product_supply");
   await expect(page.getByRole("heading", { name: "供应链找货" })).toBeVisible();
   await page.getByRole("button", { name: "重置筛选" }).click();
@@ -148,6 +164,7 @@ test("M03-07.A07/A08/A15 novice catalog shows 100+ automatic setup and manual ch
   await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
   await expect(page.getByRole("heading", { name: "Amazon 登录页" })).toBeVisible();
   await expect(page.getByText("待配置", { exact: true }).last()).toBeVisible();
+  await openMobileSourceDetails(page);
   await page.getByRole("button", { name: "编辑采集设置" }).click();
   await expect(page.getByLabel("采集频率（分钟）")).toHaveValue("30");
   await expect(page.getByLabel("来源设置状态")).toHaveValue("disabled");
@@ -213,7 +230,11 @@ test("enabled Amazon and 1688 sources are shown as automatic instead of stale ca
   await expect(automaticCards.getByText("自动采集", { exact: true })).toHaveCount(2);
   await expect(page.getByText("手工来源", { exact: true })).toHaveCount(0);
   await expect(page.getByText("待配置", { exact: true })).toHaveCount(0);
+  await openMobileSourceDetails(page, "Amazon 商品页面");
   await expect(page.getByText(/系统按选品规则每 30 分钟抓取公开 Amazon 商品页/)).toBeVisible();
+  const back = page.getByRole("button", { name: "返回来源目录" });
+  if (await back.isVisible()) await back.click();
+  await openMobileSourceDetails(page, "1688 搜索");
   await expect(page.getByText(/系统按选品规则每 30 分钟采集 1688 公开商品/)).toBeVisible();
 });
 
@@ -244,6 +265,7 @@ test("source catalog paginates the real-size directory and preserves filter stat
   await expect(page.getByRole("heading", { name: "Amazon 登录页" })).toBeVisible();
 
   await page.getByLabel("搜索来源").fill("");
+  await openMobileFilters(page);
   await page.getByLabel("准备状态").selectOption("setup_required");
   await page.getByLabel("排序").selectOption("attention");
   await expect(
@@ -256,6 +278,40 @@ test("source catalog paginates the real-size directory and preserves filter stat
   await page.getByRole("button", { name: "刷新来源" }).click();
   await expect(page.getByRole("status").last()).toContainText("已刷新 146 个来源频道");
   expect(reads).toBeGreaterThanOrEqual(3);
+});
+
+test("mobile source filters fold and source details expand in-page without another read", async ({
+  page,
+}) => {
+  test.skip((page.viewportSize()?.width ?? 0) > 760, "mobile-only source detail contract");
+  await nav(page, "platform_admin");
+  let reads = 0;
+  await page.route("**/api/v1/platform/provider-sources", (route) => {
+    reads += 1;
+    return route.fulfill({ json: envelope(sources) });
+  });
+  await page.goto("/platform-admin/providers/sources");
+
+  await expect(page.getByLabel("搜索来源")).toBeVisible();
+  await expect(page.getByLabel("业务类型")).not.toBeVisible();
+  await page.getByRole("button", { name: "更多筛选与排序" }).click();
+  await expect(page.getByRole("button", { name: "收起筛选" })).toHaveAttribute(
+    "aria-expanded",
+    "true",
+  );
+  await expect(page.getByLabel("业务类型")).toBeVisible();
+  await page.getByRole("button", { name: "收起筛选" }).click();
+  await expect(page.getByLabel("业务类型")).not.toBeVisible();
+
+  const detail = page.getByRole("button", { name: "查看来源详情" }).first();
+  await detail.click();
+  const back = page.getByRole("button", { name: "返回来源目录" });
+  await expect(back).toBeFocused();
+  await expect(page.getByText("负责人", { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "匿名测试" }).first()).toBeVisible();
+  expect(reads).toBe(1);
+  await back.click();
+  await expect(detail).toBeFocused();
 });
 
 test("platform administrator can save source schedule, retry and enablement", async ({ page }) => {
@@ -279,6 +335,7 @@ test("platform administrator can save source schedule, retry and enablement", as
   });
   await page.goto("/platform-admin/providers/sources");
   await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
+  await openMobileSourceDetails(page);
   await page.getByRole("button", { name: "编辑采集设置" }).click();
   await page.getByLabel("采集频率（分钟）").fill("45");
   await page.getByLabel("来源设置状态").selectOption("enabled");
@@ -292,7 +349,7 @@ test("platform administrator can save source schedule, retry and enablement", as
       expected_version: 1,
       reason: "调整 Amazon 公开来源采集频率",
     });
-  await expect(page.getByRole("status")).toContainText("来源设置已保存");
+  await expect(page.locator(".source-message")).toContainText("来源设置已保存");
 });
 
 test("source detail shows parser and observed page-version compatibility", async ({ page }) => {
@@ -323,6 +380,7 @@ test("source detail shows parser and observed page-version compatibility", async
   );
   await page.goto("/platform-admin/providers/sources");
   await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill(item.name);
+  await openMobileSourceDetails(page);
   await page.getByRole("button", { name: "解析兼容矩阵" }).click();
   const dialog = page.getByRole("dialog", { name: `解析器与页面版本 · ${item.name}` });
   await expect(dialog).toBeVisible();
@@ -379,6 +437,7 @@ test("public source is staged disabled, smoke-tested on the real page, then enab
 
   await page.goto("/platform-admin/providers/sources");
   await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("crawler_001");
+  await openMobileSourceDetails(page);
   await page.getByRole("button", { name: "编辑采集设置" }).click();
   await page.getByLabel("运行状态").selectOption("enabled");
   await expect(page.getByText("烟测失败不会启用来源")).toBeVisible();
@@ -392,7 +451,7 @@ test("public source is staged disabled, smoke-tested on the real page, then enab
     ["enabled", 2],
   ]);
   expect(smokeCount).toBe(1);
-  await expect(page.getByRole("status")).toContainText("真实页面烟测已通过");
+  await expect(page.locator(".source-message")).toContainText("真实页面烟测已通过");
 });
 
 test("platform administrator can compare source configuration versions and restore one as a new version", async ({
@@ -441,6 +500,7 @@ test("platform administrator can compare source configuration versions and resto
   );
   await page.goto("/platform-admin/providers/sources");
   await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
+  await openMobileSourceDetails(page);
   await page.getByRole("button", { name: "版本与回滚" }).click();
   await expect(page.getByRole("heading", { name: /版本、差异与回滚/ })).toBeVisible();
   await expect(page.getByText("采集频率").first()).toBeVisible();
@@ -453,7 +513,7 @@ test("platform administrator can compare source configuration versions and resto
       expected_version: 3,
       reason: "恢复稳定采集设置",
     });
-  await expect(page.getByRole("status")).toContainText("生成新的当前版本");
+  await expect(page.locator(".source-message")).toContainText("生成新的当前版本");
 });
 
 test("1688 acceptance shows the factual search detail and pagination coverage matrix", async ({
@@ -783,6 +843,7 @@ test("fixed parser sample keeps an immutable second-person approval conclusion",
     },
   );
   await page.goto("/platform-admin/providers/sources");
+  await openMobileSourceDetails(page);
   await page.getByRole("button", { name: "固定样本回放" }).click();
   await expect(page.getByRole("heading", { name: /固定样本回放/ })).toBeVisible();
   await expect(page.getByText("一致通过 · 待另一管理员审批")).toBeVisible();

@@ -1,0 +1,118 @@
+.source-filter {
+  display: grid;
+  grid-template-columns: minmax(260px, 1.6fr) auto;
+  align-items: end;
+  gap: 12px 16px;
+  padding: 20px;
+  border: 1px solid #cfd9e7;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.source-filter label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  color: #52657e;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.source-search {
+  grid-column: 1 / -1;
+}
+
+.source-filter-fields {
+  display: contents;
+}
+
+.source-filter input,
+.source-filter select,
+.source-filter button {
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #9eb1ca;
+  border-radius: 6px;
+  background: #fff;
+  color: #142a46;
+  font: inherit;
+}
+
+.source-filter input:focus-visible,
+.source-filter select:focus-visible,
+.source-filter button:focus-visible {
+  outline: 3px solid #185adb;
+  outline-offset: 2px;
+}
+
+.source-filter .source-reset {
+  color: #294caf;
+  font-weight: 700;
+}
+
+.source-filter .source-filter-toggle {
+  display: none;
+}
+
+.source-filter .source-result-count {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #52657e;
+  font-size: 13px;
+}
+
+@media (min-width: 761px) {
+  .source-filter-fields {
+    display: contents;
+  }
+
+  .source-filter-fields > label {
+    min-width: 140px;
+  }
+}
+
+@media (max-width: 760px) {
+  .source-filter {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .source-filter-toggle {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    color: #294caf !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    white-space: nowrap;
+  }
+
+  .source-search {
+    grid-column: 1 / -1;
+  }
+
+  .source-filter-fields {
+    display: none;
+  }
+
+  .source-filter-fields.is-open {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    max-height: min(48vh, 440px);
+    padding: 4px 2px 10px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .source-filter-fields > label {
+    min-width: 0;
+  }
+
+  .source-filter .source-result-count {
+    grid-column: 1 / -1;
+  }
+}

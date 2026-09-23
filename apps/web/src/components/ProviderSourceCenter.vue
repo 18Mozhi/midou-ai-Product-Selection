@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import ProviderCompatibilityMatrixDialog from "./ProviderCompatibilityMatrixDialog.vue";
 import ProviderParserSampleDialog from "./ProviderParserSampleDialog.vue";
+import ProviderSourceDirectory from "./ProviderSourceDirectory.vue";
+import ProviderSourceFilters from "./ProviderSourceFilters.vue";
 import ProviderSourceConfigurationDialog from "./ProviderSourceConfigurationDialog.vue";
 import type {
   ConfigurationVersion,
@@ -39,6 +41,8 @@ const initialPage = Number.parseInt(queryParam("page"), 10);
 const page = ref(Number.isInteger(initialPage) && initialPage > 0 ? initialPage : 1);
 const pageSize = 20;
 const refreshing = ref(false);
+const refreshFeedback = ref<"idle" | "refreshing" | "success" | "failed">("idle");
+const refreshFailureKind = ref<ViewState | null>(null);
 const lastUpdatedAt = ref<string | null>(null);
 const message = ref("");
 const requestId = ref("");
@@ -317,8 +321,11 @@ async function api<T>(path: string, options: RequestInit = {}) {
   }
 }
 
-async function load() {
+async function load(options: { showFeedback?: boolean } = {}) {
   const preserve = items.value.length > 0;
+  refreshFeedback.value = options.showFeedback && preserve ? "refreshing" : "idle";
+  refreshFailureKind.value = null;
+  if (options.showFeedback && preserve) requestId.value = "";
   if (!preserve) state.value = "loading";
   refreshing.value = true;
   message.value = "";
@@ -329,6 +336,7 @@ async function load() {
       (await api<SourceItem[]>("/platform/provider-sources", { signal: controller.signal })) ?? [];
     lastUpdatedAt.value = new Date().toISOString();
     state.value = items.value.length ? "ready" : "empty";
+    refreshFeedback.value = options.showFeedback && preserve ? "success" : "idle";
     if (linkedProviderId.value) {
       const linked = items.value.find((item) => item.provisioned?.id === linkedProviderId.value);
       message.value = linked ? `已定位关联来源：${linked.name}` : "关联来源不在当前来源目录中。";
@@ -336,6 +344,12 @@ async function load() {
   } catch (error) {
     if (preserve) {
       state.value = "ready";
+      const refreshFailure = error instanceof ApiClientError ? failure(error.status) : "blocked";
+      refreshFailureKind.value = refreshFailure;
+      refreshFeedback.value =
+        options.showFeedback && !["expired", "forbidden"].includes(refreshFailure)
+          ? "failed"
+          : "idle";
       message.value =
         error instanceof DOMException && error.name === "AbortError"
           ? "刷新超时，已保留上一次成功加载的来源目录。"
@@ -345,6 +359,34 @@ async function load() {
     window.clearTimeout(timer);
     refreshing.value = false;
   }
+}
+
+async function handleSourceStatePrimary() {
+  if (state.value === "expired") {
+    void router.push("/login");
+    return;
+  }
+  const pageHeading = document.querySelector<HTMLElement>(".source-center .source-guide h2");
+  pageHeading?.focus({ preventScroll: true });
+  await load({ showFeedback: true });
+  await nextTick();
+  if (state.value === "ready") pageHeading?.focus({ preventScroll: true });
+  else
+    document
+      .querySelector<HTMLElement>(".source-center .source-state-primary")
+      ?.focus({ preventScroll: true });
+}
+
+async function handleSourceRefresh() {
+  const pageHeading = document.querySelector<HTMLElement>(".source-center .source-guide h2");
+  pageHeading?.focus({ preventScroll: true });
+  await load({ showFeedback: true });
+  await nextTick();
+  if (refreshFeedback.value === "failed")
+    document
+      .querySelector<HTMLElement>(".source-center .source-refresh-primary")
+      ?.focus({ preventScroll: true });
+  else pageHeading?.focus({ preventScroll: true });
 }
 
 function beginEdit(item: SourceItem) {
@@ -594,16 +636,16 @@ onMounted(load);
 </script>
 
 <template>
-  <section class="source-center novice">
+  <section class="source-center source-center--p48 novice">
     <header class="source-guide">
       <div>
         <p>热点来源</p>
-        <h2>多平台、多国家来源已自动登记</h2>
+        <h2 tabindex="-1">多平台、多国家来源已自动登记</h2>
         <span>公开信息源由系统自动采集；需要登录的平台完成网页登录配置后才能运行。</span>
       </div>
       <div class="source-guide-actions">
         <small v-if="lastUpdatedAt">最近刷新 {{ lastUpdatedAt.slice(11, 19) }}</small>
-        <button type="button" :disabled="refreshing" @click="load">
+        <button type="button" :disabled="refreshing" @click="handleSourceRefresh">
           {{ refreshing ? "刷新中…" : "刷新来源" }}
         </button>
         <RouterLink to="/platform-admin/providers">管理来源规则</RouterLink>
@@ -635,220 +677,178 @@ onMounted(load);
         <li>网页登录型平台需要先完成网页登录配置。</li>
       </ol>
     </aside>
-    <form class="source-filter" aria-label="来源目录筛选" @submit.prevent>
-      <label class="source-search"
-        >搜索来源<input
-          v-model="query"
-          type="search"
-          autocomplete="off"
-          placeholder="搜索 Amazon、eBay、Reddit、国家或来源网址"
-      /></label>
-      <label
-        >业务类型<select v-model="category">
-          <option value="">全部类型</option>
-          <option value="news">新闻</option>
-          <option value="ecommerce">电商平台</option>
-          <option value="data">趋势数据</option>
-          <option value="community">论坛社区</option>
-          <option value="product_supply">商品供应链</option>
-        </select></label
-      ><label
-        >准备状态<select v-model="availability">
-          <option value="">全部状态</option>
-          <option value="automatic">自动采集</option>
-          <option value="setup_required">需要完成配置</option>
-          <option value="manual">手动来源</option>
-        </select></label
-      ><label
-        >市场<select v-model="market">
-          <option value="">全部地区</option>
-          <option v-for="item in marketOptions" :key="item" :value="item">{{ item }}</option>
-        </select></label
-      ><label
-        >语言<select v-model="language">
-          <option value="">全部语言</option>
-          <option v-for="item in languageOptions" :key="item" :value="item">{{ item }}</option>
-        </select></label
-      ><label
-        >接入模式<select v-model="accessMode">
-          <option value="">全部接入模式</option>
-          <option value="public_rss">公开 RSS/Atom</option>
-          <option value="public_page">公开页面</option>
-          <option value="authenticated_browser">网页登录</option>
-          <option value="import">文件导入</option>
-          <option value="manual">人工录入</option>
-        </select></label
-      ><label
-        >排序<select v-model="sort">
-          <option value="business">业务目录顺序</option>
-          <option value="attention">待配置优先</option>
-          <option value="name">名称顺序</option>
-          <option value="recent">最近成功任务</option>
-        </select></label
-      ><button type="button" class="source-reset" @click="resetFilters">重置筛选</button>
-      <span class="source-result-count">找到 {{ filtered.length }} 个来源</span>
-    </form>
-    <p v-if="message" class="source-message" role="status">
+    <ProviderSourceFilters
+      v-if="state === 'ready'"
+      :query="query"
+      :category="category"
+      :availability="availability"
+      :market="market"
+      :language="language"
+      :access-mode="accessMode"
+      :sort="sort"
+      :market-options="marketOptions"
+      :language-options="languageOptions"
+      :result-count="filtered.length"
+      @update:query="query = $event"
+      @update:category="category = $event"
+      @update:availability="availability = $event"
+      @update:market="market = $event"
+      @update:language="language = $event"
+      @update:access-mode="accessMode = $event"
+      @update:sort="sort = $event"
+      @reset="resetFilters"
+    />
+    <p v-if="message && refreshFeedback === 'idle'" class="source-message" role="status">
       {{ message }} <code v-if="requestId">{{ requestId }}</code>
     </p>
-    <div v-if="state === 'loading'" class="source-state">正在读取来源目录…</div>
-    <div v-else-if="state !== 'ready'" class="source-state" :data-kind="state">
-      <strong>{{
-        state === "empty"
-          ? "还没有来源目录"
-          : state === "expired"
-            ? "登录已过期"
-            : state === "forbidden"
-              ? "当前账号不能管理平台来源"
-              : "来源服务暂不可用"
-      }}</strong>
-      <p>{{ message }}</p>
-      <button v-if="!['expired', 'forbidden'].includes(state)" @click="load">重新加载</button>
-    </div>
     <section
-      v-else
-      id="source-results"
-      class="source-purpose-groups"
-      aria-label="按业务用途分组的热点来源"
+      v-if="state !== 'ready'"
+      class="source-state-panel"
+      :data-kind="state"
+      :aria-busy="state === 'loading'"
+      aria-live="polite"
+      aria-atomic="true"
     >
-      <section v-for="group in groupedSources" :key="group.key" class="source-purpose-group">
-        <header class="source-purpose-head">
-          <div>
-            <p>业务用途</p>
-            <h3>{{ group.label }}</h3>
-          </div>
-          <span
-            >{{ group.description }} 本页 {{ group.items.length }} 个，筛选结果共
-            {{ group.total }} 个</span
+      <p class="source-state-eyebrow">
+        {{
+          state === "expired"
+            ? "会话状态"
+            : state === "forbidden"
+              ? "访问范围"
+              : state === "blocked"
+                ? "服务状态"
+                : state === "error"
+                  ? "读取结果"
+                  : "来源目录"
+        }}
+      </p>
+      <h2>
+        {{
+          state === "loading"
+            ? "正在读取来源目录"
+            : state === "empty"
+              ? "还没有可显示的来源"
+              : state === "expired"
+                ? "登录状态已失效"
+                : state === "forbidden"
+                  ? "当前无法查看来源目录"
+                  : state === "blocked"
+                    ? "来源目录暂时不可用"
+                    : "来源目录未能读取"
+        }}
+      </h2>
+      <p class="source-state-description">
+        {{
+          state === "loading"
+            ? "正在获取可用来源、准备状态和最近采集信息。"
+            : state === "empty"
+              ? "目录已成功读取，但当前没有来源频道。可以重新加载，确认登记结果。"
+              : state === "expired"
+                ? "为保护账号，当前未展示来源信息。重新登录后，可以继续查看来源目录。"
+                : state === "forbidden"
+                  ? "当前权限还不能读取这些内容。权限调整后，可以重新加载。"
+                  : message || "来源服务暂时不可用，请稍后重新加载。"
+        }}
+      </p>
+      <details v-if="requestId" class="source-state-technical">
+        <summary>技术详情</summary>
+        <code>{{ requestId }}</code>
+      </details>
+      <button
+        v-if="state !== 'loading'"
+        type="button"
+        class="source-state-primary"
+        @click="handleSourceStatePrimary"
+      >
+        {{ state === "expired" ? "重新登录" : "重新加载目录" }}
+      </button>
+    </section>
+    <template v-else>
+      <section
+        class="source-refresh-host"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        :aria-busy="refreshFeedback === 'refreshing'"
+      >
+        <div
+          v-if="refreshFeedback !== 'idle'"
+          class="source-refresh-feedback"
+          :data-kind="
+            refreshFeedback === 'failed'
+              ? refreshFailureKind === 'blocked'
+                ? 'blocked'
+                : 'failed'
+              : refreshFeedback
+          "
+          :aria-labelledby="`source-refresh-${refreshFeedback}`"
+        >
+          <p>
+            {{
+              refreshFeedback === "refreshing"
+                ? "目录更新"
+                : refreshFeedback === "success"
+                  ? "更新完成"
+                  : refreshFailureKind === "blocked"
+                    ? "服务状态"
+                    : "更新结果"
+            }}
+          </p>
+          <h3 :id="`source-refresh-${refreshFeedback}`">
+            {{
+              refreshFeedback === "refreshing"
+                ? "正在更新来源目录"
+                : refreshFeedback === "success"
+                  ? "来源目录已更新"
+                  : refreshFailureKind === "blocked"
+                    ? "来源目录暂时未能更新"
+                    : "最新目录未能更新"
+            }}
+          </h3>
+          <p>
+            {{
+              refreshFeedback === "refreshing"
+                ? `下方继续显示上次成功加载的 ${items.length} 个来源。刷新完成后会更新目录与最近刷新时间。`
+                : message
+            }}
+          </p>
+          <details v-if="refreshFeedback !== 'refreshing' && requestId">
+            <summary>技术详情</summary>
+            <code>{{ requestId }}</code>
+          </details>
+          <button
+            v-if="refreshFeedback === 'failed'"
+            type="button"
+            class="source-refresh-primary"
+            @click="handleSourceRefresh"
           >
-        </header>
-        <div class="source-list">
-          <article
-            v-for="item in group.items"
-            :key="item.code"
-            :data-availability="effectiveAvailability(item)"
-          >
-            <header>
-              <div>
-                <small>{{ categoryText(item.category) }} · {{ item.markets.join(" / ") }}</small>
-                <h3>{{ item.name }}</h3>
-              </div>
-              <b>{{ statusText(item) }}</b>
-            </header>
-            <p>
-              {{ policyText(item) }}
-              <a
-                v-if="item.target_url.startsWith('https://')"
-                class="source-target"
-                :href="item.target_url"
-                target="_blank"
-                rel="noopener noreferrer"
-                >查看来源页面 ↗</a
-              >
-            </p>
-            <dl>
-              <div>
-                <dt>采集方式</dt>
-                <dd>{{ modeText(item.access_mode) }}</dd>
-              </div>
-              <div>
-                <dt>频率</dt>
-                <dd>
-                  {{ item.provisioned?.schedule_minutes ?? item.schedule_minutes }}
-                  分钟
-                </dd>
-              </div>
-              <div>
-                <dt>超时 / 重试</dt>
-                <dd>
-                  {{ item.provisioned?.timeout_ms ?? item.timeout_ms }} ms /
-                  {{ item.provisioned?.retry_limit ?? item.retry_limit }} 次
-                </dd>
-              </div>
-              <div>
-                <dt>负责人</dt>
-                <dd>{{ item.owner_label }}</dd>
-              </div>
-              <div>
-                <dt>更新 SLA</dt>
-                <dd>{{ slaText(item) }}</dd>
-              </div>
-              <div>
-                <dt>最近成功任务</dt>
-                <dd>{{ successText(item) }}</dd>
-              </div>
-              <div>
-                <dt>影响范围</dt>
-                <dd>
-                  {{ categoryText(item.category) }} · {{ item.markets.join(" / ") }} ·
-                  {{ item.fields.length }} 类字段
-                </dd>
-              </div>
-            </dl>
-            <footer>
-              <span>{{ item.languages.join(" / ") }} · {{ item.fields.length }} 类数据字段</span
-              ><button
-                v-if="
-                  item.provisioned &&
-                  item.availability === 'automatic' &&
-                  ['public_page', 'public_rss'].includes(item.access_mode)
-                "
-                type="button"
-                :disabled="Boolean(testing)"
-                @click="testSource(item)"
-              >
-                {{ testing === item.provisioned.id ? "测试中…" : "匿名测试" }}</button
-              ><button v-if="item.provisioned" type="button" @click="beginEdit(item)">
-                编辑采集设置</button
-              ><button
-                v-if="
-                  item.provisioned &&
-                  ['public_page', 'authenticated_browser'].includes(item.access_mode)
-                "
-                type="button"
-                @click="loadCompatibility(item)"
-              >
-                解析兼容矩阵</button
-              ><button
-                v-if="item.provisioned"
-                type="button"
-                @click="loadConfigurationVersions(item)"
-              >
-                版本与回滚</button
-              ><RouterLink
-                v-if="item.access_mode === 'authenticated_browser'"
-                :to="`/platform-admin/credentials?provider_code=${encodeURIComponent(item.code)}&mode=login`"
-                >配置网页登录</RouterLink
-              ><button
-                v-if="item.code === '1688_search' && item.provisioned"
-                type="button"
-                @click="loadParserSamples(item)"
-              >
-                固定样本回放</button
-              ><RouterLink
-                v-if="item.code === '1688_search'"
-                to="/platform-admin/providers/sources/1688-acceptance"
-                >登录准备状态</RouterLink
-              ><span v-if="!item.provisioned && item.access_mode !== 'authenticated_browser'"
-                >等待系统登记</span
-              >
-            </footer>
-          </article>
+            重新加载目录
+          </button>
         </div>
       </section>
-      <p v-if="!groupedSources.length" class="source-state">没有符合筛选条件的来源。</p>
-      <nav v-if="filtered.length" class="source-pagination" aria-label="热点来源分页">
-        <button type="button" :disabled="page === 1" @click="changePage(page - 1)">上一页</button>
-        <span
-          >第 {{ page }} / {{ totalPages }} 页 · 当前 {{ resultRange.start }}–{{
-            resultRange.end
-          }}，共 {{ filtered.length }} 个来源</span
-        >
-        <button type="button" :disabled="page === totalPages" @click="changePage(page + 1)">
-          下一页
-        </button>
-      </nav>
-    </section>
+      <ProviderSourceDirectory
+        :groups="groupedSources"
+        :total-count="filtered.length"
+        :page="page"
+        :total-pages="totalPages"
+        :range-start="resultRange.start"
+        :range-end="resultRange.end"
+        :category-text="categoryText"
+        :status-text="statusText"
+        :policy-text="policyText"
+        :mode-text="modeText"
+        :sla-text="slaText"
+        :success-text="successText"
+        :effective-availability="effectiveAvailability"
+        :testing="testing"
+        @page-change="changePage"
+        @test="testSource"
+        @edit="beginEdit"
+        @compatibility="loadCompatibility"
+        @versions="loadConfigurationVersions"
+        @samples="loadParserSamples"
+      />
+    </template>
     <ProviderSourceConfigurationDialog
       :editing="editing"
       :form="form"
@@ -894,3 +894,4 @@ onMounted(load);
 </template>
 
 <style scoped src="./ProviderSourceCenter.css"></style>
+<style scoped src="./ProviderSourceCenter.p48.css"></style>
