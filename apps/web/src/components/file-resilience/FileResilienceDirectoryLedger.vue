@@ -30,7 +30,10 @@ const hasMeasuredUsage = (root: FileResilienceDto["directories"][number]) =>
       <header>
         <div>
           <h3>{{ rootLabel(root.kind) }}</h3>
-          <p>{{ rootPurpose(root.kind) }} · {{ root.available && root.writable ? "可读写" : "不可用或不可写" }}</p>
+          <p>
+            {{ rootPurpose(root.kind) }} ·
+            {{ root.available && root.writable ? "可读写" : "不可用或不可写" }}
+          </p>
         </div>
         <b>{{ root.kind === "temp" ? "不建立持久索引" : `${root.active_files} 个活动文件` }}</b>
       </header>
@@ -38,7 +41,13 @@ const hasMeasuredUsage = (root: FileResilienceDto["directories"][number]) =>
         <section>
           <small>目录所在文件系统水位</small>
           <strong>
-            {{ !root.available ? "未取得观测" : hasMeasuredUsage(root) ? formatFilePercent(root.usage_basis_points) : "上限 / 容量未知" }}
+            {{
+              !root.available
+                ? "未取得观测"
+                : hasMeasuredUsage(root)
+                  ? formatFilePercent(root.usage_basis_points)
+                  : "上限 / 容量未知"
+            }}
           </strong>
           <p>{{ formatFileBytes(root.used_bytes) }} / {{ formatFileBytes(root.total_bytes) }}</p>
           <progress

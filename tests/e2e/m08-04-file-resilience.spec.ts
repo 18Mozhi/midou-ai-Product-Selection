@@ -131,9 +131,7 @@ test("M08-04.A07/A08/A15 desktop and 390 local-file truth", async ({ page }) => 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(
-    page.getByText(
-      "证据、导出与临时文件均在当前主机；不使用共享存储或备用服务器。",
-    ),
+    page.getByText("证据、导出与临时文件均在当前主机；不使用共享存储或备用服务器。"),
   ).toBeVisible();
 });
 test("file refresh is single-flight and preserves the last verified snapshot on failure", async ({

@@ -9,7 +9,6 @@ defineProps<{
   state: "ready" | "warning" | "blocked";
   verdict: [string, string];
 }>();
-
 </script>
 
 <template>
@@ -38,9 +37,6 @@ defineProps<{
       <small>提示仅供人工通过宝塔核对；本页不会浏览、下载、删除、备份或恢复文件。</small>
     </section>
     <FileResilienceDirectoryLedger :directories="data.directories" />
-    <FileResilienceIntegrityAndRecovery
-      :integrity="data.integrity"
-      :recovery="data.recovery"
-    />
+    <FileResilienceIntegrityAndRecovery :integrity="data.integrity" :recovery="data.recovery" />
   </section>
 </template>

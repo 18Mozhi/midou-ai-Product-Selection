@@ -1,16 +1,9 @@
 import assert from "node:assert/strict";
 import path from "node:path";
-import {
-  shellReviewCss,
-} from "./ui-phase2-shell-vue-preview.mjs";
+import { shellReviewCss } from "./ui-phase2-shell-vue-preview.mjs";
 
-export const fileReviewCss =
-  "apps/web/src/file-resilience.css";
-export const filePageSources = [
-  fileReviewCss,
-  shellReviewCss,
-  "scripts/lib/file-page-preview.mjs",
-];
+export const fileReviewCss = "apps/web/src/file-resilience.css";
+export const filePageSources = [fileReviewCss, shellReviewCss, "scripts/lib/file-page-preview.mjs"];
 const once = (value, before, after) => {
   assert.equal(value.split(before).length, 2, "P69 unique anchor: " + before.slice(0, 80));
   return value.replace(before, after);
