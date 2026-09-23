@@ -21,4 +21,5 @@
 - `1688 acceptance` Playwright：desktop Chromium 3/3、390px mobile 3/3。覆盖原页面事实、精确 202 请求与排队文案、POST 成功但读取 503 后双结果保持、人工重读恢复，以及网络中断时未知结果锁定且不重发。
 - `npm run typecheck:web`、`npm run build:web`、`npm run verify:docs`（73 路由）、`npm run format:check`、`npm run verify:runtime-docs`、`npm run verify:static-analysis`、`npm run verify:release-matrix --validate`、`npm run verify:plans` 通过。
 - `npm run verify:frontend-budget` 仍失败：全局入口 CSS `129451 > 122880` 字节；这是已记录的共享包预算超限，不是 P49 页面 chunk 的新增失败，本次未擅改其他页面以降低全局包。
-- 后续部署只报告 `deploy-baota.py` 的宝塔构建/上传与线上只读健康、深链、静态资源结果。正式 M07-03 证据缺口保持显式，不据本地测试推断通过。
+- 宝塔部署脚本成功，22 个工作区构建通过；发布 SHA `79a2521a4313e5d0077e5a73a6f955d0d0415c6b`。公网 `/api/v1/health/live`、`ready`、`version` 与 P49 页面深链均 HTTP 200，版本接口 SHA 与发布相符；8 个 P49 页面/子组件 JS/CSS 资源 HEAD 均 HTTP 200。部署临时包已由脚本删除。
+- `verify-baota-deployment.mjs --production` 仍以 `production_evidence_missing` 阻断：缺 `.artifacts/verification/baota-production-evidence.json`。部署健康不等于正式 M07-03 签收；不据本地测试推断真实权限、数据库写入或浏览器采集通过。
