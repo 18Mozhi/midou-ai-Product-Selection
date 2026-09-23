@@ -17,6 +17,12 @@ const once = (source, before, after) => {
 };
 export function previewOpenPage(source) {
   let result = source.replaceAll("\r\n", "\n");
+  if (result.includes('class="open-platform open-platform--c"'))
+    return once(
+      result,
+      'class="open-platform open-platform--c"',
+      'class="open-platform open-platform--c open-platform--review"',
+    );
   result = once(
     result,
     '<script setup lang="ts">\n',
@@ -103,6 +109,9 @@ export function previewOpenShell(source) {
 }
 export const openPageSources = [
   openPageCss,
+  "apps/web/src/open-platform-c.css",
+  "apps/web/src/components/OpenCreateDialog.vue",
+  "apps/web/src/components/OpenActionReasonDialog.vue",
   openCreateComponent,
   shellReviewCss,
   shellReviewModule,

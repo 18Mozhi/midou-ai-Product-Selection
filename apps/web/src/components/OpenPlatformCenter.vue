@@ -3,7 +3,10 @@ import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from "v
 import { ApiClientError, createApiClient } from "../api-client";
 import "../platform-polish.css";
 import "../open-platform.css";
+import "../open-platform-c.css";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import OpenActionReasonDialog from "./OpenActionReasonDialog.vue";
+import OpenCreateDialog from "./OpenCreateDialog.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 
 type ViewKey = "clients" | "webhooks" | "deliveries";
@@ -41,6 +44,9 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   notice = ref(""),
   requestId = ref(""),
   secret = ref<{ value: string; kind: string } | null>(null),
+  actionReason = ref<PendingAction | null>(null),
+  actionReasonDraft = ref(""),
+  actionReasonError = ref(""),
   pending = ref<PendingAction | null>(null),
   fieldErrors = ref<Record<string, string>>({}),
   form = reactive({
@@ -289,8 +295,27 @@ async function call(path: string, method: "POST" | "PATCH", body: Record<string,
     actionBusy.value = false;
   }
 }
-function prepare(action: PendingAction) {
+function prepare(action: PendingAction, collectReason = false) {
   if (actionBusy.value) return;
+  if (collectReason) {
+    actionReason.value = action;
+    actionReasonDraft.value = form.reason;
+    actionReasonError.value = "";
+    return;
+  }
+  pending.value = action;
+}
+function continueWithActionReason(value: string) {
+  if (!actionReason.value) return;
+  const reason = value.trim();
+  if (!reason || reason.length > 500) {
+    actionReasonError.value = "变更原因需为 1–500 个字符。";
+    return;
+  }
+  const action = actionReason.value;
+  action.body.reason = reason;
+  actionReason.value = null;
+  actionReasonError.value = "";
   pending.value = action;
 }
 function confirm() {
@@ -369,66 +394,80 @@ function createWebhook() {
   });
 }
 function clientAction(row: any, action: "rotate" | "revoke") {
-  prepare({
-    title: action === "rotate" ? "轮换接口访问密钥" : "撤销接口访问账号",
-    path: `/platform/open/clients/${row.id}/actions`,
-    method: "POST",
-    body: { action, expected_version: row.version, reason: form.reason.trim() },
-    description: `令牌权限风险预览：账号 ${row.name}，组织 ${row.organization_id}，${row.scopes.map(scopeText).join("、")}。`,
-    impact:
-      action === "rotate"
-        ? `仅保留读取系统状态权限，不包含业务数据写入权限；每分钟 ${row.quota_per_minute} 次限额保持不变。旧密钥立即失效，新密钥仅显示一次。`
-        : "该账号不包含业务数据写入权限；撤销后访问立即终止且不可恢复，需要重新创建账号才能再次接入。",
-    destructive: action === "revoke",
-  });
+  prepare(
+    {
+      title: action === "rotate" ? "轮换接口访问密钥" : "撤销接口访问账号",
+      path: `/platform/open/clients/${row.id}/actions`,
+      method: "POST",
+      body: { action, expected_version: row.version, reason: form.reason.trim() },
+      description: `令牌权限风险预览：账号 ${row.name}，组织 ${row.organization_id}，${row.scopes.map(scopeText).join("、")}。`,
+      impact:
+        action === "rotate"
+          ? `仅保留读取系统状态权限，不包含业务数据写入权限；每分钟 ${row.quota_per_minute} 次限额保持不变。旧密钥立即失效，新密钥仅显示一次。`
+          : "该账号不包含业务数据写入权限；撤销后访问立即终止且不可恢复，需要重新创建账号才能再次接入。",
+      destructive: action === "revoke",
+    },
+    true,
+  );
 }
 function webhookUpdate(row: any) {
   const next = row.status === "active" ? "disabled" : "active";
-  prepare({
-    title: next === "active" ? "启用事件回调" : "停用事件回调",
-    path: `/platform/open/webhooks/${row.id}`,
-    method: "PATCH",
-    body: {
-      name: row.name,
-      target_url: row.target_url,
-      events: row.events,
-      status: next,
-      expected_version: row.version,
-      reason: form.reason.trim(),
+  prepare(
+    {
+      title: next === "active" ? "启用事件回调" : "停用事件回调",
+      path: `/platform/open/webhooks/${row.id}`,
+      method: "PATCH",
+      body: {
+        name: row.name,
+        target_url: row.target_url,
+        events: row.events,
+        status: next,
+        expected_version: row.version,
+        reason: form.reason.trim(),
+      },
+      description: `${row.name} 将切换为“${statusText(next)}”。`,
+      impact:
+        next === "active"
+          ? "恢复后新事件可再次进入投递队列。"
+          : "停用期间不能发送测试回调，新事件不会投递到该地址。",
     },
-    description: `${row.name} 将切换为“${statusText(next)}”。`,
-    impact:
-      next === "active"
-        ? "恢复后新事件可再次进入投递队列。"
-        : "停用期间不能发送测试回调，新事件不会投递到该地址。",
-  });
+    true,
+  );
 }
 function webhookAction(row: any, action: "test" | "rotate") {
-  prepare({
-    title: action === "test" ? "发送测试回调" : "轮换回调签名密钥",
-    path: `/platform/open/webhooks/${row.id}/${action}`,
-    method: "POST",
-    body: {
-      ...(action === "rotate" ? { expected_version: row.version } : {}),
-      reason: form.reason.trim(),
+  prepare(
+    {
+      title: action === "test" ? "发送测试回调" : "轮换回调签名密钥",
+      path: `/platform/open/webhooks/${row.id}/${action}`,
+      method: "POST",
+      body: {
+        ...(action === "rotate" ? { expected_version: row.version } : {}),
+        reason: form.reason.trim(),
+      },
+      description:
+        action === "test"
+          ? `向 ${row.name} 提交一条真实测试事件。`
+          : `轮换 ${row.name} 的签名密钥。`,
+      impact:
+        action === "test"
+          ? "Worker 将执行 DNS/私网检查、签名、投递和失败重试。"
+          : "旧签名密钥立即失效，新密钥仅显示一次。",
     },
-    description:
-      action === "test" ? `向 ${row.name} 提交一条真实测试事件。` : `轮换 ${row.name} 的签名密钥。`,
-    impact:
-      action === "test"
-        ? "Worker 将执行 DNS/私网检查、签名、投递和失败重试。"
-        : "旧签名密钥立即失效，新密钥仅显示一次。",
-  });
+    true,
+  );
 }
 function replay(row: any) {
-  prepare({
-    title: "重新投递回调",
-    path: `/platform/open/deliveries/${row.id}/replay`,
-    method: "POST",
-    body: { reason: form.reason.trim() },
-    description: `基于投递 ${row.id} 创建一条新投递。`,
-    impact: "原投递与事件历史保持不变；新投递将由 Worker 独立处理。",
-  });
+  prepare(
+    {
+      title: "重新投递回调",
+      path: `/platform/open/deliveries/${row.id}/replay`,
+      method: "POST",
+      body: { reason: form.reason.trim() },
+      description: `基于投递 ${row.id} 创建一条新投递。`,
+      impact: "原投递与事件历史保持不变；新投递将由 Worker 独立处理。",
+    },
+    true,
+  );
 }
 async function copySecret() {
   if (!secret.value) return;
@@ -484,17 +523,18 @@ onBeforeUnmount(() => loadController?.abort());
 </script>
 
 <template>
-  <section class="open-platform">
+  <section class="open-platform open-platform--c">
     <header class="open-hero">
       <div>
-        <p>平台开放能力</p>
-        <h2>开放接口与事件回调</h2>
-        <span>为可信外部系统建立最小权限连接，统一管理密钥、回调和真实投递证据。</span>
+        <p>P60 / 连接工作区</p>
+        <h1>开放平台</h1>
+        <span>管理可信连接，核对每次投递的已有结果。</span>
       </div>
       <form class="open-org-filter" @submit.prevent="applyFilters">
         <label
           >组织内部编号<input
             v-model.trim="organizationId"
+            aria-label="读取组织内部编号"
             autocomplete="off"
             placeholder="输入组织内部编号；留空查看全部组织"
         /></label>
@@ -587,6 +627,7 @@ onBeforeUnmount(() => loadController?.abort());
         <button
           type="button"
           data-view="clients"
+          :aria-current="activeView === 'clients' ? 'page' : undefined"
           :class="{ active: activeView === 'clients' }"
           @click="switchView('clients')"
         >
@@ -599,6 +640,7 @@ onBeforeUnmount(() => loadController?.abort());
         <button
           type="button"
           data-view="webhooks"
+          :aria-current="activeView === 'webhooks' ? 'page' : undefined"
           :class="{ active: activeView === 'webhooks' }"
           @click="switchView('webhooks')"
         >
@@ -608,6 +650,7 @@ onBeforeUnmount(() => loadController?.abort());
         <button
           type="button"
           data-view="deliveries"
+          :aria-current="activeView === 'deliveries' ? 'page' : undefined"
           :class="{ active: activeView === 'deliveries' }"
           @click="switchView('deliveries')"
         >
@@ -619,94 +662,135 @@ onBeforeUnmount(() => loadController?.abort());
         </button>
       </nav>
 
-      <section
+      <OpenCreateDialog
         v-if="activeView !== 'deliveries'"
-        class="open-create"
-        aria-labelledby="open-create-title"
+        :key="activeView"
+        :confirming="Boolean(pending)"
+        :busy="actionBusy"
+        :title="activeView === 'clients' ? '创建接口访问账号' : '创建事件回调地址'"
       >
-        <header>
-          <div>
-            <p>新增连接</p>
-            <h3 id="open-create-title">
-              {{ activeView === "clients" ? "创建接口访问账号" : "创建事件回调地址" }}
-            </h3>
-          </div>
-          <span>组织编号、名称和变更原因必填；所有写入均使用幂等键并记录审计。</span>
-        </header>
-        <div class="open-form-grid">
-          <label
-            >名称<input v-model="form.name" maxlength="120" autocomplete="off" /><small
-              v-if="fieldErrors.name"
-              class="field-error"
-              >{{ fieldErrors.name }}</small
-            ></label
-          >
-          <label v-if="activeView === 'clients'"
-            >每分钟配额<input
-              v-model.number="form.quota_per_minute"
-              type="number"
-              min="1"
-              max="1000"
-            /><small v-if="fieldErrors.quota" class="field-error">{{
-              fieldErrors.quota
-            }}</small></label
-          >
-          <label v-else class="wide"
-            >事件回调安全网址<input
-              v-model="form.target_url"
-              type="url"
-              placeholder="https://example.com/hooks/scoutops"
-            /><small v-if="fieldErrors.target_url" class="field-error">{{
-              fieldErrors.target_url
-            }}</small></label
-          >
-          <fieldset v-if="activeView === 'webhooks'" class="wide">
-            <legend>订阅事件</legend>
+        <section class="open-create" aria-labelledby="open-create-title">
+          <header>
+            <div>
+              <p>新增连接</p>
+              <h3 id="open-create-title">
+                {{ activeView === "clients" ? "创建接口访问账号" : "创建事件回调地址" }}
+              </h3>
+            </div>
+            <span>组织编号、名称和变更原因必填；所有写入均使用幂等键并记录审计。</span>
+          </header>
+          <div class="open-form-grid">
+            <label class="wide"
+              >组织内部编号<input
+                v-model.trim="organizationId"
+                aria-label="组织内部编号"
+                required
+                autocomplete="off"
+                :aria-invalid="Boolean(fieldErrors.organization_id)"
+                aria-describedby="p60-org-help p60-org-error"
+              /><small id="p60-org-help">填写目标组织 UUID；与上方组织读取范围共用。</small
+              ><small v-if="fieldErrors.organization_id" id="p60-org-error" class="field-error">{{
+                fieldErrors.organization_id
+              }}</small></label
+            >
             <label
-              v-for="event in [
-                'scoutops.test',
-                'task.updated',
-                'approval.updated',
-                'competitor.changed',
-              ]"
-              :key="event"
-              ><input
-                type="checkbox"
-                :checked="form.events.includes(event)"
-                @change="toggleEvent(event)"
-              />{{ eventText(event) }}</label
-            ><small v-if="fieldErrors.events" class="field-error">{{ fieldErrors.events }}</small>
-          </fieldset>
-          <label class="wide"
-            >变更原因<input v-model="form.reason" maxlength="500" /><small
-              v-if="fieldErrors.reason"
-              class="field-error"
-              >{{ fieldErrors.reason }}</small
-            ><small v-if="fieldErrors.organization_id" class="field-error">{{
-              fieldErrors.organization_id
-            }}</small></label
+              >名称<input
+                v-model="form.name"
+                aria-label="名称"
+                required
+                :aria-invalid="Boolean(fieldErrors.name)"
+                aria-describedby="p60-name-error"
+                maxlength="120"
+                autocomplete="off"
+              /><small v-if="fieldErrors.name" id="p60-name-error" class="field-error">{{
+                fieldErrors.name
+              }}</small></label
+            >
+            <label v-if="activeView === 'clients'"
+              >每分钟配额<input
+                v-model.number="form.quota_per_minute"
+                aria-label="每分钟配额"
+                required
+                :aria-invalid="Boolean(fieldErrors.quota)"
+                aria-describedby="p60-quota-error"
+                type="number"
+                min="1"
+                max="1000"
+              /><small v-if="fieldErrors.quota" id="p60-quota-error" class="field-error">{{
+                fieldErrors.quota
+              }}</small></label
+            >
+            <label v-else class="wide"
+              >事件回调安全网址<input
+                v-model="form.target_url"
+                aria-label="事件回调安全网址"
+                required
+                :aria-invalid="Boolean(fieldErrors.target_url)"
+                aria-describedby="p60-target-error"
+                type="url"
+                placeholder="https://example.com/hooks/scoutops"
+              /><small v-if="fieldErrors.target_url" id="p60-target-error" class="field-error">{{
+                fieldErrors.target_url
+              }}</small></label
+            >
+            <fieldset
+              v-if="activeView === 'webhooks'"
+              class="wide"
+              :aria-invalid="Boolean(fieldErrors.events)"
+              aria-describedby="p60-events-error"
+            >
+              <legend>订阅事件</legend>
+              <label
+                v-for="event in [
+                  'scoutops.test',
+                  'task.updated',
+                  'approval.updated',
+                  'competitor.changed',
+                ]"
+                :key="event"
+                ><input
+                  type="checkbox"
+                  :checked="form.events.includes(event)"
+                  @change="toggleEvent(event)"
+                />{{ eventText(event) }}</label
+              ><small v-if="fieldErrors.events" id="p60-events-error" class="field-error">{{
+                fieldErrors.events
+              }}</small>
+            </fieldset>
+            <label class="wide"
+              >变更原因<input
+                v-model="form.reason"
+                aria-label="变更原因"
+                required
+                :aria-invalid="Boolean(fieldErrors.reason)"
+                aria-describedby="p60-reason-error"
+                maxlength="500"
+              /><small v-if="fieldErrors.reason" id="p60-reason-error" class="field-error">{{
+                fieldErrors.reason
+              }}</small></label
+            >
+          </div>
+          <button
+            class="primary"
+            type="button"
+            :disabled="actionBusy"
+            @click="activeView === 'clients' ? createClient() : createWebhook()"
           >
-        </div>
-        <button
-          class="primary"
-          type="button"
-          :disabled="actionBusy"
-          @click="activeView === 'clients' ? createClient() : createWebhook()"
-        >
-          {{
-            actionBusy
-              ? "提交中…"
-              : activeView === "clients"
-                ? "创建接口访问账号"
-                : "创建事件回调地址"
-          }}
-        </button>
-      </section>
+            {{
+              actionBusy
+                ? "提交中…"
+                : activeView === "clients"
+                  ? "创建接口访问账号"
+                  : "创建事件回调地址"
+            }}
+          </button>
+        </section>
+      </OpenCreateDialog>
 
       <section class="open-workspace" :aria-busy="refreshing">
         <header>
           <div>
-            <h3>{{ currentTitle }}</h3>
+            <h2>{{ currentTitle }}</h2>
             <p>{{ currentDescription }}</p>
           </div>
           <button type="button" :disabled="refreshing" @click="load">
@@ -1122,6 +1206,17 @@ onBeforeUnmount(() => loadController?.abort());
       </section>
     </template>
 
+    <OpenActionReasonDialog
+      :open="Boolean(actionReason)"
+      :title="actionReason?.title ?? ''"
+      :description="actionReason?.description ?? ''"
+      :impact="actionReason?.impact ?? ''"
+      :value="actionReasonDraft"
+      :error="actionReasonError"
+      @update:value="actionReasonDraft = $event"
+      @cancel="actionReason = null"
+      @confirm="continueWithActionReason"
+    />
     <ConfirmDialog
       :open="Boolean(pending)"
       :title="pending?.title ?? ''"

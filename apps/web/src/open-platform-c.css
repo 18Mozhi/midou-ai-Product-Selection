@@ -1,0 +1,496 @@
+/* P60 C: three connection tasks, clear organization scope, and a white evidence ledger. */
+.role-shell:has(.open-platform--c) .role-page-title {
+  display: none;
+}
+
+.role-shell:has(.open-platform--c) {
+  --text: #17253c;
+  --text-muted: #536985;
+  --surface: #fff;
+  --bg: #f3f6fa;
+  --border: #c7d3e4;
+  --primary: #1748b5;
+  --danger: #b42336;
+  --warning: #9a5800;
+}
+
+.open-platform--c {
+  --so-primary: #1748b5;
+  --so-primary-strong: #102a63;
+  --so-border: #c7d3e4;
+  --so-font-ui: "Microsoft YaHei", sans-serif;
+  min-width: 0;
+  gap: 22px;
+  color: #17253c;
+  font:
+    16px/1.65 "Microsoft YaHei",
+    sans-serif;
+}
+
+.open-platform--c :is(button, input, select, summary) {
+  box-sizing: border-box;
+  min-height: 44px;
+  font: inherit;
+}
+
+.open-platform--c button {
+  border: 1px solid #1748b5;
+  border-radius: 4px;
+  color: #fff;
+  background: #1748b5;
+  box-shadow: none;
+}
+
+.open-platform--c button:not(:disabled):not([aria-disabled="true"]):hover {
+  color: #fff;
+  background: #102a63;
+}
+
+.open-platform--c button:disabled,
+.open-platform--c .open-action-reread[aria-disabled="true"] {
+  color: #64748b;
+  border-color: #c7d3e4;
+  background: #e9eef5;
+  opacity: 1;
+}
+
+.open-platform--c :is(input, select) {
+  min-width: 0;
+  border: 1px solid #94a8c4;
+  border-radius: 4px;
+  color: #17253c;
+  background: #fff;
+}
+
+.open-platform--c :is(button, input, select, summary, a):focus-visible {
+  outline: 3px solid #2f6ee5;
+  outline-offset: 3px;
+}
+
+.open-platform--c .open-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 18px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.open-platform--c .open-hero p {
+  margin: 0;
+  color: #1748b5;
+  font: inherit;
+  letter-spacing: 0;
+}
+
+.open-platform--c .open-hero h1 {
+  margin: 6px 0 8px;
+  font-size: 30px;
+  line-height: 1.35;
+}
+
+.open-platform--c .open-hero span,
+.open-platform--c .open-workspace header p,
+.open-platform--c .open-platform small {
+  color: #536985;
+}
+
+.open-platform--c .open-org-filter {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid #c7d3e4;
+  background: #fff;
+}
+
+.open-platform--c .open-org-filter label,
+.open-platform--c .open-toolbar,
+.open-platform--c .open-form-grid label {
+  display: grid;
+  gap: 6px;
+}
+
+.open-platform--c .open-org-filter input,
+.open-platform--c .open-toolbar input,
+.open-platform--c .open-toolbar select,
+.open-platform--c .open-form-grid input:not([type="checkbox"]) {
+  width: 100%;
+  padding: 10px 12px;
+}
+
+.open-platform--c .open-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 16px;
+  border-radius: 0;
+  background: #102a63;
+  overflow: visible;
+}
+
+.open-platform--c .open-summary button {
+  min-height: 116px;
+  padding: 16px;
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+  text-align: left;
+  border: 1px solid #5979ae;
+  color: #fff;
+  background: transparent;
+}
+
+.open-platform--c .open-summary button :is(span, small, strong) {
+  color: inherit;
+}
+
+.open-platform--c .open-summary button strong {
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1;
+}
+
+.open-platform--c .open-summary button.active,
+.open-platform--c .open-summary button[aria-current="page"] {
+  border-color: #fff;
+  color: #102a63;
+  background: #fff;
+}
+
+.open-platform--c .p60-create-launch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px;
+  border-left: 3px solid #1748b5;
+  background: #edf3ff;
+}
+
+.open-platform--c .p60-create-launch p {
+  margin: 0;
+  color: #17253c;
+  font-size: 14px;
+}
+
+.open-platform--c .p60-create-dialog {
+  width: min(720px, calc(100vw - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  overflow: auto;
+  border: 1px solid #c7d3e4;
+  border-radius: 6px;
+  color: #17253c;
+  background: #fff;
+}
+
+.open-platform--c .p60-create-dialog::backdrop {
+  background: rgb(8 22 48 / 60%);
+}
+
+.open-platform--c .p60-action-dialog {
+  width: min(720px, calc(100vw - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  overflow: auto;
+  border: 1px solid #c7d3e4;
+  border-radius: 6px;
+  color: #17253c;
+  background: #fff;
+}
+
+.open-platform--c .p60-action-dialog::backdrop {
+  background: rgb(8 22 48 / 60%);
+}
+
+.open-platform--c .p60-action-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px;
+  color: #fff;
+  background: #102a63;
+}
+
+.open-platform--c .p60-action-heading :is(h2, p, span) {
+  margin: 0;
+  color: #fff;
+}
+
+.open-platform--c .p60-action-heading h2 {
+  margin: 8px 0;
+  font-size: 24px;
+}
+
+.open-platform--c .p60-action-summary,
+.open-platform--c .p60-action-form {
+  display: grid;
+  gap: 10px;
+  padding: 20px 24px;
+}
+
+.open-platform--c .p60-action-summary {
+  background: #f3f6fa;
+}
+
+.open-platform--c .p60-action-summary p {
+  margin: 0;
+}
+
+.open-platform--c .p60-action-form textarea {
+  min-height: 112px;
+  resize: vertical;
+  padding: 10px 12px;
+  border: 1px solid #94a8c4;
+  border-radius: 4px;
+  color: #17253c;
+  background: #fff;
+  font: inherit;
+}
+
+.open-platform--c .p60-action-form footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.open-platform--c .p60-action-form footer button:first-child,
+.open-platform--c .p60-create-heading > button {
+  border-color: #c7d3e4;
+  color: #17253c;
+  background: #fff;
+}
+
+.open-platform--c .p60-create-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px;
+  color: #fff;
+  background: #102a63;
+}
+
+.open-platform--c .p60-create-heading :is(h2, p, span) {
+  margin: 0;
+  color: #fff;
+}
+
+.open-platform--c .p60-create-heading h2 {
+  margin: 8px 0;
+  font-size: 24px;
+}
+
+.open-platform--c .open-create {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+}
+
+.open-platform--c .open-create > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.open-platform--c .open-create > header p {
+  margin: 0;
+  color: #1748b5;
+}
+
+.open-platform--c .open-create h3,
+.open-platform--c .open-workspace h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.open-platform--c .open-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.open-platform--c .open-form-grid .wide {
+  grid-column: 1 / -1;
+}
+
+.open-platform--c .open-form-grid fieldset {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid #c7d3e4;
+  border-radius: 4px;
+}
+
+.open-platform--c .open-form-grid fieldset label {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.open-platform--c .field-error {
+  color: #b42336;
+  font-weight: 650;
+}
+
+.open-platform--c .open-workspace {
+  display: grid;
+  min-width: 0;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid #c7d3e4;
+  border-radius: 0;
+  background: #fff;
+}
+
+.open-platform--c .open-workspace > header {
+  align-items: center;
+  gap: 16px;
+}
+
+.open-platform--c .open-workspace > header p {
+  margin: 3px 0 0;
+}
+
+.open-platform--c .open-toolbar {
+  grid-template-columns: minmax(180px, 2fr) repeat(3, minmax(100px, 1fr));
+  align-items: end;
+  gap: 12px;
+  margin: 8px 0;
+  padding: 16px;
+  background: #f3f6fa;
+}
+
+.open-platform--c .open-toolbar .grow {
+  min-width: 0;
+}
+
+.open-platform--c .open-toolbar > button {
+  grid-row: 2;
+}
+
+.open-platform--c .open-workspace table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.open-platform--c .open-workspace :is(th, td) {
+  padding: 14px 12px;
+  border-color: #c7d3e4;
+  font-size: 14px;
+}
+
+.open-platform--c .open-workspace th {
+  color: #536985;
+  background: #f3f6fa;
+}
+
+.open-platform--c .open-workspace td.table-view-controls__frozen {
+  background: #fff;
+}
+
+.open-platform--c .open-workspace th.table-view-controls__frozen {
+  background: #f3f6fa;
+}
+
+.open-platform--c .open-inline-empty {
+  padding: 24px;
+  border-radius: 4px;
+  text-align: left;
+  background: #f3f6fa;
+}
+
+.open-platform--c .open-notice,
+.open-platform--c .open-empty,
+.open-platform--c .open-state {
+  background: #fff;
+}
+
+.open-platform--c .open-secret {
+  border-color: #9a5800;
+  border-radius: 4px;
+  background: #fffaf0;
+}
+
+.open-platform--c .open-secret code {
+  color: #17253c;
+  overflow-wrap: anywhere;
+}
+
+.open-platform--c .open-pagination {
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #c7d3e4;
+}
+
+@media (max-width: 760px) {
+  .open-platform--c {
+    gap: 14px;
+  }
+
+  .open-platform--c .open-summary {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  .open-platform--c .open-summary button {
+    flex: 0 0 min(280px, 82vw);
+    min-width: min(280px, 82vw);
+    scroll-snap-align: start;
+  }
+
+  .open-platform--c .open-org-filter,
+  .open-platform--c .open-form-grid,
+  .open-platform--c .open-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .open-platform--c .open-form-grid .wide,
+  .open-platform--c .open-toolbar .grow,
+  .open-platform--c .open-toolbar > button {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .open-platform--c .open-create > header,
+  .open-platform--c .open-workspace > header,
+  .open-platform--c .open-pagination {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .open-platform--c .p60-create-launch {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .open-platform--c .open-secret {
+    grid-template-columns: 1fr;
+  }
+
+  .open-platform--c .p60-action-form footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .open-platform--c .open-pagination nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}

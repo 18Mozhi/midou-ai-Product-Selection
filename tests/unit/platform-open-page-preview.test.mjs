@@ -5,37 +5,64 @@ import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import {
   previewOpenPage,
   previewOpenShell,
-  openReviewImport,
-  openCreateComponent,
 } from "../../scripts/lib/platform-open-page-preview.mjs";
-import { openReviewFixtures } from "../../scripts/lib/open-review-fixtures.mjs";
-const original = await readFile("apps/web/src/components/OpenPlatformCenter.vue", "utf8");
-const transformed = previewOpenPage(original);
-test("P60 review transform preserves original business script except isolated component import", () => {
-  assert.equal(
-    parse(transformed).descriptor.scriptSetup.content.replace(openReviewImport, ""),
-    parse(original.replaceAll("\r\n", "\n")).descriptor.scriptSetup.content,
+
+const pagePath = "apps/web/src/components/OpenPlatformCenter.vue";
+const dialogPath = "apps/web/src/components/OpenCreateDialog.vue";
+const actionDialogPath = "apps/web/src/components/OpenActionReasonDialog.vue";
+const page = await readFile(pagePath, "utf8");
+const transformed = previewOpenPage(page);
+
+test("P60 production C page exposes one route-owned title and three accessible task views", () => {
+  assert.match(page, /class="open-platform open-platform--c"/);
+  assert.match(page, /<h1>开放平台<\/h1>/);
+  for (const view of ["clients", "webhooks", "deliveries"]) {
+    assert.match(page, new RegExp(`data-view="${view}"`));
+    assert.match(
+      page,
+      new RegExp(`aria-current="activeView === '${view}' \\? 'page' : undefined"`),
+    );
+  }
+  assert.equal((page.match(/<ResponsiveDataView/g) || []).length, 3);
+});
+
+test("P60 creation remains in the original form model and handlers, inside a native dialog", async () => {
+  assert.match(page, /<OpenCreateDialog[\s\S]*?<section class="open-create"/);
+  assert.match(page, /@click="activeView === 'clients' \? createClient\(\) : createWebhook\(\)"/);
+  assert.match(page, /path: "\/platform\/open\/clients"/);
+  assert.match(page, /path: "\/platform\/open\/webhooks"/);
+  assert.match(page, /scopes: \["status:read"\]/);
+  assert.match(page, /:aria-invalid="Boolean\(fieldErrors\.organization_id\)"/);
+  assert.match(page, /aria-describedby="p60-org-help p60-org-error"/);
+  assert.match(page, /class="field-error"/);
+  assert.match(page, /<ConfirmDialog/);
+  const dialog = await readFile(dialogPath, "utf8");
+  assert.match(dialog, /<dialog/);
+  assert.match(dialog, /@cancel\.prevent="close"/);
+  assert.match(dialog, /waitingForConfirmation/);
+  assert.match(dialog, /@keydown="keydown"/);
+  assert.match(page, /<OpenActionReasonDialog/);
+  const actionDialog = await readFile(actionDialogPath, "utf8");
+  assert.match(actionDialog, /aria-describedby="p60-action-reason-help p60-action-reason-error"/);
+  assert.match(actionDialog, /@cancel\.prevent="cancel"/);
+});
+
+test("P60 review transform is idempotent and its shell title is route-scoped", async () => {
+  assert.match(transformed, /open-platform--c open-platform--review/);
+  assert.equal(transformed.replace(" open-platform--review", ""), page.replaceAll("\r\n", "\n"));
+  const shell = previewOpenShell(
+    await readFile("apps/web/src/components/NavigationShell.vue", "utf8"),
   );
+  assert.match(shell, /routePath !== '\/platform-admin\/open-platform'/);
+  const styles = await readFile("apps/web/src/open-platform-c.css", "utf8");
+  assert.match(styles, /\.role-shell:has\(\.open-platform--c\) \.role-page-title/);
 });
-test("P60 preserves all three original ResponsiveDataView blocks and actions", () => {
-  const blocks = (value) => value.match(/<ResponsiveDataView[\s\S]*?<\/ResponsiveDataView>/g);
-  assert.equal(blocks(transformed).length, 3);
-  assert.deepEqual(blocks(transformed), blocks(original.replaceAll("\r\n", "\n")));
-  assert.equal((transformed.match(/<ConfirmDialog/g) || []).length, 1);
-});
-test("P60 review moves create to separate input step, preserves original handlers", () => {
-  const workspace = transformed.indexOf('<section class="open-workspace"');
-  assert.ok(workspace >= 0 && workspace < transformed.indexOf("<OpenCreateReview"));
-  assert.ok(
-    transformed.includes("@click=\"activeView === 'clients' ? createClient() : createWebhook()\""),
-  );
-  for (const key of ["organization_id", "name", "quota", "target_url", "reason", "events"])
-    assert.ok(transformed.includes(`:aria-invalid="Boolean(fieldErrors.${key})"`));
-});
-test("P60 transform and original-slot component compile with Vue", async () => {
+
+test("P60 actual Vue and create dialog compile", async () => {
   for (const [source, filename] of [
-    [transformed, "OpenPlatformCenter.vue"],
-    [await readFile(openCreateComponent, "utf8"), "OpenCreateReview.vue"],
+    [page, pagePath],
+    [await readFile(dialogPath, "utf8"), dialogPath],
+    [await readFile(actionDialogPath, "utf8"), actionDialogPath],
   ]) {
     const { descriptor, errors } = parse(source, { filename });
     assert.deepEqual(errors, []);
@@ -50,25 +77,4 @@ test("P60 transform and original-slot component compile with Vue", async () => {
       [],
     );
   }
-});
-test("P60 removes duplicate shell title only for the actual route", async () => {
-  const shell = previewOpenShell(
-    await readFile("apps/web/src/components/NavigationShell.vue", "utf8"),
-  );
-  assert.ok(shell.includes("routePath !== '/platform-admin/open-platform'"));
-});
-test("P60 transform refuses changed anchors", () => {
-  assert.throws(
-    () => previewOpenPage(original.replace("开放接口与事件回调", "renamed")),
-    /Unique P60/,
-  );
-});
-test("P60 samples are extracted from original E2E fixture without secret fabrication", async () => {
-  const { fixture, orgId, nav } = await openReviewFixtures();
-  assert.equal(fixture.clients[0].organization_id, orgId);
-  assert.equal(fixture.clients[0].id, "c1");
-  assert.equal(fixture.webhooks[0].id, "w1");
-  assert.equal(fixture.deliveries[0].id, "d1");
-  assert.equal(nav.shell, "platform_admin");
-  assert.equal(JSON.stringify(fixture).includes('"secret"'), false);
 });

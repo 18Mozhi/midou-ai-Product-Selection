@@ -126,6 +126,11 @@ export async function verifyOpenActionResults({
           .click();
       } else
         await surface.getByRole("button", { name: queued ? "测试" : "停用", exact: true }).click();
+      const actionReason = page.getByRole("dialog", {
+        name: queued ? "发送测试回调" : "停用事件回调",
+      });
+      await actionReason.getByLabel("本次变更原因").waitFor();
+      await actionReason.getByRole("button", { name: "继续核对", exact: true }).click();
       const confirmation = page.getByRole("alertdialog");
       await confirmation.waitFor();
       await confirmation.getByRole("button", { name: "确认执行", exact: true }).click();

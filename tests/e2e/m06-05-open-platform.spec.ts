@@ -77,12 +77,14 @@ test.beforeEach(async ({ page }) => {
 });
 test("M06-05.A07/A08/A15 desktop and 390 open platform", async ({ page }) => {
   await page.goto("/platform-admin/open-platform");
-  await expect(page.getByRole("heading", { name: "开放接口与事件回调", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "开放平台", level: 1 })).toBeVisible();
   await expect(page.getByText("sco_open_public", { exact: true })).not.toBeVisible();
   await expect(page.getByText("webhook_timeout", { exact: true })).not.toBeVisible();
-  await page.getByLabel("组织内部编号").fill(orgId);
-  await page.getByRole("textbox", { name: "名称", exact: true }).fill("状态观察接入");
   await page.getByRole("button", { name: "创建接口访问账号" }).click();
+  const createClient = page.locator(".open-create");
+  await createClient.getByRole("textbox", { name: "组织内部编号" }).fill(orgId);
+  await createClient.getByRole("textbox", { name: "名称", exact: true }).fill("状态观察接入");
+  await createClient.getByRole("button", { name: "创建接口访问账号" }).click();
   const creationRisk = page.getByRole("alertdialog");
   await expect(creationRisk).toContainText(`组织 ${orgId}`);
   await expect(creationRisk).toContainText("读取系统状态");
@@ -111,8 +113,11 @@ test("M06-05.A08/A16 confirmation rate limit and dependency recovery", async ({ 
     await page.getByRole("button", { name: /^报表只读 Client/ }).click();
     const dialog = page.getByRole("dialog", { name: "报表只读 Client" });
     await dialog.getByRole("button", { name: "轮换密钥" }).click();
-    await dialog.getByRole("button", { name: "关闭详情" }).click();
   } else await page.getByRole("button", { name: "轮换", exact: true }).click();
+  const actionReason = page.getByRole("dialog", { name: "轮换接口访问密钥" });
+  await expect(actionReason).toContainText("影响范围");
+  await actionReason.getByLabel("本次变更原因").fill("轮换接口访问密钥");
+  await actionReason.getByRole("button", { name: "继续核对" }).click();
   const rotationRisk = page.getByRole("alertdialog");
   await expect(rotationRisk).toContainText("轮换接口访问密钥");
   await expect(rotationRisk).toContainText("报表只读 Client");
@@ -141,9 +146,12 @@ test("M06-05.A08/A16 confirmation rate limit and dependency recovery", async ({ 
 test("M06-05 form validation and URL-backed workspace filters fail closed", async ({ page }) => {
   await page.goto("/platform-admin/open-platform");
   await page.getByRole("button", { name: "创建接口访问账号" }).click();
+  const createClient = page.locator(".open-create");
+  await createClient.getByRole("button", { name: "创建接口访问账号" }).click();
   await expect(page.getByText("请输入有效的组织内部编号。")).toBeVisible();
   await expect(page.getByText("名称需为 1–120 个字符。")).toBeVisible();
   await expect(page.getByRole("alertdialog")).toHaveCount(0);
+  await page.getByRole("button", { name: "关闭创建填写窗" }).click();
   await page.getByRole("textbox", { name: "搜索", exact: true }).fill("报表");
   await page.getByRole("combobox", { name: "状态" }).selectOption("active");
   await page.getByRole("button", { name: "应用" }).click();
@@ -151,8 +159,9 @@ test("M06-05 form validation and URL-backed workspace filters fail closed", asyn
   await page.reload();
   await expect(page.getByRole("textbox", { name: "搜索", exact: true })).toHaveValue("报表");
   await page.getByRole("button", { name: /^事件回调地址/ }).click();
-  await page.getByLabel("组织内部编号").fill(orgId);
+  await page.getByRole("button", { name: "创建事件回调地址" }).click();
   const create = page.locator(".open-create");
+  await create.getByRole("textbox", { name: "组织内部编号" }).fill(orgId);
   await create.getByRole("textbox", { name: "名称" }).fill("错误网址验证");
   await create.getByRole("textbox", { name: "事件回调安全网址" }).fill("http://127.0.0.1/hook");
   await create.getByRole("button", { name: "创建事件回调地址" }).click();

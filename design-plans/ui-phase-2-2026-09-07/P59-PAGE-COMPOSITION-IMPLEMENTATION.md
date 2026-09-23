@@ -1,6 +1,6 @@
 # P59 安全中心 C 方向生产 Vue 接入
 
-状态：C 方向页面组合已接入实际 Vue，双端业务回归通过；本提交部署后再做线上 build SHA 与静态资源核验。用户已授权“完成的页面自动同意”，本页按该授权将已批准的 C 方向整页布局和所覆盖控件视觉视为通过，不再等待逐图确认。此项不扩展为真实 RBAC、SQL 审计或安全运营验收。
+状态：已提交并部署；线上 build SHA 与提交 `25828f82383a4666f8ece18f2dcba318c5d58d01` 一致。用户已授权“完成的页面自动同意”，本页按该授权将已批准的 C 方向整页布局和所覆盖控件视觉视为通过，不再等待逐图确认。此项不扩展为真实 RBAC、SQL 审计或安全运营验收。
 
 ## 页面与组件边界
 
@@ -22,7 +22,7 @@
 - `tests/e2e/m06-04-security-operations.spec.ts`：desktop Chromium 与 390px 手机各 6 项通过；涵盖四类导航、筛选、独立数据集合、详情/技术字段、零摘要历史记录、空态、403/503和无写请求。
 - `node scripts/verify-security-page-preview.mjs`：1440/390 双端98项检查通过；`node scripts/verify-security-detail-preview.mjs`：390/760/761/1440与两种动效模式共752项详情检查通过，零图片输出。
 - `npm run typecheck:web`、`npm run build:web`、`npm run verify:docs`、`npm run format:check`、`npm run verify:plans`、`npm run verify:runtime-docs`、`npm run verify:static-analysis` 与 `npm run verify:release-matrix` 均通过。
-- `npm run verify:frontend-budget` 仍报告现有全局超限：主 CSS 129451/122880 bytes、NavigationShell JS 51825/51200 bytes；P59 使用独立延迟页面 CSS，未改动 NavigationShell。部署脚本的 22 工作区发布构建及线上核验仍待运行。
+- `npm run verify:frontend-budget` 仍报告现有全局超限：主 CSS 129451/122880 bytes、NavigationShell JS 51825/51200 bytes；P59 使用独立延迟页面 CSS，未改动 NavigationShell。22 工作区发布构建通过；线上 live/ready/version、P59 深链与专属 JS/CSS 均 HTTP 200，线上 build SHA 与提交一致。
 
 ## 未声明完成的边界
 
