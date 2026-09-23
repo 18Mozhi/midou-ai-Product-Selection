@@ -1,6 +1,6 @@
 # P61 系统状态 C 方向生产 Vue 接入 · 当前实施
 
-2026-09-23：STATUS-C 已接入真实 `/platform-admin/status`，桌面/390px 手机采用可本地切换的四分区工作台；页面读取、15 秒超时/重试/保留、六项依赖、七个现有目标及会话指标不变。`PlatformManagementCenter` 继续负责取数，`PlatformStatusCenterView` 组合真实内容，`PlatformStatusWorkspace` 仅负责四分区切换；状态专属 CSS 与隐藏重复页标题均限定 P61。提交 `8c00661010d2eb4a4b21f6b2efff8119d83f1bf0` 已推送并部署；线上 health、页面深链及专属 JS/CSS 资源均 HTTP 200，version build SHA 匹配。P61 专项 21/21、实际 Vue 98项（1440/390各49）、M06-02 定向 E2E 桌面与手机各1/1、Web 类型及22工作区构建通过；全量单测 2,277 项中 375 项因既有源码指纹/视觉基线不匹配而失败，详见实施记录。全73页目标继续，正式 M07-03/真实运维证据不因本地矩阵或页面可达性而通过。
+2026-09-23：STATUS-C 已接入真实 `/platform-admin/status`，桌面/390px 手机采用可本地切换的四分区工作台；页面读取、15 秒超时/重试/保留、六项依赖、七个现有目标及会话指标不变。`PlatformManagementCenter` 继续负责取数，`PlatformStatusCenterView` 组合真实内容，`PlatformStatusWorkspace` 仅负责四分区切换；状态专属 CSS 与隐藏重复页标题均限定 P61。提交 `8c00661010d2eb4a4b21f6b2efff8119d83f1bf0` 已推送并部署；线上 health、页面深链及专属 JS/CSS 资源均 HTTP 200，version build SHA 匹配。P61 专项 21/21、实际 Vue 98项（1440/390各49）、M06-02 定向 E2E 桌面与手机各1/1、Web 类型及22工作区构建通过；全量单测 2,277 项中 375 项失败，已观察到的失败包括历史源码指纹/视觉基线不匹配，详见实施记录。全73页目标继续，正式 M07-03/真实运维证据不因本地矩阵或页面可达性而通过。
 
 # P63 接口覆盖证据 C 方向生产 Vue 接入 · 前序发版
 
