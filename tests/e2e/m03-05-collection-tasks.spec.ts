@@ -161,7 +161,7 @@ test("M03-05.A07/A08/A15 task monitor is responsive and visual", async ({ page }
   await nav(page);
   await list(page);
   await page.goto("/platform-admin/collection");
-  await expect(page.getByRole("heading", { name: "采集任务监控", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "采集任务监控", level: 1 })).toBeVisible();
   await expect(page.getByText("部分完成").first()).toBeVisible();
   if ((page.viewportSize()?.width ?? 1000) <= 760) {
     await page.getByRole("button", { name: /部分完成 · 38 条证据/ }).click();
@@ -780,7 +780,7 @@ test("UI2-CL51 resumes a list read that was interrupted by KeepAlive deactivatio
     }
   });
   await page.goto("/platform-admin/collection");
-  await expect(page.getByRole("heading", { name: "采集任务监控", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "采集任务监控", level: 1 })).toBeVisible();
   await page.getByRole("button", { name: "刷新任务" }).click();
   await entered;
   await page.getByRole("link", { name: "网页登录采集（高级）", exact: true }).click();
