@@ -24,4 +24,4 @@
 - `npm run typecheck:web` 与 `npm run build:web` 通过。
 - 不改 API、OpenAPI、探针 POST、重试、权限、缓存、数据库、依赖、配置或服务拓扑。测试不证明真实来源权限/探针结果；跨页卸载后仍在途的探针锁策略仍待产品确认。
 
-宝塔部署和当前构建 SHA 将在代码提交后追加核验结果。正式 M07-03 与全 73 页目标保持开放。
+提交 `afde2f17866af2f745ae4dbe046ecc3dba7a06b2` 已推送并通过 `python scripts/deploy-baota.py` 部署；脚本确认状态为 `deployed`，线上构建 SHA 与提交一致，固定网站/Node/Python 目录完成更新，上传临时包已清理。正式 M07-03 与全 73 页目标保持开放。
