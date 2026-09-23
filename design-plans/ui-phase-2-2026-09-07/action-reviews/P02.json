@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-user-approved",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/LocalIdentity.vue": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769"
+    "apps/web/src/components/LocalIdentity.vue": "9ee41cb26d63988bd2ee0504b89aa53e70924e91e3abc4f3d34b37a4fc7834f7"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -28,7 +28,10 @@
       "label": "品牌返回根入口",
       "kind": "navigation",
       "routeApplicability": "shared-identity-modes-not-initial-screen-only",
-      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#9b4b982bf643379f.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/LocalIdentity.vue#9b4b982bf643379f.1",
+        "apps/web/src/components/LocalIdentity.vue#d545c6b53ab2b2a8.1"
+      ],
       "condition": "全部局部模式的RouterLink",
       "handler": "RouterLink /",
       "variants": ["all-modes"],
@@ -69,6 +72,11 @@
           "candidateId": "apps/web/src/components/LocalIdentity.vue#9b4b982bf643379f.1",
           "classification": "route-mode-family",
           "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#d545c6b53ab2b2a8.1",
+          "classification": "cross-route-reference-only",
+          "reason": "P07专属安全页根入口在当前身份路径仅作跨路由参考"
         }
       ]
     },
@@ -344,8 +352,10 @@
       "kind": "write",
       "routeApplicability": "shared-identity-modes-not-initial-screen-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#2f540419fadab817.1",
-        "apps/web/src/components/LocalIdentity.vue#2f540419fadab817.2"
+        "apps/web/src/components/LocalIdentity.vue#87ecf46f7a53619e.1",
+        "apps/web/src/components/LocalIdentity.vue#3a0dc4e3156efd96.2",
+        "apps/web/src/components/LocalIdentity.vue#24e4d3a67a2b28f1.1",
+        "apps/web/src/components/LocalIdentity.vue#3a0dc4e3156efd96.1"
       ],
       "condition": "首次设置需绑定且无secret；普通mfa未启用且无secret；均无busy锁",
       "handler": "startMfa -> POST /me/mfa/totp/enrollment {current_password} -> secret",
@@ -392,14 +402,24 @@
       "remaining": "两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。",
       "sourceCandidateApplicability": [
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#2f540419fadab817.1",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#87ecf46f7a53619e.1",
           "classification": "route-mode-family",
-          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+          "reason": "首次安全设置绑定表单保留明确必填密码和原生校验"
         },
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#2f540419fadab817.2",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#3a0dc4e3156efd96.2",
+          "classification": "route-mode-family",
+          "reason": "首次安全设置绑定按钮在提交中禁用"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#24e4d3a67a2b28f1.1",
           "classification": "cross-route-reference-only",
-          "reason": "mfa不是公开query模式，也无局部switchMode('mfa')按钮；需前往P07"
+          "reason": "P07绑定步骤表单不在当前身份路径可达"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#3a0dc4e3156efd96.1",
+          "classification": "cross-route-reference-only",
+          "reason": "P07绑定提交按钮不在当前身份路径可达"
         }
       ]
     },
@@ -409,8 +429,10 @@
       "kind": "write",
       "routeApplicability": "shared-identity-modes-not-initial-screen-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#6eba4c9b2b754a44.1",
-        "apps/web/src/components/LocalIdentity.vue#ea20d050ca8862b0.1"
+        "apps/web/src/components/LocalIdentity.vue#34264731eb9f9123.1",
+        "apps/web/src/components/LocalIdentity.vue#ce5ea11b7f38e146.1",
+        "apps/web/src/components/LocalIdentity.vue#4ce7b78a016bd6b5.1",
+        "apps/web/src/components/LocalIdentity.vue#7d20870a6b6ed73c.1"
       ],
       "condition": "首次设置或普通mfa有secret；form外button，无busy/原生required保护",
       "handler": "confirmMfa -> POST /me/mfa/totp/confirm {code} -> enabled/recoveryCodes",
@@ -461,14 +483,24 @@
       "remaining": "普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。",
       "sourceCandidateApplicability": [
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#6eba4c9b2b754a44.1",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#34264731eb9f9123.1",
           "classification": "route-mode-family",
-          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+          "reason": "首次安全设置确认表单需要验证码并保留既有字段边界"
         },
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#ea20d050ca8862b0.1",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#ce5ea11b7f38e146.1",
+          "classification": "route-mode-family",
+          "reason": "首次安全设置确认按钮在提交期间禁用"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#4ce7b78a016bd6b5.1",
           "classification": "cross-route-reference-only",
-          "reason": "mfa不是公开query模式，也无局部switchMode('mfa')按钮；需前往P07"
+          "reason": "P07绑定确认表单不在当前身份路径可达"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#7d20870a6b6ed73c.1",
+          "classification": "cross-route-reference-only",
+          "reason": "P07绑定确认按钮不在当前身份路径可达"
         }
       ]
     },
@@ -477,7 +509,10 @@
       "label": "停用MFA并撤销会话",
       "kind": "excluded",
       "routeApplicability": "shared-identity-modes-not-initial-screen-only",
-      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#44386aa05f9251f5.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/LocalIdentity.vue#29abd90f9774564d.1",
+        "apps/web/src/components/LocalIdentity.vue#6735871aaf8e0556.1"
+      ],
       "condition": "mode=mfa且mfaEnabled；无busy禁用；仅P07初始管理分支",
       "handler": "disableMfa -> DELETE /me/mfa/totp {current_password,code}；成功enabled=false，无跳转",
       "variants": ["enabled", "recovery-visible", "disable"],
@@ -523,9 +558,14 @@
       "remaining": "原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。",
       "sourceCandidateApplicability": [
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#44386aa05f9251f5.1",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#29abd90f9774564d.1",
           "classification": "cross-route-reference-only",
-          "reason": "mfa不是公开query模式，也无局部switchMode('mfa')按钮；需前往P07"
+          "reason": "P07停用MFA表单不在当前身份路径可达"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#6735871aaf8e0556.1",
+          "classification": "cross-route-reference-only",
+          "reason": "P07停用按钮不在当前身份路径可达"
         }
       ]
     },
@@ -631,7 +671,10 @@
       "label": "前往个人安全会话",
       "kind": "navigation",
       "routeApplicability": "shared-identity-modes-not-initial-screen-only",
-      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#ba3feba8b42af0bf.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/LocalIdentity.vue#ba3feba8b42af0bf.1",
+        "apps/web/src/components/LocalIdentity.vue#ba3feba8b42af0bf.2"
+      ],
       "condition": "全部局部模式固定RouterLink",
       "handler": "RouterLink /me?section=security",
       "variants": ["footer-security"],
@@ -674,8 +717,69 @@
       "sourceCandidateApplicability": [
         {
           "candidateId": "apps/web/src/components/LocalIdentity.vue#ba3feba8b42af0bf.1",
+          "classification": "cross-route-reference-only",
+          "reason": "P07专属个人安全会话入口不在当前局部身份路径"
+        },
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#ba3feba8b42af0bf.2",
           "classification": "route-mode-family",
-          "reason": "结合query白名单、局部switchMode及登录/注册结果，不局限初始mode"
+          "reason": "当前身份页脚继续提供个人安全入口"
+        }
+      ]
+    },
+    {
+      "actionId": "ID-MFA-RELOAD",
+      "label": "重新读取 MFA 状态",
+      "kind": "read",
+      "routeApplicability": "cross-route-reference-only",
+      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#9734082c2e28b39f.1"],
+      "condition": "仅P07读取失败时显示；当前身份页不可达",
+      "handler": "loadMfa -> GET /me/mfa",
+      "variants": ["read-failure", "retry"],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "仅为P07页面控制；不在当前身份路由可操作。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#9734082c2e28b39f.1",
+          "classification": "cross-route-reference-only",
+          "reason": "状态读取重试仅在P07 MFA管理错误区出现"
+        }
+      ]
+    },
+    {
+      "actionId": "ID-MFA-RETURN-LOGIN",
+      "label": "停用后手动返回登录",
+      "kind": "navigation",
+      "routeApplicability": "cross-route-reference-only",
+      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#e4840b8a830571e2.1"],
+      "condition": "P07明确登录入口；当前身份页不可达",
+      "handler": "RouterLink /login",
+      "variants": ["P07-footer"],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "仅为P07页面控制；停用后手动导航，不自动跳转。",
+      "sourceCandidateApplicability": [
+        {
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#e4840b8a830571e2.1",
+          "classification": "cross-route-reference-only",
+          "reason": "P07登录链接在当前身份路由不可见"
         }
       ]
     },
@@ -787,7 +891,7 @@
     "files": ["apps/web/src/components/LocalIdentity.vue"],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/LocalIdentity.vue": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
+      "apps/web/src/components/LocalIdentity.vue": "9ee41cb26d63988bd2ee0504b89aa53e70924e91e3abc4f3d34b37a4fc7834f7",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",

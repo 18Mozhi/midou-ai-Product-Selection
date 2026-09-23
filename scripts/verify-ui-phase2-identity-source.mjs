@@ -28,6 +28,7 @@ export async function verifyIdentitySource() {
     const calls = [],
       targets = [],
       mounted = [],
+      beforeUnmount = [],
       replies = [];
     const request = async (url, options) => {
       calls.push({ url, options });
@@ -44,6 +45,7 @@ export async function verifyIdentitySource() {
       nextTick: async () => {},
       useTemplateRef: () => ref(null),
       onMounted: (f) => mounted.push(f),
+      onBeforeUnmount: (f) => beforeUnmount.push(f),
       useRoute: () => ({ query }),
       useRouter: () => ({ replace: async (to) => targets.push(to) }),
       createApiClient: () => request,
@@ -65,13 +67,13 @@ export async function verifyIdentitySource() {
       compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.None },
     }).outputText;
     const state = new Function(...Object.keys(env), js)(...Object.values(env));
-    return { ...state, calls, targets, mounted, replies };
+    return { ...state, calls, targets, mounted, beforeUnmount, replies };
   }
   const envelope = (data) => ({ data, request_id: "fixture-request", trace_id: "fixture-trace" });
   const identity = (url) =>
     setup(
       "LocalIdentity",
-      "mode,requestState,email,identifier,password,confirmPassword,mfaCode,mfaEnabled,mfaSecret,recoveryCodes,currentPassword,newPassword,securitySetup,message,submit,switchMode,confirmEmail,loadMfa,startMfa,confirmMfa,disableMfa,changeSeedPassword",
+      "mode,requestState,email,identifier,password,confirmPassword,mfaCode,mfaEnabled,mfaSecret,recoveryCodes,currentPassword,newPassword,securitySetup,message,mfaStatus,mfaActionBusy,mfaDisabledByAction,submit,switchMode,confirmEmail,loadMfa,startMfa,confirmMfa,disableMfa,changeSeedPassword",
       url,
     );
   let s = await identity("/login?redirect=/tasks");
@@ -175,9 +177,11 @@ export async function verifyIdentitySource() {
   await s.loadMfa();
   assert.equal(s.mfaEnabled.value, false);
   assert.equal(s.requestState.value, "blocked");
-  checks.push(
-    "known source gap: false initial MFA flag survives read failure; draft must show unknown",
-  );
+  assert.equal(s.mfaStatus.value, "error");
+  s.replies.push(envelope({ totp_enabled: false }));
+  await s.loadMfa();
+  assert.equal(s.mfaStatus.value, "ready");
+  checks.push("MFA read failure remains unknown and only explicit retry loads a status");
   s.currentPassword.value = "synthetic-only-password";
   s.replies.push(envelope({ secret: "SYNTHETIC-NOT-A-SECRET" }));
   await s.startMfa();
@@ -185,6 +189,8 @@ export async function verifyIdentitySource() {
     url: "/me/mfa/totp/enrollment",
     options: { method: "POST", body: { current_password: "synthetic-only-password" } },
   });
+  assert.equal(s.currentPassword.value, "");
+  assert.equal(s.mfaSecret.value, "SYNTHETIC-NOT-A-SECRET");
   s.mfaCode.value = "000000";
   s.replies.push(envelope({ recovery_codes: ["SYNTHETIC-NOT-A-CODE"] }));
   await s.confirmMfa();
@@ -193,6 +199,11 @@ export async function verifyIdentitySource() {
     options: { method: "POST", body: { code: "000000" } },
   });
   assert.equal(s.mfaEnabled.value, true);
+  assert.equal(s.mfaSecret.value, "");
+  assert.equal(s.mfaCode.value, "");
+  assert.equal(s.recoveryCodes.value[0], "SYNTHETIC-NOT-A-CODE");
+  s.currentPassword.value = "synthetic-only-password";
+  s.mfaCode.value = "000000";
   s.replies.push(envelope(undefined));
   await s.disableMfa();
   assert.equal(s.calls.at(-1).options.method, "DELETE");
@@ -201,13 +212,26 @@ export async function verifyIdentitySource() {
     code: "000000",
   });
   assert.deepEqual(s.targets, []);
-  assert.equal(s.mfaSecret.value, "SYNTHETIC-NOT-A-SECRET");
+  assert.equal(s.mfaSecret.value, "");
+  assert.equal(s.mfaCode.value, "");
+  assert.equal(s.currentPassword.value, "");
+  assert.equal(s.recoveryCodes.value.length, 0);
+  assert.equal(s.mfaDisabledByAction.value, true);
   checks.push(
-    "MFA enrollment/confirm/disable exact methods and bodies; source retains materials after disable, no cookie proof",
+    "MFA enrollment/confirm/disable exact methods and bodies; material cleared after confirmation/disable, no cookie proof",
   );
+  s.currentPassword.value = "synthetic-only-password";
+  s.mfaCode.value = "synthetic-code";
+  s.mfaSecret.value = "SYNTHETIC-NOT-A-SECRET";
+  s.recoveryCodes.value = ["SYNTHETIC-NOT-A-CODE"];
+  s.beforeUnmount.forEach((cleanup) => cleanup());
+  assert.equal(s.currentPassword.value, "");
+  assert.equal(s.mfaCode.value, "");
+  assert.equal(s.mfaSecret.value, "");
+  assert.deepEqual(s.recoveryCodes.value, []);
+  checks.push("MFA sensitive material clears when leaving the component");
   s.switchMode("register");
-  assert.equal(s.currentPassword.value, "synthetic-only-password");
-  checks.push("source mode switch retains sensitive refs; draft is not a lifecycle/security fix");
+  assert.equal(s.currentPassword.value, "");
   const chooser = (query) =>
     setup(
       "TenancyChooser",

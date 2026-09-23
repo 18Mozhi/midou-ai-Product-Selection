@@ -1473,6 +1473,10 @@ W09 发布前必须取得干净且归属明确的提交，核对本地/远端/�
 
 2026-09-23：桌面蓝色调用链目录与白色事件阅读区、手机单列布局已接入真实 `PlatformLogCenter`；保留已有筛选、200 条窗口、链路证据、详情、读取与导出合同。新增 P62 专属 workspace/types/CSS，审核转换现在直接使用生产 Vue。定向单测、双端 P62 E2E、类型检查、状态/生命周期/导出/追踪/页面组合验证通过；22 workspace 构建及提交前质量门通过。commit/build SHA `44bc87b47239bef78c25a8b1e7fbe6b5a916e29e` 已推送并发布；线上 live/ready/version、P62 深链及专属 JS/CSS 均 HTTP 200，build SHA 一致。正式 M07-03 因生产证据文件缺失未签收，不代表生产 SQL/RBAC/真实 CSV 或全 73 页验收；全 73 页继续。
 
-# 本轮交付接续 · P09
+# 本轮交付接续 · P07
+
+2026-09-23：P07 MFA 已迁入 `/security/mfa` 实际 Vue，保留既有 MFA API 合同；桌面与 390px 浏览器验证、来源/路由映射和部署证据见 [P07 实施记录](P07-PAGE-COMPOSITION-IMPLEMENTATION.md)。真实 MFA/Cookie 撤销、生产 RBAC 与正式 M07-03 仍未由本地夹具证明；全 73 页目标继续，下一页按计划接续。
+
+# 历史交付接续 · P09/P08
 
 P10「外观偏好」C 方向已迁入实际 ThemeStudio Vue，实施、线上 SHA 与资源核验见 [P10-PAGE-COMPOSITION-IMPLEMENTATION.md](P10-PAGE-COMPOSITION-IMPLEMENTATION.md)。2026-09-23 已按用户自动同意授权完成 P09 三步引导与 P08 组织/工作区选择真实 Vue 重构，分别见 [P09 实施记录](P09-PAGE-COMPOSITION-IMPLEMENTATION.md) 和 [P08 实施记录](P08-PAGE-COMPOSITION-IMPLEMENTATION.md)；P08 commit/build SHA `b1e53eac9d731ffd8e90029ab6192bdda6c215f3` 已推送并经固定宝塔脚本部署，线上 health/version、深链和 P08 JS/CSS 资源核验通过。全 73 页目标和正式阶段验收仍开放；下一页面接续 P07 MFA 身份安全。

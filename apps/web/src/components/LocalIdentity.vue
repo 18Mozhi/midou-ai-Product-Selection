@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import "./local-identity-mfa.css";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiEnvelope } from "../api-client";
 import { publicConfig } from "../config";
@@ -45,6 +46,9 @@ const mfaCode = ref("");
 const mfaSecret = ref("");
 const recoveryCodes = ref<string[]>([]);
 const mfaEnabled = ref(false);
+const mfaStatus = ref<"unknown" | "loading" | "ready" | "error">("unknown");
+const mfaActionBusy = ref(false);
+const mfaDisabledByAction = ref(false);
 const message = ref("");
 const actionHint = ref("");
 const requestId = ref("");
@@ -87,6 +91,7 @@ const title = computed(
 );
 
 function switchMode(next: IdentityMode) {
+  if (mode.value === "mfa" && next !== "mfa") clearMfaMaterial();
   mode.value = next;
   requestState.value = "idle";
   message.value = "";
@@ -222,41 +227,81 @@ async function revoke(id: string) {
   if (result === null && requestState.value === "success") await loadSessions();
 }
 async function loadMfa() {
+  if (mfaStatus.value === "loading") return;
+  mfaStatus.value = "loading";
   const result = await request<{ totp_enabled: boolean }>("/me/mfa", undefined, "GET");
-  if (result) mfaEnabled.value = Boolean(result.data?.totp_enabled);
+  if (result) {
+    mfaEnabled.value = Boolean(result.data?.totp_enabled);
+    mfaStatus.value = "ready";
+  } else {
+    mfaStatus.value = "error";
+  }
+}
+function clearMfaMaterial() {
+  currentPassword.value = "";
+  mfaCode.value = "";
+  mfaSecret.value = "";
+  recoveryCodes.value = [];
 }
 async function startMfa() {
-  const result = await request<{ secret: string }>("/me/mfa/totp/enrollment", {
-    current_password: currentPassword.value,
-  });
-  if (result) {
-    mfaSecret.value = result.data.secret;
-    message.value = "密钥仅显示于本次绑定，请添加到认证器后输入验证码。";
+  if (mfaActionBusy.value) return;
+  mfaActionBusy.value = true;
+  try {
+    const result = await request<{ secret: string }>("/me/mfa/totp/enrollment", {
+      current_password: currentPassword.value,
+    });
+    if (result) {
+      mfaSecret.value = result.data.secret;
+      currentPassword.value = "";
+      message.value = "密钥仅显示于本次绑定，请添加到认证器后输入验证码。";
+    }
+  } finally {
+    mfaActionBusy.value = false;
   }
 }
 async function confirmMfa() {
-  const result = await request<{ recovery_codes: string[] }>("/me/mfa/totp/confirm", {
-    code: mfaCode.value,
-  });
-  if (result) {
-    mfaEnabled.value = true;
-    securitySetup.value.must_enroll_mfa = false;
-    recoveryCodes.value = result.data.recovery_codes;
-    message.value =
-      mode.value === "security-setup"
-        ? "首次安全设置已完成。请离线保存恢复码，然后重新登录进入业务功能。"
-        : "MFA 已启用。请离线保存一次性恢复码。";
+  if (mfaActionBusy.value) return;
+  mfaActionBusy.value = true;
+  try {
+    const result = await request<{ recovery_codes: string[] }>("/me/mfa/totp/confirm", {
+      code: mfaCode.value,
+    });
+    if (result) {
+      mfaEnabled.value = true;
+      mfaStatus.value = "ready";
+      mfaDisabledByAction.value = false;
+      securitySetup.value.must_enroll_mfa = false;
+      recoveryCodes.value = result.data.recovery_codes;
+      mfaSecret.value = "";
+      currentPassword.value = "";
+      mfaCode.value = "";
+      message.value =
+        mode.value === "security-setup"
+          ? "首次安全设置已完成。请离线保存恢复码，然后重新登录进入业务功能。"
+          : "MFA 已启用。请离线保存一次性恢复码。";
+    }
+  } finally {
+    mfaActionBusy.value = false;
   }
 }
 async function disableMfa() {
-  const result = await request(
-    "/me/mfa/totp",
-    { current_password: currentPassword.value, code: mfaCode.value },
-    "DELETE",
-  );
-  if (result === null && requestState.value === "success") {
-    mfaEnabled.value = false;
-    message.value = "MFA 已停用，所有会话已撤销，请重新登录。";
+  if (mfaActionBusy.value) return;
+  mfaActionBusy.value = true;
+  try {
+    const result = await request(
+      "/me/mfa/totp",
+      { current_password: currentPassword.value, code: mfaCode.value },
+      "DELETE",
+    );
+    if (result === null && requestState.value === "success") {
+      mfaEnabled.value = false;
+      mfaStatus.value = "ready";
+      mfaDisabledByAction.value = true;
+      clearMfaMaterial();
+      message.value = "MFA 已停用，所有会话已撤销，请重新登录。";
+    }
+  } finally {
+    mfaActionBusy.value = false;
   }
 }
 async function changeSeedPassword() {
@@ -278,10 +323,217 @@ onMounted(() => {
   if (mode.value === "sessions") void loadSessions();
   if (mode.value === "mfa") void loadMfa();
 });
+onBeforeUnmount(() => clearMfaMaterial());
 </script>
 
 <template>
-  <main class="identity-page" :data-mode="mode" :data-state="requestState">
+  <main
+    v-if="mode === 'mfa'"
+    class="p07-mfa-page"
+    data-testid="mfa"
+    :data-state="mfaStatus"
+    :data-request-state="requestState"
+  >
+    <header class="p07-mfa-top">
+      <RouterLink class="p07-mfa-brand" to="/">ScoutOps</RouterLink>
+      <span>账号安全</span>
+      <small>认证器管理 · 受登录会话保护</small>
+    </header>
+    <section class="p07-mfa-hero">
+      <p>MULTI-FACTOR AUTHENTICATION</p>
+      <h1>
+        {{
+          mfaStatus === "loading" || mfaStatus === "unknown"
+            ? "正在读取保护状态"
+            : mfaStatus === "error"
+              ? "暂时无法读取保护状态"
+              : mfaEnabled
+                ? "认证器已启用"
+                : mfaSecret
+                  ? "确认认证器绑定"
+                  : "为账号启用认证器"
+        }}
+      </h1>
+      <span>
+        {{
+          mfaStatus === "loading" || mfaStatus === "unknown"
+            ? "尚未读取完成前，不对当前保护状态作出判断。"
+            : mfaEnabled
+              ? "恢复码只在启用确认后显示；停用会撤销当前账号的全部会话。"
+              : "先验证当前密码，再按页面材料完成绑定。"
+        }}
+      </span>
+    </section>
+    <section class="p07-mfa-workspace" aria-label="多因素认证设置">
+      <div
+        v-if="mfaStatus === 'loading' || mfaStatus === 'unknown'"
+        class="p07-mfa-notice"
+        role="status"
+        aria-live="polite"
+      >
+        <strong>正在读取 MFA 状态</strong>
+        <span>请等待受保护读取完成，页面不会将未知状态标为“未启用”。</span>
+      </div>
+      <div
+        v-else-if="
+          mfaStatus === 'error' || ['error', 'rate_limited', 'blocked'].includes(requestState)
+        "
+        class="p07-mfa-notice p07-mfa-error"
+        role="alert"
+      >
+        <strong>{{
+          requestState === "rate_limited"
+            ? "请求过于频繁"
+            : requestState === "blocked"
+              ? "安全服务暂不可用"
+              : "读取或操作未完成"
+        }}</strong>
+        <span>{{ message || "暂时无法读取当前 MFA 状态。" }}</span>
+        <small v-if="actionHint">{{ actionHint }}</small>
+        <small v-if="requestId">请求标识：{{ requestId }}</small>
+        <small v-if="traceId && traceId !== requestId">链路标识：{{ traceId }}</small>
+        <button
+          v-if="mfaStatus === 'error'"
+          type="button"
+          class="p07-mfa-secondary"
+          :disabled="requestState === 'loading'"
+          @click="loadMfa"
+        >
+          {{ requestState === "loading" ? "正在重新读取…" : "重新读取安全状态" }}
+        </button>
+      </div>
+      <div
+        v-else-if="requestState === 'success' && message"
+        class="p07-mfa-notice p07-mfa-success"
+        role="status"
+        aria-live="polite"
+      >
+        <strong>操作已完成</strong>
+        <span>{{ message }}</span>
+      </div>
+
+      <section
+        v-if="mfaStatus === 'ready' && mfaDisabledByAction"
+        class="p07-mfa-disabled-success"
+        role="status"
+        aria-live="polite"
+      >
+        <strong>认证器已停用</strong>
+        <span>服务端已完成停用并撤销全部会话。此页面不自动跳转；请使用下方入口重新登录。</span>
+      </section>
+      <template v-else-if="mfaStatus === 'ready' && !mfaEnabled">
+        <section class="p07-mfa-disabled" aria-label="认证器状态">
+          <strong>认证器当前未启用</strong>
+          <span>账号目前没有已确认的 TOTP 认证器。</span>
+        </section>
+        <form v-if="!mfaSecret" class="p07-mfa-step" @submit.prevent="startMfa">
+          <p>步骤 1 / 2</p>
+          <h2>验证当前密码</h2>
+          <span>密码仅用于启动本次认证器绑定，不会在页面回显。</span>
+          <label for="p07-enrollment-password">当前密码</label>
+          <input
+            id="p07-enrollment-password"
+            v-model="currentPassword"
+            type="password"
+            autocomplete="current-password"
+            minlength="12"
+            maxlength="128"
+            required
+            placeholder="验证当前密码"
+          />
+          <button class="p07-mfa-primary" type="submit" :disabled="mfaActionBusy">
+            {{ mfaActionBusy ? "正在启动绑定…" : "开始绑定认证器" }}
+          </button>
+        </form>
+        <form v-else class="p07-mfa-step" @submit.prevent="confirmMfa">
+          <p>步骤 2 / 2</p>
+          <h2>在认证器中完成绑定</h2>
+          <span>使用受信任的认证器添加密钥，并输入当前验证码完成确认。</span>
+          <label for="p07-mfa-secret">手动输入密钥</label>
+          <code id="p07-mfa-secret" class="p07-mfa-secret">{{ mfaSecret }}</code>
+          <label for="p07-enrollment-code">认证器验证码</label>
+          <input
+            id="p07-enrollment-code"
+            v-model="mfaCode"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            minlength="6"
+            maxlength="32"
+            required
+            placeholder="输入验证码"
+          />
+          <p class="p07-mfa-help">验证码会随时间更新；若已过期，请等待新验证码后重试。</p>
+          <button class="p07-mfa-primary" type="submit" :disabled="mfaActionBusy">
+            {{ mfaActionBusy ? "正在确认…" : "确认并启用" }}
+          </button>
+        </form>
+        <section
+          v-if="recoveryCodes.length"
+          class="p07-mfa-recovery"
+          aria-labelledby="p07-recovery-title"
+        >
+          <p>安全恢复</p>
+          <h2 id="p07-recovery-title">一次性恢复码</h2>
+          <span>仅本次显示，请离线保存；每个代码只能使用一次。</span>
+          <code v-for="code in recoveryCodes" :key="code">{{ code }}</code>
+        </section>
+      </template>
+      <template v-else-if="mfaStatus === 'ready' && mfaEnabled">
+        <section class="p07-mfa-enabled" aria-label="认证器状态">
+          <strong>认证器 TOTP 已启用</strong>
+          <span>验证码周期更新。请妥善保管已生成的恢复码。</span>
+        </section>
+        <section
+          v-if="recoveryCodes.length"
+          class="p07-mfa-recovery"
+          aria-labelledby="p07-recovery-title"
+        >
+          <p>本次生成的恢复码</p>
+          <h2 id="p07-recovery-title">请离线保存</h2>
+          <span>这些恢复码只在本次确认后显示，每个代码只能使用一次。</span>
+          <code v-for="code in recoveryCodes" :key="code">{{ code }}</code>
+        </section>
+        <section class="p07-mfa-danger" aria-labelledby="p07-disable-title">
+          <p>高影响操作</p>
+          <h2 id="p07-disable-title">停用认证器</h2>
+          <span>停用成功后，服务端会撤销此账号的全部会话；完成后请重新登录。</span>
+          <form @submit.prevent="disableMfa">
+            <label for="p07-disable-password">当前密码</label>
+            <input
+              id="p07-disable-password"
+              v-model="currentPassword"
+              type="password"
+              autocomplete="current-password"
+              maxlength="128"
+              required
+              placeholder="验证当前密码"
+            />
+            <label for="p07-disable-code">当前验证码或恢复码</label>
+            <input
+              id="p07-disable-code"
+              v-model="mfaCode"
+              autocomplete="one-time-code"
+              minlength="6"
+              maxlength="32"
+              required
+              placeholder="输入验证码或恢复码"
+            />
+            <button class="p07-mfa-danger-button" type="submit" :disabled="mfaActionBusy">
+              {{ mfaActionBusy ? "正在停用并撤销会话…" : "停用并撤销全部会话" }}
+            </button>
+          </form>
+        </section>
+      </template>
+      <footer class="p07-mfa-footer">
+        <RouterLink to="/me?section=security">查看安全会话</RouterLink>
+        <RouterLink to="/login">返回登录</RouterLink>
+      </footer>
+    </section>
+    <footer class="p07-mfa-boundary">
+      不提供二维码、下载或复制入口 · 恢复码仅在服务端返回后显示 · 错误状态不会伪装成停用成功
+    </footer>
+  </main>
+  <main v-else class="identity-page" :data-mode="mode" :data-state="requestState">
     <header class="identity-header">
       <RouterLink class="identity-brand" to="/"><span>S</span>SCOUTOPS / 智能选品</RouterLink>
       <p>IDENTITY DESK / 账号登录</p>
@@ -308,7 +560,6 @@ onMounted(() => {
           <span v-if="mode === 'login'">使用已验证的邮箱或唯一用户名登录</span>
           <span v-else-if="mode === 'register'">先创建账号，再完成邮箱验证</span>
           <span v-else-if="mode === 'forgot'">无论账号是否存在，页面提示保持一致</span>
-          <span v-else-if="mode === 'mfa'">认证器密钥加密保存，恢复码仅显示一次</span>
           <span v-else-if="mode === 'mfa-challenge'">短时挑战保存在浏览器安全凭证中</span>
           <span v-else-if="mode === 'security-setup'">完成全部步骤前，业务后端保持拒绝</span>
         </div>
@@ -483,31 +734,38 @@ onMounted(() => {
               修改密码并撤销当前会话
             </button></template
           >
-          <template v-else-if="securitySetup.must_enroll_mfa"
-            ><label
-              >当前密码<input
-                v-model="currentPassword"
-                type="password"
-                autocomplete="current-password"
-                minlength="12"
-                maxlength="128" /></label
-            ><button v-if="!mfaSecret" class="identity-primary" type="button" @click="startMfa">
-              开始绑定认证器
-            </button>
-            <div v-else class="mfa-setup">
+          <template v-else-if="securitySetup.must_enroll_mfa">
+            <form v-if="!mfaSecret" @submit.prevent="startMfa">
+              <label
+                >当前密码<input
+                  v-model="currentPassword"
+                  type="password"
+                  autocomplete="current-password"
+                  minlength="12"
+                  maxlength="128"
+                  required
+              /></label>
+              <button class="identity-primary" type="submit" :disabled="mfaActionBusy">
+                {{ mfaActionBusy ? "正在启动绑定…" : "开始绑定认证器" }}
+              </button>
+            </form>
+            <form v-else class="mfa-setup" @submit.prevent="confirmMfa">
               <p>手动输入密钥</p>
-              <code>{{ mfaSecret }}</code
-              ><label
+              <code>{{ mfaSecret }}</code>
+              <label
                 >认证器验证码<input
                   v-model="mfaCode"
                   inputmode="numeric"
                   autocomplete="one-time-code"
-                  maxlength="8" /></label
-              ><button class="identity-primary" type="button" @click="confirmMfa">
-                确认并完成安全设置
+                  minlength="6"
+                  maxlength="32"
+                  required
+              /></label>
+              <button class="identity-primary" type="submit" :disabled="mfaActionBusy">
+                {{ mfaActionBusy ? "正在确认…" : "确认并完成安全设置" }}
               </button>
-            </div></template
-          >
+            </form>
+          </template>
           <div v-else class="recovery-codes">
             <strong>安全设置已完成</strong>
             <p>恢复码仅显示本次，请离线保存后重新登录。</p>
@@ -517,67 +775,6 @@ onMounted(() => {
             </button>
           </div>
         </section>
-        <section v-else-if="mode === 'mfa'" class="mfa-panel" data-testid="mfa">
-          <div class="mfa-status">
-            <span :class="mfaEnabled ? 'is-enabled' : 'is-pending'">{{
-              mfaEnabled ? "已启用" : "未启用"
-            }}</span>
-            <div>
-              <strong>认证器 TOTP</strong>
-              <p>遵循 RFC 6238；验证码 30 秒更新，允许受控时钟偏差并拒绝重放。</p>
-            </div>
-          </div>
-          <template v-if="!mfaEnabled">
-            <label
-              >当前密码<input
-                v-model="currentPassword"
-                type="password"
-                autocomplete="current-password"
-                minlength="12"
-                maxlength="128"
-                placeholder="验证当前密码"
-            /></label>
-            <button v-if="!mfaSecret" class="identity-primary" type="button" @click="startMfa">
-              开始绑定认证器
-            </button>
-            <div v-else class="mfa-setup">
-              <p>手动输入密钥</p>
-              <code>{{ mfaSecret }}</code
-              ><label
-                >认证器验证码<input
-                  v-model="mfaCode"
-                  inputmode="numeric"
-                  autocomplete="one-time-code"
-                  maxlength="8"
-                  placeholder="6 位验证码" /></label
-              ><button class="identity-primary" type="button" @click="confirmMfa">
-                确认并启用
-              </button>
-            </div>
-          </template>
-          <template v-else>
-            <div v-if="recoveryCodes.length" class="recovery-codes">
-              <strong>一次性恢复码</strong>
-              <p>仅本次显示，请离线保存；每个代码只能使用一次。</p>
-              <code v-for="code in recoveryCodes" :key="code">{{ code }}</code>
-            </div>
-            <div class="mfa-disable">
-              <label
-                >当前密码<input
-                  v-model="currentPassword"
-                  type="password"
-                  autocomplete="current-password"
-                  maxlength="128" /></label
-              ><label
-                >当前验证码或恢复码<input
-                  v-model="mfaCode"
-                  autocomplete="one-time-code"
-                  maxlength="32" /></label
-              ><button type="button" @click="disableMfa">停用并撤销全部会话</button>
-            </div>
-          </template>
-        </section>
-
         <div v-else class="session-list" data-testid="sessions">
           <div v-if="requestState === 'loading'" class="identity-loading">正在读取本人会话…</div>
           <p v-else-if="sessions.length === 0" class="identity-empty">
