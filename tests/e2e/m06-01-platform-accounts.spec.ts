@@ -1174,8 +1174,24 @@ test("M06-01 account actions expose tooltips, user-panel switch, create account 
 }) => {
   await setup(page);
   let createRequest: any = null;
+  let failListRefresh = false;
+  await page.route("**/api/v1/platform/accounts?**", (route: any) =>
+    failListRefresh
+      ? route.fulfill({
+          status: 503,
+          json: {
+            error: {
+              code: "dependency_unavailable",
+              message: "账号数据暂不可用。",
+              action_hint: "账号列表刷新未成功。",
+            },
+          },
+        })
+      : route.fulfill({ json: env(overview) }),
+  );
   await page.route("**/api/v1/platform/accounts/users", async (route: any) => {
     createRequest = route.request().postDataJSON();
+    failListRefresh = true;
     await route.fulfill({
       status: 201,
       json: env({ id: user, email: "new@example.test", status: "active" }),
@@ -1232,6 +1248,7 @@ test("M06-01 account actions expose tooltips, user-panel switch, create account 
       platform_role_code: null,
       organization_id: null,
     });
+  await expect(page.getByText(/账号已创建，但列表刷新未成功，请手动刷新核对/)).toBeVisible();
   await page
     .getByRole("navigation", { name: "账号与组织二级导航" })
     .getByRole("link", { name: "用户管理", exact: true })

@@ -242,7 +242,7 @@ P38–P45八份规格都有文件；全站规格48/73，W06八份、W07八份、
 
 起点main/da750f6，[ACCOUNT-OVERVIEW-C-r1](design/account-overview-direction-c/README.md)交付40场景双端80主图＋6创建局部，共86PNG，含2审核工具图。蓝色全局规模与白色组织-only结果明确区分；五列/冻结/密度、移动筛选和组织预览、P39“新建用户或平台管理员”五字段与三平台角色保留。原三个单条数组与全局3/2、18/16、2不强行对齐，12条仅合成；P41/P42创建/资料/三原因全变体不在此包冒充完成，只验证P39出入口路径。
 
-实际父函数/computed与显式watch惰性执行复现：读在途的新query被单飞跳过；已有事实时权限/网络失败均保留ready；创建成功后回读失败被成功message覆盖；旧创建成功会关闭新创建窗，取消密码仍在内存。service.overview及真实repository.overview惰性query核对trim120/30、固定200、LIKE转义、组织name/slug而非邮箱、成员/工作区不限定活动状态、summary不随筛选；不是SQL/事务/鉴权执行。对应PA-D02、PA-W05-HISTORY和PA-D03没有关闭。
+实际父函数/computed与显式watch惰性执行复现：读在途的新query被单飞跳过；已有事实时权限/网络失败均保留ready；创建成功后回读失败曾被成功message覆盖；旧创建成功曾关闭新创建窗，当前`useUserCreationOwner`隔离替代窗并由`platform-user-creation-owner.test.mjs`覆盖；取消密码仍在内存。2026-09-24修复创建用户后的反馈归属：POST成功但列表GET失败时，仍显示创建成功，同时明确要求手动刷新核对；桌面/手机真实Vue E2E覆盖，未改变请求体或写入流程。其余已复现项仍未关闭。service.overview及真实repository.overview惰性query核对trim120/30、固定200、LIKE转义、组织name/slug而非邮箱、成员/工作区不限定活动状态、summary不随筛选；不是SQL/事务/鉴权执行。对应PA-D02、PA-W05-HISTORY和PA-D03没有关闭。
 
 原型将当前输入与已读范围、写成功与回读失败分别说明，保护旧创建成功/失败不污染新窗并恢复按钮，后台读回保留当前表单；仅为本地提案。Playwright具体双端/焦点/输入/返回/列工具验证见PROGRESS与evidence，原生200%/完整三主题密度/6角色/KeepAlive/已开窗跨断点及真实MFA等仍待办。没有新增API/OpenAPI/.env/权限/schema/依赖，产品源指纹不变。
 

@@ -520,6 +520,7 @@ function closeCreateUser() {
 }
 async function createUser() {
   const isCurrent = createUserOwner.capture();
+  let accountListReloaded = true;
   createUserError.value = "";
   if (
     await write(
@@ -531,10 +532,16 @@ async function createUser() {
       },
       "POST",
       (value) => isCurrent() && (createUserError.value = value),
+      undefined,
+      (loaded) => {
+        accountListReloaded = loaded;
+      },
     )
   ) {
     if (isCurrent()) createUserOpen.value = false;
-    message.value = "账号已创建；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。";
+    message.value = accountListReloaded
+      ? "账号已创建；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。"
+      : "账号已创建，但列表刷新未成功，请手动刷新核对；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。";
   }
 }
 function openPassword(item: any) {
