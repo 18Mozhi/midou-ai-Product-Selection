@@ -24,4 +24,6 @@
 
 ## 部署
 
-待 commit、push、BaoTa 发布与线上 SHA/资源核验完成后补记。正式 M07-03 仍需受限生产证据，不能由页面静态资源可达性代替。
+已提交并推送：`8c00661010d2eb4a4b21f6b2efff8119d83f1bf0`；按固定 `python scripts/deploy-baota.py` 部署至宝塔既定网站、Node 与 Python 项目。线上 `/api/v1/health/live`、`ready`、`version` 和 `/platform-admin/status` 均 HTTP 200，版本接口返回相同 build SHA；页面主 JS/CSS、状态视图与工作区懒加载 JS 均 HTTP 200。部署器报告上传临时产物已删除。部署脚本中的格式、发布矩阵、发布归属、22 工作区构建及宝塔预检均通过。
+
+全量单测 `npm run test:unit` 为 2,277 项中 1,902 通过、375 失败；失败包含既有 ResponsiveDataView/组织管理/供应商等历史源码指纹与旧视觉基线不匹配。P61 专项 21/21、桌面与 390px 定向 E2E 各 1/1 通过；未修改这些无关历史基线。正式 M07-03 仍需受限生产证据文件，静态资源可达性、健康端点及本地夹具不能代替真实 RBAC、SQL 或正式验收。

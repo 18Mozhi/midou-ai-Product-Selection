@@ -1,6 +1,6 @@
 # P61 系统状态 C 方向生产 Vue 接入 · 当前实施
 
-2026-09-23：STATUS-C 已接入真实 `/platform-admin/status`，桌面/390px 手机采用可本地切换的四分区工作台；页面读取、15 秒超时/重试/保留、六项依赖、七个现有目标及会话指标不变。`PlatformManagementCenter` 继续负责取数，新增 `PlatformStatusWorkspace` 仅负责四个具名内容区切换；状态专属 CSS 与隐藏重复页标题均限定 P61。14/14定向单测、实际 Vue 98项（1440/390各49）、M06-02 定向 E2E 桌面与手机各1/1、Web 类型检查通过。提交/宝塔部署与线上 SHA 核验待完成；全73页目标继续，正式 M07-03/真实运维证据不因本地矩阵而通过。
+2026-09-23：STATUS-C 已接入真实 `/platform-admin/status`，桌面/390px 手机采用可本地切换的四分区工作台；页面读取、15 秒超时/重试/保留、六项依赖、七个现有目标及会话指标不变。`PlatformManagementCenter` 继续负责取数，`PlatformStatusCenterView` 组合真实内容，`PlatformStatusWorkspace` 仅负责四分区切换；状态专属 CSS 与隐藏重复页标题均限定 P61。提交 `8c00661010d2eb4a4b21f6b2efff8119d83f1bf0` 已推送并部署；线上 health、页面深链及专属 JS/CSS 资源均 HTTP 200，version build SHA 匹配。P61 专项 21/21、实际 Vue 98项（1440/390各49）、M06-02 定向 E2E 桌面与手机各1/1、Web 类型及22工作区构建通过；全量单测 2,277 项中 375 项因既有源码指纹/视觉基线不匹配而失败，详见实施记录。全73页目标继续，正式 M07-03/真实运维证据不因本地矩阵或页面可达性而通过。
 
 # P63 接口覆盖证据 C 方向生产 Vue 接入 · 前序发版
 
@@ -1436,6 +1436,7 @@ W09 发布前必须取得干净且归属明确的提交，核对本地/远端/�
 批134实施 [P17 评分规则 C 方向生产 Vue](P17-PAGE-COMPOSITION-IMPLEMENTATION.md)：已将蓝白评分规则工作区、五项配置覆盖、版本目录、阈值/权重事实、创建/只读预览/生命周期窗迁移到真实 `ScoreRuleConsole`，保留既有读取、能力判断、原因、回滚目标与 `expected_revision` 合同。定向单测 6/6，桌面/390px 评分 E2E 8/8，类型检查、格式检查、构建与宝塔部署随本批提交完成。真实 RBAC、审批/回滚写入、跨页预览、正式 M07-03 证据仍待。
 批135收口 [P16 创建选品 C 方向生产 Vue](P16-PAGE-COMPOSITION-IMPLEMENTATION.md)：确认真实 `SelectionJourney.vue` 已包含批准的蓝色阶段栏、白色工作区、候选/决策双区、五项质量门、时间轴与双端状态；保留创建、恢复、轮询、观察/驳回/采纳及五门限制合同。桌面/390px UI2 旅程合同 32/32，线上 `/opportunities/start` 返回 200；本批随已部署构建完成。真实会话/RBAC、采集凭证、数据库竞争和正式 M07-03 证据仍待。
 批136实施 [P15 机会列表 C 方向生产 Vue](P15-PAGE-COMPOSITION-IMPLEMENTATION.md)：已将蓝色机会工作台、四队列、筛选工作区、五项配置摘要、列表事实、分页与手机布局迁移到真实 `OpportunityWorkspace` / `OpportunityListPanel`，并保留 P18 详情五门合同；移动详情“更多分析”入口恢复可达。单测 9/9，机会列表/详情/筛选 E2E 桌面与 390px 6/6，类型检查、格式检查与视觉基线更新通过。真实 RBAC、批量/ERP 写入和正式 M07-03 证据仍待。
+
 # P62 链路日志 C 方向已接入生产 Vue
 
 2026-09-23：桌面蓝色调用链目录与白色事件阅读区、手机单列布局已接入真实 `PlatformLogCenter`；保留已有筛选、200 条窗口、链路证据、详情、读取与导出合同。新增 P62 专属 workspace/types/CSS，审核转换现在直接使用生产 Vue。定向单测、双端 P62 E2E、类型检查、状态/生命周期/导出/追踪/页面组合验证通过；22 workspace 构建及提交前质量门通过。commit/build SHA `44bc87b47239bef78c25a8b1e7fbe6b5a916e29e` 已推送并发布；线上 live/ready/version、P62 深链及专属 JS/CSS 均 HTTP 200，build SHA 一致。正式 M07-03 因生产证据文件缺失未签收，不代表生产 SQL/RBAC/真实 CSV 或全 73 页验收；全 73 页继续。
