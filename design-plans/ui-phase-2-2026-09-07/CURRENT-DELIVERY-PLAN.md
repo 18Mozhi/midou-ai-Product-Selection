@@ -1,6 +1,6 @@
 # P12 首页 C 方向实际 Vue 接入 · 本轮收官
 
-2026-09-24：用户授权剩余页面视觉自动通过。已将 HOME-C-r1 接入真实 `/home`：蓝色工作边界、人工推荐决策、本人待办/异常和下置自动发现进度；七字段 inline 创建、精确十市场 POST、首条暂停规则 PATCH、原路由/返回顺序均保持。首页缺 `automatic_selection` 不再伪装零；规则读取失败不出现创建/恢复；请求代次隔离迟到读取，过期/拒绝清除快照，写入受理与后续读取失败分开报告。桌面 Chromium 与 390px E2E 各4/4；Web类型、P12合同单测、文档/发布门及22工作区构建均通过，M07-03 preflight passed。固定宝塔部署及线上 SHA/专属静态资源核验待执行；真实会话/RBAC、采集器实际执行及正式 M07-03 仍需独立验证。未改共享导航、API/OpenAPI、数据库、规则、权限、环境或依赖。详见 [P12实施记录](P12-PAGE-COMPOSITION-IMPLEMENTATION.md)。
+2026-09-24：用户授权剩余页面视觉自动通过。已将 HOME-C-r1 接入真实 `/home`：蓝色工作边界、人工推荐决策、本人待办/异常和下置自动发现进度；七字段 inline 创建、精确十市场 POST、首条暂停规则 PATCH、原路由/返回顺序均保持。缺 `automatic_selection` 不再伪装零；规则/首页读取不完整时不显示创建/恢复；读取代次隔离迟到响应，过期/拒绝清除快照，写入受理与后续读取失败分开报告。桌面 Chromium 与 390px E2E 各4/4；单测8/8、Web类型、文档/发布门、M07-03 preflight及22工作区构建通过。提交/build SHA `06ae38230de2b5b7a35b89727aa22432387030d5` 已推送并由固定宝塔脚本部署；线上 ready/available/version、`/home` 和专属 JS/CSS HTTP 200，JS/CSS SHA-256 与本地构建相同。真实会话/RBAC、采集器实际执行及正式 M07-03 仍需独立验证。未改共享导航、API/OpenAPI、数据库、规则、权限、环境或依赖。详见 [P12实施记录](P12-PAGE-COMPOSITION-IMPLEMENTATION.md)。
 
 # P11 个人中心 C 方向实际 Vue 接入 · 本轮实施
 

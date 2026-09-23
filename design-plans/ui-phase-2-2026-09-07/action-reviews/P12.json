@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "pageId": "P12",
   "route": "/home",
-  "status": "implemented-user-auto-approved-local-e2e-verified",
+  "status": "implemented-user-auto-approved-production-smoke-verified-not-formally-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/HomeDashboard.vue": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0",
@@ -694,7 +694,7 @@
     }
   ],
   "surfaceReview": {
-    "status": "actual-vue-local-e2e-verified-not-production-accepted",
+    "status": "actual-vue-and-production-static-smoke-verified-not-formally-accepted",
     "files": [
       "apps/web/src/components/HomeDashboard.vue",
       "apps/web/src/components/HomeAutomationOverview.vue"

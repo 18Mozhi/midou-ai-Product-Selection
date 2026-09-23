@@ -26,6 +26,8 @@ P12 `/home` 已接入 HOME-C-r1：蓝色工作范围头部、白色人工决策�
 
 ## 部署状态
 
-待按 `AGENTS.md` 的固定宝塔入口 `python scripts/deploy-baota.py` 执行，并核验线上 `/home` 深链、live/ready/version、页面专属静态资源及 build SHA。部署成功后在此补记线上证据；在完成该步骤前不宣称生产已更新。
+2026-09-24 已按 `AGENTS.md` 运行 `python scripts/deploy-baota.py`，发布版本/build SHA 为 `06ae38230de2b5b7a35b89727aa22432387030d5`。脚本中的格式、运行文档、发布矩阵、发布归属、M07-03预检与22工作区构建全部通过，最终返回 `status=deployed`、`temporary_artifacts=deleted`。
 
-不需要数据库迁移、环境变量或配置调整。前端静态资源由部署替换，无需额外手工重启；部署脚本按既定宝塔流程管理运行项目。
+部署后线上只读复核：`/api/v1/health/ready=ready`、`/api/v1/health/available=available`、version build SHA匹配；`/home` HTTP 200；P12懒加载 JS `HomeDashboard-DOflSKXq.js` 与 CSS `HomeDashboard-By-QiQ5o.css` 均 HTTP 200，SHA-256 与本地构建字节一致。固定脚本已清理服务器临时上传包。前端静态资源由部署替换，脚本按宝塔托管流程更新运行对象；无需再手工操作。
+
+本次不新增数据库迁移、环境变量、运行配置或依赖。正式 M07-03 生产签收、生产登录身份/RBAC，以及真实采集器执行仍未由这些 smoke checks 证明。
