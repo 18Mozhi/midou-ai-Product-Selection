@@ -44,7 +44,7 @@ test("design tokens keep the signal-ledger contract and all shells share it", as
   assert.match(shell, /SIGNAL LEDGER/);
   assert.match(shell, /role-page-folio/);
   assert.doesNotMatch(shell, /<aside\s+id="role-navigation"/);
-  assert.match(account, /<nav class="account-sidebar"/);
+  assert.match(account, /<nav class="account-sidebar(?:\s|[">])/);
   assert.match(shellStyles, /--so-glow:\s*transparent/);
   assert.doesNotMatch(shellStyles, /role-shell[\s\S]{0,260}radial-gradient/);
 });

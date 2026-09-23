@@ -232,9 +232,10 @@ test("M06-02 platform overview gives administrators clear next actions", async (
   );
 });
 test("M06-02 system status presents dependency topology and bounded propagation scope", async () => {
-  const [web, statusLoad, topology, architecture, runbook, feature] = await Promise.all(
+  const [web, statusView, statusLoad, topology, architecture, runbook, feature] = await Promise.all(
     [
       "apps/web/src/components/PlatformManagementCenter.vue",
+      "apps/web/src/components/PlatformStatusCenterView.vue",
       "apps/web/src/components/use-platform-status.ts",
       "apps/web/src/components/platform-status-topology.ts",
       "docs/architecture/m06-02-platform-dashboard.md",
@@ -242,8 +243,9 @@ test("M06-02 system status presents dependency topology and bounded propagation 
       "docs/feature-map.json",
     ].map((path) => readFile(path, "utf8")),
   );
+  const statusSurface = `${web}\n${statusView}`;
   for (const copy of [
-    "依赖拓扑与故障传播",
+    "依赖关系与最新观测",
     "当前需核查的传播范围",
     "如异常持续",
     "实时连接退化",
@@ -251,13 +253,13 @@ test("M06-02 system status presents dependency topology and bounded propagation 
     "降级轮询次数",
     "仅统计当前浏览器标签页会话",
   ])
-    assert.match(web, new RegExp(copy));
+    assert.match(statusSurface, new RegExp(copy));
   for (const copy of ["访问入口", "共享依赖", "异步执行"]) assert.match(topology, new RegExp(copy));
   for (const serviceCode of ["api", "mysql", "redis", "files", "worker", "crawler"])
     assert.match(topology, new RegExp(`code: ["']${serviceCode}["']`));
   assert.match(web, /\["healthy", "ready"\]\.includes\(node\.status\)/);
-  assert.match(web, /当前没有采集任务状态记录/);
-  assert.match(web, /当前没有来源配置记录/);
+  assert.match(statusSurface, /当前没有采集任务状态记录/);
+  assert.match(statusSurface, /当前没有来源配置记录/);
   assert.match(statusLoad, /new AbortController\(\)/);
   assert.match(statusLoad, /15000/);
   assert.match(statusLoad, /if \(controller\) return true/);

@@ -17,7 +17,20 @@ test("Feature Map routes are unique and Vue Router owns reactive lazy navigation
   assert.match(router, /createRouter[\s\S]*createWebHistory/);
   assert.match(app, /defineAsyncComponent[\s\S]*useRoute/);
   assert.match(router, /appRoutes[\s\S]*document\.title/);
-  assert.match(shell, /import\.meta\.glob[\s\S]*KeepAlive/);
+  assert.match(
+    shell,
+    /const componentModules[\s\S]*"\.\/SecurityOperationsCenter\.vue": \(\) => import\("\.\/SecurityOperationsCenter\.vue"\)/,
+  );
+  assert.match(
+    shell,
+    /const lazy = \(name: string\) => \{[\s\S]*return defineAsyncComponent\(loader\)/,
+  );
+  assert.match(
+    shell,
+    /const surfaceComponents[\s\S]*"platform-account-center": lazy\("PlatformAccountCenter"\)/,
+  );
+  assert.doesNotMatch(shell, /import\.meta\.glob/);
+  assert.match(shell, /KeepAlive/);
   assert.match(shell, /navigation-shell-route-state/);
   assert.match(routeState, /采集调度/);
 });
@@ -61,6 +74,7 @@ test("business operations expose blocking context, safe batch preview and verifi
     opportunityDecision,
     opportunityRepository,
     approval,
+    approvalTypes,
     notification,
     migrations,
   ] = await Promise.all([
@@ -73,6 +87,7 @@ test("business operations expose blocking context, safe batch preview and verifi
     read("apps/web/src/components/OpportunityDecisionPanel.vue"),
     read("apps/api/src/mysql-opportunity-repository.ts"),
     read("apps/web/src/components/ApprovalWorkspace.vue"),
+    read("apps/web/src/components/approval-workspace-types.ts"),
     read("apps/web/src/components/NotificationCenter.vue"),
     Promise.all(
       ["0045_operational_task_links.up.sql", "0046_notification_workflow_root_cause.up.sql"].map(
@@ -85,11 +100,11 @@ test("business operations expose blocking context, safe batch preview and verifi
     assert.match(`${task}\n${taskDetail}\n${taskBatch}\n${taskTypes}`, new RegExp(token));
   assert.match(
     `${opportunity}\n${opportunityDecision}`,
-    /证据不足，先补齐缺失项[\s\S]*生成补数任务/,
+    /补证阻断项[\s\S]*emit\('createEvidenceTask'\)[\s\S]*创建补采任务/,
   );
   assert.match(opportunityRepository, /selection_verification[\s\S]*verification_task_id/);
   for (const token of ["evidence_complete", "evidence_total", "rule_version", "basis"])
-    assert.match(approval, new RegExp(token));
+    assert.match(`${approval}\n${approvalTypes}`, new RegExp(token));
   assert.match(notification, /group_count[\s\S]*workflow_status/);
   assert.match(notification, /sourceRoute[\s\S]*返回来源/);
   assert.match(migrations, /paused[\s\S]*collection_task_id[\s\S]*root_cause_key/);

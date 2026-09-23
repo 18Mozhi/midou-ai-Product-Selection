@@ -419,7 +419,10 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(web, /\/platform\/roles/);
   assert.match(accountShell, /if \(tab\.value === "admins"\) await loadPlatformRoles\(\)/);
   assert.match(accountShell, /已保留上次成功读取的数据/);
-  assert.match(accountShell, /if \(refreshing\.value\) return/);
+  assert.match(
+    accountShell,
+    /if \(refreshing\.value\) \{[\s\S]*queuedAccountsRead = true[\s\S]*return false/,
+  );
   assert.match(accountShell, /没有符合当前条件的组织/);
   assert.match(accountShell, /organizationListRoute[\s\S]*管理组织状态与隔离边界/);
   assert.match(accountShell, /搜索组织名称或标识/);
