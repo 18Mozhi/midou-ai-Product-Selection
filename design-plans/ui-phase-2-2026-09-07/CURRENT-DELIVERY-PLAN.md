@@ -1,6 +1,6 @@
 # P63 接口覆盖证据 C 方向生产 Vue 接入 · 当前发版
 
-批153已将P63蓝色报告身份、目录关联边界、全目录统计/分布与逐操作只读五维证据卡接入真实Vue，详见[P63实施记录](P63-PAGE-COMPOSITION-IMPLEMENTATION.md)；保持父级`api-coverage`到API `api_coverage`映射、superadmin守卫、GET和筛选合同不变。报告current仅表示当前method/path目录可关联，不表示构建版本、权限新鲜度或维度全部通过；缺失/无效/过期、拒绝/受阻和未执行仍独立表达。真实组件隔离验证80/80、桌面及390px定向E2E各1/1、P63定向单测6/6、Web类型/22工作区生产构建和文档/静态门通过。提交`aa8e7c4da4d6ac1da2e2df3217ce26cb0fa8555e`已推送并部署；线上版本SHA匹配，ready/available/version、页面深链与四个专属JS/CSS资源核验通过。CSS/NavigationShell bundle budget 尚未通过。全M06-02旧页面用例仍有非P63标题断言失败，不计入P63定向失败，也未宣称全套件通过。真实受限报告、SQL/RBAC与正式M07-03证据仍待；全73页目标继续。
+批153已将P63蓝色报告身份、目录关联边界、全目录统计/分布与逐操作只读五维证据卡接入真实Vue，详见[P63实施记录](P63-PAGE-COMPOSITION-IMPLEMENTATION.md)；保持父级`api-coverage`到API `api_coverage`映射、superadmin守卫、GET和筛选合同不变。报告current仅表示当前method/path目录可关联，不表示构建版本、权限新鲜度或维度全部通过；缺失/无效/过期、拒绝/受阻和未执行仍独立表达。真实组件隔离验证80/80、桌面及390px定向E2E各1/1、P63定向单测6/6、Web类型/22工作区生产构建和文档/静态门通过。实施提交`aa8e7c4da4d6ac1da2e2df3217ce26cb0fa8555e`已推送并部署；2026-09-23按用户要求以当前同步HEAD `9e92680460a34cf32898c4246c041afb36c3af22`再次运行宝塔固定部署流程，22工作区生产构建通过，线上`/api/v1/health/live`、`ready`、`version`与`/platform-admin/api-coverage`均HTTP 200，版本SHA匹配，页面四个专属JS/CSS资源均HTTP 200，临时上传包已删除。正式M07-03生产证据校验因缺少`.artifacts/verification/baota-production-evidence.json`受阻；没有真实受限superadmin报告/SQL/RBAC证据，不将本次部署或静态资源可达表述为正式签收。CSS/NavigationShell bundle budget 尚未通过。全M06-02旧页面用例仍有非P63标题断言失败，不计入P63定向失败，也未宣称全套件通过。全73页目标继续。
 
 # P60 开放平台 C 方向生产 Vue 接入 · 前序发版
 
