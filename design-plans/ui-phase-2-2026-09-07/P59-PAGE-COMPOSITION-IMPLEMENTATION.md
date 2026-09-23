@@ -20,7 +20,7 @@
 
 - P59 页面审核宿主的单元/结构/焦点/lifecycle 合计 37 项通过。
 - `tests/e2e/m06-04-security-operations.spec.ts`：desktop Chromium 与 390px 手机各 6 项通过；涵盖四类导航、筛选、独立数据集合、详情/技术字段、零摘要历史记录、空态、403/503和无写请求。
-- 2026-09-24 焦点回归补充：同一 M06-04 详情用例现验证移动详情窗初始焦点、Tab/Shift+Tab 边界环绕、Escape 关闭与触发按钮返焦，并保留技术详情字段断言；桌面与 390px 项目各复验 1/1 通过。此证据只覆盖事件详情代表场景，不替代五类移动详情消费者和叠层弹窗的完整无障碍验收。
+- 2026-09-24 焦点回归补充：M06-04 先覆盖事件详情的初始焦点、Tab/Shift+Tab 边界环绕、Escape 关闭与触发按钮返焦。随后新增独立矩阵，对事件、会话、凭证、组织令牌、平台审计五个真实消费者分别复验上述循环；桌面 Chromium 与 390px 项目各 1/1 通过，测试视口明确设为 390px，所有情形零非 GET 请求。它证明共享抽屉接线到五类记录后仍满足基础焦点闭环，不替代不同真实角色、ConfirmDialog 叠层、读屏或正式 M07-03 验收。
 - `node scripts/verify-security-page-preview.mjs`：1440/390 双端98项检查通过；`node scripts/verify-security-detail-preview.mjs`：390/760/761/1440与两种动效模式共752项详情检查通过，零图片输出。
 - `npm run typecheck:web`、`npm run build:web`、`npm run verify:docs`、`npm run format:check`、`npm run verify:plans`、`npm run verify:runtime-docs`、`npm run verify:static-analysis` 与 `npm run verify:release-matrix` 均通过。
 - `npm run verify:frontend-budget` 仍报告现有全局超限：主 CSS 129451/122880 bytes、NavigationShell JS 51825/51200 bytes；P59 使用独立延迟页面 CSS，未改动 NavigationShell。22 工作区发布构建通过；线上 live/ready/version、P59 深链与专属 JS/CSS 均 HTTP 200，线上 build SHA 与提交一致。

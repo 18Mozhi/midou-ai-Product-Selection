@@ -267,7 +267,7 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 | apps/api/src/open-platform-service.ts | 221f74851fb85ead7bf9dbaa07febf84b9427352a9b50f26395b485b8f589689 |
 | apps/api/src/mysql-open-platform-repository.ts | 705eb961c103b25a7a408b9aed615c0ed825dc3c112fe919b7454d017717dc51 |
 | apps/worker/src/webhook-delivery-worker.ts | 2aeb4ade86cb30217fad610880931f1167328f81dadf71fae2dcda253ffdcb50 |
-| tests/e2e/m06-04-security-operations.spec.ts | 17552a0868d9f7b751afb2da89ca1adfddfa9c19e04f27aefd7af4d5e7610730 |
+| tests/e2e/m06-04-security-operations.spec.ts | 9877b4015190fc0ba595c7a9defd06b8a2c2d87ce8916bb77b2282b41bcb5633 |
 | tests/m06-04/security-operations.test.mjs | 8b28348ef71999ecbb84c86f84d30f3dd152b4ab0ff5ff5da4a7fcb7c703e24e |
 
 指纹检查只证明本地文件版本一致；接口代码阅读不是实时接口、MySQL事务、外部投递或生产权限验证。正式图和Vue全量新风格对照仍待方向获审后逐页交付。

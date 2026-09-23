@@ -189,6 +189,50 @@ test("M06-04.A07/A08/A15 security operations visual sanitized", async ({ page })
   await eventDialog.getByRole("button", { name: "关闭详情" }).click();
   await page.evaluate(() => window.scrollTo(0, 0));
 });
+
+test("UI2-CS59 mobile detail focus contract covers all five security consumers", async ({
+  page,
+}) => {
+  await nav(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  const writes: string[] = [];
+  await page.route("**/api/v1/platform/security/operations?**", (route) => {
+    if (route.request().method() !== "GET") writes.push(route.request().method());
+    return route.fulfill({ json: env(data) });
+  });
+
+  const consumers = [
+    { view: "events", trigger: /登录失败/, dialog: "登录失败" },
+    { view: "sessions", trigger: /security@example\.test/, dialog: "security@example.test" },
+    { view: "credentials", trigger: /生产读取凭证/, dialog: "生产读取凭证" },
+    { view: "credentials", trigger: /报表客户端/, dialog: "报表客户端" },
+    { view: "audit", trigger: /查看安全运营事实/, dialog: "查看安全运营事实" },
+  ];
+  const focusable =
+    'button:visible:not(:disabled), a[href]:visible, input:visible:not(:disabled), select:visible:not(:disabled), textarea:visible:not(:disabled), summary:visible, [tabindex]:visible:not([tabindex="-1"]), [contenteditable="true"]:visible';
+
+  for (const consumer of consumers) {
+    await page.goto(`/platform-admin/security?view=${consumer.view}`);
+    const trigger = page.getByRole("button", { name: consumer.trigger });
+    await trigger.click();
+    const dialog = page.getByRole("dialog", { name: consumer.dialog });
+    await expect(dialog).toBeVisible();
+    const controls = dialog.locator(focusable);
+    await expect(controls).not.toHaveCount(0);
+    const first = controls.first();
+    const last = controls.last();
+    await expect(first).toBeFocused();
+    await page.keyboard.press("Shift+Tab");
+    await expect(last).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(first).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await expect(trigger).toBeFocused();
+  }
+  expect(writes).toEqual([]);
+});
+
 test("M06-04.A08/A16 empty forbidden blocked", async ({ page }) => {
   await nav(page);
   let status = 200;

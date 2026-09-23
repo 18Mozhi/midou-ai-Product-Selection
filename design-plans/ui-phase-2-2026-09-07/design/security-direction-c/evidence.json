@@ -11,7 +11,7 @@
     "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
     "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
     "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
-    "tests/e2e/m06-04-security-operations.spec.ts": "17552a0868d9f7b751afb2da89ca1adfddfa9c19e04f27aefd7af4d5e7610730",
+    "tests/e2e/m06-04-security-operations.spec.ts": "9877b4015190fc0ba595c7a9defd06b8a2c2d87ce8916bb77b2282b41bcb5633",
     "tests/m06-04/security-operations.test.mjs": "8b28348ef71999ecbb84c86f84d30f3dd152b4ab0ff5ff5da4a7fcb7c703e24e",
     "design-plans/ui-phase-2-2026-09-07/design/data-quality-direction-c/quality.css": "107e3760b83961d388dfe03a72d77a436b7f8794e10353ef1d9f5e71f2d14b78",
     "scripts/lib/ui-phase2-security-design-data.mjs": "9d5f7332eb9b46df51f2820bab5ff6ae4de99b3c5fbb477c68850500028b5c23",
