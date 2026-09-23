@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { statusLabel } from "../ui/status-labels";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import CrawlerSchedulerEvidence from "./CrawlerSchedulerEvidence.vue";
 import TechnicalDetails from "./TechnicalDetails.vue";
 import "../crawler-scheduler.css";
 
@@ -385,11 +386,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="crawler-scheduler" :data-state="state">
+  <section class="crawler-scheduler crawler-scheduler--c" :data-state="state">
     <header class="crawler-scheduler__hero">
       <div>
-        <p>单机采集调度</p>
-        <h2>运行与配额</h2>
+        <p>ScoutOps / 采集调度</p>
+        <h1>采集调度核验</h1>
         <span
           >惠州单机由 ai选品 Worker 领取采集任务，宝塔 Python 3.12 项目提供采集心跳与 Playwright
           桥接；来源并发上限 1。</span
@@ -408,6 +409,10 @@ onBeforeUnmount(() => {
         </button>
       </div>
     </header>
+    <aside class="p70-boundary" aria-label="运行边界">
+      <b>惠州单机 / 宝塔受管</b
+      ><span>Worker 与 Python Crawler 各一个实例；来源有效并发固定为1。</span>
+    </aside>
     <section
       v-if="data && refreshFailure"
       class="crawler-scheduler__refresh-notice"
@@ -438,56 +443,89 @@ onBeforeUnmount(() => {
       </button>
     </section>
     <template v-else-if="data">
-      <section class="crawler-scheduler__verdict" :data-verdict="state">
-        <div>
-          <small>S0 · {{ state.toUpperCase() }}</small
-          ><strong>{{ verdict[0] }}</strong>
+      <section class="p70-paper">
+        <section class="p70-conclusion" :data-verdict="state">
+          <div>
+            <small>S0 / {{ state }}</small>
+            <h2>
+              {{
+                state === "ready"
+                  ? "当前采集调度门满足"
+                  : state === "warning"
+                    ? "当前调度需要关注"
+                    : "当前采集调度门阻断"
+              }}
+            </h2>
+            <p>返回 {{ data.findings.length }} 项发现；不以单张指标卡替代总体结论。</p>
+          </div>
+          <div>
+            <b>观测时间</b><time :datetime="data.observed_at">{{ time(data.observed_at) }}</time>
+          </div>
+        </section>
+        <section v-if="data.findings.length" class="p70-findings">
+          <h2>
+            当前发现 <small>{{ data.findings.length }} 项</small>
+          </h2>
+          <article v-for="item in data.findings" :key="item.code" :data-severity="item.severity">
+            <b>{{ item.severity === "blocked" ? "阻断" : "预警" }}</b
+            ><code>{{ item.code }}</code>
+            <p>{{ item.action_hint }}</p>
+          </article>
+        </section>
+        <div class="p70-runtime">
+          <section>
+            <h2>单机运行与租约</h2>
+            <dl>
+              <div>
+                <dt>Worker / 上限</dt>
+                <dd>{{ data.topology.worker_instances }} / {{ data.topology.maximum_workers }}</dd>
+              </div>
+              <div>
+                <dt>Python Crawler / 上限</dt>
+                <dd>
+                  {{ data.topology.crawler_instances }} / {{ data.topology.maximum_crawlers }}
+                </dd>
+              </div>
+              <div>
+                <dt>重复租约</dt>
+                <dd>{{ data.leases.duplicate_count }}</dd>
+              </div>
+              <div>
+                <dt>活动档案</dt>
+                <dd>{{ data.profiles.length }}</dd>
+              </div>
+            </dl>
+          </section>
+          <section>
+            <h2>主机资源观测</h2>
+            <dl>
+              <div>
+                <dt>负载 / 核数</dt>
+                <dd>{{ (data.resource.load_basis_points / 100).toFixed(1) }}%</dd>
+              </div>
+              <div>
+                <dt>可用内存</dt>
+                <dd>{{ data.resource.available_memory_mb }} MB</dd>
+              </div>
+              <div>
+                <dt>可用磁盘</dt>
+                <dd>{{ data.resource.free_disk_mb }} MB</dd>
+              </div>
+            </dl>
+            <p>负载/核数不是CPU利用率；非Linux占位不当作实测进程数。</p>
+          </section>
         </div>
-        <p>{{ verdict[1] }}</p>
-        <em>统一后端 · 运行就绪</em>
-      </section>
-      <section class="crawler-scheduler__metrics">
-        <article>
-          <span>任务处理器</span
-          ><strong
-            >{{ data.topology.worker_instances }} / {{ data.topology.maximum_workers }}</strong
-          ><small>全局任务槽位 {{ data.leases.active_worker }}</small>
-        </article>
-        <article>
-          <span>Python 采集运行时</span
-          ><strong
-            >{{ data.topology.crawler_instances }} / {{ data.topology.maximum_crawlers }}</strong
-          ><small>活动浏览器槽位 {{ data.leases.active_crawler }}</small>
-        </article>
-        <article>
-          <span>重复租约</span><strong>{{ data.leases.duplicate_count }}</strong
-          ><small>必须保持为 0</small>
-        </article>
-        <article>
-          <span>已启用来源</span><strong>{{ data.providers.length }}</strong
-          ><small>来源并发由调度器统一管理</small>
-        </article>
-      </section>
-      <div class="crawler-scheduler__layout">
-        <section class="crawler-scheduler__panel">
+        <section class="p70-providers">
           <header>
             <div>
-              <p>来源配额</p>
-              <h3>来源并发与排队</h3>
+              <h2>来源并发与排队</h2>
+              <p>来源按熔断、排队、连续失败和代码排序；每页最多12条。</p>
             </div>
-            <span>配置值会被单机上限收紧到 1</span>
+            <b>待领取 {{ queueSummary.queued }} · 最老 {{ duration(queueSummary.oldest) }}</b>
           </header>
-          <section class="crawler-scheduler__queue-summary" aria-label="采集排队摘要">
-            <article>
-              <small>待领取任务</small><strong>{{ queueSummary.queued }}</strong>
-            </article>
-            <article>
-              <small>最老等待</small><strong>{{ duration(queueSummary.oldest) }}</strong>
-            </article>
-            <article>
-              <small>饥饿风险来源</small><strong>{{ queueSummary.starvationRisks }}</strong>
-            </article>
-          </section>
+          <p v-if="message" class="crawler-scheduler__operation-message" aria-live="polite">
+            {{ message }}
+          </p>
           <div class="crawler-scheduler__source-filters">
             <label>
               搜索来源
@@ -509,77 +547,64 @@ onBeforeUnmount(() => {
             </label>
             <span>共 {{ filteredProviders.length }} 个来源</span>
           </div>
-          <div class="crawler-scheduler__sources">
-            <p v-if="message" class="crawler-scheduler__operation-message" aria-live="polite">
-              {{ message }}
-            </p>
+          <div class="p70-provider-list">
             <article
               v-for="item in pagedProviders"
               :key="item.id"
               :data-circuit="item.circuit_state"
             >
-              <div>
+              <header>
                 <b>{{ item.code }}</b
                 ><span>{{
                   item.circuit_state === "open"
                     ? "来源已熔断"
-                    : `${item.active_leases} / ${item.effective_concurrency}`
+                    : item.active_leases + " / " + item.effective_concurrency
                 }}</span>
-              </div>
+              </header>
               <progress
+                :aria-label="item.code + '来源有效并发占用'"
+                :aria-valuetext="item.active_leases + ' / ' + (item.effective_concurrency || 1)"
                 :value="item.active_leases"
                 :max="item.effective_concurrency || 1"
-              ></progress
-              ><small
-                >来源配置 {{ item.configured_concurrency }} · 当前有效
-                {{ item.effective_concurrency }}</small
-              >
-              <small
-                >等待 {{ item.queued_tasks }} 个任务 · 最长
-                {{ duration(item.longest_queue_wait_seconds) }}</small
-              >
-              <small
-                >等待分位 P50 {{ duration(item.queue_wait_p50_seconds) }} · P95
-                {{ duration(item.queue_wait_p95_seconds) }}</small
-              >
-              <small class="crawler-scheduler__queue-risk">{{ queueRiskText(item) }}</small>
-              <small
-                >24 小时成功率 {{ rate(item.success_rate_basis_points_24h) }} · 耗时 P95
-                {{ milliseconds(item.duration_p95_ms_24h) }} · 样本
-                {{ item.sample_count_24h }}</small
-              >
-              <small v-if="item.circuit_state === 'open'" class="crawler-scheduler__circuit">
-                连续失败 {{ item.consecutive_failures }} /
-                {{ item.circuit_failure_threshold }}，仅该来源暂停；健康检查恢复后再解除。
-                <RouterLink :to="`/platform-admin/provider-adapters?provider_id=${item.id}`"
+              ></progress>
+              <p>
+                排队 {{ item.queued_tasks }} · 最长
+                {{ duration(item.longest_queue_wait_seconds) }} · P95
+                {{ duration(item.queue_wait_p95_seconds) }}
+              </p>
+              <p>{{ queueRiskText(item) }}</p>
+              <p>
+                24小时成功率 {{ rate(item.success_rate_basis_points_24h) }} · 耗时P95
+                {{ milliseconds(item.duration_p95_ms_24h) }} · 样本 {{ item.sample_count_24h }}
+              </p>
+              <details v-if="item.last_error_code">
+                <summary>最近失败</summary>
+                <code>{{ item.last_error_code }}</code>
+              </details>
+              <div v-if="item.circuit_state === 'open'" class="p70-provider-actions">
+                <RouterLink :to="'/platform-admin/provider-adapters?provider_id=' + item.id"
                   >前往来源健康</RouterLink
-                >
-                <button
+                ><button
                   type="button"
                   :disabled="providerRecovering === item.id || refreshing"
                   @click="circuitConfirm = item"
                 >
                   解除熔断
                 </button>
-              </small>
-              <details v-if="item.last_error_code">
-                <summary>最近失败</summary>
-                <code>{{ item.last_error_code }}</code>
-              </details>
+              </div>
             </article>
             <p v-if="!data.providers.length">当前没有启用来源。</p>
             <p v-else-if="!filteredProviders.length">当前筛选范围没有需要处理的来源。</p>
           </div>
           <nav
             v-if="filteredProviders.length > providerPageSize"
-            class="crawler-scheduler__source-pagination"
+            class="p70-pagination"
             aria-label="来源列表分页"
           >
             <button type="button" :disabled="providerPage <= 1" @click="providerPage -= 1">
-              上一页
-            </button>
-            <span>第 {{ providerPage }} / {{ providerPageCount }} 页</span>
-            <button
+              上一页</button
+            ><span>第 {{ providerPage }} / {{ providerPageCount }} 页</span
+            ><button
               type="button"
               :disabled="providerPage >= providerPageCount"
               @click="providerPage += 1"
@@ -588,152 +613,14 @@ onBeforeUnmount(() => {
             </button>
           </nav>
         </section>
-        <aside class="crawler-scheduler__panel">
-          <header>
-            <div>
-              <p>独占登录档案</p>
-              <h3>浏览器档案独占</h3>
-            </div>
-            <span>{{ data.profiles.length }} 个活动档案</span>
-          </header>
-          <dl>
-            <div>
-              <dt>重复租约</dt>
-              <dd>{{ data.leases.duplicate_count }}</dd>
-            </div>
-            <div>
-              <dt>独占上限</dt>
-              <dd>每档案 1</dd>
-            </div>
-            <div>
-              <dt>全局采集执行器</dt>
-              <dd>1</dd>
-            </div>
-            <div>
-              <dt>租约真相</dt>
-              <dd>数据库 5.7</dd>
-            </div>
-          </dl>
-        </aside>
-      </div>
-      <section class="crawler-scheduler__panel crawler-scheduler__receipts">
-        <header>
-          <div>
-            <p>完成回执</p>
-            <h3>容量、保留期与磁盘水位</h3>
-          </div>
-          <span v-if="data.receipt_spool">观测于 {{ time(data.receipt_spool.observed_at) }}</span>
-          <span v-else>等待 Python Crawler 上报</span>
-        </header>
-        <div v-if="data.receipt_spool" class="crawler-scheduler__receipt-grid">
-          <article>
-            <small>待回写</small><strong>{{ data.receipt_spool.pending_count }}</strong>
-            <span>{{ bytes(data.receipt_spool.pending_bytes) }}</span>
-          </article>
-          <article>
-            <small>隔离待审阅</small><strong>{{ data.receipt_spool.quarantined_count }}</strong>
-            <span>{{ bytes(data.receipt_spool.quarantined_bytes) }}</span>
-          </article>
-          <article>
-            <small>最老待回写</small>
-            <strong>{{
-              data.receipt_spool.oldest_pending_at
-                ? time(data.receipt_spool.oldest_pending_at)
-                : "无积压"
-            }}</strong>
-            <span>保留期 {{ data.receipt_spool.retention_days }} 天；到期只告警，不自动删除</span>
-          </article>
-          <article>
-            <small>目录容量</small>
-            <strong>{{
-              bytes(data.receipt_spool.pending_bytes + data.receipt_spool.quarantined_bytes)
-            }}</strong>
-            <span>告警上限 {{ bytes(data.receipt_spool.max_bytes) }}</span>
-          </article>
-          <article>
-            <small>所在磁盘可用</small><strong>{{ data.receipt_spool.free_disk_mb }} MB</strong>
-            <span>停止线 {{ data.receipt_spool.minimum_free_disk_mb }} MB</span>
-          </article>
-        </div>
-        <p v-else class="crawler-scheduler__empty">
-          尚无受限回执目录观测；调度保持阻断，重启 Python Crawler 后重新核验。
-        </p>
-      </section>
-      <section class="crawler-scheduler__panel crawler-scheduler__trend">
-        <header>
-          <div>
-            <p>最近 24 小时</p>
-            <h3>吞吐与失败率趋势</h3>
-          </div>
-          <span>{{ data.trend.reduce((sum, item) => sum + item.total, 0) }} 次浏览器运行</span>
-        </header>
-        <div v-if="data.trend.length">
-          <article v-for="item in data.trend" :key="item.bucket_at">
-            <time :datetime="item.bucket_at">{{ time(item.bucket_at) }}</time>
-            <span>吞吐 {{ item.total }}</span
-            ><span>成功 {{ item.succeeded }}</span
-            ><span>失败 {{ item.failed }}</span>
-            <strong>{{ rate(item.failure_rate_basis_points) }}</strong>
-          </article>
-        </div>
-        <p v-else class="crawler-scheduler__empty">最近 24 小时暂无浏览器运行样本。</p>
-      </section>
-      <section
-        v-if="data.active_leases.length"
-        class="crawler-scheduler__panel crawler-scheduler__associations"
-      >
-        <header>
-          <div>
-            <p>实时关联</p>
-            <h3>租约、进程与采集任务</h3>
-          </div>
-          <span>{{ data.active_leases.length }} 个活动槽位</span>
-        </header>
-        <div>
-          <article
-            v-for="(item, index) in data.active_leases"
-            :key="`${item.slot_type}:${item.task_id}:${item.run_id}:${index}`"
-          >
-            <div>
-              <b>{{ processLabel(item.process_role) }}</b>
-              <span>{{ item.provider_name || "全局调度槽位" }}</span>
-            </div>
-            <p>
-              采集任务：{{ statusLabel(item.task_status) }} · 最近心跳
-              {{ time(item.heartbeat_at) }} · 租约到期 {{ time(item.expires_at) }}
-            </p>
-            <details>
-              <summary>查看技术详情</summary>
-              <code>任务 UUID {{ item.task_id || "未关联" }}</code>
-              <code>进程标识 {{ item.process_ref }}</code>
-              <code>槽位类型 {{ item.slot_type }}</code>
-              <code v-if="item.run_id">运行 UUID {{ item.run_id }}</code>
-            </details>
-          </article>
-        </div>
-      </section>
-      <section class="crawler-scheduler__panel crawler-scheduler__findings">
-        <header>
-          <div>
-            <p>失败时拒绝放行</p>
-            <h3>调度告警</h3>
-          </div>
-          <span>{{ data.findings.length }} 项</span>
-        </header>
-        <div v-if="data.findings.length">
-          <article
-            v-for="(item, index) in data.findings"
-            :key="item.code"
-            :data-severity="item.severity"
-          >
-            <span>{{ String(index + 1).padStart(2, "0") }}</span
-            ><code>{{ item.code }}</code>
-            <p>{{ item.action_hint }}</p>
-          </article>
-        </div>
-        <div v-else class="crawler-scheduler__clear">
-          <b>当前无采集调度阻断</b><span>Node Worker 与 Python Crawler 均可正常接收任务。</span>
-        </div>
+        <CrawlerSchedulerEvidence
+          :data="data"
+          :time="time"
+          :bytes="bytes"
+          :rate="rate"
+          :process-label="processLabel"
+          :status-label="statusLabel"
+        />
       </section>
       <footer>
         <span>运行观测 {{ time(data.observed_at) }}</span
@@ -764,3 +651,7 @@ onBeforeUnmount(() => {
     />
   </section>
 </template>
+
+<style>
+@import "../crawler-scheduler-c.css";
+</style>

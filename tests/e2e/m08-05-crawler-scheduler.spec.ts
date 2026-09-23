@@ -92,16 +92,14 @@ test("M08-05.A07/A08/A15 desktop and 390 single-host scheduler truth", async ({ 
     route.fulfill({ json: envelope(base) }),
   );
   await page.goto("/platform-admin/crawler-scheduler");
-  await expect(page.getByRole("heading", { level: 1, name: "采集调度" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2, name: "运行与配额" })).toBeVisible();
-  await expect(page.getByText("采集调度已就绪")).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "采集调度核验" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "当前采集调度门满足" })).toBeVisible();
+  await expect(page.getByText("当前采集调度门满足")).toBeVisible();
   await expect(page.getByText("1 / 1")).toHaveCount(2);
-  await expect(page.getByText("等待 3 个任务 · 最长 3 分钟")).toBeVisible();
+  await expect(page.getByText("待领取 3 · 最老 3 分钟")).toBeVisible();
   await expect(page.getByLabel("运行范围")).toHaveValue("attention");
   await expect(page.getByText("共 1 个来源")).toBeVisible();
-  await expect(page.getByRole("region", { name: "采集排队摘要" })).toContainText(
-    "待领取任务3最老等待3 分钟饥饿风险来源1",
-  );
+  await expect(page.getByRole("heading", { name: "来源并发与排队" })).toBeVisible();
   await expect(page.getByText("最长等待已高于近 24 小时 P95，存在饥饿风险")).toBeVisible();
   await page.getByRole("button", { name: "回收过期租约" }).click();
   await expect(page.getByRole("heading", { name: "回收过期调度租约？" })).toBeVisible();
@@ -112,10 +110,7 @@ test("M08-05.A07/A08/A15 desktop and 390 single-host scheduler truth", async ({ 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(
-    page.getByText(
-      "惠州单机由 ai选品 Worker 领取采集任务，宝塔 Python 3.12 项目提供采集心跳与 Playwright 桥接；来源并发上限 1。",
-      { exact: true },
-    ),
+    page.getByText("Worker 与 Python Crawler 各一个实例；来源有效并发固定为1。", { exact: true }),
   ).toBeVisible();
 });
 test("M08-05.A08/A09/A16 warning blocked empty forbidden expired rate limited and unavailable", async ({
@@ -142,7 +137,7 @@ test("M08-05.A08/A09/A16 warning blocked empty forbidden expired rate limited an
         }),
   );
   await page.goto("/platform-admin/crawler-scheduler");
-  await expect(page.getByText("采集调度需要关注")).toBeVisible();
+  await expect(page.getByText("当前调度需要关注")).toBeVisible();
   response = {
     ...base,
     state: "blocked",
@@ -151,7 +146,7 @@ test("M08-05.A08/A09/A16 warning blocked empty forbidden expired rate limited an
     ],
   };
   await page.reload();
-  await expect(page.getByText("采集调度已阻断")).toBeVisible();
+  await expect(page.getByText("当前采集调度门阻断")).toBeVisible();
   response = null;
   await page.reload();
   await expect(page.getByText("尚无调度观测")).toBeVisible();
@@ -176,7 +171,7 @@ test("UI2-SC70 hidden recovering query reads real facts without starting recover
     return route.fulfill({ json: envelope(base) });
   });
   await page.goto("/platform-admin/crawler-scheduler?state=recovering");
-  await expect(page.getByText("采集调度已就绪", { exact: true })).toBeVisible();
+  await expect(page.getByText("当前采集调度门满足", { exact: true })).toBeVisible();
   await expect(page.getByText("正在回收过期租约", { exact: true })).toHaveCount(0);
   expect(methods).toEqual(["GET"]);
 });
@@ -206,7 +201,7 @@ test("M08-05 active lease links process role and collection task without exposin
     }),
   );
   await page.goto("/platform-admin/crawler-scheduler");
-  await expect(page.getByRole("heading", { name: "租约、进程与采集任务" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "活动租约与进程" })).toBeVisible();
   await expect(page.getByText("Node Worker", { exact: true })).toBeVisible();
   await expect(page.getByText("Google 新闻检索")).toBeVisible();
   await expect(page.getByText(/采集任务：执行中/)).toBeVisible();
@@ -251,7 +246,7 @@ test("M08-05 refresh is single-flight and keeps the last verified snapshot on fa
   const refresh = page.getByRole("button", { name: "刷新运行事实" });
   await refresh.click();
   await expect(page.getByRole("button", { name: "正在刷新…" })).toBeDisabled();
-  await expect(page.getByText("采集调度已就绪")).toBeVisible();
+  await expect(page.getByText("当前采集调度门满足")).toBeVisible();
   await expect(page.getByText("刷新未完成")).toBeVisible();
   await expect(page.getByText(/已保留上次成功的采集调度事实/)).toBeVisible();
   expect(reads).toBe(4);
@@ -286,6 +281,6 @@ test("M08-05 recovery success remains visible when the follow-up read fails", as
   await page.getByRole("button", { name: "确认回收" }).click();
   await expect(page.getByText("已回收 3 个过期调度槽位")).toBeVisible();
   await expect(page.getByText("刷新未完成")).toBeVisible();
-  await expect(page.getByText("采集调度已就绪")).toBeVisible();
+  await expect(page.getByText("当前采集调度门满足")).toBeVisible();
   expect(recoveryCalls).toBe(1);
 });

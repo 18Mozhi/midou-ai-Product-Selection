@@ -1,4 +1,8 @@
-# P68 MySQL 运行 C 方向生产 Vue 接入 · 本次实施
+# P70 采集调度 C 方向生产 Vue 接入 · 本次实施
+
+2026-09-23：已将自动通过的 C 方向接入真实 `/platform-admin/crawler-scheduler`：桌面/手机呈现蓝色单机边界和分区证据；保留原 GET/15 秒单飞、失败快照/追踪、筛选分页及两个既有确认动作。P70 单测 2/2、M08-05 模块测试 15/15、实际 Vue 视口/动效矩阵 144 项与 52 次本地 GET、桌面/手机 E2E 各 7/7、Web 类型检查通过。提交/宝塔部署与线上 SHA/资源核验待完成；不改 API、调度、Worker/Python、权限、审计或数据规则。全 73 页目标继续。详见[P70实施记录](P70-PAGE-COMPOSITION-IMPLEMENTATION.md)。
+
+# P68 MySQL 运行 C 方向生产 Vue 接入 · 前序实施
 
 2026-09-23：用户已授权已展示页面自动通过；C 方向已接入真实 `/platform-admin/mysql`：蓝色单主范围与白色工作区分别呈现结论/发现、资源观测、累计与瞬时口径、同机恢复证据、持久化实际值与目标。保留 GET、15 秒单飞刷新、权限、快照/失败追踪和宝塔边界；不改 API、MySQL 策略、审计、SQL、配置、迁移、备份或恢复行为。P68 定向单测 3/3、实际 Vue 四视口/动效组合 180 项与 52 次本地 GET、桌面/手机 E2E 各3/3、Web构建、22工作区构建与预检通过。提交/build SHA `caf6b7f320e531e876986d9afbfb4df6627337fd` 已推送并部署；线上 ready/available/version、P68 深链及专属 JS/CSS HTTP 200，版本 SHA 匹配；临时包已删除。详见[P68实施记录](P68-PAGE-COMPOSITION-IMPLEMENTATION.md)。UI 和本地夹具不证明真实 MySQL、生产 RBAC/SQL 审计、正式恢复与 M07-03 验收；全 73 页目标继续。
 

@@ -284,7 +284,7 @@ test("M08-05 independently observes the Node Worker and BaoTa Python Crawler", a
   assert.ok(probe.includes("\\s+scoutops_crawler"));
   assert.match(probe, /crawler_instances:\s*crawler/);
   assert.doesNotMatch(probe, /crawler_instances:\s*worker/);
-  assert.match(ui, /Python 采集运行时/);
+  assert.match(ui, /Python Crawler \/ 上限/);
   assert.match(ui, /Node Worker 与 Python Crawler/);
   assert.match(topology, /Node 后端负责 API 与 Worker，Python 项目负责采集桥接/);
   const pythonProjects = JSON.parse(manifest).objects.filter(
@@ -761,7 +761,7 @@ test("M08-05.A07/A08/A15/A16 UI and rollback preserve documented runtime informa
   ])
     assert.match(ui, new RegExp(state));
   assert.match(e2e, /390/);
-  assert.match(ui, /queueSummary[\s\S]*采集排队摘要/);
+  assert.match(ui, /queueSummary[\s\S]*待领取[\s\S]*最老/);
   assert.match(ui, /queueRiskText[\s\S]*高于近 24 小时 P95[\s\S]*饥饿风险/);
   for (const fact of [
     "## 页面与图片",

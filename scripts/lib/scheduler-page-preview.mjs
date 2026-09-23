@@ -10,6 +10,8 @@ import {
 export const schedulerReviewCss =
   "design-plans/ui-phase-2-2026-09-07/implementation/scheduler-page-preview.css";
 export const schedulerPageSources = [
+  "apps/web/src/components/CrawlerSchedulerEvidence.vue",
+  "apps/web/src/crawler-scheduler-c.css",
   schedulerReviewCss,
   shellReviewCss,
   shellReviewModule,
@@ -23,8 +25,21 @@ const once = (value, before, after) => {
 
 // Review-only transformation: source request, filter, pagination and recovery handlers remain byte-for-byte intact.
 export function previewSchedulerPage(input) {
-  const source = input.replaceAll("\r\n", "\n"),
-    template = source.slice(source.indexOf("<template>") + 10, source.lastIndexOf("</template>"));
+  const source = input.replaceAll("\r\n", "\n");
+  if (source.includes('class="crawler-scheduler crawler-scheduler--c"'))
+    return once(
+      once(
+        source,
+        'class="crawler-scheduler crawler-scheduler--c"',
+        'class="crawler-scheduler crawler-scheduler--review"',
+      ),
+      '<aside class="p70-boundary"',
+      '<p class="p70-review-note">实际 Vue C 审核版 · 本地样例 · 不发送恢复或健康检查 · 尚未部署</p><aside class="p70-boundary"',
+    );
+  const template = source.slice(
+    source.indexOf("<template>") + 10,
+    source.lastIndexOf("</template>"),
+  );
   const nodes = [],
     walk = (node) => {
       nodes.push(node);
@@ -81,11 +96,13 @@ export function schedulerPagePlugin() {
         return { code: previewSchedulerPage(source), map: null };
       if (file === absolute("apps/web/src/components/NavigationShell.vue"))
         return {
-          code: once(
-            previewShellVue(source),
-            '<header v-if="!opportunityId" class="role-page-title">',
-            '<header v-if="!opportunityId && routePath !== \'/platform-admin/crawler-scheduler\'" class="role-page-title">',
-          ),
+          code: source.includes("routePath !== '/platform-admin/crawler-scheduler'")
+            ? previewShellVue(source)
+            : once(
+                previewShellVue(source),
+                '<header v-if="!opportunityId" class="role-page-title">',
+                '<header v-if="!opportunityId && routePath !== \'/platform-admin/crawler-scheduler\'" class="role-page-title">',
+              ),
           map: null,
         };
     },
