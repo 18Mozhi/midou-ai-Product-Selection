@@ -25,7 +25,11 @@
 
 ## 部署与生产边界
 
-部署前记录：待提交后填写 commit/build SHA、宝塔部署结果、线上 health/version、`/register` 深链与 JS/CSS 哈希核对，以及 1440/390 GET-only 只读检查。生产检查不提交注册数据，不证明真实邮件投递、账号创建/验证、权限或正式 M07-03 验收。
+提交 `972685b432491b5b12b0c1dd69b2b37cccc5ef05` 已推送至 `main`，并由固定 `python scripts/deploy-baota.py` 成功部署；宝塔预检确认6个既有对象，结果 `deployed`，production build SHA 与提交一致。上传临时包已由脚本删除。按部署流程完成 Nginx 配置检查/reload 与 Node 项目受控重启；未改后端契约、Python逻辑或数据库。
+
+线上只读 GET `/api/v1/health/live`、`/ready`、`/available`、`/version` 与 `/register` 均为 HTTP 200；live/version SHA 均为 `972685b432491b5b12b0c1dd69b2b37cccc5ef05`。生产 Playwright 在1440px和390px各打开注册页：三字段、48px蓝色主按钮 `rgb(23,72,160)` 正常，无横向溢出、控制台异常或非GET API请求。生产身份资源与本地构建 SHA-256 一致：`LocalIdentity-DcXoPzSV.js` `cee1cf60718b800c0fbf16ee13de7fa4d8d703bed61d8a4c18bf85e8caa78d88`；`LocalIdentity-ByL9FfEh.css` `556360e9af183445094ab66c5fe819e192be76bc7702358bbbe6888766643ec5`。
+
+线上检查没有提交注册数据；这些证据不证明真实账号创建、邮件投递或验证、权限，亦不等于正式 M07-03 验收。
 
 ## 运行和维护
 

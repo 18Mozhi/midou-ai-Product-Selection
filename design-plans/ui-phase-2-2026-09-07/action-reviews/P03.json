@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "pageId": "P03",
   "route": "/register",
-  "status": "implemented-not-production-accepted",
+  "status": "implemented-user-approved-production-smoke-verified-not-formally-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/LocalIdentity.vue": "f57c425d7f040c0f8bc2debc59003da9c63ed3dace7bd80211f516170d192e13"
@@ -1047,7 +1047,7 @@
     }
   ],
   "surfaceReview": {
-    "status": "implemented-and-locally-verified-not-production-accepted",
+    "status": "production-readonly-smoke-verified-not-formally-accepted",
     "files": [
       "apps/web/src/components/LocalIdentity.vue",
       "apps/web/src/components/local-identity-registration.css"
@@ -1242,7 +1242,7 @@
     "ID-EMAIL-CONFIRM是挂载自动动作，无按钮候选；有token且初始verify才调用，局部切verify不自动确认。单列生命周期，不漏掉也不伪造按钮。",
     "六态保守未映射：既有四类代表控件PNG缺逐action selector协议，不全页升格。错误标题、MFA未知状态、统一busy和敏感ref清空只在新稿，实际Vue未修。"
   ],
-  "approval": "user-approved-visual-direction",
+  "approval": "user-approved-visual-direction; production checks recorded separately",
   "limits": [
     "语义映射是源审阅与图片关联，不是测试、审批或全站分母冻结。",
     "不改实际UI/鉴权/接口/业务数据，不以重构图替代生产验证。"
