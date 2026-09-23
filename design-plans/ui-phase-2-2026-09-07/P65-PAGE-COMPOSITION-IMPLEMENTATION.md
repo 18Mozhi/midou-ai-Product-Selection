@@ -14,9 +14,13 @@
 
 ## 验证
 
-- `node --test tests/unit/release-page-preview.test.mjs`：10/10。
+- `node --test tests/unit/release-page-preview.test.mjs tests/m07-05/release-rollout.test.mjs`：27/27。
 - `node scripts/verify-release-page-preview.mjs`：桌面 33 项、390px 手机 69 项，共 102 项；12 次本地 GET，无出图运行。
-- `node scripts/run-playwright-projects.mjs tests/e2e/m07-05-release-rollout.spec.ts --update-snapshots`：桌面 3/3、390px 手机 3/3；更新两张 approved C 截图基线。
-- Web 类型检查在首次调整后通过；提交前仍需复跑格式、目标单测、完整 Web 构建、文档/静态与发布矩阵。
+- `node scripts/run-playwright-projects.mjs tests/e2e/m07-05-release-rollout.spec.ts --update-snapshots`：桌面 3/3、390px 手机 3/3；更新四张桌面/手机批准 C 截图基线。
+- Web 类型检查、生产 Web 构建、格式、文档、运行文档一致性、静态分析、发布矩阵全部通过；22 工作区部署构建通过。
 
-本地夹具/E2E 不证明生产权限、MySQL 审计、真实发布/回滚或正式 M07-03 签收。宝塔部署与线上资源/版本核验待提交推送后进行。
+## 部署结果
+
+实现提交 `6fd36ca62d214c5c9b00a5dfe22313dc08119582` 已推送并由 `python scripts/deploy-baota.py` 部署。部署器报告成功且临时上传包已删除；宝塔固定 Node 项目受控更新/启动，Python 项目配置更新，Nginx 配置检查与 reload 完成。公网 live/ready/available/version、`/platform-admin/releases`、P65 专属 JS/CSS 资源均 HTTP 200，`/api/v1/health/version` 返回该部署 SHA；专属 JS 含 C 布局标记和“运行身份与部署捕获”文案，专属 CSS 含 C 页面作用域。
+
+本地夹具/E2E/静态资源可达不证明生产权限、MySQL 审计、真实发布/回滚或正式 M07-03 签收；没有触发写探针、历史双槽流程、数据库迁移或发布操作。P65 已部署不等于 M07-05 正式生产签收，也不等于全73页阶段完成。
