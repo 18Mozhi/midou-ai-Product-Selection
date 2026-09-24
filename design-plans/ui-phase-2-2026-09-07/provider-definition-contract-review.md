@@ -148,7 +148,7 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 
 用户使用：搜索/筛选到无结果时点击“清除筛选”，恢复全部当前已读取来源、默认排序和第一页；它不重新请求目录，不执行探针或扩大后端数据范围。代码仅A按钮和说明、永久测试；无新API/字段/SQL/环境变量/依赖，Registry代码未变，不重复无变化的Registry/Node/Python全套。后续发布仍走宝塔部署器核对迁移和Node停启窗口，本批未部署，不需要单独后端配置或重启。
 
-## 7. 当前源指纹（LF SHA-256）
+## 7. 历史源指纹（LF SHA-256）
 
 2026-09-11获批反馈外观增量：Registry仅增加两项展示属性及独立CSS引用，完整script不变。保存按钮因data属性签名从c00a014dd9020f4f.1变为addbc979a88d3d3a.1；其余21候选不变，无新增业务动作。当前Registry指纹见下表，新CSS及全部43当前源由[80图接入证据](P46-APPROVED-FEEDBACK-IMPLEMENTATION.md)直接校验。其他14源未改，旧图按精确历史关联保留。
 
@@ -179,3 +179,32 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 | apps/web/src/api-client.ts                         | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | apps/web/src/ui/state-contract.ts                  | 9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a |
 | config/route-catalog.json                          | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
+
+## 8. P47 适配器中心当前源码归属（2026-09-24）
+
+复核 `ProviderAdapterCenter.vue` 当前16个静态候选；原第2节仍可追溯的8个候选在本节补精确行号/类型，另补8个此前未映射候选。桌面/移动探针归同一健康检查接口语义；仅当前详情行复用当前行ID发起探针。清空筛选调用既有完整本地重置并恢复输入焦点，不重读目录。页内重读、筛选折叠、追踪披露和分页均不新增后端动作；健康探针不是采集成功证明，恢复链接不替用户执行解除暂停。
+
+| 当前位置键 | candidate sig | 类型 / 行 | 当前语义 |
+| --- | --- | --- | --- |
+| A:308 | 4d3ea4004d92534e.1 | control / 308 | PR47-CURRENT-LOAD 页头刷新状态 |
+| A:311 | 3d1c1781d275b76d.1 | control / 311 | PR47-CURRENT-NAV 返回来源定义页 |
+| A:314 | 76057c3353557f12.1 | event-binding / 314 | PR47-CURRENT-LOAD UiStatePanel主操作转发到load |
+| A:352 | 0da6a9c39b0f685c.1 | control / 352 | PR47-CURRENT-RESET 工具栏重置全部本地筛选/排序 |
+| A:354 | 17cbcae80442585d.1 | control / 354 | PR47-CURRENT-FILTER 展开本地筛选与排序 |
+| A:417 | d1614ad8db6bddf9.1 | control / 417 | PR47-CURRENT-DEFINE 空目录跳转来源定义页 |
+| A:430 | ccc2aafd70f9653e.1 | control / 430 | PR47-CURRENT-RESET 空结果清筛选并恢复搜索焦点 |
+| A:507 | 96211fe8b4dfe48d.1 | control / 507 | PR47-CURRENT-RECOVER 条件满足时导航至P70，不执行恢复 |
+| A:514 | b02f109125f46ed4.1 | control / 514 | PR47-CURRENT-PROBE 桌面探针入口，探针在途时禁用 |
+| A:580 | 741e7ec7cc13dbe8.1 | control / 580 | PR47-CURRENT-PROBE 移动详情探针入口，同一探针语义 |
+| A:596 | 1f36f7b562d00630.1 | control / 596 | PR47-CURRENT-TRACE 展开本来源探针关联编号 |
+| A:648 | 2cf3eb393d8269a0.1 | control / 648 | PR47-CURRENT-RECOVER 条件满足时导航至采集调度 |
+| A:655 | 1c008f867673db60.1 | control / 655 | PR47-CURRENT-TECH 展开移动来源身份与技术字段 |
+| A:691 | b2c6d3f8f6a9e8a9.1 | control / 691 | PR47-CURRENT-PAGE 本地上一页及边界焦点处理 |
+| A:695 | 822e3d6d7bce849d.1 | control / 695 | PR47-CURRENT-PAGE 本地下一页及边界焦点处理 |
+| A:702 | 1c008f867673db60.2 | control / 702 | PR47-CURRENT-TRACE 展开页级读取关联编号 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/ProviderAdapterCenter.vue | 4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746 |
+
+本节只登记当前源码身份及已有事实合同归属，不代表运行时全状态、真实 `provider:configure` 探针授权、采集执行、停用恢复或生产验收已通过。
