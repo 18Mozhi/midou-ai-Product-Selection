@@ -330,3 +330,19 @@ detail的x为progress/pause/cancel/delay/transfer；batch的x为pause/resume/del
 | apps/web/src/components/TaskActionDialog.vue#b13fdf83b41280a4.1 | 164 | control | task.action.submit：busy时禁用，其他校验沿用既有原生表单规则 |
 
 本节共列80个当前静态源码候选，并分别记录五个Vue文件的LF哈希。旧第3节保留原行号语义，第7节保留旧源码快照；两者均不参与当前动作覆盖计算。定向断言按candidateId集合、行号、类型和哈希验证本节，不仅核对计数；通过只证明静态映射与当前源码一致，不证明交互运行、权限后端或M07-03验收。
+
+## 10. P23 TaskExportJobsPanel 当前导航归属（2026-09-24）
+
+任务工作区父组件持有 `/tasks?view=exports` 的路由、读取与权限生命周期，并将只读导出记录及时间格式化器传给本组件。本面板的三个RouterLink分别从页头、单条导出记录和空状态导航至已有报表中心；带记录入口只附带既有`report_type`筛选参数。本组件不创建、重试或下载导出文件，不直接请求API。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/TaskExportJobsPanel.vue#da8046563e03fc99.1 | 43 | control | P23-EXPORT-CURRENT-NAV / 页头前往报表中心 |
+| apps/web/src/components/TaskExportJobsPanel.vue#7080532cf7836b46.1 | 58 | control | P23-EXPORT-CURRENT-NAV / 携带报表类型筛选查看已有任务 |
+| apps/web/src/components/TaskExportJobsPanel.vue#54ca973dc0bb3a6c.1 | 69 | control | P23-EXPORT-CURRENT-NAV / 空列表引导到报表中心 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/TaskExportJobsPanel.vue | 40175f5b0cf7f7d1d9b24a7c5ca1746b0327654bb01996ffec8bf5f8bfd561c4 |
+
+映射只证明静态导航与父级只读边界，不证明报表权限、真实异步生成、下载、重试或过期处理结果。

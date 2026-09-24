@@ -1811,6 +1811,7 @@
         "../apps/api/src/business-task-routes.ts",
         "../apps/worker/src/business-task-projection-worker.ts",
         "../apps/web/src/components/TaskWorkspace.vue",
+        "../apps/web/src/components/TaskExportJobsPanel.vue",
         "../apps/web/src/components/TaskListPanel.vue",
         "../apps/web/src/components/TaskBatchActions.vue",
         "../apps/web/src/components/TaskDetailPanel.vue",
