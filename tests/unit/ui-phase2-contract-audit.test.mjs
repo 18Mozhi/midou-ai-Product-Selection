@@ -545,6 +545,52 @@ test("current collection operations map covers all live candidates and isolates 
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current platform message workbench map covers every live source and isolates the old table", () => {
+  const file = "apps/web/src/components/PlatformMessageWorkbench.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const document = "content-notification-evidence-contract-review.md";
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const records = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.currentLine !== null &&
+      record.temporalScope !== "historical",
+  );
+  assert.equal(candidates.length, 11);
+  assert.deepEqual(
+    [...new Set(records.map((record) => record.candidateId))].sort(),
+    candidates.map((candidate) => candidate.candidateId).sort(),
+  );
+  for (const record of records) {
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.recordedLine, record.currentLine, record.candidateId);
+  }
+  const oldRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.temporalScope === "historical",
+  );
+  assert.equal(oldRows.length, 4);
+  assert.equal(
+    report.sourceClaims.filter(
+      (claim) =>
+        claim.document.endsWith(document) &&
+        claim.file === file &&
+        claim.hash === "7863a19cace6a921628b2e33e66434a5662868d8a33351abc1ef3d129a7382c2",
+    )[0]?.temporalScope,
+    "historical",
+  );
+  assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],

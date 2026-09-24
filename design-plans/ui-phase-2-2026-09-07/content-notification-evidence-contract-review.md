@@ -262,6 +262,28 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | apps/web/src/components/PlatformMessageEditor.vue | 107 | form.email_enabled | 默认 |
 | apps/web/src/components/PlatformMessageEditor.vue | 111 | form.reason | 默认 |
 
+## 5.2 P57 当前 PlatformMessageWorkbench 源码绑定（2026-09-24）
+
+第5节原人工消息工作台位置表和第6节首次指纹表保留为历史快照；以下按当前Vue逐项绑定11个候选，并以当前LF源码指纹区分版本。桌面与手机的编辑/发布/取消入口是分开的呈现位置，但仍转发同一既有消息意图；本映射不代表读屏、真实API、权限、受众、审计或生产验收。
+
+| 当前candidateId | 行 | 类型 | 语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/PlatformMessageWorkbench.vue#4e8bc7691dd553a7.1 | 68 | control | PN57-SELECT / 选择消息；手机按视口打开全文阅读窗，不新增读取请求 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#f095166e216904be.1 | 96 | control | PN57-BODY / 原生details展开或收起当前消息全文 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#16110d36bb2ca486.1 | 121 | control | PN57-EDIT / 桌面读取窗编辑草稿入口，转发既有消息对象 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#ce596c13606836a9.1 | 124 | control | PN57-PUBLISH / 桌面发布草稿入口；仅忙碌时禁用并显示处理中 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#32d17b035b89285e.1 | 132 | control | PN57-CANCEL / 取消未发布草稿，不是撤回已发布消息 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#eb47900365f5d70b.1 | 152 | dialog-definition | PN57-MOBILE-READ / 原生移动全文阅读窗口定义 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#e4f2d5b4b2005a5b.1 | 152 | event-binding | PN57-MOBILE-READ / Escape取消交由当前读取窗口处理 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#3d875f94d4ab83b0.1 | 165 | control | PN57-MOBILE-CLOSE / 关闭移动全文阅读窗口 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#bffdaadbcab11ecf.1 | 191 | control | PN57-MOBILE-EDIT / 编辑草稿并关闭当前移动读取窗口 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#ed205b81aa906e59.1 | 201 | control | PN57-MOBILE-PUBLISH / 发布草稿并关闭当前移动读取窗口 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#b90d52fcfbfbd947.1 | 212 | control | PN57-MOBILE-CANCEL / 取消草稿并关闭当前移动读取窗口 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformMessageWorkbench.vue | 689531d215e8878405c53ae55a4b157066cde2e9a1455242da7262079e27b2a5 |
+
 ## 6. 引用版本指纹
 
 以下33份文件以UTF-8读取、CRLF归一为LF后计算SHA-256。只绑定所读版本；不能证明所有运行时交互和报告语义已通过。图片/生产信息必须另有真实采证。
