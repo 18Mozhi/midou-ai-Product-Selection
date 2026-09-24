@@ -103,3 +103,19 @@ line91遮罩候选从4505a8c2bbf9389c.1变为0f50ae650a1895b3.1，事件为@mous
 浏览器验证所有可见主次动作、同态不push/非法多值不改URL/history/刷新、签认trim/勾选/重开/焦点双向循环/遮罩取消、同页返回与过滤标识；404九组正确目标/不露query/焦点/链接意图，320/768/780/781/1024及390×667无溢出。原型导航只记意图，确认仅本地提示，不写真实存储或业务。
 
 提案澄清默认error对写入结果的断言、not_found混入角色原因、blocked影响断言和error次按钮误称上一页；生产共享组件未修复，不将本图册当全调用方验证。ST05剩余主题/密度/200%缩放与辅助技术、ST06、NF03/NF04、具体图审核及73页Vue/发布验收继续待办。
+
+## 9. ConfirmDialog 当前共享控件源码归属（2026-09-24）
+
+| 当前源码 | LF SHA-256 |
+| --- | --- |
+| ConfirmDialog.vue | 3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424 |
+
+| 源位置 | 当前候选ID | 类型 | 当前源码语义归属 |
+| --- | --- | --- | --- |
+| ConfirmDialog.vue:107 | ee3fadb364714194.1 | event-binding | `CD-CURRENT-backdrop`：仅遮罩自身 `mousedown.self.prevent` 请求取消；内部点击不触发此入口 |
+| ConfirmDialog.vue:108 | ccd0fa44ea1d70a7.1 | dialog-definition | `CD-CURRENT-alertdialog`：共享确认容器定义及其标题、描述和模态语义 |
+| ConfirmDialog.vue:108 | 50c756b44835e52b.1 | event-binding | `CD-CURRENT-keyboard`：键盘事件交给本组件处理Escape与Tab边界 |
+| ConfirmDialog.vue:145 | 96a1bf094dd96757.1 | control | `CD-CURRENT-cancel`：busy时禁用并调用本地cancel；是否关闭仍由父级cancel监听处理 |
+| ConfirmDialog.vue:147 | 2586b7bf2e464a4b.1 | control | `CD-CURRENT-confirm`：仅在`enabled`时发出confirm事件；具体业务副作用由调用方处理 |
+
+本表只刷新五个当前源码身份，不把共享控件的候选数量当作业务动作数，也不把容器语义、焦点/键盘行为或事件发出视为完整运行验收。第1–5节和第7节的旧身份及旧指纹继续作为历史材料保留，不回写成当前源码证据；各业务调用方的真实RBAC、API副作用、多弹窗叠加及生产状态仍按原待办处理。
