@@ -135,7 +135,11 @@ export function runContractAudit() {
     .filter(
       (file) =>
         file.endsWith("contract-review.md") ||
-        ["opportunity-candidate-map.md", "platform-user-design-contract.md"].includes(file),
+        [
+          "opportunity-candidate-map.md",
+          "platform-user-design-contract.md",
+          "P39-DIRECTORY-SOURCE-MAPPING.md",
+        ].includes(file),
     )
     .sort();
   const documents = names.map((name) =>
