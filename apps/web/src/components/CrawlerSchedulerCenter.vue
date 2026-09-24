@@ -582,7 +582,7 @@ onBeforeUnmount(() => {
                 <code>{{ item.last_error_code }}</code>
               </details>
               <div v-if="item.circuit_state === 'open'" class="p70-provider-actions">
-                <RouterLink :to="'/platform-admin/provider-adapters?provider_id=' + item.id"
+                <RouterLink :to="'/platform-admin/providers/adapters?provider_id=' + item.id"
                   >前往来源健康</RouterLink
                 ><button
                   type="button"

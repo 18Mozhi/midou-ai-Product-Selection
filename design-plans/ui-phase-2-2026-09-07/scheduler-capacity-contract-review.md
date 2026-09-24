@@ -103,7 +103,7 @@ P71repository仅取最新production_benchmark而无SHA筛选，UTC文本解析�
 
 | 文件 | SHA256 |
 | --- | --- |
-| apps/web/src/components/CrawlerSchedulerCenter.vue | a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue | ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72 |
 | apps/web/src/components/CapacityBoundaryCenter.vue | 9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4 |
 | apps/web/src/components/ConfirmDialog.vue | 6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b |
 | apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
@@ -147,3 +147,11 @@ P70活动租约区的原生details只按需展示当前已返回的任务UUID、
 | --- | --- |
 | apps/web/src/components/CrawlerSchedulerEvidence.vue | 5202b663d54be0d34bb32aaf6b3ffadd632530cf72c40305a74f4ddf08564ee2 |
 | apps/web/src/components/CapacityBoundaryEvidence.vue | b815e48915ae9a72d1972d7ef7eebda8b91f5299041ca3028b8af65ef933fbd9 |
+
+## 8. 调度来源健康导航（2026-09-24）
+
+熔断来源行的“前往来源健康”是指向 `/platform-admin/providers/adapters?provider_id=<当前来源ID>` 的 RouterLink。调度页上的链接只负责导航；目标页目前未读取 `provider_id` 查询参数，也不自动选择该来源或执行健康检查。健康检查仍由目标页独立的显式按钮触发。本映射不改变现有目标页行为。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#c198ccff780259e3.1 | 585 | control | SC70-HEALTH-NAV / 导航至已登记适配器路由，不代表健康检查已执行 |

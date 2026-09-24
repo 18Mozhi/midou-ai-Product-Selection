@@ -113,6 +113,46 @@ test("M08-05.A07/A08/A15 desktop and 390 single-host scheduler truth", async ({ 
     page.getByText("Worker 与 Python Crawler 各一个实例；来源有效并发固定为1。", { exact: true }),
   ).toBeVisible();
 });
+test("SC70 health link reaches the registered adapter route without running a health check", async ({
+  page,
+}) => {
+  const methods: string[] = [];
+  const attention = {
+    ...base,
+    providers: [
+      {
+        ...base.providers[0],
+        circuit_state: "open" as const,
+        consecutive_failures: 5,
+        last_error_code: "provider_probe_failed",
+      },
+    ],
+  };
+  await page.route("**/api/v1/platform/operations/crawler-scheduler", (route) =>
+    route.fulfill({ json: envelope(attention) }),
+  );
+  await page.route("**/api/v1/platform/provider-adapters**", (route) => {
+    methods.push(route.request().method());
+    return route.fulfill({ json: envelope([]) });
+  });
+
+  await page.goto("/platform-admin/crawler-scheduler");
+  const link = page.getByRole("link", { name: "前往来源健康" });
+  await expect(link).toHaveAttribute(
+    "href",
+    "/platform-admin/providers/adapters?provider_id=00000000-0000-4000-8000-000000000851",
+  );
+  await link.click();
+  await expect(page).toHaveURL(
+    /\/platform-admin\/providers\/adapters\?provider_id=00000000-0000-4000-8000-000000000851$/,
+  );
+  await expect(
+    page.getByText("健康检查只验证当前探针，不代表采集成功，也不会自动解除来源暂停。", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  expect(methods).toEqual(["GET"]);
+});
 test("M08-05.A08/A09/A16 warning blocked empty forbidden expired rate limited and unavailable", async ({
   page,
 }) => {
