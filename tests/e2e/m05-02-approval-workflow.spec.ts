@@ -301,7 +301,7 @@ test("M05-02.A07/A08/A09/A15 renders approval inbox timeline and mandatory reaso
 }) => {
   await setup(page);
   await page.goto("/tasks/approvals");
-  await expect(page.getByRole("heading", { name: "审批中心", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "审批中心", level: 1 }).first()).toBeVisible();
   await expect(page.getByRole("button", { name: "待我处理" })).toHaveAttribute(
     "aria-pressed",
     "true",

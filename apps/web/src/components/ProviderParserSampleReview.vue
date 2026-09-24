@@ -78,7 +78,7 @@ const submit = (decision: "approved" | "rejected") => {
 }
 .sample-review small {
   color: #64748b;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.5;
 }
 .sample-review input:focus-visible,

@@ -106,7 +106,7 @@
 
 .account-center .account-page-rail__intro small {
   color: #dce8ff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
@@ -148,7 +148,7 @@
 
 .account-center--admins-c .account-page-rail .account-metrics small,
 .account-center--admins-c .account-page-rail .account-metrics span {
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.6;
 }
 
@@ -249,7 +249,7 @@
 
 .account-center .admin-filter-field small {
   color: var(--account-review-muted);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   line-height: 1.55;
 }

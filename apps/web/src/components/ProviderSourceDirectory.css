@@ -27,7 +27,7 @@
 
 .source-purpose-head p {
   color: #52657e;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .source-purpose-head h3 {
@@ -78,7 +78,7 @@
 
 .source-list article > header small {
   color: #52657e;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .source-list article > header h3 {
@@ -94,7 +94,7 @@
   border-radius: 4px;
   color: #294caf;
   background: #e7edf9;
-  font-size: 12px;
+  font-size: 13px;
   white-space: nowrap;
 }
 
@@ -138,7 +138,7 @@
 
 .source-record-facts dt {
   color: #52657e;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .source-record-facts dd {
@@ -155,7 +155,7 @@
   gap: 8px;
   flex-wrap: wrap;
   color: #52657e;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .source-record-body footer > span {
@@ -288,7 +288,7 @@
 
   .source-record-summary dt {
     color: #52657e;
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .source-record-summary dd {

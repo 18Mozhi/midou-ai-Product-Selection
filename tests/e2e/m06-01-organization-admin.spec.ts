@@ -528,7 +528,7 @@ async function setup(page: Page) {
 test("M06-01.A07/A08/A15 desktop organization dashboard", async ({ page }) => {
   await setup(page);
   await page.goto("/org-admin");
-  await expect(page.getByRole("heading", { name: "治理概览", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "治理概览", level: 1 })).toBeVisible();
   await expect(page.getByText("128")).toBeVisible();
   await expect(page.getByText("1238")).toBeVisible();
   await expect(page.getByText("新品决策工作区").first()).toBeVisible();
@@ -882,10 +882,11 @@ test("organization teams show an actionable empty state without invented rows", 
 });
 
 test("M06-01.A07/A08/A15 mobile member and invitation state", async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-08-26T10:00:00.000Z"));
   await setup(page);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/org-admin/members");
-  await expect(page.getByRole("heading", { name: "成员与邀请", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "成员与邀请", level: 1 })).toBeVisible();
   await expect(page.getByText("new@example.test")).toBeVisible();
   await expect(page.getByText("admin@example.test")).toBeVisible();
   await page.getByRole("button", { name: /已失效/ }).click();
@@ -957,6 +958,7 @@ test("organization member batch invitations keep per-email outcomes", async ({ p
 test("organization pending invitation can be revoked with version and audited reason", async ({
   page,
 }) => {
+  await page.clock.setFixedTime(new Date("2026-08-26T10:00:00.000Z"));
   await setup(page);
   let payload: { action?: string; expected_version?: number; reason?: string } = {};
   await page.route("**/api/v1/org/admin/invitations/*/actions", async (route) => {

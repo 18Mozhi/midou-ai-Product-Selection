@@ -419,7 +419,7 @@
 
 .automation-center--review > header p {
   margin: 0;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -588,7 +588,7 @@
   border: 1px solid var(--review-line);
   border-radius: 0;
   font-style: normal;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .automation-center--review .automation-grid article > div:first-child i {

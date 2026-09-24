@@ -781,7 +781,7 @@
 }
 .competitor-monitor--review .competitor-section-heading p {
   color: #1748a0;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
@@ -1255,11 +1255,13 @@
   .competitor-monitor--review .competitor-detail h3 {
     font-size: 26px;
   }
-  .competitor-monitor--review .competitor-actions,
-  .competitor-monitor--review .competitor-desktop-actions {
+  .competitor-monitor--review .competitor-actions {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr;
+  }
+  .competitor-monitor--review .competitor-desktop-actions {
+    display: none;
   }
   .competitor-monitor--review .competitor-actions button {
     width: 100%;

@@ -268,7 +268,7 @@ const currentRunState = computed(() => {
 .acceptance-1688__identity p,
 .acceptance-1688__rail-state > span {
   color: #d9e7ff;
-  font-size: 12px;
+  font-size: 13px;
 }
 .acceptance-1688__mark {
   display: grid;
@@ -310,7 +310,7 @@ const currentRunState = computed(() => {
 }
 .acceptance-1688__rail-stats dt {
   color: #d9e7ff;
-  font-size: 12px;
+  font-size: 13px;
 }
 .acceptance-1688__rail-stats dd {
   margin-top: 3px;
@@ -369,7 +369,7 @@ const currentRunState = computed(() => {
 }
 .acceptance-1688__hero .acceptance-1688__eyebrow {
   color: var(--acceptance-blue);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
 }
 .acceptance-1688__refresh {
@@ -405,7 +405,7 @@ const currentRunState = computed(() => {
 .acceptance-1688__content :deep(.acceptance-1688__actions > div p),
 .acceptance-1688__content :deep(.acceptance-1688__run > div p) {
   color: var(--acceptance-blue);
-  font-size: 12px;
+  font-size: 13px;
 }
 .acceptance-1688__content :deep(.acceptance-1688__verdict h3),
 .acceptance-1688__content :deep(.acceptance-1688__section h3),
@@ -434,7 +434,7 @@ const currentRunState = computed(() => {
 .acceptance-1688__content :deep(.acceptance-1688__start header small),
 .acceptance-1688__content :deep(.acceptance-1688__start label > span) {
   color: var(--acceptance-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .acceptance-1688__content :deep(dd) {
   margin: 3px 0 0;
@@ -489,17 +489,17 @@ const currentRunState = computed(() => {
   gap: 8px;
 }
 .acceptance-1688__content :deep(.acceptance-1688__card-title strong) {
-  font-size: 12px;
+  font-size: 13px;
 }
 .acceptance-1688__content :deep(.acceptance-1688__gates small),
 .acceptance-1688__content :deep(.acceptance-1688__matrix small) {
   color: var(--acceptance-muted);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.45;
 }
 .acceptance-1688__content :deep(.acceptance-1688__gates time) {
   color: var(--acceptance-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .acceptance-1688__content :deep(.acceptance-1688__execution-form) {
   display: grid;
@@ -525,7 +525,7 @@ const currentRunState = computed(() => {
 }
 .acceptance-1688__content :deep(.acceptance-1688__query small) {
   color: var(--acceptance-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .acceptance-1688__content :deep(button),
 .acceptance-1688__content :deep(a:not(.acceptance-1688__rail a)) {
@@ -577,14 +577,14 @@ const currentRunState = computed(() => {
 }
 .acceptance-1688__content :deep(.acceptance-1688__run-feedback > div > p:first-child) {
   color: var(--acceptance-blue);
-  font-size: 12px;
+  font-size: 13px;
 }
 .acceptance-1688__content :deep(.acceptance-1688__unknown-note) {
-  font-size: 12px;
+  font-size: 13px;
 }
 .acceptance-1688__content :deep(.acceptance-1688__scope-feedback details),
 .acceptance-1688__content :deep(.acceptance-1688__run-feedback details) {
-  font-size: 12px;
+  font-size: 13px;
 }
 .acceptance-1688__content :deep(code) {
   display: block;

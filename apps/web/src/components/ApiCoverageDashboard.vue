@@ -291,7 +291,7 @@ const countRatio = (value: number, total: number) => `${value} / ${total}`;
 .p63-hero p {
   margin-bottom: 6px;
   color: #d9e6ff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.06em;
 }
@@ -382,7 +382,7 @@ const countRatio = (value: number, total: number) => `${value} / ${total}`;
   display: block;
   margin-top: 3px;
   color: var(--p63-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .p63-breakdowns {
   display: grid;
@@ -428,12 +428,12 @@ const countRatio = (value: number, total: number) => `${value} / ${total}`;
 .p63-breakdowns li small {
   grid-column: 1 / -1;
   color: var(--p63-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .p63-section-note {
   margin: -3px 0 6px !important;
   color: var(--p63-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .p63-operations {
   min-width: 0;

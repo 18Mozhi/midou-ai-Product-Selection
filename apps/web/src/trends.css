@@ -1022,7 +1022,7 @@
   padding: 0;
   color: var(--trend-muted);
   background: transparent;
-  font-size: 12px;
+  font-size: 13px;
 }
 .trend-dashboard--review .trend-pagination {
   margin: 0;

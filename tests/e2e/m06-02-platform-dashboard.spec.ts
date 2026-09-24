@@ -1515,7 +1515,7 @@ test("platform completion renders trend and management without overflow or conso
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
   await page.goto("/platform-admin/content");
-  await expect(page.getByRole("heading", { name: "内容管理", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "内容管理", level: 1 })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "内容分页" })).toContainText("共 135 条");
   await page.getByRole("button", { name: "筛选内容管理" }).click();
   const initialContentFilters = page.getByRole("dialog", { name: "筛选内容管理" });
@@ -1536,7 +1536,7 @@ test("platform completion renders trend and management without overflow or conso
   await expect(page.getByRole("heading", { name: "审核热点内容" })).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
-  await expect(page.getByRole("heading", { name: "内容管理", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "内容管理", level: 1 })).toBeVisible();
   await page.getByRole("button", { name: "筛选内容管理" }).click();
   const contentFilters = page.getByRole("dialog", { name: "筛选内容管理" });
   await contentFilters.getByPlaceholder("搜索主题、分类或市场").fill("照明");

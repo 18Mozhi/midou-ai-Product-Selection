@@ -401,7 +401,7 @@
 .score-rules--review .score-rules-hero p {
   margin-bottom: 9px;
   color: #d6e4ff;
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.15em;
 }
 .score-rules--review .score-rules-hero h2 {
@@ -487,7 +487,7 @@
   padding: 10px 0;
   border-bottom: 1px solid var(--score-review-line);
   color: #526987;
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -505,7 +505,7 @@
 }
 .score-rules--review .score-rule-list article code {
   color: var(--score-review-blue);
-  font-size: 12px;
+  font-size: 13px;
 }
 .score-rules--review .score-rule-list article small {
   color: #526987;
@@ -542,7 +542,7 @@
 .score-rules--review .score-weight-list em {
   padding: 4px 7px;
   color: var(--score-review-ink);
-  font-size: 12px;
+  font-size: 13px;
 }
 .score-rules--review .score-rule-list nav {
   align-items: center;

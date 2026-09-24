@@ -205,7 +205,7 @@ function close() {
 }
 .organization-wizard__identity > small {
   color: #dbe8ff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
 }

@@ -248,7 +248,7 @@
 .task-workspace--review .task-title p {
   margin: 0;
   color: #d8e5ff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1110,7 +1110,7 @@
 .task-workspace--review:not(.task-detail-route) .task-title p {
   margin: 0;
   color: #d8e5ff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;

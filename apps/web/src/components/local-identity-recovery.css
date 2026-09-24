@@ -68,7 +68,7 @@
 
 .p04-recovery-boundary > p {
   color: #dce8ff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
@@ -105,7 +105,7 @@
 
 .p04-recovery-workspace > header > p {
   color: var(--p04-blue);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
 }

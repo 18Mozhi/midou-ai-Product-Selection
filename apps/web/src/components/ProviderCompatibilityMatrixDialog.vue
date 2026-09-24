@@ -381,7 +381,7 @@ const highestRisk = computed(() =>
 .p48-compatibility-summary > div > p,
 .p48-compatibility-ledger > header p {
   color: #164fae;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 750;
   letter-spacing: 0.06em;
 }
@@ -406,7 +406,7 @@ const highestRisk = computed(() =>
 }
 .p48-compatibility-summary dt {
   color: #64748b;
-  font-size: 12px;
+  font-size: 13px;
 }
 .p48-compatibility-summary dd {
   color: #172033;
@@ -459,7 +459,7 @@ const highestRisk = computed(() =>
 .p48-compatibility-table-wrap th {
   color: #52657d;
   background: #edf3fa;
-  font-size: 12px;
+  font-size: 13px;
 }
 .p48-compatibility-table-wrap th:nth-child(1) {
   width: 19%;
@@ -489,7 +489,7 @@ const highestRisk = computed(() =>
 }
 .p48-compatibility-table-wrap td > details {
   margin-top: 4px;
-  font-size: 12px;
+  font-size: 13px;
 }
 .p48-compatibility-table-wrap td > details summary {
   min-height: 44px;
@@ -508,7 +508,7 @@ const highestRisk = computed(() =>
   border-radius: 999px;
   color: #526176;
   background: #edf1f6;
-  font-size: 12px;
+  font-size: 13px;
   font-style: normal;
   font-weight: 700;
 }
@@ -541,7 +541,7 @@ const highestRisk = computed(() =>
 .p48-compatibility-actions p {
   margin: 0;
   color: #64748b;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.5;
 }
 .p48-compatibility-actions button {
@@ -620,7 +620,7 @@ const highestRisk = computed(() =>
   .p48-compatibility-table-wrap td > .compatibility-cell-label {
     display: block;
     color: #64748b;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
   }
   .p48-compatibility-table-wrap td > details {

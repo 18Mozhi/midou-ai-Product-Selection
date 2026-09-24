@@ -218,7 +218,7 @@ test("M04-04.A07/A08/A09/A15 cost rule console exposes explicit fees and dual ap
     return route.fulfill({ json: envelope(rule()) });
   });
   await page.goto("/sourcing/cost-rules");
-  await expect(page.getByRole("heading", { name: "成本质量门", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "成本质量门", level: 1 })).toBeVisible();
   await expect(page.getByRole("heading", { name: "成本规则准备度" })).toBeVisible();
   await expect(page.getByText("成本质量门未就绪", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "美国站标准费用", level: 3 })).toBeVisible();

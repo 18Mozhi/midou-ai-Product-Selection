@@ -377,7 +377,7 @@ test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on 
 }) => {
   const { listRequests } = await setup(page);
   await page.goto("/notifications");
-  await expect(page.getByRole("heading", { name: "通知中心", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "通知中心", level: 1 }).first()).toBeVisible();
   await expect(page.getByText("审批状态更新")).toBeVisible();
   await expect(page.getByText(/已合并 3 条同根因通知/)).toBeVisible();
   await page.getByRole("button", { name: /审批状态更新/ }).click();

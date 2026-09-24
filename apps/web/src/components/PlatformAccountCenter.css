@@ -352,7 +352,7 @@
 }
 .account-center--review .account-hero p {
   color: #cfe3ff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -499,7 +499,7 @@
 .account-center--review th {
   background: var(--account-review-soft);
   color: var(--account-review-muted);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.05em;
 }
 .account-center--review td,

@@ -207,7 +207,7 @@
   border: 1px solid rgb(255 255 255 / 32%);
   border-radius: 999px;
   color: #fff;
-  font-size: 12px;
+  font-size: 13px;
 }
 .provider-source-configuration-dialog .p48-source-configuration-form > label,
 .provider-source-configuration-dialog .p48-source-configuration-form > .source-schedule-preview,
@@ -262,7 +262,7 @@
 .provider-source-configuration-dialog .p48-source-configuration-form small,
 .provider-source-configuration-dialog .p48-source-versions-panel small {
   color: #64748b;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 450;
   line-height: 1.5;
 }
@@ -309,7 +309,7 @@
 .provider-source-configuration-dialog .p48-source-configuration-form > footer p,
 .provider-source-configuration-dialog .p48-source-versions-actions p {
   color: #64748b;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.5;
 }
 .provider-source-configuration-dialog .p48-source-configuration-form > footer > div {
@@ -564,7 +564,7 @@
   flex: 1 1 100%;
   margin: 0;
   color: #64748b;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.55;
 }
 .provider-source-configuration-dialog
