@@ -784,11 +784,36 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
     expect(columnRows.every((height) => height >= 44)).toBe(true);
   }
   await accountTabs.getByRole("link", { name: "用户管理", exact: true }).click();
+  const userWorkspace = page.locator(".account-page-layout--users");
+  await expect(
+    userWorkspace.getByRole("complementary", { name: "全平台汇总与管理入口" }),
+  ).toBeVisible();
+  await expect(userWorkspace.getByRole("heading", { name: "用户目录" })).toBeVisible();
+  await expect(
+    userWorkspace.getByRole("navigation", { name: "账号与组织二级导航" }).getByRole("link", {
+      name: "用户管理",
+      exact: true,
+    }),
+  ).toHaveAttribute("aria-current", "page");
   await expect(
     mobile
       ? page.getByRole("button", { name: /buyer@example.test.*查看详情/ })
       : page.getByRole("cell", { name: /buyer@example.test/ }),
   ).toBeVisible();
+  await expect(page).toHaveScreenshot("p43-user-directory.png", { fullPage: true });
+  const undersizedUserTargets = await userWorkspace
+    .locator(":is(a, button, input, select, summary)")
+    .evaluateAll((controls) =>
+      controls
+        .filter((control) => control.getClientRects().length)
+        .map((control) => ({
+          label:
+            control.textContent?.trim() || control.getAttribute("aria-label") || control.tagName,
+          height: control.getBoundingClientRect().height,
+        }))
+        .filter((control) => control.height < 44),
+    );
+  expect(undersizedUserTargets).toEqual([]);
   await accountTabs.getByRole("link", { name: "管理员管理", exact: true }).click();
   await expect(
     mobile

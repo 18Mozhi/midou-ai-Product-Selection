@@ -629,6 +629,7 @@ onMounted(load);
     :class="{
       'account-center--organization-review': organizationListRoute,
       'account-center--user-admin-c': tab === 'users' || tab === 'admins',
+      'account-center--users-c': tab === 'users' && props.routePath === '/platform-admin/users',
       'account-center--admins-c': adminListRoute,
       'account-center--permissions-c': permissionsRoute,
     }"
@@ -833,3 +834,4 @@ onMounted(load);
 <style src="./PlatformAccountCenterAdmin.css"></style>
 <style src="./PlatformAdminComparisonMobile.css"></style>
 <style src="./PlatformAdminDirectoryMobile.css"></style>
+<style src="./PlatformAccountUsersC.css"></style>

@@ -32,6 +32,7 @@ const props = defineProps<{
 
 const query = defineModel<string>("query", { required: true });
 const status = defineModel<string>("status", { required: true });
+const isCurrentTab = (target: AccountTab) => props.tab === target;
 const emit = defineEmits<{
   (event: "apply-filters"): void;
   (event: "reset-filters"): void;
@@ -49,16 +50,19 @@ const emit = defineEmits<{
     :class="{
       'account-page-layout--admins': props.adminListRoute,
       'account-page-layout--organizations': props.organizationListRoute,
+      'account-page-layout--users': props.tab === 'users',
     }"
   >
     <PlatformAccountGlobalRail
-      v-if="props.adminListRoute || props.organizationListRoute"
+      v-if="props.adminListRoute || props.organizationListRoute || props.tab === 'users'"
       :data="props.data"
       :tab="props.tab"
       :organization-list-route="props.organizationListRoute"
     />
     <div class="account-page-main">
-      <template v-if="!props.adminListRoute && !props.organizationListRoute">
+      <template
+        v-if="!props.adminListRoute && !props.organizationListRoute && props.tab !== 'users'"
+      >
         <div v-if="props.data" class="account-metrics">
           <article>
             <small>组织</small
@@ -85,8 +89,8 @@ const emit = defineEmits<{
             >组织管理</RouterLink
           ><RouterLink
             to="/platform-admin/users"
-            :class="{ on: props.tab === 'users' }"
-            :aria-current="props.tab === 'users' ? 'page' : undefined"
+            :class="{ on: isCurrentTab('users') }"
+            :aria-current="isCurrentTab('users') ? 'page' : undefined"
             >用户管理</RouterLink
           ><RouterLink
             to="/platform-admin/admins"
@@ -99,6 +103,10 @@ const emit = defineEmits<{
       <header v-if="props.adminListRoute" class="admin-directory-heading">
         <h3>可授权账号</h3>
         <p>包含尚未授予平台角色的账号。进入详情后核对身份与当前授权。</p>
+      </header>
+      <header v-if="props.tab === 'users'" class="user-directory-heading">
+        <h3>用户目录</h3>
+        <p>按邮箱、组织关系、平台角色和账号状态核对用户；全平台总量与当前筛选相互独立。</p>
       </header>
       <header v-if="props.organizationListRoute" class="organization-directory-heading">
         <div>
