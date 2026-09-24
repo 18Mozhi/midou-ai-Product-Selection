@@ -146,12 +146,10 @@ const emit = defineEmits<{
             />
             <small id="admin-query-help">输入邮箱关键词，搜索后更新列表。</small>
           </label>
-          <input
-            v-else
-            v-model="query"
-            :placeholder="props.searchPlaceholder"
-            :aria-label="props.searchPlaceholder"
-          />
+          <label v-else class="account-query-field">
+            <span>{{ props.searchPlaceholder }}</span>
+            <input v-model="query" :placeholder="props.searchPlaceholder" />
+          </label>
           <label v-if="props.adminListRoute" class="admin-filter-field">
             <span>账号状态</span>
             <select v-model="status" :aria-label="props.statusLabel">

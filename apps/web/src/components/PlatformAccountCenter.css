@@ -446,6 +446,17 @@
   border-color: var(--account-review-line);
   background: #fff;
 }
+.account-center--review .account-query-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  color: var(--account-review-ink);
+  font-size: 16px;
+  font-weight: 700;
+}
+.account-center--review .account-query-field input {
+  width: 100%;
+}
 .account-center--review .account-filter button {
   background: var(--account-review-blue);
 }
