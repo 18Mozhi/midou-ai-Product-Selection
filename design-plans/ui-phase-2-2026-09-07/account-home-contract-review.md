@@ -131,6 +131,29 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 
 本节只提供当前静态位置和既有父子事件边界；API字段、expected_version、服务端验证与资料读写合同仍以第3节和真实路由/服务为准，不由子组件映射推导新业务行为。
 
+### 2.3 P11 PersonalSecurityPanel 当前源码位置（2026-09-24）
+
+本组件把MFA路由、密码表单、设备会话读取状态和撤销意图呈现出来；密码字段更新、改密和撤销事件均交由PersonalCenter/usePersonalCenter处理。`writesBusy`在父级包含资料、偏好、改密及会话撤销写入，子组件据此禁用密码字段/提交和撤销按钮；此处不把按钮文案当成后端会话语义证明。
+
+#### apps/web/src/components/personal-center/PersonalSecurityPanel.vue
+
+| 当前签名.序号 | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| df188704ef470c64.1 | 41 | control | PC-SEC-CURRENT-MFA / 前往独立MFA管理页面 |
+| dc5d22c3a87ae385.1 | 44 | form-event | PC-SEC-CURRENT-PASSWORD / 阻止原生提交并向父级发出改密意图 |
+| 5c2165d671fbd739.1 | 48 | event-binding | PC-SEC-CURRENT-CURRENT-PASSWORD / 更新当前密码草稿；写入忙碌时禁用 |
+| 25ca5cb1035e2e53.1 | 59 | event-binding | PC-SEC-CURRENT-NEW-PASSWORD / 更新新密码草稿；写入忙碌时禁用 |
+| d4f7ed296afcee0c.1 | 70 | event-binding | PC-SEC-CURRENT-CONFIRM-PASSWORD / 更新本地确认草稿；写入忙碌时禁用 |
+| bc7ca7fd3084258d.1 | 80 | control | PC-SEC-CURRENT-PASSWORD / 向父级提交改密意图；所有写入忙碌时禁用 |
+| a5059536719adc96.1 | 106 | event-binding | PC-SEC-CURRENT-SESSION-READ / 呈现会话分区读取状态并转发重试 |
+| 7b6cd9865a93baa7.1 | 124 | control | PC-SEC-CURRENT-SESSION-REVOKE / 转发指定会话ID撤销意图；读取未就绪或写入忙碌时禁用 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/personal-center/PersonalSecurityPanel.vue | 24ca6d5a80e5edb05a98ffdf8dcc8ededc32b14eb43b41dff07bec6cf409d43b |
+
+静态映射不替代服务端或真实会话验收；当前撤销入口仍未按session.status隐藏非活动项且没有二次确认，保留为第3/5节所述待验行为。
+
 五文件没有本地dialog定义/确认调用候选；资料、密码、通知、首页规则均为内联form。主题选择使用自定义radio按钮，不是v-model字段。PersonalCenter有15个v-model位置、HomeDashboard有7个，共22个输入位置；另邮箱是disabled展示输入。P12共享UiStatePanel在部分错误态生成secondary但调用方无监听，属于共享消费者缺口，不加进上述五文件51项分母。
 
 ## 3. 写入与状态连续性
@@ -141,7 +164,7 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 | TH-RESTORE | selected=saved.theme或deep-ocean，再applyTheme | 不恢复密度。主题saving时该按钮未额外禁用，撤销与保存完成竞态待验；不把按钮可点等同安全完成 |
 | PC-SAVE-PROFILE | PATCH /me/profile：username/display_name/avatar_url/phone/locale/timezone/reason及profile.version→expected_version | 7输入；邮箱disabled不提交。服务端校验HTTPS、手机号、用户名及版本；无短信验证API，手机号变化仍未验证 |
 | PC-PREFERENCES | PUT /me/notification-preferences：expected_version与in_app/email/task/approval/competitor五个_enabled布尔值 | 返回替换preferences。无免打扰时段、无热点/异常额外开关，不按旧蓝图凭空增加字段 |
-| PC-PASSWORD | POST /me/password `{current_password,new_password}`；确认值只本地比较，成功replace/login | 三输入required/minlength12；不新增身份流程。当前无busy保护，错误notice沿actionHint |
+| PC-PASSWORD | POST /me/password `{current_password,new_password}`；确认值只本地比较，成功replace/login | 三输入required/minlength12；确认字段不发送；父级writesBusy阻止并行个人资料/偏好/改密/会话写入。具体会话失效范围以服务端行为为准；不新增身份流程 |
 | PC-REVOKE | DELETE /me/sessions/{id}；成功filter本地sessions | 当前未按session.status过滤撤销按钮，无二次确认弹窗；真实会话撤销只能用隔离身份验 |
 | HD-CREATE-RULE | POST /trends/monitoring-rules，7输入生成name/include_keywords/negative_keywords/market/language/category/notification_channel/collection_interval_minutes/recommendation_min_source_count | 关键词按英文逗号、中文逗号或换行拆分，trim并去空，不自行去重。空名称用首关键词，空分类null，渠道in_app，语言按市场现有映射 |
 | HD-RESUME | PATCH /trends/monitoring-rules/{id}：status=enabled、expected_version、原collection_interval_minutes和recommendation_min_source_count | 仅暂停目录第一条；前端不可擅自扩为全部恢复。成功重读首页/规则，不表示采集已完成 |
