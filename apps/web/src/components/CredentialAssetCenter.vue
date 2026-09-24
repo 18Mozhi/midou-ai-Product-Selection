@@ -8,6 +8,7 @@ import {
   onMounted,
   reactive,
   ref,
+  useId,
   watch,
 } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
@@ -68,6 +69,8 @@ interface Provider {
   access_mode: string;
 }
 const props = defineProps<{ apiBaseUrl: string }>(),
+  fieldIdPrefix = useId(),
+  nativeFieldErrors = reactive<Record<string, string>>({}),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   assets = ref<Asset[]>([]),
@@ -129,6 +132,39 @@ const {
   () => Boolean(editor.value),
   () => closeEditor(),
 );
+function nativeFieldErrorId(field: string) {
+  return `${fieldIdPrefix}-${field.replaceAll(".", "-")}-error`;
+}
+function nativeFieldLabelId(field: string) {
+  return `${fieldIdPrefix}-${field.replaceAll(".", "-")}-label`;
+}
+function nativeFieldHelperId(field: string) {
+  return `${fieldIdPrefix}-${field.replaceAll(".", "-")}-help`;
+}
+function nativeFieldDescribedBy(field: string, helperId?: string) {
+  return [helperId, nativeFieldErrors[field] ? nativeFieldErrorId(field) : ""]
+    .filter(Boolean)
+    .join(" ");
+}
+function clearNativeFieldErrors() {
+  for (const field of Object.keys(nativeFieldErrors)) delete nativeFieldErrors[field];
+}
+function captureNativeFieldError(event: Event) {
+  const control = event.target;
+  if (
+    !(control instanceof HTMLInputElement || control instanceof HTMLSelectElement) ||
+    control.validity.valid
+  )
+    return;
+  const field = control.dataset.fieldError;
+  if (field) nativeFieldErrors[field] = control.validationMessage || "请检查此字段。";
+}
+function updateNativeFieldError(field: string, event: Event) {
+  const control = event.target;
+  if (!(control instanceof HTMLInputElement || control instanceof HTMLSelectElement)) return;
+  if (control.validity.valid) delete nativeFieldErrors[field];
+  else nativeFieldErrors[field] = control.validationMessage || "请检查此字段。";
+}
 const failure = (s: number): State =>
     s === 401
       ? "expired"
@@ -295,6 +331,7 @@ function invalidateLoginMaterial() {
 }
 function finishCloseEditor() {
   editorGeneration += 1;
+  clearNativeFieldErrors();
   invalidateLoginMaterial();
   editor.value = null;
   selected.value = null;
@@ -337,6 +374,7 @@ function trapEditorFocus(event: KeyboardEvent) {
 }
 function openAsset() {
   if (writeBusy.value) return;
+  clearNativeFieldErrors();
   editorGeneration += 1;
   editor.value = "asset";
   selected.value = null;
@@ -353,6 +391,7 @@ function openAsset() {
 }
 function openRotate(asset: Asset) {
   if (writeBusy.value) return;
+  clearNativeFieldErrors();
   editorGeneration += 1;
   editor.value = "rotate";
   selected.value = asset;
@@ -366,6 +405,7 @@ function openRotate(asset: Asset) {
 }
 function openProfile() {
   if (writeBusy.value) return;
+  clearNativeFieldErrors();
   editorGeneration += 1;
   editor.value = "profile";
   selected.value = null;
@@ -385,6 +425,7 @@ function openProfile() {
 }
 function openLogin(provider?: Provider) {
   if (writeBusy.value) return;
+  clearNativeFieldErrors();
   editorGeneration += 1;
   invalidateLoginMaterial();
   loginProvider.value = provider ?? loginProviders.value[0] ?? null;
@@ -1212,6 +1253,7 @@ onActivated(() => {
           v-if="editor === 'asset' || editor === 'rotate'"
           ref="editorPanel"
           class="credential-editor"
+          @invalid.capture="captureNativeFieldError"
           @keydown.tab="trapEditorFocus"
           @submit.prevent="saveAsset"
         >
@@ -1236,13 +1278,42 @@ onActivated(() => {
           </header>
           <div class="credential-fields">
             <label v-if="editor === 'asset'"
-              >所属来源<select v-model="assetForm.provider_id" required>
+              ><span :id="nativeFieldLabelId('asset.provider')">所属来源</span
+              ><select
+                v-model="assetForm.provider_id"
+                required
+                data-field-error="asset.provider"
+                :aria-labelledby="nativeFieldLabelId('asset.provider')"
+                :aria-describedby="nativeFieldDescribedBy('asset.provider')"
+                :aria-invalid="nativeFieldErrors['asset.provider'] ? 'true' : undefined"
+                @change="updateNativeFieldError('asset.provider', $event)"
+              >
                 <option value="" disabled>选择来源</option>
                 <option v-for="p in providers" :key="p.id" :value="p.id">
                   {{ p.name }}
-                </option>
-              </select></label
-            ><label v-if="editor === 'asset'">名称<input v-model="assetForm.name" required /></label
+                </option></select
+              ><small
+                v-if="nativeFieldErrors['asset.provider']"
+                :id="nativeFieldErrorId('asset.provider')"
+                class="credential-field-error"
+                >{{ nativeFieldErrors["asset.provider"] }}</small
+              ></label
+            ><label v-if="editor === 'asset'"
+              ><span :id="nativeFieldLabelId('asset.name')">名称</span
+              ><input
+                v-model="assetForm.name"
+                required
+                data-field-error="asset.name"
+                :aria-labelledby="nativeFieldLabelId('asset.name')"
+                :aria-describedby="nativeFieldDescribedBy('asset.name')"
+                :aria-invalid="nativeFieldErrors['asset.name'] ? 'true' : undefined"
+                @input="updateNativeFieldError('asset.name', $event)"
+              /><small
+                v-if="nativeFieldErrors['asset.name']"
+                :id="nativeFieldErrorId('asset.name')"
+                class="credential-field-error"
+                >{{ nativeFieldErrors["asset.name"] }}</small
+              ></label
             ><label v-if="editor === 'asset'"
               >类型<select v-model="assetForm.kind">
                 <option
@@ -1264,12 +1335,27 @@ onActivated(() => {
                 <option value="base64">文件编码</option>
               </select></label
             ><label class="secret"
-              >需要加密保存的内容<input
+              ><span :id="nativeFieldLabelId('asset.value')">需要加密保存的内容</span
+              ><input
                 v-model="assetForm.value"
                 type="password"
                 required
                 autocomplete="new-password"
-              /><small>仅本次写入；保存后立即从页面状态清除。</small></label
+                data-field-error="asset.value"
+                :aria-labelledby="nativeFieldLabelId('asset.value')"
+                :aria-describedby="
+                  nativeFieldDescribedBy('asset.value', nativeFieldHelperId('asset.value'))
+                "
+                :aria-invalid="nativeFieldErrors['asset.value'] ? 'true' : undefined"
+                @input="updateNativeFieldError('asset.value', $event)"
+              /><small :id="nativeFieldHelperId('asset.value')"
+                >仅本次写入；保存后立即从页面状态清除。</small
+              ><small
+                v-if="nativeFieldErrors['asset.value']"
+                :id="nativeFieldErrorId('asset.value')"
+                class="credential-field-error"
+                >{{ nativeFieldErrors["asset.value"] }}</small
+              ></label
             ><label
               >到期时间（可选）<input v-model="assetForm.expires_at" type="datetime-local"
             /></label>
@@ -1290,6 +1376,7 @@ onActivated(() => {
           v-if="editor === 'profile'"
           ref="editorPanel"
           class="credential-editor"
+          @invalid.capture="captureNativeFieldError"
           @keydown.tab="trapEditorFocus"
           @submit.prevent="saveProfile"
         >
@@ -1310,28 +1397,96 @@ onActivated(() => {
           </header>
           <div class="credential-fields">
             <label
-              >网页登录档案<select
+              ><span :id="nativeFieldLabelId('profile.asset')">网页登录档案</span
+              ><select
                 v-model="profileForm.credential_asset_id"
                 required
+                data-field-error="profile.asset"
+                :aria-labelledby="nativeFieldLabelId('profile.asset')"
+                :aria-describedby="nativeFieldDescribedBy('profile.asset')"
+                :aria-invalid="nativeFieldErrors['profile.asset'] ? 'true' : undefined"
                 @change="
                   profileForm.provider_id =
                     browserAssets.find((x) => x.id === profileForm.credential_asset_id)
-                      ?.provider_id ?? ''
+                      ?.provider_id ?? '';
+                  updateNativeFieldError('profile.asset', $event);
                 "
               >
                 <option value="" disabled>选择加密档案</option>
                 <option v-for="a in browserAssets" :key="a.id" :value="a.id">
                   {{ a.name }}
-                </option>
-              </select></label
+                </option></select
+              ><small
+                v-if="nativeFieldErrors['profile.asset']"
+                :id="nativeFieldErrorId('profile.asset')"
+                class="credential-field-error"
+                >{{ nativeFieldErrors["profile.asset"] }}</small
+              ></label
             ><label
-              >内部标识<input
+              ><span :id="nativeFieldLabelId('profile.code')">内部标识</span
+              ><input
                 v-model="profileForm.code"
                 required
-                pattern="[a-z0-9_]{2,80}" /></label
-            ><label>名称<input v-model="profileForm.name" required /></label
-            ><label>页面语言<input v-model="profileForm.locale" required /></label
-            ><label>所在时区<input v-model="profileForm.timezone" required /></label
+                pattern="[a-z0-9_]{2,80}"
+                data-field-error="profile.code"
+                :aria-labelledby="nativeFieldLabelId('profile.code')"
+                :aria-describedby="nativeFieldDescribedBy('profile.code')"
+                :aria-invalid="nativeFieldErrors['profile.code'] ? 'true' : undefined"
+                @input="updateNativeFieldError('profile.code', $event)"
+              /><small
+                v-if="nativeFieldErrors['profile.code']"
+                :id="nativeFieldErrorId('profile.code')"
+                class="credential-field-error"
+                >{{ nativeFieldErrors["profile.code"] }}</small
+              ></label
+            ><label
+              ><span :id="nativeFieldLabelId('profile.name')">名称</span
+              ><input
+                v-model="profileForm.name"
+                required
+                data-field-error="profile.name"
+                :aria-labelledby="nativeFieldLabelId('profile.name')"
+                :aria-describedby="nativeFieldDescribedBy('profile.name')"
+                :aria-invalid="nativeFieldErrors['profile.name'] ? 'true' : undefined"
+                @input="updateNativeFieldError('profile.name', $event)"
+              /><small
+                v-if="nativeFieldErrors['profile.name']"
+                :id="nativeFieldErrorId('profile.name')"
+                class="credential-field-error"
+                >{{ nativeFieldErrors["profile.name"] }}</small
+              ></label
+            ><label
+              ><span :id="nativeFieldLabelId('profile.locale')">页面语言</span
+              ><input
+                v-model="profileForm.locale"
+                required
+                data-field-error="profile.locale"
+                :aria-labelledby="nativeFieldLabelId('profile.locale')"
+                :aria-describedby="nativeFieldDescribedBy('profile.locale')"
+                :aria-invalid="nativeFieldErrors['profile.locale'] ? 'true' : undefined"
+                @input="updateNativeFieldError('profile.locale', $event)"
+              /><small
+                v-if="nativeFieldErrors['profile.locale']"
+                :id="nativeFieldErrorId('profile.locale')"
+                class="credential-field-error"
+                >{{ nativeFieldErrors["profile.locale"] }}</small
+              ></label
+            ><label
+              ><span :id="nativeFieldLabelId('profile.timezone')">所在时区</span
+              ><input
+                v-model="profileForm.timezone"
+                required
+                data-field-error="profile.timezone"
+                :aria-labelledby="nativeFieldLabelId('profile.timezone')"
+                :aria-describedby="nativeFieldDescribedBy('profile.timezone')"
+                :aria-invalid="nativeFieldErrors['profile.timezone'] ? 'true' : undefined"
+                @input="updateNativeFieldError('profile.timezone', $event)"
+              /><small
+                v-if="nativeFieldErrors['profile.timezone']"
+                :id="nativeFieldErrorId('profile.timezone')"
+                class="credential-field-error"
+                >{{ nativeFieldErrors["profile.timezone"] }}</small
+              ></label
             ><label
               >状态<select v-model="profileForm.status">
                 <option value="disabled">先停用</option>

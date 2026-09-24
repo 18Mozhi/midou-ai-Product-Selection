@@ -1701,3 +1701,60 @@ test("UI2-SC50 settles an in-flight login chain into a replacement evicted page"
     providerReads: 3,
   });
 });
+
+test("UI2-SC50 native field errors are visible, associated and cleared when corrected", async ({
+  page,
+}) => {
+  await nav(page);
+  let assetWrites = 0,
+    profileWrites = 0;
+  await page.route("**/api/v1/platform/credential-assets", async (route) => {
+    if (route.request().method() === "POST") {
+      assetWrites += 1;
+      await route.fulfill({ json: { data: asset, request_id: "ui2-native-asset-write" } });
+      return;
+    }
+    await route.fulfill({ json: { data: [asset], request_id: "ui2-native-assets" } });
+  });
+  await page.route("**/api/v1/platform/crawler-profiles", async (route) => {
+    if (route.request().method() === "POST") {
+      profileWrites += 1;
+      await route.fulfill({ json: { data: profile, request_id: "ui2-native-profile-write" } });
+      return;
+    }
+    await route.fulfill({ json: { data: [profile], request_id: "ui2-native-profiles" } });
+  });
+  await page.goto("/platform-admin/credentials");
+
+  await page.getByRole("button", { name: "新建凭证资产", exact: true }).click();
+  let dialog = page.getByRole("dialog", { name: "创建凭证资产" });
+  const assetName = dialog.getByLabel("名称");
+  await dialog.getByLabel("需要加密保存的内容").fill("synthetic-validation-only");
+  await dialog.getByRole("button", { name: "加密保存", exact: true }).click();
+  await expect(assetName).toHaveAttribute("aria-invalid", "true");
+  const assetErrorId = await assetName.getAttribute("aria-describedby");
+  expect(assetErrorId).toBeTruthy();
+  const assetError = dialog.locator(`#${assetErrorId}`);
+  await expect(assetError).toBeVisible();
+  expect((await assetError.textContent())?.trim()).toBeTruthy();
+  await assetName.fill("修正后的资料名称");
+  await expect(assetName).not.toHaveAttribute("aria-invalid", "true");
+  await expect(assetError).toHaveCount(0);
+  await dialog.getByRole("button", { name: "取消", exact: true }).click();
+
+  await page.getByRole("button", { name: "关联运行档案", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "创建浏览器档案引用" });
+  const profileCode = dialog.getByLabel("内部标识");
+  await profileCode.fill("Invalid-Code");
+  await dialog.getByRole("button", { name: "保存档案引用", exact: true }).click();
+  await expect(profileCode).toHaveAttribute("aria-invalid", "true");
+  const profileErrorId = await profileCode.getAttribute("aria-describedby");
+  expect(profileErrorId).toBeTruthy();
+  const profileError = dialog.locator(`#${profileErrorId}`);
+  await expect(profileError).toBeVisible();
+  expect((await profileError.textContent())?.trim()).toBeTruthy();
+  await profileCode.fill("sc50_valid_code");
+  await expect(profileCode).not.toHaveAttribute("aria-invalid", "true");
+  await expect(profileError).toHaveCount(0);
+  expect({ assetWrites, profileWrites }).toEqual({ assetWrites: 0, profileWrites: 0 });
+});
