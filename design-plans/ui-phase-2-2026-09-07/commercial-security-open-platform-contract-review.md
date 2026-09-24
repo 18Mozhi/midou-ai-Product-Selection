@@ -318,3 +318,23 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 | apps/web/src/components/OpenActionReasonDialog.vue | 74d65b519372cb12d6741eb348a9b2af46470929eea887d709796dace1db5370 |
 
 本节不增加独立业务动作或API分母，不改变P60原有各动作的原因、权限、幂等、审计或投递合同。
+
+## 9. P60 OpenCreateDialog 当前共享创建容器源码归属（2026-09-24）
+
+`OpenPlatformCenter` 仅在Client或Webhook目录中挂载此容器，并把实际表单通过slot交给父组件；提交按钮与`createClient`/`createWebhook`处理器均在父组件，不归容器自身候选。容器负责打开填写窗、关闭或返回确认阶段时的可见性与焦点恢复，不发送业务请求。
+
+### apps/web/src/components/OpenCreateDialog.vue
+
+| 当前签名.序号 | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| 24ed67fc4fde89dc.1 | 67 | control | OP60-CREATE-SHELL-OPEN / busy或confirming时禁用的创建填写窗入口 |
+| 6caef609abb1cdd7.1 | 77 | dialog-definition | OP60-CREATE-SHELL-STRUCTURE / 原生dialog承载父级插入的Client或Webhook表单 |
+| 355e5e6680a52d74.1 | 77 | event-binding | OP60-CREATE-SHELL-KEYBOARD / 拦截原生cancel并委派关闭、限制Tab在可见控件内循环 |
+| 23ff26da119e7159.1 | 90 | control | OP60-CREATE-SHELL-CLOSE / 显式关闭入口并返回打开按钮焦点 |
+| 44452d54f6549a74.1 | 13 | dialog-script-call | OP60-CREATE-SHELL-OPEN / 通过原生showModal打开并将焦点置于首个输入 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/OpenCreateDialog.vue | 165d6b784316b4a9ff88d0e8490d0abc21103c1fe7ec9c03e321d74f892b1261 |
+
+本节只登记该组件当前5个静态源码身份。`confirming`阶段关闭/重开与字段焦点保存是容器状态衔接，不等于父级创建成功或失败；P60创建字段、校验、API、幂等和审计仍按本合同已有边界审查，不由本组件映射替代。
