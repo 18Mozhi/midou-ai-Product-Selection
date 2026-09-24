@@ -280,3 +280,19 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | apps/web/src/components/BackupRecoveryCenter.vue | f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de |
 
 旧第6节整表已明确是原始源码快照，按历史范围保留，不能覆盖本节当前指纹。映射不扩大页面能力：页面仍只读真实恢复事实，不由按钮文字推断恢复可执行、真实权限或数据库验收。
+
+## 10. P64 BackupRecoveryDirectory 页内导航归属（2026-09-24）
+
+`BackupRecoveryCenter`仅在已有读取数据时挂载本目录。三个原生锚点分别导航到同一页的目标/实际、恢复证据和备份资产区域；只改变浏览器文档内位置，不调用API、不执行备份或恢复。组件此前未被Feature Map的M07-04入口文件表列出，本批一并补记该直接导入的子组件。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/BackupRecoveryDirectory.vue#cbe3ce9e478ff362.1 | 10 | control | BR64-DIRECTORY-CURRENT-NAV / 跳转本页目标与实际锚点 |
+| apps/web/src/components/BackupRecoveryDirectory.vue#6b6da7e2248b5970.1 | 11 | control | BR64-DIRECTORY-CURRENT-NAV / 跳转本页恢复证据锚点 |
+| apps/web/src/components/BackupRecoveryDirectory.vue#90f85112b27af94e.1 | 12 | control | BR64-DIRECTORY-CURRENT-NAV / 跳转本页备份资产锚点 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/BackupRecoveryDirectory.vue | 0539b4adcbf1793d337dbefff0ccfa36d45295f1d35d8ac0c4f3e8bac1e237b7 |
+
+静态归属不验证真实备份、恢复、审计、权限、焦点/滚动表现或生产状态。

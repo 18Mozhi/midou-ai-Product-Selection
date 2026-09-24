@@ -2606,7 +2606,8 @@
         "../apps/api/src/backup-recovery-service.ts",
         "../apps/api/src/mysql-backup-recovery-repository.ts",
         "../apps/api/src/backup-recovery-routes.ts",
-        "../apps/web/src/components/BackupRecoveryCenter.vue"
+        "../apps/web/src/components/BackupRecoveryCenter.vue",
+        "../apps/web/src/components/BackupRecoveryDirectory.vue"
       ],
       "routes": ["/platform-admin/operations", "/api/v1/platform/operations/backup-recovery"],
       "scope": "MySQL evidence export and non-secret config encrypted backups on the current Huizhou host with a separate encrypted recovery root",

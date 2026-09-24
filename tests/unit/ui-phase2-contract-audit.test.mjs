@@ -2220,6 +2220,45 @@ test("current P57 notification management maps its four child event boundaries",
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current P64 recovery directory maps all three same-page anchor links", () => {
+  const file = "apps/web/src/components/BackupRecoveryDirectory.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const document = "log-backup-release-contract-review.md";
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const currentRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.claim.includes("BR64-DIRECTORY-CURRENT-NAV") &&
+      record.temporalScope !== "historical",
+  );
+  const expectedIds = ["cbe3ce9e478ff362.1", "6b6da7e2248b5970.1", "90f85112b27af94e.1"].map(
+    (signature) => `${file}#${signature}`,
+  );
+  assert.equal(candidates.length, 3);
+  assert.deepEqual(currentRows.map((record) => record.candidateId).sort(), expectedIds.sort());
+  for (const record of currentRows) {
+    const candidate = candidates.find((item) => item.candidateId === record.candidateId);
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.currentLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedKind, candidate?.kind, record.candidateId);
+  }
+  const hashes = report.sourceClaims.filter(
+    (claim) => claim.document.endsWith(document) && claim.file === file,
+  );
+  assert.equal(hashes.length, 1);
+  assert.equal(hashes[0]?.hash, digest(source));
+  assert.equal(hashes[0]?.status, "hash-current");
+  assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],
