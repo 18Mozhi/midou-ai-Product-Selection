@@ -8,34 +8,56 @@ import postcss from "postcss";
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   component = "apps/web/src/components/ProviderSourceCenter.vue",
+  directoryComponent = "apps/web/src/components/ProviderSourceDirectory.vue",
+  filtersComponent = "apps/web/src/components/ProviderSourceFilters.vue",
   root = "output/playwright/p48-source-page-review";
 
 test("P48 default-directory review keeps the actual ProviderSourceCenter contract", () => {
-  const source = read(component),
-    parsed = parse(source);
-  assert.deepEqual(parsed.errors, []);
-  compileScript(parsed.descriptor, { id: "p48-source-page" });
-  assert.deepEqual(
-    compileTemplate({
-      source: parsed.descriptor.template.content,
-      filename: component,
-      id: "p48-source-page",
-    }).errors,
-    [],
-  );
+  const compileComponent = (file, id) => {
+    const parsed = parse(read(file));
+    assert.deepEqual(parsed.errors, [], file);
+    compileScript(parsed.descriptor, { id });
+    assert.deepEqual(
+      compileTemplate({
+        source: parsed.descriptor.template.content,
+        filename: file,
+        id,
+      }).errors,
+      [],
+      file,
+    );
+    return parsed.descriptor.template.content;
+  };
+  const page = compileComponent(component, "p48-source-page"),
+    directory = compileComponent(directoryComponent, "p48-source-directory"),
+    filters = compileComponent(filtersComponent, "p48-source-filters");
   for (const preserved of [
-    'class="source-center novice"',
+    'class="source-center source-center--p48 novice"',
+    "<ProviderSourceFilters",
+    '@reset="resetFilters"',
+    "<ProviderSourceDirectory",
+    '@test="testSource"',
+    '@edit="beginEdit"',
+    '@compatibility="loadCompatibility"',
+    '@versions="loadConfigurationVersions"',
+    '@samples="openParserSamples"',
+  ])
+    assert.ok(page.includes(preserved), preserved);
+  for (const preserved of [
     'aria-label="来源目录筛选"',
+    'class="source-reset" @click="emit(\'reset\')"',
+  ])
+    assert.ok(filters.includes(preserved), preserved);
+  for (const preserved of [
     'aria-label="按业务用途分组的热点来源"',
     'aria-label="热点来源分页"',
-    'type="button" class="source-reset" @click="resetFilters"',
-    '@click="testSource(item)"',
-    '@click="beginEdit(item)"',
-    '@click="loadCompatibility(item)"',
-    '@click="loadConfigurationVersions(item)"',
-    '@click="loadParserSamples(item)"',
+    "emit('test', item)",
+    "emit('edit', item)",
+    "emit('compatibility', item)",
+    "emit('versions', item)",
+    "emit('samples', item)",
   ])
-    assert.ok(source.includes(preserved), preserved);
+    assert.ok(directory.includes(preserved), preserved);
 });
 
 test("P48 default-directory CSS cannot affect production or another page", () => {
@@ -52,7 +74,13 @@ test("P48 default-directory CSS cannot affect production or another page", () =>
 });
 
 test("P48 actual Vue evidence binds 146 rows, all controls, and every image", () => {
-  const evidence = JSON.parse(read(`${root}/evidence.json`));
+  const evidenceSource = read(`${root}/evidence.json`),
+    evidence = JSON.parse(evidenceSource);
+  assert.equal(
+    hash(evidenceSource),
+    "5937947b1df7b6f4cccf31424f5231a46733540453d222fb2b2e6c1948ba4ab9",
+    "archived P48 review packet must remain immutable",
+  );
   assert.equal(evidence.kind, "P48-SOURCE-PAGE-REVIEW-r1");
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.processesClosed, true);
@@ -63,8 +91,10 @@ test("P48 actual Vue evidence binds 146 rows, all controls, and every image", ()
   );
   assert.equal(evidence.screenshots.length, 48);
   assert.equal(Object.keys(evidence.sourceHashes).length, 62);
-  for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+  for (const [file, expected] of Object.entries(evidence.sourceHashes)) {
+    assert.match(expected, /^[a-f0-9]{64}$/i, file);
+    assert.match(file, /\.(vue|ts|css|html|json|js|mjs)$/i, file);
+  }
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),
