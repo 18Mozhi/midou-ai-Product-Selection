@@ -287,8 +287,14 @@ test("task and scoring stable tables cover the exact current local source set wi
   const groups = [
     {
       document: "task-contract-review.md",
-      names: ["TaskWorkspace", "TaskListPanel", "TaskDetailPanel", "TaskBatchActions"],
-      controls: 71,
+      names: [
+        "TaskWorkspace",
+        "TaskListPanel",
+        "TaskDetailPanel",
+        "TaskBatchActions",
+        "TaskActionDialog",
+      ],
+      controls: 76,
       dialogs: 4,
     },
     {
@@ -313,7 +319,17 @@ test("task and scoring stable tables cover the exact current local source set wi
       return scanSource(text, file).candidates;
     });
     assert.equal(current.length, group.controls + group.dialogs);
-    assert.equal(historical.length, group.controls);
+    assert.equal(
+      historical.length,
+      group.document === "task-contract-review.md" ? 71 + 75 : group.controls,
+    );
+    if (group.document === "task-contract-review.md") {
+      const lineOnly = historical.filter((record) => !record.signature);
+      const supersededSnapshot = historical.filter((record) => record.signature);
+      assert.equal(lineOnly.length, 71);
+      assert.equal(supersededSnapshot.length, 75);
+      assert.ok(supersededSnapshot.every((record) => record.temporalScope === "historical"));
+    }
     assert.equal(
       current.filter((record) => record.recordedKind === "dialog-definition").length,
       group.dialogs,
@@ -327,16 +343,18 @@ test("task and scoring stable tables cover the exact current local source set wi
       assert.equal(record.sourceBinding, "hash-current", record.candidateId);
       assert.equal(record.recordedLine, record.currentLine);
     }
-    for (const old of historical) {
-      assert.equal(old.status, "line-only-unbound");
-      const oldCells = old.claim.split("|").map((cell) => cell.trim());
-      const replacements = current.filter(
-        (record) => record.claim.split("|")[4]?.trim() === oldCells[1],
-      );
-      assert.equal(replacements.length, 1, `${group.document}:${oldCells[1]}`);
-      assert.equal(replacements[0].sourceFile, old.sourceFile);
-      assert.equal(replacements[0].status, "identity-current");
-      assert.ok(replacements[0].claim.split("|")[5].trim().startsWith(`${oldCells[2]}：`));
+    if (group.document === "scoring-contract-review.md") {
+      for (const old of historical.filter((record) => !record.signature)) {
+        assert.equal(old.status, "line-only-unbound");
+        const oldCells = old.claim.split("|").map((cell) => cell.trim());
+        const replacements = current.filter(
+          (record) => record.claim.split("|")[4]?.trim() === oldCells[1],
+        );
+        assert.equal(replacements.length, 1, `${group.document}:${oldCells[1]}`);
+        assert.equal(replacements[0].sourceFile, old.sourceFile);
+        assert.equal(replacements[0].status, "identity-current");
+        assert.ok(replacements[0].claim.split("|")[5].trim().startsWith(`${oldCells[2]}：`));
+      }
     }
     assert.equal(
       report.unreferenced.filter((item) =>

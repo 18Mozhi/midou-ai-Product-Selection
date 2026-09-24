@@ -24,7 +24,7 @@ LF归一SHA256。六个候选文件完整扫描；辅助文件只沿相关调用
 | 文件 | SHA256 |
 | --- | --- |
 | apps/web/src/components/DiscoveryOverlay.vue | 2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977 |
-| apps/web/src/components/NavigationShell.vue | 01878e559a84192b08c4086b0d0f00d3b35d4e6f34b82c6fc9c66c2211366a6e |
+| apps/web/src/components/NavigationShell.vue | a4802ba4c400d15410cdf7093809f2c22b6ed63fabcd71597d7c02969378b955 |
 | apps/web/src/components/NotFoundPage.vue | 9ebbf97a724300fa2b17be2bc76973fe22abb14a290d84222915c09b7e2f44b7 |
 | apps/web/src/components/OrganizationRolePanel.vue | aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415 |
 | apps/web/src/components/UiStateShowcase.vue | 398e4c5ad69feb5259a69bc034ca6fdc98cf936426d3075637b253576d236ad3 |
@@ -38,6 +38,8 @@ LF归一SHA256。六个候选文件完整扫描；辅助文件只沿相关调用
 | apps/web/src/App.vue | e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531 |
 | apps/web/src/router.ts | 67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4 |
 | apps/api/src/discovery-routes.ts | 7c281090d8f7e76121b0abcdf1c88b40d066cdcad38f5d9a4e6e2df29d886579 |
+
+NavigationShell旧hash与提交 `065292d36001abc549a17e9f53ab90fc796e2415` 精确一致。对照该提交到当前HEAD的真实diff仅在平台管理页标题排除列表加入 `/platform-admin/files` 与 `/platform-admin/redis` 两项；这是P69/P67已记录的自有H1页面抑制，不改变上述70项候选签名，表内受影响候选仅顺延两行。当前hash及这11处行号按完整当前文件复核，不能据此声称新增页面行为已做端到端或生产验收。
 
 ## 3. 全70项稳定候选映射
 
@@ -82,17 +84,17 @@ LF归一SHA256。六个候选文件完整扫描；辅助文件只沿相关调用
 | apps/web/src/components/NavigationShell.vue#31a7202bbbcbf38a.1 | 537 | control | shell.gate.home | 导航读取forbidden去/home | UI2-SH01–SH06 |
 | apps/web/src/components/NavigationShell.vue#b83ca94093e36cba.1 | 538 | control | shell.gate.retry | 非loading且非前三类恢复链接时load()；重读/me/navigation | UI2-SH01–SH06 |
 | apps/web/src/components/NavigationShell.vue#be9e2c92e3dca900.1 | 543 | control | shell.breadcrumb.navigate | breadcrumbTrail产生path才可导航；无path只显示文本 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#827ec3c5575d94f5.1 | 597 | control | shell.context.disclose | 上下文原生details；非机会ID页面，响应式可见性另验 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#3a4be4a53966fde8.1 | 626 | control | shell.operations.navigate | 平台运维二级导航固定十项目；链接展示不代替目标路由权限 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#6d2a591c632f75fb.1 | 646 | control | shell.surface.missing.return | 无selectedSurfaceComponent时去items[0].path或/ | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#6ba08dfa7cf297ec.1 | 656 | control | shell.route.forbidden.return | ready但routeAllowed=false时去items[0].path或/home | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#5689a1a88f3983e9.1 | 657 | control | shell.route.forbidden.permissions | 导航/me?section=permissions，不直接申请或修改权限 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#155e2256621bdcb3.1 | 662 | control | shell.navigation.item | 移动primaryItems=items前四项；同导航语义的另一个渲染点，此处不清menuQuery | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#0b2e86222c168adc.1 | 668 | control | shell.menu.open | 移动更多仅设置menuOpen=true，不等于toggle | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#8c3e23399022ee54.1 | 679 | control | shell.theme.choose.{themeId} | 三主题动态按钮；member/org版本化保存，platform只本地应用；见主题边界 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#f8690b21af426414.1 | 694 | control | shell.theme.settings | 导航/settings/theme；此链接本身没有关闭themeOpen处理 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#c5cd954168e369ca.1 | 699 | event-binding | discovery.close | DiscoveryOverlay的close事件转closeDiscovery()，清discoveryMode | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#5e8a6b546ab251fb.1 | 699 | dialog-component-call | discovery.dialog | DiscoveryOverlay组件调用；搜索/创建两变体，与定义非重复业务弹窗 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#827ec3c5575d94f5.1 | 599 | control | shell.context.disclose | 上下文原生details；非机会ID页面，响应式可见性另验 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#3a4be4a53966fde8.1 | 628 | control | shell.operations.navigate | 平台运维二级导航固定十项目；链接展示不代替目标路由权限 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#6d2a591c632f75fb.1 | 648 | control | shell.surface.missing.return | 无selectedSurfaceComponent时去items[0].path或/ | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#6ba08dfa7cf297ec.1 | 658 | control | shell.route.forbidden.return | ready但routeAllowed=false时去items[0].path或/home | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#5689a1a88f3983e9.1 | 659 | control | shell.route.forbidden.permissions | 导航/me?section=permissions，不直接申请或修改权限 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#155e2256621bdcb3.1 | 664 | control | shell.navigation.item | 移动primaryItems=items前四项；同导航语义的另一个渲染点，此处不清menuQuery | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#0b2e86222c168adc.1 | 670 | control | shell.menu.open | 移动更多仅设置menuOpen=true，不等于toggle | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#8c3e23399022ee54.1 | 681 | control | shell.theme.choose.{themeId} | 三主题动态按钮；member/org版本化保存，platform只本地应用；见主题边界 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#f8690b21af426414.1 | 696 | control | shell.theme.settings | 导航/settings/theme；此链接本身没有关闭themeOpen处理 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#c5cd954168e369ca.1 | 701 | event-binding | discovery.close | DiscoveryOverlay的close事件转closeDiscovery()，清discoveryMode | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#5e8a6b546ab251fb.1 | 701 | dialog-component-call | discovery.dialog | DiscoveryOverlay组件调用；搜索/创建两变体，与定义非重复业务弹窗 | UI2-SH01–SH06 |
 
 ### apps/web/src/components/NotFoundPage.vue
 
