@@ -177,6 +177,25 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 
 静态映射不替代服务端或真实会话验收；当前撤销入口仍未按session.status隐藏非活动项且没有二次确认，保留为第3/5节所述待验行为。
 
+### 2.5 P11 PersonalNotificationsPanel 当前源码位置（2026-09-24）
+
+当前子面板将通知分区读取状态、五个通知偏好checkbox、受控表单提交交给父级。五项开关按一个循环模板候选记录，不把单个源码位置误算成五个独立源码候选；实际请求仍由父级/composable处理。后端对 `email_enabled=true` 的真实拒绝边界仍以本文件开篇及第3节合同为准，Vue中显示可选项不表示邮件服务可用或已投递。
+
+#### apps/web/src/components/personal-center/PersonalNotificationsPanel.vue
+
+| 当前签名.序号 | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| b393d51f01c0a4b5.1 | 28 | event-binding | PC-NOTIFY-CURRENT-READ / 呈现读取状态并将重试交给父级 |
+| 1f4978a7de74c364.1 | 37 | form-event | PC-NOTIFY-CURRENT-SAVE / 有已读偏好和草稿时阻止原生提交并转发保存意图 |
+| 0309f99060d6927c.1 | 49 | event-binding | PC-NOTIFY-CURRENT-OPTIONS / 循环呈现五项布尔偏好并向父级转发更新值 |
+| 76ed759dc2d23330.1 | 74 | control | PC-NOTIFY-CURRENT-SAVE / 提交既有偏好草稿；非ready或保存中禁用 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/personal-center/PersonalNotificationsPanel.vue | 1cfaa3f20d85c1d895e48ce7f535318662a8dbf375417ba55cb55b891b5f8e86 |
+
+此静态映射不改变通知API、开关字段或投递能力，不把本地checkbox更新视为已保存。
+
 五文件没有本地dialog定义/确认调用候选；资料、密码、通知、首页规则均为内联form。主题选择使用自定义radio按钮，不是v-model字段。PersonalCenter有15个v-model位置、HomeDashboard有7个，共22个输入位置；另邮箱是disabled展示输入。P12共享UiStatePanel在部分错误态生成secondary但调用方无监听，属于共享消费者缺口，不加进上述五文件51项分母。
 
 ## 3. 写入与状态连续性
