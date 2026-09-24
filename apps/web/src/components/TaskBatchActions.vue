@@ -29,6 +29,14 @@ const { dialogElement, handleCancel } = useModalDialog(
   () => emit("close"),
 );
 
+function handleDialogCancel(event: Event) {
+  if (props.busy) {
+    event.preventDefault();
+    return;
+  }
+  handleCancel(event);
+}
+
 const actionLabel = (action: BatchTaskAction) =>
   ({ pause: "暂停", resume: "继续", delay: "延期", transfer: "调整负责人", cancel: "取消" })[
     action
@@ -38,19 +46,22 @@ const actionLabel = (action: BatchTaskAction) =>
 <template>
   <div v-if="targets.length" class="task-batch-bar">
     <span>已选 {{ targets.length }} 项</span>
-    <button type="button" @click="$emit('start', 'pause')">批量暂停</button>
-    <button type="button" @click="$emit('start', 'resume')">批量继续</button>
-    <button type="button" @click="$emit('start', 'delay')">批量延期</button>
-    <button v-if="canAssign" type="button" @click="$emit('start', 'transfer')">
+    <button type="button" :disabled="busy" @click="$emit('start', 'pause')">批量暂停</button>
+    <button type="button" :disabled="busy" @click="$emit('start', 'resume')">批量继续</button>
+    <button type="button" :disabled="busy" @click="$emit('start', 'delay')">批量延期</button>
+    <button v-if="canAssign" type="button" :disabled="busy" @click="$emit('start', 'transfer')">
       批量调整负责人
     </button>
-    <button type="button" class="danger" @click="$emit('start', 'cancel')">批量取消</button>
+    <button type="button" class="danger" :disabled="busy" @click="$emit('start', 'cancel')">
+      批量取消
+    </button>
   </div>
   <dialog
     ref="dialogElement"
     class="task-batch-impact"
     aria-label="确认批量任务操作"
-    @cancel="handleCancel"
+    :aria-busy="busy"
+    @cancel="handleDialogCancel"
   >
     <form @submit.prevent="$emit('confirm')">
       <h3>确认批量{{ actionLabel(action) }}</h3>
@@ -81,6 +92,7 @@ const actionLabel = (action: BatchTaskAction) =>
           :value="reason"
           required
           maxlength="500"
+          :disabled="busy"
           @input="$emit('update:reason', ($event.target as HTMLTextAreaElement).value)"
         ></textarea>
       </label>
@@ -89,6 +101,7 @@ const actionLabel = (action: BatchTaskAction) =>
           :value="dueAt"
           type="datetime-local"
           required
+          :disabled="busy"
           @input="$emit('update:dueAt', ($event.target as HTMLInputElement).value)"
         />
       </label>
@@ -97,6 +110,7 @@ const actionLabel = (action: BatchTaskAction) =>
         <select
           :value="assigneeId"
           required
+          :disabled="busy"
           @change="$emit('update:assigneeId', ($event.target as HTMLSelectElement).value)"
         >
           <option value="">请选择当前工作区成员</option>
@@ -106,8 +120,8 @@ const actionLabel = (action: BatchTaskAction) =>
         </select>
       </label>
       <div>
-        <button type="button" @click="$emit('close')">返回</button
-        ><button :disabled="busy || !eligible.length">确认执行</button>
+        <button type="button" :disabled="busy" @click="$emit('close')">返回</button
+        ><button :disabled="busy || !eligible.length">{{ busy ? "正在执行…" : "确认执行" }}</button>
       </div>
     </form>
   </dialog>

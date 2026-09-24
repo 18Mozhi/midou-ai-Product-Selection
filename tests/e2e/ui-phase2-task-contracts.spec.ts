@@ -180,6 +180,60 @@ for (const [action, label, eligible] of [
   });
 }
 
+test("UI2-T04 batch submission is single-flight and keeps its confirmed action snapshot", async ({
+  page,
+}) => {
+  await setup(page);
+  const writes: { path: string; body: unknown }[] = [];
+  let releaseFirst!: () => void;
+  const firstRequest = new Promise<void>((resolve) => {
+    releaseFirst = resolve;
+  });
+  await page.route("**/api/v1/tasks/*/actions", async (route) => {
+    writes.push({
+      path: new URL(route.request().url()).pathname,
+      body: route.request().postDataJSON(),
+    });
+    if (writes.length === 1) await firstRequest;
+    await route.fulfill({ json: env({ ...task, version: 3 }) });
+  });
+  await page.goto("/tasks");
+  await page.getByRole("checkbox", { name: "选择本页 2 项" }).check();
+  await page.getByRole("button", { name: "批量取消" }).click();
+  const dialog = page.getByRole("dialog", { name: "确认批量任务操作" });
+  const reasonField = dialog.getByLabel("操作原因");
+  await reasonField.fill("确认时的批量取消原因");
+  await dialog.getByRole("button", { name: "确认执行" }).click();
+  await expect.poll(() => writes.length).toBe(1);
+
+  await expect(reasonField).toBeDisabled();
+  await expect(dialog.getByRole("button", { name: "返回" })).toBeDisabled();
+  await expect(dialog.getByRole("button", { name: "正在执行…" })).toBeDisabled();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeVisible();
+  await dialog
+    .locator("form")
+    .evaluate((form) =>
+      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })),
+    );
+  await expect.poll(() => writes.length).toBe(1);
+
+  releaseFirst();
+  await expect(page.locator(".task-notice")).toContainText(
+    "批量操作完成 2 项，失败 0 项，跳过 0 项",
+  );
+  expect(writes).toEqual([
+    {
+      path: `/api/v1/tasks/${taskId}/actions`,
+      body: { action: "cancel", expected_version: 2, reason: "确认时的批量取消原因" },
+    },
+    {
+      path: "/api/v1/tasks/00000000-0000-4000-8000-000000000807/actions",
+      body: { action: "cancel", expected_version: 1, reason: "确认时的批量取消原因" },
+    },
+  ]);
+});
+
 test("UI2-T05 work filters preserve mine and return restores the exact list URL", async ({
   page,
 }) => {

@@ -1,5 +1,9 @@
 # 第二阶段实施记录
 
+## 2026-09-24 · P13 批量操作快照与单飞保护
+
+关闭 P13 已记录的批量 `confirmBatch` 可在逐项请求之间继续读取可变 action/原因，且无函数级 busy guard 的缺口。提交时固定目标 ID/版本、action、原因、期限、负责人和计数；执行中禁用批量入口和字段、阻止返回/Escape，并以处理中状态反馈。实际 Vue 重复 submit/关闭/输入冻结 E2E 桌面与390px各1/1；任务合同、KeepAlive缓存归属和 M05 页面完整相关回归桌面/手机各44/44；预览/合同单测3/3、类型、构建通过。未改变 API、服务端幂等、权限/任务状态机或数据库；真实 RBAC/DB与正式 M07-03仍待。详见[P13生产实施](P13-PAGE-COMPOSITION-IMPLEMENTATION.md)。
+
 ## 2026-09-24 · P46 必填字段语义补齐
 
 依照 ProviderRegistry 现有 `formErrors`，为16个固定必填字段补 `aria-required`；3个公开来源条款字段仅在公开接入模式且发布状态为启用时动态必填。可选健康检查 URL 不标必填，原 `novalidate`、业务校验、错误文字/关联、焦点、请求和保存门槛不变。新合同1/1、M03-01桌面/390px手机各3/3、Web类型、生产构建、153文件/73路由文档门、格式与diff检查通过。提交 `836967c4104b184dba7d08c01d3ab02715ba0e4f` 已推送；固定宝塔脚本返回 `deployed` 且生产 build SHA 一致。本轮仅静态前端，无需 Node/Python 重启；测试只走本地fixture，不触发保存，不能替代真实读屏器、RBAC或正式生产签收。详见[P46必填字段语义实施](P46-REQUIRED-FIELD-SEMANTICS-IMPLEMENTATION.md)。

@@ -655,7 +655,7 @@ async function submitTaskAction() {
   }
 }
 function previewBatch(action: BatchTaskAction) {
-  if (!canUpdate.value || (action === "transfer" && !canAssign.value)) return;
+  if (busy.value || !canUpdate.value || (action === "transfer" && !canAssign.value)) return;
   batchAction.value = action;
   batchReason.value = "";
   batchDueAt.value = "";
@@ -663,37 +663,42 @@ function previewBatch(action: BatchTaskAction) {
   showBatchImpact.value = true;
 }
 async function confirmBatch() {
+  if (busy.value || !canUpdate.value || (batchAction.value === "transfer" && !canAssign.value))
+    return;
+
+  const actionName = batchAction.value,
+    targetCount = batchTargets.value.length,
+    targets = batchEligible.value.map(({ id, version }) => ({ id, version })),
+    reason = batchReason.value.trim(),
+    dueAt = batchDueAt.value,
+    assigneeId = batchAssigneeId.value;
   if (
-    !batchEligible.value.length ||
-    (["pause", "cancel", "delay", "transfer"].includes(batchAction.value) &&
-      !batchReason.value.trim()) ||
-    (batchAction.value === "delay" && !batchDueAt.value) ||
-    (batchAction.value === "transfer" && !batchAssigneeId.value)
+    !targets.length ||
+    (["pause", "cancel", "delay", "transfer"].includes(actionName) && !reason) ||
+    (actionName === "delay" && !dueAt) ||
+    (actionName === "transfer" && !assigneeId)
   )
     return;
+
   busy.value = true;
   let completed = 0,
     failed = 0;
   try {
-    for (const task of batchEligible.value) {
+    for (const task of targets) {
       try {
         await api(`/tasks/${task.id}/actions`, {
           method: "POST",
           body: {
-            action: batchAction.value,
+            action: actionName,
             expected_version: task.version,
-            ...(["pause", "cancel"].includes(batchAction.value)
-              ? { reason: batchReason.value.trim() }
-              : {}),
-            ...(batchAction.value === "delay"
+            ...(["pause", "cancel"].includes(actionName) ? { reason } : {}),
+            ...(actionName === "delay"
               ? {
-                  reason: batchReason.value.trim(),
-                  due_at: new Date(batchDueAt.value).toISOString(),
+                  reason,
+                  due_at: new Date(dueAt).toISOString(),
                 }
               : {}),
-            ...(batchAction.value === "transfer"
-              ? { reason: batchReason.value.trim(), assignee_id: batchAssigneeId.value }
-              : {}),
+            ...(actionName === "transfer" ? { reason, assignee_id: assigneeId } : {}),
           },
         });
         completed += 1;
@@ -702,7 +707,7 @@ async function confirmBatch() {
         failed += 1;
       }
     }
-    notice.value = `批量操作完成 ${completed} 项，失败 ${failed} 项，跳过 ${batchTargets.value.length - batchEligible.value.length} 项；成功项均保留独立审计记录。`;
+    notice.value = `批量操作完成 ${completed} 项，失败 ${failed} 项，跳过 ${targetCount - targets.length} 项；成功项均保留独立审计记录。`;
     selectedIds.value = [];
     showBatchImpact.value = false;
     await load();

@@ -10,7 +10,10 @@ test("P13 review preserves the today task scope and original write controls", as
   assert.match(preview, /\/tasks\/summary/);
   assert.match(preview, /\/tasks\/member-options/);
   assert.match(preview, /expected_version/);
-  assert.match(preview, /action: batchAction\.value/);
+  assert.match(preview, /const actionName = batchAction\.value/);
+  assert.match(preview, /targets = batchEligible\.value\.map\(\(\{ id, version \}\)/);
+  assert.match(preview, /action: actionName/);
+  assert.match(preview, /if \(busy\.value \|\|/);
   assert.match(preview, /先决定下一项需要推进的工作/);
   assert.match(preview, /不等同于仅今天到期/);
   assert.match(preview, /TaskBatchActions/);
