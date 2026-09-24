@@ -261,3 +261,22 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | apps/web/src/components/CollectionOperationsConsole.vue#4640753c7de49660.1 | 1072 | dialog-component-call | CL52-BATCH / 破坏性影响确认共享调用；要求确认短语与影响勾选 |
 
 静态回归应核对当前29个candidateId、行号、类型及console当前hash；其中11个沿用第2节原语义并更新行号，本节补18个原先未归属位置。第2节剩余17个旧O身份因实际源码已无该签名，保持identity-not-found并不覆盖新分母。静态对账、源hash与历史隔离均不代表浏览器交互、服务端权限/审计、真实Worker重放或生产验收；第5/6节所有既有限制和CL-G退出条件仍有效。
+
+## 9. P53 CollectionRuntimeCenter 当前源码增量（2026-09-24）
+
+第2节R表中的4个仍存在身份继续沿用既有语义并由审计器标为line-moved；8个已不存在的旧签名保留追溯且不抵扣当前覆盖。本节补齐 `CollectionRuntimeCenter.vue` 当前另外8个位置。回收入口打开确认窗而非直接POST；筛选重置、分页及原生技术披露分别按当前实现登记。旧合同中的全局过期租约回收范围、结果未知后禁止重提、服务端授权及幂等语义保持不变。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/CollectionRuntimeCenter.vue#b3aff7d1ec82177c.1 | 417 | control | CL53-CURRENT-LOAD / 手动重读；刷新或回收中禁用 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#7287ecd28dcaceb5.1 | 420 | control | CL53-CURRENT-RECOVER / 打开过期租约全局回收确认；状态未知、无快照风险或忙碌时禁用 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#764f755fb3d8ba7c.1 | 553 | control | CL53-CURRENT-FILTER / 提交当前状态与搜索草稿；读写忙碌时禁用 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#06482162d2eef909.1 | 554 | control | CL53-CURRENT-FILTER / 恢复全部状态和空搜索并按第一页重读 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#7219dcd9d87bc4b0.1 | 680 | control | CL53-CURRENT-PAGE / 读取前页；首末边界或忙碌时禁用 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#28a360589b0e3c7f.1 | 688 | control | CL53-CURRENT-PAGE / 读取后页；服务端total_pages边界或忙碌时禁用 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#b917496c3d588d7b.1 | 700 | event-binding | CL53-CURRENT-RECOVER / 转发共享确认窗取消/确认至本页状态所有者 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#bc8824b8df3a0c77.1 | 700 | dialog-component-call | CL53-CURRENT-RECOVER / 共享确认窗声明仅回收服务端确认为过期的档案租约 |
+
+同一ConfirmDialog位置分别形成事件绑定和弹窗调用两个候选；因此本节8个候选落在7个不同源码位置。当前LF指纹仍以第8节对应文件行绑定，不重复制造哈希声明。
+
+以上仅为源位置和既有合同的静态对账，不是确认回收的真实端到端测试，也不改变生产爬虫运行态或部署状态。
