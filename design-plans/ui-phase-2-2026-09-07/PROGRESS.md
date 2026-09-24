@@ -3878,3 +3878,7 @@ P08 `/select-context` 组织与工作区 C 方向已接入真实 `TenancyChooser
 ## 2026-09-24 · F04b P10–P12 旧候选与当前摘要来源归属
 
 将 `account-home-contract-review.md` 的51条 2026-09-08 源候选行显式分入历史范围；为仍有效的 `HomeAutomationOverview` 五个导航/详情候选及 `AccountShell` 组织范围、面包屑入口登记当前行号、类型和 LF 指纹。保留现有页面合同与当前语义，不改生产 Vue、请求、权限或导航。审计总候选仍 1690/1690、0 未引用；当前作用域 `identity-not-found` 从207降至176，旧身份留在历史状态中。合同审计单测66/66、文档门153文件/73路由、格式及 `git diff --check` 通过。仅合同、审计分类、永久回归测试与进度记录变化，不需部署/重启；剩余旧身份仍需逐文件依据判断，G0未冻结，静态映射不等于动作/弹窗运行验收。
+
+## 2026-09-24 · P39 桌面全局侧栏展示边界
+
+将 `PlatformAccountDirectoryWorkspace.vue` 的桌面全局汇总和二级导航原样拆至 `PlatformAccountGlobalRail.vue`；子组件只接收只读 data/tab/route props，不创建请求或状态，目录父级仍持有筛选 v-model、行记录、状态和事件。同步 M06-01 Feature Map、P39 源候选/页面交互评审文件与精确指纹，保留视觉及路由行为不变。P39 两项候选/交互映射回归 3/3 通过；完整边界门仍需重跑，并已知另有 ProviderSourceCenter 超过 1000 行的独立既存问题。尚未部署，本批不改变 API、权限、数据库或运行配置。

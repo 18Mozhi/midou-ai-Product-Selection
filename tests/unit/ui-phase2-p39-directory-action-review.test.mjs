@@ -41,16 +41,21 @@ const context = {
   files: testFiles,
 };
 
-test("P39 maps its scoped 21 directory and organization-record source sites", () => {
+test("P39 maps its scoped 22 directory and organization-record source sites", () => {
   const result = validateActionReview(review, context);
-  assert.equal(result.sourceSites, 21);
+  assert.equal(result.sourceSites, 22);
   assert.equal(result.unmappedVisualSlots, 48);
   assert.equal(review.approval, "pending-user-review");
   assert.equal(
     candidates.filter((candidate) =>
       candidate.file.endsWith("PlatformAccountDirectoryWorkspace.vue"),
     ).length,
-    18,
+    16,
+  );
+  assert.equal(
+    candidates.filter((candidate) => candidate.file.endsWith("PlatformAccountGlobalRail.vue"))
+      .length,
+    3,
   );
   assert.equal(
     candidates.filter((candidate) => candidate.file.endsWith("PlatformOrganizationRecords.vue"))
@@ -61,10 +66,10 @@ test("P39 maps its scoped 21 directory and organization-record source sites", ()
 
 test("P39 reviews the exact local filters, responsive directories and proposal scenes", () => {
   const result = validateReviewSurfaces(review.surfaceReview, { sources, packages });
-  assert.equal(result.callerFiles, 2);
-  assert.equal(result.localModelBindings, 4);
+  assert.equal(result.callerFiles, 3);
+  assert.equal(result.localModelBindings, 6);
   assert.equal(result.callerContainers, 3);
   assert.equal(result.runtimeAcceptance, "unproven");
-  assert.match(review.compositionGaps.join(" "), /21个源码位置/u);
+  assert.match(review.compositionGaps.join(" "), /22个源码位置/u);
   assert.match(review.compositionGaps.join(" "), /六态映射.*分开/u);
 });

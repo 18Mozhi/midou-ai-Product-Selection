@@ -1,15 +1,15 @@
 # P39/P40/P43/P44 账号目录渲染源映射
 
-2026-09-24。`PlatformAccountCenter.vue` 将组织、用户、管理员目录的渲染委托给本组件；父级继续拥有路由/筛选、请求、权限数据、弹窗和写入。下表只登记当前组件内19个扫描候选，不把组件调用、表单提交或事件转发重复算作独立业务动作。候选签名按文件唯一；路由挂载和运行时变体仍以实际页面为准。
+2026-09-24。`PlatformAccountCenter.vue` 将组织、用户、管理员目录的渲染委托给本组件；父级继续拥有路由/筛选、请求、权限数据、弹窗和写入。`PlatformAccountGlobalRail.vue` 只呈现桌面侧栏的汇总与导航，接收只读数据。下表登记两个组件内19个扫描候选，不把组件调用、表单提交或事件转发重复算作独立业务动作。候选签名按文件唯一；路由挂载和运行时变体仍以实际页面为准。
 
 | 源文件 | 当前源码候选 | 语义合同 / 当前行为 |
 | --- | --- | --- |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 29448f61eb8ffc80.1 | PA-NAV-ORG · 管理员目录分支的组织管理导航 |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | ffed2dd7f439c4b0.1 | PA-NAV-USER · 管理员目录分支的用户管理导航 |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | e400286c7cd59e44.1 | PA-NAV-ADMIN · 管理员目录分支的管理员管理导航 |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 29448f61eb8ffc80.2 | PA-NAV-ORG · 非管理员目录分支的同一组织管理路径 |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | ffed2dd7f439c4b0.2 | PA-NAV-USER · 非管理员目录分支的同一用户管理路径 |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | e400286c7cd59e44.2 | PA-NAV-ADMIN · 非管理员目录分支的同一管理员管理路径 |
+| apps/web/src/components/PlatformAccountGlobalRail.vue | 29448f61eb8ffc80.1 | PA-NAV-ORG · 管理员/组织目录桌面侧栏的组织管理导航 |
+| apps/web/src/components/PlatformAccountGlobalRail.vue | ffed2dd7f439c4b0.1 | PA-NAV-USER · 管理员/组织目录桌面侧栏的用户管理导航 |
+| apps/web/src/components/PlatformAccountGlobalRail.vue | e400286c7cd59e44.1 | PA-NAV-ADMIN · 管理员/组织目录桌面侧栏的管理员管理导航 |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 29448f61eb8ffc80.1 | PA-NAV-ORG · overview分支的组织管理导航 |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | ffed2dd7f439c4b0.1 | PA-NAV-USER · overview分支的用户管理导航 |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | e400286c7cd59e44.1 | PA-NAV-ADMIN · overview分支的管理员管理导航 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | e9658d470d4cbeaf.1 | PA-FILTER · 搜索按钮触发表单提交，与表单读取归并 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 20080e701de7f5cb.1 | PA-RESET · 重置 query/status；无筛选或读取中时禁用 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 322a4ac62ce3a305.1 | PA-REFRESH · 首次读取失败时发出 load 重试 |
@@ -33,7 +33,8 @@
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | efb7e5343143c028294505450b8fb9b3b82867cf84576a0ce1ff83c23acb25d1 |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 35c8ce3d7f8aa2ef5cc1ee8ba69709bafc6c39054159181d06e00447998772b1 |
+| apps/web/src/components/PlatformAccountGlobalRail.vue | cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e |
 
 由 `scripts/audit-ui-phase2-contracts.mjs` 的只读合同扫描验证精确候选身份与源码哈希。源变更后必须按真实模板和 handler 更新映射；不可只刷新哈希。
 
