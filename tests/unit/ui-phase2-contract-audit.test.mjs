@@ -626,6 +626,50 @@ test("current platform notification center map covers its parent actions and chi
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current platform user detail map covers all live sites without trusting stale signatures", () => {
+  const file = "apps/web/src/components/PlatformUserDetailDialog.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const document = "platform-user-design-contract.md";
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const currentRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.currentLine !== null &&
+      record.claim.includes("PA43-CURRENT-"),
+  );
+  assert.equal(candidates.length, 15);
+  assert.deepEqual(
+    [...new Set(currentRows.map((record) => record.candidateId))].sort(),
+    candidates.map((candidate) => candidate.candidateId).sort(),
+  );
+  for (const record of currentRows) {
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.recordedLine, record.currentLine, record.candidateId);
+    assert.ok(record.recordedKind, record.candidateId);
+  }
+  const staleRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      !record.claim.includes("PA43-CURRENT-") &&
+      record.status === "identity-not-found",
+  );
+  assert.equal(staleRows.length, 7);
+  const claims = report.sourceClaims.filter(
+    (claim) => claim.document.endsWith(document) && claim.file === file,
+  );
+  assert.equal(claims.length, 1);
+  assert.equal(claims[0].hash, digest(source));
+  assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],

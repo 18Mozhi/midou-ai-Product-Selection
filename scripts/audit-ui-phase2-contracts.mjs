@@ -137,6 +137,9 @@ const history = {
   "platform-account-detail-contract-review.md": {
     historicalSections: ["5. 源码依据（LF SHA-256）"],
   },
+  "platform-account-contract-review.md": {
+    historicalSections: ["7. 源码指纹（LF SHA-256）"],
+  },
 };
 
 export function runContractAudit() {

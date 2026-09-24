@@ -46,6 +46,34 @@
 
 这四文件有9处v-model：A新建五字段+密码一字段，F组织/角色/原因三字段；父query/status另计。33候选包含4个dialog定义；多次渲染、转发与form/button不能简单相加为独立业务操作。
 
+### 1.1 2026-09-24 PlatformUserDetailDialog 当前源码映射
+
+上表V组保留1ad9db7时期身份用于追溯，不作为当前组件完整覆盖。本表逐项记录当前15个候选的身份、行号、种类和动作所有者；原数据接口、服务端权限、原因、幂等和审计语义不因源映射而改变。
+
+#### apps/web/src/components/PlatformUserDetailDialog.vue
+
+| 当前签名.序号 | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| 316970a74be81a74.1 | 44 | dialog-definition | PA43-CURRENT-DETAIL / 原生账号详情窗口定义 |
+| c396c48b2557ec90.1 | 44 | event-binding | PA43-CURRENT-CLOSE / Escape关闭并交给父级归属保护 |
+| 03bf338e0dc8663a.1 | 58 | control | PA43-CURRENT-SECTION / 滚动到组织关系分区 |
+| f575608b4ce38790.1 | 59 | control | PA43-CURRENT-SECTION / 滚动到平台权限分区 |
+| 04d8d432043cc06f.1 | 60 | control | PA43-CURRENT-SECTION / 滚动到登录安全分区 |
+| 2086f54419d742e3.1 | 69 | control | PA43-CURRENT-CLOSE / 工具栏关闭详情 |
+| 2964730aa12dbf82.1 | 115 | event-binding | PA43-CURRENT-MEMBERSHIP / 转发加入组织表单提交和当前用户ID |
+| d7a92de7086fdce6.1 | 148 | control | PA43-CURRENT-ROLE / 授予或撤销一个固定平台角色，busy/非活动账号禁用 |
+| 86b2bcafa2c5529c.1 | 185 | control | PA43-CURRENT-SESSION / 撤销单个活动会话 |
+| a187b4fc34f4ab4e.1 | 199 | control | PA43-CURRENT-STATUS / 停用或恢复登录 |
+| 8406f17273df6864.1 | 207 | control | PA43-CURRENT-PASSWORD / 打开既有强制改密确认流程 |
+| f1dd7ea535b03340.1 | 210 | control | PA43-CURRENT-SESSION / 撤销当前用户全部会话 |
+| 138b8370ecdca0d1.1 | 218 | control | PA43-CURRENT-CLOSE / 页尾关闭详情 |
+| 2a92366d39ac198e.1 | 226 | control | PA43-CURRENT-RETRY / 详情加载失败后重试现有读取 |
+| 02668382bdda9d3b.1 | 227 | control | PA43-CURRENT-CLOSE / 详情加载错误态关闭窗口 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformUserDetailDialog.vue | 87e0b0906fded03d7c5337dafa5e6bfc801a2367d12deb652cc36f0f88d32d9a |
+
 ## 2. 父级动作与真实写入
 
 | actionId | 当前入口/请求 | 成功与失败边界 |
