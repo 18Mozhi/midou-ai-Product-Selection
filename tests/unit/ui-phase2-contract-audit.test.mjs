@@ -709,6 +709,42 @@ test("current provider source filter map covers local query, facets, sorting and
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current home dashboard map covers all current routes, form actions and evidence disclosure", () => {
+  const file = "apps/web/src/components/HomeDashboard.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const document = "account-home-contract-review.md";
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const currentRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.currentLine !== null &&
+      record.claim.includes("HD-CURRENT-"),
+  );
+  assert.equal(candidates.length, 18);
+  assert.deepEqual(
+    [...new Set(currentRows.map((record) => record.candidateId))].sort(),
+    candidates.map((candidate) => candidate.candidateId).sort(),
+  );
+  for (const record of currentRows) {
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.recordedLine, record.currentLine, record.candidateId);
+    assert.ok(record.recordedKind, record.candidateId);
+  }
+  const claims = report.sourceClaims.filter(
+    (claim) => claim.document.endsWith(document) && claim.file === file,
+  );
+  assert.equal(claims.length, 1);
+  assert.equal(claims[0].hash, digest(source));
+  assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],

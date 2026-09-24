@@ -76,6 +76,37 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 | O#df3fb85e49a879f8.1 | 34 | HD-RULES | →`/trends?section=rules` |
 | O#07fccd037ce99d72.1 | 41 | HD-RUNTIME | 原生details→运行计数/时间，无请求 |
 
+### 2.1 P12 HomeDashboard 当前源码位置（2026-09-24）
+
+旧H行仍保留原语义历史；当前组件有18个扫描候选。以下表覆盖每个当前位置，包含读取恢复、路由入口、内联规则、列表路由和只读数据说明。对应的失败态和默认值仍按第3/5节标注为已知缺口，不以这份源映射代替修复或产品行为验收。
+
+#### H
+
+| 当前签名.序号 | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| 68febff0d855d919.1 | 267 | control | HD-CURRENT-READ / 已有快照读取失败时由用户显式重读 |
+| 2471b33884e5515b.1 | 270 | event-binding | HD-CURRENT-READ / UiStatePanel主操作事件转给首页load |
+| 5d17be0355b745f2.1 | 297 | control | HD-CURRENT-RULES / 打开既有规则页 |
+| 2fdb8b56f02fb5d4.1 | 300 | control | HD-CURRENT-OPPORTUNITIES / 查看完整推荐清单 |
+| 169dd3f4eac94585.1 | 303 | control | HD-CURRENT-START / 导航至独立创建选品流程 |
+| cb01c1a61d2872cd.1 | 318 | control | HD-CURRENT-RESUME / 仅恢复第一条已暂停规则；提交中禁用 |
+| 094ecf5aedd69025.1 | 326 | control | HD-CURRENT-SETUP / 在符合状态及能力条件时展开或收起本地首次设置表单 |
+| 473fa4f4d2c5e48b.1 | 335 | control | HD-CURRENT-RULES-READ / 规则读取错误时由有管理能力者重读 |
+| eb4229f8bc621174.1 | 336 | control | HD-CURRENT-RULES / 无管理能力时只提供规则页查看入口 |
+| 68febff0d855d919.2 | 340 | control | HD-CURRENT-READ / 首页/规则状态不完整时显式重新读取 |
+| 26550e015743f49c.1 | 346 | form-event | HD-CURRENT-CREATE / 受控首次规则表单阻止原生提交并调用既有createRule |
+| a3f78d5afc916240.1 | 435 | control | HD-CURRENT-CREATE / 表单提交按钮；提交中禁用 |
+| 8386b9138fc27b68.1 | 448 | control | HD-CURRENT-OPPORTUNITIES / 查看全部推荐数量对应的列表 |
+| 9a0707498a265485.1 | 452 | control | HD-CURRENT-RECOMMENDATION / 按服务端返回的item.route打开单条推荐 |
+| 673c9efc952a0fcb.1 | 478 | control | HD-CURRENT-CANDIDATES / 仅存在规则候选时进入候选进度视图 |
+| e7ad539389d8518c.1 | 483 | control | HD-CURRENT-EVIDENCE / 无推荐/规则候选且有待采集证据时进入采集进度视图 |
+| 7a7b103459397eaa.1 | 504 | control | HD-CURRENT-WORK / 使用本人事项或健康记录提供的原始路由 |
+| d033e930df518c8e.1 | 521 | control | HD-CURRENT-TRUTH / 原生details披露来源计数/时间和非自动采纳说明，不发请求 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/HomeDashboard.vue | 495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0 |
+
 五文件没有本地dialog定义/确认调用候选；资料、密码、通知、首页规则均为内联form。主题选择使用自定义radio按钮，不是v-model字段。PersonalCenter有15个v-model位置、HomeDashboard有7个，共22个输入位置；另邮箱是disabled展示输入。P12共享UiStatePanel在部分错误态生成secondary但调用方无监听，属于共享消费者缺口，不加进上述五文件51项分母。
 
 ## 3. 写入与状态连续性
