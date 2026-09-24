@@ -435,6 +435,27 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | A:a1d4481c811f2e52.1 | control / 183 | SC49-LOAD / 按既有读取流程重试 |
 | A:d7d20d959f3300b0.1 | event-binding / 200 | SC49-SCOPE/RUN / 范围、表单与既有验收提交子组件事件转发 |
 
+### E
+
+`ProviderAcceptanceExecution.vue`仅呈现并转发 P49 执行表单，不直接读写 API。组织变化、工作区/关键词受控输入、表单提交与范围重读均由 `Alibaba1688AcceptanceCenter`/既有 composable 接收；两个技术披露只展开当前追踪标识。提交状态为“已确认排队”时也不等于浏览器运行完成；维持第6节与 P49 事实规格的提交/权限/无轮询边界。
+
+| 当前位置键 | 类型 / 行 | 既有语义归属 |
+| --- | --- | --- |
+| E:9dc337a873726e6c.1 | form-event / 46 | SC49-RUN / 阻止原生表单并转交父级提交意图 |
+| E:6b7a113037c90aeb.1 | event-binding / 49 | SC49-SCOPE / 组织选择变化交给父级协调范围 |
+| E:df6130602862326a.1 | event-binding / 67 | SC49-SCOPE / 工作区受控选择更新 |
+| E:e941099000a6691d.1 | event-binding / 81 | SC49-RUN / 验收关键词受控输入 |
+| E:4d5599c177edbee1.1 | control / 92 | SC49-RUN / 发起一次既有受控登录验收提交 |
+| E:91f41f7556925861.1 | control / 104 | SC49-SCOPE / 请求父级重新读取组织与工作区范围 |
+| E:78c1c9ecc2d9214c.1 | control / 108 | SC49-TRACE / 展开组织范围读取关联编号 |
+| E:f617d68579969564.1 | control / 125 | SC49-TRACE / 展开本次提交任务/关联编号 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/ProviderAcceptanceExecution.vue | 8845f961637e96dedb38d9aa362560410eabffea7ab97f80ca64ff9d54fb2422 |
+
+候选映射只证明本子组件当前静态位置与父子意图归属；不替代 P49 GET/POST、服务端 `collection:replay` 权限、幂等键、范围校验或真实浏览器采集验收。
+
 ### R
 
 现有 `ProviderParserSampleReview.vue` 两个当前位置仍精确匹配第2节的SC48-SAMPLES审批通过/驳回身份，无新增源候选；其当前LF归一指纹单独记录如下。

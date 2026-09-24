@@ -79,6 +79,7 @@ const aliases = {
     S: "ProviderSourceCenter",
     D: "ProviderSourceDirectory",
     A: "Alibaba1688AcceptanceCenter",
+    E: "ProviderAcceptanceExecution",
     C: "CredentialAssetCenter",
     F: "ProviderSourceConfigurationDialog",
     P: "ProviderParserSampleDialog",
