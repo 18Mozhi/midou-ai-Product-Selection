@@ -1635,6 +1635,308 @@
   }
 }
 
+/* Keep P23's destructive and batch dialogs isolated from /work and P24 detail actions. */
+.task-workspace--review:not(.task-workspace--all) .task-delete-heading,
+.task-workspace--review:not(.task-workspace--all) .task-delete-body,
+.task-workspace--review:not(.task-workspace--all) .task-delete-footer,
+.task-workspace--review:not(.task-workspace--all) .task-delete-heading > div,
+.task-workspace--review:not(.task-workspace--all) .task-delete-footer > div,
+.task-workspace--all.task-detail-route .task-delete-heading,
+.task-workspace--all.task-detail-route .task-delete-body,
+.task-workspace--all.task-detail-route .task-delete-footer,
+.task-workspace--all.task-detail-route .task-delete-heading > div,
+.task-workspace--all.task-detail-route .task-delete-footer > div,
+.task-batch-impact:not(.task-batch-impact--directory) .task-batch-heading,
+.task-batch-impact:not(.task-batch-impact--directory) .task-batch-body,
+.task-batch-impact:not(.task-batch-impact--directory) .task-batch-footer,
+.task-batch-impact:not(.task-batch-impact--directory) .task-batch-heading > div,
+.task-batch-impact:not(.task-batch-impact--directory) .task-batch-footer > div {
+  display: contents;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-dialog[open],
+.task-workspace--all:not(.task-detail-route) .task-batch-impact--directory[open] {
+  width: min(640px, calc(100vw - 32px));
+  max-height: min(840px, calc(100dvh - 32px));
+  padding: 0;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-dialog form,
+.task-workspace--all:not(.task-detail-route) .task-batch-impact--directory form {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 0;
+  width: 100%;
+  min-height: 0;
+  max-height: inherit;
+  padding: 0;
+  overflow: hidden;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-heading,
+.task-workspace--all:not(.task-detail-route) .task-batch-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--review-line);
+}
+
+.task-workspace--all:not(.task-detail-route) .task-dialog-eyebrow {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--review-blue);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-heading h3,
+.task-workspace--all:not(.task-detail-route) .task-batch-heading h3 {
+  margin: 0;
+  color: var(--review-ink);
+  font-size: 25px;
+  line-height: 1.3;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-dialog-close {
+  flex: 0 0 44px;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-color: transparent;
+  background: #fff;
+  color: var(--review-ink);
+  font-size: 26px;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-body,
+.task-workspace--all:not(.task-detail-route) .task-batch-body {
+  min-height: 0;
+  padding: 18px 24px 20px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-body > p:first-child,
+.task-workspace--all:not(.task-detail-route) .task-batch-body > p:first-child {
+  margin: 0 0 14px;
+  color: var(--review-muted);
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-target {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--review-blue);
+  border-radius: 0 8px 8px 0;
+  background: var(--review-pale);
+  color: var(--review-ink);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-reason,
+.task-workspace--all:not(.task-detail-route) .task-batch-body label {
+  display: grid;
+  gap: 7px;
+  color: var(--review-ink);
+  font-weight: 700;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-reason > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-reason small {
+  color: var(--review-muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-reason textarea,
+.task-workspace--all:not(.task-detail-route) .task-batch-body textarea,
+.task-workspace--all:not(.task-detail-route) .task-batch-body input,
+.task-workspace--all:not(.task-detail-route) .task-batch-body select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--review-line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--review-ink);
+  font: inherit;
+  font-size: 16px;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-reason textarea,
+.task-workspace--all:not(.task-detail-route) .task-batch-body textarea {
+  min-height: 112px;
+  resize: vertical;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-help {
+  margin: 8px 0 0;
+  color: var(--review-muted);
+  font-size: 14px;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-batch-body > p:first-child {
+  line-height: 1.55;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-batch-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--review-pale);
+}
+
+.task-workspace--all:not(.task-detail-route) .task-batch-summary > div {
+  min-width: 0;
+  padding: 4px 2px;
+  border: 0;
+  border-radius: 0;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-batch-summary dt {
+  color: var(--review-muted);
+  font-size: 13px;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-batch-summary dd {
+  margin: 4px 0 0;
+  color: var(--review-ink);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-batch-summary > div:last-child {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--review-line);
+}
+
+.task-workspace--all:not(.task-detail-route) .task-batch-summary > div:last-child dd {
+  margin: 0;
+  color: var(--review-muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-batch-ineligible {
+  margin: 12px 0 0;
+  color: var(--review-muted);
+  font-size: 14px;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-batch-body label {
+  margin-top: 16px;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-footer,
+.task-workspace--all:not(.task-detail-route) .task-batch-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 24px;
+  border-top: 1px solid var(--review-line);
+  background: #f5f7fb;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-footer > span,
+.task-workspace--all:not(.task-detail-route) .task-batch-footer > span {
+  color: var(--review-muted);
+  font-size: 13px;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-footer > div,
+.task-workspace--all:not(.task-detail-route) .task-batch-footer > div {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-footer button,
+.task-workspace--all:not(.task-detail-route) .task-batch-footer button {
+  min-width: 84px;
+  min-height: 44px;
+  padding: 9px 14px;
+  border-radius: 8px;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-footer .danger,
+.task-workspace--all:not(.task-detail-route) .task-batch-footer .danger {
+  border-color: #a92f2a;
+  background: #a92f2a;
+  color: #fff;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-footer .danger:hover:not(:disabled),
+.task-workspace--all:not(.task-detail-route) .task-batch-footer .danger:hover:not(:disabled) {
+  border-color: #84231f;
+  background: #84231f;
+  color: #fff;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-footer button:disabled,
+.task-workspace--all:not(.task-detail-route) .task-batch-footer button:disabled,
+.task-workspace--all:not(.task-detail-route) .task-dialog-close:disabled {
+  opacity: 0.52;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-delete-dialog :focus-visible,
+.task-workspace--all:not(.task-detail-route) .task-batch-impact--directory :focus-visible {
+  outline: 3px solid #4d79d8;
+  outline-offset: 2px;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-row-actions[open] {
+  z-index: 5;
+}
+
+@media (max-width: 700px) {
+  .task-workspace--all:not(.task-detail-route) .task-delete-dialog[open],
+  .task-workspace--all:not(.task-detail-route) .task-batch-impact--directory[open] {
+    width: calc(100vw - 24px);
+    max-height: calc(100dvh - 24px);
+  }
+
+  .task-workspace--all:not(.task-detail-route) .task-delete-heading,
+  .task-workspace--all:not(.task-detail-route) .task-batch-heading {
+    padding: 14px 16px;
+  }
+
+  .task-workspace--all:not(.task-detail-route) .task-delete-body,
+  .task-workspace--all:not(.task-detail-route) .task-batch-body {
+    padding: 14px 16px 18px;
+  }
+
+  .task-workspace--all:not(.task-detail-route) .task-delete-footer,
+  .task-workspace--all:not(.task-detail-route) .task-batch-footer {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  }
+
+  .task-workspace--all:not(.task-detail-route) .task-delete-footer > div,
+  .task-workspace--all:not(.task-detail-route) .task-batch-footer > div {
+    justify-content: flex-end;
+  }
+}
+
 /* P13 C direction: personal action desk, separate from the all-task directory. */
 .task-workspace--today:not(.task-detail-route) {
   --today-blue: var(--so-primary);

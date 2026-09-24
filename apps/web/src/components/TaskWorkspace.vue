@@ -895,6 +895,7 @@ watch(
         :assignee-id="batchAssigneeId"
         :busy="busy"
         :can-assign="canAssign"
+        :directory-presentation="mode === 'all' && !taskId"
         @start="previewBatch"
         @close="showBatchImpact = false"
         @confirm="confirmBatch"
@@ -1059,26 +1060,57 @@ watch(
     <dialog
       ref="deleteDialogElement"
       class="task-delete-dialog"
-      aria-label="删除任务"
+      aria-labelledby="task-delete-dialog-title"
       @cancel="handleDeleteCancel"
     >
       <form @submit.prevent="removeTask">
-        <h3>删除任务</h3>
-        <p>将删除“{{ deleting?.title }}”。任务列表不再显示，但审计记录会保留。</p>
-        <label
-          >删除原因<textarea
-            v-model="deleteReason"
-            maxlength="500"
-            required
-            placeholder="请填写删除原因"
-          ></textarea>
-        </label>
-        <div>
-          <button type="button" :disabled="busy" @click="closeDeleteDialog">取消</button
-          ><button class="danger" type="submit" :disabled="busy">
-            {{ busy ? "正在删除…" : "确认删除" }}
+        <header class="task-delete-heading">
+          <div>
+            <span v-if="mode === 'all' && !taskId" class="task-dialog-eyebrow">TASK ACTION</span>
+            <h3 id="task-delete-dialog-title">删除任务</h3>
+          </div>
+          <button
+            v-if="mode === 'all' && !taskId"
+            type="button"
+            class="task-dialog-close"
+            aria-label="关闭删除任务窗口"
+            :disabled="busy"
+            @click="closeDeleteDialog"
+          >
+            ×
           </button>
+        </header>
+        <div class="task-delete-body">
+          <p v-if="mode === 'all' && !taskId">任务列表将不再显示此任务，历史审计记录仍会保留。</p>
+          <p v-else>将删除“{{ deleting?.title }}”。任务列表不再显示，但审计记录会保留。</p>
+          <div v-if="deleting && mode === 'all' && !taskId" class="task-delete-target">
+            {{ deleting.title }}
+          </div>
+          <label class="task-delete-reason">
+            <span>
+              <span>删除原因</span>
+              <small v-if="mode === 'all' && !taskId">必填 · 最多500字</small>
+            </span>
+            <textarea
+              v-model="deleteReason"
+              maxlength="500"
+              required
+              placeholder="请填写删除原因"
+            ></textarea>
+          </label>
+          <p v-if="mode === 'all' && !taskId" class="task-delete-help">
+            请核对任务和操作范围。原因应说明本次变更。
+          </p>
         </div>
+        <footer class="task-delete-footer">
+          <span v-if="mode === 'all' && !taskId">确认后按当前任务版本提交，历史审计记录保留。</span>
+          <div>
+            <button type="button" :disabled="busy" @click="closeDeleteDialog">取消</button
+            ><button class="danger" type="submit" :disabled="busy">
+              {{ busy ? "正在删除…" : "确认删除" }}
+            </button>
+          </div>
+        </footer>
       </form>
     </dialog>
   </section>

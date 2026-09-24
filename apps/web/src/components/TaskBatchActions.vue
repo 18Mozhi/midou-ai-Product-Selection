@@ -13,6 +13,7 @@ const props = defineProps<{
   assigneeId: string;
   busy: boolean;
   canAssign: boolean;
+  directoryPresentation: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -58,71 +59,104 @@ const actionLabel = (action: BatchTaskAction) =>
   </div>
   <dialog
     ref="dialogElement"
-    class="task-batch-impact"
-    aria-label="确认批量任务操作"
+    :class="['task-batch-impact', { 'task-batch-impact--directory': directoryPresentation }]"
+    :aria-label="directoryPresentation ? undefined : '确认批量任务操作'"
+    :aria-labelledby="directoryPresentation ? 'task-batch-dialog-title' : undefined"
     :aria-busy="busy"
     @cancel="handleDialogCancel"
   >
     <form @submit.prevent="$emit('confirm')">
-      <h3>确认批量{{ actionLabel(action) }}</h3>
-      <p>影响范围会在执行前固定；不符合当前状态的任务不会被修改。</p>
-      <dl>
+      <header class="task-batch-heading">
         <div>
-          <dt>已选择</dt>
-          <dd>{{ targets.length }} 项</dd>
+          <span v-if="directoryPresentation" class="task-dialog-eyebrow">TASK ACTION</span>
+          <h3 id="task-batch-dialog-title">确认批量{{ actionLabel(action) }}</h3>
         </div>
-        <div>
-          <dt>可执行</dt>
-          <dd>{{ eligible.length }} 项</dd>
-        </div>
-        <div>
-          <dt>跳过</dt>
-          <dd>{{ targets.length - eligible.length }} 项</dd>
-        </div>
-        <div>
-          <dt>关联采集任务</dt>
-          <dd>
-            {{ eligible.filter((item) => item.collection_task_id).length }}
-            项（仅展示关联，不联动取消底层任务）
-          </dd>
-        </div>
-      </dl>
-      <label v-if="action !== 'resume'"
-        >操作原因<textarea
-          :value="reason"
-          required
-          maxlength="500"
+        <button
+          v-if="directoryPresentation"
+          type="button"
+          class="task-dialog-close"
+          aria-label="关闭批量任务操作"
           :disabled="busy"
-          @input="$emit('update:reason', ($event.target as HTMLTextAreaElement).value)"
-        ></textarea>
-      </label>
-      <label v-if="action === 'delay'">
-        新截止时间<input
-          :value="dueAt"
-          type="datetime-local"
-          required
-          :disabled="busy"
-          @input="$emit('update:dueAt', ($event.target as HTMLInputElement).value)"
-        />
-      </label>
-      <label v-if="action === 'transfer'">
-        新负责人
-        <select
-          :value="assigneeId"
-          required
-          :disabled="busy"
-          @change="$emit('update:assigneeId', ($event.target as HTMLSelectElement).value)"
+          @click="$emit('close')"
         >
-          <option value="">请选择当前工作区成员</option>
-          <option v-for="member in members" :key="member.id" :value="member.id">
-            {{ member.label }}
-          </option>
-        </select>
-      </label>
-      <div>
-        <button type="button" :disabled="busy" @click="$emit('close')">返回</button
-        ><button :disabled="busy || !eligible.length">{{ busy ? "正在执行…" : "确认执行" }}</button>
+          ×
+        </button>
+      </header>
+      <div class="task-batch-body">
+        <p>影响范围会在执行前固定；不符合当前状态的任务不会被修改。</p>
+        <dl class="task-batch-summary">
+          <div>
+            <dt>已选择</dt>
+            <dd>{{ targets.length }} 项</dd>
+          </div>
+          <div>
+            <dt>可执行</dt>
+            <dd>{{ eligible.length }} 项</dd>
+          </div>
+          <div>
+            <dt>跳过</dt>
+            <dd>{{ targets.length - eligible.length }} 项</dd>
+          </div>
+          <div>
+            <dt>关联采集任务</dt>
+            <dd>
+              {{ eligible.filter((item) => item.collection_task_id).length }}
+              项 · 仅展示关联，不联动取消底层任务
+            </dd>
+          </div>
+        </dl>
+        <p v-if="directoryPresentation" class="task-batch-ineligible" role="status">
+          <template v-if="eligible.length">
+            将对 {{ eligible.length }} 项符合条件的任务执行操作；其余
+            {{ targets.length - eligible.length }} 项跳过。
+          </template>
+          <template v-else>当前所选任务均不符合此操作条件，本次不会执行。</template>
+        </p>
+        <label v-if="action !== 'resume'"
+          >操作原因<textarea
+            :value="reason"
+            required
+            maxlength="500"
+            :disabled="busy"
+            @input="$emit('update:reason', ($event.target as HTMLTextAreaElement).value)"
+          ></textarea>
+        </label>
+        <label v-if="action === 'delay'">
+          新截止时间<input
+            :value="dueAt"
+            type="datetime-local"
+            required
+            :disabled="busy"
+            @input="$emit('update:dueAt', ($event.target as HTMLInputElement).value)"
+          />
+        </label>
+        <label v-if="action === 'transfer'">
+          新负责人
+          <select
+            :value="assigneeId"
+            required
+            :disabled="busy"
+            @change="$emit('update:assigneeId', ($event.target as HTMLSelectElement).value)"
+          >
+            <option value="">请选择当前工作区成员</option>
+            <option v-for="member in members" :key="member.id" :value="member.id">
+              {{ member.label }}
+            </option>
+          </select>
+        </label>
       </div>
+      <footer class="task-batch-footer">
+        <span v-if="directoryPresentation">仅操作符合条件的任务；跳过项保持不变。</span>
+        <div>
+          <button type="button" :disabled="busy" @click="$emit('close')">返回</button
+          ><button
+            :class="{ danger: directoryPresentation && action === 'cancel' }"
+            :disabled="busy || !eligible.length"
+          >
+            {{ busy ? "正在执行…" : "确认执行" }}
+          </button>
+        </div>
+      </footer>
     </form>
   </dialog>
 </template>

@@ -124,14 +124,138 @@ test("task center previews batch transfer and delay with scoped inputs", async (
   await page.getByRole("checkbox", { name: /核验便携净水杯供应商报价/ }).check();
   await page.getByRole("checkbox", { name: /补齐竞品价格证据/ }).check();
   await page.getByRole("button", { name: "批量调整负责人" }).click();
-  const transfer = page.getByRole("dialog", { name: "确认批量任务操作" });
+  const transfer = page.getByRole("dialog", { name: "确认批量调整负责人" });
   await expect(transfer.getByText("确认批量调整负责人")).toBeVisible();
   await expect(transfer.getByLabel("新负责人")).toHaveValue("");
   await transfer.getByRole("button", { name: "返回" }).click();
   await page.getByRole("button", { name: "批量延期" }).click();
-  const delay = page.getByRole("dialog", { name: "确认批量任务操作" });
+  const delay = page.getByRole("dialog", { name: "确认批量延期" });
   await expect(delay.getByText("确认批量延期")).toBeVisible();
   await expect(delay.getByLabel("新截止时间")).toBeVisible();
+});
+
+test("P23 delete dialog keeps the task target, reason and actions usable on both layouts", async ({
+  page,
+}) => {
+  await setup(page);
+  let deleteRequests = 0;
+  page.on("request", (request) => {
+    if (
+      request.method() === "DELETE" &&
+      new URL(request.url()).pathname.endsWith(`/tasks/${taskId}`)
+    )
+      deleteRequests += 1;
+  });
+
+  await page.goto("/tasks");
+  const row = page.locator(".task-list article").filter({ hasText: "核验便携净水杯供应商报价" });
+  const menu = row.locator("summary[aria-label='任务操作：核验便携净水杯供应商报价']");
+  await menu.click();
+  const deleteTrigger = row.getByRole("button", { name: "删除任务", exact: true });
+  await deleteTrigger.click();
+
+  const dialog = page.getByRole("dialog", { name: "删除任务" });
+  await expect(dialog.getByText("核验便携净水杯供应商报价", { exact: true })).toBeVisible();
+  await expect(dialog.getByText("必填 · 最多500字")).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "关闭删除任务窗口" })).toBeVisible();
+  const layout = await dialog.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    const footerBounds = element.querySelector(".task-delete-footer")!.getBoundingClientRect();
+    const controls = [...element.querySelectorAll("textarea, button")]
+      .filter((control) => (control as HTMLElement).getClientRects().length > 0)
+      .map((control) => Math.round(control.getBoundingClientRect().height));
+    return {
+      dialogBottom: bounds.bottom,
+      footerBottom: footerBounds.bottom,
+      viewportHeight: window.innerHeight,
+      controls,
+    };
+  });
+  expect(layout.dialogBottom).toBeLessThanOrEqual(layout.viewportHeight);
+  expect(layout.footerBottom).toBeLessThanOrEqual(layout.viewportHeight);
+  expect(layout.controls.every((height) => height >= 44)).toBe(true);
+
+  await dialog.getByRole("button", { name: "关闭删除任务窗口" }).click();
+  await expect(dialog).toBeHidden();
+  await expect(deleteTrigger).toBeFocused();
+  expect(deleteRequests).toBe(0);
+});
+
+test("P23 batch dialog variants preserve scope, eligibility and a reachable footer", async ({
+  page,
+}) => {
+  await setup(page);
+  let actionRequests = 0;
+  page.on("request", (request) => {
+    if (
+      request.method() === "POST" &&
+      new URL(request.url()).pathname.match(new RegExp(`/tasks/${taskId}/actions$`))
+    ) {
+      actionRequests += 1;
+    }
+  });
+
+  await page.goto("/tasks");
+  await page.getByRole("checkbox", { name: "选择任务：核验便携净水杯供应商报价" }).check();
+  await page.getByRole("checkbox", { name: "选择任务：补齐竞品价格证据" }).check();
+
+  const variants = [
+    { button: "批量暂停", title: "确认批量暂停", fields: ["操作原因"], eligible: "1 项" },
+    { button: "批量继续", title: "确认批量继续", fields: [], eligible: "0 项" },
+    {
+      button: "批量延期",
+      title: "确认批量延期",
+      fields: ["操作原因", "新截止时间"],
+      eligible: "2 项",
+    },
+    {
+      button: "批量调整负责人",
+      title: "确认批量调整负责人",
+      fields: ["操作原因", "新负责人"],
+      eligible: "2 项",
+    },
+    { button: "批量取消", title: "确认批量取消", fields: ["操作原因"], eligible: "2 项" },
+  ];
+
+  for (const variant of variants) {
+    await page.getByRole("button", { name: variant.button, exact: true }).click();
+    const dialog = page.getByRole("dialog", { name: variant.title });
+    await expect(dialog.getByRole("heading", { name: variant.title })).toBeVisible();
+    await expect(dialog.getByRole("button", { name: "关闭批量任务操作" })).toBeVisible();
+    await expect(dialog.locator(".task-batch-summary > div")).toHaveCount(4);
+    await expect(dialog.locator(".task-batch-summary")).toContainText(variant.eligible);
+    for (const field of variant.fields) await expect(dialog.getByLabel(field)).toBeVisible();
+    if (variant.button === "批量继续") {
+      await expect(
+        dialog.getByText("当前所选任务均不符合此操作条件，本次不会执行。"),
+      ).toBeVisible();
+      await expect(dialog.getByRole("button", { name: "确认执行" })).toBeDisabled();
+    }
+    if (variant.button === "批量取消") {
+      await expect(dialog.getByRole("button", { name: "确认执行" })).toHaveClass(/danger/);
+    }
+
+    const layout = await dialog.evaluate((element) => {
+      const bounds = element.getBoundingClientRect();
+      const footerBounds = element.querySelector(".task-batch-footer")!.getBoundingClientRect();
+      const controls = [...element.querySelectorAll("textarea, input, select, button")]
+        .filter((control) => (control as HTMLElement).getClientRects().length > 0)
+        .map((control) => Math.round(control.getBoundingClientRect().height));
+      return {
+        dialogBottom: bounds.bottom,
+        footerBottom: footerBounds.bottom,
+        viewportHeight: window.innerHeight,
+        controls,
+      };
+    });
+    expect(layout.dialogBottom).toBeLessThanOrEqual(layout.viewportHeight);
+    expect(layout.footerBottom).toBeLessThanOrEqual(layout.viewportHeight);
+    expect(layout.controls.every((height) => height >= 44)).toBe(true);
+
+    await dialog.getByRole("button", { name: "返回" }).click();
+    await expect(dialog).toBeHidden();
+  }
+  expect(actionRequests).toBe(0);
 });
 
 test("M05-01 quick create route opens the task form", async ({ page }) => {
