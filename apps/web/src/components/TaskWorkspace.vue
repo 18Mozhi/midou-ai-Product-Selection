@@ -92,6 +92,7 @@ const props = defineProps<{
   batchAssigneeId = ref(""),
   showBatchImpact = ref(false),
   form = ref({ title: "", description: "", priority: "normal", due_at: "" }),
+  editorFeedback = ref<{ message: string; requestId: string } | null>(null),
   comment = ref("");
 type TaskRead = { key: string; controller: AbortController };
 class SupersededTaskRead extends Error {}
@@ -140,6 +141,7 @@ const taskActionEditor = ref<TaskActionEditor | null>(null),
 const closeTaskEditor = () => {
     showCreate.value = false;
     editing.value = null;
+    editorFeedback.value = null;
     void clearQuickCreate();
   },
   closeDeleteDialog = () => {
@@ -510,6 +512,7 @@ async function create() {
   if (busy.value || (!editing.value && !canCreate.value) || (editing.value && !canUpdate.value))
     return;
   busy.value = true;
+  editorFeedback.value = null;
   try {
     const wasEditing = Boolean(editing.value);
     await api(editing.value ? `/tasks/${editing.value.id}` : "/tasks", {
@@ -532,6 +535,9 @@ async function create() {
     await clearQuickCreate();
     await load();
   } catch (error) {
+    if (error instanceof ApiClientError) {
+      editorFeedback.value = { message: error.actionHint, requestId: error.requestId };
+    }
     rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
@@ -793,7 +799,11 @@ watch(
 <template>
   <section
     class="task-workspace task-workspace--review"
-    :class="{ 'task-detail-route': Boolean(taskId), 'task-workspace--today': mode === 'today' }"
+    :class="{
+      'task-detail-route': Boolean(taskId),
+      'task-workspace--today': mode === 'today',
+      'task-workspace--all': mode === 'all',
+    }"
   >
     <header class="task-title">
       <div>
@@ -951,34 +961,72 @@ watch(
     </nav>
     <dialog
       ref="createDialogElement"
+      class="task-create-edit-dialog"
       :aria-label="editing ? '编辑任务' : '新建任务'"
       @cancel="handleCreateCancel"
     >
       <form @submit.prevent="create">
-        <h3>{{ editing ? "编辑任务" : "新建任务" }}</h3>
-        <div class="task-kind-guide">
-          <b>这是什么任务？</b
-          ><span
-            >可以创建“复核热点”“分析亚马逊竞品”“查找货源”“确认利润”等具体工作。创建后点击任务详情，再点击开始运行。</span
+        <header class="task-editor-header">
+          <div>
+            <span>任务内容</span>
+            <h3>{{ editing ? "编辑任务" : "新建任务" }}</h3>
+          </div>
+          <button
+            type="button"
+            class="task-editor-close"
+            aria-label="关闭任务编辑窗口"
+            :disabled="busy"
+            @click="closeTaskEditor"
           >
-        </div>
-        <label>标题<input v-model="form.title" required maxlength="200" /></label
-        ><label>说明<textarea v-model="form.description" maxlength="5000"></textarea></label
-        ><label
-          >优先级<select v-model="form.priority">
-            <option value="low">低</option>
-            <option value="normal">普通</option>
-            <option value="high">高</option>
-            <option value="critical">紧急</option>
-          </select></label
-        ><label>截止时间（可选）<input v-model="form.due_at" type="datetime-local" /></label>
-        <p>未指定负责人时分配给当前用户；期限为空时明确显示“未设置”。</p>
-        <div>
-          <button type="button" :disabled="busy" @click="closeTaskEditor">取消</button
-          ><button :disabled="busy">
-            {{ busy ? "正在提交…" : editing ? "保存修改" : "创建任务" }}
+            ×
           </button>
+        </header>
+        <div class="task-editor-body">
+          <p class="task-editor-intro">填写任务内容，明确优先级与期限。</p>
+          <div class="task-kind-guide">
+            <b>这是什么任务？</b>
+            <span>
+              可以创建“复核热点”“分析亚马逊竞品”“查找货源”“确认利润”等具体工作。创建后点击任务详情，再点击开始运行。
+            </span>
+          </div>
+          <section class="task-editor-fields" aria-label="任务内容字段">
+            <label class="task-editor-field task-editor-field--wide">
+              <span class="task-editor-field-label"><span>标题</span><small>必填</small></span>
+              <input v-model="form.title" required maxlength="200" />
+            </label>
+            <label class="task-editor-field task-editor-field--wide">
+              <span class="task-editor-field-label"><span>说明</span><small>选填</small></span>
+              <textarea v-model="form.description" maxlength="5000"></textarea>
+            </label>
+            <label class="task-editor-field">
+              <span class="task-editor-field-label"><span>优先级</span><small>选填</small></span>
+              <select v-model="form.priority">
+                <option value="low">低</option>
+                <option value="normal">普通</option>
+                <option value="high">高</option>
+                <option value="critical">紧急</option>
+              </select>
+            </label>
+            <label class="task-editor-field">
+              <span class="task-editor-field-label"><span>截止时间</span><small>选填</small></span>
+              <input v-model="form.due_at" type="datetime-local" />
+            </label>
+          </section>
+          <p class="task-editor-note">未指定负责人时分配给当前用户；期限为空时明确显示“未设置”。</p>
+          <div v-if="editorFeedback" class="task-editor-error" role="alert" aria-live="assertive">
+            <p>{{ editorFeedback.message }}</p>
+            <small v-if="editorFeedback.requestId">请求编号：{{ editorFeedback.requestId }}</small>
+          </div>
         </div>
+        <footer class="task-editor-footer">
+          <span>标题为必填项，其余字段可按需填写。</span>
+          <div>
+            <button type="button" :disabled="busy" @click="closeTaskEditor">取消</button>
+            <button class="task-editor-submit" :disabled="busy">
+              {{ busy ? "正在提交…" : editing ? "保存修改" : "创建任务" }}
+            </button>
+          </div>
+        </footer>
       </form>
     </dialog>
     <TaskDetailPanel

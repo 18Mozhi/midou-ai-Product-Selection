@@ -239,6 +239,104 @@ test("task update role keeps lifecycle batch controls but not assignment or expo
   await expect(page.getByRole("button", { name: "导出任务" })).toHaveCount(0);
 });
 
+test("P23 create and edit dialog keeps the primary action reachable and returns focus", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/tasks");
+  const openButton = page.getByRole("button", { name: "＋ 新建任务" });
+  await openButton.click();
+
+  const dialog = page.getByRole("dialog", { name: "新建任务", exact: true });
+  await expect(dialog.getByRole("heading", { name: "新建任务", level: 3 })).toBeVisible();
+  await expect(dialog.getByText("必填", { exact: true })).toBeVisible();
+  await expect(dialog.getByText("选填", { exact: true })).toHaveCount(3);
+  await expect(dialog.getByRole("button", { name: "关闭任务编辑窗口" })).toBeVisible();
+
+  const footer = dialog.locator(".task-editor-footer");
+  await expect(footer.getByRole("button", { name: "创建任务", exact: true })).toBeVisible();
+  const layout = await dialog.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    const footerBounds = element.querySelector(".task-editor-footer")!.getBoundingClientRect();
+    const controls = [...element.querySelectorAll("input, textarea, select, button")]
+      .filter((control) => (control as HTMLElement).getClientRects().length > 0)
+      .map((control) => Math.round(control.getBoundingClientRect().height));
+    return {
+      dialogBottom: bounds.bottom,
+      footerBottom: footerBounds.bottom,
+      viewportHeight: window.innerHeight,
+      controls,
+    };
+  });
+  expect(layout.dialogBottom).toBeLessThanOrEqual(layout.viewportHeight);
+  expect(layout.footerBottom).toBeLessThanOrEqual(layout.viewportHeight);
+  expect(layout.controls.every((height) => height >= 44)).toBe(true);
+
+  await dialog.getByRole("button", { name: "关闭任务编辑窗口" }).click();
+  await expect(dialog).toBeHidden();
+  await expect(openButton).toBeFocused();
+
+  await page.locator(".task-row-main").filter({ hasText: "核验便携净水杯供应商报价" }).click();
+  await page.getByText("更多任务操作", { exact: true }).click();
+  const editTrigger = page.getByRole("button", { name: "编辑任务", exact: true });
+  await editTrigger.click();
+  const editDialog = page.getByRole("dialog", { name: "编辑任务", exact: true });
+  await expect(editDialog.getByLabel("标题")).toHaveValue("核验便携净水杯供应商报价");
+  await expect(editDialog.getByRole("button", { name: "保存修改", exact: true })).toBeVisible();
+  await editDialog.getByRole("button", { name: "关闭任务编辑窗口" }).click();
+  await expect(editDialog).toBeHidden();
+  await expect(editTrigger).toBeFocused();
+});
+
+test("P23 create API failure remains inside the editor and retry preserves the form contract", async ({
+  page,
+}) => {
+  await setup(page);
+  let attempts = 0;
+  let submittedBody: Record<string, unknown> | null = null;
+  await page.route("**/api/v1/tasks", async (route) => {
+    if (route.request().method() !== "POST") return route.fallback();
+    attempts += 1;
+    submittedBody = route.request().postDataJSON() as Record<string, unknown>;
+    if (attempts === 1) {
+      return route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "service_unavailable",
+            message: "任务暂时无法创建。",
+            action_hint: "任务服务暂不可用，请稍后重试。",
+          },
+          request_id: "m05-01-create-retry",
+          trace_id: "m05-01-create-retry",
+        },
+      });
+    }
+    return route.fulfill({ status: 201, json: { data: { id: "created-task" }, request_id: "ok" } });
+  });
+
+  await page.goto("/tasks");
+  await page.getByRole("button", { name: "＋ 新建任务" }).click();
+  const dialog = page.getByRole("dialog", { name: "新建任务", exact: true });
+  await dialog.getByLabel("标题").fill("核验上新资料");
+  await dialog.getByRole("button", { name: "创建任务", exact: true }).click();
+  const error = dialog.getByRole("alert");
+  await expect(error).toContainText("任务服务暂不可用，请稍后重试。");
+  await expect(error).toContainText("m05-01-create-retry");
+  await expect(dialog.getByLabel("标题")).toHaveValue("核验上新资料");
+  await expect(dialog.getByRole("button", { name: "创建任务", exact: true })).toBeEnabled();
+
+  await dialog.getByRole("button", { name: "创建任务", exact: true }).click();
+  await expect(dialog).toBeHidden();
+  expect(attempts).toBe(2);
+  expect(submittedBody).toEqual({
+    title: "核验上新资料",
+    description: "",
+    priority: "normal",
+    due_at: null,
+  });
+});
+
 test("task create disables duplicate submission while the real request is pending", async ({
   page,
 }) => {
