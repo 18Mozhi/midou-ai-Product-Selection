@@ -1405,6 +1405,207 @@
   }
 }
 
+/* P23 C direction: keep export status records distinct from business task rows. */
+.task-workspace--all:not(.task-detail-route) .task-export-jobs {
+  display: grid;
+  overflow: hidden;
+  border-color: var(--review-line);
+  border-radius: 0;
+  background: #fff;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-heading {
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--review-line);
+  border-left: 5px solid var(--review-blue);
+  background: var(--review-pale);
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-heading span {
+  color: var(--review-blue);
+  font-size: 17px;
+  font-weight: 750;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-heading h3 {
+  margin: 6px 0;
+  color: var(--review-ink);
+  font-size: 25px;
+  line-height: 1.25;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-heading p {
+  margin: 0;
+  color: var(--review-muted);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-heading > a,
+.task-workspace--all:not(.task-detail-route) .task-export-open,
+.task-workspace--all:not(.task-detail-route) .task-export-empty > a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 14px;
+  border: 1px solid var(--review-blue);
+  background: #fff;
+  color: var(--review-blue);
+  font-size: 17px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-heading > a:hover,
+.task-workspace--all:not(.task-detail-route) .task-export-open:hover,
+.task-workspace--all:not(.task-detail-route) .task-export-empty > a:hover {
+  background: var(--review-blue);
+  color: #fff;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-item {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr) minmax(190px, auto) auto;
+  gap: 16px;
+  align-items: center;
+  min-width: 0;
+  padding: 16px 24px;
+  border-top: 1px solid var(--review-line);
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-item:first-child {
+  border-top: 0;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-status {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-self: start;
+  padding: 4px 10px;
+  border-left: 3px solid #64748b;
+  background: #f1f4f8;
+  color: #34445b;
+  font-size: 17px;
+  font-weight: 750;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-status[data-status="leased"] {
+  border-color: var(--review-blue);
+  background: var(--review-pale);
+  color: var(--review-blue);
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-status[data-status="retry_scheduled"] {
+  border-color: #986600;
+  background: #fff7e5;
+  color: #704a00;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-status[data-status="succeeded"] {
+  border-color: #177245;
+  background: #eaf7ef;
+  color: #155b39;
+}
+
+.task-workspace--all:not(.task-detail-route)
+  .task-export-status:is([data-status="dead_letter"], [data-status="expired"]) {
+  border-color: #a22b2b;
+  background: #fff0ef;
+  color: #8b1e1e;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-type,
+.task-workspace--all:not(.task-detail-route) .task-export-updated {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-type strong,
+.task-workspace--all:not(.task-detail-route) .task-export-updated strong {
+  color: var(--review-ink);
+  font-size: 17px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-type p,
+.task-workspace--all:not(.task-detail-route) .task-export-updated span {
+  margin: 0;
+  color: var(--review-muted);
+  font-size: 17px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-open {
+  justify-self: end;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-empty {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  margin: 20px 24px 24px;
+  padding: 20px;
+  border-left: 4px solid #8794a7;
+  background: #f3f5f8;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-empty h4 {
+  margin: 0;
+  color: var(--review-ink);
+  font-size: 20px;
+}
+
+.task-workspace--all:not(.task-detail-route) .task-export-empty p {
+  margin: 0;
+  color: var(--review-muted);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+  .task-workspace--all:not(.task-detail-route) .task-export-heading {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 18px;
+  }
+
+  .task-workspace--all:not(.task-detail-route) .task-export-heading > a {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .task-workspace--all:not(.task-detail-route) .task-export-item {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding: 16px 18px;
+  }
+
+  .task-workspace--all:not(.task-detail-route) .task-export-open {
+    width: 100%;
+    box-sizing: border-box;
+    justify-self: stretch;
+  }
+
+  .task-workspace--all:not(.task-detail-route) .task-export-empty {
+    margin: 16px 18px 18px;
+    padding: 16px;
+  }
+}
+
 /* P23 C direction: keep task create/edit fields and actions usable in a short viewport. */
 .task-workspace--all .task-create-edit-dialog[open] {
   width: min(640px, calc(100vw - 32px));

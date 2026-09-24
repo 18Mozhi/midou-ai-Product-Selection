@@ -10,10 +10,12 @@ import {
 import { useModalDialog } from "../use-modal-dialog";
 import TaskBatchActions from "./TaskBatchActions.vue";
 import TaskDetailPanel from "./TaskDetailPanel.vue";
+import TaskExportJobsPanel from "./TaskExportJobsPanel.vue";
 import TaskListPanel from "./TaskListPanel.vue";
 import type {
   BatchTaskAction,
   MemberOption,
+  TaskExport,
   Task,
   TaskActionEditor,
   TaskSummary,
@@ -22,20 +24,6 @@ import "../task-workspace.css";
 import "../task-workspace-enhancements.css";
 type State =
   "loading" | "ready" | "empty" | "error" | "not_found" | "forbidden" | "expired" | "rate_limited";
-type ExportTask = {
-  id: string;
-  report_type: "opportunity" | "trend" | "team";
-  status: string;
-  attempt_count: number;
-  row_count: number | null;
-  last_error_code: string | null;
-  queue_position: number | null;
-  estimated_completion_at: string | null;
-  estimate_sample_size: number;
-  created_at: string;
-  updated_at: string;
-  expires_at: string;
-};
 const props = defineProps<{
     apiBaseUrl: string;
     mode: "today" | "all";
@@ -48,7 +36,7 @@ const props = defineProps<{
   state = ref<State>("loading"),
   tasks = ref<Task[]>([]),
   memberOptions = ref<MemberOption[]>([]),
-  exportTasks = ref<ExportTask[]>([]),
+  exportTasks = ref<TaskExport[]>([]),
   activeView = ref<"business" | "exports">(
     props.mode === "all" && route.query.view === "exports" ? "exports" : "business",
   ),
@@ -305,29 +293,6 @@ const pageSize = 10,
       })),
     ].sort((a, b) => new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf());
   });
-const exportStatusLabel = (value: string) =>
-    (
-      ({
-        queued: "排队中",
-        leased: "生成中",
-        retry_scheduled: "等待重试",
-        succeeded: "已完成",
-        dead_letter: "生成失败",
-        expired: "已过期",
-      }) as Record<string, string>
-    )[value] ?? "状态待确认",
-  exportTypeLabel = (value: ExportTask["report_type"]) =>
-    ({ opportunity: "机会分析", trend: "趋势分析", team: "团队绩效" })[value],
-  exportNextStep = (item: ExportTask) =>
-    item.status === "succeeded"
-      ? "前往报表页下载文件"
-      : ["dead_letter", "expired"].includes(item.status)
-        ? "前往报表页重新生成"
-        : item.queue_position == null
-          ? "系统正在异步处理，无需停留等待"
-          : item.estimated_completion_at
-            ? `队列第 ${item.queue_position} 位 · 预计 ${time(item.estimated_completion_at)} 完成`
-            : `队列第 ${item.queue_position} 位 · 暂无历史样本可估算`;
 async function api<T = any>(
   path: string,
   options?: ApiRequestOptions,
@@ -392,7 +357,7 @@ async function load() {
         await setView("business");
         return;
       }
-      const exports = await api<ExportTask[]>("/report-exports", undefined, undefined, read);
+      const exports = await api<TaskExport[]>("/report-exports", undefined, undefined, read);
       assertCurrentRead(read);
       exportTasks.value = exports;
       state.value = exportTasks.value.length ? "ready" : "empty";
@@ -922,35 +887,7 @@ watch(
         @create="showCreate = true"
         @remove="askRemove"
     /></template>
-    <section v-else class="task-export-jobs">
-      <header>
-        <div>
-          <span>异步工作</span>
-          <h3>导出任务</h3>
-        </div>
-        <RouterLink to="/reports">创建或管理导出</RouterLink>
-      </header>
-      <div v-if="exportTasks.length">
-        <article v-for="item in exportTasks" :key="item.id">
-          <i :data-status="item.status">{{ exportStatusLabel(item.status) }}</i>
-          <span
-            ><strong>{{ exportTypeLabel(item.report_type) }} · CSV</strong
-            ><small>{{ exportNextStep(item) }}</small></span
-          >
-          <span
-            ><strong>{{ time(item.updated_at) }}</strong
-            ><small>最近更新</small></span
-          >
-          <RouterLink :to="{ path: '/reports', query: { report: item.report_type } }"
-            >查看任务</RouterLink
-          >
-        </article>
-      </div>
-      <div v-else class="task-state">
-        <h3>尚无导出任务</h3>
-        <p>从报表页提交 CSV 导出后，会在这里统一显示处理状态。</p>
-      </div>
-    </section>
+    <TaskExportJobsPanel v-else :items="exportTasks" :format-time="time" />
     <nav
       v-if="activeView === 'business' && total > pageSize"
       class="task-pagination"

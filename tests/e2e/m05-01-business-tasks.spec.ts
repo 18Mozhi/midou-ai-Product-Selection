@@ -258,6 +258,120 @@ test("P23 batch dialog variants preserve scope, eligibility and a reachable foot
   expect(actionRequests).toBe(0);
 });
 
+test("P23 export view separates async status records and links to the report center", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route("**/api/v1/report-exports", (route) =>
+    route.fulfill({
+      json: env([
+        {
+          id: "00000000-0000-4000-8000-000000000851",
+          report_type: "opportunity",
+          status: "succeeded",
+          attempt_count: 1,
+          row_count: 6,
+          last_error_code: null,
+          queue_position: null,
+          estimated_completion_at: null,
+          estimate_sample_size: 0,
+          created_at: "2026-08-08T09:00:00.000Z",
+          updated_at: "2026-08-08T10:00:00.000Z",
+          expires_at: "2026-08-15T10:00:00.000Z",
+        },
+        {
+          id: "00000000-0000-4000-8000-000000000852",
+          report_type: "trend",
+          status: "retry_scheduled",
+          attempt_count: 2,
+          row_count: null,
+          last_error_code: "temporary_failure",
+          queue_position: 3,
+          estimated_completion_at: "2026-08-08T10:30:00.000Z",
+          estimate_sample_size: 4,
+          created_at: "2026-08-08T09:10:00.000Z",
+          updated_at: "2026-08-08T09:40:00.000Z",
+          expires_at: "2026-08-15T09:10:00.000Z",
+        },
+        {
+          id: "00000000-0000-4000-8000-000000000853",
+          report_type: "team",
+          status: "expired",
+          attempt_count: 1,
+          row_count: null,
+          last_error_code: null,
+          queue_position: null,
+          estimated_completion_at: null,
+          estimate_sample_size: 0,
+          created_at: "2026-08-01T09:00:00.000Z",
+          updated_at: "2026-08-08T09:50:00.000Z",
+          expires_at: "2026-08-08T09:00:00.000Z",
+        },
+      ]),
+    }),
+  );
+
+  await page.goto("/tasks?view=exports");
+
+  await expect(page.getByRole("button", { name: "导出任务" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  const panel = page.getByRole("region", { name: "导出任务" });
+  await expect(panel.getByText("机会分析 · CSV")).toBeVisible();
+  await expect(panel.getByText("等待重试", { exact: true })).toBeVisible();
+  await expect(panel.getByText(/队列第 3 位/)).toBeVisible();
+  await expect(panel.getByText("已过期", { exact: true })).toBeVisible();
+  await expect(panel.getByRole("link", { name: "打开报表中心" })).toHaveAttribute(
+    "href",
+    "/reports",
+  );
+  await expect(panel.getByRole("link", { name: "查看任务" }).first()).toHaveAttribute(
+    "href",
+    "/reports?report=opportunity",
+  );
+  await expect(page.getByRole("navigation", { name: "任务分页" })).toHaveCount(0);
+
+  const geometry = await panel.evaluate((element) => {
+    const rows = [...element.querySelectorAll(".task-export-item")].map((row) => {
+      const bounds = row.getBoundingClientRect();
+      const link = row.querySelector("a")!.getBoundingClientRect();
+      return {
+        left: bounds.left,
+        right: bounds.right,
+        actionHeight: link.height,
+        columns: getComputedStyle(row).gridTemplateColumns,
+      };
+    });
+    return {
+      viewport: window.innerWidth,
+      documentWidth: document.documentElement.scrollWidth,
+      rows,
+    };
+  });
+  expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewport);
+  expect(geometry.rows.every((row) => row.left >= 0 && row.right <= geometry.viewport)).toBe(true);
+  expect(geometry.rows.every((row) => row.actionHeight >= 44)).toBe(true);
+  if (geometry.viewport <= 760)
+    expect(geometry.rows.every((row) => row.columns.split(" ").length === 1)).toBe(true);
+});
+
+test("P23 export view empty state clearly returns to reports", async ({ page }) => {
+  await setup(page);
+  await page.route("**/api/v1/report-exports", (route) => route.fulfill({ json: env([]) }));
+  await page.goto("/tasks?view=exports");
+
+  const panel = page.getByRole("region", { name: "导出任务" });
+  await expect(panel.getByRole("heading", { name: "尚无导出任务" })).toBeVisible();
+  await expect(
+    panel.getByText("从报表页提交 CSV 导出后，会在这里统一显示处理状态。"),
+  ).toBeVisible();
+  await expect(panel.getByRole("link", { name: "前往报表中心" })).toHaveAttribute(
+    "href",
+    "/reports",
+  );
+});
+
 test("M05-01 quick create route opens the task form", async ({ page }) => {
   await setup(page);
   await page.goto("/tasks?create=1");

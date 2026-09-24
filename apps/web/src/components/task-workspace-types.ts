@@ -39,6 +39,21 @@ export type TaskSummary = {
   overdue: number;
 };
 
+export type TaskExport = {
+  id: string;
+  report_type: "opportunity" | "trend" | "team";
+  status: string;
+  attempt_count: number;
+  row_count: number | null;
+  last_error_code: string | null;
+  queue_position: number | null;
+  estimated_completion_at: string | null;
+  estimate_sample_size: number;
+  created_at: string;
+  updated_at: string;
+  expires_at: string;
+};
+
 export type TaskActionEditor = "pause" | "cancel" | "delay" | "transfer" | "progress";
 
 export type BatchTaskAction = "pause" | "resume" | "cancel" | "delay" | "transfer";
