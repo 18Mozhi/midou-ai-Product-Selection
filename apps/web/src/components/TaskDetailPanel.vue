@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useModalDialog } from "../use-modal-dialog";
+import TaskActionDialog from "./TaskActionDialog.vue";
 import type {
   MemberOption,
   Task,
@@ -38,14 +38,6 @@ const emit = defineEmits<{
   "update:comment": [value: string];
   "update:actionForm": [value: TaskActionForm];
 }>();
-
-const { dialogElement, handleCancel } = useModalDialog(
-  () => Boolean(props.actionEditor),
-  () => emit("closeAction"),
-);
-
-const updateActionForm = (field: keyof TaskActionForm, value: string | number) =>
-  emit("update:actionForm", { ...props.actionForm, [field]: value });
 </script>
 
 <template>
@@ -222,92 +214,15 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
       </form>
     </section>
   </aside>
-  <dialog
-    ref="dialogElement"
-    class="task-action-dialog"
-    aria-label="任务操作表单"
-    @cancel="handleCancel"
-  >
-    <form @submit.prevent="$emit('submitAction')">
-      <h3>
-        {{
-          actionEditor === "transfer"
-            ? "转交任务"
-            : actionEditor === "delay"
-              ? "调整任务期限"
-              : actionEditor === "progress"
-                ? "更新任务进度"
-                : actionEditor === "pause"
-                  ? "暂停任务"
-                  : "取消任务"
-        }}
-      </h3>
-      <p>提交后会写入任务活动与审计记录，并使用当前任务版本进行冲突校验。</p>
-      <label v-if="actionEditor === 'transfer'">
-        接收成员
-        <select
-          :value="actionForm.assignee_id"
-          required
-          @change="updateActionForm('assignee_id', ($event.target as HTMLSelectElement).value)"
-        >
-          <option value="" disabled>请选择可访问当前工作区的成员</option>
-          <option v-for="member in members" :key="member.id" :value="member.id">
-            {{ member.label }}
-          </option>
-        </select>
-      </label>
-      <label v-if="actionEditor === 'delay'">
-        新截止时间
-        <input
-          :value="actionForm.due_at"
-          type="datetime-local"
-          required
-          @input="updateActionForm('due_at', ($event.target as HTMLInputElement).value)"
-        />
-      </label>
-      <template v-if="actionEditor === 'progress'">
-        <label>
-          完成进度（0–100）
-          <input
-            :value="actionForm.progress_percent"
-            type="number"
-            min="0"
-            max="100"
-            step="1"
-            required
-            @input="
-              updateActionForm(
-                'progress_percent',
-                Number(($event.target as HTMLInputElement).value),
-              )
-            "
-          />
-        </label>
-        <label>
-          本次进展说明
-          <textarea
-            :value="actionForm.progress_note"
-            maxlength="500"
-            required
-            placeholder="说明已完成内容、当前阻塞和下一步"
-            @input="updateActionForm('progress_note', ($event.target as HTMLTextAreaElement).value)"
-          ></textarea>
-        </label>
-      </template>
-      <label v-else>
-        操作原因
-        <textarea
-          :value="actionForm.reason"
-          maxlength="500"
-          required
-          placeholder="请填写可审计的操作原因"
-          @input="updateActionForm('reason', ($event.target as HTMLTextAreaElement).value)"
-        ></textarea>
-      </label>
-      <div>
-        <button type="button" @click="$emit('closeAction')">返回</button
-        ><button type="submit" :disabled="busy">{{ busy ? "正在提交…" : "确认提交" }}</button>
-      </div>
-    </form>
-  </dialog>
+  <TaskActionDialog
+    :task-title="task.title"
+    :task-version="task.version"
+    :action-editor="actionEditor"
+    :action-form="actionForm"
+    :members="members"
+    :busy="busy"
+    @submit="emit('submitAction')"
+    @close="emit('closeAction')"
+    @update:action-form="emit('update:actionForm', $event)"
+  />
 </template>

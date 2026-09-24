@@ -118,6 +118,72 @@ test("direct task detail exposes a recoverable not-found state", async ({ page }
   await expect(page.getByRole("button", { name: "重新加载" })).toBeVisible();
 });
 
+test("P24 action dialogs keep target, fields and footer readable on desktop and mobile", async ({
+  page,
+}) => {
+  const observed = await setup(page);
+  await page.goto(`/tasks/${taskId}`);
+
+  const more = page.locator(".task-detail-more");
+  const variants = [
+    {
+      trigger: "更新进度",
+      title: "更新任务进度",
+      fields: ["完成进度（0–100）", "本次进展说明"],
+    },
+    { trigger: "暂停", title: "暂停任务", fields: ["操作原因"] },
+    { trigger: "调整期限", title: "调整任务期限", fields: ["新截止时间", "操作原因"] },
+    { trigger: "转交负责人", title: "转交任务", fields: ["接收成员", "操作原因"] },
+    { trigger: "取消任务", title: "取消任务", fields: ["操作原因"], danger: true },
+  ];
+
+  for (const variant of variants) {
+    let trigger;
+    if (variant.trigger === "更新进度") {
+      trigger = page.getByRole("button", { name: variant.trigger, exact: true });
+    } else {
+      if (!(await more.evaluate((element) => (element as HTMLDetailsElement).open)))
+        await more.locator("summary").click();
+      trigger = more.getByRole("button", { name: variant.trigger, exact: true });
+    }
+    await trigger.click();
+
+    const dialog = page.getByRole("dialog", { name: variant.title });
+    await expect(dialog.getByText(task.title, { exact: true })).toBeVisible();
+    await expect(dialog.getByText("第 2 版", { exact: false })).toBeVisible();
+    await expect(dialog.getByRole("button", { name: "关闭任务操作窗口" })).toBeVisible();
+    for (const field of variant.fields) await expect(dialog.getByLabel(field)).toBeVisible();
+    if (variant.danger)
+      await expect(dialog.getByRole("button", { name: "确认提交" })).toHaveAttribute(
+        "data-danger",
+        "true",
+      );
+
+    const layout = await dialog.evaluate((element) => {
+      const bounds = element.getBoundingClientRect();
+      const footer = element.querySelector(".task-action-footer")!.getBoundingClientRect();
+      const controls = [...element.querySelectorAll("input, select, textarea, button")]
+        .filter((control) => (control as HTMLElement).getClientRects().length > 0)
+        .map((control) => Math.round(control.getBoundingClientRect().height));
+      return {
+        dialogBottom: bounds.bottom,
+        footerBottom: footer.bottom,
+        viewportHeight: window.innerHeight,
+        controls,
+      };
+    });
+    expect(layout.dialogBottom).toBeLessThanOrEqual(layout.viewportHeight);
+    expect(layout.footerBottom).toBeLessThanOrEqual(layout.viewportHeight);
+    expect(layout.controls.every((height) => height >= 44)).toBe(true);
+
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await expect(trigger).toBeFocused();
+  }
+
+  expect(observed.actionRequests).toBe(0);
+});
+
 test("task center previews batch transfer and delay with scoped inputs", async ({ page }) => {
   await setup(page);
   await page.goto("/tasks");
