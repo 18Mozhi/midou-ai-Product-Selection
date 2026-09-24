@@ -250,6 +250,31 @@ P11多个子面板复用该共享反馈组件。它在error状态下显示“重
 
 五文件没有本地dialog定义/确认调用候选；资料、密码、通知、首页规则均为内联form。主题选择使用自定义radio按钮，不是v-model字段。PersonalCenter有15个v-model位置、HomeDashboard有7个，共22个输入位置；另邮箱是disabled展示输入。P12共享UiStatePanel在部分错误态生成secondary但调用方无监听，属于共享消费者缺口，不加进上述五文件51项分母。
 
+### 2.9 P10 ThemeStudio 当前源码位置（2026-09-24）
+
+当前 `ThemeStudio.vue` 共12个静态候选；上表7个旧签名保留追溯，其中4个仍匹配但行号已移动、7个身份失效。本节为全部12个当前候选补精确行号/类型及当前LF指纹。主题切换立即应用本地预览，只有主题值相对已保存主题变更才会PUT；密度只更新本地会话显示，不进入保存请求。恢复仅撤销主题，不重置密度；错误区的登录、选择工作区与重新读取按不同状态分支显示。
+
+| 当前位置键 | candidate sig | 类型 / 行 | 当前语义 |
+| --- | --- | --- | --- |
+| T:142 | 77c47b63bed1a205.1 | control / 142 | TH-CURRENT-HOME 品牌链接到首页 |
+| T:147 | 4a092ea79d6c2f5a.1 | control / 147 | TH-CURRENT-PROFILE 导航至本人资料 |
+| T:148 | ad505ab637ba2e57.1 | control / 148 | TH-CURRENT-MFA 导航至安全设置/MFA |
+| T:149 | 9c6219bf774c7860.1 | control / 149 | TH-CURRENT-ROUTE 当前外观偏好入口及aria-current |
+| T:216 | 6bb5f6a1584a9db0.1 | control / 216 | TH-CURRENT-TRACE 展开当前主题偏好关联编号 |
+| T:220 | 5587941412d5210f.1 | control / 220 | TH-CURRENT-LOGIN 仅expired状态导航登录 |
+| T:226 | 78d551a8e1f6be17.1 | control / 226 | TH-CURRENT-CONTEXT blocked状态选择工作区 |
+| T:232 | abd6f3613ef299ad.1 | control / 232 | TH-CURRENT-READ 其它可重读错误状态请求刷新偏好 |
+| T:285 | e08941698ff33588.1 | event-binding / 285 | TH-CURRENT-PREVIEW 主题radio选择转给即时预览handler |
+| T:300 | 0ddae1cee09564f0.1 | event-binding / 300 | TH-CURRENT-DENSITY 密度radio选择只更新当前会话 |
+| T:314 | 1aa1d23b0fd6f31f.1 | control / 314 | TH-CURRENT-RESTORE 仅恢复已保存主题预览，不恢复密度 |
+| T:322 | b77160ecd730473a.1 | control / 322 | TH-CURRENT-SAVE 主题dirty时保存偏好；密度不在PUT字段中 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/ThemeStudio.vue | fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f |
+
+该映射只证明源码位置与既有状态/请求边界；不代表错误态、焦点、radio方向键、保存竞态、主题完整浏览器验收或生产验收已关闭。
+
 ## 3. 写入与状态连续性
 
 | 动作 | 实际输入、请求与成功结果 | 重设计必须保留或补验 |
