@@ -186,6 +186,20 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | apps/web/src/components/ResponsiveFilterDrawer.vue | a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011 |
 | apps/web/src/components/UiStatePanel.vue | 8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164 |
 | apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
+
+## 9. T组件剩余当前源码候选（2026-09-24）
+
+第8节已为 `CollectionTaskCenter.vue` 绑定当前LF指纹；本节补录旧表尚未覆盖的5个当前候选。它们分别属于状态面主操作事件、空结果恢复按钮、详情遮罩自身点击关闭、详情原生语义与详情键盘处理。`recoverEmpty` 在非全部状态时先清状态/页码/本地query再读取；在全部状态时只重新读取。详情遮罩仅在按下目标本身时关闭，内部点击不会命中 `.self` 分支；键盘事件继续交给当前 `detailKeydown`。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/CollectionTaskCenter.vue#3a210e63ca5a7831.1 | 603 | event-binding | CL51-CURRENT-STATE-PRIMARY / 非ready与非empty时将状态面primary接到列表load |
+| apps/web/src/components/CollectionTaskCenter.vue#16620352511db5c2.1 | 820 | control | CL51-CURRENT-EMPTY-RECOVERY / 全部状态重读；筛选空态返回全部状态并重读 |
+| apps/web/src/components/CollectionTaskCenter.vue#6b55734308f206c3.1 | 838 | event-binding | CL51-CURRENT-DETAIL-DISMISS / 仅详情遮罩本身mousedown时关闭详情 |
+| apps/web/src/components/CollectionTaskCenter.vue#ed8b70dc2e6170f2.1 | 839 | dialog-definition | CL51-CURRENT-DETAIL-SEMANTICS / 当前详情面板role=dialog、aria-modal与标题/描述关联 |
+| apps/web/src/components/CollectionTaskCenter.vue#d3da42ac8f789e3b.1 | 839 | event-binding | CL51-CURRENT-DETAIL-KEYBOARD / 将详情keydown转发给既有Escape与Tab边界处理 |
+
+本节仅补候选定位，不将列表/详情读取、人工重放的API合同、RBAC、真实任务事实、键盘实机或生产部署验收重新声明为通过；原5个失效签名仍保持identity-not-found。
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | config/route-catalog.json | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
 | apps/web/src/route-catalog.ts | 6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956 |
