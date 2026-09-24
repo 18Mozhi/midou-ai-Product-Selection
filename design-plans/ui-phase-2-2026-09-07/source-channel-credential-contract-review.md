@@ -464,3 +464,19 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | apps/web/src/components/ProviderParserSampleDialog.vue | fecfc130948a6e88c37cf35cf4d55acec74fa722ad8898202ce889b10832f842 |
 | apps/web/src/components/ProviderParserSampleReview.vue | 772658f4ec7fea171f1b690000f9329efc86a45c63efe1094840fb16c66da598 |
 | apps/web/src/components/ProviderCompatibilityMatrixDialog.vue | 32752031767eb5e54917fb3791709dfde6d96aa851a3762dcd751d3b2258543e |
+
+## 13. P49 ProviderAcceptanceOperations 当前呈现归属（2026-09-24）
+
+父级 `Alibaba1688AcceptanceCenter` 计算并传入 `credentialsLink` 与 `sampleLink`；本组件分别渲染“配置或续期登录档案”“定位1688固定样本”两个RouterLink，并通过原生`details`展示启用条件与读取追踪。组件不创建凭据、不审批固定样本、不触发验收任务或读取API；上述业务行为仍由目标页面和父级所有者承担。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/ProviderAcceptanceOperations.vue#b3ddac540b01d0e1.1 | 29 | control | SC49-CURRENT-NAV / 跳转父级提供的登录档案配置/续期目标 |
+| apps/web/src/components/ProviderAcceptanceOperations.vue#1f17b9f55d6b83f1.1 | 30 | control | SC49-CURRENT-NAV / 跳转父级提供的固定样本目标 |
+| apps/web/src/components/ProviderAcceptanceOperations.vue#3454720e54e9d8c8.1 | 54 | control | SC49-CURRENT-TECH / 展开本地服务端运行与读取追踪信息 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/ProviderAcceptanceOperations.vue | 12724a3fa2359a87e48748313448f7eece817fa3f8d6423f9faf409fd4a99f8f |
+
+来源页面入口身份不证明真实登录、固定样本审批、浏览器采集、来源启用、角色隔离或生产结果。

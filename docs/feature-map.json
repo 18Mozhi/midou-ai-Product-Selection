@@ -1312,6 +1312,7 @@
         "../apps/web/src/components/ProviderSourceCenter.vue",
         "../apps/web/src/components/ProviderSourceDirectory.vue",
         "../apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
+        "../apps/web/src/components/ProviderAcceptanceOperations.vue",
         "../apps/web/src/components/ProviderSourceConfigurationDialog.vue",
         "../apps/web/src/components/ProviderParserSampleDialog.vue",
         "../apps/web/src/components/ProviderParserSampleReview.vue",
