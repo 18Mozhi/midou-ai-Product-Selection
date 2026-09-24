@@ -401,3 +401,20 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | apps/web/src/components/ApiCoverageOperationCard.vue | 1bbda614ea0bf0aa4f59ebaf69275cead59c8ee6b876de2e18b008278015d11a |
 
 这两项是原生`details/summary`控件，不是业务详情弹窗或操作按钮。源码归属和可见名称不证明证据的真实性、实际探测覆盖或辅助技术全验；原P63关于生产报告、角色和接口证据的限制保持有效。
+
+## 10. P57 PlatformNotificationManagement 当前事件边界（2026-09-24）
+
+当前四个组件使用点分别向父级 `PlatformNotificationCenter` 转发人工消息工作台的编辑/动作、草稿分页变化、投递筛选的应用/重置、投递分页变化。此组件仅拥有视图组合和事件转发；草稿写入、原因流程、读取及分页数据仍由父级持有。历史哈希留在第6节，本节登记当前组件边界与指纹。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/PlatformNotificationManagement.vue#a84b9b74f461a608.1 | 37 | event-binding | PN57-MANAGEMENT-CURRENT-MESSAGE / 工作台编辑与发布/取消动作转发 |
+| apps/web/src/components/PlatformNotificationManagement.vue#22aeb336eb22dffc.1 | 46 | event-binding | PN57-MANAGEMENT-CURRENT-MESSAGE-PAGE / 草稿分页变化转发 |
+| apps/web/src/components/PlatformNotificationManagement.vue#70cfd76c23fd89d4.1 | 63 | event-binding | PN57-MANAGEMENT-CURRENT-FILTER / 投递筛选查询与状态双向绑定、apply/reset转发 |
+| apps/web/src/components/PlatformNotificationManagement.vue#ae1971e3fd4a8474.1 | 77 | event-binding | PN57-MANAGEMENT-CURRENT-NOTIFICATION-PAGE / 投递分页变化转发 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformNotificationManagement.vue | 7cced021643a3af6a23a07f8afca71d943cabcd13cf963d97ac3b698a3dfe2e8 |
+
+上述映射是Vue源码静态边界，不证明父级API、真实发送/投递、幂等审计、角色权限或生产行为。

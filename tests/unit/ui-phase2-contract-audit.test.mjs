@@ -2171,6 +2171,55 @@ test("current P41 organization wizard maps its form submission and three field o
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current P57 notification management maps its four child event boundaries", () => {
+  const file = "apps/web/src/components/PlatformNotificationManagement.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const document = "content-notification-evidence-contract-review.md";
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const currentRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.claim.includes("PN57-MANAGEMENT-CURRENT-") &&
+      record.temporalScope !== "historical",
+  );
+  const expectedIds = [
+    "a84b9b74f461a608.1",
+    "22aeb336eb22dffc.1",
+    "70cfd76c23fd89d4.1",
+    "ae1971e3fd4a8474.1",
+  ].map((signature) => `${file}#${signature}`);
+  assert.equal(candidates.length, 4);
+  assert.deepEqual(currentRows.map((record) => record.candidateId).sort(), expectedIds.sort());
+  for (const record of currentRows) {
+    const candidate = candidates.find((item) => item.candidateId === record.candidateId);
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.currentLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedKind, candidate?.kind, record.candidateId);
+  }
+  const hashes = report.sourceClaims.filter(
+    (claim) => claim.document.endsWith(document) && claim.file === file,
+  );
+  assert.equal(hashes.length, 2);
+  const currentHash = hashes.find((claim) => claim.temporalScope !== "historical");
+  const previousHash = hashes.find((claim) => claim.temporalScope === "historical");
+  assert.equal(currentHash?.hash, digest(source));
+  assert.equal(currentHash?.status, "hash-current");
+  assert.equal(
+    previousHash?.hash,
+    "a91ffa14ffdbd1f17b01f0877b745288d96c4ea8574449721edbc61883f1cb18",
+  );
+  assert.equal(previousHash?.status, "hash-drift");
+  assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],
