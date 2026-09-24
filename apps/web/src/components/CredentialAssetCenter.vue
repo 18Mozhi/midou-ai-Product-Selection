@@ -308,7 +308,16 @@ function trapEditorFocus(event: KeyboardEvent) {
     editorPanel.value?.querySelectorAll<HTMLElement>(
       'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
     ) ?? [],
-  ).filter((element) => !element.hasAttribute("hidden"));
+  ).filter((element) => {
+    const style = window.getComputedStyle(element);
+    return (
+      !element.matches(":disabled") &&
+      !element.closest('[hidden], [inert], [aria-hidden="true"]') &&
+      element.getClientRects().length > 0 &&
+      style.visibility !== "hidden" &&
+      style.visibility !== "collapse"
+    );
+  });
   if (!focusable.length) return;
   const first = focusable[0],
     last = focusable[focusable.length - 1];

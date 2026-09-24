@@ -3898,3 +3898,8 @@ P08 `/select-context` 组织与工作区 C 方向已接入真实 `TenancyChooser
 ## 2026-09-24 · F04b M02-03 路由状态面板来源归属
 
 将三个 `NavigationAccessPanel.vue` 源候选纳入共享壳层合同：missing/forbidden 各自的“返回工作台”链接，以及仅导航到 `/me?section=permissions` 的权限入口。明确该面板不等同公开 P73 404，也不直接提交权限申请或变更授权；新永久单测核对三条候选的ID、行号、类型与当前 LF SHA。全站静态未引用候选由3降至0。未改产品 Vue、路由守卫、服务端权限或业务行为；按用户要求提交并部署当前批次后，公开 `health/ready`、`health/available`、`health/version`、登录路由及404回退均通过，`build_sha=f87225f206f94984709ccedd0922e125b6c2f049`。该发布记录不代表真实权限或生产业务验收。
+## 2026-09-24 · P50 弹窗 Tab 循环跳过视觉隐藏控件
+
+用新浏览器回归复现 P50 `trapEditorFocus` 将 CSS `display:none` 的末项提交按钮仍计入循环，导致从实际末个可见控件按 Tab 时没有由自定义边界拦截。修复后焦点名单同时排除 `:disabled`、`hidden`/`inert`/`aria-hidden` 子树、无布局矩形与 `visibility:hidden/collapse`；四类敏感编辑窗共用该本地逻辑，未改字段、弹窗内容、API、权限或写入。
+
+定向实际路由 E2E 桌面 Chromium 与390px手机各1/1通过。浏览器夹具只填入合成值、不提交，未读取真实凭证或触发业务写入。部署未执行：本次按阶段计划保留为已验证本地增量，发布仍需满足全站 G0–G3 与固定发布门。

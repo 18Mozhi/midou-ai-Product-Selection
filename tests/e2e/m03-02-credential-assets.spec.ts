@@ -207,6 +207,41 @@ test("UI2-SC50 all credential editors use the modal top layer and restore their 
     await expect(item.trigger).toBeFocused();
   }
 });
+test("UI2-SC50 focus loop skips controls hidden by CSS", async ({ page }) => {
+  await nav(page);
+  await page.route("**/api/v1/platform/credential-assets", (route) =>
+    route.fulfill({ json: { data: [asset], request_id: "ui2-hidden-focus-assets" } }),
+  );
+  await page.goto("/platform-admin/credentials");
+
+  await page.getByRole("button", { name: "新建凭证资产", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "创建凭证资产" });
+  const form = dialog.locator("form.credential-editor");
+  const close = dialog.getByRole("button", { name: "关闭凭证编辑" });
+  const cancel = dialog.getByRole("button", { name: "取消", exact: true });
+  const submit = dialog.getByRole("button", { name: "加密保存", exact: true });
+
+  await dialog.getByLabel("需要加密保存的内容").fill("synthetic-focus-only");
+  await submit.evaluate((element: HTMLElement) => {
+    element.style.display = "none";
+  });
+  await cancel.focus();
+  const trapped = await cancel.evaluate((element) => {
+    const event = new KeyboardEvent("keydown", {
+      key: "Tab",
+      bubbles: true,
+      cancelable: true,
+    });
+    element.dispatchEvent(event);
+    return event.defaultPrevented;
+  });
+
+  expect(trapped).toBe(true);
+  await expect(close).toBeFocused();
+  await expect(form).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+});
 test("UI2-SC50 credential editor backdrop and successful save return focus", async ({ page }) => {
   await nav(page);
   const created = {
