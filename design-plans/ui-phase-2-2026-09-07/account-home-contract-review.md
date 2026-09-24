@@ -196,6 +196,25 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 
 此静态映射不改变通知API、开关字段或投递能力，不把本地checkbox更新视为已保存。
 
+### 2.6 P11 PersonalAssetsPanel 当前源码位置（2026-09-24）
+
+资产子面板只呈现服务端返回的关注热点、人工决策和本人任务，并通过既有前端路由进入对应目标；当前任务入口固定到 `/tasks`，源码中没有详情ID或本人筛选参数。读取错误重试转发给父级；空态仅在resource状态为ready时显示，不推导收藏、撤销或最近浏览能力。
+
+#### apps/web/src/components/personal-center/PersonalAssetsPanel.vue
+
+| 当前签名.序号 | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| 84b53a278d412127.1 | 12 | event-binding | PC-ASSET-CURRENT-READ / 呈现本人资产读取状态并转发重试 |
+| add62a6dcbcd3e91.1 | 26 | control | PC-ASSET-CURRENT-FOLLOW / 依据关注记录ID进入对应热点视图 |
+| fb93a6197d1c0346.1 | 42 | control | PC-ASSET-CURRENT-DECISION / 依据决策关联的机会ID进入机会详情 |
+| ee2568a050e8c314.1 | 58 | control | PC-ASSET-CURRENT-TASK / 进入通用任务列表，不附加详情或本人筛选 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/personal-center/PersonalAssetsPanel.vue | 0da62518600762a5906b8e326800ea1a9d1a3f856bbf98178a3cb68a9198c7ef |
+
+此映射仅确认静态路由目标与读取事件；不改变本人资产查询范围或推断被链接页面的数据授权结果。
+
 五文件没有本地dialog定义/确认调用候选；资料、密码、通知、首页规则均为内联form。主题选择使用自定义radio按钮，不是v-model字段。PersonalCenter有15个v-model位置、HomeDashboard有7个，共22个输入位置；另邮箱是disabled展示输入。P12共享UiStatePanel在部分错误态生成secondary但调用方无监听，属于共享消费者缺口，不加进上述五文件51项分母。
 
 ## 3. 写入与状态连续性
