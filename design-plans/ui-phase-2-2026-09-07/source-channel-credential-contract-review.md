@@ -289,39 +289,55 @@ SC50规格中的02–06用例在此细化归属；永久测试只新增SC50-01�
 
 第7节全部旧指纹保留为历史快照；审计器仅用非历史指纹判断当前源码绑定。此项对账不覆盖P50未决真实扩展、后端/RBAC、加密、MySQL、完整交互矩阵与生产验收。
 
-## 9. P48 来源配置弹窗当前身份复核（2026-09-24）
+## 9. P48 来源配置弹窗拆分后的当前源码身份复核（2026-09-24）
 
-按 `ProviderSourceConfigurationDialog.vue` 当前标签、属性、事件与emit逐一核对，将21个当前源码候选归入既有SC48-CONFIG/VERSIONS语义合同。字段事件仍是原值转发，保存/烟测/回滚边界不变；两个技术详情折叠和两组弹窗焦点事件按源节点登记，不把它们重复计为新的业务写入动作。仅属静态源身份对账，不证明动态状态、权限或真实写入通过。
+按当前真实组件树分别核对：`ProviderSourceConfigurationDialog.vue` 是属性/事件中介，编辑表单及其焦点、字段和提交控件位于 `ProviderSourceEditDialog.vue`，版本历史及回滚控件位于 `ProviderSourceVersionHistoryDialog.vue`。将25个候选分别绑定到实际源文件：编辑子窗13项、历史子窗8项、父中介的子组件调用/事件转发4项。父组件继续原样转发既有 props/emits；保存、先停用再烟测启用、回滚和 API/RBAC 所有权均未改变。此为静态源码归属校正，不证明动态状态、权限、真实写入或生产验收通过。
+
+### G
+
+| 当前位置键 | 类型 / 行 | 既有语义归属 |
+| --- | --- | --- |
+| apps/web/src/components/ProviderSourceEditDialog.vue#5dde29b862125b0e.1 | dialog-definition / 64 | SC48-CONFIG / 编辑设置弹窗定义及初始焦点 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#fd96a0ddfd39623f.1 | event-binding / 64 | SC48-CONFIG / 编辑弹窗键盘焦点事件 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#683678bf384a1e42.1 | form-event / 74 | SC48-CONFIG / 表单提交转发既有save |
+| apps/web/src/components/ProviderSourceEditDialog.vue#004f04ff66f655ca.1 | control / 94 | SC48-CONFIG / 关闭编辑设置并按阶段通知 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#1c008f867673db60.1 | control / 122 | SC48-CONFIG / 处理结果技术详情折叠 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#a3dad946584f7803.1 | event-binding / 127 | SC48-CONFIG / schedule_minutes转Number并更新既有表单 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#73764f74b8f1a61a.1 | event-binding / 139 | SC48-CONFIG / timeout_ms转Number并更新既有表单 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#0d47ebf53fe0590e.1 | event-binding / 151 | SC48-CONFIG / retry_limit转Number并更新既有表单 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#c57686ba7c1f6588.1 | event-binding / 164 | SC48-CONFIG / status更新既有表单 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#c0923c491565b4ef.1 | event-binding / 205 | SC48-CONFIG / reason更新既有表单 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#c74c69289cda1b1c.1 | control / 226 | SC48-CONFIG / 确认结果后关闭并回到目录同步流程 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#a8cf70fb83e27873.1 | control / 236 | SC48-CONFIG / 取消或关闭未完成设置 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#d166a16792084fe1.1 | control / 237 | SC48-CONFIG / 原保存或烟测提交入口 |
+
+| apps/web/src/components/ProviderSourceEditDialog.vue | 4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296 |
+
+### H
+
+| 当前位置键 | 类型 / 行 | 既有语义归属 |
+| --- | --- | --- |
+| apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#22ecf14cfd3d483f.1 | dialog-definition / 76 | SC48-VERSIONS / 配置版本弹窗定义及初始焦点 |
+| apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#6998c14c2116e210.1 | event-binding / 76 | SC48-VERSIONS / 版本弹窗键盘焦点事件 |
+| apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#7cef35300d9577fb.1 | control / 96 | SC48-VERSIONS / 关闭版本弹窗 |
+| apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#1c008f867673db60.1 | control / 128 | SC48-VERSIONS / 处理结果技术详情折叠 |
+| apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#c73ff040b3307a5d.1 | control / 131 | SC48-VERSIONS / 按既有结果状态重读目录与历史 |
+| apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#ada59de7960940c4.1 | event-binding / 147 | SC48-VERSIONS / rollbackReason更新既有表单 |
+| apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#812f9da80a8dbb06.1 | control / 172 | SC48-VERSIONS / 对可回滚版本发既有rollback事件 |
+| apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#b7bbd08aecc4de79.1 | control / 193 | SC48-VERSIONS / 关闭版本弹窗 |
+
+| apps/web/src/components/ProviderSourceVersionHistoryDialog.vue | 883969c440b50856fc61c21cbbc68bc3c56762327cacb4496fde410e99d4d581 |
 
 ### F
 
 | 当前位置键 | 类型 / 行 | 既有语义归属 |
 | --- | --- | --- |
-| F:5dde29b862125b0e.1 | dialog-definition / 121 | SC48-CONFIG / 编辑设置弹窗定义 |
-| F:fd96a0ddfd39623f.1 | event-binding / 121 | SC48-CONFIG / 弹窗焦点键盘事件 |
-| F:683678bf384a1e42.1 | form-event / 131 | SC48-CONFIG / 表单提交转发既有save |
-| F:004f04ff66f655ca.1 | control / 151 | SC48-CONFIG / 关闭编辑设置并按阶段通知 |
-| F:1c008f867673db60.1 | control / 179 | SC48-CONFIG / 处理结果技术详情折叠 |
-| F:a3dad946584f7803.1 | event-binding / 184 | SC48-CONFIG / schedule_minutes原值转Number并转发 |
-| F:73764f74b8f1a61a.1 | event-binding / 196 | SC48-CONFIG / timeout_ms原值转Number并转发 |
-| F:0d47ebf53fe0590e.1 | event-binding / 208 | SC48-CONFIG / retry_limit原值转Number并转发 |
-| F:c57686ba7c1f6588.1 | event-binding / 221 | SC48-CONFIG / status原值转发 |
-| F:c0923c491565b4ef.1 | event-binding / 262 | SC48-CONFIG / reason原值转发 |
-| F:c74c69289cda1b1c.1 | control / 283 | SC48-CONFIG / 确认结果后关闭并回到目录同步流程 |
-| F:a8cf70fb83e27873.1 | control / 293 | SC48-CONFIG / 取消或关闭未完成设置 |
-| F:d166a16792084fe1.1 | control / 294 | SC48-CONFIG / 原保存或烟测提交入口 |
-| F:22ecf14cfd3d483f.1 | dialog-definition / 313 | SC48-VERSIONS / 配置版本弹窗定义 |
-| F:6998c14c2116e210.1 | event-binding / 313 | SC48-VERSIONS / 弹窗焦点键盘事件 |
-| F:7cef35300d9577fb.1 | control / 333 | SC48-VERSIONS / 关闭版本弹窗 |
-| F:1c008f867673db60.2 | control / 365 | SC48-VERSIONS / 处理结果技术详情折叠 |
-| F:c73ff040b3307a5d.1 | control / 368 | SC48-VERSIONS / 按既有结果状态重读目录与历史 |
-| F:ada59de7960940c4.1 | event-binding / 384 | SC48-VERSIONS / rollbackReason原值转发 |
-| F:812f9da80a8dbb06.1 | control / 409 | SC48-VERSIONS / 对可回滚版本发既有rollback事件 |
-| F:b7bbd08aecc4de79.1 | control / 430 | SC48-VERSIONS / 关闭版本弹窗 |
+| F:f8f748c674190729.1 | event-binding / 46 | SC48-CONFIG / 编辑窗的既有 props 与事件回传 |
+| F:0e32b5a54eb60075.1 | dialog-component-call / 46 | SC48-CONFIG / 调用专属编辑设置子组件 |
+| F:ed9b168dbe1f3587.1 | event-binding / 60 | SC48-VERSIONS / 版本窗的既有 props 与事件回传 |
+| F:6b2f9fa5430c552d.1 | dialog-component-call / 60 | SC48-VERSIONS / 调用专属版本历史子组件 |
 
-当前 `ProviderSourceConfigurationDialog.vue` 的LF归一SHA-256为 `3cb10851f9ec95552dabf2ee858e0e1c9081c27855625c5161902408fdb296f9`，旧第7节来源指纹仍保留作历史快照。
-
-| apps/web/src/components/ProviderSourceConfigurationDialog.vue | 3cb10851f9ec95552dabf2ee858e0e1c9081c27855625c5161902408fdb296f9 |
+| apps/web/src/components/ProviderSourceConfigurationDialog.vue | 5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f |
 
 ## 10. P48 来源目录当前源码身份复核（2026-09-24）
 
@@ -331,21 +347,22 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 | 当前位置键 | 类型 / 行 | 既有语义归属 |
 | --- | --- | --- |
-| S:8b5b066073993a3a.1 | control / 1329 | SC48-LOAD / 刷新来源目录 |
-| S:090fa072a224b63e.1 | event-binding / 1361 | SC48-FILTER / 七条件、排序与重置事件转发 |
-| S:1c008f867673db60.1 | control / 1399 | SC48-CONFIG / 配置保存后目录同步失败的技术详情 |
-| S:b1a60fde5d6ec9d6.1 | control / 1402 | SC48-CONFIG / 保存结果后的目录重读 |
-| S:1c008f867673db60.2 | control / 1461 | SC48-LOAD / 登录、权限或目录读取失败的技术详情 |
-| S:adb5a27ee7e15104.1 | control / 1464 | SC48-LOAD/LOGIN / 按当前失败态重新加载或重新登录 |
-| S:1c008f867673db60.3 | control / 1523 | SC48-LOAD / 目录刷新结果的技术详情 |
-| S:22e451664b4ba746.1 | control / 1526 | SC48-LOAD / 刷新失败后重新加载 |
-| S:52eea605d2c84eb0.1 | event-binding / 1536 | SC48-PAGE/PROBE/CONFIG/COMPAT/VERSIONS/LOGIN/SAMPLES / 目录子组件与既有处理函数的事件转发 |
-| S:0d05b40ba4543887.1 | event-binding / 1559 | SC48-CONFIG/VERSIONS / 配置弹窗属性与既有事件转发 |
-| S:7f36e42eb80bca2d.1 | dialog-component-call / 1559 | SC48-CONFIG/VERSIONS / 配置与版本弹窗调用 |
-| S:aebc04fe71463aa3.1 | event-binding / 1587 | SC48-SAMPLES / 样本弹窗读写、复核与恢复事件转发 |
-| S:e86a06afbe712ab0.1 | dialog-component-call / 1587 | SC48-SAMPLES / 固定样本弹窗调用 |
-| S:8665cbf979729f72.1 | event-binding / 1608 | SC48-COMPAT / 兼容矩阵关闭事件转发 |
-| S:1c8002dd18f07872.1 | dialog-component-call / 1608 | SC48-COMPAT / 兼容矩阵弹窗调用 |
+| S:8b5b066073993a3a.1 | control / 672 | SC48-LOAD / 刷新来源目录 |
+| S:436e3971cada0a0b.1 | control / 675 | SC48-DEFINE / 导航至既有来源规则目录 |
+| S:090fa072a224b63e.1 | event-binding / 704 | SC48-FILTER / 七条件、排序与重置事件转发 |
+| S:1c008f867673db60.1 | control / 742 | SC48-CONFIG / 配置保存后目录同步失败的技术详情 |
+| S:b1a60fde5d6ec9d6.1 | control / 745 | SC48-CONFIG / 保存结果后的目录重读 |
+| S:1c008f867673db60.2 | control / 804 | SC48-LOAD / 登录、权限或目录读取失败的技术详情 |
+| S:adb5a27ee7e15104.1 | control / 807 | SC48-LOAD/LOGIN / 按当前失败态重新加载或重新登录 |
+| S:1c008f867673db60.3 | control / 866 | SC48-LOAD / 目录刷新结果的技术详情 |
+| S:22e451664b4ba746.1 | control / 869 | SC48-LOAD / 刷新失败后重新加载 |
+| S:52eea605d2c84eb0.1 | event-binding / 879 | SC48-PAGE/PROBE/CONFIG/COMPAT/VERSIONS/LOGIN/SAMPLES / 目录子组件与既有处理函数的事件转发 |
+| S:0d05b40ba4543887.1 | event-binding / 902 | SC48-CONFIG/VERSIONS / 配置弹窗属性与既有事件转发 |
+| S:7f36e42eb80bca2d.1 | dialog-component-call / 902 | SC48-CONFIG/VERSIONS / 配置与版本弹窗调用 |
+| S:aebc04fe71463aa3.1 | event-binding / 930 | SC48-SAMPLES / 样本弹窗读写、复核与恢复事件转发 |
+| S:e86a06afbe712ab0.1 | dialog-component-call / 930 | SC48-SAMPLES / 固定样本弹窗调用 |
+| S:8665cbf979729f72.1 | event-binding / 951 | SC48-COMPAT / 兼容矩阵关闭事件转发 |
+| S:1c8002dd18f07872.1 | dialog-component-call / 951 | SC48-COMPAT / 兼容矩阵弹窗调用 |
 
 ### D
 
@@ -364,7 +381,7 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | D:6f7e71d427cb36b9.1 | control / 227 | SC48-PAGE / 上一页 |
 | D:f3f3456654086e7b.1 | control / 239 | SC48-PAGE / 下一页 |
 
-| apps/web/src/components/ProviderSourceCenter.vue | bfb1ea618996a14d687b4b70b15c75a871bddc7e5cd489c9bedd105d0d26f489 |
+| apps/web/src/components/ProviderSourceCenter.vue | 26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a |
 | apps/web/src/components/ProviderSourceDirectory.vue | ef10bdd7df7e4887d0c158a0b251caaffe4648afb66895e0c02f6408e10e7c34 |
 
 两文件身份和当前LF归一指纹可由定向审计与单测复验。此处不代表真实API、来源权限、匿名外发烟测、数据库写入或M07-03生产签收通过。
@@ -501,5 +518,5 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | apps/web/src/components/ProviderParserSampleDialog.vue#1c008f867673db60.2 | 165 | control | SC48-SAMPLES / 展开候选采集解析器版本 |
 | apps/web/src/components/ProviderParserSampleReview.vue#915c93b75eb41a91.1 | 47 | control | SC48-SAMPLES / 提交既有审批通过决策 |
 | apps/web/src/components/ProviderParserSampleReview.vue#35b9cb8eaccc4d26.1 | 54 | control | SC48-SAMPLES / 提交既有驳回决策 |
-| apps/web/src/components/ProviderSourceCenter.vue#436e3971cada0a0b.1 | 1332 | control | SC48-DEFINE / 导航至既有来源规则目录 |
+| apps/web/src/components/ProviderSourceCenter.vue#436e3971cada0a0b.1 | 675 | control | SC48-DEFINE / 导航至既有来源规则目录 |
 来源页面入口身份不证明真实登录、固定样本审批、浏览器采集、来源启用、角色隔离或生产结果。

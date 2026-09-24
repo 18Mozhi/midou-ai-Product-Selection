@@ -373,6 +373,7 @@ test("shared shell role and state contract binds every current source site witho
   const records = report.records.filter((record) => record.document.endsWith(`/${document}`));
   const files = [
     "apps/web/src/components/NavigationShell.vue",
+    "apps/web/src/components/NavigationAccessPanel.vue",
     "apps/web/src/components/DiscoveryOverlay.vue",
     "apps/web/src/components/OrganizationRolePanel.vue",
     "apps/web/src/components/NotFoundPage.vue",
@@ -431,7 +432,7 @@ test("shared shell role and state contract binds every current source site witho
     assert.equal(current[0].claim.split("|")[4].trim(), priorSemantic);
   }
   const hashes = report.sourceClaims.filter((claim) => claim.document.endsWith(`/${document}`));
-  assert.equal(hashes.length, 15);
+  assert.equal(hashes.length, 16);
   for (const claim of hashes) assert.equal(digest(source(claim.file)), claim.hash, claim.file);
   assert.equal(
     report.unreferenced.filter((item) => files.includes(item.file)).length,
@@ -495,6 +496,8 @@ test("current P48/P50 source maps cover each live candidate and fingerprint", ()
   for (const [name, firstCurrentLine] of [
     ["CredentialAssetCenter.vue", 255],
     ["ProviderSourceConfigurationDialog.vue", 292],
+    ["ProviderSourceEditDialog.vue", 292],
+    ["ProviderSourceVersionHistoryDialog.vue", 292],
     ["ProviderSourceCenter.vue", 326],
     ["ProviderSourceDirectory.vue", 326],
     ["Alibaba1688AcceptanceCenter.vue", 326],
