@@ -418,3 +418,16 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | apps/web/src/components/PlatformNotificationManagement.vue | 7cced021643a3af6a23a07f8afca71d943cabcd13cf963d97ac3b698a3dfe2e8 |
 
 上述映射是Vue源码静态边界，不证明父级API、真实发送/投递、幂等审计、角色权限或生产行为。
+
+## 11. PlatformManagementFilter 当前调用与提交候选（2026-09-24）
+
+共享 `PlatformManagementFilter` 由父级传入通知、内容、接口覆盖或邮件域及对应筛选参数。筛选抽屉只是响应式/对话模式容器，表单 submit 只向父级发出既有 `apply` 意图；查询和状态结果、读取范围及权限仍由各父级拥有。两个候选不重复计作两次筛选业务动作。本节指纹是当前源码，不代表完整域变体运行或生产验收；第6节保留旧指纹历史。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/PlatformManagementFilter.vue#ec5c5407e5528004.1 | 20 | dialog-component-call | PM-FILTER-CURRENT-DRAWER / ResponsiveFilterDrawer按父级mode与appearance呈现，不拥有筛选读取 |
+| apps/web/src/components/PlatformManagementFilter.vue#34a39302f4e7c582.1 | 26 | form-event | PM-FILTER-CURRENT-SUBMIT / 阻止原生提交并向父级发出apply，与筛选按钮归并 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformManagementFilter.vue | 58ed6c796cffa780c81b565b8081b40e3cf006feb238ed15758b4c3cf9ed7f2f |
