@@ -190,6 +190,74 @@ test("M03-02.A07/A08/A15 masked credential vault is responsive and visual", asyn
   await expect(editor).toBeHidden();
   await expect(createAssetButton).toBeFocused();
 });
+test("UI2-SC50 zoom-equivalent narrow layout keeps touch controls and mobile details usable", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 195, height: 844 });
+  await nav(page);
+  await page.route("**/api/v1/platform/credential-assets", (route) =>
+    route.fulfill({ json: { data: [asset], request_id: "ui2-zoom-assets" } }),
+  );
+  await page.goto("/platform-admin/credentials");
+  const center = page.locator(".credential-center");
+  const layout = () =>
+    center.evaluate((element) => ({
+      clientWidth: element.clientWidth,
+      scrollWidth: element.scrollWidth,
+      viewportWidth: document.documentElement.clientWidth,
+    }));
+  const initialLayout = await layout();
+  expect(initialLayout.scrollWidth).toBeLessThanOrEqual(initialLayout.clientWidth + 1);
+  expect(initialLayout.viewportWidth).toBe(195);
+
+  const undersizedButtons = await center.locator("a:visible, button:visible").evaluateAll((items) =>
+    items
+      .map((item) => {
+        const rect = item.getBoundingClientRect();
+        return {
+          name: item.getAttribute("aria-label") || item.textContent?.trim(),
+          width: rect.width,
+          height: rect.height,
+        };
+      })
+      .filter((item) => item.width < 44 || item.height < 44),
+  );
+  expect(undersizedButtons).toEqual([]);
+
+  const row = page.locator(".responsive-data-view__mobile article > button").first();
+  await row.click();
+  const detail = page.getByRole("dialog", { name: provider.name });
+  await expect(detail).toContainText(asset.name);
+  await expect(detail).toContainText(profile.name);
+  const closeDetail = detail.getByRole("button", { name: "关闭详情" });
+  const closeSize = await closeDetail.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { width: rect.width, height: rect.height };
+  });
+  expect(closeSize.width).toBeGreaterThanOrEqual(44);
+  expect(closeSize.height).toBeGreaterThanOrEqual(44);
+  await closeDetail.click();
+  await expect(row).toBeFocused();
+
+  await page.getByRole("button", { name: "配置网页登录", exact: true }).click();
+  const editor = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await expect(editor).toBeVisible();
+  const editorLayout = await editor.evaluate((element) => ({
+    clientWidth: element.clientWidth,
+    scrollWidth: element.scrollWidth,
+  }));
+  expect(editorLayout.scrollWidth).toBeLessThanOrEqual(editorLayout.clientWidth + 1);
+  const footerButtons = editor.locator("footer button:visible");
+  for (const button of await footerButtons.all()) {
+    await expect(button).toBeInViewport();
+    const size = await button.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return { width: rect.width, height: rect.height };
+    });
+    expect(size.width).toBeGreaterThanOrEqual(44);
+    expect(size.height).toBeGreaterThanOrEqual(44);
+  }
+});
 test("UI2-SC50 all credential editors use the modal top layer and restore their trigger", async ({
   page,
 }) => {
