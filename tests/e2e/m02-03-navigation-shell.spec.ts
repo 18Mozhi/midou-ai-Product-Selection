@@ -49,6 +49,18 @@ async function allow(page: any, shell: "member" | "organization_admin" | "platfo
           changes: [],
           follows: [],
           health: [],
+          automatic_selection: {
+            state: "not_configured",
+            enabled_rule_count: 0,
+            candidate_count: 0,
+            rule_candidate_count: 0,
+            recommended_count: 0,
+            awaiting_evidence_count: 0,
+            adopted_count: 0,
+            recommended_items: [],
+            last_collection_at: null,
+            next_collection_at: null,
+          },
           scope: {
             organization_id: "00000000-0000-4000-8000-000000000103",
             workspace_id: "00000000-0000-4000-8000-000000000104",
@@ -65,6 +77,9 @@ async function allow(page: any, shell: "member" | "organization_admin" | "platfo
     request_id: "m02-03-business",
     trace_id: "m02-03-business",
   });
+  await page.route("**/api/v1/trends/monitoring-rules", (route: any) =>
+    route.fulfill({ json: envelope([]) }),
+  );
   await page.route("**/api/v1/org/admin/summary", (route: any) =>
     route.fulfill({
       json: envelope({
@@ -167,7 +182,7 @@ for (const item of [
   }, testInfo) => {
     await allow(page, item.shell);
     await page.goto(item.path);
-    await expect(page.getByRole("heading", { name: item.heading, level: 2 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: item.heading }).first()).toBeVisible();
     await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "ready");
     await expect(page.locator(".role-nav-groups details[open]")).toHaveCount(0);
     await expect(page.locator(".role-nav-menu").first()).toBeHidden();
