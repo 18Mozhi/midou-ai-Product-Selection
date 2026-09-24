@@ -74,6 +74,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   profiles = ref<Profile[]>([]),
   providers = ref<Provider[]>([]),
   requestId = ref(""),
+  readFailureRequestId = ref(""),
   message = ref(""),
   editor = ref<EditorKind | null>(null),
   selected = ref<Asset | null>(null),
@@ -222,6 +223,7 @@ async function load() {
   if (!preserve) state.value = "loading";
   refreshing.value = true;
   message.value = "";
+  readFailureRequestId.value = "";
   refreshNotice.value = "";
   refreshNoticeRequestId.value = "";
   const controller = new AbortController();
@@ -240,6 +242,7 @@ async function load() {
     profiles.value = nextProfiles.data;
     providers.value = nextProviders.data;
     requestId.value = nextProviders.request_id;
+    readFailureRequestId.value = "";
     state.value = assets.value.length || profiles.value.length ? "ready" : "empty";
     lastUpdatedAt.value = new Date().toISOString();
     if (preserve) {
@@ -251,7 +254,7 @@ async function load() {
     if (!pageActive || generation !== readGeneration) return false;
     const apiError = error instanceof ApiClientError ? error : null;
     const timedOut = error instanceof DOMException && error.name === "AbortError";
-    requestId.value = apiError?.requestId ?? requestId.value;
+    readFailureRequestId.value = apiError?.requestId ?? "";
     message.value = timedOut
       ? "读取超过 12 秒，请稍后重试。"
       : (apiError?.actionHint ?? "网络连接异常，请稍后重试。");
@@ -260,6 +263,7 @@ async function load() {
       refreshNotice.value = timedOut
         ? "刷新超过 12 秒，已保留上一次成功读取的数据。"
         : `${message.value} 已保留上一次成功读取的数据。`;
+      refreshNoticeRequestId.value = readFailureRequestId.value;
     } else state.value = failure(apiError?.status ?? (timedOut ? 504 : 503));
     return false;
   } finally {
@@ -989,7 +993,7 @@ onActivated(() => {
     <UiStatePanel
       v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
-      :request-id="requestId"
+      :request-id="readFailureRequestId"
       @primary="load"
     />
     <section v-else>

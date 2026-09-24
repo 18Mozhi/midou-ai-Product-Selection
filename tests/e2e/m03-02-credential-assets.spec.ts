@@ -457,6 +457,138 @@ test("M03-02.A08 refresh failure preserves the last successful metadata", async 
   expect(assetRequestCount).toBeLessThanOrEqual(4);
 });
 
+test("UI2-SC50 partial credential reads retain the snapshot and identify the failed request", async ({
+  page,
+}) => {
+  await nav(page);
+  let failedRead: { path: string; status: number; requestId: string } | null = null;
+  const response = (path: string, data: unknown) => {
+    if (failedRead?.path === path) {
+      return {
+        status: failedRead.status,
+        json: {
+          error: {
+            code: failedRead.status === 403 ? "authorization_denied" : "read_unavailable",
+            message: "读取失败",
+            action_hint: "请检查权限或依赖后重试。",
+          },
+          request_id: failedRead.requestId,
+          trace_id: failedRead.requestId,
+        },
+      };
+    }
+    return { json: { data, request_id: `ui2-read-${path.split("/").at(-1)}` } };
+  };
+  await page.route("**/api/v1/platform/credential-assets", (route) =>
+    route.fulfill(response("/api/v1/platform/credential-assets", [asset])),
+  );
+  await page.route("**/api/v1/platform/crawler-profiles", (route) =>
+    route.fulfill(response("/api/v1/platform/crawler-profiles", [profile])),
+  );
+  await page.route("**/api/v1/platform/credential-provider-options", (route) =>
+    route.fulfill(response("/api/v1/platform/credential-provider-options", [provider])),
+  );
+  await page.goto("/platform-admin/credentials");
+  await expect(page.getByRole("heading", { name: asset.name, exact: true })).toBeVisible();
+
+  for (const item of [
+    { path: "/api/v1/platform/credential-assets", status: 503, requestId: "ui2-read-assets-503" },
+    {
+      path: "/api/v1/platform/crawler-profiles",
+      status: 503,
+      requestId: "ui2-read-profiles-503",
+    },
+    {
+      path: "/api/v1/platform/credential-provider-options",
+      status: 503,
+      requestId: "ui2-read-providers-503",
+    },
+    { path: "/api/v1/platform/credential-assets", status: 401, requestId: "ui2-read-assets-401" },
+    {
+      path: "/api/v1/platform/crawler-profiles",
+      status: 403,
+      requestId: "ui2-read-profiles-403",
+    },
+    {
+      path: "/api/v1/platform/credential-provider-options",
+      status: 403,
+      requestId: "ui2-read-providers-403",
+    },
+  ]) {
+    failedRead = item;
+    await page.getByRole("button", { name: "刷新数据", exact: true }).click();
+    const notice = page.getByRole("status").filter({ hasText: "保留上一次成功读取的数据" });
+    await expect(notice).toContainText("请检查权限或依赖后重试。");
+    await expect(notice).toContainText(item.requestId);
+    await expect(page.getByRole("heading", { name: asset.name, exact: true })).toBeVisible();
+  }
+});
+
+test("UI2-SC50 asset, rotation and profile write failures stay inside their editors", async ({
+  page,
+}) => {
+  await nav(page);
+  const writeErrors: Record<string, { actionHint: string; requestId: string }> = {
+    asset: { actionHint: "凭证未创建，请核对内容后重试。", requestId: "ui2-create-failed" },
+    rotate: { actionHint: "凭证未轮换，请刷新版本后重试。", requestId: "ui2-rotate-failed" },
+    profile: { actionHint: "档案引用未创建，请核对后重试。", requestId: "ui2-profile-failed" },
+  };
+  const failedWrite = (key: keyof typeof writeErrors) => {
+    const { actionHint, requestId } = writeErrors[key];
+    return {
+      status: 409,
+      json: {
+        error: { code: "version_conflict", message: "版本冲突", action_hint: actionHint },
+        request_id: requestId,
+        trace_id: requestId,
+      },
+    };
+  };
+  await page.route("**/api/v1/platform/credential-assets", (route) =>
+    route.request().method() === "POST"
+      ? route.fulfill(failedWrite("asset"))
+      : route.fulfill({ json: { data: [asset], request_id: "ui2-write-errors-assets" } }),
+  );
+  await page.route("**/api/v1/platform/credential-assets/*/rotate", (route) =>
+    route.fulfill(failedWrite("rotate")),
+  );
+  await page.route("**/api/v1/platform/crawler-profiles", (route) =>
+    route.request().method() === "POST"
+      ? route.fulfill(failedWrite("profile"))
+      : route.fulfill({ json: { data: [profile], request_id: "ui2-write-errors-profiles" } }),
+  );
+  await page.goto("/platform-admin/credentials");
+
+  await page.getByRole("button", { name: "新建凭证资产", exact: true }).click();
+  let dialog = page.getByRole("dialog", { name: "创建凭证资产" });
+  await dialog.getByLabel("所属来源").selectOption(provider.id);
+  await dialog.getByLabel("名称").fill("创建错误反馈测试");
+  await dialog.getByLabel("需要加密保存的内容").fill("synthetic-create-only");
+  await dialog.getByRole("button", { name: "加密保存", exact: true }).click();
+  await expect(dialog.getByRole("status")).toContainText(writeErrors.asset.actionHint);
+  await expect(dialog.getByRole("status")).toContainText(writeErrors.asset.requestId);
+  await expect(dialog.getByLabel("名称")).toHaveValue("创建错误反馈测试");
+  await dialog.getByRole("button", { name: "取消", exact: true }).click();
+
+  await page.getByRole("button", { name: "更新资料", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: `轮换 ${asset.name}` });
+  await dialog.getByLabel("需要加密保存的内容").fill("synthetic-rotate-only");
+  await dialog.getByRole("button", { name: "确认轮换", exact: true }).click();
+  await expect(dialog.getByRole("status")).toContainText(writeErrors.rotate.actionHint);
+  await expect(dialog.getByRole("status")).toContainText(writeErrors.rotate.requestId);
+  await dialog.getByRole("button", { name: "取消", exact: true }).click();
+
+  await page.getByRole("button", { name: "关联运行档案", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "创建浏览器档案引用" });
+  await dialog.getByLabel("网页登录档案").selectOption(asset.id);
+  await dialog.getByLabel("内部标识").fill("sc50_profile_error");
+  await dialog.getByLabel("名称").fill("引用错误反馈测试");
+  await dialog.getByRole("button", { name: "保存档案引用", exact: true }).click();
+  await expect(dialog.getByRole("status")).toContainText(writeErrors.profile.actionHint);
+  await expect(dialog.getByRole("status")).toContainText(writeErrors.profile.requestId);
+  await expect(dialog.getByLabel("名称")).toHaveValue("引用错误反馈测试");
+});
+
 test("UI2-SC50 partial login save guides recovery without recreating the asset", async ({
   page,
 }) => {
