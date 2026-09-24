@@ -27,13 +27,38 @@ export async function assertOrganizationReasonContract(dialogSource, parentSourc
     true,
     ts.ScriptKind.TS,
   );
+  const usesStaticDialogImport = parentScript.statements.some(
+    (node) =>
+      ts.isImportDeclaration(node) &&
+      node.importClause?.name?.text === "AuditedReasonDialog" &&
+      node.moduleSpecifier.text === "./AuditedReasonDialog.vue",
+  );
+  const usesLazyDialogImport = parentScript.statements.some(
+    (node) =>
+      ts.isVariableStatement(node) &&
+      node.declarationList.declarations.some((declaration) => {
+        const initializer = declaration.initializer;
+        if (
+          !ts.isIdentifier(declaration.name) ||
+          declaration.name.text !== "AuditedReasonDialog" ||
+          !initializer ||
+          !ts.isCallExpression(initializer) ||
+          initializer.expression.getText(parentScript) !== "defineAsyncComponent"
+        )
+          return false;
+        const [loader] = initializer.arguments;
+        return (
+          !!loader &&
+          ts.isArrowFunction(loader) &&
+          ts.isCallExpression(loader.body) &&
+          loader.body.expression.kind === ts.SyntaxKind.ImportKeyword &&
+          ts.isStringLiteral(loader.body.arguments[0]) &&
+          loader.body.arguments[0].text === "./AuditedReasonDialog.vue"
+        );
+      }),
+  );
   assert.ok(
-    parentScript.statements.some(
-      (node) =>
-        ts.isImportDeclaration(node) &&
-        node.importClause?.name?.text === "AuditedReasonDialog" &&
-        node.moduleSpecifier.text === "./AuditedReasonDialog.vue",
-    ),
+    usesStaticDialogImport || usesLazyDialogImport,
     "organization caller must use the actual shared reason dialog",
   );
   const sites = elements(parent.template.content, "AuditedReasonDialog");
