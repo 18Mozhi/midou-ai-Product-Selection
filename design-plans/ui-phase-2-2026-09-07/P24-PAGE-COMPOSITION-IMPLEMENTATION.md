@@ -28,4 +28,6 @@
 
 ## 发布状态
 
-本实施记录不以本地构建或夹具测试代表部署。commit、push、宝塔部署、线上版本 SHA 与资源核验结果将在发布完成后追加。
+P24 代码提交 `382b34470e7485315a1e867bd93ee35905f33caf` 已推送并通过固定 `python scripts/deploy-baota.py` 流程部署。线上 `/api/v1/health/live` 与 `/ready` 返回 `ok` / `ready`，MySQL、Redis、supervisor 均为 `available`；`/api/v1/health/version` 的 build SHA 与该提交一致。`/tasks/{taskId}` 未登录深链返回 SPA 文档 HTTP 200；任务页 JS 与 CSS 均 HTTP 200，远端 SHA-256 分别与本地构建一致。部署器确认临时上传包已删除。
+
+以上是发布与静态资源证据，不是已登录真实会话或 RBAC/数据库读写验收；真实业务任务操作、审计、并发版本冲突及 M07-03 正式验收仍待其各自证据。
