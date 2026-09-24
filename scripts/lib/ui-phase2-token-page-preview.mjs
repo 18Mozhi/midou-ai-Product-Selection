@@ -43,16 +43,15 @@ export function tokenPagePreview(source) {
     overviews[0].loc.source,
     overviews[0].loc.source.replace(aside[0].loc.source, ""),
   );
-  result = result.replace(truths[0].loc.source, "");
   const workbench = matches[0],
     parts = workbench.children.filter((node) => node.type === 1);
   assert.deepEqual(
     parts.map((node) => node.tag),
-    ["form", "section"],
+    ["section", "aside", "form"],
   );
   result = result.replace(
     workbench.loc.source,
-    `<div class="org-token-workbench">${parts[1].loc.source}<div class="p36-safety-c">${aside[0].loc.source}${truths[0].loc.source}</div>${parts[0].loc.source}</div>`,
+    `<div class="org-token-workbench">${parts[0].loc.source}<div class="p36-safety-c">${aside[0].loc.source}${parts[1].loc.source}</div>${parts[2].loc.source}</div>`,
   );
   assert.equal(result.split("ACCESS LEDGER · 当前组织").length, 2);
   result = result.replace("ACCESS LEDGER · 当前组织", "只读访问 / 当前组织");

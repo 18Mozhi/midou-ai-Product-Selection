@@ -6,38 +6,31 @@
   "sourceHashes": {
     "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
     "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
-    "apps/web/src/approval-read-failure.css": "6295ffead416eae4dfdf0fa88dde57a3b7ec6fa60241b44e4405e3f1755aaa6a",
-    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/AuditedReasonDialog.vue": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
     "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
-    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
-    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
-    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "c8de7f2d7fbb4839ef85770efda70ff3d75769ca301f9b4bbbefd5cfbaad86fa",
+    "apps/web/src/components/OrganizationDataPanel.vue": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270",
     "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
     "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
     "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
-    "apps/web/src/components/OrganizationTokenPanel.vue": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c",
     "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
-    "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
-    "apps/web/src/design/approval-read-failure-tokens.css": "bd13bd68c498bd64b2bb29cba882d09fb324b0fbacf5cab1812fd52abbdb6692",
-    "apps/web/src/design/export-detail-tokens.css": "d0dc62dff48590e983d06a8960bd74bbadc7d7f78daa31237df45214b7ee513a",
     "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
     "apps/web/src/design/token-filter-tokens.css": "6a2b9871858d0c1a5d7ee2a052b5b1d5043331f414685525d561d8ae6d366710",
     "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
     "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
-    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
-    "apps/web/src/org-data-export-detail.css": "55b7a84508f5ff64d02061bc832991bceec6674e66313623ed6ade22aba2de04",
-    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
-    "apps/web/src/organization-audit.css": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+    "apps/web/src/main.ts": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1",
+    "apps/web/src/organization-admin.css": "8442ac6897985cce39ecda8a2a7ae9e0c0a04efe9706a1e944be68337cda67ba",
     "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
-    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
-    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+    "apps/web/src/signal-ledger.css": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+    "apps/web/src/styles.css": "4d3f496112ece29924eafe59dd7f09fb68572542ffa42bda2d0f003d3adbc509",
     "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
-    "apps/web/src/styles/onboarding-navigation.css": "0fab24d84606e8ea564062ae912150a9ada2dd2fbf853f62615982be39d48492",
-    "apps/web/src/styles/platform-dashboard.css": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
-    "apps/web/src/styles/platform-operations.css": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+    "apps/web/src/styles/onboarding-navigation.css": "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26",
+    "apps/web/src/styles/platform-operations.css": "2a0a0936d6132cd3fdeb74def417edfd7a038dda43ece9f010b125b62698281b",
     "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
-    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
     "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
     "design-plans/ui-phase-2-2026-09-07/implementation/token-create-preview.css": "e15e6d1b748f66fe2749572c7b336022f93df3ec6f067295bf3d88052040d18c",
     "design-plans/ui-phase-2-2026-09-07/implementation/token-list-preview.css": "7f574634115ff6e15ed54da2b3821916ac09a2b701690c8bcfa510eb50bf6943",
@@ -46,13 +39,13 @@
     "design-plans/ui-phase-2-2026-09-07/implementation/token-secret-preview.css": "095e0a25220d1a56064af1c407930c9087764eaee2bc90eb1156dc9d8f7901b8",
     "scripts/lib/ui-phase2-token-create-preview.mjs": "e17ca664629b392328daf88597fd1ee2ce6757c0bd948007f831dc197b119a63",
     "scripts/lib/ui-phase2-token-list-preview.mjs": "1dbc8720af98081623c87b0d5dad1a943385f54087f212bc9dcc78a36fe2896e",
-    "scripts/lib/ui-phase2-token-page-preview.mjs": "e2890f59577ae041918c3d01ec6ec1016fc2839604f596f41e599bf6a08ca824",
+    "scripts/lib/ui-phase2-token-page-preview.mjs": "e9854ee946fa52c0dd2713496c07451d635a2d112744f3defcbf8de32aee2240",
     "scripts/lib/ui-phase2-token-secret-preview.mjs": "6b6567fd5ec260264548d3345518886dcdb61138b0cf45d9df55c73ed3ef8b5b",
     "scripts/verify-ui-phase2-token-page-preview.mjs": "356b6850316c8613e0560ffcd4ccdbe704fc935c134d80a50066d49977d4d30e",
-    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4"
+    "tests/e2e/m06-01-organization-admin.spec.ts": "641800d676a2cde82cac232a23edcccd24dd8f8c1de707c33bc1fdf7dec5ee6a"
   },
   "transformedHashes": {
-    "apps/web/src/components/OrganizationTokenPanel.vue": "050225c9a0497852b80756d361762b2ddfeba0b505f27abc5783d4694734e67f"
+    "apps/web/src/components/OrganizationTokenPanel.vue": "7eee9aa1aa399d64e2bafdba119cfcd808df2f58fd1a45555efaa3ab6763f2d3"
   },
   "checks": [
     {
@@ -936,56 +929,56 @@
       "width": 390,
       "state": "loading",
       "fullPage": true,
-      "sha256": "6a1bcfc5f5e81d2dfed64aebbd892c7dc0c323e7f80f86b72e560a65b2d09116"
+      "sha256": "6f7a5c3729116f396331da1f11944ff5275be2d97be45331f061b6541433fe72"
     },
     {
       "file": "390-default.png",
       "width": 390,
       "state": "default",
       "fullPage": true,
-      "sha256": "8dfecfbfc19856f3d9c7b3729e31cd195e15fa20b03db428ea93a7f6ce4a7bc6"
+      "sha256": "aef2275edf74721fe243269a2cdca6066d700b110880d92e59388e4ae3ecd0e4"
     },
     {
       "file": "390-default-viewport.png",
       "width": 390,
       "state": "default-viewport",
       "fullPage": false,
-      "sha256": "0380634085c32b68e6bbc99522f48a280e90b5e8dc30659ddf73ef509f00eae5"
+      "sha256": "144f04cc6d3bff096363ac00fbee51daf5bc2209218ef1f70034f00cfbcc2dee"
     },
     {
       "file": "390-page-two.png",
       "width": 390,
       "state": "page-two",
       "fullPage": true,
-      "sha256": "7ed7ce3117d680b3e47512915704e50ce888a331d53199943717b40758c9b290"
+      "sha256": "3bb47dd2f2b5ca2d87b56e3ebc1a9559ba9939c13005dbef03910599a3123d2a"
     },
     {
       "file": "390-no-results.png",
       "width": 390,
       "state": "no-results",
       "fullPage": true,
-      "sha256": "bae38cf83e412d5219ddd6b3f8fb4390b3e3a0f4a325d8bcdf9f1c0c4b74dbb0"
+      "sha256": "31fc1f1e076890035b3177761cbc45fe2204a8b5718c7167431fed2697594dca"
     },
     {
       "file": "390-create-scope-error.png",
       "width": 390,
       "state": "create-scope-error",
       "fullPage": true,
-      "sha256": "60f341b7293059afb4c6a7fce947614f268105159c6c8a926ae0971d3b10b1a9"
+      "sha256": "ac970fcf5069e26f94c4df58d1fc1e0074e44f463882b42053dd2fd2ba8a12c6"
     },
     {
       "file": "390-secret-shown.png",
       "width": 390,
       "state": "secret-shown",
       "fullPage": true,
-      "sha256": "ceedfdb4a24a200b6132c4ea5dd37f43837e78a4ada10c2e7ab5dac7fa79a2c1"
+      "sha256": "db430115119f20b4cd5a87e5eaedf50893ecb26d6c68b9a3bfa5cef9662c1b51"
     },
     {
       "file": "390-secret-cleared.png",
       "width": 390,
       "state": "secret-cleared",
       "fullPage": true,
-      "sha256": "6795e9754393ed38b697b4396185622a7088f5fd22e761d56e47404b6a2c89f2"
+      "sha256": "d92427e28f6829a881803dd57a359adbe4fe635277af71059f514986857634f6"
     },
     {
       "file": "390-rotate-dialog.png",
@@ -1006,238 +999,238 @@
       "width": 390,
       "state": "first-read-failure",
       "fullPage": true,
-      "sha256": "722bcd5f4f3a6479924c81aaf9ed249bc6b2396215da7132f4544ef70ede2be7"
+      "sha256": "8ea9a788d87e03d740a1de30f92536ec211e263ac71dd8a0366ab3f9604e6254"
     },
     {
       "file": "760-loading.png",
       "width": 760,
       "state": "loading",
       "fullPage": true,
-      "sha256": "67df2c954dca173573c554134249edb8823a8ebf50a5879ac4b3db0995214140"
+      "sha256": "b7b489689becc11bea61adea6bdbb8dcb3663b92212a1031e62effb562fe0062"
     },
     {
       "file": "760-default.png",
       "width": 760,
       "state": "default",
       "fullPage": true,
-      "sha256": "5e28ddfd62daaa25b3a57829373d40187895ca4fb51fb7a36c2420cd0144389e"
+      "sha256": "a11532db14694b4a084ba0b54a59e49c9eb4a949cc8b7b70552475128e4971d0"
     },
     {
       "file": "760-default-viewport.png",
       "width": 760,
       "state": "default-viewport",
       "fullPage": false,
-      "sha256": "ab63cddfae975f45638884f489debf7c0b0f07fa29c160d0a314fe1f20d34e00"
+      "sha256": "d059f0fe33dc7f45a77f88d6b2df33c47eeb4b827459474515391216fdcc38a4"
     },
     {
       "file": "760-page-two.png",
       "width": 760,
       "state": "page-two",
       "fullPage": true,
-      "sha256": "0a3493990902d5ae19aa0b787afbbe37c593a4a3aab3d3bf87954628deb64d24"
+      "sha256": "135560bd3aeeea8f97aedc6254dabb900383341a33eb43b57d3f33296f5a3cfd"
     },
     {
       "file": "760-no-results.png",
       "width": 760,
       "state": "no-results",
       "fullPage": true,
-      "sha256": "719ab2402af25030c305e210aa0fba78f18c1133d214ce3a6bb53224085acfb0"
+      "sha256": "cd2de254e2681fd3d9718e8c2658c776eb112d5a1b767dc8bc9117286e2295f3"
     },
     {
       "file": "760-create-scope-error.png",
       "width": 760,
       "state": "create-scope-error",
       "fullPage": true,
-      "sha256": "7c9ff5c2397e9d1c291da19e0ddd96b282609c48be99d3765826e167ca1b1eae"
+      "sha256": "4ca49a499c61169b13e10ffc1f9dcad9e2d095a1f80890d1206555dce083343d"
     },
     {
       "file": "760-secret-shown.png",
       "width": 760,
       "state": "secret-shown",
       "fullPage": true,
-      "sha256": "5aec8aba76a0c0ed05fd746a29a0e74f66fefeb1bfa1c2bb6db07c9eca8cbe40"
+      "sha256": "b35a042618132c1787669c9642ff6eed9b7d711cce2e8dd40055ca59b657fc7a"
     },
     {
       "file": "760-secret-cleared.png",
       "width": 760,
       "state": "secret-cleared",
       "fullPage": true,
-      "sha256": "1b9aa49d65559497559f133b4df0e12112397fc4cca3243d5b0c9369ef05cb99"
+      "sha256": "5435d59d2eba2d2344f4bfa8da76a4499b05fb2f893e7773c9aa7f161d52b1fe"
     },
     {
       "file": "760-rotate-dialog.png",
       "width": 760,
       "state": "rotate-dialog",
       "fullPage": false,
-      "sha256": "2abbb8524d1de5a5ed8a540ff1e2dd4017f644d430520efb4a5d90d2aba37652"
+      "sha256": "38089ca00259aaa4f3f14753f3004ece1c0a002b1463514a1b44c32961bc8ba3"
     },
     {
       "file": "760-revoke-dialog.png",
       "width": 760,
       "state": "revoke-dialog",
       "fullPage": false,
-      "sha256": "a62dc1c8b86ac6d2099b46186c5fa3c0b999ae1fc34db74668b956c731a2d49e"
+      "sha256": "d1cd8c0d55e209e7ab87a6f3851670e08ca4f5eb71fda132c35f5f679c7ad1c8"
     },
     {
       "file": "760-first-read-failure.png",
       "width": 760,
       "state": "first-read-failure",
       "fullPage": true,
-      "sha256": "35ee8bce6a4991d2e0e43e819fdac23800bea33a6ec00642f3f309c8651bab1d"
+      "sha256": "f8143f20e8c74cc257c5e9c4e3a123d869315d0c4f56797437c1d73ae6240971"
     },
     {
       "file": "761-loading.png",
       "width": 761,
       "state": "loading",
       "fullPage": true,
-      "sha256": "09d45217d700b84818cf3f2128f034b51ee1c89de3e534fef6279ce35629eddc"
+      "sha256": "434f0254770ba5fc5fcd00f19712ccbfac09ed780bd848587b13b64279403ee6"
     },
     {
       "file": "761-default.png",
       "width": 761,
       "state": "default",
       "fullPage": true,
-      "sha256": "0119de710ccaa545873fa18261a81f52f32f7e85f9ed3755ee28b64faa72bc70"
+      "sha256": "78c309bc6d28dd6323fa3172e5c837c5d034dc3a589f15c018a000c8d566f372"
     },
     {
       "file": "761-default-viewport.png",
       "width": 761,
       "state": "default-viewport",
       "fullPage": false,
-      "sha256": "b666916b0072fcda1b1603115d76de699a3b6357a295a2a5084b100264ea69f5"
+      "sha256": "eed06c8a3d51b732716fcd10aba777696a5ce0f9e131da50ac08189c47f44a47"
     },
     {
       "file": "761-page-two.png",
       "width": 761,
       "state": "page-two",
       "fullPage": true,
-      "sha256": "41804d73c72b3d128cd0b5a093530ce65ce776c029756bdf8e728dfb88f697f0"
+      "sha256": "6deca004e202e1182cf4230a065f55bf6d45c5a79c3235bc0dd6ced53d3b2f25"
     },
     {
       "file": "761-no-results.png",
       "width": 761,
       "state": "no-results",
       "fullPage": true,
-      "sha256": "67f157a9e352122b3cf92dc2546fbcf3ee83ff8276f3594f579bf1931dc57b38"
+      "sha256": "545d66b06211e478c89f3ac93f355c5a6a4b477a60ed480389b96092d336d5e7"
     },
     {
       "file": "761-create-scope-error.png",
       "width": 761,
       "state": "create-scope-error",
       "fullPage": true,
-      "sha256": "cf04a0e9545fc1a5da5547dbcc273a226e7796707e48391b85db7a8fa2fcbe7c"
+      "sha256": "0c147f87525e96d2145c218e23163325e183228c6201f14667f19de4e22a3eb1"
     },
     {
       "file": "761-secret-shown.png",
       "width": 761,
       "state": "secret-shown",
       "fullPage": true,
-      "sha256": "bdbf89b616c17f97c20d8771efde7efd3bb7ba0e8a510cea9f276f0cc6af6324"
+      "sha256": "2d49cf5f882dc0ad2e8a35d43758b8225486573407c2ab406940dbfeae9f2bdf"
     },
     {
       "file": "761-secret-cleared.png",
       "width": 761,
       "state": "secret-cleared",
       "fullPage": true,
-      "sha256": "01183aa867b8e6841631a678224997a3643eaa6cbed6deb66772bd56e9550189"
+      "sha256": "53c72c91bea3ca01cb56f0a1e207cff1b6061d2a3e78b4c761b557da690fa1c6"
     },
     {
       "file": "761-rotate-dialog.png",
       "width": 761,
       "state": "rotate-dialog",
       "fullPage": false,
-      "sha256": "837c2f776dac11bd817bd8ea35d32597ddd5418754216ff09c9bdf74eafd19b5"
+      "sha256": "308d8925ffe7248b4bd6b5335ddeed02335f7afe1a9796db373cf32913a61219"
     },
     {
       "file": "761-revoke-dialog.png",
       "width": 761,
       "state": "revoke-dialog",
       "fullPage": false,
-      "sha256": "28c06d851a56aa95c2790bf61089b7331671d3563e7374941123786706f80928"
+      "sha256": "04dabe55d4c8407d4f5d2e9c0f1483770804e462e0c2e525487e3849feb8a036"
     },
     {
       "file": "761-first-read-failure.png",
       "width": 761,
       "state": "first-read-failure",
       "fullPage": true,
-      "sha256": "2bea9874692a4f49589b9b9f948e7a85ab10d61c30bca2c49c1076a4d90acb02"
+      "sha256": "c04e91ef1ce761a62ba8b95cb087b8f886d44308d777feb0eea1d99ca6ffa7a2"
     },
     {
       "file": "1440-loading.png",
       "width": 1440,
       "state": "loading",
       "fullPage": true,
-      "sha256": "9e8b78f3a8f6ffa2a220c4a5ac8b0a95d61dc32bac429e8757903383d29b925a"
+      "sha256": "fe3638d566a22bf84828b0d797d12d0afca2e82b7928631cdfba719182ed1166"
     },
     {
       "file": "1440-default.png",
       "width": 1440,
       "state": "default",
       "fullPage": true,
-      "sha256": "cbb1dbe489739a3920560f40ae0547bf34456d336d0524c356e07ca7b0b50da5"
+      "sha256": "a7b876f18db91f18263ee04b74b3d0f3581a15dc9afb360172a00918b1679fc1"
     },
     {
       "file": "1440-default-viewport.png",
       "width": 1440,
       "state": "default-viewport",
       "fullPage": false,
-      "sha256": "03816bcba129b2c0a5c5597bd4b4646e7783f89740357435df9a6d28e1b69178"
+      "sha256": "fb0589916b498e162b7d6a5106bdf1845323e8af163846aefbde4c277def0f86"
     },
     {
       "file": "1440-page-two.png",
       "width": 1440,
       "state": "page-two",
       "fullPage": true,
-      "sha256": "add85a0547ad5dd821d0ec4e02c50d20c663ead7e6a17fe4250d7d98ed0dd03b"
+      "sha256": "0f4701f9d5dbc50e3ce146f0aa21c08ce275080c7fff9d6c7f2bb515f3299b72"
     },
     {
       "file": "1440-no-results.png",
       "width": 1440,
       "state": "no-results",
       "fullPage": true,
-      "sha256": "096fdbcad19657df2c037002e10969266db6e6572f1af2a5c9556e5392e303b9"
+      "sha256": "94e7bc6fc0d030ad7845898c5593445156d3c5c973a8a0823676630edc2762c5"
     },
     {
       "file": "1440-create-scope-error.png",
       "width": 1440,
       "state": "create-scope-error",
       "fullPage": true,
-      "sha256": "90d07021af6d1c5df813399491288482133a34b08e72cf8d4be7c8bd5bb7a786"
+      "sha256": "8ba82f3fe21aecb8671992ce37aab03bee01f8cb87da3c640a45a4ccec1944d8"
     },
     {
       "file": "1440-secret-shown.png",
       "width": 1440,
       "state": "secret-shown",
       "fullPage": true,
-      "sha256": "e8243950f7c22a06458d23361f56302f4920ad5324d8a9abe0a6c1e54341438f"
+      "sha256": "6ec961d60f7057f5501eeae2faab2b705d0cbfa225d221449e09fe6be975e2f7"
     },
     {
       "file": "1440-secret-cleared.png",
       "width": 1440,
       "state": "secret-cleared",
       "fullPage": true,
-      "sha256": "f3368e92492ec56af0371b88c1895ce496770b30f148ed87f347ba185a0c2024"
+      "sha256": "f8cdc16b08e956190389066c8ab8446f55068bbf88d1eb6ad5a07b0608f5225b"
     },
     {
       "file": "1440-rotate-dialog.png",
       "width": 1440,
       "state": "rotate-dialog",
       "fullPage": false,
-      "sha256": "cd9a4b0cb233c80ea55395671e1c7cdb91c7cab4a9314880c28a7d84423d69f7"
+      "sha256": "af1769e2b3f85f619ba46b2048c86f0e219ee365e80b7230752ef54db153e412"
     },
     {
       "file": "1440-revoke-dialog.png",
       "width": 1440,
       "state": "revoke-dialog",
       "fullPage": false,
-      "sha256": "ac5b13b763879929ca2e83425eb53498983ceeacc767c0e8ac3f54c1247d97fe"
+      "sha256": "a27a216c02b184d6789e57949af6230605d54140e71bed04872dbf67f6ab2662"
     },
     {
       "file": "1440-first-read-failure.png",
       "width": 1440,
       "state": "first-read-failure",
       "fullPage": true,
-      "sha256": "a2155d8da7f9f9ec58283057d1a80b02128bdc380bfa786da2bd36786d73662f"
+      "sha256": "0de4f9fbd83806cfb6ffb3308e33fd29f820693e4c323e3317c16162c90b052e"
     }
   ],
   "processesClosed": true
