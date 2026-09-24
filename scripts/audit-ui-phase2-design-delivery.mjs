@@ -46,6 +46,7 @@ import {
   historicalTokenCopySource,
   tokenCopyRevisions,
 } from "./lib/ui-phase2-token-copy-baseline.mjs";
+import { findCommittedHistoricalRevision } from "./lib/ui-phase2-committed-history.mjs";
 
 // Artifact integrity and explicit page-link inventory, NOT design/action/production acceptance.
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -96,6 +97,7 @@ for (const file of [
   "scripts/lib/ui-phase2-admin-controls-baseline.mjs",
   "scripts/lib/ui-phase2-admin-results-baseline.mjs",
   "scripts/lib/ui-phase2-admin-directory-baseline.mjs",
+  "scripts/lib/ui-phase2-committed-history.mjs",
 ])
   inputHashes[file] = (await fileHashes(file)).lf;
 const packages = [];
@@ -109,8 +111,13 @@ for (const dir of (await readdir(path.join(root, "design"), { withFileTypes: tru
   for (const [file, expected] of Object.entries(e.sourceHashes || {})) {
     assert.match(expected, /^[a-f0-9]{64}$/);
     const actual = await fileHashes(file);
+    const committedRevision =
+      expected === actual.lf || expected === actual.raw
+        ? null
+        : findCommittedHistoricalRevision(file, expected);
     const historical = organizationActionRevisions[file]?.before === expected;
     const associated =
+      committedRevision !== null ||
       (file === adminDirectoryRevision.file &&
         expected === adminDirectoryRevision.before &&
         hash(historicalAdminDirectorySource(file, await text(file))) === expected) ||
@@ -145,11 +152,14 @@ for (const dir of (await readdir(path.join(root, "design"), { withFileTypes: tru
       expected,
       actual: actual.lf,
       match: expected === actual.lf || expected === actual.raw || associated,
-      encoding: associated
-        ? "historical-LF-exact-revision-not-current-acceptance"
-        : expected === actual.lf
-          ? "LF-normalized"
-          : "raw",
+      encoding: committedRevision
+        ? "git-committed-historical-exact-revision-not-current-acceptance"
+        : associated
+          ? "historical-LF-exact-revision-not-current-acceptance"
+          : expected === actual.lf
+            ? "LF-normalized"
+            : "raw",
+      historicalCommit: committedRevision,
     });
   }
   const screenshots = [];
