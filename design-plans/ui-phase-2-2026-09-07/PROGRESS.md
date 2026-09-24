@@ -3897,4 +3897,4 @@ P08 `/select-context` 组织与工作区 C 方向已接入真实 `TenancyChooser
 
 ## 2026-09-24 · F04b M02-03 路由状态面板来源归属
 
-将三个 `NavigationAccessPanel.vue` 源候选纳入共享壳层合同：missing/forbidden 各自的“返回工作台”链接，以及仅导航到 `/me?section=permissions` 的权限入口。明确该面板不等同公开 P73 404，也不直接提交权限申请或变更授权；新永久单测核对三条候选的ID、行号、类型与当前 LF SHA。全站静态未引用候选由3降至0。仅更新合同、Feature Map、测试与进度，不改产品 Vue、路由守卫、服务端权限或业务行为，不部署/重启；真实权限与生产验收仍独立待验。
+将三个 `NavigationAccessPanel.vue` 源候选纳入共享壳层合同：missing/forbidden 各自的“返回工作台”链接，以及仅导航到 `/me?section=permissions` 的权限入口。明确该面板不等同公开 P73 404，也不直接提交权限申请或变更授权；新永久单测核对三条候选的ID、行号、类型与当前 LF SHA。全站静态未引用候选由3降至0。未改产品 Vue、路由守卫、服务端权限或业务行为；按用户要求提交并部署当前批次后，公开 `health/ready`、`health/available`、`health/version`、登录路由及404回退均通过，`build_sha=f87225f206f94984709ccedd0922e125b6c2f049`。该发布记录不代表真实权限或生产业务验收。
