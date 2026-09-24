@@ -18,8 +18,9 @@
 - `tests/e2e/m06-01-platform-accounts.spec.ts` 在桌面 Chromium 与 390px 手机运行完整 100 项，通过。新增结构断言覆盖蓝色汇总栏、当前导航、用户目录标题、可见按钮/链接/筛选控件至少 44px，以及桌面/手机无横向溢出。
 - 桌面与 390px 手机真实路由渲染已人工核对；因该 E2E 使用拦截的本地账号样例，不保留 Mock 截图基线，避免被发布真实性门禁误计为真实服务端截图证据。
 - `npm run typecheck:web`、`npm run build:web`、`npm run verify:docs`、`npm run format:check`、`npm run verify:frontend-budget`（202 项资源）和 `npm run verify:static-analysis` 均通过。
-- 构建只验证静态包；回归未创建、修改或停用真实账号，不代表生产权限或真实数据验收。
+- 固定宝塔部署已完成，生产 `/api/v1/health/version` 返回 build SHA `149238e17975520a8077814248042676d9d67378`，ready=`ready`、available=`available`；`/platform-admin/users`、入口 JS/CSS、P43 专属组件 JS/CSS 与目录工作区 JS 均 HTTP 200，P43 专属 CSS 含本批样式标记。
+- E2E 写入使用本地夹具；本次只做生产版本、健康状态、深链和静态资源核验，未执行真实账号写入，不代表生产 RBAC、MySQL 数据、审计或正式 M07-03 验收。
 
 ## 运维
 
-仅前端 Vue/CSS 与设计/回归文档变化；无 API/Node/Python 配置变更，不要求重启 Node 或 Python。部署仍使用项目固定宝塔脚本；线上需要以部署后 BUILD_SHA、live/ready、路由和静态资源返回结果核验。
+仅前端 Vue/CSS 与设计/回归文档变化；无 API、环境或依赖合同变化。部署使用项目固定宝塔脚本完成；后续代码发布仍须以同提交 BUILD_SHA、健康状态、深链及页面专属静态资源进行核验。
