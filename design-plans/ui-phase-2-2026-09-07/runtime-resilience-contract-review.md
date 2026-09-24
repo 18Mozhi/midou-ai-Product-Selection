@@ -144,7 +144,7 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 | apps/web/src/components/TechnicalDetails.vue#b3ffca8eb967d682.1 | 36 | control | 共享TECH：rows非空才有原生details |
 | apps/web/src/components/TechnicalDetails.vue#c19091da9e2471f1.1 | 43 | control | 共享COPY：clipboard.writeText，成功标签1500ms |
 
-## 6. 最终源码指纹
+## 6. 历史源码指纹（LF SHA-256）
 
 以下29个文件以LF归一SHA256绑定本批所引用的实现；大模块文件指纹用于定位版本，不表示对其无关业务做完整审计。共享源不变的旧图仍保留原证据类型；不得仅更新旧图hash冒充重采。
 
@@ -179,3 +179,32 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 | apps/worker/src/worker-pollers.ts | 82700434efc37713da4b1342bcb8e675fe84334bac9bafd4483c390fdd6ed2b1 |
 | tests/e2e/m08-01-single-server.spec.ts | ddc02d16bd45a1c13a76ba9b12448afa3bc29536f613e9b5f869589f2383e874 |
 | tests/e2e/m08-04-file-resilience.spec.ts | 9fe7bef0ae8630bd19d13af3244a4587addd068d3bf9f4867c85a288c896af1a |
+
+## 7. P66 服务拓扑当前源码归属（2026-09-24）
+
+当前 `RuntimeTopologyCenter.vue` 共16个静态候选：原第5节8个仍可识别的候选在此刷新到精确行号/类型，3个旧签名继续保留为未找到，补齐另外8个当前位置。页内四个锚点只定位本页区段；刷新/重试读取服务拓扑，队列和错误披露只展开本地事实；重启观测摘要可展开记录，但不发起重启。登录入口与其他错误重读分支保持区分。具体生产状态和单机能力仍以原合同及服务端事实为准。
+
+| 当前位置键 | candidate sig | 类型 / 行 | 当前语义 |
+| --- | --- | --- | --- |
+| apps/web/src/components/RuntimeTopologyCenter.vue:416 | 58a7337b2cdfab3b.1 | control / 416 | RT66-CURRENT-LOAD 页头刷新运行事实；保留焦点的aria-disabled/busy状态 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:433 | ba9adc29c8482881.1 | control / 433 | RT66-CURRENT-NAV 锚点跳至节点与进程区段 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:433 | e9f9ec4727623c2c.1 | control / 433 | RT66-CURRENT-NAV 锚点跳至健康探测区段 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:434 | 937f81b359ccaf21.1 | control / 434 | RT66-CURRENT-NAV 锚点跳至队列调度区段 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:434 | 276f8658e371a562.1 | control / 434 | RT66-CURRENT-NAV 锚点跳至告警与阻断区段 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:488 | a93553a3ba9aa8a6.1 | control / 488 | RT66-CURRENT-RETRY 有快照刷新失败提示中的重新核验 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:520 | 5587941412d5210f.1 | control / 520 | RT66-CURRENT-LOGIN 仅expired状态导航到登录 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:521 | d45ddc5db7a2701f.1 | control / 521 | RT66-CURRENT-RETRY expired以外列举错误状态中的重新核验 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:645 | dac6cbc2991374ba.1 | control / 645 | RT66-CURRENT-PROCESS 展开进程最近失败文本 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:654 | cc99c7c8b16ccff2.1 | control / 654 | RT66-CURRENT-RESTART 展开Node API/Worker重启观测摘要 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:789 | 1c45c779df2fcc7f.1 | control / 789 | RT66-CURRENT-QUEUES 切换仅运行/异常与全部队列本地视图 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:890 | e41c915a9e93bf55.1 | control / 890 | RT66-CURRENT-POLICY 展开单个队列调度参数 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:903 | fcf7c9f746bc706b.1 | control / 903 | RT66-CURRENT-SNAPSHOT 有发布失败计数时披露状态文件错误 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:944 | d9de878e4de4767e.1 | control / 944 | RT66-CURRENT-OBJECT 仅对返回真实href的关联对象导航 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:952 | 1c008f867673db60.1 | control / 952 | RT66-CURRENT-ALERT 展开告警码、根因及关联业务ID |
+| apps/web/src/components/RuntimeTopologyCenter.vue:975 | 1c008f867673db60.2 | control / 975 | RT66-CURRENT-BLOCKER 展开阻断项技术码 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/RuntimeTopologyCenter.vue | d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd |
+
+当前位置/类型/指纹只证明静态归属；不替代运行时焦点、服务拓扑GET、权限、进程采样、新建重启或真实宝塔验收。

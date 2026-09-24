@@ -150,6 +150,9 @@ const history = {
   "log-backup-release-contract-review.md": {
     historicalSections: ["6.1 P62 旧版日志中心指纹（2026-09-09）"],
   },
+  "runtime-resilience-contract-review.md": {
+    historicalSections: ["6. 历史源码指纹（LF SHA-256）"],
+  },
 };
 
 export function runContractAudit() {
