@@ -215,6 +215,39 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 
 此映射仅确认静态路由目标与读取事件；不改变本人资产查询范围或推断被链接页面的数据授权结果。
 
+### 2.7 P11 PersonalPermissionsPanel 当前源码位置（2026-09-24）
+
+权限面板向用户呈现角色、数据范围及能力目录；当前扫描候选为读取状态转发与条件式组织令牌入口。令牌入口只有父级从ready授权数据中确认 `organization_token:manage` 时显示；这只是导航呈现条件，不替代令牌API的服务端权限校验。读取失败而保留的快照不应被解释为新授权结果。
+
+#### apps/web/src/components/personal-center/PersonalPermissionsPanel.vue
+
+| 当前签名.序号 | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| 87a51b8aad06546c.1 | 15 | event-binding | PC-PERM-CURRENT-READ / 呈现授权读取状态并转发重试 |
+| 5ceda36eb74de709.1 | 70 | control | PC-PERM-CURRENT-TOKENS / 父级具备组织令牌管理能力时进入令牌管理路由 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/personal-center/PersonalPermissionsPanel.vue | 8502b930452a500af44b0e3762732f2d00a879886ae075294d107dd80996a2bb |
+
+本节仅映射可见入口和读取事件，不构成角色、组织数据范围或真实RBAC验收。
+
+### 2.8 P11 PersonalSectionReadStatus 当前共享读取反馈位置（2026-09-24）
+
+P11多个子面板复用该共享反馈组件。它在error状态下显示“重新读取分区”并发出retry，具体重试哪个分区由调用方绑定；该模板位置不是新的API写入或独立重试业务。
+
+#### apps/web/src/components/personal-center/PersonalSectionReadStatus.vue
+
+| 当前签名.序号 | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| 768dbb71b85f4591.1 | 42 | control | PC-READ-STATUS-CURRENT-RETRY / 仅读取错误时显示并转发所属分区的重试意图 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/personal-center/PersonalSectionReadStatus.vue | 3153e47f83bbbb463b408fe28309871dd924ad19eb7ad2a99c1b5eea850ade31 |
+
+共享反馈组件只定义本地条件按钮；请求归属仍由各面板和PersonalCenter/usePersonalCenter决定。
+
 五文件没有本地dialog定义/确认调用候选；资料、密码、通知、首页规则均为内联form。主题选择使用自定义radio按钮，不是v-model字段。PersonalCenter有15个v-model位置、HomeDashboard有7个，共22个输入位置；另邮箱是disabled展示输入。P12共享UiStatePanel在部分错误态生成secondary但调用方无监听，属于共享消费者缺口，不加进上述五文件51项分母。
 
 ## 3. 写入与状态连续性
