@@ -71,9 +71,9 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P48.md": "4a5cb92a6568dc94b2f3edc4479fc6bd7f26cab83692e3008743ac9e01493722",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P49.md": "242f27618e2b314c7ba6aa8b7cc3873a9c037f34fdf99b1a477ef70c8cff19a0",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P50.md": "7eeb239f876d2c643dffd84ad0b7d7fcf0712747e3d7e9eccb692987f712c335",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md": "0a08d794066c028595d9b3688d896252307c4821dc74740b7e42b6d6be72dbc0",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md": "2f68c0bef8f89ee48cdeed946c2008f13031a04c8aaec386a341510fc0348646",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md": "2db7f2d52d988d874d6520882168b02234f5adca5b963154bed9deb933f16cc1",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md": "fe30eef2edfe610323d19a8a22724139df273a9d9ce09b26e4f0a12225983461",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md": "88e408d69b0b18e6f5e959fe1269523ee67a81fe1727559acf86deabb5898dfa",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md": "a3555dea91aeb57e3d72b5bbc439d6e45ac25d5918aa43d0f895911e71b99d7b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "1e949d78479d99a6f9110b4d8a26ef8bedf8e99d6ed7e6657eea09ce77f19449",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P55.md": "eecb01a5420fe50237138a202cd58f9623faac8741c8942a50695acda7f1499a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P56.md": "0e4e2251072e0b24a261d350bd476434aebcb2a1dfc4c329e5d2625a7d667222",
@@ -83,7 +83,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "a2bf26800169f245383b622582c8f0767e6d9849a9a4ba5dedafc505ea8e345f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "72af7291f7d1b8d03f95fe02106b7a2a772e348277562ab5377e8847171c4a4a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "90ace44955294c0a8ed4cdd4f27ab7b6ede4d762dd867d76c1e11e6e5ec46efd",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "15e7e5d5894b5b896994249d89c3be91422ebdfdd9beb02cbc8069f1c604d854",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "b08d0fff83950f31e15d60520f785f282fe948b9753c3de41e2692cb990cc81d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "4869f2a7553d65cb5355570511b38e73af1a34075a028e1d07f7564c89d71ee3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P65.md": "65b44de90a0dfb850a5511f7cbfa75c14a2ef0fce5a3279aefeada46560ba2e8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "c5d78f0e761d077a150ff8dadd20fcf64cc7259cf6d23f23934900e443a260cd",
@@ -91,22 +91,16 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "b8cee964d50e40f6f87c2f2e867476f12cd022cb6442e0ab4cf07fd1dd551553",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "e1d459e00227acafabe8c8605fad1b0b84e15c154d074c77984f0dcbe4ddedd9",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "3ebf9ddfc3f3f904fd1b49292af6f5fd1d5acf5c8714202051275f02e6fd0640",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "03fcc4cbdb1615d5a55b60daf5b8b4809f93157065ff809695fb489ef5997773",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "845ba7877eedbfb8967a821c1668917d363db73bb903df86bf0b1ab1f498b878",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "6ae1dfb2006bf2f162a2279d4819f07bd93a00cafe366e7119e2c775a666b020",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "9d3cc2106db392ab9ff72215f3e9c79f8375e592477ce15aa4866bfe2ef01c3a"
   },
   "summary": {
     "routes": 73,
     "specifications": 73,
-    "relatedProposalRoutes": 68,
-    "noLinkedPageProposalRoutes": 5,
-    "missingPageIds": [
-      "P51",
-      "P52",
-      "P53",
-      "P63",
-      "P71"
-    ],
+    "relatedProposalRoutes": 73,
+    "noLinkedPageProposalRoutes": 0,
+    "missingPageIds": [],
     "packages": 102,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
@@ -117,13 +111,7 @@
     "pngDrift": 0,
     "unmanifestedPng": 0,
     "readmeLinksChecked": 10157,
-    "unlinkedPagePackages": [
-      "api-coverage-direction-c",
-      "browser-runtime-direction-c",
-      "capacity-direction-c",
-      "collection-overview-direction-c",
-      "collection-tasks-direction-c"
-    ],
+    "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
     "verifiedDialogVariants": 0,
@@ -1319,9 +1307,13 @@
       "batch": "W06",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md",
-      "references": [],
-      "proposalPackages": [],
-      "artifactAssociation": "no-page-proposal-linked",
+      "references": [
+        "collection-tasks-direction-c"
+      ],
+      "proposalPackages": [
+        "collection-tasks-direction-c"
+      ],
+      "artifactAssociation": "related-proposal-not-complete-proof",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -1337,9 +1329,13 @@
       "batch": "W06",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md",
-      "references": [],
-      "proposalPackages": [],
-      "artifactAssociation": "no-page-proposal-linked",
+      "references": [
+        "collection-overview-direction-c"
+      ],
+      "proposalPackages": [
+        "collection-overview-direction-c"
+      ],
+      "artifactAssociation": "related-proposal-not-complete-proof",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -1355,9 +1351,13 @@
       "batch": "W06",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md",
-      "references": [],
-      "proposalPackages": [],
-      "artifactAssociation": "no-page-proposal-linked",
+      "references": [
+        "browser-runtime-direction-c"
+      ],
+      "proposalPackages": [
+        "browser-runtime-direction-c"
+      ],
+      "artifactAssociation": "related-proposal-not-complete-proof",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -1579,9 +1579,13 @@
       "batch": "W07",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md",
-      "references": [],
-      "proposalPackages": [],
-      "artifactAssociation": "no-page-proposal-linked",
+      "references": [
+        "api-coverage-direction-c"
+      ],
+      "proposalPackages": [
+        "api-coverage-direction-c"
+      ],
+      "artifactAssociation": "related-proposal-not-complete-proof",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -1751,9 +1755,13 @@
       "batch": "W08",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md",
-      "references": [],
-      "proposalPackages": [],
-      "artifactAssociation": "no-page-proposal-linked",
+      "references": [
+        "capacity-direction-c"
+      ],
+      "proposalPackages": [
+        "capacity-direction-c"
+      ],
+      "artifactAssociation": "related-proposal-not-complete-proof",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -1926,7 +1934,7 @@
       "readme": "design-plans/ui-phase-2-2026-09-07/design/api-coverage-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/api-coverage-direction-c/evidence.json",
       "manifestHash": "b232340f4d894c4c61017163517f5506abfa133112af23b8e1da764b14ebe4c4",
-      "readmeHash": "61d325f0cf538bffba42b34b8fc08ead7a21e749d35024584c0c9beea023d0c5",
+      "readmeHash": "f70d14be2255464779b607c70bdee071ca76284ceacf6b5b682a4aa56a431fbd",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
@@ -2487,7 +2495,7 @@
       "readme": "design-plans/ui-phase-2-2026-09-07/design/capacity-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/capacity-direction-c/evidence.json",
       "manifestHash": "ad114445eb0c611f535055b97eedff41024960821118210cbe2be4d5cfae7d14",
-      "readmeHash": "4b904c4266275a5163aaca2b3825d38046d18ef9c5d6e91ffe18c5fbc30a36eb",
+      "readmeHash": "ef29ab7c1d8608b89dab18081654bba2daa98c9a73fd915b70bd672e1698b64d",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
@@ -2528,7 +2536,7 @@
       "readme": "design-plans/ui-phase-2-2026-09-07/design/collection-overview-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/collection-overview-direction-c/evidence.json",
       "manifestHash": "33dea5cbfb506c2654358ba22969806f715e54e1b8c9b10440d45e17faa1e16f",
-      "readmeHash": "375c51884340dd96476b0a1fb2fc5f7723076261ad43d9d7a95db8f9090f051d",
+      "readmeHash": "f792b93bee0c3381830bbfd91538b0825bcfcbce4bf890cdc1a9539d4a97191f",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
@@ -2570,7 +2578,7 @@
       "readme": "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/collection-tasks-direction-c/evidence.json",
       "manifestHash": "27ba368ad703ef565f3a9ec39b13cbf0e46cb0ef5b5728f412387067f7c0cb23",
-      "readmeHash": "321aca7390142a4108823ca2f2d101fe630aeea4e07921e99053750677f11ea2",
+      "readmeHash": "56c40e722df7a93b6cbb88441862a4da4fe6e2b9e59d53c46586430fe384f309",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
