@@ -2298,6 +2298,51 @@ test("current P49 acceptance operations map two parent-owned destinations and lo
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current P67 Redis center maps refresh and retry controls without promoting runtime evidence", () => {
+  const file = "apps/web/src/components/RedisResilienceCenter.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const document = "runtime-resilience-contract-review.md";
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const currentRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.claim.includes("RD67-CURRENT-") &&
+      record.temporalScope !== "historical",
+  );
+  const expectedIds = ["58a7337b2cdfab3b.1", "a93553a3ba9aa8a6.1", "d45ddc5db7a2701f.1"].map(
+    (signature) => `${file}#${signature}`,
+  );
+  assert.deepEqual(currentRows.map((record) => record.candidateId).sort(), expectedIds.sort());
+  for (const record of currentRows) {
+    const candidate = candidates.find((item) => item.candidateId === record.candidateId);
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.currentLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedKind, candidate?.kind, record.candidateId);
+  }
+  const hashes = report.sourceClaims.filter(
+    (claim) => claim.document.endsWith(document) && claim.file === file,
+  );
+  assert.equal(hashes.length, 2);
+  const currentHash = hashes.find((claim) => claim.temporalScope !== "historical");
+  const previousHash = hashes.find((claim) => claim.temporalScope === "historical");
+  assert.equal(currentHash?.hash, digest(source));
+  assert.equal(currentHash?.status, "hash-current");
+  assert.equal(
+    previousHash?.hash,
+    "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
+  );
+  assert.equal(previousHash?.status, "hash-drift");
+  assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],

@@ -208,3 +208,19 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 | apps/web/src/components/RuntimeTopologyCenter.vue | d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd |
 
 当前位置/类型/指纹只证明静态归属；不替代运行时焦点、服务拓扑GET、权限、进程采样、新建重启或真实宝塔验收。
+
+## 8. P67 RedisResilienceCenter 当前刷新与重试归属（2026-09-24）
+
+当前页头刷新、保留旧成功快照时的失败提示重试、无可展示快照的错误区重试都复用同一单飞读取流程。失败提示按刷新结果分区展示本次失败追踪；真实 `forbidden`/`expired` 状态仍走既有权限/重新登录分支。按钮映射仅登记可见控制位置和条件，不据此推定Redis已真实连接、恢复成功或运行门已通过。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/RedisResilienceCenter.vue#58a7337b2cdfab3b.1 | 235 | control | RD67-CURRENT-LOAD / 刷新运行事实，忙碌时用ARIA状态保留焦点 |
+| apps/web/src/components/RedisResilienceCenter.vue#a93553a3ba9aa8a6.1 | 265 | control | RD67-CURRENT-RETRY / 已有成功快照且刷新失败时重新核验 |
+| apps/web/src/components/RedisResilienceCenter.vue#d45ddc5db7a2701f.1 | 297 | control | RD67-CURRENT-RETRY / 非expired错误区重试既有读取流程 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/RedisResilienceCenter.vue | dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081 |
+
+第6节旧指纹仍标记历史；当前映射不代替真实 Redis、MySQL、权限、采样、宝塔进程或生产恢复验收。
