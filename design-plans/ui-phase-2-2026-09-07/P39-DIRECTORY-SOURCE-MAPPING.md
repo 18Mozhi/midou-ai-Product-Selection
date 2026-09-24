@@ -1,6 +1,6 @@
 # P39/P40/P43/P44 账号目录渲染源映射
 
-2026-09-24。`PlatformAccountCenter.vue` 将组织、用户、管理员目录的渲染委托给本组件；父级继续拥有路由/筛选、请求、权限数据、弹窗和写入。`PlatformAccountGlobalRail.vue` 只呈现桌面侧栏的汇总与导航，接收只读数据。下表登记两个组件内19个扫描候选，不把组件调用、表单提交或事件转发重复算作独立业务动作。候选签名按文件唯一；路由挂载和运行时变体仍以实际页面为准。
+2026-09-24。`PlatformAccountCenter.vue` 将组织、用户、管理员目录的渲染委托给本组件；父级继续拥有路由/筛选、请求、权限数据、弹窗和写入。`PlatformAccountGlobalRail.vue` 只呈现桌面侧栏的汇总与导航，接收只读数据。下表登记两个组件内19个当前扫描候选，不把组件调用、表单提交或事件转发重复算作独立业务动作。候选签名按文件唯一；路由挂载和运行时变体仍以实际页面为准。
 
 | 源文件 | 当前源码候选 | 语义合同 / 当前行为 |
 | --- | --- | --- |
@@ -8,7 +8,7 @@
 | apps/web/src/components/PlatformAccountGlobalRail.vue | ffed2dd7f439c4b0.1 | PA-NAV-USER · 管理员/组织目录桌面侧栏的用户管理导航 |
 | apps/web/src/components/PlatformAccountGlobalRail.vue | e400286c7cd59e44.1 | PA-NAV-ADMIN · 管理员/组织目录桌面侧栏的管理员管理导航 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 29448f61eb8ffc80.1 | PA-NAV-ORG · overview分支的组织管理导航 |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | ffed2dd7f439c4b0.1 | PA-NAV-USER · overview分支的用户管理导航 |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 968274c5acaf5a33.1 | PA-NAV-USER · 当前账号目录二级导航的用户管理入口 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | e400286c7cd59e44.1 | PA-NAV-ADMIN · overview分支的管理员管理导航 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | e9658d470d4cbeaf.1 | PA-FILTER · 搜索按钮触发表单提交，与表单读取归并 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 20080e701de7f5cb.1 | PA-RESET · 重置 query/status；无筛选或读取中时禁用 |
@@ -33,7 +33,7 @@
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 35c8ce3d7f8aa2ef5cc1ee8ba69709bafc6c39054159181d06e00447998772b1 |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08 |
 | apps/web/src/components/PlatformAccountGlobalRail.vue | cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e |
 
 由 `scripts/audit-ui-phase2-contracts.mjs` 的只读合同扫描验证精确候选身份与源码哈希。源变更后必须按真实模板和 handler 更新映射；不可只刷新哈希。
@@ -46,3 +46,4 @@
 | --- | --- | --- |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | d773d9dd7a465b72.1 | 旧 ResponsiveFilterDrawer 调用；由当前筛选抽屉候选替代 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | d539742db4335e89.1 | 旧表单提交转发；由当前筛选提交候选替代 |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | ffed2dd7f439c4b0.1 | 旧overview用户管理导航；由当前账号目录二级导航候选替代 |

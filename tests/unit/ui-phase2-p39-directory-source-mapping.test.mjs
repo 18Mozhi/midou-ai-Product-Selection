@@ -36,7 +36,7 @@ test("P39 directory source candidates have exact current semantic references and
       "e400286c7cd59e44.1",
       "e9658d470d4cbeaf.1",
       "f68d2406f8c1db70.1",
-      "ffed2dd7f439c4b0.1",
+      "968274c5acaf5a33.1",
       "ffed2dd7f439c4b0.1",
     ].sort(),
   );
@@ -44,7 +44,7 @@ test("P39 directory source candidates have exact current semantic references and
   assert.ok(referenced.every((record) => record.sourceBinding === "hash-current"));
   assert.deepEqual(
     historical.map((record) => record.signature).sort(),
-    ["d539742db4335e89.1", "d773d9dd7a465b72.1"].sort(),
+    ["d539742db4335e89.1", "d773d9dd7a465b72.1", "ffed2dd7f439c4b0.1"].sort(),
   );
   assert.ok(historical.every((record) => record.temporalScope === "historical"));
   assert.ok(
