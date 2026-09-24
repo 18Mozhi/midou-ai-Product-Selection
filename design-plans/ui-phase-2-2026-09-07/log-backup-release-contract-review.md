@@ -178,7 +178,6 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 文件                                                | SHA-256（LF）                                                    |
 | --------------------------------------------------- | ---------------------------------------------------------------- |
-| apps/web/src/components/BackupRecoveryCenter.vue    | 6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02 |
 | apps/web/src/components/AuditedReasonDialog.vue     | 3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a |
 | apps/web/src/components/ResponsiveFilterDrawer.vue  | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
 | apps/web/src/components/ResponsiveDataView.vue      | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
@@ -199,6 +198,12 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | config/route-catalog.json                           | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
 | packages/config/src/index.ts                        | 7128cf13c8d183abd5b500e54e296b017fa7e2a9a72a441fbabe15f608546a11 |
 | tests/e2e/m07-04-backup-recovery.spec.ts            | f9c712921c576a00c0ef4f9f4c24721f06a38d609514ee924557316259f17f53 |
+
+### BackupRecoveryCenter.vue 旧源码指纹（历史）
+
+| 文件 | SHA-256（LF） |
+| --- | --- |
+| apps/web/src/components/BackupRecoveryCenter.vue | 6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02 |
 
 ### 6.2 P65 旧版发布证据中心指纹（2026-09-09）
 
@@ -259,3 +264,19 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | apps/web/src/components/ReleaseRolloutCenter.vue | f362e65bea501d183d809d458497e5b3775377d12e83b8e4f52496d00b62107d |
 
 此映射只证明静态源码候选位置，不等同于真实发布/回滚执行、GET权限、数据库审计、完整键盘/读屏、浏览器全状态或生产验收。历史双槽部署说明仍不得作为当前单后端部署指令。
+
+## 9. P64 BackupRecoveryCenter 当前源码归属（2026-09-24）
+
+当前组件共7个扫描候选：已有旧表的登录与三处技术详情仍是当前身份，旧刷新和重试入口继续作为未匹配身份保留；本节补充当前三个读取入口。三者都调用页面现有`load`读取流程，不执行备份、恢复或删除动作。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/BackupRecoveryCenter.vue#32472f95c82e1a43.1 | 184 | control | BR64-CURRENT-LOAD / 请求刷新当前备份与恢复只读事实 |
+| apps/web/src/components/BackupRecoveryCenter.vue#a93553a3ba9aa8a6.1 | 213 | control | BR64-CURRENT-RETRY / 已有数据且最近刷新失败时重新核验 |
+| apps/web/src/components/BackupRecoveryCenter.vue#0227b741c3d451ee.1 | 242 | control | BR64-CURRENT-RETRY / 首次错误等非forbidden且未进入登录分支的状态重读 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/BackupRecoveryCenter.vue | f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de |
+
+旧第6节整表已明确是原始源码快照，按历史范围保留，不能覆盖本节当前指纹。映射不扩大页面能力：页面仍只读真实恢复事实，不由按钮文字推断恢复可执行、真实权限或数据库验收。

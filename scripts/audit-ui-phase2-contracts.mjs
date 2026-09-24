@@ -149,6 +149,7 @@ const history = {
   },
   "log-backup-release-contract-review.md": {
     historicalSections: [
+      "BackupRecoveryCenter.vue 旧源码指纹（历史）",
       "6.1 P62 旧版日志中心指纹（2026-09-09）",
       "6.2 P65 旧版发布证据中心指纹（2026-09-09）",
     ],
