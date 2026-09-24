@@ -138,6 +138,9 @@ const history = {
   "platform-account-detail-contract-review.md": {
     historicalSections: ["5. 源码依据（LF SHA-256）"],
   },
+  "P39-DIRECTORY-SOURCE-MAPPING.md": {
+    historicalSections: ["历史候选（不计入当前覆盖）"],
+  },
   "platform-account-contract-review.md": {
     historicalSections: ["7. 源码指纹（LF SHA-256）"],
   },
