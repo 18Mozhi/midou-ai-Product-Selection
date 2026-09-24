@@ -140,6 +140,9 @@ const history = {
   "platform-account-contract-review.md": {
     historicalSections: ["7. 源码指纹（LF SHA-256）"],
   },
+  "commercial-security-open-platform-contract-review.md": {
+    historicalSections: ["6. 来源指纹与证据边界"],
+  },
 };
 
 export function runContractAudit() {

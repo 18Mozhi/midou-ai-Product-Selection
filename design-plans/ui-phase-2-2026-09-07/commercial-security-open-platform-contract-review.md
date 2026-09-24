@@ -252,6 +252,30 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 | apps/web/src/components/CommercialOperationsCenter.vue | 4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33 |
 | apps/web/src/components/SecurityOperationsCenter.vue | 1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3 |
 | apps/web/src/components/OpenPlatformCenter.vue | 5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5 |
+
+## 7. OpenPlatformCenter当前源码增量（2026-09-24）
+
+第6节为既有来源指纹快照；当前指纹列在本节。此前OP60表中仍匹配的35个身份保留原语义并显示为行位移动，三个已失效的旧视图身份不计当前覆盖。本节补齐当前组件另外9个真实候选，包含本地视图切换与确认子组件，不将状态切换解释成API请求，也不将202受理解释成回调投递完成。
+
+### apps/web/src/components/OpenPlatformCenter.vue
+
+| 当前签名.序号 | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| 217f0846e7bba1ee.1 | 568 | control | OP60-CURRENT-TRACE / 展开本次读取关联编号 |
+| e4c0454be34c0156.1 | 571 | control | OP60-CURRENT-LOAD / 重读当前组织和已选列表快照 |
+| 378899e48c4d8c4e.1 | 627 | control | OP60-CURRENT-VIEW / 切换到接口访问账号目录并显示其汇总 |
+| e16baed7fd7574cb.1 | 640 | control | OP60-CURRENT-VIEW / 切换到事件回调地址目录并显示其汇总 |
+| b224f20b7d8e3bc6.1 | 650 | control | OP60-CURRENT-VIEW / 切换到投递记录目录并显示其汇总 |
+| 4fe0f29d19fbaf47.1 | 665 | dialog-component-call | OP60-CURRENT-CREATE / 调用新增Client/Webhook共享创建确认窗，不直接写入 |
+| 1c008f867673db60.8 | 1155 | control | OP60-CURRENT-TECH / 展开移动投递详情技术信息 |
+| f371f0b36489e592.1 | 1209 | event-binding | OP60-CURRENT-REASON / 转发原因窗关闭/提交意图给当前操作所有者 |
+| 55ddee7e496796ca.1 | 1209 | dialog-component-call | OP60-CURRENT-REASON / 调用发布、轮换、撤销或重放原因确认窗 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/OpenPlatformCenter.vue | 9bcb38c92f614302ad155436cbdba9e43507bddb62bca0a8d0fefee676ddb3b1 |
+
+本节与原有OP60请求/权限/密钥/投递合同并列；所有映射均为静态源码身份，不验证数据库、真实外部回调、RBAC、密钥隔离或生产交付。
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/TableViewControls.vue | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
 | apps/web/src/components/ConfirmDialog.vue | 6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b |
