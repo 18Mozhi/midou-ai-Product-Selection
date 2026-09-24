@@ -325,3 +325,18 @@ P38–P45八份规格都有文件；全站规格48/73，W06八份、W07八份、
 | apps/api/src/mysql-platform-dashboard-risk-metrics.ts | e49abd8f317094b4b34b5fb31f8cb47e9d3cc1dc9cffcd945035c8ecd648f094 |
 | apps/api/src/mysql-platform-dashboard-storage-metrics.ts | 16b1b6b5e04ae7b3f4438914cd88b7e985d4a836db42c6e6c1855567de0ca808 |
 | config/route-catalog.json | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
+
+## 8. P41 OrganizationCreationWizard 当前源码归属（2026-09-24）
+
+当前组件的表单提交只向父层发出`submit`事件；名称、标识和管理员字段由父层传入的`form`对象驱动，字段变更另向父层发出`clearError`。本节只补当前四个源位置和当前指纹，不把表单提交误认作子组件直接请求，不扩大既有校验与组织创建合同。第7节保留旧指纹并按历史范围读取。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/OrganizationCreationWizard.vue#ffa5038e256f600a.1 | 52 | form-event | PA41-CURRENT-SUBMIT / 表单提交事件转发给父层创建所有者 |
+| apps/web/src/components/OrganizationCreationWizard.vue#bc0893035430063c.1 | 68 | event-binding | PA41-CURRENT-INPUT / 组织名称双向输入及错误清除事件 |
+| apps/web/src/components/OrganizationCreationWizard.vue#73dff0e93770c698.1 | 82 | event-binding | PA41-CURRENT-INPUT / 组织标识双向输入及错误清除事件 |
+| apps/web/src/components/OrganizationCreationWizard.vue#dd8a952068bb7d3e.1 | 103 | event-binding | PA41-CURRENT-INPUT / 首位管理员选择及错误清除事件 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/OrganizationCreationWizard.vue | 06f42856f4bd044703b7859d8218f2adf52ac3ae6d6ed66e30139f58067ae8b3 |
