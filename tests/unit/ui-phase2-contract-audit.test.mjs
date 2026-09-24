@@ -1111,6 +1111,43 @@ test("current P53 runtime center reconciles all candidates and retains stale ide
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current P60 shared reason dialog maps native modal, field, submit, cancel and open behavior", () => {
+  const file = "apps/web/src/components/OpenActionReasonDialog.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const document = "commercial-security-open-platform-contract-review.md";
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const currentRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.currentLine !== null &&
+      record.claim.includes("OP60-DIALOG-CURRENT-"),
+  );
+  assert.equal(candidates.length, 8);
+  assert.deepEqual(
+    [...new Set(currentRows.map((record) => record.candidateId))].sort(),
+    candidates.map((candidate) => candidate.candidateId).sort(),
+  );
+  for (const record of currentRows) {
+    const candidate = candidates.find((item) => item.candidateId === record.candidateId);
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.recordedLine, record.currentLine, record.candidateId);
+    assert.equal(record.recordedKind, candidate?.kind, record.candidateId);
+  }
+  const claims = report.sourceClaims.filter(
+    (claim) => claim.document.endsWith(document) && claim.file === file,
+  );
+  assert.equal(claims.length, 1);
+  assert.equal(claims[0].hash, digest(source));
+  assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],

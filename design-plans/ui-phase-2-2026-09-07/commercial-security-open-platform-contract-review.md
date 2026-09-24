@@ -295,3 +295,26 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 | tests/m06-04/security-operations.test.mjs | 8b28348ef71999ecbb84c86f84d30f3dd152b4ab0ff5ff5da4a7fcb7c703e24e |
 
 指纹检查只证明本地文件版本一致；接口代码阅读不是实时接口、MySQL事务、外部投递或生产权限验证。正式图和Vue全量新风格对照仍待方向获审后逐页交付。
+
+## 8. P60 OpenActionReasonDialog 当前共享源码归属（2026-09-24）
+
+当前共享原因窗有8个静态候选，覆盖原生dialog定义/键盘与取消事件、两个取消入口、受控原因、表单确认及 `showModal` 调用。文本长度和空白禁用只说明前端控件约束；确认事件将原因交给OpenPlatformCenter的当前操作所有者，不在此组件发送请求。初焦点及返焦由本地open watcher管理；遇到调用方确认窗叠层时按源码检查返焦保护，不将此静态映射当作完整模态可访问性或所有调用变体通过。
+
+### apps/web/src/components/OpenActionReasonDialog.vue
+
+| 当前签名.序号 | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| 160dc61fd425f2ac.1 | 69 | dialog-definition | OP60-DIALOG-CURRENT-STRUCTURE / 原生dialog承载标题、说明、影响和原因表单 |
+| 82c94a36479f797b.1 | 69 | event-binding | OP60-DIALOG-CURRENT-KEYBOARD / 拦截原生cancel并处理Tab边界 |
+| 26642876e58a3607.1 | 82 | control | OP60-DIALOG-CURRENT-CANCEL / 带可访问名称的关闭按钮发出取消意图 |
+| 857c0fb380cc028e.1 | 88 | form-event | OP60-DIALOG-CURRENT-CONFIRM / 阻止原生提交并把当前原因值交给父级 |
+| 960bfe896acf5f31.1 | 90 | event-binding | OP60-DIALOG-CURRENT-REASON / 受控输入1–500字符原因并关联帮助/错误 |
+| 36930efc227e715c.1 | 106 | control | OP60-DIALOG-CURRENT-CANCEL / 取消按钮关闭当前原因流程 |
+| 375836db22e6b714.1 | 107 | control | OP60-DIALOG-CURRENT-CONFIRM / 非空白原因才可提交至父级操作所有者 |
+| 44452d54f6549a74.1 | 48 | dialog-script-call | OP60-DIALOG-CURRENT-OPEN / props.open切为真时调用showModal并进入焦点管理 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/OpenActionReasonDialog.vue | 74d65b519372cb12d6741eb348a9b2af46470929eea887d709796dace1db5370 |
+
+本节不增加独立业务动作或API分母，不改变P60原有各动作的原因、权限、幂等、审计或投递合同。
