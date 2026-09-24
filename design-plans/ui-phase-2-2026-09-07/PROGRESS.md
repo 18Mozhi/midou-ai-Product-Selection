@@ -3699,3 +3699,7 @@ frontend-design技能用于将选定C的蓝色范围面、白色内容面、圆�
 
 代码提交 `c3d2315eead08fa6d27d7a800b6730c3649c7ad4` 已推送并用固定宝塔脚本部署，临时上传包已删除。线上 live/ready/version 与 `/settings/theme` 均 HTTP 200，build SHA 匹配，ready 中 MySQL/Redis/supervisor 为 available；P10 专属 JS/CSS 均 HTTP 200 且远端 SHA-256 与本地构建相同。隔离响应与未登录深链不证明生产会话/RBAC/MySQL审计或真实偏好写入。P10完成不代表其余页面或全73页目标完成；下一页按剩余最早编号转 P09。
 P08 `/select-context` 组织与工作区 C 方向已接入真实 `TenancyChooser.vue`：蓝色范围说明、白底组织目录与当前组织工作区区块、搜索/空结果、无组织/无权限/失效/完成状态及移动端单列；保持接口与权限合同，新增旧请求序号保护。P08 定向合同/预览 6/6、M01-03 E2E 桌面与390px各4/4、18项 setup/迟到响应核验、身份 C 原型82场景/188图、Web构建及发布门通过。commit/build SHA `b1e53eac9d731ffd8e90029ab6192bdda6c215f3` 已推送并用固定宝塔脚本部署；线上 health/version、桌面/390px深链与 P08 JS/CSS 资源通过。无已登录测试身份，线上成员目录返回预期401，不宣称真实成员资格/RBAC/个人空间写入已验。正式 M07-03 与全73页目标仍开放。详见[P08实施记录](P08-PAGE-COMPOSITION-IMPLEMENTATION.md)。下一页接续 P07 MFA 身份安全。
+
+## 2026-09-24 · P24 任务详情 C 方向生产组件接入
+
+用户授权剩余页面与状态自动通过；P24 C 方向从批95隔离 Vue 预览进入正式 `/tasks/:taskId` 组件。TaskWorkspace 继续拥有当前 GET/action/API 与返回路由，TaskDetailPanel 仅改详情布局并保留现有权限谓词和 emits；新增桌面事实/操作双列、390px单列、活动评论与可展开技术事实样式。更新 M05-01 桌面/移动视觉基线。定向预览合同1/1、Web类型检查通过，M05-01 E2E 两项目各23/23通过，覆盖只读、详情/404、动作弹窗与工作台行为。没有 API、OpenAPI、权限、数据结构、配置或依赖变化；本地夹具不代表真实RBAC、数据库写入或 M07-03 正式验收。提交、部署和线上 SHA 核验待本轮最终门完成后补记。

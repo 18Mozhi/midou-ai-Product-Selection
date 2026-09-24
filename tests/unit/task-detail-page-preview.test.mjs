@@ -18,4 +18,8 @@ test("P24 keeps the actual direct-detail reader and action emit boundary", async
   assert.match(panel, /\$emit\('action','progress'\)/);
   assert.match(page, /expected_version/);
   assert.match(panel, /完成进度（0–100）/);
+  assert.match(workspace, /TASK DOSSIER \/ 任务详情/);
+  assert.match(detail, /class="task-dossier"/);
+  assert.match(detail, /class="task-dossier-facts"/);
+  assert.match(detail, /class="task-dossier-activity"/);
 });

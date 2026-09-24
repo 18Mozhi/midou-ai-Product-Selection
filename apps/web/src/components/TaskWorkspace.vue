@@ -772,11 +772,17 @@ watch(
   >
     <header class="task-title">
       <div>
-        <p>{{ mode === "today" ? "今日行动" : "工作队列" }}</p>
-        <h2>{{ mode === "today" ? "今日工作" : "任务中心" }}</h2>
-        <span>查看负责人、期限和下一步；过程记录与审计按需展开。</span>
+        <p>{{ taskId ? "TASK DOSSIER / 任务详情" : mode === "today" ? "今日行动" : "工作队列" }}</p>
+        <h2>
+          {{ taskId ? "查看事实，再决定下一项操作" : mode === "today" ? "今日工作" : "任务中心" }}
+        </h2>
+        <span v-if="taskId"
+          >版本、负责人、期限与活动记录均来自当前任务响应；操作按现有权限显示。</span
+        >
+        <span v-else>查看负责人、期限和下一步；过程记录与审计按需展开。</span>
       </div>
-      <button v-if="canCreate" @click="showCreate = true">＋ 新建任务</button>
+      <RouterLink v-if="taskId" :to="returnPath" class="task-detail-return">返回目录</RouterLink>
+      <button v-else-if="canCreate" @click="showCreate = true">＋ 新建任务</button>
     </header>
     <div v-if="notice" class="task-notice">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>

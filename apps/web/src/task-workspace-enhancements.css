@@ -180,36 +180,17 @@
   background: var(--so-success);
 }
 .task-workspace.task-detail-route {
-  max-width: 980px;
+  max-width: 1160px;
   margin: 0 auto;
 }
-.task-detail-route > :not(.task-detail):not(dialog):not(.task-detail-state):not(.task-notice) {
+.task-detail-route
+  > :not(.task-dossier):not(.task-title):not(dialog):not(.task-detail-state):not(.task-notice) {
   display: none;
 }
 .task-detail-route .task-detail-state {
   min-height: 320px;
   display: grid;
   place-content: center;
-}
-.task-detail-route .task-detail {
-  position: static;
-  width: auto;
-  height: auto;
-  min-height: 0;
-  padding: 28px;
-  border: 1px solid var(--so-border-strong);
-  border-radius: 12px;
-  box-shadow: none;
-}
-.task-detail-route .task-actions {
-  position: sticky;
-  bottom: calc(var(--so-mobile-nav-offset, 0px) + env(safe-area-inset-bottom));
-  z-index: 2;
-  padding: 10px;
-  border: 1px solid var(--so-border-strong);
-  border-radius: 10px;
-  background: var(--so-bg);
-  box-shadow: 0 -8px 20px var(--so-shadow-color);
 }
 .task-technical {
   margin: 10px 0 18px;
@@ -221,11 +202,8 @@
 }
 
 @media (max-width: 700px) {
-  .task-detail-route .task-detail {
-    padding: 18px;
-  }
-  .task-detail-route .task-actions {
-    bottom: calc(56px + env(safe-area-inset-bottom));
+  .task-detail-route .task-dossier {
+    padding: 0;
   }
 }
 
@@ -2576,5 +2554,432 @@
   .task-detail-route .task-action-footer button {
     flex: 1;
     min-width: 0;
+  }
+}
+
+/* P24 C direction: production task dossier, scoped to direct task-detail routes. */
+body:has(.task-workspace.task-detail-route) .role-page-breadcrumb,
+body:has(.task-workspace.task-detail-route) .role-page-title,
+body:has(.task-workspace.task-detail-route) .role-context-rail,
+body:has(.task-workspace.task-detail-route) .role-context-drawer {
+  display: none;
+}
+
+.task-workspace.task-detail-route {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 24px;
+}
+
+.task-detail-route .task-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 144px;
+  margin: 0;
+  padding: 28px 32px;
+  background: var(--review-blue, #1748a0);
+  color: #fff;
+}
+
+.task-detail-route .task-title :is(p, h2, span) {
+  color: #fff;
+}
+
+.task-detail-route .task-title p {
+  margin: 0;
+  color: #d8e5ff;
+  font-size: 14px;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+}
+
+.task-detail-route .task-title h2 {
+  margin: 5px 0;
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.2;
+}
+
+.task-detail-route .task-title span {
+  display: block;
+  max-width: 720px;
+  color: #e3ecff;
+  font-size: 16px;
+}
+
+.task-detail-route .task-title .task-detail-return {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  padding: 0 16px;
+  border: 1px solid rgb(255 255 255 / 70%);
+  background: transparent;
+  color: #fff;
+  text-decoration: none;
+}
+
+.task-detail-route .task-title .task-detail-return:hover {
+  background: rgb(255 255 255 / 12%);
+  color: #fff;
+}
+
+.task-detail-route .task-notice {
+  margin: 0;
+}
+
+.task-detail-route .task-dossier {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--review-line, #dce4ee);
+  background: #fff;
+  color: var(--review-ink, #182d4a);
+}
+
+.task-detail-route .task-dossier-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--review-line, #dce4ee);
+}
+
+.task-detail-route .task-dossier-heading p,
+.task-detail-route .task-dossier-activity > header p,
+.task-detail-route .task-dossier-actions > header p {
+  margin: 0 0 5px;
+  color: var(--review-blue, #1748a0);
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.task-detail-route .task-dossier-heading h3 {
+  margin: 0;
+  color: var(--review-ink, #182d4a);
+  font-size: clamp(24px, 3vw, 30px);
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.task-detail-route .task-dossier-heading span {
+  display: block;
+  margin-top: 7px;
+  color: var(--review-muted, #52647b);
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+
+.task-detail-route .task-dossier-close {
+  display: grid;
+  flex: 0 0 44px;
+  place-items: center;
+  width: 44px;
+  border-color: var(--review-line, #dce4ee);
+  color: var(--review-ink, #182d4a);
+  font-size: 25px;
+  text-decoration: none;
+}
+
+.task-detail-route .task-dossier-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(290px, 0.85fr);
+}
+
+.task-detail-route .task-dossier-record,
+.task-detail-route .task-dossier-actions {
+  min-width: 0;
+  padding: 24px 28px;
+}
+
+.task-detail-route .task-dossier-record {
+  border-right: 1px solid var(--review-line, #dce4ee);
+}
+
+.task-detail-route .task-dossier-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  border: 1px solid var(--review-line, #dce4ee);
+}
+
+.task-detail-route .task-dossier-facts > div {
+  min-width: 0;
+  padding: 16px;
+}
+
+.task-detail-route .task-dossier-facts > div:nth-child(even) {
+  border-left: 1px solid var(--review-line, #dce4ee);
+}
+
+.task-detail-route .task-dossier-facts > div:nth-child(n + 3) {
+  border-top: 1px solid var(--review-line, #dce4ee);
+}
+
+.task-detail-route .task-dossier-facts dt,
+.task-detail-route .task-dossier-source > span,
+.task-detail-route .task-dossier-blocking span,
+.task-detail-route .task-dossier-technical dt {
+  color: var(--review-muted, #52647b);
+  font-size: 15px;
+}
+
+.task-detail-route .task-dossier-facts dd {
+  display: grid;
+  gap: 5px;
+  margin: 6px 0 0;
+  color: var(--review-ink, #182d4a);
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+
+.task-detail-route .task-dossier-facts dd small {
+  color: var(--review-muted, #52647b);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.task-detail-route .task-dossier-facts progress {
+  width: 100%;
+  height: 8px;
+  accent-color: var(--review-blue, #1748a0);
+}
+
+.task-detail-route .task-dossier-blocking,
+.task-detail-route .task-dossier-source {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 16px;
+  border-left: 4px solid var(--review-blue, #1748a0);
+  background: var(--review-pale, #edf4ff);
+}
+
+.task-detail-route .task-dossier-blocking > div {
+  display: grid;
+  gap: 4px;
+}
+
+.task-detail-route .task-dossier-blocking strong,
+.task-detail-route .task-dossier-source strong {
+  color: var(--review-ink, #182d4a);
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+
+.task-detail-route .task-dossier-source a {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 0 12px;
+  background: var(--review-blue, #1748a0);
+  color: #fff;
+  text-decoration: none;
+}
+
+.task-detail-route .task-dossier-technical {
+  margin-top: 12px;
+  border-top: 1px solid var(--review-line, #dce4ee);
+  border-bottom: 1px solid var(--review-line, #dce4ee);
+}
+
+.task-detail-route .task-dossier-technical summary,
+.task-detail-route .task-detail-more summary {
+  min-height: 44px;
+  padding: 9px 2px;
+  color: var(--review-blue, #1748a0);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.task-detail-route .task-dossier-technical dl {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.task-detail-route .task-dossier-technical dl div {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.55fr) minmax(0, 1fr);
+  gap: 10px;
+}
+
+.task-detail-route .task-dossier-technical dd {
+  margin: 0;
+  color: var(--review-ink, #182d4a);
+  overflow-wrap: anywhere;
+}
+
+.task-detail-route .task-dossier-readonly {
+  margin: 12px 0 0;
+  padding: 12px;
+  border-left: 4px solid var(--review-blue, #1748a0);
+  background: #f5f7fb;
+  color: var(--review-muted, #52647b);
+}
+
+.task-detail-route .task-dossier-actions {
+  background: #f8fafd;
+}
+
+.task-detail-route .task-dossier-actions > header h4,
+.task-detail-route .task-dossier-activity > header h4 {
+  margin: 0;
+  color: var(--review-ink, #182d4a);
+  font-size: 22px;
+}
+
+.task-detail-route .task-dossier-primary-actions,
+.task-detail-route .task-detail-more > div {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.task-workspace.task-workspace--review.task-detail-route .task-dossier-actions button,
+.task-workspace.task-workspace--review.task-detail-route .task-dossier-activity form button {
+  appearance: none;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--review-line, #dce4ee);
+  border-radius: 0;
+  background: #fff;
+  color: var(--review-ink, #182d4a);
+  box-shadow: none;
+  text-align: left;
+}
+
+.task-workspace.task-workspace--review.task-detail-route
+  .task-dossier-actions
+  .task-dossier-primary,
+.task-workspace.task-workspace--review.task-detail-route
+  .task-dossier-activity
+  form
+  .task-dossier-primary {
+  border-color: var(--review-blue, #1748a0);
+  background: var(--review-blue, #1748a0);
+  color: #fff;
+}
+
+.task-workspace.task-workspace--review.task-detail-route
+  .task-dossier-actions
+  .task-dossier-danger {
+  border-color: #a32626;
+  color: #a32626;
+}
+
+.task-detail-route .task-dossier-actions button:disabled,
+.task-detail-route .task-dossier-activity button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.task-detail-route .task-dossier-activity {
+  grid-column: 1 / -1;
+  padding: 24px 28px;
+  border-top: 1px solid var(--review-line, #dce4ee);
+}
+
+.task-detail-route .task-dossier-activity > article {
+  display: grid;
+  gap: 4px;
+  margin-top: 12px;
+  padding: 14px 16px;
+  border-left: 3px solid var(--review-blue, #1748a0);
+  background: #f8fafd;
+}
+
+.task-detail-route .task-dossier-activity > article[data-kind="comment"] {
+  border-left-color: #287553;
+}
+
+.task-detail-route .task-dossier-activity > article p,
+.task-detail-route .task-dossier-empty {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.task-detail-route .task-dossier-activity > article small {
+  color: var(--review-muted, #52647b);
+  font-size: 15px;
+}
+
+.task-detail-route .task-dossier-activity form {
+  display: grid;
+  gap: 8px;
+  max-width: 760px;
+  margin-top: 20px;
+}
+
+.task-detail-route .task-dossier-activity form label {
+  font-weight: 700;
+}
+
+.task-detail-route .task-dossier-activity textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 112px;
+  padding: 12px;
+  border: 1px solid #c6d2e1;
+  background: #fff;
+  color: var(--review-ink, #182d4a);
+  font: inherit;
+  resize: vertical;
+}
+
+.task-detail-route :is(button, a, summary, textarea):focus-visible {
+  outline: 3px solid #2f6fe4;
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .task-detail-route .task-title {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+    padding: 22px 18px;
+  }
+
+  .task-detail-route .task-title .task-detail-return {
+    width: 100%;
+  }
+
+  .task-detail-route .task-dossier-heading,
+  .task-detail-route .task-dossier-record,
+  .task-detail-route .task-dossier-actions,
+  .task-detail-route .task-dossier-activity {
+    padding: 18px;
+  }
+
+  .task-detail-route .task-dossier-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .task-detail-route .task-dossier-record {
+    border-right: 0;
+  }
+
+  .task-detail-route .task-dossier-facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .task-detail-route .task-dossier-facts > div:nth-child(even) {
+    border-left: 0;
+  }
+
+  .task-detail-route .task-dossier-facts > div:nth-child(n + 2) {
+    border-top: 1px solid var(--review-line, #dce4ee);
+  }
+
+  .task-detail-route .task-dossier-activity {
+    grid-column: auto;
+  }
+
+  .task-detail-route .task-dossier-activity form button {
+    text-align: center;
   }
 }

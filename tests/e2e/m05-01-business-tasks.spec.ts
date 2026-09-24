@@ -12,7 +12,9 @@ test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on de
   await page.locator(".task-row-main").filter({ hasText: "核验便携净水杯供应商报价" }).click();
   await expect(page).toHaveURL(new RegExp(`/tasks/${taskId}\\?from=`));
   await expect(page.getByRole("link", { name: "关闭任务详情" })).toHaveAttribute("href", /\/work/);
-  await expect(page.getByRole("heading", { name: "任务活动" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "任务活动与评论" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "查看事实，再决定下一项操作" })).toBeVisible();
+  await expect(page.locator(".task-dossier")).toBeVisible();
   await expect(page.getByText("报价证据已核验，等待确认交期。")).toBeVisible();
   await expect(page.getByText("下一步：在期限前完成当前阶段")).toBeVisible();
   const blockingContext = page.getByLabel("阻塞与下一负责人");
@@ -23,7 +25,7 @@ test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on de
   await expect(page.getByText("报价证据已核验，等待确认交期。", { exact: true })).toHaveCount(1);
   await expect(page.getByText("comment.created", { exact: true })).toHaveCount(0);
   await expect(
-    page.locator(".task-detail-facts").getByText("测试成员", { exact: true }),
+    page.locator(".task-dossier-facts").getByText("测试成员", { exact: true }),
   ).toBeVisible();
   await expect(page.getByText("暂停任务", { exact: true })).toBeVisible();
   await page.getByText("更多任务操作", { exact: true }).click();
@@ -475,7 +477,7 @@ test("member workspace shows Chinese context theme switch and task progress with
   await page.getByText("更多任务操作", { exact: true }).click();
   await expect(page.getByRole("button", { name: "编辑任务" })).toBeVisible();
   await expect(
-    page.locator(".task-detail").getByRole("button", { name: "删除任务" }),
+    page.locator(".task-dossier").getByRole("button", { name: "删除任务" }),
   ).toBeVisible();
 });
 
