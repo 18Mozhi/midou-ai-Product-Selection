@@ -2,7 +2,7 @@
 
 ## 2026-09-24 · P13 批量操作快照与单飞保护
 
-关闭 P13 已记录的批量 `confirmBatch` 可在逐项请求之间继续读取可变 action/原因，且无函数级 busy guard 的缺口。提交时固定目标 ID/版本、action、原因、期限、负责人和计数；执行中禁用批量入口和字段、阻止返回/Escape，并以处理中状态反馈。实际 Vue 重复 submit/关闭/输入冻结 E2E 桌面与390px各1/1；任务合同、KeepAlive缓存归属和 M05 页面完整相关回归桌面/手机各44/44；预览/合同单测3/3、类型、构建通过。未改变 API、服务端幂等、权限/任务状态机或数据库；真实 RBAC/DB与正式 M07-03仍待。详见[P13生产实施](P13-PAGE-COMPOSITION-IMPLEMENTATION.md)。
+关闭 P13 已记录的批量 `confirmBatch` 可在逐项请求之间继续读取可变 action/原因，且无函数级 busy guard 的缺口。提交时固定目标 ID/版本、action、原因、期限、负责人和计数；执行中禁用批量入口和字段、阻止返回/Escape，并以处理中状态反馈。实际 Vue 重复 submit/关闭/输入冻结 E2E 桌面与390px各1/1；任务合同、KeepAlive缓存归属和 M05 页面完整相关回归桌面/手机各44/44；预览/合同单测3/3、类型、构建通过。代码提交/build SHA `3bf11b89c808d0e626ace4900cd67cde75143a3d` 已推送并部署；固定脚本的 ready/available/version、路由与资源复验通过并清理临时产物；部署流程执行既有迁移白名单与宝塔Node停启，本批未加迁移。真实 RBAC/DB/服务端幂等与正式 M07-03仍待。详见[P13生产实施](P13-PAGE-COMPOSITION-IMPLEMENTATION.md)。
 
 ## 2026-09-24 · P46 必填字段语义补齐
 
