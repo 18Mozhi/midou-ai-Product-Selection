@@ -338,3 +338,16 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 | apps/web/src/components/OpenCreateDialog.vue | 165d6b784316b4a9ff88d0e8490d0abc21103c1fe7ec9c03e321d74f892b1261 |
 
 本节只登记该组件当前5个静态源码身份。`confirming`阶段关闭/重开与字段焦点保存是容器状态衔接，不等于父级创建成功或失败；P60创建字段、校验、API、幂等和审计仍按本合同已有边界审查，不由本组件映射替代。
+
+## 10. P58 商业运营目录工作区切换（2026-09-24）
+
+页内两个控件只更新 `reviewTask`，在同一路由的全局方案目录和组织配额工作区之间切换；点击“组织配额”本身不读取组织，也不执行分配/调整，后续查询及写入仍由各自显式表单和既有处理器完成。本节为当前源码补入两个身份与LF指纹，不新增接口或商业行为。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/CommercialOperationsCenter.vue#97ebdc1b722c2d96.1 | 597 | control | CO58-CURRENT-WORKSPACE / 切换至全局方案目录，仅本地视图状态 |
+| apps/web/src/components/CommercialOperationsCenter.vue#dc703a87b7ae511f.1 | 600 | control | CO58-CURRENT-WORKSPACE / 切换至组织配额视图，本身不触发组织读取或写入 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/CommercialOperationsCenter.vue | 5fea14bb21308bc2df7526e8485698525881b227d5ba1715b5eea5bea6e1754e |
