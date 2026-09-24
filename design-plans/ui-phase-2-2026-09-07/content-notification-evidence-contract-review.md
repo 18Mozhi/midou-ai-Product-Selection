@@ -431,3 +431,16 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/PlatformManagementFilter.vue | 58ed6c796cffa780c81b565b8081b40e3cf006feb238ed15758b4c3cf9ed7f2f |
+
+## 12. PlatformManagementCenter 当前筛选与邮件编辑接线（2026-09-24）
+
+当前父组件对旧通用管理域筛选子组件转发查询和重置，内容与通知域使用各自专用流程；邮件编辑器仅在 `domain === 'email'` 时挂载，关闭只清除编辑器状态，保存转给父级 `saveMessage`。以下都是父子事件边界，不把组件接线额外计作筛选或保存写操作。第6节哈希是历史快照，本节为当前源码指纹。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/PlatformManagementCenter.vue#3e86a7a4cbf4b231.1 | 461 | event-binding | PM-CURRENT-GENERIC-FILTER-WIRING / 旧通用域过滤器的apply→load、reset→resetGenericFilters与query/status受控接线 |
+| apps/web/src/components/PlatformManagementCenter.vue#5b14488b26b010e3.1 | 566 | event-binding | EMAIL-CURRENT-EDITOR-WIRING / 邮件域编辑器关闭清空局部编辑态、保存转发给父级saveMessage |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformManagementCenter.vue | 33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00 |
