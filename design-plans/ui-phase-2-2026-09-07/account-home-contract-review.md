@@ -131,7 +131,30 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 
 本节只提供当前静态位置和既有父子事件边界；API字段、expected_version、服务端验证与资料读写合同仍以第3节和真实路由/服务为准，不由子组件映射推导新业务行为。
 
-### 2.3 P11 PersonalSecurityPanel 当前源码位置（2026-09-24）
+### 2.3 P11 PersonalCenter 当前父级源码位置（2026-09-24）
+
+旧P11表保留首批父组件动作的历史签名；以下8项补齐当前 `PersonalCenter.vue` 的操作和五分区子组件交接。分区按钮是一组模板重复实例，子组件props/events只连接composable既有状态/handler；不据此重复计算资料、偏好、改密或会话API动作。
+
+#### apps/web/src/components/PersonalCenter.vue
+
+| 当前签名.序号 | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| 71a3428b56c7ab21.1 | 53 | control | PC-CENTER-CURRENT-LOAD / 顶部重读资料；读取中或任一写操作忙碌时禁用 |
+| c68e6bb8fa382242.1 | 82 | control | PC-CENTER-CURRENT-PROFILE-RETRY / profile读取失败时调用独立重试 |
+| bdd76d306d559c2e.1 | 94 | control | PC-CENTER-CURRENT-SECTION / 五个query分区之一的本地切换按钮实例 |
+| 39f57fafe8eea828.1 | 105 | event-binding | PC-CENTER-CURRENT-PROFILE / 传递资料快照/草稿/忙碌反馈并转发更新与保存意图 |
+| 97130ec443ea7f94.1 | 114 | event-binding | PC-CENTER-CURRENT-PERMISSIONS / 传递授权分区状态与token管理能力，转发重读 |
+| 9de3424951fed3cd.1 | 120 | event-binding | PC-CENTER-CURRENT-SECURITY / 传递会话/密码及忙碌状态，转发读取和写入意图 |
+| c0f9f5a7f78f133b.1 | 134 | event-binding | PC-CENTER-CURRENT-NOTIFICATIONS / 传递偏好状态/草稿并转发重读、字段更新及保存意图 |
+| efda8df42e4c8c1a.1 | 144 | event-binding | PC-CENTER-CURRENT-ASSETS / 传递本人资产分区状态并转发重读 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PersonalCenter.vue | 5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee |
+
+这组位置描述父级的本地导航/状态接线，不宣称query深链、浏览器历史、异步竞态或服务端权限已由静态映射验收。
+
+### 2.4 P11 PersonalSecurityPanel 当前源码位置（2026-09-24）
 
 本组件把MFA路由、密码表单、设备会话读取状态和撤销意图呈现出来；密码字段更新、改密和撤销事件均交由PersonalCenter/usePersonalCenter处理。`writesBusy`在父级包含资料、偏好、改密及会话撤销写入，子组件据此禁用密码字段/提交和撤销按钮；此处不把按钮文案当成后端会话语义证明。
 
