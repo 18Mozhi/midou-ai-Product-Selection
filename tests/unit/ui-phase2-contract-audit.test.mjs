@@ -508,6 +508,43 @@ test("current P48/P50 source maps cover each live candidate and fingerprint", ()
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current collection operations map covers all live candidates and isolates the old snapshot", () => {
+  const file = "apps/web/src/components/CollectionOperationsConsole.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const records = report.records.filter(
+    (record) =>
+      record.document.endsWith("collection-runtime-contract-review.md") &&
+      record.sourceFile === file &&
+      record.currentLine !== null &&
+      record.temporalScope !== "historical",
+  );
+  assert.equal(candidates.length, 29);
+  assert.deepEqual(
+    [...new Set(records.map((record) => record.candidateId))].sort(),
+    candidates.map((candidate) => candidate.candidateId).sort(),
+  );
+  for (const record of records.filter((item) => item.candidateId)) {
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.recordedLine, record.currentLine, record.candidateId);
+  }
+  const oldSnapshot = report.sourceClaims.filter(
+    (claim) =>
+      claim.document.endsWith("collection-runtime-contract-review.md") &&
+      claim.file === file &&
+      claim.hash === "7acded3c40ce98f08e87955cd161bba67874aca496d1768b34505bb35b527d7d",
+  );
+  assert.equal(oldSnapshot.length, 1);
+  assert.equal(oldSnapshot[0].temporalScope, "historical");
+  assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],

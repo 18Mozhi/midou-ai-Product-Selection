@@ -116,6 +116,7 @@ const defaults = {
 };
 // Explicit pre-fix snapshots or superseded location tables retained by the source documents.
 const history = {
+  "collection-runtime-contract-review.md": { historicalSections: ["7. 来源指纹"] },
   "task-contract-review.md": {
     historicalSections: ["3. 局部候选→语义动作映射", "7. 01adf4d后的稳定源码映射"],
   },

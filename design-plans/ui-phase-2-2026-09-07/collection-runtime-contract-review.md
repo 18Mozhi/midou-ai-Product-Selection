@@ -72,29 +72,29 @@
 | T:acbca874b622fd25.1 | event-binding / 908 | CL51-REPLAY / cancel、replay |
 | T:e9f14f18f727a992.1 | dialog-component-call / 908 | CL51-REPLAY / 共享确认调用 |
 | O:f04d44ed4df285ab.1 | control / 361 | CL52-LOAD / 刷新 |
-| O:2506d9788c717641.1 | dialog-component-call / 365 | CL52-SCOPE / 移动筛选抽屉 |
-| O:9ba7fa048065cd28.1 | form-event / 366 | CL52-SCOPE / applyScope |
+| O:2506d9788c717641.1 | dialog-component-call / 586 | CL52-SCOPE / 移动筛选抽屉 |
+| O:9ba7fa048065cd28.1 | form-event / 587 | CL52-SCOPE / applyScope |
 | O:c28b2fc7235cdb49.1 | control / 402 | CL52-SCOPE / resetScope |
 | O:43ad97abb073c16e.1 | control / 405 | CL52-SCOPE / 原生submit |
 | O:5cb1142ec0759d3e.1 | control / 414 | CL52-LOAD / hint重试 |
 | O:ea08550bb35442f9.1 | control / 433 | CL52-LOAD / 失败快照重读 |
-| O:3a14c060674cdbaa.1 | control / 443 | CL52-LINK / 响应links六类目标 |
-| O:f6229375f6be78df.1 | control / 486 | CL52-SOURCE / 桌面技术展开 |
-| O:1c008f867673db60.1 | control / 529 | CL52-SOURCE / 移动技术展开 |
+| O:3a14c060674cdbaa.1 | control / 670 | CL52-LINK / 响应links六类目标 |
+| O:f6229375f6be78df.1 | control / 713 | CL52-SOURCE / 桌面技术展开 |
+| O:1c008f867673db60.1 | control / 756 | CL52-SOURCE / 移动技术展开 |
 | O:f596c7474d4b8232.1 | control / 534 | CL52-SOURCE / 全部与前8项 |
 | O:0db0b4127120a05a.1 | control / 575 | CL52-ROOT / 清除精确根因 |
 | O:e1cacfb14abb0a4c.1 | control / 590 | CL52-ROOT / 精确错误码切换 |
-| O:1c008f867673db60.2 | control / 600 | CL52-ROOT / 原始错误码 |
-| O:f6229375f6be78df.2 | control / 638 | CL52-ATTEMPT / 桌面技术展开 |
-| O:1c008f867673db60.3 | control / 685 | CL52-ATTEMPT / 移动技术展开 |
+| O:1c008f867673db60.2 | control / 831 | CL52-ROOT / 原始错误码 |
+| O:f6229375f6be78df.2 | control / 869 | CL52-ATTEMPT / 桌面技术展开 |
+| O:1c008f867673db60.3 | control / 916 | CL52-ATTEMPT / 移动技术展开 |
 | O:9a34a1e60386c3be.1 | control / 700 | CL52-ATTEMPT / 前页 |
 | O:a8016a8969f38074.1 | control / 711 | CL52-ATTEMPT / 后页 |
 | O:30995dc421725b22.1 | control / 729 | CL52-BATCH / 失败清单展开 |
-| O:660c7a198b93551d.1 | control / 737 | CL52-BATCH / 安全重放区展开 |
+| O:660c7a198b93551d.1 | control / 972 | CL52-BATCH / 安全重放区展开 |
 | O:104c5add10ee67a1.1 | event-binding / 743 | CL52-BATCH / checkbox change与20项上限 |
 | O:713c88750f4f0639.1 | control / 759 | CL52-BATCH / previewBatchReplay |
-| O:9ebd065e5010fd46.1 | control / 767 | CL52-DEAD / 链接单任务详情重放 |
-| O:1c008f867673db60.4 | control / 771 | CL52-DEAD / 技术详情 |
+| O:9ebd065e5010fd46.1 | control / 1022 | CL52-DEAD / 链接单任务详情重放 |
+| O:1c008f867673db60.4 | control / 1026 | CL52-DEAD / 技术详情 |
 | O:13685210dcee03e5.1 | control / 788 | CL52-DEAD / 前页 |
 | O:7b21c2da3342a42a.1 | control / 799 | CL52-DEAD / 后页 |
 | O:39535e218053c768.1 | event-binding / 816 | CL52-BATCH / cancel、confirmBatchReplay |
@@ -204,3 +204,60 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | tests/e2e/m06-03-collection-console.spec.ts | 6ef5270197d6a59ed4e5fabf92f4259c4bf831b8fbc0c891fa48034e8720dd76 |
 | tests/e2e/m03-04-playwright-crawler.spec.ts | f49ea67728ed94dab151725403d5cec0e3b46338798d6104cafd879bc2afe287 |
 | scripts/lib/ui-phase2-inventory.mjs | fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb |
+
+## 8. 2026-09-24 O组件当前源码对账
+
+第7节为旧版本指纹快照，保留追溯但不参与当前源码绑定。本节的哈希均由当前LF归一文件直接计算；它们绑定版本身份，不代表本次重新审核API、数据库、权限或运行行为。第2节O组仍匹配的11个候选行号已更新到当前精确位置；17个已不存在的旧候选继续显示为identity-not-found，不拿它们满足覆盖。当前 `CollectionOperationsConsole.vue` 共29个静态候选、5个v-model位置，本次补录之前未归属的18个位置如下。
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/CollectionRuntimeSurface.vue | 4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f |
+| apps/web/src/components/CollectionTaskCenter.vue | 6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de |
+| apps/web/src/components/CollectionOperationsConsole.vue | 2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f |
+| apps/web/src/components/CollectionRuntimeCenter.vue | 6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17 |
+| apps/web/src/collection-tasks.css | e2bcf0f176fdf670efc402c104fdac4dd2eabbafbbdc4a9d7a21e3c04d90e85f |
+| apps/web/src/collection-task-detail.css | cdeb6209781acc6ff747fb4728f9675d69479c53fd3a97dfdb9e0b5c17130544 |
+| apps/web/src/styles/platform-operations.css | 2a0a0936d6132cd3fdeb74def417edfd7a038dda43ece9f010b125b62698281b |
+| apps/web/src/crawler-runtime.css | 128465547cae7c535c6f8275629b39e7a1ec620d6d73e1f185529563e3ea14cf |
+| apps/web/src/components/ConfirmDialog.vue | 3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424 |
+| apps/web/src/components/ResponsiveDataView.vue | e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7 |
+| apps/web/src/components/ResponsiveFilterDrawer.vue | 5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f |
+| apps/web/src/components/UiStatePanel.vue | 8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164 |
+| apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
+| apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
+| config/route-catalog.json | eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b |
+| apps/web/src/route-catalog.ts | 6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956 |
+| apps/web/src/router.ts | 67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4 |
+| apps/web/src/App.vue | e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531 |
+| apps/api/src/collection-task-routes.ts | 74a9af17287692ed20d99b3f5993ad49b07a43ba967801748025a3640a078fbd |
+| apps/api/src/collection-task-service.ts | e2be97bceb32547991fe08c629d5459b686bd1672278366e7e3919321af81684 |
+| apps/api/src/mysql-collection-task-repository.ts | f2941278cff537ad1d6688989a159b8398db759373bc51379c1f8e7302fcfc47 |
+| apps/api/src/collection-console-routes.ts | e728860cac1614245115e5bf43d90ba0ad31115e07e58e845c8b73129962eac2 |
+| apps/api/src/collection-console-service.ts | 2567112c398106794d0110afe90d94a8793d67ec168e8461d02e531420483310 |
+| apps/api/src/mysql-collection-console-repository.ts | c1adfee1a3f3a8e66765d990e804ba57bc234441b233d8f795db72e0f9605915 |
+| apps/api/src/crawler-runtime-routes.ts | 69f5e8f0e9c5529aec86ed8c39ad2638551a4dffb6a1f43469b2b3dba8450477 |
+| apps/api/src/crawler-runtime-service.ts | 7dda282fdefdd95a9d49ec4be11cc2f67e723122264da54b5de45cadae62f69a |
+| apps/api/src/mysql-crawler-runtime-repository.ts | ac4cc7dab79a4baccb55ecaff7582790a67b6eaab616ef096a9b63e2d9e8e518 |
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/CollectionOperationsConsole.vue#6d3f7d591719f19f.1 | 582 | control | CL52-LOAD / 刷新读取当前固定范围 |
+| apps/web/src/components/CollectionOperationsConsole.vue#e0774dcb9c606eef.1 | 625 | control | CL52-SCOPE / resetScope：清除局部范围筛选 |
+| apps/web/src/components/CollectionOperationsConsole.vue#002b24e1d917d4a4.1 | 632 | control | CL52-SCOPE / applyScope：提交现有API范围查询 |
+| apps/web/src/components/CollectionOperationsConsole.vue#a397ba517c409773.1 | 641 | control | CL52-LOAD / refreshNotice中的重试，复用load |
+| apps/web/src/components/CollectionOperationsConsole.vue#c7e32d5d2ec42619.1 | 660 | control | CL52-LOAD / 受状态门控制的重新读取，不显示loading/失权重试 |
+| apps/web/src/components/CollectionOperationsConsole.vue#a9b7552ee181c72f.1 | 762 | control | CL52-SOURCE / 展开全部来源或收回前8条，控制对应结果区 |
+| apps/web/src/components/CollectionOperationsConsole.vue#4509211b46b0337c.1 | 804 | control | CL52-ROOT / 当前根因存在时清除精确根因筛选 |
+| apps/web/src/components/CollectionOperationsConsole.vue#644b6cd23fdb966a.1 | 820 | control | CL52-ROOT / 选择具体真实错误码进入根因下钻，按pressed显当前选择 |
+| apps/web/src/components/CollectionOperationsConsole.vue#e4688d99cdaed726.1 | 931 | control | CL52-ATTEMPT / 最近尝试前页；依API总页数及busy禁用 |
+| apps/web/src/components/CollectionOperationsConsole.vue#5c6a30d3ce827bee.1 | 942 | control | CL52-ATTEMPT / 最近尝试后页；依API总页数及busy禁用 |
+| apps/web/src/components/CollectionOperationsConsole.vue#65c7916ab5f0b4d9.1 | 964 | control | CL52-BATCH / 展开已确认失败与结果未知条目，只披露现有结算事实 |
+| apps/web/src/components/CollectionOperationsConsole.vue#3d7519a5ffaadf88.1 | 978 | event-binding | CL52-BATCH / 死信选择change转toggleDeadLetter；单项状态、busy、unknown及20条上限由既有逻辑裁决 |
+| apps/web/src/components/CollectionOperationsConsole.vue#935c6c8171139c6b.1 | 988 | event-binding | CL52-BATCH / batchReason受控输入；maxlength/错误清理不另算写操作 |
+| apps/web/src/components/CollectionOperationsConsole.vue#9233c1fc5a4723d0.1 | 1013 | control | CL52-BATCH / previewBatchReplay：先校验并冻结目标、影响和原因，再打开确认 |
+| apps/web/src/components/CollectionOperationsConsole.vue#ead51c4255c6e1f0.1 | 1043 | control | CL52-DEAD / 开放与已重放死信前页，清当前页外选择 |
+| apps/web/src/components/CollectionOperationsConsole.vue#19e60ba8660b9f22.1 | 1054 | control | CL52-DEAD / 开放与已重放死信后页，清当前页外选择 |
+| apps/web/src/components/CollectionOperationsConsole.vue#9215901b5115628c.1 | 1072 | event-binding | CL52-BATCH / ConfirmDialog cancel与confirm分别走现有取消/确认所有者 |
+| apps/web/src/components/CollectionOperationsConsole.vue#4640753c7de49660.1 | 1072 | dialog-component-call | CL52-BATCH / 破坏性影响确认共享调用；要求确认短语与影响勾选 |
+
+静态回归应核对当前29个candidateId、行号、类型及console当前hash；其中11个沿用第2节原语义并更新行号，本节补18个原先未归属位置。第2节剩余17个旧O身份因实际源码已无该签名，保持identity-not-found并不覆盖新分母。静态对账、源hash与历史隔离均不代表浏览器交互、服务端权限/审计、真实Worker重放或生产验收；第5/6节所有既有限制和CL-G退出条件仍有效。
