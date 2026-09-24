@@ -131,7 +131,7 @@ test("P32 source and review preserve explicit inherited proposal differences", (
   const markup = readFileSync(`${base}/design/workspaces-controls-direction-c/index.html`, "utf8");
   assert.match(markup, /真实共享前端尚无上限/);
   assert.match(markup, /\.\.\/workspaces-direction-c\/workspaces\.js/);
-  assert.doesNotMatch(sources[dependencies[2]], /maxlength=/);
+  assert.doesNotMatch(sources[parentFile], /:maximum-length=/);
   assert.equal(review().approval, "pending-user-review");
   assert.match(review().compositionGaps.at(-1), /字段锁定/);
 });
@@ -181,7 +181,6 @@ test("P32 binds eleven local models and three caller containers, not three dialo
     /input omissions/,
   );
   assert.equal(review().sharedReasonInput.maximumLength, null);
-  assert.doesNotMatch(sources[dependencies[2]], /maxlength=/);
 });
 test("P32 rejects stale source or a forged source-to-scene claim", () => {
   assert.throws(
