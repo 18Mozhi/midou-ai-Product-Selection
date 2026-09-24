@@ -174,7 +174,6 @@ UI2-OG01三实例同时核对精确创建body/幂等键、单POST、两次GET（
 | `apps/web/src/components/OrganizationMemberPanel.vue` | `33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7` |
 | `apps/web/src/components/OrganizationWorkspacePanel.vue` | `63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7` |
 | `apps/web/src/components/OrganizationTeamPanel.vue` | `cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174` |
-| `apps/web/src/components/OrganizationApprovalPanel.vue` | `9ec2fb2e38b6b9ff11f81c3f314671dedec07667f96d137265c42c1ddf84b032` |
 | `apps/web/src/components/OrganizationDataPanel.vue` | `0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478` |
 | `apps/web/src/components/OrganizationTokenPanel.vue` | `cd90fc469e663ef0e49bd5371b3c9a91f24d68f6039affb55b8ead8be5540725` |
 | `apps/web/src/components/OrganizationAuditPanel.vue` | `b0f7e9452a81914dfa71c3812765f93726804d2ed1e56494e9004314a6f8ac7a` |
@@ -185,4 +184,27 @@ UI2-OG01三实例同时核对精确创建body/幂等键、单POST、两次GET（
 | `apps/web/src/organization-admin.css` | `831b6561d1cbc5c46e6b3f9a2092c21685a8d8bcebd436e4c33fa2f3ae1248ee` |
 | `apps/web/src/organization-audit.css` | `383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d` |
 
+### OrganizationApprovalPanel.vue 旧源码指纹（历史）
+
+| 文件 | LF SHA-256 |
+| --- | --- |
+| `apps/web/src/components/OrganizationApprovalPanel.vue` | `9ec2fb2e38b6b9ff11f81c3f314671dedec07667f96d137265c42c1ddf84b032` |
+
 2026-09-10 P32恢复组合增量：共享原因组件新增仅显式workspaceRestore上下文启用的目标说明与C样式；其他调用的默认请求结构、原因校验和提交关闭顺序不变。真实Vue双端94检查/20图及默认/替换/关闭单测见[P32落地说明](P32-VUE-RESTORE-REVIEW.md)。本表同步已验证来源，不扩展其他页面或生产验收；旧指纹保存在07902a2e。
+
+## 7. P34 OrganizationApprovalPanel 当前分页源码归属（2026-09-24）
+
+当前组件扫描到14个静态源码候选：既有表中的当前身份继续按签名追踪，四个未映射候选是审批记录与模板目录各自的上一页/下一页按钮。它们只更新当前视图的本地页码；到达边界时将焦点转移至本地页状态说明，并仅在焦点仍由该说明持有且可视区域被遮挡时滚动到视口内，不读写URL、不调用API、不改变审批或模板。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/OrganizationApprovalPanel.vue#95030381fd924d2b.1 | 547 | control | OG-A-CURRENT-PAGINATION / 审批记录上一页及边界焦点交接 |
+| apps/web/src/components/OrganizationApprovalPanel.vue#87f27ee40744d069.1 | 550 | control | OG-A-CURRENT-PAGINATION / 审批记录下一页及边界焦点交接 |
+| apps/web/src/components/OrganizationApprovalPanel.vue#25d2be8fec5c35cd.1 | 688 | control | OG-A-CURRENT-PAGINATION / 模板目录上一页及边界焦点交接 |
+| apps/web/src/components/OrganizationApprovalPanel.vue#62fcf758cc715685.1 | 691 | control | OG-A-CURRENT-PAGINATION / 模板目录下一页及边界焦点交接 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/OrganizationApprovalPanel.vue | `332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b` |
+
+映射仅记录当前静态位置及可见焦点行为；不证明父级保活、多实例路由生命周期、读屏体验、真实API/权限或生产验收。旧指纹在第6节单独保留为历史，避免覆盖当前哈希绑定。
