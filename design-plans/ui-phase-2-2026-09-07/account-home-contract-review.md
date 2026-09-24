@@ -275,6 +275,18 @@ P11多个子面板复用该共享反馈组件。它在error状态下显示“重
 
 该映射只证明源码位置与既有状态/请求边界；不代表错误态、焦点、radio方向键、保存竞态、主题完整浏览器验收或生产验收已关闭。
 
+#### P10 `PreferenceRadioGroup` 当前选项控件（2026-09-24）
+
+共享选项按钮按 `options` 循环渲染；选项控件只将当前 `option.id` 发给 `ThemeStudio`。主题组交由既有主题预览处理，密度组更新会话内密度；持久化仍由独立显式保存操作负责。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/theme-studio/PreferenceRadioGroup.vue#991f0e9b895c8269.1 | 36 | control | TH-PREFERENCE-OPTION / 发送当前radio选项ID，不直接请求服务器 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/theme-studio/PreferenceRadioGroup.vue | 564207b20e57e29aba47737bc41d70f0327a42a58a3e9fafdc9c6356bb9944ad |
+
 ### 2.10 P11 AccountShell 当前源码位置（2026-09-24）
 
 #### A

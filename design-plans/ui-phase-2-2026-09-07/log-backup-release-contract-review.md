@@ -238,6 +238,18 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | --- | --- |
 | apps/web/src/components/PlatformLogCenter.vue | 029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518 |
 
+### 7.1 P62调用链目录本地选择（2026-09-24）
+
+`PlatformLogWorkspace` 的调用链目录按钮只更新组件内 `selectedTraceId`，由 `activeTraceId` 控制已返回事件组的显隐；它不重读日志、不改变URL、不导出，也不写业务状态。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/PlatformLogWorkspace.vue#d61db9a9a6e44c28.1 | 26 | control | LG62-CHAIN-LOCAL-SELECT / 切换当前已读调用链的事件展示 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformLogWorkspace.vue | 7d85fd1776991284de17d06f6f3f9350888a988f00fd9ee61210bf409b1a8a9a |
+
 此节只补当前源位置及哈希；CSV真实下载/审计落库、读取RBAC、移动记录细节和生产行为仍以原合同/独立运行证据为准。
 
 ## 8. P65 ReleaseRolloutCenter 当前源码归属（2026-09-24）

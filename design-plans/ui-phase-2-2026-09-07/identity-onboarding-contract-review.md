@@ -190,3 +190,17 @@ MFA和首次设置按钮是 form 外的 type=button，输入虽然部分有minle
 6. **批准后实现并发布**：先单页真实Vue闭环，再本族共享消费者回归；正式图与实现证据分别绑定版本。按PLAN的W09统一宝塔发布，本批没有部署、迁移、环境/依赖变更或重启要求。
 
 新增九份规格见page-specs/P01.md至P09.md；十项规格字段齐全并不等于上述验收通过。全站其余页、动态共享控件、运行分母冻结、A/B选择与用户签收继续待办。
+
+## 6. P01重试父子事件当前映射（2026-09-24）
+
+`LandingRedirectSurface` 将受阻态的“重新检查”主操作发为 `retry`；父级 `LandingRedirect` 接收后复用同一个 `resolveLanding`，执行既有 `/me/landing` 读取。它与挂载时的自动解析共用处理函数，不是另一个业务写动作；加载态仍不显示可重复按钮。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/LandingRedirect.vue#0f7c864f959a1c13.1 | 41 | event-binding | ID-LANDING-RETRY-PARENT / 子事件转发至现有入口解析与重读处理函数 |
+| apps/web/src/components/LandingRedirectSurface.vue#bb7cd7dbbdfa84a2.1 | 44 | event-binding | ID-LANDING-RETRY-SURFACE / 将通用状态主操作转发为retry事件 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/LandingRedirect.vue | bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5 |
+| apps/web/src/components/LandingRedirectSurface.vue | 7c4100c1eb8d4dd56d5dec61446ef2ebe544873b9c57cec49db62d1a2bad370d |

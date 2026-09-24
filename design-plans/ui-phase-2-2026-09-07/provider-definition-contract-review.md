@@ -208,3 +208,15 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 | apps/web/src/components/ProviderAdapterCenter.vue | 4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746 |
 
 本节只登记当前源码身份及已有事实合同归属，不代表运行时全状态、真实 `provider:configure` 探针授权、采集执行、停用恢复或生产验收已通过。
+
+## 9. ProviderRegistry受阻态重读事件（2026-09-24）
+
+来源定义页的共享 `UiStatePanel` 主操作只转发到既有 `load` 读取函数；该函数读取 `/platform/providers`，这个事件边不是来源创建、编辑或保存动作。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/ProviderRegistry.vue#2e080ad21acf1f26.1 | 677 | event-binding | PR01-CURRENT-RETRY / 受阻态重读转发到现有列表GET |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/ProviderRegistry.vue | 2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc |
