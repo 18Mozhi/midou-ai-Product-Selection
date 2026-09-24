@@ -720,10 +720,36 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
   await expect(accountTabs.getByRole("link", { name: "组织管理", exact: true })).toBeVisible();
   await expect(accountTabs.getByRole("link", { name: "用户管理", exact: true })).toBeVisible();
   await expect(accountTabs.getByRole("link", { name: "管理员管理", exact: true })).toBeVisible();
+  const undersizedAccountTargets = await page
+    .locator(".account-center--review :is(a, button, input, select, summary)")
+    .evaluateAll((controls) =>
+      controls
+        .filter((control) => control.getClientRects().length)
+        .map((control) => ({
+          label:
+            control.textContent?.trim() || control.getAttribute("aria-label") || control.tagName,
+          height: control.getBoundingClientRect().height,
+        }))
+        .filter((control) => control.height < 44),
+    );
+  expect(undersizedAccountTargets).toEqual([]);
   const mobile = (page.viewportSize()?.width ?? 0) <= 760;
   if (mobile) {
     await page.getByRole("button", { name: "账号筛选" }).click();
     const filters = page.getByRole("dialog", { name: "账号筛选" });
+    const undersizedFilterTargets = await filters
+      .locator("button, input, select")
+      .evaluateAll((controls) =>
+        controls
+          .filter((control) => control.getClientRects().length)
+          .map((control) => ({
+            label:
+              control.textContent?.trim() || control.getAttribute("aria-label") || control.tagName,
+            height: control.getBoundingClientRect().height,
+          }))
+          .filter((control) => control.height < 44),
+      );
+    expect(undersizedFilterTargets).toEqual([]);
     await expect(filters.getByPlaceholder("搜索组织名称或用户邮箱")).toHaveAccessibleName(
       "搜索组织名称或用户邮箱",
     );

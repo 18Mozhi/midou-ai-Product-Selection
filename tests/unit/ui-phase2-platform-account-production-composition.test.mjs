@@ -43,8 +43,9 @@ test("P39 C composition has desktop rail, responsive collapse and focus treatmen
   );
 });
 
-test("P39 column tools meet the 44px target without changing other table consumers", () => {
+test("P39 visible navigation and column tools meet the 44px target without changing other table consumers", () => {
   const normalizedStyles = styles.replace(/\s+/g, " ");
+  assert.match(normalizedStyles, /\.account-center--review \.account-tabs a \{ min-height: 44px;/);
   assert.match(
     normalizedStyles,
     /\.account-center--review \.account-table-wrap \.table-view-controls__toolbar :is\(button, summary, select\),\s*\.account-center--review \.account-table-wrap \.table-view-controls__toolbar fieldset > div\s*\{\s*min-height: 44px;/,

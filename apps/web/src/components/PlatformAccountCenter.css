@@ -418,7 +418,7 @@
   background: var(--account-review-soft);
 }
 .account-center--review .account-tabs a {
-  min-height: 42px;
+  min-height: 44px;
   border: 0;
   border-radius: 9px;
   background: transparent;
