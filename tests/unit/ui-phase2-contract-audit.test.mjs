@@ -1584,6 +1584,67 @@ test("current P09 onboarding guide maps all local navigation sites and preserves
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current platform message editor maps modal and parent save boundaries without reviving old sites", () => {
+  const file = "apps/web/src/components/PlatformMessageEditor.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const document = "content-notification-evidence-contract-review.md";
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const currentRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.claim.includes("PN57-CURRENT-") &&
+      record.currentLine !== null &&
+      record.temporalScope !== "historical",
+  );
+  assert.equal(candidates.length, 6);
+  assert.deepEqual(
+    [...new Set(currentRows.map((record) => record.candidateId))].sort(),
+    candidates.map((candidate) => candidate.candidateId).sort(),
+  );
+  for (const record of currentRows) {
+    const candidate = candidates.find((item) => item.candidateId === record.candidateId);
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.currentLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedKind, candidate?.kind, record.candidateId);
+  }
+  const oldStaleIds = [
+    "c18fb34a85c44a13.1",
+    "2412ed75f6e08a76.1",
+    "ff3f7c9094488d9f.1",
+    "c6a9a644f04c8e3f.1",
+    "358517db18f8c7cb.1",
+    "d55ba76cf5f7483a.1",
+  ];
+  for (const signature of oldStaleIds) {
+    const record = report.records.find(
+      (item) => item.document.endsWith(document) && item.candidateId === `${file}#${signature}`,
+    );
+    assert.equal(record?.status, "identity-not-found", signature);
+  }
+  const hashes = report.sourceClaims.filter(
+    (claim) => claim.document.endsWith(document) && claim.file === file,
+  );
+  assert.equal(hashes.length, 2);
+  const currentHash = hashes.find((claim) => claim.temporalScope !== "historical");
+  const previousHash = hashes.find((claim) => claim.temporalScope === "historical");
+  assert.equal(currentHash?.hash, digest(source));
+  assert.equal(currentHash?.status, "hash-current");
+  assert.equal(
+    previousHash?.hash,
+    "8bafb3374f744389257c36a27580dbf768a9b4a0991fa0ce748889bb2c093cea",
+  );
+  assert.equal(previousHash?.status, "hash-drift");
+  assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],

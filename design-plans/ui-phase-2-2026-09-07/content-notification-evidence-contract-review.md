@@ -346,3 +346,22 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | tests/m06-02/api-coverage-dashboard.test.mjs | b3a63610a59ed07a73a1598e469c0823c88da72f3436b3d7a9c48588935c93cf |
 
 2026-09-10 P32恢复组合增量：共享原因组件新增仅显式workspaceRestore上下文启用的目标说明与C样式；其他调用的默认请求结构、原因校验和提交关闭顺序不变。真实Vue双端94检查/20图及默认/替换/关闭单测见[P32落地说明](P32-VUE-RESTORE-REVIEW.md)。本表同步已验证来源，不扩展其他页面或生产验收；旧指纹保存在07902a2e。
+
+## 7. PlatformMessageEditor 当前源码归属（2026-09-24）
+
+当前 `PlatformMessageEditor.vue` 的6个扫描候选全部补入当前签名、行号、类型及LF指纹；第3节当前源码表中的6个旧签名继续保留并标识为历史位置，其中旧哈希也仍限定在第6节历史范围。组件只持有受控 props 并发出 `close` / `save` 事件：原生dialog声明及其Escape/Tab事件在同一元素但属于两个静态候选；form提交与底部submit按钮共同转发保存意图，不将其重复解释成两个独立写入。实际草稿请求仍由 `PlatformNotificationCenter` 的父级保存流程负责。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/PlatformMessageEditor.vue#ee9651365376028e.1 | 40 | dialog-definition | PN57-CURRENT-DIALOG / 受控新建或编辑草稿原生dialog定义 |
+| apps/web/src/components/PlatformMessageEditor.vue#b1b60a9027feacfb.1 | 40 | event-binding | PN57-CURRENT-DIALOG-KEYBOARD / 转发Escape关闭及dialog内Tab循环处理 |
+| apps/web/src/components/PlatformMessageEditor.vue#174bcbcaa3c52308.1 | 48 | form-event | PN57-CURRENT-SAVE / form submit向父级发出save，不在本组件直接请求API |
+| apps/web/src/components/PlatformMessageEditor.vue#d2cc265c8fd1ae47.1 | 61 | control | PN57-CURRENT-CLOSE / 顶部带可访问名称的关闭按钮发出close |
+| apps/web/src/components/PlatformMessageEditor.vue#02668382bdda9d3b.1 | 190 | control | PN57-CURRENT-CLOSE / 底部关闭按钮发出close |
+| apps/web/src/components/PlatformMessageEditor.vue#e94ca4c02d75da69.1 | 191 | control | PN57-CURRENT-SAVE / 保存草稿submit按钮，saving时禁用 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformMessageEditor.vue | 299031770711240b20ded18c86d6eb2dae9081fb44a732e06efa3317b540041a |
+
+此静态映射不替代父组件/API合同、受众选择与字段值的完整校验、真实保存、焦点读屏或生产验收；系统邮件Provider和用户邮件偏好边界保持不变。
