@@ -107,6 +107,30 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 | --- | --- |
 | apps/web/src/components/HomeDashboard.vue | 495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0 |
 
+### 2.2 P11 PersonalProfilePanel 当前源码位置（2026-09-24）
+
+旧P11表描述PersonalCenter父级行为；本节只登记当前资料子组件的9个静态候选。表单阻止浏览器原生提交并向父级发出submit，字段只发updateField；实际PATCH仍归PersonalCenter/composable，未在此子组件发请求。邮箱是只读事实，不作为候选或资料更新字段；手机号验证状态也只展示当前服务端事实，不表示本次输入已验证。
+
+#### apps/web/src/components/personal-center/PersonalProfilePanel.vue
+
+| 当前签名.序号 | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| eb06bfc56733f195.1 | 27 | form-event | PC-CURRENT-SAVE / 阻止原生表单提交并向父级发出submit意图 |
+| a009961494d9e9f6.1 | 45 | event-binding | PC-CURRENT-USERNAME / 更新登录用户名草稿；保存中禁用 |
+| 85e98ee3a227ab53.1 | 62 | event-binding | PC-CURRENT-DISPLAY-NAME / 更新必填显示名称草稿；保存中禁用 |
+| c3282a4a6e5e0694.1 | 76 | event-binding | PC-CURRENT-AVATAR / 更新头像HTTPS地址草稿；保存中禁用 |
+| 606f704e56cefdda.1 | 91 | event-binding | PC-CURRENT-PHONE / 更新手机号草稿；验证状态单独显示且不由输入伪造 |
+| 710e66a207790a9d.1 | 108 | event-binding | PC-CURRENT-LOCALE / 更新当前语言选项草稿；保存中禁用 |
+| dabba198cd2f2993.1 | 122 | event-binding | PC-CURRENT-TIMEZONE / 更新必填时区草稿；保存中禁用 |
+| 927fb4495afb35c9.1 | 135 | event-binding | PC-CURRENT-REASON / 更新必填修改原因草稿，输入上限300字符 |
+| 9f646e1e9f714001.1 | 161 | control | PC-CURRENT-SAVE / 提交资料；保存中禁用并显示处理中状态 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/personal-center/PersonalProfilePanel.vue | 5342047bd8fe79d5756cf13b86d2481bc329f279d0900da69a067845bd2cccf5 |
+
+本节只提供当前静态位置和既有父子事件边界；API字段、expected_version、服务端验证与资料读写合同仍以第3节和真实路由/服务为准，不由子组件映射推导新业务行为。
+
 五文件没有本地dialog定义/确认调用候选；资料、密码、通知、首页规则均为内联form。主题选择使用自定义radio按钮，不是v-model字段。PersonalCenter有15个v-model位置、HomeDashboard有7个，共22个输入位置；另邮箱是disabled展示输入。P12共享UiStatePanel在部分错误态生成secondary但调用方无监听，属于共享消费者缺口，不加进上述五文件51项分母。
 
 ## 3. 写入与状态连续性
