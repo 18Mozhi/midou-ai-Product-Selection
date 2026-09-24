@@ -1524,6 +1524,66 @@ test("current P65 release center maps all page controls and isolates its old fin
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current P09 onboarding guide maps all local navigation sites and preserves stale identities", () => {
+  const file = "apps/web/src/components/OnboardingGuide.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const document = "identity-onboarding-contract-review.md";
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const currentRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.claim.includes("OG-CURRENT-") &&
+      record.currentLine !== null &&
+      record.temporalScope !== "historical",
+  );
+  assert.equal(candidates.length, 7);
+  assert.deepEqual(
+    [...new Set(currentRows.map((record) => record.candidateId))].sort(),
+    candidates.map((candidate) => candidate.candidateId).sort(),
+  );
+  for (const record of currentRows) {
+    const candidate = candidates.find((item) => item.candidateId === record.candidateId);
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.currentLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedKind, candidate?.kind, record.candidateId);
+  }
+  const oldStaleIds = [
+    "07db575ab56f90da.1",
+    "75986af56e7cd4f4.1",
+    "0728ff37173af0c0.1",
+    "f74e91375a9aef9f.1",
+    "176ac690f7c39e94.1",
+  ];
+  for (const signature of oldStaleIds) {
+    const record = report.records.find(
+      (item) => item.document.endsWith(document) && item.candidateId === `${file}#${signature}`,
+    );
+    assert.equal(record?.status, "identity-not-found", signature);
+  }
+  const oldSkip = report.records.find(
+    (item) =>
+      item.document.endsWith(document) &&
+      item.candidateId === `${file}#7142f76fc59ad9ee.1` &&
+      !item.claim.includes("OG-CURRENT-"),
+  );
+  assert.notEqual(oldSkip?.status, "identity-not-found");
+  const hashes = report.sourceClaims.filter(
+    (claim) => claim.document.endsWith(document) && claim.file === file,
+  );
+  assert.equal(hashes.length, 1);
+  assert.equal(hashes[0]?.hash, digest(source));
+  assert.equal(hashes[0]?.status, "hash-current");
+  assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],

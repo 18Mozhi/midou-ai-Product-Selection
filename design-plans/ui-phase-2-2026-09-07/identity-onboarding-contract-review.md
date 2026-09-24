@@ -99,6 +99,26 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 | ID-SHOW-LOGIN | L#dc876249a8119b09.3；L#6f57070c49bdbca1.1；L#dc876249a8119b09.4；L#dc876249a8119b09.5；L#dc876249a8119b09.6；L#dc876249a8119b09.7 | 注册、验证、找回、重置、MFA 与旧 sessions 模式返回登录 |
 | ID-SHOW-FORGOT | L#56d7e5b963aa0067.1 | 失效重置链接状态进入既有找回密码模式 |
 
+### 2.2 P09 OnboardingGuide 当前源码位置（2026-09-24）
+
+当前 `OnboardingGuide.vue` 的7个静态候选均登记当前签名、行号、类型与LF指纹。旧表中的“跳过引导”签名仍可识别但已移至第39行；其余5个旧签名未匹配当前候选，保留为历史身份。步骤按钮只切换本地step；上下步按边界显隐，最后一步以RouterLink包装真实锚点进入根路径。品牌与跳过同样去根路径，不写服务端进度或完成状态。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/OnboardingGuide.vue#77c47b63bed1a205.1 | 35 | control | OG-CURRENT-ROOT / ScoutOps品牌根路由入口 |
+| apps/web/src/components/OnboardingGuide.vue#7142f76fc59ad9ee.1 | 39 | control | OG-CURRENT-SKIP / 跳过引导并前往根路由，不写完成状态 |
+| apps/web/src/components/OnboardingGuide.vue#767668a05760119c.1 | 46 | control | OG-CURRENT-STEP / 三个按钮实例选择步骤并更新aria-current |
+| apps/web/src/components/OnboardingGuide.vue#29d93cd3465b4ff3.1 | 59 | control | OG-CURRENT-PREVIOUS / step大于1时回到前一步 |
+| apps/web/src/components/OnboardingGuide.vue#af9a19de541c1f52.1 | 62 | control | OG-CURRENT-NEXT / 未到最后一步时进入下一步 |
+| apps/web/src/components/OnboardingGuide.vue#7782f528a47ecb39.1 | 70 | control | OG-CURRENT-FINISH-WRAPPER / RouterLink仅在最后一步包装根路由 |
+| apps/web/src/components/OnboardingGuide.vue#354bfce3e8fca3e5.1 | 71 | control | OG-CURRENT-FINISH-LINK / 最后一步真实锚点，激活RouterLink导航 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/OnboardingGuide.vue | abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed |
+
+本映射只确认当前静态候选与既有局部导航规则，不表示完成记录、持久化进度、真实身份/工作区、完整焦点读屏或生产状态已新增或验收。
+
 额外运行边界：P01 使用共享 UiStatePanel。blocked 默认还渲染“查看影响”次按钮，组件 emit secondary，但 LandingRedirect 没有对应监听；记录为 `NONACTION-LANDING-SECONDARY`，不假设它可打开影响详情。该候选位于共享组件，不加入上述四文件的38行分母；其余共享消费者留到壳层/通用状态批归并。
 
 四文件在 dialogs.json 无原生定义/确认调用候选，源码无实际模态弹窗。MFA、首次设置、验证结果均是内联模式；不得为了图数凭空添加弹窗或把它们从状态图包排除。今后若选定稿改为弹窗，须补具体触发、焦点、关闭及秘密清理合同，不改变安全流程。
