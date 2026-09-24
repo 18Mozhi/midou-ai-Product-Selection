@@ -1758,3 +1758,96 @@ test("UI2-SC50 native field errors are visible, associated and cleared when corr
   await expect(profileError).toHaveCount(0);
   expect({ assetWrites, profileWrites }).toEqual({ assetWrites: 0, profileWrites: 0 });
 });
+
+test("UI2-SC50 long source names and fingerprints reflow across theme and density tokens", async ({
+  page,
+}) => {
+  const longSourceName = `AuthenticatedSource${"W".repeat(160)}`,
+    longFingerprint = "ab0123456789".repeat(24),
+    longProvider = { ...provider, name: longSourceName },
+    longAsset = { ...asset, fingerprint: longFingerprint };
+  await nav(page, [longProvider]);
+  await page.route("**/api/v1/platform/credential-assets", (route) =>
+    route.fulfill({ json: { data: [longAsset], request_id: "ui2-long-asset" } }),
+  );
+  await page.route("**/api/v1/platform/crawler-profiles", (route) =>
+    route.fulfill({ json: { data: [], request_id: "ui2-long-profiles" } }),
+  );
+  await page.goto("/platform-admin/credentials");
+
+  for (const width of [390, 760, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 1000 });
+    const mobileLayout = width <= 760;
+    if (mobileLayout) {
+      const sourceRow = page.locator(".responsive-data-view__mobile article > button").first();
+      await expect(sourceRow).toContainText(longSourceName);
+    } else {
+      await expect(page.locator(".credential-compatibility td strong")).toContainText(
+        longSourceName,
+      );
+    }
+    await expect(page.locator(".credential-grid code")).toContainText(longFingerprint);
+
+    for (const theme of ["deep-ocean", "aurora-purple", "cloud-white"]) {
+      for (const density of ["standard", "compact"]) {
+        await page.evaluate(
+          ({ theme, density }) => {
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.dataset.density = density;
+          },
+          { theme, density },
+        );
+        const layout = await page.evaluate(
+          ({ sourceName, fingerprint, mobileLayout }) => {
+            const center = document.querySelector<HTMLElement>(".credential-center")!;
+            const source = Array.from(center.querySelectorAll<HTMLElement>("strong")).find(
+              (element) => element.textContent?.trim() === sourceName,
+            )!;
+            const sourceContainer = mobileLayout
+              ? source.closest<HTMLElement>(".responsive-data-view__summary")!
+              : source.closest<HTMLElement>("td")!;
+            const fingerprintElement = Array.from(
+              center.querySelectorAll<HTMLElement>("code"),
+            ).find((element) => element.textContent?.trim() === fingerprint)!;
+            const fingerprintContainer = fingerprintElement.closest<HTMLElement>("dd")!;
+            const assetCard = center.querySelector<HTMLElement>(".credential-grid > article");
+            const regions = [
+              center,
+              center.querySelector<HTMLElement>(".credential-grid"),
+              assetCard,
+              assetCard?.querySelector<HTMLElement>(":scope > header"),
+              assetCard?.querySelector<HTMLElement>(":scope > header > div"),
+              assetCard?.querySelector<HTMLElement>("header small"),
+              assetCard?.querySelector<HTMLElement>("h3"),
+              assetCard?.querySelector<HTMLElement>("dl"),
+              fingerprintElement,
+              fingerprintContainer,
+              center.querySelector<HTMLElement>(".credential-compatibility"),
+              center.querySelector<HTMLElement>(".responsive-data-view"),
+              sourceContainer,
+              fingerprintContainer,
+            ].filter((element): element is HTMLElement => element !== null);
+            return {
+              viewportWidth: document.documentElement.clientWidth,
+              pageWidth: document.documentElement.scrollWidth,
+              overflowingRegions: regions
+                .filter((element) => element.scrollWidth > element.clientWidth + 1)
+                .map((element) => ({
+                  className: element.className,
+                  clientWidth: element.clientWidth,
+                  scrollWidth: element.scrollWidth,
+                })),
+              fingerprintWrap: getComputedStyle(fingerprintContainer).overflowWrap,
+            };
+          },
+          { sourceName: longSourceName, fingerprint: longFingerprint, mobileLayout },
+        );
+        expect(layout.pageWidth, `${width}px/${theme}/${density}`).toBeLessThanOrEqual(
+          layout.viewportWidth + 1,
+        );
+        expect(layout.overflowingRegions, `${width}px/${theme}/${density}`).toEqual([]);
+        expect(layout.fingerprintWrap).toBe("anywhere");
+      }
+    }
+  }
+});
