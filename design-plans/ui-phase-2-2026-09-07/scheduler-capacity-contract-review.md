@@ -133,3 +133,17 @@ P71repository仅取最新production_benchmark而无SHA筛选，UTC文本解析�
 定向两项16.5秒通过；最终两模块desktop-chromium/mobile-390共24项57.9秒通过，部分旧用例主动切390，不把全部desktop项目说成固定桌面。未接受或更新截图基线。单测首轮29过2失败，均为架构文档已不含旧霓虹图片文件名的历史断言；已将其替换为当前信息合同及新增回归约束，保留状态/权限/回退等检查，定向2项及完整31项通过。不是放宽产品状态或接受失败快照。
 
 完整构建、质量门及临时材料状态以PROGRESS本批记录为准；新配置、API字段/OpenAPI、数据库迁移、Worker/Python行为、依赖和生产运行均未改，无当前独立重启要求。固定宝塔部署器及其当次迁移/停启预检仍是后续发布路径，不另建Web-only上传链。
+
+## 7. 抽离证据组件的技术详情源码映射（2026-09-24）
+
+P70活动租约区的原生details只按需展示当前已返回的任务UUID、进程标识及存在时的运行UUID，不触发读取、恢复或其他写操作。P71发现区的原生details只展示发现代码和责任角色代码，不触发容量查询、签认、测量或恢复。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/CrawlerSchedulerEvidence.vue#1d663944bdde1289.1 | 132 | control | P70-SCHEDULER-LEASE-TECH / 展开当前活动租约的技术标识 |
+| apps/web/src/components/CapacityBoundaryEvidence.vue#1c008f867673db60.1 | 192 | control | P71-CAPACITY-FINDING-TECH / 展开当前发现的代码与责任角色 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/CrawlerSchedulerEvidence.vue | 5202b663d54be0d34bb32aaf6b3ffadd632530cf72c40305a74f4ddf08564ee2 |
+| apps/web/src/components/CapacityBoundaryEvidence.vue | b815e48915ae9a72d1972d7ef7eebda8b91f5299041ca3028b8af65ef933fbd9 |
