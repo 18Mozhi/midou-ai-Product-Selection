@@ -1855,6 +1855,56 @@ test("current P60 create dialog shell maps its container without claiming parent
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current P11 account shell maps brand, section and theme navigation sites", () => {
+  const file = "apps/web/src/components/AccountShell.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const document = "account-home-contract-review.md";
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const currentRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.claim.includes("AC-CURRENT-") &&
+      record.currentLine !== null &&
+      record.temporalScope !== "historical",
+  );
+  const expectedCurrentIds = ["b832de42f3091adf.1", "257559b0b0a3692f.1", "2ea362a7d2584a88.1"].map(
+    (signature) => `${file}#${signature}`,
+  );
+  assert.equal(candidates.length, 5);
+  assert.deepEqual(
+    currentRows.map((record) => record.candidateId).sort(),
+    expectedCurrentIds.sort(),
+  );
+  for (const record of currentRows) {
+    const candidate = candidates.find((item) => item.candidateId === record.candidateId);
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.currentLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedKind, candidate?.kind, record.candidateId);
+  }
+  const oldStaleIds = ["dfb70bc4ca0070a5.1", "1f54ecd0f870df67.1", "508ee18711ffdef2.1"];
+  for (const signature of oldStaleIds) {
+    const record = report.records.find(
+      (item) => item.document.endsWith(document) && item.candidateId === `${file}#${signature}`,
+    );
+    assert.equal(record?.status, "identity-not-found", signature);
+  }
+  const hashes = report.sourceClaims.filter(
+    (claim) => claim.document.endsWith(document) && claim.file === file,
+  );
+  assert.equal(hashes.length, 1);
+  assert.equal(hashes[0]?.hash, digest(source));
+  assert.equal(hashes[0]?.status, "hash-current");
+  assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],
