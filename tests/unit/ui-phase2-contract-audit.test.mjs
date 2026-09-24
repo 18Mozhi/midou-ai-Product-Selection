@@ -471,6 +471,27 @@ test("audited reason source bindings retain every current site and all consumer 
 
 test("current P48/P50 source maps cover each live candidate and fingerprint", () => {
   const report = runContractAudit();
+  const document = "source-channel-credential-contract-review.md";
+  const documentLines = readFileSync(
+    new URL(`../../design-plans/ui-phase-2-2026-09-07/${document}`, import.meta.url),
+    "utf8",
+  ).split(/\r?\n/);
+  const oldMappingStart = documentLines.findIndex((line) => line === "## 2. 逐候选对应") + 1;
+  const nextSection = documentLines.findIndex(
+    (line, index) => index > oldMappingStart && /^## \d+\./.test(line),
+  );
+  const oldMappingRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.documentLine > oldMappingStart &&
+      record.documentLine < nextSection + 1,
+  );
+  assert.equal(oldMappingRows.length, 92);
+  assert.ok(oldMappingRows.every((record) => record.temporalScope === "historical"));
+  assert.equal(
+    oldMappingRows.filter((record) => record.status === "identity-not-found").length,
+    75,
+  );
   for (const [name, firstCurrentLine] of [
     ["CredentialAssetCenter.vue", 255],
     ["ProviderSourceConfigurationDialog.vue", 292],
@@ -489,7 +510,7 @@ test("current P48/P50 source maps cover each live candidate and fingerprint", ()
     const candidates = scanSource(source, file).candidates;
     const records = report.records.filter(
       (record) =>
-        record.document.endsWith("source-channel-credential-contract-review.md") &&
+        record.document.endsWith(document) &&
         record.sourceFile === file &&
         record.temporalScope !== "historical" &&
         record.sourceBinding === "hash-current" &&

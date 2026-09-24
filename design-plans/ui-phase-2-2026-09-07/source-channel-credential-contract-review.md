@@ -254,7 +254,7 @@ SC50规格中的02–06用例在此细化归属；永久测试只新增SC50-01�
 
 ## 8. P50 当前源码身份复核（2026-09-24）
 
-本节按当前 `CredentialAssetCenter.vue` 的真实标签、文本、属性与事件，将24个已变更身份对回既有SC50语义组；没有新增业务动作、路由、授权规则或API合同。第2节中仍匹配当前源码的8个既有身份继续有效；旧身份中未再匹配的项留作历史对账，不据此宣称业务行为已删除。当前文件扫描为32个候选、14个v-model源码位置。映射只证明静态源位置归属，不证明动态可达性、控件状态覆盖、真实Vue行为或生产验收。
+本节按当前 `CredentialAssetCenter.vue` 的真实标签、文本、属性与事件，将24个已变更身份对回既有SC50语义组；没有新增业务动作、路由、授权规则或API合同。另8个仍有效的身份在第14节重新登记为当前引用，避免依赖第2节旧快照。旧身份中未再匹配的项留作历史对账，不据此宣称业务行为已删除。当前文件扫描为32个候选、14个v-model源码位置。映射只证明静态源位置归属，不证明动态可达性、控件状态覆盖、真实Vue行为或生产验收。
 
 ### C
 
@@ -458,7 +458,7 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 ### R
 
-现有 `ProviderParserSampleReview.vue` 两个当前位置仍精确匹配第2节的SC48-SAMPLES审批通过/驳回身份，无新增源候选；其当前LF归一指纹单独记录如下。
+`ProviderParserSampleReview.vue` 的审批通过/驳回仍是既有SC48-SAMPLES动作；其当前源身份在第14节重新登记，避免依赖第2节旧快照。四个文件的当前LF归一指纹单独记录如下。
 
 | apps/web/src/components/Alibaba1688AcceptanceCenter.vue | 30a6bef5841efc8ff53164e0b828e7da50a90d6f7ce149f8c971eed05f6e9b74 |
 | apps/web/src/components/ProviderParserSampleDialog.vue | fecfc130948a6e88c37cf35cf4d55acec74fa722ad8898202ce889b10832f842 |
@@ -479,4 +479,27 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | --- | --- |
 | apps/web/src/components/ProviderAcceptanceOperations.vue | 12724a3fa2359a87e48748313448f7eece817fa3f8d6423f9faf409fd4a99f8f |
 
+## 14. P48/P49 旧快照候选的当前身份补列（2026-09-24）
+
+第2节明确是2026-09-08源码快照；本节把仍在当前源码中的17个位置重新绑定到已有SC48/SC49语义，不把过期签名当作当前证据。只确认静态候选身份，不增加业务动作，也不证明动态交互、真实权限或生产业务验收。
+
+| 当前candidateId | 行 | 类型 | 既有语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#ff6d5fbc586803ed.1 | 176 | control | SC49-TECH / 展开本次检查故障编号 |
+| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#5587941412d5210f.1 | 180 | control | SC49-AUTH / 检查会话过期时返回登录 |
+| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#441fd57e4a421b3a.1 | 181 | control | SC49-AUTH / 无权时返回平台概览 |
+| apps/web/src/components/CredentialAssetCenter.vue#889e842f4791c19d.1 | 914 | control | SC50-BRIDGE / 下载浏览器助手 |
+| apps/web/src/components/CredentialAssetCenter.vue#d2b72f6631a5008b.1 | 945 | event-binding | SC50-LOAD / 错误状态主操作转发至现有读取函数 |
+| apps/web/src/components/CredentialAssetCenter.vue#1c008f867673db60.1 | 1140 | control | SC50-TECH / 展开来源代码技术详情 |
+| apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.1 | 1233 | control | SC50-CLOSE / 取消资产新建或凭证轮换 |
+| apps/web/src/components/CredentialAssetCenter.vue#25e471a00cbed149.1 | 1236 | control | SC50-ASSET/ROTATE / 按既有表单保存或轮换加密资料 |
+| apps/web/src/components/CredentialAssetCenter.vue#15bb54ff377e917e.1 | 1265 | event-binding | SC50-PROFILE / 选择加密资产并同步来源上下文 |
+| apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.2 | 1299 | control | SC50-CLOSE / 取消浏览器档案引用 |
+| apps/web/src/components/CredentialAssetCenter.vue#91ffac2d135459f2.1 | 1302 | control | SC50-PROFILE / 按既有表单保存档案引用 |
+| apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#1c008f867673db60.1 | 84 | control | SC48-COMPAT / 展开兼容观测读取失败编号 |
+| apps/web/src/components/ProviderParserSampleDialog.vue#1c008f867673db60.1 | 132 | control | SC48-SAMPLES / 展开本次样本操作编号 |
+| apps/web/src/components/ProviderParserSampleDialog.vue#1c008f867673db60.2 | 165 | control | SC48-SAMPLES / 展开候选采集解析器版本 |
+| apps/web/src/components/ProviderParserSampleReview.vue#915c93b75eb41a91.1 | 47 | control | SC48-SAMPLES / 提交既有审批通过决策 |
+| apps/web/src/components/ProviderParserSampleReview.vue#35b9cb8eaccc4d26.1 | 54 | control | SC48-SAMPLES / 提交既有驳回决策 |
+| apps/web/src/components/ProviderSourceCenter.vue#436e3971cada0a0b.1 | 1332 | control | SC48-DEFINE / 导航至既有来源规则目录 |
 来源页面入口身份不证明真实登录、固定样本审批、浏览器采集、来源启用、角色隔离或生产结果。
