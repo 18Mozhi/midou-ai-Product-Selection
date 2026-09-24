@@ -2172,6 +2172,43 @@ test("current P41 organization wizard maps its form submission and three field o
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current P39 account center maps refresh control and parent-owned load wiring", () => {
+  const file = "apps/web/src/components/PlatformAccountCenter.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const document = "platform-account-contract-review.md";
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const currentRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.claim.includes("P39-ACCOUNT-CURRENT-") &&
+      record.temporalScope !== "historical",
+  );
+  const expectedIds = ["8f18fbff9e2c1c99.1", "8458edc51af426a6.1"].map(
+    (signature) => `${file}#${signature}`,
+  );
+  assert.deepEqual(currentRows.map((record) => record.candidateId).sort(), expectedIds.sort());
+  for (const record of currentRows) {
+    const candidate = candidates.find((item) => item.candidateId === record.candidateId);
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.currentLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedKind, candidate?.kind, record.candidateId);
+  }
+  const hashes = report.sourceClaims.filter(
+    (claim) => claim.document.endsWith(document) && claim.file === file,
+  );
+  assert.equal(hashes.filter((claim) => claim.temporalScope !== "historical").length, 1);
+  assert.equal(hashes.find((claim) => claim.temporalScope !== "historical")?.hash, digest(source));
+  assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("current P57 notification management maps its four child event boundaries", () => {
   const file = "apps/web/src/components/PlatformNotificationManagement.vue";
   const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
