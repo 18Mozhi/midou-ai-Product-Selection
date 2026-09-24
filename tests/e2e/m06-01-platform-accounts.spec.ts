@@ -743,6 +743,19 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
       "搜索组织名称或用户邮箱",
     );
     await expect(page.getByRole("cell", { name: "米豆选品团队 midou-team" })).toBeVisible();
+    const columnTools = page.locator(".table-view-controls__toolbar").first();
+    await expect(columnTools.getByText("列设置", { exact: true })).toBeVisible();
+    const toolbarControlHeights = await columnTools
+      .locator(":is(button, summary, select)")
+      .evaluateAll((controls) => controls.map((control) => control.getBoundingClientRect().height));
+    expect(toolbarControlHeights.length).toBeGreaterThan(0);
+    expect(toolbarControlHeights.every((height) => height >= 44)).toBe(true);
+    await columnTools.getByText("列设置", { exact: true }).click();
+    const columnRows = await columnTools
+      .locator("fieldset > div")
+      .evaluateAll((rows) => rows.map((row) => row.getBoundingClientRect().height));
+    expect(columnRows.length).toBeGreaterThan(0);
+    expect(columnRows.every((height) => height >= 44)).toBe(true);
   }
   await accountTabs.getByRole("link", { name: "用户管理", exact: true }).click();
   await expect(

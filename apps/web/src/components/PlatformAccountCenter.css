@@ -489,6 +489,13 @@
 .account-center--review .account-table-wrap {
   overflow: auto;
 }
+.account-center--review
+  .account-table-wrap
+  .table-view-controls__toolbar
+  :is(button, summary, select),
+.account-center--review .account-table-wrap .table-view-controls__toolbar fieldset > div {
+  min-height: 44px;
+}
 .account-center--review th {
   background: var(--account-review-soft);
   color: var(--account-review-muted);
