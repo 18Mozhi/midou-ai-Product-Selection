@@ -77,6 +77,7 @@ const aliases = {
   },
   "source-channel-credential-contract-review.md": {
     S: "ProviderSourceCenter",
+    D: "ProviderSourceDirectory",
     A: "Alibaba1688AcceptanceCenter",
     C: "CredentialAssetCenter",
     F: "ProviderSourceConfigurationDialog",
@@ -123,6 +124,9 @@ const history = {
   },
   "state-recovery-contract-review.md": {
     historicalSections: ["1. 入口与源码事实", "2. 源候选到语义动作"],
+  },
+  "source-channel-credential-contract-review.md": {
+    historicalSections: ["7. 来源指纹与交付边界"],
   },
   "platform-account-detail-contract-review.md": {
     historicalSections: ["5. 源码依据（LF SHA-256）"],

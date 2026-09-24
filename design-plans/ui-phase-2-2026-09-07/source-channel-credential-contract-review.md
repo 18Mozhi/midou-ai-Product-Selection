@@ -14,7 +14,7 @@ P48 /platform-admin/providers/sources，P49 /platform-admin/providers/sources/16
 
 ProviderRuntimeSurface五个RouterLink已随[来源定义合同](provider-definition-contract-review.md)记录；最后两个用platform:superadmin显隐。共享ConfirmDialog、UiStatePanel以及ResponsiveDataView的详情/桌面工具另属共享消费者；本表只统计七个局部Vue，不把共用控件重算成全站新增动作。[异常与确认合同](state-recovery-contract-review.md)只证明已有调用范围，不能代替本页全部变体验收。
 
-| 别名 | 当前源码                                                                                                     | 候选数 / v-model数 |
+| 别名 | 源文件（首轮快照）                                                                                           | 候选数 / v-model数 |
 | ---- | ------------------------------------------------------------------------------------------------------------ | ------------------ |
 | S    | [ProviderSourceCenter.vue](../../apps/web/src/components/ProviderSourceCenter.vue)                           | 21 / 7             |
 | A    | [Alibaba1688AcceptanceCenter.vue](../../apps/web/src/components/Alibaba1688AcceptanceCenter.vue)             | 12 / 3             |
@@ -25,6 +25,8 @@ ProviderRuntimeSurface五个RouterLink已随[来源定义合同](provider-defini
 | M    | [ProviderCompatibilityMatrixDialog.vue](../../apps/web/src/components/ProviderCompatibilityMatrixDialog.vue) | 3 / 0              |
 
 共92个源码候选：控件、事件、弹窗定义/调用可能来自同一节点，不等于92个业务按钮。局部role=dialog定义7个（F2、P1、M1、C3），C资产窗有创建/轮换两变体；另有共享撤销alertdialog、兼容矩阵移动详情。P49没有业务模态。25个v-model源码位置，F另有6个value+input/change转发输入，C文件输入另记事件；不是25个全部业务字段。
+
+上表及第2节的候选数、签名和行号是2026-09-08首轮源码快照，不代表当前仓库分母。P50 2026-09-24当前源码重对账见第8节；未重对账的其余文件不从旧快照推断当前完整度。
 
 本批未改变路由、API、权限、SQL或任何来源启用规则。PR-G01来源准入/烟测规则冲突延续前合同独立待决，不借界面重构选择规则。当前API档案POST没有与资产写入同样的显式no-store响应设置，故不声称所有凭证相关响应均已逐项验证缓存安全；本轮不改API。
 
@@ -125,7 +127,7 @@ ProviderRuntimeSurface五个RouterLink已随[来源定义合同](provider-defini
 | R:35b9cb8eaccc4d26.1           | control / 45                | SC48-SAMPLES / rejected驳回               |
 | M:190aaa5dd734c333.1           | dialog-definition / 26      | SC48-COMPAT / 矩阵窗定义                  |
 | M:f0685e36cb38e6c1.1           | control / 34                | SC48-COMPAT / 关闭                        |
-| M:1c008f867673db60.1           | control / 69                | SC48-COMPAT / 完整指纹详情                |
+| M:1c008f867673db60.1           | control / 69                | SC48-COMPAT / 技术详情折叠（当前为读取失败追踪） |
 
 ## 3. 输入、字段与约束
 
@@ -249,3 +251,170 @@ SC50规格中的02–06用例在此细化归属；永久测试只新增SC50-01�
 
 本批三份规格和此合同是永久交付；正式设计/实现图片仍待F00反馈及F05，不产生新的用户通过数。没有新配置、迁移、依赖或生产服务；前端文案需未来按既有发布流程上线，本批不部署、不单独重启任何服务。W06下一事实小批为P51/P52/P53；整体73页、全动作/弹窗、正式图、Vue、真实验收、宝塔与用户签收目标保持未完成。
 2026-09-12 P50焦点实施补充：[P50-CREDENTIAL-EDITOR-FOCUS-IMPLEMENTATION](P50-CREDENTIAL-EDITOR-FOCUS-IMPLEMENTATION.md)。创建/轮换、档案引用和网页登录四类生产编辑窗已迁移到原生dialog顶层模态并复用useModalDialog；撤销继续共享ConfirmDialog。五状态四宽度236项检查覆盖初焦点、双向循环、Escape、遮罩和返焦，保存成功返焦另有真实Vue E2E。焦点筛选仍只显式排除hidden属性；CSS隐藏、字段错误关联、主题/缩放和跨KeepAlive实例淘汰仍待验。审核CSS与20图未进入生产，未部署；旧19源指纹是事实规格批历史记录，不表示当前源码哈希。
+
+## 8. P50 当前源码身份复核（2026-09-24）
+
+本节按当前 `CredentialAssetCenter.vue` 的真实标签、文本、属性与事件，将24个已变更身份对回既有SC50语义组；没有新增业务动作、路由、授权规则或API合同。第2节中仍匹配当前源码的8个既有身份继续有效；旧身份中未再匹配的项留作历史对账，不据此宣称业务行为已删除。当前文件扫描为32个候选、14个v-model源码位置。映射只证明静态源位置归属，不证明动态可达性、控件状态覆盖、真实Vue行为或生产验收。
+
+### C
+
+| 当前位置键 | 类型 / 行 | 既有语义归属 |
+| --- | --- | --- |
+| C:2810dd41ddee1daa.1 | control / 909 | SC50-LOAD / 刷新数据 |
+| C:3dd38f73a19db4fb.1 | control / 919 | SC50-LOGIN / 打开网页登录导入 |
+| C:2e0a063790f5638a.1 | control / 920 | SC50-PROFILE / 打开档案关联 |
+| C:ead97caf0ed12ed6.1 | control / 921 | SC50-ASSET / 打开新建资产 |
+| C:68ab04f336a5aea2.1 | control / 971 | SC50-ASSET / 空态创建 |
+| C:391ebd4042d56809.1 | control / 1020 | SC50-ROTATE / 更新凭证资料 |
+| C:c0dce8cdd65ebd20.1 | control / 1026 | SC50-REVOKE / 选择撤销目标 |
+| C:4992a119c9f2a3c5.1 | dialog-definition / 1149 | SC50-ASSET/ROTATE/PROFILE/LOGIN / 条件共用编辑窗定义 |
+| C:08b722979514ecf4.1 | event-binding / 1149 | SC50-CLOSE / 编辑窗取消与遮罩关闭 |
+| C:7346da1c6e27ba75.1 | form-event / 1163 | SC50-ASSET/ROTATE / Tab与saveAsset |
+| C:9707b61afc89bba7.1 | control / 1179 | SC50-CLOSE / 资产编辑窗关闭 |
+| C:6dcca6c17ebcddaf.1 | form-event / 1241 | SC50-PROFILE / Tab与saveProfile |
+| C:159072d05198b551.1 | control / 1253 | SC50-CLOSE / 档案编辑窗关闭 |
+| C:8ed15facc7f55e8e.1 | form-event / 1305 | SC50-LOGIN / Tab与saveLogin |
+| C:868396bd7e29df98.1 | control / 1318 | SC50-CLOSE / 登录导入窗关闭 |
+| C:d2a64908945092ff.1 | event-binding / 1341 | SC50-LOGIN / 来源选择及材料上下文重置 |
+| C:1430f57a236d6ea1.1 | event-binding / 1353 | SC50-LOGIN / 导入方式切换及材料上下文重置 |
+| C:7443d228a98eebd4.1 | event-binding / 1364 | SC50-FILE / 受控文件选择 |
+| C:e22b7ca36f2434d7.1 | control / 1388 | SC50-EXTERNAL / 打开来源登录页 |
+| C:f176fdb4640192de.1 | control / 1391 | SC50-BRIDGE / 请求助手Cookie |
+| C:54e090f9e49dd400.1 | control / 1402 | SC50-CLOSE / 取消登录导入 |
+| C:e4a3873e7b511170.1 | control / 1403 | SC50-LOGIN / 分两步加密保存并启用档案 |
+| C:23573257838670f1.1 | event-binding / 1425 | SC50-REVOKE / ConfirmDialog取消与确认事件 |
+| C:af931088469ec90b.1 | dialog-component-call / 1425 | SC50-REVOKE / ConfirmDialog调用 |
+
+| apps/web/src/components/CredentialAssetCenter.vue | 092105c8ad2b110178abb8c8f1485c993aea560428188b7a0e0c130b74b56c1b |
+
+第7节全部旧指纹保留为历史快照；审计器仅用非历史指纹判断当前源码绑定。此项对账不覆盖P50未决真实扩展、后端/RBAC、加密、MySQL、完整交互矩阵与生产验收。
+
+## 9. P48 来源配置弹窗当前身份复核（2026-09-24）
+
+按 `ProviderSourceConfigurationDialog.vue` 当前标签、属性、事件与emit逐一核对，将21个当前源码候选归入既有SC48-CONFIG/VERSIONS语义合同。字段事件仍是原值转发，保存/烟测/回滚边界不变；两个技术详情折叠和两组弹窗焦点事件按源节点登记，不把它们重复计为新的业务写入动作。仅属静态源身份对账，不证明动态状态、权限或真实写入通过。
+
+### F
+
+| 当前位置键 | 类型 / 行 | 既有语义归属 |
+| --- | --- | --- |
+| F:5dde29b862125b0e.1 | dialog-definition / 121 | SC48-CONFIG / 编辑设置弹窗定义 |
+| F:fd96a0ddfd39623f.1 | event-binding / 121 | SC48-CONFIG / 弹窗焦点键盘事件 |
+| F:683678bf384a1e42.1 | form-event / 131 | SC48-CONFIG / 表单提交转发既有save |
+| F:004f04ff66f655ca.1 | control / 151 | SC48-CONFIG / 关闭编辑设置并按阶段通知 |
+| F:1c008f867673db60.1 | control / 179 | SC48-CONFIG / 处理结果技术详情折叠 |
+| F:a3dad946584f7803.1 | event-binding / 184 | SC48-CONFIG / schedule_minutes原值转Number并转发 |
+| F:73764f74b8f1a61a.1 | event-binding / 196 | SC48-CONFIG / timeout_ms原值转Number并转发 |
+| F:0d47ebf53fe0590e.1 | event-binding / 208 | SC48-CONFIG / retry_limit原值转Number并转发 |
+| F:c57686ba7c1f6588.1 | event-binding / 221 | SC48-CONFIG / status原值转发 |
+| F:c0923c491565b4ef.1 | event-binding / 262 | SC48-CONFIG / reason原值转发 |
+| F:c74c69289cda1b1c.1 | control / 283 | SC48-CONFIG / 确认结果后关闭并回到目录同步流程 |
+| F:a8cf70fb83e27873.1 | control / 293 | SC48-CONFIG / 取消或关闭未完成设置 |
+| F:d166a16792084fe1.1 | control / 294 | SC48-CONFIG / 原保存或烟测提交入口 |
+| F:22ecf14cfd3d483f.1 | dialog-definition / 313 | SC48-VERSIONS / 配置版本弹窗定义 |
+| F:6998c14c2116e210.1 | event-binding / 313 | SC48-VERSIONS / 弹窗焦点键盘事件 |
+| F:7cef35300d9577fb.1 | control / 333 | SC48-VERSIONS / 关闭版本弹窗 |
+| F:1c008f867673db60.2 | control / 365 | SC48-VERSIONS / 处理结果技术详情折叠 |
+| F:c73ff040b3307a5d.1 | control / 368 | SC48-VERSIONS / 按既有结果状态重读目录与历史 |
+| F:ada59de7960940c4.1 | event-binding / 384 | SC48-VERSIONS / rollbackReason原值转发 |
+| F:812f9da80a8dbb06.1 | control / 409 | SC48-VERSIONS / 对可回滚版本发既有rollback事件 |
+| F:b7bbd08aecc4de79.1 | control / 430 | SC48-VERSIONS / 关闭版本弹窗 |
+
+当前 `ProviderSourceConfigurationDialog.vue` 的LF归一SHA-256为 `3cb10851f9ec95552dabf2ee858e0e1c9081c27855625c5161902408fdb296f9`，旧第7节来源指纹仍保留作历史快照。
+
+| apps/web/src/components/ProviderSourceConfigurationDialog.vue | 3cb10851f9ec95552dabf2ee858e0e1c9081c27855625c5161902408fdb296f9 |
+
+## 10. P48 来源目录当前源码身份复核（2026-09-24）
+
+P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、分页、写入及弹窗编排，目录事实与详情交互拆在 `ProviderSourceDirectory.vue`。本节为拆分后P48的当前源位置与既有SC48合同做静态归属；不新增API、业务动作、授权或来源启用规则。ProviderSourceCenter共16个候选，其中15个身份变化；ProviderSourceDirectory有12个候选。详情开合与父子emit属于本地展示/转发，不另算外部或持久化动作。
+
+### S
+
+| 当前位置键 | 类型 / 行 | 既有语义归属 |
+| --- | --- | --- |
+| S:8b5b066073993a3a.1 | control / 1329 | SC48-LOAD / 刷新来源目录 |
+| S:090fa072a224b63e.1 | event-binding / 1361 | SC48-FILTER / 七条件、排序与重置事件转发 |
+| S:1c008f867673db60.1 | control / 1399 | SC48-CONFIG / 配置保存后目录同步失败的技术详情 |
+| S:b1a60fde5d6ec9d6.1 | control / 1402 | SC48-CONFIG / 保存结果后的目录重读 |
+| S:1c008f867673db60.2 | control / 1461 | SC48-LOAD / 登录、权限或目录读取失败的技术详情 |
+| S:adb5a27ee7e15104.1 | control / 1464 | SC48-LOAD/LOGIN / 按当前失败态重新加载或重新登录 |
+| S:1c008f867673db60.3 | control / 1523 | SC48-LOAD / 目录刷新结果的技术详情 |
+| S:22e451664b4ba746.1 | control / 1526 | SC48-LOAD / 刷新失败后重新加载 |
+| S:52eea605d2c84eb0.1 | event-binding / 1536 | SC48-PAGE/PROBE/CONFIG/COMPAT/VERSIONS/LOGIN/SAMPLES / 目录子组件与既有处理函数的事件转发 |
+| S:0d05b40ba4543887.1 | event-binding / 1559 | SC48-CONFIG/VERSIONS / 配置弹窗属性与既有事件转发 |
+| S:7f36e42eb80bca2d.1 | dialog-component-call / 1559 | SC48-CONFIG/VERSIONS / 配置与版本弹窗调用 |
+| S:aebc04fe71463aa3.1 | event-binding / 1587 | SC48-SAMPLES / 样本弹窗读写、复核与恢复事件转发 |
+| S:e86a06afbe712ab0.1 | dialog-component-call / 1587 | SC48-SAMPLES / 固定样本弹窗调用 |
+| S:8665cbf979729f72.1 | event-binding / 1608 | SC48-COMPAT / 兼容矩阵关闭事件转发 |
+| S:1c8002dd18f07872.1 | dialog-component-call / 1608 | SC48-COMPAT / 兼容矩阵弹窗调用 |
+
+### D
+
+| 当前位置键 | 类型 / 行 | 既有语义归属 |
+| --- | --- | --- |
+| D:2d157da14935d5c1.1 | control / 110 | 目录本地详情展开；无API或持久化副作用 |
+| D:7d1dbd0396d36c73.1 | control / 120 | 目录本地详情收起并返回触发点 |
+| D:825fda3d056d6a41.1 | control / 125 | SC48-LINK / 打开HTTPS来源页面 |
+| D:2379d17cd7b2d01d.1 | control / 172 | SC48-PROBE / 对符合条件的已登记公开来源发起匿名烟测 |
+| D:130f527eb216a92c.1 | control / 184 | SC48-CONFIG / 打开来源采集设置 |
+| D:e6b03d1f68d67db6.1 | control / 187 | SC48-COMPAT / 打开解析兼容矩阵 |
+| D:7209e2bc02cd1433.1 | control / 197 | SC48-VERSIONS / 打开版本与回滚记录 |
+| D:7f3b2921d6d294b5.1 | control / 200 | SC48-LOGIN / 指定来源网页登录凭证深链 |
+| D:d0be2fd8fba97ff5.1 | control / 205 | SC48-SAMPLES / 打开1688固定样本回放 |
+| D:b9ce58d9e8408695.1 | control / 212 | SC48-ACCEPT / 打开1688登录准备页 |
+| D:6f7e71d427cb36b9.1 | control / 227 | SC48-PAGE / 上一页 |
+| D:f3f3456654086e7b.1 | control / 239 | SC48-PAGE / 下一页 |
+
+| apps/web/src/components/ProviderSourceCenter.vue | bfb1ea618996a14d687b4b70b15c75a871bddc7e5cd489c9bedd105d0d26f489 |
+| apps/web/src/components/ProviderSourceDirectory.vue | ef10bdd7df7e4887d0c158a0b251caaffe4648afb66895e0c02f6408e10e7c34 |
+
+两文件身份和当前LF归一指纹可由定向审计与单测复验。此处不代表真实API、来源权限、匿名外发烟测、数据库写入或M07-03生产签收通过。
+
+## 11. P48/P49 样本、兼容与1688页面当前身份复核（2026-09-24）
+
+按已有SC48/SC49语义合同映射来源样本窗、解析兼容矩阵与1688登录验收入口当前变化的源码位置。样本创建、回放、独立审批分别保留原有写入边界；兼容矩阵与登录准备检查的读取追踪不与审批、自动启用或真实外部采集结果合并。每个映射是静态源归属，非真实请求/权限验收。
+
+### P
+
+| 当前位置键 | 类型 / 行 | 既有语义归属 |
+| --- | --- | --- |
+| P:8ee37a2198be5237.1 | dialog-definition / 88 | SC48-SAMPLES / 固定样本与独立复核弹窗定义 |
+| P:f99085051f5e9a07.1 | event-binding / 88 | SC48-SAMPLES / 弹窗焦点键盘事件 |
+| P:2f8ca16ba8121e8d.1 | control / 105 | SC48-SAMPLES / 关闭样本回放弹窗 |
+| P:479570dac45574ea.1 | control / 147 | SC48-SAMPLES / 样本读取追踪折叠 |
+| P:bff21091a1634b97.1 | control / 150 | SC48-SAMPLES / 仅重读样本目录 |
+| P:78c716f6150b4d8d.1 | control / 161 | SC48-SAMPLES / 固定既有合格采集候选 |
+| P:d589eec4cb2fcd7b.1 | event-binding / 183 | SC48-SAMPLES / 独立复核子窗决策与原因转发 |
+| P:27382a3b9a4eeefc.1 | control / 190 | SC48-SAMPLES / 对固定快照运行差异回放 |
+| P:1c008f867673db60.3 | control / 194 | SC48-SAMPLES / 回放结果技术详情折叠 |
+| P:1fc800f4950732d7.1 | control / 215 | SC48-SAMPLES / 关闭样本回放弹窗 |
+
+### M
+
+| 当前位置键 | 类型 / 行 | 既有语义归属 |
+| --- | --- | --- |
+| M:e0fca0e8a134dc18.1 | dialog-definition / 52 | SC48-COMPAT / 页面版本兼容观测弹窗定义 |
+| M:4e008aa9606a1b01.1 | event-binding / 52 | SC48-COMPAT / 弹窗焦点键盘事件 |
+| M:279ef6005288b890.1 | control / 72 | SC48-COMPAT / 关闭矩阵弹窗 |
+| M:de2e72710c0578f2.1 | control / 147 | SC48-COMPAT / 展开完整页面SHA-256指纹 |
+| M:3cbfff12b70782af.1 | control / 184 | SC48-COMPAT / 关闭矩阵弹窗 |
+
+### A
+
+| 当前位置键 | 类型 / 行 | 既有语义归属 |
+| --- | --- | --- |
+| A:708367f1d5691c04.1 | control / 128 | SC49-LOGIN / 打开本来源凭证导入深链 |
+| A:16f98bc87eeb7bf3.1 | control / 129 | SC49-SAMPLE / 打开本来源固定样本入口 |
+| A:191135a63725390b.1 | control / 132 | 检查门口径说明折叠；不新增业务动作 |
+| A:b39d5c4a0f3599f8.1 | control / 149 | SC49-LOAD / 重新读取登录验收检查 |
+| A:71ad1e14ab5adcdd.1 | control / 164 | SC49-TECH / 本次读取追踪折叠 |
+| A:a1d4481c811f2e52.1 | control / 183 | SC49-LOAD / 按既有读取流程重试 |
+| A:d7d20d959f3300b0.1 | event-binding / 200 | SC49-SCOPE/RUN / 范围、表单与既有验收提交子组件事件转发 |
+
+### R
+
+现有 `ProviderParserSampleReview.vue` 两个当前位置仍精确匹配第2节的SC48-SAMPLES审批通过/驳回身份，无新增源候选；其当前LF归一指纹单独记录如下。
+
+| apps/web/src/components/Alibaba1688AcceptanceCenter.vue | 30a6bef5841efc8ff53164e0b828e7da50a90d6f7ce149f8c971eed05f6e9b74 |
+| apps/web/src/components/ProviderParserSampleDialog.vue | fecfc130948a6e88c37cf35cf4d55acec74fa722ad8898202ce889b10832f842 |
+| apps/web/src/components/ProviderParserSampleReview.vue | 772658f4ec7fea171f1b690000f9329efc86a45c63efe1094840fb16c66da598 |
+| apps/web/src/components/ProviderCompatibilityMatrixDialog.vue | 32752031767eb5e54917fb3791709dfde6d96aa851a3762dcd751d3b2258543e |

@@ -69,6 +69,17 @@ test("line movement preserves source identity but source hash drift remains expl
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("historical source hashes do not shadow the current source fingerprint", () => {
+  const doc = parse(
+    `## Old snapshot\n| E#${sig} | 1 | control | old mapping |\n| E | ${digest("older source")} |\n## Current snapshot\n| E#${sig} | 1 | control | current mapping |\n| E | ${digest(source)} |`,
+    { defaultComponent: "Example", historicalSections: ["Old snapshot"] },
+  );
+  const report = auditContracts({ documents: [doc], sources: new Map([[file, source]]) });
+  assert.equal(report.records[1].temporalScope, "unclassified");
+  assert.equal(report.records[1].status, "identity-current");
+  assert.equal(report.records[1].sourceBinding, "hash-current");
+});
+
 test("handler changes outside the source-site signature are not mistaken for fresh source evidence", () => {
   const old = "<script setup>function save(){return 1}</script>" + source;
   const next = old.replace("return 1", "return 2");
@@ -437,6 +448,46 @@ test("audited reason source bindings retain every current site and all consumer 
   assert.equal(claims.length, 4);
   for (const claim of claims) assert.equal(claim.hash, digest(source), claim.document);
   assert.equal(report.unreferenced.filter((item) => item.file === file).length, 0);
+});
+
+test("current P48/P50 source maps cover each live candidate and fingerprint", () => {
+  const report = runContractAudit();
+  for (const [name, firstCurrentLine] of [
+    ["CredentialAssetCenter.vue", 255],
+    ["ProviderSourceConfigurationDialog.vue", 292],
+    ["ProviderSourceCenter.vue", 326],
+    ["ProviderSourceDirectory.vue", 326],
+    ["Alibaba1688AcceptanceCenter.vue", 326],
+    ["ProviderParserSampleDialog.vue", 326],
+    ["ProviderParserSampleReview.vue", 326],
+    ["ProviderCompatibilityMatrixDialog.vue", 326],
+  ]) {
+    const file = `apps/web/src/components/${name}`;
+    const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+      "\r\n",
+      "\n",
+    );
+    const candidates = scanSource(source, file).candidates;
+    const records = report.records.filter(
+      (record) =>
+        record.document.endsWith("source-channel-credential-contract-review.md") &&
+        record.sourceFile === file &&
+        record.temporalScope !== "historical" &&
+        record.sourceBinding === "hash-current" &&
+        ["identity-current", "line-moved"].includes(record.status),
+    );
+    assert.deepEqual(
+      [...new Set(records.map((record) => record.candidateId))].sort(),
+      candidates.map((candidate) => candidate.candidateId).sort(),
+      name,
+    );
+    for (const record of records.filter((item) => item.documentLine >= firstCurrentLine)) {
+      assert.equal(record.status, "identity-current", record.candidateId);
+      assert.equal(record.recordedLine, record.currentLine, record.candidateId);
+    }
+    assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  }
+  assert.equal(report.denominatorFrozen, false);
 });
 
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {

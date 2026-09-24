@@ -139,7 +139,9 @@ export function auditContracts({ documents, sources }) {
       const candidateId =
         ref.signature && ref.sourceFile ? `${ref.sourceFile}#${ref.signature}` : null;
       const candidate = module?.candidates.find((item) => item.candidateId === candidateId);
-      const expectedHashes = document.hashes.filter((item) => item.file === ref.sourceFile);
+      const expectedHashes = document.hashes.filter(
+        (item) => item.file === ref.sourceFile && item.temporalScope !== "historical",
+      );
       const binding = !expectedHashes.length
         ? "unrecorded"
         : expectedHashes.every((item) => item.hash === module?.hash)
