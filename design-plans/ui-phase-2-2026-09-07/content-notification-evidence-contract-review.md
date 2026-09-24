@@ -457,3 +457,15 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/PlatformNotificationFacts.vue | 35db0f9393a0d21154ddd3a0b3d6da4077fe1c47d3408c878cdd1d53ff7ebd6e |
+
+## 14. PlatformNotificationOperations 当前规则导航（2026-09-24）
+
+通知投递事实标题区提供一个既有 RouterLink，目标为 `/platform-admin/governance`。它只导航到规则总览，不直接开启规则编辑窗、不修改通知配置或投递状态。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/PlatformNotificationOperations.vue#a2abccb13e9ed5e1.1 | 29 | control | PN57-OPERATIONS-CURRENT-GOVERNANCE / 导航到既有平台规则总览 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformNotificationOperations.vue | 73bfa7089471ce53ea44f747727211684cb840df62a22a86b70dbaa4c9ba5e07 |
