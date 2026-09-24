@@ -284,6 +284,27 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | --- | --- |
 | apps/web/src/components/PlatformMessageWorkbench.vue | 689531d215e8878405c53ae55a4b157066cde2e9a1455242da7262079e27b2a5 |
 
+## 5.3 P57 当前 PlatformNotificationCenter 源码绑定（2026-09-24）
+
+当前父组件由平台通知入口管理读取世代、页面快照、草稿编辑和发布/取消意图；分区按钮只切换当前内存视图，不独立触发读取。以下映射保留组件转发事件与两个子对话框的调用边界，不将静态候选等同于端到端或生产验收。
+
+| 当前candidateId | 行 | 类型 | 语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/PlatformNotificationCenter.vue#9a3e50bd9098f5ff.1 | 125 | control | PN57-EDITOR / 打开新建草稿编辑器，不自动发布 |
+| apps/web/src/components/PlatformNotificationCenter.vue#b21beeb9130a0703.1 | 126 | control | PN57-LOAD / 重读通知快照；读取中禁用并反映现有刷新态 |
+| apps/web/src/components/PlatformNotificationCenter.vue#79e01b786f15fc7c.1 | 139 | control | PN57-SECTION / 切换人工消息、投递观测或系统事实的本地分区 |
+| apps/web/src/components/PlatformNotificationCenter.vue#13f96bd10b210d6d.1 | 168 | control | PN57-LOAD / 首次读取错误后的显式重新加载 |
+| apps/web/src/components/PlatformNotificationCenter.vue#cdc8e3a40be55ae9.1 | 182 | event-binding | PN57-CHILD / 接收管理子组件编辑、操作、筛选和双分页事件并交给现有所有者 |
+| apps/web/src/components/PlatformNotificationCenter.vue#8189528db997f296.1 | 203 | control | PN57-TRACE / 展开成功快照的读取关联编号 |
+| apps/web/src/components/PlatformNotificationCenter.vue#f12e9c39fb00c6a7.1 | 210 | control | PN57-TRACE / 展开本次失败读取的关联编号 |
+| apps/web/src/components/PlatformNotificationCenter.vue#4adfbf3f43a170a4.1 | 216 | event-binding | PN57-EDITOR / 接收编辑窗关闭与保存事件，交给既有草稿所有者 |
+| apps/web/src/components/PlatformNotificationCenter.vue#337effd8182c0fce.1 | 226 | event-binding | PN57-ACTION / 接收原因确认窗关闭与提交事件，交给既有消息操作所有者 |
+| apps/web/src/components/PlatformNotificationCenter.vue#e7062443e1147900.1 | 226 | dialog-component-call | PN57-ACTION / 调用共享发布或取消原因对话框，不新增写入接口 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformNotificationCenter.vue | 8dd089c006eeb5c731f0d040da20436e2958613657776373b2872fe6adde52b4 |
+
 ## 6. 引用版本指纹
 
 以下33份文件以UTF-8读取、CRLF归一为LF后计算SHA-256。只绑定所读版本；不能证明所有运行时交互和报告语义已通过。图片/生产信息必须另有真实采证。
