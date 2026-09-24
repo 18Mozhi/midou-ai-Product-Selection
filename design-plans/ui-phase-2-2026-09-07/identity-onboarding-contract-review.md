@@ -117,6 +117,20 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 | --- | --- |
 | apps/web/src/components/OnboardingGuide.vue | abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed |
 
+### 2.3 P08 TenancyChooser 当前入口与范围选择（2026-09-24）
+
+以下补记 `TenancyChooser.vue` 三个当前静态候选及源码指纹。品牌入口回到根路径；选择组织只读取该组织工作区和团队并更新本地目录状态，不提交会话范围；只有活动工作区选择才向既有 `/auth/context` 提交组织/工作区并更新会话。该静态映射不代替真实成员授权或生产写入验收。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/TenancyChooser.vue#d545c6b53ab2b2a8.1 | 173 | control | P08-CURRENT-ROOT / 品牌链接返回根路径 |
+| apps/web/src/components/TenancyChooser.vue#51f99d2206301d80.1 | 282 | control | P08-CURRENT-ORG-CHOOSE / 选择组织并读取工作区、团队；不写会话范围 |
+| apps/web/src/components/TenancyChooser.vue#9d6c9b22e4716bb9.1 | 316 | control | P08-CURRENT-WORKSPACE-CHOOSE / 仅活动工作区可用；调用既有 `/auth/context` 更新会话范围 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/TenancyChooser.vue | bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8 |
+
 本映射只确认当前静态候选与既有局部导航规则，不表示完成记录、持久化进度、真实身份/工作区、完整焦点读屏或生产状态已新增或验收。
 
 额外运行边界：P01 使用共享 UiStatePanel。blocked 默认还渲染“查看影响”次按钮，组件 emit secondary，但 LandingRedirect 没有对应监听；记录为 `NONACTION-LANDING-SECONDARY`，不假设它可打开影响详情。该候选位于共享组件，不加入上述四文件的38行分母；其余共享消费者留到壳层/通用状态批归并。
