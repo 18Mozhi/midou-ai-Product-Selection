@@ -1,17 +1,18 @@
-# P40 组织管理列表 C 方向生产实施
+# P40 组织管理列表 C 方向实际 Vue 接入
 
 ## 已实施
 
-- 真实 `PlatformAccountCenter.vue` 在 `/platform-admin/organizations` 路由上增加 `account-center--organization-review` 作用域，保留组织名称/标识搜索、active/disabled/archived 状态筛选、重置、创建组织、详情导航和移动记录预览合同。
-- 组织路由沿用 P39 蓝色范围标题与白色事实工作区，同时为筛选查询与组织记录增加蓝色证据边界，避免把用户/管理员字段混入组织列表。
-- 未新增 API、分页字段、权限、数据库或写入动作；组织详情仍使用现有父级选择与既有弹窗。
+- `/platform-admin/organizations` 在真实 `PlatformAccountCenter` 中采用组织专属 C 布局：页头聚焦组织任务，平台全局计数与对象导航进入蓝色侧栏，组织记录、筛选与状态进入独立白色结果区；刷新置于结果区标题处。
+- 查询字段明确为“组织名称或标识”，状态筛选显示既有组织状态；两者增加就近解释并关联查询说明。手机记录把状态、成员数、工作区数拆开呈现；零值继续显示零，未增加其他数据或字段。
+- 桌面侧栏在 1024px 及以下折叠到内容上方，保留原 760px 手机筛选抽屉和记录预览行为。表格列设置、冻结、密度与详情入口仍由现有组件提供。
+- 父级继续拥有现有 GET、query/status URL 同步、重置、创建组织/用户和详情路由动作；本次未改变请求参数、状态枚举、写入载荷、权限、API/OpenAPI、数据库、配置或依赖。P39、P43–P45 不共享此页新布局分支。
 
 ## 验证
 
-- `node --test tests/unit/ui-phase2-platform-organization-list-production-composition.test.mjs`：3/3 通过。
-- P39 账号管理壳层双端导航回归 4/4 通过；P40 复用同一真实父级路由和记录组件。
-- `npm run typecheck:web`、`npm run format:check`、`git diff --check`：通过。
+- `tests/e2e/m06-01-platform-accounts.spec.ts` 全套覆盖 P39/P40/P43/P44/P45：桌面 Chromium 50/50、mobile-390 50/50。组织目录场景核验真实 Vue 布局分区、说明关联、既有状态选项、移动端分项计数、筛选/清空，以及当前可见触控目标不低于 44px。
+- `tests/unit/ui-phase2-platform-account-production-composition.test.mjs`：5/5；`npm run build:web`、前端预算（202 项资源）、静态分析（446 文件）、73 路由/153文档门、运行文档一致性门、格式检查均通过。
+- E2E 首次发现手机记录仍为原来的点分隔数量行，已按审核图改为“成员/工作区”各自有标签并重跑通过。浏览器夹具没有证明真实 MySQL 查询/权限或生产状态。
 
 ## 未覆盖
 
-本批未改变或宣称完成真实组织分页、MySQL 过滤/排序、组织创建/编辑/停用写入、跨组织 RBAC、详情历史生命周期或正式 M07-03 证据。
+没有实现 P41 创建页或 P42 详情页；本批也不证明完整应用壳、浏览器历史/KeepAlive、真实 RBAC/MySQL、组织写入、读屏器实测、正式 M07-03 或生产签收。已完成本地提交前验证；是否提交/部署仍按项目的发布归属与宝塔门禁处理。

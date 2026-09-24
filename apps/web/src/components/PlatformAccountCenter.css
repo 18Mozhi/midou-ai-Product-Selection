@@ -529,6 +529,220 @@
 .account-center--organization-review .account-table-wrap {
   border-top: 3px solid var(--account-review-blue-deep);
 }
+.account-center--organization-review {
+  --account-review-blue: #254a9c;
+  --account-review-blue-deep: #18386f;
+  --account-review-ink: #202c3d;
+  --account-review-muted: #58677b;
+  --account-review-line: #dbe1e9;
+  --account-review-soft: #edf1f6;
+}
+.account-center--organization-review .account-hero {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  border-color: var(--account-review-line);
+  background: #fff;
+  color: var(--account-review-ink);
+  box-shadow: none;
+}
+.account-center--organization-review .account-hero > div:first-child {
+  padding: 22px 24px;
+}
+.account-center--organization-review .account-hero p {
+  color: var(--account-review-blue-deep);
+}
+.account-center--organization-review .account-hero h2 {
+  margin: 0 0 8px;
+  color: var(--account-review-ink);
+  font-size: 30px;
+  line-height: 1.2;
+}
+.account-center--organization-review .account-hero span {
+  color: var(--account-review-muted);
+}
+.account-center--organization-review .hero-actions {
+  justify-content: flex-end;
+  padding: 20px 24px;
+  background: transparent;
+}
+.account-center--organization-review .account-hero button {
+  border-color: #254a9c;
+  background: #254a9c;
+  color: #fff;
+}
+.account-center--organization-review .account-hero button:nth-child(2) {
+  border-color: #254a9c;
+  background: #fff;
+  color: #18386f;
+}
+.account-center .account-page-layout--organizations {
+  display: grid;
+  grid-template-columns: 228px minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+  min-width: 0;
+}
+.account-center
+  .account-page-layout:not(.account-page-layout--admins):not(.account-page-layout--organizations),
+.account-center
+  .account-page-layout:not(.account-page-layout--admins):not(.account-page-layout--organizations)
+  .account-page-main {
+  display: contents;
+}
+.account-center--organization-review .account-page-layout--organizations .account-page-rail {
+  position: static;
+  padding: 0;
+  overflow: hidden;
+}
+.account-center--organization-review .account-page-rail__intro {
+  padding: 20px;
+}
+.account-center--organization-review .account-page-rail .account-metrics {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin: 0;
+}
+.account-center--organization-review .account-page-rail .account-metrics article {
+  min-height: 0;
+  padding: 16px 20px;
+  border: 0;
+  border-top: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.account-center--organization-review .account-page-rail .account-metrics :is(small, strong, span) {
+  display: block;
+  color: #fff;
+}
+.account-center--organization-review .account-page-rail .account-metrics small,
+.account-center--organization-review .account-page-rail .account-metrics span {
+  font-size: 13px;
+  line-height: 1.6;
+}
+.account-center--organization-review .account-page-rail .account-metrics strong {
+  margin: 3px 0;
+  font-size: 25px;
+  line-height: 1.2;
+}
+.account-center--organization-review .account-page-rail .account-tabs {
+  display: grid;
+  gap: 7px;
+  width: auto;
+  margin: 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.account-center--organization-review .account-page-rail .account-tabs a {
+  justify-content: flex-start;
+  padding: 9px 12px;
+  border: 1px solid rgb(255 255 255 / 36%);
+  border-radius: 7px;
+  background: transparent;
+  color: #fff;
+  text-decoration: none;
+}
+.account-center--organization-review .account-page-rail .account-tabs a.on {
+  border-color: #fff;
+  background: #fff;
+  color: #18386f;
+}
+.account-center--organization-review .account-page-layout--organizations .account-page-main {
+  padding: 24px;
+  border: 1px solid var(--account-review-line);
+  border-radius: 14px;
+  background: #fff;
+}
+.account-center--organization-review .organization-directory-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.account-center--organization-review .organization-directory-heading h3 {
+  margin: 0 0 5px;
+  color: var(--account-review-ink);
+  font-size: 22px;
+}
+.account-center--organization-review .organization-directory-heading p {
+  margin: 0;
+  color: var(--account-review-muted);
+}
+.account-center--organization-review .organization-directory-heading button {
+  border-color: #254a9c;
+  background: #fff;
+  color: #18386f;
+}
+.account-center--organization-review .organization-filter-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  color: var(--account-review-ink);
+  font-size: 16px;
+  font-weight: 700;
+}
+.account-center--organization-review .organization-filter-field input,
+.account-center--organization-review .organization-filter-field select {
+  width: 100%;
+}
+.account-center--organization-review .organization-filter-field small {
+  color: var(--account-review-muted);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.account-center--organization-review .account-filter {
+  grid-template-columns: minmax(260px, 1.4fr) minmax(190px, 0.9fr) auto;
+  align-items: end;
+  padding: 20px;
+}
+.account-center--organization-review .account-filter > div {
+  display: flex;
+  gap: 8px;
+  align-self: end;
+}
+.account-center--organization-review .organization-directory-heading + .account-filter {
+  margin-top: 2px;
+}
+.account-center--organization-review .account-updated {
+  margin: 0;
+}
+.account-center--organization-review .account-table-wrap td:first-child {
+  width: 38%;
+}
+.account-center--organization-review .account-table-wrap td small {
+  overflow-wrap: anywhere;
+}
+.account-center--organization-review
+  .account-table-wrap
+  table[data-table-density="compact"]
+  :is(th, td) {
+  padding-block: 8px;
+}
+.account-center--organization-review .responsive-data-view__mobile article {
+  padding: 0;
+}
+.account-center--organization-review .responsive-record-summary {
+  display: grid;
+  gap: 8px;
+}
+.account-center--organization-review .p40-record-status {
+  color: var(--account-review-muted);
+}
+.account-center--organization-review .p40-record-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  color: var(--account-review-muted);
+  font-size: 14px;
+}
+.account-center--organization-review .p40-record-counts b {
+  color: var(--account-review-ink);
+  font-weight: 600;
+}
 @media (max-width: 940px) {
   .account-center--review .account-hero {
     grid-template-columns: 1fr;
@@ -537,6 +751,43 @@
     justify-content: flex-start;
     padding: 0 26px 26px;
     background: transparent;
+  }
+}
+@media (max-width: 1024px) {
+  .account-center .account-page-layout--organizations {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .account-center--organization-review .account-page-layout--organizations .account-page-rail {
+    display: grid;
+    grid-template-columns: minmax(190px, 0.55fr) minmax(0, 1.45fr);
+    align-items: center;
+    gap: 12px 20px;
+  }
+  .account-center--organization-review .account-page-rail__intro {
+    padding: 20px;
+    border: 0;
+  }
+  .account-center--organization-review .account-page-rail .account-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .account-center--organization-review .account-page-rail .account-metrics article {
+    padding: 8px 12px;
+    border: 0;
+    border-left: 1px solid rgb(255 255 255 / 28%);
+  }
+  .account-center--organization-review .account-page-rail .account-tabs {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0 16px 16px;
+  }
+  .account-center--organization-review .account-page-rail .account-tabs a {
+    justify-content: center;
+  }
+  .account-center--organization-review .account-filter {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.75fr);
+  }
+  .account-center--organization-review .account-filter > div {
+    grid-column: 1 / -1;
   }
 }
 @media (max-width: 700px) {
@@ -560,6 +811,47 @@
   }
   .account-center--review .account-filter {
     grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 760px) {
+  .account-center--organization-review .account-page-layout--organizations .account-page-rail {
+    display: block;
+    padding: 0;
+  }
+  .account-center--organization-review .account-page-rail__intro {
+    margin-bottom: 0;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgb(255 255 255 / 28%);
+  }
+  .account-center--organization-review .account-page-rail .account-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .account-center--organization-review .account-page-rail .account-metrics article {
+    min-width: 0;
+    padding: 10px 8px;
+    border-top: 0;
+  }
+  .account-center--organization-review .account-page-rail .account-metrics strong {
+    font-size: 20px;
+  }
+  .account-center--organization-review .account-page-rail .account-metrics span {
+    overflow-wrap: anywhere;
+  }
+  .account-center--organization-review .account-page-rail .account-tabs {
+    margin: 0 12px 12px;
+  }
+  .account-center--organization-review .account-page-layout--organizations .account-page-main {
+    padding: 16px;
+  }
+  .account-center--organization-review .organization-directory-heading {
+    align-items: flex-start;
+  }
+  .account-center--organization-review .account-filter {
+    padding: 16px;
+  }
+  .account-center--organization-review .account-filter > div {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 .account-center--user-admin-c {

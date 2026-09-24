@@ -960,16 +960,50 @@ test("organization list uses organization-specific filters and a recoverable emp
     return route.fulfill({ json: env(query ? { ...overview, organizations: [] } : overview) });
   });
   await page.goto("/platform-admin/organizations");
-  await expect(page.getByRole("heading", { name: "管理组织状态与隔离边界" })).toBeVisible();
+  await expect(
+    page.locator(".account-hero").getByRole("heading", { name: "组织管理" }),
+  ).toBeVisible();
+  const organizationLayout = page.locator(".account-page-layout--organizations");
+  await expect(organizationLayout.getByRole("complementary")).toBeVisible();
+  await expect(
+    organizationLayout.getByRole("navigation", { name: "账号与组织二级导航" }),
+  ).toBeVisible();
+  const results = organizationLayout.locator(".account-page-main");
+  await expect(results.getByRole("heading", { name: "组织记录" })).toBeVisible();
+  await expect(results.getByRole("button", { name: "刷新数据" })).toBeVisible();
+  await expect(page.locator(".account-hero").getByRole("button", { name: /刷新/ })).toHaveCount(0);
   const mobile = (page.viewportSize()?.width ?? 0) <= 760;
   if (mobile) await page.getByRole("button", { name: "组织筛选" }).click();
   const filters = mobile ? page.getByRole("dialog", { name: "组织筛选" }) : page;
   await expect(filters.getByPlaceholder("搜索组织名称或标识")).toBeVisible();
+  await expect(filters.getByLabel("组织名称或标识")).toHaveAttribute(
+    "aria-describedby",
+    "organization-query-help",
+  );
+  await expect(filters.getByText("按组织名称或标识查询，不按成员邮箱查询。")).toBeVisible();
   await expect(filters.getByLabel("组织状态").locator("option")).toHaveText([
     "全部状态",
     "正常使用",
     "已停用组织",
   ]);
+  await expect(filters.getByText("仅筛选组织状态，不代表成员账号状态。")).toBeVisible();
+  if (mobile) {
+    await expect(page.locator(".p40-record-counts")).toContainText("成员");
+    await expect(page.locator(".p40-record-counts")).toContainText("工作区");
+  }
+  const undersizedTargets = await page
+    .locator(".account-center--organization-review :is(a, button, input, select, summary)")
+    .evaluateAll((controls) =>
+      controls
+        .filter((control) => control.getClientRects().length)
+        .map((control) => ({
+          label:
+            control.textContent?.trim() || control.getAttribute("aria-label") || control.tagName,
+          height: control.getBoundingClientRect().height,
+        }))
+        .filter((control) => control.height < 44),
+    );
+  expect(undersizedTargets).toEqual([]);
   await filters.getByPlaceholder("搜索组织名称或标识").fill("不存在的组织");
   await filters.getByRole("button", { name: "搜索" }).click();
   await expect(page.getByText("没有符合当前条件的组织", { exact: true })).toBeVisible();

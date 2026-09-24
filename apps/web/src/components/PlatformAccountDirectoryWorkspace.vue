@@ -44,12 +44,28 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="account-page-layout" :class="{ 'account-page-layout--admins': props.adminListRoute }">
-    <aside v-if="props.adminListRoute" class="account-page-rail" aria-label="全平台汇总与管理入口">
+  <div
+    class="account-page-layout"
+    :class="{
+      'account-page-layout--admins': props.adminListRoute,
+      'account-page-layout--organizations': props.organizationListRoute,
+    }"
+  >
+    <aside
+      v-if="props.adminListRoute || props.organizationListRoute"
+      class="account-page-rail"
+      :aria-label="props.organizationListRoute ? '平台汇总与账号管理入口' : '全平台汇总与管理入口'"
+    >
       <header class="account-page-rail__intro">
         <small>平台全局</small>
         <h3>账号与组织</h3>
-        <p>以下为全平台汇总，不是当前列表条数。</p>
+        <p>
+          {{
+            props.organizationListRoute
+              ? "汇总不随组织列表筛选变化。"
+              : "以下为全平台汇总，不是当前列表条数。"
+          }}
+        </p>
       </header>
       <div v-if="props.data" class="account-metrics">
         <article>
@@ -89,7 +105,7 @@ const emit = defineEmits<{
       </nav>
     </aside>
     <div class="account-page-main">
-      <template v-if="!props.adminListRoute">
+      <template v-if="!props.adminListRoute && !props.organizationListRoute">
         <div v-if="props.data" class="account-metrics">
           <article>
             <small>组织</small
@@ -131,6 +147,20 @@ const emit = defineEmits<{
         <h3>可授权账号</h3>
         <p>包含尚未授予平台角色的账号。进入详情后核对身份与当前授权。</p>
       </header>
+      <header v-if="props.organizationListRoute" class="organization-directory-heading">
+        <div>
+          <h3>组织记录</h3>
+          <p>名称与标识、关系数量和当前状态</p>
+        </div>
+        <button
+          type="button"
+          class="secondary"
+          :disabled="props.refreshing || props.busy"
+          @click="emit('load')"
+        >
+          {{ props.refreshing ? "正在刷新…" : "刷新数据" }}
+        </button>
+      </header>
       <ResponsiveFilterDrawer :label="props.filterLabel" :active-count="props.activeFilterCount">
         <form
           class="account-filter"
@@ -146,6 +176,15 @@ const emit = defineEmits<{
             />
             <small id="admin-query-help">输入邮箱关键词，搜索后更新列表。</small>
           </label>
+          <label v-else-if="props.organizationListRoute" class="organization-filter-field">
+            <span>组织名称或标识</span>
+            <input
+              v-model="query"
+              :placeholder="props.searchPlaceholder"
+              aria-describedby="organization-query-help"
+            />
+            <small id="organization-query-help">按组织名称或标识查询，不按成员邮箱查询。</small>
+          </label>
           <label v-else class="account-query-field">
             <span>{{ props.searchPlaceholder }}</span>
             <input v-model="query" :placeholder="props.searchPlaceholder" />
@@ -158,6 +197,19 @@ const emit = defineEmits<{
               <option value="disabled">已停用</option>
             </select>
             <small>仅筛选账号状态，不代表角色权限范围。</small>
+          </label>
+          <label v-else-if="props.organizationListRoute" class="organization-filter-field">
+            <span>组织状态</span>
+            <select
+              v-model="status"
+              :aria-label="props.statusLabel"
+              aria-describedby="organization-status-help"
+            >
+              <option value="">全部状态</option>
+              <option value="active">正常使用</option>
+              <option value="archived">已停用组织</option>
+            </select>
+            <small id="organization-status-help">仅筛选组织状态，不代表成员账号状态。</small>
           </label>
           <select v-else v-model="status" :aria-label="props.statusLabel">
             <option value="">全部状态</option>

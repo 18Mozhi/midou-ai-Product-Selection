@@ -642,7 +642,7 @@ onMounted(load);
               : permissionsRoute
                 ? "平台权限"
                 : organizationListRoute
-                  ? "平台组织"
+                  ? "组织管理"
                   : adminListRoute
                     ? "平台管理员"
                     : "平台用户"
@@ -655,7 +655,7 @@ onMounted(load);
               : permissionsRoute
                 ? "核对角色与能力边界"
                 : organizationListRoute
-                  ? "管理组织状态与隔离边界"
+                  ? "组织管理"
                   : adminListRoute
                     ? "授权、会话与登录状态，一处管理"
                     : "查看用户归属与登录状态"
@@ -667,7 +667,7 @@ onMounted(load);
             : permissionsRoute
               ? "直接读取后端角色目录，比较每个固定平台角色实际拥有与缺少的能力。"
               : organizationListRoute
-                ? "核对成员与工作区数量，进入详情维护资料、停用或恢复。所有操作都会留审计记录。"
+                ? "查找组织，核对成员与工作区，进入详情维护资料和状态。"
                 : adminListRoute
                   ? "创建运营、安全或超级管理员，维护角色、会话与登录状态。所有操作都会留审计记录。"
                   : "创建用户、核对组织归属并维护登录状态。所有操作都会留审计记录。"
@@ -685,7 +685,12 @@ onMounted(load);
             <AppIcon name="plus" /> 新建组织</button
           ><button @click="openCreateUser(tab === 'admins')">
             <AppIcon name="plus" /> {{ tab === "admins" ? "新建管理员" : "新建用户" }}</button
-          ><button class="secondary" :disabled="refreshing || Boolean(busy)" @click="load">
+          ><button
+            v-if="!organizationListRoute"
+            class="secondary"
+            :disabled="refreshing || Boolean(busy)"
+            @click="load"
+          >
             {{ refreshing ? "正在刷新…" : "刷新数据" }}
           </button>
         </template>

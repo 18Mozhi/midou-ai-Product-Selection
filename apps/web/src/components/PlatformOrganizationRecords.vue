@@ -48,13 +48,18 @@ const emit = defineEmits<{ openOrganization: [item: any] }>();
       </table>
     </template>
     <template #summary="{ row }">
-      <span class="responsive-record-summary"
-        ><strong>{{ row.name }}</strong
-        ><small
-          >{{ statusText(row.status) }} · {{ row.member_count }} 人 ·
-          {{ row.workspace_count }} 个工作区</small
-        ></span
-      >
+      <span class="responsive-record-summary">
+        <strong>{{ row.name }}</strong>
+        <small class="p40-record-status">{{ statusText(row.status) }}</small>
+        <span class="p40-record-counts">
+          <span
+            >成员 <b>{{ row.member_count }}</b> 人</span
+          >
+          <span
+            >工作区 <b>{{ row.workspace_count }}</b> 个</span
+          >
+        </span>
+      </span>
     </template>
     <template #detail="{ row, close }">
       <dl>

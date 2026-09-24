@@ -7,6 +7,10 @@ const workspace = await readFile(
   "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
   "utf8",
 );
+const organizationRecords = await readFile(
+  "apps/web/src/components/PlatformOrganizationRecords.vue",
+  "utf8",
+);
 const accountSurface = `${panel}\n${workspace}`;
 const styles = await readFile("apps/web/src/components/PlatformAccountCenter.css", "utf8");
 
@@ -50,4 +54,15 @@ test("P39 visible navigation and column tools meet the 44px target without chang
     normalizedStyles,
     /\.account-center--review \.account-table-wrap \.table-view-controls__toolbar :is\(button, summary, select\),\s*\.account-center--review \.account-table-wrap \.table-view-controls__toolbar fieldset > div\s*\{\s*min-height: 44px;/,
   );
+});
+
+test("P40 organization page keeps global summaries separate and labels mobile facts", () => {
+  assert.match(workspace, /account-page-layout--organizations/);
+  assert.match(workspace, /organization-directory-heading/);
+  assert.match(workspace, /组织名称或标识/);
+  assert.match(workspace, /仅筛选组织状态，不代表成员账号状态/);
+  assert.match(organizationRecords, /class="p40-record-status"/);
+  assert.match(organizationRecords, /class="p40-record-counts"/);
+  assert.match(styles, /\.account-center \.account-page-layout--organizations/);
+  assert.match(styles, /@media \(max-width: 1024px\)/);
 });
