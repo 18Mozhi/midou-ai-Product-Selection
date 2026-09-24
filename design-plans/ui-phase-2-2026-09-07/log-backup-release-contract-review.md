@@ -179,7 +179,6 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | 文件                                                | SHA-256（LF）                                                    |
 | --------------------------------------------------- | ---------------------------------------------------------------- |
 | apps/web/src/components/BackupRecoveryCenter.vue    | 6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02 |
-| apps/web/src/components/ReleaseRolloutCenter.vue    | 0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1 |
 | apps/web/src/components/AuditedReasonDialog.vue     | 3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a |
 | apps/web/src/components/ResponsiveFilterDrawer.vue  | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
 | apps/web/src/components/ResponsiveDataView.vue      | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
@@ -200,6 +199,12 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | config/route-catalog.json                           | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
 | packages/config/src/index.ts                        | 7128cf13c8d183abd5b500e54e296b017fa7e2a9a72a441fbabe15f608546a11 |
 | tests/e2e/m07-04-backup-recovery.spec.ts            | f9c712921c576a00c0ef4f9f4c24721f06a38d609514ee924557316259f17f53 |
+
+### 6.2 P65 旧版发布证据中心指纹（2026-09-09）
+
+| 文件 | SHA-256（LF） |
+| --- | --- |
+| apps/web/src/components/ReleaseRolloutCenter.vue | 0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1 |
 
 2026-09-10 P32恢复组合增量：共享原因组件新增仅显式workspaceRestore上下文启用的目标说明与C样式；其他调用的默认请求结构、原因校验和提交关闭顺序不变。真实Vue双端94检查/20图及默认/替换/关闭单测见[P32落地说明](P32-VUE-RESTORE-REVIEW.md)。本表同步已验证来源，不扩展其他页面或生产验收；旧指纹保存在07902a2e。
 
@@ -229,3 +234,28 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | apps/web/src/components/PlatformLogCenter.vue | 029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518 |
 
 此节只补当前源位置及哈希；CSV真实下载/审计落库、读取RBAC、移动记录细节和生产行为仍以原合同/独立运行证据为准。
+
+## 8. P65 ReleaseRolloutCenter 当前源码归属（2026-09-24）
+
+当前组件共12个静态候选：新增映射此前未引用的7项，原表中其余5项仍匹配但行号已有变化；原刷新和两处重试签名均已失效，继续作为旧身份保留。刷新和重试复用只读GET；三个原生页内锚点仅导航；配置指纹、门指标及阻断详情均为按需披露。超管接口覆盖链接仍受 `platform:superadmin` 条件约束。当前LF哈希与6.2节旧指纹分开登记。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/ReleaseRolloutCenter.vue#2e6f5b1858278d74.1 | 189 | control | RL65-CURRENT-LOAD / 刷新当前发布事实，复用单飞只读load |
+| apps/web/src/components/ReleaseRolloutCenter.vue#7e7fceb8ddc95b63.1 | 199 | control | RL65-CURRENT-COVERAGE / 超管查看接口覆盖证据 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#a93553a3ba9aa8a6.1 | 221 | control | RL65-CURRENT-RETRY / 保留成功快照时重试失败读取 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#5587941412d5210f.1 | 252 | control | RL65-CURRENT-LOGIN / expired状态重新登录 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#0227b741c3d451ee.1 | 253 | control | RL65-CURRENT-RETRY / 非forbidden且未显示登录链接的错误态重读 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#9d42d660b274b4e7.1 | 269 | control | RL65-CURRENT-NAV / 跳转到运行身份页内锚点 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#e6f6630b9e002351.1 | 270 | control | RL65-CURRENT-NAV / 跳转到历史观察页内锚点 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#0745c7ca1efdbdf9.1 | 271 | control | RL65-CURRENT-NAV / 跳转到动作与历史页内锚点 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#cc981fe4f655ae81.1 | 335 | control | RL65-CURRENT-TECH / 展开生产配置指纹 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.1 | 530 | control | RL65-CURRENT-TECH / 展开桌面发布门指标 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.2 | 588 | control | RL65-CURRENT-TECH / 展开移动发布门指标 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.3 | 714 | control | RL65-CURRENT-TECH / 展开阻断原因技术详情 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/ReleaseRolloutCenter.vue | f362e65bea501d183d809d458497e5b3775377d12e83b8e4f52496d00b62107d |
+
+此映射只证明静态源码候选位置，不等同于真实发布/回滚执行、GET权限、数据库审计、完整键盘/读屏、浏览器全状态或生产验收。历史双槽部署说明仍不得作为当前单后端部署指令。
