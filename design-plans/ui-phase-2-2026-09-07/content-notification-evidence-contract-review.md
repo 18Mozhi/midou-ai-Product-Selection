@@ -365,3 +365,22 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | apps/web/src/components/PlatformMessageEditor.vue | 299031770711240b20ded18c86d6eb2dae9081fb44a732e06efa3317b540041a |
 
 此静态映射不替代父组件/API合同、受众选择与字段值的完整校验、真实保存、焦点读屏或生产验收；系统邮件Provider和用户邮件偏好边界保持不变。
+
+## 8. P57 PlatformNotificationActionDialog 当前源码归属（2026-09-24）
+
+当前动作原因窗共6个静态候选，全部登记当前行号、类型及LF指纹。`action` 仅在现有 `publish` / `cancel` 两种父级动作上下文间切换标题、说明和确认按钮语义；本组件负责受控原因值、提交前长度禁用条件及发出事件，实际发布/取消请求仍由父级处理器完成。两个关闭按钮只关闭原因窗，不等同于“取消草稿”；真正的草稿取消是 action=`cancel` 时的表单确认提交。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/PlatformNotificationActionDialog.vue#8860caa2eace34ef.1 | 33 | dialog-definition | PN57-ACTION-CURRENT-DIALOG / 按publish或cancel显示对应原因窗名称 |
+| apps/web/src/components/PlatformNotificationActionDialog.vue#8e352812d3e9d460.1 | 33 | event-binding | PN57-ACTION-CURRENT-KEYBOARD / Escape关闭转发及dialog内Tab循环 |
+| apps/web/src/components/PlatformNotificationActionDialog.vue#11191cd13f827990.1 | 41 | form-event | PN57-ACTION-CURRENT-SUBMIT / 表单提交只向父级发出submit事件 |
+| apps/web/src/components/PlatformNotificationActionDialog.vue#ff6f244b760bf0a4.1 | 47 | control | PN57-ACTION-CURRENT-CLOSE / 顶部关闭原因窗并发出close |
+| apps/web/src/components/PlatformNotificationActionDialog.vue#358517db18f8c7cb.1 | 85 | control | PN57-ACTION-CURRENT-CLOSE / 底部取消仅关闭原因窗，不执行取消草稿 |
+| apps/web/src/components/PlatformNotificationActionDialog.vue#8623dd504ba5e80f.1 | 86 | control | PN57-ACTION-CURRENT-CONFIRM / publish发布或cancel取消草稿；提交中、原因不足/超限时禁用 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformNotificationActionDialog.vue | 98d6bfab3dae6b9b091371a241d9096420c4f8e84f1c2b4da969ae9f8c3f9eb6 |
+
+本映射只确认候选位置与组件事件边界，不证明真实RBAC、请求幂等/审计、受众解析、站内投递、生产发送或全状态读屏验收；邮件Provider及现有通知偏好合同不变。
