@@ -18,7 +18,7 @@
 
 P11的五个分区来自query section；AccountShell只接受profile/permissions/security/notifications/assets，否则回profile。PersonalCenter的旧局部Tab仅在accountShell=false时出现，P11实际使用外层链接导航。P12推荐队列来自automatic_selection.recommended_items，其他待办过滤掉actions中的opportunity，再并入health；changes/follows虽返回但当前没有逐项呈现，只进入total。不能把接口数组存在写成页面展示完成。
 
-## 2. 51 个局部控件候选
+## 2. 51 个局部控件候选（历史源码快照）
 
 前缀T=ThemeStudio、P=PersonalCenter、A=AccountShell、H=HomeDashboard、O=HomeAutomationOverview，文件均为apps/web/src/components/{名称}.vue。候选键可按此前缀还原actions.json完整candidateId；行号只是定位。actionId采用本地稳定语义名，下文各表已写全，不用“按钮N”代替。
 
@@ -75,6 +75,26 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 | O#490c957ac97ec485.1 | 30 | HD-EVIDENCE | →`/opportunities?view=evidence_pending` |
 | O#df3fb85e49a879f8.1 | 34 | HD-RULES | →`/trends?section=rules` |
 | O#07fccd037ce99d72.1 | 41 | HD-RUNTIME | 原生details→运行计数/时间，无请求 |
+
+本表保留 2026-09-08 基线的源身份，现已作为历史定位，不计当前覆盖。仍有效的 `HomeAutomationOverview` 五个候选在下表重新绑定当前源码；其余当前 P10/P11/P12 候选见本节后续各当前映射小节。
+
+## 2. 当前源码位置（2026-09-24）
+
+### apps/web/src/components/HomeAutomationOverview.vue
+
+旧 O 行保留历史语义；以下五个候选是当前只读状态组件中的四个筛选入口和一个原生详情披露，不持有请求或写入。绑定以本文件当前源指纹和真实组件为准。
+
+| 当前签名.序号 | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| 4a67e5db61801646.1 | 22 | control | HD-AUTO-CURRENT-RECOMMENDED / 进入既有推荐队列 |
+| 94e724cc55ab8a3c.1 | 26 | control | HD-AUTO-CURRENT-CANDIDATES / 进入既有规则候选队列 |
+| 490c957ac97ec485.1 | 30 | control | HD-AUTO-CURRENT-EVIDENCE / 进入既有待采集队列 |
+| df3fb85e49a879f8.1 | 34 | control | HD-AUTO-CURRENT-RULES / 进入既有趋势规则页 |
+| 07fccd037ce99d72.1 | 41 | control | HD-AUTO-CURRENT-RUNTIME / 原生 details 展开运行进度与时间，无请求 |
+
+| 当前源文件 | 当前 LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/HomeAutomationOverview.vue | 5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4 |
 
 ### 2.1 P12 HomeDashboard 当前源码位置（2026-09-24）
 
@@ -296,14 +316,16 @@ P11多个子面板复用该共享反馈组件。它在error状态下显示“重
 | 当前签名.序号 | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
 | b832de42f3091adf.1 | 26 | control | AC-CURRENT-BRAND / ScoutOps品牌入口导航至应用首页 |
+| 0f58e919e43acff5.1 | 30 | control | AC-CURRENT-CONTEXT / 导航至现有组织与工作区选择页 |
 | 257559b0b0a3692f.1 | 40 | control | AC-CURRENT-SECTIONS / 按个人中心分区数据生成`/me?section=…`导航并标记当前分区 |
+| aa62e5d933afce98.1 | 58 | control | AC-CURRENT-BREADCRUMB / 面包屑导航至应用首页 |
 | 2ea362a7d2584a88.1 | 50 | control | AC-CURRENT-THEME / 导航至外观偏好页 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/AccountShell.vue | f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39 |
 
-本表登记三个此前未映射的当前入口，不重复计入已有组织/工作区和面包屑位置。分区状态仍由route query的既有映射驱动，不在此处增加分区或更改导航权限；当前源码位置核对不替代P11移动可访问名、焦点或真实会话验证。
+本表登记当前五个入口；所有可见入口都单独定位，但不推导新增分区或改变导航权限。分区状态仍由route query的既有映射驱动；当前源码位置核对不替代P11移动可访问名、焦点或真实会话验证。
 
 ## 3. 写入与状态连续性
 

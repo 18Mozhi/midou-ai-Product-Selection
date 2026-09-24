@@ -767,6 +767,49 @@ test("current home dashboard map covers all current routes, form actions and evi
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("P10-P12 baseline rows remain historical while current automation overview candidates stay bound", () => {
+  const file = "apps/web/src/components/HomeAutomationOverview.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const document = "account-home-contract-review.md";
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const historicalRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) && record.documentLine >= 25 && record.documentLine <= 77,
+  );
+  const currentRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.currentLine !== null &&
+      record.claim.includes("HD-AUTO-CURRENT-"),
+  );
+
+  assert.equal(historicalRows.length, 51);
+  assert.ok(historicalRows.every((record) => record.temporalScope === "historical"));
+  assert.equal(candidates.length, 5);
+  assert.deepEqual(
+    [...new Set(currentRows.map((record) => record.candidateId))].sort(),
+    candidates.map((candidate) => candidate.candidateId).sort(),
+  );
+  for (const record of currentRows) {
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.recordedLine, record.currentLine, record.candidateId);
+    assert.equal(record.recordedKind, "control", record.candidateId);
+  }
+  const claims = report.sourceClaims.filter(
+    (claim) => claim.document.endsWith(document) && claim.file === file,
+  );
+  assert.equal(claims.length, 1);
+  assert.equal(claims[0].hash, digest(source));
+  assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("current P11 profile panel map covers controlled field events and parent-owned save", () => {
   const file = "apps/web/src/components/personal-center/PersonalProfilePanel.vue";
   const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
@@ -1894,9 +1937,13 @@ test("current P11 account shell maps brand, section and theme navigation sites",
       record.currentLine !== null &&
       record.temporalScope !== "historical",
   );
-  const expectedCurrentIds = ["b832de42f3091adf.1", "257559b0b0a3692f.1", "2ea362a7d2584a88.1"].map(
-    (signature) => `${file}#${signature}`,
-  );
+  const expectedCurrentIds = [
+    "b832de42f3091adf.1",
+    "0f58e919e43acff5.1",
+    "257559b0b0a3692f.1",
+    "aa62e5d933afce98.1",
+    "2ea362a7d2584a88.1",
+  ].map((signature) => `${file}#${signature}`);
   assert.equal(candidates.length, 5);
   assert.deepEqual(
     currentRows.map((record) => record.candidateId).sort(),

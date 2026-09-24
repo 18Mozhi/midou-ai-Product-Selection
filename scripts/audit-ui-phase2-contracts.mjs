@@ -117,6 +117,9 @@ const defaults = {
 };
 // Explicit pre-fix snapshots or superseded location tables retained by the source documents.
 const history = {
+  "account-home-contract-review.md": {
+    historicalSections: ["2. 51 个局部控件候选（历史源码快照）"],
+  },
   "collection-runtime-contract-review.md": { historicalSections: ["7. 来源指纹"] },
   "content-notification-evidence-contract-review.md": {
     historicalSections: ["apps/web/src/components/PlatformMessageWorkbench.vue", "6. 引用版本指纹"],
