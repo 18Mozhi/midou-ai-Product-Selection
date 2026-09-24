@@ -174,11 +174,10 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 ## 6. 来源指纹
 
-下面绑定本批本地最终LF归一文件；部分大型后端文件只核对本合同相关函数，SHA是整文件版本定位，不宣称整库审计。全局baseline/coverage和正式审核状态未改变；文件一致不证明真实数据库或生产已验证。
+以下为原始源码指纹快照；各文件是否仍匹配当前源码由静态审计器分别判定。部分大型后端文件只核对本合同相关函数，SHA是整文件版本定位，不宣称整库审计。全局baseline/coverage和正式审核状态未改变；文件一致不证明真实数据库或生产已验证。
 
 | 文件                                                | SHA-256（LF）                                                    |
 | --------------------------------------------------- | ---------------------------------------------------------------- |
-| apps/web/src/components/PlatformLogCenter.vue       | 4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d |
 | apps/web/src/components/BackupRecoveryCenter.vue    | 6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02 |
 | apps/web/src/components/ReleaseRolloutCenter.vue    | 0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1 |
 | apps/web/src/components/AuditedReasonDialog.vue     | 3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a |
@@ -203,3 +202,30 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | tests/e2e/m07-04-backup-recovery.spec.ts            | f9c712921c576a00c0ef4f9f4c24721f06a38d609514ee924557316259f17f53 |
 
 2026-09-10 P32恢复组合增量：共享原因组件新增仅显式workspaceRestore上下文启用的目标说明与C样式；其他调用的默认请求结构、原因校验和提交关闭顺序不变。真实Vue双端94检查/20图及默认/替换/关闭单测见[P32落地说明](P32-VUE-RESTORE-REVIEW.md)。本表同步已验证来源，不扩展其他页面或生产验收；旧指纹保存在07902a2e。
+
+### 6.1 P62 旧版日志中心指纹（2026-09-09）
+
+| 文件 | SHA-256（LF） |
+| --- | --- |
+| apps/web/src/components/PlatformLogCenter.vue | 4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d |
+
+## 7. P62 PlatformLogCenter 当前源码归属（2026-09-24）
+
+当前组件共20个扫描候选：本节新增此前未映射的8项，第2节已有的12个仍然身份按当前行号匹配；第6.1节的旧哈希单独保留历史身份。导出按钮先打开有原因的确认窗，再由当前筛选发起既有导出请求；刷新、重试和三个追踪披露均不构成额外写入。旧链接、历史语义及审计/权限合同不因位置映射而扩张。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/PlatformLogCenter.vue#f457c74d5cac0e80.1 | 353 | control | LG62-CURRENT-EXPORT / 打开当前筛选CSV的审计原因流程；忙碌状态以禁用/ARIA状态呈现 |
+| apps/web/src/components/PlatformLogCenter.vue#d37ca26c235aab7a.1 | 363 | control | LG62-CURRENT-LOAD / 重读日志；单飞读取时以ARIA状态表达刷新中 |
+| apps/web/src/components/PlatformLogCenter.vue#fa83b88a7082fbd5.1 | 482 | control | LG62-CURRENT-RETRY / 错误/保留快照时复用同一load重读 |
+| apps/web/src/components/PlatformLogCenter.vue#8189528db997f296.1 | 659 | control | LG62-CURRENT-TRACE / 原生披露最近成功快照读取编号 |
+| apps/web/src/components/PlatformLogCenter.vue#f71cf4e0c63914cf.1 | 663 | control | LG62-CURRENT-TRACE / 原生披露最近一次读取失败编号 |
+| apps/web/src/components/PlatformLogCenter.vue#be642d45b3e34274.1 | 667 | control | LG62-CURRENT-TRACE / 原生披露最近一次导出请求编号 |
+| apps/web/src/components/PlatformLogCenter.vue#13b398e8ab4b93d3.1 | 671 | event-binding | LG62-CURRENT-EXPORT-REASON / 向当前导出所有者转发原因提交或取消 |
+| apps/web/src/components/PlatformLogCenter.vue#2c239372ff0167e8.1 | 671 | dialog-component-call | LG62-CURRENT-EXPORT-REASON / 调用日志导出审计原因窗，最多300字符 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformLogCenter.vue | 029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518 |
+
+此节只补当前源位置及哈希；CSV真实下载/审计落库、读取RBAC、移动记录细节和生产行为仍以原合同/独立运行证据为准。

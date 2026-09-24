@@ -1148,6 +1148,53 @@ test("current P60 shared reason dialog maps native modal, field, submit, cancel 
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current P62 log center maps remaining controls and isolates the superseded source hash", () => {
+  const file = "apps/web/src/components/PlatformLogCenter.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const document = "log-backup-release-contract-review.md";
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const currentRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.currentLine !== null &&
+      record.temporalScope !== "historical",
+  );
+  assert.equal(candidates.length, 20);
+  assert.deepEqual(
+    [...new Set(currentRows.map((record) => record.candidateId))].sort(),
+    candidates.map((candidate) => candidate.candidateId).sort(),
+  );
+  for (const record of currentRows) {
+    const candidate = candidates.find((item) => item.candidateId === record.candidateId);
+    assert.ok(["identity-current", "line-moved"].includes(record.status), record.candidateId);
+    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(record.currentLine, candidate?.line, record.candidateId);
+    assert.equal(record.recordedKind, candidate?.kind, record.candidateId);
+  }
+  const additions = currentRows.filter((record) => record.claim.includes("LG62-CURRENT-"));
+  assert.equal(additions.length, 8);
+  for (const record of additions) {
+    assert.equal(record.status, "identity-current", record.candidateId);
+    assert.equal(record.recordedLine, record.currentLine, record.candidateId);
+  }
+  const hashes = report.sourceClaims.filter(
+    (claim) => claim.document.endsWith(document) && claim.file === file,
+  );
+  assert.equal(hashes.length, 2);
+  const currentHash = hashes.find((claim) => claim.temporalScope !== "historical");
+  const previousHash = hashes.find((claim) => claim.temporalScope === "historical");
+  assert.equal(currentHash?.hash, digest(source));
+  assert.equal(currentHash?.status, "hash-current");
+  assert.equal(previousHash?.status, "hash-drift");
+  assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],

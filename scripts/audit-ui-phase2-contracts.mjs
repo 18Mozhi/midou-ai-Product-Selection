@@ -143,6 +143,9 @@ const history = {
   "commercial-security-open-platform-contract-review.md": {
     historicalSections: ["6. 来源指纹与证据边界"],
   },
+  "log-backup-release-contract-review.md": {
+    historicalSections: ["6.1 P62 旧版日志中心指纹（2026-09-09）"],
+  },
 };
 
 export function runContractAudit() {
