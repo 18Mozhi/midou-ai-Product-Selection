@@ -528,7 +528,7 @@ async function setup(page: Page) {
 test("M06-01.A07/A08/A15 desktop organization dashboard", async ({ page }) => {
   await setup(page);
   await page.goto("/org-admin");
-  await expect(page.getByRole("heading", { name: "治理概览", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "治理概览", level: 1 }).first()).toBeVisible();
   await expect(page.getByText("128")).toBeVisible();
   await expect(page.getByText("1238")).toBeVisible();
   await expect(page.getByText("新品决策工作区").first()).toBeVisible();
