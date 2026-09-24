@@ -30,7 +30,12 @@ test("every setup source has a real HTTPS page and authenticated sources can ope
 });
 
 test("source UI only offers anonymous tests for executable automatic public adapters", async () => {
-  const ui = await readFile("apps/web/src/components/ProviderSourceCenter.vue", "utf8");
+  const [page, directory] = await Promise.all(
+    ["ProviderSourceCenter.vue", "ProviderSourceDirectory.vue"].map((file) =>
+      readFile(`apps/web/src/components/${file}`, "utf8"),
+    ),
+  );
+  const ui = `${page}\n${directory}`;
   assert.match(ui, /item\.availability === 'automatic'[\s\S]*\['public_page', 'public_rss'\]/);
   assert.match(ui, /配置网页登录/);
 });

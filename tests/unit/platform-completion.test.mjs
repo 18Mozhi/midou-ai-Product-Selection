@@ -205,12 +205,17 @@ test("source catalog exposes the latest persisted successful task without invent
   assert.match(sql, /candidate\.status IN \('succeeded','succeeded_empty'\)/);
   assert.match(sql, /candidate\.finished_at DESC,candidate\.id DESC/);
 
-  const web = await readFile("apps/web/src/components/ProviderSourceCenter.vue", "utf8");
-  assert.match(web, /更新 SLA/);
-  assert.match(web, /沿用采集计划/);
-  assert.match(web, /最近成功任务/);
-  assert.match(web, /影响范围/);
-  assert.match(web, /待配置/);
+  const [web, directory] = await Promise.all(
+    ["ProviderSourceCenter.vue", "ProviderSourceDirectory.vue"].map((file) =>
+      readFile(`apps/web/src/components/${file}`, "utf8"),
+    ),
+  );
+  const sourceSurface = `${web}\n${directory}`;
+  assert.match(sourceSurface, /更新 SLA/);
+  assert.match(sourceSurface, /沿用采集计划/);
+  assert.match(sourceSurface, /最近成功任务/);
+  assert.match(sourceSurface, /影响范围/);
+  assert.match(sourceSurface, /待配置/);
 });
 
 test("platform navigation exposes complete management domains and role switching", async () => {
@@ -244,12 +249,13 @@ test("platform navigation exposes complete management domains and role switching
 });
 
 test("platform management and dashboard expose operational details instead of placeholder cards", async () => {
-  const [management, records, review, notifications] = await Promise.all(
+  const [management, records, review, notifications, statusCenter] = await Promise.all(
     [
       "PlatformManagementCenter.vue",
       "PlatformManagementRecordList.vue",
       "PlatformContentReviewDialog.vue",
       "PlatformNotificationCenter.vue",
+      "PlatformStatusCenterView.vue",
     ].map((file) =>
       readFile(new URL(`../../apps/web/src/components/${file}`, import.meta.url), "utf8"),
     ),
@@ -262,7 +268,7 @@ test("platform management and dashboard expose operational details instead of pl
   // Require the actual mounted owner, not a label found in an unrelated source file.
   assert.match(
     management,
-    /import PlatformContentReviewDialog from "\.\/PlatformContentReviewDialog\.vue"/,
+    /const PlatformContentReviewDialog = defineAsyncComponent\([\s\S]*import\("\.\/PlatformContentReviewDialog\.vue"\)/,
   );
   assert.match(
     management,
@@ -275,12 +281,13 @@ test("platform management and dashboard expose operational details instead of pl
   assert.match(review, /审核热点内容/);
   assert.match(
     management,
-    /import PlatformNotificationCenter from "\.\/PlatformNotificationCenter\.vue"/,
+    /const PlatformNotificationCenter = defineAsyncComponent\([\s\S]*import\("\.\/PlatformNotificationCenter\.vue"\)/,
   );
   assert.match(management, /<PlatformNotificationCenter\s+v-else-if="domain === 'notifications'"/);
   assert.match(notifications, /投递/);
   assert.match(records, /接收邮箱/);
-  assert.match(management, /采集任务状态/);
+  assert.match(management, /<PlatformStatusCenterView/);
+  assert.match(statusCenter, /采集任务状态/);
   assert.match(dashboard, /采集任务成功和失败趋势折线图/);
   assert.match(main, /button\[aria-label\],a\[aria-label\]/);
   assert.match(main, /element\.title = label/);

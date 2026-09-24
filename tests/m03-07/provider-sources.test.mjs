@@ -268,7 +268,8 @@ test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
       "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
       "utf8",
     ),
-    webSurface = `${web}\n${configurationDialog}`;
+    directory = await readFile("apps/web/src/components/ProviderSourceDirectory.vue", "utf8"),
+    webSurface = `${web}\n${directory}\n${configurationDialog}`;
   assert.match(up, /provider_source_replay_runs/);
   assert.match(down, /DROP TABLE IF EXISTS `provider_source_replay_runs`/);
   assert.match(automaticUp, /automatic_source_schedules[\s\S]*provider_refresh_operations/);
@@ -289,7 +290,7 @@ test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
     /loading[\s\S]*ready[\s\S]*empty[\s\S]*error[\s\S]*expired[\s\S]*forbidden[\s\S]*blocked/,
   );
   assert.match(web, /市场热点与消费者信号[\s\S]*商品与竞品观察[\s\S]*供应链找货/);
-  assert.match(web, /groupedSources[\s\S]*按业务用途分组的热点来源/);
+  assert.match(webSurface, /groupedSources[\s\S]*按业务用途分组的热点来源/);
   assert.match(webSurface, /烟测并启用/);
   assert.match(webSurface, /真实页面烟测/);
   assert.match(webSurface, /解析兼容矩阵/);
