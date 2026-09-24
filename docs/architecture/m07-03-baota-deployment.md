@@ -6,7 +6,7 @@ M07-03 当前部署目标为惠州 `192.168.1.220`、`midouai.medouai.com` 与 `
 
 部署脚本只认识上述六个固定目录、当前一次上传暂存与回滚目录，以及初始化时可迁移的受控 `shared`。脚本不再包含 `current`/`releases` 的迁移或删除分支；根目录存在其他条目时会在停止 Node 前失败关闭，由运维先确认归属并移出，不能由部署器猜测删除。固定目录开始切换后如任一步失败，部署器会恢复上一版 `frontend/backend/python`、`release.env` 与 Nginx 配置，并通过宝塔重新启动 Node；无论成功或失败都只清理当前 SHA 的 stage/upload，回滚本身失败时保留恢复目录并明确报错，禁止静默删除恢复材料。
 
-本地发布还要求 Git 忽略的 `.artifacts/release-change-ownership.json`。清单以一个已发布祖先 commit 为 `baseSha`、当前待发布提交为 `headSha`，并把区间内每个 commit 和每个变更路径精确归入一个带负责人的工作包。缺失、重复、区间外、跨工作包修改同一路径、基线非祖先或 HEAD 漂移均在读取 Windows 凭据和上传前失败关闭。示例结构位于 `verification/release-change-ownership.example.json`；清单是发布审批事实，不上传服务器、不写秘密。
+本地发布还要求 Git 忽略的 `.artifacts/release-change-ownership.json`。清单以一个已发布祖先 commit 为 `baseSha`、当前待发布提交为 `headSha`，并把区间内每个 commit 和每个 commit 实际触及的路径（包含区间内新增后删除或恢复的路径）精确归入一个带负责人的工作包。缺失、重复、区间外、跨工作包修改同一路径、基线非祖先或 HEAD 漂移均在读取 Windows 凭据和上传前失败关闭。示例结构位于 `verification/release-change-ownership.example.json`；清单是发布审批事实，不上传服务器、不写秘密。
 
 本模块不新增业务表、权限或业务事件，复用可回滚的 `deployment_releases` 保存发布身份、迁移版本、配置指纹、状态、批准人和 request_id/trace_id。生产数据库已按顺序应用 73 个既有 up 迁移。部署页面依据 `images-html/01_72_page_concepts/64_系统监控.jpg` 更新为实时 checking、healthy、blocked、rollback：healthy 同时要求 readiness 和脱敏版本身份，Worker/Crawler 明确由宝塔心跳监测，M07-04 恢复演练不得提前显示成功。
 

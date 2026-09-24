@@ -15,9 +15,31 @@ const git = (root, args, nullSeparated = false) => {
     : result.stdout.split(/\r?\n/).filter(Boolean);
 };
 
-const currentRangeManifest = (root) => {
+const currentRangeManifest = (root, releaseBase) => {
   const [headSha] = git(root, ["rev-parse", "HEAD"]);
-  const [baseSha] = git(root, ["rev-parse", "HEAD~2"]);
+  const [defaultBase] = git(root, ["rev-parse", "HEAD~2"]);
+  const baseSha = releaseBase ?? defaultBase;
+  const commits = git(root, ["rev-list", "--reverse", `${baseSha}..${headSha}`]);
+  const paths = [
+    ...new Set(
+      commits.flatMap((commit) =>
+        git(
+          root,
+          [
+            "diff-tree",
+            "--root",
+            "--no-commit-id",
+            "--name-only",
+            "-r",
+            "-z",
+            "--first-parent",
+            commit,
+          ],
+          true,
+        ),
+      ),
+    ),
+  ];
   return {
     schemaVersion: 1,
     releaseId: "unit-release-ownership",
@@ -27,8 +49,8 @@ const currentRangeManifest = (root) => {
       {
         id: "verified-batch",
         owner: "测试负责人",
-        commits: git(root, ["rev-list", "--reverse", `${baseSha}..${headSha}`]),
-        paths: git(root, ["diff", "--name-only", "-z", `${baseSha}..${headSha}`], true),
+        commits,
+        paths,
       },
     ],
   };
@@ -93,4 +115,21 @@ test("release ownership rejects unassigned paths, duplicate commits and head dri
       () => verifyReleaseChangeOwnership({ root, manifest: drifted }),
       /release_ownership_manifest_invalid|release_ownership_head_drift/,
     );
+  }));
+
+test("release ownership includes paths added and removed inside the release range", () =>
+  withReleaseRepository(async (root) => {
+    const [baseSha] = git(root, ["rev-parse", "HEAD"]);
+    await writeFile(join(root, "transient-review.png"), "temporary visual evidence\n", "utf8");
+    git(root, ["add", "transient-review.png"]);
+    git(root, ["commit", "-m", "add temporary review artifact"]);
+    await rm(join(root, "transient-review.png"));
+    git(root, ["add", "-u", "transient-review.png"]);
+    git(root, ["commit", "-m", "remove temporary review artifact"]);
+
+    const manifest = currentRangeManifest(root, baseSha);
+    assert.ok(manifest.workPackages[0].paths.includes("transient-review.png"));
+    const result = await verifyReleaseChangeOwnership({ root, manifest });
+    assert.equal(result.commits, 2);
+    assert.equal(result.paths, 1);
   }));

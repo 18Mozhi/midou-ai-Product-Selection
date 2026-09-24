@@ -41,6 +41,29 @@ function exactSet(actual, expected, missingCode, extraCode) {
   if (extra.length) throw new Error(`${extraCode}:${extra.join(",")}`);
 }
 
+function pathsForCommits(root, commits) {
+  return [
+    ...new Set(
+      commits.flatMap((commit) =>
+        git(
+          root,
+          [
+            "diff-tree",
+            "--root",
+            "--no-commit-id",
+            "--name-only",
+            "-r",
+            "-z",
+            "--first-parent",
+            commit,
+          ],
+          { nullSeparated: true },
+        ),
+      ),
+    ),
+  ];
+}
+
 export async function verifyReleaseChangeOwnership({ root, manifest }) {
   if (
     !manifest ||
@@ -70,11 +93,7 @@ export async function verifyReleaseChangeOwnership({ root, manifest }) {
     "--reverse",
     `${manifest.baseSha}..${head}`,
   ]);
-  const expectedPaths = git(
-    repositoryRoot,
-    ["diff", "--name-only", "-z", `${manifest.baseSha}..${head}`],
-    { nullSeparated: true },
-  );
+  const expectedPaths = pathsForCommits(repositoryRoot, expectedCommits);
   if (!expectedCommits.length || !expectedPaths.length)
     throw new Error("release_ownership_empty_release");
 
@@ -113,18 +132,11 @@ export async function verifyReleaseChangeOwnership({ root, manifest }) {
       assignedPaths.push(path);
       return path;
     });
-    const pathsFromCommits = new Set();
-    for (const commit of commits) {
-      for (const path of git(
-        repositoryRoot,
-        ["diff-tree", "--root", "--no-commit-id", "--name-only", "-r", "-z", commit],
-        { nullSeparated: true },
-      )) {
-        const existingOwner = pathOwner.get(path);
-        if (existingOwner && existingOwner !== item.id)
-          throw new Error(`release_path_cross_package_conflict:${path}`);
-        pathsFromCommits.add(path);
-      }
+    const pathsFromCommits = new Set(pathsForCommits(repositoryRoot, commits));
+    for (const path of pathsFromCommits) {
+      const existingOwner = pathOwner.get(path);
+      if (existingOwner && existingOwner !== item.id)
+        throw new Error(`release_path_cross_package_conflict:${path}`);
     }
     exactSet(
       paths,
