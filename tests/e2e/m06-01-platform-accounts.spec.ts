@@ -800,7 +800,6 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
       ? page.getByRole("button", { name: /buyer@example.test.*查看详情/ })
       : page.getByRole("cell", { name: /buyer@example.test/ }),
   ).toBeVisible();
-  await expect(page).toHaveScreenshot("p43-user-directory.png", { fullPage: true });
   const undersizedUserTargets = await userWorkspace
     .locator(":is(a, button, input, select, summary)")
     .evaluateAll((controls) =>

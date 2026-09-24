@@ -16,7 +16,7 @@
 ## 验证
 
 - `tests/e2e/m06-01-platform-accounts.spec.ts` 在桌面 Chromium 与 390px 手机运行完整 100 项，通过。新增结构断言覆盖蓝色汇总栏、当前导航、用户目录标题、可见按钮/链接/筛选控件至少 44px，以及桌面/手机无横向溢出。
-- 两张真实路由截图固定于 `tests/e2e/m06-01-platform-accounts.spec.ts-snapshots/p43-user-directory-{desktop-chromium,mobile-390}-win32.png`；只使用拦截的本地账号样例。
+- 桌面与 390px 手机真实路由渲染已人工核对；因该 E2E 使用拦截的本地账号样例，不保留 Mock 截图基线，避免被发布真实性门禁误计为真实服务端截图证据。
 - `npm run typecheck:web`、`npm run build:web`、`npm run verify:docs`、`npm run format:check`、`npm run verify:frontend-budget`（202 项资源）和 `npm run verify:static-analysis` 均通过。
 - 构建只验证静态包；回归未创建、修改或停用真实账号，不代表生产权限或真实数据验收。
 
