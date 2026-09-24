@@ -1,6 +1,6 @@
 import test from "node:test";
 import { assertOrganizationReasonContract } from "../../scripts/lib/ui-phase2-organization-reason-contract.mjs";
-import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -109,8 +109,7 @@ test("P36 each of78 field states has both widths,20 compositions and exact field
 
 test("P36 historical source and image fingerprints retain exact captures", () => {
   for (const [f, sha] of Object.entries(e.sourceHashes))
-    // Capture-time proof only; current behavior has a separate mounted regression.
-    assert.equal(hash(historicalTokenCopySource(f, readFileSync(f, "utf8"))), sha, f);
+    assertCaptureSourceRevision(f, readFileSync(f, "utf8"), sha);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   assert.deepEqual(

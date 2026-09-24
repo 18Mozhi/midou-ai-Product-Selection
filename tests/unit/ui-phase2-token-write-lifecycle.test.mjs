@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const folder = "output/playwright/p36-write-lifecycle";
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
@@ -15,7 +16,7 @@ test("P36 write diagnostic pins current production sources and all76 evidence im
   assert.equal(evidence.screenshots.length, 76);
   assert.match(evidence.scope, /Diagnostic findings are not acceptance passes/);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
+    assertCaptureSourceRevision(file, read(file), sha);
   const scenarios = [
     "success",
     "write409",

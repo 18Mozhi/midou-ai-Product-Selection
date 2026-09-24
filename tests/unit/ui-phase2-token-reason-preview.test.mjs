@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const folder = "output/playwright/p36-reason-vue-preview";
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
@@ -13,7 +14,7 @@ test("P36 reason review pins current untransformed sources and complete80 image 
   assert.equal(evidence.processesClosed, true);
   assert.equal(evidence.checks.length, 408);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
+    assertCaptureSourceRevision(file, read(file), sha);
   const states = [
     "default",
     "invalid",

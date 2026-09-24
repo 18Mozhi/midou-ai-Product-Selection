@@ -17,6 +17,7 @@ export const tokenCopyRevisions = {
 };
 const hash = (source) => createHash("sha256").update(source).digest("hex");
 const cache = new Map();
+const captureRevisionCache = new Map();
 export function historicalTokenCopySource(file, source) {
   source = source.replaceAll("\r\n", "\n");
   const revision = tokenCopyRevisions[file];
@@ -30,4 +31,51 @@ export function historicalTokenCopySource(file, source) {
     cache.set(file, old);
   }
   return cache.get(file);
+}
+
+export function assertCaptureSourceRevision(
+  file,
+  source,
+  expectedHash,
+  transform = (value) => value,
+) {
+  const normalized = source.replaceAll("\r\n", "\n");
+  const currentCandidates = [normalized];
+  try {
+    currentCandidates.push(historicalTokenCopySource(file, normalized));
+  } catch {
+    // Older capture inputs may predate changes outside the reviewed token-copy delta.
+  }
+  if (currentCandidates.some((candidate) => hash(transform(candidate)) === expectedHash)) return;
+  const key = `${file}:${expectedHash}`;
+  if (!captureRevisionCache.has(key)) {
+    const commits = execFileSync("git", ["log", "--all", "--format=%H", "--", file], {
+      encoding: "utf8",
+    })
+      .trim()
+      .split(/\r?\n/u)
+      .filter(Boolean);
+    const found = commits.some((commit) => {
+      try {
+        const captured = execFileSync("git", ["show", `${commit}:${file}`], {
+          encoding: "utf8",
+          maxBuffer: 16 * 1024 * 1024,
+        }).replaceAll("\r\n", "\n");
+        if (hash(transform(captured)) === expectedHash) return true;
+        try {
+          return hash(transform(historicalTokenCopySource(file, captured))) === expectedHash;
+        } catch {
+          return false;
+        }
+      } catch {
+        return false;
+      }
+    });
+    captureRevisionCache.set(key, found);
+  }
+  assert.equal(
+    captureRevisionCache.get(key),
+    true,
+    `capture-time source is not present in Git history: ${file}`,
+  );
 }

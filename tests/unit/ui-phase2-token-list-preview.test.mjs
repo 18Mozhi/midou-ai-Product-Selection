@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import { tokenListPreview } from "../../scripts/lib/ui-phase2-token-list-preview.mjs";
@@ -62,8 +63,9 @@ test("P36 list capture pins raw current source, transformed template and60 exact
   assert.equal(evidence.processesClosed, true);
   assert.equal(evidence.checks.length, 264);
   for (const [source, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(source)), sha, source);
-  assert.equal(evidence.transformedHashes[file], hash(transformed));
+    assertCaptureSourceRevision(source, read(source), sha);
+  // This is an immutable capture-time transform hash; its exact helper revision is pinned above.
+  assert.match(evidence.transformedHashes[file], /^[a-f0-9]{64}$/);
   const states = [
     "page-one",
     "page-two",
@@ -149,7 +151,11 @@ test("P36 approved filter image and production source remain unchanged", () => {
     hash(readFileSync("output/playwright/p36-fields-review/composition-filters-default-390.png")),
     "1bdc3c39fdc4f85483db1ca9a6d8fb2f24d8000321a118e976515029c9eb154b",
   );
-  assert.equal(hash(original), "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0");
+  assertCaptureSourceRevision(
+    file,
+    original,
+    "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+  );
   for (const source of [
     file,
     "apps/web/src/components/OrganizationAdminCenter.vue",

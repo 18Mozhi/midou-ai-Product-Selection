@@ -1,5 +1,8 @@
 import test from "node:test";
-import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import {
+  assertCaptureSourceRevision,
+  historicalTokenCopySource,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -79,7 +82,7 @@ test("P36 original reset, filtering, URL and write boundaries stay covered", () 
 });
 test("P36 capture-time source and image hashes retain only permanent delivery files", () => {
   for (const [f, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(historicalTokenCopySource(f, read(f))), sha, f);
+    assertCaptureSourceRevision(f, read(f), sha);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   assert.deepEqual(

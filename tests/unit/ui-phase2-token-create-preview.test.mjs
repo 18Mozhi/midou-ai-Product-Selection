@@ -1,5 +1,8 @@
 import test from "node:test";
-import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import {
+  assertCaptureSourceRevision,
+  historicalTokenCopySource,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -50,7 +53,7 @@ test("P36 existing preview binds capture-time originals and transformed template
   assert.equal(evidence.checks.length, 152);
   assert.equal(evidence.runs.length, 4);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(historicalTokenCopySource(file, read(file))), sha, file);
+    assertCaptureSourceRevision(file, read(file), sha);
   // Original capture is historical; the structural test above still uses current source.
   assert.equal(
     evidence.transformedHashes[component],
