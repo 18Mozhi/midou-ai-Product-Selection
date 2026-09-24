@@ -46,7 +46,13 @@ const provider = {
     roles: [],
     capabilities: [],
     platform_roles: ["platform_super_admin"],
-    platform_capabilities: ["platform:secure", "platform:superadmin", "key_rotation:manage"],
+    platform_capabilities: [
+      "platform:secure",
+      "platform:superadmin",
+      "platform:operate",
+      "platform_token:manage",
+      "key_rotation:manage",
+    ],
     guard_reason: "navigation_platform_admin_allowed",
   };
 async function nav(page: any, availableProviders = [provider]) {
@@ -81,13 +87,49 @@ async function nav(page: any, availableProviders = [provider]) {
   );
 }
 async function navigatePlatform(page: any, path: string) {
-  const link = page
-    .getByRole("navigation", { name: "平台管理后台导航", exact: true })
-    .locator(`a[href="${path}"]`);
+  const link = page.locator(`nav a[href="${path}"]`).first();
   await expect(link).toHaveCount(1);
   // Browser back/forward can leave a modal without a pointer click; invoke the real RouterLink.
   await link.evaluate((element: HTMLAnchorElement) => element.click());
   await expect(page).toHaveURL(new RegExp(`${path.replaceAll("/", "\\/")}$`));
+}
+const credentialCacheEvictionRoutes = [
+  "/platform-admin",
+  "/platform-admin/organizations",
+  "/platform-admin/users",
+  "/platform-admin/admins",
+  "/platform-admin/permissions",
+  "/platform-admin/providers",
+  "/platform-admin/providers/sources",
+  "/platform-admin/collection/overview",
+  "/platform-admin/data",
+  "/platform-admin/governance",
+  "/platform-admin/content",
+  "/platform-admin/notifications",
+  "/platform-admin/commercial",
+  "/platform-admin/security",
+  "/platform-admin/open-platform",
+];
+async function evictCredentialSurface(page: any) {
+  for (const path of credentialCacheEvictionRoutes) await navigatePlatform(page, path);
+}
+async function stubUnrelatedPlatformReads(page: any) {
+  await page.route("**/api/v1/**", async (route) => {
+    const path = new URL(route.request().url()).pathname;
+    if (
+      path === "/api/v1/me/navigation" ||
+      path.startsWith("/api/v1/platform/credential-") ||
+      path === "/api/v1/platform/crawler-profiles"
+    ) {
+      await route.fallback();
+      return;
+    }
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ data: [], request_id: "ui2-p50-cache-eviction" }),
+    });
+  });
 }
 async function stubEmptyPlatformDashboard(page: any) {
   await page.route("**/api/v1/platform/dashboard?**", (route: any) =>
@@ -1351,5 +1393,111 @@ test("UI2-SC50 detached login profile unknown rereads before any manual recovery
     assetWrites: 1,
     profileWrites: 1,
     assetReads: 2,
+  });
+});
+
+test("UI2-SC50 settles an in-flight login chain into a replacement evicted page", async ({
+  page,
+}) => {
+  await nav(page, [provider, secondProvider]);
+  await stubUnrelatedPlatformReads(page);
+  const savedAsset = {
+      ...asset,
+      id: "00000000-0000-4000-8000-000000000811",
+      name: "跨实例 Cookie 登录资料",
+      kind: "cookie_bundle",
+      version: 1,
+    },
+    savedProfile = {
+      ...profile,
+      id: "00000000-0000-4000-8000-000000000812",
+      credential_asset_id: savedAsset.id,
+      code: "browser_source_login_test",
+      name: "跨实例网页登录档案",
+      status: "active",
+    };
+  let releaseAssetWrite = () => {},
+    releaseProfileWrite = () => {},
+    assetWriteStarted = false,
+    profileWriteStarted = false,
+    assetWrites = 0,
+    profileWrites = 0,
+    assetReads = 0,
+    profileReads = 0,
+    providerReads = 0,
+    assets: (typeof asset)[] = [],
+    profiles: (typeof profile)[] = [];
+  const assetWriteGate = new Promise<void>((resolve) => {
+      releaseAssetWrite = resolve;
+    }),
+    profileWriteGate = new Promise<void>((resolve) => {
+      releaseProfileWrite = resolve;
+    });
+  await page.route("**/api/v1/platform/credential-provider-options", (route) => {
+    providerReads += 1;
+    return route.fulfill({ json: { data: [provider], request_id: "ui2-p50-cross-provider" } });
+  });
+  await page.route("**/api/v1/platform/credential-assets", async (route) => {
+    if (route.request().method() === "POST") {
+      assetWrites += 1;
+      assetWriteStarted = true;
+      await assetWriteGate;
+      assets = [savedAsset];
+      return route.fulfill({
+        status: 201,
+        json: { data: savedAsset, request_id: "ui2-p50-cross-asset" },
+      });
+    }
+    assetReads += 1;
+    return route.fulfill({
+      json: { data: assets, request_id: `ui2-p50-cross-assets-${assetReads}` },
+    });
+  });
+  await page.route("**/api/v1/platform/crawler-profiles", async (route) => {
+    if (route.request().method() === "POST") {
+      profileWrites += 1;
+      profileWriteStarted = true;
+      await profileWriteGate;
+      profiles = [savedProfile];
+      return route.fulfill({
+        status: 201,
+        json: { data: savedProfile, request_id: "ui2-p50-cross-profile" },
+      });
+    }
+    profileReads += 1;
+    return route.fulfill({
+      json: { data: profiles, request_id: `ui2-p50-cross-profiles-${profileReads}` },
+    });
+  });
+
+  await page.goto(`/platform-admin/credentials?provider_id=${provider.id}&mode=login`);
+  const dialog = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" });
+  await dialog.locator('input[type="file"]').setInputFiles({
+    name: "cross-instance.cookies",
+    mimeType: "text/plain",
+    buffer: Buffer.from('[{"name":"study","value":"synthetic","domain":"example.test"}]'),
+  });
+  await dialog.getByRole("button", { name: "加密保存并启用", exact: true }).click();
+  await expect.poll(() => assetWriteStarted).toBe(true);
+
+  await evictCredentialSurface(page);
+  releaseAssetWrite();
+  await expect.poll(() => profileWriteStarted).toBe(true);
+  await navigatePlatform(page, "/platform-admin/providers/sources");
+  await navigatePlatform(page, "/platform-admin/credentials");
+  await expect(page.getByRole("status")).toContainText("网页登录档案保存仍在等待服务器响应");
+  await expect(page.getByRole("button", { name: "新建凭证资产", exact: true })).toBeDisabled();
+
+  releaseProfileWrite();
+  await expect(page.getByRole("heading", { name: savedAsset.name, exact: true })).toBeVisible();
+  await expect(page.getByRole("status")).toContainText("网页登录档案保存已完成");
+  await expect(page.getByRole("status")).toContainText("当前凭证资料已重新读取");
+  await expect(page.getByRole("button", { name: "新建凭证资产", exact: true })).toBeEnabled();
+  expect({ assetWrites, profileWrites, assetReads, profileReads, providerReads }).toEqual({
+    assetWrites: 1,
+    profileWrites: 1,
+    assetReads: 3,
+    profileReads: 3,
+    providerReads: 3,
   });
 });

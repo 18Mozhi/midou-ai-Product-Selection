@@ -8,9 +8,18 @@ import {
   onMounted,
   reactive,
   ref,
+  watch,
 } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
+import {
+  beginCredentialWrite,
+  consumeCredentialWriteSettlement,
+  credentialWriteOperation,
+  finishCredentialWrite,
+  settleCredentialWrite,
+  type CredentialWriteSettlement,
+} from "../credential-write-coordinator";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
@@ -20,17 +29,9 @@ import "../credential-assets-c.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type EditorKind = "asset" | "rotate" | "profile" | "login";
 type LoginSaveStage = "idle" | "asset" | "profile" | "partial" | "unknown";
-type DetachedWriteOutcome = "success" | "unknown" | "failure" | "partial";
 interface WriteResult<T> {
   data: T | null;
   error: ApiClientError | null;
-  requestId: string;
-}
-interface DetachedWriteSettlement {
-  label: string;
-  outcome: DetachedWriteOutcome;
-  actionHint: string;
-  message: string;
   requestId: string;
 }
 interface Asset {
@@ -83,7 +84,6 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   refreshNotice = ref(""),
   refreshNoticeTone = ref<"info" | "success" | "danger">("success"),
   refreshNoticeRequestId = ref(""),
-  pendingWriteLabel = ref(""),
   editorPanel = ref<HTMLElement | null>(null),
   loginFileName = ref(""),
   loginPayload = ref(""),
@@ -118,7 +118,8 @@ let activeController: AbortController | null = null,
   revokeGeneration = 0,
   pageActive = true,
   resumeRead = false,
-  detachedWriteSettlement: DetachedWriteSettlement | null = null;
+  writeUiReady = false,
+  settlingWriteId: number | null = null;
 const {
   dialogElement: editorDialog,
   handleCancel: handleEditorCancel,
@@ -135,6 +136,7 @@ const failure = (s: number): State =>
         : [408, 425, 429, 502, 503, 504].includes(s)
           ? "blocked"
           : "error",
+  writeBusy = computed(() => saving.value || credentialWriteOperation.value !== null),
   browserAssets = computed(() =>
     assets.value.filter(
       (item) =>
@@ -149,13 +151,13 @@ const failure = (s: number): State =>
   ),
   loginControlsLocked = computed(
     () =>
-      saving.value ||
+      writeBusy.value ||
       loginMaterialBusy.value ||
       !["idle", "asset", "profile"].includes(loginSaveStage.value),
   ),
   pendingWriteNotice = computed(() =>
-    pendingWriteLabel.value && !editor.value && !revokeTarget.value
-      ? `${pendingWriteLabel.value}仍在等待服务器响应，暂时不能开始新的凭证修改。`
+    credentialWriteOperation.value?.label && !editor.value && !revokeTarget.value
+      ? `${credentialWriteOperation.value.label}仍在等待服务器响应，暂时不能开始新的凭证修改。`
       : "",
   ),
   compatibilityRows = computed(() =>
@@ -296,7 +298,7 @@ function finishCloseEditor() {
   loginSaveStage.value = "idle";
 }
 function closeEditor() {
-  if (saving.value) return;
+  if (writeBusy.value) return;
   finishCloseEditor();
 }
 function resetLoginMaterialContext() {
@@ -330,7 +332,7 @@ function trapEditorFocus(event: KeyboardEvent) {
   }
 }
 function openAsset() {
-  if (saving.value) return;
+  if (writeBusy.value) return;
   editorGeneration += 1;
   editor.value = "asset";
   selected.value = null;
@@ -346,7 +348,7 @@ function openAsset() {
   focusEditor();
 }
 function openRotate(asset: Asset) {
-  if (saving.value) return;
+  if (writeBusy.value) return;
   editorGeneration += 1;
   editor.value = "rotate";
   selected.value = asset;
@@ -359,7 +361,7 @@ function openRotate(asset: Asset) {
   focusEditor();
 }
 function openProfile() {
-  if (saving.value) return;
+  if (writeBusy.value) return;
   editorGeneration += 1;
   editor.value = "profile";
   selected.value = null;
@@ -378,7 +380,7 @@ function openProfile() {
   focusEditor();
 }
 function openLogin(provider?: Provider) {
-  if (saving.value) return;
+  if (writeBusy.value) return;
   editorGeneration += 1;
   invalidateLoginMaterial();
   loginProvider.value = provider ?? loginProviders.value[0] ?? null;
@@ -497,7 +499,7 @@ function browserBridge<T>(action: string, payload: Record<string, unknown>, sign
   });
 }
 async function acquireBrowserCookies() {
-  if (loginMaterialBusy.value || saving.value || loginSaveStage.value !== "idle") return;
+  if (loginMaterialBusy.value || writeBusy.value || loginSaveStage.value !== "idle") return;
   const provider = loginProvider.value;
   if (!provider?.target_url?.startsWith("http")) {
     message.value = "请先选择有真实网址的来源。";
@@ -570,15 +572,17 @@ async function writeOutcome<T = any>(
   }
 }
 function beginOwnedWrite(label: string) {
-  pendingWriteLabel.value = label;
+  const id = beginCredentialWrite(label);
+  if (id === null) return null;
   refreshNotice.value = "";
   refreshNoticeRequestId.value = "";
+  return id;
 }
 function detachedSettlement<T>(
   label: string,
   result: WriteResult<T>,
-  override: Partial<Pick<DetachedWriteSettlement, "outcome" | "message">> = {},
-): DetachedWriteSettlement {
+  override: Partial<Pick<CredentialWriteSettlement, "outcome" | "message">> = {},
+): CredentialWriteSettlement {
   return {
     label,
     outcome:
@@ -588,22 +592,18 @@ function detachedSettlement<T>(
     requestId: result.requestId,
   };
 }
-async function applyDetachedWriteSettlement(settlement: DetachedWriteSettlement) {
-  if (!pageActive) {
-    detachedWriteSettlement = settlement;
-    return;
-  }
+async function applyDetachedWriteSettlement(
+  settlement: CredentialWriteSettlement,
+): Promise<boolean> {
+  if (!pageActive) return false;
   if (settlement.outcome === "failure") {
     refreshNoticeTone.value = "danger";
     refreshNotice.value = settlement.actionHint || `${settlement.label}未完成，请重新打开后重试。`;
     refreshNoticeRequestId.value = settlement.requestId;
-    return;
+    return true;
   }
   const refreshed = await load();
-  if (!pageActive) {
-    detachedWriteSettlement = settlement;
-    return;
-  }
+  if (!pageActive) return false;
   refreshNoticeTone.value = settlement.outcome === "success" && refreshed ? "success" : "danger";
   refreshNotice.value = settlement.message
     ? refreshed
@@ -617,17 +617,39 @@ async function applyDetachedWriteSettlement(settlement: DetachedWriteSettlement)
         ? `${settlement.label}结果暂时无法确认，已重新读取当前资料；请核对后再操作。`
         : `${settlement.label}结果暂时无法确认，当前资料也未能刷新；请稍后点击“刷新数据”核对，避免重复提交。`;
   refreshNoticeRequestId.value = settlement.requestId;
+  return true;
 }
+async function reconcileCredentialWrite() {
+  const current = credentialWriteOperation.value;
+  if (!writeUiReady || !pageActive || !current?.settlement || settlingWriteId === current.id)
+    return;
+  settlingWriteId = current.id;
+  let consumed = false;
+  try {
+    consumed = await applyDetachedWriteSettlement(current.settlement);
+    if (consumed) consumeCredentialWriteSettlement(current.id);
+  } finally {
+    if (settlingWriteId === current.id) settlingWriteId = null;
+    if (
+      !consumed &&
+      pageActive &&
+      credentialWriteOperation.value?.id === current.id &&
+      credentialWriteOperation.value.settlement
+    )
+      queueMicrotask(() => void reconcileCredentialWrite());
+  }
+}
+watch(credentialWriteOperation, () => void reconcileCredentialWrite());
 async function settleDetachedWrite<T>(
+  operationId: number,
   label: string,
   result: WriteResult<T>,
-  override?: Partial<Pick<DetachedWriteSettlement, "outcome" | "message">>,
+  override?: Partial<Pick<CredentialWriteSettlement, "outcome" | "message">>,
 ) {
-  pendingWriteLabel.value = "";
-  await applyDetachedWriteSettlement(detachedSettlement(label, result, override));
+  settleCredentialWrite(operationId, detachedSettlement(label, result, override));
 }
 async function saveAsset() {
-  if (saving.value) return;
+  if (writeBusy.value) return;
   const submittedEditor = editor.value;
   if (submittedEditor !== "asset" && submittedEditor !== "rotate") return;
   const selectedId = selected.value?.id ?? "",
@@ -640,7 +662,8 @@ async function saveAsset() {
       editorGeneration === generation &&
       editor.value === submittedEditor &&
       (submittedEditor !== "rotate" || selected.value?.id === selectedId);
-  beginOwnedWrite(label);
+  const operationId = beginOwnedWrite(label);
+  if (operationId === null) return;
   const result =
     submittedEditor === "rotate" && selected.value
       ? await writeOutcome(
@@ -670,17 +693,17 @@ async function saveAsset() {
           isCurrent,
         );
   if (!isCurrent()) {
-    await settleDetachedWrite(label, result);
+    await settleDetachedWrite(operationId, label, result);
     return;
   }
-  pendingWriteLabel.value = "";
+  finishCredentialWrite(operationId);
   if (result.data) {
     finishCloseEditor();
     await load();
   }
 }
 async function saveProfile() {
-  if (saving.value) return;
+  if (writeBusy.value) return;
   const generation = editorGeneration,
     visit = pageVisit,
     label = "运行档案关联",
@@ -689,20 +712,21 @@ async function saveProfile() {
       pageVisit === visit &&
       editorGeneration === generation &&
       editor.value === "profile";
-  beginOwnedWrite(label);
+  const operationId = beginOwnedWrite(label);
+  if (operationId === null) return;
   const result = await writeOutcome<Profile>("/platform/crawler-profiles", profileForm, isCurrent);
   if (!isCurrent()) {
-    await settleDetachedWrite(label, result);
+    await settleDetachedWrite(operationId, label, result);
     return;
   }
-  pendingWriteLabel.value = "";
+  finishCredentialWrite(operationId);
   if (result.data) {
     finishCloseEditor();
     await load();
   }
 }
 async function saveLogin() {
-  if (saving.value) return;
+  if (writeBusy.value) return;
   const provider = loginProvider.value;
   if (!provider || !loginPayload.value) return;
   const generation = editorGeneration,
@@ -721,7 +745,8 @@ async function saveLogin() {
         .replace(/[^a-z0-9]+/g, "_")
         .replace(/^_|_$/g, "")
         .slice(0, 45) || "source";
-  beginOwnedWrite("网页登录档案保存");
+  const operationId = beginOwnedWrite("网页登录档案保存");
+  if (operationId === null) return;
   loginSaveStage.value = "asset";
   const assetResult = await writeOutcome<Asset>(
     "/platform/credential-assets",
@@ -740,6 +765,7 @@ async function saveLogin() {
   if (!assetResult.data) {
     if (!isCurrent()) {
       await settleDetachedWrite(
+        operationId,
         "凭证资产写入",
         assetResult,
         assetResult.error?.status === 0
@@ -752,7 +778,7 @@ async function saveLogin() {
       );
       return;
     }
-    pendingWriteLabel.value = "";
+    finishCredentialWrite(operationId);
     if (assetResult.error?.status === 0) {
       invalidateLoginMaterial();
       loginSaveStage.value = "unknown";
@@ -780,22 +806,23 @@ async function saveLogin() {
     isCurrent,
   );
   if (!isCurrent()) {
-    if (profileResult.data) await settleDetachedWrite("网页登录档案保存", profileResult);
+    if (profileResult.data)
+      await settleDetachedWrite(operationId, "网页登录档案保存", profileResult);
     else if (profileResult.error?.status === 0)
-      await settleDetachedWrite("运行档案写入", profileResult, {
+      await settleDetachedWrite(operationId, "运行档案写入", profileResult, {
         outcome: "unknown",
         message:
           "加密档案已保存，但运行档案写入结果暂时无法确认。请核对当前资料后再操作，避免重新导入或重复关联。",
       });
     else
-      await settleDetachedWrite("运行档案创建", profileResult, {
+      await settleDetachedWrite(operationId, "运行档案创建", profileResult, {
         outcome: "partial",
         message:
           "加密档案已保存，但运行档案未创建。请点击“关联运行档案”，选择刚保存的档案继续；无需重新导入。",
       });
     return;
   }
-  pendingWriteLabel.value = "";
+  finishCredentialWrite(operationId);
   if (!profileResult.data) {
     loginSaveStage.value = profileResult.error?.status === 0 ? "unknown" : "partial";
     message.value =
@@ -810,7 +837,7 @@ async function saveLogin() {
   message.value = `${provider.name} 网页登录档案已加密保存；该来源完成解析验收后，采集任务才会使用此档案。`;
 }
 async function revoke() {
-  if (saving.value) return;
+  if (writeBusy.value) return;
   const target = revokeTarget.value;
   if (!target) return;
   const generation = revokeGeneration,
@@ -821,7 +848,8 @@ async function revoke() {
       pageVisit === visit &&
       revokeGeneration === generation &&
       revokeTarget.value?.id === target.id;
-  beginOwnedWrite(label);
+  const operationId = beginOwnedWrite(label);
+  if (operationId === null) return;
   const result = await writeOutcome<Asset>(
     `/platform/credential-assets/${target.id}/revoke`,
     {
@@ -831,10 +859,10 @@ async function revoke() {
     isCurrent,
   );
   if (!isCurrent()) {
-    await settleDetachedWrite(label, result);
+    await settleDetachedWrite(operationId, label, result);
     return;
   }
-  pendingWriteLabel.value = "";
+  finishCredentialWrite(operationId);
   if (result.data) {
     revokeGeneration += 1;
     revokeTarget.value = null;
@@ -842,19 +870,28 @@ async function revoke() {
   }
 }
 function openRevoke(asset: Asset) {
-  if (saving.value) return;
+  if (writeBusy.value) return;
   revokeGeneration += 1;
   revokeTarget.value = asset;
   message.value = "";
 }
 function closeRevoke() {
-  if (saving.value) return;
+  if (writeBusy.value) return;
   revokeGeneration += 1;
   revokeTarget.value = null;
   message.value = "";
 }
 onMounted(async () => {
+  const existingWrite = credentialWriteOperation.value;
+  if (existingWrite?.settlement && existingWrite.settlement.outcome !== "failure") {
+    writeUiReady = true;
+    await reconcileCredentialWrite();
+    return;
+  }
   await load();
+  writeUiReady = true;
+  await reconcileCredentialWrite();
+  if (credentialWriteOperation.value) return;
   const params = new URLSearchParams(location.search);
   if (params.get("mode") === "login") {
     const providerId = params.get("provider_id"),
@@ -890,11 +927,9 @@ onDeactivated(suspendPage);
 onBeforeUnmount(suspendPage);
 onActivated(() => {
   pageActive = true;
-  if (detachedWriteSettlement) {
-    const settlement = detachedWriteSettlement;
-    detachedWriteSettlement = null;
+  if (credentialWriteOperation.value) {
     resumeRead = false;
-    void applyDetachedWriteSettlement(settlement);
+    void reconcileCredentialWrite();
     return;
   }
   if (!resumeRead) return;
@@ -915,7 +950,7 @@ onActivated(() => {
       <div class="credential-header-actions">
         <div class="credential-refresh-meta">
           <small>最近读取 {{ lastUpdatedLabel }}</small>
-          <button type="button" :disabled="refreshing || saving" @click="load">
+          <button type="button" :disabled="refreshing || writeBusy" @click="load">
             {{ refreshing ? "刷新中…" : "刷新数据" }}
           </button>
         </div>
@@ -925,9 +960,9 @@ onActivated(() => {
             href="/browser-helper/scoutops-browser-helper.zip"
             download="scoutops-browser-helper.zip"
             >下载浏览器助手</a
-          ><button type="button" :disabled="saving" @click="openLogin()">配置网页登录</button
-          ><button type="button" :disabled="saving" @click="openProfile">关联运行档案</button
-          ><button type="button" class="primary" :disabled="saving" @click="openAsset">
+          ><button type="button" :disabled="writeBusy" @click="openLogin()">配置网页登录</button
+          ><button type="button" :disabled="writeBusy" @click="openProfile">关联运行档案</button
+          ><button type="button" class="primary" :disabled="writeBusy" @click="openAsset">
             新建凭证资产
           </button>
         </div>
@@ -977,7 +1012,7 @@ onActivated(() => {
         <p>
           如果来源需要网页登录，点击“配置网页登录”并导入已登录的浏览器档案；普通接口密钥或账号资料也可以单独加密保存。
         </p>
-        <button type="button" :disabled="saving" @click="openAsset">创建第一个凭证</button>
+        <button type="button" :disabled="writeBusy" @click="openAsset">创建第一个凭证</button>
       </section>
       <div v-else class="credential-grid">
         <article v-for="asset in assets" :key="asset.id" :data-status="asset.status">
@@ -1028,14 +1063,14 @@ onActivated(() => {
           <footer>
             <button
               type="button"
-              :disabled="saving || asset.status === 'revoked'"
+              :disabled="writeBusy || asset.status === 'revoked'"
               @click="openRotate(asset)"
             >
               更新资料</button
             ><button
               type="button"
               class="danger"
-              :disabled="saving || asset.status === 'revoked'"
+              :disabled="writeBusy || asset.status === 'revoked'"
               @click="openRevoke(asset)"
             >
               撤销
@@ -1189,7 +1224,7 @@ onActivated(() => {
               type="button"
               aria-label="关闭凭证编辑"
               title="关闭凭证编辑"
-              :disabled="saving"
+              :disabled="writeBusy"
               @click="closeEditor"
             >
               ×
@@ -1239,10 +1274,10 @@ onActivated(() => {
             {{ message }} <code v-if="requestId">{{ requestId }}</code>
           </p>
           <footer>
-            <button type="button" class="secondary" :disabled="saving" @click="closeEditor">
+            <button type="button" class="secondary" :disabled="writeBusy" @click="closeEditor">
               取消
             </button>
-            <button type="submit" :disabled="saving || !assetForm.value">
+            <button type="submit" :disabled="writeBusy || !assetForm.value">
               {{ saving ? "加密写入中…" : editor === "rotate" ? "确认轮换" : "加密保存" }}
             </button>
           </footer>
@@ -1263,7 +1298,7 @@ onActivated(() => {
               type="button"
               aria-label="关闭浏览器档案编辑"
               title="关闭浏览器档案编辑"
-              :disabled="saving"
+              :disabled="writeBusy"
               @click="closeEditor"
             >
               ×
@@ -1305,17 +1340,19 @@ onActivated(() => {
             {{ message }} <code v-if="requestId">{{ requestId }}</code>
           </p>
           <footer>
-            <button type="button" class="secondary" :disabled="saving" @click="closeEditor">
+            <button type="button" class="secondary" :disabled="writeBusy" @click="closeEditor">
               取消
             </button>
-            <button type="submit" :disabled="saving || !browserAssets.length">保存档案引用</button>
+            <button type="submit" :disabled="writeBusy || !browserAssets.length">
+              保存档案引用
+            </button>
           </footer>
         </form>
         <form
           v-if="editor === 'login'"
           ref="editorPanel"
           class="credential-editor login-editor"
-          :aria-busy="saving || loginMaterialBusy"
+          :aria-busy="writeBusy || loginMaterialBusy"
           @keydown.tab="trapEditorFocus"
           @submit.prevent="saveLogin"
         >
@@ -1327,7 +1364,7 @@ onActivated(() => {
             <button
               type="button"
               aria-label="关闭网页登录档案导入"
-              :disabled="saving"
+              :disabled="writeBusy"
               @click="closeEditor()"
             >
               ×
@@ -1408,10 +1445,10 @@ onActivated(() => {
           </aside>
           <p v-if="message" role="status">{{ message }}</p>
           <footer>
-            <button type="button" :disabled="saving" @click="closeEditor()">取消</button
+            <button type="button" :disabled="writeBusy" @click="closeEditor()">取消</button
             ><button
               :disabled="
-                saving ||
+                writeBusy ||
                 loginMaterialBusy ||
                 loginSaveStage === 'partial' ||
                 loginSaveStage === 'unknown' ||
@@ -1438,7 +1475,7 @@ onActivated(() => {
       impact="只撤销当前平台资产；不会删除历史密文与审计。后续任务必须改用其他已授权凭证。"
       confirm-label="撤销资产"
       busy-label="正在撤销…"
-      :busy="saving"
+      :busy="writeBusy"
       :status-message="message"
       :status-request-id="requestId"
       destructive
