@@ -3839,3 +3839,7 @@ P08 `/select-context` 组织与工作区 C 方向已接入真实 `TenancyChooser
 ## 2026-09-24 · F04b P61 PlatformStatusCenterView 当前源码归属
 
 为`PlatformStatusCenterView.vue`五个此前未映射的RouterLink候选增加P61独立状态中心合同，登记固定拓扑/采集/来源入口及按父级href呈现的节点和传播核查入口，并绑定当前LF指纹。结合Feature Map中的M06-02 `/platform-admin/status` 路由、真实父级传参和既有P61实施记录，保持GET与分区选择归属不变。新增候选全集、位置/类型/哈希回归，全站静态未映射由58降至53；只新增合同、测试与进度，不改生产Vue、路由、权限或服务，不部署/重启。目标页真实性、真实RBAC与生产状态仍未验，G0未冻结。
+
+## 2026-09-24 · F04b P61 PlatformStatusWorkspace 本地切换源码归属
+
+为`PlatformStatusWorkspace.vue`一个此前未映射的本地分区按钮补充位置、类型、当前LF指纹及回归；其只切换active视图并更新`aria-pressed`/面板关联，不触发GET、URL或存储。作为P61合同的子组件条目，全站静态未映射由53降至52。只更新审计合同、测试和进度，不改产品组件或P61运行合同，不部署/重启；四分区完整键盘/读屏和生产验收仍未关闭，G0未冻结。

@@ -23,3 +23,19 @@
 | apps/web/src/components/PlatformStatusCenterView.vue | 6ce3255def9689fd88051da43680d5eb53b50699c4f229901871b267cacab9c7 |
 
 这五项登记视图中的导航源码身份，不等于去重后的五个独立业务动作，也不证明目标页的读取/权限、传播状态判断、真实生产观测或生产RBAC已验收。静态映射不改变父级GET、P61页面结构、M06-02路由能力和既有七个目标范围。
+
+## 3. P61 PlatformStatusWorkspace 本地分区切换源码归属
+
+`PlatformStatusCenterView`将四个既有slot交给本组件。本组件的分区按钮只更新本地`active`键，并同步`aria-pressed`与面板关联；切换不重新读取数据、不改URL、不写浏览器存储。
+
+### apps/web/src/components/PlatformStatusWorkspace.vue
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/PlatformStatusWorkspace.vue#b7ef2bc74a304a7a.1 | 46 | control | P61-WORKSPACE-CURRENT-SECTION / 按钮切换当前本地分区并暴露pressed与面板关联状态 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformStatusWorkspace.vue | 775769a187d18e8440f6e0ccef08a13b305620cf29747eb0aad35766059b01f8 |
+
+该候选是重复渲染的分区模板入口，不将每个分区实例当成独立业务动作，也不代替键盘/读屏的完整工作区验收。

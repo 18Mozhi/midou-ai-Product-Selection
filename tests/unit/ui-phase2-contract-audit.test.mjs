@@ -1987,6 +1987,43 @@ test("current P61 status view maps its five navigation candidates and current ha
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current P61 status workspace maps its local section switch without persistence claims", () => {
+  const file = "apps/web/src/components/PlatformStatusWorkspace.vue";
+  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    "\r\n",
+    "\n",
+  );
+  const document = "status-center-contract-review.md";
+  const report = runContractAudit();
+  const candidates = scanSource(source, file).candidates;
+  const currentRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.claim.includes("P61-WORKSPACE-CURRENT-") &&
+      record.currentLine !== null &&
+      record.temporalScope !== "historical",
+  );
+  assert.equal(candidates.length, 1);
+  assert.equal(currentRows.length, 1);
+  const record = currentRows[0];
+  const candidate = candidates[0];
+  assert.equal(record?.candidateId, candidate?.candidateId);
+  assert.equal(record?.status, "identity-current");
+  assert.equal(record?.sourceBinding, "hash-current");
+  assert.equal(record?.currentLine, candidate?.line);
+  assert.equal(record?.recordedLine, candidate?.line);
+  assert.equal(record?.recordedKind, candidate?.kind);
+  const hashes = report.sourceClaims.filter(
+    (claim) => claim.document.endsWith(document) && claim.file === file,
+  );
+  assert.equal(hashes.length, 1);
+  assert.equal(hashes[0]?.hash, digest(source));
+  assert.equal(hashes[0]?.status, "hash-current");
+  assert.equal(report.unreferenced.filter((item) => item.file === file).length, 0);
+  assert.equal(report.denominatorFrozen, false);
+});
+
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],
