@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import {
-  computed,
-  defineAsyncComponent,
-  onMounted,
-  onUnmounted,
-  ref,
-  watch,
-  type Component,
-} from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import { applyCachedTheme, applyShellDensity, themes } from "../design/theme";
@@ -30,88 +22,9 @@ import type { ShellNavigationItem } from "../route-catalog";
 import { useNavigationDiscovery } from "../use-navigation-discovery";
 import { useNavigationShellTheme } from "../use-navigation-shell-theme";
 import AppIcon from "./AppIcon.vue";
+import NavigationAccessPanel from "./NavigationAccessPanel.vue";
+import { DiscoveryOverlay, surfaceComponents } from "./navigation-surface-registry";
 import "../member-workspace-polish.css";
-
-const componentModules: Record<string, () => Promise<{ default: Component }>> = {
-  "./DiscoveryOverlay.vue": () => import("./DiscoveryOverlay.vue"),
-  "./HomeDashboard.vue": () => import("./HomeDashboard.vue"),
-  "./TaskWorkspace.vue": () => import("./TaskWorkspace.vue"),
-  "./ApprovalWorkspace.vue": () => import("./ApprovalWorkspace.vue"),
-  "./NotificationCenter.vue": () => import("./NotificationCenter.vue"),
-  "./AutomationRuleCenter.vue": () => import("./AutomationRuleCenter.vue"),
-  "./ReportCenter.vue": () => import("./ReportCenter.vue"),
-  "./PersonalCenter.vue": () => import("./PersonalCenter.vue"),
-  "./OrganizationAdminCenter.vue": () => import("./OrganizationAdminCenter.vue"),
-  "./PlatformDashboard.vue": () => import("./PlatformDashboard.vue"),
-  "./PlatformAccountCenter.vue": () => import("./PlatformAccountCenter.vue"),
-  "./PlatformManagementCenter.vue": () => import("./PlatformManagementCenter.vue"),
-  "./PlatformLogCenter.vue": () => import("./PlatformLogCenter.vue"),
-  "./PlatformGovernanceCenter.vue": () => import("./PlatformGovernanceCenter.vue"),
-  "./BackupRecoveryCenter.vue": () => import("./BackupRecoveryCenter.vue"),
-  "./ReleaseRolloutCenter.vue": () => import("./ReleaseRolloutCenter.vue"),
-  "./RuntimeTopologyCenter.vue": () => import("./RuntimeTopologyCenter.vue"),
-  "./RedisResilienceCenter.vue": () => import("./RedisResilienceCenter.vue"),
-  "./MySqlResilienceCenter.vue": () => import("./MySqlResilienceCenter.vue"),
-  "./FileResilienceCenter.vue": () => import("./FileResilienceCenter.vue"),
-  "./CrawlerSchedulerCenter.vue": () => import("./CrawlerSchedulerCenter.vue"),
-  "./CapacityBoundaryCenter.vue": () => import("./CapacityBoundaryCenter.vue"),
-  "./TrendDashboard.vue": () => import("./TrendDashboard.vue"),
-  "./ScoreRuleConsole.vue": () => import("./ScoreRuleConsole.vue"),
-  "./SelectionJourney.vue": () => import("./SelectionJourney.vue"),
-  "./OpportunityWorkspace.vue": () => import("./OpportunityWorkspace.vue"),
-  "./CompetitorMonitor.vue": () => import("./CompetitorMonitor.vue"),
-  "./SourcingWorkspace.vue": () => import("./SourcingWorkspace.vue"),
-  "./CostRuleConsole.vue": () => import("./CostRuleConsole.vue"),
-  "./ProviderRuntimeSurface.vue": () => import("./ProviderRuntimeSurface.vue"),
-  "./CollectionRuntimeSurface.vue": () => import("./CollectionRuntimeSurface.vue"),
-  "./PlatformDataCenter.vue": () => import("./PlatformDataCenter.vue"),
-  "./SecurityOperationsCenter.vue": () => import("./SecurityOperationsCenter.vue"),
-  "./OpenPlatformCenter.vue": () => import("./OpenPlatformCenter.vue"),
-  "./CommercialOperationsCenter.vue": () => import("./CommercialOperationsCenter.vue"),
-};
-const lazy = (name: string) => {
-  const loader = componentModules[`./${name}.vue`];
-  if (!loader) throw new Error(`missing lazy component: ${name}`);
-  return defineAsyncComponent(loader);
-};
-const DiscoveryOverlay = lazy("DiscoveryOverlay");
-
-const surfaceComponents: Record<string, Component> = {
-  "home-dashboard": lazy("HomeDashboard"),
-  "task-workspace": lazy("TaskWorkspace"),
-  "approval-workspace": lazy("ApprovalWorkspace"),
-  "notification-center": lazy("NotificationCenter"),
-  "automation-rule-center": lazy("AutomationRuleCenter"),
-  "report-center": lazy("ReportCenter"),
-  "personal-center": lazy("PersonalCenter"),
-  "organization-admin-center": lazy("OrganizationAdminCenter"),
-  "platform-dashboard": lazy("PlatformDashboard"),
-  "platform-account-center": lazy("PlatformAccountCenter"),
-  "platform-management-center": lazy("PlatformManagementCenter"),
-  "platform-log-center": lazy("PlatformLogCenter"),
-  "platform-governance-center": lazy("PlatformGovernanceCenter"),
-  "backup-recovery-center": lazy("BackupRecoveryCenter"),
-  "release-rollout-center": lazy("ReleaseRolloutCenter"),
-  "runtime-topology-center": lazy("RuntimeTopologyCenter"),
-  "redis-resilience-center": lazy("RedisResilienceCenter"),
-  "mysql-resilience-center": lazy("MySqlResilienceCenter"),
-  "file-resilience-center": lazy("FileResilienceCenter"),
-  "crawler-scheduler-center": lazy("CrawlerSchedulerCenter"),
-  "capacity-boundary-center": lazy("CapacityBoundaryCenter"),
-  "trend-dashboard": lazy("TrendDashboard"),
-  "score-rule-console": lazy("ScoreRuleConsole"),
-  "selection-journey": lazy("SelectionJourney"),
-  "opportunity-workspace": lazy("OpportunityWorkspace"),
-  "competitor-monitor": lazy("CompetitorMonitor"),
-  "sourcing-workspace": lazy("SourcingWorkspace"),
-  "cost-rule-console": lazy("CostRuleConsole"),
-  "provider-runtime-surface": lazy("ProviderRuntimeSurface"),
-  "collection-runtime-surface": lazy("CollectionRuntimeSurface"),
-  "platform-data-center": lazy("PlatformDataCenter"),
-  "security-operations-center": lazy("SecurityOperationsCenter"),
-  "open-platform-center": lazy("OpenPlatformCenter"),
-  "commercial-operations-center": lazy("CommercialOperationsCenter"),
-};
 
 type Shell = NavigationShellKind;
 type State =
@@ -640,25 +553,10 @@ onUnmounted(() => {
             :key="surfaceCacheKey"
             v-bind="selectedSurfaceProps"
           />
-          <section v-else class="role-gate-state" aria-live="polite">
-            <span class="role-state-mark" aria-hidden="true">?</span>
-            <p>页面不存在</p>
-            <h2>页面不存在</h2>
-            <p>该地址没有可用功能，请从顶部模块索引重新进入。</p>
-            <RouterLink :to="items[0]?.path || '/'">返回工作台</RouterLink>
-          </section>
+          <NavigationAccessPanel v-else state="missing" :home-path="items[0]?.path || '/'" />
         </KeepAlive>
       </template>
-      <section v-else class="role-gate-state" aria-live="polite">
-        <span class="role-state-mark" aria-hidden="true">×</span>
-        <p>路由权限</p>
-        <h1>无权打开此页面</h1>
-        <p>当前角色不包含该页面要求的能力，请返回有权访问的模块。</p>
-        <div class="role-gate-actions">
-          <RouterLink :to="items[0]?.path || '/home'">返回工作台</RouterLink>
-          <RouterLink to="/me?section=permissions">申请权限或联系管理员</RouterLink>
-        </div>
-      </section>
+      <NavigationAccessPanel v-else state="forbidden" :home-path="items[0]?.path || '/home'" />
     </section>
     <nav v-if="state === 'ready'" class="role-mobile-nav" aria-label="移动快捷导航">
       <RouterLink

@@ -1,0 +1,576 @@
+.provider-source-configuration-dialog .source-modal {
+  position: fixed;
+  z-index: 80;
+  inset: 0;
+  padding: 20px;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--so-bg) 80%, transparent);
+}
+.provider-source-configuration-dialog .source-modal form,
+.provider-source-configuration-dialog .configuration-version-panel {
+  width: min(520px, 100%);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  display: grid;
+  gap: 14px;
+  padding: 24px;
+  border: 1px solid var(--so-border);
+  border-radius: 18px;
+  background: var(--so-bg-elevated);
+  box-shadow: var(--so-shadow);
+}
+.provider-source-configuration-dialog .configuration-version-panel {
+  width: min(760px, 100%);
+}
+.provider-source-configuration-dialog .source-modal input,
+.provider-source-configuration-dialog .source-modal select,
+.provider-source-configuration-dialog .source-modal textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+.provider-source-configuration-dialog .source-modal header,
+.provider-source-configuration-dialog .source-modal footer,
+.provider-source-configuration-dialog .configuration-version-list > li > header,
+.provider-source-configuration-dialog .configuration-version-list > li > header > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.provider-source-configuration-dialog .source-modal h3,
+.provider-source-configuration-dialog .source-modal p {
+  margin: 0;
+}
+.provider-source-configuration-dialog .source-modal label,
+.provider-source-configuration-dialog .configuration-version-list > li > header > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.provider-source-configuration-dialog .source-modal header > button {
+  font-size: 22px;
+  color: var(--so-text);
+  background: transparent;
+}
+.provider-source-configuration-dialog .source-modal footer {
+  justify-content: flex-end;
+}
+.provider-source-configuration-dialog .source-modal footer button:first-child {
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+.provider-source-configuration-dialog .configuration-version-panel textarea {
+  min-height: 72px;
+}
+.provider-source-configuration-dialog .configuration-version-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.provider-source-configuration-dialog .configuration-version-list > li {
+  padding: 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel-soft);
+}
+.provider-source-configuration-dialog .configuration-version-list ul {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+}
+.provider-source-configuration-dialog .configuration-version-list ul li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.provider-source-configuration-dialog .source-state {
+  padding: 30px;
+  text-align: center;
+}
+.provider-source-configuration-dialog .source-smoke-notice {
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--so-warning) 42%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--so-warning) 10%, transparent);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.provider-source-configuration-dialog .source-schedule-preview {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel-soft);
+}
+.provider-source-configuration-dialog .source-schedule-preview h4,
+.provider-source-configuration-dialog .source-schedule-preview dl,
+.provider-source-configuration-dialog .source-schedule-preview dd {
+  margin: 0;
+}
+.provider-source-configuration-dialog .source-schedule-preview > p,
+.provider-source-configuration-dialog .source-schedule-preview dt {
+  color: var(--so-text-muted);
+}
+.provider-source-configuration-dialog .source-schedule-preview dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.provider-source-configuration-dialog .source-schedule-preview dl > div {
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--so-panel);
+}
+.provider-source-configuration-dialog .source-schedule-preview dd {
+  margin-top: 4px;
+}
+@media (max-width: 760px) {
+  .provider-source-configuration-dialog .source-schedule-preview dl {
+    grid-template-columns: 1fr;
+  }
+}
+
+.provider-source-configuration-dialog .source-modal.p48-source-configuration-modal,
+.provider-source-configuration-dialog .source-modal.p48-source-versions-modal {
+  padding: 24px;
+  background: rgb(15 23 42 / 72%);
+  backdrop-filter: blur(8px);
+}
+.provider-source-configuration-dialog .p48-source-configuration-form,
+.provider-source-configuration-dialog .p48-source-versions-panel {
+  width: min(820px, 100%);
+  max-height: calc(100dvh - 48px);
+  gap: 0;
+  padding: 0;
+  overflow: auto;
+  border: 1px solid #d3deec;
+  border-radius: 20px;
+  background: #f7f9fc;
+  color: #172033;
+  box-shadow: 0 28px 72px rgb(15 23 42 / 28%);
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > header,
+.provider-source-configuration-dialog .p48-source-versions-identity {
+  align-items: flex-start;
+  padding: 26px 30px;
+  color: #fff;
+  background: #164fae;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > header > div,
+.provider-source-configuration-dialog .p48-source-versions-identity > div {
+  display: grid;
+  gap: 8px;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > header p,
+.provider-source-configuration-dialog .p48-source-versions-identity p {
+  color: rgb(255 255 255 / 82%);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > header h3,
+.provider-source-configuration-dialog .p48-source-versions-identity h3 {
+  color: #fff;
+  font-size: clamp(23px, 3vw, 31px);
+  line-height: 1.2;
+  outline: none;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > header > button,
+.provider-source-configuration-dialog .p48-source-versions-identity > button {
+  flex: 0 0 44px;
+  width: 44px;
+  min-height: 44px;
+  border: 1px solid rgb(255 255 255 / 40%);
+  border-radius: 10px;
+  color: #fff;
+  background: rgb(255 255 255 / 10%);
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > header > button:disabled,
+.provider-source-configuration-dialog .p48-source-versions-identity > button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.provider-source-configuration-dialog .p48-source-configuration-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.provider-source-configuration-dialog .p48-source-configuration-meta span {
+  padding: 6px 10px;
+  border: 1px solid rgb(255 255 255 / 32%);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 12px;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > label,
+.provider-source-configuration-dialog .p48-source-configuration-form > .source-schedule-preview,
+.provider-source-configuration-dialog .p48-source-configuration-form > .source-smoke-notice,
+.provider-source-configuration-dialog .p48-source-configuration-form > .p48-source-dialog-feedback,
+.provider-source-configuration-dialog .p48-source-versions-panel > .p48-source-dialog-feedback {
+  padding: 18px 30px;
+  border: 0;
+  border-bottom: 1px solid #dce4ef;
+  border-radius: 0;
+  background: #fff;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > .p48-source-dialog-feedback,
+.provider-source-configuration-dialog .p48-source-versions-panel > .p48-source-dialog-feedback {
+  display: grid;
+  gap: 6px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  border-left: 4px solid #1769e0;
+  color: #344d6a;
+  background: #eaf3ff;
+}
+.provider-source-configuration-dialog .p48-source-dialog-feedback p {
+  margin: 0;
+  line-height: 1.55;
+}
+.provider-source-configuration-dialog .p48-source-dialog-feedback summary {
+  min-height: 44px;
+  line-height: 44px;
+}
+.provider-source-configuration-dialog .p48-source-dialog-feedback code {
+  overflow-wrap: anywhere;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > label {
+  display: grid;
+  gap: 8px;
+  color: #243247;
+  font-size: 14px;
+  font-weight: 650;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form input,
+.provider-source-configuration-dialog .p48-source-configuration-form select,
+.provider-source-configuration-dialog .p48-source-configuration-form textarea,
+.provider-source-configuration-dialog .p48-source-versions-panel textarea {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #aebdd0;
+  border-radius: 9px;
+  background: #fff;
+  color: #172033;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form small,
+.provider-source-configuration-dialog .p48-source-versions-panel small {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 450;
+  line-height: 1.5;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form textarea,
+.provider-source-configuration-dialog .p48-source-versions-panel textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form :focus-visible,
+.provider-source-configuration-dialog .p48-source-versions-panel :focus-visible {
+  outline: 3px solid #66a3ff;
+  outline-offset: 3px;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form .source-smoke-notice {
+  border-left: 5px solid #d97706;
+  color: #6b4a1c;
+  background: #fff8e8;
+  line-height: 1.6;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form .source-schedule-preview {
+  border-bottom: 1px solid #dce4ef;
+  background: #edf4ff;
+}
+.provider-source-configuration-dialog
+  .p48-source-configuration-form
+  .source-schedule-preview
+  dl
+  > div {
+  border: 1px solid #d6e2f1;
+  background: #fff;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > footer,
+.provider-source-configuration-dialog .p48-source-versions-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  justify-content: space-between;
+  padding: 14px 30px;
+  border-top: 1px solid #d3deec;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 -10px 22px rgb(15 23 42 / 6%);
+  backdrop-filter: blur(10px);
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > footer p,
+.provider-source-configuration-dialog .p48-source-versions-actions p {
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > footer > div {
+  display: flex;
+  gap: 10px;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > footer button,
+.provider-source-configuration-dialog .p48-source-versions-actions button,
+.provider-source-configuration-dialog .configuration-version-list button {
+  min-height: 44px;
+  padding: 9px 15px;
+  border-radius: 9px;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > footer button:first-child,
+.provider-source-configuration-dialog .p48-source-versions-actions button {
+  border: 1px solid #aebdd0;
+  color: #243247;
+  background: #fff;
+}
+.provider-source-configuration-dialog .p48-source-versions-panel {
+  width: min(920px, 100%);
+}
+.provider-source-configuration-dialog .p48-source-versions-panel > header > div {
+  min-width: 0;
+}
+.provider-source-configuration-dialog .p48-source-versions-panel > p {
+  padding: 14px 30px;
+  color: #53657d;
+  background: #eaf3ff;
+  line-height: 1.55;
+}
+.provider-source-configuration-dialog .p48-source-versions-panel > label {
+  display: grid;
+  gap: 8px;
+  padding: 16px 30px;
+  border-bottom: 1px solid #dce4ef;
+  background: #fff;
+  font-weight: 650;
+}
+.provider-source-configuration-dialog .p48-source-versions-panel > .source-state,
+.provider-source-configuration-dialog .p48-source-versions-panel > p:last-of-type {
+  margin: 0;
+  padding: 28px 30px;
+}
+.provider-source-configuration-dialog
+  .p48-source-versions-panel
+  > .p48-source-version-action-feedback {
+  display: grid;
+  gap: 7px;
+  padding: 14px 30px;
+  border-bottom: 1px solid #dce4ef;
+  border-left: 4px solid #294caf;
+  background: #f6f9ff;
+}
+.provider-source-configuration-dialog .p48-source-version-action-feedback[data-stage="success"] {
+  border-left-color: #3b7d63;
+  background: #f8fcfa;
+}
+.provider-source-configuration-dialog .p48-source-version-action-feedback[data-stage="sync_failed"],
+.provider-source-configuration-dialog .p48-source-version-action-feedback[data-stage="read_failed"],
+.provider-source-configuration-dialog .p48-source-version-action-feedback[data-stage="conflict"],
+.provider-source-configuration-dialog .p48-source-version-action-feedback[data-stage="forbidden"],
+.provider-source-configuration-dialog .p48-source-version-action-feedback[data-stage="failed"] {
+  border-left-color: #a97016;
+  background: #fffdf8;
+}
+.provider-source-configuration-dialog .p48-source-version-action-feedback > :is(p, h4) {
+  margin: 0;
+}
+.provider-source-configuration-dialog .p48-source-version-action-feedback > p {
+  color: #52657e;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.provider-source-configuration-dialog .p48-source-version-action-feedback > button {
+  min-height: 44px;
+  justify-self: start;
+  padding: 8px 12px;
+  border: 1px solid #294caf;
+  border-radius: 5px;
+  color: #fff;
+  background: #294caf;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+}
+.provider-source-configuration-dialog .p48-source-version-action-feedback > button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.provider-source-configuration-dialog .p48-source-version-action-feedback details summary {
+  min-height: 44px;
+  line-height: 44px;
+}
+.provider-source-configuration-dialog .p48-source-version-action-feedback code {
+  overflow-wrap: anywhere;
+}
+.provider-source-configuration-dialog .configuration-version-list {
+  gap: 0;
+  padding: 0 30px;
+  background: #fff;
+}
+.provider-source-configuration-dialog .configuration-version-list > li {
+  display: grid;
+  gap: 10px;
+  padding: 16px 0;
+  border: 0;
+  border-bottom: 1px solid #dce4ef;
+  border-radius: 0;
+  background: transparent;
+}
+.provider-source-configuration-dialog .configuration-version-list > li > header > div {
+  gap: 5px;
+}
+.provider-source-configuration-dialog .configuration-version-list > li > header strong {
+  color: #172033;
+  font-size: 16px;
+}
+.provider-source-configuration-dialog .configuration-version-list > li > header span,
+.provider-source-configuration-dialog .configuration-version-list > li > p {
+  color: #64748b;
+  font-size: 13px;
+}
+.provider-source-configuration-dialog .configuration-version-list ul {
+  gap: 0;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.provider-source-configuration-dialog .configuration-version-list ul li {
+  align-items: baseline;
+  padding: 8px 0;
+  border-top: 1px solid #edf1f6;
+  font-size: 13px;
+}
+.provider-source-configuration-dialog .configuration-version-list code {
+  overflow-wrap: anywhere;
+  color: #334155;
+}
+.provider-source-configuration-dialog .p48-source-versions-actions {
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 760px) {
+  .provider-source-configuration-dialog .source-modal.p48-source-configuration-modal,
+  .provider-source-configuration-dialog .source-modal.p48-source-versions-modal {
+    align-items: stretch;
+    padding: 0;
+  }
+  .provider-source-configuration-dialog .p48-source-configuration-form,
+  .provider-source-configuration-dialog .p48-source-versions-panel {
+    width: 100%;
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+  .provider-source-configuration-dialog .p48-source-configuration-form > header,
+  .provider-source-configuration-dialog .p48-source-versions-identity,
+  .provider-source-configuration-dialog .p48-source-configuration-form > label,
+  .provider-source-configuration-dialog .p48-source-configuration-form > .source-schedule-preview,
+  .provider-source-configuration-dialog .p48-source-configuration-form > .source-smoke-notice,
+  .provider-source-configuration-dialog
+    .p48-source-configuration-form
+    > .p48-source-configuration-save-feedback,
+  .provider-source-configuration-dialog .p48-source-versions-panel > p,
+  .provider-source-configuration-dialog
+    .p48-source-versions-panel
+    > .p48-source-version-action-feedback,
+  .provider-source-configuration-dialog .p48-source-versions-panel > label {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+  .provider-source-configuration-dialog .p48-source-configuration-form > header h3,
+  .provider-source-configuration-dialog .p48-source-versions-identity h3 {
+    font-size: 25px;
+  }
+  .provider-source-configuration-dialog .p48-source-configuration-form .source-schedule-preview dl {
+    grid-template-columns: 1fr;
+  }
+  .provider-source-configuration-dialog .p48-source-configuration-form > footer,
+  .provider-source-configuration-dialog .p48-source-versions-actions {
+    display: grid;
+    gap: 8px;
+    padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
+  }
+  .provider-source-configuration-dialog .p48-source-configuration-form > footer > div {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr;
+  }
+  .provider-source-configuration-dialog .p48-source-configuration-form > footer p,
+  .provider-source-configuration-dialog .p48-source-versions-actions p {
+    margin: 0;
+  }
+  .provider-source-configuration-dialog .configuration-version-list {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+  .provider-source-configuration-dialog .configuration-version-list > li > header {
+    align-items: flex-start;
+  }
+  .provider-source-configuration-dialog .configuration-version-list ul li {
+    display: grid;
+    gap: 4px;
+  }
+}
+@media (forced-colors: active) {
+  .provider-source-configuration-dialog .p48-source-configuration-form,
+  .provider-source-configuration-dialog .p48-source-versions-panel,
+  .provider-source-configuration-dialog .p48-source-configuration-form > header,
+  .provider-source-configuration-dialog .p48-source-versions-identity {
+    border: 1px solid CanvasText;
+  }
+}
+
+.provider-source-configuration-dialog
+  .p48-source-configuration-form
+  > .p48-source-configuration-save-feedback {
+  display: grid;
+  gap: 6px;
+  padding: 14px 30px;
+  border: 0;
+  border-bottom: 1px solid #dce4ef;
+  border-left: 4px solid #294caf;
+  background: #f6f9ff;
+}
+.provider-source-configuration-dialog
+  .p48-source-configuration-form
+  > .p48-source-configuration-save-feedback[data-stage="success"] {
+  border-left-color: #3b7d63;
+  background: #f8fcfa;
+}
+.provider-source-configuration-dialog
+  .p48-source-configuration-form
+  > .p48-source-configuration-save-feedback[data-stage="partial"],
+.provider-source-configuration-dialog
+  .p48-source-configuration-form
+  > .p48-source-configuration-save-feedback[data-stage="failed"],
+.provider-source-configuration-dialog
+  .p48-source-configuration-form
+  > .p48-source-configuration-save-feedback[data-stage="conflict"] {
+  border-left-color: #a97016;
+  background: #fffdf8;
+}
+.provider-source-configuration-dialog .p48-source-configuration-save-feedback > :is(p, h4) {
+  margin: 0;
+}
+.provider-source-configuration-dialog .p48-source-configuration-save-feedback > p {
+  color: #52657e;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.provider-source-configuration-dialog .p48-source-configuration-form > footer > p {
+  flex: 1 1 100%;
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.provider-source-configuration-dialog
+  .p48-source-configuration-form
+  :is(input, select, textarea):disabled {
+  color: #64748b;
+  background: #eef2f7;
+  cursor: wait;
+}

@@ -22,11 +22,16 @@ export function useProviderSourceDialogFocus(
     }
 
     const modal = dialog.value;
-    const parent = modal?.parentElement;
-    if (!modal || !parent) return;
+    const boundary = modal?.closest<HTMLElement>(".source-center") ?? modal?.parentElement;
+    if (!modal || !boundary) return;
 
-    for (const child of Array.from(parent.children)) {
-      if (!(child instanceof HTMLElement) || child === modal) continue;
+    let modalSurface: HTMLElement = modal;
+    while (modalSurface.parentElement && modalSurface.parentElement !== boundary) {
+      modalSurface = modalSurface.parentElement;
+    }
+
+    for (const child of Array.from(boundary.children)) {
+      if (!(child instanceof HTMLElement) || child === modalSurface) continue;
       inertedBackground.set(child, child.hasAttribute("inert"));
       child.setAttribute("inert", "");
     }

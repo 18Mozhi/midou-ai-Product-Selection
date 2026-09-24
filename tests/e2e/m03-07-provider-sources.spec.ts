@@ -177,6 +177,7 @@ test("enabled Amazon and 1688 sources are shown as automatic instead of stale ca
   page,
 }) => {
   await nav(page, "platform_admin");
+  await catalog(page);
   const enabledProductSources = [
     {
       ...manual[0],

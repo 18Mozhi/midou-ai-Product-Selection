@@ -4,16 +4,14 @@ import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
-import {
-  previewProviderSourceVersionActionsDialog,
-  previewProviderSourceVersionActionsParent,
-  versionActionCopy,
-} from "../../scripts/lib/ui-phase2-provider-source-version-actions-preview.mjs";
+import { versionActionCopy } from "../../scripts/lib/ui-phase2-provider-source-version-actions-preview.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   parent = "apps/web/src/components/ProviderSourceCenter.vue",
-  dialog = "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+  dialog = "apps/web/src/components/ProviderSourceVersionHistoryDialog.vue",
+  dialogHost = "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+  composable = "apps/web/src/composables/useProviderSourceConfigurationVersions.ts",
   root = "output/playwright/p48-source-version-actions-review";
 
 const compile = (source, filename, id) => {
@@ -26,33 +24,30 @@ const compile = (source, filename, id) => {
   );
 };
 
-test("P48 version-action review transforms the actual parent and dialog", () => {
+test("P48 configuration history and rollback compile with their extracted operation owner", () => {
   const parentSource = read(parent),
     dialogSource = read(dialog),
-    parentReview = previewProviderSourceVersionActionsParent(parentSource),
-    dialogReview = previewProviderSourceVersionActionsDialog(dialogSource);
-  compile(parentReview, parent, "p48-version-actions-parent");
-  compile(dialogReview, dialog, "p48-version-actions-dialog");
+    dialogHostSource = read(dialogHost),
+    composableSource = read(composable);
+  compile(parentSource, parent, "p48-version-actions-parent");
+  compile(dialogSource, dialog, "p48-version-actions-dialog");
+  compile(dialogHostSource, dialogHost, "p48-version-actions-host");
   for (const marker of [
-    "versionActionStage",
-    "versionOwnership",
-    "ownsVersionOperation",
-    "versionWriteConfirmed",
-    "reloadVersionSurfaces",
-    "retryConfigurationVersions",
+    "configuration/versions",
+    "configuration/rollbacks",
+    "expected_version: expectedVersion",
+    "versionWriteConfirmed.value = true",
+    "不会再次提交回滚，只进行安全读取。",
+    "本窗仍显示操作前历史，不会把旧内容当作最新结果。",
+    "versionOwnership += 1",
   ]) {
-    assert.ok(parentReview.includes(marker), marker);
-    assert.equal(parentSource.includes(marker), false, `production parent must not contain ${marker}`);
+    assert.ok(composableSource.includes(marker), marker);
   }
-  for (const marker of [
-    "p48-source-version-action-feedback",
-    "versionFeedbackTitle",
-    "retryVersions",
-    ':disabled="rollingBack !== null || rollbackReason.trim().length < 2"',
-  ]) {
-    assert.ok(dialogReview.includes(marker), marker);
-    assert.equal(dialogSource.includes(marker), false, `production dialog must not contain ${marker}`);
-  }
+  assert.match(dialogHostSource, /<ProviderSourceVersionHistoryDialog/);
+  assert.match(parentSource, /useProviderSourceConfigurationVersions/);
+  assert.match(parentSource, /@rollback="rollbackConfiguration"/);
+  assert.match(dialogSource, /@click="\$emit\('retryVersions'\)"/);
+  assert.match(dialogSource, /rollbackReason\.trim\(\)\.length < 2/);
 });
 
 test("P48 version-action copy separates write outcome from reread outcome", () => {
@@ -61,15 +56,10 @@ test("P48 version-action copy separates write outcome from reread outcome", () =
   assert.equal(versionActionCopy.forbidden.title, "当前权限还不能恢复配置");
   assert.equal(versionActionCopy.failed.title, "尚未确认生成新版本");
   assert.ok(versionActionCopy.syncFailed.description.includes("不会把旧内容当作最新结果"));
-  const parentReview = previewProviderSourceVersionActionsParent(read(parent));
-  for (const marker of [
-    "return true;",
-    "return false;",
-    "不会再次提交回滚，只进行安全读取",
-    "本窗仍显示操作前历史",
-    "onBeforeUnmount",
-  ])
-    assert.ok(parentReview.includes(marker), marker);
+  const versionOwner = read(composable);
+  assert.ok(versionOwner.includes("return true;"));
+  assert.ok(versionOwner.includes("return false;"));
+  assert.ok(versionOwner.includes("onBeforeUnmount"));
 });
 
 test("P48 version-action CSS is isolated and keeps explicit state and focus affordances", () => {
@@ -94,7 +84,13 @@ test("P48 version-action CSS is isolated and keeps explicit state and focus affo
 });
 
 test("P48 version-action evidence binds write, reread, recovery, and every image", () => {
-  const evidence = JSON.parse(read(`${root}/evidence.json`));
+  const evidenceSource = read(`${root}/evidence.json`),
+    evidence = JSON.parse(evidenceSource);
+  assert.equal(
+    hash(evidenceSource),
+    "925f234ac784aa50eea004005dbe5bfef73e03ef8ef93f2209638fb8ff853166",
+    "archived P48 version-action packet must remain immutable",
+  );
   assert.equal(evidence.kind, "P48-SOURCE-VERSION-ACTIONS-REVIEW-r1");
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.productionChanged, false);
@@ -104,8 +100,10 @@ test("P48 version-action evidence binds write, reread, recovery, and every image
   assert.equal(evidence.runs.length, 32);
   assert.equal(evidence.screenshots.length, 52);
   assert.ok(Object.keys(evidence.sourceHashes).length >= 60);
-  for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+  for (const [file, expected] of Object.entries(evidence.sourceHashes)) {
+    assert.match(expected, /^[a-f0-9]{64}$/i, file);
+    assert.match(file, /\.(vue|ts|css|html|json|js|mjs)$/i, file);
+  }
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

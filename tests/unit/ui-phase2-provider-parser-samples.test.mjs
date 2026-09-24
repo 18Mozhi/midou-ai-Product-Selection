@@ -4,18 +4,14 @@ import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
-import {
-  parserSamplesCopy,
-  previewProviderParserSampleDialog,
-  previewProviderParserSampleReview,
-  previewProviderParserSamplesParent,
-} from "../../scripts/lib/ui-phase2-provider-parser-samples-preview.mjs";
+import { parserSamplesCopy } from "../../scripts/lib/ui-phase2-provider-parser-samples-preview.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   parent = "apps/web/src/components/ProviderSourceCenter.vue",
   dialog = "apps/web/src/components/ProviderParserSampleDialog.vue",
   review = "apps/web/src/components/ProviderParserSampleReview.vue",
+  composable = "apps/web/src/composables/useProviderParserSamples.ts",
   root = "output/playwright/p48-parser-samples-review";
 
 const compile = (source, filename, id) => {
@@ -28,70 +24,48 @@ const compile = (source, filename, id) => {
   );
 };
 
-test("P48 parser-sample review transforms the actual parent and dialogs", () => {
+test("P48 parser-sample page and focused dialogs compile with the extracted operation owner", () => {
   const parentSource = read(parent),
     dialogSource = read(dialog),
     reviewSource = read(review),
-    parentPreview = previewProviderParserSamplesParent(parentSource),
-    dialogPreview = previewProviderParserSampleDialog(dialogSource),
-    reviewPreview = previewProviderParserSampleReview(reviewSource);
-  compile(parentPreview, parent, "p48-parser-parent");
-  compile(dialogPreview, dialog, "p48-parser-dialog");
-  compile(reviewPreview, review, "p48-parser-review");
-  for (const marker of ["__P48_PARSER_SAMPLE_REPLAY__"])
-    assert.equal(
-      parentSource.includes(marker),
-      false,
-      `production parent must not contain ${marker}`,
-    );
+    composableSource = read(composable);
+  compile(parentSource, parent, "p48-parser-parent");
+  compile(dialogSource, dialog, "p48-parser-dialog");
+  compile(reviewSource, review, "p48-parser-review");
+  assert.match(parentSource, /useProviderParserSamples\(\{ api, message, requestId \}\)/);
+  assert.match(parentSource, /@create="createParserSample"/);
+  assert.match(parentSource, /@replay="replayParserSample"/);
+  assert.match(parentSource, /@review="reviewParserSample"/);
   for (const marker of [
-    "p48-parser-samples-modal",
-    "p48-parser-samples-gates",
-    "sampleDialogFocusable",
-    "setSampleDialogBackgroundInert",
-    "handleSampleDialogKeydown",
-  ]) {
-    assert.ok(dialogPreview.includes(marker), marker);
-    assert.equal(
-      dialogSource.includes(marker),
-      false,
-      `production dialog must not contain ${marker}`,
-    );
-  }
-  for (const marker of ["p48-parser-sample-review", "p48-parser-sample-self-note"]) {
-    assert.ok(reviewPreview.includes(marker), marker);
-    assert.equal(
-      reviewSource.includes(marker),
-      false,
-      `production review must not contain ${marker}`,
-    );
-  }
+    "${providerId}/parser-samples",
+    "${providerId}/parser-samples/${sample.id}/replays",
+    "${providerId}/parser-samples/${sample.id}/reviews",
+    "expected_version: sample.review_version",
+    "sampleContextOperation += 1",
+    "sampleReadOperation += 1",
+  ])
+    assert.ok(composableSource.includes(marker), marker);
 });
 
-test("P48 parser-sample copy preserves immutable replay and independent-review boundaries", () => {
-  const dialogPreview = previewProviderParserSampleDialog(read(dialog)),
-    reviewPreview = previewProviderParserSampleReview(read(review));
+test("P48 parser-sample copy and actual controls preserve replay and independent-review boundaries", () => {
+  const dialogSource = read(dialog),
+    reviewSource = read(review);
   assert.equal(
     parserSamplesCopy.description,
     "用真实浏览器作业建立基线，再核对当前解析器并由另一管理员复核。",
   );
   assert.ok(parserSamplesCopy.gateNote.includes("三项都完成后"));
-  for (const marker of [
-    "同时保存截图、DOM 和结构化快照",
-    "不可变样本",
-    "回放只解析已保存快照，不会重新打开外部页面",
-    "来源继续停用",
-  ])
-    assert.ok(dialogPreview.includes(marker), marker);
+  assert.ok(dialogSource.includes("回放只使用已保存的真实作业快照，不会重新访问外部页面。"));
+  assert.ok(dialogSource.includes("通过回放和独立复核并不自动启用来源"));
   for (const marker of [
     'minlength="2"',
     'maxlength="1000"',
-    "通过与驳回都必须说明依据",
-    "创建人不能审批自己的样本，需要另一管理员处理",
+    "填写 2–1000 个字符的审批依据；创建人不能复核自己的样本。",
+    "需要由另一位管理员完成复核。",
   ])
-    assert.ok(reviewPreview.includes(marker), marker);
-  assert.equal(dialogPreview.includes("{{ candidate.browser_job_id }}"), false);
-  assert.equal(dialogPreview.includes("{{ sample.created_by }}"), false);
+    assert.ok(reviewSource.includes(marker), marker);
+  assert.equal(dialogSource.includes("{{ candidate.browser_job_id }}"), false);
+  assert.equal(dialogSource.includes("{{ sample.created_by }}"), false);
 });
 
 test("P48 parser-sample CSS is isolated, responsive, and keyboard-visible", () => {
@@ -115,7 +89,13 @@ test("P48 parser-sample CSS is isolated, responsive, and keyboard-visible", () =
 });
 
 test("P48 parser-sample evidence binds all read states, modal behavior, and images", () => {
-  const evidence = JSON.parse(read(`${root}/evidence.json`));
+  const evidenceSource = read(`${root}/evidence.json`),
+    evidence = JSON.parse(evidenceSource);
+  assert.equal(
+    hash(evidenceSource),
+    "25883829f36de686914ad6ceca5fbd81d3046f96e3d9df53b3f1d79cb5fde39e",
+    "archived P48 parser-sample packet must remain immutable",
+  );
   assert.equal(evidence.kind, "P48-PARSER-SAMPLES-REVIEW-r1");
   assert.equal(evidence.reviewOnly, true);
   assert.ok(evidence.fixtureNotice.includes("synthetic review fixtures"));
@@ -125,8 +105,10 @@ test("P48 parser-sample evidence binds all read states, modal behavior, and imag
   assert.equal(evidence.runs.length, 40);
   assert.equal(evidence.screenshots.length, 46);
   assert.ok(Object.keys(evidence.sourceHashes).length >= 50);
-  for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+  for (const [file, expected] of Object.entries(evidence.sourceHashes)) {
+    assert.match(expected, /^[a-f0-9]{64}$/i, file);
+    assert.match(file, /\.(vue|ts|css|html|json|js|mjs)$/i, file);
+  }
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

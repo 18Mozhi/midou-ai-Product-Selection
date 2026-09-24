@@ -13,7 +13,12 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
     [`${components}/PlatformUserRecords.vue`, 180],
     [`${components}/PlatformAdminRecords.vue`, 240],
     [`${components}/ProviderSourceCenter.vue`, 1_000],
+    ["apps/web/src/composables/useProviderParserSamples.ts", 320],
+    ["apps/web/src/composables/useProviderSourceConfigurationVersions.ts", 380],
+    ["apps/web/src/composables/useProviderSourceDirectory.ts", 260],
     [`${components}/ProviderSourceConfigurationDialog.vue`, 400],
+    [`${components}/ProviderSourceEditDialog.vue`, 280],
+    [`${components}/ProviderSourceVersionHistoryDialog.vue`, 220],
     [`${components}/ProviderParserSampleDialog.vue`, 240],
     [`${components}/ProviderParserSampleReview.vue`, 100],
     [`${components}/OpportunityWorkspace.vue`, 1_000],
@@ -27,6 +32,8 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
     [`${components}/SourcingWorkspace.vue`, 700],
     [`${components}/SourcingComparisonPanel.vue`, 120],
     [`${components}/NavigationShell.vue`, 700],
+    [`${components}/NavigationAccessPanel.vue`, 120],
+    [`${components}/navigation-surface-registry.ts`, 130],
     [`${components}/HomeAutomationOverview.vue`, 140],
     ["apps/web/src/navigation-shell-permissions.ts", 80],
     ["apps/web/src/use-navigation-shell-theme.ts", 100],
@@ -58,10 +65,10 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
     readFile(`${components}/SourcingWorkspace.vue`, "utf8"),
     readFile(`${components}/OrganizationAdminCenter.vue`, "utf8"),
   ]);
-  assert.match(accounts, /import PlatformAccountDirectoryWorkspace/);
+  assert.match(accounts, /const PlatformAccountDirectoryWorkspace = defineAsyncComponent/);
   assert.match(accounts, /loadAccounts/);
   assert.match(accountDirectory, /defineModel<string>\("query"/);
-  assert.match(accountDirectory, /emit\("open-user"/);
+  assert.match(accountDirectory, /\(event: "open-user"/);
   assert.doesNotMatch(accountDirectory, /createApiClient|fetch\(/);
   assert.match(accountDirectory, /import PlatformAccountGlobalRail/);
   assert.match(accountDirectory, /<PlatformAccountGlobalRail/);
@@ -73,18 +80,39 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
   assert.match(accountDirectory, /<PlatformOrganizationRecords/);
   assert.match(accountDirectory, /import PlatformUserRecords/);
   assert.match(accountDirectory, /<PlatformUserRecords/);
-  assert.match(sources, /import ProviderParserSampleDialog/);
+  assert.match(sources, /const ProviderParserSampleDialog = defineAsyncComponent/);
   assert.match(sources, /<ProviderParserSampleDialog/);
+  assert.match(sources, /useProviderParserSamples\(\{ api, message, requestId \}\)/);
+  assert.match(sources, /useProviderSourceConfigurationVersions/);
+  assert.match(sources, /useProviderSourceDirectory/);
+  const [parserSamples, sourceVersions, sourceDirectory] = await Promise.all([
+    readFile("apps/web/src/composables/useProviderParserSamples.ts", "utf8"),
+    readFile("apps/web/src/composables/useProviderSourceConfigurationVersions.ts", "utf8"),
+    readFile("apps/web/src/composables/useProviderSourceDirectory.ts", "utf8"),
+  ]);
+  assert.match(parserSamples, /parser-samples\/\$\{sample\.id\}\/replays/);
+  assert.match(parserSamples, /parser-samples\/\$\{sample\.id\}\/reviews/);
+  assert.match(sourceVersions, /configuration\/rollbacks/);
+  assert.match(sourceDirectory, /router\.replace\(\{ query: next \}\)/);
   const parserDialog = await readFile(`${components}/ProviderParserSampleDialog.vue`, "utf8");
   assert.match(parserDialog, /import ProviderParserSampleReview/);
   assert.match(parserDialog, /<ProviderParserSampleReview/);
-  assert.match(sources, /import ProviderSourceConfigurationDialog/);
+  assert.match(sources, /const ProviderSourceConfigurationDialog = defineAsyncComponent/);
   assert.match(sources, /<ProviderSourceConfigurationDialog/);
-  assert.match(opportunities, /import OpportunityWorkspaceDialogs/);
+  const configurationDialog = await readFile(
+    `${components}/ProviderSourceConfigurationDialog.vue`,
+    "utf8",
+  );
+  assert.match(configurationDialog, /import ProviderSourceEditDialog/);
+  assert.match(configurationDialog, /<ProviderSourceEditDialog/);
+  assert.match(configurationDialog, /import ProviderSourceVersionHistoryDialog/);
+  assert.match(configurationDialog, /<ProviderSourceVersionHistoryDialog/);
+  assert.doesNotMatch(configurationDialog, /useProviderSourceDialogFocus|createApiClient|fetch\(/);
+  assert.match(opportunities, /const OpportunityWorkspaceDialogs = defineAsyncComponent/);
   assert.match(opportunities, /<OpportunityWorkspaceDialogs/);
-  assert.match(opportunities, /import OpportunityDecisionPanel/);
+  assert.match(opportunities, /const OpportunityDecisionPanel = defineAsyncComponent/);
   assert.match(opportunities, /<OpportunityDecisionPanel/);
-  assert.match(opportunities, /import OpportunityLineagePanel/);
+  assert.match(opportunities, /const OpportunityLineagePanel = defineAsyncComponent/);
   assert.match(opportunities, /<OpportunityLineagePanel/);
   assert.match(trends, /import TrendFilterPanel/);
   assert.match(trends, /<TrendFilterPanel/);
@@ -94,10 +122,18 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
   assert.match(sourcing, /<SourcingComparisonPanel/);
   assert.match(sourcing, /import SourcingWorkspaceDialogs/);
   assert.match(sourcing, /<SourcingWorkspaceDialogs/);
-  assert.match(organization, /import OrganizationMemberPanel/);
+  assert.match(organization, /const OrganizationMemberPanel = defineAsyncComponent/);
   assert.match(organization, /<OrganizationMemberPanel/);
-  assert.match(organization, /import OrganizationRolePanel/);
+  assert.match(organization, /const OrganizationRolePanel = defineAsyncComponent/);
   assert.match(organization, /<OrganizationRolePanel/);
-  assert.match(organization, /import OrganizationApprovalPanel/);
+  assert.match(organization, /const OrganizationApprovalPanel = defineAsyncComponent/);
   assert.match(organization, /<OrganizationApprovalPanel/);
+  const navigationShell = await readFile(`${components}/NavigationShell.vue`, "utf8");
+  const surfaceRegistry = await readFile(`${components}/navigation-surface-registry.ts`, "utf8");
+  assert.match(navigationShell, /import NavigationAccessPanel/);
+  assert.match(navigationShell, /state="missing"/);
+  assert.match(navigationShell, /state="forbidden"/);
+  assert.match(navigationShell, /import \{ DiscoveryOverlay, surfaceComponents \}/);
+  assert.match(surfaceRegistry, /export const surfaceComponents/);
+  assert.match(surfaceRegistry, /"provider-runtime-surface"/);
 });

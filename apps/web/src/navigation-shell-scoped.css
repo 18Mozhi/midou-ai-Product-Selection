@@ -446,67 +446,6 @@
   box-shadow: inset 0 -4px var(--so-primary);
 }
 
-.role-gate-state {
-  min-height: calc(100vh - 210px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-}
-
-.role-state-mark {
-  width: 74px;
-  height: 74px;
-  display: grid;
-  place-items: center;
-  border: 2px solid var(--so-text);
-  color: var(--so-primary);
-  font: 700 32px var(--so-font-display);
-}
-
-.role-gate-state > p:first-of-type {
-  margin: 20px 0 6px;
-  color: var(--so-primary);
-  font: 700 13px var(--so-font-mono);
-  letter-spacing: 0.12em;
-}
-
-.role-gate-state h1,
-.role-gate-state h2 {
-  margin: 0;
-  font-family: var(--so-font-display);
-  font-size: clamp(30px, 4vw, 50px);
-}
-
-.role-gate-state > p:last-of-type,
-.role-gate-state > small {
-  max-width: 560px;
-  color: var(--so-text-muted);
-}
-
-.role-gate-state > a,
-.role-gate-state > button,
-.role-gate-actions a {
-  min-height: 44px;
-  margin-top: 18px;
-  padding: 0 16px;
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid var(--so-text);
-  color: var(--so-on-primary);
-  background: var(--so-primary);
-  text-decoration: none;
-  font-weight: 800;
-}
-
-.role-gate-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-}
-
 .role-mobile-nav {
   display: none;
 }
