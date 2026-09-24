@@ -3835,3 +3835,7 @@ P08 `/select-context` 组织与工作区 C 方向已接入真实 `TenancyChooser
 ## 2026-09-24 · F04b P63 ApiCoverageOperationCard 当前源码归属
 
 为 `ApiCoverageOperationCard.vue` 两个原生details/summary候选登记五维证据和技术追踪的当前位置、类型及LF指纹；父级Dashboard逐记录传入`operation`，本卡只展示数据，不执行请求。同步纠正旧合同将P63证据卡称为无交互候选的描述，明确其不是详情dialog。新增两项全集/行号/类型/当前哈希回归，全站静态未映射由60降至58；只修改合同、永久测试与进度，不改API覆盖目录、探测、权限、产品代码或配置，不部署/重启。真实报告、角色权限和辅助技术验收仍待，G0未冻结。
+
+## 2026-09-24 · F04b P61 PlatformStatusCenterView 当前源码归属
+
+为`PlatformStatusCenterView.vue`五个此前未映射的RouterLink候选增加P61独立状态中心合同，登记固定拓扑/采集/来源入口及按父级href呈现的节点和传播核查入口，并绑定当前LF指纹。结合Feature Map中的M06-02 `/platform-admin/status` 路由、真实父级传参和既有P61实施记录，保持GET与分区选择归属不变。新增候选全集、位置/类型/哈希回归，全站静态未映射由58降至53；只新增合同、测试与进度，不改生产Vue、路由、权限或服务，不部署/重启。目标页真实性、真实RBAC与生产状态仍未验，G0未冻结。
