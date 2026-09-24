@@ -50,7 +50,7 @@ P56/P57 API检查platform:operate，P63检查platform:superadmin；目录角色�
 | P57编辑 | 原生dialog新建/编辑×三受众，渠道字段、保存/关闭/Escape | 10个本地表单绑定；来源选择200/500上限、邮件禁用、错误关联和忙状态待全验 |
 | P57发布/取消 | AuditedReasonDialog共享定义、两个有效动态标题；邮件retry/suppress为关闭入口历史分支 | 取消原因窗零POST，提交后异步归属/防重待验；不得将所有脚本调用当独立窗口定义 |
 | P57全文 | 原生details/summary，每个消息独立开关、三状态可读 | Enter开、Space关、原文不截断、焦点保留、零写入；正常摘要不默认展开 |
-| P63证据 | 当前无局部交互候选；五维证据span的title及CSS卡片 | title不等于可键盘/触屏访问的详情，正式稿必须补可达阅读；此处没有详情dialog |
+| P63证据 | `ApiCoverageOperationCard`中五维证据与技术追踪各自使用原生details/summary，summary名称含method/path | 两个原生披露入口不是详情dialog；内容来自父级传入的operation，本表只确认静态身份，不替代全状态/读屏验收 |
 
 ## 4. 已复现、本批变化及剩余验收
 
@@ -384,3 +384,20 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | apps/web/src/components/PlatformNotificationActionDialog.vue | 98d6bfab3dae6b9b091371a241d9096420c4f8e84f1c2b4da969ae9f8c3f9eb6 |
 
 本映射只确认候选位置与组件事件边界，不证明真实RBAC、请求幂等/审计、受众解析、站内投递、生产发送或全状态读屏验收；邮件Provider及现有通知偏好合同不变。
+
+## 9. P63 ApiCoverageOperationCard 当前源码归属（2026-09-24）
+
+`ApiCoverageDashboard`循环渲染本组件并传入单条`operation`；本组件只展示该记录的摘要及两个可独立展开的原生披露区，不发起网络请求或业务动作。
+
+### apps/web/src/components/ApiCoverageOperationCard.vue
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/ApiCoverageOperationCard.vue#0555e1f79d8d4038.1 | 71 | control | P63-OP-CURRENT-EVIDENCE / 展开当前method/path对应的五维证据结果 |
+| apps/web/src/components/ApiCoverageOperationCard.vue#57d520c8f4d3aa77.1 | 85 | control | P63-OP-CURRENT-TRACE / 展开当前method/path对应的请求与追踪编号 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/ApiCoverageOperationCard.vue | 1bbda614ea0bf0aa4f59ebaf69275cead59c8ee6b876de2e18b008278015d11a |
+
+这两项是原生`details/summary`控件，不是业务详情弹窗或操作按钮。源码归属和可见名称不证明证据的真实性、实际探测覆盖或辅助技术全验；原P63关于生产报告、角色和接口证据的限制保持有效。
