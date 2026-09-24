@@ -444,3 +444,16 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/PlatformManagementCenter.vue | 33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00 |
+
+## 13. PlatformNotificationFacts 当前目录链接（2026-09-24）
+
+事实区的两个RouterLink分别进入个人中心 `/me` 与平台治理总览 `/platform-admin/governance`。链接属于已有导航入口；静态绑定不保证目标页自动打开某个通知偏好分区、也不证明目标页内数据或权限验收。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/PlatformNotificationFacts.vue#9c897f6109cc18aa.1 | 83 | control | PN57-FACTS-CURRENT-PREFERENCES / 导航至已有个人中心 `/me` 查看通知偏好 |
+| apps/web/src/components/PlatformNotificationFacts.vue#b57765191bc5cdc3.1 | 97 | control | PN57-FACTS-CURRENT-GOVERNANCE / 导航至已有平台规则总览 `/platform-admin/governance` |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformNotificationFacts.vue | 35db0f9393a0d21154ddd3a0b3d6da4077fe1c47d3408c878cdd1d53ff7ebd6e |
