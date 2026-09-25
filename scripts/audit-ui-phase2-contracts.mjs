@@ -126,7 +126,9 @@ const history = {
   "account-home-contract-review.md": {
     historicalSections: ["2. 51 个局部控件候选（历史源码快照）"],
   },
-  "collection-runtime-contract-review.md": { historicalSections: ["7. 来源指纹"] },
+  "collection-runtime-contract-review.md": {
+    historicalSections: ["7. 来源指纹", "9.1 P51详情状态与关闭旧身份归档"],
+  },
   "content-notification-evidence-contract-review.md": {
     historicalSections: [
       "apps/web/src/components/PlatformMessageWorkbench.vue",

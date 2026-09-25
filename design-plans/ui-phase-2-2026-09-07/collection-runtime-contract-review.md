@@ -50,7 +50,6 @@
 | S:404044c1ac23071f.1 | control / 20 | CL-NAV / 浏览器运行 |
 | T:d1849db8e18799fd.1 | control / 488 | CL51-LOAD / 保留快照刷新 |
 | T:a0dc06b99ac90370.1 | control / 491 | CL51-LINK / 浏览器运行 |
-| T:2f2f0f3ceae01eac.1 | event-binding / 494 | CL51-LOAD / 状态面primary |
 | T:4ec44b3c83794aca.1 | control / 503 | CL51-LOAD / 错误重读 |
 | T:7e6436ac5e8e9b15.1 | event-binding / 539 | CL51-FILTER / changeStatus |
 | T:dfaa056b9550313b.1 | control / 616 | CL51-DETAIL / 桌面查看push task |
@@ -58,9 +57,6 @@
 | T:1c008f867673db60.1 | control / 671 | CL51-TECH / 移动技术详情 |
 | T:680ca05fdeabfdbf.1 | control / 698 | CL51-PAGE / 前页 |
 | T:cda5e997a43d64c9.1 | control / 702 | CL51-PAGE / 后页 |
-| T:b6414d02a0f96150.1 | event-binding / 711 | CL51-DETAIL / 遮罩mousedown.self关闭 |
-| T:472cf13bb7c4d799.1 | dialog-definition / 712 | CL51-DETAIL / loading、error、loaded容器 |
-| T:86cb88a88c044c05.1 | event-binding / 712 | CL51-DETAIL / detailKeydown Tab/Escape |
 | T:33bc529b8390aa3d.1 | control / 731 | CL51-DETAIL / 失败后读取当前task |
 | T:e2f1f3476ece93e2.1 | control / 732 | CL51-DETAIL / 失败关闭 |
 | T:30e32a01e61d8558.1 | control / 744 | CL51-DETAIL / 已加载关闭 |
@@ -200,6 +196,17 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | apps/web/src/components/CollectionTaskCenter.vue#d3da42ac8f789e3b.1 | 839 | event-binding | CL51-CURRENT-DETAIL-KEYBOARD / 将详情keydown转发给既有Escape与Tab边界处理 |
 
 本节仅补候选定位，不将列表/详情读取、人工重放的API合同、RBAC、真实任务事实、键盘实机或生产部署验收重新声明为通过；原5个失效签名仍保持identity-not-found。
+
+### 9.1 P51详情状态与关闭旧身份归档
+
+以下四个早期签名由第9节现行状态面、详情遮罩、dialog语义与键盘候选替代；仍无替代映射的“失败关闭”旧候选保留在第2节，不作推定。历史身份不计当前覆盖，替代映射仅证明源码位置。
+
+| 旧candidateId | 原始语义 | 当前替代身份 |
+| --- | --- | --- |
+| apps/web/src/components/CollectionTaskCenter.vue#2f2f0f3ceae01eac.1 | CL51-LOAD 状态面primary | #3a210e63ca5a7831.1 CL51-CURRENT-STATE-PRIMARY |
+| apps/web/src/components/CollectionTaskCenter.vue#b6414d02a0f96150.1 | CL51-DETAIL 遮罩mousedown.self关闭 | #6b55734308f206c3.1 CL51-CURRENT-DETAIL-DISMISS |
+| apps/web/src/components/CollectionTaskCenter.vue#472cf13bb7c4d799.1 | CL51-DETAIL loading/error/loaded容器 | #ed8b70dc2e6170f2.1 CL51-CURRENT-DETAIL-SEMANTICS |
+| apps/web/src/components/CollectionTaskCenter.vue#86cb88a88c044c05.1 | CL51-DETAIL detailKeydown Tab/Escape | #d3da42ac8f789e3b.1 CL51-CURRENT-DETAIL-KEYBOARD |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | config/route-catalog.json | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
 | apps/web/src/route-catalog.ts | 6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956 |
