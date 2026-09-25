@@ -3,10 +3,10 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1701；旧登记1477；新身份611，旧表独有身份387。签名变化不等于增删业务能力。
-- 已具体语义对应52页/1166源位置/1049组；其中路由动作835组，转发/容器关联110组，其余明确排除。其余21页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应53页/1205源位置/1070组；其中路由动作856组，转发/容器关联110组，其余明确排除。其余20页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记52页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记53页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -63,7 +63,7 @@
 | [P47 采集程序](page-specs/P47.md) | 78 | [23组](action-reviews/P47.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P48 热点来源](page-specs/P48.md) | 78 | [25组](action-reviews/P48.json) | 150个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P49 1688 启用检查](page-specs/P49.md) | 78 | [11组](action-reviews/P49.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P50 凭证与档案](page-specs/P50.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P50 凭证与档案](page-specs/P50.md) | 78 | [21组](action-reviews/P50.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P51 采集任务](page-specs/P51.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P52 采集总览](page-specs/P52.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P53 网页登录采集](page-specs/P53.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -4079,6 +4079,53 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 仅登记现有检查读取、范围读取、人工验收排队、既有登录/固定样本导航和本地披露；不增加直接启用、任务轮询、停止任务或自动重试POST。
 - 用户视觉自动通过与源码语义映射分开记录；动作审批、真实角色授权、MySQL、队列终态、真实1688登录采集和正式M07-03签收仍未通过。
 - 本映射只覆盖P49的检查宿主、执行表单和下一步/技术详情组件；共享导航壳、响应式详情、发现浮层与其他来源目录消费者沿用各自页面合同。
+
+## P50 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P50.json)：39个局部源位置 → 21组；7类写入，21组路由动作，0组转发/容器关联不重复计动作。已映射0/14个源码字段位置，0/4处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有126个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| SC50-LOAD 读取或刷新凭证与运行档案元数据 / read | 2处；current-route-source-contract | ；其余见JSON | 静态映射不证明真实平台角色、服务端数据完整性、加密存储或生产超时表现。 |
+| SC50-ASSET-OPEN 打开凭证资产创建表单 / local | 2处；current-route-source-contract | ；其余见JSON | 映射不证明真实表单有效性、真实密文或服务端授权。 |
+| SC50-PROFILE-OPEN 打开运行档案关联表单 / local | 1处；current-route-source-contract | ；其余见JSON | 前端入口不证明真实角色可见范围、档案状态或加密资产关联权限。 |
+| SC50-LOGIN-OPEN 打开指定来源网页登录材料导入 / local | 1处；current-route-source-contract | ；其余见JSON | 真实来源、扩展通讯和服务端凭证授权仍需独立验证。 |
+| SC50-ROTATE-TARGET 选择当前资产作为轮换目标 / local | 1处；current-route-source-contract | ；其余见JSON | 目标选择不证明后端版本竞争或轮换副作用。 |
+| SC50-EDITOR-DIALOG 承载资产、轮换、档案与登录编辑窗 / local | 2处；current-route-source-contract | ；其余见JSON | DOM焦点、浏览器遮罩和共享确认窗内部行为不是该源码映射的验收结果。 |
+| SC50-ASSET-FORM 校验并提交凭证创建或轮换表单 / write | 1处；current-route-source-contract | ；其余见JSON | 本映射不执行真实密钥写入，也不证明 MySQL 事务、版本冲突或下游自动重放。 |
+| SC50-ASSET-VALIDATION 清除凭证字段的过期原生错误 / local | 3处；current-route-source-contract | ；其余见JSON | 映射不构成浏览器、读屏器及真实密文表单的无障碍认证。 |
+| SC50-ASSET-SAVE 保存新凭证或轮换已有凭证 / write | 1处；current-route-source-contract | ；其余见JSON | 本映射不执行真实秘密写入、外部采集、密钥轮换或生产审计验证。 |
+| SC50-PROFILE-FORM 校验并提交运行档案引用表单 / write | 1处；current-route-source-contract | ；其余见JSON | 本地映射不证明资产归属校验、真实RBAC或数据库关联约束。 |
+| SC50-PROFILE-VALIDATION 更新档案字段并同步现有资产来源 / local | 5处；current-route-source-contract | ；其余见JSON | 静态字段归组不验证真实来源/资产一致性或账号权限。 |
+| SC50-PROFILE-SAVE 保存新的运行档案引用 / write | 1处；current-route-source-contract | ；其余见JSON | 本映射不执行真实档案创建或验证来源登录状态。 |
+| SC50-LOGIN-CONTEXT 切换登录来源或材料导入方式 / local | 2处；current-route-source-contract | ；其余见JSON | 真实跨实例竞态和扩展中的秘密清理需要真实浏览器/扩展验证。 |
+| SC50-FILE 选择本地登录材料文件 / local | 1处；current-route-source-contract | ；其余见JSON | 不会读取真实用户文件；本映射不是文件内容、Cookie域或密文存储验证。 |
+| SC50-LOGIN-SAVE 按既有两阶段流程保存登录材料与运行档案 / write | 2处；current-route-source-contract | ；其余见JSON | 本映射不调用真实浏览器助手、上传文件、写入加密资产或创建运行档案。 |
+| SC50-CLOSE 关闭或取消凭证、档案与登录编辑窗 / local | 6处；current-route-source-contract | ；其余见JSON | 触发焦点返回、遮罩与Escape的真实浏览器表现需单独验收。 |
+| SC50-REVOKE 确认撤销选定凭证资产 / write | 3处；current-route-source-contract | ；其余见JSON | 本映射不执行真实撤销，不证明MySQL版本竞争、角色授权、历史保留或下游消费者行为。 |
+| SC50-HELPER-DOWNLOAD 下载站点提供的浏览器助手压缩包 / local | 1处；current-route-source-contract | ；其余见JSON | 此审阅不下载、安装、运行或验证真实浏览器扩展。 |
+| SC50-HELPER-COOKIE 向已安装浏览器助手请求当前来源Cookie / write | 1处；current-route-source-contract | ；其余见JSON | 测试映射不授权真实Cookie读取，也不证明浏览器扩展来源隔离或秘密生命周期。 |
+| SC50-EXTERNAL 打开既有来源登录页面 / navigation | 1处；current-route-source-contract | ；其余见JSON | 外部页面可用性、站点条款与真实登录流程不在本地源映射验收内。 |
+| SC50-TECH 展开来源代码技术信息 / local | 1处；current-route-source-contract | ；其余见JSON | 静态映射不验证屏幕阅读器输出或用户数据展示范围。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+
+### 明确保留的边界
+
+- 逐项覆盖CredentialAssetCenter.vue的39个当前扫描候选；既有共享弹窗、移动详情和导航壳内部候选不重复并入页面宿主计数。
+- 资产创建/轮换、运行档案、网页登录导入与撤销保留既有独立写入边界；下载、打开外部登录页和请求助手Cookie均作为不同动作审阅。
+- 用户视觉自动通过与动作映射分开记录；动作审批、全状态真实交互、RBAC/MySQL、外部扩展和M07-03仍未通过。
+- 本映射只覆盖凭证台账页面宿主；共享ConfirmDialog、ResponsiveDataView、ProviderRuntimeSurface和NavigationShell内部交互沿用各自合同。
 
 ## P54 局部动作与共享消费者
 

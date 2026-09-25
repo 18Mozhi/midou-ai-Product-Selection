@@ -509,6 +509,8 @@
     "tests/unit/ui-phase2-p48-action-map.test.mjs": "8bb605c5a19e7ecb268927ba83d19cda6ca4533f49abab09f4bbf45ee731b8b3",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json": "96a62a7bd311026549d9b269a1ab268bb83f6624b3e173dfee8df955a72688a2",
     "tests/unit/ui-phase2-p49-action-map.test.mjs": "e68ae4976a2e7aaa11a201227c2d32139789eb698210448e5dad3382643728ed",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P50.json": "7d9780ae5f819dc48a1464ade191ea4135dec50477ca10462df0b639f73132e2",
+    "tests/unit/ui-phase2-p50-action-map.test.mjs": "ae180a8f3ddf127d3c8ac023330c0afdf1003c16e9a4168df651e316c5267220",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "077621e403cc46d1ee487b3e98a895ec1fd86017bddf709839404ed5b7ea30de",
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -604,13 +606,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 52,
-    "explicitlyGroupedSourceSites": 1166,
-    "semanticGroups": 1049,
-    "routeActions": 835,
+    "reviewedPages": 53,
+    "explicitlyGroupedSourceSites": 1205,
+    "semanticGroups": 1070,
+    "routeActions": 856,
     "wiringGroups": 110,
     "pagesWithoutExplicitSemanticReview": [
-      "P50",
       "P51",
       "P52",
       "P53",
@@ -634,7 +635,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 52,
+    "visualApprovedReviewedPages": 53,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -2785,13 +2786,42 @@
       "path": "/platform-admin/credentials",
       "title": "凭证与档案",
       "oldStaticAssociatedCandidates": 78,
-      "review": null,
+      "review": {
+        "pageId": "P50",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 39,
+        "semanticGroups": 21,
+        "routeActions": 21,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 7,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 126,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 14,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 4,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "credential-assets-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "逐项覆盖CredentialAssetCenter.vue的39个当前扫描候选；既有共享弹窗、移动详情和导航壳内部候选不重复并入页面宿主计数。",
+        "资产创建/轮换、运行档案、网页登录导入与撤销保留既有独立写入边界；下载、打开外部登录页和请求助手Cookie均作为不同动作审阅。",
+        "用户视觉自动通过与动作映射分开记录；动作审批、全状态真实交互、RBAC/MySQL、外部扩展和M07-03仍未通过。"
+      ]
     },
     {
       "id": "P51",
@@ -4455,6 +4485,32 @@
         "localModelBindings": 3,
         "reviewedInputBindings": 0,
         "sourceCallerContainers": 1,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P50",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 39,
+      "semanticGroups": 21,
+      "routeActions": 21,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 7,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 126,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 14,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 4,
         "callerContainers": 0,
         "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
@@ -14655,7 +14711,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#889e842f4791c19d.1",
@@ -14680,7 +14742,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-HELPER-DOWNLOAD",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#3216d7209881fb86.1",
@@ -14699,7 +14767,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-LOGIN-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#da51ee773f1eb5e2.1",
@@ -14718,7 +14792,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-PROFILE-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#07c8680b127235e2.1",
@@ -14737,7 +14817,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-ASSET-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#466d5492514f7a0e.1",
@@ -14761,7 +14847,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#343034ee456c8020.1",
@@ -14789,7 +14881,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-ASSET-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#99e8924082a7d684.1",
@@ -14821,7 +14919,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-ROTATE-TARGET",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#a244801ec79346ec.1",
@@ -14853,7 +14957,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-REVOKE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#1c008f867673db60.1",
@@ -14887,7 +14997,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#f9aa4f7cabe04961.1",
@@ -14911,7 +15027,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-EDITOR-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#efc208b3291dd2c0.1",
@@ -14935,7 +15057,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-EDITOR-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#fcfad5327d89010f.1",
@@ -14963,7 +15091,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-ASSET-FORM",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#a75910143d18b017.1",
@@ -14991,7 +15125,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#3b5333f821fbebcc.1",
@@ -15023,7 +15163,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-ASSET-VALIDATION",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#f0de1dd230399061.1",
@@ -15055,7 +15201,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-ASSET-VALIDATION",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#db8f358359d81455.1",
@@ -15083,7 +15235,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-ASSET-VALIDATION",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#2f453887d0cc66db.1",
@@ -15111,7 +15269,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#584e25b2c7498fe2.1",
@@ -15139,7 +15303,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-ASSET-SAVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#49e83794fc69aec5.1",
@@ -15167,7 +15337,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-PROFILE-FORM",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#785d60d74b62708a.1",
@@ -15195,7 +15371,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#56cda485ff9a67e1.1",
@@ -15223,7 +15405,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-PROFILE-VALIDATION",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#118e781b0120c4b2.1",
@@ -15251,7 +15439,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-PROFILE-VALIDATION",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#2ddf54204f452511.1",
@@ -15279,7 +15473,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-PROFILE-VALIDATION",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#6bd7eed22ff8851d.1",
@@ -15307,7 +15507,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-PROFILE-VALIDATION",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#7550a9de2696128b.1",
@@ -15335,7 +15541,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-PROFILE-VALIDATION",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#2f453887d0cc66db.2",
@@ -15363,7 +15575,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#98e4c1aff937289a.1",
@@ -15391,7 +15609,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-PROFILE-SAVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#92da9f015f800722.1",
@@ -15419,7 +15643,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-LOGIN-SAVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#d86a0656a93bd973.1",
@@ -15447,7 +15677,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#d2a64908945092ff.1",
@@ -15475,7 +15711,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-LOGIN-CONTEXT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#1430f57a236d6ea1.1",
@@ -15503,7 +15745,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-LOGIN-CONTEXT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#7443d228a98eebd4.1",
@@ -15535,7 +15783,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-FILE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#e22b7ca36f2434d7.1",
@@ -15567,7 +15821,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-EXTERNAL",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#f176fdb4640192de.1",
@@ -15603,7 +15863,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-HELPER-COOKIE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#148e132f8526cb9d.1",
@@ -15631,7 +15897,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#a6de35af2d13a51e.1",
@@ -15659,7 +15931,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-LOGIN-SAVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#5eca67d4ff8b7b15.1",
@@ -15678,7 +15956,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-REVOKE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#cb14d6dea1ed210f.1",
@@ -15697,7 +15981,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P50",
+          "actionId": "SC50-REVOKE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#15912fa115381d2d.1",
