@@ -238,7 +238,7 @@ detail的x为progress/pause/cancel/delay/transfer；batch的x为pause/resume/del
 
 | 文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/TaskWorkspace.vue | fbc03ed2a4db1cb349063301730971e53cb889c1ca734f4618fee0de31f2114e |
+| apps/web/src/components/TaskWorkspace.vue | 22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d |
 | apps/web/src/components/TaskListPanel.vue | b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f |
 | apps/web/src/components/TaskDetailPanel.vue | 2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48 |
 | apps/web/src/components/TaskBatchActions.vue | cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b |

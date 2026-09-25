@@ -655,6 +655,61 @@ test("task create disables duplicate submission while the real request is pendin
   expect(observed.createRequests).toBe(1);
 });
 
+test("task create and delete dialogs stay open when Escape is pressed during a pending write", async ({
+  page,
+}) => {
+  const observed = await setup(page);
+  let releaseCreate!: () => void, signalCreate!: () => void;
+  const createPending = new Promise<void>((resolve) => (releaseCreate = resolve));
+  const createStarted = new Promise<void>((resolve) => (signalCreate = resolve));
+  await page.route("**/api/v1/tasks", async (route) => {
+    if (route.request().method() !== "POST") return route.fallback();
+    signalCreate();
+    await createPending;
+    await route.fallback();
+  });
+
+  await page.goto("/work");
+  await page
+    .getByRole("button", { name: /新建任务/ })
+    .first()
+    .click();
+  const createDialog = page.getByRole("dialog", { name: "新建任务", exact: true });
+  await createDialog.getByLabel("标题").fill("等待中的新建任务");
+  await createDialog.getByRole("button", { name: "创建任务", exact: true }).click();
+  await createStarted;
+  await page.keyboard.press("Escape");
+  await expect(createDialog).toBeVisible();
+  await expect(createDialog.getByLabel("标题")).toHaveValue("等待中的新建任务");
+  releaseCreate();
+  await expect(createDialog).toBeHidden();
+  expect(observed.createRequests).toBe(1);
+
+  let releaseDelete!: () => void, signalDelete!: () => void;
+  const deletePending = new Promise<void>((resolve) => (releaseDelete = resolve));
+  const deleteStarted = new Promise<void>((resolve) => (signalDelete = resolve));
+  await page.route(`**/api/v1/tasks/${taskId}`, async (route) => {
+    if (route.request().method() !== "DELETE") return route.fallback();
+    signalDelete();
+    await deletePending;
+    await route.fulfill({ json: env({ id: taskId }) });
+  });
+
+  await page.goto("/tasks");
+  const row = page.locator(".task-list article").filter({ hasText: "核验便携净水杯供应商报价" });
+  await row.locator("summary[aria-label='任务操作：核验便携净水杯供应商报价']").click();
+  await row.getByRole("button", { name: "删除任务", exact: true }).click();
+  const deleteDialog = page.getByRole("dialog", { name: "删除任务" });
+  await deleteDialog.getByLabel("删除原因").fill("确认当前任务后提交");
+  await deleteDialog.getByRole("button", { name: "确认删除", exact: true }).click();
+  await deleteStarted;
+  await page.keyboard.press("Escape");
+  await expect(deleteDialog).toBeVisible();
+  await expect(deleteDialog.getByLabel("删除原因")).toHaveValue("确认当前任务后提交");
+  releaseDelete();
+  await expect(deleteDialog).toBeHidden();
+});
+
 test("personal center renders the core profile instead of staying on its loading state", async ({
   page,
 }) => {
