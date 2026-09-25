@@ -577,7 +577,18 @@ test("M02-03 personal center uses an account shell without the organization navi
   );
   await page.goto("/me");
   await expect(page.locator(".account-shell")).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "个人中心分区" })).toBeVisible();
+  const accountDirectory = page.getByRole("navigation", { name: "个人中心分区" });
+  await expect(accountDirectory).toBeVisible();
+  for (const name of [
+    "基本资料：账号信息",
+    "我的权限：角色与范围",
+    "安全与设备：密码与会话",
+    "通知偏好：五项通知设置",
+    "我的资产：关注、决策与任务",
+    "外观偏好：主题与密度",
+  ]) {
+    await expect(accountDirectory.getByRole("link", { name, exact: true })).toBeVisible();
+  }
   await expect(page.getByRole("complementary", { name: "个人中心分区" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "选品成员" })).toBeVisible();
 });

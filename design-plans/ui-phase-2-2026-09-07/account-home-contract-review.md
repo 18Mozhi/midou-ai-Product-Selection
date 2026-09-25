@@ -368,7 +368,7 @@ PersonalCenter先请求profile，成功立即ready，再Promise.allSettled等四
 ## 5. 新设计前必须处理的缺口
 
 - **分区事实性**：P11的`Promise.allSettled`后失败区赋空/default而没有逐区error，P12规则GET catch赋[]。需先补失败回归，再设计可区分加载/失败/真实空的分区；不更改API或默认业务偏好。
-- **可访问名称**：AccountShell移动样式`.account-sidebar a span { display: none; }`，AppIcon为aria-hidden，链接自身无aria-label。需核实实际移动可访问树并补名称；不能只看图标可见就通过键盘/读屏验收。
+- **可访问名称（已局部关闭）**：上述 `.account-sidebar` 无名称描述的是旧壳层快照。当前 `AccountShell.vue` 为五个分区链接及外观入口提供明确 `aria-label`；`m02-03-navigation-shell.spec.ts` 现通过桌面与390px真实浏览器的 `getByRole` 验证计算后的六个链接名称。该浏览器语义检查不等于辅助技术实机读屏验收。
 - **交互语义**：ThemeStudio role=radio按钮只有click、无方向键或roving tabindex；获审实现须选原生radio或补完整键盘合同。多个表单错误没有字段关联，PersonalCenter错误也用统一success色notice；不把旧色彩视为新设计约束。
 - **恢复语义**：ThemeStudio把rate_limited和blocked等统一呈现“尚未选择组织与工作区”，不一定符合真实原因；HomeDashboard给所有错误primary“重新读取”，secondary无监听。新稿必须基于真实错误而非假动作提供恢复。
 - **数据范围与层级**：P11没有申请权限、取消收藏、最近浏览或免打扰实际控件；P12没有逐条变化/关注区，资产任务链接也未指向详情。明确缺口后审核相应现有入口呈现，不凭蓝图添加业务字段/能力。
