@@ -61,9 +61,7 @@ async function setup(page: Page) {
       }),
     }),
   );
-  await page.route("**/api/v1/org/admin/tokens", (route) =>
-    route.fulfill({ json: envelope([]) }),
-  );
+  await page.route("**/api/v1/org/admin/tokens", (route) => route.fulfill({ json: envelope([]) }));
   await page.route("**/api/v1/organizations/*/audit-events**", (route) => {
     const query = new URL(route.request().url()).searchParams;
     const filtered = events.filter(
