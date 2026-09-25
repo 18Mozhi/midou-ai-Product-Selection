@@ -162,3 +162,15 @@ P70活动租约区的原生details只按需展示当前已返回的任务UUID、
 | apps/web/src/components/ConfirmDialog.vue#30a3b6ddc206839e.1 | 92 | 共享旧Escape/Tab处理 |
 | apps/web/src/components/ConfirmDialog.vue#d1b7ac74d4f4ffc3.1 | 123 | 共享旧取消按钮 |
 | apps/web/src/components/ConfirmDialog.vue#3003ba3e33804f38.1 | 124 | 共享旧确认按钮 |
+
+## 10. P70 当前采集调度页面动作归组（2026-09-26）
+
+`action-reviews/P70.json`以当前 `CrawlerSchedulerCenter.vue`/`CrawlerSchedulerEvidence.vue` 源码映射16个候选为9类动作。两类确认动作各包括本页打开控件、确认/取消事件接线及共享确认窗调用点；三个不同候选不是三次服务器写入。筛选/分页仅在客户端对已有来源结果执行。
+
+过期租约回收和来源熔断解除是两条独立 POST 写路径，body 均为空对象，并沿各自既有同源与Idempotency-Key合同；回收不改变任务/档案状态，来源恢复不自动健康检查。现有来源目标标识缺口、网络未知结果及真实SQL锁/审计/权限未验收继续保留。
+
+## 11. P71 当前容量边界页面动作归组（2026-09-26）
+
+`action-reviews/P71.json` 将 CapacityBoundaryCenter/Evidence 的7个当前本地候选映射为3类动作：既有容量GET与错误重读、签认确认窗及POST、本地发现详情披露。共享确认组件、父级读取/授权/审计与请求详情复制仍引用各自合同，不重复计入页面候选。
+
+刷新可能产生既有观测和审计写入；签认只确认服务端已有归档/恢复证据，不执行测量或恢复。规划用户数、参考线、发现标签和封顶资源条不构成容量保证、签名或具体责任人。数据新鲜度、观测与签认绑定、事务并发、实际权限及正式M08-06验收仍待真实证据。

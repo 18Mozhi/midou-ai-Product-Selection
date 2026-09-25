@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P73",
+  "route": "/:pathMatch(.*)*",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/NotFoundPage.vue": "9ebbf97a724300fa2b17be2bc76973fe22abb14a290d84222915c09b7e2f44b7"
+  },
+  "inputs": {},
+  "actions": [
+    {
+      "actionId": "NF-BRAND",
+      "kind": "navigation",
+      "label": "从404恢复页返回主页",
+      "sourceCandidateIds": ["apps/web/src/components/NotFoundPage.vue#ad49e2f05ad189d6.1"],
+      "sourceContractKeys": ["NF03/NF04"],
+      "contractAliasReason": "依据P73公开fallback当前源码与共享壳层/恢复合同逐项归组，不扩展到目标页面行为。",
+      "condition": "用户点击页面品牌链接时。",
+      "handler": "通过当前RouterLink导航到固定/home入口，不回退浏览器history。",
+      "variants": ["current-route-source-contract"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p73-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "离开404页后目标页面的请求/会话权限不属于本页零API结论。"
+    },
+    {
+      "actionId": "NF-RETURN",
+      "kind": "navigation",
+      "label": "返回最近有效的已登记页面",
+      "sourceCandidateIds": ["apps/web/src/components/NotFoundPage.vue#0b84761726a96f8e.1"],
+      "sourceContractKeys": ["NF03/NF04"],
+      "contractAliasReason": "依据P73公开fallback当前源码与共享壳层/恢复合同逐项归组，不扩展到目标页面行为。",
+      "condition": "未知路径页始终提供主恢复入口时。",
+      "handler": "使用导航记忆解析且已由router.resolve接受的recentDestination.fullPath；未登记/解析失败回/home；不修改storage。",
+      "variants": ["current-route-source-contract"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p73-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "导航记忆检查不等于完整URL安全、跨账号隔离、目标会话有效或HTTP状态为404。"
+    },
+    {
+      "actionId": "NF-HOME",
+      "kind": "navigation",
+      "label": "最近目标不是主页时提供独立主页入口",
+      "sourceCandidateIds": ["apps/web/src/components/NotFoundPage.vue#7ed277e44773eac9.1"],
+      "sourceContractKeys": ["NF03/NF04"],
+      "contractAliasReason": "依据P73公开fallback当前源码与共享壳层/恢复合同逐项归组，不扩展到目标页面行为。",
+      "condition": "仅当recentDestination.path不等于/home时显示次链接。",
+      "handler": "使用固定/home RouterLink；主页query不会被本次导航链接注入。",
+      "variants": ["current-route-source-contract"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p73-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "条件入口不证明目的页面已登录、获授权或目标请求成功。"
+    }
+  ],
+  "pageScopeExclusions": {
+    "sharedFiles": [
+      {
+        "file": "apps/web/src/App.vue",
+        "rationale": "公开fallback选择、route.meta装配与DEV内页排除由父路由/App构建合同负责，不是NotFound页面候选。"
+      },
+      {
+        "file": "apps/web/src/router/navigation-memory.ts",
+        "rationale": "最近目的地写入与输入校验是共享导航记忆合同；本页只消费解析后的有效目标。"
+      }
+    ],
+    "remaining": "本页候选限品牌/home与最近目标的3条导航；没有history.back、搜索、联系支持、表单或确认写入。"
+  },
+  "dialogs": {
+    "kind": "none-in-current-source",
+    "remaining": "页面没有弹窗、表单、业务提交、重试或撤销动作。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": ["apps/web/src/components/NotFoundPage.vue"],
+    "dependencyHashes": {
+      "apps/web/src/components/NotFoundPage.vue": "9ebbf97a724300fa2b17be2bc76973fe22abb14a290d84222915c09b7e2f44b7"
+    },
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [],
+    "sharedRemaining": [
+      "recentDestination消费与路径校验引用共享导航记忆合同；目标页的业务请求/权限不纳入404驻留页。"
+    ],
+    "remaining": "静态映射不证明真实HTTP 404、生产内部路由不可达、目标页鉴权、真实存储异常或完整URL安全。"
+  },
+  "compositionGaps": [
+    "P73当前3个页面候选归为品牌主页、最近有效目标和条件主页3条导航。",
+    "页面驻留期间不调用业务API；点击导航离开后不能继续宣称零请求或无需鉴权。",
+    "当前未知路径可见文本可能包含path，query/hash不展示；敏感路径截图仍须使用隔离样例。",
+    "SPA fallback画面、HTTP响应状态、目标页权限与跨标签导航记忆为不同验收面。"
+  ]
+}

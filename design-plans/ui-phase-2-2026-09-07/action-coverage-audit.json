@@ -260,11 +260,11 @@
     "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "e92899302297a5b0ac4c41aa58abe8e51a353f0c8edf42bc2bcb5dec05da857e",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "f7ebe07d459e15dbbcf7277443fc9d62c5b1babd1722b7b869cf1c567232b385",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "b3ed452522bdd2a90555b598dbbb202b0d066b3ee7ee428d649c3ad310de6c81",
-    "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "e17569ee986feeed4c401a67f9d6b4e8378eca16326788482557255fd1dbf073",
-    "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "e15b64fe4d46d8d63f06f47c86b5ab9e504c840a4ecfd994c2f58b88233a86c6",
+    "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "2519ab4ecf42019f22816a66f913d797030a9652dafc0f99405d802aa32bd4e2",
+    "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "b0b320c6749b98de3949923851e09e11a177571ad15d6d382a754921e9cb0be7",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "458a1816ede8758e1c5579c7e86d08ed0e2a6677625eb513662fc48f0c1e6bb1",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "76a24081b3dc1566b2564cdbbfed07e22c563e57163540e5e4e477674f6f5b22",
-    "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "397590fc13cc8b8464b7f71973412e4d598652708ef722b1416d4ed2e391619f",
+    "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "38ba8918b66a8d2167554df758bc7666563c69d306f5b0674d41ec458e4c08c3",
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "807b562fa1c4ddd4b2fdf58f0fe635ce7a9af2dd7dcd246f89cfc59db508a762",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "c81dcd0bb2c2ca22a5a777b7e1aa96fd44e8b23c31ce8c0d415622e63d744bec",
@@ -550,6 +550,16 @@
     "tests/unit/ui-phase2-p67-action-review.test.mjs": "1f5a0f81ee4ed4f015007de6b0f5a6a378b90e6b3fa03a5b90430227b19ba09b",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P68.json": "efa47f120405862fc98495e7f3428bd36de72922af78fe23e11c283ffc80b120",
     "tests/unit/ui-phase2-p68-action-review.test.mjs": "9431b4f03e0f72ef37ce4c33b66a5312bdb0b7726cc8d9c2517b7b8245f4e6bd",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P69.json": "157337db8ae7bf7068477e9edf5b55ed3ecdf413a474be373fd3fe719adceada",
+    "tests/unit/ui-phase2-p69-action-review.test.mjs": "3e2e539566ebc4c63f5d02cb0245431157db33588672ef74b5653f5461be9fe1",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P70.json": "1053ac98302653e4ae229c29d3f6339110cafbf64ca1d1c4998acd0f4af913a0",
+    "tests/unit/ui-phase2-p70-action-review.test.mjs": "3dff08f5329be88ff5468f1b781df2a6dbdd9e48fda4e64e8d92289f7ad55f6d",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P71.json": "1fd32a8559d085ce493d68850e818fbb6f5bc26002ec0c12cf2744ff8f8b9a81",
+    "tests/unit/ui-phase2-p71-action-review.test.mjs": "e407369ec7d08e30449592866f183973a99328901fe69647ac3e1ac0cd517fe5",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P72.json": "07f76a77ea8bb11487e1540375d5da1a3299f2c661dbdcecfa68381e9407e58b",
+    "tests/unit/ui-phase2-p72-action-review.test.mjs": "de5d14b49c8634b5ce568a84ef9e3cbfa0ed957b8a2c2ffc5e53cb3840ea8566",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P73.json": "130849387acfc29efaf22dc5f3f247e2f6f52b70345763f1a8fb4a399e2150ec",
+    "tests/unit/ui-phase2-p73-action-review.test.mjs": "684eb8bf6b75cf6aaf95663cad3caf1a8a0b77efdead974ac0bf74dfbcc38bdf",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "b55592c802f1c2298d7910080beae7e68aec828a11357363546a1007f3c859fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "c429b797dbd4a03d6ae7ab46566440059f39dd47ba2c41b7913cf99d76677ee5",
@@ -618,11 +628,11 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "44625ac8f1344573a748a094e242d3c55c09e6f473f7a9c2af3d00442161ccf3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "ca3ee2177c96cb2f8da0e3e8e18263f4f389187c62e26f35f064ae1f48529ba8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "a914f1ce2647afdee5215d1d8f777e231d9c2c833c228601973abb1c604effe9",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "e1d459e00227acafabe8c8605fad1b0b84e15c154d074c77984f0dcbe4ddedd9",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "3ebf9ddfc3f3f904fd1b49292af6f5fd1d5acf5c8714202051275f02e6fd0640",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "845ba7877eedbfb8967a821c1668917d363db73bb903df86bf0b1ab1f498b878",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "6ae1dfb2006bf2f162a2279d4819f07bd93a00cafe366e7119e2c775a666b020",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "9d3cc2106db392ab9ff72215f3e9c79f8375e592477ce15aa4866bfe2ef01c3a",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "4401a57c8e8ebefb922ff7d5eeadcf1e1e3b96ea7e0a1a3e219417e6e0f894f7",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "70b353cdcc98ce726480f56df1f121b2625da2a56c4d62590c7a020ce9aed34e",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "32822df54c7950e5353cf9e50686f26d364c5b901a6682149f6937b5fe85a30f",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "8799c6057f3b537823713df64d67e76ba912331b1253f7ca34ed84fe12eba081",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "5e7d02960a5904c118159279d1f9ec7a71dd0d6d235bfae42f92ee42cd7af30a",
     "scripts/audit-ui-phase2-action-coverage.mjs": "dbed9ad7022d527bb6b3897dc51a395fc1b8d2f150219057887650a638c000bf",
     "scripts/lib/ui-phase2-action-coverage.mjs": "39ccdd68059bfd76f0ed3a534088bee6f4e958aca6ea38e2bdb224b02357edee",
     "scripts/lib/ui-phase2-review-surfaces.mjs": "22f0710e70d77f4335a86a3ed6ef6d14c54fc23ec98d50aa2e22c50809e4e523",
@@ -636,21 +646,15 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 68,
-    "explicitlyGroupedSourceSites": 1505,
-    "semanticGroups": 1248,
-    "routeActions": 1026,
+    "reviewedPages": 73,
+    "explicitlyGroupedSourceSites": 1541,
+    "semanticGroups": 1270,
+    "routeActions": 1048,
     "wiringGroups": 118,
-    "pagesWithoutExplicitSemanticReview": [
-      "P69",
-      "P70",
-      "P71",
-      "P72",
-      "P73"
-    ],
+    "pagesWithoutExplicitSemanticReview": [],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 68,
+    "visualApprovedReviewedPages": 73,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -3603,65 +3607,214 @@
       "path": "/platform-admin/files",
       "title": "文件存储",
       "oldStaticAssociatedCandidates": 39,
-      "review": null,
+      "review": {
+        "pageId": "P69",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 4,
+        "semanticGroups": 3,
+        "routeActions": 3,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 0,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 18,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 0,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 1,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "files-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "P69当前4个页内候选映射只读刷新、快照/首次错误两类重读与expired登录。",
+        "三个原生progress展示basis points/10000的只读指标，不计按钮，不允许拖动/修改容量值。",
+        "页面无文件浏览/下载/删除/恢复动作；unknown/不可用的10000占位不等于已测磁盘满。"
+      ]
     },
     {
       "id": "P70",
       "path": "/platform-admin/crawler-scheduler",
       "title": "采集调度",
       "oldStaticAssociatedCandidates": 49,
-      "review": null,
+      "review": {
+        "pageId": "P70",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 16,
+        "semanticGroups": 9,
+        "routeActions": 9,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 2,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 54,
+        "surfaces": {
+          "callerFiles": 2,
+          "localModelBindings": 2,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 3,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "scheduler-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "P70当前16个页内源码候选映射至9类语义动作；两个确认调用开窗/取消/提交事件分别归入对应恢复动作。",
+        "回收仅处理当前到期调度槽位；来源解除只针对所选provider且不自动发健康检查；不改变任务历史、状态或其他来源。",
+        "本地过滤和分页不等同服务端过滤/任务数量；GET可写既有观测/审计，不说成零写入。",
+        "来源确认对象的code/ID显示缺口与未知POST结果待办保留；静态图及单测不替代实际数据库/权限验收。"
+      ]
     },
     {
       "id": "P71",
       "path": "/platform-admin/capacity",
       "title": "容量边界",
       "oldStaticAssociatedCandidates": 41,
-      "review": null,
+      "review": {
+        "pageId": "P71",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 7,
+        "semanticGroups": 3,
+        "routeActions": 3,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 1,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 18,
+        "surfaces": {
+          "callerFiles": 2,
+          "localModelBindings": 0,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 2,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "capacity-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "P71当前7个本页候选归为容量GET/重读、签认POST与本地发现披露三类动作；共享确认和请求详情内部控件单独引用。",
+        "刷新/重读可能写入既有观测及审计；签认只记录对已存在证据的认可，不运行压测、备份或恢复。",
+        "规划用户、显示参考线及封顶进度条不构成容量承诺或主机资源占比；缺少SHA/签名不应补画证明。",
+        "真实新鲜度、观测/签认记录绑定、事务并发与实际生产验收缺口继续保留。"
+      ]
     },
     {
       "id": "P72",
       "path": "/ui-states",
       "title": "界面状态",
       "oldStaticAssociatedCandidates": 7,
-      "review": null,
+      "review": {
+        "pageId": "P72",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 8,
+        "semanticGroups": 4,
+        "routeActions": 4,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 0,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 24,
+        "surfaces": {
+          "callerFiles": 2,
+          "localModelBindings": 0,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 2,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "recovery-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "P72当前8个候选归入品牌导航、八态选择、卡片演示动作及纯本地确认演示四类动作。",
+        "loading无卡片动作；八态选择与确认文案是开发演示，不代表真实状态、权限申请、撤销或持久化。",
+        "共享UiStatePanel候选按P72子组件上下文归组，不据此宣称其他消费者语义已复核。",
+        "production route/query隔离、bundle剥离及完整主题/无障碍仍按既有合同单独验收。"
+      ]
     },
     {
       "id": "P73",
       "path": "/:pathMatch(.*)*",
       "title": "页面不存在",
       "oldStaticAssociatedCandidates": 3,
-      "review": null,
+      "review": {
+        "pageId": "P73",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 3,
+        "semanticGroups": 3,
+        "routeActions": 3,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 0,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 18,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 0,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 1,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "recovery-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "P73当前3个页面候选归为品牌主页、最近有效目标和条件主页3条导航。",
+        "页面驻留期间不调用业务API；点击导航离开后不能继续宣称零请求或无需鉴权。",
+        "当前未知路径可见文本可能包含path，query/hash不展示；敏感路径截图仍须使用隔离样例。",
+        "SPA fallback画面、HTTP响应状态、目标页权限与跨标签导航记忆为不同验收面。"
+      ]
     }
   ],
   "reviews": [
@@ -5429,6 +5582,136 @@
         "localModelBindings": 0,
         "reviewedInputBindings": 0,
         "sourceCallerContainers": 2,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P69",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 4,
+      "semanticGroups": 3,
+      "routeActions": 3,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 0,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 18,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 0,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 1,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P70",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 16,
+      "semanticGroups": 9,
+      "routeActions": 9,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 2,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 54,
+      "surfaces": {
+        "callerFiles": 2,
+        "localModelBindings": 2,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 3,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P71",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 7,
+      "semanticGroups": 3,
+      "routeActions": 3,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 1,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 18,
+      "surfaces": {
+        "callerFiles": 2,
+        "localModelBindings": 0,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 2,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P72",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 8,
+      "semanticGroups": 4,
+      "routeActions": 4,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 0,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 24,
+      "surfaces": {
+        "callerFiles": 2,
+        "localModelBindings": 0,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 2,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P73",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 3,
+      "semanticGroups": 3,
+      "routeActions": 3,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 0,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 18,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 0,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 1,
         "callerContainers": 0,
         "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
@@ -9074,7 +9357,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P71",
+          "actionId": "SC71-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CapacityBoundaryCenter.vue#811287f91562f61d.1",
@@ -9095,7 +9384,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P71",
+          "actionId": "SC71-ATTEST",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CapacityBoundaryCenter.vue#4f73abdd0d99fc21.1",
@@ -9121,7 +9416,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P71",
+          "actionId": "SC71-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CapacityBoundaryCenter.vue#26fe2d5165472bca.1",
@@ -9151,7 +9452,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P71",
+          "actionId": "SC71-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CapacityBoundaryCenter.vue#bad94329bde0aecb.1",
@@ -9172,7 +9479,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P71",
+          "actionId": "SC71-ATTEST",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CapacityBoundaryCenter.vue#0db1bef96a99927a.1",
@@ -9193,7 +9506,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P71",
+          "actionId": "SC71-ATTEST",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CapacityBoundaryEvidence.vue#1c008f867673db60.1",
@@ -9217,7 +9536,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P71",
+          "actionId": "SC71-FINDING-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#6d3f7d591719f19f.1",
@@ -15918,7 +16243,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#3c7b3b6045a144ee.1",
@@ -15939,7 +16270,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-EXPIRED",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#4f73abdd0d99fc21.1",
@@ -15965,7 +16302,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#ae52c30c28ab3a05.1",
@@ -15995,7 +16338,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#0767d27629b787d7.1",
@@ -16021,7 +16370,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-FILTER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#1b581569d5d9e0d4.1",
@@ -16047,7 +16402,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-FILTER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#dac6cbc2991374ba.1",
@@ -16081,7 +16442,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-DETAIL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#c198ccff780259e3.1",
@@ -16113,7 +16480,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-HEALTH",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#c07df29b8de46d08.1",
@@ -16147,7 +16520,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-PROVIDER-RECOVER",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#d868a97237e89c1c.1",
@@ -16177,7 +16556,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-PAGE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#3a29e19ec40c7562.1",
@@ -16207,7 +16592,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-PAGE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#a00a70cca22f9831.1",
@@ -16228,7 +16619,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-EXPIRED",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#b107542a89a71d5c.1",
@@ -16249,7 +16646,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-EXPIRED",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#3c382eda5cb1d9ce.1",
@@ -16270,7 +16673,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-PROVIDER-RECOVER",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#9e9fa4a77b724507.1",
@@ -16291,7 +16700,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-PROVIDER-RECOVER",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerEvidence.vue#1d663944bdde1289.1",
@@ -16315,7 +16730,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P70",
+          "actionId": "SC70-LEASE-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#4cff98e257b4af2d.1",
@@ -19383,7 +19804,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P69",
+          "actionId": "FL69-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/FileResilienceCenter.vue#21c66441891be768.1",
@@ -19409,7 +19836,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P69",
+          "actionId": "FL69-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/FileResilienceCenter.vue#5587941412d5210f.1",
@@ -19439,7 +19872,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P69",
+          "actionId": "FL69-LOGIN",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/FileResilienceCenter.vue#6a87ca890e2cd293.1",
@@ -19469,7 +19908,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P69",
+          "actionId": "FL69-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/HomeAutomationOverview.vue#4a67e5db61801646.1",
@@ -26197,7 +26642,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P73",
+          "actionId": "NF-BRAND",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/NotFoundPage.vue#0b84761726a96f8e.1",
@@ -26218,7 +26669,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P73",
+          "actionId": "NF-RETURN",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/NotFoundPage.vue#7ed277e44773eac9.1",
@@ -26244,7 +26701,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P73",
+          "actionId": "NF-HOME",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#9b4302ca61b627ec.1",
@@ -68369,6 +68832,11 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 283,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
+          "line": 204,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -68381,6 +68849,11 @@
           "pageId": "P47",
           "actionId": "PR47-LOAD",
           "kind": "read"
+        },
+        {
+          "pageId": "P72",
+          "actionId": "ST72-ACTIONS",
+          "kind": "local"
         }
       ]
     },
@@ -68486,6 +68959,11 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 285,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
+          "line": 205,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -68498,6 +68976,11 @@
           "pageId": "P47",
           "actionId": "PR47-SECONDARY-UNBOUND",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P72",
+          "actionId": "ST72-ACTIONS",
+          "kind": "local"
         }
       ]
     },
@@ -68518,7 +69001,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P72",
+          "actionId": "ST72-HOME",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/UiStateShowcase.vue#7f48e1357c8dae41.1",
@@ -68544,7 +69033,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P72",
+          "actionId": "ST72-SELECT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/UiStateShowcase.vue#b2a9d9fdd632dd45.1",
@@ -68565,7 +69060,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P72",
+          "actionId": "ST72-ACTIONS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/UiStateShowcase.vue#659be34503b475d2.1",
@@ -68586,7 +69087,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P72",
+          "actionId": "ST72-CONFIRM-DEMO",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/UiStateShowcase.vue#5cb580b48eea94d3.1",
@@ -68607,7 +69114,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P72",
+          "actionId": "ST72-CONFIRM-DEMO",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/UiStateShowcase.vue#2067b78f30a4668d.1",
@@ -68628,7 +69141,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P72",
+          "actionId": "ST72-CONFIRM-DEMO",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/use-modal-dialog.ts#524dddb64d598a2e.1",

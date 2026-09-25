@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P71",
+  "route": "/platform-admin/capacity",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/CapacityBoundaryCenter.vue": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8",
+    "apps/web/src/components/CapacityBoundaryEvidence.vue": "b815e48915ae9a72d1972d7ef7eebda8b91f5299041ca3028b8af65ef933fbd9"
+  },
+  "inputs": {},
+  "actions": [
+    {
+      "actionId": "SC71-LOAD",
+      "kind": "read",
+      "label": "读取或刷新容量边界实测事实",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CapacityBoundaryCenter.vue#26fe2d5165472bca.1",
+        "apps/web/src/components/CapacityBoundaryCenter.vue#4f73abdd0d99fc21.1",
+        "apps/web/src/components/CapacityBoundaryCenter.vue#d0414c44eef669b6.1"
+      ],
+      "sourceContractKeys": [
+        "SC71-LOAD GET（自身有审计）",
+        "SC71-LOAD 保留快照重试",
+        "SC71-LOAD 首次失败重试"
+      ],
+      "contractAliasReason": "依据P71容量边界当前源候选与已核对的容量合同逐项归组；未扩展到测量或恢复执行器。",
+      "condition": "用户请求刷新，或在保留快照/首次读取失败后主动重读时。",
+      "handler": "沿用当前GET与既有读取状态/快照归属；页面会写api_view及平台审计，刷新不是零写入，也不执行压测或恢复。",
+      "variants": ["current-route-source-contract"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p71-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "读取成功不证明同提交签名、实际并发容量、生产权限或隔离恢复通过。"
+    },
+    {
+      "actionId": "SC71-ATTEST",
+      "kind": "write",
+      "label": "确认签认归档与隔离恢复演练",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CapacityBoundaryCenter.vue#0db1bef96a99927a.1",
+        "apps/web/src/components/CapacityBoundaryCenter.vue#811287f91562f61d.1",
+        "apps/web/src/components/CapacityBoundaryCenter.vue#bad94329bde0aecb.1"
+      ],
+      "sourceContractKeys": [
+        "SC71-ATTEST 打开确认",
+        "SC71-ATTEST cancel本地/confirm POST",
+        "SC71-ATTEST 同一确认调用，不重复算动作"
+      ],
+      "contractAliasReason": "依据P71容量边界当前源候选与已核对的容量合同逐项归组；未扩展到测量或恢复执行器。",
+      "condition": "用户打开现有确认窗、输入既有确认词并明确提交时。",
+      "handler": "打开不写入，取消仅关闭本地窗口；确认后沿现有body、reason及Idempotency-Key发POST。服务端只验证已存在的归档/恢复证据并记录签认，不启动压测或恢复执行器。",
+      "variants": ["current-route-source-contract"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p71-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "失败或网络未知不证明未签认；服务与仓储当前未证明观测新鲜度、同提交绑定、真实权限/审计或并发幂等验收。"
+    },
+    {
+      "actionId": "SC71-FINDING-TECH",
+      "kind": "local",
+      "label": "展开当前容量发现代码与责任角色",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CapacityBoundaryEvidence.vue#1c008f867673db60.1"
+      ],
+      "sourceContractKeys": ["P71-CAPACITY-FINDING-TECH / 展开当前发现的代码与责任角色"],
+      "contractAliasReason": "依据P71容量边界当前源候选与已核对的容量合同逐项归组；未扩展到测量或恢复执行器。",
+      "condition": "当前容量事实返回发现项并由用户展开技术详情时。",
+      "handler": "只披露当前响应中的发现代码与角色标签；不读取、不签认、不测量，也不展示原始测量样本或伪造签名。",
+      "variants": ["current-route-source-contract"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p71-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "角色标签不是具体责任人；发现文本不能替代原始采样、构建身份或权限证明。"
+    }
+  ],
+  "pageScopeExclusions": {
+    "sharedFiles": [
+      {
+        "file": "apps/web/src/components/ConfirmDialog.vue",
+        "rationale": "确认词/影响说明/取消控件为共享确认组件；P71仅映射本页打开、取消/确认接线与调用点，不重复占用共享候选。"
+      },
+      {
+        "file": "apps/web/src/components/TechnicalDetails.vue",
+        "rationale": "请求ID展示/复制由共享详情组件合同覆盖；本页finding details仅归本地发现动作。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformManagementCenter.vue",
+        "rationale": "父级持有GET、platform:operate授权、错误与审计边界；不重复映射为P71页面候选。"
+      }
+    ],
+    "remaining": "两类刷新错误重试归入同一现有GET；三处确认候选是开窗、事件绑定和组件调用，并非三次写入。"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "仅现有归档与隔离恢复签认确认窗；取消不POST、确认沿现有body。共享焦点细节引用共享合同，不增加测量或恢复弹窗。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/CapacityBoundaryCenter.vue",
+      "apps/web/src/components/CapacityBoundaryEvidence.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/CapacityBoundaryCenter.vue": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8",
+      "apps/web/src/components/CapacityBoundaryEvidence.vue": "b815e48915ae9a72d1972d7ef7eebda8b91f5299041ca3028b8af65ef933fbd9"
+    },
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [],
+    "sharedRemaining": [
+      "确认焦点/确认词键盘行为与请求编号复制由共享组件合同覆盖；P71 progress及证据数字均为只读显示。"
+    ],
+    "remaining": "静态映射与夹具测试不证明真实容量、签认SQL/并发/审计、RBAC、同提交测量或正式M08-06生产验收。"
+  },
+  "compositionGaps": [
+    "P71当前7个本页候选归为容量GET/重读、签认POST与本地发现披露三类动作；共享确认和请求详情内部控件单独引用。",
+    "刷新/重读可能写入既有观测及审计；签认只记录对已存在证据的认可，不运行压测、备份或恢复。",
+    "规划用户、显示参考线及封顶进度条不构成容量承诺或主机资源占比；缺少SHA/签名不应补画证明。",
+    "真实新鲜度、观测/签认记录绑定、事务并发与实际生产验收缺口继续保留。"
+  ]
+}

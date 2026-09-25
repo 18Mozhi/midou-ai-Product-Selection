@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P72",
+  "route": "/ui-states",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/UiStateShowcase.vue": "398e4c5ad69feb5259a69bc034ca6fdc98cf936426d3075637b253576d236ad3",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164"
+  },
+  "inputs": {},
+  "actions": [
+    {
+      "actionId": "ST72-HOME",
+      "kind": "navigation",
+      "label": "返回 ScoutOps 首页",
+      "sourceCandidateIds": ["apps/web/src/components/UiStateShowcase.vue#6716f11d5cb87664.1"],
+      "sourceContractKeys": ["ST05/ST06"],
+      "contractAliasReason": "依据P72开发专用状态演示当前源候选、八态合同与UiStatePanel当前候选逐项归组，不扩大为生产业务动作。",
+      "condition": "用户点击开发演示顶部品牌入口时。",
+      "handler": "按当前Vue Router品牌链接导航到既有首页；不持久化演示状态或改变返回路径合同。",
+      "variants": ["current-route-source-contract"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p72-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "导航本身不证明首页授权或任何业务操作已发生。"
+    },
+    {
+      "actionId": "ST72-SELECT",
+      "kind": "local",
+      "label": "选择一个开发态界面状态",
+      "sourceCandidateIds": ["apps/web/src/components/UiStateShowcase.vue#7f48e1357c8dae41.1"],
+      "sourceContractKeys": ["ST05/ST06"],
+      "contractAliasReason": "依据P72开发专用状态演示当前源候选、八态合同与UiStatePanel当前候选逐项归组，不扩大为生产业务动作。",
+      "condition": "审核者选择八种合法状态之一时。",
+      "handler": "沿既有query.state更新单个合法值，保留其他query；合法同态不增加history，清空当前actionResult。",
+      "variants": ["current-route-source-contract"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p72-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "状态是演示选择，不代表真实用户/服务权限或故障事实；非法/重复query回退策略不在按钮动作中重写。"
+    },
+    {
+      "actionId": "ST72-ACTIONS",
+      "kind": "local",
+      "label": "触发当前状态卡片的演示主/次动作",
+      "sourceCandidateIds": [
+        "apps/web/src/components/UiStatePanel.vue#3eebdb6b72e10446.1",
+        "apps/web/src/components/UiStatePanel.vue#589e8eedc7c9c864.1",
+        "apps/web/src/components/UiStateShowcase.vue#b2a9d9fdd632dd45.1"
+      ],
+      "sourceContractKeys": [
+        "仅P72状态卡片调用上下文；非loading时emit primary，由父级既有八态逻辑决定本地示例或导航",
+        "仅存在文案且非loading时emit secondary；不推断该共享组件其他消费者",
+        "ST05/ST06"
+      ],
+      "contractAliasReason": "依据P72开发专用状态演示当前源候选、八态合同与UiStatePanel当前候选逐项归组，不扩大为生产业务动作。",
+      "condition": "当前状态卡片展示主动作，或其已有次动作可用且非loading时。",
+      "handler": "UiStatePanel只emit primary/secondary；父级依八态表执行本地actionResult、既有导航或恢复示例；loading不展示动作。",
+      "variants": ["current-route-source-contract"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p72-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "“重新尝试/申请权限”等演示文案不代表真实重试、权限申请、网络或业务写入。"
+    },
+    {
+      "actionId": "ST72-CONFIRM-DEMO",
+      "kind": "local",
+      "label": "打开并完成本地高影响确认演示",
+      "sourceCandidateIds": [
+        "apps/web/src/components/UiStateShowcase.vue#2067b78f30a4668d.1",
+        "apps/web/src/components/UiStateShowcase.vue#5cb580b48eea94d3.1",
+        "apps/web/src/components/UiStateShowcase.vue#659be34503b475d2.1"
+      ],
+      "sourceContractKeys": ["ST05/ST06"],
+      "contractAliasReason": "依据P72开发专用状态演示当前源候选、八态合同与UiStatePanel当前候选逐项归组，不扩大为生产业务动作。",
+      "condition": "用户打开演示确认窗，满足确认勾选和trim后短语匹配并显式确认时。",
+      "handler": "打开/取消只改变本地状态；确认仅设置confirmed=true并关闭，无API、授权撤销、持久化或审计。",
+      "variants": ["current-route-source-contract"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p72-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "共享ConfirmDialog键盘/焦点/遮罩行为仍由共享合同负责；本示例不得推断其他调用方或真实授权流程。"
+    }
+  ],
+  "pageScopeExclusions": {
+    "sharedFiles": [
+      {
+        "file": "apps/web/src/components/ConfirmDialog.vue",
+        "rationale": "该组件是跨页面共享定义；P72仅映射演示调用点和当前事件接线，内部checkbox/短语/键盘控件由共享合同复核。"
+      },
+      {
+        "file": "apps/web/src/App.vue",
+        "rationale": "DEV条件导入、query入口和生产剥离是路由/构建边界，不是本页面业务控件动作。"
+      }
+    ],
+    "remaining": "UiStatePanel两项候选在P72子组件调用上下文内归入示例动作；不代表该共享组件其他调用方已审核。"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "唯一演示确认窗仅维护本地状态；没有实际异步提交、业务撤销、API或审计。确认组件内部交互继续引用共享合同。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/UiStateShowcase.vue",
+      "apps/web/src/components/UiStatePanel.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/UiStateShowcase.vue": "398e4c5ad69feb5259a69bc034ca6fdc98cf936426d3075637b253576d236ad3",
+      "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164"
+    },
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [],
+    "sharedRemaining": [
+      "八态状态选择是一个v-for源码点而非一个运行时按钮；ConfirmDialog字段与键盘行为属于共享组件合同。"
+    ],
+    "remaining": "静态映射不证明生产不可达、DEV query隔离、bundle剥离、全主题/密度或完整辅助技术验收。"
+  },
+  "compositionGaps": [
+    "P72当前8个候选归入品牌导航、八态选择、卡片演示动作及纯本地确认演示四类动作。",
+    "loading无卡片动作；八态选择与确认文案是开发演示，不代表真实状态、权限申请、撤销或持久化。",
+    "共享UiStatePanel候选按P72子组件上下文归组，不据此宣称其他消费者语义已复核。",
+    "production route/query隔离、bundle剥离及完整主题/无障碍仍按既有合同单独验收。"
+  ]
+}

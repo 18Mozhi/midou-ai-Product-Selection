@@ -256,3 +256,9 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 `action-reviews/P68.json`将 `MySqlResilienceCenter.vue` 四个专属控件候选映射为只读GET刷新、保留快照失败/首次错误重读及expired登录。三个技术追踪/复制位置仍引用共享 `TechnicalDetails`，成功快照与本次失败读取编号分别归属。
 
 页面无SQL、迁移、参数配置、备份或恢复执行入口。读观测仍沿当前repository事务写入服务已有审计；动作表不改变这条合同，也不证明实库、权限、审计、恢复或M07-03正式验收。
+
+## 12. P69 文件存储当前页面动作映射（2026-09-26）
+
+`action-reviews/P69.json`将 `FileResilienceCenter.vue` 四个本页候选映射为只读刷新、保留快照失败/首次错误重读与expired登录。共享 `TechnicalDetails` 的请求编号展开/复制仍按成功快照和失败读取分别归属；三个只读容量 `progress` 不作为按钮/输入候选。
+
+本页没有文件浏览/下载/删除/备份/恢复按钮；容量不可用时的10000占位不表述为磁盘满。此映射不证明三根路径真实状态、文件抽样全覆盖、生产权限/SQL审计或M07-03验收。

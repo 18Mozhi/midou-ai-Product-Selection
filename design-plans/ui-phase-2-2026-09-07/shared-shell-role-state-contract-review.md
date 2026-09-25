@@ -195,6 +195,15 @@ F04b已确认修复前结果导航不关闭、旧搜索可覆盖新结果。现�
 
 P72八态行为沿用原ST表，loading不显示操作；error/blocked重试是本地恢复示例，确认只是关闭并confirmed=true。ConfirmDialog演示不是原生useModalDialog调用方。P73只有三个导航候选；组件本身不请求业务API，导航离开后的身份检查或目标取数不包含在“零API”结论内。navigation-memory接受单斜线而非//开头，存储键未按身份/范围分区；不能将这个检查夸大为完整URL安全或跨账号隔离证明。
 
+2026-09-26 动作清单 `action-reviews/P72.json` 将 P72 当前两个Vue组件的8个源码候选归为4类。本地状态/确认示例不调用业务API；UiStatePanel候选仅按P72子组件语境归类，不代表其他消费者审查完成。生产DEV query隔离和bundle剥离仍按下述独立防线验证。
+
+同日 `action-reviews/P73.json` 将 NotFoundPage 当前三个本页导航候选分别记录为品牌主页、最近有效目标及条件主页入口。页面内无业务API；目标页取数与授权不在此页面范围。
+
+| 当前子组件candidateId | 行 | 类型 | 稳定语义归属 | 本页边界 |
+| --- | ---: | --- | --- | --- |
+| apps/web/src/components/UiStatePanel.vue#589e8eedc7c9c864.1 | 71 | control | ST-PRIMARY | 仅P72状态卡片调用上下文；非loading时emit primary，由父级既有八态逻辑决定本地示例或导航 |
+| apps/web/src/components/UiStatePanel.vue#3eebdb6b72e10446.1 | 73 | control | ST-SECONDARY | 仅存在文案且非loading时emit secondary；不推断该共享组件其他消费者 |
+
 App仅DEV条件导入UiStateShowcase/VerificationFramework，NavigationShell glob显式排除二者；本批不构建、不检生产bundle，因此不声称当前生产不可达已验证。P72使用具体URL和DEV query分开验收，P73用实际未知路径，不请求字面量通配路由。
 
 useModalDialog保存打开前焦点，nextTick后showModal；关闭时close后nextTick返焦；cancel.preventDefault后请求父级关闭；unmount只close，没有显式返焦。原生dialog负责模态机制，但不证明全部消费者的首焦点/Tab循环/遮罩关闭均合格。当前文字引用清单为21个Vue文件：ApprovalWorkspace、AuditedReasonDialog、AutomationRuleCenter、CommercialOperationsCenter、CostRuleConsole、DiscoveryOverlay、NotificationCenter、OpportunityWorkspace、OpportunityWorkspaceDialogs、OrganizationCreationWizard、PlatformAccountDialogs、PlatformGovernanceCenter、PlatformManagementCenter、PlatformMessageEditor、PlatformOrganizationDetailDialog、PlatformUserDetailDialog、ReportCenter、ScoreRuleConsole、TaskBatchActions、TaskDetailPanel、TaskWorkspace。此为候选消费者索引，仍要按实际useModalDialog调用、open表达式和触发源逐项展开；不是21个已验证业务弹窗。
