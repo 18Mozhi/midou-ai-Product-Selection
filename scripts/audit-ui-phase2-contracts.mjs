@@ -129,7 +129,12 @@ const history = {
   },
   "scoring-contract-review.md": { historicalSections: ["2. 25个源码候选的完整局部映射"] },
   "selection-journey-contract-review.md": {
-    historicalSections: ["2. 控件候选与表单输入", "8. 16f524b后的源码清单与证据刷新"],
+    historicalSections: [
+      "2. 控件候选与表单输入",
+      "8. 16f524b后的源码清单与证据刷新",
+      "9. c31fddc7统一质量门后的当前源码映射",
+      "SelectionJourney",
+    ],
     historicalColumns: ["N03旧尾键"],
   },
   "state-recovery-contract-review.md": {

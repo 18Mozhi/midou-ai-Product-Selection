@@ -179,3 +179,11 @@ SelectionJourney.vue LF SHA-256：e3af3805ebaaa5c5d9c3eae15d1a72c8a03bfeb05b1bfc
 真实Vue图证据位于output/playwright/p16-c-r2-review，接口均拦截为既有service夹具，不能据此证明来源、MySQL或线上状态。42项原业务/读取回归与70项布局检查通过；具体图与未覆盖项见新审核说明。原型382图按当前源函数重新capture，未修改批准字段。
 
 2026-09-10控件补充：[真实控件114图审核](P16-VUE-CONTROL-REVIEW.md)，170检查；手机footer改nowrap与自然span尺寸，避免reset换列被裁剪。handleStateSecondary仅把journey或resumeId存在时均视为读取受阻；新建无ID保留创建未确认说明，原请求/五门/事件/存储不变。十处原按钮及新summary代表状态不新增语义分母，具体批准仍待。
+
+### SelectionJourney
+
+第9节旧版映射中的 J-DECIDE 表单尾键已被第10节当前表单尾键取代，仅作历史追溯，不计入当前源码覆盖。
+
+| 文件 | sig | 语义归属 |
+| --- | --- | --- |
+| apps/web/src/components/SelectionJourney.vue | 5704caf4d4e8cd9d.1 | J-DECIDE 旧版form-event身份（已被第10节当前映射取代） |

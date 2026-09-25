@@ -2222,6 +2222,35 @@ test("current P34 organization approvals map both pagers and isolate the histori
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current P16 decision form map isolates the superseded form-event identity", () => {
+  const file = "apps/web/src/components/SelectionJourney.vue";
+  const document = "selection-journey-contract-review.md";
+  const report = runContractAudit();
+  const oldId = `${file}#5704caf4d4e8cd9d.1`;
+  const currentId = `${file}#5d5700a54ddffff7.1`;
+  const historicalRow = report.records.find(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.candidateId === oldId &&
+      record.temporalScope === "historical",
+  );
+  const currentRow = report.records.find(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.candidateId === currentId &&
+      record.temporalScope !== "historical",
+  );
+  assert.equal(historicalRow?.status, "identity-not-found");
+  assert.equal(historicalRow?.currentLine, null);
+  assert.equal(currentRow?.status, "line-moved");
+  assert.equal(currentRow?.sourceBinding, "unrecorded");
+  assert.equal(currentRow?.currentLine, 550);
+  assert.equal(
+    report.unreferenced.some((candidate) => candidate.candidateId === currentId),
+    false,
+  );
+});
+
 test("current P41 organization wizard maps its form submission and three field owners", () => {
   const file = "apps/web/src/components/OrganizationCreationWizard.vue";
   const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
