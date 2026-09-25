@@ -246,7 +246,7 @@
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "f75a5b158124235ff951c8dd1b69fdeed7d3cbb3b722601397ddda17b4ce5fd4",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "52bcc443860a0bb026603c721ab806104450f0780cb4d2a9f9898ca59ee80884",
     "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "776fc3abc9b2c95b0441f701f1623eb18972e88482177b7b51cfb06f82408ed8",
-    "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "6350ced052c4283d850746b8736e64ab76ed2ed7eabe2ecd3feac5dcb630f815",
+    "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "b5463da0234f707cbbd40804c227b7ffc02959bc399a8e22bdeeba7092640ea1",
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "5f3c64c9b20555b19912b0348b264904c1d624bcbac1cc5b9a64182ac71cf149",
     "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "f4c2ca930b5818ac0b71c231f77f4ee991488ae98db27f1773b1b9d5c320f530",
     "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "665e010b0cc7f265fec00a8d541ffa8d1d735b97314e6c334dbd82985fb3f498",
@@ -526,6 +526,8 @@
     "scripts/verify-ui-phase2-governance-c.mjs": "601087302a527aa19c27decca6752c4f3b6c98ffdfb55a634bba4cd3d9b3a614",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P56.json": "d317a0f04f66b7829cf639fb71803168b5e27104e35938b3806740bfb1a72086",
     "scripts/verify-ui-phase2-content-c.mjs": "de06af621213c8dbf1e4eb1d1d7eb77b40eef5ea882fa49ca3a772d285aafae2",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P57.json": "e0974451f75e916f7bf25a9038b9bf046c72d6241d7c57ff7b054010da029eb8",
+    "tests/unit/ui-phase2-p57-action-map.test.mjs": "2ec83f7f90020ee20b53f4f3b75cacffaf1d305b9fa09d4f338d45ebdf91b956",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "b55592c802f1c2298d7910080beae7e68aec828a11357363546a1007f3c859fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "c429b797dbd4a03d6ae7ab46566440059f39dd47ba2c41b7913cf99d76677ee5",
@@ -612,13 +614,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 56,
-    "explicitlyGroupedSourceSites": 1272,
-    "semanticGroups": 1124,
-    "routeActions": 907,
-    "wiringGroups": 113,
+    "reviewedPages": 57,
+    "explicitlyGroupedSourceSites": 1303,
+    "semanticGroups": 1145,
+    "routeActions": 923,
+    "wiringGroups": 118,
     "pagesWithoutExplicitSemanticReview": [
-      "P57",
       "P58",
       "P59",
       "P60",
@@ -638,7 +639,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 56,
+    "visualApprovedReviewedPages": 57,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -3087,13 +3088,42 @@
       "path": "/platform-admin/notifications",
       "title": "通知管理",
       "oldStaticAssociatedCandidates": 75,
-      "review": null,
+      "review": {
+        "pageId": "P57",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 31,
+        "semanticGroups": 21,
+        "routeActions": 16,
+        "wiringGroups": 5,
+        "excludedGroups": 0,
+        "writeActions": 0,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 126,
+        "surfaces": {
+          "callerFiles": 6,
+          "localModelBindings": 13,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 1,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "platform-notifications-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "逐项覆盖P57通知域6个专用Vue组件的31个当前候选；PlatformManagementCenter四个通知路径所有者候选通过既有合同交叉引用，其他11个父组件候选明确排除。",
+        "投递筛选只影响投递记录/摘要；消息草稿目录使用独立message_page，邮件能力保持关闭，不新增邮件入口或自动投递。",
+        "草稿保存、发布和取消仍由既有父级API所有者处理；原因窗取消不写入，取消只针对未发布draft，不撤回已发布消息。"
+      ]
     },
     {
       "id": "P58",
@@ -4759,6 +4789,32 @@
         "sourceCallerContainers": 3,
         "callerContainers": 3,
         "consumerVariants": 3,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P57",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 31,
+      "semanticGroups": 21,
+      "routeActions": 16,
+      "wiringGroups": 5,
+      "excludedGroups": 0,
+      "writeActions": 0,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 126,
+      "surfaces": {
+        "callerFiles": 6,
+        "localModelBindings": 13,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 1,
+        "callerContainers": 0,
+        "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
       }
     }
@@ -46421,7 +46477,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-EDITOR-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageEditor.vue#b1b60a9027feacfb.1",
@@ -46440,7 +46502,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-EDITOR-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageEditor.vue#174bcbcaa3c52308.1",
@@ -46459,7 +46527,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-EDITOR-SAVE-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageEditor.vue#d2cc265c8fd1ae47.1",
@@ -46478,7 +46552,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-EDITOR-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageEditor.vue#02668382bdda9d3b.1",
@@ -46497,7 +46577,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-EDITOR-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageEditor.vue#e94ca4c02d75da69.1",
@@ -46516,7 +46602,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-EDITOR-SAVE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageWorkbench.vue#4e8bc7691dd553a7.1",
@@ -46544,7 +46636,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-SELECT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageWorkbench.vue#f095166e216904be.1",
@@ -46572,7 +46670,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-BODY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageWorkbench.vue#16110d36bb2ca486.1",
@@ -46604,7 +46708,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-MESSAGE-EDIT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageWorkbench.vue#ce596c13606836a9.1",
@@ -46636,7 +46746,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-MESSAGE-PUBLISH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageWorkbench.vue#32d17b035b89285e.1",
@@ -46668,7 +46784,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-MESSAGE-CANCEL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageWorkbench.vue#eb47900365f5d70b.1",
@@ -46687,7 +46809,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-MOBILE-READER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageWorkbench.vue#e4f2d5b4b2005a5b.1",
@@ -46706,7 +46834,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-MOBILE-READER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageWorkbench.vue#3d875f94d4ab83b0.1",
@@ -46730,7 +46864,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-MOBILE-READER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageWorkbench.vue#bffdaadbcab11ecf.1",
@@ -46758,7 +46898,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-MESSAGE-EDIT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageWorkbench.vue#ed205b81aa906e59.1",
@@ -46786,7 +46932,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-MESSAGE-PUBLISH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformMessageWorkbench.vue#b90d52fcfbfbd947.1",
@@ -46814,7 +46966,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-MESSAGE-CANCEL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformNotificationActionDialog.vue#8860caa2eace34ef.1",
@@ -46833,7 +46991,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-ACTION-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformNotificationActionDialog.vue#8e352812d3e9d460.1",
@@ -46852,7 +47016,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-ACTION-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformNotificationActionDialog.vue#11191cd13f827990.1",
@@ -46871,7 +47041,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-ACTION-SUBMIT-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformNotificationActionDialog.vue#ff6f244b760bf0a4.1",
@@ -46890,7 +47066,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-ACTION-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformNotificationActionDialog.vue#358517db18f8c7cb.1",
@@ -46909,7 +47091,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-ACTION-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformNotificationActionDialog.vue#8623dd504ba5e80f.1",
@@ -46928,7 +47116,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-ACTION-CONFIRM",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformNotificationCenter.vue#9a3e50bd9098f5ff.1",
@@ -47213,7 +47407,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-MESSAGE-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformNotificationManagement.vue#22aeb336eb22dffc.1",
@@ -47241,7 +47441,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-MESSAGE-PAGE-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformNotificationManagement.vue#70cfd76c23fd89d4.1",
@@ -47265,7 +47471,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-FILTER-WIRING",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformNotificationManagement.vue#ae1971e3fd4a8474.1",
@@ -47293,7 +47505,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-NOTIFICATION-PAGE-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformNotificationOperations.vue#a2abccb13e9ed5e1.1",
@@ -47312,7 +47530,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-GOVERNANCE-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformNotificationOperations.vue#1c008f867673db60.1",
@@ -47336,7 +47560,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-DELIVERY-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformNotificationPagination.vue#3a1c06036af4d8a4.1",
@@ -47360,7 +47590,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-PAGINATION",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformNotificationPagination.vue#ab6f56976164b3f3.1",
@@ -47384,7 +47620,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P57",
+          "actionId": "PN57-PAGINATION",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#f1666fd06fb5d95e.1",

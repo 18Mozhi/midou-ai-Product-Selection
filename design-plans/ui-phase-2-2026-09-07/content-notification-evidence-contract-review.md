@@ -492,3 +492,11 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | apps/web/src/components/PlatformNotificationOperations.vue#bf271304a21c8a72.1 | PN57当前操作者偏好导航至 `/me` | 第13节：通知事实区的个人中心导航 |
 | apps/web/src/components/PlatformNotificationOperations.vue#656bc15c15ec0ab7.1 | PN57治理页导航 | 第13/14节：现行治理总览导航入口 |
 | apps/web/src/components/PlatformNotificationOperations.vue#2f1d0bb94a278adc.1 | PN57同治理页的另一个调用点 | 第13/14节：治理导航的当前分区与调用点 |
+
+## 17. P57 通知管理当前页面动作归组（2026-09-26）
+
+`action-reviews/P57.json` 将 `/platform-admin/notifications` 的消息工作台、通知管理、通知运行观测、双分页器、草稿编辑窗与专用发布/取消原因窗31个当前组件候选，连同父管理器中刷新/状态重读、请求编号和通知原因入口4个当前候选，逐项映射到PN57既有合同。父组件11个内容审核、已关闭email、旧通用筛选及邮件队列原因候选按真实域条件明确排除。发布/取消按钮、编辑器form和专用原因窗的事件边界保持分离；工作台发出意图，父级和原因窗处理现有数据合同，草稿保存不会自动发布。
+
+投递记录query/status筛选与消息草稿目录各自保留现有作用域；notification page和message_page独立，共享分页器只发change事件。邮件入口保持关闭。取消仅用于未发布草稿，不能解释为撤回已发布消息；本地确认、关闭、全文展开、链接和分页均不冒领真实受众写入、投递或RBAC证据。
+
+`tests/unit/ui-phase2-p57-action-map.test.mjs` 校验35个当前通知路径候选唯一归属、跨域父候选排除、双分页与筛选独立、草稿保存及发布/取消原因边界、真实运行时未验收状态。视觉按用户授权对剩余页面自动通过；真实platform:operate/RBAC、收件人去重、站内通知插入、审计、邮件投递和正式M07-03生产验收仍待独立验证。该源映射不改变通知运行代码或用户数据。

@@ -3,10 +3,10 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1701；旧登记1477；新身份611，旧表独有身份387。签名变化不等于增删业务能力。
-- 已具体语义对应56页/1272源位置/1124组；其中路由动作907组，转发/容器关联113组，其余明确排除。其余17页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应57页/1303源位置/1145组；其中路由动作923组，转发/容器关联118组，其余明确排除。其余16页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记56页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记57页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -70,7 +70,7 @@
 | [P54 数据中心](page-specs/P54.md) | 58 | [18组](action-reviews/P54.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P55 质量与规则](page-specs/P55.md) | 59 | [8组](action-reviews/P55.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P56 内容管理](page-specs/P56.md) | 75 | [7组](action-reviews/P56.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P57 通知管理](page-specs/P57.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P57 通知管理](page-specs/P57.md) | 75 | [21组](action-reviews/P57.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P58 配额管理](page-specs/P58.md) | 71 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P59 安全中心](page-specs/P59.md) | 69 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P60 开放平台](page-specs/P60.md) | 72 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -4429,3 +4429,61 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 真实 MySQL、platform:operate、幂等、审计、全主题、读屏/软键盘和生产部署仍待验。
 - PlatformManagementFilter、PlatformManagementRecordList、PlatformContentPagination、ResponsiveDataView 与 ResponsiveFilterDrawer 只由当前页面调用并保持既有业务合同；共享内部按钮另按消费者验证。
 - 当前 Vue 路由夹具覆盖桌面和手机代表状态，不等于真实 MySQL、RBAC、审计或生产签收。
+
+## P57 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P57.json)：31个局部源位置 → 21组；0类写入，16组路由动作，5组转发/容器关联不重复计动作。已映射0/13个源码字段位置，0/1处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有126个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| PN57-MESSAGE-WIRING 将工作台消息编辑与发布/取消意图转给父所有者 / wiring | 1处；current-route-source-contract | ；其余见JSON | 事件接线不等于保存、发布、取消或真实用户投递。 |
+| PN57-MESSAGE-PAGE-WIRING 转发人工消息草稿目录的独立分页变化 / wiring | 1处；current-route-source-contract | ；其余见JSON | 本地事件不证明服务端COUNT或实际页记录完整。 |
+| PN57-FILTER-WIRING 转发投递记录查询、重置和受控筛选字段 / local | 1处；current-route-source-contract | ；其余见JSON | 事件转发不证明后端类别语义、邮件可用或收件人过滤事实。 |
+| PN57-NOTIFICATION-PAGE-WIRING 转发投递记录列表的独立分页变化 / wiring | 1处；current-route-source-contract | ；其余见JSON | 本地事件不证明投递记录送达或服务端总数口径。 |
+| PN57-SELECT 选择当前既有草稿或消息查看正文与可用操作 / local | 1处；current-route-source-contract | ；其余见JSON | 当前页选择不代表获取完整目录或具备草稿编辑/动作权限。 |
+| PN57-BODY 展开或收起当前消息完整正文 / local | 1处；current-route-source-contract | ；其余见JSON | 展开只验证本地呈现，不代表正文未被截断于服务端响应。 |
+| PN57-MESSAGE-EDIT 从桌面或移动阅读界面编辑当前草稿 / local | 2处；current-route-source-contract | ；其余见JSON | 打开编辑不证明PATCH通过版本/权限校验或保存成功。 |
+| PN57-MESSAGE-PUBLISH 请求发布当前草稿并进入原因确认 / local | 2处；current-route-source-contract | ；其余见JSON | 发布入口不代表真实受众数量、通知插入或投递完成。 |
+| PN57-MESSAGE-CANCEL 请求取消当前未发布草稿并进入原因确认 / local | 2处；current-route-source-contract | ；其余见JSON | 取消入口不证明后端版本、权限或审计写入成功。 |
+| PN57-MOBILE-READER 呈现并关闭移动端完整消息阅读窗 / local | 3处；current-route-source-contract | ；其余见JSON | 页面局部映射不代验浏览器原生dialog所有系统读屏与软键盘行为。 |
+| PN57-GOVERNANCE-NAV 导航到既有平台规则总览 / navigation | 1处；current-route-source-contract | ；其余见JSON | 目标路由可见不证明规则存在或当前会话具备治理操作权限。 |
+| PN57-DELIVERY-TECH 展开投递记录已有技术字段 / local | 1处；current-route-source-contract | ；其余见JSON | 展开不证明技术字段脱敏或对应真实SMTP/provider结果。 |
+| PN57-PAGINATION 由共享分页器呈现并发出上一页/下一页意图 / local | 2处；current-route-source-contract | ；其余见JSON | 共享组件一个按钮实例的源候选由两个不同分页器消费，不能将两游标合并。 |
+| PN57-EDITOR-DIALOG 打开草稿新建/编辑原生窗口并处理窗口键盘事件 / local | 2处；current-route-source-contract | ；其余见JSON | 组件局部合同不证明所有主题/角色下的真实读屏和软键盘行为。 |
+| PN57-EDITOR-SAVE-WIRING 将新建/编辑表单submit意图转发给父保存所有者 / wiring | 1处；current-route-source-contract | ；其余见JSON | 表单事件不证明服务端版本、同源、幂等、审计或数据库写入结果。 |
+| PN57-EDITOR-CLOSE 关闭草稿编辑窗 / local | 2处；current-route-source-contract | ；其余见JSON | 关闭窗不证明未提交的草稿字段已持久化。 |
+| PN57-EDITOR-SAVE 提交新建或更新草稿表单 / local | 1处；current-route-source-contract | ；其余见JSON | 按钮点击不证明父级请求成功、版本冲突或受众引用可用。 |
+| PN57-ACTION-DIALOG 呈现发布/取消专用原因窗并处理键盘关闭 / local | 2处；current-route-source-contract | ；其余见JSON | dialog存在不证明消息动作已提交或用户可以绕过原因要求。 |
+| PN57-ACTION-SUBMIT-WIRING 将发布/取消原因表单提交转发至父动作所有者 / wiring | 1处；current-route-source-contract | ；其余见JSON | 组件事件不证明真实RBAC、受众去重、事务、审计或投递。 |
+| PN57-ACTION-CLOSE 关闭发布/取消原因填写窗口而不提交动作 / local | 2处；current-route-source-contract | ；其余见JSON | 关闭原因窗不代表父服务端动作已取消或回滚。 |
+| PN57-ACTION-CONFIRM 确认发布草稿或取消未发布草稿 / local | 1处；current-route-source-contract | ；其余见JSON | 确认按钮启用不证明服务端校验通过、受众插入或站内消息送达。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| PN57-MESSAGE-WIRING | @edit / emit('edit', $event) | PN57-MESSAGE-EDIT |
+| PN57-MESSAGE-WIRING | @action / (item, action) => emit('action', item, action) | PN57-MESSAGE-PUBLISH、PN57-MESSAGE-CANCEL |
+| PN57-MESSAGE-PAGE-WIRING | @change / emit('messagePage', $event) | PN57-PAGINATION |
+| PN57-NOTIFICATION-PAGE-WIRING | @change / emit('notificationPage', $event) | PN57-PAGINATION |
+| PN57-EDITOR-SAVE-WIRING | @submit.prevent / $emit('save') | PN57-EDITOR-SAVE |
+| PN57-ACTION-SUBMIT-WIRING | @submit.prevent / $emit('submit') | PN57-ACTION-CONFIRM |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+
+### 明确保留的边界
+
+- 逐项覆盖P57通知域6个专用Vue组件的31个当前候选；PlatformManagementCenter四个通知路径所有者候选通过既有合同交叉引用，其他11个父组件候选明确排除。
+- 投递筛选只影响投递记录/摘要；消息草稿目录使用独立message_page，邮件能力保持关闭，不新增邮件入口或自动投递。
+- 草稿保存、发布和取消仍由既有父级API所有者处理；原因窗取消不写入，取消只针对未发布draft，不撤回已发布消息。
+- PlatformManagementCenter跨域状态所有者与NavigationShell沿其各自合同复用；PlatformNotificationPagination一个源码按钮由两条独立分页消费者使用，游标仍分开。
