@@ -1,0 +1,736 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P51",
+  "route": "/platform-admin/collection",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/CollectionRuntimeSurface.vue": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
+    "apps/web/src/components/CollectionTaskCenter.vue": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+  },
+  "inputs": {
+    "apps/web/src/components/CollectionTaskCenter.vue": [
+      "query",
+      "status",
+      "replayReason"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "CL51-NAV",
+      "label": "在采集总览、任务页和浏览器运行间导航",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionRuntimeSurface.vue#3c465962052e3b24.1",
+        "apps/web/src/components/CollectionRuntimeSurface.vue#404044c1ac23071f.1",
+        "apps/web/src/components/CollectionRuntimeSurface.vue#ebad8fdaf536f0e3.1",
+        "apps/web/src/components/CollectionTaskCenter.vue#a0dc06b99ac90370.1"
+      ],
+      "sourceContractKeys": [
+        "CL-NAV / 总览",
+        "CL-NAV / 任务页",
+        "CL-NAV / 浏览器运行",
+        "CL51-LINK / 浏览器运行"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-NAV精确归属，不增加新建任务或重放路径。",
+      "condition": "用户在采集工作区中选择三个既有采集页签之一时。",
+      "handler": "仅沿既有路由在采集总览、当前任务页和浏览器运行页间切换；页签导航不读取任务详情、不创建任务或执行采集。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "导航可见性不证明目标路由的数据范围、权限或运行服务状态。"
+    },
+    {
+      "actionId": "CL51-LOAD",
+      "label": "读取、刷新或重读当前任务列表",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#4ec44b3c83794aca.1",
+        "apps/web/src/components/CollectionTaskCenter.vue#d1849db8e18799fd.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-LOAD / 保留快照刷新",
+        "CL51-LOAD / 错误重读"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-LOAD精确归属，不增加新建任务或重放路径。",
+      "condition": "页面首次进入，或用户在可用状态显式刷新/重试时。",
+      "handler": "调用既有任务列表 GET，固定当前页与状态参数；刷新失败保留已有快照并展示错误，首次失败按当前状态面处理，不发起任务写入。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地动作映射不证明真实 collection:replay 权限、MySQL 结果或线上超时表现。"
+    },
+    {
+      "actionId": "CL51-STATE-PRIMARY",
+      "label": "将状态面主操作接到列表读取处理器",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#3a210e63ca5a7831.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-CURRENT-STATE-PRIMARY / 非ready与非empty时将状态面primary接到列表load"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-STATE-PRIMARY精确归属，不增加新建任务或重放路径。",
+      "condition": "列表状态面提供主操作，且当前状态允许重读时。",
+      "handler": "只将 UiStatePanel 的既有 primary 事件转发给任务列表 load；不形成独立请求路径。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "静态事件关系不验证真实未授权、会话过期或 API 恢复结果。",
+      "forwardsTo": [
+        "CL51-LOAD"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#3a210e63ca5a7831.1",
+          "event": "@primary",
+          "handler": "() => load()",
+          "targets": [
+            "CL51-LOAD"
+          ]
+        }
+      ]
+    },
+    {
+      "actionId": "CL51-FILTER",
+      "label": "切换服务端任务状态筛选",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#7e6436ac5e8e9b15.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-FILTER / changeStatus"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-FILTER精确归属，不增加新建任务或重放路径。",
+      "condition": "状态筛选器可用且当前读取未被更新请求取代时。",
+      "handler": "状态变化清除当前页文本查询并回到第一页；保留既有 URL 同步与带状态参数的列表 GET。文本输入本身只筛选当前已返回页，不扩展为全库搜索。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "状态目录完整性和真实服务端筛选语义仍需用运行数据验证。"
+    },
+    {
+      "actionId": "CL51-PAGE",
+      "label": "翻阅当前服务端分页结果",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#680ca05fdeabfdbf.1",
+        "apps/web/src/components/CollectionTaskCenter.vue#cda5e997a43d64c9.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-PAGE / 前页",
+        "CL51-PAGE / 后页"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-PAGE精确归属，不增加新建任务或重放路径。",
+      "condition": "存在上一页/下一页且列表没有正在读取时。",
+      "handler": "按既有 page、page_size=50 和可选 status 查询下一页；翻页清除当前页文本筛选，越界保护与 reduced-motion 滚动沿用当前实现。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "分页指标仅代表服务端返回页与 meta.total，不证明跨组织数据隔离。"
+    },
+    {
+      "actionId": "CL51-EMPTY-RECOVERY",
+      "label": "重读空列表或返回全部状态",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#16620352511db5c2.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-CURRENT-EMPTY-RECOVERY / 全部状态重读；筛选空态返回全部状态并重读"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-EMPTY-RECOVERY精确归属，不增加新建任务或重放路径。",
+      "condition": "服务端返回空结果时显示相应恢复入口。",
+      "handler": "全部状态下只重读当前队列；指定状态的空结果可清除状态、页码及当前页文本条件后读取全部状态。不会补造普通采集任务创建入口。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "合成空态不证明真实队列为空或恢复请求成功。"
+    },
+    {
+      "actionId": "CL51-DETAIL-OPEN",
+      "label": "从桌面行或手机记录打开完整任务详情",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#5efbd64729e57af0.1",
+        "apps/web/src/components/CollectionTaskCenter.vue#dfaa056b9550313b.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-DETAIL / 桌面查看push task",
+        "CL51-DETAIL / 关闭移动记录后开完整详情"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-DETAIL-OPEN精确归属，不增加新建任务或重放路径。",
+      "condition": "当前任务记录提供桌面查看或移动端完整详情入口时。",
+      "handler": "桌面查看沿既有 task 查询参数进入详情；手机入口先结束共享记录抽屉再进入同一完整任务详情，并记录稳定返焦目标。任务 GET 由 task 路由变化触发。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本页映射不验收共享 ResponsiveDataView 抽屉内部的全部焦点与角色状态。"
+    },
+    {
+      "actionId": "CL51-DETAIL-READ",
+      "label": "重试当前任务详情读取",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#33bc529b8390aa3d.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-DETAIL / 失败后读取当前task"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-DETAIL-READ精确归属，不增加新建任务或重放路径。",
+      "condition": "任务详情进入明确的可重试读取失败状态时。",
+      "handler": "对当前 URL 中的任务 ID 重读既有任务详情 GET；详情先清理旧对象并以 detailSequence 隔离迟到响应，不重放任务。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地失败样例不证明真实详情权限、历史事件完整性或服务端响应。"
+    },
+    {
+      "actionId": "CL51-DETAIL-DISMISS",
+      "label": "仅在点击详情遮罩本身时关闭详情",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#6b55734308f206c3.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-CURRENT-DETAIL-DISMISS / 仅详情遮罩本身mousedown时关闭详情"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-DETAIL-DISMISS精确归属，不增加新建任务或重放路径。",
+      "condition": "详情遮罩处于打开状态，且按下目标就是遮罩本身时。",
+      "handler": "继续使用 mousedown.self 守卫，只关闭当前详情并沿 closeDetail 的既有历史回退/查询清理路径处理；点击面板内容不触发关闭。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "静态映射不证明触控设备、浏览器历史或读屏器行为。"
+    },
+    {
+      "actionId": "CL51-DETAIL-DIALOG",
+      "label": "为任务详情提供原生对话框语义",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#ed8b70dc2e6170f2.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-CURRENT-DETAIL-SEMANTICS / 当前详情面板role=dialog、aria-modal与标题/描述关联"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-DETAIL-DIALOG精确归属，不增加新建任务或重放路径。",
+      "condition": "详情处于 loading、error 或 loaded 任一可见状态时。",
+      "handler": "复用当前 role=dialog、aria-modal、稳定标题和描述关联；确认重放打开期间详情保持 inert。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "静态属性不等同于真实辅助技术读屏或完整模态隔离验收。"
+    },
+    {
+      "actionId": "CL51-DETAIL-KEYBOARD",
+      "label": "处理详情 Escape 关闭与可见控件 Tab 循环",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#d3da42ac8f789e3b.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-CURRENT-DETAIL-KEYBOARD / 将详情keydown转发给既有Escape与Tab边界处理"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-DETAIL-KEYBOARD精确归属，不增加新建任务或重放路径。",
+      "condition": "任务详情打开且键盘事件落在详情面板内时。",
+      "handler": "将键盘事件交给既有 detailKeydown：Escape 关闭；Tab/Shift+Tab 仅在当前可见、可聚焦控件边界循环，不扩展焦点集合到隐藏控件。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义映射不覆盖所有浏览器、缩放、读屏器或共享确认窗内部焦点行为。"
+    },
+    {
+      "actionId": "CL51-DETAIL-CLOSE",
+      "label": "关闭 loading、error 或 loaded 中的任务详情",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#30e32a01e61d8558.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-DETAIL / loading、error、loaded共用关闭详情"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-DETAIL-CLOSE精确归属，不增加新建任务或重放路径。",
+      "condition": "详情头部的常驻关闭入口可见时。",
+      "handler": "调用统一 closeDetail，取消当前客户端详情读取、清理详情/重放草稿，并按打开来源使用 router.back 或删除 task 查询参数；关闭后尝试返回稳定触发控件。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "静态路径映射不证明所有历史栈形态均可恢复焦点。"
+    },
+    {
+      "actionId": "CL51-MOBILE-TECH",
+      "label": "从移动任务记录进入技术详情",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#1c008f867673db60.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-TECH / 移动技术详情"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-MOBILE-TECH精确归属，不增加新建任务或重放路径。",
+      "condition": "移动端任务记录提供技术详情入口时。",
+      "handler": "沿用 ResponsiveDataView 的既有完整任务详情入口，不新增第二套任务读取或重放动作。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "共享移动记录抽屉的内部生命周期不由本页面局部合同冒领。"
+    },
+    {
+      "actionId": "CL51-RECOVERY-ANCHOR",
+      "label": "定位到当前死信任务的人工重放区域",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#96164ff76e31b8d8.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-RECOVER / 重放原因区锚点"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-RECOVERY-ANCHOR精确归属，不增加新建任务或重放路径。",
+      "condition": "当前死信详情展示“进入重放”入口时。",
+      "handler": "只定位至当前详情中的重放表单，不执行提交、预览之外的写入或外部采集。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "页面内锚点可达性不证明重放依赖已经恢复。"
+    },
+    {
+      "actionId": "CL51-RECOVERY-NAV",
+      "label": "按任务阻塞或终态进入既有恢复页面",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#9334ac0d41264e22.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-RECOVER / 凭证、来源或总览链接"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-RECOVERY-NAV精确归属，不增加新建任务或重放路径。",
+      "condition": "任务状态/错误码满足既有 recoveryAction 分支时。",
+      "handler": "登录/验证码受阻进入凭证页，robots/source_changed 进入来源设置，终止失败/部分完成进入采集总览；这些入口不声明目标修复已成功。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "导航目标存在不证明目标页权限、配置更改或任务恢复结果。"
+    },
+    {
+      "actionId": "CL51-ROBOTS-DISCLOSURE",
+      "label": "按需展开已返回的 robots 判定摘要",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#d499af7185a1f039.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-TECH / robots判定展开"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-ROBOTS-DISCLOSURE精确归属，不增加新建任务或重放路径。",
+      "condition": "当前子查询详情含有 robots 判定对象时。",
+      "handler": "展开原生 details，披露后端已返回的裁决版本、匹配 user-agent 和有限预览；不重新抓取 robots.txt，不展示原始任务 target 或凭证。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "展开行为不证明当前网站政策或生产采集器实际遵守结果。"
+    },
+    {
+      "actionId": "CL51-TECH-DISCLOSURE",
+      "label": "按需展开任务技术关联标识",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#79686f2d00e174f0.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-TECH / 完整技术标识"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-TECH-DISCLOSURE精确归属，不增加新建任务或重放路径。",
+      "condition": "任务详情已成功读取且用户需要核对诊断信息时。",
+      "handler": "展开原生 details 展示任务、组织、工作区、请求和错误标识；不披露内部 target_json、租约令牌或凭证。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地渲染映射不证明真实接口脱敏、角色授权或审计访问策略。"
+    },
+    {
+      "actionId": "CL51-REPLAY-OPEN",
+      "label": "打开现有死信任务人工重放确认",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#5046ae27ac1c3e07.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-REPLAY / 确认预览"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-REPLAY-OPEN精确归属，不增加新建任务或重放路径。",
+      "condition": "当前详情状态为 dead_letter、原因 trim 后至少 2 字且未提交时。",
+      "handler": "仅打开共享 ConfirmDialog 并保留固定当前原因/任务上下文；此按钮本身不 POST，确认期间底层详情 inert。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "静态映射不证明真实依赖已修复或用户有 collection:replay 权限。"
+    },
+    {
+      "actionId": "CL51-REPLAY-WRITE",
+      "label": "确认后为当前死信创建新的人工重放任务",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#acbca874b622fd25.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-REPLAY / cancel、replay"
+      ],
+      "contractAliasReason": "该宿主事件绑定同时转发确认取消与确认提交；仅 confirm 分支进入既有 replay POST，cancel 分支只关闭确认窗且不写入。",
+      "condition": "用户确认共享二次确认，原任务仍为当前 dead_letter 详情，理由 trim 后 2–500 字且未有写入占用。",
+      "handler": "仅调用 POST /platform/collection/tasks/{id}/replay，body 只含 reason，沿用共享客户端 Idempotency-Key；后端创建 scheduled 新任务并保留旧历史。网络、超时、限流及网关类结果未知时明确要求先重读核对，不自动重复 POST。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本合同不执行真实死信重放，不证明 collection:replay/RBAC、MySQL 事务、Worker 执行、幂等或外部采集成功。"
+    },
+    {
+      "actionId": "CL51-REPLAY-DIALOG",
+      "label": "调用共享死信重放二次确认窗",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionTaskCenter.vue#e9f14f18f727a992.1"
+      ],
+      "sourceContractKeys": [
+        "CL51-REPLAY / 共享确认调用"
+      ],
+      "contractAliasReason": "按既有CL51合同对CL51-REPLAY-DIALOG精确归属，不增加新建任务或重放路径。",
+      "condition": "页面已有有效重放意图并展示共享 ConfirmDialog 时。",
+      "handler": "传入既有任务影响说明、确认短语及 cancel/confirm 回调；挂载确认窗不单独发出任务写请求。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p51-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "共享 ConfirmDialog 内部按钮状态和焦点循环属于共享控件合同，不在P51本地候选计数内。"
+    }
+  ],
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "P51本地任务详情为一个role=dialog，重放调用共享ConfirmDialog；移动任务记录由ResponsiveDataView详情抽屉承载。此映射只列本页宿主与共享采集页签，不重复计共享抽屉/确认窗/导航壳内部候选。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/CollectionRuntimeSurface.vue",
+      "apps/web/src/components/CollectionTaskCenter.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/CollectionRuntimeSurface.vue": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
+      "apps/web/src/components/CollectionTaskCenter.vue": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+    },
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [],
+    "sharedRemaining": [
+      "本映射只覆盖采集页签宿主和任务页组件；ResponsiveDataView、ConfirmDialog、UiStatePanel、NavigationShell和API客户端共享交互继续以各自合同为准。"
+    ],
+    "remaining": "静态映射不代表真实平台RBAC、MySQL任务/死信、Worker/Python执行、外部采集、全主题/缩放/读屏或M07-03验收通过。"
+  },
+  "compositionGaps": [
+    "逐项覆盖CollectionRuntimeSurface.vue与CollectionTaskCenter.vue的26个当前扫描候选；共享移动详情、确认窗和导航壳的内部候选不重复并入P51局部计数。",
+    "手动重放只登记既有dead_letter POST与reason字段；不增加任务创建、状态修改、自动重试或外部采集动作。",
+    "用户视觉自动通过与动作映射分开记录；actionApproval、真实collection:replay授权、MySQL、Worker终态、读屏和正式M07-03签收仍未通过。"
+  ]
+}

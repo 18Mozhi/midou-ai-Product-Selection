@@ -3,10 +3,10 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1701；旧登记1477；新身份611，旧表独有身份387。签名变化不等于增删业务能力。
-- 已具体语义对应53页/1205源位置/1070组；其中路由动作856组，转发/容器关联110组，其余明确排除。其余20页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应54页/1231源位置/1090组；其中路由动作875组，转发/容器关联111组，其余明确排除。其余19页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记53页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记54页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -64,7 +64,7 @@
 | [P48 热点来源](page-specs/P48.md) | 78 | [25组](action-reviews/P48.json) | 150个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P49 1688 启用检查](page-specs/P49.md) | 78 | [11组](action-reviews/P49.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P50 凭证与档案](page-specs/P50.md) | 78 | [21组](action-reviews/P50.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P51 采集任务](page-specs/P51.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P51 采集任务](page-specs/P51.md) | 81 | [20组](action-reviews/P51.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P52 采集总览](page-specs/P52.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P53 网页登录采集](page-specs/P53.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P54 数据中心](page-specs/P54.md) | 58 | [18组](action-reviews/P54.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -4126,6 +4126,58 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 资产创建/轮换、运行档案、网页登录导入与撤销保留既有独立写入边界；下载、打开外部登录页和请求助手Cookie均作为不同动作审阅。
 - 用户视觉自动通过与动作映射分开记录；动作审批、全状态真实交互、RBAC/MySQL、外部扩展和M07-03仍未通过。
 - 本映射只覆盖凭证台账页面宿主；共享ConfirmDialog、ResponsiveDataView、ProviderRuntimeSurface和NavigationShell内部交互沿用各自合同。
+
+## P51 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P51.json)：26个局部源位置 → 20组；1类写入，19组路由动作，1组转发/容器关联不重复计动作。已映射0/3个源码字段位置，0/3处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有120个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| CL51-NAV 在采集总览、任务页和浏览器运行间导航 / navigation | 4处；current-route-source-contract | ；其余见JSON | 导航可见性不证明目标路由的数据范围、权限或运行服务状态。 |
+| CL51-LOAD 读取、刷新或重读当前任务列表 / read | 2处；current-route-source-contract | ；其余见JSON | 本地动作映射不证明真实 collection:replay 权限、MySQL 结果或线上超时表现。 |
+| CL51-STATE-PRIMARY 将状态面主操作接到列表读取处理器 / wiring | 1处；current-route-source-contract | ；其余见JSON | 静态事件关系不验证真实未授权、会话过期或 API 恢复结果。 |
+| CL51-FILTER 切换服务端任务状态筛选 / read | 1处；current-route-source-contract | ；其余见JSON | 状态目录完整性和真实服务端筛选语义仍需用运行数据验证。 |
+| CL51-PAGE 翻阅当前服务端分页结果 / read | 2处；current-route-source-contract | ；其余见JSON | 分页指标仅代表服务端返回页与 meta.total，不证明跨组织数据隔离。 |
+| CL51-EMPTY-RECOVERY 重读空列表或返回全部状态 / read | 1处；current-route-source-contract | ；其余见JSON | 合成空态不证明真实队列为空或恢复请求成功。 |
+| CL51-DETAIL-OPEN 从桌面行或手机记录打开完整任务详情 / navigation | 2处；current-route-source-contract | ；其余见JSON | 本页映射不验收共享 ResponsiveDataView 抽屉内部的全部焦点与角色状态。 |
+| CL51-DETAIL-READ 重试当前任务详情读取 / read | 1处；current-route-source-contract | ；其余见JSON | 本地失败样例不证明真实详情权限、历史事件完整性或服务端响应。 |
+| CL51-DETAIL-DISMISS 仅在点击详情遮罩本身时关闭详情 / local | 1处；current-route-source-contract | ；其余见JSON | 静态映射不证明触控设备、浏览器历史或读屏器行为。 |
+| CL51-DETAIL-DIALOG 为任务详情提供原生对话框语义 / local | 1处；current-route-source-contract | ；其余见JSON | 静态属性不等同于真实辅助技术读屏或完整模态隔离验收。 |
+| CL51-DETAIL-KEYBOARD 处理详情 Escape 关闭与可见控件 Tab 循环 / local | 1处；current-route-source-contract | ；其余见JSON | 源语义映射不覆盖所有浏览器、缩放、读屏器或共享确认窗内部焦点行为。 |
+| CL51-DETAIL-CLOSE 关闭 loading、error 或 loaded 中的任务详情 / navigation | 1处；current-route-source-contract | ；其余见JSON | 静态路径映射不证明所有历史栈形态均可恢复焦点。 |
+| CL51-MOBILE-TECH 从移动任务记录进入技术详情 / local | 1处；current-route-source-contract | ；其余见JSON | 共享移动记录抽屉的内部生命周期不由本页面局部合同冒领。 |
+| CL51-RECOVERY-ANCHOR 定位到当前死信任务的人工重放区域 / local | 1处；current-route-source-contract | ；其余见JSON | 页面内锚点可达性不证明重放依赖已经恢复。 |
+| CL51-RECOVERY-NAV 按任务阻塞或终态进入既有恢复页面 / navigation | 1处；current-route-source-contract | ；其余见JSON | 导航目标存在不证明目标页权限、配置更改或任务恢复结果。 |
+| CL51-ROBOTS-DISCLOSURE 按需展开已返回的 robots 判定摘要 / local | 1处；current-route-source-contract | ；其余见JSON | 展开行为不证明当前网站政策或生产采集器实际遵守结果。 |
+| CL51-TECH-DISCLOSURE 按需展开任务技术关联标识 / local | 1处；current-route-source-contract | ；其余见JSON | 本地渲染映射不证明真实接口脱敏、角色授权或审计访问策略。 |
+| CL51-REPLAY-OPEN 打开现有死信任务人工重放确认 / local | 1处；current-route-source-contract | ；其余见JSON | 静态映射不证明真实依赖已修复或用户有 collection:replay 权限。 |
+| CL51-REPLAY-WRITE 确认后为当前死信创建新的人工重放任务 / write | 1处；current-route-source-contract | ；其余见JSON | 本合同不执行真实死信重放，不证明 collection:replay/RBAC、MySQL 事务、Worker 执行、幂等或外部采集成功。 |
+| CL51-REPLAY-DIALOG 调用共享死信重放二次确认窗 / local | 1处；current-route-source-contract | ；其余见JSON | 共享 ConfirmDialog 内部按钮状态和焦点循环属于共享控件合同，不在P51本地候选计数内。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| CL51-STATE-PRIMARY | @primary / () => load() | CL51-LOAD |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+
+### 明确保留的边界
+
+- 逐项覆盖CollectionRuntimeSurface.vue与CollectionTaskCenter.vue的26个当前扫描候选；共享移动详情、确认窗和导航壳的内部候选不重复并入P51局部计数。
+- 手动重放只登记既有dead_letter POST与reason字段；不增加任务创建、状态修改、自动重试或外部采集动作。
+- 用户视觉自动通过与动作映射分开记录；actionApproval、真实collection:replay授权、MySQL、Worker终态、读屏和正式M07-03签收仍未通过。
+- 本映射只覆盖采集页签宿主和任务页组件；ResponsiveDataView、ConfirmDialog、UiStatePanel、NavigationShell和API客户端共享交互继续以各自合同为准。
 
 ## P54 局部动作与共享消费者
 

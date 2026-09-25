@@ -243,7 +243,7 @@
     "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "ff6b41e79cb7eba143652e3114c1a979379d22bcdf88a4a1de246d9b969fb378",
     "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "46208241bd2c2586902709b5164d7c7c873569a0e5dd07eca3bf2196e009dbd6",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
-    "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "5311066f4b9987ae7c02369bc9533fd6ee2ea502667b1f4dfa483af81c7853ca",
+    "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "eca9334488a0ba9ba53dee8c1ca3232717c96a18c48fdbae6ed02cc005f81b78",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "52bcc443860a0bb026603c721ab806104450f0780cb4d2a9f9898ca59ee80884",
     "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "776fc3abc9b2c95b0441f701f1623eb18972e88482177b7b51cfb06f82408ed8",
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "6350ced052c4283d850746b8736e64ab76ed2ed7eabe2ecd3feac5dcb630f815",
@@ -265,7 +265,7 @@
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "458a1816ede8758e1c5579c7e86d08ed0e2a6677625eb513662fc48f0c1e6bb1",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "76a24081b3dc1566b2564cdbbfed07e22c563e57163540e5e4e477674f6f5b22",
     "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "397590fc13cc8b8464b7f71973412e4d598652708ef722b1416d4ed2e391619f",
-    "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "e32cf911f6f385ada27937a4b24ec7eeaff9196deff06413de03c05215e9d502",
+    "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "807b562fa1c4ddd4b2fdf58f0fe635ce7a9af2dd7dcd246f89cfc59db508a762",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "c81dcd0bb2c2ca22a5a777b7e1aa96fd44e8b23c31ce8c0d415622e63d744bec",
     "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "53418f5884776c80af2aee2d9c253f9c62e6517adbd92997cda678a4806e62eb",
@@ -510,7 +510,9 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json": "96a62a7bd311026549d9b269a1ab268bb83f6624b3e173dfee8df955a72688a2",
     "tests/unit/ui-phase2-p49-action-map.test.mjs": "e68ae4976a2e7aaa11a201227c2d32139789eb698210448e5dad3382643728ed",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P50.json": "7d9780ae5f819dc48a1464ade191ea4135dec50477ca10462df0b639f73132e2",
-    "tests/unit/ui-phase2-p50-action-map.test.mjs": "ae180a8f3ddf127d3c8ac023330c0afdf1003c16e9a4168df651e316c5267220",
+    "tests/unit/ui-phase2-p50-action-map.test.mjs": "4c61df3cb0613cd955defb597905e8381e6a55a3d83f5dde31bec168d985aa6d",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P51.json": "99bd0218a17d0b7c5eb9a19b5f6a4fcb30903a048ed3acbbbf3f51de0f443d86",
+    "tests/unit/ui-phase2-p51-action-map.test.mjs": "795e5958e54feed9ebcb6f06f5c2b66bc8455fff16be43a397248249fac208d0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "077621e403cc46d1ee487b3e98a895ec1fd86017bddf709839404ed5b7ea30de",
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -606,13 +608,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 53,
-    "explicitlyGroupedSourceSites": 1205,
-    "semanticGroups": 1070,
-    "routeActions": 856,
-    "wiringGroups": 110,
+    "reviewedPages": 54,
+    "explicitlyGroupedSourceSites": 1231,
+    "semanticGroups": 1090,
+    "routeActions": 875,
+    "wiringGroups": 111,
     "pagesWithoutExplicitSemanticReview": [
-      "P51",
       "P52",
       "P53",
       "P57",
@@ -635,7 +636,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 53,
+    "visualApprovedReviewedPages": 54,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -2828,13 +2829,42 @@
       "path": "/platform-admin/collection",
       "title": "采集任务",
       "oldStaticAssociatedCandidates": 81,
-      "review": null,
+      "review": {
+        "pageId": "P51",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 26,
+        "semanticGroups": 20,
+        "routeActions": 19,
+        "wiringGroups": 1,
+        "excludedGroups": 0,
+        "writeActions": 1,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 120,
+        "surfaces": {
+          "callerFiles": 2,
+          "localModelBindings": 3,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 3,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "collection-tasks-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "逐项覆盖CollectionRuntimeSurface.vue与CollectionTaskCenter.vue的26个当前扫描候选；共享移动详情、确认窗和导航壳的内部候选不重复并入P51局部计数。",
+        "手动重放只登记既有dead_letter POST与reason字段；不增加任务创建、状态修改、自动重试或外部采集动作。",
+        "用户视觉自动通过与动作映射分开记录；actionApproval、真实collection:replay授权、MySQL、Worker终态、读屏和正式M07-03签收仍未通过。"
+      ]
     },
     {
       "id": "P52",
@@ -4511,6 +4541,32 @@
         "localModelBindings": 14,
         "reviewedInputBindings": 0,
         "sourceCallerContainers": 4,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P51",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 26,
+      "semanticGroups": 20,
+      "routeActions": 19,
+      "wiringGroups": 1,
+      "excludedGroups": 0,
+      "writeActions": 1,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 120,
+      "surfaces": {
+        "callerFiles": 2,
+        "localModelBindings": 3,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 3,
         "callerContainers": 0,
         "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
@@ -9397,7 +9453,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeSurface.vue#ebad8fdaf536f0e3.1",
@@ -9420,7 +9482,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeSurface.vue#404044c1ac23071f.1",
@@ -9443,7 +9511,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#d1849db8e18799fd.1",
@@ -9466,7 +9540,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#a0dc06b99ac90370.1",
@@ -9489,7 +9569,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#3a210e63ca5a7831.1",
@@ -9513,7 +9599,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-STATE-PRIMARY",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#4ec44b3c83794aca.1",
@@ -9545,7 +9637,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#7e6436ac5e8e9b15.1",
@@ -9573,7 +9671,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-FILTER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#dfaa056b9550313b.1",
@@ -9609,7 +9713,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-DETAIL-OPEN",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#5efbd64729e57af0.1",
@@ -9641,7 +9751,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-DETAIL-OPEN",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#1c008f867673db60.1",
@@ -9673,7 +9789,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-MOBILE-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#16620352511db5c2.1",
@@ -9701,7 +9823,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-EMPTY-RECOVERY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#680ca05fdeabfdbf.1",
@@ -9733,7 +9861,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#cda5e997a43d64c9.1",
@@ -9765,7 +9899,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#6b55734308f206c3.1",
@@ -9793,7 +9933,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-DETAIL-DISMISS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#ed8b70dc2e6170f2.1",
@@ -9821,7 +9967,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-DETAIL-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#d3da42ac8f789e3b.1",
@@ -9849,7 +10001,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-DETAIL-KEYBOARD",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#30e32a01e61d8558.1",
@@ -9881,7 +10039,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-DETAIL-CLOSE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#33bc529b8390aa3d.1",
@@ -9917,7 +10081,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-DETAIL-READ",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#96164ff76e31b8d8.1",
@@ -9961,7 +10131,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-RECOVERY-ANCHOR",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#9334ac0d41264e22.1",
@@ -10005,7 +10181,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-RECOVERY-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#d499af7185a1f039.1",
@@ -10049,7 +10231,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-ROBOTS-DISCLOSURE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#79686f2d00e174f0.1",
@@ -10085,7 +10273,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-TECH-DISCLOSURE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#5046ae27ac1c3e07.1",
@@ -10125,7 +10319,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-REPLAY-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#acbca874b622fd25.1",
@@ -10148,7 +10348,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-REPLAY-WRITE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#e9f14f18f727a992.1",
@@ -10171,7 +10377,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P51",
+          "actionId": "CL51-REPLAY-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#c989a362f5cc118d.1",
