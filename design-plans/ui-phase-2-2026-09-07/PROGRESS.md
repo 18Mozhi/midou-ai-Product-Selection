@@ -18,7 +18,9 @@
 
 ## 2026-09-25 · P60 一次性密钥展示生命周期
 
-密钥只在当前页面、组织与视图上下文仍有效时展示；组织输入或视图变化、离开 KeepAlive 页面及卸载都会清除已显示密钥，迟到的写响应不会重新显示旧上下文密钥。使用合成拦截响应覆盖组织变化、视图切换、KeepAlive 离开及迟到响应。P60 定向单测33/33、M06-05 Playwright 桌面/390px 手机各5/5、Web类型检查/构建、前端预算202资源、文档/运行文档/格式/静态分析门通过。一个 review-only 预览转换单测仍受 NavigationShell 旧锚点影响，未改共享运行壳层；真实密钥/权限/API写入与M07-03验收不在本批验证范围。详见 `P60-SECRET-LIFECYCLE-BATCH29.md`。本批部署记录待后续附加。
+密钥只在当前页面、组织与视图上下文仍有效时展示；组织输入或视图变化、离开 KeepAlive 页面及卸载都会清除已显示密钥，迟到的写响应不会重新显示旧上下文密钥。使用合成拦截响应覆盖组织变化、视图切换、KeepAlive 离开及迟到响应。P60 定向单测33/33、M06-05 Playwright 桌面/390px 手机各5/5、Web类型检查/构建、前端预算202资源、文档/运行文档/格式/静态分析门通过。一个 review-only 预览转换单测仍受 NavigationShell 旧锚点影响，未改共享运行壳层；真实密钥/权限/API写入与M07-03验收不在本批验证范围。详见 `P60-SECRET-LIFECYCLE-BATCH29.md`。
+
+批次提交 `151b8069afaa2f5dfb029a7e9d57101679202a13` 已推送并按固定宝塔脚本发布；脚本返回 `deployed`、临时包已删除。线上 live/ready/available/version、`/platform-admin/open-platform` 均HTTP 200，version build SHA 与提交一致；`OpenPlatformCenter` JS/CSS HTTP 200且SHA-256与本地生产构建匹配。线上核验为只读静态路由/健康/资源检查，不含真实密钥签发、MySQL/RBAC、外部回调或正式M07-03验收。后续阶段仍继续。
 
 ## 2026-09-25 · P37 审计筛选历史与缓存恢复
 
