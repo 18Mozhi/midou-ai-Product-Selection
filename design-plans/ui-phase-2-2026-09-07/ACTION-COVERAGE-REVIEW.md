@@ -3,10 +3,10 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1701；旧登记1477；新身份611，旧表独有身份387。签名变化不等于增删业务能力。
-- 已具体语义对应57页/1303源位置/1145组；其中路由动作923组，转发/容器关联118组，其余明确排除。其余16页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应58页/1346源位置/1169组；其中路由动作947组，转发/容器关联118组，其余明确排除。其余15页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记57页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记58页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -71,7 +71,7 @@
 | [P55 质量与规则](page-specs/P55.md) | 59 | [8组](action-reviews/P55.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P56 内容管理](page-specs/P56.md) | 75 | [7组](action-reviews/P56.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P57 通知管理](page-specs/P57.md) | 75 | [21组](action-reviews/P57.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P58 配额管理](page-specs/P58.md) | 71 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P58 配额管理](page-specs/P58.md) | 71 | [24组](action-reviews/P58.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P59 安全中心](page-specs/P59.md) | 69 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P60 开放平台](page-specs/P60.md) | 72 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P61 系统状态](page-specs/P61.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -4487,3 +4487,53 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 投递筛选只影响投递记录/摘要；消息草稿目录使用独立message_page，邮件能力保持关闭，不新增邮件入口或自动投递。
 - 草稿保存、发布和取消仍由既有父级API所有者处理；原因窗取消不写入，取消只针对未发布draft，不撤回已发布消息。
 - PlatformManagementCenter跨域状态所有者与NavigationShell沿其各自合同复用；PlatformNotificationPagination一个源码按钮由两条独立分页消费者使用，游标仍分开。
+
+## P58 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P58.json)：43个局部源位置 → 24组；2类写入，24组路由动作，0组转发/容器关联不重复计动作。已映射0/26个源码字段位置，0/2处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有144个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| CO58-LOAD 读取或刷新商业运营快照 / read | 2处；current-route-source-contract | ；其余见JSON | 静态映射不证明真实会话、RBAC、服务端统计口径或生产读取成功。 |
+| CO58-NEW 从页面任一新建入口打开同一草稿窗 / local | 2处；current-route-source-contract | ；其余见JSON | 打开窗口不证明后续POST、RBAC或幂等写入结果。 |
+| CO58-CURRENT-WORKSPACE 切换方案目录与组织配额工作区 / local | 2处；current-route-source-contract | ；其余见JSON | 本地视图切换不代表组织已经读取或授权。 |
+| CO58-ORG-READ 读取输入的组织配额范围 / read | 2处；current-route-source-contract | ；其余见JSON | 输入UUID及本地GET不证明组织身份或真实RBAC。 |
+| CO58-ORG-CLEAR 清除组织范围并返回全局方案目录 / read | 1处；current-route-source-contract | ；其余见JSON | 清除范围不删除组织或配额数据。 |
+| CO58-SUSPEND 准备暂停当前组织配额 / local | 1处；current-route-source-contract | ；其余见JSON | 确认窗打开不证明暂停已执行或审计已写入。 |
+| CO58-RESUME 准备恢复当前组织配额 / local | 1处；current-route-source-contract | ；其余见JSON | 确认窗打开不证明恢复已执行或额度已生效。 |
+| CO58-END 准备结束当前组织配额分配 / local | 1处；current-route-source-contract | ；其余见JSON | 确认窗打开不证明分配已结束或外部限制已发生。 |
+| CO58-ASSIGN 准备首次分配或变更组织配额方案 / local | 2处；current-route-source-contract | ；其余见JSON | 预览中的额度影响不证明服务端有效额度或真实用量。 |
+| CO58-ADJUST 准备新增单计量项人工额度调整 / local | 2处；current-route-source-contract | ；其余见JSON | 本地预览不证明后端时间语义、当前有效额度或审计结果。 |
+| CO58-REVOKE 准备撤销当前页的一条活动调整 / local | 1处；current-route-source-contract | ；其余见JSON | 列表状态不证明此刻仍生效；准备意图不代表撤销完成。 |
+| CO58-ADJ-PAGE 翻阅组织调整历史的独立分页 / read | 2处；current-route-source-contract | ；其余见JSON | 本地分页不验证服务端总数或历史记录完整性。 |
+| CO58-FILTER 查询商业方案目录筛选 / read | 2处；current-route-source-contract | ；其余见JSON | 筛选提交不证明服务端过滤语义或授权。 |
+| CO58-RESET 清空方案目录筛选 / read | 1处；current-route-source-contract | ；其余见JSON | 重置筛选不清理服务端数据。 |
+| CO58-EDIT-OPEN 打开所选方案的编辑草稿窗 / local | 1处；current-route-source-contract | ；其余见JSON | 打开编辑器不证明版本仍然最新或有保存权限。 |
+| CO58-ACTIVATE 准备启用草稿方案 / local | 1处；current-route-source-contract | ；其余见JSON | 启用入口不证明活动组织分配、写入或审计结果。 |
+| CO58-RETIRE 准备退役启用中的方案 / local | 1处；current-route-source-contract | ；其余见JSON | 退役入口不证明未来服务端分配行为或写入成功。 |
+| CO58-PAGE 翻阅方案目录独立分页 / read | 2处；current-route-source-contract | ；其余见JSON | 本地分页不验证服务端COUNT、筛选语义或生产数据。 |
+| CO58-CREATE-DIALOG 呈现并关闭创建方案草稿窗 / local | 4处；current-route-source-contract | ；其余见JSON | 窗口结构和关闭不代表表单通过服务端校验或草稿已写入。 |
+| CO58-CREATE 提交新建配额方案草稿 / write | 2处；current-route-source-contract | ；其余见JSON | 静态源映射不证明真实RBAC、未知POST结果策略、MySQL事务或审计。 |
+| CO58-EDIT-DIALOG 呈现、键盘关闭或取消编辑方案窗 / local | 3处；current-route-source-contract | ；其余见JSON | 局部窗口映射不证明完整读屏、键盘和生产权限。 |
+| CO58-SAVE-PREPARE 将编辑表单转换为版本化保存确认意图 / local | 2处；current-route-source-contract | ；其余见JSON | 预览影响不证明真实组织影响、版本有效或保存已执行。 |
+| CO58-CONFIRM-DIALOG 呈现或取消商业配额影响确认窗 / local | 3处；current-route-source-contract | ；其余见JSON | 确认界面不证明影响计算与后端状态完全一致。 |
+| CO58-CONFIRM 确认并提交当前商业配额变更 / write | 2处；current-route-source-contract | ；其余见JSON | 不代表真实platform:operate授权、MySQL事务/审计、请求未知处理或配额实际强制执行。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+
+### 明确保留的边界
+
+- 逐项覆盖CommercialOperationsCenter.vue的43个当前候选；共享壳层和技术详情内部控件按共享合同处理。
+- 显式区分准备影响确认与确认提交；创建仅创建draft，其他组织/方案写操作均经现有影响确认。
+- 不推定未知POST结果可安全重提，不新增价格、计费、收费套餐、组织选择API或配额执行行为。
+- 本映射覆盖CommercialOperationsCenter.vue页面局部候选；共享NavigationShell、技术详情及基础样式组件内部交互不重复计入P58。

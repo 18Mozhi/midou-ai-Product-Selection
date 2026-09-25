@@ -244,7 +244,7 @@
     "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "46208241bd2c2586902709b5164d7c7c873569a0e5dd07eca3bf2196e009dbd6",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "f75a5b158124235ff951c8dd1b69fdeed7d3cbb3b722601397ddda17b4ce5fd4",
-    "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "52bcc443860a0bb026603c721ab806104450f0780cb4d2a9f9898ca59ee80884",
+    "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "f12927837a6e8f002575a87826b1cd3c11d21fcdf7619f7e992a532454d5c0f1",
     "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "776fc3abc9b2c95b0441f701f1623eb18972e88482177b7b51cfb06f82408ed8",
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "b5463da0234f707cbbd40804c227b7ffc02959bc399a8e22bdeeba7092640ea1",
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "5f3c64c9b20555b19912b0348b264904c1d624bcbac1cc5b9a64182ac71cf149",
@@ -528,6 +528,8 @@
     "scripts/verify-ui-phase2-content-c.mjs": "de06af621213c8dbf1e4eb1d1d7eb77b40eef5ea882fa49ca3a772d285aafae2",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P57.json": "e0974451f75e916f7bf25a9038b9bf046c72d6241d7c57ff7b054010da029eb8",
     "tests/unit/ui-phase2-p57-action-map.test.mjs": "2ec83f7f90020ee20b53f4f3b75cacffaf1d305b9fa09d4f338d45ebdf91b956",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P58.json": "a797aa69783dd129683e6d3f9839cd2a91242a10fa7b36c02479587f7cbe6536",
+    "tests/unit/ui-phase2-p58-action-review.test.mjs": "9d8f8c1c97bec57a3f26ebc6aca25f2d0ffb4a87798cfa7173ff1e8557e059f5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "b55592c802f1c2298d7910080beae7e68aec828a11357363546a1007f3c859fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "c429b797dbd4a03d6ae7ab46566440059f39dd47ba2c41b7913cf99d76677ee5",
@@ -585,7 +587,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P55.md": "eecb01a5420fe50237138a202cd58f9623faac8741c8942a50695acda7f1499a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P56.md": "0e4e2251072e0b24a261d350bd476434aebcb2a1dfc4c329e5d2625a7d667222",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "8b3ecc637cdd7afadc3906676aa6bcd083a0cc5c1bb4bf6608e20c73b8e9dc5b",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P58.md": "6db483dbff408114f131efc73a947ea4133e6b9182f2c273a08f830940667231",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P58.md": "f5c8adcf83981edea27b9088e97b7ecba9d7153dc6c61847919a09d36ae8a50b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P59.md": "529f3048769ab67e059a66d9f71b7893b25d2a320eacb047f7fac3dcdff374f7",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "e37bda1d2dee311b10ea1a4422f5b2e74e2a9cca8e6c00830619c90094028d4e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "72af7291f7d1b8d03f95fe02106b7a2a772e348277562ab5377e8847171c4a4a",
@@ -614,13 +616,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 57,
-    "explicitlyGroupedSourceSites": 1303,
-    "semanticGroups": 1145,
-    "routeActions": 923,
+    "reviewedPages": 58,
+    "explicitlyGroupedSourceSites": 1346,
+    "semanticGroups": 1169,
+    "routeActions": 947,
     "wiringGroups": 118,
     "pagesWithoutExplicitSemanticReview": [
-      "P58",
       "P59",
       "P60",
       "P61",
@@ -639,7 +640,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 57,
+    "visualApprovedReviewedPages": 58,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -3130,13 +3131,42 @@
       "path": "/platform-admin/commercial",
       "title": "配额管理",
       "oldStaticAssociatedCandidates": 71,
-      "review": null,
+      "review": {
+        "pageId": "P58",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 43,
+        "semanticGroups": 24,
+        "routeActions": 24,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 2,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 144,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 26,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 2,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "commercial-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "逐项覆盖CommercialOperationsCenter.vue的43个当前候选；共享壳层和技术详情内部控件按共享合同处理。",
+        "显式区分准备影响确认与确认提交；创建仅创建draft，其他组织/方案写操作均经现有影响确认。",
+        "不推定未知POST结果可安全重提，不新增价格、计费、收费套餐、组织选择API或配额执行行为。"
+      ]
     },
     {
       "id": "P59",
@@ -4813,6 +4843,32 @@
         "localModelBindings": 13,
         "reviewedInputBindings": 0,
         "sourceCallerContainers": 1,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P58",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 43,
+      "semanticGroups": 24,
+      "routeActions": 24,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 2,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 144,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 26,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 2,
         "callerContainers": 0,
         "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
@@ -10833,7 +10889,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#be51bdf2cdf9a55b.1",
@@ -10854,7 +10916,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-NEW",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#97ebdc1b722c2d96.1",
@@ -10873,7 +10941,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-CURRENT-WORKSPACE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#dc703a87b7ae511f.1",
@@ -10892,7 +10966,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-CURRENT-WORKSPACE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#493a928ba76cfd75.1",
@@ -10918,7 +10998,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-ORG-READ",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#ad67cce2619c5349.1",
@@ -10944,7 +11030,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-ORG-READ",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#b48d0677e26f41b1.1",
@@ -10974,7 +11066,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-ORG-CLEAR",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#d776ea6a30d93887.1",
@@ -11000,7 +11098,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#242e3015fcd7a833.1",
@@ -11042,7 +11146,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-SUSPEND",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#13e46057d2fb04d8.1",
@@ -11084,7 +11194,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-RESUME",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#dd38746d8ffdb0c3.1",
@@ -11126,7 +11242,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-END",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#b892a7fa2cef5f0a.1",
@@ -11160,7 +11282,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-ASSIGN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#9e4e87ab21464529.1",
@@ -11194,7 +11322,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-ASSIGN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#ee61aee8d61107d7.1",
@@ -11232,7 +11366,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-ADJUST",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#813b6f6555c53581.1",
@@ -11270,7 +11410,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-ADJUST",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#f89ab4cc10f2272c.1",
@@ -11320,7 +11466,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-REVOKE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#30584d1112c65a3f.1",
@@ -11362,7 +11514,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-ADJ-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#dcf33a943a6cf78c.1",
@@ -11404,7 +11562,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-ADJ-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#63cd4281b5c9bba9.1",
@@ -11434,7 +11598,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-NEW",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#6ccee5bf5f08a84f.1",
@@ -11464,7 +11634,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-FILTER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#dd360735505349d1.1",
@@ -11494,7 +11670,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-FILTER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#2f1b49bdefe2e793.1",
@@ -11524,7 +11706,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-RESET",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#b9b9138a457290a7.1",
@@ -11562,7 +11750,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-EDIT-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#08f74ebab8ffdc18.1",
@@ -11604,7 +11798,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-ACTIVATE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#3bb72b8a5d05954f.1",
@@ -11646,7 +11846,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-RETIRE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#b80d8e0853709211.1",
@@ -11680,7 +11886,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#56d050ac5ca9e0cd.1",
@@ -11714,7 +11926,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#151c3c8c32d92c80.1",
@@ -11733,7 +11951,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-CREATE-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#30d28c64a162319d.1",
@@ -11752,7 +11976,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-CREATE-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#de9a0d9bc0232967.1",
@@ -11771,7 +12001,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-CREATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#c172959eea18c58e.1",
@@ -11790,7 +12026,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-CREATE-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#64a8d5e746c9adce.1",
@@ -11809,7 +12051,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-CREATE-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#2be90b500fbc2735.1",
@@ -11830,7 +12078,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-CREATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#2580b7a172938724.1",
@@ -11851,7 +12105,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-EDIT-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#fdd65c58da16291a.1",
@@ -11872,7 +12132,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-EDIT-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#c272d770b0c006ce.1",
@@ -11898,7 +12164,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-SAVE-PREPARE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#be9bcd04e462aa25.1",
@@ -11924,7 +12196,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-EDIT-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#5dc1a96390934ee9.1",
@@ -11950,7 +12228,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-SAVE-PREPARE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#d3b00b7eb8292418.1",
@@ -11971,7 +12255,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-CONFIRM-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#5a1af08abe5636bc.1",
@@ -11992,7 +12282,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-CONFIRM-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#5c175a797dcf657a.1",
@@ -12018,7 +12314,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-CONFIRM",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#53e49d44934e8397.1",
@@ -12044,7 +12346,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-CONFIRM-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#0406cc973c1194af.1",
@@ -12070,7 +12378,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P58",
+          "actionId": "CO58-CONFIRM",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#92a11027f1dd1f3c.1",

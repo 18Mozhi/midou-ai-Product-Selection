@@ -1,0 +1,901 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P58",
+  "route": "/platform-admin/commercial",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/CommercialOperationsCenter.vue": "3b783a9e9b70b366da425f11ef81526b15a05d797c86cb1c5d563ec663252257"
+  },
+  "inputs": {
+    "apps/web/src/components/CommercialOperationsCenter.vue": [
+      "organizationInput",
+      "assignment.plan_id",
+      "assignment.period_start",
+      "assignment.period_end",
+      "assignment.reason",
+      "adjustment.quota_key",
+      "adjustment.delta_value",
+      "adjustment.effective_at",
+      "adjustment.expires_at",
+      "adjustment.reason",
+      "query",
+      "status",
+      "plan.code",
+      "plan.name",
+      "plan.description",
+      "plan.collection_tasks",
+      "plan.open_api_requests",
+      "plan.report_exports",
+      "plan.reason",
+      "editingPlan.name",
+      "editingPlan.description",
+      "editingPlan.collection_tasks",
+      "editingPlan.open_api_requests",
+      "editingPlan.report_exports",
+      "editingPlan.status",
+      "editingPlan.reason"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "CO58-LOAD",
+      "kind": "read",
+      "label": "读取或刷新商业运营快照",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#c989a362f5cc118d.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#d776ea6a30d93887.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-LOAD 刷新",
+        "CO58-LOAD 错误重试"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-LOAD精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "用户刷新当前商业运营视图或读取失败后重试时。",
+      "handler": "调用既有load与GET；沿用URL中的组织、筛选和两个分页状态，失败保留已读快照。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "静态映射不证明真实会话、RBAC、服务端统计口径或生产读取成功。"
+    },
+    {
+      "actionId": "CO58-NEW",
+      "kind": "local",
+      "label": "从页面任一新建入口打开同一草稿窗",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#63cd4281b5c9bba9.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#be51bdf2cdf9a55b.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-NEW 顶部新建",
+        "CO58-NEW 目录重复入口"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-NEW精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "用户在页头或目录中请求新建方案时。",
+      "handler": "设置现有creatingPlan窗口状态；不创建草稿、不启用方案，也不分配组织额度。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "打开窗口不证明后续POST、RBAC或幂等写入结果。"
+    },
+    {
+      "actionId": "CO58-CURRENT-WORKSPACE",
+      "kind": "local",
+      "label": "切换方案目录与组织配额工作区",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#97ebdc1b722c2d96.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#dc703a87b7ae511f.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-CURRENT-WORKSPACE / 切换至全局方案目录，仅本地视图状态",
+        "CO58-CURRENT-WORKSPACE / 切换至组织配额视图，本身不触发组织读取或写入"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-CURRENT-WORKSPACE精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "用户选择方案目录或组织配额任务线时。",
+      "handler": "只切换reviewTask本地视图，不触发组织读取或任何配额写入。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地视图切换不代表组织已经读取或授权。"
+    },
+    {
+      "actionId": "CO58-ORG-READ",
+      "kind": "read",
+      "label": "读取输入的组织配额范围",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#493a928ba76cfd75.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#ad67cce2619c5349.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-ORG 读取form",
+        "CO58-ORG 同form提交按钮"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-ORG-READ精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "组织ID表单提交且没有读取请求在途时。",
+      "handler": "使用现有UUID输入、URL状态与页面GET读取组织、分配、用量和调整；不新增组织搜索接口。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "输入UUID及本地GET不证明组织身份或真实RBAC。"
+    },
+    {
+      "actionId": "CO58-ORG-CLEAR",
+      "kind": "read",
+      "label": "清除组织范围并返回全局方案目录",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#b48d0677e26f41b1.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-ORG 清除"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-ORG-CLEAR精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "用户清除当前组织范围且读取空闲时。",
+      "handler": "清除输入与组织URL参数、重置调整历史页并读取现有全局目录。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "清除范围不删除组织或配额数据。"
+    },
+    {
+      "actionId": "CO58-SUSPEND",
+      "kind": "local",
+      "label": "准备暂停当前组织配额",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#242e3015fcd7a833.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-SUSPEND 暂停确认入口"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-SUSPEND精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "当前分配可暂停且页面展示暂停入口时。",
+      "handler": "准备既有版本化suspend POST、expected_version与原因并显示影响确认；点击本身不提交。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "确认窗打开不证明暂停已执行或审计已写入。"
+    },
+    {
+      "actionId": "CO58-RESUME",
+      "kind": "local",
+      "label": "准备恢复当前组织配额",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#13e46057d2fb04d8.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-RESUME 恢复确认入口"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-RESUME精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "当前分配可恢复且页面展示恢复入口时。",
+      "handler": "准备既有版本化resume POST与原因并显示影响确认；点击本身不提交。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "确认窗打开不证明恢复已执行或额度已生效。"
+    },
+    {
+      "actionId": "CO58-END",
+      "kind": "local",
+      "label": "准备结束当前组织配额分配",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#dd38746d8ffdb0c3.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-END 结束确认入口"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-END精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "当前分配未结束且页面展示结束入口时。",
+      "handler": "准备既有版本化end POST与原因并显示影响确认；点击本身不提交。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "确认窗打开不证明分配已结束或外部限制已发生。"
+    },
+    {
+      "actionId": "CO58-ASSIGN",
+      "kind": "local",
+      "label": "准备首次分配或变更组织配额方案",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#9e4e87ab21464529.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#b892a7fa2cef5f0a.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-ASSIGN 分配/变更form",
+        "CO58-ASSIGN 同form按钮"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-ASSIGN精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "组织已读取，用户提交方案、周期和原因表单时。",
+      "handler": "按现有表单生成分配/变更确认意图；沿用当前页active方案及版本，暂不POST。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "预览中的额度影响不证明服务端有效额度或真实用量。"
+    },
+    {
+      "actionId": "CO58-ADJUST",
+      "kind": "local",
+      "label": "准备新增单计量项人工额度调整",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#813b6f6555c53581.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#ee61aee8d61107d7.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-ADJUST 调整form",
+        "CO58-ADJUST 同form按钮"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-ADJUST精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "组织有未结束分配且调整量通过当前前端校验时。",
+      "handler": "非零调整进入现有影响确认；保留计量项、有效期、原因和分配身份，不直接POST。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地预览不证明后端时间语义、当前有效额度或审计结果。"
+    },
+    {
+      "actionId": "CO58-REVOKE",
+      "kind": "local",
+      "label": "准备撤销当前页的一条活动调整",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#f89ab4cc10f2272c.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-REVOKE 调整撤销"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-REVOKE精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "当前调整记录原状态为active并显示撤销入口时。",
+      "handler": "准备带expected_version及既有原因的撤销POST确认意图；只针对该调整记录。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "列表状态不证明此刻仍生效；准备意图不代表撤销完成。"
+    },
+    {
+      "actionId": "CO58-ADJ-PAGE",
+      "kind": "read",
+      "label": "翻阅组织调整历史的独立分页",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#30584d1112c65a3f.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#dcf33a943a6cf78c.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-ADJ-PAGE 上一页",
+        "CO58-ADJ-PAGE 下一页"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-ADJ-PAGE精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "目标调整页处于服务端分页边界内且没有读取请求在途时。",
+      "handler": "只更新adjustment_page并读取；不更改方案目录page。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地分页不验证服务端总数或历史记录完整性。"
+    },
+    {
+      "actionId": "CO58-FILTER",
+      "kind": "read",
+      "label": "查询商业方案目录筛选",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#6ccee5bf5f08a84f.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#dd360735505349d1.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-FILTER 查询form",
+        "CO58-FILTER 同form按钮"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-FILTER精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "用户提交查询或状态筛选且读取空闲时。",
+      "handler": "保留现有query/status允许值，重置方案目录页并经GET读取；不作用于组织用量。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "筛选提交不证明服务端过滤语义或授权。"
+    },
+    {
+      "actionId": "CO58-RESET",
+      "kind": "read",
+      "label": "清空方案目录筛选",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#2f1b49bdefe2e793.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-RESET 重置"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-RESET精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "读取空闲时用户请求重置筛选。",
+      "handler": "清空query/status、回到目录第一页并读取当前方案目录。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "重置筛选不清理服务端数据。"
+    },
+    {
+      "actionId": "CO58-EDIT-OPEN",
+      "kind": "local",
+      "label": "打开所选方案的编辑草稿窗",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#b9b9138a457290a7.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-EDIT 打开编辑"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-EDIT-OPEN精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "当前方案行提供编辑入口时。",
+      "handler": "将当前已读方案字段与expected_version复制到本地编辑草稿，不发送请求。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "打开编辑器不证明版本仍然最新或有保存权限。"
+    },
+    {
+      "actionId": "CO58-ACTIVATE",
+      "kind": "local",
+      "label": "准备启用草稿方案",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#08f74ebab8ffdc18.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-ACTIVATE 启用确认"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-ACTIVATE精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "当前行状态为draft且显示快捷启用入口时。",
+      "handler": "以当前方案值和expected_version准备既有PATCH确认意图；不直接启用。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "启用入口不证明活动组织分配、写入或审计结果。"
+    },
+    {
+      "actionId": "CO58-RETIRE",
+      "kind": "local",
+      "label": "准备退役启用中的方案",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#3bb72b8a5d05954f.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-RETIRE 退役确认"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-RETIRE精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "当前行状态为active且显示快捷退役入口时。",
+      "handler": "以当前方案值和expected_version准备既有PATCH确认意图；不直接退役。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "退役入口不证明未来服务端分配行为或写入成功。"
+    },
+    {
+      "actionId": "CO58-PAGE",
+      "kind": "read",
+      "label": "翻阅方案目录独立分页",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#56d050ac5ca9e0cd.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#b80d8e0853709211.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-PAGE 上一页",
+        "CO58-PAGE 下一页"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-PAGE精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "目标方案目录页处于当前服务端分页边界内且读取空闲时。",
+      "handler": "只更新page并读取；不更改调整历史页。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地分页不验证服务端COUNT、筛选语义或生产数据。"
+    },
+    {
+      "actionId": "CO58-CREATE-DIALOG",
+      "kind": "local",
+      "label": "呈现并关闭创建方案草稿窗",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#151c3c8c32d92c80.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#30d28c64a162319d.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#64a8d5e746c9adce.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#c172959eea18c58e.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-CREATE / 创建配额方案草稿窗结构及身份说明",
+        "CO58-CREATE / 原生cancel转发至现有关闭守卫",
+        "CO58-CREATE / 显式关闭创建草稿窗，提交期间禁用",
+        "CO58-CREATE / 取消创建草稿，提交期间禁用"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-CREATE-DIALOG精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "创建窗口实例打开、关闭或收到原生cancel事件时。",
+      "handler": "沿用原生dialog、现有关闭守卫和忙碌禁关行为；取消仅关闭窗口，不撤销已发事务。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "窗口结构和关闭不代表表单通过服务端校验或草稿已写入。"
+    },
+    {
+      "actionId": "CO58-CREATE",
+      "kind": "write",
+      "label": "提交新建配额方案草稿",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#2be90b500fbc2735.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#de9a0d9bc0232967.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-CREATE 同form提交按钮",
+        "CO58-CREATE / 受控表单提交既有创建处理器"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-CREATE精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "创建字段通过浏览器约束且mutating=false时。",
+      "handler": "仅由表单提交既有POST /platform/commercial/plans，带原字段、reason、Origin/幂等键所有者与忙碌保护；成功创建draft，不自动启用或分配。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "静态源映射不证明真实RBAC、未知POST结果策略、MySQL事务或审计。"
+    },
+    {
+      "actionId": "CO58-EDIT-DIALOG",
+      "kind": "local",
+      "label": "呈现、键盘关闭或取消编辑方案窗",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#2580b7a172938724.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#be9bcd04e462aa25.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#fdd65c58da16291a.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-EDIT 编辑dialog定义",
+        "CO58-EDIT Escape转发",
+        "CO58-EDIT 取消"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-EDIT-DIALOG精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "编辑方案实例打开且尚未转换为影响确认时。",
+      "handler": "使用现有原生dialog与Escape守卫；取消丢弃本地编辑草稿，不改方案。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "局部窗口映射不证明完整读屏、键盘和生产权限。"
+    },
+    {
+      "actionId": "CO58-SAVE-PREPARE",
+      "kind": "local",
+      "label": "将编辑表单转换为版本化保存确认意图",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#5dc1a96390934ee9.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#c272d770b0c006ce.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-SAVE 编辑form转影响确认",
+        "CO58-SAVE 同form按钮"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-SAVE-PREPARE精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "编辑字段通过表单约束并提交时。",
+      "handler": "调用既有savePlan构造PATCH与expected_version/reason，关闭编辑窗并转入影响确认；此步不写入。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "预览影响不证明真实组织影响、版本有效或保存已执行。"
+    },
+    {
+      "actionId": "CO58-CONFIRM-DIALOG",
+      "kind": "local",
+      "label": "呈现或取消商业配额影响确认窗",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#53e49d44934e8397.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#5a1af08abe5636bc.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#d3b00b7eb8292418.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-CONFIRM 影响dialog定义",
+        "CO58-CONFIRM Escape转发",
+        "CO58-CONFIRM 取消"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-CONFIRM-DIALOG精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "任一既有商业写操作已准备pending意图时。",
+      "handler": "展示当前影响快照；Escape或取消清空pending，不提交POST/PATCH。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "确认界面不证明影响计算与后端状态完全一致。"
+    },
+    {
+      "actionId": "CO58-CONFIRM",
+      "kind": "write",
+      "label": "确认并提交当前商业配额变更",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CommercialOperationsCenter.vue#0406cc973c1194af.1",
+        "apps/web/src/components/CommercialOperationsCenter.vue#5c175a797dcf657a.1"
+      ],
+      "sourceContractKeys": [
+        "CO58-CONFIRM form",
+        "CO58-CONFIRM 执行按钮"
+      ],
+      "contractAliasReason": "沿用P58现有CO58源合同对CO58-CONFIRM精确归属，不扩大商业范围、字段或API行为。",
+      "condition": "存在pending操作且mutating=false，用户显式确认时。",
+      "handler": "仅此确认表单调用pending中既有path/method/body及幂等键；写后重读快照并显示现有结果反馈。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p58-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "不代表真实platform:operate授权、MySQL事务/审计、请求未知处理或配额实际强制执行。"
+    }
+  ],
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "页面定义创建、编辑、影响确认三个原生dialog；静态映射不替代真实浏览器焦点、读屏、RBAC、商业写入或审计验收。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/CommercialOperationsCenter.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/CommercialOperationsCenter.vue": "3b783a9e9b70b366da425f11ef81526b15a05d797c86cb1c5d563ec663252257"
+    },
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [],
+    "sharedRemaining": [
+      "本映射覆盖CommercialOperationsCenter.vue页面局部候选；共享NavigationShell、技术详情及基础样式组件内部交互不重复计入P58。"
+    ],
+    "remaining": "源码映射与既有本地测试不证明真实会话/RBAC、未知POST结果策略、MySQL事务审计、生产配额效果或完整M06-06验收。"
+  },
+  "compositionGaps": [
+    "逐项覆盖CommercialOperationsCenter.vue的43个当前候选；共享壳层和技术详情内部控件按共享合同处理。",
+    "显式区分准备影响确认与确认提交；创建仅创建draft，其他组织/方案写操作均经现有影响确认。",
+    "不推定未知POST结果可安全重提，不新增价格、计费、收费套餐、组织选择API或配额执行行为。"
+  ]
+}

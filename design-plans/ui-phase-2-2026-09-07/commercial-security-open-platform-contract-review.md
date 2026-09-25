@@ -381,3 +381,11 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 | apps/web/src/components/CommercialOperationsCenter.vue#925fc3fffe999c5a.1 | 983 | form-event | CO58-CREATE 旧创建form |
 | apps/web/src/components/CommercialOperationsCenter.vue#1afdd47b63111a06.1 | 989 | control | CO58-CREATE 旧顶部关闭 |
 | apps/web/src/components/CommercialOperationsCenter.vue#a4c5a912e246ba93.1 | 1037 | control | CO58-CREATE 旧取消 |
+
+## 12. P58 当前动作与弹窗语义映射（2026-09-26）
+
+新增 `action-reviews/P58.json` 与永久回归，将当前 `CommercialOperationsCenter.vue` 的43个源码候选逐一归入既有CO58合同。目录读取、组织读取、两套分页和筛选分别归属；准备影响确认的组织/方案操作与确认提交写入明确分开。创建草稿是直接POST，但只创建draft；其他配额变更仅由影响确认提交。这里是静态源码映射，不是按钮六态验收、action审批、真实RBAC/MySQL/审计或生产验收；未知POST结果的重提策略继续待产品决定。
+
+| 当前源文件 | 当前LF SHA-256 | 当前候选 | 语义组 |
+| --- | --- | ---: | ---: |
+| apps/web/src/components/CommercialOperationsCenter.vue | 3b783a9e9b70b366da425f11ef81526b15a05d797c86cb1c5d563ec663252257 | 43 | 24 |
