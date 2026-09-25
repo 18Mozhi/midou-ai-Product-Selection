@@ -40,8 +40,7 @@ const definitions = [
     label: "打开运行档案关联表单",
     kind: "local",
     condition: "当前用户可创建运行档案引用且页面没有敏感写入在途。",
-    handler:
-      "打开既有新建档案表单；使用现有默认值和当前可关联资产候选，不读取秘密或直接启用来源。",
+    handler: "打开既有新建档案表单；使用现有默认值和当前可关联资产候选，不读取秘密或直接启用来源。",
     remaining: "前端入口不证明真实角色可见范围、档案状态或加密资产关联权限。",
   },
   {
@@ -83,7 +82,8 @@ const definitions = [
     label: "校验并提交凭证创建或轮换表单",
     kind: "write",
     sourceContractKeys: ["SC50-ASSET/ROTATE / 字段无效反馈、Tab循环与既有保存提交"],
-    contractAliasReason: "同一原生表单在资产创建和轮换两种既有模式间切换；表单提交仍调用各自原处理器。",
+    contractAliasReason:
+      "同一原生表单在资产创建和轮换两种既有模式间切换；表单提交仍调用各自原处理器。",
     condition: "表单字段满足现有原生校验，且凭证写协调器未被占用。",
     handler:
       "保留创建/轮换现有字段、expected_version、幂等和写后读取语义；提交拒绝/冲突按当前字段与消息处理，不自动重复写入。",
@@ -91,11 +91,7 @@ const definitions = [
   },
   {
     actionId: "SC50-ASSET-VALIDATION",
-    candidates: [
-      "3b5333f821fbebcc.1",
-      "f0de1dd230399061.1",
-      "db8f358359d81455.1",
-    ],
+    candidates: ["3b5333f821fbebcc.1", "f0de1dd230399061.1", "db8f358359d81455.1"],
     label: "清除凭证字段的过期原生错误",
     kind: "local",
     condition: "资产/轮换字段发生符合现有事件绑定的值变化时。",
@@ -120,7 +116,8 @@ const definitions = [
     label: "校验并提交运行档案引用表单",
     kind: "write",
     sourceContractKeys: ["SC50-PROFILE / 字段无效反馈、Tab循环与既有档案关联提交"],
-    contractAliasReason: "该表单只创建当前凭证资产的运行档案引用，并保留原字段默认值与既有提交函数。",
+    contractAliasReason:
+      "该表单只创建当前凭证资产的运行档案引用，并保留原字段默认值与既有提交函数。",
     condition: "当前资产引用与档案字段通过原生校验，且无写入占用。",
     handler: "沿用创建档案引用的现有 POST 与幂等/写后读取处理；默认disabled状态不被映射或修改。",
     remaining: "本地映射不证明资产归属校验、真实RBAC或数据库关联约束。",
@@ -168,7 +165,8 @@ const definitions = [
     label: "选择本地登录材料文件",
     kind: "local",
     sourceContractKeys: ["SC50-FILE / 受控文件选择"],
-    contractAliasReason: "文件只进入现有登录导入内存流程并受既有扩展名、大小和来源校验，不上传至新通道。",
+    contractAliasReason:
+      "文件只进入现有登录导入内存流程并受既有扩展名、大小和来源校验，不上传至新通道。",
     condition: "登录表单允许选取与当前导入方式匹配的文件时。",
     handler:
       "保留Cookie文件与完整浏览器档案各自既有限制，使用原FileReader读取，并在来源/方式/窗体上下文变化时清理载荷。",
@@ -203,16 +201,13 @@ const definitions = [
     label: "关闭或取消凭证、档案与登录编辑窗",
     kind: "local",
     condition: "相应编辑器已打开且父级现有关闭守卫允许关闭。",
-    handler: "调用当前closeEditor或保留既有取消行为，清理材料/字段错误并关闭窗体；写入忙碌时拒绝关闭。",
+    handler:
+      "调用当前closeEditor或保留既有取消行为，清理材料/字段错误并关闭窗体；写入忙碌时拒绝关闭。",
     remaining: "触发焦点返回、遮罩与Escape的真实浏览器表现需单独验收。",
   },
   {
     actionId: "SC50-REVOKE",
-    candidates: [
-      "a244801ec79346ec.1",
-      "5eca67d4ff8b7b15.1",
-      "cb14d6dea1ed210f.1",
-    ],
+    candidates: ["a244801ec79346ec.1", "5eca67d4ff8b7b15.1", "cb14d6dea1ed210f.1"],
     label: "确认撤销选定凭证资产",
     kind: "write",
     sourceContractKeys: [
@@ -295,8 +290,16 @@ export function buildP50ActionReview() {
     const previous = recordsById.get(record.candidateId);
     if (previous)
       assert.equal(
-        previous.claim.split("|").map((cell) => cell.trim()).filter(Boolean).at(-1),
-        record.claim.split("|").map((cell) => cell.trim()).filter(Boolean).at(-1),
+        previous.claim
+          .split("|")
+          .map((cell) => cell.trim())
+          .filter(Boolean)
+          .at(-1),
+        record.claim
+          .split("|")
+          .map((cell) => cell.trim())
+          .filter(Boolean)
+          .at(-1),
         `conflicting current P50 contract for ${record.candidateId}`,
       );
     else recordsById.set(record.candidateId, record);
@@ -320,9 +323,13 @@ export function buildP50ActionReview() {
     const actionId = ownerBySignature.get(signature);
     assert.ok(actionId, `unmapped P50 candidate ${record.candidateId}`);
     groups.get(actionId).push(record.candidateId);
-    claimsByGroup
-      .get(actionId)
-      .push(record.claim.split("|").map((cell) => cell.trim()).filter(Boolean).at(-1));
+    claimsByGroup.get(actionId).push(
+      record.claim
+        .split("|")
+        .map((cell) => cell.trim())
+        .filter(Boolean)
+        .at(-1),
+    );
   }
   const visualStates = Object.fromEntries(
     ["default", "hover", "focus", "pressed", "disabled", "busy"].map((state) => [
@@ -335,8 +342,9 @@ export function buildP50ActionReview() {
     label: definition.label,
     kind: definition.kind,
     sourceCandidateIds: groups.get(definition.actionId).sort(),
-    sourceContractKeys:
-      definition.sourceContractKeys ?? [...new Set(claimsByGroup.get(definition.actionId))],
+    sourceContractKeys: definition.sourceContractKeys ?? [
+      ...new Set(claimsByGroup.get(definition.actionId)),
+    ],
     contractAliasReason:
       definition.contractAliasReason ??
       `按既有SC50合同对${definition.actionId}的精确源码归属合并，不扩展凭证、档案、登录或撤销行为。`,
@@ -349,7 +357,9 @@ export function buildP50ActionReview() {
     remaining: definition.remaining,
   }));
   const surfaces = scanReviewSurfaces(source, sourceFile);
-  const inputs = surfaces.inputs.length ? { [sourceFile]: surfaces.inputs.map((x) => x.binding) } : {};
+  const inputs = surfaces.inputs.length
+    ? { [sourceFile]: surfaces.inputs.map((x) => x.binding) }
+    : {};
   return {
     schemaVersion: 1,
     pageId: "P50",

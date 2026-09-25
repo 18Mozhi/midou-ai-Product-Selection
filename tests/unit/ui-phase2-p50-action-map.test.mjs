@@ -46,10 +46,22 @@ test("P50 keeps distinct asset/profile/login/revoke and browser-helper effects",
     "SC50-HELPER-COOKIE",
   ])
     assert.equal(review.actions.find((action) => action.actionId === actionId)?.kind, "write");
-  assert.equal(review.actions.find((action) => action.actionId === "SC50-EXTERNAL")?.kind, "navigation");
-  assert.equal(review.actions.find((action) => action.actionId === "SC50-HELPER-DOWNLOAD")?.kind, "local");
-  assert.match(review.actions.find((action) => action.actionId === "SC50-LOGIN-SAVE").handler, /资产POST后再运行档案POST/u);
-  assert.match(review.actions.find((action) => action.actionId === "SC50-REVOKE").handler, /expected_version/u);
+  assert.equal(
+    review.actions.find((action) => action.actionId === "SC50-EXTERNAL")?.kind,
+    "navigation",
+  );
+  assert.equal(
+    review.actions.find((action) => action.actionId === "SC50-HELPER-DOWNLOAD")?.kind,
+    "local",
+  );
+  assert.match(
+    review.actions.find((action) => action.actionId === "SC50-LOGIN-SAVE").handler,
+    /资产POST后再运行档案POST/u,
+  );
+  assert.match(
+    review.actions.find((action) => action.actionId === "SC50-REVOKE").handler,
+    /expected_version/u,
+  );
   assert.match(review.compositionGaps.join(" "), /不自动启用|不同动作审阅/u);
 });
 
