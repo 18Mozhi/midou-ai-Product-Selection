@@ -3,10 +3,10 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1701；旧登记1477；新身份605，旧表独有身份381。签名变化不等于增删业务能力。
-- 已具体语义对应49页/1046源位置/990组；其中路由动作782组，转发/容器关联105组，其余明确排除。其余24页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应50页/1062源位置/1013组；其中路由动作803组，转发/容器关联106组，其余明确排除。其余23页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记49页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记50页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -60,7 +60,7 @@
 | [P44 管理员管理](page-specs/P44.md) | 97 | [44组](action-reviews/P44.json) | 186个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P45 角色权限](page-specs/P45.md) | 97 | [5组](action-reviews/P45.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P46 来源设置](page-specs/P46.md) | 78 | [24组](action-reviews/P46.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P47 采集程序](page-specs/P47.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P47 采集程序](page-specs/P47.md) | 78 | [23组](action-reviews/P47.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P48 热点来源](page-specs/P48.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P49 1688 启用检查](page-specs/P49.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P50 凭证与档案](page-specs/P50.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -3895,6 +3895,64 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 视觉自动批准不提升actionApproval、所有控件全状态、真实来源授权、provider:configure、MySQL、审计、采集执行或正式M07-03生产验收。
 - ProviderRuntimeSurface的全局shell、DiscoveryOverlay、NavigationShell和其他子路由源组件不在P46本地表面范围；它们按各自页面/共享合同审阅，不在本映射中重复计数。
 - P46筛选字段与TableViewControls density在顶层inputs中绑定核对；本局部surface输入表只展开23个来源表单字段，不代表全局偏好/读屏验收。
+
+## P47 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P47.json)：31个局部源位置 → 23组；1类写入，21组路由动作，1组转发/容器关联不重复计动作。已映射0/7个源码字段位置，2/2处调用/内嵌容器，2个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有90个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| PR47-NAV-REGISTRY 返回来源定义目录 / navigation | 3处；global-rail、page-header、empty-directory | ；其余见JSON | 本地路由和菜单可见性不证明服务端角色守卫或目标页API授权。 |
+| PR47-NAV-ADAPTERS 当前适配器导航项 / navigation | 1处；current-route | ；其余见JSON | 当前项可见不证明用户具有真实访问权限。 |
+| PR47-NAV-SOURCES 来源频道导航 / navigation | 1处；source-channel | ；其余见JSON | 本地链接不证明来源频道角色授权。 |
+| PR47-NAV-1688 1688来源检查二级入口 / navigation | 1处；superadmin-visible、otherwise-hidden | ；其余见JSON | 前端v-if不是服务端授权证据。 |
+| PR47-NAV-CREDENTIALS 凭证目录二级入口 / navigation | 1处；superadmin-visible、otherwise-hidden | ；其余见JSON | 本地能力条件不证明真实服务端RBAC或凭证访问授权。 |
+| PR47-LOAD 读取或重读适配器状态目录 / read | 2处；initial、manual-refresh、retained-snapshot-retry、loading、error | ；其余见JSON | 本地映射不证明真实来源目录、provider:configure授权或服务端过期会话处理。 |
+| PR47-LOAD-WIRING 状态面板primary重读事件转发 / wiring | 1处；error-retry、retained-snapshot-retry | ；其余见JSON | 转发接线不证明状态面板完整文案、会话导航或真实权限。 |
+| PR47-SECONDARY-UNBOUND 未绑定父处理器的状态面板secondary / excluded | 1处；error、forbidden、blocked、expired | ；其余见JSON | 真实登录恢复目标属于安全/产品行为，本映射不擅自接入。 |
+| PR47-RESET 清除全部筛选与排序 / local | 2处；toolbar、empty-query、empty-status、empty-registration、combined-filter | ；其余见JSON | 仅描述客户端视图状态，不是服务端筛选或持久化偏好。 |
+| PR47-FILTER-DISCLOSURE 展开筛选与排序字段 / local | 1处；collapsed、expanded | ；其余见JSON | 原生details操作与完整读屏验收仍需运行时覆盖。 |
+| PR47-RECOVER-NAV 前往采集调度查看恢复入口 / navigation | 2处；desktop-row、mobile-detail、recovery-gate-closed-no-link | ；其余见JSON | 导航可见不等于恢复请求已提交、熔断已解除或拥有相应真实授权。 |
+| PR47-PROBE 对当前来源执行健康检查 / write | 2处；desktop、mobile-detail、pending、success、rejected | ；其余见JSON | POST会触达外部来源并记录健康事实；真实授权、外发、幂等、未知结果及MySQL未由静态映射证明。 |
+| PR47-PROBE-TRACE 展开当前来源检查追踪编号 / local | 1处；collapsed、expanded | ；其余见JSON | 展示编号不代表服务端动作成功或可对外复制。 |
+| PR47-READ-TRACE 展开目录读取追踪编号 / local | 1处；collapsed、expanded | ；其余见JSON | 读取request标识与探针request标识不可混为一条回执。 |
+| PR47-TECH-DETAIL 展开移动来源技术详情 / local | 1处；collapsed、expanded、long-technical-value | ；其余见JSON | 技术披露不替代真实数据库事实、授权检查或完整屏幕阅读器验收。 |
+| PR47-PAGE-PREV 适配器目录上一页 / local | 1处；first-page-disabled、later-page-enabled | ；其余见JSON | 不是服务端分页或跨刷新位置。 |
+| PR47-PAGE-NEXT 适配器目录下一页 / local | 1处；last-page-disabled、later-page-enabled、filter-shrinks-page-count | ；其余见JSON | 客户端分页结果不证明服务端结果总数或数据完整性。 |
+| PR47-MOBILE-PREVIEW-OPEN 打开移动来源详情预览 / local | 1处；closed、open、selected-record | ；其余见JSON | 详情内容仍是适配器列表快照，不证明独立详情读取或后端权限。 |
+| PR47-MOBILE-PREVIEW-CLOSE 关闭移动来源详情并返回触发器 / local | 3处；escape、tab-cycle、scrim、header-close、trigger-removed | ；其余见JSON | 当前源映射不替代所有异步结果/缓存生命周期、真实读屏和软键盘验收。 |
+| PR47-MOBILE-PREVIEW-SURFACE 移动详情共享容器定义 / local | 1处；closed、open | ；其余见JSON | 容器定义不证明详情值正确或所有共享消费者验收。 |
+| PR47-COLUMNS-OPEN 展开桌面列显示设置 / local | 1处；closed、open、single-column-hidden | ；其余见JSON | 390px手机使用移动卡片，不由桌面列控件映射代表。 |
+| PR47-COLUMN-TOGGLE 切换桌面目录列显示 / local | 1处；visible、hidden、last-visible-protected | ；其余见JSON | 只记录共享本地偏好与保护条件，不表示持久化或所有其他消费者通过。 |
+| PR47-FREEZE 冻结或取消冻结首个可见列 / local | 1处；unfrozen、frozen | ；其余见JSON | 冻结是页面本地显示偏好，不证明持久化、横向滚动和其他消费者通过。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| PR47-LOAD-WIRING | @primary / load | PR47-LOAD |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| ProviderAdapterCenter.vue / ResponsiveDataView.1 / adapter-detail-preview | responsive-row-detail / related-scene-only | [detail · 1440](design/provider-adapters-direction-c/1440-detail.png) / [detail · 390](design/provider-adapters-direction-c/390-detail.png)、[detail-technical · 1440](design/provider-adapters-direction-c/1440-detail-technical.png) / [detail-technical · 390](design/provider-adapters-direction-c/390-detail-technical.png) | 仅记录P47预览容器所用源结构；不代表目录权限或外部探针验收。 |
+| ProviderAdapterCenter.vue / aside.1 / default-truth-note | inline-aside / related-scene-only | [default · 1440](design/provider-adapters-direction-c/1440-default.png) / [default · 390](design/provider-adapters-direction-c/390-default.png) | 只覆盖当前说明层，不作为生产事实验收。 |
+
+### 明确保留的边界
+
+- 31个当前P47与已列共享源候选均按实际路由调用映射；不把共享组件的其他页面消费者并入本页验收。
+- 健康检查POST会触达外部来源；缓存淘汰后的同标签页在途锁及未知网络结果策略仍按待确认边界单独处理，不由动作地图自行批准。
+- 不在P47直接触发采集、恢复熔断、修改来源定义或生成适配器；相关能力归属其他路由/API。
+- 视觉通过仅记录为用户全局授权；actionApproval、动态状态/弹窗完整性、真实RBAC、外部探针、MySQL及M07-03生产验收仍未通过。
+- 仅覆盖P47适配器消费者的移动预览容器；不将共享组件的其他页面调用者纳入本页验收。
 
 ## P54 局部动作与共享消费者
 

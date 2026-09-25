@@ -257,7 +257,7 @@
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
     "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md": "bb96f5d6c067255f9e22f4051e117c6352f18dea2184eaf7639a6b305cd8f9cd",
     "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "cf100dafa46b0a9dc7f11b51fe923e99da9bb3166b23a905f116ffc2d0a935ba",
-    "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "a4491f104c95d7990b095e7b45274a809072e11a977bf4e1c73ab97f49c1eb0f",
+    "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "9514a192992f81a59c2a031bab4f61f45d6849fdf984e96ebf4720c3a080cb7f",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "f7ebe07d459e15dbbcf7277443fc9d62c5b1babd1722b7b869cf1c567232b385",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "b3ed452522bdd2a90555b598dbbb202b0d066b3ee7ee428d649c3ad310de6c81",
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "31d1354c3f232fbce6a74028e25e4aa9578fc76654096a1fc14d614759c19898",
@@ -503,6 +503,8 @@
     "tests/e2e/m03-01-provider-registry.spec.ts": "72915fae648b4c45fd6017de436d33d0032be5abff8d473713788cc314730f88",
     "tests/unit/ui-phase2-p46-action-map.test.mjs": "2013206d1dab1da9d1c496db1cf8041f1d1f17a8f7938d7c8aa4e81c15bb6416",
     "tests/m03-01/provider-registry.test.mjs": "063dc557443189915365dac01a4b33e36d97bd841f23eec1ba9cdd8acf11a15a",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P47.json": "b34e8925bc188dda4b953b60776562b09c3aeb3af3dcda3c8b4e6bc9cb53b4f3",
+    "tests/unit/ui-phase2-p47-action-map.test.mjs": "c7afdcccdf764a8f41001ad63502435b47b6a1fc11a11f5a64752dc8fce90870",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "077621e403cc46d1ee487b3e98a895ec1fd86017bddf709839404ed5b7ea30de",
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -598,13 +600,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 605,
     "oldOnlyIdentities": 381,
-    "reviewedPages": 49,
-    "explicitlyGroupedSourceSites": 1046,
-    "semanticGroups": 990,
-    "routeActions": 782,
-    "wiringGroups": 105,
+    "reviewedPages": 50,
+    "explicitlyGroupedSourceSites": 1062,
+    "semanticGroups": 1013,
+    "routeActions": 803,
+    "wiringGroups": 106,
     "pagesWithoutExplicitSemanticReview": [
-      "P47",
       "P48",
       "P49",
       "P50",
@@ -631,7 +632,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 49,
+    "visualApprovedReviewedPages": 50,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -2654,13 +2655,43 @@
       "path": "/platform-admin/providers/adapters",
       "title": "采集程序",
       "oldStaticAssociatedCandidates": 78,
-      "review": null,
+      "review": {
+        "pageId": "P47",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 31,
+        "semanticGroups": 23,
+        "routeActions": 21,
+        "wiringGroups": 1,
+        "excludedGroups": 1,
+        "writeActions": 1,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "actual-vue-review-fixture"
+        ],
+        "unmappedVisualSlots": 90,
+        "surfaces": {
+          "callerFiles": 5,
+          "localModelBindings": 7,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 2,
+          "callerContainers": 2,
+          "consumerVariants": 2,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "provider-adapters-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "31个当前P47与已列共享源候选均按实际路由调用映射；不把共享组件的其他页面消费者并入本页验收。",
+        "健康检查POST会触达外部来源；缓存淘汰后的同标签页在途锁及未知网络结果策略仍按待确认边界单独处理，不由动作地图自行批准。",
+        "不在P47直接触发采集、恢复熔断、修改来源定义或生成适配器；相关能力归属其他路由/API。",
+        "视觉通过仅记录为用户全局授权；actionApproval、动态状态/弹窗完整性、真实RBAC、外部探针、MySQL及M07-03生产验收仍未通过。"
+      ]
     },
     {
       "id": "P48",
@@ -4287,6 +4318,32 @@
         "sourceCallerContainers": 3,
         "callerContainers": 3,
         "consumerVariants": 4,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P47",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 31,
+      "semanticGroups": 23,
+      "routeActions": 21,
+      "wiringGroups": 1,
+      "excludedGroups": 1,
+      "writeActions": 1,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "actual-vue-review-fixture"
+      ],
+      "unmappedVisualSlots": 90,
+      "surfaces": {
+        "callerFiles": 5,
+        "localModelBindings": 7,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 2,
+        "callerContainers": 2,
+        "consumerVariants": 2,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -48127,9 +48184,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 179,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 282,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#3d1c1781d275b76d.1",
@@ -48157,9 +48225,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 180,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 276,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-NAV-REGISTRY",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#76057c3353557f12.1",
@@ -48181,9 +48260,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 181,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 284,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-LOAD-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#0da6a9c39b0f685c.1",
@@ -48216,9 +48306,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 182,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 286,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-RESET",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#17cbcae80442585d.1",
@@ -48240,9 +48341,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 183,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 288,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-FILTER-DISCLOSURE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#d1614ad8db6bddf9.1",
@@ -48279,9 +48391,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 184,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 277,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-NAV-REGISTRY",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#ccc2aafd70f9653e.1",
@@ -48307,9 +48430,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 185,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 287,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-RESET",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#96211fe8b4dfe48d.1",
@@ -48354,9 +48488,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 186,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 289,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-RECOVER-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#b02f109125f46ed4.1",
@@ -48397,9 +48542,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 187,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 291,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-PROBE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#741e7ec7cc13dbe8.1",
@@ -48425,9 +48581,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 188,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 292,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-PROBE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#1f36f7b562d00630.1",
@@ -48457,9 +48624,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 189,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 293,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-PROBE-TRACE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#2cf3eb393d8269a0.1",
@@ -48500,9 +48678,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 190,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 290,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-RECOVER-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#1c008f867673db60.1",
@@ -48539,9 +48728,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 191,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 295,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-TECH-DETAIL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#b2c6d3f8f6a9e8a9.1",
@@ -48567,9 +48767,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 192,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 296,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-PAGE-PREV",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#822e3d6d7bce849d.1",
@@ -48595,9 +48806,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 193,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 297,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-PAGE-NEXT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#1c008f867673db60.2",
@@ -48638,9 +48860,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 194,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 294,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P47",
+          "actionId": "PR47-READ-TRACE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#e0fca0e8a134dc18.1",
@@ -49965,12 +50198,27 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 38,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 255,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 275,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P46",
           "actionId": "PR46-NAVIGATION",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-NAV-REGISTRY",
           "kind": "navigation"
         }
       ]
@@ -49996,12 +50244,27 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 39,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 256,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 278,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P46",
           "actionId": "PR46-NAVIGATION",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-NAV-ADAPTERS",
           "kind": "navigation"
         }
       ]
@@ -50027,12 +50290,27 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 40,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 257,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 279,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P46",
           "actionId": "PR46-NAVIGATION",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-NAV-SOURCES",
           "kind": "navigation"
         }
       ]
@@ -50063,12 +50341,27 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 41,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 258,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 280,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P46",
           "actionId": "PR46-NAVIGATION",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-NAV-1688",
           "kind": "navigation"
         }
       ]
@@ -50099,12 +50392,27 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 42,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 259,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 281,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P46",
           "actionId": "PR46-NAVIGATION",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-NAV-CREDENTIALS",
           "kind": "navigation"
         }
       ]
@@ -53181,6 +53489,16 @@
           "jsonPointer": null
         },
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 260,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 298,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md",
           "line": 13,
           "jsonPointer": null
@@ -53195,6 +53513,11 @@
         {
           "pageId": "P46",
           "actionId": "PR46-PREVIEW-OPEN",
+          "kind": "local"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-MOBILE-PREVIEW-OPEN",
           "kind": "local"
         }
       ]
@@ -53226,6 +53549,16 @@
           "jsonPointer": null
         },
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 261,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 299,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md",
           "line": 14,
           "jsonPointer": null
@@ -53240,6 +53573,11 @@
         {
           "pageId": "P46",
           "actionId": "PR46-PREVIEW-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-MOBILE-PREVIEW-CLOSE",
           "kind": "local"
         }
       ]
@@ -53271,6 +53609,16 @@
           "jsonPointer": null
         },
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 262,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 300,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md",
           "line": 15,
           "jsonPointer": null
@@ -53285,6 +53633,11 @@
         {
           "pageId": "P46",
           "actionId": "PR46-PREVIEW-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-MOBILE-PREVIEW-CLOSE",
           "kind": "local"
         }
       ]
@@ -53316,6 +53669,16 @@
           "jsonPointer": null
         },
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 263,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 302,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md",
           "line": 16,
           "jsonPointer": null
@@ -53330,6 +53693,11 @@
         {
           "pageId": "P46",
           "actionId": "PR46-PREVIEW-SURFACE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-MOBILE-PREVIEW-SURFACE",
           "kind": "local"
         }
       ]
@@ -53404,6 +53772,16 @@
           "jsonPointer": null
         },
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 264,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 301,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md",
           "line": 17,
           "jsonPointer": null
@@ -53418,6 +53796,11 @@
         {
           "pageId": "P46",
           "actionId": "PR46-PREVIEW-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-MOBILE-PREVIEW-CLOSE",
           "kind": "local"
         }
       ]
@@ -58015,6 +58398,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 238,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 265,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 303,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -58026,6 +58419,11 @@
         {
           "pageId": "P46",
           "actionId": "PR46-COLUMNS",
+          "kind": "local"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-COLUMNS-OPEN",
           "kind": "local"
         }
       ]
@@ -58102,6 +58500,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 239,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 266,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 304,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -58113,6 +58521,11 @@
         {
           "pageId": "P46",
           "actionId": "PR46-COLUMNS",
+          "kind": "local"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-COLUMN-TOGGLE",
           "kind": "local"
         }
       ]
@@ -58185,6 +58598,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 240,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 267,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 305,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -58196,6 +58619,11 @@
         {
           "pageId": "P46",
           "actionId": "PR46-FREEZE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-FREEZE",
           "kind": "local"
         }
       ]
@@ -64261,12 +64689,27 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 246,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 268,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 283,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P46",
           "actionId": "PR46-LOAD",
+          "kind": "read"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-LOAD",
           "kind": "read"
         }
       ]
@@ -64363,12 +64806,27 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 247,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 269,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 285,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P46",
           "actionId": "PR46-PANEL-SECONDARY-UNBOUND",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P47",
+          "actionId": "PR47-SECONDARY-UNBOUND",
           "kind": "excluded"
         }
       ]

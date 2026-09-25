@@ -245,3 +245,61 @@ P46 当前逐候选动作表见 `action-reviews/P46.json`。以下 `PR46-CURRENT
 | D | 847801b2ac6e7a17.1 | PR46-CURRENT-PREVIEW-CLOSE · 移动详情标题关闭与焦点返回 |
 | U | 589e8eedc7c9c864.1 | PR46-LOAD · P46的primary读取按钮事件 |
 | U | 3eebdb6b72e10446.1 | PR46-SECONDARY-UNBOUND · secondary事件在P46无父级监听，不能算作已实现恢复 |
+
+## P47 页面动作映射与共享控件当前调用归属（2026-09-25）
+
+以下别名将同一共享实现按 P47 当前调用者重新归属；不会把 P46 的来源定义预览或 P38 的平台总览内容混入 P47。共享组件当前业务行为仍由原组件持有，页面动作清单只描述可达入口、事件接线和本地展示。
+
+| 区域 | 当前签名 | P47语义合同 |
+| --- | --- | --- |
+| S | 7d0657958d2afe06.1 | PR47-CURRENT-NAV-REGISTRY · 全局目录到来源定义页 |
+| S | c91c2e71e426b739.1 | PR47-CURRENT-NAV-ADAPTERS · 全局目录当前适配器入口 |
+| S | d6812914ba6d07da.1 | PR47-CURRENT-NAV-SOURCES · 全局目录到来源频道 |
+| S | c56767a09d40c33b.1 | PR47-CURRENT-NAV-1688 · superadmin二级检查入口 |
+| S | 23ee0a87fa977a0d.1 | PR47-CURRENT-NAV-CREDENTIALS · superadmin凭证入口 |
+| D | 6da4dad42cb34c8d.1 | PR47-CURRENT-PREVIEW-OPEN · 移动适配器记录详情预览入口 |
+| D | c182428cb2c0ed66.1 | PR47-CURRENT-PREVIEW-CLOSE · 移动详情Escape及Tab/Shift+Tab处理 |
+| D | 988131834dc4bd6f.1 | PR47-CURRENT-PREVIEW-CLOSE · 移动详情遮罩关闭 |
+| D | a3c9be2acacfd788.1 | PR47-CURRENT-PREVIEW-SURFACE · 移动适配器详情容器定义 |
+| D | 847801b2ac6e7a17.1 | PR47-CURRENT-PREVIEW-CLOSE · 移动详情标题关闭与触发器返焦 |
+| T | e2fd0d02cbd9f684.1 | PR47-CURRENT-COLUMNS-OPEN · P47桌面列设置原生展开控件 |
+| T | 921f4be18a3fe814.1 | PR47-CURRENT-COLUMN-TOGGLE · P47显示列切换，至少保留一列 |
+| T | d09cd5524db7bee5.1 | PR47-CURRENT-FREEZE · P47首个可见列冻结本地偏好 |
+| U | 589e8eedc7c9c864.1 | PR47-CURRENT-LOAD · P47状态面板primary读取按钮 |
+| U | 3eebdb6b72e10446.1 | PR47-CURRENT-SECONDARY-UNBOUND · P47没有绑定secondary父处理器 |
+
+动作审核使用以下精确候选别名；末列为合同键，不是行为描述：
+
+| 区域 | 当前签名 | 合同键 |
+| --- | --- | --- |
+| S | 7d0657958d2afe06.1 | PR47-CURRENT-NAV-REGISTRY |
+| A | 3d1c1781d275b76d.1 | PR47-CURRENT-NAV |
+| A | d1614ad8db6bddf9.1 | PR47-CURRENT-DEFINE |
+| S | c91c2e71e426b739.1 | PR47-CURRENT-NAV-ADAPTERS |
+| S | d6812914ba6d07da.1 | PR47-CURRENT-NAV-SOURCES |
+| S | c56767a09d40c33b.1 | PR47-CURRENT-NAV-1688 |
+| S | 23ee0a87fa977a0d.1 | PR47-CURRENT-NAV-CREDENTIALS |
+| A | 4d3ea4004d92534e.1 | PR47-CURRENT-LOAD |
+| U | 589e8eedc7c9c864.1 | PR47-CURRENT-LOAD |
+| A | 76057c3353557f12.1 | PR47-CURRENT-LOAD |
+| U | 3eebdb6b72e10446.1 | PR47-CURRENT-SECONDARY-UNBOUND |
+| A | 0da6a9c39b0f685c.1 | PR47-CURRENT-RESET |
+| A | ccc2aafd70f9653e.1 | PR47-CURRENT-RESET |
+| A | 17cbcae80442585d.1 | PR47-CURRENT-FILTER |
+| A | 96211fe8b4dfe48d.1 | PR47-CURRENT-RECOVER |
+| A | 2cf3eb393d8269a0.1 | PR47-CURRENT-RECOVER |
+| A | b02f109125f46ed4.1 | PR47-CURRENT-PROBE |
+| A | 741e7ec7cc13dbe8.1 | PR47-CURRENT-PROBE |
+| A | 1f36f7b562d00630.1 | PR47-CURRENT-TRACE |
+| A | 1c008f867673db60.2 | PR47-CURRENT-TRACE |
+| A | 1c008f867673db60.1 | PR47-CURRENT-TECH |
+| A | b2c6d3f8f6a9e8a9.1 | PR47-CURRENT-PAGE |
+| A | 822e3d6d7bce849d.1 | PR47-CURRENT-PAGE |
+| D | 6da4dad42cb34c8d.1 | PR47-CURRENT-PREVIEW-OPEN |
+| D | c182428cb2c0ed66.1 | PR47-CURRENT-PREVIEW-CLOSE |
+| D | 988131834dc4bd6f.1 | PR47-CURRENT-PREVIEW-CLOSE |
+| D | 847801b2ac6e7a17.1 | PR47-CURRENT-PREVIEW-CLOSE |
+| D | a3c9be2acacfd788.1 | PR47-CURRENT-PREVIEW-SURFACE |
+| T | e2fd0d02cbd9f684.1 | PR47-CURRENT-COLUMNS-OPEN |
+| T | 921f4be18a3fe814.1 | PR47-CURRENT-COLUMN-TOGGLE |
+| T | d09cd5524db7bee5.1 | PR47-CURRENT-FREEZE |
