@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import { scanSource } from "./lib/ui-phase2-inventory.mjs";
+import { runContractAudit } from "./audit-ui-phase2-contracts.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const folder = "design-plans/ui-phase-2-2026-09-07/";
@@ -87,13 +88,14 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
   const userContract = source(userContractPath);
   const currentContract = source(currentContractPath);
   const responsiveContract = source(responsiveContractPath);
-  const historicalCandidates = [
-    ...`${contract}\n${userContract}`.matchAll(/^\|\s*([A-Z])\s*\|\s*([0-9a-f]{16}\.\d+)\s*\|/gm),
+  const historicalSnapshot = `${contract}\n${userContract}`;
+  const documentedCandidates = [
+    ...historicalSnapshot.matchAll(/^\|\s*([A-Z])\s*\|\s*([0-9a-f]{16}\.\d+)\s*\|/gm),
   ].map((match) => `${match[1]}#${match[2]}`);
   // The old table is evidence, not the current template. Supersede only the
   // explicitly documented shared components; all other identities remain exact.
   sameUnique(
-    historicalCandidates.filter((key) => key.startsWith("S#")),
+    documentedCandidates.filter((key) => key.startsWith("S#")),
     [
       "S#6da4dad42cb34c8d.1",
       "S#4fa7deb3456a41ae.1",
@@ -109,8 +111,9 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
     ),
   ].map((match) => `S#${match[1]}`);
   assert.equal(responsiveCandidates.length, 5, "current responsive candidates required");
+  sameUnique(responsiveCandidates, [...new Set(responsiveCandidates)], "candidates");
   sameUnique(
-    historicalCandidates.filter((key) => key.startsWith("Q#")),
+    documentedCandidates.filter((key) => key.startsWith("Q#")),
     [
       "Q#28fb788b88500472.1",
       "Q#beb5f8d5846aa028.1",
@@ -118,8 +121,9 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
       "Q#483082db5a776bf3.1",
       "Q#df1390feb7424a07.1",
       "Q#cd956325fcd081da.1",
+      "Q#7e0fa28eaeb1cc09.1",
     ],
-    "historical filter candidates",
+    "documented filter candidates",
   );
   const filterRevisions = [
     ...currentContract.matchAll(/^\|\s*(Q#[0-9a-f]{16}\.\d+)\s*\|\s*(Q#[0-9a-f]{16}\.\d+)\s*\|/gm),
@@ -128,6 +132,7 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
   const [, oldFilter, newFilter] = filterRevisions[0];
   assert.equal(oldFilter, "Q#beb5f8d5846aa028.1", "historical filter open identity");
   assert.notEqual(newFilter, oldFilter, "filter revision must not reuse historical identity");
+  assert.equal(newFilter, "Q#7e0fa28eaeb1cc09.1", "current filter candidate identity");
   const filterSource = source(filterFile);
   const trigger = scanSource(filterSource, filterFile).candidates.find(
     (item) => item.attributes.ref === "triggerButton",
@@ -148,12 +153,26 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
     oldFilter,
     "filter open changes beyond association",
   );
-  const candidates = [
-    ...historicalCandidates
-      .filter((key) => !key.startsWith("S#"))
-      .map((key) => (key === oldFilter ? newFilter : key)),
-    ...responsiveCandidates,
+  const contractDocuments = new Set([
+    `${folder}platform-account-contract-review.md`,
+    `${folder}platform-user-design-contract.md`,
+    `${folder}responsive-detail-focus-contract-review.md`,
+  ]);
+  const currentAudit = runContractAudit((absolute) => read(absolute));
+  const currentCandidateIds = [
+    ...new Set(
+      currentAudit.records
+        .filter(
+          (record) =>
+            contractDocuments.has(record.document) &&
+            record.temporalScope !== "historical" &&
+            ["identity-current", "line-moved"].includes(record.status) &&
+            record.candidateId,
+        )
+        .map((record) => record.candidateId),
+    ),
   ];
+  const candidates = currentCandidateIds;
   const bindings = [...contract.matchAll(/^\|\s*([A-Z])\s*\|\s*([\w.]+)\s*\|/gm)]
     .filter((match) => !/^[0-9a-f]{16}\.\d+$/.test(match[2]))
     .map((match) => `${match[1]}#${match[2]}`);
@@ -165,18 +184,27 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
     vueFiles.push(file);
     const content = source(file);
     expectedCandidates.push(
-      ...scanSource(content, file).candidates.map(
-        (item) => `${alias}#${item.candidateId.split("#")[1]}`,
-      ),
+      ...scanSource(content, file).candidates.map((item) => item.candidateId),
     );
     expectedBindings.push(...modelBindings(content, file).map((binding) => `${alias}#${binding}`));
   }
   sameUnique(candidates, expectedCandidates, "candidates");
   sameUnique(bindings, expectedBindings, "v-model bindings");
-  assert.equal(candidates.length, 128);
+  assert.equal(candidates.length, 118);
   assert.equal(bindings.length, 24);
 
-  const hashes = [...contract.matchAll(/^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|/gm)];
+  const sourceHistory = contract.split("## 7. 源码指纹（LF SHA-256）")[1]?.split("## 8.")[0];
+  assert(sourceHistory, "historical source fingerprint section required");
+  const hashes = [...sourceHistory.matchAll(/^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|/gm)];
+  const historicalInventory = hashes
+    .map((match) => `${match[1].trim()}|${match[2]}`)
+    .sort((a, b) => a.localeCompare(b, "en"))
+    .join("\n");
+  assert.equal(
+    createHash("sha256").update(historicalInventory).digest("hex"),
+    "908a9c67180917252ad3a63871a2e337b498bead5e3f4ddd9b9c87d880d7961e",
+    "historical source fingerprint inventory drift",
+  );
   const revisions = [
     ...currentContract.matchAll(
       /^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|\s*([0-9a-f]{64})\s*\|/gm,
@@ -206,11 +234,6 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
     const file = match[1].trim();
     const revision = revisionByFile.get(file);
     if (revision) assert.equal(match[2], revision.before, `${file}: historical hash drift`);
-    assert.equal(
-      createHash("sha256").update(source(file)).digest("hex"),
-      revision?.after ?? match[2],
-      `${file}: hash drift`,
-    );
   }
   const responsiveHashes = [
     ...responsiveContract.matchAll(/^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|/gm),
@@ -234,8 +257,8 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
       assert(paletteValues.has(name), `missing overlay palette role: ${name}`);
       return paletteValues.get(name);
     });
-  // Keep the earlier focus evidence immutable. Expand only the palette delta from
-  // the appearance-enabled intermediate revision; current raw hashes stay mandatory.
+  // Keep the earlier supplement fingerprint immutable and verify the current
+  // token-expanded source independently from its raw current fingerprint.
   assert.equal(
     responsiveHashes[0][2],
     "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
@@ -243,13 +266,14 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
   );
   assert.equal(
     createHash("sha256").update(beforePalette).digest("hex"),
-    "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
-    "responsive palette delta drift",
+    "cae5867f5fdee18d6543cf705cd36639b10af0bbd383ea874060f0eb9a55f6d7",
+    "current palette expansion drift (source hash drift)",
   );
   // Extraction added a runtime dependency. Keep the original 32-source snapshot,
   // but do not omit the new producer from the current verification surface.
+  const addedSourceSection = currentContract.split("## 当前38个来源的LF指纹")[0];
   const additionalHashes = [
-    ...currentContract.matchAll(/^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|\s*$/gm),
+    ...addedSourceSection.matchAll(/^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|\s*$/gm),
   ];
   sameUnique(
     additionalHashes.map((match) => match[1].trim()),
@@ -262,6 +286,25 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
       createHash("sha256").update(source(file)).digest("hex"),
       match[2],
       `${file}: hash drift`,
+    );
+  }
+  const currentFingerprintSection = currentContract.split("## 当前38个来源的LF指纹")[1];
+  assert(currentFingerprintSection, "current source fingerprint inventory required");
+  const currentFingerprints = [
+    ...currentFingerprintSection.matchAll(/^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|/gm),
+  ];
+  const currentSourceFiles = [...vueFiles, ...supportingSources, ...addedSources];
+  sameUnique(
+    currentFingerprints.map((match) => match[1].trim()),
+    currentSourceFiles,
+    "current source fingerprint files",
+  );
+  for (const match of currentFingerprints) {
+    const file = match[1].trim();
+    assert.equal(
+      createHash("sha256").update(source(file)).digest("hex"),
+      match[2],
+      `${file}: current hash drift`,
     );
   }
   const coverage = JSON.parse(source(`${folder}coverage.json`));
@@ -299,7 +342,7 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
     pages: 8,
     candidates: candidates.length,
     bindings: bindings.length,
-    sources: hashes.length + additionalHashes.length,
+    sources: currentFingerprints.length,
     historicalSources: hashes.length,
     revisedSources: revisions.length,
     links,

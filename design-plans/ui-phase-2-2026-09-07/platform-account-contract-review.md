@@ -6,7 +6,7 @@
 
 ## 1. 数量口径与源码别名
 
-11个本族Vue文件共112个静态候选、23处v-model；其中P43四文件33候选/9绑定复用[用户合同](platform-user-design-contract.md)，本表补其余79候选/14绑定。四个跨模块共享组件另有16候选/1绑定，总计本次核对128候选/24绑定。不是128个业务动作，form/button、事件转发、定义/调用均可能归并；v-for实例、权限/状态及嵌套关系需要运行时扩展，不能凭数量冻结G0。
+11个本族Vue文件共112个静态候选、23处v-model；其中P43四文件33候选/9绑定复用[用户合同](platform-user-design-contract.md)，本表补其余79候选/14绑定。四个跨模块共享组件另有16候选/1绑定，总计该历史快照核对128候选/24绑定。该数字保留为当时的静态清单，不是当前Vue分母或128个业务动作；当前候选与指纹以[当前合同接续](platform-account-current-contract.md)的118候选/38源表为准。form/button、事件转发、定义/调用均可能归并；v-for实例、权限/状态及嵌套关系仍需运行时扩展，不能凭静态数量冻结G0。
 
 别名全部位于apps/web/src/components/：D=PlatformDashboard.vue，C=PlatformAccountCenter.vue，O=PlatformOrganizationRecords.vue，M=PlatformAdminRecords.vue，W=OrganizationCreationWizard.vue，G=PlatformOrganizationDetailDialog.vue，R=PlatformRoleComparison.vue；P43既有A=PlatformAccountDialogs.vue、U=PlatformUserRecords.vue、V=PlatformUserDetailDialog.vue、F=PlatformUserMembershipForm.vue。共享S=ResponsiveDataView.vue、Q=ResponsiveFilterDrawer.vue、T=TableViewControls.vue、X=TechnicalDetails.vue。sig只在所属文件内唯一，不跨文件相加去重。
 
@@ -253,7 +253,7 @@ UI2-PA03现有24个实例：四类各成功/错误×切到乙/停留甲共16；�
 | 无障碍与视觉 | 1440/390、768/1024及适用邻界、200%缩放、长文本、软键盘、16/13px与44px、三主题；真实屏幕阅读/错误和复制失败独立留证 |
 | 正式与生产 | 每页正式图/Vue对照+全部适用变体；真实鉴权/事务/审计及同SHA宝塔证据；未审/未执行不得passed |
 
-本批新增只读验证器`node scripts/verify-ui-phase2-platform-account-contract.mjs`：核对15个Vue文件的128候选及24绑定、八页十项规格/实际路径、文档本地链接与本文记录的源LF哈希；候选和源码漂移时失败。脚本不执行API/浏览器/数据库、不写生成清单，不验证业务语义是否正确，也不将任何review状态设为通过。新状态/变体须由人工查真实调用链补表再实际采证，不能为通过计数删候选。
+本批最初的只读验证器`node scripts/verify-ui-phase2-platform-account-contract.mjs`曾核对15个Vue文件的128历史候选及24绑定。当前实现区分该历史快照与现行源码合同：当前核对118候选、24绑定、38个源指纹，以及八页规格/实际路径和文档链接；历史源清单仍独立固定。脚本不执行API/浏览器/数据库、不写生成清单，不验证业务语义是否正确，也不将任何review状态设为通过。新状态/变体仍须查真实调用链并实际采证，不能靠静态计数替代。
 
 ## 6. 交付、使用与未改变范围
 

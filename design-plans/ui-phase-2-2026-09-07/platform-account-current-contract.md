@@ -2,11 +2,11 @@
 
 2026-09-11。修正独立验证工具把历史快照误作当前源码的缺口。旧 [平台账号合同](platform-account-contract-review.md) 与 [用户设计合同](platform-user-design-contract.md) 原表、图片、批准范围均保留；本文件不是新视觉批准或生产验收。
 
-## 七处明确源码修订
+## 历史源码修订链
 
-历史列必须与原表逐项相等；当前列必须与真实文件的 LF SHA-256 逐项相等。只接续这七个文件，其余原表25个文件仍逐项严格核对；不采用“任意旧哈希也可通过”的宽松回退。
+下表保留七个源码在2026-09-11接续时的历史修订链，不再把`after`列误作今天的指纹。原始32源表位于`platform-account-contract-review.md`第7节，其排序后的`路径|哈希`清单指纹为`908a9c67180917252ad3a63871a2e337b498bead5e3f4ddd9b9c87d880d7961e`。完整38源的当前值统一以本文末尾的当前指纹表为准。
 
-| 文件 | 历史 LF SHA-256 | 当前 LF SHA-256 | 已有依据 |
+| 文件 | 历史基线 LF SHA-256 | 2026-09-11接续时 LF SHA-256 | 已有依据 |
 | --- | --- | --- | --- |
 | apps/web/src/components/PlatformRoleComparison.vue | d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba | 53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809 | 同角色结果局部C展示class；完整脚本/原模板内容与控件保持 |
 | apps/web/src/components/PlatformDashboard.vue | 7935e4cdeca4991615f554ff0c66cf5e623454269fa0771ff06b861f15ca5a95 | b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498 | ea005452 历史时间窗/在途读取修复；[当前语义合同](platform-overview-semantic-contract-review.md) |
@@ -26,17 +26,62 @@ S（ResponsiveDataView）的五个候选读取已有 [动作归属表](responsiv
 | --- | --- | --- |
 | Q#beb5f8d5846aa028.1 | Q#7e0fa28eaeb1cc09.1 | 同一 triggerButton 的 @click=show，仅增加 :aria-controls=panelId；移除这一属性后必须扫描回历史身份 |
 
-验证器不接受其他 Q 候选替换、重复/缺失登记、无关联的旧身份或任意新签名。其余122个候选和全部24个 v-model 继续与实际 Vue 逐项核对。候选数量不是业务动作分母，也不替代运行时唯一面板/首焦点/全部消费者验收；本次静态登记不提升页面审核。
+验证器不接受其他 Q 候选替换、重复/缺失登记、无关联的旧身份或任意新签名。原“其余122个候选”是128候选历史快照中的剩余数，不再用作当前页面计数。当前候选由下文三份现行来源合同精确绑定；候选数量不是业务动作分母，也不替代运行时唯一面板/首焦点/全部消费者验收；本次静态登记不提升页面审核。
 
 PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新增依赖保留；本次把实际导入的共享浮层及 P44 手机调色板两文件加入原始来源检查。P44 两个样式文件的旧指纹分别为 9b74248f/4c668445，本轮接续已有颜色角色提取；布局与已登记区域边界由 [当前图包重放](P44-P46-CURRENT-REPLAY.md) 核对。原32源历史表不改，当前38源是本工具的明确静态范围，不代表全项目源码分母。
 
 | 新增核对文件 | 当前 LF SHA-256 |
 | --- | --- |
-| apps/web/src/use-platform-organization-actions.ts | 3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb |
+| apps/web/src/use-platform-organization-actions.ts | 233d53f196475f976422f7e7ee6867eba3550c89118cee142e500db0069391ae |
 | apps/web/src/use-user-creation-owner.ts | cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e |
 | apps/web/src/components/PlatformAdminComparisonMobile.css | 03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae |
 | apps/web/src/components/PlatformAdminDirectoryMobile.css | 6a9f05f7690a67746b4ea9dc479ea7d78a43ad2b73707bde6d2dad0c2d0050f3 |
-| apps/web/src/design/platform-overlay-tokens.css | 92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b |
+| apps/web/src/design/platform-overlay-tokens.css | 1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5 |
+| apps/web/src/design/platform-admin-mobile-tokens.css | 3c878a3060007abd8bb51a0bf626833a9e8ac7ab4a62c3fcbcd587e9c52b7e68 |
+
+## 当前38个来源的LF指纹（2026-09-25）
+
+候选当前集合从平台账号、用户与共享响应式控件三份合同中按实际扫描状态取`identity-current`/`line-moved`记录，历史身份不冒充现行候选。当前15个Vue文件共118个源码候选、24个v-model；这与原128候选历史快照口径不同，不表示删减业务动作。以下38项包括原32源及六个当前新增依赖，校验器逐项对真实工作树做LF SHA-256核对。
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformDashboard.vue | 902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e |
+| apps/web/src/components/PlatformAccountCenter.vue | eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213 |
+| apps/web/src/components/PlatformOrganizationRecords.vue | 392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a |
+| apps/web/src/components/PlatformAdminRecords.vue | 74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297 |
+| apps/web/src/components/OrganizationCreationWizard.vue | 6ec50816ecc69c9b707e5a309ef789129f8fb5f6087bad0c4427709055b03c53 |
+| apps/web/src/components/PlatformOrganizationDetailDialog.vue | 99466d18329d4315db351e535f52214ae0c14d9d8cec8fc47307d41b4afb487e |
+| apps/web/src/components/PlatformRoleComparison.vue | a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309 |
+| apps/web/src/components/PlatformAccountDialogs.vue | 4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da |
+| apps/web/src/components/PlatformUserRecords.vue | a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228 |
+| apps/web/src/components/PlatformUserDetailDialog.vue | 87e0b0906fded03d7c5337dafa5e6bfc801a2367d12deb652cc36f0f88d32d9a |
+| apps/web/src/components/PlatformUserMembershipForm.vue | 553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644 |
+| apps/web/src/components/ResponsiveDataView.vue | e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7 |
+| apps/web/src/components/ResponsiveFilterDrawer.vue | 5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f |
+| apps/web/src/components/TableViewControls.vue | b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b |
+| apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
+| apps/web/src/use-modal-dialog.ts | 5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc |
+| apps/web/src/use-platform-user-detail.ts | 8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e |
+| apps/web/src/platform-account-types.ts | 7c78cdfd603d8419ee18d7bd5feb12b1d40cbb7bdf102aeaf17a919a7003afe2 |
+| apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
+| apps/web/src/components/NavigationShell.vue | da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9 |
+| apps/api/src/authorization-routes.ts | f670a9e21650e2fedd3ea691049de840cb2a47c9c6add471c38eb7e71e208975 |
+| apps/api/src/platform-account-routes.ts | 79c273a1492f2cc157c72d82ac6ab2b8a950ccb789696c2329d7a6206fefe226 |
+| apps/api/src/platform-account-service.ts | 189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d |
+| apps/api/src/mysql-platform-account-repository.ts | 96cc13077b24ba17643adc9b13ca14cd2e71ea49d3e13d3abceb7b86ed7b87c5 |
+| apps/api/src/platform-dashboard-routes.ts | 1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30 |
+| apps/api/src/platform-dashboard-service.ts | 568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e |
+| apps/api/src/mysql-platform-dashboard-repository.ts | b290af1c03b2767c79bb565f9ec256550250acc4be0cc787de12b81e9b8dcd28 |
+| apps/api/src/mysql-platform-dashboard-scale-metrics.ts | 75f0800028a81a7456578b65699406b8d52593deb89926c4970a4b7bd9679c00 |
+| apps/api/src/mysql-platform-dashboard-collection-metrics.ts | dc37e16179b6c8d57d2b6ffcb23fcfce7d44d950bbfc9263104be1d6d74c438d |
+| apps/api/src/mysql-platform-dashboard-risk-metrics.ts | e49abd8f317094b4b34b5fb31f8cb47e9d3cc1dc9cffcd945035c8ecd648f094 |
+| apps/api/src/mysql-platform-dashboard-storage-metrics.ts | 16b1b6b5e04ae7b3f4438914cd88b7e985d4a836db42c6e6c1855567de0ca808 |
+| config/route-catalog.json | eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b |
+| apps/web/src/use-platform-organization-actions.ts | 233d53f196475f976422f7e7ee6867eba3550c89118cee142e500db0069391ae |
+| apps/web/src/use-user-creation-owner.ts | cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e |
+| apps/web/src/components/PlatformAdminComparisonMobile.css | 03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae |
+| apps/web/src/components/PlatformAdminDirectoryMobile.css | 6a9f05f7690a67746b4ea9dc479ea7d78a43ad2b73707bde6d2dad0c2d0050f3 |
+| apps/web/src/design/platform-overlay-tokens.css | 1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5 |
 | apps/web/src/design/platform-admin-mobile-tokens.css | 3c878a3060007abd8bb51a0bf626833a9e8ac7ab4a62c3fcbcd587e9c52b7e68 |
 
 ## 运行与失败边界
@@ -59,3 +104,7 @@ node --test tests/unit/ui-phase2-platform-current-contract.test.mjs
 本次准备一并提交此前因旧检查失败积累的同任务改动：共享焦点修复、P43创建/改密/十类原因审核实现、对应永久测试及470张正式PNG（含16张焦点对照）和5组图册/清单。不是470个已验收业务状态。既有102图包15069PNG源/图片漂移为0，新470图由各自独立测试核对，不改旧分母、不覆盖旧图。尚待用户审核及生产核验的项继续保持待定。
 
 未新建临时脚本、截图或后台服务；上述图册为请求的正式交付物保留，已核对此前12个验证端口均无监听。本轮不部署、不重启；Git提交结果以本轮最终回复为准。业务/API/OpenAPI/权限/数据库/环境变量/依赖未改，因此无需后端、Python、插件或部署配置同步。
+
+## 2026-09-25 当前对账续记
+
+上述01af0262及P43批次数字均是当时记录。当前只读工具保留原32源/128候选历史快照，并从平台账号、用户、响应式控件三份现行合同与真实Vue扫描对账：15个Vue文件118个当前候选、24个v-model，连同依赖共38个当前源；当前完整LF指纹见本文表。`node scripts/verify-ui-phase2-platform-account-contract.mjs` 与对应30项正反例通过后，才可据此更新门禁状态。本次不代表P38–P45运行时、真人读屏、真实RBAC/数据库或生产验收。

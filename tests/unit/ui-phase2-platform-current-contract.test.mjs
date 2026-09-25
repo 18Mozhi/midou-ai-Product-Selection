@@ -36,13 +36,13 @@ function rejectsChange(file, mutate, pattern) {
   assert(used, `missing negative read: ${file}`);
 }
 
-test("platform current contract strictly reconciles history and all 38 current sources", () => {
+test("platform current contract separates its historical inventory from all 38 current sources", () => {
   const result = verifyPlatformAccountContract(read);
   assert.deepEqual(
     { ...result, links: undefined },
     {
       pages: 8,
-      candidates: 128,
+      candidates: 118,
       bindings: 24,
       sources: 38,
       historicalSources: 32,
@@ -132,7 +132,7 @@ test("rejects a missing, duplicated or unrelated supersession", () => {
 });
 test("rejects historical, current and cross-document fingerprint mismatches", () => {
   rejectsChange(current, (s) => replaced(s, "7935e4c", "0935e4c"), /historical hash drift/);
-  rejectsChange(current, (s) => replaced(s, "b9b433a", "09b433a"), /hash drift/);
+  rejectsChange(current, (s) => replaced(s, "902ade12", "002ade12"), /current hash drift/);
   rejectsChange(
     responsive,
     (s) => replaced(s, "b9e635a", "09e635a"),
@@ -165,11 +165,16 @@ test("normalizes Windows CRLF without treating it as a new source revision", () 
   );
 });
 
-test("retains all historical filter identities instead of overwriting the open button", () => {
+test("preserves documented filter identities while applying the explicit current supersession", () => {
   rejectsChange(
     historical,
-    (s) => replaced(s, "beb5f8d5846aa028.1", "7e0fa28eaeb1cc09.1"),
-    /historical filter candidates: source\/contract drift/,
+    (s) => replaced(s, "beb5f8d5846aa028.1", "0000000000000000.1"),
+    /documented filter candidates: source\/contract drift/,
+  );
+  rejectsChange(
+    historical,
+    (s) => replaced(s, "7e0fa28eaeb1cc09.1", "0000000000000000.1"),
+    /documented filter candidates: source\/contract drift/,
   );
 });
 
@@ -193,7 +198,7 @@ test("requires exactly one explicit filter replacement and its original identity
   rejectsChange(
     current,
     (s) => replaced(s, "Q#7e0fa28eaeb1cc09.1", "Q#0000000000000000.1"),
-    /candidates: source\/contract drift/,
+    /current filter candidate identity/,
   );
 });
 
@@ -218,7 +223,7 @@ test("does not supersede the other five filter candidates", () => {
   );
 });
 
-test("requires the imported palette and proves the exact pre-extraction source", () => {
+test("requires the imported palette and pins the current expanded source", () => {
   rejectsChange(
     current,
     (s) => s.replace(/^\| apps\/web\/src\/design\/platform-overlay-tokens.css.*\n/m, ""),
@@ -227,7 +232,7 @@ test("requires the imported palette and proves the exact pre-extraction source",
   rejectsChange(
     "apps/web/src/design/platform-overlay-tokens.css",
     (s) => replaced(s, "#f3f6fb", "#f4f6fb"),
-    /responsive palette delta drift/,
+    /current palette expansion drift/,
   );
   rejectsChange(
     "apps/web/src/design/platform-overlay-tokens.css",

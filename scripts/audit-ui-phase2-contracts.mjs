@@ -168,8 +168,12 @@ const history = {
   },
 };
 
-export function runContractAudit() {
-  const read = (file) => readFileSync(resolve(root, file), "utf8").replaceAll("\r\n", "\n");
+export function runContractAudit(readOverride) {
+  const read = (file) =>
+    (readOverride
+      ? readOverride(resolve(root, file))
+      : readFileSync(resolve(root, file), "utf8")
+    ).replaceAll("\r\n", "\n");
   const names = readdirSync(resolve(root, folder))
     .filter(
       (file) =>
