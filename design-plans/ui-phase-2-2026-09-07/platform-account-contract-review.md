@@ -379,8 +379,8 @@ P38–P45八份规格都有文件；全站规格48/73，W06八份、W07八份、
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/PlatformAccountCenter.vue#8f18fbff9e2c1c99.1 | 689 | control | P39-ACCOUNT-CURRENT-REFRESH / PA-REFRESH；页头账号目录读取，刷新中或写入繁忙时禁用 |
-| apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1 | 732 | event-binding | P39-ACCOUNT-CURRENT-WIRING / PA-REFRESH-WIRING；将目录子组件的 load 意图连接到父级既有读取处理，不另计读取动作 |
+| apps/web/src/components/PlatformAccountCenter.vue#8f18fbff9e2c1c99.1 | 695 | control | P39-ACCOUNT-CURRENT-REFRESH / PA-REFRESH；页头账号目录读取，刷新中或写入繁忙时禁用 |
+| apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1 | 738 | event-binding | P39-ACCOUNT-CURRENT-WIRING / PA-REFRESH-WIRING；将目录子组件的 load 意图连接到父级既有读取处理，不另计读取动作 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |

@@ -6,7 +6,7 @@
 
 ## 1. 候选归属（33个直接候选，不是业务动作分母）
 
-文件别名均在apps/web/src/components：U=PlatformUserRecords.vue，V=PlatformUserDetailDialog.vue，A=PlatformAccountDialogs.vue，F=PlatformUserMembershipForm.vue。下表sig必须与扫描器逐对象一致；重复sig用文件名区分。父PlatformAccountCenter、ResponsiveDataView、TableViewControls、ResponsiveFilterDrawer等现已由[W05全族合同](platform-account-contract-review.md)补齐局部候选；NavigationShell仍归W01共享壳层，不把33项当P43全部运行时动作。
+文件别名均在apps/web/src/components：U=PlatformUserRecords.vue，V=PlatformUserDetailDialog.vue，A=PlatformAccountDialogs.vue，F=PlatformUserMembershipForm.vue，M=PlatformAdminRecords.vue，R=PlatformRoleComparison.vue，G=PlatformAccountGlobalRail.vue。下表sig必须与扫描器逐对象一致；重复sig用文件名区分。父PlatformAccountCenter、ResponsiveDataView、TableViewControls、ResponsiveFilterDrawer等现已由[W05全族合同](platform-account-contract-review.md)补齐局部候选；NavigationShell仍归W01共享壳层，不把33项当P43全部运行时动作。
 
 | 文件 | candidate sig | 归属/真实语义 |
 | --- | --- | --- |
@@ -165,3 +165,16 @@ P43动作映射使用本合同作为单一语义源。下表接续共享父组�
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08 |
 
 其余四个直接页面组件沿用本合同已有当前候选记录；P43.json另固定六个组件的当前LF指纹。源位置数不等于唯一按钮或业务动作数。
+## P44 当前来源补映射
+
+以下候选属于 `/platform-admin/admins` 实际渲染的管理员列表、只读角色比较和全局账号目录导航。它们沿用本文件的 P43-CURRENT 源身份约定；管理员/比较/全局侧栏的独立页面语义键使用 P44-CURRENT。此补映射只建立源候选到现行合同的可追溯性，不表示按钮六态、动作批准或生产权限验收通过。
+
+| 源候选 | P44 当前语义合同 | 页面边界 |
+| --- | --- | --- |
+| M | b77b1781563a48b8.1 | P44-CURRENT-b77b1781563a48b8.1 · 桌面管理员账号详情入口，触发父级既有详情读取 |
+| M | 18553297e6cbdd0a.1 | P44-CURRENT-18553297e6cbdd0a.1 · 移动管理员预览转详情，先关闭预览再发同一详情意图 |
+| M | 1c008f867673db60.1 | P44-CURRENT-1c008f867673db60.1 · 管理员账号技术详情展开，仅展开已有标识 |
+| R | e4a2fbf8875f3488.1 | P44-CURRENT-e4a2fbf8875f3488.1 · 嵌入式角色比较重置，本地状态、不写URL、不调用写API |
+| G | 29448f61eb8ffc80.1 | P44-CURRENT-29448f61eb8ffc80.1 · 管理员页全局组织导航，保持既有路由守卫 |
+| G | ffed2dd7f439c4b0.1 | P44-CURRENT-ffed2dd7f439c4b0.1 · 管理员页全局用户导航，保持既有路由守卫 |
+| G | e400286c7cd59e44.1 | P44-CURRENT-e400286c7cd59e44.1 · 管理员页全局管理员导航，当前页导航、不新增权限 |

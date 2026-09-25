@@ -253,10 +253,10 @@
     "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "9e90766df41be0e25e1c97a7aa88f6d31d8d73bcf57f86b1ea1b6ce3b9c70092",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "73ccec3c884d7f0f2037640bf851a734ba81d9dff1ab02f7ecfffd193902b0e5",
     "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "663f7750ce15423be375fb5c0ec820386f4a265f73f812579d24c1a40b2e49ab",
-    "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "72f28e42992559de4b18b3c07e6be9ddf27c1dc0c09aef4d4c024d3f62435384",
+    "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "709f5ec576bdfa24d7945ee76cc36ea2a5e3efa464cadb85c4e73a57f2f9f246",
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
     "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md": "bb96f5d6c067255f9e22f4051e117c6352f18dea2184eaf7639a6b305cd8f9cd",
-    "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "1c9c86d41f6a742dceea23c1838fa75dee7fe51f2bdcbdaa1041db71624b1782",
+    "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "cf100dafa46b0a9dc7f11b51fe923e99da9bb3166b23a905f116ffc2d0a935ba",
     "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "159477ef01be7308fda95d8c7582b085ba74012847c99cea6f0f329823fbdfa1",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "f7ebe07d459e15dbbcf7277443fc9d62c5b1babd1722b7b869cf1c567232b385",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "b3ed452522bdd2a90555b598dbbb202b0d066b3ee7ee428d649c3ad310de6c81",
@@ -495,6 +495,8 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P43.json": "226998f2688e80ec947503e4a797182dba9e1f27a273d42caae70cb7aa186e6f",
     "tests/m06-01/platform-accounts.test.mjs": "613efe80a997f2ac45fcbe88000b52d9084c28afaee875dce93c8c431004cd00",
     "tests/unit/ui-phase2-p43-action-map.test.mjs": "72f91bf29fcc742d62015463be669abebb9500e24c0e60cc23346a08577cebac",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P44.json": "0f5f71a10ea1cd397b133dc091352766e99a3250a947a33141262e71a54ca677",
+    "tests/unit/ui-phase2-p44-action-map.test.mjs": "180618ba5065cf84c449d3ce4878f863a8f0077c8f48d4c85a94cfaf62784ac0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "077621e403cc46d1ee487b3e98a895ec1fd86017bddf709839404ed5b7ea30de",
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -547,7 +549,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P41.md": "bc0c619fbce430464f86835046d52f5e41650d71bdbdaccd082db892cd45ed1b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P42.md": "9150e5fe051df95622f6fb398b5488ce1b45ec6f68fce79c3cf37ca972293e60",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P43.md": "24ac7c62938906bbc19509db3421df39e56cc1b21a714defd153114fa6a4e783",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P44.md": "2ede4acf8d40faa102438a32461abd7783e3d251e48c4df2be851618a3b3c011",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P44.md": "14d8f23dafcda1a8c4777327e70a989a34f208fbd7a56785df0cc82ce6eaa4e3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P45.md": "88cf61feef9df714003bdb8eb4a5cc6d5d7ce31594ac6e39efbfe187a9243687",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P46.md": "84a98f5df3d13cc72dcddee8d11709e41b9ecb746ccfb7acd9c811a6da014c7a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P47.md": "66af69788896fa8dbb75addce94d60eca1218681390f477c857c35f8002d6269",
@@ -581,7 +583,7 @@
     "scripts/lib/ui-phase2-action-coverage.mjs": "f5cdfea52a1dae23099b9fad6d77fd8d72c7fa8124f1ff940afb53525975d27e",
     "scripts/lib/ui-phase2-review-surfaces.mjs": "22f0710e70d77f4335a86a3ed6ef6d14c54fc23ec98d50aa2e22c50809e4e523",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
-    "scripts/audit-ui-phase2-contracts.mjs": "a90a8e4447480c1be6d4822467eea18bbae6fe962750ecdea16b6008728fde4f",
+    "scripts/audit-ui-phase2-contracts.mjs": "a0a20c732719c3609737765024bce72d2afd16ab41145af62a871f8276d2389d",
     "scripts/lib/ui-phase2-contract-audit.mjs": "b7b12201094c94705ce2e0e0f5145830b4a2468632f1a33b09fe96a54e7039da"
   },
   "summary": {
@@ -590,13 +592,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 605,
     "oldOnlyIdentities": 381,
-    "reviewedPages": 46,
-    "explicitlyGroupedSourceSites": 1013,
-    "semanticGroups": 917,
-    "routeActions": 728,
-    "wiringGroups": 98,
+    "reviewedPages": 47,
+    "explicitlyGroupedSourceSites": 1017,
+    "semanticGroups": 961,
+    "routeActions": 758,
+    "wiringGroups": 103,
     "pagesWithoutExplicitSemanticReview": [
-      "P44",
       "P45",
       "P46",
       "P47",
@@ -626,7 +627,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 46,
+    "visualApprovedReviewedPages": 47,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -2520,13 +2521,42 @@
       "path": "/platform-admin/admins",
       "title": "管理员管理",
       "oldStaticAssociatedCandidates": 97,
-      "review": null,
+      "review": {
+        "pageId": "P44",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 71,
+        "semanticGroups": 44,
+        "routeActions": 30,
+        "wiringGroups": 5,
+        "excludedGroups": 9,
+        "writeActions": 3,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "actual-vue-local-interception",
+          "actual-vue-review-fixture"
+        ],
+        "unmappedVisualSlots": 186,
+        "surfaces": {
+          "callerFiles": 8,
+          "localModelBindings": 22,
+          "reviewedInputBindings": 11,
+          "sourceCallerContainers": 13,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "user-admin-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "管理员目录及只读比较的静态来源已逐项映射；P44与P43共享的详情/创建/改密/原因动作沿用同一组件合同，完整App生命周期仍需独立回归。",
+        "视觉全局自动通过不等于按钮六态、真实RBAC、MySQL写入、审计持久化或M07正式生产验收。"
+      ]
     },
     {
       "id": "P45",
@@ -4111,6 +4141,33 @@
         "sourceCallerContainers": 12,
         "callerContainers": 12,
         "consumerVariants": 12,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P44",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 71,
+      "semanticGroups": 44,
+      "routeActions": 30,
+      "wiringGroups": 5,
+      "excludedGroups": 9,
+      "writeActions": 3,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "actual-vue-local-interception",
+        "actual-vue-review-fixture"
+      ],
+      "unmappedVisualSlots": 186,
+      "surfaces": {
+        "callerFiles": 8,
+        "localModelBindings": 22,
+        "reviewedInputBindings": 11,
+        "sourceCallerContainers": 13,
+        "callerContainers": 0,
+        "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -37922,6 +37979,11 @@
           "pageId": "P43",
           "actionId": "PA43-OUT-ADMINS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OUT-ADMINS",
+          "kind": "excluded"
         }
       ]
     },
@@ -37989,6 +38051,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-OUT-ROLE-REFRESH",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OUT-ROLE-REFRESH",
           "kind": "excluded"
         }
       ]
@@ -38058,6 +38125,11 @@
           "pageId": "P43",
           "actionId": "PA43-OUT-ORG-CREATE",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OUT-ORG-CREATE",
+          "kind": "excluded"
         }
       ]
     },
@@ -38126,6 +38198,11 @@
           "pageId": "P43",
           "actionId": "PA43-CREATE-OPEN",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-CREATE-OPEN",
+          "kind": "local"
         }
       ]
     },
@@ -38189,6 +38266,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-REFRESH",
+          "kind": "read"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-REFRESH",
           "kind": "read"
         }
       ]
@@ -38262,6 +38344,11 @@
           "pageId": "P43",
           "actionId": "PA43-OUT-ROLE-REFRESH",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OUT-ROLE-REFRESH",
+          "kind": "excluded"
         }
       ]
     },
@@ -38334,6 +38421,11 @@
           "pageId": "P43",
           "actionId": "PA43-OUT-ROLE-REFRESH",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OUT-ROLE-REFRESH",
+          "kind": "excluded"
         }
       ]
     },
@@ -38393,6 +38485,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-WORKSPACE-WIRING",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-WORKSPACE-WIRING",
           "kind": "wiring"
         }
       ]
@@ -38457,6 +38554,11 @@
           "pageId": "P43",
           "actionId": "PA43-OUT-WIZARD",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OUT-WIZARD",
+          "kind": "excluded"
         }
       ]
     },
@@ -38511,6 +38613,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-DIALOGS-WIRING",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-DIALOGS-WIRING",
           "kind": "wiring"
         }
       ]
@@ -38567,6 +38674,11 @@
           "pageId": "P43",
           "actionId": "PA43-DIALOGS-WIRING",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-DIALOGS-WIRING",
+          "kind": "wiring"
         }
       ]
     },
@@ -38622,6 +38734,11 @@
           "pageId": "P43",
           "actionId": "PA43-OUT-ORG-DETAIL",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OUT-ORG-DETAIL",
+          "kind": "excluded"
         }
       ]
     },
@@ -38676,6 +38793,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-OUT-ORG-DETAIL",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OUT-ORG-DETAIL",
           "kind": "excluded"
         }
       ]
@@ -38740,6 +38862,11 @@
           "pageId": "P43",
           "actionId": "PA43-DETAIL-WIRING",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-DETAIL-WIRING",
+          "kind": "wiring"
         }
       ]
     },
@@ -38803,6 +38930,11 @@
           "pageId": "P43",
           "actionId": "PA43-DETAIL-WIRING",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-DETAIL-WIRING",
+          "kind": "wiring"
         }
       ]
     },
@@ -38855,6 +38987,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-CREATE-CONTAINER",
+          "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-CREATE-CONTAINER",
           "kind": "local"
         }
       ]
@@ -38909,6 +39046,11 @@
           "pageId": "P43",
           "actionId": "PA43-CREATE-CANCEL",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-CREATE-CANCEL",
+          "kind": "local"
         }
       ]
     },
@@ -38961,6 +39103,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-CREATE-SUBMIT",
+          "kind": "write"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-CREATE-SUBMIT",
           "kind": "write"
         }
       ]
@@ -39015,6 +39162,11 @@
           "pageId": "P43",
           "actionId": "PA43-CREATE-CANCEL",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-CREATE-CANCEL",
+          "kind": "local"
         }
       ]
     },
@@ -39067,6 +39219,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-CREATE-SUBMIT",
+          "kind": "write"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-CREATE-SUBMIT",
           "kind": "write"
         }
       ]
@@ -39121,6 +39278,11 @@
           "pageId": "P43",
           "actionId": "PA43-PASSWORD-CONTAINER",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-PASSWORD-CONTAINER",
+          "kind": "local"
         }
       ]
     },
@@ -39173,6 +39335,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-PASSWORD-CANCEL",
+          "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-PASSWORD-CANCEL",
           "kind": "local"
         }
       ]
@@ -39227,6 +39394,11 @@
           "pageId": "P43",
           "actionId": "PA43-PASSWORD-SUBMIT",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-PASSWORD-SUBMIT",
+          "kind": "local"
         }
       ]
     },
@@ -39279,6 +39451,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-PASSWORD-CANCEL",
+          "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-PASSWORD-CANCEL",
           "kind": "local"
         }
       ]
@@ -39333,6 +39510,11 @@
           "pageId": "P43",
           "actionId": "PA43-PASSWORD-SUBMIT",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-PASSWORD-SUBMIT",
+          "kind": "local"
         }
       ]
     },
@@ -39385,6 +39567,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-REASON-CONTAINER",
+          "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-REASON-CONTAINER",
           "kind": "local"
         }
       ]
@@ -39439,6 +39626,11 @@
           "pageId": "P43",
           "actionId": "PA43-REASON-CANCEL",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-REASON-CANCEL",
+          "kind": "local"
         }
       ]
     },
@@ -39491,6 +39683,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-REASON-SUBMIT",
+          "kind": "write"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-REASON-SUBMIT",
           "kind": "write"
         }
       ]
@@ -39545,6 +39742,11 @@
           "pageId": "P43",
           "actionId": "PA43-REASON-INPUT",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-REASON-INPUT",
+          "kind": "local"
         }
       ]
     },
@@ -39598,6 +39800,11 @@
           "pageId": "P43",
           "actionId": "PA43-REASON-CANCEL",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-REASON-CANCEL",
+          "kind": "local"
         }
       ]
     },
@@ -39650,6 +39857,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-REASON-SUBMIT",
+          "kind": "write"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-REASON-SUBMIT",
           "kind": "write"
         }
       ]
@@ -39706,6 +39918,11 @@
           "pageId": "P43",
           "actionId": "PA43-NAVIGATION",
           "kind": "navigation"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-NAVIGATION",
+          "kind": "excluded"
         }
       ]
     },
@@ -39761,6 +39978,11 @@
           "pageId": "P43",
           "actionId": "PA43-NAVIGATION",
           "kind": "navigation"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-NAVIGATION",
+          "kind": "excluded"
         }
       ]
     },
@@ -39816,6 +40038,11 @@
           "pageId": "P43",
           "actionId": "PA43-NAVIGATION",
           "kind": "navigation"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-NAVIGATION",
+          "kind": "excluded"
         }
       ]
     },
@@ -39871,6 +40098,11 @@
           "pageId": "P43",
           "actionId": "PA43-OUT-ORG-REFRESH",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OUT-ORG-REFRESH",
+          "kind": "excluded"
         }
       ]
     },
@@ -39920,6 +40152,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-FILTER-DRAWER",
+          "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-FILTER-DRAWER",
           "kind": "local"
         }
       ]
@@ -39971,6 +40208,11 @@
           "pageId": "P43",
           "actionId": "PA43-FILTER",
           "kind": "read"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-FILTER",
+          "kind": "read"
         }
       ]
     },
@@ -40021,6 +40263,11 @@
           "pageId": "P43",
           "actionId": "PA43-FILTER",
           "kind": "read"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-FILTER",
+          "kind": "read"
         }
       ]
     },
@@ -40070,6 +40317,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-RESET",
+          "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-RESET",
           "kind": "local"
         }
       ]
@@ -40125,6 +40377,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-REFRESH",
+          "kind": "read"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-REFRESH",
           "kind": "read"
         }
       ]
@@ -40189,6 +40446,11 @@
           "pageId": "P43",
           "actionId": "PA43-RESET",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OUT-ORG-EMPTY-RESET",
+          "kind": "excluded"
         }
       ]
     },
@@ -40252,6 +40514,11 @@
           "pageId": "P43",
           "actionId": "PA43-OUT-ORG-CREATE",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OUT-ORG-CREATE",
+          "kind": "excluded"
         }
       ]
     },
@@ -40310,6 +40577,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-OUT-ORG-DETAIL",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OUT-ORG-DETAIL",
           "kind": "excluded"
         }
       ]
@@ -40370,6 +40642,11 @@
           "pageId": "P43",
           "actionId": "PA43-DETAIL-ROW-WIRING",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OUT-USER-ROW-WIRING",
+          "kind": "excluded"
         }
       ]
     },
@@ -40433,6 +40710,11 @@
           "pageId": "P43",
           "actionId": "PA43-OUT-ADMIN-FILTER",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-EMPTY-RESET",
+          "kind": "local"
         }
       ]
     },
@@ -40496,6 +40778,11 @@
           "pageId": "P43",
           "actionId": "PA43-OUT-ADMIN-FILTER",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-EMPTY-CREATE",
+          "kind": "local"
         }
       ]
     },
@@ -40555,6 +40842,11 @@
           "pageId": "P43",
           "actionId": "PA43-OUT-ADMIN-FILTER",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-DETAIL-ROW-WIRING",
+          "kind": "wiring"
         }
       ]
     },
@@ -40578,6 +40870,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 42,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 178,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 178,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -40589,6 +40891,11 @@
         {
           "pageId": "P40",
           "actionId": "PA-NAV-ORG",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-GLOBAL-NAVIGATION",
           "kind": "navigation"
         }
       ]
@@ -40613,6 +40920,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 43,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 179,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 179,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -40624,6 +40941,11 @@
         {
           "pageId": "P40",
           "actionId": "PA-NAV-USER",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-GLOBAL-NAVIGATION",
           "kind": "navigation"
         }
       ]
@@ -40648,6 +40970,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 44,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 180,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 180,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -40659,6 +40991,11 @@
         {
           "pageId": "P40",
           "actionId": "PA-NAV-ADMIN",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-GLOBAL-NAVIGATION",
           "kind": "navigation"
         }
       ]
@@ -40691,9 +41028,25 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 55,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 174,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 174,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OPEN-DETAIL",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAdminRecords.vue#18553297e6cbdd0a.1",
@@ -40718,9 +41071,25 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 56,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 175,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 175,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P44",
+          "actionId": "PA44-OPEN-DETAIL",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAdminRecords.vue#1c008f867673db60.1",
@@ -40745,9 +41114,25 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 57,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 176,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 176,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P44",
+          "actionId": "PA44-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformContentCenter.vue#9f8a46068562150e.1",
@@ -46273,9 +46658,25 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 70,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 177,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 177,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P44",
+          "actionId": "PA44-ROLE-RESET",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformStatusCenterView.vue#528025bcfd01008c.1",
@@ -46445,6 +46846,11 @@
           "pageId": "P43",
           "actionId": "PA43-DETAIL-CONTAINER",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-DETAIL-CONTAINER",
+          "kind": "local"
         }
       ]
     },
@@ -46483,6 +46889,11 @@
           "pageId": "P43",
           "actionId": "PA43-DETAIL-CLOSE",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-DETAIL-CLOSE",
+          "kind": "local"
         }
       ]
     },
@@ -46512,6 +46923,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-DETAIL-SECTION",
+          "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-DETAIL-SECTION",
           "kind": "local"
         }
       ]
@@ -46543,6 +46959,11 @@
           "pageId": "P43",
           "actionId": "PA43-DETAIL-SECTION",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-DETAIL-SECTION",
+          "kind": "local"
         }
       ]
     },
@@ -46573,6 +46994,11 @@
           "pageId": "P43",
           "actionId": "PA43-DETAIL-SECTION",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-DETAIL-SECTION",
+          "kind": "local"
         }
       ]
     },
@@ -46602,6 +47028,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-DETAIL-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-DETAIL-CLOSE",
           "kind": "local"
         }
       ]
@@ -46646,6 +47077,11 @@
           "pageId": "P43",
           "actionId": "PA43-MEMBERSHIP-WIRING",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-MEMBERSHIP-WIRING",
+          "kind": "wiring"
         }
       ]
     },
@@ -46679,6 +47115,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-ROLE-CHOOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-ROLE-CHOOSE",
           "kind": "local"
         }
       ]
@@ -46722,6 +47163,11 @@
           "pageId": "P43",
           "actionId": "PA43-SESSION-CHOOSE",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-SESSION-CHOOSE",
+          "kind": "local"
         }
       ]
     },
@@ -46751,6 +47197,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-STATUS-CHOOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-STATUS-CHOOSE",
           "kind": "local"
         }
       ]
@@ -46782,6 +47233,11 @@
           "pageId": "P43",
           "actionId": "PA43-PASSWORD-OPEN",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-PASSWORD-OPEN",
+          "kind": "local"
         }
       ]
     },
@@ -46812,6 +47268,11 @@
           "pageId": "P43",
           "actionId": "PA43-SESSION-CHOOSE",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-SESSION-CHOOSE",
+          "kind": "local"
         }
       ]
     },
@@ -46841,6 +47302,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-DETAIL-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-DETAIL-CLOSE",
           "kind": "local"
         }
       ]
@@ -46885,6 +47351,11 @@
           "pageId": "P43",
           "actionId": "PA43-DETAIL-RETRY",
           "kind": "read"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-DETAIL-RETRY",
+          "kind": "read"
         }
       ]
     },
@@ -46928,6 +47399,11 @@
           "pageId": "P43",
           "actionId": "PA43-DETAIL-CLOSE",
           "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-DETAIL-CLOSE",
+          "kind": "local"
         }
       ]
     },
@@ -46966,6 +47442,11 @@
           "pageId": "P43",
           "actionId": "PA43-MEMBERSHIP-SUBMIT",
           "kind": "write"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-MEMBERSHIP-SUBMIT",
+          "kind": "write"
         }
       ]
     },
@@ -47003,6 +47484,11 @@
         {
           "pageId": "P43",
           "actionId": "PA43-MEMBERSHIP-SUBMIT",
+          "kind": "write"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-MEMBERSHIP-SUBMIT",
           "kind": "write"
         }
       ]

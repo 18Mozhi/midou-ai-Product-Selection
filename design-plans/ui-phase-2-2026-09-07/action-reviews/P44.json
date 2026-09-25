@@ -1,0 +1,2887 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P44",
+  "route": "/platform-admin/admins",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+  "sourceHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
+    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+    "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformRoleComparison.vue": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "87e0b0906fded03d7c5337dafa5e6bfc801a2367d12deb652cc36f0f88d32d9a",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+  },
+  "actions": [
+    {
+      "actionId": "PA44-OUT-ADMINS",
+      "label": "权限管理入口（仅P45可达）",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#adcd96ea7cc90712.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-adcd96ea7cc90712.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "仅平台权限页面显示此入口",
+      "handler": "此用户页不触发管理员导航；保留共享父组件的P45路由归属。",
+      "variants": [
+        "route-specific-excluded"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-OUT-ROLE-REFRESH",
+      "label": "角色目录读取入口（仅P45可达）",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#bcd4023ebe5d9ca9.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#c4cfef52bcc169fb.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#c526b71b2b59e702.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-bcd4023ebe5d9ca9.1",
+        "P43-CURRENT-c4cfef52bcc169fb.1",
+        "P43-CURRENT-c526b71b2b59e702.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "仅权限目录页面有该刷新或错误重试",
+      "handler": "这些按钮只作用于角色目录，不属于用户列表。",
+      "variants": [
+        "route-specific-excluded"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-OUT-ORG-CREATE",
+      "label": "组织创建入口（归P41）",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#280136c1a545dff9.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#f68d2406f8c1db70.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-280136c1a545dff9.1",
+        "P43-CURRENT-f68d2406f8c1db70.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "组织目录或组织管理路由可达",
+      "handler": "组织创建继续归属P41，不从用户页触发。",
+      "variants": [
+        "route-specific-excluded"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-CREATE-OPEN",
+      "label": "打开新建管理员窗",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#1516ea5a6c3b1540.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-1516ea5a6c3b1540.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "用户目录模式且无阻断中的写操作",
+      "handler": "父级打开新建用户分支；不会在此入口发送创建请求。",
+      "variants": [
+        "open",
+        "busy"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--list"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--create"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-REFRESH",
+      "label": "读取或刷新管理员目录",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#8f18fbff9e2c1c99.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#322a4ac62ce3a305.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-8f18fbff9e2c1c99.1",
+        "P43-CURRENT-322a4ac62ce3a305.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "用户目录显示页头刷新或首次读取失败反馈",
+      "handler": "沿用父级GET /platform/accounts与原有query/status；保留已有快照与失败追踪。",
+      "variants": [
+        "initial",
+        "manual-refresh",
+        "retry"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--list"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--error"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--refresh_error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-WORKSPACE-WIRING",
+      "label": "目录子组件到父级的事件接线",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-8458edc51af426a6.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "用户工作区挂载",
+      "handler": "将筛选、重置、读取和用户详情转发到既有父处理器；组织/管理员事件保留各自页面归属。",
+      "variants": [
+        "filters",
+        "reset",
+        "load",
+        "open-user"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--filter"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--list"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。",
+      "forwardsTo": [
+        "PA44-FILTER",
+        "PA44-RESET",
+        "PA44-REFRESH",
+        "PA44-OUT-ORG-CREATE",
+        "PA44-EMPTY-CREATE",
+        "PA44-OUT-ORG-DETAIL",
+        "PA44-OPEN-DETAIL"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1",
+          "event": "@apply-filters",
+          "handler": "applyFilters",
+          "targets": [
+            "PA44-FILTER"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1",
+          "event": "@reset-filters",
+          "handler": "resetFilters",
+          "targets": [
+            "PA44-RESET"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1",
+          "event": "@load",
+          "handler": "load",
+          "targets": [
+            "PA44-REFRESH"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1",
+          "event": "@create-organization",
+          "handler": "openOrganizationWizard",
+          "targets": [
+            "PA44-OUT-ORG-CREATE"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1",
+          "event": "@create-admin",
+          "handler": "openCreateUser(true)",
+          "targets": [
+            "PA44-EMPTY-CREATE"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1",
+          "event": "@open-organization",
+          "handler": "openOrganization",
+          "targets": [
+            "PA44-OUT-ORG-DETAIL"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1",
+          "event": "@open-user",
+          "handler": "openUserDetail",
+          "targets": [
+            "PA44-OPEN-DETAIL"
+          ]
+        }
+      ]
+    },
+    {
+      "actionId": "PA44-OUT-WIZARD",
+      "label": "组织创建向导事件（归P41）",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#5db731eeed33ba4f.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-5db731eeed33ba4f.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "向导只在P41路由挂载",
+      "handler": "本用户页不挂载或提交组织向导。",
+      "variants": [
+        "route-specific-excluded"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-DIALOGS-WIRING",
+      "label": "创建、改密与原因窗父子接线",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-2dcca5d38d8e9ea8.1",
+        "P43-CURRENT-316b73a793573a29.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "共享账号弹窗组件挂载",
+      "handler": "事件候选与组件调用成对记录；表单意图由父级既有处理器处理，不重复计动作。",
+      "variants": [
+        "create",
+        "password",
+        "reason"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--create"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--password"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_disable"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。",
+      "forwardsTo": [
+        "PA44-CREATE-CANCEL",
+        "PA44-CREATE-SUBMIT",
+        "PA44-PASSWORD-CANCEL",
+        "PA44-PASSWORD-SUBMIT",
+        "PA44-REASON-CANCEL",
+        "PA44-REASON-SUBMIT",
+        "PA44-REASON-INPUT"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1",
+          "event": "@close-create-user",
+          "handler": "closeCreateUser",
+          "targets": [
+            "PA44-CREATE-CANCEL"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1",
+          "event": "@create-user",
+          "handler": "createUser",
+          "targets": [
+            "PA44-CREATE-SUBMIT"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1",
+          "event": "@close-password",
+          "handler": "closePassword",
+          "targets": [
+            "PA44-PASSWORD-CANCEL"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1",
+          "event": "@reset-password",
+          "handler": "resetPassword",
+          "targets": [
+            "PA44-PASSWORD-SUBMIT"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1",
+          "event": "@close-reason",
+          "handler": "cancelReason",
+          "targets": [
+            "PA44-REASON-CANCEL"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1",
+          "event": "@submit-reason",
+          "handler": "submitReason",
+          "targets": [
+            "PA44-REASON-SUBMIT"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1",
+          "event": "@update:reason-text",
+          "handler": "reasonText = $event",
+          "targets": [
+            "PA44-REASON-INPUT"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1",
+          "event": "@close-create-user",
+          "handler": "closeCreateUser",
+          "targets": [
+            "PA44-CREATE-CANCEL"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1",
+          "event": "@create-user",
+          "handler": "createUser",
+          "targets": [
+            "PA44-CREATE-SUBMIT"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1",
+          "event": "@close-password",
+          "handler": "closePassword",
+          "targets": [
+            "PA44-PASSWORD-CANCEL"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1",
+          "event": "@reset-password",
+          "handler": "resetPassword",
+          "targets": [
+            "PA44-PASSWORD-SUBMIT"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1",
+          "event": "@close-reason",
+          "handler": "cancelReason",
+          "targets": [
+            "PA44-REASON-CANCEL"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1",
+          "event": "@submit-reason",
+          "handler": "submitReason",
+          "targets": [
+            "PA44-REASON-SUBMIT"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1",
+          "event": "@update:reason-text",
+          "handler": "reasonText = $event",
+          "targets": [
+            "PA44-REASON-INPUT"
+          ]
+        }
+      ]
+    },
+    {
+      "actionId": "PA44-OUT-ORG-DETAIL",
+      "label": "组织详情事件（归P42）",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#6f151cbab1f5518e.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#39ba950db197263c.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#8871f6d994e9fced.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-6f151cbab1f5518e.1",
+        "P43-CURRENT-39ba950db197263c.1",
+        "P43-CURRENT-8871f6d994e9fced.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "组织详情或组织行出现",
+      "handler": "组织详情及行打开事件不属于用户管理页。",
+      "variants": [
+        "route-specific-excluded"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-DETAIL-WIRING",
+      "label": "管理员账号详情事件父级接线",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#39878a11789ae9ce.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-39878a11789ae9ce.1",
+        "P43-CURRENT-cab997ead119619a.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "用户详情弹窗挂载",
+      "handler": "详情关闭/重读/停用/角色/组织关系/改密/会话意图连接到父级；组件调用不另计动作。",
+      "variants": [
+        "close",
+        "retry",
+        "status",
+        "role",
+        "membership",
+        "password",
+        "session"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_disable"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。",
+      "forwardsTo": [
+        "PA44-DETAIL-CLOSE",
+        "PA44-DETAIL-RETRY",
+        "PA44-STATUS-CHOOSE",
+        "PA44-ROLE-CHOOSE",
+        "PA44-MEMBERSHIP-SUBMIT",
+        "PA44-PASSWORD-OPEN",
+        "PA44-SESSION-CHOOSE"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#39878a11789ae9ce.1",
+          "event": "@close",
+          "handler": "closeUserDetail",
+          "targets": [
+            "PA44-DETAIL-CLOSE"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#39878a11789ae9ce.1",
+          "event": "@retry",
+          "handler": "selected && openUserDetail(selected)",
+          "targets": [
+            "PA44-DETAIL-RETRY"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#39878a11789ae9ce.1",
+          "event": "@toggle-status",
+          "handler": "toggleUser",
+          "targets": [
+            "PA44-STATUS-CHOOSE"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#39878a11789ae9ce.1",
+          "event": "@role",
+          "handler": "role",
+          "targets": [
+            "PA44-ROLE-CHOOSE"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#39878a11789ae9ce.1",
+          "event": "@add-membership",
+          "handler": "addMembership",
+          "targets": [
+            "PA44-MEMBERSHIP-SUBMIT"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#39878a11789ae9ce.1",
+          "event": "@reset-password",
+          "handler": "openPassword",
+          "targets": [
+            "PA44-PASSWORD-OPEN"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#39878a11789ae9ce.1",
+          "event": "@revoke-sessions",
+          "handler": "revokeSessions",
+          "targets": [
+            "PA44-SESSION-CHOOSE"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1",
+          "event": "@close",
+          "handler": "closeUserDetail",
+          "targets": [
+            "PA44-DETAIL-CLOSE"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1",
+          "event": "@retry",
+          "handler": "selected && openUserDetail(selected)",
+          "targets": [
+            "PA44-DETAIL-RETRY"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1",
+          "event": "@toggle-status",
+          "handler": "toggleUser",
+          "targets": [
+            "PA44-STATUS-CHOOSE"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1",
+          "event": "@role",
+          "handler": "role",
+          "targets": [
+            "PA44-ROLE-CHOOSE"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1",
+          "event": "@add-membership",
+          "handler": "addMembership",
+          "targets": [
+            "PA44-MEMBERSHIP-SUBMIT"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1",
+          "event": "@reset-password",
+          "handler": "openPassword",
+          "targets": [
+            "PA44-PASSWORD-OPEN"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1",
+          "event": "@revoke-sessions",
+          "handler": "revokeSessions",
+          "targets": [
+            "PA44-SESSION-CHOOSE"
+          ]
+        }
+      ]
+    },
+    {
+      "actionId": "PA44-NAVIGATION",
+      "label": "管理员路由隐藏的工作区目录分支",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#29448f61eb8ffc80.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#968274c5acaf5a33.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e400286c7cd59e44.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-29448f61eb8ffc80.1",
+        "P43-CURRENT-968274c5acaf5a33.1",
+        "P43-CURRENT-e400286c7cd59e44.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "adminListRoute时工作区内目录链接被条件隐藏，当前路由显示全局侧栏",
+      "handler": "保留组织/用户/管理员目录目标，但这三个内嵌链接在本页不渲染；实际可达侧栏另行映射。",
+      "variants": [
+        "route-specific-excluded"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-OUT-ORG-REFRESH",
+      "label": "组织记录刷新（归P40）",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#9c9141422bfd2c11.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-9c9141422bfd2c11.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "仅组织记录区域渲染",
+      "handler": "P43用户目录不显示此组织专属读取按钮。",
+      "variants": [
+        "route-specific-excluded"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-FILTER-DRAWER",
+      "label": "移动端筛选抽屉容器",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#03d32a05b1b3fd19.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-03d32a05b1b3fd19.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "窄视口用户筛选打开",
+      "handler": "容器仅呈现已有筛选字段，提交和重置仍由既有事件处理。",
+      "variants": [
+        "closed",
+        "open"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--filter"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-FILTER",
+      "label": "提交管理员邮箱/状态筛选",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#2d610959fc00fb96.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e9658d470d4cbeaf.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-2d610959fc00fb96.1",
+        "P43-CURRENT-e9658d470d4cbeaf.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "用户目录筛选有效且表单提交",
+      "handler": "按钮与原生表单归并为applyFilters；保留URL query/status及最多200条列表合同。",
+      "variants": [
+        "submit",
+        "empty"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--filter"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--filtered_empty"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-RESET",
+      "label": "清除管理员筛选",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#20080e701de7f5cb.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-20080e701de7f5cb.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "当前用户目录有筛选条件或筛选结果为空",
+      "handler": "恢复原有用户query/status默认条件；清空态控件不额外发明过滤规则。",
+      "variants": [
+        "toolbar",
+        "filtered-empty"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--filter"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--filtered_empty"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-OUT-USER-ROW-WIRING",
+      "label": "管理员路由隐藏的用户记录事件分支",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#44e761922e1da1d0.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-44e761922e1da1d0.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "adminListRoute时用户记录组件不会挂载",
+      "handler": "保留P43用户列表的open-user事件归属；本页管理员记录另有独立事件接线。",
+      "variants": [
+        "route-specific-excluded"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-OPEN-DETAIL",
+      "label": "打开管理员账号详情",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAdminRecords.vue#b77b1781563a48b8.1",
+        "apps/web/src/components/PlatformAdminRecords.vue#18553297e6cbdd0a.1"
+      ],
+      "sourceContractKeys": [
+        "P44-CURRENT-b77b1781563a48b8.1",
+        "P44-CURRENT-18553297e6cbdd0a.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "用户记录可见且选中用户身份有效",
+      "handler": "沿用GET /platform/accounts/users/{userId}；手机预览确认用户后打开同一详情并关闭预览。",
+      "variants": [
+        "desktop",
+        "mobile-preview-to-detail"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--list"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--preview"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail_loading"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail_error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-TECH",
+      "label": "展开管理员账号技术标识",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAdminRecords.vue#1c008f867673db60.1"
+      ],
+      "sourceContractKeys": [
+        "P44-CURRENT-1c008f867673db60.1"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "移动用户预览技术详情可见",
+      "handler": "仅展开现有技术标识，不发请求或修改数据。",
+      "variants": [
+        "collapsed",
+        "expanded"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--preview"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--technical"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-DETAIL-CONTAINER",
+      "label": "账号详情原生窗口",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformUserDetailDialog.vue#316970a74be81a74.1"
+      ],
+      "sourceContractKeys": [
+        "PA43-CURRENT-DETAIL / 原生账号详情窗口定义"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "用户详情已选择并处于当前路由",
+      "handler": "原生dialog承载详情；窗口存在不等于服务端权限验收。",
+      "variants": [
+        "loading",
+        "ready",
+        "error"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail_loading"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail_error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-DETAIL-CLOSE",
+      "label": "关闭账号详情",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformUserDetailDialog.vue#c396c48b2557ec90.1",
+        "apps/web/src/components/PlatformUserDetailDialog.vue#2086f54419d742e3.1",
+        "apps/web/src/components/PlatformUserDetailDialog.vue#138b8370ecdca0d1.1",
+        "apps/web/src/components/PlatformUserDetailDialog.vue#02668382bdda9d3b.1"
+      ],
+      "sourceContractKeys": [
+        "PA43-CURRENT-CLOSE / Escape关闭并交给父级归属保护",
+        "PA43-CURRENT-CLOSE / 工具栏关闭详情",
+        "PA43-CURRENT-CLOSE / 页尾关闭详情",
+        "PA43-CURRENT-CLOSE / 详情加载错误态关闭窗口"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "详情窗口打开或处于读取错误态",
+      "handler": "Escape、页头/页尾和错误态关闭都交给父级代次/路由归属处理，不提交写操作。",
+      "variants": [
+        "escape",
+        "header",
+        "footer",
+        "error"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail_error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-DETAIL-SECTION",
+      "label": "详情内跳转分区",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformUserDetailDialog.vue#03bf338e0dc8663a.1",
+        "apps/web/src/components/PlatformUserDetailDialog.vue#f575608b4ce38790.1",
+        "apps/web/src/components/PlatformUserDetailDialog.vue#04d8d432043cc06f.1"
+      ],
+      "sourceContractKeys": [
+        "PA43-CURRENT-SECTION / 滚动到组织关系分区",
+        "PA43-CURRENT-SECTION / 滚动到平台权限分区",
+        "PA43-CURRENT-SECTION / 滚动到登录安全分区"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "账号详情加载成功",
+      "handler": "滚动至组织关系、平台权限或登录安全分区；不改变当前用户。",
+      "variants": [
+        "memberships",
+        "roles",
+        "security"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--memberships"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--roles"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--security"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-DETAIL-RETRY",
+      "label": "重试读取账号详情",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformUserDetailDialog.vue#2a92366d39ac198e.1"
+      ],
+      "sourceContractKeys": [
+        "PA43-CURRENT-RETRY / 详情加载失败后重试现有读取"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "详情GET出现可重试错误",
+      "handler": "重新读取同一用户详情，保留既有窗口归属保护。",
+      "variants": [
+        "retry",
+        "loading",
+        "success"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail_error"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail_loading"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-MEMBERSHIP-WIRING",
+      "label": "详情转发加入组织表单提交",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformUserDetailDialog.vue#2964730aa12dbf82.1"
+      ],
+      "sourceContractKeys": [
+        "PA43-CURRENT-MEMBERSHIP / 转发加入组织表单提交和当前用户ID"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "详情已读取且加入组织表单可用",
+      "handler": "把表单数据和所选用户ID转给父级既有addMembership。",
+      "variants": [
+        "valid",
+        "error"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--memberships"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--membership_error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。",
+      "forwardsTo": [
+        "PA44-MEMBERSHIP-SUBMIT"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#2964730aa12dbf82.1",
+          "event": "@submit",
+          "handler": "$emit('addMembership', selected.id, $event)",
+          "targets": [
+            "PA44-MEMBERSHIP-SUBMIT"
+          ]
+        }
+      ]
+    },
+    {
+      "actionId": "PA44-MEMBERSHIP-SUBMIT",
+      "label": "提交加入组织意图",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformUserMembershipForm.vue#e88849ecc037f9c2.1",
+        "apps/web/src/components/PlatformUserMembershipForm.vue#505257661bdbe17b.1"
+      ],
+      "sourceContractKeys": [
+        "PA43-MEMBERSHIP form提交",
+        "PA43-MEMBERSHIP 按钮提交"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "用户active、表单有效且未busy",
+      "handler": "按既有POST /platform/accounts/users/{id}/memberships提交组织ID、五选一角色和原因；服务端仍执行资格/关系校验。",
+      "variants": [
+        "valid",
+        "invalid",
+        "busy",
+        "failure"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--memberships"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--membership_error"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--write_busy"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--write_error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-ROLE-CHOOSE",
+      "label": "选择固定平台角色授予或撤销",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformUserDetailDialog.vue#d7a92de7086fdce6.1"
+      ],
+      "sourceContractKeys": [
+        "PA43-CURRENT-ROLE / 授予或撤销一个固定平台角色，busy/非活动账号禁用"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "详情已读取且账号active；自我超级管理员撤销按既有保护禁用",
+      "handler": "打开对应原因确认流程；实际POST仍由父级在原因确认后执行。",
+      "variants": [
+        "grant",
+        "revoke",
+        "inactive-disabled",
+        "self-protection"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--roles"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--disabled_roles"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_grant_operations"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_revoke_operations"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--self_refusal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-SESSION-CHOOSE",
+      "label": "选择撤销单个或全部会话",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformUserDetailDialog.vue#86b2bcafa2c5529c.1",
+        "apps/web/src/components/PlatformUserDetailDialog.vue#f1dd7ea535b03340.1"
+      ],
+      "sourceContractKeys": [
+        "PA43-CURRENT-SESSION / 撤销单个活动会话",
+        "PA43-CURRENT-SESSION / 撤销当前用户全部会话"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "详情安全区存在目标活动会话或全量撤销入口",
+      "handler": "单个会话传现有session_id，全部会话使用null，并进入原共享原因确认。",
+      "variants": [
+        "single",
+        "all",
+        "none",
+        "expired"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--security"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--no_sessions"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--expired_session"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_session"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_sessions"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-STATUS-CHOOSE",
+      "label": "选择停用或恢复账号登录",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformUserDetailDialog.vue#a187b4fc34f4ab4e.1"
+      ],
+      "sourceContractKeys": [
+        "PA43-CURRENT-STATUS / 停用或恢复登录"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "详情已读取且写入未busy",
+      "handler": "打开既有原因窗；实际active/disabled写入和停用会话撤销仍由服务端合同拥有。",
+      "variants": [
+        "active-to-disabled",
+        "disabled-to-active",
+        "self-protection"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--disabled"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_disable"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_restore"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--self_refusal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-PASSWORD-OPEN",
+      "label": "打开强制改密窗",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformUserDetailDialog.vue#8406f17273df6864.1"
+      ],
+      "sourceContractKeys": [
+        "PA43-CURRENT-PASSWORD / 打开既有强制改密确认流程"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "详情已读取且写入未busy",
+      "handler": "打开现有临时密码窗；不在此按钮发起密码写入。",
+      "variants": [
+        "open",
+        "cancel"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--detail"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--password"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-CREATE-CONTAINER",
+      "label": "新建用户原生窗口",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDialogs.vue#96a5d8f14ce43590.1"
+      ],
+      "sourceContractKeys": [
+        "新建用户原生dialog定义"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "用户模式新建窗口打开",
+      "handler": "保留五个既有创建字段及原校验；不扩增表单字段。",
+      "variants": [
+        "default",
+        "organization-selected",
+        "error"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--create"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--create_org"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--create_error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-CREATE-CANCEL",
+      "label": "取消新建用户",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDialogs.vue#9e8b9d6531d0203d.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#c3a13fcf7d0fc151.1"
+      ],
+      "sourceContractKeys": [
+        "PA43-CREATE Escape取消",
+        "PA43-CREATE 按钮取消"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "新建窗口打开且提交未开始",
+      "handler": "Escape或取消按钮关闭窗口，不执行创建请求。",
+      "variants": [
+        "escape",
+        "button"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--create"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--create_error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-CREATE-SUBMIT",
+      "label": "提交新建用户",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDialogs.vue#f76649b0950ec968.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#472f3632b99eae63.1"
+      ],
+      "sourceContractKeys": [
+        "PA43-CREATE form提交",
+        "PA43-CREATE 按钮提交"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "原生表单校验通过且创建请求未busy",
+      "handler": "按既有POST /platform/accounts/users提交五字段；空组织/平台角色继续为null，不含reason。",
+      "variants": [
+        "valid",
+        "invalid",
+        "busy",
+        "failure",
+        "success"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--create"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--create_org"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--create_busy"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--create_error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-PASSWORD-CONTAINER",
+      "label": "强制改密原生窗口",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDialogs.vue#0a0c76ebc577d650.1"
+      ],
+      "sourceContractKeys": [
+        "密码表单原生dialog定义"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "详情改密入口打开共享密码窗",
+      "handler": "窗口接收当前账号和临时密码草稿；密码关闭后的敏感值清理仍保留为待修核项。",
+      "variants": [
+        "default",
+        "invalid",
+        "error"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--password"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--password_invalid"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--password_error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-PASSWORD-CANCEL",
+      "label": "取消强制改密",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDialogs.vue#04769fc3148b559f.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#0fbdc8b9a1396e9c.1"
+      ],
+      "sourceContractKeys": [
+        "PA43-PASSWORD Escape取消",
+        "PA43-PASSWORD 按钮取消"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "密码窗口打开且提交未开始",
+      "handler": "Escape或取消关闭当前密码窗口，不调用密码API。",
+      "variants": [
+        "escape",
+        "button"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--password"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--password_error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-PASSWORD-SUBMIT",
+      "label": "确认临时密码并进入原因确认",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDialogs.vue#22727b212f0b7505.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#9ad3d7837ab53f7c.1"
+      ],
+      "sourceContractKeys": [
+        "PA43-PASSWORD form提交到原因窗",
+        "PA43-PASSWORD 按钮进入原因窗"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "临时密码通过原校验且窗口未busy",
+      "handler": "form与确认按钮共同进入原共享原因流程；最终密码POST只在原因确认后发生。",
+      "variants": [
+        "valid",
+        "invalid",
+        "reason-step"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--password"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--password_invalid"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_reset_password"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-REASON-CONTAINER",
+      "label": "共享原因原生窗口",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDialogs.vue#8cb5dc651024abe9.1"
+      ],
+      "sourceContractKeys": [
+        "共享原因原生dialog定义"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "状态/角色/会话/改密操作已选择目标",
+      "handler": "展示既有2–300字符原因要求；11种业务目标由父级决定。",
+      "variants": [
+        "11-operation-variants",
+        "invalid"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_disable"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_restore"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_reset_password"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_invalid"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-REASON-CANCEL",
+      "label": "取消原因确认",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDialogs.vue#bd4ff44ef0d1442c.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#07d6870e96868709.1"
+      ],
+      "sourceContractKeys": [
+        "原因窗Escape取消，不写入",
+        "原因窗按钮取消"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "原因窗口打开且写入尚未开始",
+      "handler": "Escape或取消关闭确认，不发出写请求。",
+      "variants": [
+        "escape",
+        "button"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_disable"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_restore"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_invalid"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-REASON-INPUT",
+      "label": "编辑操作原因",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDialogs.vue#b313681d9ad25f0e.1"
+      ],
+      "sourceContractKeys": [
+        "原因value/input转发，不是v-model"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "原因窗口打开",
+      "handler": "textarea通过update:reasonText更新父级草稿；编辑不提交写请求。",
+      "variants": [
+        "edit",
+        "required",
+        "minlength",
+        "maxlength"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_disable"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_reset_password"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_invalid"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-REASON-SUBMIT",
+      "label": "确认原因并执行已选操作",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDialogs.vue#4a0496f0cb3d6338.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#7819d63c0a94ede2.1"
+      ],
+      "sourceContractKeys": [
+        "原因窗form确认",
+        "原因窗按钮确认"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "原因有效且写入未busy",
+      "handler": "表单与确认按钮共同调用既有submitReason，由目标动作处理器按当前API合同提交。",
+      "variants": [
+        "valid",
+        "invalid",
+        "busy",
+        "failure",
+        "write-success-read-warning",
+        "success"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_disable"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_restore"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_grant_operations"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_revoke_operations"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_grant_security"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_revoke_security"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_grant_super"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_revoke_super"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_session"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_sessions"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_reset_password"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--reason_invalid"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--write_busy"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--write_error"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--write_read_error"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-OUT-ORG-EMPTY-RESET",
+      "label": "管理员路由隐藏的组织空态清筛分支",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#86ea70e081f1f8e3.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-86ea70e081f1f8e3.1"
+      ],
+      "contractAliasReason": "以精确当前合同键标注此条件分支，不将其计入管理员页动作。",
+      "condition": "organizationEmptyState条件成立时才渲染",
+      "handler": "该清筛控件只属于组织列表空态；管理员空态另行映射。",
+      "variants": [
+        "route-specific-excluded"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p44-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "排除只界定P44，不表示P40组织列表已通过动作/运行时验收。"
+    },
+    {
+      "actionId": "PA44-DETAIL-ROW-WIRING",
+      "label": "管理员记录行详情事件转发",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#103fa7d7798d62d6.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-103fa7d7798d62d6.1"
+      ],
+      "contractAliasReason": "沿用单一可见意图的现行合同键；状态或桌面/移动入口不重复计为业务动作。",
+      "condition": "管理员记录列表挂载",
+      "handler": "把管理员行选择转发到父级openUser详情读取，不重复计详情读取动作。",
+      "variants": [
+        "desktop-row",
+        "mobile-preview"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--list"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--preview"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p44-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "本地隔离响应与源码映射不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。",
+      "forwardsTo": [
+        "PA44-OPEN-DETAIL"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#103fa7d7798d62d6.1",
+          "event": "@open-user",
+          "handler": "emit('open-user', $event)",
+          "targets": [
+            "PA44-OPEN-DETAIL"
+          ]
+        }
+      ]
+    },
+    {
+      "actionId": "PA44-EMPTY-RESET",
+      "label": "管理员空结果清除筛选",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#86ea70e081f1f8e3.2"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-86ea70e081f1f8e3.2"
+      ],
+      "contractAliasReason": "沿用单一可见意图的现行合同键；状态或桌面/移动入口不重复计为业务动作。",
+      "condition": "管理员目录有活动筛选且结果为空",
+      "handler": "发出reset-filters，由父级恢复当前URL筛选并重读既有管理员列表。",
+      "variants": [
+        "filtered-empty"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--filtered_empty"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p44-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "本地隔离响应与源码映射不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-EMPTY-CREATE",
+      "label": "管理员空目录打开创建窗",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#38003e3f7b002f71.1"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-38003e3f7b002f71.1"
+      ],
+      "contractAliasReason": "沿用单一可见意图的现行合同键；状态或桌面/移动入口不重复计为业务动作。",
+      "condition": "管理员目录为空且没有活动筛选",
+      "handler": "仅发出create-admin；由父级打开共享五字段创建窗，不在空态按钮处直接写入。",
+      "variants": [
+        "unfiltered-empty"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--empty"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--create"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p44-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "本地隔离响应与源码映射不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-ROLE-RESET",
+      "label": "重置本地角色比较条件",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformRoleComparison.vue#e4a2fbf8875f3488.1"
+      ],
+      "sourceContractKeys": [
+        "P44-CURRENT-e4a2fbf8875f3488.1"
+      ],
+      "contractAliasReason": "沿用单一可见意图的现行合同键；状态或桌面/移动入口不重复计为业务动作。",
+      "condition": "管理员页嵌入的只读角色比较已挂载",
+      "handler": "恢复角色比较默认选择、仅差异、搜索与分组；不写URL或调用修改API。",
+      "variants": [
+        "default",
+        "search",
+        "group",
+        "same-role-all"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--comparison"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--compare_all"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--compare_search"
+        },
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--compare_group"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p44-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "本地隔离响应与源码映射不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
+      "actionId": "PA44-GLOBAL-NAVIGATION",
+      "label": "平台账号/组织全局侧栏导航",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountGlobalRail.vue#29448f61eb8ffc80.1",
+        "apps/web/src/components/PlatformAccountGlobalRail.vue#ffed2dd7f439c4b0.1",
+        "apps/web/src/components/PlatformAccountGlobalRail.vue#e400286c7cd59e44.1"
+      ],
+      "sourceContractKeys": [
+        "P44-CURRENT-29448f61eb8ffc80.1",
+        "P44-CURRENT-ffed2dd7f439c4b0.1",
+        "P44-CURRENT-e400286c7cd59e44.1"
+      ],
+      "contractAliasReason": "沿用单一可见意图的现行合同键；状态或桌面/移动入口不重复计为业务动作。",
+      "condition": "平台账号目录全局侧栏可见",
+      "handler": "仅导航到组织、用户或管理员路由，保持既有权限守卫。",
+      "variants": [
+        "organizations",
+        "users",
+        "admins"
+      ],
+      "scenes": [
+        {
+          "package": "user-admin-direction-c",
+          "scene": "admins--list"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p44-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "本地隔离响应与源码映射不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    }
+  ],
+  "inputs": {
+    "apps/web/src/components/PlatformAccountCenter.vue": [
+      "query",
+      "status"
+    ],
+    "apps/web/src/components/PlatformAccountDialogs.vue": [
+      "userForm.email",
+      "userForm.temporary_password",
+      "userForm.platform_role_code",
+      "userForm.organization_id",
+      "userForm.organization_role_code",
+      "passwordForm.temporary_password"
+    ],
+    "apps/web/src/components/PlatformUserMembershipForm.vue": [
+      "form.organization_id",
+      "form.role_code",
+      "form.reason"
+    ]
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "四个原生dialog分别为用户详情、新建、密码、共享原因；移动记录预览由ResponsiveDataView另行实现。动作映射不等同于全状态浏览器或读屏验收。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/PlatformAccountCenter.vue",
+      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+      "apps/web/src/components/PlatformAccountGlobalRail.vue",
+      "apps/web/src/components/PlatformAdminRecords.vue",
+      "apps/web/src/components/PlatformRoleComparison.vue",
+      "apps/web/src/components/PlatformUserDetailDialog.vue",
+      "apps/web/src/components/PlatformUserMembershipForm.vue",
+      "apps/web/src/components/PlatformAccountDialogs.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
+      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
+      "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+      "apps/web/src/components/PlatformRoleComparison.vue": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309",
+      "apps/web/src/components/PlatformUserDetailDialog.vue": "87e0b0906fded03d7c5337dafa5e6bfc801a2367d12deb652cc36f0f88d32d9a",
+      "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+      "apps/web/src/components/PlatformAccountDialogs.vue": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+    },
+    "includeStructuralContainers": true,
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [
+      {
+        "file": "apps/web/src/components/PlatformAccountCenter.vue",
+        "binding": "query",
+        "meaning": "管理员目录邮箱查询草稿",
+        "remaining": "沿用现有URL同步和长度截断，不增设查询条件。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountCenter.vue",
+        "binding": "status",
+        "meaning": "管理员目录账号状态筛选草稿",
+        "remaining": "只筛选账号状态，不混入角色权限。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+        "binding": "userForm.email",
+        "meaning": "创建用户邮箱",
+        "remaining": "继续现有必填和长度约束，由既有API校验最终确认。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+        "binding": "userForm.temporary_password",
+        "meaning": "新用户临时密码",
+        "remaining": "保持现有长度约束，不在本变更中扩展安全规则。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+        "binding": "userForm.platform_role_code",
+        "meaning": "可选固定平台角色",
+        "remaining": "仅使用当前普通用户和三种平台角色。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+        "binding": "userForm.organization_id",
+        "meaning": "可选组织ID",
+        "remaining": "空值继续转null；不推导或补造组织数据。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+        "binding": "userForm.organization_role_code",
+        "meaning": "组织初始角色",
+        "remaining": "只在选择组织时按既有选项使用。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+        "binding": "passwordForm.temporary_password",
+        "meaning": "强制重置的临时密码",
+        "remaining": "关闭后敏感值清理仍列待修，不假设自动清理。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformUserMembershipForm.vue",
+        "binding": "form.organization_id",
+        "meaning": "目标组织ID",
+        "remaining": "仅从现有eligible组织项选择。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformUserMembershipForm.vue",
+        "binding": "form.role_code",
+        "meaning": "组织角色代码",
+        "remaining": "只使用既有五种角色选项。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformUserMembershipForm.vue",
+        "binding": "form.reason",
+        "meaning": "加入组织审计原因",
+        "remaining": "沿用既有2–300字符规则。"
+      }
+    ],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [],
+    "sharedRemaining": [
+      "P44复用P43已映射的用户详情、组织关系表单、新建/改密/原因窗；当前父级来源、P44管理员列表、全局侧栏和角色比较另行映射。",
+      "ResponsiveFilterDrawer、ResponsiveDataView与TechnicalDetails的完整消费者及容器状态仍需全局/浏览器层验收。",
+      "自动视觉批准不提升动作审核、全状态、读屏、真实RBAC、MySQL或审计验收。"
+    ],
+    "remaining": "动作映射和本地场景不证明全状态App生命周期或真实生产验收。"
+  },
+  "compositionGaps": [
+    "管理员目录及只读比较的静态来源已逐项映射；P44与P43共享的详情/创建/改密/原因动作沿用同一组件合同，完整App生命周期仍需独立回归。",
+    "视觉全局自动通过不等于按钮六态、真实RBAC、MySQL写入、审计持久化或M07正式生产验收。"
+  ]
+}
