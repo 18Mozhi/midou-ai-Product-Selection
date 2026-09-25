@@ -20,8 +20,9 @@
 - `node --test tests/unit/ui-phase2-commercial-create-review.test.mjs tests/unit/ui-phase2-commercial-create-write-review.test.mjs`：8/8 通过。两个旧图册继续按原始 P58 组件版本 `655a99686a170c1e98d2aea3cf69eb71cac69342` 复验，不把旧预览当作当前生产源；截图与原清单不变。
 - `npm run typecheck:web`：通过。
 - `node scripts/run-playwright-projects.mjs tests/e2e/m06-06-commercial.spec.ts`：桌面 Chromium 4/4、390px 手机 4/4。新增用例覆盖创建窗布局/溢出、7 字段、标识原生约束、挂起 POST 时防关闭/禁编辑、模拟 403 的窗内提示/编号/草稿保留，以及模拟 201 的原请求、成功关闭、列表定位与草稿重置；所有 POST 都由本地浏览器拦截，不产生真实写入。
-- E2E 临时 API/Vite 进程在测试结束后退出。生产未连接、未写入、未部署；真实会话/RBAC、MySQL/审计和未知 POST 结果策略不由本地测试证明。
+- `python scripts/deploy-baota.py`：返回 `status=deployed`，`build_sha=69086515fbe0b3109075f0a7876ed7a9deb16330`，上传临时包已删除。线上 `live/ready/available/version` 均 HTTP 200，live/version SHA 一致，MySQL/Redis/supervisor 与 API/Worker available；`/platform-admin/commercial` 深链 HTTP 200，CommercialOperationsCenter JS/CSS 均 HTTP 200 且 SHA-256 与本地构建一致。
+- E2E 临时 API/Vite 进程在测试结束后退出。生产验收为公开健康/资源只读检查，没有真实登录会话、RBAC或配额写入；MySQL审计事务和未知 POST 结果策略不由本地或公开检查证明。
 
 ## 影响边界
 
-只改创建原生 dialog 的 Vue、样式与该路径 E2E；复用原 API，不改调用字段、OpenAPI、服务端校验、数据库、权限、环境、依赖或宝塔对象。无配置调节项，无独立后端重启需求；正式发布仍使用唯一的 `python scripts/deploy-baota.py` 固定流程，并按统一 W09 发布门核对线上 SHA、提交归属、预检、备份及维护窗口。本批不据局部 P58 完成宣布全 73 页或 M07-03 通过。
+只改创建原生 dialog 的 Vue、样式与该路径 E2E；复用原 API，不改调用字段、OpenAPI、服务端校验、数据库、权限、环境、依赖或宝塔对象。无配置调节项，无独立后端重启需求；本批已用唯一固定部署脚本发布，并按线上 SHA、提交归属、预检与公开健康完成复核。本批不据局部 P58 完成宣布全 73 页或 M07-03 正式签收通过。
