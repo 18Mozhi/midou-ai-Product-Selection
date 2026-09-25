@@ -62,7 +62,7 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 | CS-G02 P58影响预览 | 分页外当前方案、未来/过期调整、负调整截零再反推、当前周期/新周期 | 待逐输入比对服务公式；预览不能编影响值 |
 | CS-G03 写后读取及模态归属 | P58创建/确认和P60 call在load吞错后写成功提示；关闭再开/切范围后迟到写结果；原因和输入错误在模态外 | 待复现，不能自动重发或取消已发事务 |
 | CS-G04 P59路由/缓存 | route.fullPath watcher清loadedOnce但refreshing早退，非本页缓存watch与快速切换；首次超时提示旧快照 | 空态修复未覆盖；需精准请求终态与路由归属测试 |
-| CS-G05 P60范围/历史/密钥 | 组织输入与旧结果未分离、URL只replace当前view、无popstate/deactivate；一次性secret跨范围/缓存/迟到响应 | 待合成密钥隔离测试；不使用真实密钥或改变安全规则 |
+| CS-G05 P60范围/历史/密钥 | 2026-09-25批次29已用合成密钥验证组织输入/目录切换清理、KeepAlive离页清理和组织变化后迟到响应丢弃；组织输入与旧结果的可见区分、URL只replace、缺少popstate仍待处理 | 密钥展示生命周期部分关闭；其余范围/历史和一般读写异步归属待后续验证，不使用真实密钥或改变安全规则 |
 | CS-G06 输入/状态等价 | P58表单minlength与服务1字符原因差异、P60 UI1000上限与配置上限、投递页原因隐藏、error未关联字段 | 记录差异，业务/配置不确定时先决定，不擅自扩约束 |
 | CS-G07 共享无障碍/布局 | 全部原生模态、五+三详情、确认叠层、按钮六态、缩放/键盘、三主题/两密度 | 本批正常开关不能作为完整无障碍验收 |
 | CS-G08 真实合同/正式交付 | 64份规格不是64页正式新设计；F00未审、语义分母未冻、真实权限/事务/加密/外发/生产与用户签收 | G0继续中、G1–G5待验；不把本批修复或候选数改成全站通过 |
@@ -193,7 +193,7 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 | 05407b8a7159149a.1 | 533 | form-event | OP60-LOAD 组织读取form |
 | 88a9882a80ac28a2.1 | 541 | control | OP60-LOAD 同form按钮 |
 | 32b3ac036c571c07.1 | 552 | control | OP60-SECRET 复制 |
-| e70a65ac56ee311f.1 | 553 | control | OP60-SECRET 安全保存后清除 |
+| 0b5f3917e5414006.1 | 593 | control | OP60-SECRET 安全保存后清除并使迟到密钥响应失效 |
 | 1c008f867673db60.1 | 578 | control | OP60-TECH 请求详情 |
 | 5367bd616a3abe62.1 | 622 | control | OP60-LOAD 首读错误重试 |
 | b70e50f696b891f1.1 | 751 | event-binding | OP60-EVENT 四事件checkbox转发 |
@@ -268,19 +268,19 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 
 | 当前签名.序号 | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| 217f0846e7bba1ee.1 | 568 | control | OP60-CURRENT-TRACE / 展开本次读取关联编号 |
-| e4c0454be34c0156.1 | 571 | control | OP60-CURRENT-LOAD / 重读当前组织和已选列表快照 |
-| 378899e48c4d8c4e.1 | 627 | control | OP60-CURRENT-VIEW / 切换到接口访问账号目录并显示其汇总 |
-| e16baed7fd7574cb.1 | 640 | control | OP60-CURRENT-VIEW / 切换到事件回调地址目录并显示其汇总 |
-| b224f20b7d8e3bc6.1 | 650 | control | OP60-CURRENT-VIEW / 切换到投递记录目录并显示其汇总 |
-| 4fe0f29d19fbaf47.1 | 665 | dialog-component-call | OP60-CURRENT-CREATE / 调用新增Client/Webhook共享创建确认窗，不直接写入 |
-| 1c008f867673db60.8 | 1155 | control | OP60-CURRENT-TECH / 展开移动投递详情技术信息 |
-| f371f0b36489e592.1 | 1209 | event-binding | OP60-CURRENT-REASON / 转发原因窗关闭/提交意图给当前操作所有者 |
-| 55ddee7e496796ca.1 | 1209 | dialog-component-call | OP60-CURRENT-REASON / 调用发布、轮换、撤销或重放原因确认窗 |
+| 217f0846e7bba1ee.1 | 608 | control | OP60-CURRENT-TRACE / 展开本次读取关联编号 |
+| e4c0454be34c0156.1 | 611 | control | OP60-CURRENT-LOAD / 重读当前组织和已选列表快照 |
+| 378899e48c4d8c4e.1 | 667 | control | OP60-CURRENT-VIEW / 切换到接口访问账号目录并显示其汇总 |
+| e16baed7fd7574cb.1 | 680 | control | OP60-CURRENT-VIEW / 切换到事件回调地址目录并显示其汇总 |
+| b224f20b7d8e3bc6.1 | 690 | control | OP60-CURRENT-VIEW / 切换到投递记录目录并显示其汇总 |
+| 4fe0f29d19fbaf47.1 | 705 | dialog-component-call | OP60-CURRENT-CREATE / 调用新增Client/Webhook共享创建确认窗，不直接写入 |
+| 1c008f867673db60.8 | 1195 | control | OP60-CURRENT-TECH / 展开移动投递详情技术信息 |
+| f371f0b36489e592.1 | 1249 | event-binding | OP60-CURRENT-REASON / 转发原因窗关闭/提交意图给当前操作所有者 |
+| 55ddee7e496796ca.1 | 1249 | dialog-component-call | OP60-CURRENT-REASON / 调用发布、轮换、撤销或重放原因确认窗 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/OpenPlatformCenter.vue | 9bcb38c92f614302ad155436cbdba9e43507bddb62bca0a8d0fefee676ddb3b1 |
+| apps/web/src/components/OpenPlatformCenter.vue | 888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa |
 
 本节与原有OP60请求/权限/密钥/投递合同并列；所有映射均为静态源码身份，不验证数据库、真实外部回调、RBAC、密钥隔离或生产交付。
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |

@@ -14,7 +14,11 @@
 
 ## 2026-09-25 · P60 当前部署与资源预算事实复核
 
-线上只读核验 `/platform-admin/open-platform` 深链、`OpenPlatformCenter` JS/CSS 均 HTTP 200，资源 SHA-256 与本地当前构建一致；live/ready/available/version 正常，build SHA 为 `bf65285830819b7d1989094e4437726fb5a07765`。`npm run verify:frontend-budget` 当前通过，202 个资源；Feature Map 旧的 129451/122880 与 52297/51200 预算数值已按当前实测纠正。仅更新交付事实文档，没有 P60 运行时代码/API/RBAC/数据库或外部投递变更；无需重新部署。正式 M07-03 证据、真实 MySQL/RBAC/加密及回调投递仍需独立验收。
+线上只读核验 `/platform-admin/open-platform` 深链、`OpenPlatformCenter` JS/CSS 均 HTTP 200，资源 SHA-256 与本地当前构建一致；live/ready/available/version 正常，当前 build SHA 为 `c34196d4bd291fa34afaab96db2dd392bed4de49`（P58 记录文档提交的重新构建）。`npm run verify:frontend-budget` 当前通过，202 个资源；Feature Map 旧的 129451/122880 与 52297/51200 预算数值已按当前实测纠正。仅更新交付事实文档，没有 P60 运行时代码/API/RBAC/数据库或外部投递变更；无需重新部署。正式 M07-03 证据、真实 MySQL/RBAC/加密及回调投递仍需独立验收。
+
+## 2026-09-25 · P60 一次性密钥展示生命周期
+
+密钥只在当前页面、组织与视图上下文仍有效时展示；组织输入或视图变化、离开 KeepAlive 页面及卸载都会清除已显示密钥，迟到的写响应不会重新显示旧上下文密钥。使用合成拦截响应覆盖组织变化、视图切换、KeepAlive 离开及迟到响应。P60 定向单测33/33、M06-05 Playwright 桌面/390px 手机各5/5、Web类型检查/构建、前端预算202资源、文档/运行文档/格式/静态分析门通过。一个 review-only 预览转换单测仍受 NavigationShell 旧锚点影响，未改共享运行壳层；真实密钥/权限/API写入与M07-03验收不在本批验证范围。详见 `P60-SECRET-LIFECYCLE-BATCH29.md`。本批部署记录待后续附加。
 
 ## 2026-09-25 · P37 审计筛选历史与缓存恢复
 

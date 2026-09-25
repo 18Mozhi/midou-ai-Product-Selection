@@ -1,6 +1,16 @@
 import { test, expect, type Locator } from "@playwright/test";
 const orgId = "00000000-0000-4000-8000-000000000605",
   env = (data: any) => ({ data, request_id: "m06-05-e2e", trace_id: "m06-05-e2e" }),
+  navigation = {
+    shell: "platform_admin",
+    organization_id: null,
+    workspace_id: null,
+    roles: [],
+    capabilities: [],
+    platform_roles: ["platform_security_admin"],
+    platform_capabilities: ["platform:secure", "platform_token:manage"],
+    guard_reason: "allowed",
+  },
   data = {
     clients: [
       {
@@ -60,20 +70,18 @@ const orgId = "00000000-0000-4000-8000-000000000605",
   };
 test.beforeEach(async ({ page }) => {
   await page.route("**/api/v1/me/navigation?shell=platform_admin", (r) =>
-    r.fulfill({
-      json: env({
-        shell: "platform_admin",
-        organization_id: null,
-        workspace_id: null,
-        roles: [],
-        capabilities: [],
-        platform_roles: ["platform_security_admin"],
-        platform_capabilities: ["platform:secure", "platform_token:manage"],
-        guard_reason: "allowed",
-      }),
-    }),
+    r.fulfill({ json: env(navigation) }),
   );
   await page.route(/\/api\/v1\/platform\/open(?:\?.*)?$/, (r) => r.fulfill({ json: env(data) }));
+});
+test.afterEach(() => {
+  navigation.platform_roles.splice(0, navigation.platform_roles.length, "platform_security_admin");
+  navigation.platform_capabilities.splice(
+    0,
+    navigation.platform_capabilities.length,
+    "platform:secure",
+    "platform_token:manage",
+  );
 });
 test("M06-05.A07/A08/A15 desktop and 390 open platform", async ({ page }) => {
   await page.goto("/platform-admin/open-platform");
@@ -192,4 +200,120 @@ test("M06-05 form validation and URL-backed workspace filters fail closed", asyn
   await create.getByRole("button", { name: "创建事件回调地址" }).click();
   await expect(page.getByText("仅允许无凭证、无片段的 HTTPS 443 地址。")).toBeVisible();
   await expect(page.getByRole("alertdialog")).toHaveCount(0);
+});
+
+test("M06-05 one-time secrets clear on scope and view changes, and ignore late deactivated responses", async ({
+  page,
+}) => {
+  const alternateOrgId = "00000000-0000-4000-8000-000000000606";
+  navigation.platform_roles.push("platform_superadmin");
+  navigation.platform_capabilities.push("platform:superadmin");
+
+  let createCount = 0,
+    releaseThirdCreate: (() => void) | undefined;
+  await page.route("**/api/v1/platform/open/clients", async (route) => {
+    createCount += 1;
+    if (createCount === 3)
+      await new Promise<void>((resolve) => {
+        releaseThirdCreate = resolve;
+      });
+    await route.fulfill({ json: env({ secret: `synthetic-secret-${createCount}` }) });
+  });
+
+  async function createClient(name: string) {
+    await page.getByRole("button", { name: "创建接口访问账号" }).first().click();
+    const form = page.locator(".open-create");
+    await form.getByRole("textbox", { name: "组织内部编号" }).fill(orgId);
+    await form.getByRole("textbox", { name: "名称", exact: true }).fill(name);
+    await form.getByRole("button", { name: "创建接口访问账号" }).click();
+    await page.getByRole("alertdialog").getByRole("button", { name: "确认执行" }).click();
+  }
+
+  await page.goto("/platform-admin/open-platform");
+  await expect(page.getByRole("heading", { name: "开放平台", level: 1 })).toBeVisible();
+  await createClient("组织范围密钥测试");
+  await expect(page.getByText("synthetic-secret-1", { exact: true })).toBeVisible();
+  await page.getByRole("textbox", { name: "读取组织内部编号" }).fill(alternateOrgId);
+  await expect(page.getByText("synthetic-secret-1", { exact: true })).toHaveCount(0);
+
+  await page.locator('[data-view="clients"]').click();
+  await createClient("目录切换密钥测试");
+  await expect(page.getByText("synthetic-secret-2", { exact: true })).toBeVisible();
+  await page.locator('[data-view="webhooks"]').click();
+  await expect(page.getByText("synthetic-secret-2", { exact: true })).toHaveCount(0);
+  await page.locator('[data-view="clients"]').click();
+
+  await page.getByRole("button", { name: "创建接口访问账号" }).first().click();
+  const form = page.locator(".open-create");
+  await form.getByRole("textbox", { name: "组织内部编号" }).fill(orgId);
+  await form.getByRole("textbox", { name: "名称", exact: true }).fill("离开页面中的密钥测试");
+  await form.getByRole("button", { name: "创建接口访问账号" }).click();
+  const pendingWrite = page.waitForResponse(
+      (response) =>
+        response.request().method() === "POST" &&
+        new URL(response.url()).pathname.endsWith("/platform/open/clients"),
+    ),
+    refreshedRead = page.waitForResponse(
+      (response) =>
+        response.request().method() === "GET" &&
+        new URL(response.url()).pathname.endsWith("/platform/open"),
+    );
+  const startedWrite = page.waitForRequest(
+    (request) =>
+      request.method() === "POST" &&
+      new URL(request.url()).pathname.endsWith("/platform/open/clients"),
+  );
+  await page.getByRole("alertdialog").getByRole("button", { name: "确认执行" }).click();
+  await startedWrite;
+  await page
+    .getByRole("navigation", { name: "面包屑" })
+    .getByRole("link", { name: "安全中心" })
+    .click();
+  await expect(page).toHaveURL(/\/platform-admin\/security$/);
+  releaseThirdCreate?.();
+  await pendingWrite;
+  await refreshedRead;
+  await page.goBack();
+  await expect(page).toHaveURL(/\/platform-admin\/open-platform$/);
+  await expect(page.getByText("synthetic-secret-3", { exact: true })).toHaveCount(0);
+});
+
+test("M06-05 delayed one-time secret is ignored after the organization input changes", async ({
+  page,
+}) => {
+  const alternateOrgId = "00000000-0000-4000-8000-000000000607";
+  let releaseCreate: (() => void) | undefined;
+  await page.route("**/api/v1/platform/open/clients", async (route) => {
+    await new Promise<void>((resolve) => {
+      releaseCreate = resolve;
+    });
+    await route.fulfill({ json: env({ secret: "synthetic-late-organization-secret" }) });
+  });
+
+  await page.goto("/platform-admin/open-platform");
+  await expect(page.getByRole("heading", { name: "开放平台", level: 1 })).toBeVisible();
+  await page.getByRole("button", { name: "创建接口访问账号" }).first().click();
+  const form = page.locator(".open-create");
+  await form.getByRole("textbox", { name: "组织内部编号" }).fill(orgId);
+  await form.getByRole("textbox", { name: "名称", exact: true }).fill("迟到组织密钥测试");
+  await form.getByRole("button", { name: "创建接口访问账号" }).click();
+  const creation = page.waitForResponse(
+    (response) =>
+      response.request().method() === "POST" &&
+      new URL(response.url()).pathname.endsWith("/platform/open/clients"),
+  );
+  const submitted = page.waitForRequest(
+    (request) =>
+      request.method() === "POST" &&
+      new URL(request.url()).pathname.endsWith("/platform/open/clients"),
+  );
+  await page.getByRole("alertdialog").getByRole("button", { name: "确认执行" }).click();
+  await submitted;
+  await page.getByRole("textbox", { name: "读取组织内部编号" }).fill(alternateOrgId);
+  releaseCreate?.();
+  await creation;
+  await expect(page.locator(".open-action-result")).toContainText("操作成功并已写入审计");
+  await expect(page.getByText("synthetic-late-organization-secret", { exact: true })).toHaveCount(
+    0,
+  );
 });

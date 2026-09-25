@@ -48,6 +48,13 @@ function harness() {
       },
     }),
     nextTick: async () => {},
+    watch() {},
+    onActivated: (fn) => {
+      box.activate = fn;
+    },
+    onDeactivated: (fn) => {
+      box.deactivate = fn;
+    },
     onMounted: (fn) => {
       box.mount = fn;
     },

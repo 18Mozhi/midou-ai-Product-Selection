@@ -43,6 +43,9 @@ function harness() {
       },
     }),
     nextTick: async () => {},
+    watch() {},
+    onActivated() {},
+    onDeactivated() {},
     onMounted() {},
     onBeforeUnmount() {},
     createApiClient: () => (url, options) =>

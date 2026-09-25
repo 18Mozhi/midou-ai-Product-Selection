@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from "vue";
+import {
+  computed,
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import "../platform-polish.css";
 import "../open-platform.css";
@@ -154,6 +164,13 @@ const viewMeta = {
   );
 
 let loadController: AbortController | null = null;
+let secretGeneration = 0;
+let surfaceActive = true;
+function clearSecret() {
+  secretGeneration += 1;
+  secret.value = null;
+}
+watch(organizationId, clearSecret, { flush: "sync" });
 function syncUrl() {
   const query = new URLSearchParams(),
     current = currentFilter.value;
@@ -238,6 +255,7 @@ async function load() {
   }
 }
 function switchView(view: ViewKey) {
+  if (view !== activeView.value) clearSecret();
   activeView.value = view;
   notice.value = "";
   syncUrl();
@@ -266,6 +284,11 @@ function goToPage(page: number) {
 
 async function call(path: string, method: "POST" | "PATCH", body: Record<string, unknown>) {
   if (actionBusy.value) return;
+  const secretContext = {
+    generation: secretGeneration,
+    organizationId: organizationId.value.trim(),
+    view: activeView.value,
+  };
   actionBusy.value = true;
   actionResult.value = null;
   notice.value = "";
@@ -281,7 +304,13 @@ async function call(path: string, method: "POST" | "PATCH", body: Record<string,
       requestId: actionRequestId,
       refresh: "unverified",
     };
-    if (response.data?.secret)
+    if (
+      response.data?.secret &&
+      surfaceActive &&
+      secretGeneration === secretContext.generation &&
+      organizationId.value.trim() === secretContext.organizationId &&
+      activeView.value === secretContext.view
+    )
       secret.value = {
         value: response.data.secret,
         kind: path.includes("webhooks") ? "Webhook 签名密钥" : "API Client 密钥",
@@ -519,7 +548,18 @@ const statusText = (value: string) =>
   });
 
 onMounted(load);
-onBeforeUnmount(() => loadController?.abort());
+onActivated(() => {
+  surfaceActive = true;
+});
+onDeactivated(() => {
+  surfaceActive = false;
+  clearSecret();
+});
+onBeforeUnmount(() => {
+  surfaceActive = false;
+  clearSecret();
+  loadController?.abort();
+});
 </script>
 
 <template>
@@ -550,7 +590,7 @@ onBeforeUnmount(() => loadController?.abort());
       <code>{{ secret.value }}</code>
       <footer>
         <button type="button" @click="copySecret">复制密钥</button
-        ><button type="button" @click="secret = null">我已安全保存</button>
+        ><button type="button" @click="clearSecret">我已安全保存</button>
       </footer>
     </aside>
     <div v-if="actionResult" class="open-notice open-action-result" role="status">
