@@ -61,7 +61,7 @@ try {
   await server.listen();
   browser = await chromium.launch({ headless: true });
   for (const action of ["create", "decide"]) {
-    for (const mode of ["destroy-success", "destroy-failure", "cache-success"]) {
+    for (const mode of ["destroy-success", "destroy-failure", "cache-success", "storage-failure"]) {
       const context = await browser.newContext({
         viewport: { width: 1440, height: 1000 },
         locale: "zh-CN",
@@ -130,11 +130,21 @@ try {
           unexpected.push(request.method() + " " + url.pathname);
           return route.abort();
         });
-        if (action === "decide")
-          await page.addInitScript(({ key, id }) => localStorage.setItem(key, id), {
-            key,
-            id: old.id,
-          });
+        await page.addInitScript(
+          ({ key, id, action, mode }) => {
+            if (id) localStorage.setItem(key, id);
+            if (mode === "storage-failure") {
+              const method = action === "create" ? "setItem" : "removeItem";
+              Object.defineProperty(Storage.prototype, method, {
+                configurable: true,
+                value() {
+                  throw new DOMException("Storage unavailable", "SecurityError");
+                },
+              });
+            }
+          },
+          { key, id: action === "decide" ? old.id : null, action, mode },
+        );
         await page.goto("http://127.0.0.1:5175/__p16_write_lifetime/");
         if (action === "create") {
           await page.getByLabel("商品关键词", { exact: true }).fill("原商品关键词");
@@ -147,7 +157,23 @@ try {
           document.querySelector('.selection-journey[aria-busy="true"]'),
         );
         assert.equal(writes.length, 1);
-        if (mode.startsWith("destroy")) {
+        if (mode === "storage-failure") {
+          const response = page.waitForResponse((r) => r.headers()["x-lifetime-result"] === mode);
+          release();
+          await (await response).finished();
+          await settle(page);
+          assert.equal(
+            await page.locator(".selection-status").getAttribute("data-state"),
+            action === "create" ? "running" : "decided",
+          );
+          assert.match(await page.getByRole("status").textContent(), /服务器状态不受影响/u);
+          assert.equal(await page.locator(".ui-state-panel").count(), 0);
+          assert.equal(
+            writes.length,
+            1,
+            "storage failure must not replay a confirmed server write",
+          );
+        } else if (mode.startsWith("destroy")) {
           await page.locator("#destroy").click();
           await page.locator("#destroyed").waitFor();
           await page.evaluate(({ key, id }) => localStorage.setItem(key, id), {

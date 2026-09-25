@@ -102,7 +102,9 @@ export async function buildJourneyDesignData(repo) {
         createIntents[input_kind] = { path: p, method: options.method, body: plain(options.body) };
         return { data: sample, request_id: sample.request_id };
       },
-      applyJourney() {},
+      applyJourney() {
+        return true;
+      },
       schedule() {},
       applyFailure: (e) => {
         throw e;
@@ -127,7 +129,9 @@ export async function buildJourneyDesignData(repo) {
       decision: { ...decision, action },
       stopRead() {},
       stop() {},
-      applyJourney() {},
+      applyJourney() {
+        return true;
+      },
       applyFailure: (e) => {
         throw e;
       },
@@ -153,19 +157,22 @@ export async function buildJourneyDesignData(repo) {
   }).result;
   assert.equal(blockedRequests, 0);
   const resetDecision = { action: "reject", reason: "旧旅程原因" };
-  run(`${extract(main, "reset", "function")}\nreset();`, {
-    busy: { value: false },
-    stopRead() {},
-    resumeId: { value: sample.id },
-    journey: { value: sample },
-    state: { value: "error" },
-    message: { value: "error" },
-    form: { input_kind: "asin", input_value: "b012345678" },
-    selectedResultId: { value: "selected" },
-    localStorage: { removeItem() {} },
-    progressStorageKey: "scoutops.selection-journey.active-id",
-    decision: resetDecision,
-  });
+  run(
+    `${extract(main, "saveProgressId", "function")}\n${extract(main, "reset", "function")}\nreset();`,
+    {
+      busy: { value: false },
+      stopRead() {},
+      resumeId: { value: sample.id },
+      journey: { value: sample },
+      state: { value: "error" },
+      message: { value: "error" },
+      form: { input_kind: "asin", input_value: "b012345678" },
+      selectedResultId: { value: "selected" },
+      localStorage: { removeItem() {} },
+      progressStorageKey: "scoutops.selection-journey.active-id",
+      decision: resetDecision,
+    },
+  );
   assert.equal(resetDecision.reason, "旧旅程原因");
   const errors = [];
   for (const input_value of [
@@ -184,20 +191,23 @@ export async function buildJourneyDesignData(repo) {
   let selected = { value: "" },
     saved = null;
   const apply = (next) =>
-    run(`${extract(main, "applyJourney", "function")}\napplyJourney(next);`, {
-      next,
-      journey: { value: null },
-      selectedResultId: selected,
-      progressStorageKey: "scoutops.selection-journey.active-id",
-      localStorage: {
-        setItem: (_, value) => {
-          saved = value;
-        },
-        removeItem: () => {
-          saved = null;
+    run(
+      `${extract(main, "saveProgressId", "function")}\n${extract(main, "applyJourney", "function")}\napplyJourney(next);`,
+      {
+        next,
+        journey: { value: null },
+        selectedResultId: selected,
+        progressStorageKey: "scoutops.selection-journey.active-id",
+        localStorage: {
+          setItem: (_, value) => {
+            saved = value;
+          },
+          removeItem: () => {
+            saved = null;
+          },
         },
       },
-    });
+    );
   apply(sample);
   assert.equal(selected.value, "");
   assert.equal(saved, sample.id);

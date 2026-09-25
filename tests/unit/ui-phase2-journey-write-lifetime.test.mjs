@@ -21,7 +21,7 @@ const setup = ast.statements
   .join("\n");
 const code = ts.transpileModule(
   setup +
-    "\nexport const exposed={create,decide,form,decision,journey,state,message,requestId,busy};",
+    "\nexport const exposed={create,decide,reset,resume,form,decision,journey,state,message,requestId,busy};",
   { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } },
 ).outputText;
 const key = "scoutops.selection-journey.active-id";
@@ -39,6 +39,7 @@ class ApiClientError extends Error {}
 function harness() {
   const hooks = { mounted: [], activated: [], deactivated: [], unmounted: [] },
     storage = new Map(),
+    storageFailures = new Set(),
     storageCalls = [],
     requests = [],
     timers = [];
@@ -69,12 +70,17 @@ function harness() {
       return pending;
     },
     localStorage: {
-      getItem: (k) => storage.get(k) ?? null,
+      getItem: (k) => {
+        if (storageFailures.has("get")) throw new Error("storage unavailable");
+        return storage.get(k) ?? null;
+      },
       setItem: (k, v) => {
+        if (storageFailures.has("set")) throw new Error("storage unavailable");
         storageCalls.push(["set", k, v]);
         storage.set(k, v);
       },
       removeItem: (k) => {
+        if (storageFailures.has("remove")) throw new Error("storage unavailable");
         storageCalls.push(["remove", k]);
         storage.delete(k);
       },
@@ -94,6 +100,7 @@ function harness() {
     ui: context.exports.exposed,
     hooks,
     storage,
+    storageFailures,
     storageCalls,
     requests,
     timers,
@@ -183,3 +190,61 @@ for (const action of ["create", "decide"]) {
     assert.deepEqual(h.timers, action === "create" ? [2000] : []);
   });
 }
+
+test("create: bookmark write failure does not turn a confirmed server success into a failed create", async () => {
+  const h = harness(),
+    work = submit(h, "create");
+  h.storageFailures.add("set");
+  h.resolve({ data: result("create"), request_id: "created-on-server" });
+  await work;
+  assert.equal(h.ui.journey.value.id, oldId);
+  assert.equal(h.ui.state.value, "ready");
+  assert.equal(h.ui.busy.value, false);
+  assert.match(h.ui.message.value, /服务器状态不受影响/u);
+  assert.deepEqual(
+    h.requests.map(({ method }) => method),
+    ["POST"],
+  );
+});
+
+test("decide: bookmark clear failure preserves the confirmed decision and reports only local recovery state", async () => {
+  const h = harness(),
+    work = submit(h, "decide");
+  h.storageFailures.add("remove");
+  h.resolve({ data: result("decide"), request_id: "decision-saved-on-server" });
+  await work;
+  assert.equal(h.ui.journey.value.state, "decided");
+  assert.equal(h.ui.state.value, "ready");
+  assert.equal(h.ui.decision.reason, "");
+  assert.equal(
+    h.storage.get(key),
+    oldId,
+    "storage failure is reported without falsifying server state",
+  );
+  assert.match(h.ui.message.value, /服务器状态不受影响/u);
+  assert.deepEqual(
+    h.requests.map(({ method }) => method),
+    ["POST"],
+  );
+});
+
+test("resume: storage read failure is contained and leaves the page usable", async () => {
+  const h = harness();
+  h.storageFailures.add("get");
+  await h.ui.resume();
+  assert.equal(h.ui.state.value, "ready");
+  assert.match(h.ui.message.value, /当前页面仍可继续/u);
+  assert.deepEqual(h.requests, []);
+});
+
+test("reset: bookmark removal failure does not prevent resetting the visible draft", () => {
+  const h = harness();
+  h.ui.form.input_value = "待清空关键词";
+  h.storage.set(key, oldId);
+  h.storageFailures.add("remove");
+  h.ui.reset();
+  assert.equal(h.ui.form.input_value, "");
+  assert.equal(h.ui.journey.value, null);
+  assert.equal(h.storage.get(key), oldId);
+  assert.match(h.ui.message.value, /服务器状态不受影响/u);
+});

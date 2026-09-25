@@ -83,6 +83,24 @@ let active = false,
   disposed = false,
   readVersion = 0;
 let readController: AbortController | undefined;
+const progressStorageWarning =
+  "浏览器暂不能同步本地恢复标记；服务器状态不受影响，当前页面仍可继续，离开后可能无法自动恢复。";
+function readProgressId() {
+  try {
+    return { available: true, id: localStorage.getItem(progressStorageKey) };
+  } catch {
+    return { available: false, id: null };
+  }
+}
+function saveProgressId(id: string | null) {
+  try {
+    if (id) localStorage.setItem(progressStorageKey, id);
+    else localStorage.removeItem(progressStorageKey);
+    return true;
+  } catch {
+    return false;
+  }
+}
 const terminal = computed(
     () =>
       journey.value &&
@@ -200,8 +218,7 @@ function applyJourney(next: Journey) {
       : [];
   if (!available.some((candidate) => candidate.raw_evidence_id === selectedResultId.value))
     selectedResultId.value = available.length === 1 ? (available[0]?.raw_evidence_id ?? "") : "";
-  if (next.state === "decided") localStorage.removeItem(progressStorageKey);
-  else localStorage.setItem(progressStorageKey, next.id);
+  return saveProgressId(next.state === "decided" ? null : next.id);
 }
 async function create() {
   if (!active || busy.value || reading.value) return;
@@ -214,8 +231,9 @@ async function create() {
     const result = await request<Journey>("/selection-journeys", { method: "POST", body: form });
     if (disposed) return;
     requestId.value = result.request_id;
-    applyJourney(result.data);
+    const progressSaved = applyJourney(result.data);
     state.value = "ready";
+    if (!progressSaved) message.value = progressStorageWarning;
     schedule();
   } catch (error) {
     if (disposed) return;
@@ -242,15 +260,16 @@ async function readJourney(id: string, restoring = false) {
     });
     if (!ownsRead()) return;
     requestId.value = result.request_id;
-    applyJourney(result.data);
+    const progressSaved = applyJourney(result.data);
     state.value = "ready";
-    if (restoring)
+    if (!progressSaved) message.value = progressStorageWarning;
+    else if (restoring)
       message.value = result.data.state === "decided" ? "" : "已恢复上次未完成的选品进度。";
     schedule();
   } catch (error) {
     if (!ownsRead()) return;
     if (restoring && error instanceof ApiClientError && error.status === 404) {
-      localStorage.removeItem(progressStorageKey);
+      if (!saveProgressId(null)) message.value = progressStorageWarning;
       resumeId.value = "";
       state.value = "ready";
       return;
@@ -286,9 +305,10 @@ async function decide() {
     });
     if (disposed) return;
     requestId.value = result.request_id;
-    applyJourney(result.data);
+    const progressSaved = applyJourney(result.data);
     decision.reason = "";
     state.value = "ready";
+    if (!progressSaved) message.value = progressStorageWarning;
     stop();
   } catch (error) {
     if (disposed) return;
@@ -306,7 +326,7 @@ function reset() {
   message.value = "";
   form.input_value = "";
   selectedResultId.value = "";
-  localStorage.removeItem(progressStorageKey);
+  if (!saveProgressId(null)) message.value = progressStorageWarning;
 }
 function handleStateSecondary() {
   if (state.value === "blocked") {
@@ -324,10 +344,15 @@ function handleStateSecondary() {
   window.history.back();
 }
 async function resume() {
-  const savedJourneyId = localStorage.getItem(progressStorageKey);
+  const savedProgress = readProgressId();
+  if (!savedProgress.available) {
+    message.value = progressStorageWarning;
+    return;
+  }
+  const savedJourneyId = savedProgress.id;
   if (!savedJourneyId) return;
   if (!journeyIdPattern.test(savedJourneyId)) {
-    localStorage.removeItem(progressStorageKey);
+    if (!saveProgressId(null)) message.value = progressStorageWarning;
     return;
   }
   resumeId.value = savedJourneyId;
