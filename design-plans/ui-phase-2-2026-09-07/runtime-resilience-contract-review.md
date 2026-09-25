@@ -238,3 +238,9 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 | apps/web/src/components/RedisResilienceCenter.vue#99e387027e98dda9.1 | 192 | RD67-LOAD 旧页头读取身份 |
 | apps/web/src/components/RedisResilienceCenter.vue#21c66441891be768.1 | 207 | RD67-RETRY 旧刷新失败重试身份 |
 | apps/web/src/components/RedisResilienceCenter.vue#6a87ca890e2cd293.1 | 234 | RD67-RETRY 旧首次错误重试身份 |
+
+## 9. P66 服务拓扑当前动作映射（2026-09-26）
+
+`action-reviews/P66.json`将 `RuntimeTopologyCenter.vue` 当前16个候选归入刷新、四个页内区段、失败重读/登录、最近失败与重启观测、队列本地视图、策略/状态文件/告警/阻断披露及关联对象导航。重复出现的 `RT66-CURRENT-*`合同尾键仍按当前路径和实际源控件分别归组；旧身份表继续保留供历史追溯。
+
+页面只读、披露及导航动作不扩大到进程重启、任务调度、告警清除或状态文件修复。`queue.showAllQueues`仅本地切换。记录此归组不证明真实平台权限、MySQL审计、OS进程/探测或M08-01正式生产验收。

@@ -260,7 +260,7 @@
     "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "e92899302297a5b0ac4c41aa58abe8e51a353f0c8edf42bc2bcb5dec05da857e",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "f7ebe07d459e15dbbcf7277443fc9d62c5b1babd1722b7b869cf1c567232b385",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "b3ed452522bdd2a90555b598dbbb202b0d066b3ee7ee428d649c3ad310de6c81",
-    "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "31d1354c3f232fbce6a74028e25e4aa9578fc76654096a1fc14d614759c19898",
+    "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "f1bec1a82b90a86e0606bffb9dbca8e711eaee83c3146c5e4e705e1720a2a857",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "e15b64fe4d46d8d63f06f47c86b5ab9e504c840a4ecfd994c2f58b88233a86c6",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "458a1816ede8758e1c5579c7e86d08ed0e2a6677625eb513662fc48f0c1e6bb1",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "76a24081b3dc1566b2564cdbbfed07e22c563e57163540e5e4e477674f6f5b22",
@@ -544,6 +544,8 @@
     "tests/unit/ui-phase2-p64-action-review.test.mjs": "1b9b95a91b5bccb6effd745c9b93138af017661cf923c7d8599acbec9da5acfd",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P65.json": "94033b47bad5362f16be4390220fbd09da012e42525e661526eddfba921f5b6a",
     "tests/unit/ui-phase2-p65-action-review.test.mjs": "7f02bf53e9a207961682fb575679af0832611507597b4bf3bf8d46f5e8412494",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P66.json": "61e1ee33e2bd3eefd68ccbc0281eb176e99873de38e5646e81b3684ca3837483",
+    "tests/unit/ui-phase2-p66-action-review.test.mjs": "1a65f98a1262a4991353979572dd6cecf847e9a4b76674532d5dab927eef6202",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "b55592c802f1c2298d7910080beae7e68aec828a11357363546a1007f3c859fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "c429b797dbd4a03d6ae7ab46566440059f39dd47ba2c41b7913cf99d76677ee5",
@@ -609,7 +611,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "638bc66ddda804f5022476e6fe5bb8dab6668ec434aadfb36af6022134ffac36",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "97bfa7b985c4245c83f2bb86c2719766431d075601a3dc57219dafcf6787ed01",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P65.md": "6484a40709152db9e56130c2311cb0966fa4871c770c0e80ed64794e8e1ff033",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "c5d78f0e761d077a150ff8dadd20fcf64cc7259cf6d23f23934900e443a260cd",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "44625ac8f1344573a748a094e242d3c55c09e6f473f7a9c2af3d00442161ccf3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "b8179a19edc86714bd88b31e38eb499d9614a5b8fb2eaf1a888592d325a3f7e3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "b8cee964d50e40f6f87c2f2e867476f12cd022cb6442e0ab4cf07fd1dd551553",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "e1d459e00227acafabe8c8605fad1b0b84e15c154d074c77984f0dcbe4ddedd9",
@@ -630,13 +632,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 65,
-    "explicitlyGroupedSourceSites": 1481,
-    "semanticGroups": 1230,
-    "routeActions": 1008,
+    "reviewedPages": 66,
+    "explicitlyGroupedSourceSites": 1497,
+    "semanticGroups": 1242,
+    "routeActions": 1020,
     "wiringGroups": 118,
     "pagesWithoutExplicitSemanticReview": [
-      "P66",
       "P67",
       "P68",
       "P69",
@@ -647,7 +648,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 65,
+    "visualApprovedReviewedPages": 66,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -3474,13 +3475,42 @@
       "path": "/platform-admin/topology",
       "title": "服务拓扑",
       "oldStaticAssociatedCandidates": 43,
-      "review": null,
+      "review": {
+        "pageId": "P66",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 16,
+        "semanticGroups": 12,
+        "routeActions": 12,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 0,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 72,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 0,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 1,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "topology-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "16个当前RuntimeTopologyCenter候选映射至12类只读/本地/导航动作，分别覆盖四分区、失败重读、队列视图、策略、告警及阻断。",
+        "重启历史是观测摘要不是执行按钮；队列视图开关只改变本地显示，不改变Worker调度。",
+        "公开health/nodes与health/available是独立脱敏入口，不归为本页刷新，也不据此推断节点运行态。"
+      ]
     },
     {
       "id": "P67",
@@ -5261,6 +5291,32 @@
         "localModelBindings": 0,
         "reviewedInputBindings": 0,
         "sourceCallerContainers": 2,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P66",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 16,
+      "semanticGroups": 12,
+      "routeActions": 12,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 0,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 72,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 0,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 1,
         "callerContainers": 0,
         "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
@@ -57255,7 +57311,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#ba9adc29c8482881.1",
@@ -57279,7 +57341,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#e9f9ec4727623c2c.1",
@@ -57303,7 +57371,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#937f81b359ccaf21.1",
@@ -57327,7 +57401,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#276f8658e371a562.1",
@@ -57351,7 +57431,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#a93553a3ba9aa8a6.1",
@@ -57375,7 +57461,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#5587941412d5210f.1",
@@ -57410,7 +57502,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-LOGIN",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#d45ddc5db7a2701f.1",
@@ -57438,7 +57536,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#dac6cbc2991374ba.1",
@@ -57481,7 +57585,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-PROCESS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#cc99c7c8b16ccff2.1",
@@ -57517,7 +57627,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-RESTART",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#1c45c779df2fcc7f.1",
@@ -57552,7 +57668,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-QUEUES",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#e41c915a9e93bf55.1",
@@ -57591,7 +57713,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-POLICY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#fcf7c9f746bc706b.1",
@@ -57630,7 +57758,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-SNAPSHOT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#d9de878e4de4767e.1",
@@ -57681,7 +57815,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-OBJECT",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#1c008f867673db60.1",
@@ -57720,7 +57860,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-ALERT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#1c008f867673db60.2",
@@ -57759,7 +57905,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P66",
+          "actionId": "RT66-BLOCKER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#d82691355635a0a5.1",

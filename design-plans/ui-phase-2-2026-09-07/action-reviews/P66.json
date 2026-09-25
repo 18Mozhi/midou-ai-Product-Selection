@@ -1,0 +1,459 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P66",
+  "route": "/platform-admin/topology",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/RuntimeTopologyCenter.vue": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd"
+  },
+  "inputs": {},
+  "actions": [
+    {
+      "actionId": "RT66-LOAD",
+      "kind": "read",
+      "label": "读取或刷新服务拓扑与运行事实",
+      "sourceCandidateIds": [
+        "apps/web/src/components/RuntimeTopologyCenter.vue#58a7337b2cdfab3b.1"
+      ],
+      "sourceContractKeys": [
+        "RT66-CURRENT-LOAD 页头刷新运行事实；保留焦点的aria-disabled/busy状态"
+      ],
+      "contractAliasReason": "依据P66服务拓扑合同的当前源身份归组，观察控件不解释为重启或修复命令。",
+      "condition": "用户请求刷新当前运行拓扑时。",
+      "handler": "沿用既有15秒单飞、请求/追踪编号及父级GET；只读快照不触发Worker或节点操作。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p66-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "页面查看仍可能写入既有平台审计，不等于数据库零写入或实时外部探测。"
+    },
+    {
+      "actionId": "RT66-NAV",
+      "kind": "navigation",
+      "label": "跳转节点进程、健康探测、队列调度及告警区段",
+      "sourceCandidateIds": [
+        "apps/web/src/components/RuntimeTopologyCenter.vue#276f8658e371a562.1",
+        "apps/web/src/components/RuntimeTopologyCenter.vue#937f81b359ccaf21.1",
+        "apps/web/src/components/RuntimeTopologyCenter.vue#ba9adc29c8482881.1",
+        "apps/web/src/components/RuntimeTopologyCenter.vue#e9f9ec4727623c2c.1"
+      ],
+      "sourceContractKeys": [
+        "RT66-CURRENT-NAV 锚点跳至节点与进程区段",
+        "RT66-CURRENT-NAV 锚点跳至健康探测区段",
+        "RT66-CURRENT-NAV 锚点跳至队列调度区段",
+        "RT66-CURRENT-NAV 锚点跳至告警与阻断区段"
+      ],
+      "contractAliasReason": "依据P66服务拓扑合同的当前源身份归组，观察控件不解释为重启或修复命令。",
+      "condition": "用户选择拓扑页内目录分区时。",
+      "handler": "定位当前页面现有区段锚点，不改变过滤、调度或运行状态。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p66-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "页内导航不是重启、修复或调度执行动作。"
+    },
+    {
+      "actionId": "RT66-RETRY",
+      "kind": "read",
+      "label": "在拓扑事实读取失败后重新核验",
+      "sourceCandidateIds": [
+        "apps/web/src/components/RuntimeTopologyCenter.vue#a93553a3ba9aa8a6.1",
+        "apps/web/src/components/RuntimeTopologyCenter.vue#d45ddc5db7a2701f.1"
+      ],
+      "sourceContractKeys": [
+        "RT66-CURRENT-RETRY 有快照刷新失败提示中的重新核验",
+        "RT66-CURRENT-RETRY expired以外列举错误状态中的重新核验"
+      ],
+      "contractAliasReason": "依据P66服务拓扑合同的当前源身份归组，观察控件不解释为重启或修复命令。",
+      "condition": "已有快照刷新失败，或首次错误属于非forbidden且非expired的可重读分支时。",
+      "handler": "复用当前只读GET及请求归属；不重启进程、不补跑探测。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p66-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "重读成功不证明节点、Worker、队列或上游实际健康。"
+    },
+    {
+      "actionId": "RT66-LOGIN",
+      "kind": "navigation",
+      "label": "会话过期时重新登录",
+      "sourceCandidateIds": [
+        "apps/web/src/components/RuntimeTopologyCenter.vue#5587941412d5210f.1"
+      ],
+      "sourceContractKeys": [
+        "RT66-CURRENT-LOGIN 仅expired状态导航到登录"
+      ],
+      "contractAliasReason": "依据P66服务拓扑合同的当前源身份归组，观察控件不解释为重启或修复命令。",
+      "condition": "读取明确返回expired会话时。",
+      "handler": "导航至既有登录入口；forbidden分支不伪装成登录过期。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p66-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "导航不证明重新认证、platform:operate或审计权限已取得。"
+    },
+    {
+      "actionId": "RT66-PROCESS",
+      "kind": "local",
+      "label": "展开进程最近失败文本",
+      "sourceCandidateIds": [
+        "apps/web/src/components/RuntimeTopologyCenter.vue#dac6cbc2991374ba.1"
+      ],
+      "sourceContractKeys": [
+        "RT66-CURRENT-PROCESS 展开进程最近失败文本"
+      ],
+      "contractAliasReason": "依据P66服务拓扑合同的当前源身份归组，观察控件不解释为重启或修复命令。",
+      "condition": "当前进程观测包含last_failure时。",
+      "handler": "只披露当前响应中的最近失败文本，不自动重试或重启进程。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p66-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "失败说明不保证进程完整日志、根因或当前状态仍相同。"
+    },
+    {
+      "actionId": "RT66-RESTART",
+      "kind": "local",
+      "label": "展开API/Worker重启观测摘要",
+      "sourceCandidateIds": [
+        "apps/web/src/components/RuntimeTopologyCenter.vue#cc99c7c8b16ccff2.1"
+      ],
+      "sourceContractKeys": [
+        "RT66-CURRENT-RESTART 展开Node API/Worker重启观测摘要"
+      ],
+      "contractAliasReason": "依据P66服务拓扑合同的当前源身份归组，观察控件不解释为重启或修复命令。",
+      "condition": "当前运行事实提供对应进程重启计数/观测序列时。",
+      "handler": "展示返回的累计与新增重启观测，不向进程发送重启命令。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p66-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "采样摘要不是OS进程列表、自动修复结果或完整重启审计。"
+    },
+    {
+      "actionId": "RT66-QUEUES",
+      "kind": "local",
+      "label": "切换全部队列与运行/异常队列本地视图",
+      "sourceCandidateIds": [
+        "apps/web/src/components/RuntimeTopologyCenter.vue#1c45c779df2fcc7f.1"
+      ],
+      "sourceContractKeys": [
+        "RT66-CURRENT-QUEUES 切换仅运行/异常与全部队列本地视图"
+      ],
+      "contractAliasReason": "依据P66服务拓扑合同的当前源身份归组，观察控件不解释为重启或修复命令。",
+      "condition": "用户切换队列列表显示范围时。",
+      "handler": "只改变本地showAllQueues显示状态，不发请求、不改变队列调度。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p66-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "筛选后的列表不代表隐藏队列不存在或调度已暂停。"
+    },
+    {
+      "actionId": "RT66-POLICY",
+      "kind": "local",
+      "label": "展开单个队列调度策略参数",
+      "sourceCandidateIds": [
+        "apps/web/src/components/RuntimeTopologyCenter.vue#e41c915a9e93bf55.1"
+      ],
+      "sourceContractKeys": [
+        "RT66-CURRENT-POLICY 展开单个队列调度参数"
+      ],
+      "contractAliasReason": "依据P66服务拓扑合同的当前源身份归组，观察控件不解释为重启或修复命令。",
+      "condition": "当前队列返回调度策略参数时。",
+      "handler": "只展开所选队列现有返回字段，不编辑优先级/并发/重试配置。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p66-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "策略摘要不是队列已执行或已达到调度效果的证明。"
+    },
+    {
+      "actionId": "RT66-SNAPSHOT",
+      "kind": "local",
+      "label": "披露状态文件异常",
+      "sourceCandidateIds": [
+        "apps/web/src/components/RuntimeTopologyCenter.vue#fcf7c9f746bc706b.1"
+      ],
+      "sourceContractKeys": [
+        "RT66-CURRENT-SNAPSHOT 有发布失败计数时披露状态文件错误"
+      ],
+      "contractAliasReason": "依据P66服务拓扑合同的当前源身份归组，观察控件不解释为重启或修复命令。",
+      "condition": "返回的发布失败计数非零且本页显示状态文件异常入口时。",
+      "handler": "只展开响应中的异常计数/说明，不写入或修复状态文件。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p66-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "计数为零仅是当前响应事实，不证明所有状态文件均有效。"
+    },
+    {
+      "actionId": "RT66-OBJECT",
+      "kind": "navigation",
+      "label": "打开响应中提供真实href的关联业务对象",
+      "sourceCandidateIds": [
+        "apps/web/src/components/RuntimeTopologyCenter.vue#d9de878e4de4767e.1"
+      ],
+      "sourceContractKeys": [
+        "RT66-CURRENT-OBJECT 仅对返回真实href的关联对象导航"
+      ],
+      "contractAliasReason": "依据P66服务拓扑合同的当前源身份归组，观察控件不解释为重启或修复命令。",
+      "condition": "返回对象带有真实href时才显示链接。",
+      "handler": "导航到既有href目标；由目标重新授权，不拼造目标地址、不修改对象。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p66-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "链接存在不证明对象仍存在或用户有权查看。"
+    },
+    {
+      "actionId": "RT66-ALERT",
+      "kind": "local",
+      "label": "展开告警代码、根因与关联业务ID",
+      "sourceCandidateIds": [
+        "apps/web/src/components/RuntimeTopologyCenter.vue#1c008f867673db60.1"
+      ],
+      "sourceContractKeys": [
+        "RT66-CURRENT-ALERT 展开告警码、根因及关联业务ID"
+      ],
+      "contractAliasReason": "依据P66服务拓扑合同的当前源身份归组，观察控件不解释为重启或修复命令。",
+      "condition": "当前告警记录提供技术详情时。",
+      "handler": "只披露当前返回的告警事实，不清除告警、不重放关联业务动作。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p66-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "详情展开不证明根因、告警完整性或当前影响已解除。"
+    },
+    {
+      "actionId": "RT66-BLOCKER",
+      "kind": "local",
+      "label": "展开阻断项技术代码",
+      "sourceCandidateIds": [
+        "apps/web/src/components/RuntimeTopologyCenter.vue#1c008f867673db60.2"
+      ],
+      "sourceContractKeys": [
+        "RT66-CURRENT-BLOCKER 展开阻断项技术码"
+      ],
+      "contractAliasReason": "依据P66服务拓扑合同的当前源身份归组，观察控件不解释为重启或修复命令。",
+      "condition": "当前读取含阻断项且提供技术码披露时。",
+      "handler": "只查看当前阻断code，不触发恢复、回滚或修复。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p66-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "阻断码展示不等于阻断已解决或服务已恢复。"
+    }
+  ],
+  "pageScopeExclusions": {
+    "sharedFiles": [
+      {
+        "file": "apps/web/src/components/PlatformManagementCenter.vue",
+        "rationale": "父级持有共享platform:operate GET、读写审计与登录/权限所有权；本页只映射拓扑组件局部候选。"
+      },
+      {
+        "file": "apps/web/src/components/NavigationShell.vue",
+        "rationale": "全局路由壳/导航动作已按共享壳合同归属，P66仅作为当前页消费者。"
+      }
+    ],
+    "remaining": "父级读取、错误分类与全局导航不重复归属；P66动作均限于查看、重读、页内过滤/披露或既有链接跳转。"
+  },
+  "dialogs": {
+    "kind": "none-in-current-source",
+    "remaining": "P66无业务详情dialog、抽屉、确认窗或执行表单；告警、策略和阻断信息使用原生details/summary。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/RuntimeTopologyCenter.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/RuntimeTopologyCenter.vue": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd"
+    },
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [],
+    "sharedRemaining": [
+      "PlatformManagementCenter父级读取和NavigationShell全局导航不计入P66局部组件候选；实际平台审计与权限仍需独立证据。"
+    ],
+    "remaining": "静态映射不证明真实节点健康、MySQL审计、Linux进程身份/重启、生产调度效果或M08-01正式验收。"
+  },
+  "compositionGaps": [
+    "16个当前RuntimeTopologyCenter候选映射至12类只读/本地/导航动作，分别覆盖四分区、失败重读、队列视图、策略、告警及阻断。",
+    "重启历史是观测摘要不是执行按钮；队列视图开关只改变本地显示，不改变Worker调度。",
+    "公开health/nodes与health/available是独立脱敏入口，不归为本页刷新，也不据此推断节点运行态。"
+  ]
+}
