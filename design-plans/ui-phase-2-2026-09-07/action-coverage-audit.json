@@ -243,7 +243,7 @@
     "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "ff6b41e79cb7eba143652e3114c1a979379d22bcdf88a4a1de246d9b969fb378",
     "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "46208241bd2c2586902709b5164d7c7c873569a0e5dd07eca3bf2196e009dbd6",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
-    "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "32b2e04b2413099357c81a8e77c40157eb8d405bdae7debdf0ea3675453d4f42",
+    "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "f75a5b158124235ff951c8dd1b69fdeed7d3cbb3b722601397ddda17b4ce5fd4",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "52bcc443860a0bb026603c721ab806104450f0780cb4d2a9f9898ca59ee80884",
     "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "776fc3abc9b2c95b0441f701f1623eb18972e88482177b7b51cfb06f82408ed8",
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "6350ced052c4283d850746b8736e64ab76ed2ed7eabe2ecd3feac5dcb630f815",
@@ -515,6 +515,8 @@
     "tests/unit/ui-phase2-p51-action-map.test.mjs": "795e5958e54feed9ebcb6f06f5c2b66bc8455fff16be43a397248249fac208d0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P52.json": "a12d6e31b8dc3734dd1b127a02ba810178139a07300e04249b08527100711dfc",
     "tests/unit/ui-phase2-p52-action-map.test.mjs": "77d94e9e75405de5557e9f2861d447132c43a6aa7224e4f68f630e920f6f4e41",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P53.json": "8349657b306ee7456507f17a37200c49e8a0102d46e68f58ec8eced401d6df08",
+    "tests/unit/ui-phase2-p53-action-map.test.mjs": "4b1fc426854abe19387e7cee017d0f64a207c37e80955cfddc0ec113f39bca3d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "077621e403cc46d1ee487b3e98a895ec1fd86017bddf709839404ed5b7ea30de",
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -610,13 +612,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 55,
-    "explicitlyGroupedSourceSites": 1260,
-    "semanticGroups": 1114,
-    "routeActions": 898,
-    "wiringGroups": 112,
+    "reviewedPages": 56,
+    "explicitlyGroupedSourceSites": 1272,
+    "semanticGroups": 1124,
+    "routeActions": 907,
+    "wiringGroups": 113,
     "pagesWithoutExplicitSemanticReview": [
-      "P53",
       "P57",
       "P58",
       "P59",
@@ -637,7 +638,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 55,
+    "visualApprovedReviewedPages": 56,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -2914,13 +2915,42 @@
       "path": "/platform-admin/collection/browser-runtime",
       "title": "网页登录采集",
       "oldStaticAssociatedCandidates": 81,
-      "review": null,
+      "review": {
+        "pageId": "P53",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 12,
+        "semanticGroups": 10,
+        "routeActions": 9,
+        "wiringGroups": 1,
+        "excludedGroups": 0,
+        "writeActions": 1,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 60,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 2,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 2,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "browser-runtime-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "逐项覆盖CollectionRuntimeCenter.vue的12个当前扫描候选；共享ConfirmDialog及ResponsiveDataView内部控件不重复计入P53。",
+        "运行搜索只读取现有ID/错误码/请求/链路标识，状态、页码及全量档案/统计范围保持当前API合同。",
+        "回收按钮只打开共享确认窗；仅确认事件提交现有全局过期租约回收POST，取消不写入，未知结果不重复提交。"
+      ]
     },
     {
       "id": "P54",
@@ -4623,6 +4653,32 @@
         "localModelBindings": 5,
         "reviewedInputBindings": 0,
         "sourceCallerContainers": 4,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P53",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 12,
+      "semanticGroups": 10,
+      "routeActions": 9,
+      "wiringGroups": 1,
+      "excludedGroups": 0,
+      "writeActions": 1,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 60,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 2,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 2,
         "callerContainers": 0,
         "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
@@ -9375,7 +9431,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P53",
+          "actionId": "CL53-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#7287ecd28dcaceb5.1",
@@ -9394,7 +9456,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P53",
+          "actionId": "CL53-RECOVERY-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#25af292333a00121.1",
@@ -9422,7 +9490,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P53",
+          "actionId": "CL53-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#a9a0bd7b83bfaa17.1",
@@ -9458,7 +9532,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P53",
+          "actionId": "CL53-RENEW-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#cbea42c5b9e6a6b3.1",
@@ -9486,7 +9566,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P53",
+          "actionId": "CL53-FILTER-FORM",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#764f755fb3d8ba7c.1",
@@ -9510,7 +9596,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P53",
+          "actionId": "CL53-FILTER-APPLY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#06482162d2eef909.1",
@@ -9534,7 +9626,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P53",
+          "actionId": "CL53-FILTER-RESET",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#1c008f867673db60.1",
@@ -9566,7 +9664,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P53",
+          "actionId": "CL53-RUN-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#7219dcd9d87bc4b0.1",
@@ -9594,7 +9698,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P53",
+          "actionId": "CL53-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#28a360589b0e3c7f.1",
@@ -9622,7 +9732,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P53",
+          "actionId": "CL53-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#b917496c3d588d7b.1",
@@ -9641,7 +9757,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P53",
+          "actionId": "CL53-RECOVER-WRITE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#bc8824b8df3a0c77.1",
@@ -9660,7 +9782,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P53",
+          "actionId": "CL53-RECOVER-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeSurface.vue#3c465962052e3b24.1",

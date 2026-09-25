@@ -3,10 +3,10 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1701；旧登记1477；新身份611，旧表独有身份387。签名变化不等于增删业务能力。
-- 已具体语义对应55页/1260源位置/1114组；其中路由动作898组，转发/容器关联112组，其余明确排除。其余18页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应56页/1272源位置/1124组；其中路由动作907组，转发/容器关联113组，其余明确排除。其余17页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记55页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记56页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -66,7 +66,7 @@
 | [P50 凭证与档案](page-specs/P50.md) | 78 | [21组](action-reviews/P50.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P51 采集任务](page-specs/P51.md) | 81 | [20组](action-reviews/P51.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P52 采集总览](page-specs/P52.md) | 81 | [24组](action-reviews/P52.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P53 网页登录采集](page-specs/P53.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P53 网页登录采集](page-specs/P53.md) | 81 | [10组](action-reviews/P53.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P54 数据中心](page-specs/P54.md) | 58 | [18组](action-reviews/P54.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P55 质量与规则](page-specs/P55.md) | 59 | [8组](action-reviews/P55.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P56 内容管理](page-specs/P56.md) | 75 | [7组](action-reviews/P56.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -4234,6 +4234,48 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 总览读取仅按现有服务端范围/window/error_code及独立分页查询；根因按真实dead-letter error_code筛选，不将平台来源健康误作组织/时间筛选结果。
 - 批量操作仅登记最多20条当前页开放死信的冻结快照和逐条既有重放POST；用户视觉自动通过与动作审批/真实权限/数据库/Worker验收保持分开。
 - 本映射只覆盖采集总览页签宿主与CollectionOperationsConsole；ResponsiveFilterDrawer、ResponsiveDataView、ConfirmDialog、TechnicalDetails和NavigationShell内部交互沿用各自共享合同。
+
+## P53 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P53.json)：12个局部源位置 → 10组；1类写入，9组路由动作，1组转发/容器关联不重复计动作。已映射0/2个源码字段位置，0/2处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有60个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| CL53-LOAD 读取、刷新或从状态面重试网页采集运行快照 / read | 2处；current-route-source-contract | ；其余见JSON | 源映射不证明真实collection:replay授权、MySQL快照或生产超时行为。 |
+| CL53-RECOVERY-OPEN 打开全局过期租约回收确认 / local | 1处；current-route-source-contract | ；其余见JSON | 打开确认窗不证明服务端此刻仍存在过期租约或调用者有回收权限。 |
+| CL53-RENEW-NAV 进入既有登录受阻采集任务处理列表 / navigation | 1处；current-route-source-contract | ；其余见JSON | 导航目标不证明任务存在、档案续期完成或浏览器登录有效。 |
+| CL53-FILTER-FORM 将搜索/状态表单提交转给当前筛选处理器 / wiring | 1处；current-route-source-contract | ；其余见JSON | 事件接线不验证后端状态过滤或跨组织数据范围。 |
+| CL53-FILTER-APPLY 提交运行搜索词与状态筛选 / read | 1处；current-route-source-contract | ；其余见JSON | 客户端提交不证明服务端真实过滤、列表总数或授权。 |
+| CL53-FILTER-RESET 清空搜索与状态筛选并读取第一页 / read | 1处；current-route-source-contract | ；其余见JSON | 本地重置不证明服务端默认范围或数据授权。 |
+| CL53-RUN-TECH 展开当前运行的关联技术标识 / local | 1处；current-route-source-contract | ；其余见JSON | 按需披露不证明服务端日志脱敏、访问审计或身份授权。 |
+| CL53-PAGE 翻阅最近运行独立分页 / read | 2处；current-route-source-contract | ；其余见JSON | 本地分页不验证MySQL总数或生产查询隔离。 |
+| CL53-RECOVER-WRITE 从确认窗事件受控提交全局过期租约回收 / write | 1处；current-route-source-contract | ；其余见JSON | 本映射不执行真实回收，不证明collection:replay授权、MySQL事务/幂等、有效租约未受影响或生产Python/浏览器状态。 |
+| CL53-RECOVER-DIALOG 调用共享过期租约影响确认窗 / local | 1处；current-route-source-contract | ；其余见JSON | 共享ConfirmDialog内部勾选、确认短语、焦点和关闭行为由共享组件合同负责，不由该调用点代验。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| CL53-FILTER-FORM | @submit.prevent / applyFilters | CL53-FILTER-APPLY |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+
+### 明确保留的边界
+
+- 逐项覆盖CollectionRuntimeCenter.vue的12个当前扫描候选；共享ConfirmDialog及ResponsiveDataView内部控件不重复计入P53。
+- 运行搜索只读取现有ID/错误码/请求/链路标识，状态、页码及全量档案/统计范围保持当前API合同。
+- 回收按钮只打开共享确认窗；仅确认事件提交现有全局过期租约回收POST，取消不写入，未知结果不重复提交。
+- 本映射只覆盖CollectionRuntimeCenter.vue页面局部候选；UiStatePanel、ConfirmDialog、ResponsiveDataView、TechnicalDetails与NavigationShell内部交互沿各自共享合同验收。
 
 ## P54 局部动作与共享消费者
 

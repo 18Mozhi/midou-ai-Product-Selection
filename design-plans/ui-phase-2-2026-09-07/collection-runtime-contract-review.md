@@ -331,3 +331,9 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 `action-reviews/P52.json` 将 `/platform-admin/collection/overview` 当前 `CollectionRuntimeSurface.vue` 与 `CollectionOperationsConsole.vue` 的32个扫描候选逐项映射到既有CL52合同，覆盖采集页签导航、服务端范围/根因读取、来源/尝试/死信技术披露、独立分页及批量重放预览与共享确认事件。来源目录前8项/全部展开单独登记为本地披露；移动详情及确认窗的内部控件仍归各自共享组件合同。总览写边界仅限当前页面开放死信选择上限20条、至少2字符且最多500字符原因、冻结批次，以及既有逐条 `/platform/collection/tasks/{task_id}/replay` POST；body只含reason并使用既有任务级幂等键。未知结果不自动重发，逐条成功仅表示创建新任务，不代表采集执行成功。
 
 `tests/unit/ui-phase2-p52-action-map.test.mjs` 校验32个候选唯一归属、范围/分页边界、冻结及未知写结果策略和未验收状态。视觉按用户授权对剩余页面自动通过单独记录；P52动作审批、真实platform:operate/collection:replay与RBAC、MySQL聚合/幂等、Worker终态、共享控件内部验收及正式M07-03生产验收仍未通过。该静态映射不执行重放、不改变API或部署。
+
+## 12. P53 网页采集运行页当前页面动作归组（2026-09-26）
+
+`action-reviews/P53.json` 将 `/platform-admin/collection/browser-runtime` 的 `CollectionRuntimeCenter.vue` 12个当前扫描候选逐项映射到既有CL53合同：读取/状态面重读、运行搜索与状态提交、筛选重置、独立分页、过期档案续期任务导航、运行技术标识、回收确认窗打开及确认事件。回收按钮只打开确认窗；只有共享确认窗confirm事件进入既有 `POST /platform/crawler-runtime/recover-expired`，body为空对象，cancel只关闭确认窗。继续保留Origin/幂等/`collection:replay`、服务端执行时全局过期租约范围、未知结果禁止重提和成功后重新读取；不将回收误述为OS浏览器停止或采集业务恢复。
+
+`tests/unit/ui-phase2-p53-action-map.test.mjs` 校验12个源码候选唯一归属、筛选/续期导航契约、确认窗与真实写入分离，以及生产和权限验收状态边界。视觉按用户授权自动通过；动作审批、真实collection:replay/RBAC、Origin/幂等审计、MySQL租约、Python/OS浏览器状态、外部登录、真实回收及正式M07-03生产验收仍未通过。该静态映射不执行租约回收，也不改变运行合同。
