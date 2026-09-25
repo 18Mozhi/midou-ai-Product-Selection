@@ -225,6 +225,7 @@ export function runContractAudit(readOverride) {
           "opportunity-candidate-map.md",
           "platform-user-design-contract.md",
           "P39-DIRECTORY-SOURCE-MAPPING.md",
+          "P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
         ].includes(file),
     )
     .sort();

@@ -1,0 +1,608 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P40",
+  "route": "/platform-admin/organizations",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+  "sourceHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
+    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+    "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
+  },
+  "actions": [
+    {
+      "actionId": "PA-ORG-CREATE",
+      "label": "从组织目录进入创建组织",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#280136c1a545dff9.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#f68d2406f8c1db70.1"
+      ],
+      "condition": "页头始终可用；无筛选且组织列表为空时出现空态入口",
+      "handler": "两处入口调用openOrganizationWizard，导航到独立P41路由；P40不直接执行创建写入",
+      "variants": ["page-header", "unfiltered-empty-state"],
+      "scenes": [
+        { "package": "platform-organizations-direction-c", "scene": "list" },
+        { "package": "platform-organizations-direction-c", "scene": "empty" }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "scripts/verify-ui-phase2-organization-list-preview.mjs", "evidenceType": "actual-vue-isolated-browser" },
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "浏览器路由夹具证明入口目标；不代表P41创建表单、服务端写入或权限验收。"
+    },
+    {
+      "actionId": "PA-USER-CREATE",
+      "label": "从组织目录创建用户",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#1516ea5a6c3b1540.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#f76649b0950ec968.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#472f3632b99eae63.1"
+      ],
+      "condition": "P40页头入口打开用户创建原生弹窗；弹窗确认按钮在busy时禁用",
+      "handler": "保留现有父级createUser处理及PA-USER-CREATE请求体，不新增字段、原因或权限规则",
+      "variants": ["page-header-and-native-dialog"],
+      "scenes": [
+        { "package": "account-overview-direction-c", "scene": "create_user" },
+        { "package": "account-overview-direction-c", "scene": "create_busy" }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "当前E2E覆盖P40弹窗打开；不能由本映射推定真实POST、RBAC、审计或生产创建已验收。"
+    },
+    {
+      "actionId": "PA40-USER-CREATE-CANCEL",
+      "label": "取消新建用户",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountDialogs.vue#c3a13fcf7d0fc151.1"],
+      "condition": "P40新建用户弹窗打开且尚未提交",
+      "handler": "发出closeCreateUser关闭弹窗；此动作不提交用户写入",
+      "variants": ["native-dialog-footer-cancel"],
+      "scenes": [{ "package": "account-overview-direction-c", "scene": "create_user" }],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "本次源映射未声称所有输入草稿清除、真实辅助技术或生产会话行为通过。"
+    },
+    {
+      "actionId": "PA40-USER-DIALOG-WIRING",
+      "label": "P40用户弹窗的父子事件接线",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#96a5d8f14ce43590.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#9e8b9d6531d0203d.1"
+      ],
+      "sourceContractKeys": ["PA40-USER-DIALOG-WIRING"],
+      "contractAliasReason": "同一弹窗组件调用和原生dialog定义/取消是父子接线与容器，不另计业务请求；只把P40可达的新建用户分支接到现有动作，其它共享弹窗明确转为本页排除。",
+      "condition": "父级PlatformAccountCenter挂载共享弹窗；P40只打开create-user分支",
+      "handler": "close/create-user连接到P40创建窗关闭与既有PA-USER-CREATE；密码和原因回调仅由其他详情/授权分支触发",
+      "variants": ["create-user-dialog", "shared-inactive-dialog-branches"],
+      "scenes": [{ "package": "account-overview-direction-c", "scene": "create_user" }],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "接线登记不等于每个共享弹窗分支的字段/焦点/写入验收；P40只验当前可达用户创建分支。",
+      "forwardsTo": ["PA-USER-CREATE", "PA40-USER-CREATE-CANCEL", "PA40-EXCLUDED-CONDITIONAL-BRANCHES"],
+      "forwardBindings": [
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1", "event": "@close-create-user", "handler": "closeCreateUser", "targets": ["PA40-USER-CREATE-CANCEL"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1", "event": "@create-user", "handler": "createUser", "targets": ["PA-USER-CREATE"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1", "event": "@close-password", "handler": "passwordOpen = false", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1", "event": "@reset-password", "handler": "resetPassword", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1", "event": "@close-reason", "handler": "cancelReason", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1", "event": "@submit-reason", "handler": "submitReason", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1", "event": "@update:reason-text", "handler": "reasonText = $event", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1", "event": "@close-create-user", "handler": "closeCreateUser", "targets": ["PA40-USER-CREATE-CANCEL"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1", "event": "@create-user", "handler": "createUser", "targets": ["PA-USER-CREATE"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1", "event": "@close-password", "handler": "passwordOpen = false", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1", "event": "@reset-password", "handler": "resetPassword", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1", "event": "@close-reason", "handler": "cancelReason", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1", "event": "@submit-reason", "handler": "submitReason", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1", "event": "@update:reason-text", "handler": "reasonText = $event", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#9e8b9d6531d0203d.1", "event": "@cancel", "handler": "handleCreateUserCancel", "targets": ["PA40-USER-CREATE-CANCEL"] }
+      ]
+    },
+    {
+      "actionId": "PA-FILTER",
+      "label": "查询并应用组织筛选",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#2d610959fc00fb96.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e9658d470d4cbeaf.1"
+      ],
+      "condition": "组织名称/标识query与空、active、archived status提交；刷新中搜索禁用",
+      "handler": "表单submit触发父级applyFilters；搜索按钮提交同一表单，按既有query/status、URL及GET合同读取",
+      "variants": ["desktop-inline-filter", "mobile-filter-drawer"],
+      "scenes": [
+        { "package": "platform-organizations-direction-c", "scene": "filter" },
+        { "package": "platform-organizations-direction-c", "scene": "filtered_empty" }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "scripts/verify-ui-phase2-organization-list-preview.mjs", "evidenceType": "actual-vue-isolated-browser" },
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "现有夹具验证浏览器URL与读取参数，不证明真实MySQL过滤、权限或排序。"
+    },
+    {
+      "actionId": "PA-RESET",
+      "label": "清除组织筛选",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#20080e701de7f5cb.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#86ea70e081f1f8e3.1"
+      ],
+      "condition": "筛选条有query/status且不在refreshing时可用；过滤无结果区提供清除入口",
+      "handler": "reset-filters按原逻辑移除query/status并读取列表，不修改其他URL键",
+      "variants": ["filter-bar-reset", "filtered-empty-clear"],
+      "scenes": [{ "package": "platform-organizations-direction-c", "scene": "filtered_empty" }],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "scripts/verify-ui-phase2-organization-list-preview.mjs", "evidenceType": "actual-vue-isolated-browser" },
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "不外推浏览器完整历史栈、跨KeepAlive返回或真实服务端查询验收。"
+    },
+    {
+      "actionId": "PA-REFRESH",
+      "label": "刷新组织记录或重试首次读取",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#9c9141422bfd2c11.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#322a4ac62ce3a305.1"
+      ],
+      "condition": "手动刷新按钮在refreshing或父级busy时禁用；首次读取失败时显示重试",
+      "handler": "两者都调用父级既有load/GET；不产生新URL历史或写入",
+      "variants": ["manual-refresh", "first-read-error-retry"],
+      "scenes": [
+        { "package": "platform-organizations-direction-c", "scene": "refreshing" },
+        { "package": "platform-organizations-direction-c", "scene": "error" }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "scripts/verify-ui-phase2-organization-list-preview.mjs", "evidenceType": "actual-vue-isolated-browser" }
+      ],
+      "remaining": "读取错误/保留快照/过期/拒绝策略与真实网络、RBAC仍待独立验收。"
+    },
+    {
+      "actionId": "PA40-WORKSPACE-WIRING",
+      "label": "父级连接组织目录工作区",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1"],
+      "condition": "P40父组件为组织目录工作区提供既有筛选、读取、创建和详情处理器",
+      "handler": "事件仅转发到相应本页动作或显式排除的其他目录分支，不重复生成动作",
+      "variants": ["organization-list-route"],
+      "scenes": [{ "package": "platform-organizations-direction-c", "scene": "list" }],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "本组核对事件连接，不代表父级请求、角色权限和缓存/迟到结果已生产验收。",
+      "forwardsTo": ["PA-FILTER", "PA-RESET", "PA-REFRESH", "PA-ORG-CREATE", "PA40-EXCLUDED-CONDITIONAL-BRANCHES", "PA-ORG-DETAIL"],
+      "forwardBindings": [
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1", "event": "@apply-filters", "handler": "applyFilters", "targets": ["PA-FILTER"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1", "event": "@reset-filters", "handler": "resetFilters", "targets": ["PA-RESET"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1", "event": "@load", "handler": "load", "targets": ["PA-REFRESH"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1", "event": "@create-organization", "handler": "openOrganizationWizard", "targets": ["PA-ORG-CREATE"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1", "event": "@create-admin", "handler": "openCreateUser(true)", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1", "event": "@open-organization", "handler": "openOrganization", "targets": ["PA-ORG-DETAIL"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1", "event": "@open-user", "handler": "openUserDetail", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] }
+      ]
+    },
+    {
+      "actionId": "PA40-FILTER-DRAWER",
+      "label": "移动筛选抽屉容器接线",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#03d32a05b1b3fd19.1"],
+      "condition": "移动端ResponsiveFilterDrawer承载同一组织筛选表单",
+      "handler": "容器不发额外请求或写入；提交沿PA-FILTER",
+      "variants": ["mobile-filter-drawer"],
+      "scenes": [{ "package": "platform-organizations-direction-c", "scene": "filter" }],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        { "file": "scripts/verify-ui-phase2-organization-list-preview.mjs", "evidenceType": "actual-vue-isolated-browser" }
+      ],
+      "remaining": "焦点循环、触发器返焦、软键盘及共享抽屉其它消费者单独验收。",
+      "forwardsTo": ["PA-FILTER"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "PA-ORG-DETAIL",
+      "label": "从桌面记录或手机预览打开组织详情",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformOrganizationRecords.vue#6923b73e52535ef3.1",
+        "apps/web/src/components/PlatformOrganizationRecords.vue#2a07373cb016b4b5.1"
+      ],
+      "condition": "每条组织记录可查看详情；父级busy时禁用，移动端先关闭预览",
+      "handler": "openOrganization导航到/platform-admin/organizations/{organizationId}；目标页合同归P42",
+      "variants": ["desktop-row", "mobile-preview"],
+      "scenes": [
+        { "package": "platform-organizations-direction-c", "scene": "preview" },
+        { "package": "platform-organizations-direction-c", "scene": "detail" }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "scripts/verify-ui-phase2-organization-list-preview.mjs", "evidenceType": "actual-vue-isolated-browser" },
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "当前浏览器路由夹具不是P42编辑/状态操作、真实组织授权或KeepAlive历史验收。"
+    },
+    {
+      "actionId": "PA40-ORG-DETAIL-WIRING",
+      "label": "组织记录详情事件转发",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#8871f6d994e9fced.1"],
+      "condition": "P40 organizations分支渲染PlatformOrganizationRecords",
+      "handler": "open-organization事件传给父级既有openOrganization；不重复计详情导航",
+      "variants": ["organization-records-component"],
+      "scenes": [{ "package": "platform-organizations-direction-c", "scene": "preview" }],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "事件接线可追到父处理器；不代表目标组织真实存在或P42写入获准。",
+      "forwardsTo": ["PA-ORG-DETAIL"],
+      "forwardBindings": [
+        { "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#8871f6d994e9fced.1", "event": "@open-organization", "handler": "emit('open-organization', $event)", "targets": ["PA-ORG-DETAIL"] }
+      ]
+    },
+    {
+      "actionId": "PA-ORG-TECH",
+      "label": "展开或收起组织技术标识",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/PlatformOrganizationRecords.vue#1c008f867673db60.1"],
+      "condition": "手机组织预览中的原生details/summary",
+      "handler": "只展开或折叠组织UUID；不复制、不请求、不写入",
+      "variants": ["mobile-preview-technical-details"],
+      "scenes": [{ "package": "platform-organizations-direction-c", "scene": "preview_technical" }],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "scripts/verify-ui-phase2-organization-list-preview.mjs", "evidenceType": "actual-vue-isolated-browser" }
+      ],
+      "remaining": "图示和当前本地展开不证明读屏播报或真实长标识完整性。"
+    },
+    {
+      "actionId": "PA-NAV-ORG",
+      "label": "侧栏进入组织管理",
+      "kind": "navigation",
+      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountGlobalRail.vue#29448f61eb8ffc80.1"],
+      "condition": "组织、用户、管理员目录路由显示平台目录侧栏",
+      "handler": "RouterLink进入/platform-admin/organizations",
+      "variants": ["platform-directory-rail"],
+      "scenes": [{ "package": "platform-organizations-direction-c", "scene": "list" }],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "只核对当前局部路由入口，不外推NavigationShell或全站角色可见性。"
+    },
+    {
+      "actionId": "PA-NAV-USER",
+      "label": "侧栏进入用户管理",
+      "kind": "navigation",
+      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountGlobalRail.vue#ffed2dd7f439c4b0.1"],
+      "condition": "组织、用户、管理员目录路由显示平台目录侧栏",
+      "handler": "RouterLink进入/platform-admin/users",
+      "variants": ["platform-directory-rail"],
+      "scenes": [{ "package": "platform-organizations-direction-c", "scene": "list" }],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "P43目标页数据、动作与权限另行映射。"
+    },
+    {
+      "actionId": "PA-NAV-ADMIN",
+      "label": "侧栏进入管理员管理",
+      "kind": "navigation",
+      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountGlobalRail.vue#e400286c7cd59e44.1"],
+      "condition": "组织、用户、管理员目录路由显示平台目录侧栏",
+      "handler": "RouterLink进入/platform-admin/admins",
+      "variants": ["platform-directory-rail"],
+      "scenes": [{ "package": "platform-organizations-direction-c", "scene": "list" }],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "P44目标页数据、动作与权限另行映射。"
+    },
+    {
+      "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+      "sourceContractKeys": [
+        "PA45-ADMINS",
+        "PA45-REFRESH",
+        "PA-REFRESH",
+        "PA40-P41-WIZARD-OUT",
+        "PA40-P42-DETAIL-OUT",
+        "PA40-P43-DETAIL-OUT",
+        "PA40-OVERVIEW-TABS-OUT",
+        "PA40-USER-DETAIL-OUT",
+        "PA40-ADMIN-EMPTY-OUT",
+        "PA40-PASSWORD-OUT",
+        "PA40-REASON-OUT"
+      ],
+      "contractAliasReason": "同一父子源码被P39/P41-P45复用；本组逐候选排除权限页、账号概览刷新、创建向导/详情、用户/管理员目录及密码/原因弹窗分支，不能算作P40动作完成。",
+      "label": "明确排除的其他路由和共享弹窗分支",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#adcd96ea7cc90712.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#bcd4023ebe5d9ca9.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#8f18fbff9e2c1c99.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#c4cfef52bcc169fb.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#c526b71b2b59e702.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#5db731eeed33ba4f.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#6f151cbab1f5518e.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#39ba950db197263c.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#39878a11789ae9ce.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#29448f61eb8ffc80.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#968274c5acaf5a33.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e400286c7cd59e44.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#44e761922e1da1d0.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#86ea70e081f1f8e3.2",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#38003e3f7b002f71.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#103fa7d7798d62d6.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#0a0c76ebc577d650.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#04769fc3148b559f.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#22727b212f0b7505.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#0fbdc8b9a1396e9c.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#9ad3d7837ab53f7c.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#8cb5dc651024abe9.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#bd4ff44ef0d1442c.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#4a0496f0cb3d6338.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#b313681d9ad25f0e.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#07d6870e96868709.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#7819d63c0a94ede2.1"
+      ],
+      "condition": "这些静态候选只在其它routePath、tab、弹窗状态或目标用户详情中可达；P40组织列表分支不显示",
+      "handler": "不将被排除分支计入当前页面业务动作或视觉完成度；具体归属按sourceContractKeys记录",
+      "variants": ["permissions", "overview-refresh", "P41", "P42", "P43", "P44", "password-dialog", "reason-dialog"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "显式排除只界定P40；P41-P45页面及其写入/焦点状态仍待各自动作映射。"
+    }
+  ],
+  "inputs": {
+    "apps/web/src/components/PlatformAccountCenter.vue": ["query", "status"],
+    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": ["query", "status"],
+    "apps/web/src/components/PlatformAccountDialogs.vue": [
+      "userForm.email",
+      "userForm.temporary_password",
+      "userForm.platform_role_code",
+      "userForm.organization_id",
+      "userForm.organization_role_code"
+    ]
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "P40包含组织筛选共享抽屉、手机组织记录预览和页头新建用户dialog；这里只登记这些本地调用/消费者。密码与原因dialog候选已明确排除到P43/P42，不代表其页面验收。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/PlatformAccountCenter.vue",
+      "apps/web/src/components/PlatformAccountDialogs.vue",
+      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+      "apps/web/src/components/PlatformAccountGlobalRail.vue",
+      "apps/web/src/components/PlatformOrganizationRecords.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/PlatformAccountCenter.vue": "eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213",
+      "apps/web/src/components/PlatformAccountDialogs.vue": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
+      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
+      "apps/web/src/components/PlatformOrganizationRecords.vue": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
+    },
+    "includeStructuralContainers": true,
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [
+      { "file": "apps/web/src/components/PlatformAccountCenter.vue", "binding": "query", "meaning": "父级组织查询草稿，参与原URL/GET合同", "remaining": "浏览器回退、KeepAlive与真实查询另验。" },
+      { "file": "apps/web/src/components/PlatformAccountCenter.vue", "binding": "status", "meaning": "父级组织状态草稿，空/active/archived沿用现有筛选", "remaining": "真实状态数据/RBAC另验。" },
+      { "file": "apps/web/src/components/PlatformAccountDialogs.vue", "binding": "userForm.email", "meaning": "P40新建用户弹窗邮箱字段", "remaining": "服务端账户规则与真实创建另验。" },
+      { "file": "apps/web/src/components/PlatformAccountDialogs.vue", "binding": "userForm.temporary_password", "meaning": "P40新建用户临时密码字段", "remaining": "真实凭证策略、显示与安全验收另行处理。" },
+      { "file": "apps/web/src/components/PlatformAccountDialogs.vue", "binding": "userForm.platform_role_code", "meaning": "P40新建用户的平台角色选择", "remaining": "本地显示不证明服务端角色授权。" },
+      { "file": "apps/web/src/components/PlatformAccountDialogs.vue", "binding": "userForm.organization_id", "meaning": "P40新建用户的组织归属选择", "remaining": "真实组织范围及后端归属另验。" },
+      { "file": "apps/web/src/components/PlatformAccountDialogs.vue", "binding": "userForm.organization_role_code", "meaning": "P40新建用户的组织角色选择", "remaining": "写入和权限验收仍未完成。" }
+    ],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [
+      {
+        "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+        "tag": "ResponsiveFilterDrawer",
+        "ordinal": 1,
+        "shape": "responsive-filter",
+        "sourceBehavior": "移动端包裹组织query/status筛选；桌面仍使用内联表单",
+        "remaining": "只映射P40调用形态，不等价共享抽屉全生命周期验收。",
+        "variants": [{ "name": "p40-mobile-filter", "evidenceScope": "related-scene-only", "scenes": [{ "package": "platform-organizations-direction-c", "scene": "filter" }], "remaining": "真实软键盘、完整焦点循环和用户取消草稿仍待验。" }]
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "query/status提交给同一父级筛选处理，不生成第二套业务查询",
+        "remaining": "静态组合证据不表示真实MySQL查询完成。",
+        "variants": [{ "name": "p40-organization-filter-form", "evidenceScope": "matching-inline-form-scene", "scenes": [{ "package": "platform-organizations-direction-c", "scene": "filter" }], "remaining": "真实输入法、服务端边界与读屏逐字段验收仍待办。" }]
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountGlobalRail.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "呈现平台范围说明、计数和组织/用户/管理员目录入口",
+        "remaining": "局部aside不代表全局NavigationShell与角色可达性。",
+        "variants": [{ "name": "p40-platform-directory-rail", "evidenceScope": "related-scene-only", "scenes": [{ "package": "platform-organizations-direction-c", "scene": "list" }], "remaining": "真实platform:superadmin授权与跨路由返回另验。" }]
+      },
+      {
+        "file": "apps/web/src/components/PlatformOrganizationRecords.vue",
+        "tag": "ResponsiveDataView",
+        "ordinal": 1,
+        "shape": "responsive-row-detail",
+        "sourceBehavior": "桌面组织行与移动预览复用同一记录；详情继续导航P42",
+        "remaining": "共享预览组件的焦点生命周期仍由共享消费者验收。",
+        "variants": [{ "name": "p40-mobile-organization-preview", "evidenceScope": "matching-dialog-scene", "scenes": [{ "package": "platform-organizations-direction-c", "scene": "preview" }], "remaining": "这里只核对P40记录和预览入口，不代替完整返回/KeepAlive。" }]
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "页头新建用户入口激活该原生dialog；确认委托父级现有createUser",
+        "remaining": "仅表示P40来源的用户创建dialog，不代表密码或原因dialog。",
+        "variants": [{ "name": "p40-create-user-dialog", "evidenceScope": "matching-dialog-scene", "scenes": [{ "package": "account-overview-direction-c", "scene": "create_user" }], "remaining": "完整表单验证、真实POST、失败恢复和生产授权仍待验。" }]
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "用户创建表单提交到父级，输入和提交不由弹窗子组件直接发请求",
+        "remaining": "真实事务、幂等与审计仍以既有服务端合同验收。",
+        "variants": [{ "name": "p40-create-user-form", "evidenceScope": "matching-inline-form-scene", "scenes": [{ "package": "account-overview-direction-c", "scene": "create_user" }], "remaining": "字段边界、原生校验与真实权限结果另验。" }]
+      }
+    ],
+    "sharedRemaining": [
+      "共享ResponsiveFilterDrawer与ResponsiveDataView在P40只作消费者形态登记；焦点返回、软键盘、读屏及所有其他调用方未由此关闭。",
+      "PlatformAccountDialogs中的密码重置和共享原因窗按P43/P42条件排除；本页只纳入新建用户分支。",
+      "全局壳、真实RBAC/MySQL、写入审计、服务端错误与生产验收均与本地候选映射分开。"
+    ]
+  },
+  "compositionGaps": [
+    "此文件对P40五个真实Vue源码作逐候选登记；过滤和记录六态尚未逐控件绑定到实际截图。",
+    "新建用户弹窗证据是本地fixture/入口交互，不等于真实账户POST、角色授权或生产数据验收。",
+    "P41/P42/P43/P44与共享组件剩余消费者独立审阅，不由P40的条件排除或局部页面覆盖。"
+  ],
+  "limits": [
+    "Source and fixture evidence are not semantic action approval, role authorization, database acceptance, or production acceptance.",
+    "Visual direction approval is retained separately and does not approve every control state or action behavior.",
+    "The review scope is exactly the five hashed Vue sources; shared shell, service permissions, database, and other routes are excluded."
+  ]
+}
