@@ -1,0 +1,431 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P41",
+  "route": "/platform-admin/organizations/new",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/OrganizationCreationWizard.vue": "6ec50816ecc69c9b707e5a309ef789129f8fb5f6087bad0c4427709055b03c53",
+    "apps/web/src/components/PlatformAccountCenter.vue": "eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213"
+  },
+  "actions": [
+    {
+      "actionId": "PA41-OPEN",
+      "label": "从组织目录页头进入新建组织向导",
+      "kind": "navigation",
+      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountCenter.vue#280136c1a545dff9.1"],
+      "sourceContractKeys": ["PA-ORG-CREATE 非P45页头打开组织向导"],
+      "contractAliasReason": "P41记录已存在的P40页头来源入口，仅代表进入本路由；页面写入由PA41-CREATE单独映射。",
+      "condition": "P40组织列表页头入口可见时",
+      "handler": "openOrganizationWizard先打开向导并push /platform-admin/organizations/new，不发送组织创建请求",
+      "variants": ["organization-header-entry"],
+      "scenes": [{ "package": "platform-organizations-direction-c", "scene": "create" }],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "路由入口验证不代表P41真实组织创建、角色授权或数据库事务通过。"
+    },
+    {
+      "actionId": "PA41-NEXT",
+      "label": "校验组织资料并进入管理员确认",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationCreationWizard.vue#10583294b61e5704.1"],
+      "sourceContractKeys": ["PA41-NEXT reportValidity后进入确认"],
+      "contractAliasReason": "合同按历史页内控件标签登记；本映射绑定到当前精确源候选。",
+      "condition": "第一步已打开",
+      "handler": "continueToConfirmation先调用原生reportValidity；有效时清错误并切到第二步，不写服务端",
+      "variants": ["valid-inputs", "invalid-inputs"],
+      "scenes": [
+        { "package": "platform-organizations-direction-c", "scene": "create_filled" },
+        { "package": "platform-organizations-direction-c", "scene": "create_invalid" },
+        { "package": "platform-organizations-direction-c", "scene": "create_confirm" }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "tests/unit/ui-phase2-organization-create-preview.test.mjs", "evidenceType": "offline-proposal-check-not-Vue" },
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "原生校验和本地夹具不代表所有浏览器/输入法与读屏实测。"
+    },
+    {
+      "actionId": "PA41-BACK",
+      "label": "返回组织资料步骤",
+      "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationCreationWizard.vue#d4a2da9643d6151e.1"],
+      "sourceContractKeys": ["PA41-BACK 返回上一步清错误"],
+      "contractAliasReason": "合同按历史页内控件标签登记；本映射绑定到当前精确源候选。",
+      "condition": "管理员与确认步骤已打开",
+      "handler": "step设回第一步并清除当前创建错误，不清除父级表单草稿或写请求",
+      "variants": ["back-from-confirmation"],
+      "scenes": [
+        { "package": "platform-organizations-direction-c", "scene": "create_confirm" },
+        { "package": "platform-organizations-direction-c", "scene": "create_filled" }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "父表单保留草稿是当前既有行为；导航重入与真实写入事务另验。"
+    },
+    {
+      "actionId": "PA41-CANCEL",
+      "label": "取消向导并返回组织目录",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationCreationWizard.vue#faacd7ed42835c46.1",
+        "apps/web/src/components/OrganizationCreationWizard.vue#dbb9c697adbd2614.1"
+      ],
+      "sourceContractKeys": ["PA41-CANCEL 原生cancel→父关闭", "PA41-CANCEL 按钮取消，step回1"],
+      "contractAliasReason": "原生cancel/Escape和显式取消按钮汇入同一父级close流程；二者不会提交创建。",
+      "condition": "向导打开且未被原生模态关闭",
+      "handler": "close重置本地步骤并emit close，父级replace回组织目录且下一帧尝试将焦点还给原入口",
+      "variants": ["explicit-cancel", "native-escape"],
+      "scenes": [
+        { "package": "platform-organizations-direction-c", "scene": "create" },
+        { "package": "platform-organizations-direction-c", "scene": "create_admin" }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "取消不会撤销已发请求；真实离页与浏览器历史语义按写入归属测试核验。"
+    },
+    {
+      "actionId": "PA41-CURRENT-INPUT",
+      "label": "编辑组织资料/首位管理员并清除旧错误",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationCreationWizard.vue#bc0893035430063c.1",
+        "apps/web/src/components/OrganizationCreationWizard.vue#73dff0e93770c698.1",
+        "apps/web/src/components/OrganizationCreationWizard.vue#dd8a952068bb7d3e.1"
+      ],
+      "sourceContractKeys": [
+        "PA41-CURRENT-INPUT / 组织名称双向输入及错误清除事件",
+        "PA41-CURRENT-INPUT / 组织标识双向输入及错误清除事件",
+        "PA41-CURRENT-INPUT / 首位管理员选择及错误清除事件"
+      ],
+      "contractAliasReason": "三个v-model分别映射具体字段；clearError只是反馈清除，不构成三次创建或独立服务写入。",
+      "condition": "对应的组织资料步骤字段可见",
+      "handler": "name/slug由父级表单模型双向更新，管理员选择更新initial_admin_user_id；输入/选择只emit clearError",
+      "variants": ["name", "slug", "initial-admin-user"],
+      "scenes": [
+        { "package": "platform-organizations-direction-c", "scene": "create_filled" },
+        { "package": "platform-organizations-direction-c", "scene": "create_admin" }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "tests/unit/ui-phase2-organization-create-production-composition.test.mjs", "evidenceType": "actual-vue-review-fixture" },
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "管理员候选只来自当前账号概览返回的数据，不扩大为全库查询或授权确认。"
+    },
+    {
+      "actionId": "PA41-CREATE",
+      "label": "确认并创建组织及默认工作区",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationCreationWizard.vue#ffa5038e256f600a.1",
+        "apps/web/src/components/OrganizationCreationWizard.vue#8f34ceeac7432a4a.1"
+      ],
+      "sourceContractKeys": [
+        "PA41-CURRENT-SUBMIT / 表单提交事件转发给父层创建所有者",
+        "PA41-CREATE 最终submit按钮"
+      ],
+      "contractAliasReason": "原生form提交与最后确认按钮是同一创建意图；子组件只转发submit，HTTP写入属于父级createOrganization。",
+      "condition": "第二步已确认，父级busy=false；当前候选管理员非active时禁用",
+      "handler": "父级single-flight创建POST /platform/accounts/organizations，仅发送name/slug和非空initial_admin_user_id；已有归属守卫隔离离页迟到回执",
+      "variants": ["default-superadmin", "selected-active-admin", "busy", "failure-retry", "success-route-to-detail"],
+      "scenes": [
+        { "package": "platform-organizations-direction-c", "scene": "create_confirm" },
+        { "package": "platform-organizations-direction-c", "scene": "create_busy" },
+        { "package": "platform-organizations-direction-c", "scene": "create_error" },
+        { "package": "platform-organizations-direction-c", "scene": "create_minimal" }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "tests/unit/ui-phase2-organization-create-production-composition.test.mjs", "evidenceType": "actual-vue-review-fixture" },
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "测试使用隔离拦截；不证明真实MySQL原子性、真实RBAC、审计或M07-03生产签收。"
+    },
+    {
+      "actionId": "PA41-DIALOG-CONTAINER",
+      "label": "P41 原生向导容器与本地动作归属",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationCreationWizard.vue#0b065ffdf54ab12b.1"],
+      "sourceContractKeys": ["PA41-DIALOG 原生向导定义"],
+      "contractAliasReason": "dialog-definition是已登记的原生窗口容器，不是额外的创建业务动作。",
+      "condition": "route /platform-admin/organizations/new 对应向导打开",
+      "handler": "原生dialog包含P41字段、步进、取消和最终submit控件，不直接请求API",
+      "variants": ["two-step-native-dialog"],
+      "scenes": [{ "package": "platform-organizations-direction-c", "scene": "create" }],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        { "file": "tests/unit/ui-phase2-organization-create-production-composition.test.mjs", "evidenceType": "actual-vue-review-fixture" }
+      ],
+      "remaining": "容器与实际App的一般读屏/全部浏览器原生dialog行为另验。",
+      "forwardsTo": ["PA41-BACK", "PA41-CANCEL", "PA41-CREATE", "PA41-CURRENT-INPUT", "PA41-NEXT"],
+      "forwardBindings": []
+    },
+    {
+      "actionId": "PA41-WIZARD-WIRING",
+      "label": "父级接管向导字段错误、关闭与提交事件",
+      "kind": "wiring",
+      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountCenter.vue#5db731eeed33ba4f.1"],
+      "sourceContractKeys": ["PA41 向导clearError/close/submit事件集合"],
+      "contractAliasReason": "一个组件调用候选内含三个不同事件；逐个绑定到既有当前错误、取消和创建处理器，不将转发另计写入。",
+      "condition": "PlatformAccountCenter挂载P41向导组件",
+      "handler": "clear-error清当前创建错误；close返回P40；submit调用父级createOrganization",
+      "variants": ["clear-error", "close", "submit"],
+      "scenes": [{ "package": "platform-organizations-direction-c", "scene": "create_confirm" }],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        { "file": "tests/unit/ui-phase2-organization-create-production-composition.test.mjs", "evidenceType": "actual-vue-review-fixture" }
+      ],
+      "remaining": "父级事务是否成功仍由隔离测试之外的服务端合同验收。",
+      "forwardsTo": ["PA41-CANCEL", "PA41-CREATE", "PA41-CURRENT-INPUT"],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#5db731eeed33ba4f.1",
+          "event": "@clear-error",
+          "handler": "createError = ''",
+          "targets": ["PA41-CURRENT-INPUT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#5db731eeed33ba4f.1",
+          "event": "@close",
+          "handler": "closeOrganizationWizard",
+          "targets": ["PA41-CANCEL"]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#5db731eeed33ba4f.1",
+          "event": "@submit",
+          "handler": "createOrganization",
+          "targets": ["PA41-CREATE"]
+        }
+      ]
+    },
+    {
+      "actionId": "PA41-EXCLUDED-OTHER-CENTER-ACTIONS",
+      "label": "同一父组件中的非P41目录、详情和共享动作",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#adcd96ea7cc90712.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#bcd4023ebe5d9ca9.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#1516ea5a6c3b1540.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#c4cfef52bcc169fb.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#c526b71b2b59e702.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#39878a11789ae9ce.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#6f151cbab1f5518e.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#39ba950db197263c.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#8f18fbff9e2c1c99.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1"
+      ],
+      "sourceContractKeys": [
+        "PA45-ADMINS 跳管理员管理",
+        "PA45-REFRESH 刷新角色目录",
+        "PA-USER-CREATE 新用户/管理员，admins默认运营角色",
+        "PA45-REFRESH 角色首读错误重试",
+        "PA45-REFRESH 空角色目录重新检查",
+        "PA43窗口事件集合：创建、密码、原因、关闭、reason更新",
+        "同上一项AccountDialogs组件调用，非新增业务动作",
+        "PA43 close/retry/status/role/membership/password/session转发",
+        "同上一项用户详情组件调用",
+        "PA42 close/retry/clear-feedback/save/toggle-status事件转发，非新增动作",
+        "同上一项PlatformOrganizationDetailDialog调用",
+        "P39-ACCOUNT-CURRENT-REFRESH / PA-REFRESH；页头账号目录读取，刷新中或写入繁忙时禁用",
+        "P39-ACCOUNT-CURRENT-WIRING / PA-REFRESH-WIRING；将目录子组件的 load 意图连接到父级既有读取处理，不另计读取动作"
+      ],
+      "contractAliasReason": "当前父文件复用于P39/P40/P42/P43/P45；本组逐候选排除目录刷新、角色/用户入口、用户/组织详情及其共享弹窗接线，不将共享DOM存在误算为P41可达动作。",
+      "condition": "该控件/事件绑定属于其他路由或向导未打开时的父层分支",
+      "handler": "P41不显示/不调用这些独立入口；分别回归P39/P40/P42/P43/P45，不扩展当前范围",
+      "variants": ["P39-account-overview", "P40-organization-list", "P42-organization-detail", "P43-user-detail", "P44-admin-detail", "P45-role-center"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }
+      ],
+      "remaining": "显式排除仅界定P41，不代表这些其他页面的动作或权限/生命周期完成验收。"
+    }
+  ],
+  "inputs": {
+    "apps/web/src/components/OrganizationCreationWizard.vue": [
+      "form.name",
+      "form.slug",
+      "form.initial_admin_user_id"
+    ]
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "P41只纳入OrganizationCreationWizard原生dialog与其form/identity aside容器；PlatformAccountDialogs、P42/P43详情等共享/其他路由分支均显式排除。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/OrganizationCreationWizard.vue",
+      "apps/web/src/components/PlatformAccountCenter.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/OrganizationCreationWizard.vue": "6ec50816ecc69c9b707e5a309ef789129f8fb5f6087bad0c4427709055b03c53",
+      "apps/web/src/components/PlatformAccountCenter.vue": "eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213"
+    },
+    "includeStructuralContainers": true,
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [
+      {
+        "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+        "binding": "form.name",
+        "meaning": "组织名称，父级表单模型保留创建草稿",
+        "remaining": "原生长度/必填约束保留；真实写入由既有父级服务合同另验。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+        "binding": "form.slug",
+        "meaning": "组织标识，沿用当前小写字母/数字/连字符原生模式",
+        "remaining": "保持当前允许尾部连字符的真实规则，不推断为严格slug校验或完整服务端IANA/字符策略。"
+      },
+      {
+        "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+        "binding": "form.initial_admin_user_id",
+        "meaning": "可选首位管理员，空值继续由当前操作者作为默认管理员",
+        "remaining": "选项来自当前概览用户集合且禁用非active项，不等于全库查询或后端授权结果。"
+      }
+    ],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [
+      {
+        "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "由P41路由状态打开的两步原生组织向导，不执行子组件API调用",
+        "remaining": "本地结构映射不代替原生dialog在所有浏览器/读屏器中的实测。",
+        "variants": [
+          {
+            "name": "p41-two-step-wizard",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [{ "package": "platform-organizations-direction-c", "scene": "create" }],
+            "remaining": "直接URL初始焦点、Escape/返回焦点与真实App缓存导航单独核验。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "原生required/pattern/reportValidity驱动资料步骤；最终form submit向父级发出一次submit意图",
+        "remaining": "不把子组件事件当作HTTP写请求；成功/失败的事务事实属于父级与服务端。",
+        "variants": [
+          {
+            "name": "p41-profile-and-final-confirmation",
+            "evidenceScope": "matching-inline-form-scene",
+            "scenes": [{ "package": "platform-organizations-direction-c", "scene": "create_confirm" }],
+            "remaining": "浏览器约束验证和真实MySQL原子性分开验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "桌面展示组织身份和当前步骤，手机转为顶部步骤说明",
+        "remaining": "此容器映射限于P41，不推断共享NavigationShell或其他路由可达性。",
+        "variants": [
+          {
+            "name": "p41-identity-and-step-context",
+            "evidenceScope": "related-scene-only",
+            "scenes": [{ "package": "platform-organizations-direction-c", "scene": "create" }],
+            "remaining": "视觉授权不代替主题、密度、200%缩放与实际读屏验收。"
+          }
+        ]
+      }
+    ],
+    "sharedRemaining": [
+      "父级PlatformAccountCenter共享其他路由控制已逐候选排除；不代表P39/P40/P42/P43/P44/P45全页审阅完成。",
+      "P41组织创建事务继续由原createOrganization与现有API拥有；本映射不授权真实生产业务写入。",
+      "全局壳、真实RBAC/MySQL、事务审计与正式M07-03保持独立验收。"
+    ]
+  },
+  "compositionGaps": [
+    "P41源动作已逐候选分类；全部可见按钮hover/focus/pressed/disabled/busy仍未逐控件绑定到具体状态图。",
+    "桌面/手机C稿按用户统一授权自动通过，不代表直接深链、完整浏览器历史或真实管理员授权通过。",
+    "生产隔离夹具没有创建真实组织、默认工作区或管理员关系。"
+  ],
+  "limits": [
+    "Current source references and isolated fixtures are not transaction, RBAC, audit or production acceptance.",
+    "Visual auto-approval is separate from semantic action approval and each source control-state mapping.",
+    "The action scope is the exact current host and wizard source hashes; other shared account routes are explicit exclusions."
+  ]
+}

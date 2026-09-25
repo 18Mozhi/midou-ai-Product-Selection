@@ -385,3 +385,18 @@ P38–P45八份规格都有文件；全站规格48/73，W06八份、W07八份、
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/PlatformAccountCenter.vue | eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213 |
+
+## 10. P41 创建向导逐页动作映射（2026-09-25）
+
+P41 的完整页面级逐候选映射见 `action-reviews/P41.json`。当前范围只包含向导宿主 `PlatformAccountCenter.vue` 与真实两步子组件 `OrganizationCreationWizard.vue`；以当前合同中的精确候选签名核对页面入口、字段变更、下一步/上一步/取消/最终提交、原生 Escape 转发和父级提交接线。P40 筛选/刷新、P42 组织资料/状态、P43/44 用户或管理员操作、P45 角色动作均显式排除，不因共享父文件或同一账号模块而并入 P41。
+
+| 源位置 | 当前身份 | P41语义 |
+| --- | --- | --- |
+| 组织目录页头 | 已有组织创建入口 | 只导航打开 `/platform-admin/organizations/new`，写入仍归父处理器 |
+| P41向导组件调用 | `clear-error`、`close`、`submit` 三个父级事件绑定 | 分别转发给当前错误、取消和原创建所有者 |
+| `OrganizationCreationWizard.vue` 原生 dialog | `PA41-DIALOG` | 向导窗口容器，不另计业务动作 |
+| P41 form submit 与最终按钮 | `PA41-CURRENT-SUBMIT` + `PA41-CREATE` | 同一组织创建意图；实际请求由父级单飞/归属守卫执行 |
+| P41名称、标识、管理员字段 | 三个 `PA41-CURRENT-INPUT` | 编辑字段并清当前错误，不等于创建 |
+| P41下一步、上一步、取消和原生 cancel | `PA41-NEXT`、`PA41-BACK`、`PA41-CANCEL` | 原生有效性下一步、返回清错、按钮/Escape返回P40 |
+
+映射只说明当前源码动作边界。用户已授权的视觉自动通过独立记录在 `DESIGN-REVIEW-INDEX.md`；`P41.json` 保持 `actionApproval=pending-user-review`，不声称真实事务、MySQL、RBAC、审计或 M07-03 通过。
