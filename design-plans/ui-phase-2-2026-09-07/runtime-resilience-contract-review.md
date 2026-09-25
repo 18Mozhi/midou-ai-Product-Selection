@@ -250,3 +250,9 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 `action-reviews/P67.json`将 `RedisResilienceCenter.vue` 当前4个局部候选映射为读取、两类错误重读和expired登录。三个 `TechnicalDetails` 调用点继续使用共享技术详情/复制合同，并分别归属快照读取或当前失败读取编号；旧源身份保留在上方历史表，不参与当前映射。
 
 页面无Redis启停、恢复、清键、连接复制或配置写入；告警提示不自动执行。该归组不证明真实Redis探针、MySQL观测/审计、权限或M07-03正式验收。
+
+## 11. P68 MySQL运行当前页面动作映射（2026-09-26）
+
+`action-reviews/P68.json`将 `MySqlResilienceCenter.vue` 四个专属控件候选映射为只读GET刷新、保留快照失败/首次错误重读及expired登录。三个技术追踪/复制位置仍引用共享 `TechnicalDetails`，成功快照与本次失败读取编号分别归属。
+
+页面无SQL、迁移、参数配置、备份或恢复执行入口。读观测仍沿当前repository事务写入服务已有审计；动作表不改变这条合同，也不证明实库、权限、审计、恢复或M07-03正式验收。

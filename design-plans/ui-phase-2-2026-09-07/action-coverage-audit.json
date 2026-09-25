@@ -260,7 +260,7 @@
     "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "e92899302297a5b0ac4c41aa58abe8e51a353f0c8edf42bc2bcb5dec05da857e",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "f7ebe07d459e15dbbcf7277443fc9d62c5b1babd1722b7b869cf1c567232b385",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "b3ed452522bdd2a90555b598dbbb202b0d066b3ee7ee428d649c3ad310de6c81",
-    "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "7afb7bb803124d45dfd69908575a221aa57b7eb62ccda019c96bf54389c4bc55",
+    "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "e17569ee986feeed4c401a67f9d6b4e8378eca16326788482557255fd1dbf073",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "e15b64fe4d46d8d63f06f47c86b5ab9e504c840a4ecfd994c2f58b88233a86c6",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "458a1816ede8758e1c5579c7e86d08ed0e2a6677625eb513662fc48f0c1e6bb1",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "76a24081b3dc1566b2564cdbbfed07e22c563e57163540e5e4e477674f6f5b22",
@@ -548,6 +548,8 @@
     "tests/unit/ui-phase2-p66-action-review.test.mjs": "1a65f98a1262a4991353979572dd6cecf847e9a4b76674532d5dab927eef6202",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P67.json": "9ec178eae6cc6c643868e1a0c7cddeacab1a43c7520a80ab96c2e02b0d106af4",
     "tests/unit/ui-phase2-p67-action-review.test.mjs": "1f5a0f81ee4ed4f015007de6b0f5a6a378b90e6b3fa03a5b90430227b19ba09b",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P68.json": "efa47f120405862fc98495e7f3428bd36de72922af78fe23e11c283ffc80b120",
+    "tests/unit/ui-phase2-p68-action-review.test.mjs": "9431b4f03e0f72ef37ce4c33b66a5312bdb0b7726cc8d9c2517b7b8245f4e6bd",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "b55592c802f1c2298d7910080beae7e68aec828a11357363546a1007f3c859fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "c429b797dbd4a03d6ae7ab46566440059f39dd47ba2c41b7913cf99d76677ee5",
@@ -615,7 +617,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P65.md": "6484a40709152db9e56130c2311cb0966fa4871c770c0e80ed64794e8e1ff033",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "44625ac8f1344573a748a094e242d3c55c09e6f473f7a9c2af3d00442161ccf3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "ca3ee2177c96cb2f8da0e3e8e18263f4f389187c62e26f35f064ae1f48529ba8",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "b8cee964d50e40f6f87c2f2e867476f12cd022cb6442e0ab4cf07fd1dd551553",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "a914f1ce2647afdee5215d1d8f777e231d9c2c833c228601973abb1c604effe9",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "e1d459e00227acafabe8c8605fad1b0b84e15c154d074c77984f0dcbe4ddedd9",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "3ebf9ddfc3f3f904fd1b49292af6f5fd1d5acf5c8714202051275f02e6fd0640",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "845ba7877eedbfb8967a821c1668917d363db73bb903df86bf0b1ab1f498b878",
@@ -634,13 +636,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 67,
-    "explicitlyGroupedSourceSites": 1501,
-    "semanticGroups": 1245,
-    "routeActions": 1023,
+    "reviewedPages": 68,
+    "explicitlyGroupedSourceSites": 1505,
+    "semanticGroups": 1248,
+    "routeActions": 1026,
     "wiringGroups": 118,
     "pagesWithoutExplicitSemanticReview": [
-      "P68",
       "P69",
       "P70",
       "P71",
@@ -649,7 +650,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 67,
+    "visualApprovedReviewedPages": 68,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -3560,13 +3561,42 @@
       "path": "/platform-admin/mysql",
       "title": "MySQL 运行",
       "oldStaticAssociatedCandidates": 39,
-      "review": null,
+      "review": {
+        "pageId": "P68",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 4,
+        "semanticGroups": 3,
+        "routeActions": 3,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 0,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 18,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 0,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 2,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "mysql-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "P68当前4个局部候选映射为只读刷新、两个错误重读分支与expired登录；无筛选、分页、排序或业务表单。",
+        "SQL执行、迁移、连接参数修改、备份/恢复不是页面动作，不由 `action_hint` 文本推导新入口。",
+        "RPO/RTO、窗口累计与未知/零值保持服务事实，不因视觉状态推断生产恢复资格。"
+      ]
     },
     {
       "id": "P69",
@@ -5373,6 +5403,32 @@
         "localModelBindings": 0,
         "reviewedInputBindings": 0,
         "sourceCallerContainers": 1,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P68",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 4,
+      "semanticGroups": 3,
+      "routeActions": 3,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 0,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 18,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 0,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 2,
         "callerContainers": 0,
         "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
@@ -23419,7 +23475,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P68",
+          "actionId": "MY68-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/MySqlResilienceCenter.vue#21c66441891be768.1",
@@ -23445,7 +23507,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P68",
+          "actionId": "MY68-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/MySqlResilienceCenter.vue#5587941412d5210f.1",
@@ -23475,7 +23543,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P68",
+          "actionId": "MY68-LOGIN",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/MySqlResilienceCenter.vue#6a87ca890e2cd293.1",
@@ -23505,7 +23579,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P68",
+          "actionId": "MY68-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/NavigationAccessPanel.vue#c68005f9913103a4.1",
