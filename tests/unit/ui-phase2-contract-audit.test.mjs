@@ -1793,6 +1793,7 @@ test("current P65 release center maps all page controls and isolates its old fin
       (item) => item.document.endsWith(document) && item.candidateId === `${file}#${signature}`,
     );
     assert.equal(record?.status, "identity-not-found", signature);
+    assert.equal(record?.temporalScope, "historical", signature);
   }
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
@@ -1809,6 +1810,56 @@ test("current P65 release center maps all page controls and isolates its old fin
   assert.equal(previousHash?.status, "hash-drift");
   assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
   assert.equal(report.denominatorFrozen, false);
+});
+
+test("P08 identity-flow superseded signatures stay historical beside current action families", () => {
+  const document = "identity-onboarding-contract-review.md";
+  const report = runContractAudit();
+  const cases = [
+    {
+      file: "apps/web/src/components/LocalIdentity.vue",
+      signatures: [
+        "2e7305c394f2d04e.1",
+        "e469057c327dc16e.1",
+        "3170fd522bb10adc.1",
+        "2f540419fadab817.1",
+        "6eba4c9b2b754a44.1",
+        "2f540419fadab817.2",
+        "ea20d050ca8862b0.1",
+        "44386aa05f9251f5.1",
+        "c29c165271e564d1.1",
+        "170fb1546e423ddb.1",
+        "68d7e490dbe530cd.1",
+      ],
+    },
+    {
+      file: "apps/web/src/components/TenancyChooser.vue",
+      signatures: [
+        "9b4b982bf643379f.1",
+        "fbfed57848d7366f.1",
+        "6f0aae6f4f0ea461.1",
+        "a556210b61698de6.1",
+      ],
+    },
+  ];
+  for (const item of cases) {
+    const rows = report.records.filter(
+      (record) =>
+        record.document.endsWith(document) &&
+        record.sourceFile === item.file &&
+        record.candidateId &&
+        item.signatures.some((signature) => record.candidateId.endsWith(`#${signature}`)),
+    );
+    assert.equal(rows.length, item.signatures.length, item.file);
+    assert.ok(
+      rows.every((record) => record.temporalScope === "historical"),
+      item.file,
+    );
+    assert.ok(
+      rows.every((record) => record.status === "identity-not-found"),
+      item.file,
+    );
+  }
 });
 
 test("current P09 onboarding guide maps all local navigation sites and preserves stale identities", () => {
@@ -1853,6 +1904,7 @@ test("current P09 onboarding guide maps all local navigation sites and preserves
       (item) => item.document.endsWith(document) && item.candidateId === `${file}#${signature}`,
     );
     assert.equal(record?.status, "identity-not-found", signature);
+    assert.equal(record?.temporalScope, "historical", signature);
   }
   const oldSkip = report.records.find(
     (item) =>

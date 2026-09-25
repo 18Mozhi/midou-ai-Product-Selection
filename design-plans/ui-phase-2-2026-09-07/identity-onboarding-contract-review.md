@@ -42,25 +42,12 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 | --- | --- | --- | --- |
 | R#0c5f729c6e5f1db6.1 | 42 | ID-LANDING-CHECK | UiStatePanel primary→resolveLanding；加载时无按钮，受阻重读；I01 |
 | L#9b4b982bf643379f.1 | 286 | ID-ROOT | 品牌→`/`；I01/I02 |
-| L#2e7305c394f2d04e.1 | 357 | ID-FORM-SUBMIT | 按 mode 展开登录/注册/找回/重置/MFA挑战五动作；I02–I06 |
 | L#4ea44facc4e04130.1 | 413 | ID-SHOW-FORGOT | login→局部 forgot，无请求/URL变化；I02 |
-| L#e469057c327dc16e.1 | 417 | ID-FORM-SUBMIT | 表单按钮，loading禁用；与submit事件合并，非第六动作；I02–I06 |
 | L#dc876249a8119b09.1 | 452 | ID-SHOW-LOGIN | verify结果返回；I04/I05 |
-| L#3170fd522bb10adc.1 | 482 | ID-SEED-PASSWORD | must_change_password→changeSeedPassword；I07 |
-| L#2f540419fadab817.1 | 494 | ID-MFA-START | 首次设置、需绑定且无secret→startMfa；I07 |
-| L#6eba4c9b2b754a44.1 | 506 | ID-MFA-CONFIRM | 首次设置展示secret后确认；I07 |
 | L#dc876249a8119b09.2 | 515 | ID-SHOW-LOGIN | 首次设置结束、恢复码后返回；I07 |
-| L#2f540419fadab817.2 | 540 | ID-MFA-START | mfa未启用且无secret→startMfa；I08 |
-| L#ea20d050ca8862b0.1 | 553 | ID-MFA-CONFIRM | mfa绑定确认；I08 |
-| L#44386aa05f9251f5.1 | 576 | ID-MFA-DISABLE | mfa已启用→disableMfa；I08 |
 | L#f29375268246ac09.1 | 591 | ID-LEGACY-SESSION-REVOKE | 旧sessions模板行，暂无公开模式入口；源码保留、运行入口待归并P11 |
-| L#c29c165271e564d1.1 | 596 | ID-SHOW-REGISTER | 非register→局部register；I03 |
-| L#170fb1546e423ddb.1 | 604 | ID-SHOW-LOGIN | 非login→局部login；I02–I08 |
 | L#ba3feba8b42af0bf.1 | 612 | ID-ACCOUNT-SECURITY | RouterLink→`/me?section=security`；I09 |
 | L#df188704ef470c64.1 | 613 | ID-MFA-ROUTE | RouterLink→P07，会话守卫适用；I09 |
-| L#68d7e490dbe530cd.1 | 614 | ID-CONTEXT-ROUTE | login且success→P08；I02 |
-| T#9b4b982bf643379f.1 | 146 | ID-ROOT | 品牌→P01；I01 |
-| T#fbfed57848d7366f.1 | 155 | NONACTION-ACCOUNT | “当前账号”无handler/href，不登记为已实现账号菜单；I10 |
 | T#5587941412d5210f.1 | 201 | ID-LOGIN-ROUTE | expired→`/login`；I10 |
 | T#222cadb1072dc1d8.1 | 202 | ID-ORG-RELOAD | error/forbidden→loadOrganizations；I10 |
 | T#9dde30dd57699c01.1 | 213 | ID-ORG-RELOAD | 无工作区→loadOrganizations；I10 |
@@ -69,15 +56,8 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 | T#df188704ef470c64.1 | 219 | ID-MFA-ROUTE | 无组织→P07；I09/I11 |
 | T#72a9593314273d39.1 | 232 | ID-CONTEXT-CONTINUE | selectedContext就绪→safeReturnTo；I10 |
 | T#04d5594b96977687.1 | 237 | ID-ORG-RELOAD | 已选组织时返回组织，重新读目录；I10 |
-| T#6f0aae6f4f0ea461.1 | 255 | ID-ORG-CHOOSE | 每组织实例→chooseOrganization，并行读工作区/团队；I10 |
 | T#087b197306ae2192.1 | 274 | ID-ORG-CLEAR | 搜索无结果→清空query，无写请求；I10 |
-| T#a556210b61698de6.1 | 278 | ID-WORKSPACE-CHOOSE | active且非selecting→POST范围；I10 |
-| O#07db575ab56f90da.1 | 40 | ID-ROOT | 品牌→P01；I12 |
 | O#7142f76fc59ad9ee.1 | 41 | ID-GUIDE-SKIP | 跳过→P01，不写完成状态；I12 |
-| O#75986af56e7cd4f4.1 | 61 | ID-GUIDE-STEP | 三实例，step=index并更新aria-current；I12 |
-| O#0728ff37173af0c0.1 | 72 | ID-GUIDE-PREVIOUS | step>1→previous；I12 |
-| O#f74e91375a9aef9f.1 | 73 | ID-GUIDE-NEXT | step<3→next；I12 |
-| O#176ac690f7c39e94.1 | 74 | ID-GUIDE-FINISH | 第3步→P01；I12 |
 
 ### 2.1 当前 LocalIdentity 源标识补记
 
@@ -136,6 +116,45 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 额外运行边界：P01 使用共享 UiStatePanel。blocked 默认还渲染“查看影响”次按钮，组件 emit secondary，但 LandingRedirect 没有对应监听；记录为 `NONACTION-LANDING-SECONDARY`，不假设它可打开影响详情。该候选位于共享组件，不加入上述四文件的38行分母；其余共享消费者留到壳层/通用状态批归并。
 
 四文件在 dialogs.json 无原生定义/确认调用候选，源码无实际模态弹窗。MFA、首次设置、验证结果均是内联模式；不得为了图数凭空添加弹窗或把它们从状态图包排除。今后若选定稿改为弹窗，须补具体触发、焦点、关闭及秘密清理合同，不改变安全流程。
+
+### 2.4 P08/P09旧源码身份归档（历史）
+
+以下旧签名已不在当前组件中。LocalIdentity 对应的当前源动作族见2.1；OnboardingGuide 与 TenancyChooser 的逐候选当前映射见2.2、2.3。交叉索引只到语义族，不声称每个旧签名与新签名一一对应；登录成功到P08旧入口无当前LocalIdentity候选替代项，当前账号说明亦没有可操作入口，均不推定为仍然可用。
+
+#### apps/web/src/components/LocalIdentity.vue
+
+| 旧candidateId | 初始语义 | 当前映射边界 |
+| --- | --- | --- |
+| L#2e7305c394f2d04e.1 | ID-FORM-SUBMIT 按mode展开登录/注册/找回/重置/MFA挑战 | 2.1 ID-FORM-SUBMIT当前动作族 |
+| L#e469057c327dc16e.1 | ID-FORM-SUBMIT 表单按钮，与submit归并 | 2.1 ID-FORM-SUBMIT当前动作族 |
+| L#3170fd522bb10adc.1 | ID-SEED-PASSWORD 首次改密提交 | 2.1 ID-SEED-PASSWORD当前动作族 |
+| L#2f540419fadab817.1 | ID-MFA-START 首次安全设置绑定 | 2.1 ID-MFA-START当前动作族 |
+| L#6eba4c9b2b754a44.1 | ID-MFA-CONFIRM 首次安全设置确认 | 2.1 ID-MFA-CONFIRM当前动作族 |
+| L#2f540419fadab817.2 | ID-MFA-START 普通MFA绑定 | 2.1 ID-MFA-START当前动作族 |
+| L#ea20d050ca8862b0.1 | ID-MFA-CONFIRM 普通MFA绑定确认 | 2.1 ID-MFA-CONFIRM当前动作族 |
+| L#44386aa05f9251f5.1 | ID-MFA-DISABLE 停用MFA | 2.1 ID-MFA-DISABLE当前动作族 |
+| L#c29c165271e564d1.1 | ID-SHOW-REGISTER 局部切换注册模式 | 2.1 ID-SHOW-REGISTER当前动作族 |
+| L#170fb1546e423ddb.1 | ID-SHOW-LOGIN 局部切换登录模式 | 2.1 ID-SHOW-LOGIN当前动作族 |
+| L#68d7e490dbe530cd.1 | ID-CONTEXT-ROUTE 登录成功后进入P08 | 当前LocalIdentity源表无一对一候选，不推定替代项 |
+
+#### apps/web/src/components/OnboardingGuide.vue
+
+| 旧candidateId | 初始语义 | 当前候选交叉索引 |
+| --- | --- | --- |
+| O#07db575ab56f90da.1 | ID-ROOT 品牌回P01 | OG-CURRENT-ROOT |
+| O#75986af56e7cd4f4.1 | ID-GUIDE-STEP 三实例切换步骤 | OG-CURRENT-STEP |
+| O#0728ff37173af0c0.1 | ID-GUIDE-PREVIOUS 上一步 | OG-CURRENT-PREVIOUS |
+| O#f74e91375a9aef9f.1 | ID-GUIDE-NEXT 下一步 | OG-CURRENT-NEXT |
+| O#176ac690f7c39e94.1 | ID-GUIDE-FINISH 完成并进入P01 | OG-CURRENT-FINISH-WRAPPER / LINK；链接目标语义保留，不称交互等价 |
+
+#### apps/web/src/components/TenancyChooser.vue
+
+| 旧candidateId | 初始语义 | 当前候选交叉索引 |
+| --- | --- | --- |
+| T#9b4b982bf643379f.1 | ID-ROOT 品牌回P01 | P08-CURRENT-ROOT |
+| T#fbfed57848d7366f.1 | NONACTION-ACCOUNT 当前账号文字，没有handler/href | 无当前操作候选；仍不得描述为账号菜单入口 |
+| T#6f0aae6f4f0ea461.1 | ID-ORG-CHOOSE 选择组织并读取工作区/团队 | P08-CURRENT-ORG-CHOOSE |
+| T#a556210b61698de6.1 | ID-WORKSPACE-CHOOSE 选择活动工作区并更新会话范围 | P08-CURRENT-WORKSPACE-CHOOSE |
 
 ## 3. 输入、请求与成功事实
 
