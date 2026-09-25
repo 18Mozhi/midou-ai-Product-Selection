@@ -150,12 +150,6 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| c18fb34a85c44a13.1 | 20 | dialog-definition | PN57-EDITOR 新建/编辑定义 |
-| 2412ed75f6e08a76.1 | 20 | event-binding | PN57-CLOSE Escape事件 |
-| ff3f7c9094488d9f.1 | 26 | form-event | PN57-SAVE 表单提交 |
-| c6a9a644f04c8e3f.1 | 32 | control | PN57-CLOSE 顶部关闭 |
-| 358517db18f8c7cb.1 | 117 | control | PN57-CLOSE 底部取消 |
-| d55ba76cf5f7483a.1 | 118 | control | PN57-SAVE 保存按钮（同form） |
 
 ### apps/web/src/components/PlatformNotificationManagement.vue
 
@@ -365,6 +359,19 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | apps/web/src/components/PlatformMessageEditor.vue | 299031770711240b20ded18c86d6eb2dae9081fb44a732e06efa3317b540041a |
 
 此静态映射不替代父组件/API合同、受众选择与字段值的完整校验、真实保存、焦点读屏或生产验收；系统邮件Provider和用户邮件偏好边界保持不变。
+
+### 7.1 PlatformMessageEditor 已替代候选身份（历史）
+
+第3节中的六个早期签名已由本节完整的六候选当前映射替代；历史行用于追溯旧源码，不计入当前覆盖，也不构成通知草稿行为、权限或生产验收。
+
+| 旧candidateId | 原始语义 | 当前替代身份 |
+| --- | --- | --- |
+| apps/web/src/components/PlatformMessageEditor.vue#c18fb34a85c44a13.1 | PN57-EDITOR 新建/编辑定义 | #ee9651365376028e.1 PN57-CURRENT-DIALOG |
+| apps/web/src/components/PlatformMessageEditor.vue#2412ed75f6e08a76.1 | PN57-CLOSE Escape事件 | #b1b60a9027feacfb.1 PN57-CURRENT-DIALOG-KEYBOARD |
+| apps/web/src/components/PlatformMessageEditor.vue#ff3f7c9094488d9f.1 | PN57-SAVE 表单提交 | #174bcbcaa3c52308.1 PN57-CURRENT-SAVE |
+| apps/web/src/components/PlatformMessageEditor.vue#c6a9a644f04c8e3f.1 | PN57-CLOSE 顶部关闭 | #d2cc265c8fd1ae47.1 PN57-CURRENT-CLOSE |
+| apps/web/src/components/PlatformMessageEditor.vue#358517db18f8c7cb.1 | PN57-CLOSE 底部取消 | #02668382bdda9d3b.1 PN57-CURRENT-CLOSE |
+| apps/web/src/components/PlatformMessageEditor.vue#d55ba76cf5f7483a.1 | PN57-SAVE 保存按钮（同form） | #e94ca4c02d75da69.1 PN57-CURRENT-SAVE |
 
 ## 8. P57 PlatformNotificationActionDialog 当前源码归属（2026-09-24）
 
