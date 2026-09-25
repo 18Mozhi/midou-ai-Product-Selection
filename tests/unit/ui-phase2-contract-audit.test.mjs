@@ -1467,6 +1467,49 @@ test("current P47 adapter center reconciles all candidates and isolates its supe
       (item) => item.document.endsWith(document) && item.candidateId === `${file}#${signature}`,
     );
     assert.equal(record?.status, "identity-not-found", signature);
+    assert.equal(record?.temporalScope, "historical", signature);
+  }
+  for (const [sourceFile, signatures] of [
+    ["apps/web/src/components/ProviderRegistry.vue", ["d2b72f6631a5008b.1"]],
+    [
+      "apps/web/src/components/ResponsiveDataView.vue",
+      ["4fa7deb3456a41ae.1", "53d89072117d7eda.1", "e23893d134b1daa1.1"],
+    ],
+  ]) {
+    for (const signature of signatures) {
+      const record = report.records.find(
+        (item) =>
+          item.document.endsWith(document) && item.candidateId === `${sourceFile}#${signature}`,
+      );
+      assert.equal(record?.status, "identity-not-found", signature);
+      assert.equal(record?.temporalScope, "historical", signature);
+    }
+  }
+  for (const [sourceDocument, candidateId] of [
+    [document, "apps/web/src/components/ProviderRegistry.vue#2e080ad21acf1f26.1"],
+    [
+      "responsive-detail-focus-contract-review.md",
+      "apps/web/src/components/ResponsiveDataView.vue#c182428cb2c0ed66.1",
+    ],
+    [
+      "responsive-detail-focus-contract-review.md",
+      "apps/web/src/components/ResponsiveDataView.vue#988131834dc4bd6f.1",
+    ],
+    [
+      "responsive-detail-focus-contract-review.md",
+      "apps/web/src/components/ResponsiveDataView.vue#a3c9be2acacfd788.1",
+    ],
+  ]) {
+    assert.ok(
+      report.records.some(
+        (item) =>
+          item.document.endsWith(sourceDocument) &&
+          item.candidateId === candidateId &&
+          item.temporalScope !== "historical" &&
+          item.currentLine !== null,
+      ),
+      candidateId,
+    );
   }
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,

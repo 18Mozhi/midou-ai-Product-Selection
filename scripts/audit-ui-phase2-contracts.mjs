@@ -159,7 +159,8 @@ const history = {
     historicalSections: ["7. 源码指纹（LF SHA-256）"],
   },
   "provider-definition-contract-review.md": {
-    historicalSections: ["7. 历史源指纹（LF SHA-256）"],
+    historicalSections: ["7. 历史源指纹（LF SHA-256）", "PR46/PR47及共享详情旧身份归档"],
+    historicalColumns: ["旧签名"],
   },
   "commercial-security-open-platform-contract-review.md": {
     historicalSections: ["6. 来源指纹与证据边界", "OpenPlatformCenter"],

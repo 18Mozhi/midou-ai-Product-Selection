@@ -42,7 +42,6 @@ API的compatibility_matrix聚合留存HTML/DOM的页面指纹与解析版本，�
 | S    | 23ee0a87fa977a0d.1 | PR-NAV50           | superadmin可见，去凭证                                                                           |
 | R    | 7895edf33d41a47a.1 | PR46-CREATE        | 页头edit(undefined,event)，内存技术默认值、disabled                                              |
 | R    | 3eebd05a35b5e2d1.1 | PR46-LOAD          | loadMessage时再次读取，保留快照                                                                  |
-| R    | d2b72f6631a5008b.1 | PR46-LOAD          | UiStatePanel primary调用load；默认动作文案差异见PR-G04                                           |
 | R    | de4c1cd1ccf4c8da.1 | PR46-CREATE        | 空目录且编辑器关闭时创建，与页头同业务动作                                                       |
 | R    | 27f5c560567881c4.1 | PR46-LOAD          | 列表工具栏刷新，refreshing禁用                                                                   |
 | R    | 0da6a9c39b0f685c.1 | PR46-RESET         | 重置5筛选/排序控件，watch回第1页                                                                 |
@@ -62,19 +61,13 @@ API的compatibility_matrix聚合留存HTML/DOM的页面指纹与解析版本，�
 | R    | 4ba7742e75103fa4.1 | PR46-STEP-PREV     | 上一步，内存字段保留                                                                             |
 | R    | d0e6c4e6deaeab8a.1 | PR46-STEP-NEXT     | 校验当前组再下一步                                                                               |
 | R    | addbc979a88d3d3a.1 | PR46-SAVE          | type=submit；创建POST/编辑PUT+expected_version，同一实例串行；新窗等待上一项保存，结果按代次归属 |
-| A    | 92930355cc4e2a4f.1 | PR47-LOAD          | 刷新，refreshing禁用                                                                             |
 | A    | 3d1c1781d275b76d.1 | PR47-DEFINE        | 页头返回P46，仅导航                                                                              |
-| A    | d2b72f6631a5008b.1 | PR47-LOAD          | 状态primary调用load；不是登录或返回工作台                                                        |
 | A    | 0da6a9c39b0f685c.1 | PR47-RESET         | 工具栏完整resetFilters                                                                           |
 | A    | d1614ad8db6bddf9.1 | PR47-DEFINE        | 无来源时“登记来源”去P46，不是登记程序                                                            |
-| A    | 2c7db35d039ef2f4.1 | PR47-RESET         | 过滤空态“清除筛选”，本批改为同一完整resetFilters                                                 |
 | A    | 96211fe8b4dfe48d.1 | PR47-RECOVER       | 桌面open且恢复门满足时链接P70，不发恢复请求                                                      |
 | A    | b02f109125f46ed4.1 | PR47-PROBE         | 桌面probe(item)，probing非空禁用全部探针按钮                                                     |
-| A    | efa5a28bbc761600.1 | PR47-PROBE         | 移动详情probe(row)，相同接口/副作用                                                              |
 | A    | 2cf3eb393d8269a0.1 | PR47-RECOVER       | 移动同条件去采集调度                                                                             |
 | A    | 1c008f867673db60.1 | PR47-TECH-ROW      | 移动详情技术标识/错误码                                                                          |
-| A    | 369397a871aefe1e.1 | PR47-PAGE-PREV     | 本地上一页                                                                                       |
-| A    | e193aebbbf403ff8.1 | PR47-PAGE-NEXT     | 本地下一页                                                                                       |
 | A    | 1c008f867673db60.2 | PR47-TECH-FEEDBACK | 反馈关联号展开                                                                                   |
 
 历史A空结果候选3670aecf7cfb60e1.1（仅清mode/health）对应现在2c7db35d039ef2f4.1（resetFilters），语义仍PR47-RESET；保留此映射，不把候选变化冒充新增功能。全局生成清单和旧图库保持原来源，R01按实际影响更新，不只替换hash。
@@ -113,9 +106,6 @@ D=ResponsiveDataView.vue，T=TableViewControls.vue，U=UiStatePanel.vue。以下
 | 文件 | 签名               | 共享行为与本族消费者                                               |
 | ---- | ------------------ | ------------------------------------------------------------------ |
 | D    | 6da4dad42cb34c8d.1 | 移动行show(row,event)，P46定义预览/P47运行预览两个内容变体         |
-| D    | 4fa7deb3456a41ae.1 | overlay Escape关闭并回触发按钮                                     |
-| D    | 53d89072117d7eda.1 | scrim命名按钮关闭                                                  |
-| D    | e23893d134b1daa1.1 | role=dialog定义，标题来自detailTitle；没有native模态或焦点循环证明 |
 | D    | 847801b2ac6e7a17.1 | 标题区关闭，初焦点落此按钮                                         |
 | T    | e2fd0d02cbd9f684.1 | 列设置原生details/summary，只在识别列数>1时显示                    |
 | T    | 921f4be18a3fe814.1 | 动态每列checkbox，toggleColumn，至少留1列；两个不同表格消费者      |
@@ -220,3 +210,20 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/ProviderRegistry.vue | 2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc |
+
+### PR46/PR47及共享详情旧身份归档
+
+以下十个早期身份已由第8/9节、共享详情当前源码映射或对应当前源组件候选替代；旧合同保留追溯，不计当前覆盖。
+
+| source | 旧签名 | 旧语义 |
+| --- | --- | --- |
+| apps/web/src/components/ProviderRegistry.vue | d2b72f6631a5008b.1 | PR46受阻态重读旧转发 |
+| apps/web/src/components/ProviderAdapterCenter.vue | 92930355cc4e2a4f.1 | PR47旧刷新入口 |
+| apps/web/src/components/ProviderAdapterCenter.vue | d2b72f6631a5008b.1 | PR47旧受阻态重读转发 |
+| apps/web/src/components/ProviderAdapterCenter.vue | 2c7db35d039ef2f4.1 | PR47旧空结果清筛选 |
+| apps/web/src/components/ProviderAdapterCenter.vue | efa5a28bbc761600.1 | PR47旧移动探针入口 |
+| apps/web/src/components/ProviderAdapterCenter.vue | 369397a871aefe1e.1 | PR47旧上一页 |
+| apps/web/src/components/ProviderAdapterCenter.vue | e193aebbbf403ff8.1 | PR47旧下一页 |
+| apps/web/src/components/ResponsiveDataView.vue | 4fa7deb3456a41ae.1 | 共享移动详情旧Escape处理 |
+| apps/web/src/components/ResponsiveDataView.vue | 53d89072117d7eda.1 | 共享移动详情旧遮罩关闭 |
+| apps/web/src/components/ResponsiveDataView.vue | e23893d134b1daa1.1 | 共享移动详情旧dialog定义 |
